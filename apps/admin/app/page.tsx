@@ -22,6 +22,8 @@ export default async function AdminHome() {
   const curriculum = await getCurriculum();
   const pairs = [...new Map(curriculum.map(x => [`${x.class_code}-${x.subject_code}`, x])).values()];
   const lessonGroups = await Promise.all(pairs.map(async x => ({...x, lessons: await getLessons(x.class_code,x.subject_code)})));
+  const classCount = new Set(curriculum.map(x => x.class_code)).size;
+  const subjectCount = new Set(curriculum.map(x => `${x.class_code}|${x.subject_code}`)).size;
   const chapters = new Set(curriculum.map(x => `${x.class_code}|${x.subject_code}|${x.chapter_code}`)).size;
   const lessons = lessonGroups.reduce((n,x)=>n+x.lessons.length,0);
   const published = lessonGroups.reduce((n,x)=>n+x.lessons.filter(l=>l.status==='PUBLISHED').length,0);
@@ -30,8 +32,8 @@ export default async function AdminHome() {
     <aside className="admin-sidebar"><Link href="/" className="admin-brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>ADMIN</small></span></Link><nav><span className="nav-label">WORKSPACE</span><a className="active" href="#top">▦ Dashboard</a><a href="#curriculum">◈ Curriculum</a><a href="#content">▤ Content</a><a href="#students">♙ Students</a><a href="#analytics">↗ Analytics</a><span className="nav-label">CONTROL</span><a href="#ai">✦ AI Review</a><a href="#settings">⚙ Settings</a></nav><div className="admin-user"><span className="avatar">M</span><div><strong>Local operator</strong><small>QuantaEdge</small></div></div></aside>
     <section className="admin-main" id="top"><header className="admin-top"><div><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Curriculum operations</h1></div><div className="top-status"><span className="status-dot"/> API-backed data</div></header>
       <div className="admin-grid stats">
-        <article><span>Classes</span><strong>3</strong><small>Class 6 · 7 · 8</small></article>
-        <article><span>Subjects</span><strong>6</strong><small>Maths + Science</small></article>
+        <article><span>Classes</span><strong>{classCount}</strong><small>curriculum classes</small></article>
+        <article><span>Subjects</span><strong>{subjectCount}</strong><small>class-subject mappings</small></article>
         <article><span>Chapters</span><strong>{chapters}</strong><small>mapped to curriculum</small></article>
         <article><span>Published lessons</span><strong>{published}</strong><small>{lessons} lessons loaded</small></article>
       </div>
