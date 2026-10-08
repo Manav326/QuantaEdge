@@ -72,6 +72,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java 21
+        if: needs.changes.outputs.api == 'true' || needs.changes.outputs.full == 'true'
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -79,27 +80,33 @@ jobs:
           cache: maven
 
       - name: Validate API
+        if: needs.changes.outputs.api == 'true' || needs.changes.outputs.full == 'true'
         working-directory: services/api
         run: mvn -B -ntp verify
 
       - name: Set up Node
+        if: needs.changes.outputs.web == 'true' || needs.changes.outputs.admin == 'true' || needs.changes.outputs.full == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Install web dependencies
+        if: needs.changes.outputs.web == 'true' || needs.changes.outputs.full == 'true'
         working-directory: apps/web
         run: npm install
 
       - name: Build web
+        if: needs.changes.outputs.web == 'true' || needs.changes.outputs.full == 'true'
         working-directory: apps/web
         run: npm run build
 
       - name: Install admin dependencies
+        if: needs.changes.outputs.admin == 'true' || needs.changes.outputs.full == 'true'
         working-directory: apps/admin
         run: npm install
 
       - name: Build admin
+        if: needs.changes.outputs.admin == 'true' || needs.changes.outputs.full == 'true'
         working-directory: apps/admin
         run: npm run build
 
