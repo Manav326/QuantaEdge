@@ -34,7 +34,7 @@ function Block({ block, onHelp }:{block:any;onHelp:(kind:string)=>void}) {
     {data.url ? <a href={data.url} target="_blank" rel="noreferrer" className="button button-small">Visual देखें ↗</a> : <p>{data.alt ?? data.description ?? 'इस concept के लिए visual representation आवश्यक नहीं है।'}</p>}
     {data.caption && <p>{data.caption}</p>}
   </div>;
-  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>{data.title ?? 'QuantaEdge help'}</strong><p>अटकें तो सीधे answer नहीं—पहले hint, फिर आसान explanation, example और step-by-step मदद मिलेगी।</p><div className="hint-row">{(data.actions??['EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP']).map((x:string)=><button key={x} onClick={()=>onHelp(x)}>{x.replaceAll('_',' ')}</button>)}</div></div></div>;
+  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>{data.title ?? 'QuantaEdge help'}</strong><p>अटकें तो सीधे answer नहीं—पहले hint, फिर आसान explanation, example और step-by-step मदद मिलेगी।</p><div className="hint-row">{(data.actions??['EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP']).map((x:string)=><button key={x} onClick={()=>onHelp(x)}>{x.replaceAll('_',' ')}</button>)}</div>{/* Selected help action is rendered by the lesson shell below. */}</div></div>
   if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker">Recap</span>{data.points?.map((x:string)=><div className="feedback" key={x}><span>✓ {x}</span></div>)}</div>;
   return null;
 }
@@ -43,13 +43,14 @@ export default function LearnPage() {
   const [lesson, setLesson] = useState<Detail|null>(null);
   const [answer, setAnswer] = useState<string|null>(null);
   const [help, setHelp] = useState('none');
+  const [feedback, setFeedback] = useState<any>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
     async function load() {
       try {
         const list = await fetch('/api/v1/learning/lessons?classCode=7&subjectCode=maths').then(r=>r.json()) as Lesson[];
-        const target = list.find(x => x.code === 'simple-equations-foundation') ?? list[0];
+        const target = list.find(x => x.code === 'variable-basics') ?? list[0];
         if (!target) throw new Error('No published lesson');
         const detail = await fetch(`/api/v1/learning/lessons/${target.id}`).then(r=>r.json()) as Detail;
         setLesson(detail);
@@ -67,9 +68,15 @@ export default function LearnPage() {
   async function submit(value:string) {
     setAnswer(value);
     if (!firstQuestion) return;
-    await fetch(`/api/v1/learning/questions/${firstQuestion.id}/answer`, {
-      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:value})
-    });
+    try {
+      const response = await fetch(`/api/v1/learning/questions/${firstQuestion.id}/answer`, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:value})
+      });
+      if (!response.ok) throw new Error('answer failed');
+      setFeedback(await response.json());
+    } catch {
+      setFeedback({correct:null, feedback:'उत्तर जाँच नहीं हो पाई। कृपया फिर प्रयास करें।'});
+    }
   }
 
   return <main className="lesson-page">
@@ -80,12 +87,13 @@ export default function LearnPage() {
       <p className="lesson-intro">{lesson.summary}</p>
 
       {lesson.blocks.map(block=><Block key={block.sequence_no} block={block} onHelp={setHelp}/>)}
+      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>पहले concept को दोबारा अपने शब्दों में समझें, फिर example देखकर नया प्रयास करें।</span></div>}
 
       {firstQuestion && <div className="concept-card">
         <span className="concept-kicker">Check your understanding · {firstQuestion.question_type}</span>
         <p>{firstQuestion.prompt}</p>
         <div className="answer-row">{options.map(o=><button key={o.key} className={answer===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.label}</button>)}</div>
-        {answer && <div className="feedback"><b>उत्तर दर्ज हो गया ✓</b><span>अगले चरण में feedback और mastery rule लागू होगा।</span></div>}
+        {feedback && <div className="feedback"><b>{feedback.correct === true ? '✓ सही' : feedback.correct === false ? 'अभी सही नहीं' : 'उत्तर दर्ज है'}</b><span>{feedback.feedback}</span>{feedback.explanation && <span>{feedback.explanation}</span>}</div>}
       </div>}
 
       <div className="lesson-next"><span>Next: Practice</span><Link href="/student/practice" className="button button-dark button-small">Practice खोलें →</Link></div>
