@@ -16,7 +16,7 @@ public class CurriculumAuditController {
 
   private static final Map<String, Integer> EXPECTED = Map.of(
       "6/maths", 15, "6/science", 18,
-      "7/maths", 16, "7/science", 20,
+      "7/maths", 16, "7/science", 19,
       "8/maths", 16, "8/science", 19);
 
   private static final List<String> REQUIRED_FORMATS = List.of(
