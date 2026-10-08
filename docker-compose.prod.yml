@@ -39,6 +39,12 @@ services:
     ports:
       - "${API_PORT:-8080}:8080"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
@@ -53,7 +59,8 @@ services:
       - "${WEB_PORT:-3000}:3000"
     restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 
   admin:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-admin:${QUANTAEDGE_IMAGE_TAG}
@@ -64,7 +71,8 @@ services:
       - "${ADMIN_PORT:-3001}:3000"
     restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 
 volumes:
   quantaedge_postgres:
