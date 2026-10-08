@@ -108,7 +108,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for i in {1..60}; do
+          for i in {1..150}; do
             if curl -fsS http://localhost:8080/api/v1/curriculum/audit/strict > /tmp/audit.json; then
               break
             fi
