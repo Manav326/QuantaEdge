@@ -17,7 +17,7 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 
 ## Curriculum/content
 
-The MVP curriculum foundation covers **Bihar Board / SCERT Class 6, 7 and 8 Maths + Science** in the canonical textbook order. The audited path contains **104 published curriculum sections**: Class 6 Maths 15 + Science 18; Class 7 Maths 16 + Science 20 (including the book's appendix/internal-organs reference sections); Class 8 Maths 16 + Science 19.
+The MVP curriculum foundation covers **Bihar Board / SCERT Class 6, 7 and 8 Maths + Science** in the canonical textbook order. The audited path contains **105 published curriculum sections**: Class 6 Maths 15 + Science 18; Class 7 Maths 16 + Science 19 (18 official chapters plus two explicit supplementary reference sections, with one legacy duplicate excluded); Class 8 Maths 16 + Science 19.
 
 Every canonical chapter follows the same teacher-shaped learning arc rather than a disconnected screen sequence:
 
