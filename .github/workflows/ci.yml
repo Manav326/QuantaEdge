@@ -190,7 +190,9 @@ jobs:
 
           curl -fsS 'http://localhost:8080/api/v1/learning/lessons?classCode=7&subjectCode=maths' >/tmp/qe-lessons.json
           LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-lessons.json"))[0]["id"])')"
-          curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json'             -d "{"lessonId":$LESSON_ID}"             http://localhost:8080/api/v1/tutor/sessions >/tmp/qe-tutor-session.json
+          curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json' \
+            -d "{\"lessonId\":$LESSON_ID}" \
+            http://localhost:8080/api/v1/tutor/sessions >/tmp/qe-tutor-session.json
           python - <<'PY'
           import json
           tutor=json.load(open('/tmp/qe-tutor-session.json'))
@@ -215,7 +217,9 @@ jobs:
           assert diagnostic["questions"][0]["options"] != "[]"
           PY
 
-          curl -fsS -b /tmp/qe.cookies -X POST -H 'Content-Type: application/json'             -d '{"answer":"A"}'             http://localhost:8080/api/v1/learning/questions/$(python -c 'import json; print(json.load(open("/tmp/qe-diagnostic.json"))["questions"][0]["id"])')/answer >/tmp/qe-answer.json
+          curl -fsS -b /tmp/qe.cookies -X POST -H 'Content-Type: application/json' \
+            -d '{"answer":"A"}' \
+            http://localhost:8080/api/v1/learning/questions/$(python -c 'import json; print(json.load(open("/tmp/qe-diagnostic.json"))["questions"][0]["id"])')/answer >/tmp/qe-answer.json
           python - <<'PY'
           import json
           answer=json.load(open('/tmp/qe-answer.json'))
