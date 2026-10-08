@@ -31,10 +31,10 @@ public class LearningStateService {
       values(?,?,?,?,?,now())
       """,studentId,questionId,selected,answer,correct);
 
-    long total=jdbc.queryForObject("select count(*) from question where lesson_id=? and active=true",Long.class,lessonId);
+    long total=jdbc.queryForObject("select count(*) from question where lesson_id=? and active=true and review_status in ('APPROVED','PUBLISHED')",Long.class,lessonId);
     long answered=jdbc.queryForObject("""
       select count(distinct question_id) from student_question_attempt
-      where student_id=? and question_id in(select id from question where lesson_id=? and active=true)
+      where student_id=? and question_id in(select id from question where lesson_id=? and active=true and review_status in ('APPROVED','PUBLISHED'))
       """,Long.class,studentId,lessonId);
     int progress=(int)Math.min(100,total==0?0:Math.round(answered*100f/total));
     String status=progress>=100?"COMPLETED":"IN_PROGRESS";
@@ -98,7 +98,7 @@ public class LearningStateService {
   private void ensureStudentCanAnswer(long studentId,long questionId,long lessonId){
     Long count=jdbc.queryForObject("""
       select count(*) from question q join lesson l on l.id=q.lesson_id
-      where q.id=? and q.lesson_id=? and q.active=true and l.active=true and l.status='PUBLISHED'
+      where q.id=? and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and l.active=true and l.status='PUBLISHED'
       """,Long.class,questionId,lessonId);
     if(count==0) throw new IllegalArgumentException("Question does not belong to lesson");
     ensurePublishedLesson(lessonId);
