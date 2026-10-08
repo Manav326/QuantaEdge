@@ -115,6 +115,14 @@ public class AdminController {
     AuthContext admin=authorization.requireAdmin(context);
     String status=String.valueOf(body.getOrDefault("status","DRAFT"));
     if(!Set.of("DRAFT","REVIEW","PUBLISHED","ARCHIVED").contains(status)) throw new IllegalArgumentException("Invalid lesson status");
+    if("PUBLISHED".equals(status)){
+      Long blocked=jdbc.queryForObject("""
+        select count(*) from question
+        where lesson_id=? and active=true
+          and review_status not in ('APPROVED','PUBLISHED')
+      """,Long.class,lessonId);
+      if(blocked!=null && blocked>0) throw new IllegalStateException("Lesson contains unreviewed questions");
+    }
     int changed=jdbc.update("update lesson set status=? where id=?",status,lessonId);
     log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
     return Map.of("updated",changed>0,"lessonId",lessonId,"status",status);
@@ -161,14 +169,15 @@ public class AdminController {
     List<Map<String,Object>> items=(List<Map<String,Object>>)body.getOrDefault("questions",List.of());
     int imported=0;
     for(Map<String,Object> item:items){
+      String answerPayload=item.get("answerPayload")==null?"{}":String.valueOf(item.get("answerPayload"));
       Long qid=jdbc.queryForObject("""
-        insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,board,marks,exam_format,topic,subtopic,skill,tags,review_status)
-        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT') returning id
+        insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,board,marks,exam_format,topic,subtopic,skill,tags,answer_payload,review_status)
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT') returning id
         """,Long.class,lessonId,String.valueOf(item.getOrDefault("questionType","SHORT_ANSWER")),
         item.get("prompt"),item.get("explanation"),String.valueOf(item.getOrDefault("difficulty","CORE")),
         Integer.valueOf(String.valueOf(item.getOrDefault("sortOrder",imported+1))),sourceKind,sourceTitle,sourceRef,sourceYear,board,
         item.get("marks")==null?null:Integer.valueOf(String.valueOf(item.get("marks"))),item.get("examFormat"),
-        item.get("topic"),item.get("subtopic"),item.get("skill"),item.getOrDefault("tags","[]"));
+        item.get("topic"),item.get("subtopic"),item.get("skill"),item.getOrDefault("tags","[]"),answerPayload);
       Object options=item.get("options");
       if(options instanceof List<?> list){
         int ord=1; for(Object opt:list){
