@@ -61,5 +61,7 @@ for i in $(seq 1 30); do
 done
 
 echo "API did not become healthy within 60 seconds." >&2
-docker compose ps >&2
+docker compose ps -a >&2
+echo "===== API logs =====" >&2
+docker compose logs --no-color --tail=200 api >&2
 exit 1
