@@ -61,28 +61,29 @@ begin
       ))
       on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
-      for answer in select unnest(array[
-        'अध्याय की मुख्य अवधारणा को पहचानकर उदाहरण में लागू करना।',
-        'सही तरीका चुनना, कदम क्रम से करना और उत्तर जाँचना।',
-        'नए उदाहरण में उत्तर के साथ कारण समझाना।'
-      ]) loop
-        select answer into answer;
-        insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
-        values(lesson_id,obj_id,'MCQ',
-          r.display_name||' — सीखने के दौरान सबसे सही अभ्यास क्या है?',
-          answer,
-          case when stage.n=1 then 'FOUNDATION' when stage.n=2 then 'CORE' else 'CHALLENGE' end,
-          (select count(*)+1 from question where lesson_id=lesson_id))
-        returning id into question_id;
+      insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
+      values(
+        lesson_id,obj_id,'MCQ',
+        r.display_name||' — सीखने के दौरान सबसे सही अभ्यास क्या है?',
+        case stage.n
+          when 1 then 'मुख्य अवधारणा को पहचानकर रोज़मर्रा के उदाहरण से जोड़ना।'
+          when 2 then 'सही तरीका चुनना, कदम क्रम से करना और उत्तर जाँचना।'
+          else 'नए उदाहरण में उत्तर के साथ कारण समझाना।'
+        end,
+        case when stage.n=1 then 'FOUNDATION' when stage.n=2 then 'CORE' else 'CHALLENGE' end,
+        1)
+      returning id into question_id;
 
-        insert into question_option(question_id,option_key,label,is_correct,sort_order)
-        values
-          (question_id,'A',answer,true,1),
-          (question_id,'B','केवल उत्तर याद कर लेना',false,2),
-          (question_id,'C','बिना प्रश्न पढ़े अनुमान लगाना',false,3),
-          (question_id,'D','दूसरे अध्याय का नियम लगा देना',false,4);
-        exit;
-      end loop;
+      insert into question_option(question_id,option_key,label,is_correct,sort_order)
+      values
+        (question_id,'A',case stage.n
+          when 1 then 'मुख्य अवधारणा को पहचानकर उदाहरण से जोड़ना।'
+          when 2 then 'सही तरीका चुनकर कदम क्रम से करना और उत्तर जाँचना।'
+          else 'नए उदाहरण में उत्तर के साथ कारण समझाना।'
+        end,true,1),
+        (question_id,'B','केवल उत्तर याद कर लेना',false,2),
+        (question_id,'C','बिना प्रश्न पढ़े अनुमान लगाना',false,3),
+        (question_id,'D','दूसरे अध्याय का नियम लगा देना',false,4);
     end loop;
   end loop;
 end $$;
