@@ -1,3 +1,10 @@
 import './globals.css';
-export const metadata={title:'QuantaEdge',description:'AI-powered learning for Bihar Board students'};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="hi"><body>{children}</body></html>}
+
+export const metadata = {
+  title: 'QuantaEdge Admin',
+  description: 'QuantaEdge curriculum and learning operations',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <html lang="en"><body>{children}</body></html>;
+}
