@@ -236,6 +236,7 @@ public class AuthService {
 
   private void requireParent(long userId) {
     String role=jdbc.queryForObject("select role from user_account where id=?",String.class,userId);
+    System.out.println("AUTH_PARENT_CHECK userId=" + userId + " dbRole=" + role);
     if(!"PARENT".equals(role) && !"ADMIN".equals(role)) throw new SecurityException("Parent access required");
   }
 
