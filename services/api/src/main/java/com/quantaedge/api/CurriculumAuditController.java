@@ -31,7 +31,6 @@ public class CurriculumAuditController {
   @GetMapping("/audit")
   public Map<String, Object> audit() {
     var result = new LinkedHashMap<String, Object>();
-    result.put("expected", EXPECTED);
     result.put("actual", jdbc.queryForList("""
       select c.code||'/'||s.code as curriculum, count(*) as chapters
       from curriculum_chapter ch
