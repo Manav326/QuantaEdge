@@ -22,7 +22,18 @@ app:
   auth:
     session-hours: ${APP_AUTH_SESSION_HOURS:168}
     secure-cookies: ${APP_AUTH_SECURE_COOKIES:false}
+    otp-cooldown-seconds: ${APP_AUTH_OTP_COOLDOWN_SECONDS:60}
     admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:}
+  ai-tutor:
+    enabled: ${APP_AI_TUTOR_ENABLED:false}
+    api-key: ${OPENAI_API_KEY:}
+    model: ${APP_AI_TUTOR_MODEL:gpt-5.6-luna}
+    base-url: ${OPENAI_API_BASE_URL:https://api.openai.com}
+    max-output-tokens: ${APP_AI_TUTOR_MAX_OUTPUT_TOKENS:500}
+    max-message-chars: ${APP_AI_TUTOR_MAX_MESSAGE_CHARS:1200}
+    max-messages-per-10m: ${APP_AI_TUTOR_MAX_MESSAGES_PER_10M:20}
+    max-messages-per-day: ${APP_AI_TUTOR_MAX_MESSAGES_PER_DAY:100}
+    history-messages: ${APP_AI_TUTOR_HISTORY_MESSAGES:10}
 management:
   endpoints:
     web:
