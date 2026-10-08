@@ -224,7 +224,9 @@ jobs:
             -d '{"mobile":"7070107483","otp":"000000","displayName":"CI Parent"}' \
             http://localhost:8080/api/v1/auth/verify-otp >/tmp/qe-parent.json
 
-          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/guardians/children >/tmp/qe-children.json
+          curl -sS -b /tmp/qe.cookies http://localhost:8080/api/v1/guardians/children >/tmp/qe-children.json
+          echo "===== GUARDIAN RESPONSE ====="
+          cat /tmp/qe-children.json
           curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json' \
             -d '{"displayName":"CI Student","classCode":"7","language":"hi","pin":"1234","consentAccepted":true}' \
             http://localhost:8080/api/v1/guardians/children >/tmp/qe-child.json
