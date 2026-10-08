@@ -52,7 +52,7 @@ public class AuthService {
         Long.class, normalized);
     if (recent > 0) throw new IllegalStateException("Please wait before requesting another OTP");
 
-    String otp = demoSeed ? "123456" : String.format("%06d", random.nextInt(1_000_000));
+    String otp = (demoSeed && normalized.equals("+917070107483")) ? "000000" :\n        (demoSeed ? "123456" : String.format("%06d", random.nextInt(1_000_000)));
     jdbc.update("""
       insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at)
       values (?,?,?,now()+interval '5 minutes')
