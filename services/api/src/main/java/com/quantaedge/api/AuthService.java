@@ -131,7 +131,8 @@ public class AuthService {
   }
 
   @Transactional
-  public AuthContext createChild(long userId,String name,String classCode,String language,String pin) {
+  public AuthContext createChild(long userId,String name,String classCode,String language,String pin,boolean consentAccepted) {
+    if(!consentAccepted) throw new SecurityException("Guardian consent is required before creating a student profile");
     requireParent(userId);
     if(name==null || name.trim().length()<2 || name.trim().length()>120)
       throw new IllegalArgumentException("Student name must be between 2 and 120 characters");
