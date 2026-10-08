@@ -295,7 +295,7 @@ jobs:
         run: |
           set -euo pipefail
           npx --yes playwright@latest install --with-deps chromium
-          npx --yes @playwright/test@latest test tests/ui-smoke.spec.js --reporter=line
+          npx --yes @playwright/test@latest test tests/ui-smoke-v2.spec.js --reporter=line
 
       - name: Collect service logs on failure
         if: failure()
