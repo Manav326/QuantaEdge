@@ -1,6 +1,6 @@
 -- Backfill the same three-stage teaching path for chapters added/corrected by V6/V7.
 do $$
-declare r record; obj_id bigint; lesson_id bigint; question_id bigint; stage record; answer text;
+declare r record; obj_id bigint; v_lesson_id bigint; v_question_id bigint; stage record; answer text;
 begin
   for r in
     select ch.id,ch.code,ch.display_name,ch.description
@@ -34,36 +34,36 @@ begin
       on conflict(chapter_id,code) do update set
         title=excluded.title,summary=excluded.summary,estimated_minutes=excluded.estimated_minutes,
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
-      returning id into lesson_id;
+      returning id into v_lesson_id;
 
-      insert into lesson_block(lesson_id,sequence_no,block_type,content)
+      insert into lesson_block(v_lesson_id,sequence_no,block_type,content)
       values
-      (lesson_id,1,'EXPLANATION',jsonb_build_object(
+      (v_lesson_id,1,'EXPLANATION',jsonb_build_object(
         'heading',case stage.n when 1 then r.display_name||' को समझें' when 2 then 'शिक्षक के साथ करके देखें' else 'अब खुद समझाएं' end,
         'body',r.description,
         'teachingMove',case stage.n when 1 then 'Activate prior knowledge, introduce vocabulary, connect to daily life.' when 2 then 'Model one worked example and think aloud.' else 'Remove scaffolding and ask for reasoning.' end,
         'keyPoints',jsonb_build_array('मुख्य अवधारणा पहचानें।','उदाहरण देखकर तरीका समझें।','उत्तर का कारण बताना सीखें।')
       )),
-      (lesson_id,2,'CHALLENGE',jsonb_build_object(
+      (v_lesson_id,2,'CHALLENGE',jsonb_build_object(
         'title',case stage.n when 1 then 'देखो और सोचो' when 2 then 'साथ में हल करें' else 'अब तुम्हारी बारी' end,
         'prompt',case stage.n when 1 then 'इस विषय का एक रोज़मर्रा का उदाहरण पहचानिए और बताइए कि उसमें क्या हो रहा है।'
           when 2 then 'ऊपर दिए विचार को एक नए उदाहरण पर लागू कीजिए। पहले तरीका बताइए, फिर उत्तर दीजिए।'
           else 'एक नया उदाहरण खुद बनाइए, हल कीजिए और अपने उत्तर की जाँच कीजिए।' end,
         'hint','पहले मुख्य शब्द/मात्रा/आकृति/घटना पहचानें, फिर संबंधित नियम या कारण चुनें।'
       )),
-      (lesson_id,3,'AI_HELP',jsonb_build_object(
+      (v_lesson_id,3,'AI_HELP',jsonb_build_object(
         'title','अटकें तो QuantaEdge से पूछें',
         'actions',jsonb_build_array('EASY_EXPLANATION','EXAMPLE','DIAGRAM','STEP_BY_STEP','EXAM_ANSWER'),
         'socratic',true
       )),
-      (lesson_id,4,'SUMMARY',jsonb_build_object(
+      (v_lesson_id,4,'SUMMARY',jsonb_build_object(
         'points',jsonb_build_array(r.description,'मुख्य विचार को अपने शब्दों में दोहराएँ।','एक नए उदाहरण में लागू करके mastery जाँचें।')
       ))
-      on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
+      on conflict(v_lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
-      insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
+      insert into question(v_lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
       values(
-        lesson_id,obj_id,'MCQ',
+        v_lesson_id,obj_id,'MCQ',
         r.display_name||' — सीखने के दौरान सबसे सही अभ्यास क्या है?',
         case stage.n
           when 1 then 'मुख्य अवधारणा को पहचानकर रोज़मर्रा के उदाहरण से जोड़ना।'
@@ -72,18 +72,18 @@ begin
         end,
         case when stage.n=1 then 'FOUNDATION' when stage.n=2 then 'CORE' else 'CHALLENGE' end,
         1)
-      returning id into question_id;
+      returning id into v_question_id;
 
-      insert into question_option(question_id,option_key,label,is_correct,sort_order)
+      insert into question_option(v_question_id,option_key,label,is_correct,sort_order)
       values
-        (question_id,'A',case stage.n
+        (v_question_id,'A',case stage.n
           when 1 then 'मुख्य अवधारणा को पहचानकर उदाहरण से जोड़ना।'
           when 2 then 'सही तरीका चुनकर कदम क्रम से करना और उत्तर जाँचना।'
           else 'नए उदाहरण में उत्तर के साथ कारण समझाना।'
         end,true,1),
-        (question_id,'B','केवल उत्तर याद कर लेना',false,2),
-        (question_id,'C','बिना प्रश्न पढ़े अनुमान लगाना',false,3),
-        (question_id,'D','दूसरे अध्याय का नियम लगा देना',false,4);
+        (v_question_id,'B','केवल उत्तर याद कर लेना',false,2),
+        (v_question_id,'C','बिना प्रश्न पढ़े अनुमान लगाना',false,3),
+        (v_question_id,'D','दूसरे अध्याय का नियम लगा देना',false,4);
     end loop;
   end loop;
 end $$;
