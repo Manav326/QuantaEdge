@@ -142,7 +142,8 @@ export default function LearnPage() {
         if(!targetId){
           const rec=await fetch('/api/v1/recommendations/next');
           const rb=await rec.json();
-          if(rec.ok&&rb.available) targetId=Number(rb.lesson.id);
+          if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
+          if(rec.ok&&rb.available&&rb.lesson) targetId=Number(rb.lesson.id);
         }
         if(!targetId) throw new Error('No recommendation available');
         const detail=await fetch('/api/v1/learning/lessons/'+targetId);
