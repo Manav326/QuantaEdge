@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: Deploy over SSH
+      - name: Deploy immutable release
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.QUANTAEDGE_DEPLOY_HOST }}
@@ -27,13 +27,6 @@ jobs:
           script: |
             set -eu
             cd /opt/quantaedge
-            git fetch --prune origin
-            git checkout "${{ inputs.ref }}"
-            git reset --hard "origin/${{ inputs.ref }}"
-            export QUANTAEDGE_IMAGE_TAG="sha-$(git rev-parse HEAD)"
             export QUANTAEDGE_GHCR_OWNER="${{ github.repository_owner }}"
-            echo "${{ secrets.QUANTAEDGE_GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d --remove-orphans
-            docker image prune -f
-            docker compose -f docker-compose.prod.yml ps
+            export QUANTAEDGE_GHCR_TOKEN="${{ secrets.QUANTAEDGE_GHCR_TOKEN }}"
+            bash scripts/quantaedge-deploy.sh "${{ inputs.ref }}"
