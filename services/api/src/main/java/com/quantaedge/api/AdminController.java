@@ -1,6 +1,8 @@
 package com.quantaedge.api;
 
 import java.util.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
+  private final ObjectMapper mapper;
 
-  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization){this.jdbc=jdbc;this.authorization=authorization;}
+  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization,ObjectMapper mapper){
+    this.jdbc=jdbc; this.authorization=authorization; this.mapper=mapper;
+  }
 
   @GetMapping("/lessons")
   public List<Map<String,Object>> lessons(@RequestParam(required=false) String classCode,
@@ -220,7 +225,9 @@ public class AdminController {
     List<Map<String,Object>> items=(List<Map<String,Object>>)body.getOrDefault("questions",List.of());
     int imported=0;
     for(Map<String,Object> item:items){
-      String answerPayload=item.get("answerPayload")==null?"{}":String.valueOf(item.get("answerPayload"));
+      String answerPayload=item.get("answerPayload")==null?"{}":(
+          item.get("answerPayload") instanceof String s ? s : toJson(item.get("answerPayload")));
+      String tags=toJson(item.getOrDefault("tags",List.of()));
       Long qid=jdbc.queryForObject("""
         insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,source_id,board,marks,exam_format,topic,subtopic,skill,tags,answer_payload,review_status)
         values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT') returning id
@@ -228,7 +235,7 @@ public class AdminController {
         item.get("prompt"),item.get("explanation"),String.valueOf(item.getOrDefault("difficulty","CORE")),
         Integer.valueOf(String.valueOf(item.getOrDefault("sortOrder",imported+1))),sourceKind,sourceTitle,sourceRef,sourceYear,sourceId,board,
         item.get("marks")==null?null:Integer.valueOf(String.valueOf(item.get("marks"))),item.get("examFormat"),
-        item.get("topic"),item.get("subtopic"),item.get("skill"),item.getOrDefault("tags","[]"),answerPayload);
+        item.get("topic"),item.get("subtopic"),item.get("skill"),tags,answerPayload);
       Object options=item.get("options");
       if(options instanceof List<?> list){
         int ord=1; for(Object opt:list){
@@ -276,6 +283,14 @@ public class AdminController {
     int changed=jdbc.update("update content_asset set status=?,updated_at=now() where id=?",status,assetId);
     log(admin,"ASSET_STATUS",String.valueOf(assetId),status);
     return Map.of("updated",changed>0,"status",status);
+  }
+
+  private String toJson(Object value){
+    try{
+      return value instanceof String s ? s : mapper.writeValueAsString(value);
+    }catch(JsonProcessingException ex){
+      throw new IllegalArgumentException("Invalid JSON content");
+    }
   }
 
   private void log(AuthContext admin,String action,String resource,String detail){
