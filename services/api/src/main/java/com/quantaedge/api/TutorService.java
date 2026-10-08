@@ -72,16 +72,16 @@ public class TutorService {
         from question q
         where q.id=? and q.lesson_id=(select lesson_id from tutor_session where id=?) and q.active=true
         """,questionId,sessionId);
-      if(!q.isEmpty())qctx=mapper.writeValueAsString(q.getFirst());
+      if(!q.isEmpty())qctx=json(q.getFirst());
     }
 
-    String blocks=mapper.writeValueAsString(jdbc.queryForList("""
+    String blocks=json(jdbc.queryForList("""
       select b.block_type,b.content from lesson_block b
       where b.lesson_id=(select lesson_id from tutor_session where id=?) and b.active=true
       order by b.sequence_no limit 12
       """,sessionId));
 
-    String mastery=mapper.writeValueAsString(jdbc.queryForList("""
+    String mastery=json(jdbc.queryForList("""
       select cc.title,m.mastery_percent,m.attempts
       from student_concept_mastery m join chapter_concept cc on cc.id=m.concept_id
       where m.student_id=? and cc.chapter_id=(select chapter_id from lesson where id=(select lesson_id from tutor_session where id=?))
@@ -116,7 +116,7 @@ public class TutorService {
       LEARNER MODE: %s
       LEARNER MESSAGE:
       %s
-      """.formatted(mapper.writeValueAsString(lesson),blocks,mastery,qctx,mapper.writeValueAsString(history),mode,normalized);
+      """.formatted(mapper.writeValueAsString(lesson),blocks,mastery,qctx,json(history),mode,normalized);
 
     jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
     TutorReply reply=provider.generate(instructions,input);
@@ -142,4 +142,9 @@ public class TutorService {
       """,Long.class,lessonId,studentId);
     if(count==null||count==0)throw new SecurityException("Tutor lesson access denied");
   }
+
+  private String json(Object value){
+    try{return mapper.writeValueAsString(value);}catch(Exception e){throw new IllegalStateException("Unable to build tutor context");}
+  }
 }
+
