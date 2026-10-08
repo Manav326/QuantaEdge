@@ -15,7 +15,7 @@ public class AuthorizationService {
   }
   public AuthContext requireParent(AuthContext context) {
     context=requireAuth(context);
-    if(!context.isParent()) throw new SecurityException("Parent access required");
+    if(!context.isParent() && !context.isAdmin()) throw new SecurityException("Parent access required");
     return context;
   }
   public AuthContext requireAdmin(AuthContext context) {
