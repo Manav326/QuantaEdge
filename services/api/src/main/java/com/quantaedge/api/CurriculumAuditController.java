@@ -128,10 +128,10 @@ public class CurriculumAuditController {
               "select count(*) from chapter_source where chapter_id=? and coverage_status in ('MAPPED','COVERED')",
               Long.class, id);
           case "BOARD_FORMAT_COVERAGE" -> jdbc.queryForObject(
-              "select count(distinct coalesce(exam_format,question_type)) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true",
+              "select count(distinct coalesce(exam_format,question_type)) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')",
               Long.class, id);
           case "SOURCE_TAGGED_QUESTIONS" -> jdbc.queryForObject(
-              "select count(*) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true and q.source_kind <> 'AUTHOR_CREATED' and (q.source_ref is not null or q.tags <> '[]'::jsonb)",
+              "select count(*) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and q.source_kind <> 'AUTHOR_CREATED' and (q.source_ref is not null or q.tags <> '[]'::jsonb)",
               Long.class, id);
           default -> 0L;
         };
@@ -141,7 +141,7 @@ public class CurriculumAuditController {
       for (String format : REQUIRED_FORMATS) {
         long count = jdbc.queryForObject(
             "select count(*) from question q join lesson l on l.id=q.lesson_id " +
-            "where l.chapter_id=? and q.active=true and q.question_type=?",
+            "where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and q.question_type=?",
             Long.class, id, format);
         if (count < 1) missing.add("FORMAT_" + format + " (0/1)");
       }
