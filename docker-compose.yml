@@ -44,6 +44,12 @@ services:
       APP_AI_TUTOR_MODEL: ${APP_AI_TUTOR_MODEL:-gpt-5.6-luna}
     ports:
       - "${API_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,7 +63,8 @@ services:
     ports:
       - "${WEB_PORT:-3000}:3000"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
   admin:
     build:
       context: ./apps/admin
@@ -66,7 +73,8 @@ services:
     ports:
       - "${ADMIN_PORT:-3001}:3000"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
 volumes:
   quantaedge_postgres:
   quantaedge_redis:
