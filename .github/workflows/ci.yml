@@ -144,12 +144,49 @@ jobs:
           status="$(python -c 'import json; print(json.load(open("/tmp/audit.json"))["status"])')"
           test "$status" = "GREEN"
 
-      - name: Smoke-test student and admin routes
+      - name: Smoke-test authenticated learning journey
         shell: bash
         run: |
           set -euo pipefail
           curl -fsS http://localhost:3000/student >/dev/null
           curl -fsS http://localhost:3001/ >/dev/null
+
+          rm -f /tmp/qe.cookies
+          curl -fsS -c /tmp/qe.cookies -H 'Content-Type: application/json' \
+            -d '{"mobile":"7070107483","purpose":"LOGIN"}' \
+            http://localhost:8080/api/v1/auth/request-otp >/tmp/qe-otp.json
+          test "$(python -c 'import json; print(json.load(open("/tmp/qe-otp.json")).get("devCode",""))')" = "000000"
+
+          curl -fsS -b /tmp/qe.cookies -c /tmp/qe.cookies -H 'Content-Type: application/json' \
+            -d '{"mobile":"7070107483","otp":"000000","displayName":"CI Parent"}' \
+            http://localhost:8080/api/v1/auth/verify-otp >/tmp/qe-parent.json
+
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/guardians/children >/tmp/qe-children.json
+          curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json' \
+            -d '{"displayName":"CI Student","classCode":"7","language":"hi","pin":"1234"}' \
+            http://localhost:8080/api/v1/guardians/children >/tmp/qe-child.json
+          CHILD_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-child.json"))["id"])')"
+
+          curl -fsS -b /tmp/qe.cookies -c /tmp/qe.cookies -H 'Content-Type: application/json' \
+            -d "{\"studentId\":${CHILD_ID}}" \
+            http://localhost:8080/api/v1/auth/select-student >/tmp/qe-select.json
+
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/students/me >/tmp/qe-student.json
+          python - <<'PY'
+          import json
+          student=json.load(open('/tmp/qe-student.json'))
+          assert student["class_code"] == "7"
+          assert "lessonStats" in student
+          assert "mastery" in student
+          PY
+
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/recommendations/next >/tmp/qe-rec.json
+          python - <<'PY'
+          import json
+          rec=json.load(open('/tmp/qe-rec.json'))
+          assert rec.get("available") is True
+          assert rec["lesson"]["id"]
+          PY
 
       - name: Collect service logs on failure
         if: failure()
