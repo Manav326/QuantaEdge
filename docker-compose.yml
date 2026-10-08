@@ -35,6 +35,7 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001}
+      APP_DEMO_SEED: ${APP_DEMO_SEED:-true}
     ports:
       - "${API_PORT:-8080}:8080"
     depends_on:
@@ -46,7 +47,7 @@ services:
     build:
       context: ./apps/web
     environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:${API_PORT:-8080}
+      BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${WEB_PORT:-3000}:3000"
     depends_on:
@@ -55,7 +56,7 @@ services:
     build:
       context: ./apps/admin
     environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:${API_PORT:-8080}
+      BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${ADMIN_PORT:-3001}:3000"
     depends_on:
