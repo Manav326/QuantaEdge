@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: quantaedge-api
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/quantaedge}
+    username: ${SPRING_DATASOURCE_USERNAME:quantaedge}
+    password: ${SPRING_DATASOURCE_PASSWORD:change-me-local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+server:
+  port: 8080
