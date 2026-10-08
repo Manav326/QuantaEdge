@@ -153,7 +153,7 @@ public class TutorService {
           && content!=null){
         try{
           var node=mapper.readTree(String.valueOf(content));
-          node.remove(List.of("correct","correctOption","answer","answer_payload","solution","markingScheme"));
+          for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) node.remove(field);
           safe.add(Map.of("block_type",type,"content",node));
           continue;
         }catch(Exception ignored){}
