@@ -15,6 +15,9 @@ public class RecommendationController {
   @GetMapping("/next")
   public Map<String,Object> next(@RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireStudent(context);
+    Long attempts=jdbc.queryForObject("select count(*) from student_question_attempt where student_id=? and correct is not null",Long.class,context.studentId());
+    Long diagnostics=jdbc.queryForObject("select count(*) from learning_session where student_id=? and source='DIAGNOSTIC' and ended_at is not null",Long.class,context.studentId());
+    if((attempts==null||attempts==0)&&(diagnostics==null||diagnostics==0)) return Map.of("available",true,"kind","DIAGNOSTIC","reason","INITIAL_DIAGNOSTIC");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select l.id,l.code,l.title,l.summary,l.estimated_minutes,
              ch.code as chapter_code,ch.display_name as chapter_name,
