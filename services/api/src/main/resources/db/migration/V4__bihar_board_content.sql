@@ -9,6 +9,7 @@ declare
   ch_id bigint;
   obj_id bigint;
   lesson_id bigint;
+  question_id bigint;
   stage record;
   q record;
   answer text;
@@ -138,7 +139,7 @@ begin
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
       returning id into lesson_id;
 
-      delete from question where lesson_id=lesson_id;
+      delete from question where question.lesson_id=lesson_id;
 
       insert into lesson_block(lesson_id,sequence_no,block_type,content)
       values
@@ -174,10 +175,10 @@ begin
         end if;
 
         insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
-        values(lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n);
+        values(lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n) returning id into question_id;
 
         insert into question_option(question_id,option_key,label,is_correct,sort_order)
-        select currval(pg_get_serial_sequence('question','id')),k,label,correct,ord
+        select question_id,k,label,correct,ord
         from (values
           ('A',answer,true,1),
           ('B','केवल उत्तर याद करना',false,2),
