@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import TutorDock from './TutorDock';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
@@ -24,7 +25,7 @@ function parse<T=any>(value:string):T {
   try { return JSON.parse(value) as T; } catch { return {} as T; }
 }
 
-function Block({ block, onHelp }:{block:Detail['blocks'][number];onHelp:(kind:string)=>void}) {
+function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpen:()=>void}) {
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? 'समझें'}</span>
@@ -55,8 +56,9 @@ function Block({ block, onHelp }:{block:Detail['blocks'][number];onHelp:(kind:st
 
   if (block.block_type==='AI_HELP') return <div className="ai-help">
     <div className="ai-icon">✦</div>
-    <div><strong>AI tutor · अभी बंद है</strong>
-      <p>AI tutor launch के बाद अलग feature flag से सक्षम होगा। अभी learner को teacher-style hints, explanation और practice flow से पूरा lesson मिलता है।</p>
+    <div><strong>AI tutor</strong>
+      <p>अटकें तो इस lesson के context में hint, explanation, example या step-by-step मदद लें।</p>
+      <button type="button" className="button button-dark button-small" onClick={onTutorOpen}>Tutor खोलें →</button>
     </div>
   </div>;
 
@@ -114,6 +116,7 @@ export default function LearnClient() {
   const [lessons,setLessons]=useState<Lesson[]>([]);
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [help,setHelp]=useState('none');
+  const [tutorOpen,setTutorOpen]=useState(false);
   const [error,setError]=useState('');
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
@@ -183,11 +186,14 @@ export default function LearnClient() {
       <p className="lesson-intro">{lesson.summary}</p>
       <div className="feedback"><span>Learning path</span><span>पूर्व ज्ञान → explanation → worked example → guided → independent → assessment → recap</span></div>
 
-      {lesson.blocks.map(block=><Block key={block.id} block={block} onHelp={setHelp}/>)}
+      {lesson.blocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>पहले concept को अपने शब्दों में समझें, फिर example देखकर नया प्रयास करें।</span></div>}
 
       <div className="content-heading"><h2>इस lesson के सभी प्रश्न</h2><span>{lesson.questions.length} questions</span></div>
       {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}}/>)}
+
+      <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label="AI tutor खोलें">✦ <span>AI Tutor</span></button>
+      <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} />
 
       <div className="lesson-next">
         {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}>← पिछला</button> : <span/>}
