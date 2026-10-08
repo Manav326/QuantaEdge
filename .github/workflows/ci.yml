@@ -19,11 +19,11 @@ jobs:
     name: Detect affected areas
     runs-on: ubuntu-latest
     outputs:
-      api: \${{ steps.detect.outputs.api }}
-      web: \${{ steps.detect.outputs.web }}
-      admin: \${{ steps.detect.outputs.admin }}
-      integration: \${{ steps.detect.outputs.integration }}
-      full: \${{ steps.detect.outputs.full }}
+      api: ${{ steps.detect.outputs.api }}
+      web: ${{ steps.detect.outputs.web }}
+      admin: ${{ steps.detect.outputs.admin }}
+      integration: ${{ steps.detect.outputs.integration }}
+      full: ${{ steps.detect.outputs.full }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,10 +32,10 @@ jobs:
         id: detect
         shell: bash
         env:
-          EVENT_NAME: \${{ github.event_name }}
-          BASE_REF: \${{ github.base_ref }}
-          REF_NAME: \${{ github.ref_name }}
-          FULL_AUDIT: \${{ inputs.full_audit || false }}
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          REF_NAME: ${{ github.ref_name }}
+          FULL_AUDIT: ${{ inputs.full_audit || false }}
         run: |
           set -euo pipefail
           if [ "$EVENT_NAME" = "pull_request" ]; then
