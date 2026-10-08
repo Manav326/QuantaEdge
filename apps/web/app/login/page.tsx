@@ -84,7 +84,7 @@ export default function LoginPage(){
           <input type="checkbox" checked={consentAccepted} onChange={e=>setConsentAccepted(e.target.checked)}/>
           <span>मैं इस बच्चे का अधिकृत अभिभावक हूँ और उसकी learning profile बनाने तथा learning records रखने की सहमति देता/देती हूँ।</span>
         </label>
-        {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>
+        {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>}
         <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4||!consentAccepted} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
       </>}
       <small className="auth-note">Production OTP provider और guardian records server-side configured हैं।</small>
