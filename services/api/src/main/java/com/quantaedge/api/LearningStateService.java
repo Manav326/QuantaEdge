@@ -12,7 +12,7 @@ public class LearningStateService {
 
   @Transactional
   public void startLesson(long studentId,long lessonId){
-    ensurePublishedLesson(lessonId);
+    ensureStudentLessonAccess(studentId,lessonId);
     jdbc.update("""
       insert into student_lesson_progress(student_id,lesson_id,status,progress_percent,started_at,last_opened_at)
       values(?,?,'IN_PROGRESS',0,now(),now())
@@ -71,6 +71,20 @@ public class LearningStateService {
         mastery_percent=least(100,greatest(0,round(100.0*(student_concept_mastery.correct_attempts+excluded.correct_attempts) /
           nullif(student_concept_mastery.graded_attempts+1,0)))),last_attempt_at=now(),updated_at=now()
       """,studentId,conceptId,correct,correct);
+  }
+
+  private void ensureStudentLessonAccess(long studentId,long lessonId){
+    Long count=jdbc.queryForObject("""
+      select count(*) from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=?
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+        and c.code=st.class_code and st.active=true
+      """,Long.class,studentId,lessonId);
+    if(count==null||count==0) throw new SecurityException("Lesson access denied");
   }
 
   private void ensurePublishedLesson(long lessonId){
