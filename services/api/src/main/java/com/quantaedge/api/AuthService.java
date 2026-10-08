@@ -122,8 +122,19 @@ public class AuthService {
   @Transactional
   public AuthContext createChild(long userId,String name,String classCode,String language,String pin) {
     requireParent(userId);
-    if(pin==null || pin.length()<4 || pin.length()>8 || pin.chars().anyMatch(ch -> !Character.isDigit(ch))) throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
-    String board=jdbc.queryForObject("select board from curriculum_class where code=? and active=true",String.class,classCode);
+    if(name==null || name.trim().length()<2 || name.trim().length()>120)
+      throw new IllegalArgumentException("Student name must be between 2 and 120 characters");
+    if(!"hi".equalsIgnoreCase(language))
+      throw new IllegalArgumentException("Only Hindi student profiles are currently supported");
+    if(pin==null || pin.length()<4 || pin.length()>8 || pin.chars().anyMatch(ch -> !Character.isDigit(ch)))
+      throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
+    String board;
+    try {
+      board=jdbc.queryForObject("select board from curriculum_class where code=? and active=true",String.class,classCode);
+    } catch(Exception ex) {
+      throw new IllegalArgumentException("Invalid class selection");
+    }
+    if(board==null || board.isBlank()) throw new IllegalArgumentException("Invalid class selection");
     Long id=jdbc.queryForObject("""
       insert into student(public_id,display_name,class_code,board,language,environment,access_pin_hash,access_pin_set_at)
       values (?,?,?,?,?,'PRODUCTION',?,now()) returning id
