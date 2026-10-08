@@ -1,22 +1,36 @@
+
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-type Lesson = { id:number; code:string; title:string; summary:string; estimated_minutes:number; chapter_name:string; subject_name:string };
-type Detail = Lesson & { blocks:{sequence_no:number;block_type:string;content:string}[]; questions:{id:number;question_type:string;prompt:string;explanation:string;options:string;source_kind?:string;exam_format?:string}[] };
+type Lesson = {
+  id:number; code:string; title:string; summary:string; estimated_minutes:number;
+  chapter_name:string; subject_name:string; chapter_code:string;
+};
+type Question = {
+  id:number; question_type:string; prompt:string; explanation:string; options:string;
+  source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
+  topic?:string; subtopic?:string; skill?:string; response_mode?:string;
+};
+type Detail = Lesson & {
+  class_code:string; class_name:string;
+  blocks:{id:number;sequence_no:number;block_type:string;content:string}[];
+  questions:Question[];
+};
 
-function parse(value:string) {
-  try { return JSON.parse(value); } catch { return {}; }
+function parse<T=any>(value:string):T {
+  try { return JSON.parse(value) as T; } catch { return {} as T; }
 }
 
-function Block({ block, onHelp }:{block:any;onHelp:(kind:string)=>void}) {
-  const data=parse(block.content);
+function Block({ block, onHelp }:{block:Detail['blocks'][number];onHelp:(kind:string)=>void}) {
+  const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? 'समझें'}</span>
     <p>{data.body ?? data.description}</p>
     {data.keyPoints?.map((x:string)=><div className="feedback" key={x}><span>• {x}</span></div>)}
   </div>;
+
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
     <span className="concept-kicker">Worked example</span>
     <h3>{data.title ?? 'उदाहरण'}</h3>
@@ -24,79 +38,133 @@ function Block({ block, onHelp }:{block:any;onHelp:(kind:string)=>void}) {
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. {x}</span></div>)}
     {data.answer && <p><strong>उत्तर:</strong> {data.answer}</p>}
   </div>;
+
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE'].includes(block.block_type)) return <div className="concept-card">
     <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?'साथ में करें':'अब खुद करें')}</span>
     <p>{data.prompt}</p>
     {data.hint && <div className="feedback"><span>Hint: {data.hint}</span></div>}
   </div>;
+
   if (['IMAGE','DIAGRAM','VIDEO'].includes(block.block_type)) return <div className="concept-card">
     <span className="concept-kicker">{data.title ?? 'Visual'}</span>
-    {data.url ? <a href={data.url} target="_blank" rel="noreferrer" className="button button-small">Visual देखें ↗</a> : <p>{data.alt ?? data.description ?? 'इस concept के लिए visual representation आवश्यक नहीं है।'}</p>}
+    <div className="feedback"><span>◈</span><span>{data.description ?? data.alt ?? 'इस concept का labelled visual देखें।'}</span></div>
+    {data.url && <a href={data.url} target="_blank" rel="noreferrer" className="button button-small">Visual देखें ↗</a>}
     {data.caption && <p>{data.caption}</p>}
   </div>;
-  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>{data.title ?? 'QuantaEdge help'}</strong><p>अटकें तो सीधे answer नहीं—पहले hint, फिर आसान explanation, example और step-by-step मदद मिलेगी।</p><div className="hint-row">{(data.actions??['EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP']).map((x:string)=><button key={x} onClick={()=>onHelp(x)}>{x.replaceAll('_',' ')}</button>)}</div>{/* Selected help action is rendered by the lesson shell below. */}</div></div>
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker">Recap</span>{data.points?.map((x:string)=><div className="feedback" key={x}><span>✓ {x}</span></div>)}</div>;
+
+  if (block.block_type==='AI_HELP') return <div className="ai-help">
+    <div className="ai-icon">✦</div>
+    <div><strong>{data.title ?? 'QuantaEdge help'}</strong>
+      <p>अटकें तो सीधे answer नहीं—पहले hint, फिर आसान explanation, example और step-by-step मदद मिलेगी।</p>
+      <div className="hint-row">{(data.actions??['EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP']).map((x:string)=>
+        <button key={x} onClick={()=>onHelp(x)}>{x.replaceAll('_',' ')}</button>)}</div>
+    </div>
+  </div>;
+
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">
+    <span className="concept-kicker">Recap</span>
+    {data.points?.map((x:string)=><div className="feedback" key={x}><span>✓ {x}</span></div>)}
+  </div>;
+
   return null;
 }
 
-export default function LearnPage() {
-  const [lesson, setLesson] = useState<Detail|null>(null);
-  const [answer, setAnswer] = useState<string|null>(null);
-  const [help, setHelp] = useState('none');
-  const [feedback, setFeedback] = useState<any>(null);
-  const [error, setError] = useState('');
+function QuestionCard({q, onResult}:{q:Question;onResult:(id:number,result:any)=>void}) {
+  const [value,setValue]=useState('');
+  const [busy,setBusy]=useState(false);
+  const [result,setResult]=useState<any>(null);
+  const options=parse<{key:string;label:string}[]>(q.options||'[]');
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const list = await fetch('/api/v1/learning/lessons?classCode=7&subjectCode=maths').then(r=>r.json()) as Lesson[];
-        const target = list.find(x => x.code === 'variable-basics') ?? list[0];
-        if (!target) throw new Error('No published lesson');
-        const detail = await fetch(`/api/v1/learning/lessons/${target.id}`).then(r=>r.json()) as Detail;
-        setLesson(detail);
-      } catch { setError('Lesson load नहीं हो पाया। API health और Docker services जाँचें।'); }
+  async function submit(next:string) {
+    setValue(next);
+    if (!next.trim()) return;
+    setBusy(true);
+    try {
+      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
+      });
+      const body=await response.json();
+      setResult(body);
+      onResult(q.id,body);
+    } finally { setBusy(false); }
+  }
+
+  return <article className="concept-card">
+    <div className="lesson-meta">
+      <span className="concept-kicker">{q.question_type} · {q.exam_format ? q.exam_format : 'Practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
+      <span>{q.source_kind === 'TEXTBOOK_ALIGNED' ? 'SCERT-aligned author question' : q.source_kind ?? 'Author-created'}</span>
+    </div>
+    <p><strong>{q.prompt}</strong></p>
+    {options.length>0 ? <div className="answer-row">
+      {options.map(o=><button key={o.key} disabled={busy} className={value===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.key}. {o.label}</button>)}
+    </div> : <div>
+      {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
+        <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder="अपना reasoning/उत्तर यहाँ लिखें…" rows={q.question_type==='LONG_ANSWER'?6:4}/> :
+        <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
+      <button className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}>उत्तर जाँचें</button>
+    </div>}
+    {result && <div className="feedback">
+      <b>{result.correct===true?'✓ सही':result.correct===false?'अभी सही नहीं':'उत्तर दर्ज है'}</b>
+      <span>{result.feedback}</span>
+      {result.explanation && <span>{result.explanation}</span>}
+    </div>}
+  </article>;
+}
+
+export default function LearnPage() {
+  const [lessons,setLessons]=useState<Lesson[]>([]);
+  const [lesson,setLesson]=useState<Detail|null>(null);
+  const [help,setHelp]=useState('none');
+  const [error,setError]=useState('');
+
+  const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
+
+  async function loadLesson(id:number) {
+    const detail=await fetch('/api/v1/learning/lessons/'+id).then(r=>{
+      if(!r.ok) throw new Error('lesson');
+      return r.json();
+    }) as Detail;
+    setLesson(detail);
+  }
+
+  useEffect(()=>{
+    async function load(){
+      try{
+        const list=await fetch('/api/v1/learning/lessons?classCode=7&subjectCode=maths').then(r=>r.json()) as Lesson[];
+        setLessons(list);
+        if(!list.length) throw new Error('No published lesson');
+        await loadLesson(list[0].id);
+      }catch{setError('Lesson load नहीं हो पाया। API health और Docker services जाँचें।');}
     }
     load();
-  }, []);
+  },[]);
 
-  if (error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
-  if (!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>;
-
-  const firstQuestion = lesson.questions[0];
-  const options = firstQuestion ? parse(firstQuestion.options) as {key:string;label:string}[] : [];
-
-  async function submit(value:string) {
-    setAnswer(value);
-    if (!firstQuestion) return;
-    try {
-      const response = await fetch(`/api/v1/learning/questions/${firstQuestion.id}/answer`, {
-        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:value})
-      });
-      if (!response.ok) throw new Error('answer failed');
-      setFeedback(await response.json());
-    } catch {
-      setFeedback({correct:null, feedback:'उत्तर जाँच नहीं हो पाई। कृपया फिर प्रयास करें।'});
-    }
-  }
+  if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
+  if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>;
 
   return <main className="lesson-page">
     <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span className="lesson-progress">Published curriculum · {lesson.estimated_minutes} min</span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow">कक्षा 7 · {lesson.subject_name} · {lesson.chapter_name}</span><span>~{lesson.estimated_minutes} min</span></div>
+      <div className="lesson-meta">
+        <span className="eyebrow">कक्षा {lesson.class_code} · {lesson.subject_name} · {lesson.chapter_name}</span>
+        <span>Lesson {currentIndex+1} / {lessons.length}</span>
+      </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
+      <div className="feedback"><span>Learning path</span><span>पूर्व ज्ञान → explanation → worked example → guided → independent → assessment → recap</span></div>
 
-      {lesson.blocks.map(block=><Block key={block.sequence_no} block={block} onHelp={setHelp}/>)}
-      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>पहले concept को दोबारा अपने शब्दों में समझें, फिर example देखकर नया प्रयास करें।</span></div>}
+      {lesson.blocks.map(block=><Block key={block.id} block={block} onHelp={setHelp}/>)}
+      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>पहले concept को अपने शब्दों में समझें, फिर example देखकर नया प्रयास करें।</span></div>}
 
-      {firstQuestion && <div className="concept-card">
-        <span className="concept-kicker">Check your understanding · {firstQuestion.question_type}</span>
-        <p>{firstQuestion.prompt}</p>
-        <div className="answer-row">{options.map(o=><button key={o.key} className={answer===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.label}</button>)}</div>
-        {feedback && <div className="feedback"><b>{feedback.correct === true ? '✓ सही' : feedback.correct === false ? 'अभी सही नहीं' : 'उत्तर दर्ज है'}</b><span>{feedback.feedback}</span>{feedback.explanation && <span>{feedback.explanation}</span>}</div>}
-      </div>}
+      <div className="content-heading"><h2>इस lesson के सभी प्रश्न</h2><span>{lesson.questions.length} questions</span></div>
+      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}}/>)}
 
-      <div className="lesson-next"><span>Next: Practice</span><Link href="/student/practice" className="button button-dark button-small">Practice खोलें →</Link></div>
+      <div className="lesson-next">
+        {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}>← पिछला</button> : <span/>}
+        {currentIndex>=0 && currentIndex<lessons.length-1
+          ? <button className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}>अगला lesson →</button>
+          : <Link href="/student/practice" className="button button-dark button-small">Practice खोलें →</Link>}
+      </div>
     </section>
   </main>;
 }
