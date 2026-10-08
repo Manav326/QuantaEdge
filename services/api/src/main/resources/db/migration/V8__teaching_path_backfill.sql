@@ -36,7 +36,7 @@ begin
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
       returning id into v_lesson_id;
 
-      insert into lesson_block(v_lesson_id,sequence_no,block_type,content)
+      insert into lesson_block(lesson_id,sequence_no,block_type,content)
       values
       (v_lesson_id,1,'EXPLANATION',jsonb_build_object(
         'heading',case stage.n when 1 then r.display_name||' को समझें' when 2 then 'शिक्षक के साथ करके देखें' else 'अब खुद समझाएं' end,
@@ -59,9 +59,9 @@ begin
       (v_lesson_id,4,'SUMMARY',jsonb_build_object(
         'points',jsonb_build_array(r.description,'मुख्य विचार को अपने शब्दों में दोहराएँ।','एक नए उदाहरण में लागू करके mastery जाँचें।')
       ))
-      on conflict(v_lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
+      on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
-      insert into question(v_lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
+      insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
       values(
         v_lesson_id,obj_id,'MCQ',
         r.display_name||' — सीखने के दौरान सबसे सही अभ्यास क्या है?',
@@ -74,7 +74,7 @@ begin
         1)
       returning id into v_question_id;
 
-      insert into question_option(v_question_id,option_key,label,is_correct,sort_order)
+      insert into question_option(question_id,option_key,label,is_correct,sort_order)
       values
         (v_question_id,'A',case stage.n
           when 1 then 'मुख्य अवधारणा को पहचानकर उदाहरण से जोड़ना।'
