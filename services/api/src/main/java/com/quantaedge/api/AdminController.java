@@ -181,8 +181,11 @@ public class AdminController {
     String sourceKind=String.valueOf(body.getOrDefault("sourceKind","AUTHOR_CREATED"));
     Integer sourceYear=body.get("sourceYear")==null?null:Integer.valueOf(String.valueOf(body.get("sourceYear")));
     String sourceRef=body.get("sourceRef")==null?null:String.valueOf(body.get("sourceRef"));
-    if(!"AUTHOR_CREATED".equals(sourceKind) && (sourceRef==null || sourceRef.isBlank() || sourceYear==null))
-      throw new IllegalArgumentException("Source-backed questions require sourceRef and sourceYear");
+    Long sourceId=body.get("sourceId")==null?null:Long.valueOf(String.valueOf(body.get("sourceId")));
+    if(!"AUTHOR_CREATED".equals(sourceKind) && (sourceRef==null || sourceRef.isBlank() || sourceYear==null || sourceId==null))
+      throw new IllegalArgumentException("Source-backed questions require sourceId, sourceRef and sourceYear");
+    if(sourceId!=null && jdbc.queryForObject("select count(*) from content_source where id=?",Long.class,sourceId)==0)
+      throw new IllegalArgumentException("Registered content source not found");
     int changed=jdbc.update("""
       update question set prompt=?,explanation=?,difficulty=?,marks=?,exam_format=?,source_kind=?,
         source_title=?,source_ref=?,source_year=?,source_id=?,board=?,topic=?,subtopic=?,skill=?,review_status=?
