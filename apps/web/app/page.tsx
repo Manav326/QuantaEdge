@@ -44,7 +44,7 @@ export default function Home() {
             <div className="task"><span className="task-icon">✦</span><div><strong>Mastery बढ़ाएँ</strong><small>Progress और concept mastery के आधार पर next step</small></div><span className="arrow">→</span></div>
             <Link href="/login" className="device-cta">अपनी learning journey शुरू करें →</Link>
           </div>
-        </div>n>
+        </div>
 
       <section className="strip"><span>एक tutor जो हर बच्चे के लिए थोड़ा अलग पढ़ाता है</span><div><b>DIAGNOSE</b><i>→</i><b>LEARN</b><i>→</i><b>PRACTICE</b><i>→</i><b>MASTER</b></div></section>
 
