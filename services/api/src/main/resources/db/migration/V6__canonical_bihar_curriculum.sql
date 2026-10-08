@@ -117,10 +117,10 @@ begin
 {"class":"8","subject":"science","code":"sound","no":18,"name":"ध्वनियाँ तरह-तरह की","desc":"कंपन, ध्वनि का उत्पादन/संचार, तीव्रता और श्रव्यता।"},
 {"class":"8","subject":"science","code":"air-water-pollution","no":19,"name":"वायु एवं जल-प्रदूषण की समस्या","desc":"प्रदूषण के स्रोत, प्रभाव, रोकथाम और नागरिक जिम्मेदारी।"}
 ]'::jsonb)
-  as x(class text,subject text,code text,no int,name text,desc text)
+  as x(class text,subject text,code text,no int,name text,description text)
   loop
     insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,curriculum_source,content_status,textbook_chapter_no,teaching_order,pedagogy_note)
-    select s.id,r.code,r.name,r.desc,r.no,'SCERT Bihar textbook / teacher handbook reference','PUBLISHED',r.no,r.no,
+    select s.id,r.code,r.name,r.description,r.no,'SCERT Bihar textbook / teacher handbook reference','PUBLISHED',r.no,r.no,
       'Teacher sequence: activate prior knowledge → build the core idea → model an example → guided practice → independent practice → recap.'
     from curriculum_subject s join curriculum_class c on c.id=s.class_id
     where c.code=r.class and s.code=r.subject
