@@ -80,7 +80,11 @@ export default function LoginPage(){
         <label>बच्चे का नाम<input value={child.displayName} onChange={e=>setChild({...child,displayName:e.target.value})} placeholder="जैसे आर्यन"/></label>
         <label>कक्षा<select value={child.classCode} onChange={e=>setChild({...child,classCode:e.target.value})}><option value="6">कक्षा 6</option><option value="7">कक्षा 7</option><option value="8">कक्षा 8</option></select></label>
         <label>Student PIN<input value={child.pin} onChange={e=>setChild({...child,pin:e.target.value})} placeholder="4–8 digits" inputMode="numeric" maxLength={8}/></label>
-        {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>}
+        <label className="consent-row">
+          <input type="checkbox" checked={consentAccepted} onChange={e=>setConsentAccepted(e.target.checked)}/>
+          <span>मैं इस बच्चे का अधिकृत अभिभावक हूँ और उसकी learning profile बनाने तथा learning records रखने की सहमति देता/देती हूँ।</span>
+        </label>
+        {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>
         <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4||!consentAccepted} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
       </>}
       <small className="auth-note">Production OTP provider और guardian records server-side configured हैं।</small>
