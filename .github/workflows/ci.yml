@@ -349,7 +349,7 @@ jobs:
 
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"assetType":"IMAGE","title":"CI visual asset","altText":"CI visual","url":"https://example.invalid/ci-image","sourceKind":"AUTHOR_CREATED","status":"REVIEW"}'             http://localhost:8080/api/v1/admin/assets >/tmp/qe-asset.json
           ASSET_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-asset.json"))["id"])')"
-          curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset >/tmp/qe-attach.json
+          curl --request=PUT -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset >/tmp/qe-attach.json
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-attach.json"))["updated"])')" = "True"
 
       - name: Browser UI smoke test
