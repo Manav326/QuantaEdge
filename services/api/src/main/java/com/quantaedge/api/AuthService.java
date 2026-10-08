@@ -204,6 +204,7 @@ public class AuthService {
   }
 
   public String issueToken(AuthContext context) {
+    System.out.println("AUTH_TOKEN_ISSUE role=" + context.role() + " userId=" + context.userId() + " studentId=" + context.studentId());
     String raw=randomToken();
     jdbc.update("""
       insert into auth_session(token_hash,user_id,student_id,expires_at)
