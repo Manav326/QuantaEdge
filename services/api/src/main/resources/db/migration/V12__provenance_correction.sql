@@ -21,11 +21,11 @@ set source_kind='AUTHOR_CREATED',
     source_ref='author-created:chapter:'||coalesce(source_ref,'unknown'),
     source_year=null,
     board=null,
-    tags=(
+    tags=coalesce((
       select jsonb_agg(x)
       from jsonb_array_elements_text(coalesce(tags,'[]'::jsonb)) x
       where x not in ('textbook-aligned','scert-chapter-'||coalesce(source_ref,''))
-    )
+    ), '[]'::jsonb)
 where source_kind='TEXTBOOK_ALIGNED'
   and tags ? 'author-created';
 
