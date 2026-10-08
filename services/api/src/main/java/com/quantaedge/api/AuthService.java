@@ -49,6 +49,8 @@ public class AuthService {
   }
 
   public String requestOtp(String mobile,String purpose) {
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose))
+      throw new IllegalArgumentException("Invalid OTP purpose");
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
     long recent=jdbc.queryForObject(
@@ -89,13 +91,16 @@ public class AuthService {
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String displayName) {
     String normalized=normalizeMobile(mobile);
+    String purpose="LOGIN";
     var rows=jdbc.queryForList("""
-      select id,code_hash,attempts,expires_at
+      select id,code_hash,attempts,expires_at,purpose
       from otp_challenge where mobile_e164=? and consumed_at is null
       order by requested_at desc limit 1
       """,normalized);
     if(rows.isEmpty()) throw new IllegalArgumentException("OTP not found or expired");
     var row=rows.getFirst();
+    if(!purpose.equals(String.valueOf(row.get("purpose"))))
+      throw new IllegalArgumentException("OTP purpose mismatch");
     if(((Number)row.get("attempts")).intValue()>=5) throw new IllegalStateException("Too many OTP attempts");
     jdbc.update("update otp_challenge set attempts=attempts+1 where id=?",row.get("id"));
     if(java.time.OffsetDateTime.now().isAfter((java.time.OffsetDateTime)row.get("expires_at"))) {
