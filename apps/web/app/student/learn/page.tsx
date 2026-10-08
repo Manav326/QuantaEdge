@@ -55,10 +55,8 @@ function Block({ block, onHelp }:{block:Detail['blocks'][number];onHelp:(kind:st
 
   if (block.block_type==='AI_HELP') return <div className="ai-help">
     <div className="ai-icon">✦</div>
-    <div><strong>{data.title ?? 'QuantaEdge help'}</strong>
-      <p>अटकें तो सीधे answer नहीं—पहले hint, फिर आसान explanation, example और step-by-step मदद मिलेगी।</p>
-      <div className="hint-row">{(data.actions??['EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP']).map((x:string)=>
-        <button key={x} onClick={()=>onHelp(x)}>{x.replaceAll('_',' ')}</button>)}</div>
+    <div><strong>AI tutor · अभी बंद है</strong>
+      <p>AI tutor launch के बाद अलग feature flag से सक्षम होगा। अभी learner को teacher-style hints, explanation और practice flow से पूरा lesson मिलता है।</p>
     </div>
   </div>;
 
