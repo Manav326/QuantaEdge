@@ -79,7 +79,7 @@ public class AuthController {
   @PostMapping("/logout")
   public ResponseEntity<Map<String,Object>> logout(@CookieValue(value=AuthService.COOKIE,required=false) String token) {
     auth.revoke(token);
-    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,"").httpOnly(true).secure(secureCookies).sameSite("Lax").path("/").maxAge(Duration.ZERO).build();
+    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,"").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).body(Map.of("loggedOut",true));
   }
 

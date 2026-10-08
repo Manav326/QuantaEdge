@@ -23,6 +23,19 @@ public class GuardianController {
       """,context.userId());
   }
 
+  @DeleteMapping("/children/{studentId}")
+  public Map<String,Object> archiveChild(@PathVariable long studentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    context=authorization.requireParent(context);
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED')
+      """,Boolean.class,context.userId(),studentId);
+    if(!allowed) throw new SecurityException("Child access denied");
+    jdbc.update("update guardian_student set active=false,consent_status='REVOKED' where guardian_user_id=? and student_id=?",context.userId(),studentId);
+    jdbc.update("update student set active=false where id=?",studentId);
+    return Map.of("deleted",true,"studentId",studentId);
+  }
+
   @GetMapping("/children/{studentId}/report")
   public Map<String,Object> report(@PathVariable long studentId,@RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireParent(context);

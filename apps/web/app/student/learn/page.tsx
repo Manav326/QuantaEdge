@@ -117,6 +117,8 @@ export default function LearnPage() {
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [help,setHelp]=useState('none');
   const [error,setError]=useState('');
+  const [sessionId,setSessionId]=useState<number|null>(null);
+  const [sessionStarted,setSessionStarted]=useState<number|null>(null);
   const router=useRouter();
   const searchParams=useSearchParams();
 
@@ -151,11 +153,22 @@ export default function LearnPage() {
         const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code).then(r=>r.json()) as Lesson[];
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
+        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
+        if(sr.ok){const sb=await sr.json();setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}
         setLesson(d);
       }catch(e:any){setError(e.message==='Student unavailable'?'Student login required':'Lesson load नहीं हो पाया।');}
     }
     load();
   },[router,searchParams]);
+
+  useEffect(()=>{
+    return ()=>{
+      if(sessionId && sessionStarted){
+        const minutes=Math.max(0,Math.min(240,Math.round((Date.now()-sessionStarted)/60000)));
+        void fetch('/api/v1/learning/sessions/'+sessionId+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
+      }
+    };
+  },[sessionId,sessionStarted]);
 
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>;
