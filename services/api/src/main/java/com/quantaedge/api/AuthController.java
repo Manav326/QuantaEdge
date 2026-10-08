@@ -59,6 +59,17 @@ public class AuthController {
     return withCookie(auth.issueToken(selected),selected);
   }
 
+  @PostMapping("/switch-parent")
+  public ResponseEntity<Map<String,Object>> switchParent(
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    if(context==null || context.userId()==null || context.studentId()==null)
+      throw new SecurityException("Parent session unavailable");
+    AuthContext parent=auth.contextForUser(context.userId());
+    if(!"PARENT".equals(parent.role()) && !"ADMIN".equals(parent.role()))
+      throw new SecurityException("Parent session unavailable");
+    return withCookie(auth.issueToken(parent),parent);
+  }
+
   @GetMapping("/me")
   public Map<String,Object> me(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     if(context==null) throw new SecurityException("Authentication required");
