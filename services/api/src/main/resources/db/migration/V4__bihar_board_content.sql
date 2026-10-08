@@ -137,11 +137,11 @@ begin
       on conflict(chapter_id,code) do update set
         title=excluded.title,summary=excluded.summary,estimated_minutes=excluded.estimated_minutes,
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
-      returning id into lesson_id;
+      returning id into v_lesson_id;
 
-      delete from question where question.lesson_id=lesson_id;
+      delete from question q where q.lesson_id=v_lesson_id;
 
-      insert into lesson_block(lesson_id,sequence_no,block_type,content)
+      insert into lesson_block(v_lesson_id,sequence_no,block_type,content)
       values
       (lesson_id,1,'EXPLANATION',
         jsonb_build_object(
@@ -161,7 +161,7 @@ begin
         else
           jsonb_build_object('points',jsonb_build_array(r.description,'अवधारणा को उदाहरण पर लागू करें।','अंत में उत्तर की जाँच करना सीखने का हिस्सा है।'))
         end)
-      on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
+      on conflict(v_lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
       for q in select * from (values
         (1,'मुख्य उद्देश्य क्या है?','FOUNDATION'),
