@@ -32,7 +32,8 @@ create table auth_session (
   created_at timestamptz not null default now(),
   last_seen_at timestamptz not null default now(),
   expires_at timestamptz not null,
-  revoked_at timestamptz
+  revoked_at timestamptz,
+  check (user_id is not null or student_id is not null)
 );
 
 create table guardian_student (
@@ -56,6 +57,5 @@ create index idx_auth_session_token on auth_session(token_hash,expires_at,revoke
 create index idx_guardian_student_guardian on guardian_student(guardian_user_id,active);
 create index idx_guardian_student_student on guardian_student(student_id,active);
 
-insert into app_metadata(key,value)
-values ('schema','auth-and-guardians-v15')
+insert into app_metadata(key,value) values ('schema','auth-and-guardians-v15')
 on conflict(key) do update set value=excluded.value;

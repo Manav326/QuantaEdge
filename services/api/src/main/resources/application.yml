@@ -19,6 +19,10 @@ app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
   demo-seed: ${APP_DEMO_SEED:false}
+  auth:
+    session-hours: ${APP_AUTH_SESSION_HOURS:168}
+    secure-cookies: ${APP_AUTH_SECURE_COOKIES:true}
+    admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:}
 management:
   endpoints:
     web:

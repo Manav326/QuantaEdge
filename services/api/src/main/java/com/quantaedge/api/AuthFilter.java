@@ -13,17 +13,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class AuthFilter extends OncePerRequestFilter {
   private final AuthService auth;
   public AuthFilter(AuthService auth){this.auth=auth;}
-
-  @Override
-  protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
+  @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
       throws ServletException,IOException {
     String token=null;
-    if(request.getCookies()!=null){
-      for(Cookie cookie:request.getCookies()){
-        if(AuthService.COOKIE.equals(cookie.getName())){token=cookie.getValue();break;}
-      }
-    }
-    if(token!=null){
+    if(request.getCookies()!=null) for(Cookie cookie:request.getCookies())
+      if(AuthService.COOKIE.equals(cookie.getName())) { token=cookie.getValue(); break; }
+    if(token!=null) {
       AuthContext context=auth.current(token);
       if(context!=null) request.setAttribute("authContext",context);
     }

@@ -8,14 +8,19 @@ public class AuthorizationService {
     if(context==null || !context.isAuthenticated()) throw new SecurityException("Authentication required");
     return context;
   }
-  public AuthContext requireAdmin(AuthContext context) {
+  public AuthContext requireStudent(AuthContext context) {
     context=requireAuth(context);
-    if(!context.isAdmin()) throw new SecurityException("Admin access required");
+    if(!context.isStudent()) throw new SecurityException("Student access required");
     return context;
   }
   public AuthContext requireParent(AuthContext context) {
     context=requireAuth(context);
     if(!context.isParent()) throw new SecurityException("Parent access required");
+    return context;
+  }
+  public AuthContext requireAdmin(AuthContext context) {
+    context=requireAuth(context);
+    if(!context.isAdmin()) throw new SecurityException("Admin access required");
     return context;
   }
 }
