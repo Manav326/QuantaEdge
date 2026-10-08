@@ -137,6 +137,22 @@ public class AdminController {
     return jdbc.queryForList("select id,lesson_id,question_type,prompt,explanation,difficulty,marks,exam_format,source_kind,source_title,source_ref,source_year,board,topic,subtopic,skill,tags::text as tags,answer_payload::text as answer_payload,review_status from question where lesson_id=? and active=true order by sort_order",lessonId);
   }
 
+  @PutMapping("/lessons/{lessonId}/blocks/{blockId}/asset")
+  public Map<String,Object> attachAsset(@PathVariable long lessonId,@PathVariable long blockId,
+      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context){
+    AuthContext admin=authorization.requireAdmin(context);
+    long assetId=Long.parseLong(String.valueOf(body.get("assetId")));
+    Long assetCount=jdbc.queryForObject("select count(*) from content_asset where id=?",Long.class,assetId);
+    if(assetCount==null||assetCount==0) throw new IllegalArgumentException("Asset not found");
+    int changed=jdbc.update("""
+      update lesson_block set asset_id=?
+      where id=? and lesson_id=? and active=true
+      """,assetId,blockId,lessonId);
+    if(changed==0) throw new IllegalArgumentException("Lesson block not found");
+    log(admin,"BLOCK_ASSET_ATTACH",String.valueOf(blockId),"asset="+assetId);
+    return Map.of("updated",true,"lessonId",lessonId,"blockId",blockId,"assetId",assetId);
+  }
+
   @PutMapping("/lessons/{lessonId}/status")
   @Transactional
   public Map<String,Object> updateLessonStatus(@PathVariable long lessonId,@RequestBody Map<String,Object> body,
