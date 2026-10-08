@@ -185,7 +185,7 @@ public class AdminController {
       throw new IllegalArgumentException("Source-backed questions require sourceRef and sourceYear");
     int changed=jdbc.update("""
       update question set prompt=?,explanation=?,difficulty=?,marks=?,exam_format=?,source_kind=?,
-        source_title=?,source_ref=?,source_year=?,board=?,topic=?,subtopic=?,skill=?,review_status=?
+        source_title=?,source_ref=?,source_year=?,source_id=?,board=?,topic=?,subtopic=?,skill=?,review_status=?
       where id=?
       """,
       body.get("prompt"),body.get("explanation"),String.valueOf(body.getOrDefault("difficulty","CORE")),
@@ -207,20 +207,23 @@ public class AdminController {
     String sourceTitle=body.get("sourceTitle")==null?null:String.valueOf(body.get("sourceTitle"));
     String sourceRef=body.get("sourceRef")==null?null:String.valueOf(body.get("sourceRef"));
     Integer sourceYear=body.get("sourceYear")==null?null:Integer.valueOf(String.valueOf(body.get("sourceYear")));
+    Long sourceId=body.get("sourceId")==null?null:Long.valueOf(String.valueOf(body.get("sourceId")));
     String board=body.get("board")==null?null:String.valueOf(body.get("board"));
-    if(!"AUTHOR_CREATED".equals(sourceKind) && (sourceRef==null||sourceRef.isBlank()||sourceYear==null||board==null||board.isBlank()))
-      throw new IllegalArgumentException("Source-backed imports require sourceRef, sourceYear and board");
+    if(!"AUTHOR_CREATED".equals(sourceKind) && (sourceRef==null||sourceRef.isBlank()||sourceYear==null||board==null||board.isBlank()||sourceId==null))
+      throw new IllegalArgumentException("Source-backed imports require sourceId, sourceRef, sourceYear and board");
+    if(sourceId!=null && jdbc.queryForObject("select count(*) from content_source where id=?",Long.class,sourceId)==0)
+      throw new IllegalArgumentException("Registered content source not found");
 
     List<Map<String,Object>> items=(List<Map<String,Object>>)body.getOrDefault("questions",List.of());
     int imported=0;
     for(Map<String,Object> item:items){
       String answerPayload=item.get("answerPayload")==null?"{}":String.valueOf(item.get("answerPayload"));
       Long qid=jdbc.queryForObject("""
-        insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,board,marks,exam_format,topic,subtopic,skill,tags,answer_payload,review_status)
+        insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,source_id,board,marks,exam_format,topic,subtopic,skill,tags,answer_payload,review_status)
         values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT') returning id
         """,Long.class,lessonId,String.valueOf(item.getOrDefault("questionType","SHORT_ANSWER")),
         item.get("prompt"),item.get("explanation"),String.valueOf(item.getOrDefault("difficulty","CORE")),
-        Integer.valueOf(String.valueOf(item.getOrDefault("sortOrder",imported+1))),sourceKind,sourceTitle,sourceRef,sourceYear,board,
+        Integer.valueOf(String.valueOf(item.getOrDefault("sortOrder",imported+1))),sourceKind,sourceTitle,sourceRef,sourceYear,sourceId,board,
         item.get("marks")==null?null:Integer.valueOf(String.valueOf(item.get("marks"))),item.get("examFormat"),
         item.get("topic"),item.get("subtopic"),item.get("skill"),item.getOrDefault("tags","[]"),answerPayload);
       Object options=item.get("options");
