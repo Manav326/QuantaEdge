@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
-  chapter_name:string; subject_name:string; chapter_code:string;
+  chapter_name:string; subject_name:string; subject_code:string; chapter_code:string;
 };
 type Question = {
   id:number; question_type:string; prompt:string; explanation:string; options:string;
