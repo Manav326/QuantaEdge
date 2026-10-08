@@ -74,6 +74,32 @@ public class GuardianController {
       where c.code=(select class_code from student where id=?)
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
       """,studentId,studentId));
+    result.put("sessionStats",jdbc.queryForMap("""
+      select count(*) as sessions_30d,
+             coalesce(sum(minutes) filter(where started_at>=now()-interval '30 days'),0) as minutes_30d,
+             coalesce(round(avg(minutes) filter(where ended_at is not null and started_at>=now()-interval '30 days'),1),0) as avg_minutes
+      from learning_session where student_id=?
+      """,studentId));
+    result.put("recentAttempts",jdbc.queryForList("""
+      select qa.answered_at,qa.correct,q.question_type,ch.display_name as chapter_name,
+             cc.title as concept_title
+      from student_question_attempt qa
+      join question q on q.id=qa.question_id
+      left join chapter_concept cc on cc.id=q.concept_id
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      where qa.student_id=?
+      order by qa.answered_at desc limit 20
+      """,studentId));
+    result.put("masteryDetails",jdbc.queryForList("""
+      select cc.title as concept_title,ch.display_name as chapter_name,s.display_name as subject_name,
+             m.mastery_percent,m.attempts
+      from student_concept_mastery m
+      join chapter_concept cc on cc.id=m.concept_id
+      join curriculum_chapter ch on ch.id=cc.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      where m.student_id=? order by m.mastery_percent asc,ch.teaching_order,cc.concept_order limit 20
+      """,studentId));
     return result;
   }
 
