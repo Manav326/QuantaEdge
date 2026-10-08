@@ -107,9 +107,10 @@ public class GuardianController {
   public Map<String,Object> createChild(@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestBody Map<String,Object> body){
     context=authorization.requireParent(context);
+    boolean consentAccepted=Boolean.TRUE.equals(body.get("consentAccepted"));
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
         String.valueOf(body.getOrDefault("classCode","7")),String.valueOf(body.getOrDefault("language","hi")),
-        String.valueOf(body.getOrDefault("pin","")));
+        String.valueOf(body.getOrDefault("pin","")),consentAccepted);
     return jdbc.queryForMap("select public_id,display_name,class_code,board,language from student where id=?",child.studentId());
   }
 }
