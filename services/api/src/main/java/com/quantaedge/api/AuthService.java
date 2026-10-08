@@ -39,7 +39,7 @@ public class AuthService {
   }
 
   public String normalizeMobile(String value) {
-    String digits=value==null?"":value.replaceAll("\\D","");
+    String digits=value==null?"":value.replaceAll("[^0-9]","");
     if(digits.startsWith("91") && digits.length()==12) return "+"+digits;
     if(digits.length()==10) return "+91"+digits;
     return value==null?"":value.trim();
@@ -47,7 +47,7 @@ public class AuthService {
 
   public String requestOtp(String mobile,String purpose) {
     String normalized=normalizeMobile(mobile);
-    if(!normalized.matches("\\+91\\d{10}")) throw new IllegalArgumentException("Invalid Indian mobile number");
+    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
     long recent=jdbc.queryForObject(
         "select count(*) from otp_challenge where mobile_e164=? and requested_at>now()-interval '60 seconds'",
         Long.class,normalized);
@@ -119,7 +119,7 @@ public class AuthService {
   @Transactional
   public AuthContext createChild(long userId,String name,String classCode,String language,String pin) {
     requireParent(userId);
-    if(pin==null || !pin.matches("\\d{4,8}")) throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
+    if(pin==null || pin.length()<4 || pin.length()>8 || pin.chars().anyMatch(ch -> !Character.isDigit(ch))) throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
     String board=jdbc.queryForObject("select board from curriculum_class where code=? and active=true",String.class,classCode);
     Long id=jdbc.queryForObject("""
       insert into student(public_id,display_name,class_code,board,language,environment,access_pin_hash,access_pin_set_at)
