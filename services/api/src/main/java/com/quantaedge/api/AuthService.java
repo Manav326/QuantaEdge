@@ -89,9 +89,9 @@ public class AuthService {
   }
 
   @Transactional
-  public AuthContext verifyOtp(String mobile,String otp,String displayName) {
+  public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName) {
     String normalized=normalizeMobile(mobile);
-    String purpose="LOGIN";
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
     var rows=jdbc.queryForList("""
       select id,code_hash,attempts,expires_at,purpose
       from otp_challenge where mobile_e164=? and consumed_at is null
