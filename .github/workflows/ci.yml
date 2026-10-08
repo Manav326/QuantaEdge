@@ -108,13 +108,33 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          rm -f /tmp/audit.json
           for i in {1..150}; do
-            if curl -fsS http://localhost:8080/api/v1/curriculum/audit/strict > /tmp/audit.json; then
+            api_id="$(docker compose -f docker-compose.yml ps -q api || true)"
+            if [ -n "$api_id" ]; then
+              status="$(docker inspect -f '{{.State.Status}}' "$api_id")"
+              if [ "$status" = "exited" ] || [ "$status" = "dead" ]; then
+                echo "API container stopped before becoming ready."
+                docker inspect "$api_id" --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}} Error={{.State.Error}}'
+                docker compose -f docker-compose.yml logs --no-color --tail=300 api
+                exit 1
+              fi
+            fi
+            if curl --connect-timeout 2 --max-time 5 -fsS http://localhost:8080/api/v1/curriculum/audit/strict > /tmp/audit.json; then
+              echo "Curriculum API is ready after $((i * 2)) seconds."
               break
             fi
             sleep 2
           done
-          test -s /tmp/audit.json
+          if [ ! -s /tmp/audit.json ]; then
+            echo "Curriculum API did not become ready within 5 minutes."
+            docker compose -f docker-compose.yml ps -a
+            echo "===== API inspect ====="
+            docker inspect "$(docker compose -f docker-compose.yml ps -q api)" --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}} RestartCount={{.RestartCount}} Error={{.State.Error}}'
+            echo "===== API logs ====="
+            docker compose -f docker-compose.yml logs --no-color --tail=300 api
+            exit 1
+          fi
           cat /tmp/audit.json
 
       - name: Require strict curriculum GREEN
