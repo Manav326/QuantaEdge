@@ -73,7 +73,13 @@ public class AuthController {
   @GetMapping("/me")
   public Map<String,Object> me(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     if(context==null) throw new SecurityException("Authentication required");
-    return Map.of("authenticated",true,"role",context.role(),"studentId",context.studentId(),"userId",context.userId(),"displayName",context.displayName());
+    var result=new LinkedHashMap<String,Object>();
+    result.put("authenticated",true);
+    result.put("role",context.role());
+    result.put("studentId",context.studentId());
+    result.put("userId",context.userId());
+    result.put("displayName",context.displayName());
+    return result;
   }
 
   @PostMapping("/logout")
