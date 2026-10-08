@@ -2,65 +2,68 @@ services:
   postgres:
     image: postgres:17-alpine
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-quantaedge}
-      POSTGRES_USER: ${POSTGRES_USER:-quantaedge}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me-local}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - quantaedge_postgres:/var/lib/postgresql/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 3s
       retries: 10
+
   redis:
     image: redis:8-alpine
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - quantaedge_redis:/data
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10
+
   api:
-    build:
-      context: ./services/api
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-api:${QUANTAEDGE_IMAGE_TAG}
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-quantaedge}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-quantaedge}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-change-me-local}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
-      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001}
-      APP_DEMO_SEED: ${APP_DEMO_SEED:-true}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS}
+      APP_DEMO_SEED: "false"
     ports:
       - "${API_PORT:-8080}:8080"
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+
   web:
-    build:
-      context: ./apps/web
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-web:${QUANTAEDGE_IMAGE_TAG}
     environment:
       BACKEND_INTERNAL_URL: http://api:8080
     ports:
       - "${WEB_PORT:-3000}:3000"
+    restart: unless-stopped
     depends_on:
       - api
+
   admin:
-    build:
-      context: ./apps/admin
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-admin:${QUANTAEDGE_IMAGE_TAG}
     environment:
-      BACKEND_INTERNAL_URL: http://api:8080
+      NEXT_PUBLIC_API_BASE_URL: ${PUBLIC_API_BASE_URL}
     ports:
       - "${ADMIN_PORT:-3001}:3000"
+    restart: unless-stopped
     depends_on:
       - api
+
 volumes:
   quantaedge_postgres:
   quantaedge_redis:

@@ -1,3 +1,13 @@
 import type { NextConfig } from 'next';
-const nextConfig: NextConfig = { output: 'standalone' };
+
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  async rewrites() {
+    return [{
+      source: '/api/:path*',
+      destination: `${process.env.BACKEND_INTERNAL_URL ?? 'http://api:8080'}/api/:path*`,
+    }];
+  },
+};
+
 export default nextConfig;
