@@ -139,7 +139,7 @@ begin
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
       returning id into v_lesson_id;
 
-      delete from question q where q.lesson_id=v_lesson_id;
+      delete from question where lesson_id=v_lesson_id;
 
       insert into lesson_block(lesson_id,sequence_no,block_type,content)
       values
