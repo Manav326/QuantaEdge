@@ -22,6 +22,7 @@ public class AuthService {
   private final boolean demoSeed;
   private final int sessionHours;
   private final boolean secureCookies;
+  private final int otpCooldownSeconds;
   private final List<String> adminMobiles;
 
   public AuthService(
@@ -29,6 +30,7 @@ public class AuthService {
       @Value("${app.demo-seed:false}") boolean demoSeed,
       @Value("${app.auth.session-hours:168}") int sessionHours,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies,
+      @Value("${app.auth.otp-cooldown-seconds:60}") int otpCooldownSeconds,
       @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
@@ -49,8 +51,8 @@ public class AuthService {
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
     long recent=jdbc.queryForObject(
-        "select count(*) from otp_challenge where mobile_e164=? and requested_at>now()-interval '60 seconds'",
-        Long.class,normalized);
+        "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
+        Long.class,normalized,otpCooldownSeconds);
     if(recent>0) throw new IllegalStateException("Please wait before requesting another OTP");
 
     String otp=(demoSeed && normalized.equals("+917070107483")) ? "000000" :
