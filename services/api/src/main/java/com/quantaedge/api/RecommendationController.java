@@ -31,6 +31,7 @@ public class RecommendationController {
       left join student_lesson_progress p on p.student_id=? and p.lesson_id=l.id
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
         and c.code=(select class_code from student where id=?)
+        and coalesce(p.status,'NOT_STARTED') <> 'COMPLETED'
       group by l.id,ch.id,s.id,p.status
       order by case when coalesce(p.status,'NOT_STARTED')='COMPLETED' then 1 else 0 end,
                coalesce(round(avg(coalesce(m.mastery_percent,0))),0),ch.sort_order,l.sort_order
