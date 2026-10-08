@@ -128,7 +128,7 @@ public class AdminController {
         int ord=1; for(Object opt:list){
           if(opt instanceof Map<?,?> om){
             jdbc.update("insert into question_option(question_id,option_key,label,is_correct,sort_order) values (?,?,?,?,?)",
-                qid,String.valueOf(om.get("key")),String.valueOf(om.get("label")),Boolean.parseBoolean(String.valueOf(om.getOrDefault("correct",false))),ord++);
+                qid,String.valueOf(om.get("key")),String.valueOf(om.get("label")),Boolean.parseBoolean(String.valueOf(om.containsKey("correct") ? om.get("correct") : Boolean.FALSE)),ord++);
           }
         }
       }
