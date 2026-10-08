@@ -92,7 +92,7 @@ public class LearningController {
       select q.id,q.lesson_id,q.question_type,q.explanation,q.answer_payload::text as answer_payload
       from question q join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
-      where q.id=? and q.active=true and l.active=true and l.status='PUBLISHED'
+      where q.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
       """,questionId);
     if(rows.isEmpty()) throw new IllegalArgumentException("Question not found");
@@ -127,7 +127,7 @@ public class LearningController {
              case when q.question_type in ('INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','MATCH','ORDER',
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode
-      from question q where q.lesson_id=? and q.active=true order by q.sort_order
+      from question q where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
       """,lessonId);
   }
 
