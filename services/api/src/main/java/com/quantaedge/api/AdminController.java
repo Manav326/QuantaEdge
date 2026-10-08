@@ -193,7 +193,7 @@ public class AdminController {
       """,
       body.get("prompt"),body.get("explanation"),String.valueOf(body.getOrDefault("difficulty","CORE")),
       body.get("marks")==null?null:Integer.valueOf(String.valueOf(body.get("marks"))),
-      body.get("examFormat"),sourceKind,body.get("sourceTitle"),sourceRef,sourceYear,body.get("board"),
+      body.get("examFormat"),sourceKind,body.get("sourceTitle"),sourceRef,sourceYear,sourceId,body.get("board"),
       body.get("topic"),body.get("subtopic"),body.get("skill"),
       String.valueOf(body.getOrDefault("reviewStatus","REVIEW")),questionId);
     log(admin,"QUESTION_UPDATE",String.valueOf(questionId),sourceKind+"/"+sourceRef);
