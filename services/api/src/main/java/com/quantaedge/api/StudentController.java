@@ -91,6 +91,18 @@ public class StudentController {
              count(*) filter(where mastery_percent<50) as needs_support
       from student_concept_mastery where student_id=?
       """,studentId));
+    result.put("masteryDetails",jdbc.queryForList("""
+      select cc.id as concept_id,cc.title as concept_title,
+             ch.display_name as chapter_name,s.display_name as subject_name,
+             m.mastery_percent,m.attempts,m.last_attempt_at
+      from student_concept_mastery m
+      join chapter_concept cc on cc.id=m.concept_id
+      join curriculum_chapter ch on ch.id=cc.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      where m.student_id=?
+      order by m.mastery_percent asc,ch.teaching_order,cc.concept_order
+      limit 30
+      """,studentId));
     return result;
   }
 }
