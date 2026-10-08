@@ -121,3 +121,10 @@ on conflict(chapter_id,requirement_code) do update set
 insert into app_metadata(key,value)
 values ('schema','market-ready-learning-coverage-v9')
 on conflict(key) do update set value=excluded.value;
+
+alter table lesson_block drop constraint if exists lesson_block_block_type_check;
+alter table lesson_block add constraint lesson_block_block_type_check check (block_type in (
+  'EXPLANATION','IMAGE','DIAGRAM','VIDEO','QUESTION','MCQ','TRUE_FALSE','MATCH','ORDER','INPUT',
+  'HINT','AI_HELP','SUMMARY','CHALLENGE','PREREQUISITE','WORKED_EXAMPLE','GUIDED_PRACTICE',
+  'INDEPENDENT_PRACTICE','RECAP'
+));
