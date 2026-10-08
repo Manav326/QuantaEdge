@@ -27,7 +27,7 @@ set source_kind='AUTHOR_CREATED',
       where x not in ('textbook-aligned','scert-chapter-'||coalesce(source_ref,''))
     ), '[]'::jsonb)
 where source_kind='TEXTBOOK_ALIGNED'
-  and tags ? 'author-created';
+  and (tags ? 'author-created' or tags ? 'authored-aligned' or tags ? 'textbook-aligned');
 
 insert into app_metadata(key,value)
 values ('schema','provenance-correction-v12')
