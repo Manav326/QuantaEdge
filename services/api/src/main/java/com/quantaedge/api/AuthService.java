@@ -109,7 +109,13 @@ public class AuthService {
       throw new IllegalArgumentException("OTP purpose mismatch");
     if(((Number)row.get("attempts")).intValue()>=5) throw new IllegalStateException("Too many OTP attempts");
     jdbc.update("update otp_challenge set attempts=attempts+1 where id=?",row.get("id"));
-    if(java.time.OffsetDateTime.now().isAfter((java.time.OffsetDateTime)row.get("expires_at"))) {
+    Object expiresAt = row.get("expires_at");
+    Instant expiresInstant = expiresAt instanceof java.sql.Timestamp ts
+        ? ts.toInstant()
+        : expiresAt instanceof java.time.OffsetDateTime odt
+            ? odt.toInstant()
+            : java.time.Instant.parse(String.valueOf(expiresAt));
+    if(Instant.now().isAfter(expiresInstant)) {
       throw new IllegalArgumentException("OTP expired");
     }
     if(!hash(otp).equals(String.valueOf(row.get("code_hash")))) throw new IllegalArgumentException("Incorrect OTP");
