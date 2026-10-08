@@ -185,8 +185,35 @@ jobs:
           import json
           rec=json.load(open('/tmp/qe-rec.json'))
           assert rec.get("available") is True
-          assert rec["lesson"]["id"]
+          assert rec.get("kind") == "DIAGNOSTIC"
           PY
+
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/diagnostic >/tmp/qe-diagnostic.json
+          python - <<'PY'
+          import json
+          diagnostic=json.load(open('/tmp/qe-diagnostic.json'))
+          assert diagnostic["completed"] is False
+          assert len(diagnostic["questions"]) > 0
+          assert diagnostic["questions"][0]["options"] != "[]"
+          PY
+
+          curl -fsS -b /tmp/qe.cookies -X POST -H 'Content-Type: application/json'             -d '{"answer":"A"}'             http://localhost:8080/api/v1/learning/questions/$(python -c 'import json; print(json.load(open("/tmp/qe-diagnostic.json"))["questions"][0]["id"])')/answer >/tmp/qe-answer.json
+          python - <<'PY'
+          import json
+          answer=json.load(open('/tmp/qe-answer.json'))
+          assert "autoGraded" in answer
+          assert "correct" in answer
+          PY
+
+          curl -fsS -b /tmp/qe.cookies -c /tmp/qe.cookies -X POST             http://localhost:8080/api/v1/auth/switch-parent >/tmp/qe-parent-switch.json
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/guardians/children >/tmp/qe-children-after-switch.json
+
+          rm -f /tmp/qe-admin.cookies /tmp/qe-admin-otp.json
+          curl -fsS -c /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"mobile":"7070107483","purpose":"LOGIN"}'             http://localhost:8080/api/v1/auth/request-otp >/tmp/qe-admin-otp.json
+          test "$(python -c 'import json; print(json.load(open("/tmp/qe-admin-otp.json")).get("devCode",""))')" = "000000"
+          curl -fsS -b /tmp/qe-admin.cookies -c /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"mobile":"7070107483","otp":"000000"}'             http://localhost:8080/api/v1/auth/verify-otp >/tmp/qe-admin-login.json
+          test "$(python -c 'import json; print(json.load(open("/tmp/qe-admin-login.json"))["role"])')" = "ADMIN"
+          curl -fsS -b /tmp/qe-admin.cookies http://localhost:8080/api/v1/admin/overview >/tmp/qe-admin-overview.json
 
       - name: Collect service logs on failure
         if: failure()
