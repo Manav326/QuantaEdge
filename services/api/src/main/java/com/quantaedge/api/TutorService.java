@@ -116,7 +116,7 @@ public class TutorService {
       LEARNER MODE: %s
       LEARNER MESSAGE:
       %s
-      """.formatted(mapper.writeValueAsString(lesson),blocks,mastery,qctx,json(history),mode,normalized);
+      """.formatted(json(lesson),blocks,mastery,qctx,json(history),mode,normalized);
 
     jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
     TutorReply reply=provider.generate(instructions,input);
