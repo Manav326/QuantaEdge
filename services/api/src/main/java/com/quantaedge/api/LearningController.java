@@ -3,9 +3,12 @@ package com.quantaedge.api;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +35,9 @@ public class LearningController {
       join curriculum_subject s on s.id = ch.subject_id
       join curriculum_class c on c.id = s.class_id
       left join learning_objective o on o.id = l.objective_id
-      where c.code = ? and s.code = ? and c.active = true and s.active = true and ch.active = true and ch.content_status = 'PUBLISHED' and l.active = true and l.status = 'PUBLISHED'
+      where c.code = ? and s.code = ? and c.active = true and s.active = true
+        and ch.active = true and ch.content_status = 'PUBLISHED'
+        and l.active = true and l.status = 'PUBLISHED'
       order by ch.sort_order, l.sort_order
       """, classCode, subjectCode);
   }
@@ -50,7 +55,9 @@ public class LearningController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       left join learning_objective o on o.id=l.objective_id
-      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+        and c.active=true and s.active=true
       """, lessonId);
 
     if (lessons.isEmpty()) {
@@ -64,31 +71,57 @@ public class LearningController {
       where lesson_id=? and active=true
       order by sequence_no
       """, lessonId));
-    result.put("questions", jdbc.queryForList("""
-      select q.id, q.question_type, q.prompt, q.explanation,
-             q.difficulty, q.sort_order,
-             coalesce(
-               (select jsonb_agg(
-                  jsonb_build_object(
-                    'key', qo.option_key,
-                    'label', qo.label,
-                    'correct', qo.is_correct
-                  ) order by qo.sort_order
-               ) from question_option qo where qo.question_id=q.id),
-               '[]'::jsonb
-             )::text as options
-      from question q
-      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
-      order by q.sort_order
-      """, lessonId));
+    result.put("questions", publicQuestions(lessonId));
     return result;
   }
 
   @GetMapping("/lessons/{lessonId}/questions")
   public List<Map<String, Object>> questions(@PathVariable long lessonId) {
+    return publicQuestions(lessonId);
+  }
+
+  @PostMapping("/questions/{questionId}/answer")
+  public Map<String, Object> answer(
+      @PathVariable long questionId,
+      @RequestBody Map<String, Object> body) {
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+      select q.id, q.question_type, q.explanation, q.answer_payload::text as answer_payload,
+             l.id as lesson_id, l.chapter_id
+      from question q join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      where q.id=? and q.active=true and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+      """, questionId);
+    if (rows.isEmpty()) {
+      throw new IllegalArgumentException("Question not found");
+    }
+
+    var q = rows.getFirst();
+    String submitted = String.valueOf(body.getOrDefault("answer", "")).trim();
+    String expectedJson = String.valueOf(q.get("answer_payload"));
+    String expected = extractJsonString(expectedJson, "value");
+    String kind = extractJsonString(expectedJson, "kind");
+
+    boolean autoGradable = !"".equals(expected) && ("OPTION".equals(kind) || "TEXT".equals(kind));
+    boolean correct = autoGradable && normalize(submitted).equals(normalize(expected));
+
+    var result = new LinkedHashMap<String,Object>();
+    result.put("questionId", questionId);
+    result.put("correct", autoGradable ? correct : null);
+    result.put("autoGraded", autoGradable);
+    result.put("explanation", q.get("explanation"));
+    result.put("feedback", autoGradable
+        ? (correct ? "सही। अब यह बताइए कि आपने यह उत्तर क्यों चुना।" : "अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
+        : "यह उत्तर शिक्षक/मूल्यांकन rubric से जाँचा जाएगा।");
+    return result;
+  }
+
+  private List<Map<String, Object>> publicQuestions(long lessonId) {
     return jdbc.queryForList("""
       select q.id, q.question_type, q.prompt, q.explanation,
              q.difficulty, q.sort_order,
+             q.source_kind, q.source_title, q.source_ref, q.source_year,
+             q.board, q.marks, q.exam_format, q.topic, q.subtopic, q.skill, q.tags::text as tags,
              coalesce(
                (select jsonb_agg(
                   jsonb_build_object(
@@ -99,8 +132,21 @@ public class LearningController {
                '[]'::jsonb
              )::text as options
       from question q
-      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
+      where q.lesson_id=? and q.active=true
       order by q.sort_order
       """, lessonId);
+  }
+
+  private String normalize(String value) {
+    return value.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+  }
+
+  private String extractJsonString(String json, String key) {
+    String marker = "\"" + key + "\":\"";
+    int start = json.indexOf(marker);
+    if (start < 0) return "";
+    start += marker.length();
+    int end = json.indexOf("\"", start);
+    return end < 0 ? "" : json.substring(start, end);
   }
 }
