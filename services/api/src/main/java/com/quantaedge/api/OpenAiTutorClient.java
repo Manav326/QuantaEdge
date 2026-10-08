@@ -32,6 +32,7 @@ public class OpenAiTutorClient {
     this.http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8)).build();
   }
 
+  public boolean isEnabled(){return enabled;}
   public boolean isConfigured(){return enabled && apiKey!=null && !apiKey.isBlank();}
   public String model(){return model;}
 
