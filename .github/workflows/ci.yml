@@ -218,14 +218,18 @@ jobs:
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"sourceKind":"BOARD_PAST_PAPER","title":"CI Verified Source","provider":"QuantaEdge CI","sourceUrl":"https://example.invalid/ci","edition":"test","language":"hi","sourceYear":2026,"status":"REFERENCE"}'             http://localhost:8080/api/v1/admin/sources >/tmp/qe-source.json
           SOURCE_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-source.json"))["id"])')"
 
-          LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-rec.json")).get("lesson",{}).get("id") or 0)')"
+          curl -fsS -b /tmp/qe-admin.cookies http://localhost:8080/api/v1/admin/lessons >/tmp/qe-admin-lessons.json
+          LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-admin-lessons.json"))[0]["id"])')"
           test "$LESSON_ID" != "0"
+          curl -fsS -b /tmp/qe-admin.cookies http://localhost:8080/api/v1/admin/lessons/$LESSON_ID >/tmp/qe-admin-lesson.json
+          BLOCK_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-admin-lesson.json"))["blocks"][0]["id"])')"
+          test "$BLOCK_ID" != "0"
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"lessonId\":${LESSON_ID},\"sourceKind\":\"BOARD_PAST_PAPER\",\"sourceId\":${SOURCE_ID},\"sourceTitle\":\"CI Verified Source\",\"sourceRef\":\"ci://verified-question-1\",\"sourceYear\":2026,\"board\":\"Bihar Board\",\"questions\":[{\"questionType\":\"SHORT_ANSWER\",\"prompt\":\"CI provenance test question\",\"explanation\":\"Imported for CI provenance validation\",\"sortOrder\":99,\"tags\":[\"ci\"]}]}"             http://localhost:8080/api/v1/admin/questions/import >/tmp/qe-import.json
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-import.json"))["imported"])')" = "1"
 
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"assetType":"IMAGE","title":"CI visual asset","altText":"CI visual","url":"https://example.invalid/ci-image","sourceKind":"AUTHOR_CREATED","status":"REVIEW"}'             http://localhost:8080/api/v1/admin/assets >/tmp/qe-asset.json
           ASSET_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-asset.json"))["id"])')"
-          curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/1/asset >/tmp/qe-attach.json
+          curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset >/tmp/qe-attach.json
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-attach.json"))["updated"])')" = "True"
 
       - name: Collect service logs on failure
