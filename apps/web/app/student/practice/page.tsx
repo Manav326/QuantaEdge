@@ -27,7 +27,8 @@ export default function PracticePage(){
         if(me.status===401||me.status===403){router.replace('/login');return;}
         const student=await me.json(); if(!me.ok) throw new Error(student.message||'Student unavailable');
         const rec=await fetch('/api/v1/recommendations/next'); const rb=await rec.json();
-        if(!rec.ok||!rb.available) throw new Error('No recommended lesson');
+        if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
+        if(!rec.ok||!rb.available||!rb.lesson) throw new Error('No recommended lesson');
         const qs=await fetch('/api/v1/learning/lessons/'+rb.lesson.id+'/questions').then(r=>r.json());
         setQuestions(qs);
       }catch(e:any){setError(e.message||'Practice load नहीं हो पाया।');}
