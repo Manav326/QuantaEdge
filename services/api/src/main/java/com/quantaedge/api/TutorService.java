@@ -75,11 +75,12 @@ public class TutorService {
       if(!q.isEmpty())qctx=json(q.getFirst());
     }
 
-    String blocks=json(jdbc.queryForList("""
+    List<Map<String,Object>> rawBlocks=jdbc.queryForList("""
       select b.block_type,b.content from lesson_block b
       where b.lesson_id=(select lesson_id from tutor_session where id=?) and b.active=true
       order by b.sequence_no limit 12
-      """,sessionId));
+      """,sessionId);
+    String blocks=json(safeBlocks(rawBlocks));
 
     String mastery=json(jdbc.queryForList("""
       select cc.title,m.mastery_percent,m.attempts
@@ -141,6 +142,25 @@ public class TutorService {
         and c.code=(select class_code from student where id=?)
       """,Long.class,lessonId,studentId);
     if(count==null||count==0)throw new SecurityException("Tutor lesson access denied");
+  }
+
+  private List<Map<String,Object>> safeBlocks(List<Map<String,Object>> raw){
+    List<Map<String,Object>> safe=new ArrayList<>();
+    for(Map<String,Object> row:raw){
+      String type=String.valueOf(row.get("block_type"));
+      Object content=row.get("content");
+      if(Set.of("QUESTION","MCQ","TRUE_FALSE","INPUT","MATCH","ORDER","ASSERTION_REASON","CASE_BASED","NUMERICAL","SOURCE_BASED").contains(type)
+          && content!=null){
+        try{
+          var node=mapper.readTree(String.valueOf(content));
+          node.remove(List.of("correct","correctOption","answer","answer_payload","solution","markingScheme"));
+          safe.add(Map.of("block_type",type,"content",node));
+          continue;
+        }catch(Exception ignored){}
+      }
+      safe.add(Map.of("block_type",type,"content",content==null?"":content));
+    }
+    return safe;
   }
 
   private String json(Object value){
