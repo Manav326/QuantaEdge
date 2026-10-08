@@ -5,7 +5,8 @@ import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 export default function StudentHome(){
-  const router=useRouter(); const [data,setData]=useState<any>(null); const [rec,setRec]=useState<any>(null); const [error,setError]=useState('');
+  const router=useRouter();
+  async function logout(){await fetch('/api/v1/auth/logout',{method:'POST'});router.replace('/login');} const [data,setData]=useState<any>(null); const [rec,setRec]=useState<any>(null); const [error,setError]=useState('');
   useEffect(()=>{(async()=>{try{
     const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login');return}
     const b=await r.json(); if(!r.ok) throw new Error(b.message||'Unable to load student');
@@ -16,7 +17,7 @@ export default function StudentHome(){
   if(!data)return <main className="app-shell"><section className="app-content"><div className="eyebrow">Learning profile लोड हो रहा है…</div></section></main>;
   const stats=data.lessonStats,q=data.questionStats;
   return <main className="app-shell">
-    <header className="app-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><div className="student-profile"><span>{data.display_name}</span><span className="avatar">अ</span></div></header>
+    <header className="app-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><div className="student-profile"><span>{data.display_name}</span><span className="avatar">अ</span><button className="text-link" onClick={logout}>Logout</button></div></header>
     <div className="app-layout"><aside className="side-nav"><Link className="side-active" href="/student">⌂ <span>आज</span></Link><Link href="/student/learn">▣ <span>पढ़ाई</span></Link><Link href="/student/practice">✦ <span>अभ्यास</span></Link><Link href="/student/progress">↗ <span>मेरी प्रगति</span></Link></aside>
       <section className="app-content">
         <div className="welcome-row"><div><span className="eyebrow">आपकी learning journey · Class {data.class_code}</span><h1>नमस्ते, {data.display_name} 👋</h1><p>आज की पढ़ाई आपकी progress और mastery के आधार पर आगे बढ़ती है।</p></div><div className="streak-card">✓ <strong>{Math.round(Number(stats.completion_percent))}%</strong><span>curriculum complete</span></div></div>
