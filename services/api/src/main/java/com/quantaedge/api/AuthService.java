@@ -199,6 +199,7 @@ public class AuthService {
     jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
     String name=r.get("student_name")!=null?String.valueOf(r.get("student_name")):(r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
     String role=r.get("student_id")!=null?"STUDENT":String.valueOf(r.get("role"));
+    System.out.println("AUTH_SESSION_READ dbRole=" + r.get("role") + " userId=" + r.get("user_id") + " studentId=" + r.get("student_id") + " resolvedRole=" + role);
     return new AuthContext(r.get("user_id")==null?null:((Number)r.get("user_id")).longValue(),
         r.get("student_id")==null?null:((Number)r.get("student_id")).longValue(),role,name);
   }
