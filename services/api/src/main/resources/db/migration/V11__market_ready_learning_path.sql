@@ -38,11 +38,7 @@ begin
       )
     );
 
-    source_title := case
-      when r.subject_code='maths' then 'Bihar SCERT Class '||r.class_code||' Mathematics — गणित भाग-'||r.class_code
-      else 'Bihar SCERT Class '||r.class_code||' Science — विज्ञान भाग-'||
-        case r.class_code when '6' then '1' when '7' then '2' else '3' end
-    end;
+    source_title := 'QuantaEdge original curriculum-aligned practice';
 
     insert into chapter_concept(chapter_id,code,title,description,concept_order,status)
     values
@@ -185,60 +181,60 @@ begin
       (lesson1,obj1,'MCQ',
        'अध्याय “'||r.display_name||'” की मुख्य अवधारणा को नई स्थिति में लागू करते समय सबसे अच्छा पहला कदम क्या है?',
        'पहले प्रश्न में दी जानकारी और पूछी गई बात पहचानना, फिर उपयुक्त अवधारणा चुनना चाहिए।',
-       'FOUNDATION',1,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',1,'MCQ','core','recognition','concept-selection',
-       jsonb_build_array('authored-aligned','textbook-aligned','scert-chapter-'||r.textbook_chapter_no),
+       'FOUNDATION',1,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,1,'MCQ','core','recognition','concept-selection',
+       jsonb_build_array('author-created','curriculum-aligned','scert-chapter-'||r.textbook_chapter_no),
        jsonb_build_object('kind','OPTION','value','A')),
       (lesson1,obj1,'TRUE_FALSE',
        '“'||r.display_name||'” में सही उत्तर तक पहुँचने के लिए केवल अंतिम उत्तर याद करना पर्याप्त है।',
-       'नहीं। reasoning और verification भी आवश्यक हैं।','FOUNDATION',2,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',1,'OBJECTIVE','core','reasoning','verification',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'नहीं। reasoning और verification भी आवश्यक हैं।','FOUNDATION',2,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,1,'OBJECTIVE','core','reasoning','verification',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson1,obj1,'INPUT',
        '“'||r.display_name||'” के प्रश्न को हल करते समय पहला कदम एक छोटे वाक्य में लिखिए।',
-       'पहला कदम है दी गई जानकारी और पूछी गई बात पहचानना।','FOUNDATION',3,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',1,'VERY_SHORT','method','setup','problem-reading',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'पहला कदम है दी गई जानकारी और पूछी गई बात पहचानना।','FOUNDATION',3,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,1,'VERY_SHORT','method','setup','problem-reading',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson2,obj2,'MATCH',
        '“'||r.display_name||'” में मिलान कीजिए: (1) दी गई जानकारी — (A) प्रश्न में मौजूद तथ्य; (2) अवधारणा — (B) लागू नियम/कारण; (3) जाँच — (C) उत्तर की पुष्टि।',
-       'सही मिलान 1-A, 2-B, 3-C है।','CORE',4,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'MATCHING','method','classification','reasoning',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'सही मिलान 1-A, 2-B, 3-C है।','CORE',4,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'MATCHING','method','classification','reasoning',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson2,obj2,'ORDER',
        '“'||r.display_name||'” का समाधान क्रम लगाइए: (A) उत्तर जाँचें, (B) जानकारी पहचानें, (C) अवधारणा चुनें, (D) कदम करें।',
-       'सही क्रम B → C → D → A है।','CORE',5,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'VERY_SHORT','method','sequence','process',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'सही क्रम B → C → D → A है।','CORE',5,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'VERY_SHORT','method','sequence','process',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson2,obj2,'ASSERTION_REASON',
        'कथन: “'||r.display_name||'” के प्रश्न में reasoning लिखना उपयोगी है। कारण: इससे समाधान की सोच और सही अवधारणा का चयन जाँचा जा सकता है। क्या दोनों सही हैं और कारण कथन को support करता है?',
-       'हाँ। reasoning से प्रक्रिया की जाँच होती है।','CORE',6,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'ASSERTION_REASON','reasoning','justification','argument',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'हाँ। reasoning से प्रक्रिया की जाँच होती है।','CORE',6,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'ASSERTION_REASON','reasoning','justification','argument',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson2,obj2,'CASE_BASED',
        'केस: एक विद्यार्थी “'||r.display_name||'” से जुड़ी नई परिस्थिति पढ़ता है। वह पहले दिए तथ्य लिखता है, फिर अवधारणा चुनता है और अंत में उत्तर verify करता है। बताइए यह approach क्यों उपयुक्त है।',
-       'यह approach problem reading, concept selection और verification को जोड़ती है।','CORE',7,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',3,'CASE_BASED','application','case','reasoning',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'यह approach problem reading, concept selection और verification को जोड़ती है।','CORE',7,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,3,'CASE_BASED','application','case','reasoning',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson3,obj3,'SHORT_ANSWER',
        '“'||r.display_name||'” की मुख्य अवधारणा को अपने शब्दों में समझाइए और एक नया उदाहरण बताइए।',
-       'उत्तर में concept + example + कारण होना चाहिए।','CORE',8,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'SHORT_ANSWER','core','explanation','communication',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'उत्तर में concept + example + कारण होना चाहिए।','CORE',8,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'SHORT_ANSWER','core','explanation','communication',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson3,obj3,'LONG_ANSWER',
        '“'||r.display_name||'” पर एक व्यवस्थित उत्तर लिखिए: अवधारणा, आवश्यक कदम/कारण, उदाहरण और self-check शामिल करें।',
-       'पूर्ण उत्तर में अवधारणा, क्रम, उदाहरण और जाँच स्पष्ट होनी चाहिए।','CHALLENGE',9,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',4,'LONG_ANSWER','core','synthesis','written-expression',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'पूर्ण उत्तर में अवधारणा, क्रम, उदाहरण और जाँच स्पष्ट होनी चाहिए।','CHALLENGE',9,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,4,'LONG_ANSWER','core','synthesis','written-expression',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson3,obj3,'NUMERICAL',
        'यदि “'||r.display_name||'” के किसी प्रश्न में संख्यात्मक/मात्रात्मक मान दिए हों, तो उत्तर देने से पहले कौन-सी जाँच अनिवार्य है?',
-       'इकाई, गणना और प्रश्न के संदर्भ की जाँच करनी चाहिए।','CORE',10,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'NUMERICAL','application','verification','calculation',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'इकाई, गणना और प्रश्न के संदर्भ की जाँच करनी चाहिए।','CORE',10,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'NUMERICAL','application','verification','calculation',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson3,obj3,'DIAGRAM',
        '“'||r.display_name||'” की उस अवधारणा का labelled diagram/flow/graph बनाइए जहाँ दृश्य representation समझ को स्पष्ट करता है।',
-       'Diagram में आवश्यक labels और संबंध स्पष्ट होने चाहिए।','CORE',11,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',3,'DIAGRAM','visual','representation','diagramming',
-       jsonb_build_array('authored-aligned','textbook-aligned'),'{}'::jsonb),
+       'Diagram में आवश्यक labels और संबंध स्पष्ट होने चाहिए।','CORE',11,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,3,'DIAGRAM','visual','representation','diagramming',
+       jsonb_build_array('author-created','curriculum-aligned'),'{}'::jsonb),
       (lesson3,obj3,'SOURCE_BASED',
        'स्रोत-आधारित प्रश्न: Bihar SCERT के अध्याय mapping को देखकर बताइए कि “'||r.display_name||'” किस textbook chapter number से mapped है और यह mapping सीखने के लिए क्यों महत्वपूर्ण है।',
-       'यह प्रश्न source navigation और curriculum alignment जाँचता है।','FOUNDATION',12,'AUTHOR_CREATED',source_title,'chapter:'||r.textbook_chapter_no,null,'Bihar SCERT',2,'SOURCE_BASED','source-literacy','mapping','source-use',
+       'यह प्रश्न source navigation और curriculum alignment जाँचता है।','FOUNDATION',12,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'SOURCE_BASED','source-literacy','mapping','source-use',
        jsonb_build_array('author-created','source-mapping'),'{}'::jsonb),
       (lesson3,obj3,'MAP',
        case when r.subject_code='science'
          then 'यदि “'||r.display_name||'” के लिए स्थान/भौगोलिक संबंध आवश्यक हों, तो उपयुक्त labelled map बनाइए; यदि map आवश्यक नहीं है तो स्पष्ट कारण लिखिए।'
          else 'यदि “'||r.display_name||'” के लिए map आवश्यक नहीं है, तो कारण लिखिए; यदि शिक्षक कोई contextual map दे, तो उसमें relevant labels पहचानिए।'
        end,
-       'Map को तभी उपयोग करें जब concept को spatial context की आवश्यकता हो।','CHALLENGE',13,'TEXTBOOK_ALIGNED',source_title,'chapter:'||r.textbook_chapter_no,2026,'Bihar',2,'MAP','visual','spatial-reasoning','representation',
-       jsonb_build_array('author-created','visual-decision'),'{}'::jsonb);
+       'Map को तभी उपयोग करें जब concept को spatial context की आवश्यकता हो।','CHALLENGE',13,'AUTHOR_CREATED',source_title,'author-created:chapter:'||r.textbook_chapter_no,null,null,2,'MAP','visual','spatial-reasoning','representation',
+       jsonb_build_array('author-created','curriculum-aligned','visual-decision'),'{}'::jsonb);
 
     -- Add a small option set only to the option-based items.
     insert into question_option(question_id,option_key,label,is_correct,sort_order)
