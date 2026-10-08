@@ -238,6 +238,15 @@ public class AdminController {
     return Map.of("imported",imported,"lessonId",lessonId);
   }
 
+  @GetMapping("/assets")
+  public List<Map<String,Object>> assets(@RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    return jdbc.queryForList("""
+      select id,asset_type,title,alt_text,url,source_kind,source_title,source_ref,license_note,status,created_at
+      from content_asset order by created_at desc
+      """);
+  }
+
   @PostMapping("/assets")
   public Map<String,Object> createAsset(@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context){
