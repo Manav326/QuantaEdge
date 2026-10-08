@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +71,6 @@ public class CurriculumAuditController {
 
     var failures = new ArrayList<Map<String, Object>>();
 
-    // A missing curriculum pair is a hard failure; do not let an incomplete seed
-    // look green merely because every chapter that exists passes its local checks.
     var actualCounts = new LinkedHashMap<String, Integer>();
     for (var row : jdbc.queryForList("""
       select c.code||'/'||s.code as curriculum, count(*) as chapters
@@ -85,6 +84,7 @@ public class CurriculumAuditController {
       actualCounts.put(String.valueOf(row.get("curriculum")),
           ((Number) row.get("chapters")).intValue());
     }
+
     for (var expected : EXPECTED.entrySet()) {
       int actual = actualCounts.getOrDefault(expected.getKey(), 0);
       if (actual != expected.getValue()) {
@@ -94,55 +94,119 @@ public class CurriculumAuditController {
       }
     }
 
+    var lessonCounts = countByChapter("""
+      select chapter_id, count(*) as count
+      from lesson
+      where active=true and status='PUBLISHED'
+      group by chapter_id
+      """);
+
+    var conceptCounts = countByChapter("""
+      select chapter_id, count(*) as count
+      from chapter_concept
+      where status in ('READY_FOR_REVIEW','PUBLISHED')
+      group by chapter_id
+      """);
+
+    var blockCounts = new HashMap<Long, Map<String, Long>>();
+    for (var row : jdbc.queryForList("""
+      select l.chapter_id, b.block_type, count(*) as count
+      from lesson_block b
+      join lesson l on l.id=b.lesson_id
+      where l.active=true and l.status='PUBLISHED'
+        and b.active=true
+      group by l.chapter_id,b.block_type
+      """)) {
+      long chapterId = ((Number) row.get("chapter_id")).longValue();
+      String blockType = String.valueOf(row.get("block_type"));
+      blockCounts.computeIfAbsent(chapterId, ignored -> new HashMap<>())
+          .put(blockType, ((Number) row.get("count")).longValue());
+    }
+
+    var visualCounts = countByChapter("""
+      select l.chapter_id, count(*) as count
+      from lesson_block b
+      join lesson l on l.id=b.lesson_id
+      where l.active=true and l.status='PUBLISHED'
+        and b.active=true
+        and (
+          b.block_type in ('IMAGE','DIAGRAM','VIDEO')
+          or (b.block_type='EXPLANATION' and jsonb_exists(b.content, 'visualDecision'))
+        )
+      group by l.chapter_id
+      """);
+
+    var requirementsByChapter = new HashMap<Long, List<Map<String, Object>>>();
+    for (var req : jdbc.queryForList("""
+      select chapter_id, requirement_code, min_count
+      from lesson_requirement
+      where required=true
+      order by chapter_id,id
+      """)) {
+      long chapterId = ((Number) req.get("chapter_id")).longValue();
+      requirementsByChapter.computeIfAbsent(chapterId, ignored -> new ArrayList<>()).add(req);
+    }
+
+    var sourceMappingCounts = countByChapter("""
+      select chapter_id, count(*) as count
+      from chapter_source
+      where coverage_status in ('MAPPED','COVERED')
+      group by chapter_id
+      """);
+
+    var boardFormatCounts = countDistinctByChapter("""
+      select l.chapter_id, count(distinct coalesce(q.exam_format,q.question_type)) as count
+      from question q
+      join lesson l on l.id=q.lesson_id
+      where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+      group by l.chapter_id
+      """);
+
+    var sourceTaggedCounts = countByChapter("""
+      select l.chapter_id, count(*) as count
+      from question q
+      join lesson l on l.id=q.lesson_id
+      where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+        and q.source_kind <> 'AUTHOR_CREATED'
+        and (q.source_ref is not null or q.tags <> '[]'::jsonb)
+      group by l.chapter_id
+      """);
+
+    var formatCounts = new HashMap<Long, Map<String, Long>>();
+    for (var row : jdbc.queryForList("""
+      select l.chapter_id, q.question_type, count(*) as count
+      from question q
+      join lesson l on l.id=q.lesson_id
+      where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+      group by l.chapter_id,q.question_type
+      """)) {
+      long chapterId = ((Number) row.get("chapter_id")).longValue();
+      String format = String.valueOf(row.get("question_type"));
+      formatCounts.computeIfAbsent(chapterId, ignored -> new HashMap<>())
+          .put(format, ((Number) row.get("count")).longValue());
+    }
+
     for (var chapter : chapters) {
       long id = ((Number) chapter.get("id")).longValue();
       var missing = new ArrayList<String>();
 
-      long lessons = jdbc.queryForObject(
-          "select count(*) from lesson where chapter_id=? and active=true and status='PUBLISHED'",
-          Long.class, id);
+      long lessons = lessonCounts.getOrDefault(id, 0L);
       if (lessons < 3) missing.add("TEACHING_STAGES (" + lessons + "/3)");
 
-      long concepts = jdbc.queryForObject(
-          "select count(*) from chapter_concept where chapter_id=? and status in ('READY_FOR_REVIEW','PUBLISHED')",
-          Long.class, id);
+      long concepts = conceptCounts.getOrDefault(id, 0L);
       if (concepts < 3) missing.add("CONCEPTS (" + concepts + "/3)");
 
-      var requirements = jdbc.queryForList("""
-        select requirement_code,min_count from lesson_requirement
-        where chapter_id=? and required=true order by id
-        """, id);
-
-      for (var req : requirements) {
+      for (var req : requirementsByChapter.getOrDefault(id, List.of())) {
         String code = String.valueOf(req.get("requirement_code"));
         int min = ((Number) req.get("min_count")).intValue();
-        long count = switch (code) {
-          case "PREREQUISITE" -> countBlocks(id, "PREREQUISITE");
-          case "EXPLANATION" -> countBlocks(id, "EXPLANATION");
-          case "WORKED_EXAMPLE" -> countBlocks(id, "WORKED_EXAMPLE");
-          case "GUIDED_PRACTICE" -> countBlocks(id, "GUIDED_PRACTICE");
-          case "INDEPENDENT_PRACTICE" -> countBlocks(id, "INDEPENDENT_PRACTICE");
-          case "RECAP" -> countBlocks(id, "RECAP") + countBlocks(id, "SUMMARY");
-          case "VISUAL_OR_NOT_REQUIRED" -> countVisualDecision(id);
-          case "NCERT_OR_TEXTBOOK_MAPPING" -> jdbc.queryForObject(
-              "select count(*) from chapter_source where chapter_id=? and coverage_status in ('MAPPED','COVERED')",
-              Long.class, id);
-          case "BOARD_FORMAT_COVERAGE" -> jdbc.queryForObject(
-              "select count(distinct coalesce(exam_format,question_type)) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')",
-              Long.class, id);
-          case "SOURCE_TAGGED_QUESTIONS" -> jdbc.queryForObject(
-              "select count(*) from question q join lesson l on l.id=q.lesson_id where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and q.source_kind <> 'AUTHOR_CREATED' and (q.source_ref is not null or q.tags <> '[]'::jsonb)",
-              Long.class, id);
-          default -> 0L;
-        };
+        long count = requirementCount(
+            code, id, blockCounts, visualCounts, sourceMappingCounts, boardFormatCounts, sourceTaggedCounts);
         if (count < min) missing.add(code + " (" + count + "/" + min + ")");
       }
 
+      var chapterFormats = formatCounts.getOrDefault(id, Map.of());
       for (String format : REQUIRED_FORMATS) {
-        long count = jdbc.queryForObject(
-            "select count(*) from question q join lesson l on l.id=q.lesson_id " +
-            "where l.chapter_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and q.question_type=?",
-            Long.class, id, format);
+        long count = chapterFormats.getOrDefault(format, 0L);
         if (count < 1) missing.add("FORMAT_" + format + " (0/1)");
       }
 
@@ -164,26 +228,37 @@ public class CurriculumAuditController {
     return result;
   }
 
-  private long countBlocks(long chapterId, String type) {
-    return jdbc.queryForObject("""
-      select count(*) from lesson_block b
-      join lesson l on l.id=b.lesson_id
-      where l.chapter_id=? and l.active=true and l.status='PUBLISHED'
-        and b.active=true and b.block_type=?
-      """, Long.class, chapterId, type);
+  private long requirementCount(
+      String code,
+      long chapterId,
+      Map<Long, Map<String, Long>> blockCounts,
+      Map<Long, Long> visualCounts,
+      Map<Long, Long> sourceMappingCounts,
+      Map<Long, Long> boardFormatCounts,
+      Map<Long, Long> sourceTaggedCounts) {
+    var blocks = blockCounts.getOrDefault(chapterId, Map.of());
+    return switch (code) {
+      case "PREREQUISITE", "EXPLANATION", "WORKED_EXAMPLE", "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE" ->
+          blocks.getOrDefault(code, 0L);
+      case "RECAP" -> blocks.getOrDefault("RECAP", 0L) + blocks.getOrDefault("SUMMARY", 0L);
+      case "VISUAL_OR_NOT_REQUIRED" -> visualCounts.getOrDefault(chapterId, 0L);
+      case "NCERT_OR_TEXTBOOK_MAPPING" -> sourceMappingCounts.getOrDefault(chapterId, 0L);
+      case "BOARD_FORMAT_COVERAGE" -> boardFormatCounts.getOrDefault(chapterId, 0L);
+      case "SOURCE_TAGGED_QUESTIONS" -> sourceTaggedCounts.getOrDefault(chapterId, 0L);
+      default -> 0L;
+    };
   }
 
-  private long countVisualDecision(long chapterId) {
-    return jdbc.queryForObject("""
-      select count(*)
-      from lesson_block b
-      join lesson l on l.id=b.lesson_id
-      where l.chapter_id=? and l.active=true and l.status='PUBLISHED'
-        and b.active=true
-        and (
-          b.block_type in ('IMAGE','DIAGRAM','VIDEO')
-          or (b.block_type='EXPLANATION' and b.content ? 'visualDecision')
-        )
-      """, Long.class, chapterId);
+  private Map<Long, Long> countByChapter(String sql) {
+    var result = new HashMap<Long, Long>();
+    for (var row : jdbc.queryForList(sql)) {
+      result.put(((Number) row.get("chapter_id")).longValue(),
+          ((Number) row.get("count")).longValue());
+    }
+    return result;
+  }
+
+  private Map<Long, Long> countDistinctByChapter(String sql) {
+    return countByChapter(sql);
   }
 }
