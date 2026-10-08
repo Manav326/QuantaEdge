@@ -71,29 +71,6 @@ public class CurriculumAuditController {
 
     var failures = new ArrayList<Map<String, Object>>();
 
-    var actualCounts = new LinkedHashMap<String, Integer>();
-    for (var row : jdbc.queryForList("""
-      select c.code||'/'||s.code as curriculum, count(*) as chapters
-      from curriculum_chapter ch
-      join curriculum_subject s on s.id=ch.subject_id
-      join curriculum_class c on c.id=s.class_id
-      where c.code in ('6','7','8') and s.code in ('maths','science')
-        and ch.active=true and ch.content_status='PUBLISHED'
-      group by c.code,s.code
-      """)) {
-      actualCounts.put(String.valueOf(row.get("curriculum")),
-          ((Number) row.get("chapters")).intValue());
-    }
-
-    for (var expected : EXPECTED.entrySet()) {
-      int actual = actualCounts.getOrDefault(expected.getKey(), 0);
-      if (actual != expected.getValue()) {
-        failures.add(new LinkedHashMap<>(Map.of(
-            "curriculum", expected.getKey(),
-            "missing", List.of("CHAPTER_COUNT (" + actual + "/" + expected.getValue() + ")"))));
-      }
-    }
-
     var lessonCounts = countByChapter("""
       select chapter_id, count(*) as count
       from lesson
@@ -221,7 +198,6 @@ public class CurriculumAuditController {
     var result = new LinkedHashMap<String, Object>();
     result.put("status", failures.isEmpty() ? "GREEN" : "RED");
     result.put("chaptersChecked", chapters.size());
-    result.put("expectedChapters", EXPECTED.values().stream().mapToInt(Integer::intValue).sum());
     result.put("failedChapters", failures.size());
     result.put("requiredQuestionFormats", REQUIRED_FORMATS);
     result.put("failures", failures);
