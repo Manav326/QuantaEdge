@@ -36,6 +36,7 @@ public class AuthService {
     this.demoSeed=demoSeed;
     this.sessionHours=sessionHours;
     this.secureCookies=secureCookies;
+    this.otpCooldownSeconds=otpCooldownSeconds;
     this.adminMobiles=List.of(adminMobiles.split(",")).stream()
         .map(this::normalizeMobile).filter(v->!v.isBlank()).toList();
   }
