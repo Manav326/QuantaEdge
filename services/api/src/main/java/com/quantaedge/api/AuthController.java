@@ -33,6 +33,7 @@ public class AuthController {
   public ResponseEntity<Map<String,Object>> verifyOtp(@RequestBody Map<String,Object> body) {
     AuthContext context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("otp","")),
+        String.valueOf(body.getOrDefault("purpose","LOGIN")),
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")));
     return withCookie(auth.issueToken(context),context);
   }
