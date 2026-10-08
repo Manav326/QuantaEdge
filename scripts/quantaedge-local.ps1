@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("up","rebuild","down","reset","logs","ps")]
+  [ValidateSet("up","rebuild","down","reset","logs","ps","audit")]
   [string]$Action = "up"
 )
 
@@ -9,6 +9,14 @@ Set-Location (Join-Path $PSScriptRoot "..")
 $env:APP_DEMO_SEED = if ($env:APP_DEMO_SEED) { $env:APP_DEMO_SEED } else { "true" }
 
 switch ($Action) {
+  "audit" {
+    $api = "http://localhost:$($env:API_PORT ?? 8080)"
+    $response = Invoke-RestMethod "$api/api/v1/curriculum/audit/strict"
+    $response | ConvertTo-Json -Depth 20
+    if ($response.status -ne "GREEN") { throw "Curriculum strict audit is RED. Do not ship until every chapter passes." }
+    Write-Host "Curriculum strict audit: GREEN"
+    exit 0
+  }
   "up" {
     docker compose up -d --build --remove-orphans
   }
