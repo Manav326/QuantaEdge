@@ -20,14 +20,7 @@ public class AuthFilter extends OncePerRequestFilter {
       if(AuthService.COOKIE.equals(cookie.getName())) { token=cookie.getValue(); break; }
     if(token!=null) {
       AuthContext context=auth.current(token);
-      if(context!=null) {
-        System.out.println("AUTH_FILTER path=" + request.getRequestURI() + " role=" + context.role() + " userId=" + context.userId() + " studentId=" + context.studentId());
-        request.setAttribute("authContext",context);
-      } else {
-        System.out.println("AUTH_FILTER path=" + request.getRequestURI() + " context=null");
-      }
-    } else {
-      System.out.println("AUTH_FILTER path=" + request.getRequestURI() + " cookie=null");
+      if(context!=null) request.setAttribute("authContext",context);
     }
     chain.doFilter(request,response);
   }
