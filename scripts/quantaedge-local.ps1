@@ -57,4 +57,7 @@ for ($i = 0; $i -lt 30; $i++) {
     Start-Sleep -Seconds 2
   }
 }
+Write-Host "===== API logs =====" -ForegroundColor Yellow
+docker compose ps -a
+docker compose logs --no-color --tail=200 api
 throw "API did not become healthy within 60 seconds."
