@@ -8,7 +8,7 @@ declare
   r record;
   ch_id bigint;
   obj_id bigint;
-  lesson_id bigint;
+  v_lesson_id bigint;
   question_id bigint;
   stage record;
   q record;
@@ -175,7 +175,7 @@ begin
         end if;
 
         insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
-        values(lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n) returning id into question_id;
+        values(v_lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n) returning id into question_id;
 
         insert into question_option(question_id,option_key,label,is_correct,sort_order)
         select question_id,k,label,correct,ord
