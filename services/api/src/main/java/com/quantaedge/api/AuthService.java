@@ -199,13 +199,11 @@ public class AuthService {
     jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
     String name=r.get("student_name")!=null?String.valueOf(r.get("student_name")):(r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
     String role=r.get("student_id")!=null?"STUDENT":String.valueOf(r.get("role"));
-    System.out.println("AUTH_SESSION_READ dbRole=" + r.get("role") + " userId=" + r.get("user_id") + " studentId=" + r.get("student_id") + " resolvedRole=" + role);
     return new AuthContext(r.get("user_id")==null?null:((Number)r.get("user_id")).longValue(),
         r.get("student_id")==null?null:((Number)r.get("student_id")).longValue(),role,name);
   }
 
   public String issueToken(AuthContext context) {
-    System.out.println("AUTH_TOKEN_ISSUE role=" + context.role() + " userId=" + context.userId() + " studentId=" + context.studentId());
     String raw=randomToken();
     jdbc.update("""
       insert into auth_session(token_hash,user_id,student_id,expires_at)
@@ -236,7 +234,6 @@ public class AuthService {
 
   private void requireParent(long userId) {
     String role=jdbc.queryForObject("select role from user_account where id=?",String.class,userId);
-    System.out.println("AUTH_PARENT_CHECK userId=" + userId + " dbRole=" + role);
     if(!"PARENT".equals(role) && !"ADMIN".equals(role)) throw new SecurityException("Parent access required");
   }
 
