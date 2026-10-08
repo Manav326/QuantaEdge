@@ -13,6 +13,52 @@ public class AdminController {
 
   public AdminController(JdbcTemplate jdbc,AuthorizationService authorization){this.jdbc=jdbc;this.authorization=authorization;}
 
+  @GetMapping("/lessons")
+  public List<Map<String,Object>> lessons(@RequestParam(required=false) String classCode,
+      @RequestParam(required=false) String subjectCode,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    if(classCode==null || subjectCode==null) return jdbc.queryForList("""
+      select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
+             c.code as class_code,s.code as subject_code
+      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      where l.active=true order by c.sort_order,s.sort_order,ch.sort_order,l.sort_order
+      """);
+    return jdbc.queryForList("""
+      select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
+             c.code as class_code,s.code as subject_code
+      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      where l.active=true and c.code=? and s.code=? order by ch.sort_order,l.sort_order
+      """,classCode,subjectCode);
+  }
+
+  @GetMapping("/students")
+  public List<Map<String,Object>> students(@RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    return jdbc.queryForList("""
+      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,st.environment,
+             st.active,st.created_at,count(distinct p.id) as completed_lessons
+      from student st left join student_lesson_progress p on p.student_id=st.id and p.status='COMPLETED'
+      where st.environment='PRODUCTION' group by st.id order by st.created_at desc
+      """);
+  }
+
+  @GetMapping("/action-log")
+  public List<Map<String,Object>> actionLog(@RequestParam(defaultValue="50") int limit,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    int safe=Math.max(1,Math.min(limit,200));
+    return jdbc.query("""
+      select l.id,l.action,l.resource,l.detail,l.created_at,u.mobile_e164
+      from admin_action_log l join user_account u on u.id=l.admin_user_id
+      order by l.created_at desc limit ?
+      """,(rs,n)->Map.of(
+        "id",rs.getLong("id"),"action",rs.getString("action"),"resource",rs.getString("resource"),
+        "detail",rs.getString("detail"),"createdAt",rs.getObject("created_at"),"adminMobile",rs.getString("mobile_e164")),safe);
+  }
+
   @GetMapping("/overview")
   public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context){
     authorization.requireAdmin(context);
