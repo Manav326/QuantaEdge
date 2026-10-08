@@ -171,6 +171,26 @@ jobs:
             -d "{\"studentId\":${CHILD_ID}}" \
             http://localhost:8080/api/v1/auth/select-student >/tmp/qe-select.json
 
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/students/me >/tmp/qe-student.json
+          python - <<'PY'
+          import json
+          student=json.load(open('/tmp/qe-student.json'))
+          assert student["class_code"] == "7"
+          assert "lessonStats" in student
+          assert "mastery" in student
+          PY
+
+          curl -fsS http://localhost:8080/api/v1/system/status >/tmp/qe-status.json
+          python - <<'PY'
+          import json
+          status=json.load(open('/tmp/qe-status.json'))
+          assert status["status"] == "ok"
+          assert status["aiTutorEnabled"] is False
+          PY
+
+          curl -fsS 'http://localhost:8080/api/v1/learning/lessons?classCode=7&subjectCode=maths' >/tmp/qe-lessons.json
+          LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-lessons.json"))[0]["id"])')"
+
           curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/learning/lessons/$LESSON_ID >/tmp/qe-lesson.json
           python - <<'PY'
           import json, subprocess
@@ -198,25 +218,6 @@ jobs:
           assert student["lessonStats"]["completed_lessons"] >= 1
           PY
 
-          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/students/me >/tmp/qe-student.json
-          python - <<'PY'
-          import json
-          student=json.load(open('/tmp/qe-student.json'))
-          assert student["class_code"] == "7"
-          assert "lessonStats" in student
-          assert "mastery" in student
-          PY
-
-          curl -fsS http://localhost:8080/api/v1/system/status >/tmp/qe-status.json
-          python - <<'PY'
-          import json
-          status=json.load(open('/tmp/qe-status.json'))
-          assert status["status"] == "ok"
-          assert status["aiTutorEnabled"] is False
-          PY
-
-          curl -fsS 'http://localhost:8080/api/v1/learning/lessons?classCode=7&subjectCode=maths' >/tmp/qe-lessons.json
-          LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-lessons.json"))[0]["id"])')"
           curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json' \
             -d "{\"lessonId\":$LESSON_ID}" \
             http://localhost:8080/api/v1/tutor/sessions >/tmp/qe-tutor-session.json
