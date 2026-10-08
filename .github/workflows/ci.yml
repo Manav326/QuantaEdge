@@ -1,4 +1,5 @@
 name: QuantaEdge CI
+# CI uses affected-area gating; release/main remains the full verification path.
 
 on:
   push:
