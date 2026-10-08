@@ -163,7 +163,7 @@ jobs:
 
           curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/guardians/children >/tmp/qe-children.json
           curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json' \
-            -d '{"displayName":"CI Student","classCode":"7","language":"hi","pin":"1234"}' \
+            -d '{"displayName":"CI Student","classCode":"7","language":"hi","pin":"1234","consentAccepted":true}' \
             http://localhost:8080/api/v1/guardians/children >/tmp/qe-child.json
           CHILD_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-child.json"))["id"])')"
 
