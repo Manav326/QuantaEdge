@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class LearningController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
-  private final LearningStateService state;
+  private final LearningStateService state;\n  private final QuestionAnswerService answerService;
 
   public LearningController(JdbcTemplate jdbc, AuthorizationService authorization, LearningStateService state) {
     this.jdbc=jdbc; this.authorization=authorization; this.state=state;
@@ -98,19 +98,19 @@ public class LearningController {
     var q=rows.getFirst();
     long lessonId=((Number)q.get("lesson_id")).longValue();
     ensureStudentLessonAccess(context.studentId(),lessonId);
-    String submitted=String.valueOf(body.getOrDefault("answer","")).trim();
+    Object submittedObject=body.getOrDefault("answer","");
+    String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : submittedObject.toString();
     String payload=String.valueOf(q.get("answer_payload"));
-    String expected=extractJsonString(payload,"value");
-    String kind=extractJsonString(payload,"kind");
-    boolean autoGraded=!"".equals(expected)&&("OPTION".equals(kind)||"TEXT".equals(kind));
-    Boolean correct=autoGraded?normalize(submitted).equals(normalize(expected)):null;
-    state.recordAttempt(context.studentId(),questionId,lessonId,submitted,autoGraded,correct);
+    QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
+    state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct());
 
     var result=new LinkedHashMap<String,Object>();
     result.put("questionId",questionId); result.put("questionType",q.get("question_type"));
-    result.put("correct",correct); result.put("autoGraded",autoGraded); result.put("explanation",q.get("explanation"));
-    result.put("feedback",autoGraded?(Boolean.TRUE.equals(correct)?"सही। अब अपने उत्तर का कारण बताइए।":"अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
-        :"उत्तर सेव हो गया। इस प्रश्न को rubric/teacher review से जाँचा जाएगा।");
+    result.put("correct",evaluation.correct()); result.put("autoGraded",evaluation.autoGraded()); result.put("gradingKind",evaluation.kind());
+    result.put("explanation",q.get("explanation"));
+    result.put("feedback",evaluation.autoGraded()
+      ? (Boolean.TRUE.equals(evaluation.correct())?"सही। अब अपने उत्तर का कारण बताइए।":"अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
+      : "उत्तर सेव हो गया। इस प्रश्न के लिए teacher/rubric आधारित जाँच आवश्यक है।");
     return result;
   }
 
@@ -140,9 +140,4 @@ public class LearningController {
     if(count==0) throw new SecurityException("Lesson access denied");
   }
 
-  private String normalize(String value){ return value.trim().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT); }
-  private String extractJsonString(String json,String key){
-    String marker="\"" + key + "\":\""; int start=json.indexOf(marker); if(start<0)return "";
-    start+=marker.length(); int end=json.indexOf("\"",start); return end<0?"":json.substring(start,end);
-  }
 }
