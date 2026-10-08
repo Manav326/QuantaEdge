@@ -29,11 +29,11 @@ jobs:
             cd /opt/quantaedge
             git fetch --prune origin
             git checkout "${{ inputs.ref }}"
-            git pull --ff-only origin "${{ inputs.ref }}"
+            git reset --hard "origin/${{ inputs.ref }}"
             export QUANTAEDGE_IMAGE_TAG="sha-$(git rev-parse HEAD)"
             export QUANTAEDGE_GHCR_OWNER="${{ github.repository_owner }}"
             echo "${{ secrets.QUANTAEDGE_GHCR_TOKEN }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
             docker image prune -f
-            docker compose ps
+            docker compose -f docker-compose.prod.yml ps
