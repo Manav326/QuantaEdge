@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class LearningController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
-  private final LearningStateService state;\n  private final QuestionAnswerService answerService;
+  private final LearningStateService state;
+  private final QuestionAnswerService answerService;
 
-  public LearningController(JdbcTemplate jdbc, AuthorizationService authorization, LearningStateService state) {
-    this.jdbc=jdbc; this.authorization=authorization; this.state=state;
+  public LearningController(JdbcTemplate jdbc, AuthorizationService authorization, LearningStateService state, QuestionAnswerService answerService) {
+    this.jdbc=jdbc; this.authorization=authorization; this.state=state; this.answerService=answerService;
   }
 
   @GetMapping("/lessons")
