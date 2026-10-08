@@ -70,7 +70,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   return null;
 }
 
-function QuestionCard({q, onResult}:{q:Question;onResult:(id:number,result:any)=>void}) {
+function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
   const [value,setValue]=useState('');
   const [busy,setBusy]=useState(false);
   const [result,setResult]=useState<any>(null);
@@ -102,7 +102,7 @@ function QuestionCard({q, onResult}:{q:Question;onResult:(id:number,result:any)=
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
         <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder="अपना reasoning/उत्तर यहाँ लिखें…" rows={q.question_type==='LONG_ANSWER'?6:4}/> :
         <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
-      <button className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}>उत्तर जाँचें</button>
+      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}>उत्तर जाँचें</button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}>✦ Tutor</button></div>
     </div>}
     {result && <div className="feedback">
       <b>{result.correct===true?'✓ सही':result.correct===false?'अभी सही नहीं':'उत्तर दर्ज है'}</b>
@@ -117,6 +117,7 @@ export default function LearnClient() {
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [help,setHelp]=useState('none');
   const [tutorOpen,setTutorOpen]=useState(false);
+  const [tutorQuestionId,setTutorQuestionId]=useState<number|undefined>(undefined);
   const [error,setError]=useState('');
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
@@ -190,10 +191,10 @@ export default function LearnClient() {
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>पहले concept को अपने शब्दों में समझें, फिर example देखकर नया प्रयास करें।</span></div>}
 
       <div className="content-heading"><h2>इस lesson के सभी प्रश्न</h2><span>{lesson.questions.length} questions</span></div>
-      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}}/>)}
+      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label="AI tutor खोलें">✦ <span>AI Tutor</span></button>
-      <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} />
+      <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
         {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}>← पिछला</button> : <span/>}
