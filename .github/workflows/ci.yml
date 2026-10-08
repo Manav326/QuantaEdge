@@ -37,14 +37,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: |
-            apps/web/package-lock.json
-            apps/admin/package-lock.json
 
       - name: Install web dependencies
         working-directory: apps/web
-        run: npm ci
+        run: npm install
 
       - name: Build web
         working-directory: apps/web
@@ -52,7 +48,7 @@ jobs:
 
       - name: Install admin dependencies
         working-directory: apps/admin
-        run: npm ci
+        run: npm install
 
       - name: Build admin
         working-directory: apps/admin
@@ -143,5 +139,4 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/quantaedge-admin:sha-${{ github.sha }}
             ghcr.io/${{ github.repository_owner }}/quantaedge-admin:latest
           cache-from: type=gha,scope=admin
-          cache-to: type=gha,mode=max
-          scope=admin
+          cache-to: type=gha,mode=max,scope=admin
