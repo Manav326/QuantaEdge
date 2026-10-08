@@ -51,7 +51,7 @@ public class GuardianController {
       select count(*) filter(where l.active=true and l.status='PUBLISHED') as total_lessons,
              count(*) filter(where p.status='COMPLETED') as completed_lessons,
              coalesce(round(100.0*count(*) filter(where p.status='COMPLETED')/
-               nullif(count(*) filter(where l.active=true and l.status='PUBLISHED'),0),1),0) as completion_percent
+               nullif(count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'),0),1),0) as completion_percent
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       """,studentId));
