@@ -1,5 +1,6 @@
 package com.quantaedge.api;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -56,9 +57,9 @@ public class LearningController {
       throw new LessonNotFoundException(lessonId);
     }
 
-    Map<String, Object> result = new java.util.LinkedHashMap<>(lessons.getFirst());
+    Map<String, Object> result = new LinkedHashMap<>(lessons.getFirst());
     result.put("blocks", jdbc.queryForList("""
-      select id, sequence_no, block_type, content
+      select id, sequence_no, block_type, content::text as content
       from lesson_block
       where lesson_id=? and active=true
       order by sequence_no
@@ -75,7 +76,7 @@ public class LearningController {
                   ) order by qo.sort_order
                ) from question_option qo where qo.question_id=q.id),
                '[]'::jsonb
-             ) as options
+             )::text as options
       from question q
       where q.lesson_id=? and q.active=true
       order by q.sort_order
@@ -96,7 +97,7 @@ public class LearningController {
                   ) order by qo.sort_order
                ) from question_option qo where qo.question_id=q.id),
                '[]'::jsonb
-             ) as options
+             )::text as options
       from question q
       where q.lesson_id=? and q.active=true
       order by q.sort_order
