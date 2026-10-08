@@ -41,6 +41,8 @@ public class AuthService {
         .map(this::normalizeMobile).filter(v->!v.isBlank()).toList();
   }
 
+  public int getSessionHours() { return sessionHours; }
+
   public String normalizeMobile(String value) {
     String digits=value==null?"":value.replaceAll("[^0-9]","");
     if(digits.startsWith("91") && digits.length()==12) return "+"+digits;
@@ -57,6 +59,10 @@ public class AuthService {
         "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
         Long.class,normalized,otpCooldownSeconds);
     if(recent>0) throw new IllegalStateException("Please wait before requesting another OTP");
+    long hourly=jdbc.queryForObject(
+        "select count(*) from otp_challenge where mobile_e164=? and requested_at > now()-interval '1 hour'",
+        Long.class,normalized);
+    if(hourly>=5) throw new IllegalStateException("Too many OTP requests. Please try again later.");
 
     String otp=(demoSeed && normalized.equals("+917070107483")) ? "000000" :
         (demoSeed ? "123456" : String.format("%06d",random.nextInt(1_000_000)));
