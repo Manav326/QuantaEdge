@@ -5,6 +5,7 @@ import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 export default function ParentPage(){
+  async function logout(){await fetch('/api/v1/auth/logout',{method:'POST'});router.replace('/login');}
   const router=useRouter(); const [children,setChildren]=useState<any[]>([]); const [selected,setSelected]=useState<any>(null); const [error,setError]=useState('');
   async function load(id?:number){let cr=await fetch('/api/v1/guardians/children');if(cr.status===401){router.replace('/login');return}if(cr.status===403){const sr=await fetch('/api/v1/auth/switch-parent',{method:'POST'});if(!sr.ok){router.replace('/login');return}cr=await fetch('/api/v1/guardians/children');}const cb=await cr.json();if(!cr.ok){setError(cb.message||'Unable to load children');return}setChildren(cb);const child=cb.find((x:any)=>x.id===id)||cb[0];if(child){const rr=await fetch('/api/v1/guardians/children/'+child.id+'/report');const rb=await rr.json();if(rr.ok)setSelected(rb)}}
   useEffect(()=>{load()},[]);
@@ -12,7 +13,7 @@ export default function ParentPage(){
   if(!children.length)return <main className="parent-app"><section className="parent-dashboard"><div className="auth-card"><h1>अभी child profile नहीं है</h1><p>Login flow में student profile बनाकर फिर यहाँ आएँ।</p><Link href="/login" className="button button-dark">Student profile बनाएं →</Link></div></section></main>;
   if(!selected)return <main className="parent-app"><section className="parent-dashboard"><div className="eyebrow">Report लोड हो रही है…</div></section></main>;
   const stats=selected.lessonStats,q=selected.questionStats;
-  return <main className="parent-app"><header className="parent-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><span>Parent view · {selected.display_name}</span></header>
+  return <main className="parent-app"><header className="parent-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><span>Parent view · {selected.display_name}</span><button className="text-link" onClick={logout}>Logout</button></header>
     <section className="parent-dashboard"><div><span className="eyebrow">Learning summary</span><h1>{selected.display_name} ने क्या सीखा?</h1><p>यह report आपके linked child के वास्तविक learning records से बनती है।</p></div>
       {children.length>1&&<label>Child<select value={selected.id} onChange={e=>load(Number(e.target.value))}>{children.map(c=><option key={c.id} value={c.id}>{c.display_name}</option>)}</select></label>}
       <div className="parent-stats"><article><span>Lessons complete</span><strong>{stats.completed_lessons}</strong><small>of {stats.total_lessons} published lessons</small></article><article><span>Accuracy</span><strong>{q.accuracy_percent}%</strong><small>{q.attempts} answered questions</small></article><article><span>Curriculum</span><strong>{stats.completion_percent}%</strong><small>completion</small></article></div>
