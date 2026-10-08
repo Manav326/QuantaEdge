@@ -91,8 +91,8 @@ public class AuthController {
   }
 
   private ResponseEntity<Map<String,Object>> withCookie(String token,AuthContext context) {
-    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,token).httpOnly(true).secure(secureCookies).sameSite("Lax").path("/")
-        .maxAge(Duration.ofDays(7)).build();
+    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,token).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+        .maxAge(Duration.ofHours(auth.getSessionHours())).build();
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString())
         .body(Map.of("authenticated",true,"role",context.role(),
             "studentId",context.studentId()==null?0:context.studentId(),
