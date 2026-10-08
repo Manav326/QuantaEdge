@@ -180,6 +180,24 @@ jobs:
           assert "mastery" in student
           PY
 
+          curl -fsS http://localhost:8080/api/v1/system/status >/tmp/qe-status.json
+          python - <<'PY'
+          import json
+          status=json.load(open('/tmp/qe-status.json'))
+          assert status["status"] == "ok"
+          assert status["aiTutorEnabled"] is False
+          PY
+
+          curl -fsS 'http://localhost:8080/api/v1/learning/lessons?classCode=7&subjectCode=maths' >/tmp/qe-lessons.json
+          LESSON_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-lessons.json"))[0]["id"])')"
+          curl -fsS -b /tmp/qe.cookies -H 'Content-Type: application/json'             -d "{"lessonId":$LESSON_ID}"             http://localhost:8080/api/v1/tutor/sessions >/tmp/qe-tutor-session.json
+          python - <<'PY'
+          import json
+          tutor=json.load(open('/tmp/qe-tutor-session.json'))
+          assert tutor["available"] is False
+          assert tutor["sessionId"] > 0
+          PY
+
           curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/recommendations/next >/tmp/qe-rec.json
           python - <<'PY'
           import json
@@ -214,6 +232,13 @@ jobs:
           curl -fsS -b /tmp/qe-admin.cookies -c /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"mobile":"7070107483","otp":"000000"}'             http://localhost:8080/api/v1/auth/verify-otp >/tmp/qe-admin-login.json
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-admin-login.json"))["role"])')" = "ADMIN"
           curl -fsS -b /tmp/qe-admin.cookies http://localhost:8080/api/v1/admin/overview >/tmp/qe-admin-overview.json
+          curl -fsS -b /tmp/qe-admin.cookies http://localhost:8080/api/v1/admin/tutor/analytics >/tmp/qe-admin-tutor.json
+          python - <<'PY'
+          import json
+          tutor=json.load(open('/tmp/qe-admin-tutor.json'))
+          assert "summary" in tutor
+          assert "modes" in tutor
+          PY
 
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"sourceKind":"BOARD_PAST_PAPER","title":"CI Verified Source","provider":"QuantaEdge CI","sourceUrl":"https://example.invalid/ci","edition":"test","language":"hi","sourceYear":2026,"status":"REFERENCE"}'             http://localhost:8080/api/v1/admin/sources >/tmp/qe-source.json
           SOURCE_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-source.json"))["id"])')"
