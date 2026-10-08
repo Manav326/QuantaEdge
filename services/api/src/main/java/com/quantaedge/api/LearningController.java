@@ -32,7 +32,7 @@ public class LearningController {
       join curriculum_subject s on s.id = ch.subject_id
       join curriculum_class c on c.id = s.class_id
       left join learning_objective o on o.id = l.objective_id
-      where c.code = ? and s.code = ? and l.active = true
+      where c.code = ? and s.code = ? and c.active = true and s.active = true and ch.active = true and ch.content_status = 'PUBLISHED' and l.active = true and l.status = 'PUBLISHED'
       order by ch.sort_order, l.sort_order
       """, classCode, subjectCode);
   }
@@ -50,7 +50,7 @@ public class LearningController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       left join learning_objective o on o.id=l.objective_id
-      where l.id=? and l.active=true
+      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
       """, lessonId);
 
     if (lessons.isEmpty()) {
@@ -78,7 +78,7 @@ public class LearningController {
                '[]'::jsonb
              )::text as options
       from question q
-      where q.lesson_id=? and q.active=true
+      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
       order by q.sort_order
       """, lessonId));
     return result;
@@ -99,7 +99,7 @@ public class LearningController {
                '[]'::jsonb
              )::text as options
       from question q
-      where q.lesson_id=? and q.active=true
+      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
       order by q.sort_order
       """, lessonId);
   }
