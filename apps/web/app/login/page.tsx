@@ -13,6 +13,7 @@ export default function LoginPage(){
   const [displayName,setDisplayName]=useState('');
   const [step,setStep]=useState<'mobile'|'otp'|'child'>('mobile');
   const [child,setChild]=useState({displayName:'',classCode:'7',language:'hi',pin:''});
+  const [consentAccepted,setConsentAccepted]=useState(false);
   const [children,setChildren]=useState<Child[]>([]);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
@@ -43,7 +44,7 @@ export default function LoginPage(){
   async function createChild(){
     setError(''); setBusy(true);
     try{
-      const r=await fetch('/api/v1/guardians/children',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(child)});
+      const r=await fetch('/api/v1/guardians/children',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...child,consentAccepted})});
       const b=await r.json(); if(!r.ok) throw new Error(b.message||'Child creation failed');
       await selectChild(Number(b.id));
     }catch(e:any){setError(e.message||'Child creation failed')}finally{setBusy(false)}
@@ -80,7 +81,7 @@ export default function LoginPage(){
         <label>कक्षा<select value={child.classCode} onChange={e=>setChild({...child,classCode:e.target.value})}><option value="6">कक्षा 6</option><option value="7">कक्षा 7</option><option value="8">कक्षा 8</option></select></label>
         <label>Student PIN<input value={child.pin} onChange={e=>setChild({...child,pin:e.target.value})} placeholder="4–8 digits" inputMode="numeric" maxLength={8}/></label>
         {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>}
-        <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
+        <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4||!consentAccepted} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
       </>}
       <small className="auth-note">Production OTP provider और guardian records server-side configured हैं।</small>
     </section>
