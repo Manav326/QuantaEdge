@@ -17,15 +17,15 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 
 ## Curriculum/content
 
-The MVP curriculum foundation covers **Bihar Board / SCERT Class 6, 7 and 8 Maths + Science**.
+The MVP curriculum foundation covers **Bihar Board / SCERT Class 6, 7 and 8 Maths + Science** in the canonical textbook order. The audited path contains **104 published curriculum sections**: Class 6 Maths 15 + Science 18; Class 7 Maths 16 + Science 20 (including the book's appendix/internal-organs reference sections); Class 8 Maths 16 + Science 19.
 
-Each subject has chapter-level mapping plus three published learning stages per chapter:
+Every canonical chapter follows the same teacher-shaped learning arc rather than a disconnected screen sequence:
 
-1. पहले समझें — foundation
-2. उदाहरण से सीखें — guided practice
-3. खुद करके पक्का करें — mastery
+1. पहले समझें — activate prior knowledge and build the core idea
+2. उदाहरण के साथ करें — teacher-modeled worked example and guided practice
+3. खुद करके पक्का करें — independent application and reasoning
 
-Each stage includes explanation/challenge/summary or help content and curriculum-linked practice questions. The learning content is authored for QuantaEdge; it is not a copy of the SCERT textbook text.
+The system generates a consistent lesson shell for every canonical chapter, while keeping curriculum order and chapter metadata in the database. QuantaEdge-authored content is not a copy of SCERT textbook text. The `/api/v1/curriculum/audit` endpoint exposes the expected chapter counts and actual teaching order for QA.
 
 SCERT Bihar officially publishes the Class 6–8 textbooks and teacher handbooks used as the curriculum reference for this mapping. The repository keeps the curriculum reference separate from QuantaEdge-authored lesson content.
 
