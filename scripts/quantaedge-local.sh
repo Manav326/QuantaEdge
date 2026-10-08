@@ -6,6 +6,12 @@ cd "$(dirname "$0")/.."
 ACTION="${1:-up}"
 
 case "$ACTION" in
+  audit)
+    curl -fsS "http://localhost:${API_PORT:-8080}/api/v1/curriculum/audit/strict" | tee /tmp/quantaedge-curriculum-audit.json
+    grep -q '"status":"GREEN"' /tmp/quantaedge-curriculum-audit.json || { echo "Curriculum strict audit is RED. Do not ship."; exit 1; }
+    echo "Curriculum strict audit: GREEN"
+    exit 0
+    ;;
   up)
     export APP_DEMO_SEED="${APP_DEMO_SEED:-true}"
     docker compose up -d --build --remove-orphans
