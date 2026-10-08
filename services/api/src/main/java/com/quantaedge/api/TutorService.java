@@ -153,7 +153,10 @@ public class TutorService {
           && content!=null){
         try{
           var node=mapper.readTree(String.valueOf(content));
-          for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) node.remove(field);
+          if(node.isObject()){
+            for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) node.getNodeFactory();
+            for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) ((com.fasterxml.jackson.databind.node.ObjectNode)node).remove(field);
+          }
           safe.add(Map.of("block_type",type,"content",node));
           continue;
         }catch(Exception ignored){}
