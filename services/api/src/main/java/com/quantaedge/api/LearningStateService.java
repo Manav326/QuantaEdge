@@ -25,6 +25,7 @@ public class LearningStateService {
   @Transactional
   public void recordAttempt(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,Boolean correct){
     ensureStudentCanAnswer(studentId,questionId,lessonId);
+    if(answer!=null && answer.length()>5000) throw new IllegalArgumentException("Answer is too long");
     String selected=answer!=null&&answer.length()<=20?answer:null;
     jdbc.update("""
       insert into student_question_attempt(student_id,question_id,selected_option,answer_text,correct,answered_at)
@@ -97,10 +98,19 @@ public class LearningStateService {
 
   private void ensureStudentCanAnswer(long studentId,long questionId,long lessonId){
     Long count=jdbc.queryForObject("""
-      select count(*) from question q join lesson l on l.id=q.lesson_id
-      where q.id=? and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and l.active=true and l.status='PUBLISHED'
-      """,Long.class,questionId,lessonId);
-    if(count==0) throw new IllegalArgumentException("Question does not belong to lesson");
+      select count(*) from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=?
+      where q.id=? and q.lesson_id=? and q.active=true
+        and q.review_status in ('APPROVED','PUBLISHED')
+        and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+        and st.active=true and c.code=st.class_code
+      """,Long.class,studentId,questionId,lessonId);
+    if(count==0) throw new SecurityException("Question access denied");
     ensurePublishedLesson(lessonId);
   }
 }
