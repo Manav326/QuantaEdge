@@ -115,6 +115,29 @@ where c.code in ('6','7','8') and s.code in ('maths','science') and ch.active=tr
 on conflict(chapter_id,requirement_code) do update set
  required=excluded.required,min_count=excluded.min_count,description=excluded.description;
 
+-- Map every canonical chapter to the authoritative Bihar textbook volume.
+insert into chapter_source(chapter_id,source_id,source_chapter_no,source_chapter_title,coverage_type,coverage_status)
+select ch.id, src.id, ch.textbook_chapter_no, ch.display_name, 'CURRICULUM', 'MAPPED'
+from curriculum_chapter ch
+join curriculum_subject s on s.id=ch.subject_id
+join curriculum_class c on c.id=s.class_id
+join content_source src on src.source_kind='STATE_TEXTBOOK'
+ and src.edition='current'
+ and (
+   (c.code='6' and s.code='maths' and src.title like 'Bihar SCERT Class 6 Mathematics%') or
+   (c.code='7' and s.code='maths' and src.title like 'Bihar SCERT Class 7 Mathematics%') or
+   (c.code='8' and s.code='maths' and src.title like 'Bihar SCERT Class 8 Mathematics%') or
+   (c.code='6' and s.code='science' and src.title like 'Bihar SCERT Class 6 Science%') or
+   (c.code='7' and s.code='science' and src.title like 'Bihar SCERT Class 7 Science%') or
+   (c.code='8' and s.code='science' and src.title like 'Bihar SCERT Class 8 Science%')
+ )
+where c.code in ('6','7','8') and s.code in ('maths','science') and ch.active=true
+on conflict(chapter_id,source_id,coverage_type) do update set
+ source_chapter_no=excluded.source_chapter_no,source_chapter_title=excluded.source_chapter_title,coverage_status='MAPPED';
+
+-- NCERT is tracked as a separate comparative source. It is never counted as Bihar
+-- textbook coverage unless a chapter-level editorial mapping has actually been verified.
+
 -- Existing V8 generic lesson shells are intentionally not treated as proof of
 -- source-backed completeness. Their content remains visible for local UX QA,
 -- but the audit distinguishes shell coverage from authored/source-backed coverage.
