@@ -171,6 +171,33 @@ jobs:
             -d "{\"studentId\":${CHILD_ID}}" \
             http://localhost:8080/api/v1/auth/select-student >/tmp/qe-select.json
 
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/learning/lessons/$LESSON_ID >/tmp/qe-lesson.json
+          python - <<'PY'
+          import json, subprocess
+          lesson=json.load(open('/tmp/qe-lesson.json'))
+          questions=lesson.get('questions',[])
+          assert questions, 'lesson must expose learner questions'
+          expected={
+            'MCQ':'A','TRUE_FALSE':'B','MATCH':{'1':'A','2':'B','3':'C'},
+            'ORDER':['B','C','D','A']
+          }
+          for q in questions:
+            typ=q['question_type']
+            answer=expected.get(typ,'CI learner response')
+            body=json.dumps({'answer':answer})
+            subprocess.run([
+              'curl','-fsS','-b','/tmp/qe.cookies','-H','Content-Type: application/json',
+              '-d',body,
+              f"http://localhost:8080/api/v1/learning/questions/{q['id']}/answer"
+            ],check=True,stdout=subprocess.DEVNULL)
+          PY
+          curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/students/me >/tmp/qe-student-after-lesson.json
+          python - <<'PY'
+          import json
+          student=json.load(open('/tmp/qe-student-after-lesson.json'))
+          assert student["lessonStats"]["completed_lessons"] >= 1
+          PY
+
           curl -fsS -b /tmp/qe.cookies http://localhost:8080/api/v1/students/me >/tmp/qe-student.json
           python - <<'PY'
           import json
