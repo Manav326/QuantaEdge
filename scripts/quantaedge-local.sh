@@ -39,7 +39,7 @@ case "$ACTION" in
     exit 0
     ;;
   *)
-    echo "Usage: bash scripts/quantaedge-local.sh [up|rebuild|down|reset|logs|ps]" >&2
+    echo "Usage: bash scripts/quantaedge-local.sh [up|rebuild|down|reset|logs|ps|audit]" >&2
     exit 2
     ;;
 esac
