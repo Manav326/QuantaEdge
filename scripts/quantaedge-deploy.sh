@@ -50,6 +50,7 @@ for i in {1..30}; do
 done
 
 curl -fsS --max-time 10 http://localhost:${API_PORT:-8080}/actuator/health >/dev/null
+curl -fsS --max-time 10 http://localhost:${API_PORT:-8080}/api/v1/system/status >/dev/null
 curl -fsS --max-time 10 http://localhost:${WEB_PORT:-3000}/ >/dev/null
 curl -fsS --max-time 10 http://localhost:${ADMIN_PORT:-3001}/ >/dev/null
 docker compose -f docker-compose.prod.yml ps
