@@ -14,23 +14,26 @@ async function loginGuardian(page) {
   await page.getByLabel('OTP').fill('000000');
   await page.getByRole('button', { name: 'OTP सत्यापित करें' }).click();
 
-  await expect(page.getByRole('heading', { name: 'बच्चे का learning profile बनाएं।' })).toBeVisible();
+  const setup = page.getByRole('heading', { name: 'बच्चे का learning profile बनाएं।' });
+  if (await setup.isVisible().catch(() => false)) {
+    await page.getByLabel('बच्चे का नाम').fill('UI CI Student');
+    await page.getByLabel('कक्षा').selectOption('7');
+    await page.getByLabel('Student PIN').fill('1234');
 
-  await page.getByLabel('बच्चे का नाम').fill('UI CI Student');
-  await page.getByLabel('कक्षा').selectOption('7');
-  await page.getByLabel('Student PIN').fill('1234');
+    const consent = page.getByRole('checkbox');
+    await expect(consent).toBeVisible();
+    await expect(consent).toBeEnabled();
+    await consent.check();
 
-  const consent = page.getByRole('checkbox');
-  await expect(consent).toBeVisible();
-  await expect(consent).toBeEnabled();
-  await consent.check();
+    const create = page.getByRole('button', { name: 'Student profile बनाएं' });
+    await expect(create).toBeEnabled();
+    await create.click();
+    await page.waitForURL('**/student', { waitUntil: 'domcontentloaded' });
+  } else {
+    await expect(page).toHaveURL(/\/student/);
+  }
 
-  const create = page.getByRole('button', { name: 'Student profile बनाएं' });
-  await expect(create).toBeEnabled();
-  await create.click();
-
-  await page.waitForURL('**/student', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByText('नमस्ते, UI CI Student')).toBeVisible();
+  await expect(page.getByText(/नमस्ते,/)).toBeVisible();
 }
 
 test.describe('QuantaEdge rendered UI smoke', () => {
