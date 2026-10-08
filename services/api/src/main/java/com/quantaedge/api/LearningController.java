@@ -2,8 +2,8 @@ package com.quantaedge.api;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,8 +65,14 @@ public class LearningController {
     }
 
     Map<String, Object> result = new LinkedHashMap<>(lessons.getFirst());
+    // Never send answer-bearing fields from lesson blocks to the browser. The
+    // authoritative answer lives in question.answer_payload and is only used by
+    // the answer endpoint.
     result.put("blocks", jdbc.queryForList("""
-      select id, sequence_no, block_type, content::text as content
+      select id, sequence_no, block_type,
+             case when block_type in ('QUESTION','MCQ','TRUE_FALSE','MATCH','ORDER','INPUT')
+                  then (content - 'correctOption' - 'answer' - 'answer_payload')
+                  else content end as content
       from lesson_block
       where lesson_id=? and active=true
       order by sequence_no
@@ -85,9 +91,9 @@ public class LearningController {
       @PathVariable long questionId,
       @RequestBody Map<String, Object> body) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select q.id, q.question_type, q.explanation, q.answer_payload::text as answer_payload,
-             l.id as lesson_id, l.chapter_id
-      from question q join lesson l on l.id=q.lesson_id
+      select q.id, q.question_type, q.explanation, q.answer_payload::text as answer_payload
+      from question q
+      join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
       where q.id=? and q.active=true and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
@@ -102,17 +108,20 @@ public class LearningController {
     String expected = extractJsonString(expectedJson, "value");
     String kind = extractJsonString(expectedJson, "kind");
 
-    boolean autoGradable = !"".equals(expected) && ("OPTION".equals(kind) || "TEXT".equals(kind));
+    boolean autoGradable = !"".equals(expected)
+        && ("OPTION".equals(kind) || "TEXT".equals(kind));
     boolean correct = autoGradable && normalize(submitted).equals(normalize(expected));
 
-    var result = new LinkedHashMap<String,Object>();
+    var result = new LinkedHashMap<String, Object>();
     result.put("questionId", questionId);
+    result.put("questionType", q.get("question_type"));
     result.put("correct", autoGradable ? correct : null);
     result.put("autoGraded", autoGradable);
     result.put("explanation", q.get("explanation"));
     result.put("feedback", autoGradable
-        ? (correct ? "सही। अब यह बताइए कि आपने यह उत्तर क्यों चुना।" : "अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
-        : "यह उत्तर शिक्षक/मूल्यांकन rubric से जाँचा जाएगा।");
+        ? (correct ? "सही। अब यह बताइए कि आपने यह उत्तर क्यों चुना।"
+                   : "अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
+        : "उत्तर दर्ज हो गया। इस प्रश्न के लिए teacher/rubric आधारित जाँच आवश्यक है।");
     return result;
   }
 
@@ -122,15 +131,19 @@ public class LearningController {
              q.difficulty, q.sort_order,
              q.source_kind, q.source_title, q.source_ref, q.source_year,
              q.board, q.marks, q.exam_format, q.topic, q.subtopic, q.skill, q.tags::text as tags,
-             coalesce(
-               (select jsonb_agg(
-                  jsonb_build_object(
-                    'key', qo.option_key,
-                    'label', qo.label
-                  ) order by qo.sort_order
-               ) from question_option qo where qo.question_id=q.id),
-               '[]'::jsonb
-             )::text as options
+             case
+               when q.question_type in ('MCQ','TRUE_FALSE') then
+                 coalesce((select jsonb_agg(
+                    jsonb_build_object('key', qo.option_key, 'label', qo.label)
+                    order by qo.sort_order
+                 ) from question_option qo where qo.question_id=q.id), '[]'::jsonb)
+               else '[]'::jsonb
+             end::text as options,
+             case
+               when q.question_type in ('INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER') then 'text'
+               when q.question_type in ('MATCH','ORDER') then 'structured-text'
+               else 'choice'
+             end as response_mode
       from question q
       where q.lesson_id=? and q.active=true
       order by q.sort_order
