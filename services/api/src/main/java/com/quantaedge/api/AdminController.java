@@ -59,6 +59,35 @@ public class AdminController {
         "detail",rs.getString("detail"),"createdAt",rs.getObject("created_at"),"adminMobile",rs.getString("mobile_e164")),safe);
   }
 
+  @GetMapping("/sources")
+  public List<Map<String,Object>> sources(@RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    return jdbc.queryForList("""
+      select id,source_kind,title,provider,source_url,edition,language,source_year,status,accessed_at
+      from content_source order by source_kind,title
+      """);
+  }
+
+  @PostMapping("/sources")
+  public Map<String,Object> createSource(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    AuthContext admin=authorization.requireAdmin(context);
+    Long id=jdbc.queryForObject("""
+      insert into content_source(source_kind,title,provider,source_url,edition,language,source_year,checksum,status)
+      values (?,?,?,?,?,?,?,?,?)
+      on conflict(source_kind,title,edition) do update set
+        provider=excluded.provider,source_url=excluded.source_url,language=excluded.language,
+        source_year=excluded.source_year,checksum=excluded.checksum,status=excluded.status
+      returning id
+      """,Long.class,
+      String.valueOf(body.get("sourceKind")),body.get("title"),body.get("provider"),body.get("sourceUrl"),
+      body.get("edition"),String.valueOf(body.getOrDefault("language","hi")),
+      body.get("sourceYear")==null?null:Integer.valueOf(String.valueOf(body.get("sourceYear"))),
+      body.get("checksum"),String.valueOf(body.getOrDefault("status","REFERENCE")));
+    log(admin,"SOURCE_REGISTER",String.valueOf(id),String.valueOf(body.get("title")));
+    return Map.of("id",id);
+  }
+
   @GetMapping("/overview")
   public Map<String,Object> overview(@RequestAttribute(value="authContext",required=false) AuthContext context){
     authorization.requireAdmin(context);
