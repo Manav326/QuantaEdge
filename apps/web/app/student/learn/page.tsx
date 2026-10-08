@@ -3,6 +3,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
@@ -116,6 +117,8 @@ export default function LearnPage() {
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [help,setHelp]=useState('none');
   const [error,setError]=useState('');
+  const router=useRouter();
+  const searchParams=useSearchParams();
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
 
@@ -130,14 +133,29 @@ export default function LearnPage() {
   useEffect(()=>{
     async function load(){
       try{
-        const list=await fetch('/api/v1/learning/lessons?classCode=7&subjectCode=maths').then(r=>r.json()) as Lesson[];
+        const me=await fetch('/api/v1/students/me');
+        if(me.status===401||me.status===403){router.replace('/login');return;}
+        const student=await me.json();
+        if(!me.ok) throw new Error(student.message||'Student unavailable');
+        const requestedId=Number(searchParams.get('lessonId')||0);
+        let targetId=requestedId;
+        if(!targetId){
+          const rec=await fetch('/api/v1/recommendations/next');
+          const rb=await rec.json();
+          if(rec.ok&&rb.available) targetId=Number(rb.lesson.id);
+        }
+        if(!targetId) throw new Error('No recommendation available');
+        const detail=await fetch('/api/v1/learning/lessons/'+targetId);
+        if(!detail.ok) throw new Error('lesson');
+        const d=await detail.json() as Detail;
+        const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code).then(r=>r.json()) as Lesson[];
         setLessons(list);
-        if(!list.length) throw new Error('No published lesson');
-        await loadLesson(list[0].id);
-      }catch{setError('Lesson load नहीं हो पाया। API health और Docker services जाँचें।');}
+        await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
+        setLesson(d);
+      }catch(e:any){setError(e.message==='Student unavailable'?'Student login required':'Lesson load नहीं हो पाया।');}
     }
     load();
-  },[]);
+  },[router,searchParams]);
 
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>;
