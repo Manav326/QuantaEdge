@@ -11,9 +11,8 @@ public class TutorHealthIndicator implements HealthIndicator {
 
   @Override
   public Health health(){
-    if(tutor.isConfigured()){
-      return Health.up().withDetail("configured",true).withDetail("model",tutor.model()).build();
-    }
-    return Health.down().withDetail("configured",false).withDetail("reason","AI tutor enabled without provider configuration").build();
+    if(!tutor.isEnabled()) return Health.up().withDetail("enabled",false).build();
+    if(tutor.isConfigured()) return Health.up().withDetail("enabled",true).withDetail("configured",true).withDetail("model",tutor.model()).build();
+    return Health.down().withDetail("enabled",true).withDetail("configured",false).withDetail("reason","AI tutor enabled without provider configuration").build();
   }
 }
