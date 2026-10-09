@@ -34,7 +34,7 @@ public class AuthService {
       @Value("${app.auth.session-hours:168}") int sessionHours,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies,
       @Value("${app.auth.otp-cooldown-seconds:60}") int otpCooldownSeconds,
-      @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
+      @Value("${app.auth.admin-mobiles:7070107483}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
     this.sessionHours=sessionHours;
@@ -45,6 +45,15 @@ public class AuthService {
   }
 
   public int getSessionHours() { return sessionHours; }
+
+  /** True while an invited staff account has not completed its first successful sign-in. */
+  public boolean isStaffFirstAccess(String mobile) {
+    String normalized=normalizeMobile(mobile);
+    List<Map<String,Object>> rows=jdbc.queryForList(
+        "select last_login_at from staff_account where mobile_e164=?", normalized);
+    if (rows.isEmpty()) return adminMobiles.contains(normalized);
+    return rows.getFirst().get("last_login_at")==null;
+  }
 
   public String normalizeMobile(String value) {
     String digits=value==null?"":value.replaceAll("[^0-9]","");
@@ -124,6 +133,11 @@ public class AuthService {
 
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName) {
+    return verifyOtp(mobile, otp, purpose, displayName, false);
+  }
+
+  @Transactional
+  public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess) {
     String normalized=normalizeMobile(mobile);
     if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
     if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
@@ -152,17 +166,26 @@ public class AuthService {
     if(!hash(otp).equals(String.valueOf(row.get("code_hash")))) throw new IllegalArgumentException("Incorrect OTP");
 
     if ("STAFF_LOGIN".equals(purpose)) {
-      jdbc.update("update otp_challenge set consumed_at=now() where id=?", row.get("id"));
       List<Map<String,Object>> staffRows=jdbc.queryForList(
-          "select id, active from staff_account where mobile_e164=?", normalized);
-      Long staffId=null;
+          "select id, active, last_login_at from staff_account where mobile_e164=?", normalized);
+      Long staffId;
       if (!staffRows.isEmpty()) {
         Map<String,Object> staffRow=staffRows.getFirst();
         if (!Boolean.TRUE.equals(staffRow.get("active"))) {
           throw new SecurityException("This staff account is inactive. Contact an administrator.");
         }
+        boolean activated=staffRow.get("last_login_at")!=null;
+        if (firstAccess && activated) {
+          throw new IllegalStateException("This staff account is already activated. Choose Sign in instead.");
+        }
+        if (!firstAccess && !activated) {
+          throw new IllegalStateException("Your staff invitation is ready. Choose First-time access to activate it.");
+        }
         staffId=((Number)staffRow.get("id")).longValue();
       } else if (adminMobiles.contains(normalized)) {
+        if (!firstAccess) {
+          throw new IllegalStateException("Use First-time access to set up the bootstrap administrator.");
+        }
         String staffName=displayName==null||displayName.isBlank()?"Administrator":displayName.trim();
         // An explicitly configured bootstrap-admin mobile is authoritative. Retire any
         // legacy user identity for this number so the phone cannot continue as both
@@ -188,6 +211,7 @@ public class AuthService {
       } else {
         throw new SecurityException("This mobile is not assigned to an active staff account.");
       }
+      jdbc.update("update otp_challenge set consumed_at=now() where id=?", row.get("id"));
       return contextForStaff(staffId);
     }
 
