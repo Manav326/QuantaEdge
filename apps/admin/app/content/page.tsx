@@ -269,7 +269,25 @@ export default function ContentStudio(){
    const id=Number(createType==='chapter'?result.chapter_id:result.lesson_id);const kind=createType;setCreateType(null);await load();await open({type:kind,id});setNotice('Draft '+kind+' created. Add reviewed teaching material before publishing.');
   }catch(e){setError(e instanceof Error?e.message:'Could not create content.')}finally{setSaving(false)}
  }
- async function setChapterPublication(publish:boolean){
+ async function verifyChapterSource(){
+   if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canReview||!chapterSourceDetailsComplete||form.curriculumSourceVerified)return;
+   setSaving(true);setError('');setNotice('');
+   try{
+    await api('/api/v1/admin/content/chapters/'+selected.id+'/verify-source',{method:'POST'});
+    await load();await open(selected);
+    setNotice('Official curriculum source verified. The chapter can be published when its micro-topic checks pass.');
+   }catch(e){setError(e instanceof Error?e.message:'The curriculum source could not be verified.')}finally{setSaving(false)}
+  }
+  async function verifyLessonSource(){
+   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!lessonSourceDetailsComplete||form.alignmentSourceVerified)return;
+   setSaving(true);setError('');setNotice('');
+   try{
+    await api('/api/v1/admin/content/lessons/'+selected.id+'/verify-source',{method:'POST'});
+    await load();await open(selected);
+    setNotice('Official textbook mapping verified. The micro-topic can be submitted after the remaining checks pass.');
+   }catch(e){setError(e instanceof Error?e.message:'The textbook mapping could not be verified.')}finally{setSaving(false)}
+  }
+  async function setChapterPublication(publish:boolean){
   if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canPublishPermission)return;
   setSaving(true);setError('');setNotice('');
   try{
