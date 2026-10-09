@@ -42,11 +42,14 @@ public class AdminContentController {
   private final JdbcTemplate jdbc;
   private final ObjectMapper mapper;
   private final AuthorizationService authorization;
+  private final StaffAuditService staffAudit;
 
-  public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization) {
+  public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization,
+      StaffAuditService staffAudit) {
     this.jdbc = jdbc;
     this.mapper = mapper;
     this.authorization = authorization;
+    this.staffAudit = staffAudit;
   }
 
   @GetMapping
@@ -156,6 +159,8 @@ public class AdminContentController {
       returning id
       """, Long.class, subjectId, code, name, description, sortOrder,
       !"ARCHIVED".equals(status), status, curriculumSource, sourceUrl, sourceEdition, sourcePages);
+    staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/created",
+        "Created chapter '"+name+"' in class "+classCode+" / "+subjectCode+" as DRAFT.");
     return chapterById(chapterId);
   }
 
@@ -193,6 +198,8 @@ public class AdminContentController {
       returning id
       """, Long.class, chapterId, code, title, summary, minutes, status, sortOrder,
       !"ARCHIVED".equals(status), sourceTitle, sourceUrl, sourceEdition, sourcePages);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/created",
+        "Created micro-topic '"+title+"' under chapter "+chapterId+" as DRAFT.");
     return lessonById(lessonId);
   }
 
@@ -253,6 +260,8 @@ public class AdminContentController {
       """, name, description, sortOrder, status, !"ARCHIVED".equals(status),
       curriculumSource, sourceUrl, sourceEdition, sourcePages, sourceVerified, chapterId);
     if (changed == 0) throw notFound("Chapter", chapterId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/updated",
+        "Saved chapter '"+name+"'; resulting workflow status="+status+".");
     return chapterById(chapterId);
   }
 
@@ -314,6 +323,8 @@ public class AdminContentController {
         set review_status='REVIEW',review_notes=null,reviewed_at=null,reviewed_by_staff_id=null
         where lesson_id=? and active=true and review_status not in ('APPROVED','PUBLISHED')
         """,lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/submit",
+        "Submitted micro-topic '"+current.get("lesson_title")+"' for review.");
     return lessonById(lessonId);
   }
 
@@ -330,6 +341,8 @@ public class AdminContentController {
     }
     validateLessonForPublishing(lessonId);
     jdbc.update("update lesson set status='PUBLISHED', active=true, updated_at=now() where id=?",lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/publish",
+        "Published micro-topic '"+current.get("lesson_title")+"'.");
     return lessonById(lessonId);
   }
 
@@ -341,7 +354,10 @@ public class AdminContentController {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     lessonById(lessonId);
     jdbc.update("update lesson set status='DRAFT', active=true, updated_at=now() where id=?",lessonId);
-    return lessonById(lessonId);
+    Map<String,Object> result=lessonById(lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/unpublish",
+        "Unpublished micro-topic '"+result.get("lesson_title")+"' and returned it to draft.");
+    return result;
   }
 
   @PostMapping("/lessons/{lessonId}/questions/{questionId}/review")
@@ -370,6 +386,8 @@ public class AdminContentController {
         where id=? and lesson_id=?
         """,status,notes,status,status,context.staffId(),questionId,lessonId);
     if (changed==0) throw notFound("Question",questionId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/questions/"+questionId+"/review",
+        "Question review state changed to "+status+"; reviewer notes "+(notes==null||notes.isBlank()?"not supplied":"supplied")+".");
     return jdbc.queryForMap("""
         select id,lesson_id,question_type,prompt,review_status,review_notes,reviewed_at,active
         from question where id=? and lesson_id=?
@@ -432,7 +450,10 @@ public class AdminContentController {
       where id=?
       """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status),
       sourceTitle, sourceUrl, sourceEdition, sourcePages, sourceVerified, lessonId);
-    return lessonById(lessonId);
+    Map<String,Object> result=lessonById(lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/updated",
+        "Saved micro-topic '"+result.get("lesson_title")+"'; resulting workflow status="+result.get("lesson_status")+".");
+    return result;
   }
 
   private void validateQuestionForReview(long lessonId,long questionId) {
