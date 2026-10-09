@@ -395,9 +395,22 @@ public class AuthService {
   }
 
   public List<String> permissionsForStaff(long staffId) {
+    String role=jdbc.queryForObject(
+        "select role from staff_account where id=?", String.class, staffId);
+    // ADMIN is a system role, not a snapshot of grants. Always use the live permission
+    // catalogue so adding a new task cannot silently make the administrator second-class.
+    if ("ADMIN".equals(role)) {
+      return jdbc.queryForList(
+          "select permission_key from staff_permission_catalog order by permission_key",
+          String.class);
+    }
     return jdbc.queryForList("""
-        select permission_key from staff_permission_grant
-        where staff_id=? order by permission_key
+        select g.permission_key
+        from staff_permission_grant g
+        join staff_account s on s.id=g.staff_id
+        join staff_permission_catalog p on p.permission_key=g.permission_key
+        where g.staff_id=? and s.active=true
+        order by g.permission_key
         """, String.class, staffId);
   }
 
