@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,7 @@ class LearningControllerTest {
 
   @BeforeEach
   void setUp() {
-    when(authorization.requireStudent(student)).thenReturn(student);
+    lenient().when(authorization.requireStudent(student)).thenReturn(student);
     controller = new LearningController(jdbc, authorization, state, answerService);
   }
 
@@ -61,7 +62,7 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "class_code", "7", "subject_code", "maths",
             "chapter_code", "algebraic-expressions", "title", "Expressions")));
-    when(jdbc.queryForList(contains("strip_answer_keys(content)"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("strip_answer_keys(b.content)"), eq(42L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), eq(42L))).thenReturn(List.of());
 
     Map<String, Object> lesson = controller.lesson(42L, student);
