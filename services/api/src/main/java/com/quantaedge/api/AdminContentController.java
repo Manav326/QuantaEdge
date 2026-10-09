@@ -403,7 +403,9 @@ public class AdminContentController {
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
     authorization.requirePermission(context,"CONTENT_EDIT");
-    if ("REVIEW".equals(status)) authorization.requirePermission(context,"CONTENT_SUBMIT");
+    if ("REVIEW".equals(status) && !"REVIEW".equals(String.valueOf(current.get("lesson_status")))) {
+      authorization.requirePermission(context,"CONTENT_SUBMIT");
+    }
     if ("PUBLISHED".equals(status) || "ARCHIVED".equals(status)
         || "PUBLISHED".equals(String.valueOf(current.get("lesson_status")))
         || "ARCHIVED".equals(String.valueOf(current.get("lesson_status")))) {
