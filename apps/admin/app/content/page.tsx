@@ -263,6 +263,46 @@ export default function ContentStudio(){
    const id=Number(createType==='chapter'?result.chapter_id:result.lesson_id);const kind=createType;setCreateType(null);await load();await open({type:kind,id});setNotice('Draft '+kind+' created. Add reviewed teaching material before publishing.');
   }catch(e){setError(e instanceof Error?e.message:'Could not create content.')}finally{setSaving(false)}
  }
+ async function setChapterPublication(publish:boolean){
+  if(!selected||selected.type!=='chapter'||saving||hasUnsavedChanges||!canPublishPermission)return;
+  setSaving(true);setError('');setNotice('');
+  try{
+   await api('/api/v1/admin/content/chapters/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
+   await load();await open(selected);
+   setNotice(publish?'Chapter published successfully.':'Chapter returned to draft and hidden from learners.');
+  }catch(e){setError(e instanceof Error?e.message:'Chapter publication could not be updated.')}finally{setSaving(false)}
+ }
+ async function setLessonPublication(publish:boolean){
+  if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canPublishPermission)return;
+  setSaving(true);setError('');setNotice('');
+  try{
+   await api('/api/v1/admin/content/lessons/'+selected.id+(publish?'/publish':'/unpublish'),{method:'POST'});
+   await load();await open(selected);
+   setNotice(publish?'Micro-topic published successfully.':'Micro-topic returned to draft and hidden from learners.');
+  }catch(e){setError(e instanceof Error?e.message:'Publication could not be updated.')}finally{setSaving(false)}
+ }
+ async function submitLessonForReview(){
+  if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canSubmit)return;
+  setSaving(true);setError('');setNotice('');
+  try{
+   await api('/api/v1/admin/content/lessons/'+selected.id+'/submit',{method:'POST'});
+   await load();await open(selected);
+   setNotice('Sent to the review queue. A reviewer must approve the active questions before publication.');
+  }catch(e){setError(e instanceof Error?e.message:'Could not submit this micro-topic for review.')}finally{setSaving(false)}
+ }
+ async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'){
+  if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!questionId)return;
+  const note=status==='REJECTED'?window.prompt('Tell the author what needs to change before resubmission:'):null;
+  if(status==='REJECTED'&&note===null)return;
+  setSaving(true);setError('');setNotice('');
+  try{
+   await api('/api/v1/admin/content/lessons/'+selected.id+'/questions/'+questionId+'/review',{
+    method:'POST',body:JSON.stringify({status,reviewNotes:note||undefined})
+   });
+   await load();await open(selected);
+   setNotice(status==='APPROVED'?'Question approved.':'Question returned to the author with review feedback.');
+  }catch(e){setError(e instanceof Error?e.message:'Question review could not be saved.')}finally{setSaving(false)}
+ }
  async function saveChapter(nextStatus?:string){
   if(!selected||selected.type!=='chapter')return;setSaving(true);setError('');setNotice('');
   try{await api('/api/v1/admin/content/chapters/'+selected.id,{method:'PATCH',body:JSON.stringify({displayName:form.displayName,description:form.description,curriculumSource:form.curriculumSource,curriculumSourceUrl:form.curriculumSourceUrl,curriculumSourceEdition:form.curriculumSourceEdition,curriculumSourcePages:form.curriculumSourcePages,curriculumSourceVerified:Boolean(form.curriculumSourceVerified),status:nextStatus||form.chapterStatus,sortOrder:Number(form.chapterSortOrder)})});await load();await open(selected);setNotice(nextStatus==='PUBLISHED'?'Publish request completed. Review the resulting state.':'Chapter details saved.')}
