@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Base64;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -52,7 +51,7 @@ public class StudentController {
     return ResponseEntity.ok()
         .contentType(MediaType.IMAGE_JPEG)
         .cacheControl(CacheControl.noStore())
-        .header(HttpHeaders.X_CONTENT_TYPE_OPTIONS,"nosniff")
+        .header("X-Content-Type-Options","nosniff")
         .body(bytes);
   }
 
