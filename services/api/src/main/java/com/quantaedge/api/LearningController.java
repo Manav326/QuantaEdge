@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,44 +67,99 @@ public class LearningController {
       where lesson_id=? and active=true
       order by sequence_no
       """, lessonId));
-    result.put("questions", jdbc.queryForList("""
-      select q.id, q.question_type, q.prompt, q.explanation,
-             q.difficulty, q.sort_order,
-             coalesce(
-               (select jsonb_agg(
-                  jsonb_build_object(
-                    'key', qo.option_key,
-                    'label', qo.label,
-                    'correct', qo.is_correct
-                  ) order by qo.sort_order
-               ) from question_option qo where qo.question_id=q.id),
-               '[]'::jsonb
-             )::text as options
-      from question q
-      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
-      order by q.sort_order
-      """, lessonId));
+    result.put("questions", publicQuestionsSql(), lessonId);
     return result;
   }
 
   @GetMapping("/lessons/{lessonId}/questions")
   public List<Map<String, Object>> questions(@PathVariable long lessonId) {
-    return jdbc.queryForList("""
+    return jdbc.queryForList(publicQuestionsSql(), lessonId);
+  }
+
+  private String publicQuestionsSql() {
+    return """
       select q.id, q.question_type, q.prompt, q.explanation,
              q.difficulty, q.sort_order,
              coalesce(
                (select jsonb_agg(
                   jsonb_build_object(
                     'key', qo.option_key,
-                    'label', qo.label,
-                    'correct', qo.is_correct
+                    'label', qo.label
                   ) order by qo.sort_order
                ) from question_option qo where qo.question_id=q.id),
                '[]'::jsonb
              )::text as options
       from question q
-      where q.lesson_id=? and q.active=true and exists (select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')
+      where q.lesson_id=? and q.active=true and exists (
+        select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_class c on c.id=s.class_id
+        where l.id=q.lesson_id and l.active=true and l.status='PUBLISHED'
+          and ch.active=true and ch.content_status='PUBLISHED'
+          and s.active=true and c.active=true
+      )
       order by q.sort_order
-      """, lessonId);
+      """;
+  }
+
+  /**
+   * Local-preview grading only. The client never receives the answer key.
+   * Production submissions must be connected to an authenticated student identity
+   * before this endpoint is enabled for production accounts.
+   */
+  @PostMapping("/questions/{questionId}/answer")
+  public Map<String, Object> answer(
+      @PathVariable long questionId,
+      @RequestBody Map<String, Object> body) {
+    String selectedOption = String.valueOf(body.getOrDefault("selectedOption", "")).trim();
+    if (selectedOption.isEmpty() || selectedOption.length() > 20) {
+      throw new IllegalArgumentException("A valid selectedOption is required");
+    }
+
+    List<Map<String, Object>> previewStudents = jdbc.queryForList("""
+      select id from student
+      where environment='LOCAL_PREVIEW' and active=true
+      order by id limit 1
+      """);
+    if (previewStudents.isEmpty()) {
+      throw new SecurityException("Authenticated student identity is required to submit answers");
+    }
+    long studentId = ((Number) previewStudents.getFirst().get("id")).longValue();
+
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+      select q.id, q.explanation,
+             exists(select 1 from question_option qo
+                    where qo.question_id=q.id and qo.option_key=? and qo.is_correct) as correct,
+             exists(select 1 from question_option qo
+                    where qo.question_id=q.id and qo.option_key=?) as option_exists
+      from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where q.id=? and q.active=true and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED'
+        and s.active=true and c.active=true
+      """, selectedOption, selectedOption, questionId);
+    if (rows.isEmpty()) {
+      throw new LessonNotFoundException(questionId);
+    }
+
+    Map<String, Object> graded = rows.getFirst();
+    if (!Boolean.TRUE.equals(graded.get("option_exists"))) {
+      throw new IllegalArgumentException("Selected option does not belong to this question");
+    }
+    boolean correct = Boolean.TRUE.equals(graded.get("correct"));
+    jdbc.update("""
+      insert into student_question_attempt(student_id,question_id,selected_option,correct)
+      values (?,?,?,?)
+      """, studentId, questionId, selectedOption, correct);
+
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("questionId", questionId);
+    result.put("correct", correct);
+    result.put("explanation", graded.get("explanation"));
+    result.put("saved", true);
+    return result;
   }
 }
