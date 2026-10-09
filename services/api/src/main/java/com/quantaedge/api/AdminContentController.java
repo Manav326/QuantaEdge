@@ -886,6 +886,7 @@ public class AdminContentController {
              q.marks, q.exam_format, q.source_kind, q.source_title, q.source_ref,
              q.source_year, q.source_id, q.board, q.topic, q.subtopic, q.skill,
              q.tags::text as tags, q.answer_payload::text as answer_payload,
+             (select upper(src.status) from content_source src where src.id=q.source_id) as source_status,
              coalesce(
                (select jsonb_agg(jsonb_build_object(
                  'key',qo.option_key,'label',qo.label,'correct',qo.is_correct,
