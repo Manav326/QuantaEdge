@@ -38,6 +38,18 @@ def require_text(value: Any, name: str, max_length: int = 2000) -> str:
     return value.strip()
 
 
+def page_range(value: Any, name: str, page_count: int) -> tuple[int, int]:
+    text = require_text(value, name, 160)
+    match = re.fullmatch(r"(?i)PDF pages?\\s+(\\d+)(?:\\s*[-–]\\s*(\\d+))?", text)
+    if not match:
+        raise ValueError(f"{name} must use an explicit PDF page range such as 'PDF pages 20-28'.")
+    start = int(match.group(1))
+    end = int(match.group(2) or start)
+    if start < 1 or end < start or end > page_count:
+        raise ValueError(f"{name} must be within PDF pages 1-{page_count}.")
+    return start, end
+
+
 def validate_bundle(bundle: Any) -> dict[str, Any]:
     if not isinstance(bundle, dict):
         raise ValueError("The import bundle must be a JSON object.")
@@ -85,7 +97,7 @@ def validate_bundle(bundle: Any) -> dict[str, Any]:
     if not CODE_RE.fullmatch(code):
         raise ValueError("chapter.code must use lowercase letters, numbers and hyphens.")
     require_text(chapter.get("display_name"), "chapter.display_name", 160)
-    require_text(chapter.get("source_pages"), "chapter.source_pages", 160)
+    chapter_start, chapter_end = page_range(chapter.get("source_pages"), "chapter.source_pages", source["pdf_page_count"])
     lessons = bundle.get("lessons")
     if not isinstance(lessons, list) or not lessons:
         raise ValueError("At least one original draft lesson is required.")
@@ -98,7 +110,9 @@ def validate_bundle(bundle: Any) -> dict[str, Any]:
             raise ValueError(f"Lesson codes must be unique and use lowercase letters, numbers and hyphens: {lesson_code}")
         seen_lessons.add(lesson_code)
         require_text(lesson.get("title"), f"lessons[{index - 1}].title", 240)
-        require_text(lesson.get("source_pages"), f"lessons[{index - 1}].source_pages", 160)
+        lesson_start, lesson_end = page_range(lesson.get("source_pages"), f"lessons[{index - 1}].source_pages", source["pdf_page_count"])
+        if lesson_start < chapter_start or lesson_end > chapter_end:
+            raise ValueError(f"Lesson {lesson_code} page range must fall inside the reviewed chapter page range.")
         minutes = lesson.get("estimated_minutes", 10)
         order = lesson.get("sort_order", index)
         if not isinstance(minutes, int) or not 1 <= minutes <= 120:
