@@ -13,7 +13,9 @@ permissions:
 
 concurrency:
   group: quantaedge-ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Cancel stale PR validation, but let main-branch verification finish.
+  # The newest pending main run will validate the final commit after the active run.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   changes:
