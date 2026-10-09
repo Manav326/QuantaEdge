@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 type StudentAccountMenuProps = {
   displayName: string;
   classCode: string | number;
+  profileImageDataUrl?: string | null;
 };
 
 function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'settings' | 'logout' }) {
@@ -18,13 +19,13 @@ function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'settings
   return <svg {...common}><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>;
 }
 
-export default function StudentAccountMenu({ displayName, classCode }: StudentAccountMenuProps) {
+export default function StudentAccountMenu({ displayName, classCode, profileImageDataUrl }: StudentAccountMenuProps) {
+  const avatarSrc = profileImageDataUrl || '/branding/student-avatar.svg';
   const router = useRouter();
   const accountRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [actionError, setActionError] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -47,24 +48,6 @@ export default function StudentAccountMenu({ displayName, classCode }: StudentAc
 
   function closeMenu() {
     setOpen(false);
-    setActionError('');
-  }
-
-  async function openParentSettings() {
-    setBusy(true);
-    setActionError('');
-    try {
-      const response = await fetch('/api/v1/auth/switch-parent', { method: 'POST' });
-      const body = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(body.message || 'Parent settings are unavailable for this account.');
-      closeMenu();
-      router.replace('/parent/children');
-      router.refresh();
-    } catch (error) {
-      setActionError(error instanceof Error ? error.message : 'Parent settings could not be opened. Please try again.');
-    } finally {
-      setBusy(false);
-    }
   }
 
   async function logout() {
@@ -88,14 +71,14 @@ export default function StudentAccountMenu({ displayName, classCode }: StudentAc
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls="student-account-menu"
-        onClick={() => { setOpen(value => !value); setActionError(''); }}
+        onClick={() => { setOpen(value => !value); }}
       >
         <span className="student-account-trigger__copy">
           <strong>{displayName}</strong>
           <small>Class {classCode}</small>
         </span>
         <span className="student-avatar">
-          <img src="/branding/student-avatar.svg" alt="" width="44" height="44" />
+          <img src={avatarSrc} alt="" width="44" height="44" />
         </span>
         <svg className={`student-account-chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
@@ -103,7 +86,7 @@ export default function StudentAccountMenu({ displayName, classCode }: StudentAc
       {open && (
         <div className="student-account-menu" id="student-account-menu" aria-label="Student account options">
           <div className="student-account-menu__identity">
-            <img src="/branding/student-avatar.svg" alt="" width="48" height="48" />
+            <img src={avatarSrc} alt="" width="48" height="48" />
             <div>
               <strong>{displayName}</strong>
               <span>Student account</span>
@@ -121,10 +104,9 @@ export default function StudentAccountMenu({ displayName, classCode }: StudentAc
             <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong>My progress</strong><small>Review your learning journey</small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
-          <button type="button" className="student-account-menu__item" onClick={() => void openParentSettings()} disabled={busy}>
-            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile &amp; settings</strong><small>Manage your profile and subjects</small></span><span className="student-account-menu__arrow">→</span>
-          </button>
-          {actionError && <p className="student-account-menu__error" role="alert">{actionError}</p>}
+          <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
+            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile &amp; settings</strong><small>Photo, school and personal details</small></span><span className="student-account-menu__arrow">→</span>
+          </Link>
           <div className="student-account-menu__divider" />
           <button type="button" className="student-account-menu__logout" onClick={() => void logout()} disabled={busy}>
             <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Log out'}</span>
