@@ -351,7 +351,7 @@ public class AdminContentController {
         )
       """, Long.class, lessonId);
     if (invalidQuestions != null && invalidQuestions > 0) {
-      throw badRequest("Every published practice question must have at least two options and exactly one correct answer. Input questions are not yet supported for grading.");
+      throw badRequest("Every published question must use a supported grading type and valid answer key: MCQ/true-false need exactly one correct option, input needs a TEXT key, numerical needs a NUMERIC key, and source-backed questions need verified provenance.");
     }
   }
 
