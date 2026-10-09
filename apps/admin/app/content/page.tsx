@@ -71,9 +71,54 @@ function contentFor(type:string):Record<string,any>{
  return {title:'Learning support'};
 }
 function normalizeBlock(block:ContentBlock){
- const next={...block,content:{...(block.content||{})}};
- if((next.block_type==='EXPLANATION'||next.block_type==='PREREQUISITE')&&!next.content.html&&next.content.body)next.content.html=htmlFromText(String(next.content.body));
- return next;
+  const next={...block,content:{...(block.content||{})}};
+  if((next.block_type==='EXPLANATION'||next.block_type==='PREREQUISITE')&&!next.content.html&&next.content.body)next.content.html=htmlFromText(String(next.content.body));
+  return next;
+}
+function cleanContentText(value:unknown){
+ return String(value??'').replace(/<[^>]*>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+}
+function meaningfulContent(value:unknown){
+ const text=cleanContentText(value).toLocaleLowerCase();
+ if(!text)return false;
+ return !/^(?:यहाँ अपना explanation लिखें.*|समस्या या प्रश्न यहाँ लिखें\.?|पहला चरण लिखें|अगला चरण लिखें|पहला मुख्य विचार|दूसरा मुख्य विचार|याद रखने वाली बात|explain the core idea|show the important pattern|connect it to a real example|add teaching content|विद्यार्थी इस visual से क्या समझें\??|इस media से विद्यार्थी क्या सीखेंगे\??|अगला छोटा कदम क्या होगा\??|विद्यार्थी के लिए अभ्यास निर्देश लिखें|ऐसा संकेत दें जो सोचने में मदद करे.*|untitled.*|write .* here\.?|your question will appear here\.?|answer choice)$/i.test(text);
+}
+function blockHasPublishableContent(block:ContentBlock){
+ const value=block.content||{};
+ switch(block.block_type){
+  case 'EXPLANATION': case 'PREREQUISITE':
+   return meaningfulContent(value.html||value.body);
+  case 'WORKED_EXAMPLE':
+   return meaningfulContent(value.problem)&&Array.isArray(value.steps)&&value.steps.some((step:unknown)=>meaningfulContent(step))&&meaningfulContent(value.answer);
+  case 'IMAGE': case 'DIAGRAM': case 'ANIMATION': case 'VIDEO': case 'AUDIO':
+   return /^https:\/\//i.test(String(value.url||''))&&meaningfulContent(value.description);
+  case 'GUIDED_PRACTICE': case 'INDEPENDENT_PRACTICE': case 'CHALLENGE':
+   return meaningfulContent(value.prompt);
+  case 'SUMMARY': case 'RECAP':
+   return Array.isArray(value.points)&&value.points.some((point:unknown)=>meaningfulContent(point));
+  case 'HINT':
+   return meaningfulContent(value.body);
+  case 'AI_HELP':
+   return true;
+  default:
+   return meaningfulContent(value.body||value.description||value.prompt);
+ }
+}
+function questionHasValidAnswer(question:any){
+ const type=String(question.question_type||'').toUpperCase();
+ if(!meaningfulContent(question.prompt)||String(question.review_status||'').toUpperCase()!=='APPROVED')return false;
+ if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))return false;
+ if(type==='MCQ'||type==='TRUE_FALSE'){
+  const options=Array.isArray(question.options)?question.options:[];
+  return options.length>=2&&options.every((option:any)=>meaningfulContent(option.label))&&options.filter((option:any)=>Boolean(option.correct)).length===1;
+ }
+ const answer=question.answer_payload||{};
+ if(type==='INPUT')return answer.kind==='TEXT'&&meaningfulContent(answer.value);
+ return answer.kind==='NUMERIC'&&answer.value!==undefined&&answer.value!==null&&String(answer.value).trim()!=='';
+}
+function questionsForSnapshot(showAdvanced:boolean,questionJson:string,questions:any[]){
+ if(!showAdvanced)return questions;
+ try{const value=JSON.parse(questionJson);return Array.isArray(value)?value:[{invalid_json:questionJson}]}catch{return [{invalid_json:questionJson}]}
 }
 function RichTextEditor({blockKey,initialHtml,onChange}:{blockKey:number;initialHtml:string;onChange:(html:string)=>void}){
  const ref=useRef<HTMLDivElement|null>(null);
@@ -126,6 +171,9 @@ function LearnerBlock({block}:{block:ContentBlock}){
 }
 export default function ContentStudio(){
  const [rows,setRows]=useState<Row[]>([]);
+ const [identity,setIdentity]=useState<any>(null);
+ const [baselineSnapshot,setBaselineSnapshot]=useState('');
+ const [previewFingerprint,setPreviewFingerprint]=useState('');
  const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[statusFilter,setStatusFilter]=useState('ALL'),[search,setSearch]=useState('');
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
  const [blocks,setBlocks]=useState<ContentBlock[]>([]),[questions,setQuestions]=useState<any[]>([]);
@@ -136,7 +184,21 @@ export default function ContentStudio(){
  const workspaceRef=useRef<HTMLElement|null>(null);
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
  async function load(){setLoading(true);setError('');try{const data=await api('/api/v1/admin/content');setRows(Array.isArray(data)?data:[])}catch(e){setError(e instanceof Error?e.message:'Content library could not be loaded. Sign in as an administrator and retry.')}finally{setLoading(false)}}
- useEffect(()=>{void load()},[]);
+ useEffect(()=>{
+  let mounted=true;
+  void (async()=>{
+   try{
+    const me=await api('/api/v1/auth/me');
+    if(!me.staffId){window.location.assign('/login');return;}
+    if(!mounted)return;
+    setIdentity(me);
+    await load();
+   }catch(e){
+    if(mounted){setError(e instanceof Error?e.message:'Staff identity could not be verified.');setLoading(false);}
+   }
+  })();
+  return ()=>{mounted=false};
+ },[]);
  const classOptions=useMemo(()=>Array.from(new Map(rows.map(r=>[r.class_code,r.class_name])).entries()),[rows]);
  const subjectOptions=useMemo(()=>Array.from(new Map(rows.filter(r=>classFilter==='ALL'||r.class_code===classFilter).map(r=>[r.subject_code,r.subject_name])).entries()),[rows,classFilter]);
  const filtered=useMemo(()=>rows.filter(r=>{if(classFilter!=='ALL'&&r.class_code!==classFilter)return false;if(subjectFilter!=='ALL'&&r.subject_code!==subjectFilter)return false;const term=search.trim().toLocaleLowerCase();return !term||[r.class_name,r.subject_name,r.chapter_name||'',r.lesson_title||'',r.chapter_code||'',r.lesson_code||''].some(v=>v.toLocaleLowerCase().includes(term))}),[rows,classFilter,subjectFilter,search]);
@@ -147,19 +209,51 @@ export default function ContentStudio(){
  const publishedChapters=new Set(rows.filter(r=>r.chapter_id!==null&&r.chapter_status==='PUBLISHED'&&r.chapter_active===true).map(r=>r.chapter_id)).size;
  const draftLessons=new Set(rows.filter(r=>r.lesson_id!==null&&(r.lesson_status==='DRAFT'||r.lesson_status==='REVIEW')).map(r=>r.lesson_id)).size;
  const active=activeBlock>=0&&activeBlock<blocks.length?blocks[activeBlock]:null;
+ const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
+ const isAdmin=identity?.role==='ADMIN';
+ const hasPermission=(permission:string)=>isAdmin||permissions.includes(permission);
+ const canView=hasPermission('CONTENT_VIEW');
+ const canCreate=hasPermission('CONTENT_CREATE');
+ const canEdit=hasPermission('CONTENT_EDIT');
+ const canSubmit=hasPermission('CONTENT_SUBMIT');
+ const canReview=hasPermission('CONTENT_REVIEW');
+ const canPublishPermission=hasPermission('CONTENT_PUBLISH');
+ const isEditorView=Boolean(selected||createType);
+ const createHasInput=Boolean(createType&&['displayName','description','code','title','summary','curriculumSource','curriculumSourceUrl','alignmentSourceTitle','alignmentSourceUrl'].some(key=>String(createForm[key]??'').trim()));
+ const draftSnapshot=useMemo(()=>{
+  if(createType)return JSON.stringify({createForm});
+  if(selected?.type==='chapter')return JSON.stringify({form});
+  if(selected?.type==='lesson')return JSON.stringify({form,blocks,questions:questionsForSnapshot(showAdvancedQuestions,questionJson,questions)});
+  return '';
+ },[selected,createType,createForm,form,blocks,questions,showAdvancedQuestions,questionJson]);
+ const hasUnsavedChanges=createType?createHasInput:Boolean(baselineSnapshot&&baselineSnapshot!==draftSnapshot);
+ const previewReviewed=Boolean(previewFingerprint&&previewFingerprint===draftSnapshot);
+ const backToLibrary=()=>{
+  if(hasUnsavedChanges&&!window.confirm('You have unsaved changes. Leave this editor and discard them?'))return;
+  setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setPreviewFingerprint('');setError('');setNotice('');
+ };
+ const markPreviewReviewed=()=>{
+  setPreviewFingerprint(draftSnapshot);
+  setNotice('Learner preview checked. Any future change will require a new preview check.');
+ };
  function updateContent(index:number,patch:Record<string,any>){setBlocks(old=>old.map((b,i)=>i===index?{...b,content:{...b.content,...patch}}:b))}
  async function open(item:Selection){
   setSelected(item);setDetail(null);setError('');setNotice('');setCreateType(null);setActiveBlock(0);setShowAdvancedQuestions(false);
   try{
-   const data=await api('/api/v1/admin/content/'+(item.type==='chapter'?'chapters':'lessons')+'/'+item.id);setDetail(data);
-   setForm(item.type==='chapter'?{...EMPTY,displayName:data.chapter_name||'',description:data.chapter_description||'',chapterStatus:data.chapter_status||'DRAFT',chapterSortOrder:Number(data.chapter_sort_order||1),curriculumSource:data.curriculum_source||'',curriculumSourceUrl:data.curriculum_source_url||'',curriculumSourceEdition:data.curriculum_source_edition||'',curriculumSourcePages:data.curriculum_source_pages||'',curriculumSourceVerified:Boolean(data.curriculum_source_verified)}:{...EMPTY,title:data.lesson_title||'',summary:data.lesson_summary||'',estimatedMinutes:Number(data.estimated_minutes||10),lessonStatus:data.lesson_status||'DRAFT',sortOrder:Number(data.lesson_sort_order||1),alignmentSourceTitle:data.alignment_source_title||'',alignmentSourceUrl:data.alignment_source_url||'',alignmentSourceEdition:data.alignment_source_edition||'',alignmentPageRange:data.alignment_page_range||'',alignmentSourceVerified:Boolean(data.alignment_source_verified)});
+   const data=await api('/api/v1/admin/content/'+(item.type==='chapter'?'chapters':'lessons')+'/'+item.id);
+   setDetail(data);
+   const nextForm=item.type==='chapter'?{...EMPTY,displayName:data.chapter_name||'',description:data.chapter_description||'',chapterStatus:data.chapter_status||'DRAFT',chapterSortOrder:Number(data.chapter_sort_order||1),curriculumSource:data.curriculum_source||'',curriculumSourceUrl:data.curriculum_source_url||'',curriculumSourceEdition:data.curriculum_source_edition||'',curriculumSourcePages:data.curriculum_source_pages||'',curriculumSourceVerified:Boolean(data.curriculum_source_verified)}:{...EMPTY,title:data.lesson_title||'',summary:data.lesson_summary||'',estimatedMinutes:Number(data.estimated_minutes||10),lessonStatus:data.lesson_status||'DRAFT',sortOrder:Number(data.lesson_sort_order||1),alignmentSourceTitle:data.alignment_source_title||'',alignmentSourceUrl:data.alignment_source_url||'',alignmentSourceEdition:data.alignment_source_edition||'',alignmentPageRange:data.alignment_page_range||'',alignmentSourceVerified:Boolean(data.alignment_source_verified)};
+   setForm(nextForm);
    const nextBlocks=(data.blocks||[]).map((b:any,i:number)=>normalizeBlock({sequence_no:Number(b.sequence_no||i+1),block_type:String(b.block_type||'EXPLANATION'),content:parsed(b.content,{}),active:b.active!==false}));
-   setBlocks(nextBlocks);const qs=(data.questions||[]).map((q:any)=>({...q,options:parsed(q.options,[]),tags:parsed(q.tags,[]),answer_payload:parsed(q.answer_payload,{})}));setQuestions(qs);setQuestionJson(JSON.stringify(qs,null,2));
+   const qs=(data.questions||[]).map((q:any)=>({...q,options:parsed(q.options,[]),tags:parsed(q.tags,[]),answer_payload:parsed(q.answer_payload,{})}));
+   setBlocks(nextBlocks);setQuestions(qs);setQuestionJson(JSON.stringify(qs,null,2));
+   setBaselineSnapshot(item.type==='chapter'?JSON.stringify({form:nextForm}):JSON.stringify({form:nextForm,blocks:nextBlocks,questions:qs}));
+   setPreviewFingerprint('');
   }catch(e){setError(e instanceof Error?e.message:'Could not open this content.')}
  }
  function beginCreate(type:'chapter'|'lesson'){
   const chapter=rows.find(r=>r.chapter_id!==null&&(classFilter==='ALL'||r.class_code===classFilter)&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
-  setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);
+  setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');setPreviewFingerprint('');
   setCreateForm({classCode:classFilter!=='ALL'?classFilter:chapter?.class_code||classOptions[0]?.[0]||'6',subjectCode:subjectFilter!=='ALL'?subjectFilter:chapter?.subject_code||'maths',chapterId:selected?.type==='chapter'?selected.id:Number(chapter?.chapter_id||0),code:'',displayName:'',description:'',curriculumSource:'',curriculumSourceUrl:'',curriculumSourceEdition:'',curriculumSourcePages:'',alignmentSourceTitle:'',alignmentSourceUrl:'',alignmentSourceEdition:'',alignmentPageRange:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
  }
  async function create(){
