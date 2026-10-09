@@ -3,6 +3,8 @@ package com.quantaedge.api;
 import java.util.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminController {
+  private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final ObjectMapper mapper;
@@ -145,17 +148,28 @@ public class AdminController {
   @PutMapping("/lessons/{lessonId}/blocks/{blockId}/asset")
   public Map<String,Object> attachAsset(@PathVariable long lessonId,@PathVariable long blockId,
       @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context){
-    AuthContext admin=authorization.requireAdmin(context);
-    long assetId=Long.parseLong(String.valueOf(body.get("assetId")));
-    Long assetCount=jdbc.queryForObject("select count(*) from content_asset where id=?",Long.class,assetId);
-    if(assetCount==null||assetCount==0) throw new IllegalArgumentException("Asset not found");
-    int changed=jdbc.update("""
-      update lesson_block set asset_id=?
-      where id=? and lesson_id=? and active=true
-      """,assetId,blockId,lessonId);
-    if(changed==0) throw new IllegalArgumentException("Lesson block not found");
-    log(admin,"BLOCK_ASSET_ATTACH",String.valueOf(blockId),"asset="+assetId);
-    return Map.of("updated",true,"lessonId",lessonId,"blockId",blockId,"assetId",assetId);
+    Long assetId=null;
+    LOGGER.info("ATTACH_ASSET_DIAGNOSTIC start lessonId={} blockId={}",lessonId,blockId);
+    try {
+      AuthContext admin=authorization.requireAdmin(context);
+      LOGGER.info("ATTACH_ASSET_DIAGNOSTIC authorized adminUserId={}",admin.userId());
+      assetId=Long.parseLong(String.valueOf(body.get("assetId")));
+      Long assetCount=jdbc.queryForObject("select count(*) from content_asset where id=?",Long.class,assetId);
+      LOGGER.info("ATTACH_ASSET_DIAGNOSTIC assetLookup assetId={} count={}",assetId,assetCount);
+      if(assetCount==null||assetCount==0) throw new IllegalArgumentException("Asset not found");
+      int changed=jdbc.update("""
+        update lesson_block set asset_id=?
+        where id=? and lesson_id=? and active=true
+        """,assetId,blockId,lessonId);
+      LOGGER.info("ATTACH_ASSET_DIAGNOSTIC blockUpdate lessonId={} blockId={} changed={}",lessonId,blockId,changed);
+      if(changed==0) throw new IllegalArgumentException("Lesson block not found");
+      log(admin,"BLOCK_ASSET_ATTACH",String.valueOf(blockId),"asset="+assetId);
+      LOGGER.info("ATTACH_ASSET_DIAGNOSTIC auditLogged lessonId={} blockId={} assetId={}",lessonId,blockId,assetId);
+      return Map.of("updated",true,"lessonId",lessonId,"blockId",blockId,"assetId",assetId);
+    } catch (RuntimeException ex) {
+      LOGGER.error("ATTACH_ASSET_DIAGNOSTIC failed lessonId={} blockId={} assetId={}",lessonId,blockId,assetId,ex);
+      throw ex;
+    }
   }
 
   @PutMapping("/lessons/{lessonId}/status")
