@@ -30,8 +30,6 @@ class AuthServiceRegistrationTest {
 
   @Test
   void newVisitorCanRequestSignupOtp() {
-    when(jdbc.queryForObject(contains("select exists(select 1 from staff_account"),
-        eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
     when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
@@ -45,9 +43,21 @@ class AuthServiceRegistrationTest {
   }
 
   @Test
+  void customerCanRequestLoginOtpWhenSameMobileAlsoHasStaffIdentity() {
+    when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
+        eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(true);
+    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
+        eq(NORMALIZED_MOBILE), eq(60))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
+        eq(Long.class), eq(NORMALIZED_MOBILE))).thenReturn(0L);
+
+    assertEquals("123456", auth.requestOtp(MOBILE, "LOGIN"));
+    verify(jdbc).update(contains("insert into otp_challenge"), eq(NORMALIZED_MOBILE),
+        eq("LOGIN"), org.mockito.ArgumentMatchers.anyString());
+  }
+
+  @Test
   void loginOtpIsNotIssuedForANumberWithoutAnAccount() {
-    when(jdbc.queryForObject(contains("select exists(select 1 from staff_account"),
-        eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
 
@@ -58,8 +68,6 @@ class AuthServiceRegistrationTest {
 
   @Test
   void signupOtpIsNotIssuedForAnExistingAccount() {
-    when(jdbc.queryForObject(contains("select exists(select 1 from staff_account"),
-        eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(false);
     when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
         eq(Boolean.class), eq(NORMALIZED_MOBILE))).thenReturn(true);
 
