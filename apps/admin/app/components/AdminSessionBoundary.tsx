@@ -79,18 +79,21 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
       }
     };
     void check();
-    const onHistory = (event?: PageTransitionEvent) => {
-      if (event?.type === 'pageshow' && event.persisted) document.body.classList.add('qe-session-bfcache-guard');
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) document.body.classList.add('qe-session-bfcache-guard');
+      void check().finally(() => document.body.classList.remove('qe-session-bfcache-guard'));
+    };
+    const onPopState = () => {
       void check().finally(() => document.body.classList.remove('qe-session-bfcache-guard'));
     };
     const onPageHide = () => document.body.classList.add('qe-session-bfcache-guard');
-    window.addEventListener('pageshow', onHistory);
-    window.addEventListener('popstate', onHistory);
+    window.addEventListener('pageshow', onPageShow);
+    window.addEventListener('popstate', onPopState);
     window.addEventListener('pagehide', onPageHide);
     return () => {
       alive = false;
-      window.removeEventListener('pageshow', onHistory);
-      window.removeEventListener('popstate', onHistory);
+      window.removeEventListener('pageshow', onPageShow);
+      window.removeEventListener('popstate', onPopState);
       window.removeEventListener('pagehide', onPageHide);
       document.body.classList.remove('qe-session-bfcache-guard');
     };
