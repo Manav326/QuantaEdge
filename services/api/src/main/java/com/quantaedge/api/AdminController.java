@@ -17,9 +17,13 @@ public class AdminController {
   private final AuthorizationService authorization;
   private final ObjectMapper mapper;
   private final AuthService auth;
+  private final AdminContentController contentController;
+  private final StaffAuditService staffAudit;
 
-  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization,ObjectMapper mapper,AuthService auth){
+  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization,ObjectMapper mapper,
+      AuthService auth,AdminContentController contentController,StaffAuditService staffAudit){
     this.jdbc=jdbc; this.authorization=authorization; this.mapper=mapper; this.auth=auth;
+    this.contentController=contentController; this.staffAudit=staffAudit;
   }
 
   @GetMapping("/parents")
@@ -33,6 +37,7 @@ public class AdminController {
       left join guardian_student gs on gs.guardian_user_id=u.id
       left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
       where u.role='PARENT'
+        and not exists(select 1 from staff_account staff where staff.mobile_e164=u.mobile_e164)
       group by u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at
       order by u.created_at desc
       """);
@@ -49,6 +54,10 @@ public class AdminController {
           join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       where gs.guardian_user_id=? and st.environment='PRODUCTION'
+        and not exists(
+          select 1 from user_account u join staff_account staff on staff.mobile_e164=u.mobile_e164
+          where u.id=gs.guardian_user_id
+        )
       order by st.created_at desc
       """,parentId);
   }
@@ -59,7 +68,11 @@ public class AdminController {
       @RequestAttribute(value="authContext",required=false) AuthContext context){
     AuthContext admin=authorization.requireAdmin(context);
     if(!(body.get("active") instanceof Boolean active)) throw new IllegalArgumentException("active must be true or false");
-    int changed=jdbc.update("update user_account set active=?,updated_at=now() where id=? and role='PARENT'",active,parentId);
+    int changed=jdbc.update("""
+      update user_account u set active=?,updated_at=now()
+      where u.id=? and u.role='PARENT'
+        and not exists(select 1 from staff_account staff where staff.mobile_e164=u.mobile_e164)
+      """,active,parentId);
     if(changed==0) throw new IllegalArgumentException("Parent account not found");
     if(!active) jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null",parentId);
     log(admin,active?"PARENT_REACTIVATE":"PARENT_SUSPEND",String.valueOf(parentId),"active="+active);
@@ -248,18 +261,24 @@ public class AdminController {
       @RequestAttribute(value="authContext",required=false) AuthContext context){
     AuthContext admin=authorization.requireAdmin(context);
     String status=String.valueOf(body.getOrDefault("status","DRAFT"));
-    if(!Set.of("DRAFT","REVIEW","PUBLISHED","ARCHIVED").contains(status)) throw new IllegalArgumentException("Invalid lesson status");
-    if("PUBLISHED".equals(status)){
-      Long blocked=jdbc.queryForObject("""
-        select count(*) from question
-        where lesson_id=? and active=true
-          and review_status not in ('APPROVED','PUBLISHED')
-      """,Long.class,lessonId);
-      if(blocked!=null && blocked>0) throw new IllegalStateException("Lesson contains unreviewed questions");
+    if(!Set.of("DRAFT","REVIEW","PUBLISHED","ARCHIVED").contains(status)) {
+      throw new IllegalArgumentException("Invalid lesson status");
     }
-    int changed=jdbc.update("update lesson set status=? where id=?",status,lessonId);
+    if("PUBLISHED".equals(status)) {
+      contentController.publishLesson(lessonId,context);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
+      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+    }
+    if("REVIEW".equals(status)) {
+      contentController.submitLessonForReview(lessonId,context);
+      log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
+      return Map.of("updated",true,"lessonId",lessonId,"status",status);
+    }
+    int changed=jdbc.update("update lesson set status=?,active=? where id=?",
+        status,!"ARCHIVED".equals(status),lessonId);
+    if(changed==0) throw new IllegalArgumentException("Lesson not found");
     log(admin,"LESSON_STATUS",String.valueOf(lessonId),status);
-    return Map.of("updated",changed>0,"lessonId",lessonId,"status",status);
+    return Map.of("updated",true,"lessonId",lessonId,"status",status);
   }
 
   @PutMapping("/questions/{questionId}")
@@ -277,14 +296,15 @@ public class AdminController {
       throw new IllegalArgumentException("Registered content source not found");
     int changed=jdbc.update("""
       update question set prompt=?,explanation=?,difficulty=?,marks=?,exam_format=?,source_kind=?,
-        source_title=?,source_ref=?,source_year=?,source_id=?,board=?,topic=?,subtopic=?,skill=?,review_status=?
+        source_title=?,source_ref=?,source_year=?,source_id=?,board=?,topic=?,subtopic=?,skill=?,
+        review_status='DRAFT',review_notes='Question content changed; review and approve again before publishing.',
+        reviewed_at=null,reviewed_by_staff_id=null
       where id=?
       """,
       body.get("prompt"),body.get("explanation"),String.valueOf(body.getOrDefault("difficulty","CORE")),
       body.get("marks")==null?null:Integer.valueOf(String.valueOf(body.get("marks"))),
       body.get("examFormat"),sourceKind,body.get("sourceTitle"),sourceRef,sourceYear,sourceId,body.get("board"),
-      body.get("topic"),body.get("subtopic"),body.get("skill"),
-      String.valueOf(body.getOrDefault("reviewStatus","REVIEW")),questionId);
+      body.get("topic"),body.get("subtopic"),body.get("skill"),questionId);
     log(admin,"QUESTION_UPDATE",String.valueOf(questionId),sourceKind+"/"+sourceRef);
     return Map.of("updated",changed>0,"questionId",questionId);
   }
@@ -378,6 +398,12 @@ public class AdminController {
   }
 
   private void log(AuthContext admin,String action,String resource,String detail){
-    if(admin.userId()!=null) jdbc.update("insert into admin_action_log(admin_user_id,action,resource,detail) values (?,?,?,?)",admin.userId(),action,resource,detail);
+    if(admin.staffId()!=null) {
+      staffAudit.recordAction(admin,"/api/v1/admin/"+action.toLowerCase(java.util.Locale.ROOT),
+          action+" | resource="+resource+" | "+detail);
+    } else if(admin.userId()!=null) {
+      jdbc.update("insert into admin_action_log(admin_user_id,action,resource,detail) values (?,?,?,?)",
+          admin.userId(),action,resource,detail);
+    }
   }
 }
