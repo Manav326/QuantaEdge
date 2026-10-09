@@ -436,7 +436,7 @@ export default function ContentStudio(){
   const publishReadyLessonCount=Number(detail?.publish_ready_lesson_count||0);
   const chapterReadyToPublish=publishReadyLessonCount>0;
   const lessonStatus=String(form.lessonStatus||'DRAFT').toUpperCase();
-  const submittedForReview=['REVIEW','PUBLISHED'].includes(lessonStatus);
+  const submittedForReview=!hasUnsavedChanges&&['REVIEW','PUBLISHED'].includes(lessonStatus);
   const savedContentRevision=Number(detail?.content_revision);
   const sourceReadinessDetail=sourceReady
     ? 'Official source title, URL, edition and page range have been verified.'
@@ -459,18 +459,20 @@ export default function ContentStudio(){
     : !parentChapterAvailable
       ? 'The parent chapter is missing or inactive. Restore it before submitting this topic.'
       : !submittedForReview
-        ? 'The chapter may remain a draft during review. Publish it after the questions are approved.'
+        ? hasUnsavedChanges
+          ? 'Save your changes and resubmit the topic before preparing the parent chapter for publication.'
+          : 'The chapter may remain a draft during review. Publish it after the questions are approved.'
         : !questionsReady
           ? 'Finish reviewing all active questions first. Then publish the parent chapter before this topic.'
           : 'All question reviews are complete. Publish the parent chapter before publishing this micro-topic.';
   const canSubmitLessonForReview=basicsReady&&blocksReady&&previewReviewed&&activeQuestions.length>0&&sourceReady&&parentChapterAvailable;
   const readiness=[
-   {ok:basicsReady,label:'1. Topic details are complete',detail:basicsReady?'Title, learner goal and a valid learning time are saved.':'Add a clear topic title, learner goal and learning time between 1 and 120 minutes.'},
+   {ok:basicsReady,label:'1. Topic details are complete',detail:basicsReady?(hasUnsavedChanges?'Title, learner goal and time are complete in the editor. Save changes before continuing.':'Title, learner goal and a valid learning time are saved.'):'Add a clear topic title, learner goal and learning time between 1 and 120 minutes.'},
    {ok:blocksReady,label:'2. Teaching content is complete',detail:activeBlocks.length?blocksCompleteCount+' of '+activeBlocks.length+' active teaching blocks are complete'+(blocksReady?'':'. Complete or deactivate every unfinished block.'):'Add at least one active teaching block with real content.'},
    {ok:sourceReady,label:'3. Official textbook mapping is verified',detail:sourceReadinessDetail},
    {ok:activeQuestions.length>0,label:'4. Practice questions are included',detail:activeQuestions.length?activeQuestions.length+' active practice question(s) included. All active questions must be approved in step 7.':'Add at least one active practice question. Inactive questions do not count.'},
    {ok:previewReviewed,label:'5. Current saved learner preview is checked',detail:hasUnsavedChanges?'Save your changes first. The preview confirmation must refer to the current saved version.':previewReviewed?'Saved content version '+savedContentRevision+' has been checked.':'Open the learner preview, inspect the current saved version and confirm it there.'},
-   {ok:submittedForReview,label:lessonStatus==='PUBLISHED'?'6. Review is complete':'6. Micro-topic is submitted for review',detail:lessonStatus==='REVIEW'?'Submitted. The topic is waiting for review and question decisions.':lessonStatus==='PUBLISHED'?'The review workflow is complete and the micro-topic is published.':lessonStatus==='ARCHIVED'?'This topic is archived. Restore it to draft before submitting it again.':'After checks 1–5 pass, save the topic and select “Submit for review”.'},
+   {ok:submittedForReview,label:lessonStatus==='PUBLISHED'&&!hasUnsavedChanges?'6. Review is complete':'6. Micro-topic is submitted for review',detail:hasUnsavedChanges&&['REVIEW','PUBLISHED','ARCHIVED'].includes(lessonStatus)?'Unsaved edits will return this topic to draft when saved. Save, confirm the new preview, then submit it for review again.':lessonStatus==='REVIEW'?'Submitted. The topic is waiting for review and question decisions.':lessonStatus==='PUBLISHED'?'The review workflow is complete and the micro-topic is published.':lessonStatus==='ARCHIVED'?'This topic is archived. Restore it to draft before submitting it again.':'After checks 1–5 pass, save the topic and select “Submit for review”.'},
    {ok:questionsReady,label:'7. Every active question is approved and valid',detail:questionApprovalDetail},
    {ok:chapterReady,label:'8. Parent chapter is published',detail:chapterReadinessDetail}
   ];
