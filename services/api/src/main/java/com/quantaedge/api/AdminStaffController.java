@@ -184,7 +184,7 @@ public class AdminStaffController {
     int safeLimit=Math.max(1,Math.min(limit,500));
     return jdbc.queryForList("""
         select a.id,a.actor_staff_id,a.actor_role,a.http_method,a.request_path,
-               a.response_status,a.remote_address,a.user_agent,a.created_at,
+               a.response_status,a.remote_address,a.user_agent,a.details,a.created_at,
                coalesce(s.display_name,'Removed staff account') as actor_name
         from staff_audit_log a
         left join staff_account s on s.id=a.actor_staff_id
