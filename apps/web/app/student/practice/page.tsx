@@ -1,96 +1,118 @@
+
 'use client';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-type Lesson={id:number;title:string;code:string;chapter_name:string;subject_name:string};
-type Question={id:number;question_type:string;prompt:string;explanation:string;options:string};
-type Option={key:string;label:string};
-type GradeResult={questionId:number;correct:boolean;explanation:string|null;saved:boolean};
-function parse(v:unknown){if(typeof v!=='string')return v??[];try{return JSON.parse(v)}catch{return[]}}
+type Question={
+  id:number;question_type:string;prompt:string;explanation:string;options:string;
+  source_kind?:string;source_year?:number;board?:string;marks?:number;exam_format?:string;
+  topic?:string;subtopic?:string;skill?:string;response_mode?:string
+};
+function parse<T=any>(v:string):T{try{return JSON.parse(v) as T}catch{return [] as T}}
 
 export default function PracticePage(){
   const [questions,setQuestions]=useState<Question[]>([]);
-  const [lesson,setLesson]=useState<Lesson|null>(null);
-  const [classCode,setClassCode]=useState('7');
-  const [subjectCode,setSubjectCode]=useState('maths');
+  const [student,setStudent]=useState<any>(null);
   const [index,setIndex]=useState(0);
-  const [selected,setSelected]=useState<string|null>(null);
-  const [grade,setGrade]=useState<GradeResult|null>(null);
+  const [selected,setSelected]=useState('');
+  const [result,setResult]=useState<any>(null);
   const [error,setError]=useState('');
-  const [loading,setLoading]=useState(true);
-  const [submitting,setSubmitting]=useState(false);
+  const router=useRouter();
 
   useEffect(()=>{
-    let cancelled=false;
     async function load(){
       try{
-        const params=new URLSearchParams(window.location.search);
-        let cls=params.get('classCode')||'',subject=params.get('subjectCode')||'';
-        if(!cls||!subject){
-          const p=await fetch('/api/v1/students/preview',{cache:'no-store'});
-          if(!p.ok)throw new Error('Student profile load नहीं हो पाया।');
-          const profile=await p.json();
-          cls=cls||String(profile.class_code||'7');
-          subject=subject||'maths';
-        }
-        if(!['6','7','8'].includes(cls)||!['maths','science'].includes(subject))throw new Error('कक्षा या विषय सही नहीं है।');
-        const lr=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(cls)+'&subjectCode='+encodeURIComponent(subject),{cache:'no-store'});
-        if(!lr.ok)throw new Error('Published lessons load नहीं हो पाए।');
-        const list=await lr.json() as Lesson[];
-        const requested=params.get('lessonId');
-        const ordered=requested?list.filter(x=>String(x.id)===requested).concat(list.filter(x=>String(x.id)!==requested)):list;
-        let picked:Lesson|null=null,qs:Question[]=[];
-        for(const item of ordered){
-          const qr=await fetch('/api/v1/learning/lessons/'+item.id+'/questions',{cache:'no-store'});
-          if(!qr.ok)continue;
-          const candidate=await qr.json() as Question[];
-          const usable=candidate.filter(q=>(parse(q.options) as Option[]).length>0);
-          if(usable.length){picked=item;qs=usable;break}
-        }
-        if(cancelled)return;
-        setClassCode(cls);setSubjectCode(subject);setLesson(picked);setQuestions(qs);setIndex(0);setSelected(null);setGrade(null);
-      }catch(e){if(!cancelled)setError(e instanceof Error?e.message:'Practice load नहीं हो पाया。')}
-      finally{if(!cancelled)setLoading(false)}
+        const me=await fetch('/api/v1/students/me');
+        if(me.status===401||me.status===403){router.replace('/login');return;}
+        const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||'Student unavailable');
+        setStudent(studentData);
+        const rec=await fetch('/api/v1/recommendations/next'); const rb=await rec.json();
+        if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
+        if(!rec.ok||!rb.available||!rb.lesson) throw new Error('No recommended lesson');
+        const qs=await fetch('/api/v1/learning/lessons/'+rb.lesson.id+'/questions').then(r=>r.json());
+        setQuestions(qs);
+      }catch(e:any){setError(e.message||'Practice load नहीं हो पाया।');}
     }
-    void load();return()=>{cancelled=true}
-  },[]);
+    load();
+  },[router]);
 
-  async function submitAnswer(optionKey:string){
-    if(!questions[index]||submitting||grade)return;
-    setSelected(optionKey);setError('');setSubmitting(true);
-    try{
-      const response=await fetch('/api/v1/learning/questions/'+questions[index].id+'/answer',{
-        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({selectedOption:optionKey})
-      });
-      if(!response.ok){
-        const body=await response.json().catch(()=>({}));
-        throw new Error(body.message||'उत्तर जाँचा नहीं जा सका। कृपया फिर कोशिश करें।');
-      }
-      const result=await response.json() as GradeResult;
-      setGrade(result);
-    }catch(e){
-      setSelected(null);
-      setError(e instanceof Error?e.message:'उत्तर जाँचा नहीं जा सका।');
-    }finally{setSubmitting(false)}
+  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Practice unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
+  if(!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Loading practice…</div></section></main>;
+
+  const q=questions[index];
+  const options=parse<{key:string;label:string}[]>(q.options||'[]');
+
+  async function answer(value:string|object){
+    const serialized=typeof value==='string'?value:JSON.stringify(value);
+    if(!serialized.trim()) return;
+    setSelected(serialized);
+    const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
+      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:value})
+    });
+    setResult(await response.json());
   }
 
-  function nextQuestion(){
-    setIndex(index+1);setSelected(null);setGrade(null);setError('');
-  }
+  const next=()=>{
+    if(index+1<questions.length){setIndex(index+1);setSelected('');setResult(null);}
+  };
 
-  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">अभ्यास load हो रहा है…</div></section></main>;
-  if(error&&!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>अभ्यास उपलब्ध नहीं है</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
-  if(!questions.length||!lesson)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>अभी अभ्यास उपलब्ध नहीं है</h1><p>इस विषय में कोई published multiple-choice practice question नहीं मिला।</p><Link href={'/student/learn?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode)} className="button button-dark">← विषय पर लौटें</Link></div></section></main>;
+  return <main className="practice-page">
+    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
+    <section className="practice-wrap">
+      <div className="eyebrow">Class {student?.class_code ?? '—'} · {q.question_type}</div>
+      <div className="feedback">
+        <span>{q.exam_format ?? 'Concept practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
+        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?'SCERT-aligned author question':q.source_kind ?? 'Author-created'}</span>
+        {q.source_year ? <span>{q.source_year}</span>:null}
+      </div>
+      <h1>{q.prompt}</h1>
+      <p>पहले सोचो। उत्तर दो। फिर feedback पढ़कर reasoning जाँचो।</p>
 
-  const q=questions[index],options=parse(q.options) as Option[],answered=grade!==null;
-  return <main className="practice-page"><header className="lesson-header"><Link href={'/student/learn?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode)} className="back">← {lesson.subject_name||subjectCode}</Link><span>अभ्यास · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
-    <section className="practice-wrap"><div className="eyebrow">कक्षा {classCode} · {lesson.subject_name||subjectCode} · {lesson.chapter_name}</div><h1>{q.prompt}</h1><p>पहले सोचो, फिर विकल्प चुनो और feedback देखो।</p>
-      <div className="option-grid">{options.map(o=><button type="button" key={o.key} disabled={answered||submitting} className={selected===o.key?'selected':''} onClick={()=>void submitAnswer(o.key)}>{o.label}</button>)}</div>
-      {submitting&&<div className="practice-feedback" role="status"><span>उत्तर जाँचा जा रहा है…</span></div>}
-      {error&&<div className="track-alert" role="alert">{error}</div>}
-      {answered&&<div className="practice-feedback"><strong>{grade.correct?'✓ सही जवाब':'अभी नहीं'}</strong><span>{grade.explanation||q.explanation}</span></div>}
-      <div className="practice-footer"><span>Question {index+1} of {questions.length}</span>{answered&&index+1<questions.length?<button className="button button-dark" onClick={nextQuestion}>अगला सवाल →</button>:answered?<Link href={'/student/learn?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode)+'&lessonId='+lesson.id} className="button button-dark">Lesson पर लौटें →</Link>:<span>Option चुनें</span>}</div>
+      {options.length>0 ? <div className="option-grid">
+        {options.map(o=><button key={o.key} disabled={!!result} className={selected===o.key?'selected':''} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}
+      </div> : q.question_type==='ORDER' ? <OrderInput prompt={q.prompt} disabled={!!result} onSubmit={answer}/> :
+      q.question_type==='MATCH' ? <MatchInput disabled={!!result} onSubmit={answer}/> :
+      <div className="concept-card">
+        {q.question_type==='NUMERICAL'
+          ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder="संख्यात्मक उत्तर लिखें…"/>
+          : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder="अपना reasoning/उत्तर लिखें…" rows={q.question_type==='LONG_ANSWER'?7:5}/>}
+        <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}>उत्तर जमा करें</button>
+      </div>}
+
+      {result&&<div className="practice-feedback">
+        <strong>{result.correct===true?'✓ सही जवाब':result.correct===false?'अभी नहीं':'उत्तर दर्ज है'}</strong>
+        <span>{result.feedback}</span>
+        {result.explanation&&<span>{result.explanation}</span>}
+      </div>}
+
+      <div className="practice-footer">
+        <span>Question {index+1} of {questions.length}</span>
+        {result && index+1<questions.length ? <button className="button button-dark" onClick={next}>अगला सवाल →</button>
+          : result ? <Link href="/student/progress" className="button button-dark">Progress देखें →</Link>
+          : <span>उत्तर दें</span>}
+      </div>
     </section>
   </main>;
+}
+
+
+function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;onSubmit:(value:string|object)=>void}){
+  const letters=Array.from(new Set(prompt.match(/[A-D]/g)||[]));
+  const [order,setOrder]=useState<string[]>([]);
+  function pick(letter:string){if(disabled||order.includes(letter))return;setOrder([...order,letter]);}
+  function reset(){if(!disabled)setOrder([])}
+  return <div className="concept-card structured-card"><div className="structured-hint">क्रम चुनें: हर विकल्प पर एक बार टैप करें।</div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'अभी कोई क्रम नहीं चुना'}</div><div className="practice-footer"><button className="text-link" onClick={reset}>Reset</button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}>क्रम जमा करें</button></div></div>;
+}
+
+function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string|object)=>void}){
+  const [text,setText]=useState('');
+  function submit(){
+    const mapping=text.split(',').map(s=>s.trim()).filter(Boolean).reduce((acc,item)=>{
+      const [k,v]=item.split(':').map(x=>x.trim()); if(k&&v) (acc as any)[k]=v; return acc;
+    },{} as Record<string,string>);
+    if(Object.keys(mapping).length) onSubmit(mapping);
+  }
+  return <div className="concept-card structured-card"><div className="structured-hint">मिलान लिखें: <b>1:A, 2:B, 3:C</b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}>मिलान जमा करें</button></div>;
 }
