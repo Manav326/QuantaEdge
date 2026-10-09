@@ -61,7 +61,7 @@ jobs:
           if printf '%s\n' "$files" | grep -qE '^services/api/'; then api=true; fi
           if printf '%s\n' "$files" | grep -qE '^apps/web/'; then web=true; fi
           if printf '%s\n' "$files" | grep -qE '^apps/admin/'; then admin=true; fi
-          if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/test_.*\.py
+          if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/test_.*\.py$'; then content=true; fi
           if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml$|^\.github/workflows/'; then all=true; fi
           if [ "$all" = "true" ]; then api=true; web=true; admin=true; content=true; fi
           echo "api=$api" >> "$GITHUB_OUTPUT"
@@ -246,7 +246,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Validate reviewed-content import safeguards
-        run: python -m unittest discover -s tests -p "test_content_import.py" -v
+        run: python -m unittest discover -s tests -p "test_*.py" -v
 
   validate-api:
     name: API verification
