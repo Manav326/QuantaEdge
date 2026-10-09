@@ -22,8 +22,7 @@ create index if not exists idx_auth_session_staff_active
 
 -- Permit an authenticated session to belong to a staff identity as well as a parent/user or student.
 -- Replace only a legacy guard that required user_id or student_id; keep unrelated constraints intact.
-do $
-declare
+do $staff_auth_session_constraint$ declare
   constraint_row record;
   definition text;
 begin
@@ -39,10 +38,9 @@ begin
       execute format('alter table public.auth_session drop constraint %I', constraint_row.conname);
     end if;
   end loop;
-end $;
+end $staff_auth_session_constraint$;
 
-do $
-begin
+do $staff_auth_session_identity$ begin
   if not exists (
     select 1 from pg_constraint
     where conrelid='public.auth_session'::regclass
@@ -52,7 +50,7 @@ begin
       add constraint auth_session_identity_required
       check (user_id is not null or student_id is not null or staff_id is not null);
   end if;
-end $;
+end $staff_auth_session_identity$;
 
 create table staff_permission_catalog (
   permission_key varchar(64) primary key,
