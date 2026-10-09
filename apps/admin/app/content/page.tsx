@@ -100,8 +100,12 @@ function blockHasPublishableContent(block:ContentBlock){
    return meaningfulContent(value.body);
   case 'AI_HELP':
    return true;
+  case 'MCQ': case 'TRUE_FALSE': case 'QUESTION':
+   return meaningfulContent(value.prompt||value.question||value.body)&&Array.isArray(value.options)&&value.options.length>=2&&value.options.every((option:any)=>meaningfulContent(option.label));
+  case 'MATCH': case 'ORDER': case 'INPUT':
+   return meaningfulContent(value.prompt||value.question||value.body||value.instructions);
   default:
-   return meaningfulContent(value.body||value.description||value.prompt);
+   return meaningfulContent(value.body||value.description||value.prompt||value.question||value.text);
  }
 }
 function questionHasValidAnswer(question:any){
