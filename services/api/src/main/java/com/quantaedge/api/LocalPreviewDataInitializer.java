@@ -34,7 +34,7 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
       insert into student_lesson_progress(
         student_id, lesson_id, status, progress_percent, started_at, completed_at, last_opened_at
       )
-      select ?, id, 'COMPLETED', 100, now(), now(), now()
+      select ?, l.id, 'COMPLETED', 100, now(), now(), now()
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
       on conflict (student_id,lesson_id) do update set
