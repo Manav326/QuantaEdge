@@ -80,6 +80,8 @@ public class AuthController {
     result.put("studentId",context.studentId());
     result.put("userId",context.userId());
     result.put("displayName",context.displayName());
+    result.put("staffId",context.staffId());
+    result.put("permissions",context.staffId()==null?java.util.List.of():auth.permissionsForStaff(context.staffId()));
     return result;
   }
 
@@ -97,6 +99,7 @@ public class AuthController {
         .body(Map.of("authenticated",true,"role",context.role(),
             "studentId",context.studentId()==null?0:context.studentId(),
             "userId",context.userId()==null?0:context.userId(),
+            "staffId",context.staffId()==null?0:context.staffId(),
             "displayName",context.displayName()==null?"":context.displayName()));
   }
 }
