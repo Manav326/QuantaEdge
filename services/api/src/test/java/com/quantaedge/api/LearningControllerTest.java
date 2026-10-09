@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -102,8 +103,8 @@ class LearningControllerTest {
 
     assertThrows(SecurityException.class,
         () -> controller.answer(42L, Map.of("answer", "Z"), student));
-    verify(state, never()).recordAttempt(any(Long.class), any(Long.class), any(Long.class),
-        anyString(), any(Boolean.class), any());
+    verify(state, never()).recordAttempt(eq(7L), eq(42L), eq(9L),
+        anyString(), anyBoolean(), any());
   }
 
   @Test
