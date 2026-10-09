@@ -63,7 +63,7 @@ begin
 
       insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
       values(
-        lesson_id,obj_id,'MCQ',
+        v_lesson_id,obj_id,'MCQ',
         r.display_name||' — सीखने के दौरान सबसे सही अभ्यास क्या है?',
         case stage.n
           when 1 then 'मुख्य अवधारणा को पहचानकर रोज़मर्रा के उदाहरण से जोड़ना।'
