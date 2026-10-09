@@ -204,7 +204,7 @@ public class AuthService {
   public List<String> updateStudentTracks(long studentId,List<String> trackCodes) {
     Map<String,Object> row;
     try {
-      row=jdbc.queryForMap("select class_code from student where id=? and active=true and environment='PRODUCTION'",studentId);
+      row=jdbc.queryForMap("select class_code from student where id=? and active=true and environment='PRODUCTION' for update",studentId);
     } catch(EmptyResultDataAccessException ex) {
       throw new IllegalArgumentException("Active production student not found");
     }

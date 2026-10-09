@@ -10,10 +10,15 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 - Interactive practice: http://localhost:3000/student/practice
 - Student progress: http://localhost:3000/student/progress
 - Parent view: http://localhost:3000/parent
+- Parent child management: http://localhost:3000/parent/children
 - Login entry: http://localhost:3000/login
 - Admin workspace: http://localhost:3001
 - Curriculum API: http://localhost:8080/api/v1/curriculum
 - API health: http://localhost:8080/actuator/health
+
+## Parent, student and subject access
+
+Parent registration collects the parent name and verifies the mobile OTP before creating the account. Local demo mode returns OTP `123456`. Each parent can manage a configurable number of active child profiles (default `APP_AUTH_MAX_CHILDREN_PER_PARENT=3`); increase this environment variable to expand the limit. Each child may subscribe to Maths, Science, or both, and the API enforces these subscriptions when listing, opening, starting, or practising lessons. Administrators can suspend/reactivate parent accounts and student profiles and manage subject tracks in the admin console under **Parents & families**. Suspension revokes current sessions; archiving a parent-child link retains learning history.
 
 ## Curriculum and content status
 
