@@ -19,8 +19,7 @@ public class AuthFilter extends OncePerRequestFilter {
   @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
       throws ServletException,IOException {
     String uri=request.getRequestURI();
-    boolean trace="PUT".equalsIgnoreCase(request.getMethod())
-        && uri.startsWith("/api/v1/admin/lessons/")
+    boolean trace=uri.startsWith("/api/v1/admin/lessons/")
         && uri.contains("/blocks/") && uri.endsWith("/asset");
     if(trace) LOGGER.info("HTTP_DIAG auth-filter-enter uri={} hasCookies={}",uri,request.getCookies()!=null);
     try {
