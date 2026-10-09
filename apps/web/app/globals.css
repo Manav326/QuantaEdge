@@ -385,3 +385,17 @@
   .parent-profile-page__spinner{animation:none}
   .parent-profile-field input,.parent-profile-field select{transition:none}
 }
+
+
+/* Keep the parent dashboard's three-part header balanced on narrow screens. */
+.parent-header{position:relative;z-index:20;gap:14px}
+.parent-header>span{flex:1;min-width:0;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:540px){
+  .parent-header{height:auto;min-height:68px;padding:8px 12px;gap:8px}
+  .parent-header .qe-brand--compact .qe-brand__wordmark{width:132px}
+  .parent-header .qe-brand--compact .qe-brand__tagline{font-size:6.8px}
+  .parent-header>span{font-size:9px}
+  .parent-account__trigger-copy{display:none}
+  .parent-account__trigger{padding:4px;gap:4px}
+  .parent-account__avatar{flex-basis:40px;width:40px;height:40px}
+}
