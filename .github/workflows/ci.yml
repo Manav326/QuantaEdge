@@ -388,6 +388,12 @@ jobs:
           if [ -n "$api_id" ]; then
             docker inspect "$api_id" --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}} RestartCount={{.RestartCount}} Error={{.State.Error}}'
           fi
+          echo "===== host-side API status probe ====="
+          curl -sS --max-time 5 -o /dev/null --write-out 'HOST_STATUS http=%{http_code} remote=%{remote_ip}:%{remote_port}\n' http://localhost:8080/api/v1/system/status || true
+          echo "===== API-container loopback status probe ====="
+          docker compose -f docker-compose.yml exec -T api curl -sS --max-time 5 -o /dev/null --write-out 'CONTAINER_STATUS http=%{http_code} remote=%{remote_ip}:%{remote_port}\n' http://localhost:8080/api/v1/system/status || true
+          echo "===== unauthenticated API-container asset PUT probe (expected 403; no cookie or mutation) ====="
+          docker compose -f docker-compose.yml exec -T api curl -sS --max-time 5 -X PUT -H 'Content-Type: application/json' -d '{"assetId":0}' -o /dev/null --write-out 'CONTAINER_ASSET_PUT http=%{http_code} remote=%{remote_ip}:%{remote_port}\n' http://localhost:8080/api/v1/admin/lessons/0/blocks/0/asset || true
           docker compose -f docker-compose.yml logs --no-color --tail=500
 
       - name: Tear down local stack
