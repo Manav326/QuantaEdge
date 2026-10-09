@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 type StudentAccountMenuProps = {
   displayName: string;
   classCode: string | number;
-  profileImageDataUrl?: string | null;
+  profileImageUrl?: string | null;
 };
 
 function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'settings' | 'logout' }) {
@@ -19,8 +19,8 @@ function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'settings
   return <svg {...common}><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>;
 }
 
-export default function StudentAccountMenu({ displayName, classCode, profileImageDataUrl }: StudentAccountMenuProps) {
-  const avatarSrc = profileImageDataUrl || '/branding/student-avatar.svg';
+export default function StudentAccountMenu({ displayName, classCode, profileImageUrl }: StudentAccountMenuProps) {
+  const avatarSrc = profileImageUrl || '/branding/student-avatar.svg';
   const router = useRouter();
   const accountRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
