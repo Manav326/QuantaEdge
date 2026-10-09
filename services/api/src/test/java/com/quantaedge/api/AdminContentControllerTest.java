@@ -17,11 +17,12 @@ class AdminContentControllerTest {
   @Mock private JdbcTemplate jdbc;
   @Mock private ObjectMapper mapper;
   @Mock private AuthorizationService authorization;
+  @Mock private StaffAuditService staffAudit;
 
   @Test
   void legacySharedTokenCannotAuthorizeContentCms() {
     when(authorization.requirePermission(null, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", null));
@@ -34,7 +35,7 @@ class AdminContentControllerTest {
   void studentSessionCannotReadAdminContentEvenWithLegacyToken() {
     AuthContext student = new AuthContext(10L, 20L, "STUDENT", "Student");
     when(authorization.requirePermission(student, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", student));
