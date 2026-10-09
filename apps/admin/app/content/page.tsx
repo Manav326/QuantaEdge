@@ -89,13 +89,13 @@ function blockHasPublishableContent(block:ContentBlock){
   case 'EXPLANATION': case 'PREREQUISITE':
    return meaningfulContent(value.html||value.body);
   case 'WORKED_EXAMPLE':
-   return meaningfulContent(value.problem)&&Array.isArray(value.steps)&&value.steps.some((step:unknown)=>meaningfulContent(step))&&meaningfulContent(value.answer);
+   return meaningfulContent(value.problem)&&Array.isArray(value.steps)&&value.steps.length>0&&value.steps.every((step:unknown)=>meaningfulContent(step))&&meaningfulContent(value.answer);
   case 'IMAGE': case 'DIAGRAM': case 'ANIMATION': case 'VIDEO': case 'AUDIO':
    return /^https:\/\//i.test(String(value.url||''))&&meaningfulContent(value.description);
   case 'GUIDED_PRACTICE': case 'INDEPENDENT_PRACTICE': case 'CHALLENGE':
    return meaningfulContent(value.prompt);
   case 'SUMMARY': case 'RECAP':
-   return Array.isArray(value.points)&&value.points.some((point:unknown)=>meaningfulContent(point));
+   return Array.isArray(value.points)&&value.points.length>0&&value.points.every((point:unknown)=>meaningfulContent(point));
   case 'HINT':
    return meaningfulContent(value.body);
   case 'AI_HELP':
@@ -312,7 +312,21 @@ export default function ContentStudio(){
   if(blocks.length>=100){setError('This lesson already has the maximum of 100 teaching blocks.');return}
   const next:ContentBlock={sequence_no:blocks.length+1,block_type:type,content:contentFor(type),active:true};setBlocks(old=>[...old,next]);setActiveBlock(blocks.length);setNotice('Added '+(BLOCK_OPTIONS.find(x=>x.type===type)?.label||type)+'. Complete the content, then save.');
  }
- function updateQuestion(index:number,patch:Record<string,any>){setQuestions(old=>{const next=old.map((q,i)=>i===index?{...q,...patch}:q);setQuestionJson(JSON.stringify(next,null,2));return next})}
+ function updateQuestion(index:number,patch:Record<string,any>){
+  const editsQuestionContent=Object.keys(patch).some(key=>!['review_status','review_notes','active','sort_order'].includes(key));
+  setQuestions(old=>{
+   const next=old.map((q,i)=>{
+    if(i!==index)return q;
+    const updated={...q,...patch};
+    if(editsQuestionContent&&['APPROVED','PUBLISHED'].includes(String(q.review_status||'').toUpperCase())&&!Object.prototype.hasOwnProperty.call(patch,'review_status')){
+     updated.review_status='DRAFT';
+     updated.review_notes='Content changed; review it again before publishing.';
+    }
+    return updated;
+   });
+   setQuestionJson(JSON.stringify(next,null,2));return next;
+  });
+ }
  function updateOption(qIndex:number,oIndex:number,patch:Record<string,any>){const q=questions[qIndex];if(!q)return;updateQuestion(qIndex,{options:(q.options||[]).map((o:any,i:number)=>({...o,...(i===oIndex?patch:{})}))})}
  function addQuestion(){
   const index=questions.length+1;const q={question_type:'MCQ',prompt:'',explanation:'',difficulty:'CORE',sort_order:index,active:true,review_status:'DRAFT',review_notes:null,marks:1,exam_format:'Practice',source_kind:'AUTHOR_CREATED',source_title:null,source_ref:null,source_year:null,source_id:null,board:null,topic:form.title||null,subtopic:null,skill:null,tags:[],answer_payload:{kind:'OPTION',value:'A'},options:[{key:'A',label:'',correct:true,sort_order:1},{key:'B',label:'',correct:false,sort_order:2}]};const next=[...questions,q];setQuestions(next);setQuestionJson(JSON.stringify(next,null,2));
