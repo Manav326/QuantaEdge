@@ -77,6 +77,34 @@ class AuthServiceTest {
   }
 
   @Test
+  void customerCanVerifyLoginWhenSameMobileAlsoHasStaffIdentity() throws Exception {
+    String mobile = "+917070107483";
+    long userId = 52L;
+    Map<String,Object> otpRow = Map.of(
+        "id", 71L,
+        "code_hash", hash("123456"),
+        "attempts", 0,
+        "expires_at", Timestamp.from(Instant.now().plusSeconds(120)),
+        "purpose", "LOGIN");
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+
+    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
+        .thenReturn(List.of(otpRow));
+    when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
+        eq(Boolean.class), eq(mobile))).thenReturn(true);
+    when(jdbc.queryForObject("select id from user_account where mobile_e164=?", Long.class, mobile))
+        .thenReturn(userId);
+    when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", userId))
+        .thenReturn(Map.of("role", "PARENT", "display_name", "Existing customer"));
+
+    AuthContext context = auth.verifyOtp("7070107483", "123456", "LOGIN", null);
+
+    assertEquals(userId, context.userId());
+    assertEquals(null, context.staffId());
+    assertEquals("PARENT", context.role());
+  }
+
+  @Test
   void allowlistedBootstrapMobileIsRecognizedAsFirstAccessBeforeStaffRowExists() {
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
     when(jdbc.queryForList("select last_login_at from staff_account where mobile_e164=?", "+917070107483"))
