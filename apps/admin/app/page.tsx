@@ -60,7 +60,7 @@ export default function AdminHome(){
   const activeReview=useMemo(()=>reviewRows.filter(row=>['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0),[reviewRows]);
 
   if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">QUANTAEDGE OPERATIONS</span><h1>Dashboard unavailable</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}>Try again</button></div></section></main>;
-  if(loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="QuantaEdge" /><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Preparing your workspace</h1><p>Connecting to current content and learning records…</p></div></section></main>;
+  if(loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Preparing your workspace</h1><p>Connecting to current content and learning records…</p></div></section></main>;
 
   const pendingReview=reviewRows.filter(row=>!['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0);
   const primaryStats=[

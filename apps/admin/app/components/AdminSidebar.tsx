@@ -61,9 +61,16 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
   return (
     <aside className={'admin-sidebar qe-shared-sidebar' + (collapsed ? ' is-collapsed' : '')}>
       <div className="qe-sidebar-brand-row">
-        <Link href="/" className="admin-brand" aria-label="QuantaEdge admin home">
-          <span className="brand-mark">Q</span>
-          <span><strong>QuantaEdge</strong><small>{variant === 'content' ? 'ACADEMIC CONSOLE' : 'ADMIN CONSOLE'}</small></span>
+        <Link href="/" className="admin-brand qe-admin-brand" aria-label="QuantaEdge — Smarter Decisions. Greater Growth.">
+          {collapsed ? (
+            <img className="qe-admin-brand-mark" src="/branding/quantaedge-icon.png" alt="" width={35} height={35} aria-hidden="true" />
+          ) : (
+            <span className="qe-admin-brand-copy">
+              <img className="qe-admin-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
+              <small className="qe-admin-brand-tagline">Smarter Decisions. Greater Growth.</small>
+              <small className="qe-admin-brand-context">{variant === 'content' ? 'ACADEMIC CONSOLE' : 'ADMIN CONSOLE'}</small>
+            </span>
+          )}
         </Link>
         <button
           type="button"

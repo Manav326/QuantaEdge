@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import QuantaEdgeBrand from './components/QuantaEdgeBrand';
 
 const subjects = [
   { icon: '∑', name: 'गणित', meta: 'कक्षा 6–8 · हिन्दी', tone: 'violet' },
@@ -15,7 +16,7 @@ export default function Home() {
   return (
     <main className="site">
       <header className="topbar">
-        <Link href="/" className="brand brand-lockup-wrap" aria-label="QuantaEdge home"><img className="brand-lockup" src="/branding/quantaedge-logo.png" alt="QuantaEdge — Smarter Decisions. Greater Growth." /></Link>
+        <QuantaEdgeBrand variant="header" />
 
         <nav className="topnav" aria-label="मुख्य navigation">
           <a href="#how-it-works">कैसे काम करता है</a>
@@ -159,7 +160,7 @@ export default function Home() {
       </section>
 
       <footer className="footer">
-        <div className="brand brand-lockup-wrap"><img className="brand-lockup" src="/branding/quantaedge-logo.png" alt="QuantaEdge — Smarter Decisions. Greater Growth." /></div>
+        <QuantaEdgeBrand href={null} variant="footer" />
         <p>पढ़ाई, अब आपके बच्चे के हिसाब से।</p>
         <div className="footer-links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         <span>© 2026 QuantaEdge Learning</span>

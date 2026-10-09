@@ -89,9 +89,12 @@ export default function AdminLogin() {
   return (
     <main className="qe-login-shell">
       <aside className="qe-login-story">
-        <Link href="/" className="qe-login-brand" aria-label="QuantaEdge staff console">
-          <span className="qe-login-brand-mark">Q</span>
-          <span><strong>QuantaEdge</strong><small>STAFF CONSOLE</small></span>
+        <Link href="/" className="qe-login-brand" aria-label="QuantaEdge — Smarter Decisions. Greater Growth. — Staff console">
+          <span className="qe-login-brand-copy">
+            <img className="qe-login-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
+            <small className="qe-login-brand-tagline">Smarter Decisions. Greater Growth.</small>
+            <small className="qe-login-brand-context">STAFF CONSOLE</small>
+          </span>
         </Link>
 
         <div className="qe-login-story-content">
@@ -117,8 +120,9 @@ export default function AdminLogin() {
       </aside>
 
       <section className="qe-login-panel">
-        <div className="qe-login-mobile-brand">
-          <span className="qe-login-brand-mark">Q</span><strong>QuantaEdge</strong>
+        <div className="qe-login-mobile-brand" role="img" aria-label="QuantaEdge — Smarter Decisions. Greater Growth.">
+          <img className="qe-login-mobile-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
+          <small>Smarter Decisions. Greater Growth.</small>
         </div>
         <div className="qe-login-card">
           <div className="qe-login-card-top">

@@ -57,7 +57,7 @@ export default function DiagnosticPage(){
   }
 
   return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span>Initial diagnostic · {idx+1} / {qs.length}</span><span className="avatar">Q</span></header>
+    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span>Initial diagnostic · {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow">पहले diagnostic, फिर adaptive learning</div>
       <h1>{q.prompt}</h1>

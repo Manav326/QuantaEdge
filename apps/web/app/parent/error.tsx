@@ -1,5 +1,6 @@
 'use client';
 
+import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import Link from 'next/link';
 
 export default function ParentRouteError({
@@ -11,7 +12,7 @@ export default function ParentRouteError({
 }){
   return <main className="parent-app parent-error-page">
     <header className="parent-header">
-      <Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link>
+      <QuantaEdgeBrand variant="compact" />
       <Link href="/login" className="text-link">Sign in</Link>
     </header>
     <section className="parent-dashboard">
