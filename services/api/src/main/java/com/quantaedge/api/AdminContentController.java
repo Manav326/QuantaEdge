@@ -137,8 +137,8 @@ public class AdminContentController {
     String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
     String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
     if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
-    if ("PUBLISHED".equals(status)) {
-      throw badRequest("Create chapters as draft, verify the source and prepare reviewed lessons before publishing.");
+    if (!"DRAFT".equals(status)) {
+      throw badRequest("Create chapters as draft; use the separate publication action after source and lesson checks pass.");
     }
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
     List<Map<String, Object>> subjects = jdbc.queryForList("""
@@ -182,8 +182,8 @@ public class AdminContentController {
     String sourcePages = optionalText(body.get("alignmentPageRange"), 160);
     String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
-    if ("PUBLISHED".equals(status)) {
-      throw badRequest("Create lessons as draft, add reviewed content and questions, then publish.");
+    if (!"DRAFT".equals(status)) {
+      throw badRequest("Create micro-topics as drafts; use Submit for review, the review queue, and the separate Publish action for later states.");
     }
     Long lessonId = jdbc.queryForObject("""
       insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active,
@@ -393,10 +393,10 @@ public class AdminContentController {
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
     authorization.requirePermission(context,"CONTENT_EDIT");
-    if ("REVIEW".equals(status) && !"REVIEW".equals(String.valueOf(current.get("lesson_status")))) {
-      authorization.requirePermission(context,"CONTENT_SUBMIT");
-    }
     String previousStatus=String.valueOf(current.get("lesson_status"));
+    if ("REVIEW".equals(status) && !"REVIEW".equals(previousStatus)) {
+      throw badRequest("Use the separate Submit for review action so the topic is validated before reviewers receive it.");
+    }
     if ("PUBLISHED".equals(status) || "ARCHIVED".equals(status)
         || "PUBLISHED".equals(previousStatus)
         || "ARCHIVED".equals(previousStatus)) {
