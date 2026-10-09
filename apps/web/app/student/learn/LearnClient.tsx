@@ -28,48 +28,56 @@ function parse<T=any>(value:string):T {
   try { return JSON.parse(value) as T; } catch { return {} as T; }
 }
 
+function safeRichHtml(value:string) {
+  let html=String(value||'');
+  html=html.replace(/<\s*(script|style|iframe|object|embed|form|input|button)[\s\S]*?<\/\s*\1\s*>/gi,'');
+  html=html.replace(/<\s*(script|style|iframe|object|embed|form|input|button)\b[^>]*\/?>/gi,'');
+  html=html.replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,'');
+  html=html.replace(/\s+(href|src)\s*=\s*(['"])\s*(?:javascript|vbscript|data):[\s\S]*?\2/gi,'');
+  html=html.replace(/<(?!\/?(?:p|div|span|br|strong|b|em|i|u|ul|ol|li|h2|h3|h4|blockquote|code|pre|a|img)\b)[^>]*>/gi,'');
+  html=html.replace(/\s+style\s*=\s*(['"])([\s\S]*?)\1/gi,(_m,q,styles:string)=>{
+    const allowed=styles.split(';').map(rule=>rule.trim()).filter(Boolean).filter(rule=>/^(color|background-color|font-size|font-family|font-weight|font-style|text-align|text-decoration|margin-left)\s*:/i.test(rule)).filter(rule=>!/(url\s*\(|expression|javascript|@import)/i.test(rule)).join(';');
+    return allowed?' style="'+allowed.replace(/"/g,'&quot;')+'"':'';
+  });
+  html=html.replace(/\s+(?:href|src)\s*=\s*(['"])(?!https?:\/\/|\/|#)[\s\S]*?\1/gi,'');
+  return html;
+}
+
 function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpen:()=>void}) {
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
-    <span className="concept-kicker">{data.heading ?? data.title ?? 'समझें'}</span>
-    <p>{data.body ?? data.description}</p>
-    {data.keyPoints?.map((x:string)=><div className="feedback" key={x}><span>• {x}</span></div>)}
+    <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?'पहले से क्या जानते हैं?':'समझें')}</span>
+    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(String(data.html))}}/> : <p>{data.body ?? data.description}</p>}
+    {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
-
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
-    <span className="concept-kicker">Worked example</span>
-    <h3>{data.title ?? 'उदाहरण'}</h3>
-    <p>{data.problem ?? data.prompt}</p>
+    <span className="concept-kicker">Worked example</span><h3>{data.title ?? 'उदाहरण'}</h3><p>{data.problem ?? data.prompt}</p>
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. {x}</span></div>)}
     {data.answer && <p><strong>उत्तर:</strong> {data.answer}</p>}
   </div>;
-
-  if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE'].includes(block.block_type)) return <div className="concept-card">
-    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?'साथ में करें':'अब खुद करें')}</span>
-    <p>{data.prompt}</p>
-    {data.hint && <div className="feedback"><span>Hint: {data.hint}</span></div>}
+  if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
+    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?'साथ में करें':block.block_type==='HINT'?'Helpful hint':'अब खुद करें')}</span><p>{data.prompt ?? data.body}</p>{data.hint && <div className="feedback"><span>Hint: {data.hint}</span></div>}
   </div>;
-
-  if (['IMAGE','DIAGRAM','VIDEO'].includes(block.block_type)) return <div className="concept-card">
-    <span className="concept-kicker">{data.title ?? 'Visual'}</span>
-    <div className="feedback"><span>◈</span><span>{data.description ?? data.alt ?? 'इस concept का labelled visual देखें।'}</span></div>
-    {data.url && <a href={data.url} target="_blank" rel="noreferrer" className="button button-small">Visual देखें ↗</a>}
-    {data.caption && <p>{data.caption}</p>}
-  </div>;
-
-  if (block.block_type==='AI_HELP') return <div className="ai-help">
-    <div className="ai-icon">✦</div>
-    <div><strong>AI tutor</strong>
-      <p>अटकें तो इस lesson के context में hint, explanation, example या step-by-step मदद लें।</p>
-      <button type="button" className="button button-dark button-small" onClick={onTutorOpen}>Tutor खोलें →</button>
-    </div>
-  </div>;
-
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">
-    <span className="concept-kicker">Recap</span>
-    {data.points?.map((x:string)=><div className="feedback" key={x}><span>✓ {x}</span></div>)}
-  </div>;
-
+  if (['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
+    const url=String(data.url||'');
+    const directVideo=/\.(mp4|webm|ogg)(\?.*)?$/i.test(url);
+    const youtube=/youtube\.com\/watch\?/i.test(url)||/youtu\.be\//i.test(url);
+    let embed=url;
+    if(youtube){try{const parsedUrl=new URL(url);const id=parsedUrl.hostname.includes('youtu.be')?parsedUrl.pathname.slice(1):parsedUrl.searchParams.get('v')||'';if(id)embed='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)}catch{}}
+    return <div className="concept-card"><span className="concept-kicker">{data.title ?? (block.block_type==='AUDIO'?'सुनकर समझें':block.block_type==='VIDEO'?'देखकर समझें':'Visual')}</span>
+      {data.description && <p>{data.description}</p>}
+      {url && ['IMAGE','DIAGRAM','ANIMATION'].includes(block.block_type) && <img className="lesson-visual-media" src={url} alt={String(data.alt||data.title||'Learning visual')}/>}
+      {url && block.block_type==='VIDEO' && directVideo && <video className="lesson-visual-video" controls preload="metadata" src={url}/>}
+      {url && block.block_type==='VIDEO' && youtube && <div className="lesson-visual-embed"><iframe src={embed} title={String(data.title||'Lesson video')} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>}
+      {url && block.block_type==='AUDIO' && <audio className="lesson-visual-audio" controls preload="metadata" src={url}/>}
+      {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small">Video देखें ↗</a>}
+      {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link">Audio open करें ↗</a>}
+      {!url && <div className="feedback"><span>◈</span><span>{data.description ?? data.alt ?? 'इस concept का labelled visual देखें।'}</span></div>}
+      {data.caption && <p className="lesson-media-caption">{data.caption}</p>}
+    </div>;
+  }
+  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>AI tutor</strong><p>अटकें तो इस lesson के context में hint, explanation, example या step-by-step मदद लें।</p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}>Tutor खोलें →</button></div></div>;
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker">Recap</span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ {x}</span></div>)}</div>;
   return null;
 }
 
