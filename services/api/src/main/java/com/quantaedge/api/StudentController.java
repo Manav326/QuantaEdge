@@ -43,8 +43,9 @@ public class StudentController {
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
+        and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
-      order by c.sort_order,s.sort_order,ch.sort_order,l.sort_order
+      order by c.sort_order,s.sort_order,ch.teaching_order,ch.sort_order,l.sort_order
       """,studentId,studentId);
   }
 
@@ -61,8 +62,8 @@ public class StudentController {
     Map<String,Object> result=new LinkedHashMap<>(student);
     result.put("lessonStats",jdbc.queryForMap("""
       select count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED') as total_lessons,
-             count(*) filter(where p.status='COMPLETED') as completed_lessons,
-             coalesce(round(100.0*count(*) filter(where p.status='COMPLETED')/
+             count(*) filter(where p.status='COMPLETED' and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED') as completed_lessons,
+             coalesce(round(100.0*count(*) filter(where p.status='COMPLETED' and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')/
                nullif(count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'),0),1),0) as completion_percent
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
@@ -77,13 +78,14 @@ public class StudentController {
     result.put("curriculum",jdbc.queryForList("""
       select c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              count(distinct ch.id) as chapters,
-             count(distinct l.id) filter(where l.active=true and l.status='PUBLISHED') as lessons,
+             count(distinct l.id) as lessons,
+             count(distinct ch.id) filter(where l.id is not null) as content_ready_chapters,
              count(distinct p.id) filter(where p.status='COMPLETED') as completed
       from curriculum_class c join curriculum_subject s on s.class_id=c.id
-      join curriculum_chapter ch on ch.subject_id=s.id
-      left join lesson l on l.chapter_id=ch.id
+      left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
+      left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      where c.code=(select class_code from student where id=?)
+      where c.active=true and s.active=true and c.code=(select class_code from student where id=?)
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
       """,studentId,studentId));
     result.put("mastery",jdbc.queryForMap("""
