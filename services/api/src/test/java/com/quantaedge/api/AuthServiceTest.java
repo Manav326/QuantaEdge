@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -120,6 +121,31 @@ class AuthServiceTest {
         .thenReturn(List.of(Map.of("last_login_at", Timestamp.from(Instant.now()))));
 
     assertFalse(auth.isStaffFirstAccess("7070107483"));
+  }
+
+  @Test
+  void administratorGetsEveryCurrentPermissionFromCatalogNotStaleGrantRows() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+    List<String> catalog = List.of("AUDIT_VIEW", "CONTENT_REVIEW", "CONTENT_PUBLISH", "STAFF_MANAGE");
+    when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 9L))
+        .thenReturn("ADMIN");
+    when(jdbc.queryForList(
+        "select permission_key from staff_permission_catalog order by permission_key", String.class))
+        .thenReturn(catalog);
+
+    assertIterableEquals(catalog, auth.permissionsForStaff(9L));
+  }
+
+  @Test
+  void suspendedEmployeeStillShowsConfiguredGrantsButAuthorizationRejectsUse() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+    List<String> grants = List.of("CONTENT_VIEW", "CONTENT_EDIT");
+    when(jdbc.queryForObject("select role from staff_account where id=?", String.class, 12L))
+        .thenReturn("CONTENT_AUTHOR");
+    when(jdbc.queryForList(contains("from staff_permission_grant"), eq(String.class), eq(12L)))
+        .thenReturn(grants);
+
+    assertIterableEquals(grants, auth.permissionsForStaff(12L));
   }
 
   private static String hash(String value) throws Exception {
