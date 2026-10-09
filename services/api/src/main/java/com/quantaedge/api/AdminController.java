@@ -230,7 +230,7 @@ public class AdminController {
       String tags=toJson(item.getOrDefault("tags",List.of()));
       Long qid=jdbc.queryForObject("""
         insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,source_kind,source_title,source_ref,source_year,source_id,board,marks,exam_format,topic,subtopic,skill,tags,answer_payload,review_status)
-        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT') returning id
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?::jsonb,'DRAFT') returning id
         """,Long.class,lessonId,String.valueOf(item.getOrDefault("questionType","SHORT_ANSWER")),
         item.get("prompt"),item.get("explanation"),String.valueOf(item.getOrDefault("difficulty","CORE")),
         Integer.valueOf(String.valueOf(item.getOrDefault("sortOrder",imported+1))),sourceKind,sourceTitle,sourceRef,sourceYear,sourceId,board,
