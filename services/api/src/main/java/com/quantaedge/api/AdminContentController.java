@@ -427,8 +427,8 @@ public class AdminContentController {
     if ("PUBLISHED".equals(status) && !"PUBLISHED".equals(previousStatus)) {
       throw badRequest("Use the separate Publish action after review checks are complete.");
     }
-    // Editing a currently published topic must remove the edited draft from learners until it is reviewed and republished.
-    if ("PUBLISHED".equals(previousStatus)) status="DRAFT";
+    // Any save to a submitted or published topic creates a draft that must be previewed/submitted again.
+    if ("PUBLISHED".equals(previousStatus) || "REVIEW".equals(previousStatus)) status="DRAFT";
     if (sourceVerified) requireCompleteSourceReference(sourceTitle, sourceUrl, sourceEdition, sourcePages, "lesson");
     if ("PUBLISHED".equals(status) && !sourceVerified) {
       throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
@@ -1001,7 +1001,7 @@ public class AdminContentController {
         }
         if (changed) {
           questionContentChanged = true;
-          if ("APPROVED".equals(String.valueOf(existing.get("review_status"))) || "PUBLISHED".equals(String.valueOf(existing.get("review_status")))) {
+          if (Set.of("APPROVED","PUBLISHED","REVIEW","REJECTED").contains(String.valueOf(existing.get("review_status")).toUpperCase())) {
             reviewStatus = "DRAFT";
             reviewNotes = "Question content or provenance changed; review and approve again before publishing.";
           }
