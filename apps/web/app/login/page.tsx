@@ -50,11 +50,12 @@ export default function LoginPage(){
       const r=await fetch('/api/v1/auth/request-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mobile:mobile.trim(),purpose})});
       const b=await readApiJson(r);
       if(!r.ok){
-        const fallback=r.status===400
-          ? (mode==='login'
-              ? 'Login request was rejected. If this is your first visit, choose Register; otherwise wait briefly and retry.'
-              : 'OTP request was rejected. Check the mobile number and try again shortly.');
-        throw new Error(b.message||fallback||`OTP request failed (HTTP ${r.status})`);
+        const fallback = r.status === 400
+          ? (mode === 'login'
+              ? 'No existing account was found or the OTP request is temporarily limited. If this is your first visit, choose Register.'
+              : 'Check the mobile number and retry after any OTP cooldown.')
+          : `OTP request failed (HTTP ${r.status})`;
+        throw new Error(b.message || fallback);
       }
       setDevCode(b.devCode||''); setOtp(''); setStep('otp');
     }catch(e:any){setError(e.message||'OTP request failed')}finally{setBusy(false)}
