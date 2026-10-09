@@ -579,8 +579,8 @@ public class AdminContentController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where l.id=? and l.active=true and ch.active=true
-        and (not ? or ch.content_status='PUBLISHED')
+      where l.id=? and l.active=true
+        and (not ? or (ch.active=true and ch.content_status='PUBLISHED'))
         and s.active=true and c.active=true
       """, Long.class, lessonId, requirePublishedChapter);
     if (parentReady == null || parentReady == 0) {
