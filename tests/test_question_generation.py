@@ -126,7 +126,7 @@ class QuestionGenerationTests(unittest.TestCase):
 
     def test_valid_generated_mcq_passes_checks(self):
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), 1, ["MCQ"], chunk)
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
         self.assertEqual("B", checked["questions"][0]["answer_payload"]["value"])
 
     def test_mcq_must_have_exactly_one_answer_matching_key(self):
@@ -134,32 +134,32 @@ class QuestionGenerationTests(unittest.TestCase):
         output["questions"][0]["options"][0]["correct"] = True
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
         with self.assertRaisesRegex(ValueError, "exactly one correct option"):
-            GEN.validate_model_output(output, 1, ["MCQ"], chunk)
+            GEN.validate_model_output(output, ["MCQ"], chunk)
 
     def test_questions_cannot_reference_pages_outside_their_excerpt(self):
         output = sample_model_output()
         output["questions"][0]["source_page_numbers"] = [99]
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
         with self.assertRaisesRegex(ValueError, "cite only pages"):
-            GEN.validate_model_output(output, 1, ["MCQ"], chunk)
+            GEN.validate_model_output(output, ["MCQ"], chunk)
 
     def test_unsupported_types_are_rejected(self):
         output = sample_model_output()
         output["questions"][0]["question_type"] = "LONG_ANSWER"
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
         with self.assertRaisesRegex(ValueError, "disallowed type"):
-            GEN.validate_model_output(output, 1, ["MCQ"], chunk)
+            GEN.validate_model_output(output, ["MCQ"], chunk)
 
     def test_input_and_numerical_answer_payloads_are_typed(self):
         chunk = {"page_numbers": [2], "page_start": 2, "page_end": 2, "text": "excerpt"}
         output = sample_model_output()
         q = output["questions"][0]
         q.update(question_type="INPUT", options=[], answer_payload={"kind": "TEXT", "value": "5"})
-        checked = GEN.validate_model_output(output, 1, ["INPUT"], chunk)
+        checked = GEN.validate_model_output(output, ["INPUT"], chunk)
         self.assertEqual("TEXT", checked["questions"][0]["answer_payload"]["kind"])
         q.update(question_type="NUMERICAL", answer_payload={"kind": "NUMERIC", "value": "5"})
         with self.assertRaisesRegex(ValueError, "finite numeric"):
-            GEN.validate_model_output(output, 1, ["NUMERICAL"], chunk)
+            GEN.validate_model_output(output, ["NUMERICAL"], chunk)
 
     def test_question_type_mix_is_deterministic_and_curriculum_aware(self):
         maths = GEN.scheduled_question_types(12, {"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL"}, "maths")
@@ -175,7 +175,7 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_candidate_bundle_is_never_auto_approved(self):
         _, source, chapters = GEN.validate_extraction(sample_extraction())
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), 1, ["MCQ"], chunk)
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
         bundle = GEN.build_candidate_bundle(
             sample_extraction()["curriculum"], source, chapters[0], [(chunk, checked)], "test-model"
         )
@@ -188,7 +188,7 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_review_gate_requires_all_five_confirmations(self):
         _, source, chapters = GEN.validate_extraction(sample_extraction())
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), 1, ["MCQ"], chunk)
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
         candidate = GEN.build_candidate_bundle(
             sample_extraction()["curriculum"], source, chapters[0], [(chunk, checked)], "test-model"
         )
