@@ -3,15 +3,12 @@ package com.quantaedge.api;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,20 +30,21 @@ public class AdminContentController {
   private static final Set<String> LESSON_STATUSES = Set.of("DRAFT", "REVIEW", "PUBLISHED", "ARCHIVED");
   private static final Set<String> BLOCK_TYPES = Set.of(
       "EXPLANATION", "IMAGE", "DIAGRAM", "VIDEO", "QUESTION", "MCQ", "TRUE_FALSE",
-      "MATCH", "ORDER", "INPUT", "HINT", "AI_HELP", "SUMMARY", "CHALLENGE");
-  private static final Set<String> QUESTION_TYPES = Set.of("MCQ", "TRUE_FALSE", "INPUT");
+      "MATCH", "ORDER", "INPUT", "HINT", "AI_HELP", "SUMMARY", "CHALLENGE",
+      "PREREQUISITE", "WORKED_EXAMPLE", "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE", "RECAP");
+  private static final Set<String> QUESTION_TYPES = Set.of(
+      "MCQ", "TRUE_FALSE", "INPUT", "MATCH", "ORDER", "ASSERTION_REASON",
+      "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "NUMERICAL", "DIAGRAM", "MAP", "SOURCE_BASED");
   private static final Set<String> DIFFICULTIES = Set.of("FOUNDATION", "CORE", "CHALLENGE");
 
   private final JdbcTemplate jdbc;
   private final ObjectMapper mapper;
-  private final String adminToken;
-  private final boolean localPreviewMode;
+  private final AuthorizationService authorization;
 
-  public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, Environment environment) {
+  public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization) {
     this.jdbc = jdbc;
     this.mapper = mapper;
-    this.adminToken = environment.getProperty("app.admin.content-token", "").trim();
-    this.localPreviewMode = environment.getProperty("app.demo-seed", Boolean.class, false);
+    this.authorization = authorization;
   }
 
   @GetMapping
@@ -528,12 +526,9 @@ public class AdminContentController {
   }
 
   private void authorize(String suppliedToken, AuthContext context) {
-    if (context != null && context.isAdmin()) return;
-    if (localPreviewMode && adminToken.isBlank()) return;
-    if (!adminToken.isBlank() && suppliedToken != null && MessageDigest.isEqual(
-        adminToken.getBytes(StandardCharsets.UTF_8), suppliedToken.getBytes(StandardCharsets.UTF_8))) return;
-    throw new ResponseStatusException(HttpStatus.FORBIDDEN,
-        "Admin content access requires a valid X-Admin-Token. Configure QUANTAEDGE_ADMIN_TOKEN.");
+    // A browser-supplied shared secret or demo-mode flag is not an identity.
+    // All content authoring and publishing requires a valid authenticated admin session.
+    authorization.requireAdmin(context);
   }
 
   private static List<Map<String, Object>> objectList(Object value, String name) {
