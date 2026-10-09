@@ -17,13 +17,18 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    jdbc.update("delete from student where environment='LOCAL_PREVIEW'");
+    UUID previewPublicId = UUID.fromString("7f4c7e1a-1b21-4db9-a6f6-9d4a1f1e7a31");
+    jdbc.update("delete from student where environment='LOCAL_PREVIEW' and public_id<>?", previewPublicId);
 
     Long studentId = jdbc.queryForObject("""
-      insert into student(public_id, display_name, class_code, board, language, environment)
-      values (?, 'आर्यन', '7', 'Bihar Board', 'hi', 'LOCAL_PREVIEW')
+      insert into student(public_id, display_name, class_code, board, language, environment, active)
+      values (?, 'आर्यन', '7', 'Bihar Board', 'hi', 'LOCAL_PREVIEW', true)
+      on conflict (public_id) do update set
+        display_name=excluded.display_name, class_code=excluded.class_code,
+        board=excluded.board, language=excluded.language,
+        environment='LOCAL_PREVIEW', active=true
       returning id
-      """, Long.class, UUID.fromString("7f4c7e1a-1b21-4db9-a6f6-9d4a1f1e7a31"));
+      """, Long.class, previewPublicId);
 
     jdbc.update("""
       insert into student_lesson_progress(
@@ -32,6 +37,11 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
       select ?, id, 'COMPLETED', 100, now(), now(), now()
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
+      on conflict (student_id,lesson_id) do update set
+        status='COMPLETED', progress_percent=100,
+        started_at=coalesce(student_lesson_progress.started_at, excluded.started_at),
+        completed_at=coalesce(student_lesson_progress.completed_at, excluded.completed_at),
+        last_opened_at=coalesce(student_lesson_progress.last_opened_at, excluded.last_opened_at)
       """, studentId);
 
     jdbc.update("""
