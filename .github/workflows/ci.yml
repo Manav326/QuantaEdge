@@ -70,6 +70,25 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.api == 'true'
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: quantaedge
+          POSTGRES_USER: quantaedge
+          POSTGRES_PASSWORD: quantaedge-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U quantaedge -d quantaedge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/quantaedge
+      SPRING_DATASOURCE_USERNAME: quantaedge
+      SPRING_DATASOURCE_PASSWORD: quantaedge-test
+      APP_DEMO_SEED: "false"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
