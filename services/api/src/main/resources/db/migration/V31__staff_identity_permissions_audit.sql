@@ -125,3 +125,11 @@ create table staff_audit_log (
 
 create index idx_staff_audit_created on staff_audit_log(created_at desc);
 create index idx_staff_audit_actor_created on staff_audit_log(actor_staff_id, created_at desc);
+
+-- Make the reviewer visible on the question itself as well as in the append-only staff activity trail.
+alter table question
+  add column if not exists reviewed_by_staff_id bigint references staff_account(id) on delete set null;
+
+create index if not exists idx_question_reviewed_by_staff
+  on question(reviewed_by_staff_id, reviewed_at desc)
+  where reviewed_by_staff_id is not null;
