@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 import java.nio.charset.StandardCharsets;
@@ -54,7 +55,7 @@ class AuthServiceTest {
         "attempts", 0,
         "expires_at", Timestamp.from(Instant.now().plusSeconds(120)),
         "purpose", "STAFF_LOGIN");
-    when(jdbc.queryForList(contains("from otp_challenge where mobile_e164=?"), eq(mobile)))
+    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("STAFF_LOGIN")))
         .thenReturn(List.of(otpRow));
     when(jdbc.queryForList("select id, active, last_login_at from staff_account where mobile_e164=?", mobile))
         .thenReturn(List.of());
@@ -70,8 +71,8 @@ class AuthServiceTest {
     assertNotNull(context);
     assertEquals(staffId, context.staffId());
     assertEquals("ADMIN", context.role());
-    verify(jdbc).update(contains("update auth_session set revoked_at=now()"), eq(mobile));
-    verify(jdbc).update(contains("update user_account set role='PARENT', active=false"), eq(mobile));
+    verify(jdbc, never()).update(contains("update auth_session set revoked_at=now()"), eq(mobile));
+    verify(jdbc, never()).update(contains("update user_account set role='PARENT', active=false"), eq(mobile));
     verify(jdbc).update(contains("insert into staff_permission_grant"), eq(staffId));
   }
 
