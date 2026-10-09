@@ -20,6 +20,40 @@ create index if not exists idx_auth_session_staff_active
   on auth_session(staff_id, expires_at)
   where staff_id is not null;
 
+-- Permit an authenticated session to belong to a staff identity as well as a parent/user or student.
+-- Replace only a legacy guard that required user_id or student_id; keep unrelated constraints intact.
+do $
+declare
+  constraint_row record;
+  definition text;
+begin
+  for constraint_row in
+    select conname, pg_get_constraintdef(oid) as definition
+    from pg_constraint
+    where conrelid='public.auth_session'::regclass and contype='c'
+  loop
+    definition := constraint_row.definition;
+    if definition ilike '%user_id IS NOT NULL%'
+       and definition ilike '%student_id IS NOT NULL%'
+       and definition ilike '% OR %' then
+      execute format('alter table public.auth_session drop constraint %I', constraint_row.conname);
+    end if;
+  end loop;
+end $;
+
+do $
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid='public.auth_session'::regclass
+      and conname='auth_session_identity_required'
+  ) then
+    alter table public.auth_session
+      add constraint auth_session_identity_required
+      check (user_id is not null or student_id is not null or staff_id is not null);
+  end if;
+end $;
+
 create table staff_permission_catalog (
   permission_key varchar(64) primary key,
   display_name varchar(120) not null,
@@ -61,6 +95,18 @@ from staff_account s
 cross join staff_permission_catalog p
 where s.role='ADMIN'
 on conflict(staff_id, permission_key) do nothing;
+
+-- Revoke sessions that were issued while an admin identity still used the user_account role.
+-- Staff must establish a fresh session from the dedicated staff identity before using the console.
+update auth_session s
+set revoked_at=now()
+where s.revoked_at is null
+  and s.user_id in (
+    select u.id
+    from user_account u
+    join staff_account staff on staff.mobile_e164=u.mobile_e164
+    where u.role='ADMIN'
+  );
 
 -- An administrator identity is no longer also a parent/user role. Its original row is retained
 -- for referential integrity and any guardian relations; normal parent authentication won't use it
