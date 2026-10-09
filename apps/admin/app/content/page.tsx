@@ -474,11 +474,11 @@ export default function ContentStudio(){
    {ok:questionsReady,label:'7. Every active question is approved and valid',detail:questionApprovalDetail},
    {ok:chapterReady,label:'8. Parent chapter is published',detail:chapterReadinessDetail}
   ];
-  const preparationReady=basicsReady&&blocksReady&&sourceReady&&activeQuestions.length>0;
+  const preparationReady=lessonStatus!=='ARCHIVED'&&basicsReady&&blocksReady&&sourceReady&&activeQuestions.length>0;
   const reviewStageReady=submittedForReview&&questionsReady;
   const publishedStageReady=lessonStatus==='PUBLISHED'&&chapterReady;
   const workflowSteps=[
-   {label:'Prepare',ok:preparationReady},
+   {label:lessonStatus==='ARCHIVED'?'Restore':'Prepare',ok:preparationReady},
    {label:'Preview',ok:previewReviewed},
    {label:'Review',ok:reviewStageReady},
    {label:'Published',ok:publishedStageReady}
