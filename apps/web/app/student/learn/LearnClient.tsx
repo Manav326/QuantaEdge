@@ -141,11 +141,17 @@ export default function LearnClient() {
   },[trackBrowse]);
 
   async function loadLesson(id:number) {
-    const detail=await fetch('/api/v1/learning/lessons/'+id).then(r=>{
-      if(!r.ok) throw new Error('lesson');
-      return r.json();
-    }) as Detail;
-    setLesson(detail);
+    try {
+      const started=await fetch('/api/v1/learning/lessons/'+id+'/start',{method:'POST'});
+      if(!started.ok) throw new Error('lesson progress');
+      const detail=await fetch('/api/v1/learning/lessons/'+id).then(r=>{
+        if(!r.ok) throw new Error('lesson');
+        return r.json();
+      }) as Detail;
+      setLesson(detail);
+    } catch {
+      setError('इस पाठ को खोलने या progress save करने में समस्या हुई। फिर प्रयास करें।');
+    }
   }
 
   useEffect(()=>{
