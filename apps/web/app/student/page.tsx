@@ -22,6 +22,20 @@ export default function StudentHome(){
       <section className="app-content">
         <div className="welcome-row"><div><span className="eyebrow">आपकी learning journey · Class {data.class_code}</span><h1>नमस्ते, {data.display_name} 👋</h1><p>आज की पढ़ाई आपकी progress और mastery के आधार पर आगे बढ़ती है।</p></div><div className="streak-card">✓ <strong>{Math.round(Number(stats.completion_percent))}%</strong><span>curriculum complete</span></div></div>
         <div className="goal-card"><div><span>Learning progress</span><strong>{stats.completed_lessons} / {stats.total_lessons} lessons</strong><small>{q.attempts} attempts · {q.accuracy_percent}% graded accuracy</small></div><div className="goal-ring">{Math.round(Number(stats.completion_percent))}%</div></div>
+        <div className="content-heading"><h2>आपके दो विषय</h2><span>Class {data.class_code}</span></div>
+        <div className="task-list subject-tracks">
+          {(['maths','science'] as const).map((subjectCode)=>{
+            const track=(data.curriculum||[]).find((item:any)=>item.subject_code===subjectCode);
+            const title=subjectCode==='maths'?'गणित':'विज्ञान';
+            const count=Number(track?.lessons||0);
+            return <Link key={subjectCode} href={'/student/learn?subjectCode='+subjectCode} className="app-task">
+              <span className="task-icon">{subjectCode==='maths'?'∑':'⚗'}</span>
+              <div><strong>{title}</strong><small>{Number(track?.chapters||0)} अध्याय · {count} प्रकाशित पाठ</small>
+              <small>{count>0?'उपलब्ध पाठ देखें':'इस विषय के पाठ समीक्षा/लेखन में हैं; प्रकाशित होने पर यहाँ दिखेंगे।'}</small></div>
+              <span className="task-action">→</span>
+            </Link>;
+          })}
+        </div>
         <div className="content-heading"><h2>आज क्या करें?</h2><span>mastery-driven</span></div>
         <div className="task-list">
           {rec?.kind==='DIAGNOSTIC' ? <Link href="/student/diagnostic" className="app-task next"><span className="task-icon">◎</span><div><strong>पहला learning diagnostic</strong><small>छोटा assessment → आपकी शुरुआती recommendation</small></div><span className="task-action">→</span></Link> : rec?.lesson ? <Link href={'/student/learn?lessonId='+rec.lesson.id} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small>आपकी progress और mastery के आधार पर recommended lesson</small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong>पूरा curriculum पूरा हो गया 🎉</strong><small>अब आप अभ्यास दोहरा सकते हैं या अपनी mastery देख सकते हैं।</small></div></div> : null}
