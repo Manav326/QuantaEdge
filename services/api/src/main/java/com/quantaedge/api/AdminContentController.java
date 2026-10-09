@@ -604,11 +604,11 @@ public class AdminContentController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED'
+      where l.id=? and l.active=true and ch.active=true
         and s.active=true and c.active=true
       """,Long.class,lessonId);
     if(parentReady==null||parentReady==0) {
-      throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
+      throw badRequest("Ensure the chapter, class and subject are active before submitting this micro-topic. The chapter may remain a draft during review.");
     }
     Long sourceReady=jdbc.queryForObject("""
       select count(*) from lesson
