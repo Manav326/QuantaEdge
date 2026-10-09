@@ -127,7 +127,17 @@ class ReviewedContentImportTests(unittest.TestCase):
         self.assertFalse(patch["alignmentSourceVerified"])
         self.assertEqual("DRAFT", patch["questions"][0]["review_status"])
         self.assertEqual("AUTHOR_CREATED", patch["questions"][0]["source_kind"])
+        self.assertEqual("FOUNDATION", patch["questions"][0]["difficulty"])
         self.assertFalse(patch["questions"][0].get("correctAnswer"))
+
+    def test_question_source_page_reference_is_preserved_on_import(self):
+        bundle = valid_bundle()
+        bundle["lessons"][0]["questions"][0]["source_ref"] = "AI-generated candidate; verify PDF page(s) 20"
+        operations = MODULE.make_request_payloads(bundle)
+        self.assertEqual(
+            "AI-generated candidate; verify PDF page(s) 20",
+            operations[2]["body"]["questions"][0]["source_ref"],
+        )
 
     def test_dry_run_does_not_require_session_or_call_network(self):
         result = MODULE.run_import(valid_bundle(), "http://localhost:8080", "", dry_run=True)
