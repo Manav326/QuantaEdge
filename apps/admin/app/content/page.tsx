@@ -108,19 +108,35 @@ function blockHasPublishableContent(block:ContentBlock){
    return meaningfulContent(value.body||value.description||value.prompt||value.question||value.text);
  }
 }
-function questionHasValidAnswer(question:any){
+function questionReadinessIssues(question:any):string[]{
+ const issues:string[]=[];
  const type=String(question.question_type||'').toUpperCase();
- if(!meaningfulContent(question.prompt)||!['APPROVED','PUBLISHED'].includes(String(question.review_status||'').toUpperCase()))return false;
- if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))return false;
+ const status=String(question.review_status||'DRAFT').toUpperCase();
+ if(question.active===false)issues.push('This question is inactive and is not counted toward publication.');
+ if(!meaningfulContent(question.prompt))issues.push('Add a meaningful question prompt.');
+ if(!['APPROVED','PUBLISHED'].includes(status))issues.push(status==='REJECTED'?'This question was returned; correct it and resubmit for review.':'A reviewer must approve this question before the micro-topic can be published.');
+ if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))issues.push('This question type is not currently supported for automatic scoring.');
+ const answer=question.answer_payload&&typeof question.answer_payload==='object'?question.answer_payload:parsed(question.answer_payload,{});
  if(type==='MCQ'||type==='TRUE_FALSE'){
-  const options=Array.isArray(question.options)?question.options:[];
+  const options=Array.isArray(question.options)?question.options:parsed(question.options,[]);
   const correctOptions=options.filter((option:any)=>Boolean(option.correct));
-  const answer=question.answer_payload||{};
-  return options.length>=2&&options.every((option:any)=>meaningfulContent(option.label))&&correctOptions.length===1&&answer.kind==='OPTION'&&String(answer.value)===String(correctOptions[0]?.key);
+  if(options.length<2)issues.push('Add at least two answer options.');
+  if(options.some((option:any)=>!meaningfulContent(option.label)))issues.push('Fill in every answer option.');
+  if(correctOptions.length!==1)issues.push('Mark exactly one answer as correct.');
+  if(correctOptions.length===1&&(answer.kind!=='OPTION'||String(answer.value)!==String(correctOptions[0]?.key)))issues.push('The answer key must match the option marked correct.');
+ }else if(type==='INPUT'){
+  if(answer.kind!=='TEXT'||!meaningfulContent(answer.value))issues.push('Add the expected text answer.');
+ }else if(type==='NUMERICAL'){
+  if(answer.kind!=='NUMERIC'||answer.value===undefined||answer.value===null||String(answer.value).trim()==='')issues.push('Add the numeric answer key.');
  }
- const answer=question.answer_payload||{};
- if(type==='INPUT')return answer.kind==='TEXT'&&meaningfulContent(answer.value);
- return answer.kind==='NUMERIC'&&answer.value!==undefined&&answer.value!==null&&String(answer.value).trim()!=='';
+ const sourceKind=String(question.source_kind||'AUTHOR_CREATED').toUpperCase();
+ if(sourceKind!=='AUTHOR_CREATED'&&(!question.source_id||!String(question.source_ref||'').trim()||!question.source_year||!String(question.source_title||'').trim()||!String(question.board||'').trim())){
+  issues.push('Complete the registered source, board, year and exact page/reference for this sourced question.');
+ }
+ return [...new Set(issues)];
+}
+function questionHasValidAnswer(question:any){
+ return questionReadinessIssues(question).length===0;
 }
 function questionsForSnapshot(showAdvanced:boolean,questionJson:string,questions:any[]){
  if(!showAdvanced)return questions;
@@ -375,7 +391,9 @@ export default function ContentStudio(){
   const activeBlocks=blocks.filter(block=>block.active!==false);
   const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&activeBlocks.every(blockHasPublishableContent);
   const activeQuestions=questions.filter(question=>question.active!==false);
-  const questionsReady=activeQuestions.length>0&&activeQuestions.every(questionHasValidAnswer);
+  const validActiveQuestionCount=activeQuestions.filter(questionHasValidAnswer).length;
+  const invalidActiveQuestionDetails=activeQuestions.map((question:any,index:number)=>({number:index+1,issues:questionReadinessIssues(question)})).filter((item:any)=>item.issues.length>0);
+  const questionsReady=activeQuestions.length>0&&validActiveQuestionCount===activeQuestions.length;
   const lessonSourceDetailsComplete=Boolean(String(form.alignmentSourceTitle||'').trim()&&/^https:\/\//i.test(String(form.alignmentSourceUrl||''))&&String(form.alignmentSourceEdition||'').trim()&&String(form.alignmentPageRange||'').trim());
   const chapterSourceDetailsComplete=Boolean(String(form.curriculumSource||'').trim()&&/^https:\/\//i.test(String(form.curriculumSourceUrl||''))&&String(form.curriculumSourceEdition||'').trim()&&String(form.curriculumSourcePages||'').trim());
   const lessonSourceDetailsChanged=Boolean(selected?.type==='lesson'&&detail&&(
@@ -402,9 +420,9 @@ export default function ContentStudio(){
    {ok:basicsReady,label:'Topic title and learner goal are complete',detail:basicsReady?'Title, learner goal and learning time are present':'Add a clear topic title, learner goal and valid time'},
    {ok:blocksReady,label:'Teaching blocks contain real content',detail:activeBlocks.length?String(activeBlocks.filter(blockHasPublishableContent).length)+' of '+activeBlocks.length+' active blocks complete':'Add at least one active teaching block'},
    {ok:previewReviewed,label:'Current learner preview has been checked',detail:previewReviewed?'Preview checked against the current version':'Open the learner preview and mark it checked'},
-   {ok:activeQuestions.length>0,label:'At least one practice question is included',detail:activeQuestions.length?String(activeQuestions.length)+' active question(s) ready for review':'Add at least one active practice question'},
+   {ok:activeQuestions.length>0,label:'At least one practice question is included',detail:activeQuestions.length?String(activeQuestions.length)+' active question(s) included':questions.length?String(questions.length)+' question(s) are listed, but none are active. Activate at least one to include it in publishing.':'Add at least one active practice question'},
    {ok:submittedForReview,label:'Micro-topic submitted for review',detail:form.lessonStatus==='REVIEW'?'A reviewer can now approve or return the questions':form.lessonStatus==='PUBLISHED'?'Previously reviewed content is published':form.lessonStatus==='ARCHIVED'?'Archived content can be restored only after the remaining checks pass':'Save your changes, then select Submit for review'},
-   {ok:questionsReady,label:'Practice questions are approved and valid',detail:activeQuestions.length?String(activeQuestions.filter(questionHasValidAnswer).length)+' of '+activeQuestions.length+' active questions approved and complete':'Ask a reviewer to approve the active questions'},
+   {ok:questionsReady,label:'Practice questions are approved and valid',detail:activeQuestions.length?String(validActiveQuestionCount)+' of '+activeQuestions.length+' active questions approved and complete'+(invalidActiveQuestionDetails.length?'; '+invalidActiveQuestionDetails.slice(0,2).map((item:any)=>'Q'+item.number+': '+item.issues[0]).join(' · ')+(invalidActiveQuestionDetails.length>2?' · and '+(invalidActiveQuestionDetails.length-2)+' more':''):'') : questions.length?String(questions.length)+' question(s) exist, but none are active. Activate a question and save.':'Add an active question, submit the micro-topic for review, then have a reviewer approve each question.'},
    {ok:sourceReady,label:'Official textbook mapping is complete',detail:sourceReady?'Source, HTTPS URL, edition and pages verified':canReview?'Add the official source title, HTTPS URL, edition and page range, then verify it against the source':'Complete the source title, HTTPS URL, edition and page range; a reviewer must verify it'},
    {ok:chapterReady,label:'Parent chapter is published',detail:chapterReady?'Parent chapter is published and active':parentChapterAvailable?'The active parent chapter can remain a draft during review, but must be published before this topic goes live.':'Restore or activate the parent chapter before submitting this topic'}
   ];
@@ -472,7 +490,7 @@ export default function ContentStudio(){
        <div className="qe-block-catalog"><div><span className="admin-kicker">ADD TO TEACHING SEQUENCE</span><p>Pick the content format that best clarifies this micro-topic.</p></div><div className="qe-block-catalog-grid">{BLOCK_OPTIONS.map(option=><button type="button" key={option.type} disabled={!canEdit||saving} onClick={()=>addBlock(option.type)}><span>{option.icon}</span><b>{option.label}</b><small>{option.hint}</small></button>)}</div></div>
       </div>
       <div className="qe-editor-section qe-assessment-section"><div className="qe-editor-section-title"><div><h3>Practice and understanding</h3><p>Keep answer keys accurate. All review and publishing restrictions remain validated by the API.</p></div><button type="button" className="qe-secondary-button" disabled={!canEdit||saving} onClick={addQuestion}>＋ Add MCQ</button></div>
-       {questions.length===0?<div className="qe-empty-questions"><span>✦</span><b>No practice questions yet</b><p>Add a question to check that the learner understood the concept.</p><button type="button" className="qe-secondary-button" disabled={!canEdit||saving} onClick={addQuestion}>Create first question</button></div>:questions.map((q:any,index:number)=><article className="qe-question-author" key={q.id||'new-'+index}><header><span className="qe-question-num">Q{index+1}</span><div><strong>{q.prompt||'Untitled question'}</strong><small>{q.question_type} <i>·</i> {q.review_status||'DRAFT'} <i>·</i> {q.difficulty||'CORE'}</small></div><button type="button" className="qe-question-remove" title="Remove question" disabled={!canEdit||saving} onClick={()=>{const next=questions.filter((_,i)=>i!==index);setQuestions(next);setQuestionJson(JSON.stringify(next,null,2))}}>×</button></header>
+       {questions.length===0?<div className="qe-empty-questions"><span>✦</span><b>No practice questions yet</b><p>Add a question to check that the learner understood the concept.</p><button type="button" className="qe-secondary-button" disabled={!canEdit||saving} onClick={addQuestion}>Create first question</button></div>:questions.map((q:any,index:number)=><article className="qe-question-author" key={q.id||'new-'+index}><header><span className="qe-question-num">Q{index+1}</span><div><strong>{q.prompt||'Untitled question'}</strong><small>{q.question_type} <i>·</i> {q.review_status||'DRAFT'} <i>·</i> {q.active===false?'INACTIVE':'ACTIVE'} <i>·</i> {q.difficulty||'CORE'}</small></div><button type="button" className={'qe-question-activate '+(q.active===false?'is-inactive':'')} disabled={!canEdit||saving} onClick={()=>updateQuestion(index,{active:q.active===false})}>{q.active===false?'Activate':'Deactivate'}</button><button type="button" className="qe-question-remove" title="Remove question" disabled={!canEdit||saving} onClick={()=>{const next=questions.filter((_,i)=>i!==index);setQuestions(next);setQuestionJson(JSON.stringify(next,null,2))}}>×</button></header>{q.active===false?<div className="qe-question-diagnostic inactive"><strong>Not counted for publishing</strong><span>Activate this question to include it in the learning experience, then save your changes.</span></div>:questionReadinessIssues(q).length>0?<div className="qe-question-diagnostic"><strong>Needs attention</strong><span>{questionReadinessIssues(q).join(' ')}</span></div>:<div className="qe-question-diagnostic ready"><strong>Question checks passed</strong><span>This active question has an approved status and a valid answer key.</span></div>}
         {q.question_type==='MCQ'||q.question_type==='TRUE_FALSE'?<><label className="qe-form-field">Question prompt<textarea rows={2} value={q.prompt||''} onChange={e=>updateQuestion(index,{prompt:e.target.value})}/></label><div className="qe-options-list">{(q.options||[]).map((option:any,oi:number)=><label key={option.key||oi}><input type="radio" name={'correct-'+index} checked={Boolean(option.correct)} disabled={!canEdit||saving} onChange={()=>{const options=(q.options||[]).map((o:any,j:number)=>({...o,correct:j===oi}));updateQuestion(index,{options,answer_payload:{kind:'OPTION',value:option.key}})}}/><input value={option.label||''} onChange={e=>updateOption(index,oi,{label:e.target.value})} aria-label={'Answer option '+(oi+1)}/><span>{option.key}</span></label>)}</div><label className="qe-form-field">Explanation after answering<textarea rows={2} value={q.explanation||''} onChange={e=>updateQuestion(index,{explanation:e.target.value})}/></label><div className="qe-form-grid"><label>Question difficulty<select disabled={!canEdit||saving} value={q.difficulty||'CORE'} onChange={e=>updateQuestion(index,{difficulty:e.target.value})}><option value="FOUNDATION">Foundation</option><option value="CORE">Core</option><option value="CHALLENGE">Challenge</option></select></label><div className="qe-question-workflow-state"><span>Review state</span><b>{String(q.review_status||'DRAFT').replaceAll('_',' ')}</b><small>{['APPROVED','PUBLISHED'].includes(String(q.review_status||'').toUpperCase())?'Reviewed content is currently approved':'A reviewer must approve this question before publishing'}</small></div></div>
         {canReview&&q.id?<div className="qe-question-review"><small>{hasUnsavedChanges?'Save pending changes before review.':form.lessonStatus!=='REVIEW'?'The author must submit the micro-topic for review first.':'Review as a separate workflow action.'}</small><button type="button" disabled={saving||hasUnsavedChanges||form.lessonStatus!=='REVIEW'||!meaningfulContent(q.prompt)} onClick={()=>void reviewQuestion(Number(q.id),'APPROVED')}>Approve question</button><button type="button" disabled={saving||hasUnsavedChanges||form.lessonStatus!=='REVIEW'||!meaningfulContent(q.prompt)} onClick={()=>void reviewQuestion(Number(q.id),'REJECTED')}>Return to author</button></div>:canReview?<p className="qe-staff-help">Save this new question before a reviewer can approve it.</p>:null}</>:<div className="qe-editor-hint">This existing {q.question_type} question is preserved. Use the advanced assessment editor below to edit specialist question formats.</div>}
        </article>)}
