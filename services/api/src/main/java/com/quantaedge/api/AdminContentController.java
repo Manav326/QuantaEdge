@@ -352,7 +352,7 @@ public class AdminContentController {
         current.get("alignment_source_edition")==null?null:String.valueOf(current.get("alignment_source_edition")),
         current.get("alignment_page_range")==null?null:String.valueOf(current.get("alignment_page_range")),
         "micro-topic");
-    jdbc.update("update lesson set alignment_source_verified=true,updated_at=now() where id=?",lessonId);
+    jdbc.update("update lesson set alignment_source_verified=true where id=?",lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/verify-source",
         "Verified official textbook mapping for micro-topic '"+current.get("lesson_title")+"'.");
     return lessonById(lessonId);
@@ -404,7 +404,7 @@ public class AdminContentController {
       throw badRequest("Unpublish or restore this lesson before submitting it for review.");
     }
     validateLessonForSubmission(lessonId);
-    jdbc.update("update lesson set status='REVIEW', active=true, updated_at=now() where id=?",lessonId);
+    jdbc.update("update lesson set status='REVIEW', active=true where id=?",lessonId);
     jdbc.update("""
         update question
         set review_status='REVIEW',review_notes=null,reviewed_at=null,reviewed_by_staff_id=null
@@ -427,7 +427,7 @@ public class AdminContentController {
       throw badRequest("Submit the micro-topic for review before publishing it.");
     }
     validateLessonForPublishing(lessonId);
-    jdbc.update("update lesson set status='PUBLISHED', active=true, updated_at=now() where id=?",lessonId);
+    jdbc.update("update lesson set status='PUBLISHED', active=true where id=?",lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/publish",
         "Published micro-topic '"+current.get("lesson_title")+"'.");
     return lessonById(lessonId);
@@ -440,7 +440,7 @@ public class AdminContentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
     lessonById(lessonId);
-    jdbc.update("update lesson set status='DRAFT', active=true, updated_at=now() where id=?",lessonId);
+    jdbc.update("update lesson set status='DRAFT', active=true where id=?",lessonId);
     Map<String,Object> result=lessonById(lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/unpublish",
         "Unpublished micro-topic '"+result.get("lesson_title")+"' and returned it to draft.");
