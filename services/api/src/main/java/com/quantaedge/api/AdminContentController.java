@@ -317,6 +317,21 @@ public class AdminContentController {
     return updateChapter(chapterId,body,null,context);
   }
 
+  @PostMapping("/lessons/{lessonId}/submit")
+  @Transactional
+  public Map<String,Object> submitLessonForReview(
+      @PathVariable long lessonId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_SUBMIT");
+    Map<String,Object> current=lessonById(lessonId);
+    String currentStatus=String.valueOf(current.get("lesson_status"));
+    if ("PUBLISHED".equals(currentStatus)||"ARCHIVED".equals(currentStatus)) {
+      throw badRequest("Unpublish or restore this lesson before submitting it for review.");
+    }
+    jdbc.update("update lesson set status='REVIEW', active=true, updated_at=now() where id=?",lessonId);
+    return lessonById(lessonId);
+  }
+
   @PostMapping("/lessons/{lessonId}/publish")
   @Transactional
   public Map<String,Object> publishLesson(
