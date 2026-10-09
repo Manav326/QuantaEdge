@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -317,12 +318,16 @@ public class AuthService {
     if(!hasGuardianAccess(parentUserId,studentId)) throw new SecurityException("Child access not granted");
     String cleanUsername=validateUsername(username);
     validatePassword(password,8,"Student password");
-    jdbc.update("""
-      insert into student_login_credential(guardian_user_id,student_id,username,password_hash,active,updated_at)
-      values (?,?,?,?,true,now())
-      on conflict(guardian_user_id,student_id) do update
-        set username=excluded.username,password_hash=excluded.password_hash,active=true,updated_at=now()
-      """,parentUserId,studentId,cleanUsername,passwordEncoder.encode(password));
+    try {
+      jdbc.update("""
+        insert into student_login_credential(guardian_user_id,student_id,username,password_hash,active,updated_at)
+        values (?,?,?,?,true,now())
+        on conflict(guardian_user_id,student_id) do update
+          set username=excluded.username,password_hash=excluded.password_hash,active=true,updated_at=now()
+        """,parentUserId,studentId,cleanUsername,passwordEncoder.encode(password));
+    } catch(DuplicateKeyException ex) {
+      throw new IllegalArgumentException("That username is already used by another child on this parent account. Choose a different username.");
+    }
   }
 
   @Transactional
