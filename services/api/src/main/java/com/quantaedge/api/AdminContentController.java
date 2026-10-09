@@ -365,6 +365,9 @@ public class AdminContentController {
     result.put("questions", jdbc.queryForList("""
       select q.id, q.question_type, q.prompt, q.explanation, q.difficulty,
              q.sort_order, q.active, q.review_status, q.review_notes, q.reviewed_at,
+             q.marks, q.exam_format, q.source_kind, q.source_title, q.source_ref,
+             q.source_year, q.source_id, q.board, q.topic, q.subtopic, q.skill,
+             q.tags::text as tags, q.answer_payload::text as answer_payload,
              coalesce(
                (select jsonb_agg(jsonb_build_object(
                  'key',qo.option_key,'label',qo.label,'correct',qo.is_correct,
@@ -422,54 +425,113 @@ public class AdminContentController {
       String reviewStatus = String.valueOf(q.getOrDefault("review_status", "DRAFT")).trim().toUpperCase();
       String reviewNotes = optionalText(q.get("review_notes"), 1200);
       int order = integerValue(first(q, "sort_order", "sortOrder"), 1, 10000, "sort_order");
+      Integer marks = optionalInteger(first(q, "marks", "marks"), 1, 100, "marks");
+      String examFormat = optionalText(first(q, "exam_format", "examFormat"), 40);
+      String sourceKind = String.valueOf(first(q, "source_kind", "sourceKind") == null
+          ? "AUTHOR_CREATED" : first(q, "source_kind", "sourceKind")).trim().toUpperCase();
+      String sourceTitle = optionalText(first(q, "source_title", "sourceTitle"), 300);
+      String sourceRef = optionalText(first(q, "source_ref", "sourceRef"), 500);
+      Integer sourceYear = optionalInteger(first(q, "source_year", "sourceYear"), 1800, 2100, "sourceYear");
+      Long sourceId = optionalLong(first(q, "source_id", "sourceId"), "sourceId");
+      String board = optionalText(q.get("board"), 80);
+      String topic = optionalText(q.get("topic"), 200);
+      String subtopic = optionalText(q.get("subtopic"), 200);
+      String skill = optionalText(q.get("skill"), 200);
+      String tagsJson = jsonText(q.get("tags"), "tags", "[]");
+      String answerPayload = jsonText(first(q, "answer_payload", "answerPayload"), "answer_payload", "{}");
+
       if (!QUESTION_TYPES.contains(type)) throw badRequest("Unsupported question type: " + type);
       if (!DIFFICULTIES.contains(difficulty)) throw badRequest("Unsupported question difficulty: " + difficulty);
-      if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(reviewStatus)) {
-        throw badRequest("Question review status must be DRAFT, REVIEW, APPROVED, or REJECTED.");
+      if (!Set.of("DRAFT","REVIEW","APPROVED","PUBLISHED","REJECTED").contains(reviewStatus)) {
+        throw badRequest("Question review status must be DRAFT, REVIEW, APPROVED, PUBLISHED, or REJECTED.");
+      }
+      if (!Set.of("AUTHOR_CREATED","STATE_TEXTBOOK","BOARD_PAST_PAPER","TEXTBOOK_DERIVED").contains(sourceKind)) {
+        throw badRequest("Unsupported question source kind.");
+      }
+      if (!"AUTHOR_CREATED".equals(sourceKind)) {
+        if (sourceId == null || sourceRef == null || sourceYear == null || board == null || sourceTitle == null) {
+          throw badRequest("Source-backed questions need a registered source, exact reference/page, year, board and source title.");
+        }
+        Long sourceCount = jdbc.queryForObject("select count(*) from content_source where id=?", Long.class, sourceId);
+        if (sourceCount == null || sourceCount == 0) throw badRequest("Registered content source not found.");
+        String sourceStatus = jdbc.queryForObject("select status from content_source where id=?", String.class, sourceId);
+        if (Set.of("APPROVED","PUBLISHED").contains(reviewStatus)
+            && !Set.of("VERIFIED","APPROVED","PUBLISHED").contains(String.valueOf(sourceStatus).toUpperCase())) {
+          throw badRequest("This source is still a candidate/reference. Verify its edition and page mapping before approving source-backed questions.");
+        }
       }
 
       List<Map<String, Object>> options = objectList(q.get("options"), "question options");
       if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && options.size() < 2) {
         throw badRequest("Multiple-choice and true/false questions need at least two options.");
       }
-      if ("INPUT".equals(type) && !options.isEmpty()) {
-        throw badRequest("Input questions must not include multiple-choice options.");
+      if (!Set.of("MCQ", "TRUE_FALSE").contains(type) && !options.isEmpty()) {
+        throw badRequest("Only MCQ and true/false questions may use choice options in the current student UI.");
       }
       if (options.size() > 10) throw badRequest("A question cannot have more than 10 options.");
       Set<String> optionKeys = new HashSet<>();
       int correctCount = 0;
+      String correctKey = null;
       for (Map<String, Object> option : options) {
         String key = requiredText(first(option, "key", "option_key"), 20);
         requiredText(option.get("label"), 500);
         if (!optionKeys.add(key)) throw badRequest("Option keys must be unique within a question.");
-        if (booleanValue(first(option, "correct", "is_correct"), false)) correctCount++;
+        if (booleanValue(first(option, "correct", "is_correct"), false)) {
+          correctCount++;
+          correctKey = key;
+        }
       }
       if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && correctCount != 1) {
         throw badRequest("Each multiple-choice question must have exactly one correct answer.");
       }
+      if ("MCQ".equals(type) || "TRUE_FALSE".equals(type)) {
+        answerPayload = jsonText(toJson(Map.of("kind", "OPTION", "value", correctKey)), "answer_payload", "{}");
+      }
 
       if (create) {
         questionContentChanged = true;
-        if ("APPROVED".equals(reviewStatus)) {
+        if ("APPROVED".equals(reviewStatus) || "PUBLISHED".equals(reviewStatus)) {
           reviewStatus = "DRAFT";
-          reviewNotes = "New question requires review before approval.";
+          reviewNotes = "New question requires a separate review and approval.";
         }
         Long createdId = jdbc.queryForObject("""
-          insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,review_status,review_notes,reviewed_at)
-          values(?,?,?,?,?,?,?,?,?,case when ?='APPROVED' then now() else null end)
+          insert into question(
+            lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,
+            review_status,review_notes,reviewed_at,marks,exam_format,source_kind,source_title,
+            source_ref,source_year,source_id,board,topic,subtopic,skill,tags,answer_payload
+          )
+          values(?,?,?,?,?,?,?, ?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?::jsonb)
           returning id
           """, Long.class, lessonId, type, prompt, explanation, difficulty, order,
-          booleanValue(q.get("active"), true), reviewStatus, reviewNotes, reviewStatus);
+          booleanValue(q.get("active"), true), reviewStatus, reviewNotes,
+          reviewStatus, marks, examFormat, sourceKind, sourceTitle, sourceRef, sourceYear,
+          sourceId, board, topic, subtopic, skill, tagsJson, answerPayload);
         id = createdId;
       } else {
         Map<String, Object> existing = jdbc.queryForMap("""
-          select question_type,prompt,explanation,difficulty,review_status
+          select question_type,prompt,explanation,difficulty,review_status,marks,exam_format,
+                 source_kind,source_title,source_ref,source_year,source_id,board,topic,subtopic,skill,
+                 tags::text as tags,answer_payload::text as answer_payload
           from question where id=? and lesson_id=?
           """, id, lessonId);
         boolean changed = !type.equals(String.valueOf(existing.get("question_type")))
             || !prompt.equals(String.valueOf(existing.get("prompt")))
             || !java.util.Objects.equals(explanation, existing.get("explanation"))
-            || !difficulty.equals(String.valueOf(existing.get("difficulty")));
+            || !difficulty.equals(String.valueOf(existing.get("difficulty")))
+            || !java.util.Objects.equals(marks, existing.get("marks") == null ? null : ((Number) existing.get("marks")).intValue())
+            || !java.util.Objects.equals(examFormat, existing.get("exam_format"))
+            || !sourceKind.equals(String.valueOf(existing.get("source_kind")))
+            || !java.util.Objects.equals(sourceTitle, existing.get("source_title"))
+            || !java.util.Objects.equals(sourceRef, existing.get("source_ref"))
+            || !java.util.Objects.equals(sourceYear, existing.get("source_year") == null ? null : ((Number) existing.get("source_year")).intValue())
+            || !java.util.Objects.equals(sourceId, existing.get("source_id") == null ? null : ((Number) existing.get("source_id")).longValue())
+            || !java.util.Objects.equals(board, existing.get("board"))
+            || !java.util.Objects.equals(topic, existing.get("topic"))
+            || !java.util.Objects.equals(subtopic, existing.get("subtopic"))
+            || !java.util.Objects.equals(skill, existing.get("skill"))
+            || !tagsJson.equals(jsonText(existing.get("tags"), "tags", "[]"))
+            || !answerPayload.equals(jsonText(existing.get("answer_payload"), "answer_payload", "{}"));
+
         List<Map<String, Object>> oldOptions = jdbc.queryForList("""
           select option_key,label,is_correct,sort_order from question_option
           where question_id=? order by sort_order
@@ -487,17 +549,20 @@ public class AdminContentController {
         }
         if (changed) {
           questionContentChanged = true;
-          if ("APPROVED".equals(String.valueOf(existing.get("review_status")))) {
+          if ("APPROVED".equals(String.valueOf(existing.get("review_status"))) || "PUBLISHED".equals(String.valueOf(existing.get("review_status")))) {
             reviewStatus = "DRAFT";
-            reviewNotes = "Question content changed; review and approve again before publishing.";
+            reviewNotes = "Question content or provenance changed; review and approve again before publishing.";
           }
         }
         jdbc.update("""
           update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?,
-              review_status=?,review_notes=?,reviewed_at=case when ?='APPROVED' then coalesce(reviewed_at,now()) else null end
+              review_status=?,review_notes=?,reviewed_at=case when ?='APPROVED' then coalesce(reviewed_at,now()) else null end,
+              marks=?,exam_format=?,source_kind=?,source_title=?,source_ref=?,source_year=?,source_id=?,board=?,
+              topic=?,subtopic=?,skill=?,tags=?::jsonb,answer_payload=?::jsonb
           where id=? and lesson_id=?
           """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true),
-          reviewStatus, reviewNotes, reviewStatus, id, lessonId);
+          reviewStatus, reviewNotes, reviewStatus, marks, examFormat, sourceKind, sourceTitle, sourceRef,
+          sourceYear, sourceId, board, topic, subtopic, skill, tagsJson, answerPayload, id, lessonId);
       }
       submittedIds.add(id);
       jdbc.update("delete from question_option where question_id=?", id);
@@ -518,6 +583,32 @@ public class AdminContentController {
       if (!submittedIds.contains(id)) jdbc.update("update question set active=false where id=? and lesson_id=?", id, lessonId);
     }
     return questionContentChanged;
+  }
+
+  private String jsonText(Object value, String name, String fallback) {
+    if (value == null) return fallback;
+    if (value instanceof String text) {
+      if (text.isBlank()) return fallback;
+      try { return mapper.readTree(text).toString(); }
+      catch (JacksonException ex) { throw badRequest(name + " must contain valid JSON."); }
+    }
+    try { return mapper.writeValueAsString(value); }
+    catch (JacksonException ex) { throw badRequest(name + " must contain valid JSON."); }
+  }
+
+  private static Integer optionalInteger(Object value, int min, int max, String name) {
+    if (value == null || String.valueOf(value).isBlank()) return null;
+    final int result;
+    try { result = value instanceof Number number ? number.intValue() : Integer.parseInt(String.valueOf(value).trim()); }
+    catch (NumberFormatException ex) { throw badRequest(name + " must be an integer."); }
+    if (result < min || result > max) throw badRequest(name + " must be between " + min + " and " + max + ".");
+    return result;
+  }
+
+  private static Long optionalLong(Object value, String name) {
+    if (value == null || String.valueOf(value).isBlank()) return null;
+    try { long result = value instanceof Number number ? number.longValue() : Long.parseLong(String.valueOf(value).trim()); if (result < 1) throw badRequest(name + " must be positive."); return result; }
+    catch (NumberFormatException ex) { throw badRequest(name + " must be an integer."); }
   }
 
   private String toJson(Object value) {
