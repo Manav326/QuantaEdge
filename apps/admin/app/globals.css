@@ -526,3 +526,13 @@
 .qe-question-author>header{flex-wrap:wrap}
 .qe-question-author>header>div{min-width:120px;flex:1}
 @media(max-width:560px){.qe-question-activate{padding:7px}.qe-question-author>header{gap:7px}}
+
+/* Secure-session boundary screens use the same premium admin palette. */
+.qe-session-gate{min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 15% 15%,#fff0e5 0,transparent 35%),#f5f7fb;color:#172039}
+.qe-session-gate section{width:min(460px,100%);padding:32px;background:#fff;border:1px solid #e5e8f0;border-radius:24px;box-shadow:0 22px 70px rgba(25,32,57,.12);text-align:center}
+.qe-session-gate section>img{display:block;margin:0 auto 17px;object-fit:contain}
+.qe-session-gate .eyebrow,.qe-session-gate .admin-kicker{display:inline-flex;margin:auto}
+.qe-session-gate h1{margin:16px 0 8px;font-size:clamp(25px,5vw,33px);line-height:1.15;letter-spacing:-1px}
+.qe-session-gate p{margin:0 0 22px;color:#6d778d;font-size:13px;line-height:1.7}
+.qe-session-gate .button{min-height:46px}
+@media(max-width:620px){.qe-session-gate section{padding:24px 19px;border-radius:19px}}

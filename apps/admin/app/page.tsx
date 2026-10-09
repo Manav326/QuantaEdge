@@ -88,12 +88,7 @@ export default function AdminHome(){
         <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
       </nav>
 
-      <section className="admin-welcome">
-        <div className="admin-welcome-copy"><span className="admin-welcome-eyebrow"><span className="status-dot"/> OPERATIONS OVERVIEW</span><h2>Learning deserves<br/><em>great operations.</em></h2><p>Keep curriculum quality, family access and student learning moving forward from one place.</p>
-          <div className="admin-welcome-actions"><Link href="/content" className="admin-action-primary">Open Content Studio <span>↗</span></Link><Link href="/parents" className="admin-action-secondary">Manage families <span>→</span></Link></div>
-        </div>
-        <div className="admin-welcome-visual" aria-hidden="true"><div className="admin-orb admin-orb-one"/><div className="admin-orb admin-orb-two"/><div className="admin-visual-card"><div className="admin-visual-top"><span>LEARNING QUALITY</span><span className="admin-visual-live">LIVE</span></div><div className="admin-visual-glyph">Q</div><strong>Structured by design.</strong><p>Class · Subject · Chapter · Lesson</p><div className="admin-visual-track"><span/></div><small>Content with clear ownership</small></div><div className="admin-floating-token token-top">✦ <span>Review</span></div><div className="admin-floating-token token-bottom">✓ <span>Role secured</span></div></div>
-      </section>
+      
 
       <div className="admin-section-title"><div><span className="admin-kicker">PLATFORM SNAPSHOT</span><h2>At a glance</h2></div><span className="admin-live-label"><i/> Live records</span></div>
       <div className="admin-grid stats admin-primary-stats">
