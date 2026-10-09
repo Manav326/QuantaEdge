@@ -16,14 +16,8 @@ export default function QuantaEdgeBrand({
 }: QuantaEdgeBrandProps) {
   const lockup = (
     <span className={`qe-brand qe-brand--${variant}`}>
-      <img className="qe-brand__mark" src="/branding/quantaedge-icon.png" alt="" width={48} height={48} aria-hidden="true" />
-      <span className="qe-brand__copy">
-        <span className="qe-brand__wordmark" aria-hidden="true">
-          <span className="qe-brand__quanta">Quanta</span>
-          <span className="qe-brand__edge">Edge</span>
-        </span>
-        <span className="qe-brand__tagline">Smarter Decisions. Greater Growth.</span>
-      </span>
+      <img className="qe-brand__wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
+      <span className="qe-brand__tagline">Smarter Decisions. Greater Growth.</span>
     </span>
   );
 

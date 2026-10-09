@@ -90,9 +90,8 @@ export default function AdminLogin() {
     <main className="qe-login-shell">
       <aside className="qe-login-story">
         <Link href="/" className="qe-login-brand" aria-label="QuantaEdge — Smarter Decisions. Greater Growth. — Staff console">
-          <img className="qe-login-brand-mark-img" src="/branding/quantaedge-icon.png" alt="" width={40} height={40} aria-hidden="true" />
           <span className="qe-login-brand-copy">
-            <strong><span className="qe-login-brand-quanta">Quanta</span><span className="qe-login-brand-edge">Edge</span></strong>
+            <img className="qe-login-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
             <small className="qe-login-brand-tagline">Smarter Decisions. Greater Growth.</small>
             <small className="qe-login-brand-context">STAFF CONSOLE</small>
           </span>
@@ -122,11 +121,8 @@ export default function AdminLogin() {
 
       <section className="qe-login-panel">
         <div className="qe-login-mobile-brand" role="img" aria-label="QuantaEdge — Smarter Decisions. Greater Growth.">
-          <img className="qe-login-mobile-brand-mark" src="/branding/quantaedge-icon.png" alt="" width={34} height={34} aria-hidden="true" />
-          <span className="qe-login-mobile-brand-copy">
-            <strong><span className="qe-login-mobile-quanta">Quanta</span><span className="qe-login-brand-edge">Edge</span></strong>
-            <small>Smarter Decisions. Greater Growth.</small>
-          </span>
+          <img className="qe-login-mobile-brand-wordmark" src="/branding/quantaedge-wordmark.png" alt="" width={600} height={94} aria-hidden="true" />
+          <small>Smarter Decisions. Greater Growth.</small>
         </div>
         <div className="qe-login-card">
           <div className="qe-login-card-top">

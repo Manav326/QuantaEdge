@@ -61,44 +61,30 @@
 
 /* Media-rich lesson blocks and authored text from Content Studio */
 .lesson-rich-content{font-size:15px;line-height:1.8;overflow-wrap:anywhere}.lesson-rich-content p{margin:0 0 13px}.lesson-rich-content p:last-child{margin-bottom:0}.lesson-rich-content h2,.lesson-rich-content h3,.lesson-rich-content h4{line-height:1.35;margin:15px 0 9px}.lesson-rich-content ul,.lesson-rich-content ol{padding-left:25px;margin:10px 0}.lesson-rich-content img{display:block;max-width:100%;height:auto;border-radius:13px;margin:14px auto}.lesson-rich-content blockquote{margin:12px 0;padding:12px 16px;border-left:3px solid #f97316;background:#fff0e5;border-radius:0 10px 10px 0}.lesson-rich-content a{color:#f97316;text-decoration:underline;text-underline-offset:3px}.lesson-rich-content code{background:#f0f2f7;border-radius:5px;padding:2px 5px}.lesson-visual-media,.lesson-visual-video{display:block;max-width:100%;max-height:440px;height:auto;width:auto;margin:12px auto;border-radius:14px;background:#f2f4f8}.lesson-visual-video{width:100%;height:auto;aspect-ratio:16/9}.lesson-visual-audio{display:block;width:100%;margin:12px 0}.lesson-visual-embed{position:relative;aspect-ratio:16/9;width:100%;overflow:hidden;border-radius:14px;background:#111827;margin:12px 0}.lesson-visual-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.lesson-media-caption{font-size:12px;color:#748097;text-align:center;margin-top:9px}
-
-/* Responsive QuantaEdge lockup: the tagline is real text, not tiny text baked into a scaled PNG. */
-.qe-brand-link,.qe-brand-static{display:inline-flex;align-items:center;min-width:0;flex:none;color:inherit;text-decoration:none;line-height:normal}
+/* QuantaEdge lockup uses the official transparent wordmark PNG plus real HTML tagline text. */
+.qe-brand-link,.qe-brand-static{display:inline-flex;align-items:flex-start;min-width:0;max-width:100%;flex:none;color:inherit;text-decoration:none;line-height:normal}
 .qe-brand-link:focus-visible{outline:3px solid #fdba74;outline-offset:4px;border-radius:8px}
-.qe-brand{display:inline-flex;align-items:center;gap:9px;min-width:0;line-height:normal}
-.qe-brand__mark{display:block;flex:0 0 auto;width:40px;height:40px;object-fit:contain;background:#fff;border:1px solid #f1e5de;border-radius:11px;box-shadow:0 5px 14px rgba(21,32,56,.09)}
-.qe-brand__copy{display:flex;flex-direction:column;gap:4px;min-width:0}
-.qe-brand__wordmark{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;font-size:21px;font-weight:800;letter-spacing:-.055em;line-height:1}
-.qe-brand__quanta{color:#152038}
-.qe-brand__edge{color:#f97316}
-.qe-brand__tagline{display:block;margin:0;color:#566176;font-size:8.4px;font-weight:700;letter-spacing:.025em;line-height:1.25;white-space:nowrap}
-.qe-brand--compact{gap:7px}
-.qe-brand--compact .qe-brand__mark{width:30px;height:30px;border-radius:9px;box-shadow:none}
-.qe-brand--compact .qe-brand__copy{gap:3px}
-.qe-brand--compact .qe-brand__wordmark{font-size:16.5px;letter-spacing:-.045em}
-.qe-brand--compact .qe-brand__tagline{font-size:6.8px;letter-spacing:0}
-.qe-brand--footer .qe-brand__mark{width:38px;height:38px}
-.qe-brand--footer .qe-brand__wordmark{font-size:21px}
-.qe-brand--footer .qe-brand__tagline{font-size:8.2px}
-.qe-brand--auth{gap:12px}
-.qe-brand--auth .qe-brand__mark{width:48px;height:48px;border-radius:14px}
-.qe-brand--auth .qe-brand__copy{gap:5px}
-.qe-brand--auth .qe-brand__wordmark{font-size:25px}
-.qe-brand--auth .qe-brand__tagline{font-size:9.2px}
+.qe-brand{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;max-width:100%;line-height:normal}
+.qe-brand__wordmark{display:block;width:220px;max-width:100%;height:auto;object-fit:contain}
+.qe-brand__tagline{display:block;max-width:100%;margin:0;color:#566176;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;font-size:9px;font-weight:700;letter-spacing:.015em;line-height:1.25;white-space:nowrap}
+.qe-brand--compact .qe-brand__wordmark{width:155px}
+.qe-brand--compact .qe-brand__tagline{font-size:7.4px;letter-spacing:.005em}
+.qe-brand--footer .qe-brand__wordmark{width:200px}
+.qe-brand--footer .qe-brand__tagline{font-size:8.6px}
+.qe-brand--auth .qe-brand__wordmark{width:235px}
+.qe-brand--auth .qe-brand__tagline{font-size:9.4px}
 @media(max-width:850px){
-  .qe-brand--header .qe-brand__mark{width:35px;height:35px}
-  .qe-brand--header .qe-brand__wordmark{font-size:18px}
-  .qe-brand--header .qe-brand__tagline{font-size:7.2px;letter-spacing:0}
+  .qe-brand--header .qe-brand__wordmark{width:190px}
+  .qe-brand--header .qe-brand__tagline{font-size:8.1px}
 }
 @media(max-width:390px){
-  .qe-brand--header{gap:6px}
-  .qe-brand--header .qe-brand__mark{width:31px;height:31px;border-radius:9px}
-  .qe-brand--header .qe-brand__wordmark{font-size:16px}
-  .qe-brand--header .qe-brand__tagline{font-size:7.1px}
-  .qe-brand--compact{gap:5px}
-  .qe-brand--compact .qe-brand__mark{width:27px;height:27px}
-  .qe-brand--compact .qe-brand__wordmark{font-size:14.5px}
-  .qe-brand--compact .qe-brand__tagline{font-size:7px}
+  .qe-brand--header .qe-brand__wordmark{width:148px}
+  .qe-brand--header .qe-brand__tagline{font-size:7.2px}
+  .qe-brand--compact .qe-brand__wordmark{width:140px}
+  .qe-brand--compact .qe-brand__tagline{font-size:7.1px}
+  .qe-brand--footer .qe-brand__wordmark{width:180px}
+  .qe-brand--footer .qe-brand__tagline{font-size:8.1px}
+  .qe-brand--auth{max-width:calc(100vw - 32px)}
+  .qe-brand--auth .qe-brand__wordmark{width:220px}
 }
-
 @media(max-width:390px){.app-header{padding-left:12px;padding-right:12px;gap:8px}.student-profile{gap:7px}.student-profile>span:first-child{display:none}}

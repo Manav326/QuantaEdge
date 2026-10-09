@@ -487,30 +487,27 @@
 @media(max-width:980px){.qe-login-shell{grid-template-columns:minmax(290px,.8fr) minmax(430px,1.2fr)}.qe-login-story{padding-left:28px;padding-right:28px}.qe-login-panel{padding-left:28px;padding-right:28px}.qe-login-story h1{font-size:clamp(32px,4.5vw,45px)}}
 @media(max-width:720px){.qe-login-shell{grid-template-columns:1fr;min-height:100vh}.qe-login-story{display:none}.qe-login-panel{padding:24px 16px 18px;min-height:100vh;justify-content:flex-start}.qe-login-mobile-brand{display:flex;align-items:center;align-self:flex-start;gap:10px;margin:2px 0 25px;color:#1b263d}.qe-login-mobile-brand strong{font-size:15px}.qe-login-mobile-brand .qe-login-brand-mark{width:34px;height:34px;font-size:17px;border-radius:11px}.qe-login-card{max-width:460px;padding:25px 21px;width:100%;margin:auto 0}.qe-login-card-top{margin-bottom:23px}.qe-login-panel-footer{margin-top:17px;display:grid;gap:6px}.qe-login-panel-footer span:last-child{display:none}}
 @media(prefers-reduced-motion:reduce){.qe-login-primary{transition:none}}
-
-/* QuantaEdge brand rendering and contrast refinements */
-.qe-admin-brand{gap:10px}
+/* QuantaEdge uses the official transparent wordmark; the tagline remains live text. */
+.qe-admin-brand{gap:9px}
 .qe-admin-brand-mark{display:block;flex:0 0 35px;width:35px;height:35px;object-fit:contain;background:#fff;border:1px solid #f1e5de;border-radius:11px;box-shadow:0 4px 13px rgba(0,0,0,.16)}
-.qe-admin-brand-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
-.qe-admin-brand-copy strong{display:flex;align-items:baseline;gap:0;font-size:18px;line-height:1;letter-spacing:-.045em;white-space:nowrap}
-.qe-admin-brand-quanta{color:#f4f6fb}
-.qe-admin-brand-edge{color:#fb923c}
-.qe-admin-brand-copy .qe-admin-brand-tagline{display:block;margin-top:3px;font-size:7.2px;line-height:1.25;letter-spacing:.01em;color:#b8c4d7;white-space:nowrap}
+.qe-admin-brand-copy{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;max-width:100%}
+.qe-admin-brand-wordmark{display:block;width:145px;max-width:100%;height:auto;object-fit:contain;background:#fff;border-radius:7px;padding:4px 5px}
+.qe-admin-brand-copy .qe-admin-brand-tagline{display:block;margin-top:1px;font-size:7.4px;line-height:1.25;letter-spacing:.005em;color:#c3cddd;white-space:nowrap}
 .qe-admin-brand-copy .qe-admin-brand-context{display:block;margin-top:2px;font-size:6.2px;line-height:1.2;letter-spacing:1.2px;color:#8490a7}
 .qe-shared-sidebar.is-collapsed .admin-brand .qe-admin-brand-mark{flex:0 0 35px}
-.qe-login-brand{gap:12px}
-.qe-login-brand-mark-img{display:block;flex:0 0 40px;width:40px;height:40px;object-fit:contain;background:#fff;border:1px solid #f1e5de;border-radius:13px;box-shadow:0 10px 24px rgba(21,32,56,.14)}
-.qe-login-brand-copy{display:flex;flex-direction:column;gap:4px;min-width:0}
-.qe-login-brand-copy strong{display:flex;align-items:baseline;gap:0;font-size:21px;line-height:1;letter-spacing:-.04em;white-space:nowrap}
-.qe-login-brand .qe-login-brand-quanta{color:#fff}
-.qe-login-brand .qe-login-brand-edge{color:#fb923c}
-.qe-login-brand .qe-login-brand-tagline{margin-top:2px;font-size:8.2px;line-height:1.25;letter-spacing:.01em;color:#c3cddd;font-weight:600;white-space:nowrap}
+.qe-login-brand{display:inline-flex;align-items:flex-start;gap:12px}
+.qe-login-brand-copy{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}
+.qe-login-brand-wordmark{display:block;width:205px;max-width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px;padding:5px 6px}
+.qe-login-brand .qe-login-brand-tagline{margin-top:2px;font-size:8.5px;line-height:1.25;letter-spacing:.005em;color:#c3cddd;font-weight:600;white-space:nowrap}
 .qe-login-brand .qe-login-brand-context{margin-top:2px;font-size:6.8px;line-height:1.2;letter-spacing:1.3px;color:#9eabc1}
-.qe-login-mobile-brand{align-items:center;gap:9px}
-.qe-login-mobile-brand-mark{display:block;flex:0 0 34px;width:34px;height:34px;object-fit:contain;background:#fff;border:1px solid #f1e5de;border-radius:11px}
-.qe-login-mobile-brand-copy{display:flex;flex-direction:column;gap:3px}
-.qe-login-mobile-brand-copy strong{display:flex;align-items:baseline;white-space:nowrap;font-size:16px;line-height:1;letter-spacing:-.04em}
-.qe-login-mobile-quanta{color:#152038}
-.qe-login-mobile-brand .qe-login-brand-edge{color:#f97316}
-.qe-login-mobile-brand-copy small{font-size:7.2px;line-height:1.25;letter-spacing:0;color:#667085;font-weight:700;white-space:nowrap}
+.qe-login-mobile-brand{display:none}
+.qe-login-mobile-brand-wordmark{display:block;width:182px;max-width:100%;height:auto;object-fit:contain;background:#fff;border-radius:8px;padding:4px 5px}
+.qe-login-mobile-brand small{display:block;font-size:7.4px;line-height:1.25;letter-spacing:.005em;color:#667085;font-weight:700;white-space:nowrap}
+.qe-login-mobile-brand{align-items:flex-start;flex-direction:column;gap:4px}
 .admin-loading-mark{display:block;object-fit:contain;background:#fff!important;border:1px solid #f1e5de;border-radius:14px;padding:3px;color:transparent;font-size:0}
+@media(max-width:720px){
+  .qe-login-brand{max-width:calc(100vw - 48px)}
+  .qe-login-brand-wordmark{width:190px}
+  .qe-login-brand .qe-login-brand-tagline{font-size:8px}
+  .qe-login-mobile-brand{display:flex}
+}
