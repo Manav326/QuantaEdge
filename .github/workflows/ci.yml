@@ -343,30 +343,7 @@ jobs:
 
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"assetType":"IMAGE","title":"CI visual asset","altText":"CI visual","url":"https://example.invalid/ci-image","sourceKind":"AUTHOR_CREATED","status":"REVIEW"}'             http://localhost:8080/api/v1/admin/assets >/tmp/qe-asset.json
           ASSET_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-asset.json"))["id"])')"
-          attachment_url="http://localhost:8080/api/v1/admin/lessons/\${LESSON_ID}/blocks/\${BLOCK_ID}/asset"
-          set +e
-          curl --request=PUT -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json' \
-            -d "{\"assetId\":\${ASSET_ID}}" --output /tmp/qe-attach.json \
-            --write-out 'HOST_PUT status=%{http_code} remote=%{remote_ip}:%{remote_port} upload_bytes=%{size_upload} download_bytes=%{size_download}\n' \
-            "$attachment_url"
-          host_rc=$?
-          set -e
-          if [ "$host_rc" -ne 0 ]; then
-            echo "HOST_PUT exit_code=$host_rc response_bytes=$(wc -c < /tmp/qe-attach.json)"
-            api_id="$(docker compose -f docker-compose.yml ps -q api)"
-            docker cp /tmp/qe-admin.cookies "\${api_id}:/tmp/qe-admin.cookies"
-            set +e
-            docker compose -f docker-compose.yml exec -T api curl --request=PUT -fsS -b /tmp/qe-admin.cookies \
-              -H 'Content-Type: application/json' -d "{\"assetId\":\${ASSET_ID}}" \
-              --output /tmp/qe-attach-direct.json \
-              --write-out 'CONTAINER_LOOPBACK_PUT status=%{http_code} remote=%{remote_ip}:%{remote_port} upload_bytes=%{size_upload} download_bytes=%{size_download}\n' \
-              "http://localhost:8080/api/v1/admin/lessons/\${LESSON_ID}/blocks/\${BLOCK_ID}/asset"
-            direct_rc=$?
-            set -e
-            echo "CONTAINER_LOOPBACK_PUT exit_code=$direct_rc"
-            docker cp "\${api_id}:/tmp/qe-attach-direct.json" /tmp/qe-attach-direct.json 2>/dev/null || true
-            exit "$host_rc"
-          fi
+          curl --request=PUT -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset >/tmp/qe-attach.json
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-attach.json"))["updated"])')" = "True"
 
       - name: Browser UI smoke test
