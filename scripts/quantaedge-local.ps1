@@ -8,6 +8,19 @@ Set-Location (Join-Path $PSScriptRoot "..")
 
 $env:APP_DEMO_SEED = if ($env:APP_DEMO_SEED) { $env:APP_DEMO_SEED } else { "true" }
 
+# The local app is accessed through Next.js at these origins. Keep them
+# allowed even if a .env or inherited environment contains production origins.
+$localCorsOrigins = @(
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001"
+)
+if (-not [string]::IsNullOrWhiteSpace($env:APP_CORS_ALLOWED_ORIGINS)) {
+  $localCorsOrigins += @($env:APP_CORS_ALLOWED_ORIGINS -split "," | ForEach-Object { $_.Trim() })
+}
+$env:APP_CORS_ALLOWED_ORIGINS = ($localCorsOrigins | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique) -join ","
+
 # Keep this script compatible with Windows PowerShell 5.1, which does not
 # support the PowerShell 7 null-coalescing operator (??).
 $apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }

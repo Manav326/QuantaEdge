@@ -55,6 +55,14 @@ public class AuthService {
       throw new IllegalArgumentException("Invalid OTP purpose");
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
+
+    boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
+    if("SIGNUP".equals(purpose) && accountExists)
+      throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
+    if("LOGIN".equals(purpose) && !accountExists)
+      throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
+
     long recent=jdbc.queryForObject(
         "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
         Long.class,normalized,otpCooldownSeconds);
@@ -66,37 +74,41 @@ public class AuthService {
 
     String otp=demoSeed ? "123456" : String.format("%06d",random.nextInt(1_000_000));
 
+    if(!demoSeed) {
+      String providerUrl=System.getenv("APP_OTP_PROVIDER_URL");
+      String providerToken=System.getenv("APP_OTP_PROVIDER_TOKEN");
+      if(providerUrl==null || providerUrl.isBlank() || providerToken==null || providerToken.isBlank()) {
+        throw new IllegalStateException("OTP provider is not configured");
+      }
+      try {
+        var client=java.net.http.HttpClient.newHttpClient();
+        var payload="{\"to\":\"" + normalized + "\",\"otp\":\"" + otp + "\",\"purpose\":\"" + purpose + "\"}";
+        var request=java.net.http.HttpRequest.newBuilder(java.net.URI.create(providerUrl))
+            .header("Authorization","Bearer "+providerToken)
+            .header("Content-Type","application/json")
+            .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payload)).build();
+        var response=client.send(request,java.net.http.HttpResponse.BodyHandlers.discarding());
+        if(response.statusCode()/100!=2) throw new IllegalStateException("OTP provider rejected request");
+      } catch(Exception ex) {
+        throw new IllegalStateException("Unable to deliver OTP");
+      }
+    }
+
     jdbc.update("""
       insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at)
       values (?,?,?,now()+interval '5 minutes')
       """,normalized,purpose,hash(otp));
 
-    if(demoSeed) return otp;
-
-    String providerUrl=System.getenv("APP_OTP_PROVIDER_URL");
-    String providerToken=System.getenv("APP_OTP_PROVIDER_TOKEN");
-    if(providerUrl==null || providerUrl.isBlank() || providerToken==null || providerToken.isBlank()) {
-      throw new IllegalStateException("OTP provider is not configured");
-    }
-    try {
-      var client=java.net.http.HttpClient.newHttpClient();
-      var payload="{\"to\":\"" + normalized + "\",\"otp\":\"" + otp + "\",\"purpose\":\"" + purpose + "\"}";
-      var request=java.net.http.HttpRequest.newBuilder(java.net.URI.create(providerUrl))
-          .header("Authorization","Bearer "+providerToken)
-          .header("Content-Type","application/json")
-          .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payload)).build();
-      var response=client.send(request,java.net.http.HttpResponse.BodyHandlers.discarding());
-      if(response.statusCode()/100!=2) throw new IllegalStateException("OTP provider rejected request");
-    } catch(Exception ex) {
-      throw new IllegalStateException("Unable to deliver OTP");
-    }
-    return null;
+    return demoSeed ? otp : null;
   }
 
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName) {
     String normalized=normalizeMobile(mobile);
     if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
+    if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
+      throw new IllegalArgumentException("Parent name must be between 2 and 120 characters");
+
     var rows=jdbc.queryForList("""
       select id,code_hash,attempts,expires_at,purpose
       from otp_challenge where mobile_e164=? and consumed_at is null
@@ -118,6 +130,14 @@ public class AuthService {
       throw new IllegalArgumentException("OTP expired");
     }
     if(!hash(otp).equals(String.valueOf(row.get("code_hash")))) throw new IllegalArgumentException("Incorrect OTP");
+
+    boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
+    if("SIGNUP".equals(purpose) && accountExists)
+      throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
+    if("LOGIN".equals(purpose) && !accountExists)
+      throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
+
     jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
 
     String role=adminMobiles.contains(normalized)?"ADMIN":"PARENT";

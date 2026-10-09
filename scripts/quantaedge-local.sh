@@ -5,6 +5,15 @@ cd "$(dirname "$0")/.."
 
 ACTION="${1:-up}"
 
+# Ensure local browser origins remain in the allow-list, even when a
+# developer's environment also defines production origins.
+local_cors_origins="http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001"
+if [ -n "${APP_CORS_ALLOWED_ORIGINS:-}" ]; then
+  export APP_CORS_ALLOWED_ORIGINS="${APP_CORS_ALLOWED_ORIGINS},${local_cors_origins}"
+else
+  export APP_CORS_ALLOWED_ORIGINS="${local_cors_origins}"
+fi
+
 case "$ACTION" in
   up)
     export APP_DEMO_SEED="${APP_DEMO_SEED:-true}"
