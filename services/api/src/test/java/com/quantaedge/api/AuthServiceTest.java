@@ -63,7 +63,7 @@ class AuthServiceTest {
     when(jdbc.queryForMap("select role, display_name from staff_account where id=? and active=true", staffId))
         .thenReturn(Map.of("role", "ADMIN", "display_name", "Administrator"));
 
-    AuthContext context = auth.verifyOtp("9876543210", "123456", "STAFF_LOGIN", null);
+    AuthContext context = auth.verifyOtp("9876543210", "123456", "STAFF_LOGIN", null, true);
 
     assertNotNull(context);
     assertEquals(staffId, context.staffId());
