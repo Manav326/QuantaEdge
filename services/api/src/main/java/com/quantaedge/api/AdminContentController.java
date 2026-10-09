@@ -257,8 +257,12 @@ public class AdminContentController {
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
 
     if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
-    if (body.containsKey("questions")) updateQuestions(lessonId, body.get("questions"));
-    if ("PUBLISHED".equals(status)) validateLessonForPublishing(lessonId);
+    boolean questionContentChanged = body.containsKey("questions") && updateQuestions(lessonId, body.get("questions"));
+    if ("PUBLISHED".equals(status) && questionContentChanged) {
+      status = "REVIEW";
+    } else if ("PUBLISHED".equals(status)) {
+      validateLessonForPublishing(lessonId);
+    }
 
     jdbc.update("""
       update lesson
@@ -392,12 +396,13 @@ public class AdminContentController {
     }
   }
 
-  private void updateQuestions(long lessonId, Object value) {
+  private boolean updateQuestions(long lessonId, Object value) {
     List<Map<String, Object>> questions = objectList(value, "questions");
     List<Map<String, Object>> current = jdbc.queryForList("select id from question where lesson_id=?", lessonId);
     Set<Long> currentIds = new HashSet<>();
     current.forEach(row -> currentIds.add(((Number) row.get("id")).longValue()));
     Set<Long> submittedIds = new HashSet<>();
+    boolean questionContentChanged = false;
 
     for (Map<String, Object> q : questions) {
       boolean create = q.get("id") == null;
@@ -414,7 +419,9 @@ public class AdminContentController {
       int order = integerValue(first(q, "sort_order", "sortOrder"), 1, 10000, "sort_order");
       if (!QUESTION_TYPES.contains(type)) throw badRequest("Unsupported question type: " + type);
       if (!DIFFICULTIES.contains(difficulty)) throw badRequest("Unsupported question difficulty: " + difficulty);
-      if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(reviewStatus)) throw badRequest("Question review status must be DRAFT, REVIEW, APPROVED, or REJECTED.");
+      if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(reviewStatus)) {
+        throw badRequest("Question review status must be DRAFT, REVIEW, APPROVED, or REJECTED.");
+      }
 
       List<Map<String, Object>> options = objectList(q.get("options"), "question options");
       if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && options.size() < 2) {
@@ -437,6 +444,7 @@ public class AdminContentController {
       }
 
       if (create) {
+        questionContentChanged = true;
         Long createdId = jdbc.queryForObject("""
           insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,review_status,review_notes,reviewed_at)
           values(?,?,?,?,?,?,?,?,?,case when ?='APPROVED' then now() else null end)
@@ -445,6 +453,36 @@ public class AdminContentController {
           booleanValue(q.get("active"), true), reviewStatus, reviewNotes, reviewStatus);
         id = createdId;
       } else {
+        Map<String, Object> existing = jdbc.queryForMap("""
+          select question_type,prompt,explanation,difficulty,review_status
+          from question where id=? and lesson_id=?
+          """, id, lessonId);
+        boolean changed = !type.equals(String.valueOf(existing.get("question_type")))
+            || !prompt.equals(String.valueOf(existing.get("prompt")))
+            || !java.util.Objects.equals(explanation, existing.get("explanation"))
+            || !difficulty.equals(String.valueOf(existing.get("difficulty")));
+        List<Map<String, Object>> oldOptions = jdbc.queryForList("""
+          select option_key,label,is_correct,sort_order from question_option
+          where question_id=? order by sort_order
+          """, id);
+        if (oldOptions.size() != options.size()) changed = true;
+        for (int i = 0; !changed && i < options.size(); i++) {
+          Map<String, Object> incoming = options.get(i);
+          Map<String, Object> previous = oldOptions.get(i);
+          Object suppliedOrder = first(incoming, "sort_order", "sortOrder");
+          int incomingOrder = suppliedOrder instanceof Number ? ((Number) suppliedOrder).intValue() : i + 1;
+          changed = !requiredText(first(incoming, "key", "option_key"), 20).equals(String.valueOf(previous.get("option_key")))
+              || !requiredText(incoming.get("label"), 500).equals(String.valueOf(previous.get("label")))
+              || booleanValue(first(incoming, "correct", "is_correct"), false) != Boolean.TRUE.equals(previous.get("is_correct"))
+              || incomingOrder != ((Number) previous.get("sort_order")).intValue();
+        }
+        if (changed) {
+          questionContentChanged = true;
+          if ("APPROVED".equals(String.valueOf(existing.get("review_status")))) {
+            reviewStatus = "DRAFT";
+            reviewNotes = "Question content changed; review and approve again before publishing.";
+          }
+        }
         jdbc.update("""
           update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?,
               review_status=?,review_notes=?,reviewed_at=case when ?='APPROVED' then coalesce(reviewed_at,now()) else null end
@@ -470,6 +508,7 @@ public class AdminContentController {
     for (Long id : currentIds) {
       if (!submittedIds.contains(id)) jdbc.update("update question set active=false where id=? and lesson_id=?", id, lessonId);
     }
+    return questionContentChanged;
   }
 
   private String toJson(Object value) {
