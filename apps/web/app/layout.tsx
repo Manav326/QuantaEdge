@@ -1,8 +1,10 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'QuantaEdge Learning',
-  description: 'पढ़ाई, अब आपके बच्चे के हिसाब से।',
+  title: { default: 'QuantaEdge | Smarter Decisions. Greater Growth.', template: '%s | QuantaEdge' },
+  description: 'AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8. Smarter Decisions. Greater Growth.',
+  applicationName: 'QuantaEdge',
+  icons: { icon: '/branding/quantaedge-icon.png', apple: '/branding/quantaedge-icon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

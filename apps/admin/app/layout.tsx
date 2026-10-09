@@ -1,8 +1,10 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'QuantaEdge Admin',
-  description: 'QuantaEdge curriculum and learning operations',
+  title: { default: 'QuantaEdge Admin', template: '%s | QuantaEdge' },
+  description: 'QuantaEdge learning platform administration and curriculum operations.',
+  applicationName: 'QuantaEdge',
+  icons: { icon: '/branding/quantaedge-icon.png', apple: '/branding/quantaedge-icon.png' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
