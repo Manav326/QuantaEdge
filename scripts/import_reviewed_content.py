@@ -40,7 +40,7 @@ def require_text(value: Any, name: str, max_length: int = 2000) -> str:
 
 def page_range(value: Any, name: str, page_count: int) -> tuple[int, int]:
     text = require_text(value, name, 160)
-    match = re.fullmatch(r"(?i)PDF pages?\\s+(\\d+)(?:\\s*[-–]\\s*(\\d+))?", text)
+    match = re.fullmatch(r"(?i)PDF pages?\s+(\d+)(?:\s*[-–]\s*(\d+))?", text)
     if not match:
         raise ValueError(f"{name} must use an explicit PDF page range such as 'PDF pages 20-28'.")
     start = int(match.group(1))
