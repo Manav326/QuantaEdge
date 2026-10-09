@@ -27,7 +27,7 @@ SCERT Bihar is the curriculum source of truth. The extraction workflow creates a
 - Actual question inventory vs planned targets: docs/product/curriculum-question-inventory.md
 - Complete chapter × question-type dataset: docs/product/curriculum-question-targets.csv
 
-The current minimum question-bank plan is 2,166 original questions across 100? no, across the canonical 102 chapter rows. This is a planning target, not content already prepared or published. No question rows are generated to make the numbers look complete.
+The current minimum question-bank plan is 2,166 original questions across the canonical 102 chapter rows. This is a planning target, not content already prepared or published. No question rows are generated to make the numbers look complete.
 
 ## Local preview student
 
