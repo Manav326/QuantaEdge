@@ -54,12 +54,12 @@ public class QuestionAnswerService {
   private Evaluation compareJsonArray(JsonNode expected,Object submitted) throws Exception {
     JsonNode actual=toJson(submitted);
     if(!actual.isArray()) return new Evaluation(true,false,"JSON_ARRAY");
-    return new Evaluation(true,canonical(actual).equals(canonical(expected)),"JSON_ARRAY");
+    return new Evaluation(true,actual.isArray() && actual.equals(expected),"JSON_ARRAY");
   }
 
   private Evaluation compareJsonValue(JsonNode expected,Object submitted) throws Exception {
     JsonNode actual=toJson(submitted);
-    return new Evaluation(true,canonical(actual).equals(canonical(expected)),"JSON");
+    return new Evaluation(true,actual.equals(expected),"JSON");
   }
 
   private JsonNode toJson(Object value) throws Exception {
@@ -68,23 +68,6 @@ public class QuestionAnswerService {
     return mapper.valueToTree(value);
   }
 
-  private String canonical(JsonNode node) {
-    if(node==null||node.isNull()) return "null";
-    if(node.isObject()) {
-      List<String> fields=new ArrayList<>();
-      node.fieldNames().forEachRemaining(fields::add);
-      Collections.sort(fields);
-      StringBuilder out=new StringBuilder("{");
-      for(String field:fields) out.append(mapper.valueToTree(field)).append(":").append(canonical(node.get(field))).append(",");
-      return out.append("}").toString();
-    }
-    if(node.isArray()) {
-      StringBuilder out=new StringBuilder("[");
-      for(JsonNode n:node) out.append(canonical(n)).append(",");
-      return out.append("]").toString();
-    }
-    return node.toString();
-  }
 
   private String normalized(String value) {
     return value.trim().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT);
