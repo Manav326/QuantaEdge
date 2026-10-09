@@ -1,0 +1,137 @@
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+type StudentAccountMenuProps = {
+  displayName: string;
+  classCode: string | number;
+};
+
+function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'settings' | 'logout' }) {
+  const common = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true as const };
+  if (kind === 'book') return <svg {...common}><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 5.5V21M8 7h8M8 11h7"/></svg>;
+  if (kind === 'practice') return <svg {...common}><path d="m12 3 2.4 5.1 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3Z"/></svg>;
+  if (kind === 'progress') return <svg {...common}><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 5-6"/><path d="M15.5 7H19v3.5"/></svg>;
+  if (kind === 'settings') return <svg {...common}><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"/></svg>;
+  return <svg {...common}><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>;
+}
+
+export default function StudentAccountMenu({ displayName, classCode }: StudentAccountMenuProps) {
+  const router = useRouter();
+  const accountRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [actionError, setActionError] = useState('');
+
+  useEffect(() => {
+    if (!open) return;
+    function handlePointerDown(event: PointerEvent) {
+      if (!accountRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]);
+
+  function closeMenu() {
+    setOpen(false);
+    setActionError('');
+  }
+
+  async function openParentSettings() {
+    setBusy(true);
+    setActionError('');
+    try {
+      const response = await fetch('/api/v1/auth/switch-parent', { method: 'POST' });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(body.message || 'Parent settings are unavailable for this account.');
+      closeMenu();
+      router.replace('/parent/children');
+      router.refresh();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : 'Parent settings could not be opened. Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function logout() {
+    setBusy(true);
+    try {
+      await fetch('/api/v1/auth/logout', { method: 'POST' });
+    } finally {
+      router.replace('/login');
+      router.refresh();
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="student-profile" ref={accountRef}>
+      <button
+        ref={triggerRef}
+        type="button"
+        className="student-account-trigger"
+        aria-label={`Open profile and settings for ${displayName}`}
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-controls="student-account-menu"
+        onClick={() => { setOpen(value => !value); setActionError(''); }}
+      >
+        <span className="student-account-trigger__copy">
+          <strong>{displayName}</strong>
+          <small>Class {classCode}</small>
+        </span>
+        <span className="student-avatar">
+          <img src="/branding/student-avatar.svg" alt="" width="44" height="44" />
+        </span>
+        <svg className={`student-account-chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+
+      {open && (
+        <div className="student-account-menu" id="student-account-menu" aria-label="Student account options">
+          <div className="student-account-menu__identity">
+            <img src="/branding/student-avatar.svg" alt="" width="48" height="48" />
+            <div>
+              <strong>{displayName}</strong>
+              <span>Student account</span>
+              <small>Class {classCode}</small>
+            </div>
+          </div>
+          <div className="student-account-menu__section-label">YOUR LEARNING</div>
+          <Link href="/student/learn" className="student-account-menu__item" onClick={closeMenu}>
+            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong>Continue learning</strong><small>Pick up where you left off</small></span><span className="student-account-menu__arrow">→</span>
+          </Link>
+          <Link href="/student/practice" className="student-account-menu__item" onClick={closeMenu}>
+            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong>Practice questions</strong><small>Build confidence with practice</small></span><span className="student-account-menu__arrow">→</span>
+          </Link>
+          <Link href="/student/progress" className="student-account-menu__item" onClick={closeMenu}>
+            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong>My progress</strong><small>Review your learning journey</small></span><span className="student-account-menu__arrow">→</span>
+          </Link>
+          <div className="student-account-menu__divider" />
+          <button type="button" className="student-account-menu__item" onClick={() => void openParentSettings()} disabled={busy}>
+            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile &amp; settings</strong><small>Manage your profile and subjects</small></span><span className="student-account-menu__arrow">→</span>
+          </button>
+          {actionError && <p className="student-account-menu__error" role="alert">{actionError}</p>}
+          <div className="student-account-menu__divider" />
+          <button type="button" className="student-account-menu__logout" onClick={() => void logout()} disabled={busy}>
+            <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Log out'}</span>
+          </button>
+          <p className="student-account-menu__footnote">Your learning progress is saved automatically.</p>
+        </div>
+      )}
+    </div>
+  );
+}
