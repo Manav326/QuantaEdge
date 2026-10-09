@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -55,7 +56,7 @@ public class AdminContentController {
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    authorize(token, context, "CONTENT_VIEW");
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.display_name as class_name,
              s.code as subject_code, s.display_name as subject_name,
@@ -102,7 +103,7 @@ public class AdminContentController {
       @PathVariable long chapterId,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    authorize(token, context, "CONTENT_VIEW");
     return chapterById(chapterId);
   }
 
@@ -111,7 +112,7 @@ public class AdminContentController {
       @PathVariable long lessonId,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    authorize(token, context, "CONTENT_VIEW");
     return lessonById(lessonId);
   }
 
@@ -121,7 +122,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    authorize(token, context, "CONTENT_CREATE");
     String classCode = requiredText(body.get("classCode"), 30);
     String subjectCode = requiredText(body.get("subjectCode"), 40);
     String code = requiredText(body.get("code"), 60).toLowerCase();
@@ -164,7 +165,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    authorize(token, context, "CONTENT_CREATE");
     long chapterId = longValue(body.get("chapterId"), "chapterId");
     chapterById(chapterId);
     String code = requiredText(body.get("code"), 100).toLowerCase();
@@ -202,7 +203,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
+    Map<String,Object> current = chapterById(chapterId);
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
     String status = requiredText(body.get("status"), 20).toUpperCase();
@@ -213,7 +214,22 @@ public class AdminContentController {
     String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
     boolean sourceVerified = booleanValue(body.get("curriculumSourceVerified"), false);
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
-    chapterById(chapterId);
+    boolean fieldsChanged = !Objects.equals(name,current.get("chapter_name"))
+        || !Objects.equals(description,current.get("chapter_description"))
+        || sortOrder != ((Number)current.get("chapter_sort_order")).intValue()
+        || !Objects.equals(curriculumSource,current.get("curriculum_source"))
+        || !Objects.equals(sourceUrl,current.get("curriculum_source_url"))
+        || !Objects.equals(sourceEdition,current.get("curriculum_source_edition"))
+        || !Objects.equals(sourcePages,current.get("curriculum_source_pages"))
+        || sourceVerified != Boolean.TRUE.equals(current.get("curriculum_source_verified"));
+    String oldStatus=String.valueOf(current.get("chapter_status"));
+    if (fieldsChanged) authorization.requirePermission(context,"CONTENT_EDIT");
+    if (!status.equals(oldStatus) || "PUBLISHED".equals(status) || "ARCHIVED".equals(status)
+        || "PUBLISHED".equals(oldStatus) || "ARCHIVED".equals(oldStatus)) {
+      authorization.requirePermission(context,"CONTENT_PUBLISH");
+    } else if (!fieldsChanged) {
+      authorization.requirePermission(context,"CONTENT_EDIT");
+    }
     if (sourceVerified) requireCompleteSourceReference(curriculumSource, sourceUrl, sourceEdition, sourcePages, "chapter");
     if ("PUBLISHED".equals(status)) {
       if (!sourceVerified) throw badRequest("A chapter cannot be published until its official source edition and page mapping are verified.");
@@ -261,6 +277,95 @@ public class AdminContentController {
     return chapterById(chapterId);
   }
 
+  @PostMapping("/chapters/{chapterId}/publish")
+  @Transactional
+  public Map<String,Object> publishChapter(
+      @PathVariable long chapterId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_PUBLISH");
+    Map<String,Object> current=chapterById(chapterId);
+    Map<String,Object> body=new LinkedHashMap<>();
+    body.put("displayName",current.get("chapter_name"));
+    body.put("description",current.get("chapter_description"));
+    body.put("status","PUBLISHED");
+    body.put("sortOrder",((Number)current.get("chapter_sort_order")).intValue());
+    body.put("curriculumSource",current.get("curriculum_source"));
+    body.put("curriculumSourceUrl",current.get("curriculum_source_url"));
+    body.put("curriculumSourceEdition",current.get("curriculum_source_edition"));
+    body.put("curriculumSourcePages",current.get("curriculum_source_pages"));
+    body.put("curriculumSourceVerified",Boolean.TRUE.equals(current.get("curriculum_source_verified")));
+    return updateChapter(chapterId,body,null,context);
+  }
+
+  @PostMapping("/chapters/{chapterId}/unpublish")
+  @Transactional
+  public Map<String,Object> unpublishChapter(
+      @PathVariable long chapterId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_PUBLISH");
+    Map<String,Object> current=chapterById(chapterId);
+    Map<String,Object> body=new LinkedHashMap<>();
+    body.put("displayName",current.get("chapter_name"));
+    body.put("description",current.get("chapter_description"));
+    body.put("status","DRAFT");
+    body.put("sortOrder",((Number)current.get("chapter_sort_order")).intValue());
+    body.put("curriculumSource",current.get("curriculum_source"));
+    body.put("curriculumSourceUrl",current.get("curriculum_source_url"));
+    body.put("curriculumSourceEdition",current.get("curriculum_source_edition"));
+    body.put("curriculumSourcePages",current.get("curriculum_source_pages"));
+    body.put("curriculumSourceVerified",Boolean.TRUE.equals(current.get("curriculum_source_verified")));
+    return updateChapter(chapterId,body,null,context);
+  }
+
+  @PostMapping("/lessons/{lessonId}/publish")
+  @Transactional
+  public Map<String,Object> publishLesson(
+      @PathVariable long lessonId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_PUBLISH");
+    lessonById(lessonId);
+    validateLessonForPublishing(lessonId);
+    jdbc.update("update lesson set status='PUBLISHED', active=true, updated_at=now() where id=?",lessonId);
+    return lessonById(lessonId);
+  }
+
+  @PostMapping("/lessons/{lessonId}/unpublish")
+  @Transactional
+  public Map<String,Object> unpublishLesson(
+      @PathVariable long lessonId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_PUBLISH");
+    lessonById(lessonId);
+    jdbc.update("update lesson set status='DRAFT', active=true, updated_at=now() where id=?",lessonId);
+    return lessonById(lessonId);
+  }
+
+  @PostMapping("/lessons/{lessonId}/questions/{questionId}/review")
+  @Transactional
+  public Map<String,Object> reviewQuestion(
+      @PathVariable long lessonId,
+      @PathVariable long questionId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_REVIEW");
+    String status=requiredText(body.get("status"),20).toUpperCase();
+    if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(status)) {
+      throw badRequest("Review status must be Draft, Needs review, Approved or Rejected.");
+    }
+    String notes=optionalText(body.get("reviewNotes"),1200);
+    int changed=jdbc.update("""
+        update question
+        set review_status=?, review_notes=?,
+            reviewed_at=case when ?='APPROVED' then now() else null end
+        where id=? and lesson_id=?
+        """,status,notes,status,questionId,lessonId);
+    if (changed==0) throw notFound("Question",questionId);
+    return jdbc.queryForMap("""
+        select id,lesson_id,question_type,prompt,review_status,review_notes,reviewed_at,active
+        from question where id=? and lesson_id=?
+        """,questionId,lessonId);
+  }
+
   @PatchMapping("/lessons/{lessonId}")
   @Transactional
   public Map<String, Object> updateLesson(
@@ -268,8 +373,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    authorize(token, context);
-    lessonById(lessonId);
+    Map<String,Object> current = lessonById(lessonId);
     String title = requiredText(body.get("title"), 240);
     String summary = optionalText(body.get("summary"), 800);
     int minutes = integerValue(body.get("estimatedMinutes"), 1, 120, "estimatedMinutes");
@@ -281,6 +385,13 @@ public class AdminContentController {
     boolean sourceVerified = booleanValue(body.get("alignmentSourceVerified"), false);
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
+    authorization.requirePermission(context,"CONTENT_EDIT");
+    if ("REVIEW".equals(status)) authorization.requirePermission(context,"CONTENT_SUBMIT");
+    if ("PUBLISHED".equals(status) || "ARCHIVED".equals(status)
+        || "PUBLISHED".equals(String.valueOf(current.get("lesson_status")))
+        || "ARCHIVED".equals(String.valueOf(current.get("lesson_status")))) {
+      authorization.requirePermission(context,"CONTENT_PUBLISH");
+    }
     if (sourceVerified) requireCompleteSourceReference(sourceTitle, sourceUrl, sourceEdition, sourcePages, "lesson");
     if ("PUBLISHED".equals(status) && !sourceVerified) {
       throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
@@ -663,10 +774,9 @@ public class AdminContentController {
     }
   }
 
-  private void authorize(String suppliedToken, AuthContext context) {
-    // A browser-supplied shared secret or demo-mode flag is not an identity.
-    // All content authoring and publishing requires a valid authenticated admin session.
-    authorization.requireAdmin(context);
+  private void authorize(String suppliedToken, AuthContext context, String permission) {
+    // Shared browser tokens never grant access. Every task is checked against the authenticated identity.
+    authorization.requirePermission(context,permission);
   }
 
   private static List<Map<String, Object>> objectList(Object value, String name) {
