@@ -702,7 +702,7 @@ public class AdminContentController {
       where q.lesson_id=? and q.active=true
         and (
           q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
-          or q.review_status<>'APPROVED'
+          or q.review_status not in ('APPROVED','PUBLISHED')
           or nullif(btrim(q.prompt),'') is null
           or (q.question_type in ('MCQ','TRUE_FALSE') and (
             (select count(*) from question_option qo where qo.question_id=q.id)<2
