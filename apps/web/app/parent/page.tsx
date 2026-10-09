@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
-type ChildRow={id:number;display_name:string};
+type ChildRow={id:number;display_name:string;class_code?:string;board?:string};
 type ParentReport=Record<string,any>;
 type ParentProfile=Record<string,any>;
 
@@ -25,10 +25,14 @@ export default function ParentPage(){
   const [selected,setSelected]=useState<ParentReport|null>(null);
   const [parentProfile,setParentProfile]=useState<ParentProfile|null>(null);
   const [error,setError]=useState('');
+  const [actionError,setActionError]=useState('');
   const [loading,setLoading]=useState(true);
+  const [switchingChild,setSwitchingChild]=useState(false);
+  const [openingStudent,setOpeningStudent]=useState(false);
 
   async function load(id?:number){
-    setLoading(true);
+    const switching=id!==undefined;
+    if(switching)setSwitchingChild(true);else setLoading(true);
     setError('');
     try{
       let cr=await fetch('/api/v1/guardians/children',{cache:'no-store'});
@@ -58,8 +62,22 @@ export default function ParentPage(){
       setSelected(null);
       setError(e?.message||'The parent report could not be loaded. Check the local services and retry.');
     }finally{
-      setLoading(false);
+      if(switching)setSwitchingChild(false);else setLoading(false);
     }
+  }
+
+  async function openSelectedStudent(){
+    if(!selected)return;
+    setActionError('');
+    setOpeningStudent(true);
+    try{
+      const response=await fetch('/api/v1/auth/select-student',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({studentId:selected.id})});
+      const body=await readApi(response);
+      if(!response.ok)throw new Error(body.message||'Unable to open this child’s learning space.');
+      router.replace('/student');
+      router.refresh();
+    }catch(e:any){setActionError(e?.message||'Unable to open this child’s learning space.');}
+    finally{setOpeningStudent(false);}
   }
 
   useEffect(()=>{void load();},[]);
@@ -88,7 +106,16 @@ export default function ParentPage(){
     </header>
     <section className="parent-dashboard">
       <div><span className="eyebrow">Learning summary</span><h1>{selected.display_name||'Student'} ने क्या सीखा?</h1><p>यह report आपके linked child के वास्तविक learning records से बनती है।</p></div>
-      {children.length>1&&<label>Child<select value={selected.id} onChange={e=>void load(Number(e.target.value))}>{children.map(c=><option key={c.id} value={c.id}>{c.display_name}</option>)}</select></label>}
+      {children.length>1&&<section className="parent-report-switcher" aria-label="Choose a child’s learning report">
+        <div className="parent-report-switcher__intro"><span className="eyebrow">FAMILY ACCOUNT</span><h2>Each child, their own progress</h2><p>Select a child below to view their individual lessons, practice accuracy, study time and concept mastery. Siblings’ learning records are kept separate.</p></div>
+        <div className="parent-report-switcher__profiles">{children.map(c=><button key={c.id} type="button" className={Number(selected.id)===c.id?'parent-report-switcher__profile is-current':'parent-report-switcher__profile'} aria-pressed={Number(selected.id)===c.id} disabled={switchingChild} onClick={()=>void load(c.id)}>
+          <span className="parent-report-switcher__avatar">{(c.display_name||'S').trim().slice(0,1)||'S'}</span>
+          <span className="parent-report-switcher__copy"><strong>{c.display_name}</strong><small>Class {c.class_code||'—'}{c.board?' · '+c.board:''}</small><small>{Number(selected.id)===c.id?'Currently viewing this report':'View this child’s report'}</small></span>
+          <span className="parent-report-switcher__arrow">{Number(selected.id)===c.id?'✓':'→'}</span>
+        </button>)}</div>
+        {switchingChild&&<p className="parent-report-switcher__status" role="status">Loading the selected child’s report…</p>}
+      </section>}
+      {actionError&&<div className="feedback" role="alert">{actionError}</div>}
       <div className="parent-stats">
         <article><span>Lessons complete</span><strong>{stats.completed_lessons??0}</strong><small>of {stats.total_lessons??0} published lessons</small></article>
         <article><span>Accuracy</span><strong>{q.accuracy_percent??0}%</strong><small>{q.attempts??0} answered questions</small></article>
@@ -102,7 +129,8 @@ export default function ParentPage(){
         <article className="report-panel"><div className="panel-title"><strong>Concepts needing support</strong><span>↗</span></div>{masteryDetails.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={m.concept_title||i}><div><b>{m.concept_title||'Concept'}</b><small>{m.subject_name} · {m.chapter_name}</small></div><span>{m.mastery_percent??0}%</span></div>)}</article>
         <article className="report-panel"><div className="panel-title"><strong>Recent practice</strong><span>✓</span></div>{recentAttempts.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={i}><div><b>{m.concept_title||m.chapter_name||'Practice'}</b><small>{m.question_type||'Question'}</small></div><span className={m.correct===true?'good':''}>{m.correct===true?'सही':m.correct===false?'गलत':'Review'}</span></div>)}</article>
       </div>
-      <Link href="/student" className="button button-dark">Student journey खोलें →</Link>
+      <button type="button" className="button button-dark" disabled={openingStudent} onClick={()=>void openSelectedStudent()}>{openingStudent?'Opening learning space…':`${selected.display_name||'Student'} की learning खोलें →`}</button>
+      <p className="parent-open-student-note">This opens the selected child’s learning area. Use the account menu there to return to the parent dashboard.</p>
     </section>
   </main>;
 }
