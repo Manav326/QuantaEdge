@@ -353,12 +353,14 @@ public class AdminContentController {
       throw badRequest("Review status must be Draft, Needs review, Approved or Rejected.");
     }
     String notes=optionalText(body.get("reviewNotes"),1200);
+    if ("APPROVED".equals(status)) validateQuestionForReview(lessonId,questionId);
     int changed=jdbc.update("""
         update question
         set review_status=?, review_notes=?,
-            reviewed_at=case when ?='APPROVED' then now() else null end
+            reviewed_at=case when ?='APPROVED' then now() else null end,
+            reviewed_by_staff_id=case when ?='APPROVED' then ? else null end
         where id=? and lesson_id=?
-        """,status,notes,status,questionId,lessonId);
+        """,status,notes,status,status,context.staffId(),questionId,lessonId);
     if (changed==0) throw notFound("Question",questionId);
     return jdbc.queryForMap("""
         select id,lesson_id,question_type,prompt,review_status,review_notes,reviewed_at,active
@@ -414,6 +416,71 @@ public class AdminContentController {
       """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status),
       sourceTitle, sourceUrl, sourceEdition, sourcePages, sourceVerified, lessonId);
     return lessonById(lessonId);
+  }
+
+  private void validateQuestionForReview(long lessonId,long questionId) {
+    Map<String,Object> q;
+    try {
+      q=jdbc.queryForMap("""
+          select question_type,prompt,source_kind,source_id,source_ref,source_year,
+                 source_title,board,answer_payload::text as answer_payload
+          from question where id=? and lesson_id=?
+          """,questionId,lessonId);
+    } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+      throw notFound("Question",questionId);
+    }
+    String type=String.valueOf(q.get("question_type")).toUpperCase();
+    if (!Set.of("MCQ","TRUE_FALSE","INPUT","NUMERICAL").contains(type)) {
+      throw badRequest("This question type is not supported for automatic scoring and cannot be approved yet.");
+    }
+    if (q.get("prompt")==null||String.valueOf(q.get("prompt")).isBlank()) {
+      throw badRequest("Add a question prompt before approval.");
+    }
+    Map<String,Object> answer;
+    try {
+      Object parsed=mapper.readValue(String.valueOf(q.get("answer_payload")),Object.class);
+      if (!(parsed instanceof Map<?,?> map)) throw badRequest("Question answer key must be an object.");
+      answer=new LinkedHashMap<>();
+      for (Map.Entry<?,?> entry:map.entrySet()) {
+        if (entry.getKey() instanceof String key) answer.put(key,entry.getValue());
+      }
+    } catch (JacksonException ex) {
+      throw badRequest("Stored question answer data is invalid.");
+    }
+    if ("MCQ".equals(type)||"TRUE_FALSE".equals(type)) {
+      List<Map<String,Object>> options=jdbc.queryForList("""
+          select option_key,label,is_correct from question_option
+          where question_id=? order by sort_order
+          """,questionId);
+      long correct=options.stream().filter(o->Boolean.TRUE.equals(o.get("is_correct"))).count();
+      if (options.size()<2||correct!=1) {
+        throw badRequest("Approval requires at least two answer options and exactly one correct answer.");
+      }
+      String correctKey=String.valueOf(options.stream().filter(o->Boolean.TRUE.equals(o.get("is_correct"))).findFirst().orElseThrow().get("option_key"));
+      if (!"OPTION".equals(answer.get("kind"))||!correctKey.equals(String.valueOf(answer.get("value")))) {
+        throw badRequest("The answer key does not match the marked correct option.");
+      }
+    } else if ("INPUT".equals(type)) {
+      if (!"TEXT".equals(answer.get("kind"))||String.valueOf(answer.getOrDefault("value","")).isBlank()) {
+        throw badRequest("Add the expected text answer before approval.");
+      }
+    } else if (!"NUMERIC".equals(answer.get("kind"))||answer.get("value")==null) {
+      throw badRequest("Add a numeric answer key before approval.");
+    }
+    String sourceKind=String.valueOf(q.get("source_kind")).toUpperCase();
+    if (!"AUTHOR_CREATED".equals(sourceKind)) {
+      if (q.get("source_id")==null||q.get("source_ref")==null||String.valueOf(q.get("source_ref")).isBlank()
+          ||q.get("source_year")==null||q.get("source_title")==null||q.get("board")==null) {
+        throw badRequest("Add source title, board, year and exact page/reference before approving this sourced question.");
+      }
+      Long validSource=jdbc.queryForObject("""
+          select count(*) from content_source
+          where id=? and upper(status) in ('VERIFIED','APPROVED','PUBLISHED')
+          """,Long.class,q.get("source_id"));
+      if(validSource==null||validSource==0) {
+        throw badRequest("Verify the referenced source before approving this question.");
+      }
+    }
   }
 
   private void validateLessonForPublishing(long lessonId) {
@@ -573,8 +640,8 @@ public class AdminContentController {
       String difficulty = requiredText(q.get("difficulty"), 20).toUpperCase();
       String prompt = requiredText(q.get("prompt"), 1000);
       String explanation = optionalText(q.get("explanation"), 1200);
-      String reviewStatus = String.valueOf(q.getOrDefault("review_status", "DRAFT")).trim().toUpperCase();
-      String reviewNotes = optionalText(q.get("review_notes"), 1200);
+      String reviewStatus = "DRAFT";
+      String reviewNotes = null; // Review state can only change through the permissioned review endpoint.
       int order = integerValue(first(q, "sort_order", "sortOrder"), 1, 10000, "sort_order");
       Integer marks = optionalInteger(first(q, "marks", "marks"), 1, 100, "marks");
       String examFormat = optionalText(first(q, "exam_format", "examFormat"), 40);
@@ -660,11 +727,13 @@ public class AdminContentController {
         id = createdId;
       } else {
         Map<String, Object> existing = jdbc.queryForMap("""
-          select question_type,prompt,explanation,difficulty,review_status,marks,exam_format,
+          select question_type,prompt,explanation,difficulty,review_status,review_notes,marks,exam_format,
                  source_kind,source_title,source_ref,source_year,source_id,board,topic,subtopic,skill,
                  tags::text as tags,answer_payload::text as answer_payload
           from question where id=? and lesson_id=?
           """, id, lessonId);
+        reviewStatus = String.valueOf(existing.get("review_status"));
+        reviewNotes = existing.get("review_notes")==null?null:String.valueOf(existing.get("review_notes"));
         boolean changed = !type.equals(String.valueOf(existing.get("question_type")))
             || !prompt.equals(String.valueOf(existing.get("prompt")))
             || !java.util.Objects.equals(explanation, existing.get("explanation"))
