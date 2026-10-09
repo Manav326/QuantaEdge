@@ -67,8 +67,7 @@ insert into staff_permission_catalog(permission_key, display_name, description) 
  ('CONTENT_REVIEW','Review content','Review content and approve or return practice questions.'),
  ('CONTENT_PUBLISH','Publish content','Publish or unpublish approved content after all checks pass.'),
  ('STAFF_MANAGE','Manage staff','Create staff accounts, grant permissions and suspend staff access.'),
- ('AUDIT_VIEW','View audit trail','Inspect staff access and activity records.'),
- ('USER_MANAGE','Manage accounts','Manage parent and student accounts.')
+ ('AUDIT_VIEW','View audit trail','Inspect staff access and activity records.')
 on conflict(permission_key) do update
 set display_name=excluded.display_name, description=excluded.description;
 
