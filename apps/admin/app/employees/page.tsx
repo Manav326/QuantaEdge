@@ -143,7 +143,17 @@ export default function AdminStaffPage() {
 
   function toggleDraftPermission(key:string,checked:boolean,creating=false) {
     const current=creating?newPermissions:draftPermissions;
-    const next=checked?[...new Set([...current,key])]:current.filter(item=>item!==key);
+    let next=checked?[...new Set([...current,key])]:current.filter(item=>item!==key);
+    if(checked&&key.startsWith('CONTENT_')&&key!=='CONTENT_VIEW') {
+      next=[...new Set([...next,'CONTENT_VIEW'])];
+    }
+    if(checked&&key==='CONTENT_CREATE') {
+      next=[...new Set([...next,'CONTENT_VIEW','CONTENT_EDIT'])];
+    }
+    if(!checked&&key==='CONTENT_VIEW') {
+      next=next.filter(item=>!['CONTENT_CREATE','CONTENT_EDIT','CONTENT_SUBMIT','CONTENT_REVIEW','CONTENT_PUBLISH'].includes(item));
+    }
+    if(!checked&&key==='CONTENT_EDIT') next=next.filter(item=>item!=='CONTENT_CREATE');
     if(creating)setNewPermissions(next);else setDraftPermissions(next);
   }
 
