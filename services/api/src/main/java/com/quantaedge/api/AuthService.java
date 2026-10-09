@@ -54,17 +54,25 @@ public class AuthService {
   }
 
   public String requestOtp(String mobile,String purpose) {
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose))
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
 
-    boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
-        "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
-    if("SIGNUP".equals(purpose) && accountExists)
-      throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
-    if("LOGIN".equals(purpose) && !accountExists)
-      throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
+    if ("STAFF_LOGIN".equals(purpose)) {
+      boolean staffExists = Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from staff_account where mobile_e164=? and active=true)", Boolean.class, normalized));
+      if (!staffExists && !adminMobiles.contains(normalized)) {
+        throw new IllegalArgumentException("This mobile is not assigned to an active staff account.");
+      }
+    } else {
+      boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
+      if("SIGNUP".equals(purpose) && accountExists)
+        throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
+      if("LOGIN".equals(purpose) && !accountExists)
+        throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
+    }
 
     long recent=jdbc.queryForObject(
         "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
@@ -108,7 +116,7 @@ public class AuthService {
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName) {
     String normalized=normalizeMobile(mobile);
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
     if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
       throw new IllegalArgumentException("Parent name must be between 2 and 120 characters");
 
@@ -134,6 +142,34 @@ public class AuthService {
     }
     if(!hash(otp).equals(String.valueOf(row.get("code_hash")))) throw new IllegalArgumentException("Incorrect OTP");
 
+    if ("STAFF_LOGIN".equals(purpose)) {
+      jdbc.update("update otp_challenge set consumed_at=now() where id=?", row.get("id"));
+      List<Map<String,Object>> staffRows=jdbc.queryForList(
+          "select id, active from staff_account where mobile_e164=?", normalized);
+      Long staffId=null;
+      if (!staffRows.isEmpty()) {
+        Map<String,Object> staffRow=staffRows.getFirst();
+        if (!Boolean.TRUE.equals(staffRow.get("active"))) {
+          throw new SecurityException("This staff account is inactive. Contact an administrator.");
+        }
+        staffId=((Number)staffRow.get("id")).longValue();
+      } else if (adminMobiles.contains(normalized)) {
+        String staffName=displayName==null||displayName.isBlank()?"Administrator":displayName.trim();
+        staffId=jdbc.queryForObject("""
+          insert into staff_account(public_id,mobile_e164,display_name,role,active)
+          values (?,?,?,'ADMIN',true) returning id
+          """, Long.class, UUID.randomUUID(), normalized, staffName);
+        jdbc.update("""
+          insert into staff_permission_grant(staff_id,permission_key)
+          select ?, permission_key from staff_permission_catalog
+          on conflict(staff_id,permission_key) do nothing
+          """, staffId);
+      } else {
+        throw new SecurityException("This mobile is not assigned to an active staff account.");
+      }
+      return contextForStaff(staffId);
+    }
+
     boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
     if("SIGNUP".equals(purpose) && accountExists)
@@ -143,7 +179,7 @@ public class AuthService {
 
     jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
 
-    String role=adminMobiles.contains(normalized)?"ADMIN":"PARENT";
+    String role="PARENT";
     Long userId;
     try {
       userId=jdbc.queryForObject("select id from user_account where mobile_e164=?",Long.class,normalized);
@@ -266,27 +302,36 @@ public class AuthService {
   public AuthContext current(String token) {
     if(token==null || token.isBlank()) return null;
     var rows=jdbc.queryForList("""
-      select s.user_id,s.student_id,u.role,u.display_name,st.display_name as student_name
+      select s.user_id,s.student_id,s.staff_id,
+             u.role,u.display_name,st.display_name as student_name,
+             e.role as staff_role,e.display_name as staff_name
       from auth_session s
       left join user_account u on u.id=s.user_id
       left join student st on st.id=s.student_id
+      left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
+        and (s.staff_id is null or e.id is not null)
       """,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
     jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
-    String name=r.get("student_name")!=null?String.valueOf(r.get("student_name")):(r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
-    String role=r.get("student_id")!=null?"STUDENT":String.valueOf(r.get("role"));
-    return new AuthContext(r.get("user_id")==null?null:((Number)r.get("user_id")).longValue(),
-        r.get("student_id")==null?null:((Number)r.get("student_id")).longValue(),role,name);
+    Long userId=r.get("user_id")==null?null:((Number)r.get("user_id")).longValue();
+    Long studentId=r.get("student_id")==null?null:((Number)r.get("student_id")).longValue();
+    Long staffId=r.get("staff_id")==null?null:((Number)r.get("staff_id")).longValue();
+    String name=studentId!=null?String.valueOf(r.get("student_name")):
+        staffId!=null?String.valueOf(r.get("staff_name")):
+        (r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
+    String role=studentId!=null?"STUDENT":
+        staffId!=null?String.valueOf(r.get("staff_role")):String.valueOf(r.get("role"));
+    return new AuthContext(userId,studentId,staffId,role,name);
   }
 
   public String issueToken(AuthContext context) {
     String raw=randomToken();
     jdbc.update("""
-      insert into auth_session(token_hash,user_id,student_id,expires_at)
-      values (?,?,?,?)
-      """,hash(raw),context.userId(),context.studentId(),java.sql.Timestamp.from(Instant.now().plus(Duration.ofHours(sessionHours))));
+      insert into auth_session(token_hash,user_id,student_id,staff_id,expires_at)
+      values (?,?,?,?,?)
+      """,hash(raw),context.userId(),context.studentId(),context.staffId(),java.sql.Timestamp.from(Instant.now().plus(Duration.ofHours(sessionHours))));
     return raw;
   }
 
@@ -303,6 +348,21 @@ public class AuthService {
   public AuthContext contextForUser(long userId) {
     var r=jdbc.queryForMap("select role,display_name from user_account where id=? and active=true",userId);
     return new AuthContext(userId,null,String.valueOf(r.get("role")),r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
+  }
+
+  public AuthContext contextForStaff(long staffId) {
+    Map<String,Object> row=jdbc.queryForMap(
+        "select role, display_name from staff_account where id=? and active=true", staffId);
+    jdbc.update("update staff_account set last_login_at=now() where id=?", staffId);
+    return new AuthContext(null, null, staffId, String.valueOf(row.get("role")),
+        row.get("display_name")==null?null:String.valueOf(row.get("display_name")));
+  }
+
+  public List<String> permissionsForStaff(long staffId) {
+    return jdbc.queryForList("""
+        select permission_key from staff_permission_grant
+        where staff_id=? order by permission_key
+        """, String.class, staffId);
   }
 
   public AuthContext contextForStudent(Long userId,long studentId) {
