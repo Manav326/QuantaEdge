@@ -381,6 +381,9 @@ public class AdminContentController {
       throw badRequest("Submit the micro-topic for review before approving or returning its questions.");
     }
     String notes=optionalText(body.get("reviewNotes"),1200);
+    if ("REJECTED".equals(status) && (notes==null || notes.isBlank())) {
+      throw badRequest("Add clear feedback so the author knows what must be corrected.");
+    }
     if ("APPROVED".equals(status)) validateQuestionForReview(lessonId,questionId);
     int changed=jdbc.update("""
         update question
@@ -495,7 +498,8 @@ public class AdminContentController {
           where question_id=? order by sort_order
           """,questionId);
       long correct=options.stream().filter(o->Boolean.TRUE.equals(o.get("is_correct"))).count();
-      if (options.size()<2||correct!=1) {
+      boolean blankOption=options.stream().anyMatch(option->!meaningfulTeachingText(option.get("label")));
+      if (options.size()<2||correct!=1||blankOption) {
         throw badRequest("Approval requires at least two answer options and exactly one correct answer.");
       }
       String correctKey=String.valueOf(options.stream().filter(o->Boolean.TRUE.equals(o.get("is_correct"))).findFirst().orElseThrow().get("option_key"));
