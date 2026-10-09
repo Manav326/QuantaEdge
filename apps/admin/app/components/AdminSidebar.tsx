@@ -90,9 +90,9 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
             {item.key === 'content' && variant === 'overview' ? <small>01</small> : null}
           </Link>
         ))}
-        <Link href="/legacy-content" title={collapsed ? 'Detailed authoring' : undefined} className="qe-legacy-nav">
+        {role === 'ADMIN' ? <Link href="/legacy-content" title={collapsed ? 'Detailed authoring' : undefined} className="qe-legacy-nav">
           <span className="qe-nav-icon" aria-hidden="true">✎</span><span className="qe-nav-label">Detailed authoring</span>
-        </Link>
+        </Link> : null}
         {role === 'ADMIN' ? <Link href="/employees" title={collapsed ? 'Staff & audit' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
           <span className="qe-nav-icon" aria-hidden="true">♙</span><span className="qe-nav-label">Staff & audit</span>
         </Link> : permissions.includes('AUDIT_VIEW') ? <Link href="/employees?view=audit" title={collapsed ? 'Activity trail' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
