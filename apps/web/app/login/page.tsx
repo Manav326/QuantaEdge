@@ -71,6 +71,10 @@ export default function LoginPage(){
       const r=await fetch('/api/v1/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       const b=await readApiJson(r);
       if(!r.ok) throw new Error(b.message||`OTP verification failed (HTTP ${r.status})`);
+      if(mode==='login'){
+        router.replace('/parent');
+        return;
+      }
       const cr=await fetch('/api/v1/guardians/children');
       const cb=await readApiJson(cr);
       if(!cr.ok) throw new Error(cb.message||`Unable to load children (HTTP ${cr.status})`);
