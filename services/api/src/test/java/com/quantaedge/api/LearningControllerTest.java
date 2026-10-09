@@ -67,7 +67,7 @@ class LearningControllerTest {
 
     Map<String, Object> lesson = controller.lesson(42L, student);
 
-    verify(jdbc).queryForList(contains("strip_answer_keys(content)"), eq(42L));
+    verify(jdbc).queryForList(contains("strip_answer_keys(b.content)"), eq(42L));
     assertTrue(lesson.containsKey("blocks"));
     assertTrue(lesson.containsKey("questions"));
   }
