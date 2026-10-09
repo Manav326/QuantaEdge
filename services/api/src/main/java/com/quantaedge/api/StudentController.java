@@ -3,6 +3,8 @@ package com.quantaedge.api;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,91 @@ public class StudentController {
   @GetMapping("/me")
   public Map<String,Object> me(@RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireStudent(context); return statsFor(context.studentId());
+  }
+
+
+  @GetMapping("/me/profile")
+  public Map<String,Object> myProfile(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    return profileFor(context.studentId());
+  }
+
+  @PutMapping("/me/profile")
+  @Transactional
+  public Map<String,Object> updateMyProfile(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    long studentId=context.studentId();
+
+    String displayName=profileText(body.get("displayName"),"Name",120);
+    if(displayName.length()<2) throw new IllegalArgumentException("Name must contain at least 2 characters.");
+    String city=profileText(body.get("city"),"City or town",100);
+    String state=profileText(body.get("state"),"State",100);
+    String schoolName=profileText(body.get("schoolName"),"School name",180);
+    String schoolMedium=profileText(body.get("schoolMedium"),"School medium",40);
+    String favoriteSubject=profileText(body.get("favoriteSubject"),"Favourite subject",30);
+    String learningGoal=profileText(body.get("learningGoal"),"Learning goal",300);
+
+    if(!schoolMedium.isEmpty() && !List.of("Hindi","English","Hindi & English","Other").contains(schoolMedium))
+      throw new IllegalArgumentException("Choose a valid school medium.");
+    if(!favoriteSubject.isEmpty() && !List.of("maths","science","both","other","not_sure").contains(favoriteSubject))
+      throw new IllegalArgumentException("Choose a valid favourite subject.");
+
+    String image;
+    if(body.containsKey("profileImageDataUrl")) {
+      image=validatedProfileImage(body.get("profileImageDataUrl"));
+    } else {
+      image=jdbc.queryForObject("select profile_image_data_url from student where id=? and active=true",String.class,studentId);
+    }
+
+    int changed=jdbc.update("""
+      update student
+      set display_name=?,profile_image_data_url=?,city=?,state=?,school_name=?,
+          school_medium=?,favorite_subject=?,learning_goal=?,profile_updated_at=now()
+      where id=? and active=true
+      """,displayName,image,nullable(city),nullable(state),nullable(schoolName),
+         nullable(schoolMedium),nullable(favoriteSubject),nullable(learningGoal),studentId);
+    if(changed!=1) throw new SecurityException("Active student profile not found.");
+    return profileFor(studentId);
+  }
+
+  private Map<String,Object> profileFor(long studentId) {
+    return jdbc.queryForMap("""
+      select id,public_id,display_name,class_code,board,language,
+             profile_image_data_url,city,state,school_name,school_medium,
+             favorite_subject,learning_goal,profile_updated_at
+      from student where id=? and active=true
+      """,studentId);
+  }
+
+  private String profileText(Object value,String label,int maxLength) {
+    String text=value==null?"":String.valueOf(value).trim();
+    if(text.length()>maxLength) throw new IllegalArgumentException(label+" must be "+maxLength+" characters or fewer.");
+    if(text.chars().anyMatch(ch -> Character.isISOControl(ch) && ch!='\\n' && ch!='\\t'))
+      throw new IllegalArgumentException(label+" contains unsupported characters.");
+    return text;
+  }
+
+  private String nullable(String value) {
+    return value==null || value.isBlank()?null:value;
+  }
+
+  private String validatedProfileImage(Object value) {
+    String data=value==null?"":String.valueOf(value).trim();
+    if(data.isEmpty()) return null;
+    final String prefix="data:image/jpeg;base64,";
+    if(!data.startsWith(prefix) || data.length()>500_000)
+      throw new IllegalArgumentException("Upload a JPG photo smaller than 350 KB.");
+    byte[] bytes;
+    try {
+      bytes=Base64.getDecoder().decode(data.substring(prefix.length()));
+    } catch(IllegalArgumentException ex) {
+      throw new IllegalArgumentException("The uploaded photo is not a valid image.");
+    }
+    if(bytes.length==0 || bytes.length>350*1024)
+      throw new IllegalArgumentException("Upload a JPG photo smaller than 350 KB.");
+    return data;
   }
 
   @GetMapping("/preview")
@@ -58,7 +145,7 @@ public class StudentController {
 
   private Map<String,Object> statsFor(long studentId){
     Map<String,Object> student=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language from student where id=? and active=true
+      select id,public_id,display_name,class_code,board,language,profile_image_data_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
       """,studentId);
     Map<String,Object> result=new LinkedHashMap<>(student);
     result.put("lessonStats",jdbc.queryForMap("""
