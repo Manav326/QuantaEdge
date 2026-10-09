@@ -407,9 +407,8 @@ public class AuthService {
     return jdbc.queryForList("""
         select g.permission_key
         from staff_permission_grant g
-        join staff_account s on s.id=g.staff_id
         join staff_permission_catalog p on p.permission_key=g.permission_key
-        where g.staff_id=? and s.active=true
+        where g.staff_id=?
         order by g.permission_key
         """, String.class, staffId);
   }
