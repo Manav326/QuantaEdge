@@ -1,8 +1,8 @@
 
 package com.quantaedge.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -292,7 +292,7 @@ public class AdminContentController {
 
   private String toJson(Object value) {
     try { return mapper.writeValueAsString(value); }
-    catch (JsonProcessingException ex) { throw badRequest("Content must contain valid JSON."); }
+    catch (JacksonException ex) { throw badRequest("Content must contain valid JSON."); }
   }
 
   private void authorize(String suppliedToken) {
