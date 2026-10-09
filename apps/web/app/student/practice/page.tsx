@@ -26,20 +26,20 @@ export default function PracticePage(){
       try{
         const me=await fetch('/api/v1/students/me');
         if(me.status===401||me.status===403){router.replace('/login');return;}
-        const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||'Student unavailable');
+        const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||'Student profile nahi mila');
         setStudent(studentData);
         const rec=await fetch('/api/v1/recommendations/next'); const rb=await rec.json();
         if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
-        if(!rec.ok||!rb.available||!rb.lesson) throw new Error('No recommended lesson');
+        if(!rec.ok||!rb.available||!rb.lesson) throw new Error('Abhi koi recommended lesson nahi mila');
         const qs=await fetch('/api/v1/learning/lessons/'+rb.lesson.id+'/questions').then(r=>r.json());
         setQuestions(qs);
-      }catch(e:any){setError(e.message||'Practice load नहीं हो पाया।');}
+      }catch(e:any){setError(e.message||'Practice load nahi ho paayi.');}
     }
     load();
   },[router]);
 
-  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Practice unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
-  if(!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Loading practice…</div></section></main>;
+  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Practice load nahi ho paayi</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
+  if(!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Practice load ho rahi hai…</div></section></main>;
 
   const q=questions[index];
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
@@ -64,11 +64,11 @@ export default function PracticePage(){
       <div className="eyebrow">Class {student?.class_code ?? '—'} · {q.question_type}</div>
       <div className="feedback">
         <span>{q.exam_format ?? 'Concept practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
-        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?'SCERT-aligned author question':q.source_kind ?? 'Author-created'}</span>
+        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?'SCERT se aligned question':q.source_kind ?? 'Content team ka question'}</span>
         {q.source_year ? <span>{q.source_year}</span>:null}
       </div>
       <h1>{q.prompt}</h1>
-      <p>पहले सोचो। उत्तर दो। फिर feedback पढ़कर reasoning जाँचो।</p>
+      <p>Pehle socho, answer do, phir feedback padhkar apni reasoning check karo.</p>
 
       {options.length>0 ? <div className="option-grid">
         {options.map(o=><button key={o.key} disabled={!!result} className={selected===o.key?'selected':''} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}
@@ -76,21 +76,21 @@ export default function PracticePage(){
       q.question_type==='MATCH' ? <MatchInput disabled={!!result} onSubmit={answer}/> :
       <div className="concept-card">
         {q.question_type==='NUMERICAL'
-          ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder="संख्यात्मक उत्तर लिखें…"/>
-          : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder="अपना reasoning/उत्तर लिखें…" rows={q.question_type==='LONG_ANSWER'?7:5}/>}
-        <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}>उत्तर जमा करें</button>
+          ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Number wala answer yahan likhein…"/>
+          : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Apna answer ya reasoning yahan likhein…" rows={q.question_type==='LONG_ANSWER'?7:5}/>}
+        <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}>Answer submit karein</button>
       </div>}
 
       {result&&<div className="practice-feedback">
-        <strong>{result.correct===true?'✓ सही जवाब':result.correct===false?'अभी नहीं':'उत्तर दर्ज है'}</strong>
+        <strong>{result.correct===true?'✓ सही जवाब':result.correct===false?'Abhi nahi':'Answer save ho gaya'}</strong>
         <span>{result.feedback}</span>
         {result.explanation&&<span>{result.explanation}</span>}
       </div>}
 
       <div className="practice-footer">
         <span>Question {index+1} of {questions.length}</span>
-        {result && index+1<questions.length ? <button className="button button-dark" onClick={next}>अगला सवाल →</button>
-          : result ? <Link href="/student/progress" className="button button-dark">Progress देखें →</Link>
+        {result && index+1<questions.length ? <button className="button button-dark" onClick={next}>Agla question →</button>
+          : result ? <Link href="/student/progress" className="button button-dark">Progress dekhein →</Link>
           : <span>उत्तर दें</span>}
       </div>
     </section>
@@ -103,7 +103,7 @@ function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;o
   const [order,setOrder]=useState<string[]>([]);
   function pick(letter:string){if(disabled||order.includes(letter))return;setOrder([...order,letter]);}
   function reset(){if(!disabled)setOrder([])}
-  return <div className="concept-card structured-card"><div className="structured-hint">क्रम चुनें: हर विकल्प पर एक बार टैप करें।</div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'अभी कोई क्रम नहीं चुना'}</div><div className="practice-footer"><button className="text-link" onClick={reset}>Reset</button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}>क्रम जमा करें</button></div></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint">Sequence choose karein: har option par ek baar tap karein.</div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'Abhi sequence choose nahi hua'}</div><div className="practice-footer"><button className="text-link" onClick={reset}>Reset</button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}>Sequence submit karein</button></div></div>;
 }
 
 function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string|object)=>void}){
@@ -114,5 +114,5 @@ function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string
     },{} as Record<string,string>);
     if(Object.keys(mapping).length) onSubmit(mapping);
   }
-  return <div className="concept-card structured-card"><div className="structured-hint">मिलान लिखें: <b>1:A, 2:B, 3:C</b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}>मिलान जमा करें</button></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint">Matching likhein: <b>1:A, 2:B, 3:C</b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}>Matching submit karein</button></div>;
 }

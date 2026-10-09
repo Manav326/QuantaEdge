@@ -34,7 +34,7 @@ export default function DiagnosticPage(){
     void fetch('/api/v1/learning/sessions/'+session+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
   }},[session,started]);
 
-  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Diagnostic load nahi ho paaya</h1><p>{error}</p><Link href="/student" className="button button-dark">← वापस</Link></div></section></main>;
+  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Diagnostic load nahi ho paaya</h1><p>{error}</p><Link href="/student" className="button button-dark">← Wapas</Link></div></section></main>;
   if(!qs.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Initial diagnostic ready ho raha hai…</div></section></main>;
 
   const q=qs[idx];
@@ -63,8 +63,8 @@ export default function DiagnosticPage(){
       <h1>{q.prompt}</h1>
       <p>Yeh chhota assessment aapki starting learning recommendation banane mein help karta hai.</p>
       <div className="option-grid">{options.map(o=><button key={o.key} className={value===o.key?'selected':''} disabled={!!result} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}</div>
-      {result&&<div className="practice-feedback"><strong>{result.correct===true?'✓ सही':'Agla attempt humein aapki learning samajhne mein help karega'}</strong><span>{result.feedback}</span></div>}
-      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button className="button button-dark" onClick={next}>{idx+1<qs.length?'अगला →':'Learning journey shuru karein →'}</button></div>}
+      {result&&<div className="practice-feedback"><strong>{result.correct===true?'✓ Sahi':'Agla attempt humein aapki learning samajhne mein help karega'}</strong><span>{result.feedback}</span></div>}
+      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button className="button button-dark" onClick={next}>{idx+1<qs.length?'Agla →':'Learning journey shuru karein →'}</button></div>}
     </section>
   </main>;
 }
