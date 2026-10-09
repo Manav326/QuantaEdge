@@ -27,6 +27,9 @@ public class AuthService {
   private final List<String> adminMobiles;
   @Value("${app.auth.max-children-per-parent:3}")
   private int maxChildrenPerParent = 3;
+  // This opt-in is effective only with demo OTP mode, never with real OTP delivery.
+  @Value("${app.auth.allow-repeated-demo-otp:false}")
+  private boolean allowRepeatedDemoOtp = false;
 
   public AuthService(
       JdbcTemplate jdbc,
@@ -91,14 +94,18 @@ public class AuthService {
         throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
     }
 
-    long recent=jdbc.queryForObject(
-        "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
-        Long.class,normalized,otpCooldownSeconds);
-    if(recent>0) throw new IllegalStateException("Please wait before requesting another OTP");
-    long hourly=jdbc.queryForObject(
-        "select count(*) from otp_challenge where mobile_e164=? and requested_at > now()-interval '1 hour'",
-        Long.class,normalized);
-    if(hourly>=5) throw new IllegalStateException("Too many OTP requests. Please try again later.");
+    // Keep real OTP delivery rate-limited. Local QA can opt out only when the fixed demo OTP
+    // is enabled, avoiding repeated-login test lockouts without weakening production delivery.
+    if (!(demoSeed && allowRepeatedDemoOtp)) {
+      long recent=jdbc.queryForObject(
+          "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
+          Long.class,normalized,otpCooldownSeconds);
+      if(recent>0) throw new IllegalStateException("Please wait before requesting another OTP");
+      long hourly=jdbc.queryForObject(
+          "select count(*) from otp_challenge where mobile_e164=? and requested_at > now()-interval '1 hour'",
+          Long.class,normalized);
+      if(hourly>=5) throw new IllegalStateException("Too many OTP requests. Please try again later.");
+    }
 
     String otp=demoSeed ? "123456" : String.format("%06d",random.nextInt(1_000_000));
 

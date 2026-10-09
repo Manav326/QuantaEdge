@@ -31,6 +31,21 @@ class AuthServiceTest {
   @Mock private JdbcTemplate jdbc;
 
   @Test
+  void localDemoOtpCanOptIntoRepeatedRequestsWithoutRateLimitQueries() throws Exception {
+    String mobile = "+917070107483";
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+    var field = AuthService.class.getDeclaredField("allowRepeatedDemoOtp");
+    field.setAccessible(true);
+    field.setBoolean(auth, true);
+    when(jdbc.queryForList("select active from staff_account where mobile_e164=?", mobile))
+        .thenReturn(List.of());
+
+    assertEquals("123456", auth.requestOtp("7070107483", "STAFF_LOGIN"));
+    verify(jdbc, never()).queryForObject(contains("interval '1 second'"), eq(Long.class), eq(mobile), eq(60));
+    verify(jdbc, never()).queryForObject(contains("interval '1 hour'"), eq(Long.class), eq(mobile));
+  }
+
+  @Test
   void configuredBootstrapAdminCanRequestOtpWithoutExistingStaffRow() {
     String mobile = "+917070107483";
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
