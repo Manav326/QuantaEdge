@@ -84,7 +84,7 @@ export default function Home() {
 
             <div className="task">
               <span className="task-icon">✦</span>
-              <div><strong>Mastery badhayein</strong><small>Concept mastery के आधार पर next step</small></div>
+              <div><strong>Mastery badhayein</strong><small>Concept mastery ke basis par next step</small></div>
               <span className="arrow">→</span>
             </div>
 
