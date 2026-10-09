@@ -205,9 +205,7 @@ public class AuthService {
       return contextForStaff(staffId);
     }
 
-    boolean isStaffMobile=Boolean.TRUE.equals(jdbc.queryForObject(
-        "select exists(select 1 from staff_account where mobile_e164=?)", Boolean.class, normalized));
-    if(isStaffMobile) throw new SecurityException("This mobile belongs to a staff identity. Use Staff access on the admin console.");
+    // LOGIN/SIGNUP authenticate the customer identity, independently of a matching staff identity.
     boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
     if("SIGNUP".equals(purpose) && accountExists)
