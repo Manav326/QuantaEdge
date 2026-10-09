@@ -157,6 +157,11 @@ public class AuthService {
         }
         staffId=((Number)staffRow.get("id")).longValue();
       } else if (adminMobiles.contains(normalized)) {
+        Boolean linkedUser=Boolean.TRUE.equals(jdbc.queryForObject(
+            "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized));
+        if(linkedUser) {
+          throw new SecurityException("This mobile is associated with a learner-family account. Create or migrate a separate staff identity before staff sign-in.");
+        }
         String staffName=displayName==null||displayName.isBlank()?"Administrator":displayName.trim();
         staffId=jdbc.queryForObject("""
           insert into staff_account(public_id,mobile_e164,display_name,role,active)
