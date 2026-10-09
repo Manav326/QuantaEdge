@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <clipPath id="avatarClip"><circle cx="64" cy="64" r="62"/></clipPath>
+    <linearGradient id="shirt" x1="28" y1="83" x2="105" y2="130" gradientUnits="userSpaceOnUse"><stop stop-color="#243553"/><stop offset="1" stop-color="#152038"/></linearGradient>
+  </defs>
+  <g clip-path="url(#avatarClip)">
+    <circle cx="64" cy="64" r="64" fill="#FFF0E5"/>
+    <circle cx="104" cy="22" r="19" fill="#FED7AA" opacity=".8"/>
+    <path d="M12 132c2-20 12-34 29-42l23-9 23 9c18 8 28 22 30 42H12Z" fill="url(#shirt)"/>
+    <path d="M42 79h44v20c-7 9-14 13-22 13s-15-4-22-13V79Z" fill="#9A593D"/>
+    <path d="M37 48c0-21 12-33 28-33 19 0 29 14 28 34l-4 20c-3 14-14 23-25 23S42 83 39 69l-2-21Z" fill="#243047"/>
+    <path d="M43 49c1-13 7-22 21-22 15 0 22 11 22 25l-2 18c-2 14-11 22-21 22S44 83 42 69l1-20Z" fill="#C9815E"/>
+    <path d="M43 49c-3-10-1-22 6-29 5-5 11-7 18-6 14 1 23 12 23 25-7-2-13-7-17-14-7 9-18 14-30 14v10Z" fill="#243047"/>
+    <path d="M42 44c-5 1-8 6-7 12 1 5 4 8 8 8l-1-20ZM86 44c5 1 8 6 7 12-1 5-4 8-8 8l1-20Z" fill="#C9815E"/>
+    <ellipse cx="53" cy="58" rx="2.3" ry="3" fill="#243047"/>
+    <ellipse cx="75" cy="58" rx="2.3" ry="3" fill="#243047"/>
+    <path d="M57 72c4 4 10 4 14 0" stroke="#7C3F32" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="m43 91 13-5 8 11 8-11 13 5-8 17H51L43 91Z" fill="#fff"/>
+    <path d="m59 97 5-1 5 1-2 15h-6l-2-15Z" fill="#F97316"/>
+    <path d="M30 105c7-10 13-14 21-17l13 16 13-16c9 3 16 8 22 17l8 27H22l8-27Z" fill="url(#shirt)"/>
+    <path d="m51 88 13 16-7 7-12-18 6-5ZM77 88l-13 16 7 7 12-18-6-5Z" fill="#334563"/>
+    <circle cx="47" cy="66" r="2.5" fill="#E99D83" opacity=".65"/>
+    <circle cx="81" cy="66" r="2.5" fill="#E99D83" opacity=".65"/>
+  </g>
+  <circle cx="64" cy="64" r="62" stroke="#F8D4BB" stroke-width="3"/>
+</svg>
