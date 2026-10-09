@@ -37,7 +37,71 @@ python scripts/scert_extract_review.py \
   --output ./private-review/class-6-maths-extraction.json
 ```
 
-## Stage 2 — author original learning material
+## Stage 2 — optional AI-assisted question generation
+
+The extractor intentionally does not call an AI model. Use this separate script to turn the extraction review bundle into original question/lesson candidates:
+
+- Script: \`scripts/generate_questions_from_extraction.py\`
+- Input: only a \`DRAFT_EXTRACTION_ONLY\` bundle made by the extractor.
+- Output: one \`<chapter-code>.ai-generated-draft.json\` per selected chapter, marked \`AI_GENERATED_DRAFT\`.
+- Default question count: 12 candidates per chapter. The default type mix is curriculum-aware: Maths uses 6 MCQ, 2 True/False, 2 text-input and 2 numerical questions per 12; Science uses 7 MCQ, 2 True/False and 3 text-input questions per 12. These are generated candidates, not approved content.
+- Model provider: any configured OpenAI-compatible chat-completions endpoint. Set \`OPENAI_API_KEY\`, \`OPENAI_API_BASE_URL\` and \`QUANTAEDGE_QUESTION_MODEL\` explicitly. The question-generation model is deliberately configured separately from the AI tutor.
+- Budget controls: \`--chapter-code\`, \`--max-chapters\`, \`--questions-per-chapter\`, \`--max-context-chars\` and \`--max-api-calls\`. Long chapters are split into bounded excerpts; when there are more excerpts than requested questions, the excerpts are sampled across the chapter. Inspect the generated question-level page references to see the actual coverage.
+- Quality gates: exact question counts/type quotas, supported grading types, answer-key/option consistency, numeric answer types, page references, prompt uniqueness and difficulty values are validated locally. A validation failure stops the chapter and does not write its candidate bundle. This is a structural check, not proof that the model's answers are factually correct.
+
+First run an offline plan. It does not make any network calls:
+
+\`\`\`bash
+python scripts/generate_questions_from_extraction.py \
+  --extraction ./private-review/class-6-maths-extraction.json \
+  --output-dir ./private-review/ai-candidates/class-6-maths \
+  --chapter-code knowing-numbers
+\`\`\`
+
+For actual generation, first configure a model that is enabled on your endpoint. Then explicitly confirm that extracted page text may be sent to that model provider:
+
+\`\`\`bash
+export OPENAI_API_KEY='<provider API key>'
+export OPENAI_API_BASE_URL='https://api.openai.com'
+export QUANTAEDGE_QUESTION_MODEL='<model available to this endpoint>'
+python scripts/generate_questions_from_extraction.py \
+  --extraction ./private-review/class-6-maths-extraction.json \
+  --output-dir ./private-review/ai-candidates/class-6-maths \
+  --chapter-code knowing-numbers \
+  --questions-per-chapter 12 \
+  --max-api-calls 12 \
+  --generate --confirm-external-processing
+\`\`\`
+
+The script sends the selected extracted text—not the PDF file itself—to the configured provider. Review provider privacy/retention terms and content-sharing permissions before confirming. Use a private, ignored directory for extraction bundles and candidates; do not commit textbook text, generated candidate bundles or API credentials.
+
+AI output remains \`AI_GENERATED_DRAFT\` and is deliberately rejected by the content importer. To promote it for editorial import, use the interactive human gate:
+
+\`\`\`bash
+python scripts/review_generated_question_bundle.py \
+  --bundle ./private-review/ai-candidates/class-6-maths/knowing-numbers.ai-generated-draft.json \
+  --output ./private-review/reviewed/knowing-numbers.reviewed.json \
+  --reviewer 'Responsible curriculum editor'
+\`\`\`
+
+The reviewer must type \`YES\` for all five checks. This records the named reviewer and date but does **not** approve individual questions or publish anything. Do not attest that content is original or that reuse rights are reviewed unless those points have genuinely been checked.
+
+When the reviewed chapter code matches the existing canonical class/subject chapter, preview the import and explicitly attach new lesson drafts to that existing chapter rather than creating a duplicate chapter:
+
+\`\`\`bash
+export QUANTAEDGE_API_BASE_URL='http://localhost:8080'
+export QUANTAEDGE_ADMIN_SESSION='<QE_SESSION cookie value>'
+python scripts/import_reviewed_content.py \
+  --bundle ./private-review/reviewed/knowing-numbers.reviewed.json \
+  --attach-to-existing-chapter
+python scripts/import_reviewed_content.py \
+  --bundle ./private-review/reviewed/knowing-numbers.reviewed.json \
+  --attach-to-existing-chapter --apply
+\`\`\`
+
+The first importer command is a dry run. The second writes draft lessons/questions only, under an authenticated admin session. A chapter-code mismatch will not be silently auto-mapped; check the Admin Content Studio and correct the chapter map rather than creating a duplicate canonical chapter. Source alignment remains unverified, questions remain \`DRAFT\`, and publication still requires editor approval and the existing curriculum/source validation. For a genuinely new chapter, omit \`--attach-to-existing-chapter\` only after confirming that the code does not duplicate an existing canonical chapter.
+
+## Stage 3 — review and author the learning material
 
 The extraction JSON is a review artifact only. It is not a lesson, question bank, or student-delivery payload. Do not copy full textbook text, scans, or textbook questions into student content unless the relevant reuse rights are confirmed.
 
@@ -53,7 +117,7 @@ Create a separate editor-reviewed authoring bundle with schema_version 1 and bun
 
 Question authoring rules: MCQ/TRUE_FALSE require 2–10 unique options and exactly one correct option. INPUT requires a TEXT answer key; NUMERICAL requires a NUMERIC answer key. Other formats can remain drafts, but cannot be published until their complete student interaction and grading path is supported.
 
-## Stage 3 — dry-run and draft-only import
+## Stage 4 — dry-run and draft-only import
 
 scripts/import_reviewed_content.py validates the reviewed authoring bundle and creates content through the authenticated admin API. It rejects raw extraction bundles, placeholder editions, non-HTTPS remote sources, missing source hashes, invalid/out-of-range page ranges, lesson page ranges outside the chapter, duplicate lesson codes, malformed question keys and unsupported block/question types.
 
@@ -73,7 +137,7 @@ python scripts/import_reviewed_content.py --bundle ./private-review/class-6-math
 
 Use HTTPS for non-local API URLs. The importer creates DRAFT chapters, DRAFT lessons and DRAFT questions only; it leaves source verification false, never overwrites existing chapters, and stops on code collisions. The API uses an authenticated administrator session, not the old shared X-Admin-Token or demo-mode bypass. Since the API writes are separate requests, an API failure can leave partial draft records; inspect the CMS before retrying.
 
-## Stage 4 — editorial review and publication
+## Stage 5 — editorial review and publication
 
 1. Open Admin Content Studio using an authenticated administrator account.
 2. Confirm class, subject, chapter, official book edition, chapter title and exact PDF page mapping.
