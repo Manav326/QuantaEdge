@@ -536,3 +536,6 @@
 .qe-session-gate p{margin:0 0 22px;color:#6d778d;font-size:13px;line-height:1.7}
 .qe-session-gate .button{min-height:46px}
 @media(max-width:620px){.qe-session-gate section{padding:24px 19px;border-radius:19px}}
+
+/* Cover any browser back/forward cache snapshot until the session guard finishes. */
+body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:#f5f7fb;color:#172039;font:700 13px/1.6 system-ui,sans-serif;text-align:center;}

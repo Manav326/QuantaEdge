@@ -540,3 +540,6 @@
 .qe-workspace-layout.is-collapsed .qe-workspace-icon{flex-basis:34px;width:34px;height:34px;font-size:17px}
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot{justify-content:center;padding-left:0;padding-right:0}
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>span{flex-basis:30px;width:30px;height:30px}
+
+/* Cover any browser back/forward cache snapshot until the session guard finishes. */
+body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha hai…';position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:var(--paper,#f7f8fc);color:var(--ink,#152038);font:700 13px/1.6 'DM Sans','Noto Sans Devanagari',sans-serif;text-align:center;letter-spacing:0;}

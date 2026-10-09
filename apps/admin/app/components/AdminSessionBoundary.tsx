@@ -52,9 +52,11 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   const [ready, setReady] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const isLogin = pathname === '/login';
+  const isSession = pathname === '/session';
   useEffect(() => installRefreshRecovery(), []);
   useEffect(() => {
     let alive = true;
+    if (isSession) { setReady(true); setBlocked(false); return; }
     setReady(false); setBlocked(false);
     const check = async () => {
       setReady(false);
@@ -77,11 +79,23 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
       }
     };
     void check();
-    const onHistory = () => { void check(); };
+    const onHistory = (event?: PageTransitionEvent) => {
+      if (event?.type === 'pageshow' && event.persisted) document.body.classList.add('qe-session-bfcache-guard');
+      void check().finally(() => document.body.classList.remove('qe-session-bfcache-guard'));
+    };
+    const onPageHide = () => document.body.classList.add('qe-session-bfcache-guard');
     window.addEventListener('pageshow', onHistory);
     window.addEventListener('popstate', onHistory);
-    return () => { alive = false; window.removeEventListener('pageshow', onHistory); window.removeEventListener('popstate', onHistory); };
-  }, [pathname, router, isLogin]);
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      alive = false;
+      window.removeEventListener('pageshow', onHistory);
+      window.removeEventListener('popstate', onHistory);
+      window.removeEventListener('pagehide', onPageHide);
+      document.body.classList.remove('qe-session-bfcache-guard');
+    };
+  }, [pathname, router, isLogin, isSession]);
+  if (isSession) return <>{children}</>;
   if (blocked) return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">SECURE WORKSPACE</span><h1>This sign-in belongs to the learning site.</h1><p>To keep accounts separate, sign out before entering the staff console.</p><button className="button button-dark" onClick={() => void logoutToSwitch()}>Log out to switch accounts</button></section></main>;
   if (!ready) return <main className="qe-session-gate" aria-live="polite"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE STAFF</span><h1>Verifying secure access…</h1><p>Your staff role and saved session are being checked.</p></section></main>;
   return <>{children}</>;
