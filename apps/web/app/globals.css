@@ -165,3 +165,88 @@
   .student-account-menu{animation:none}
   .student-account-trigger,.student-account-chevron,.student-account-menu__item,.student-account-menu__arrow{transition:none}
 }
+
+
+/* Student profile settings page */
+.student-profile-page__wrap{width:min(100%,1000px);margin:0 auto;padding:28px clamp(16px,3vw,34px) 90px}
+.student-profile-page__breadcrumb{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 26px}
+.student-profile-page__breadcrumb a{display:inline-flex;align-items:center;gap:7px;color:#758096;font-size:12px;font-weight:800;text-decoration:none}
+.student-profile-page__breadcrumb a:hover{color:#c2410c}
+.student-profile-page__breadcrumb>span{color:#a4abba;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.student-profile-page__heading{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:28px}
+.student-profile-page__heading h1{margin:13px 0 8px;color:#152038;font-size:clamp(30px,4vw,43px);line-height:1.08;letter-spacing:-1.8px}
+.student-profile-page__heading p{max-width:550px;margin:0;color:#758096;font-size:13px;line-height:1.75}
+.student-profile-page__class-pill{display:flex;flex:0 0 auto;flex-direction:column;gap:5px;min-width:125px;padding:15px 17px;border:1px solid #eceef4;border-radius:15px;background:linear-gradient(145deg,#fff,#fffaf6)}
+.student-profile-page__class-pill>span{color:#9aa2b2;font-size:8px;font-weight:800;letter-spacing:1.3px}
+.student-profile-page__class-pill strong{color:#152038;font-size:17px;letter-spacing:-.3px}
+.student-profile-page__class-pill small{color:#7e899e;font-size:10px}
+.student-profile-page__alert{display:flex;align-items:flex-start;gap:10px;margin:0 0 16px;padding:12px 15px;border:1px solid;border-radius:12px;font-size:12px;line-height:1.6}
+.student-profile-page__alert.is-error{border-color:#f1c9c1;background:#fff5f2;color:#a63d23}
+.student-profile-page__alert.is-success{border-color:#ccebdc;background:#f2fbf6;color:#217750}
+.student-profile-page__loading{display:flex;align-items:center;justify-content:center;gap:10px;min-height:230px;border:1px solid #e8ebf2;border-radius:20px;background:#fff;color:#758096;font-size:12px}
+.student-profile-page__spinner{width:18px;height:18px;border:2px solid #f4c7a9;border-top-color:#c2410c;border-radius:50%;animation:student-profile-spin .75s linear infinite}
+@keyframes student-profile-spin{to{transform:rotate(360deg)}}
+.student-profile-form{display:grid;gap:16px}
+.student-profile-card{min-width:0;padding:clamp(18px,3vw,27px);border:1px solid #e6e9f0;border-radius:20px;background:#fff;box-shadow:0 8px 28px rgba(21,32,56,.035)}
+.student-profile-card__intro{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.student-profile-card__number{display:grid;place-items:center;flex:0 0 35px;width:35px;height:35px;border:1px solid #f5dfd1;border-radius:12px;background:#fff5ed;color:#c2410c;font-size:10px;font-weight:900}
+.student-profile-card__intro h2{margin:0;color:#1c2942;font-size:17px;line-height:1.3;letter-spacing:-.4px}
+.student-profile-card__intro p{margin:5px 0 0;color:#8a93a5;font-size:11px;line-height:1.6}
+.student-profile-photo-editor{display:flex;align-items:center;gap:22px;padding:19px;border:1px solid #f0e9e4;border-radius:17px;background:linear-gradient(105deg,#fffaf6 0%,#fff 65%)}
+.student-profile-photo-editor__preview{position:relative;flex:0 0 116px;width:116px;height:116px}
+.student-profile-photo-editor__preview>img{display:block;width:100%;height:100%;object-fit:cover;border:4px solid white;border-radius:30px;background:#fff0e5;box-shadow:0 0 0 1px #f0d8c7,0 8px 22px rgba(21,32,56,.09)}
+.student-profile-photo-editor__camera{position:absolute;right:-5px;bottom:-4px;display:grid;place-items:center;width:33px;height:33px;border:3px solid white;border-radius:12px;background:#f97316;color:white;font-size:15px;font-weight:800;box-shadow:0 4px 10px rgba(194,65,12,.2)}
+.student-profile-photo-editor__copy{min-width:0;flex:1}
+.student-profile-photo-editor__copy>strong{display:block;color:#25324b;font-size:14px;font-weight:800}
+.student-profile-photo-editor__copy>p{max-width:410px;margin:6px 0 10px;color:#7e899d;font-size:11px;line-height:1.65}
+.student-profile-photo-editor__filename{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 0 10px;color:#a0a7b5;font-size:9px}
+.student-profile-photo-editor__actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.student-profile-photo-editor__file{display:none!important}
+.student-profile-quiet-button{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:7px 10px;border:1px solid transparent;border-radius:9px;background:transparent;color:#78849a;font-size:11px;font-weight:800;text-decoration:none;cursor:pointer}
+.student-profile-quiet-button:hover{border-color:#e7eaf1;background:#f8f9fc;color:#26344d}
+.student-profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px}
+.student-profile-field{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;color:#35425b;font-size:11px;font-weight:800}
+.student-profile-field--wide{grid-column:1/-1}
+.student-profile-field input,.student-profile-field select,.student-profile-field textarea{display:block;width:100%;min-width:0;min-height:44px;padding:11px 12px;border:1px solid #dfe4ed;border-radius:11px;outline:0;background:#fff;color:#25324b;font:500 12px/1.5 'DM Sans','Noto Sans Devanagari',sans-serif;box-shadow:0 1px 2px rgba(21,32,56,.02);transition:border-color .16s ease,box-shadow .16s ease}
+.student-profile-field input::placeholder,.student-profile-field textarea::placeholder{color:#b0b6c3;font-weight:400}
+.student-profile-field input:focus,.student-profile-field select:focus,.student-profile-field textarea:focus{border-color:#f4a46f;box-shadow:0 0 0 3px rgba(249,115,22,.11)}
+.student-profile-field textarea{min-height:104px;resize:vertical}
+.student-profile-field>small{align-self:flex-end;margin-top:-3px;color:#a0a7b5;font-size:9px;font-weight:500}
+.student-profile-privacy-note{display:flex;align-items:flex-start;gap:8px;margin:19px 0 0;padding:11px 13px;border-radius:11px;background:#f8f9fc;color:#8992a4;font-size:10px;line-height:1.6}
+.student-profile-privacy-note>span{color:#c2410c;font-size:13px;line-height:1.2}
+.student-profile-form__footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 2px 18px}
+.student-profile-form__footer>p{margin:0;color:#8b94a5;font-size:10px;line-height:1.6}
+.student-profile-form__footer>div{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto}
+.student-profile-form__footer .button{min-height:42px;padding:11px 16px;border:0;cursor:pointer}
+.student-profile-form__footer .button:disabled{opacity:.55;cursor:wait;transform:none}
+@media(max-width:650px){
+  .student-profile-page__wrap{padding-top:22px}
+  .student-profile-page__heading{align-items:flex-start;flex-direction:column;gap:15px}
+  .student-profile-page__heading h1{font-size:33px}
+  .student-profile-page__class-pill{display:grid;grid-template-columns:auto auto;align-items:center;gap:5px 12px;min-width:0;padding:10px 13px}
+  .student-profile-page__class-pill>span{grid-column:1;grid-row:1}
+  .student-profile-page__class-pill strong{grid-column:1;grid-row:2;font-size:14px}
+  .student-profile-page__class-pill small{grid-column:2;grid-row:2}
+  .student-profile-photo-editor{align-items:flex-start;gap:15px;padding:14px}
+  .student-profile-photo-editor__preview{flex-basis:88px;width:88px;height:88px}
+  .student-profile-photo-editor__preview>img{border-radius:24px}
+  .student-profile-photo-editor__camera{width:29px;height:29px;border-radius:10px}
+  .student-profile-photo-editor__actions{gap:5px}
+  .student-profile-form__footer{align-items:stretch;flex-direction:column}
+  .student-profile-form__footer>div{width:100%}
+  .student-profile-form__footer>div .button{flex:1}
+}
+@media(max-width:430px){
+  .student-profile-fields{grid-template-columns:minmax(0,1fr);gap:15px}
+  .student-profile-field--wide{grid-column:auto}
+  .student-profile-card{padding:16px}
+  .student-profile-photo-editor{flex-direction:column;align-items:center;text-align:center}
+  .student-profile-photo-editor__copy{width:100%}
+  .student-profile-photo-editor__actions{justify-content:center}
+  .student-profile-photo-editor__filename{max-width:100%}
+  .student-profile-privacy-note{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .student-profile-page__spinner{animation:none}
+  .student-profile-field input,.student-profile-field select,.student-profile-field textarea{transition:none}
+}
