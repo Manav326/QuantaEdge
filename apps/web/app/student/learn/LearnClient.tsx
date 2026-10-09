@@ -10,6 +10,9 @@ type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
   chapter_name:string; subject_name:string; subject_code:string; chapter_code:string;
 };
+type TrackBrowse = {
+  classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
+};
 type Question = {
   id:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
@@ -115,6 +118,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
 export default function LearnClient() {
   const [lessons,setLessons]=useState<Lesson[]>([]);
   const [lesson,setLesson]=useState<Detail|null>(null);
+  const [trackBrowse,setTrackBrowse]=useState<TrackBrowse|null>(null);
   const [help,setHelp]=useState('none');
   const [tutorOpen,setTutorOpen]=useState(false);
   const [tutorQuestionId,setTutorQuestionId]=useState<number|undefined>(undefined);
@@ -125,6 +129,16 @@ export default function LearnClient() {
   const searchParams=useSearchParams();
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
+  const trackGroups=useMemo(()=>{
+    if(!trackBrowse)return [];
+    const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
+    trackBrowse.lessons.forEach(item=>{
+      const key=item.chapter_code||item.chapter_name||'chapter';
+      const current=grouped.get(key)||{code:key,name:item.chapter_name||'अध्याय',lessons:[]};
+      current.lessons.push(item);grouped.set(key,current);
+    });
+    return Array.from(grouped.values());
+  },[trackBrowse]);
 
   async function loadLesson(id:number) {
     const detail=await fetch('/api/v1/learning/lessons/'+id).then(r=>{
@@ -135,13 +149,29 @@ export default function LearnClient() {
   }
 
   useEffect(()=>{
+    let cancelled=false;
     async function load(){
+      setError('');
       try{
         const me=await fetch('/api/v1/students/me');
         if(me.status===401||me.status===403){router.replace('/login');return;}
         const student=await me.json();
         if(!me.ok) throw new Error(student.message||'Student unavailable');
         const requestedId=Number(searchParams.get('lessonId')||0);
+        const selectedSubject=searchParams.get('subjectCode');
+        if(!requestedId && selectedSubject){
+          if(selectedSubject!=='maths' && selectedSubject!=='science') throw new Error('विषय सही नहीं है।');
+          const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject));
+          const listBody=await listResponse.json();
+          if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
+          if(cancelled)return;
+          const trackLessons=listBody as Lesson[];
+          const subjectName=selectedSubject==='maths'?'गणित':'विज्ञान';
+          setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);
+          setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons});
+          return;
+        }
+        setTrackBrowse(null);
         let targetId=requestedId;
         if(!targetId){
           const rec=await fetch('/api/v1/recommendations/next');
@@ -157,11 +187,12 @@ export default function LearnClient() {
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
-        if(sr.ok){const sb=await sr.json();setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}
-        setLesson(d);
-      }catch(e:any){setError(e.message==='Student unavailable'?'Student login required':'Lesson load नहीं हो पाया।');}
+        if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
+        if(!cancelled){setTrackBrowse(null);setLesson(d);}
+      }catch(e:any){if(!cancelled)setError(e.message==='Student unavailable'?'Student login required':'Lesson load नहीं हो पाया।');}
     }
-    load();
+    void load();
+    return ()=>{cancelled=true;};
   },[router,searchParams]);
 
   useEffect(()=>{
@@ -174,6 +205,26 @@ export default function LearnClient() {
   },[sessionId,sessionStarted]);
 
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
+  if(trackBrowse) return <main className="lesson-page">
+    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span className="lesson-progress">Class {trackBrowse.classCode} · Published curriculum</span><span className="avatar">अ</span></header>
+    <section className="lesson-wrap">
+      <div className="lesson-meta"><span className="eyebrow">कक्षा {trackBrowse.classCode} · {trackBrowse.subjectName}</span><span>{trackBrowse.lessons.length} प्रकाशित पाठ</span></div>
+      <h1>{trackBrowse.subjectName} की पढ़ाई</h1>
+      <p className="lesson-intro">इस सूची में केवल प्रकाशित पाठ दिखते हैं। समीक्षा या लेखन में मौजूद सामग्री विद्यार्थियों को नहीं दिखाई जाती।</p>
+      {trackGroups.length===0 ? <div className="concept-card">
+        <span className="concept-kicker">विषय की सामग्री</span>
+        <h2>अभी कोई प्रकाशित पाठ उपलब्ध नहीं है</h2>
+        <p>इस विषय के अध्याय सूचीबद्ध हैं, लेकिन उनके वास्तविक पाठ अभी लेखन/समीक्षा में हैं। जैसे ही पाठ तैयार और प्रकाशित होंगे, वे यहाँ दिखाई देंगे।</p>
+        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark">दूसरा विषय देखें →</Link>
+        <p><Link href="/student" className="text-link">Student home पर लौटें</Link></p>
+      </div> : trackGroups.map(group=><section className="concept-card" key={group.code}>
+        <span className="concept-kicker">अध्याय</span><h2>{group.name}</h2>
+        <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
+          <span className="task-icon">▣</span><div><strong>{item.title}</strong><small>{item.estimated_minutes} मिनट · प्रकाशित पाठ</small></div><span className="task-action">→</span>
+        </Link>)}</div>
+      </section>)}
+    </section>
+  </main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Loading lesson…</div></section></main>;
 
   return <main className="lesson-page">
