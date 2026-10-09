@@ -165,6 +165,47 @@ class AuthServiceTest {
     assertIterableEquals(grants, auth.permissionsForStaff(12L));
   }
 
+  @Test
+  void parentCannotOpenChildAsTheirLearningAccount() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+
+    SecurityException error = assertThrows(SecurityException.class,
+        () -> auth.selectStudent(52L, 81L));
+
+    assertTrue(error.getMessage().contains("cannot enter a child's learning account"));
+  }
+
+  @Test
+  void legacyPinLoginCannotBypassParentProvisionedCredentials() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+
+    SecurityException error = assertThrows(SecurityException.class,
+        () -> auth.loginStudent("00000000-0000-0000-0000-000000000081", "1234"));
+
+    assertTrue(error.getMessage().contains("parent-created username and password"));
+  }
+
+  @Test
+  void legacyParentChildSessionIsRevokedInsteadOfBecomingAStudentSession() throws Exception {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String token = "legacy-parent-child-session";
+    Map<String,Object> legacySession = new java.util.HashMap<>();
+    legacySession.put("user_id", 52L);
+    legacySession.put("student_id", 81L);
+    legacySession.put("staff_id", null);
+    legacySession.put("role", "PARENT");
+    legacySession.put("display_name", "Parent");
+    legacySession.put("student_name", "Child");
+    legacySession.put("staff_role", null);
+    legacySession.put("staff_name", null);
+    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+        .thenReturn(List.of(legacySession));
+
+    assertEquals(null, auth.current(token));
+
+    verify(jdbc).update(contains("update auth_session set revoked_at=now()"), eq(hash(token)));
+  }
+
   private static String hash(String value) throws Exception {
     byte[] digest = MessageDigest.getInstance("SHA-256")
         .digest(value.getBytes(StandardCharsets.UTF_8));
