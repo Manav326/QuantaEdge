@@ -354,9 +354,16 @@ jobs:
           npx --yes playwright@latest install --with-deps chromium
           npx --yes @playwright/test@latest test tests/ui-smoke-v2.spec.js --reporter=line
 
-      - name: Collect service logs on failure
+      - name: Collect service diagnostics on failure
         if: failure()
-        run: docker compose -f docker-compose.yml logs --no-color
+        shell: bash
+        run: |
+          docker compose -f docker-compose.yml ps -a
+          api_id="$(docker compose -f docker-compose.yml ps -aq api || true)"
+          if [ -n "$api_id" ]; then
+            docker inspect "$api_id" --format='Status={{.State.Status}} ExitCode={{.State.ExitCode}} OOMKilled={{.State.OOMKilled}} RestartCount={{.RestartCount}} Error={{.State.Error}}'
+          fi
+          docker compose -f docker-compose.yml logs --no-color --tail=500
 
       - name: Tear down local stack
         if: always()
