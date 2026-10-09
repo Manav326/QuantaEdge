@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-type Child={id:number;public_id:string;display_name:string;class_code:string;class_name?:string};
 type AuthMode='register'|'login';
 
 async function readApiJson(response: Response): Promise<any> {
@@ -104,7 +103,7 @@ export default function LoginPage(){
           <button type="button" className={`button button-small ${mode==='register'?'button-dark':'button-light'}`} aria-pressed={mode==='register'} onClick={()=>switchMode('register')}>नया अकाउंट</button>
           <button type="button" className={`button button-small ${mode==='login'?'button-dark':'button-light'}`} aria-pressed={mode==='login'} onClick={()=>switchMode('login')}>पहले से अकाउंट है? Login</button>
         </div>}
-        {mode==='register' && <label>Parent name<input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="आपका नाम" autoComplete="name"/></label>}
+        {mode==='register' && step==='mobile' && <label>Parent name<input value={displayName} onChange={e=>setDisplayName(e.target.value)} placeholder="आपका नाम" autoComplete="name"/></label>}
         <label>Mobile number<input value={mobile} onChange={e=>setMobile(e.target.value)} placeholder="10 digit mobile number" inputMode="numeric" autoComplete="tel" /></label>
         {step==='otp' && <>
           <label>OTP<input value={otp} onChange={e=>setOtp(e.target.value)} placeholder="6 digit OTP" inputMode="numeric" maxLength={6} autoComplete="one-time-code"/></label>
