@@ -19,6 +19,7 @@ select st.id, s.id, 'ACTIVE'
 from student st
 join curriculum_class c on c.code=st.class_code and c.active=true
 join curriculum_subject s on s.class_id=c.id and s.active=true
+where st.active=true
 on conflict(student_id, subject_id) do nothing;
 
 insert into app_metadata(key,value)
