@@ -331,12 +331,34 @@ export default function ContentStudio(){
    await load();await open(selected);setNotice(nextStatus==='REVIEW'?'Lesson saved for review.':nextStatus==='PUBLISHED'?'Publish request completed. Confirm final status and readiness below.':'Lesson and teaching material saved.');
   }catch(e){setError(e instanceof Error?e.message:'Lesson could not be saved.')}finally{setSaving(false)}
  }
- const readiness=useMemo(()=>[
-  {ok:blocks.some(b=>b.active!==false),label:'At least one active teaching block',detail:blocks.filter(b=>b.active!==false).length+' active blocks'},
-  {ok:questions.some(q=>q.active!==false),label:'Practice question added',detail:questions.filter(q=>q.active!==false).length+' active questions'},
-  {ok:Boolean(form.alignmentSourceVerified),label:'Textbook / source mapping verified',detail:form.alignmentSourceVerified?'Source marked verified':'Add official URL, edition and page range'},
-  {ok:detail?.chapter_status==='PUBLISHED',label:'Parent chapter published',detail:detail?.chapter_status==='PUBLISHED'?'Chapter is published':'Publish the chapter before the lesson'}
- ],[blocks,questions,form.alignmentSourceVerified,detail]);
+ const basicsReady=Boolean(String(form.title||'').trim()&&String(form.summary||'').trim()&&Number(form.estimatedMinutes)>=1&&Number(form.estimatedMinutes)<=120);
+  const activeBlocks=blocks.filter(block=>block.active!==false);
+  const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&activeBlocks.every(blockHasPublishableContent);
+  const activeQuestions=questions.filter(question=>question.active!==false);
+  const questionsReady=activeQuestions.length>0&&activeQuestions.every(questionHasValidAnswer);
+  const sourceReady=Boolean(form.alignmentSourceVerified&&String(form.alignmentSourceTitle||'').trim()&&/^https:\/\//i.test(String(form.alignmentSourceUrl||''))&&String(form.alignmentSourceEdition||'').trim()&&String(form.alignmentPageRange||'').trim());
+  const chapterSourceReady=Boolean(form.curriculumSourceVerified&&String(form.curriculumSource||'').trim()&&/^https:\/\//i.test(String(form.curriculumSourceUrl||''))&&String(form.curriculumSourceEdition||'').trim()&&String(form.curriculumSourcePages||'').trim());
+  const chapterReady=detail?.chapter_status==='PUBLISHED'&&detail?.chapter_active!==false;
+  const readiness=[
+   {ok:basicsReady,label:'Topic title and learner goal are complete',detail:basicsReady?'Title, learner goal and learning time are present':'Add a clear topic title, learner goal and valid time'},
+   {ok:blocksReady,label:'Teaching blocks contain real content',detail:activeBlocks.length?String(activeBlocks.filter(blockHasPublishableContent).length)+' of '+activeBlocks.length+' active blocks complete':'Add at least one active teaching block'},
+   {ok:previewReviewed,label:'Current learner preview has been checked',detail:previewReviewed?'Preview checked against the current version':'Open the learner preview and mark it checked'},
+   {ok:questionsReady,label:'Practice questions are approved and valid',detail:activeQuestions.length?String(activeQuestions.filter(questionHasValidAnswer).length)+' of '+activeQuestions.length+' active questions complete':'Add at least one active practice question, then ask a reviewer to approve it'},
+   {ok:sourceReady,label:'Official textbook mapping is complete',detail:sourceReady?'Source, HTTPS URL, edition and pages verified':'Add source title, HTTPS URL, edition and page range, then mark verified'},
+   {ok:chapterReady,label:'Parent chapter is published',detail:chapterReady?'Parent chapter is published and active':'Publish the parent chapter before this micro-topic'}
+  ];
+  const workflowSteps=[
+   {label:'Basics',ok:basicsReady},
+   {label:'Teaching blocks',ok:blocksReady},
+   {label:'Preview',ok:previewReviewed},
+   {label:'Publish',ok:questionsReady&&sourceReady&&chapterReady}
+  ];
+  const currentWorkflowStep=workflowSteps.findIndex(step=>!step.ok);
+  const canPublishLessonReady=workflowSteps.every(step=>step.ok);
+  const canPublishThisContent=selected?.type==='chapter'?chapterSourceReady:canPublishLessonReady;
+  const firstMissingRequirement=selected?.type==='chapter'
+    ? (chapterSourceReady?'All visible chapter checks are complete. The server will also validate its lessons.':'Complete and verify the official curriculum source before publishing.')
+    : (readiness.find(item=>!item.ok)?.detail||'All publish checks are complete.');
  return <main className="admin-shell qe-content-shell">
   <AdminSidebar active="content" variant="content" />
   <section className="admin-main qe-content-main" id="top">
