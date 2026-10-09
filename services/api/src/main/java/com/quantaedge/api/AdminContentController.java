@@ -319,7 +319,11 @@ public class AdminContentController {
       @PathVariable long lessonId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorization.requirePermission(context,"CONTENT_PUBLISH");
-    lessonById(lessonId);
+    Map<String,Object> current=lessonById(lessonId);
+    String currentStatus=String.valueOf(current.get("lesson_status"));
+    if (!"REVIEW".equals(currentStatus) && !"ARCHIVED".equals(currentStatus)) {
+      throw badRequest("Submit the micro-topic for review before publishing it.");
+    }
     validateLessonForPublishing(lessonId);
     jdbc.update("update lesson set status='PUBLISHED', active=true, updated_at=now() where id=?",lessonId);
     return lessonById(lessonId);
