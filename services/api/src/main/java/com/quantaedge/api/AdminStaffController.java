@@ -29,11 +29,14 @@ public class AdminStaffController {
   private final JdbcTemplate jdbc;
   private final AuthService auth;
   private final AuthorizationService authorization;
+  private final StaffAuditService staffAudit;
 
-  public AdminStaffController(JdbcTemplate jdbc, AuthService auth, AuthorizationService authorization) {
+  public AdminStaffController(JdbcTemplate jdbc, AuthService auth, AuthorizationService authorization,
+      StaffAuditService staffAudit) {
     this.jdbc = jdbc;
     this.auth = auth;
     this.authorization = authorization;
+    this.staffAudit = staffAudit;
   }
 
   @GetMapping
@@ -101,6 +104,8 @@ public class AdminStaffController {
           "A staff account already exists for this mobile number.");
     }
     replacePermissions(id, permissions, context.staffId());
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+id+"/created",
+        "Created staff identity with role "+role+"; granted permissions: "+String.join(", ",permissions));
     return staffById(id);
   }
 
@@ -129,8 +134,13 @@ public class AdminStaffController {
     }
     List<String> permissions=readPermissions(body.get("permissions"));
     validateStaffPermissions(role,permissions);
+    String beforeRole=String.valueOf(existing.get("role"));
+    List<String> beforePermissions=auth.permissionsForStaff(staffId);
     jdbc.update("update staff_account set role=?,updated_at=now() where id=?",role,staffId);
     replacePermissions(staffId,permissions,context.staffId());
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/permissions",
+        "Role changed from "+beforeRole+" to "+role+"; permissions changed from ["+
+        String.join(", ",beforePermissions)+"] to ["+String.join(", ",permissions)+"]");
     return staffById(staffId);
   }
 
@@ -159,6 +169,8 @@ public class AdminStaffController {
     if (!active) {
       jdbc.update("update auth_session set revoked_at=now() where staff_id=? and revoked_at is null",staffId);
     }
+    staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/status",
+        (active?"Activated":"Suspended")+" staff identity; "+(!active?"active sessions were revoked.":""));
     Map<String,Object> result=staffById(staffId);
     result.put("message",active?"Staff account activated.":"Staff account suspended; active sessions revoked.");
     return result;
