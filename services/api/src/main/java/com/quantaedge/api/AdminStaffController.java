@@ -77,6 +77,12 @@ public class AdminStaffController {
         && mobile.substring(3).chars().allMatch(Character::isDigit))) {
       throw badRequest("Enter a valid 10-digit Indian mobile number.");
     }
+    Boolean linkedParent=jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,mobile);
+    if(Boolean.TRUE.equals(linkedParent)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This mobile is already associated with a parent account. Staff identities must use a separate mobile number.");
+    }
     String role=String.valueOf(body.getOrDefault("role","CONTENT_AUTHOR")).trim().toUpperCase();
     if (!ROLES.contains(role)) throw badRequest("Choose a supported staff role.");
     List<String> permissions=body.containsKey("permissions")
