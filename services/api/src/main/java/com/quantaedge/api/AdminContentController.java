@@ -794,11 +794,12 @@ public class AdminContentController {
         jdbc.update("""
           update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?,
               review_status=?,review_notes=?,reviewed_at=case when ?='APPROVED' then coalesce(reviewed_at,now()) else null end,
+              reviewed_by_staff_id=case when ?='APPROVED' then reviewed_by_staff_id else null end,
               marks=?,exam_format=?,source_kind=?,source_title=?,source_ref=?,source_year=?,source_id=?,board=?,
               topic=?,subtopic=?,skill=?,tags=?::jsonb,answer_payload=?::jsonb
           where id=? and lesson_id=?
           """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true),
-          reviewStatus, reviewNotes, reviewStatus, marks, examFormat, sourceKind, sourceTitle, sourceRef,
+          reviewStatus, reviewNotes, reviewStatus, reviewStatus, marks, examFormat, sourceKind, sourceTitle, sourceRef,
           sourceYear, sourceId, board, topic, subtopic, skill, tagsJson, answerPayload, id, lessonId);
       }
       submittedIds.add(id);
