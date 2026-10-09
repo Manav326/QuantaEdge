@@ -436,7 +436,7 @@ def main() -> int:
     parser.add_argument("--max-chapters", type=int, default=0, help="Budget/test limit; zero means all mapped chapters")
     parser.add_argument("--max-api-calls", type=int, default=100, help="Hard cap on model requests per run")
     parser.add_argument("--api-base-url", default=os.environ.get("OPENAI_API_BASE_URL", "https://api.openai.com"))
-    parser.add_argument("--model", default=os.environ.get("QUANTAEDGE_QUESTION_MODEL") or os.environ.get("APP_AI_TUTOR_MODEL", ""))
+    parser.add_argument("--model", default=os.environ.get("QUANTAEDGE_QUESTION_MODEL", ""))
     parser.add_argument("--timeout", type=int, default=90)
     parser.add_argument("--generate", action="store_true", help="Actually call the model; default is an offline plan")
     parser.add_argument("--confirm-external-processing", action="store_true", help="Confirm source text may be sent to the configured model provider")
