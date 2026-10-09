@@ -152,7 +152,10 @@ public class AdminStaffController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     requireStaffManager(context);
     Map<String,Object> staff=staffById(staffId);
-    boolean active=body.get("active") instanceof Boolean value ? value : false;
+    if (!(body.get("active") instanceof Boolean)) {
+      throw badRequest("Choose whether the staff account should be active or suspended.");
+    }
+    boolean active=(Boolean)body.get("active");
     if (context.staffId()!=null && context.staffId()==staffId && !active) {
       throw badRequest("You cannot suspend your own staff account.");
     }
