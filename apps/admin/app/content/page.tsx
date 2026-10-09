@@ -436,7 +436,6 @@ export default function ContentStudio(){
   const lessonStatus=String(form.lessonStatus||'DRAFT').toUpperCase();
   const submittedForReview=['REVIEW','PUBLISHED'].includes(lessonStatus);
   const savedContentRevision=Number(detail?.content_revision);
-  const checkedContentRevision=Number(detail?.preview_checked_revision);
   const sourceReadinessDetail=sourceReady
     ? 'Official source title, URL, edition and page range have been verified.'
     : lessonSourceDetailsChanged
