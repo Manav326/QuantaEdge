@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Base64;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,31 @@ public class StudentController {
   public Map<String,Object> myProfile(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     return profileFor(context.studentId());
+  }
+
+
+  @GetMapping(value="/me/profile-photo",produces=MediaType.IMAGE_JPEG_VALUE)
+  public ResponseEntity<byte[]> myProfilePhoto(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    String data=jdbc.queryForObject(
+        "select profile_image_data_url from student where id=? and active=true",
+        String.class,context.studentId());
+    if(data==null || data.isBlank()) return ResponseEntity.notFound().build();
+    final String prefix="data:image/jpeg;base64,";
+    if(!data.startsWith(prefix)) return ResponseEntity.notFound().build();
+    byte[] bytes;
+    try {
+      bytes=Base64.getDecoder().decode(data.substring(prefix.length()));
+    } catch(IllegalArgumentException ex) {
+      return ResponseEntity.notFound().build();
+    }
+    if(bytes.length==0 || bytes.length>350*1024) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok()
+        .contentType(MediaType.IMAGE_JPEG)
+        .cacheControl(CacheControl.noStore())
+        .header(HttpHeaders.X_CONTENT_TYPE_OPTIONS,"nosniff")
+        .body(bytes);
   }
 
   @PutMapping("/me/profile")
@@ -145,7 +174,7 @@ public class StudentController {
 
   private Map<String,Object> statsFor(long studentId){
     Map<String,Object> student=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language,profile_image_data_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
+      select id,public_id,display_name,class_code,board,language,case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo' else null end as profile_image_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
       """,studentId);
     Map<String,Object> result=new LinkedHashMap<>(student);
     result.put("lessonStats",jdbc.queryForMap("""
