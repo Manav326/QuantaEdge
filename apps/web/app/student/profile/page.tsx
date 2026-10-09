@@ -145,7 +145,7 @@ export default function StudentProfilePage() {
       const profileImageDataUrl = await prepareProfilePhoto(file);
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoName(file.name);
-      setNotice('Photo ready. Select Changes save karein to keep it on your profile.');
+      setNotice('Photo ready. Changes save karein taaki photo profile par rahe.');
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
     } finally {
@@ -178,7 +178,7 @@ export default function StudentProfilePage() {
         learningGoal: body.learning_goal || '',
         profileImageDataUrl: body.profile_image_data_url || '',
       });
-      setNotice('Your profile has been saved.');
+      setNotice('Aapki profile save ho gayi hai.');
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
     } finally {
@@ -189,7 +189,7 @@ export default function StudentProfilePage() {
   function resetPhoto() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
     setPhotoName('');
-    setNotice('Photo removed from this draft. Changes save karein to confirm.');
+    setNotice('Draft se photo hat gayi hai. Confirm karne ke liye changes save karein.');
     setError('');
   }
 

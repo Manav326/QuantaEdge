@@ -99,7 +99,7 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to save student login details.');
       await load();
-      setNotice('Login details save ho gayi hain for '+child.display_name+'. Username aur password bachche ke saath safely share karein.');
+      setNotice('Login details '+child.display_name+' ke liye save ho gayi hain. Username aur password bachche ke saath safely share karein.');
     }catch(e:any){setError(e.message||'Unable to save student login details.');}
   }
 
@@ -113,7 +113,7 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to update tracks.');
       await load();
-      setNotice(`Learning tracks saved for ${child.display_name}.`);
+      setNotice(`${child.display_name} ke learning subjects save ho gaye hain.`);
     }catch(e:any){setError(e.message||'Unable to update tracks.');}
     finally{setBusyTrack(null);}
   }
@@ -126,7 +126,7 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to archive the profile.');
       await load();
-      setNotice(`${child.display_name}'s profile was archived. Historical learning records were retained.`);
+      setNotice(`${child.display_name} ka profile archive ho gaya hai. Purane learning records safe rakhe gaye hain.`);
     }catch(e:any){setError(e.message||'Unable to archive profile.');}
   }
 

@@ -3,14 +3,14 @@ import QuantaEdgeBrand from './components/QuantaEdgeBrand';
 import LandingAccountMenu from './components/LandingAccountMenu';
 
 const subjects = [
-  { icon: '∑', name: 'गणित', meta: 'कक्षा 6–8 · हिन्दी', tone: 'violet' },
-  { icon: '⚗', name: 'विज्ञान', meta: 'कक्षा 6–8 · हिन्दी', tone: 'blue' },
+  { icon: '∑', name: 'गणित', meta: 'Class 6–8 · Hindi medium', tone: 'violet' },
+  { icon: '⚗', name: 'विज्ञान', meta: 'Class 6–8 · Hindi medium', tone: 'blue' },
 ];
 
 const promises = [
-  ['01', 'पहले समझेंगे', 'हर lesson prerequisite, explanation और worked example से concept की नींव बनाता है।'],
-  ['02', 'फिर अभ्यास', 'छोटे interactive सवाल, instant feedback और persistent learning records।'],
-  ['03', 'फिर आगे बढ़ेंगे', 'Diagnostic, progress और concept mastery के आधार पर अगला कदम तय होता है।'],
+  ['01', 'Pehle concept samjhenge', 'Har lesson mein prerequisite, simple explanation aur worked example se concept clear hota hai.'],
+  ['02', 'Phir practice karenge', 'Short interactive questions, instant feedback aur saved learning progress.'],
+  ['03', 'Phir next step lenge', 'Diagnostic, progress aur concept mastery ke basis par next step decide hota hai.'],
 ];
 
 export default function Home() {
@@ -19,9 +19,9 @@ export default function Home() {
       <header className="topbar">
         <QuantaEdgeBrand variant="header" />
 
-        <nav className="topnav" aria-label="मुख्य navigation">
-          <a href="#how-it-works">कैसे काम करता है</a>
-          <a href="#subjects">पढ़ाई</a>
+        <nav className="topnav" aria-label="Main navigation">
+          <a href="#how-it-works">Kaise kaam karta hai</a>
+          <a href="#subjects">Padhai</a>
           <a href="#parents">Parents</a>
         </nav>
 
@@ -32,21 +32,21 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow"><span className="live-dot" /> कक्षा 6–8 · बिहार बोर्ड · हिन्दी में</div>
-          <h1>पढ़ाई,<br /><em>बच्चे के हिसाब से।</em></h1>
+          <div className="eyebrow"><span className="live-dot" /> Class 6–8 · Bihar Board · Hindi medium</div>
+          <h1>Padhai,<br /><em>bachche ke hisaab se.</em></h1>
           <p className="hero-lead">
-            QuantaEdge बच्चे को सिर्फ answers नहीं देता। Diagnostic, practice और real learning records के आधार पर अगला learning step तय करता है।
+            QuantaEdge sirf answers nahi deta. Diagnostic, practice aur real learning records se bachche ka next learning step decide hota hai.
           </p>
 
           <div className="hero-actions">
-            <Link href="/login/student" className="button button-dark">अपनी पढ़ाई शुरू करें <span>→</span></Link>
-            <Link href="/login" className="button button-light">मैं Parent हूँ</Link>
+            <Link href="/login/student" className="button button-dark">Apni padhai shuru karein <span>→</span></Link>
+            <Link href="/login" className="button button-light">Main parent hoon</Link>
           </div>
 
           <div className="trust-row">
-            <span>✓ कोई public ranking नहीं</span>
-            <span>✓ सीखने पर focus</span>
-            <span>✓ Parent visibility</span>
+            <span>✓ Koi public ranking nahi</span>
+            <span>✓ Learning par focus</span>
+            <span>✓ Parent ko progress dikhegi</span>
           </div>
         </div>
 
@@ -54,16 +54,16 @@ export default function Home() {
           <div className="device-glow" />
           <div className="student-card">
             <div className="student-head">
-              <div><span className="muted-small">Learning journey</span><h3>आपके बच्चे के लिए</h3></div>
+              <div><span className="muted-small">Learning journey</span><h3>Aapke bachche ke liye</h3></div>
               <div className="avatar">Q</div>
             </div>
 
             <div className="mission-card">
               <div>
-                <span className="mission-label">आज की पढ़ाई</span>
-                <strong>एक concept · एक सही अगला कदम</strong>
+                <span className="mission-label">Aaj ki padhai</span>
+                <strong>Ek concept · ek sahi next step</strong>
                 <div className="progress-track"><span style={{ width: '58%' }} /></div>
-                <small>Progress answers के साथ save होती है</small>
+                <small>Answers ke saath progress save hoti hai</small>
               </div>
               <span className="streak">LIVE</span>
             </div>
@@ -72,37 +72,37 @@ export default function Home() {
 
             <div className="task done">
               <span className="task-icon">↻</span>
-              <div><strong>समझें</strong><small>Prerequisite · explanation · worked example</small></div>
+              <div><strong>Samjhein</strong><small>Prerequisite · explanation · worked example</small></div>
               <span className="check">✓</span>
             </div>
 
             <div className="task active">
               <span className="task-icon">∑</span>
-              <div><strong>अभ्यास करें</strong><small>Interactive questions · instant feedback</small></div>
+              <div><strong>Practice karein</strong><small>Interactive questions · instant feedback</small></div>
               <span className="arrow">→</span>
             </div>
 
             <div className="task">
               <span className="task-icon">✦</span>
-              <div><strong>Mastery बढ़ाएँ</strong><small>Concept mastery के आधार पर next step</small></div>
+              <div><strong>Mastery badhayein</strong><small>Concept mastery के आधार पर next step</small></div>
               <span className="arrow">→</span>
             </div>
 
-            <Link href="/login/student" className="device-cta">अपनी learning journey शुरू करें →</Link>
+            <Link href="/login/student" className="device-cta">Apni learning journey shuru karein →</Link>
           </div>
         </div>
       </section>
 
       <section className="strip">
-        <span>एक learning system जो हर बच्चे के लिए अगला सही कदम चुनता है</span>
+        <span>Ek learning system jo har bachche ke liye sahi next step choose karta hai</span>
         <div><b>DIAGNOSE</b><i>→</i><b>LEARN</b><i>→</i><b>PRACTICE</b><i>→</i><b>MASTER</b></div>
       </section>
 
       <section id="how-it-works" className="section">
         <div className="section-intro">
-          <span className="eyebrow">हमारा learning loop</span>
-          <h2>सिर्फ content नहीं।<br /><em>एक सही अगला कदम।</em></h2>
-          <p>Progress, question attempts, sessions और concept mastery एक ही learning state में persist होते हैं और recommendation को drive करते हैं।</p>
+          <span className="eyebrow">Hamara learning loop</span>
+          <h2>Sirf content nahi.<br /><em>Har baar ek sahi next step.</em></h2>
+          <p>Progress, question attempts, sessions aur concept mastery save rehte hain aur next recommendation decide karne mein help karte hain.</p>
         </div>
 
         <div className="promise-grid">
@@ -118,8 +118,8 @@ export default function Home() {
 
       <section id="subjects" className="section section-soft">
         <div className="section-heading">
-          <div><span className="eyebrow">अभी से शुरू करें</span><h2>आपकी पढ़ाई का पहला कदम</h2></div>
-          <Link href="/login/student" className="text-link">शुरू करें →</Link>
+          <div><span className="eyebrow">Abhi shuru karein</span><h2>Aapki padhai ka pehla step</h2></div>
+          <Link href="/login/student" className="text-link">Start karein →</Link>
         </div>
 
         <div className="subject-grid">
@@ -135,10 +135,10 @@ export default function Home() {
 
       <section id="parents" className="parent-section">
         <div className="parent-copy">
-          <span className="eyebrow">Parents के लिए</span>
-          <h2>बच्चा कितना पढ़ा नहीं —<br /><em>क्या सीखा, वह दिखे।</em></h2>
-          <p>Linked child के वास्तविक lessons, attempts, sessions, completion और concept mastery का simple summary।</p>
-          <Link href="/login" className="button button-dark">Parent view खोलें →</Link>
+          <span className="eyebrow">Parents ke liye</span>
+          <h2>Sirf kitna padha nahi —<br /><em>kya seekha, woh dekhein.</em></h2>
+          <p>Aapke bachche ke actual lessons, attempts, sessions, completion aur concept mastery ka simple summary.</p>
+          <Link href="/login" className="button button-dark">Parent view open karein →</Link>
         </div>
 
         <div className="report-card">
@@ -161,7 +161,7 @@ export default function Home() {
 
       <footer className="footer">
         <QuantaEdgeBrand href={null} variant="footer" />
-        <p>पढ़ाई, अब आपके बच्चे के हिसाब से।</p>
+        <p>Padhai, ab aapke bachche ke hisaab se.</p>
         <div className="footer-links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         <span>© 2026 QuantaEdge Learning</span>
       </footer>

@@ -169,7 +169,7 @@ export default function ParentProfilePage() {
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoChanged(true);
       setPhotoName(file.name);
-      setNotice('Photo ready. Select Changes save karein to keep it on your profile.');
+      setNotice('Photo ready. Changes save karein taaki photo profile par rahe.');
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
     } finally {
@@ -212,7 +212,7 @@ export default function ParentProfilePage() {
         preferredLanguage: body.preferred_language || 'English',
         profileImageDataUrl: '',
       });
-      setNotice('Your parent profile has been saved.');
+      setNotice('Aapki parent profile save ho gayi hai.');
       setPhotoName('');
       setPhotoChanged(false);
     } catch (saveError) {
@@ -226,7 +226,7 @@ export default function ParentProfilePage() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
     setPhotoChanged(true);
     setPhotoName('');
-    setNotice('Photo removed from this draft. Changes save karein to confirm.');
+    setNotice('Draft se photo hat gayi hai. Confirm karne ke liye changes save karein.');
     setError('');
   }
 
