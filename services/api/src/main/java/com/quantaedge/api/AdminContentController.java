@@ -358,6 +358,40 @@ public class AdminContentController {
     return lessonById(lessonId);
   }
 
+  @PostMapping("/lessons/{lessonId}/preview-check")
+  @Transactional
+  public Map<String,Object> markLessonPreviewChecked(
+      @PathVariable long lessonId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_SUBMIT");
+    long expectedRevision=longValue(body.get("contentRevision"),"contentRevision");
+    Long currentRevision;
+    try {
+      currentRevision=jdbc.queryForObject("select content_revision from lesson where id=?",Long.class,lessonId);
+    } catch (org.springframework.dao.EmptyResultDataAccessException ex) {
+      throw notFound("Lesson",lessonId);
+    }
+    if(currentRevision==null || currentRevision.longValue()!=expectedRevision) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The saved topic changed after this preview loaded. Refresh the topic, inspect the latest preview, and confirm that version.");
+    }
+    int updated=jdbc.update("""
+        update lesson
+        set preview_checked_revision=content_revision,preview_checked_at=now(),
+            preview_checked_by_staff_id=?,updated_at=now()
+        where id=? and content_revision=?
+        """,context.staffId(),lessonId,expectedRevision);
+    if(updated!=1) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "The saved topic changed while confirming the preview. Refresh and check the latest version.");
+    }
+    Map<String,Object> result=lessonById(lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/preview-check",
+        "Confirmed learner preview for micro-topic '"+result.get("lesson_title")+"' at content revision "+expectedRevision+".");
+    return result;
+  }
+
   @PostMapping("/lessons/{lessonId}/submit")
   @Transactional
   public Map<String,Object> submitLessonForReview(
@@ -513,7 +547,9 @@ public class AdminContentController {
       update lesson
       set title=?, summary=?, estimated_minutes=?, sort_order=?, status=?, active=?,
           alignment_source_title=?, alignment_source_url=?, alignment_source_edition=?,
-          alignment_page_range=?, alignment_source_verified=?
+          alignment_page_range=?, alignment_source_verified=?,
+          content_revision=content_revision+1,preview_checked_revision=null,
+          preview_checked_at=null,preview_checked_by_staff_id=null
       where id=?
       """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status),
       sourceTitle, sourceUrl, sourceEdition, sourcePages, sourceVerified, lessonId);
@@ -734,13 +770,25 @@ public class AdminContentController {
     if(activeQuestions==null||activeQuestions==0) {
       throw badRequest("Add at least one active practice question before submitting for review.");
     }
+    validatePreviewCheck(lessonId);
   }
 
   private void validateLessonForPublishing(long lessonId) {
     validateLessonForPublishing(lessonId,true);
   }
 
+  private void validatePreviewCheck(long lessonId) {
+    Long checked=jdbc.queryForObject("""
+      select count(*) from lesson
+      where id=? and content_revision=preview_checked_revision
+      """,Long.class,lessonId);
+    if(checked==null||checked==0) {
+      throw badRequest("Open the current saved learner preview and confirm it before submitting or publishing this micro-topic.");
+    }
+  }
+
   private void validateLessonForPublishing(long lessonId,boolean requirePublishedChapter) {
+    validatePreviewCheck(lessonId);
     Long parentReady = jdbc.queryForObject("""
       select count(*) from lesson l
       join curriculum_chapter ch on ch.id=l.chapter_id
@@ -861,6 +909,8 @@ public class AdminContentController {
              l.active as lesson_active, l.alignment_source_title,
              l.alignment_source_url, l.alignment_source_edition,
              l.alignment_page_range, l.alignment_source_verified,
+             l.content_revision, l.preview_checked_revision, l.preview_checked_at,
+             l.preview_checked_by_staff_id,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
              ch.content_status as chapter_status, ch.active as chapter_active,
