@@ -410,3 +410,7 @@
 .qe-audit-event>small{color:#3d4e65!important}
 .qe-audit-detail{display:block;color:#24364e!important;font-size:11px;line-height:1.55;margin-top:7px;white-space:normal}
 .qe-staff-help{color:#34445b}
+
+/* Reviewers can certify source mappings in read-only authoring mode; authors cannot self-certify. */
+.qe-viewer-mode .qe-editor-section select.qe-source-verification{pointer-events:auto!important;opacity:1!important;color:#17273d!important;background:#fff!important;cursor:pointer}
+.qe-content-main .qe-source-verification:disabled{color:#526178!important;opacity:.75}
