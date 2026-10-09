@@ -25,7 +25,7 @@ app:
     session-hours: ${APP_AUTH_SESSION_HOURS:168}
     secure-cookies: ${APP_AUTH_SECURE_COOKIES:false}
     otp-cooldown-seconds: ${APP_AUTH_OTP_COOLDOWN_SECONDS:60}
-    admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:}
+    admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:7070107483}
     max-children-per-parent: ${APP_AUTH_MAX_CHILDREN_PER_PARENT:3}
   ai-tutor:
     enabled: ${APP_AI_TUTOR_ENABLED:false}
