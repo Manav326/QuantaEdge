@@ -98,11 +98,10 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_chunking_preserves_all_text_and_page_numbers(self):
         pages = [{"page_number": 1, "text": "A" * 2200}, {"page_number": 2, "text": "B" * 900}]
         chunks = GEN.make_chunks(pages, 2000)
-        combined = "".join(piece["text"] for chunk in chunks for piece in chunk["text"].split("[PDF page") if False)
-        self.assertEqual(4, len(chunks))
+        self.assertEqual(2, len(chunks))
         self.assertIn(1, chunks[0]["page_numbers"])
         self.assertTrue(all(chunk["text"] for chunk in chunks))
-        self.assertEqual(3100, sum(len(page["text"]) for page in pages))
+        self.assertEqual(3100, sum(chunk["text"].count("A") + chunk["text"].count("B") for chunk in chunks))
 
     def test_question_allocation_hits_exact_target(self):
         chunks = [
