@@ -260,8 +260,12 @@ public class AdminContentController {
       """, name, description, sortOrder, status, !"ARCHIVED".equals(status),
       curriculumSource, sourceUrl, sourceEdition, sourcePages, sourceVerified, chapterId);
     if (changed == 0) throw notFound("Chapter", chapterId);
-    staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/updated",
-        "Saved chapter '"+name+"'; resulting workflow status="+status+".");
+    String chapterAction = "PUBLISHED".equals(status) ? "publish"
+        : ("PUBLISHED".equals(oldStatus) && "DRAFT".equals(status) ? "unpublish" : "updated");
+    String chapterActionText = "PUBLISHED".equals(status) ? "Published chapter"
+        : ("PUBLISHED".equals(oldStatus) && "DRAFT".equals(status) ? "Unpublished chapter" : "Saved chapter");
+    staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/"+chapterAction,
+        chapterActionText+" '"+name+"'; resulting workflow status="+status+".");
     return chapterById(chapterId);
   }
 
