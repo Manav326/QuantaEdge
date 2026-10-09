@@ -482,6 +482,10 @@ public class AuthService {
     return new AuthContext(userId,studentId,staffId,role,name);
   }
 
+  public record SessionTokens(String accessToken,String refreshToken,AuthContext context) {}
+  public static final long ACCESS_TOKEN_MINUTES=15;
+
+  /** Legacy token helper retained for compatibility. Web sign-ins use issueSession. */
   public String issueToken(AuthContext context) {
     String raw=randomToken();
     jdbc.update("""
@@ -491,8 +495,55 @@ public class AuthService {
     return raw;
   }
 
+  /** Issue short-lived access plus independently stored refresh credentials. */
+  public SessionTokens issueSession(AuthContext context) {
+    Instant now=Instant.now();
+    String access=randomToken(), refresh=randomToken();
+    jdbc.update("""
+      insert into auth_session(token_hash,refresh_token_hash,user_id,student_id,staff_id,expires_at,refresh_expires_at)
+      values (?,?,?,?,?,?,?)
+      """,hash(access),hash(refresh),context.userId(),context.studentId(),context.staffId(),
+      java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
+      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))));
+    return new SessionTokens(access,refresh,context);
+  }
+
+  /** Rotate the refresh token and the access token under a row lock. */
+  @Transactional
+  public SessionTokens refreshSession(String refreshToken) {
+    if(refreshToken==null || refreshToken.isBlank()) throw new SecurityException("Session expired. Please sign in again.");
+    var rows=jdbc.queryForList("""
+      select s.id
+      from auth_session s
+      left join staff_account e on e.id=s.staff_id and e.active=true
+      where s.refresh_token_hash=? and s.revoked_at is null and s.refresh_expires_at>now()
+        and (s.staff_id is null or e.id is not null)
+      for update of s
+      """,hash(refreshToken));
+    if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
+    long sessionId=((Number)rows.getFirst().get("id")).longValue();
+    String access=randomToken(), nextRefresh=randomToken();
+    Instant now=Instant.now();
+    int changed=jdbc.update("""
+      update auth_session set token_hash=?,refresh_token_hash=?,expires_at=?,refresh_expires_at=?,last_seen_at=now()
+      where id=? and revoked_at is null
+      """,hash(access),hash(nextRefresh),
+      java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
+      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))),sessionId);
+    if(changed!=1) throw new SecurityException("Session expired. Please sign in again.");
+    AuthContext context=current(access);
+    if(context==null) throw new SecurityException("Session expired. Please sign in again.");
+    return new SessionTokens(access,nextRefresh,context);
+  }
+
   public void revoke(String token) {
-    if(token!=null && !token.isBlank()) jdbc.update("update auth_session set revoked_at=now() where token_hash=?",hash(token));
+    if(token!=null && !token.isBlank()) jdbc.update("update auth_session set revoked_at=now() where token_hash=? and revoked_at is null",hash(token));
+  }
+
+  public void revoke(String token,String refreshToken) {
+    revoke(token);
+    if(refreshToken!=null && !refreshToken.isBlank())
+      jdbc.update("update auth_session set revoked_at=now() where refresh_token_hash=? and revoked_at is null",hash(refreshToken));
   }
 
   public boolean hasGuardianAccess(long userId,long studentId) {
