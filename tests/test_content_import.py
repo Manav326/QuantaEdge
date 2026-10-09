@@ -2,6 +2,7 @@ import copy
 import importlib.util
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "scripts" / "import_reviewed_content.py"
 SPEC = importlib.util.spec_from_file_location("import_reviewed_content", MODULE_PATH)
@@ -145,6 +146,38 @@ class ReviewedContentImportTests(unittest.TestCase):
         self.assertEqual(1, result["questions"])
         self.assertEqual("DRAFT", result["all_statuses"])
         self.assertFalse(result["student_delivery_allowed"])
+
+    def test_attach_to_existing_chapter_creates_only_draft_lessons(self):
+        bundle = valid_bundle()
+        calls = []
+
+        class FakeApi:
+            def request(self, method, path, body=None):
+                calls.append((method, path, body))
+                if method == "GET":
+                    return [{
+                        "class_code": "7", "subject_code": "maths",
+                        "chapter_code": "algebraic-expressions-new", "chapter_id": 42,
+                        "chapter_status": "PUBLISHED", "chapter_active": True,
+                        "lesson_code": None,
+                    }]
+                if method == "POST" and path == "/api/v1/admin/content/lessons":
+                    return {"lesson_id": 88}
+                return {}
+
+        with patch.object(MODULE, "AdminApi", return_value=FakeApi()):
+            result = MODULE.run_import(
+                bundle, "http://localhost:8080", "test-session",
+                dry_run=False, attach_existing_chapter=True,
+            )
+        self.assertEqual("ATTACHED_EXISTING", result["chapter_mode"])
+        self.assertEqual(42, result["chapter_id"])
+        self.assertEqual([88], result["lesson_ids"])
+        self.assertFalse(any(method == "POST" and path == "/api/v1/admin/content/chapters" for method, path, _ in calls))
+        lesson_patches = [body for method, path, body in calls if method == "PATCH"]
+        self.assertEqual("DRAFT", lesson_patches[0]["status"])
+        self.assertFalse(lesson_patches[0]["alignmentSourceVerified"])
+        self.assertEqual("DRAFT", lesson_patches[0]["questions"][0]["review_status"])
 
     def test_duplicate_lesson_codes_are_rejected_before_any_api_call(self):
         bundle = valid_bundle()
