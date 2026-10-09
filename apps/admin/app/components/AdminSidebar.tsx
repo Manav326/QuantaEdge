@@ -20,6 +20,8 @@ const links: Array<{ key: AdminSection; href: string; icon: string; label: strin
 
 export default function AdminSidebar({ active, variant = 'default', displayName }: AdminSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [role, setRole] = useState('');
+  const [permissions, setPermissions] = useState<string[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -28,6 +30,14 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
     } catch {
       // The sidebar still works for this session if storage is unavailable.
     }
+    fetch('/api/v1/auth/me', { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(me => {
+        if (!me) return;
+        setRole(String(me.role || ''));
+        setPermissions(Array.isArray(me.permissions) ? me.permissions : []);
+      })
+      .catch(() => undefined);
   }, []);
 
   function toggleCollapsed() {
@@ -77,6 +87,11 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
         <Link href="/legacy-content" title={collapsed ? 'Detailed authoring' : undefined} className="qe-legacy-nav">
           <span className="qe-nav-icon" aria-hidden="true">✎</span><span className="qe-nav-label">Detailed authoring</span>
         </Link>
+        {role === 'ADMIN' ? <Link href="/employees" title={collapsed ? 'Staff & audit' : undefined} className="qe-staff-nav">
+          <span className="qe-nav-icon" aria-hidden="true">♙</span><span className="qe-nav-label">Staff & audit</span>
+        </Link> : permissions.includes('AUDIT_VIEW') ? <Link href="/employees?view=audit" title={collapsed ? 'Activity trail' : undefined} className="qe-staff-nav">
+          <span className="qe-nav-icon" aria-hidden="true">◷</span><span className="qe-nav-label">Activity trail</span>
+        </Link> : null}
       </nav>
 
       {variant === 'overview' ? <>
