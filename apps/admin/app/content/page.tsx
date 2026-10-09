@@ -110,7 +110,7 @@ function blockHasPublishableContent(block:ContentBlock){
 }
 function questionHasValidAnswer(question:any){
  const type=String(question.question_type||'').toUpperCase();
- if(!meaningfulContent(question.prompt)||String(question.review_status||'').toUpperCase()!=='APPROVED')return false;
+ if(!meaningfulContent(question.prompt)||!['APPROVED','PUBLISHED'].includes(String(question.review_status||'').toUpperCase()))return false;
  if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))return false;
  if(type==='MCQ'||type==='TRUE_FALSE'){
   const options=Array.isArray(question.options)?question.options:[];
@@ -231,7 +231,7 @@ export default function ContentStudio(){
   return '';
  },[selected,createType,createForm,form,blocks,questions,showAdvancedQuestions,questionJson]);
  const hasUnsavedChanges=createType?createHasInput:Boolean(baselineSnapshot&&baselineSnapshot!==draftSnapshot);
- const previewReviewed=Boolean(previewFingerprint&&previewFingerprint===draftSnapshot);
+ const previewReviewed=Boolean((previewFingerprint&&previewFingerprint===draftSnapshot)||(!hasUnsavedChanges&&String(form.lessonStatus).toUpperCase()==='PUBLISHED'));
  const backToLibrary=()=>{
   if(hasUnsavedChanges&&!window.confirm('You have unsaved changes. Leave this editor and discard them?'))return;
   setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setPreviewFingerprint('');setError('');setNotice('');
