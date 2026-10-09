@@ -377,10 +377,10 @@ export default function ContentStudio(){
    {label:'Basics',ok:basicsReady},
    {label:'Teaching blocks',ok:blocksReady},
    {label:'Preview',ok:previewReviewed},
-   {label:'Publish',ok:basicsReady&&blocksReady&&previewReviewed&&submittedForReview&&questionsReady&&sourceReady&&chapterReady}
+   {label:'Publish',ok:String(form.lessonStatus).toUpperCase()==='PUBLISHED'}
   ];
   const currentWorkflowStep=workflowSteps.findIndex(step=>!step.ok);
-  const canPublishLessonReady=workflowSteps.every(step=>step.ok);
+  const canPublishLessonReady=basicsReady&&blocksReady&&previewReviewed&&submittedForReview&&questionsReady&&sourceReady&&chapterReady;
   const canPublishThisContent=selected?.type==='chapter'?chapterSourceReady:canPublishLessonReady;
   const firstMissingRequirement=selected?.type==='chapter'
     ? (chapterSourceReady?'All visible chapter checks are complete. The server will also validate its lessons.':'Complete and verify the official curriculum source before publishing.')
