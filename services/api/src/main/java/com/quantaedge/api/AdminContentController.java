@@ -307,8 +307,11 @@ public class AdminContentController {
     Set<Long> submittedIds = new HashSet<>();
 
     for (Map<String, Object> q : questions) {
-      long id = longValue(q.get("id"), "question id");
-      if (!currentIds.contains(id) || !submittedIds.add(id)) throw badRequest("Question IDs must be unique and belong to this lesson.");
+      boolean create = q.get("id") == null;
+      long id = create ? 0L : longValue(q.get("id"), "question id");
+      if (!create && (!currentIds.contains(id) || submittedIds.contains(id))) {
+        throw badRequest("Question IDs must be unique and belong to this lesson.");
+      }
       String type = requiredText(first(q, "question_type", "questionType"), 30).toUpperCase();
       String difficulty = requiredText(q.get("difficulty"), 20).toUpperCase();
       String prompt = requiredText(q.get("prompt"), 1000);
@@ -316,14 +319,13 @@ public class AdminContentController {
       int order = integerValue(first(q, "sort_order", "sortOrder"), 1, 10000, "sort_order");
       if (!QUESTION_TYPES.contains(type)) throw badRequest("Unsupported question type: " + type);
       if (!DIFFICULTIES.contains(difficulty)) throw badRequest("Unsupported question difficulty: " + difficulty);
-      jdbc.update("""
-        update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?
-        where id=? and lesson_id=?
-        """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true), id, lessonId);
 
       List<Map<String, Object>> options = objectList(q.get("options"), "question options");
       if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && options.size() < 2) {
         throw badRequest("Multiple-choice and true/false questions need at least two options.");
+      }
+      if ("INPUT".equals(type) && !options.isEmpty()) {
+        throw badRequest("Input questions must not include multiple-choice options.");
       }
       if (options.size() > 10) throw badRequest("A question cannot have more than 10 options.");
       Set<String> optionKeys = new HashSet<>();
@@ -334,7 +336,25 @@ public class AdminContentController {
         if (!optionKeys.add(key)) throw badRequest("Option keys must be unique within a question.");
         if (booleanValue(first(option, "correct", "is_correct"), false)) correctCount++;
       }
-      if (!options.isEmpty() && correctCount != 1) throw badRequest("Each question with options must have exactly one correct answer.");
+      if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && correctCount != 1) {
+        throw badRequest("Each multiple-choice question must have exactly one correct answer.");
+      }
+
+      if (create) {
+        Long createdId = jdbc.queryForObject("""
+          insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active)
+          values(?,?,?,?,?,?,?)
+          returning id
+          """, Long.class, lessonId, type, prompt, explanation, difficulty, order,
+          booleanValue(q.get("active"), true));
+        id = createdId;
+      } else {
+        jdbc.update("""
+          update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?
+          where id=? and lesson_id=?
+          """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true), id, lessonId);
+      }
+      submittedIds.add(id);
       jdbc.update("delete from question_option where question_id=?", id);
       int index = 1;
       for (Map<String, Object> option : options) {
