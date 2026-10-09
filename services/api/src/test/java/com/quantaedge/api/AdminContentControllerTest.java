@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,6 +20,19 @@ class AdminContentControllerTest {
   @Mock private ObjectMapper mapper;
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
+
+  @Test
+  void previewConfirmationRejectsAStaleContentRevision() {
+    AuthContext author = new AuthContext(null, null, 42L, "CONTENT_AUTHOR", "Content author");
+    when(jdbc.queryForObject("select content_revision from lesson where id=?", Long.class, 7L))
+        .thenReturn(12L);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.markLessonPreviewChecked(7L, java.util.Map.of("contentRevision", 11L), author));
+
+    assertTrue(error.getReason().contains("changed after this preview loaded"));
+  }
 
   @Test
   void legacySharedTokenCannotAuthorizeContentCms() {
