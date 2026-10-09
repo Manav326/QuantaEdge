@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,71 +24,93 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @ExtendWith(MockitoExtension.class)
 class LearningControllerTest {
-  @Mock
-  private JdbcTemplate jdbc;
+  @Mock private JdbcTemplate jdbc;
+  @Mock private AuthorizationService authorization;
+  @Mock private LearningStateService state;
+  @Mock private QuestionAnswerService answerService;
+
+  private final AuthContext student = new AuthContext(70L, 7L, "STUDENT", "Preview Student");
+  private LearningController controller;
+
+  @BeforeEach
+  void setUp() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    controller = new LearningController(jdbc, authorization, state, answerService);
+  }
 
   @Test
   void publicQuestionDeliveryDoesNotSelectCorrectAnswerFlags() {
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(42L)))
+        .thenReturn(1L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
-    LearningController controller = new LearningController(jdbc);
 
-    controller.questions(42L);
+    controller.questions(42L, student);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), eq(42L));
-    assertTrue(sql.getValue().contains("'label', qo.label"));
+    assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
     assertFalse(sql.getValue().contains("qo.is_correct"));
-    assertFalse(sql.getValue().contains("q.explanation"));
-    assertTrue(sql.getValue().contains("q.review_status='APPROVED'"));
+    assertFalse(sql.getValue().contains("answer_payload"));
   }
 
   @Test
-  void publicLessonBlocksStripAnswerKeysRecursively() {
-    when(jdbc.queryForList(contains("select l.id, l.code, l.title"), any(Object[].class)))
-        .thenReturn(List.of(Map.of("id", 42L)));
-    when(jdbc.queryForList(contains("from lesson_block"), any(Object[].class))).thenReturn(List.of());
-    when(jdbc.queryForList(contains("select q.id, q.question_type"), any(Object[].class))).thenReturn(List.of());
+  void lessonBlocksStripAnswerKeysRecursively() {
+    when(jdbc.queryForList(contains("select l.id,l.code,l.title"), any(Object[].class)))
+        .thenReturn(List.of(Map.of(
+            "id", 42L, "class_code", "7", "subject_code", "maths",
+            "chapter_code", "algebraic-expressions", "title", "Expressions")));
+    when(jdbc.queryForList(contains("strip_answer_keys(content)"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("select q.id,q.question_type"), eq(42L))).thenReturn(List.of());
 
-    LearningController controller = new LearningController(jdbc);
-    controller.lesson(42L);
+    Map<String, Object> lesson = controller.lesson(42L, student);
 
     verify(jdbc).queryForList(contains("strip_answer_keys(content)"), eq(42L));
+    assertTrue(lesson.containsKey("blocks"));
+    assertTrue(lesson.containsKey("questions"));
   }
 
   @Test
-  void answerIsGradedServerSideAndSavedForLocalPreviewStudent() {
-    when(jdbc.queryForList(contains("from student"))).thenReturn(List.of(Map.of("id", 7L)));
-    when(jdbc.queryForList(contains("select q.id, q.explanation"), any(Object[].class)))
+  void answerIsGradedServerSideAndPersistedWithoutExposingAnswerPayload() {
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
         .thenReturn(List.of(Map.of(
-            "id", 42L,
-            "explanation", "Subtract four from both sides.",
-            "correct", true,
-            "option_exists", true)));
-    when(jdbc.update(contains("insert into student_question_attempt"), any(Object[].class))).thenReturn(1);
+            "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
+            "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+        .thenReturn(1L);
+    when(answerService.evaluate(anyString(), eq("B"))).thenReturn(
+        new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
-    LearningController controller = new LearningController(jdbc);
-    Map<String, Object> result = controller.answer(42L, Map.of("selectedOption", "B"));
+    Map<String, Object> result = controller.answer(42L, Map.of("answer", "B"), student);
 
     assertEquals(true, result.get("correct"));
-    assertEquals(true, result.get("saved"));
+    assertEquals(true, result.get("autoGraded"));
     assertEquals("Subtract four from both sides.", result.get("explanation"));
-    verify(jdbc).update(contains("insert into student_question_attempt"), eq(7L), eq(42L), eq("B"), eq(true));
+    assertFalse(result.containsKey("answer_payload"));
+    assertFalse(result.containsKey("correctAnswer"));
+    verify(state).recordAttempt(7L, 42L, 9L, "B", true, true);
   }
 
   @Test
-  void answerRejectsAnOptionThatDoesNotBelongToTheQuestion() {
-    when(jdbc.queryForList(contains("from student"))).thenReturn(List.of(Map.of("id", 7L)));
-    when(jdbc.queryForList(contains("select q.id, q.explanation"), any(Object[].class)))
+  void answerRejectsQuestionsOutsideThePublishedStudentTrack() {
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
         .thenReturn(List.of(Map.of(
-            "id", 42L,
-            "explanation", "Explanation",
-            "correct", false,
-            "option_exists", false)));
+            "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
+            "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+        .thenReturn(0L);
 
-    LearningController controller = new LearningController(jdbc);
-    assertThrows(IllegalArgumentException.class,
-        () -> controller.answer(42L, Map.of("selectedOption", "Z")));
-    verify(jdbc, never()).update(contains("insert into student_question_attempt"), any(Object[].class));
+    assertThrows(SecurityException.class,
+        () -> controller.answer(42L, Map.of("answer", "Z"), student));
+    verify(state, never()).recordAttempt(any(Long.class), any(Long.class), any(Long.class),
+        anyString(), any(Boolean.class), any());
+  }
+
+  @Test
+  void anonymousRequestsAreRejectedBeforeReadingQuestions() {
+    when(authorization.requireStudent(null)).thenThrow(new SecurityException("Authentication required"));
+
+    assertThrows(SecurityException.class, () -> controller.questions(42L, null));
+    verify(jdbc, never()).queryForList(anyString(), any(Object[].class));
   }
 }
