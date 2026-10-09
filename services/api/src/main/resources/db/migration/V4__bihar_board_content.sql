@@ -161,7 +161,7 @@ begin
         else
           jsonb_build_object('points',jsonb_build_array(r.description,'अवधारणा को उदाहरण पर लागू करें।','अंत में उत्तर की जाँच करना सीखने का हिस्सा है।'))
         end)
-      on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
+      on conflict on constraint lesson_block_lesson_id_sequence_no_key do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
       for q in select * from (values
         (1,'मुख्य उद्देश्य क्या है?','FOUNDATION'),

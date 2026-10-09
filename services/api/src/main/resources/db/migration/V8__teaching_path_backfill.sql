@@ -59,7 +59,7 @@ begin
       (lesson_id,4,'SUMMARY',jsonb_build_object(
         'points',jsonb_build_array(r.description,'मुख्य विचार को अपने शब्दों में दोहराएँ।','एक नए उदाहरण में लागू करके mastery जाँचें।')
       ))
-      on conflict(lesson_id,sequence_no) do update set block_type=excluded.block_type,content=excluded.content,active=true;
+      on conflict on constraint lesson_block_lesson_id_sequence_no_key do update set block_type=excluded.block_type,content=excluded.content,active=true;
 
       insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
       values(
