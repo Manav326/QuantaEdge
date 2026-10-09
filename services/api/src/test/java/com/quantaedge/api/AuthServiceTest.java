@@ -54,7 +54,7 @@ class AuthServiceTest {
         "purpose", "STAFF_LOGIN");
     when(jdbc.queryForList(contains("from otp_challenge where mobile_e164=?"), eq(mobile)))
         .thenReturn(List.of(otpRow));
-    when(jdbc.queryForList("select id, active from staff_account where mobile_e164=?", mobile))
+    when(jdbc.queryForList("select id, active, last_login_at from staff_account where mobile_e164=?", mobile))
         .thenReturn(List.of());
     when(jdbc.queryForObject(
         contains("insert into staff_account(public_id,mobile_e164,display_name,role,active)"),
