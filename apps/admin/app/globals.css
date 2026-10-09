@@ -511,3 +511,18 @@
   .qe-login-brand .qe-login-brand-tagline{font-size:8px}
   .qe-login-mobile-brand{display:flex}
 }
+
+/* Practice-question review diagnostics and activation controls. */
+.qe-question-activate{flex:0 0 auto;border:1px solid #dfe5ef;border-radius:8px;background:#f6f8fb;color:#35435b;padding:7px 9px;font:700 10px 'DM Sans',Arial,sans-serif;cursor:pointer}
+.qe-question-activate.is-inactive{border-color:#b8e4cd;background:#f0fbf5;color:#17764b}
+.qe-question-activate:disabled{opacity:.5;cursor:not-allowed}
+.qe-question-diagnostic{display:grid;gap:4px;margin:10px 0 14px;padding:10px 12px;border:1px solid #f0d7b5;border-radius:10px;background:#fffaf2;color:#754b1c}
+.qe-question-diagnostic strong{font-size:10px}
+.qe-question-diagnostic span{font-size:10px;line-height:1.55;overflow-wrap:anywhere;color:#785f42}
+.qe-question-diagnostic.inactive{border-color:#e5e8ef;background:#f7f8fb;color:#46526a}
+.qe-question-diagnostic.inactive span{color:#647187}
+.qe-question-diagnostic.ready{border-color:#ccebd9;background:#f4fcf7;color:#236d4c}
+.qe-question-diagnostic.ready span{color:#41765d}
+.qe-question-author>header{flex-wrap:wrap}
+.qe-question-author>header>div{min-width:120px;flex:1}
+@media(max-width:560px){.qe-question-activate{padding:7px}.qe-question-author>header{gap:7px}}
