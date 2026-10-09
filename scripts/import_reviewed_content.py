@@ -388,6 +388,7 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
         api.request("PATCH", f"/api/v1/admin/content/lessons/{lesson_id}", patch)
     return {
         "mode": "APPLIED_DRAFT_ONLY",
+        "chapter_mode": "ATTACHED_EXISTING" if attach_existing_chapter else "CREATED_DRAFT",
         "chapter_id": chapter_id,
         "lesson_ids": lesson_ids,
         "class_code": curriculum["class_code"],
