@@ -16,9 +16,79 @@ public class AdminController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final ObjectMapper mapper;
+  private final AuthService auth;
 
-  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization,ObjectMapper mapper){
-    this.jdbc=jdbc; this.authorization=authorization; this.mapper=mapper;
+  public AdminController(JdbcTemplate jdbc,AuthorizationService authorization,ObjectMapper mapper,AuthService auth){
+    this.jdbc=jdbc; this.authorization=authorization; this.mapper=mapper; this.auth=auth;
+  }
+
+  @GetMapping("/parents")
+  public List<Map<String,Object>> parents(@RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    return jdbc.queryForList("""
+      select u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at,
+        count(distinct case when gs.active=true and gs.consent_status='CONSENTED' and st.active=true then st.id end) as active_children,
+        count(distinct case when gs.active=true and gs.consent_status='CONSENTED' then st.id end) as linked_children
+      from user_account u
+      left join guardian_student gs on gs.guardian_user_id=u.id
+      left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
+      where u.role='PARENT'
+      group by u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at
+      order by u.created_at desc
+      """);
+  }
+
+  @GetMapping("/parents/{parentId}/children")
+  public List<Map<String,Object>> parentChildren(@PathVariable long parentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    authorization.requireAdmin(context);
+    return jdbc.queryForList("""
+      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,st.active as student_active,
+        st.created_at,gs.active as relationship_active,gs.consent_status,
+        coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
+          join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
+      from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and st.environment='PRODUCTION'
+      order by st.created_at desc
+      """,parentId);
+  }
+
+  @PutMapping("/parents/{parentId}/status")
+  @Transactional
+  public Map<String,Object> updateParentStatus(@PathVariable long parentId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    AuthContext admin=authorization.requireAdmin(context);
+    if(!(body.get("active") instanceof Boolean active)) throw new IllegalArgumentException("active must be true or false");
+    int changed=jdbc.update("update user_account set active=?,updated_at=now() where id=? and role='PARENT'",active,parentId);
+    if(changed==0) throw new IllegalArgumentException("Parent account not found");
+    if(!active) jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null",parentId);
+    log(admin,active?"PARENT_REACTIVATE":"PARENT_SUSPEND",String.valueOf(parentId),"active="+active);
+    return Map.of("updated",true,"parentId",parentId,"active",active);
+  }
+
+  @PutMapping("/students/{studentId}/status")
+  @Transactional
+  public Map<String,Object> updateProductionStudentStatus(@PathVariable long studentId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    AuthContext admin=authorization.requireAdmin(context);
+    if(!(body.get("active") instanceof Boolean active)) throw new IllegalArgumentException("active must be true or false");
+    int changed=jdbc.update("update student set active=? where id=? and environment='PRODUCTION'",active,studentId);
+    if(changed==0) throw new IllegalArgumentException("Production student not found");
+    if(!active) jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
+    log(admin,active?"STUDENT_REACTIVATE":"STUDENT_SUSPEND",String.valueOf(studentId),"active="+active);
+    return Map.of("updated",true,"studentId",studentId,"active",active);
+  }
+
+  @PutMapping("/students/{studentId}/tracks")
+  @Transactional
+  public Map<String,Object> updateStudentTracks(@PathVariable long studentId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    AuthContext admin=authorization.requireAdmin(context);
+    List<String> tracks=body.get("trackCodes") instanceof List<?> values
+        ? values.stream().map(String::valueOf).toList() : List.of();
+    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks);
+    log(admin,"STUDENT_TRACKS",String.valueOf(studentId),String.join(",",activeTracks));
+    return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
   }
 
   @GetMapping("/lessons")

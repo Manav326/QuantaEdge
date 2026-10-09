@@ -2,6 +2,8 @@ package com.quantaedge.api;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,21 +11,40 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/guardians")
 public class GuardianController {
   private final JdbcTemplate jdbc; private final AuthorizationService authorization; private final AuthService auth;
+  @Value("${app.auth.max-children-per-parent:3}") private int maxChildrenPerParent=3;
   public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth){this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;}
+
+  @GetMapping("/account")
+  public Map<String,Object> account(@RequestAttribute(value="authContext",required=false) AuthContext context){
+    context=authorization.requireParent(context);
+    long activeChildren=jdbc.queryForObject("""
+      select count(distinct st.id) from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        and st.active=true and st.environment='PRODUCTION'
+      """,Long.class,context.userId());
+    int limit=Math.max(1,maxChildrenPerParent);
+    return Map.of("parentName",context.displayName()==null?"":context.displayName(),"activeChildren",activeChildren,
+        "maxChildren",limit,"remainingSlots",Math.max(0,limit-(int)activeChildren));
+  }
 
   @GetMapping("/children")
   public List<Map<String,Object>> children(@RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireParent(context);
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
-             gs.relationship,gs.consent_status
+             gs.relationship,gs.consent_status,
+             coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
+               join curriculum_subject s on s.id=ste.subject_id
+               where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       join curriculum_class cc on cc.code=st.class_code
-      where gs.guardian_user_id=? and gs.active=true order by st.created_at
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        and st.active=true and st.environment='PRODUCTION' order by st.created_at
       """,context.userId());
   }
 
   @DeleteMapping("/children/{studentId}")
+  @Transactional
   public Map<String,Object> archiveChild(@PathVariable long studentId,
       @RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireParent(context);
@@ -32,8 +53,14 @@ public class GuardianController {
       """,Boolean.class,context.userId(),studentId);
     if(!allowed) throw new SecurityException("Child access denied");
     jdbc.update("update guardian_student set active=false,consent_status='REVOKED' where guardian_user_id=? and student_id=?",context.userId(),studentId);
-    jdbc.update("update student set active=false where id=?",studentId);
-    return Map.of("deleted",true,"studentId",studentId);
+    Boolean anotherGuardian=jdbc.queryForObject("""
+      select exists(select 1 from guardian_student where student_id=? and active=true and consent_status='CONSENTED')
+      """,Boolean.class,studentId);
+    if(!anotherGuardian){
+      jdbc.update("update student set active=false where id=? and environment='PRODUCTION'",studentId);
+      jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
+    }
+    return Map.of("archived",true,"studentId",studentId,"studentDisabled",!anotherGuardian);
   }
 
   @GetMapping("/children/{studentId}/report")
@@ -53,8 +80,10 @@ public class GuardianController {
              coalesce(round(100.0*count(*) filter(where p.status='COMPLETED')/
                nullif(count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'),0),1),0) as completion_percent
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      """,studentId));
+      """,studentId,studentId));
     result.put("questionStats",jdbc.queryForMap("""
       select count(*) as attempts,count(*) filter(where correct=true) as correct,
              count(*) filter(where correct is not null) as graded_attempts,
@@ -68,12 +97,13 @@ public class GuardianController {
              count(distinct l.id) filter(where l.active=true and l.status='PUBLISHED') as lessons,
              count(distinct p.id) filter(where p.status='COMPLETED') as completed
       from curriculum_class c join curriculum_subject s on s.class_id=c.id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       join curriculum_chapter ch on ch.subject_id=s.id
       left join lesson l on l.chapter_id=ch.id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       where c.code=(select class_code from student where id=?)
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
-      """,studentId,studentId));
+      """,studentId,studentId,studentId));
     result.put("sessionStats",jdbc.queryForMap("""
       select count(*) as sessions_30d,
              coalesce(sum(minutes) filter(where started_at>=now()-interval '30 days'),0) as minutes_30d,
@@ -110,7 +140,30 @@ public class GuardianController {
     boolean consentAccepted=Boolean.TRUE.equals(body.get("consentAccepted"));
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
         String.valueOf(body.getOrDefault("classCode","7")),String.valueOf(body.getOrDefault("language","hi")),
-        String.valueOf(body.getOrDefault("pin","")),consentAccepted);
-    return jdbc.queryForMap("select id,public_id,display_name,class_code,board,language from student where id=?",child.studentId());
+        String.valueOf(body.getOrDefault("pin","")),consentAccepted,
+        body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
+    return jdbc.queryForMap("""
+      select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
+        coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
+          join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
+      from student st where st.id=?
+      """,child.studentId());
+  }
+
+  @PutMapping("/children/{studentId}/tracks")
+  @Transactional
+  public Map<String,Object> updateChildTracks(@PathVariable long studentId,
+      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context){
+    context=authorization.requireParent(context);
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(select 1 from guardian_student gs join student st on st.id=gs.student_id
+        where gs.guardian_user_id=? and gs.student_id=? and gs.active=true and gs.consent_status='CONSENTED'
+          and st.active=true and st.environment='PRODUCTION')
+      """,Boolean.class,context.userId(),studentId);
+    if(!allowed) throw new SecurityException("Child access denied");
+    List<String> tracks=body.get("trackCodes") instanceof List<?> values
+        ? values.stream().map(String::valueOf).toList() : List.of();
+    List<String> activeTracks=auth.updateStudentTracks(studentId,tracks);
+    return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
   }
 }

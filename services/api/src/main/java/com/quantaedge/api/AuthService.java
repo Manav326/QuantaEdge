@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,6 +25,8 @@ public class AuthService {
   private final boolean secureCookies;
   private final int otpCooldownSeconds;
   private final List<String> adminMobiles;
+  @Value("${app.auth.max-children-per-parent:3}")
+  private int maxChildrenPerParent = 3;
 
   public AuthService(
       JdbcTemplate jdbc,
@@ -156,11 +159,24 @@ public class AuthService {
   }
 
   @Transactional
-  public AuthContext createChild(long userId,String name,String classCode,String language,String pin,boolean consentAccepted) {
+  public AuthContext createChild(long userId,String name,String classCode,String language,String pin,
+      boolean consentAccepted,List<String> trackCodes) {
     if(!consentAccepted) throw new SecurityException("Guardian consent is required before creating a student profile");
     requireParent(userId);
+    List<Map<String,Object>> parentRows=jdbc.queryForList(
+        "select id from user_account where id=? and active=true and role in ('PARENT','ADMIN') for update",userId);
+    if(parentRows.isEmpty()) throw new SecurityException("Active parent account required");
+    long activeChildren=jdbc.queryForObject("""
+      select count(distinct st.id) from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        and st.active=true and st.environment='PRODUCTION'
+      """,Long.class,userId);
+    int childLimit=Math.max(1,maxChildrenPerParent);
+    if(activeChildren>=childLimit)
+      throw new IllegalStateException("This parent account has reached its child profile limit ("+childLimit+"). Contact support to increase it.");
     if(name==null || name.trim().length()<2 || name.trim().length()>120)
       throw new IllegalArgumentException("Student name must be between 2 and 120 characters");
+    if(classCode==null || classCode.isBlank()) throw new IllegalArgumentException("Class selection is required");
     if(!"hi".equalsIgnoreCase(language))
       throw new IllegalArgumentException("Only Hindi student profiles are currently supported");
     if(pin==null || pin.length()<4 || pin.length()>8 || pin.chars().anyMatch(ch -> !Character.isDigit(ch)))
@@ -175,12 +191,48 @@ public class AuthService {
     Long id=jdbc.queryForObject("""
       insert into student(public_id,display_name,class_code,board,language,environment,access_pin_hash,access_pin_set_at)
       values (?,?,?,?,?,'PRODUCTION',?,now()) returning id
-      """,Long.class,UUID.randomUUID(),name,classCode,board,language,hash(pin));
+      """,Long.class,UUID.randomUUID(),name.trim(),classCode,board,language,hash(pin));
     jdbc.update("""
       insert into guardian_student(guardian_user_id,student_id,relationship,consent_status)
       values (?,?,'PARENT','CONSENTED')
       """,userId,id);
+    applyStudentTracks(id,classCode,trackCodes);
     return contextForStudent(userId,id);
+  }
+
+  @Transactional
+  public List<String> updateStudentTracks(long studentId,List<String> trackCodes) {
+    Map<String,Object> row;
+    try {
+      row=jdbc.queryForMap("select class_code from student where id=? and active=true and environment='PRODUCTION'",studentId);
+    } catch(EmptyResultDataAccessException ex) {
+      throw new IllegalArgumentException("Active production student not found");
+    }
+    return applyStudentTracks(studentId,String.valueOf(row.get("class_code")),trackCodes);
+  }
+
+  private List<String> applyStudentTracks(long studentId,String classCode,List<String> requested) {
+    List<String> selected=requested==null
+        ? List.of("maths","science")
+        : requested.stream().map(v->v==null?"":v.trim().toLowerCase(java.util.Locale.ROOT)).distinct().toList();
+    if(selected.isEmpty() || selected.size()>2 || selected.stream().anyMatch(v->!List.of("maths","science").contains(v)))
+      throw new IllegalArgumentException("Choose one or two valid subjects: Maths and/or Science");
+    Long classExists=jdbc.queryForObject("select count(*) from curriculum_class where code=? and active=true",Long.class,classCode);
+    if(classExists==null || classExists==0) throw new IllegalArgumentException("Invalid class selection");
+    jdbc.update("update student_track_enrollment set status='ENDED',updated_at=now() where student_id=? and status='ACTIVE'",studentId);
+    for(String code:selected) {
+      List<Long> subjects=jdbc.queryForList("""
+        select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
+        where c.code=? and c.active=true and s.code=? and s.active=true
+        """,Long.class,classCode,code);
+      if(subjects.isEmpty()) throw new IllegalArgumentException("The "+code+" track is not available for class "+classCode);
+      jdbc.update("""
+        insert into student_track_enrollment(student_id,subject_id,status)
+        values (?,?,'ACTIVE')
+        on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+        """,studentId,subjects.getFirst());
+    }
+    return selected;
   }
 
   @Transactional
@@ -252,8 +304,9 @@ public class AuthService {
   }
 
   private void requireParent(long userId) {
-    String role=jdbc.queryForObject("select role from user_account where id=?",String.class,userId);
-    if(!"PARENT".equals(role) && !"ADMIN".equals(role)) throw new SecurityException("Parent access required");
+    List<String> roles=jdbc.queryForList("select role from user_account where id=? and active=true",String.class,userId);
+    if(roles.isEmpty() || (!"PARENT".equals(roles.getFirst()) && !"ADMIN".equals(roles.getFirst())))
+      throw new SecurityException("Active parent access required");
   }
 
   private String hash(String value) {

@@ -31,6 +31,14 @@ public class LocalPreviewDataInitializer implements CommandLineRunner {
       """, Long.class, previewPublicId);
 
     jdbc.update("""
+      insert into student_track_enrollment(student_id,subject_id,status)
+      select ?,s.id,'ACTIVE'
+      from curriculum_subject s join curriculum_class c on c.id=s.class_id
+      where c.code='7' and s.code in ('maths','science') and s.active=true
+      on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+      """, studentId);
+
+    jdbc.update("""
       insert into student_lesson_progress(
         student_id, lesson_id, status, progress_percent, started_at, completed_at, last_opened_at
       )

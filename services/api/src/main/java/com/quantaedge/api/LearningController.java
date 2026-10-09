@@ -33,17 +33,19 @@ public class LearningController {
              o.code as objective_code,o.title as objective_title
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join learning_objective o on o.id=l.objective_id
       where c.code=? and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order
-      """,classCode,subjectCode);
+      """,context.studentId(),classCode,subjectCode);
   }
 
   @PostMapping("/lessons/{lessonId}/start")
   public Map<String,Object> start(@PathVariable long lessonId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    ensureStudentLessonAccess(context.studentId(),lessonId);
     state.startLesson(context.studentId(),lessonId);
     return Map.of("started",true,"lessonId",lessonId);
   }
@@ -62,12 +64,13 @@ public class LearningController {
              coalesce(p.status,'NOT_STARTED') as progress_status
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join learning_objective o on o.id=l.objective_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
-      """,context.studentId(),lessonId,context.studentId());
+      """,context.studentId(),context.studentId(),lessonId,context.studentId());
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
     result.put("blocks",jdbc.queryForList("""
@@ -144,6 +147,7 @@ public class LearningController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       join student st on st.id=? and st.active=true
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true and c.code=st.class_code

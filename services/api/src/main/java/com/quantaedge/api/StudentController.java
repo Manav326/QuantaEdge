@@ -42,11 +42,12 @@ public class StudentController {
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
       order by c.sort_order,s.sort_order,ch.teaching_order,ch.sort_order,l.sort_order
-      """,studentId,studentId);
+      """,studentId,studentId,studentId);
   }
 
   private boolean hasGuardian(long userId,long studentId){
@@ -66,8 +67,10 @@ public class StudentController {
              coalesce(round(100.0*count(*) filter(where p.status='COMPLETED' and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED')/
                nullif(count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'),0),1),0) as completion_percent
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      """,studentId));
+      """,studentId,studentId));
     result.put("questionStats",jdbc.queryForMap("""
       select count(*) as attempts,count(*) filter(where correct=true) as correct,
              count(*) filter(where correct is not null) as graded_attempts,
@@ -82,12 +85,13 @@ public class StudentController {
              count(distinct ch.id) filter(where l.id is not null) as content_ready_chapters,
              count(distinct p.id) filter(where p.status='COMPLETED') as completed
       from curriculum_class c join curriculum_subject s on s.class_id=c.id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       where c.active=true and s.active=true and c.code=(select class_code from student where id=?)
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
-      """,studentId,studentId));
+      """,studentId,studentId,studentId));
     result.put("mastery",jdbc.queryForMap("""
       select count(*) as concepts,coalesce(round(avg(mastery_percent),1),0) as average_mastery,
              count(*) filter(where mastery_percent>=80) as mastered,
