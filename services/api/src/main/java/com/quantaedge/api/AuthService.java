@@ -432,25 +432,14 @@ public class AuthService {
     return selected;
   }
 
-  @Transactional
+  /** Parent dashboards are read-only; a parent must never become a child session. */
   public AuthContext selectStudent(long userId,long studentId) {
-    requireParent(userId);
-    if(!hasGuardianAccess(userId,studentId)) throw new SecurityException("Child access not granted");
-    return contextForStudent(userId,studentId);
+    throw new SecurityException("Parents can view child reports but cannot enter a child's learning account.");
   }
 
+  /** Legacy PIN sign-in is disabled; student credentials must be provisioned by a parent. */
   public AuthContext loginStudent(String publicId,String pin) {
-    var row=jdbc.queryForMap("""
-      select st.id,st.display_name,st.access_pin_hash
-      from student st
-      where st.public_id=? and st.active=true and st.environment='PRODUCTION'
-        and exists(select 1 from guardian_student gs join user_account u on u.id=gs.guardian_user_id
-          where gs.student_id=st.id and gs.active=true and gs.consent_status='CONSENTED' and u.active=true
-            and u.role in ('PARENT','ADMIN'))
-      """,UUID.fromString(publicId));
-    String stored=String.valueOf(row.get("access_pin_hash"));
-    if(stored==null || stored.isBlank() || !hash(pin).equals(stored)) throw new IllegalArgumentException("Invalid student access code");
-    return contextForStudent(null,((Number)row.get("id")).longValue());
+    throw new SecurityException("Student login requires a parent-created username and password.");
   }
 
   public AuthContext previewLogin() {
@@ -475,10 +464,16 @@ public class AuthService {
       """,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
-    jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
     Long userId=r.get("user_id")==null?null:((Number)r.get("user_id")).longValue();
     Long studentId=r.get("student_id")==null?null:((Number)r.get("student_id")).longValue();
     Long staffId=r.get("staff_id")==null?null:((Number)r.get("staff_id")).longValue();
+    // Legacy parent-impersonation sessions stored both identities. Revoke them rather than
+    // letting an old browser cookie keep acting as a child after the access model changes.
+    if(userId!=null && studentId!=null) {
+      jdbc.update("update auth_session set revoked_at=now() where token_hash=? and revoked_at is null",hash(token));
+      return null;
+    }
+    jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
     String name=studentId!=null?String.valueOf(r.get("student_name")):
         staffId!=null?String.valueOf(r.get("staff_name")):
         (r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
