@@ -130,8 +130,13 @@ function questionReadinessIssues(question:any):string[]{
   if(answer.kind!=='NUMERIC'||answer.value===undefined||answer.value===null||String(answer.value).trim()==='')issues.push('Add the numeric answer key.');
  }
  const sourceKind=String(question.source_kind||'AUTHOR_CREATED').toUpperCase();
- if(sourceKind!=='AUTHOR_CREATED'&&(!question.source_id||!String(question.source_ref||'').trim()||!question.source_year||!String(question.source_title||'').trim()||!String(question.board||'').trim())){
-  issues.push('Complete the registered source, board, year and exact page/reference for this sourced question.');
+ if(sourceKind!=='AUTHOR_CREATED'){
+  if(!question.source_id||!String(question.source_ref||'').trim()||!question.source_year||!String(question.source_title||'').trim()||!String(question.board||'').trim()){
+   issues.push('Complete the registered source, board, year and exact page/reference for this sourced question.');
+  }
+  if(!['VERIFIED','APPROVED','PUBLISHED'].includes(String(question.source_status||'').toUpperCase())){
+   issues.push('The registered source must be verified or approved before this sourced question can be published.');
+  }
  }
  return [...new Set(issues)];
 }
