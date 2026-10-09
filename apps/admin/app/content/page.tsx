@@ -332,7 +332,7 @@ export default function ContentStudio(){
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+'/submit',{method:'POST'});
    await load();await open(selected);
-   setNotice('Sent to the review queue. A reviewer must approve the active questions before publication.');
+   setNotice('Submitted to the review queue. An authorized reviewer—including an administrator—can approve or return the active questions before publication.');
   }catch(e){setError(e instanceof Error?e.message:'Could not submit this micro-topic for review.')}finally{setSaving(false)}
  }
  async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'){
