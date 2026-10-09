@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <defs><clipPath id="c"><circle cx="64" cy="64" r="62"/></clipPath><linearGradient id="j" x1="25" y1="91" x2="105" y2="135" gradientUnits="userSpaceOnUse"><stop stop-color="#263753"/><stop offset="1" stop-color="#152038"/></linearGradient></defs>
+  <g clip-path="url(#c)">
+    <circle cx="64" cy="64" r="64" fill="#FFF0E5"/><circle cx="104" cy="25" r="18" fill="#FED7AA" opacity=".8"/>
+    <path d="M12 132c3-23 15-37 36-45l16-5 17 5c20 8 32 22 35 45H12Z" fill="url(#j)"/>
+    <path d="M43 81h42v23c-7 9-14 13-21 13s-14-4-21-13V81Z" fill="#A9684C"/>
+    <path d="M34 50c0-24 12-37 30-37s30 13 30 37l-4 22c-3 15-15 25-26 25S41 87 38 72l-4-22Z" fill="#263149"/>
+    <path d="M42 49c0-17 8-28 22-28 15 0 23 12 23 29l-2 17c-2 14-11 22-21 22S45 81 43 67l-1-18Z" fill="#C98563"/>
+    <path d="M40 48c-1-17 7-29 19-33 12-4 27 1 32 15 2 5 3 11 1 17-8-3-14-9-18-17-7 8-18 13-34 14v4Z" fill="#394155"/>
+    <path d="M42 43c-5 2-8 7-7 13 1 5 4 8 8 8l-1-21ZM86 43c5 2 8 7 7 13-1 5-4 8-8 8l1-21Z" fill="#C98563"/>
+    <path d="M50 58c2-2 5-2 7 0M71 58c2-2 5-2 7 0" stroke="#263149" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M58 72c4 3 9 3 13 0" stroke="#864A3A" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="m44 91 20 15 20-15 9 6-13 34H48L35 97l9-6Z" fill="#fff"/><path d="m57 103 7 4 7-4-3 28h-8l-3-28Z" fill="#F97316"/>
+  </g><circle cx="64" cy="64" r="62" stroke="#F8D4BB" stroke-width="3"/>
+</svg>
