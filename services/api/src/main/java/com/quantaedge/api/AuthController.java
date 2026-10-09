@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
   private final AuthService auth;
+  private final StaffAuditService staffAudit;
   private final boolean secureCookies;
 
-  public AuthController(AuthService auth,@Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
-    this.auth=auth; this.secureCookies=secureCookies;
+  public AuthController(AuthService auth, StaffAuditService staffAudit,
+      @Value("${app.auth.secure-cookies:true}") boolean secureCookies) {
+    this.auth=auth; this.staffAudit=staffAudit; this.secureCookies=secureCookies;
   }
 
   @PostMapping("/request-otp")
@@ -35,7 +37,9 @@ public class AuthController {
         String.valueOf(body.getOrDefault("otp","")),
         String.valueOf(body.getOrDefault("purpose","LOGIN")),
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")));
-    return withCookie(auth.issueToken(context),context);
+    String token=auth.issueToken(context);
+    if(context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Staff sign-in succeeded.");
+    return withCookie(token,context);
   }
 
   @PostMapping("/student-login")
@@ -86,8 +90,11 @@ public class AuthController {
   }
 
   @PostMapping("/logout")
-  public ResponseEntity<Map<String,Object>> logout(@CookieValue(value=AuthService.COOKIE,required=false) String token) {
+  public ResponseEntity<Map<String,Object>> logout(
+      @CookieValue(value=AuthService.COOKIE,required=false) String token,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
     auth.revoke(token);
+    if(context!=null&&context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/logout","Staff signed out.");
     ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,"").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).body(Map.of("loggedOut",true));
   }
