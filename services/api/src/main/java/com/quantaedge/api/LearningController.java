@@ -28,6 +28,7 @@ public class LearningController {
     if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
     return jdbc.queryForList("""
       select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,
+             c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              ch.code as chapter_code,ch.display_name as chapter_name,
              o.code as objective_code,o.title as objective_title
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
