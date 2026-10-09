@@ -229,6 +229,15 @@ public class AdminStaffController {
     if (permissions.contains("STAFF_MANAGE") && !"ADMIN".equals(role)) {
       throw badRequest("Only administrator identities may receive staff-management permission.");
     }
+    boolean anyContentTask=permissions.stream().anyMatch(key -> Set.of(
+        "CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT","CONTENT_REVIEW","CONTENT_PUBLISH"
+        ).contains(key));
+    if (anyContentTask && !permissions.contains("CONTENT_VIEW")) {
+      throw badRequest("Any content task permission also requires View learning content.");
+    }
+    if (permissions.contains("CONTENT_CREATE") && !permissions.contains("CONTENT_EDIT")) {
+      throw badRequest("Create content also requires Edit content so the draft can be completed.");
+    }
     if ("ADMIN".equals(role) && permissions.size()!=permissionCatalogSize()) {
       throw badRequest("Administrator accounts must retain all permissions.");
     }
