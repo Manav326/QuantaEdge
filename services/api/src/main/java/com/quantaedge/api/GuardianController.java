@@ -2,8 +2,12 @@ package com.quantaedge.api;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,119 @@ public class GuardianController {
     int limit=Math.max(1,maxChildrenPerParent);
     return Map.of("parentName",context.displayName()==null?"":context.displayName(),"activeChildren",activeChildren,
         "maxChildren",limit,"remainingSlots",Math.max(0,limit-(int)activeChildren));
+  }
+
+
+  @GetMapping("/profile")
+  public Map<String,Object> profile(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    if(context.userId()==null) throw new SecurityException("Parent account required");
+    return parentProfile(context.userId());
+  }
+
+  @PutMapping("/profile")
+  @Transactional
+  public Map<String,Object> updateProfile(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    if(context.userId()==null) throw new SecurityException("Parent account required");
+    long userId=context.userId();
+
+    String name=profileText(body.get("displayName"),"Name",120);
+    if(name.length()<2) throw new IllegalArgumentException("Name must contain at least 2 characters.");
+    String email=profileText(body.get("email"),"Email",254);
+    if(!email.isBlank() && (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$") || email.length()>254))
+      throw new IllegalArgumentException("Enter a valid email address, or leave it blank.");
+    String city=profileText(body.get("city"),"City or town",100);
+    String state=profileText(body.get("state"),"State",100);
+    String occupation=profileText(body.get("occupation"),"Occupation",120);
+    String organization=profileText(body.get("organization"),"Organisation",180);
+    String preferredLanguage=profileText(body.get("preferredLanguage"),"Preferred language",30);
+    if(!List.of("English","Hindi","Hindi & English","Other").contains(preferredLanguage))
+      throw new IllegalArgumentException("Choose a valid preferred language.");
+
+    String image;
+    if(body.containsKey("profileImageDataUrl")) {
+      image=validatedProfileImage(body.get("profileImageDataUrl"));
+    } else {
+      image=jdbc.queryForObject("select profile_image_data_url from user_account where id=? and active=true",String.class,userId);
+    }
+
+    int changed=jdbc.update("""
+      update user_account
+      set display_name=?,profile_image_data_url=?,email=?,city=?,state=?,occupation=?,
+          organization=?,preferred_language=?,profile_updated_at=now(),updated_at=now()
+      where id=? and active=true and role='PARENT'
+      """,name,image,nullable(email),nullable(city),nullable(state),nullable(occupation),
+         nullable(organization),preferredLanguage,userId);
+    if(changed!=1) throw new SecurityException("Active parent account not found.");
+    return parentProfile(userId);
+  }
+
+  @GetMapping(value="/profile-photo",produces=MediaType.IMAGE_JPEG_VALUE)
+  public ResponseEntity<byte[]> profilePhoto(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    if(context.userId()==null) throw new SecurityException("Parent account required");
+    String data=jdbc.queryForObject(
+        "select profile_image_data_url from user_account where id=? and active=true",
+        String.class,context.userId());
+    if(data==null || data.isBlank()) return ResponseEntity.notFound().build();
+    final String prefix="data:image/jpeg;base64,";
+    if(!data.startsWith(prefix)) return ResponseEntity.notFound().build();
+    byte[] bytes;
+    try {
+      bytes=Base64.getDecoder().decode(data.substring(prefix.length()));
+    } catch(IllegalArgumentException ex) {
+      return ResponseEntity.notFound().build();
+    }
+    if(bytes.length==0 || bytes.length>350*1024) return ResponseEntity.notFound().build();
+    return ResponseEntity.ok()
+        .contentType(MediaType.IMAGE_JPEG)
+        .cacheControl(CacheControl.noStore())
+        .header("X-Content-Type-Options","nosniff")
+        .body(bytes);
+  }
+
+  private Map<String,Object> parentProfile(long userId) {
+    return jdbc.queryForMap("""
+      select id,public_id,display_name,mobile_e164,email,city,state,occupation,
+             organization,preferred_language,
+             case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo' else null end as profile_image_url,
+             profile_updated_at
+      from user_account
+      where id=? and active=true and role='PARENT'
+      """,userId);
+  }
+
+  private String profileText(Object value,String label,int maxLength) {
+    String text=value==null?"":String.valueOf(value).trim();
+    if(text.length()>maxLength) throw new IllegalArgumentException(label+" must be "+maxLength+" characters or fewer.");
+    if(text.chars().anyMatch(ch -> Character.isISOControl(ch) && ch!='\\n' && ch!='\\t'))
+      throw new IllegalArgumentException(label+" contains unsupported characters.");
+    return text;
+  }
+
+  private String nullable(String value) {
+    return value==null || value.isBlank()?null:value;
+  }
+
+  private String validatedProfileImage(Object value) {
+    String data=value==null?"":String.valueOf(value).trim();
+    if(data.isEmpty()) return null;
+    final String prefix="data:image/jpeg;base64,";
+    if(!data.startsWith(prefix) || data.length()>500_000)
+      throw new IllegalArgumentException("Upload a JPG photo smaller than 350 KB.");
+    byte[] bytes;
+    try {
+      bytes=Base64.getDecoder().decode(data.substring(prefix.length()));
+    } catch(IllegalArgumentException ex) {
+      throw new IllegalArgumentException("The uploaded photo is not a valid image.");
+    }
+    if(bytes.length==0 || bytes.length>350*1024)
+      throw new IllegalArgumentException("Upload a JPG photo smaller than 350 KB.");
+    return data;
   }
 
   @GetMapping("/children")
