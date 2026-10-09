@@ -27,7 +27,13 @@ export default function AdminHome(){
       const mr=await fetch('/api/v1/auth/me');
       if(!mr.ok){router.replace('/login');return;}
       const mb=await mr.json();
-      if(mb.role!=='ADMIN'){router.replace('/login');return;}
+      if(mb.role!=='ADMIN'){
+        const permissions=Array.isArray(mb.permissions)?mb.permissions:[];
+        if(permissions.includes('CONTENT_VIEW'))router.replace('/content');
+        else if(permissions.includes('AUDIT_VIEW'))router.replace('/employees?view=audit');
+        else router.replace('/login');
+        return;
+      }
       if(!mounted)return;
       setMe(mb);
       const responses=await Promise.all([
