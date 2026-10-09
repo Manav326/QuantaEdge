@@ -500,6 +500,99 @@ public class AdminContentController {
     }
   }
 
+  private Map<String,Object> readBlockContent(Object raw) {
+    if(raw==null)return Map.of();
+    try {
+      Object parsed=mapper.readValue(String.valueOf(raw),Object.class);
+      if(!(parsed instanceof Map<?,?> values))return Map.of();
+      Map<String,Object> result=new LinkedHashMap<>();
+      for(Map.Entry<?,?> entry:values.entrySet()) {
+        if(entry.getKey() instanceof String key)result.put(key,entry.getValue());
+      }
+      return result;
+    } catch(JacksonException ex) {
+      throw badRequest("Stored teaching block content is invalid JSON.");
+    }
+  }
+
+  private boolean meaningfulTeachingText(Object value) {
+    if(value==null)return false;
+    String text=String.valueOf(value)
+        .replaceAll("<[^>]*>"," ")
+        .replace("&nbsp;"," ").replace("&#160;"," ").replace("&amp;","&")
+        .replaceAll("\\s+"," ").trim().toLowerCase(java.util.Locale.ROOT);
+    if(text.isBlank())return false;
+    return !(text.startsWith("यहाँ अपना explanation लिखें")
+        || text.startsWith("समस्या या प्रश्न यहाँ लिखें")
+        || text.equals("पहला चरण लिखें") || text.equals("अगला चरण लिखें")
+        || text.equals("पहला मुख्य विचार") || text.equals("दूसरा मुख्य विचार")
+        || text.equals("याद रखने वाली बात")
+        || text.equals("explain the core idea") || text.equals("show the important pattern")
+        || text.equals("connect it to a real example") || text.equals("add teaching content")
+        || text.equals("विद्यार्थी इस visual से क्या समझें?")
+        || text.equals("इस media से विद्यार्थी क्या सीखेंगे?")
+        || text.equals("अगला छोटा कदम क्या होगा?")
+        || text.equals("विद्यार्थी के लिए अभ्यास निर्देश लिखें")
+        || text.startsWith("ऐसा संकेत दें जो सोचने में मदद करे")
+        || text.equals("write explanation here") || text.equals("write content here")
+        || text.equals("untitled") || text.equals("answer choice"));
+  }
+
+  private Object firstBlockValue(Map<String,Object> content,String... keys) {
+    for(String key:keys) {
+      Object value=content.get(key);
+      if(value!=null&&!String.valueOf(value).isBlank())return value;
+    }
+    return null;
+  }
+
+  private boolean everyMeaningfulItem(Object value) {
+    if(!(value instanceof List<?> items)||items.isEmpty())return false;
+    return items.stream().allMatch(this::meaningfulTeachingText);
+  }
+
+  private boolean blockHasPublishableContent(String type,Map<String,Object> content) {
+    switch(type) {
+      case "EXPLANATION":
+      case "PREREQUISITE":
+        return meaningfulTeachingText(firstBlockValue(content,"html","body","text"));
+      case "WORKED_EXAMPLE":
+        return meaningfulTeachingText(content.get("problem"))
+            && everyMeaningfulItem(content.get("steps"))
+            && meaningfulTeachingText(content.get("answer"));
+      case "IMAGE":
+      case "DIAGRAM":
+      case "ANIMATION":
+      case "VIDEO":
+      case "AUDIO":
+        return String.valueOf(content.getOrDefault("url","")).matches("(?i)^https://.+")
+            && meaningfulTeachingText(content.get("description"));
+      case "GUIDED_PRACTICE":
+      case "INDEPENDENT_PRACTICE":
+      case "CHALLENGE":
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","instructions"));
+      case "SUMMARY":
+      case "RECAP":
+        return everyMeaningfulItem(content.get("points"));
+      case "HINT":
+        return meaningfulTeachingText(firstBlockValue(content,"body","hint"));
+      case "AI_HELP":
+        return true;
+      case "MCQ":
+      case "TRUE_FALSE":
+      case "QUESTION":
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","question","body"))
+            && content.get("options") instanceof List<?> options && options.size()>=2;
+      case "MATCH":
+      case "ORDER":
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","instructions","body"));
+      case "INPUT":
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","question","body"));
+      default:
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","body","description","text"));
+    }
+  }
+
   private void validateLessonForPublishing(long lessonId) {
     Long parentReady = jdbc.queryForObject("""
       select count(*) from lesson l
@@ -512,10 +605,37 @@ public class AdminContentController {
     if (parentReady == null || parentReady == 0) {
       throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
     }
-    Long blocks = jdbc.queryForObject(
-        "select count(*) from lesson_block where lesson_id=? and active=true", Long.class, lessonId);
-    if (blocks == null || blocks == 0) {
+    Long sourceReady = jdbc.queryForObject("""
+      select count(*) from lesson
+      where id=? and alignment_source_verified=true
+        and nullif(btrim(alignment_source_title),'') is not null
+        and lower(coalesce(alignment_source_url,'')) like 'https://%'
+        and nullif(btrim(alignment_source_edition),'') is not null
+        and nullif(btrim(alignment_page_range),'') is not null
+      """,Long.class,lessonId);
+    if(sourceReady==null||sourceReady==0) {
+      throw badRequest("Complete and verify the textbook source title, HTTPS URL, edition and page range before publishing.");
+    }
+
+    List<Map<String,Object>> activeBlocks = jdbc.queryForList("""
+      select block_type,content::text as content
+      from lesson_block where lesson_id=? and active=true order by sequence_no
+      """,lessonId);
+    if(activeBlocks.isEmpty()) {
       throw badRequest("Add at least one active teaching block before publishing this lesson.");
+    }
+    boolean hasCoreTeachingBlock=false;
+    for(Map<String,Object> row:activeBlocks) {
+      String type=String.valueOf(row.get("block_type")).toUpperCase();
+      Map<String,Object> content=readBlockContent(row.get("content"));
+      if(!blockHasPublishableContent(type,content)) {
+        throw badRequest("Complete the "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
+            " teaching block or deactivate it before publishing.");
+      }
+      if(!"AI_HELP".equals(type)) hasCoreTeachingBlock=true;
+    }
+    if(!hasCoreTeachingBlock) {
+      throw badRequest("Add at least one complete teaching block beyond the AI tutor entry.");
     }
     Long questions = jdbc.queryForObject(
         "select count(*) from question where lesson_id=? and active=true", Long.class, lessonId);
@@ -528,19 +648,21 @@ public class AdminContentController {
         and (
           q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
           or q.review_status<>'APPROVED'
+          or nullif(btrim(q.prompt),'') is null
           or (q.question_type in ('MCQ','TRUE_FALSE') and (
             (select count(*) from question_option qo where qo.question_id=q.id)<2
+            or exists(select 1 from question_option qo where qo.question_id=q.id and nullif(btrim(qo.label),'') is null)
             or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
             or coalesce(q.answer_payload->>'kind','')<>'OPTION'
             or q.answer_payload->>'value' is distinct from (
               select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct limit 1
             )
           ))
-          or (q.question_type='INPUT' and coalesce(q.answer_payload->>'kind','')<>'TEXT')
-          or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or not (q.answer_payload ? 'value')))
+          or (q.question_type='INPUT' and (coalesce(q.answer_payload->>'kind','')<>'TEXT' or nullif(btrim(q.answer_payload->>'value'),'') is null))
+          or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or q.answer_payload->'value' is null or q.answer_payload->'value'='null'::jsonb))
           or (q.source_kind<>'AUTHOR_CREATED' and (
             q.source_id is null or nullif(btrim(q.source_ref),'') is null or q.source_year is null
-            or nullif(btrim(q.board),'') is null
+            or nullif(btrim(q.source_title),'') is null or nullif(btrim(q.board),'') is null
             or not exists(select 1 from content_source src where src.id=q.source_id and upper(src.status) in ('VERIFIED','APPROVED','PUBLISHED'))
           ))
         )
