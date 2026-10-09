@@ -358,10 +358,11 @@ export default function ContentStudio(){
   const sourceReady=Boolean(form.alignmentSourceVerified&&String(form.alignmentSourceTitle||'').trim()&&/^https:\/\//i.test(String(form.alignmentSourceUrl||''))&&String(form.alignmentSourceEdition||'').trim()&&String(form.alignmentPageRange||'').trim());
   const chapterSourceReady=Boolean(form.curriculumSourceVerified&&String(form.curriculumSource||'').trim()&&/^https:\/\//i.test(String(form.curriculumSourceUrl||''))&&String(form.curriculumSourceEdition||'').trim()&&String(form.curriculumSourcePages||'').trim());
   const chapterReady=detail?.chapter_status==='PUBLISHED'&&detail?.chapter_active!==false;
+  const parentChapterAvailable=Boolean(detail?.chapter_id)&&detail?.chapter_active!==false;
   const publishReadyLessonCount=Number(detail?.publish_ready_lesson_count||0);
   const chapterReadyToPublish=publishReadyLessonCount>0;
   const submittedForReview=['REVIEW','PUBLISHED','ARCHIVED'].includes(String(form.lessonStatus));
-  const canSubmitLessonForReview=basicsReady&&blocksReady&&previewReviewed&&activeQuestions.length>0&&sourceReady&&chapterReady;
+  const canSubmitLessonForReview=basicsReady&&blocksReady&&previewReviewed&&activeQuestions.length>0&&sourceReady&&parentChapterAvailable;
   const readiness=[
    {ok:basicsReady,label:'Topic title and learner goal are complete',detail:basicsReady?'Title, learner goal and learning time are present':'Add a clear topic title, learner goal and valid time'},
    {ok:blocksReady,label:'Teaching blocks contain real content',detail:activeBlocks.length?String(activeBlocks.filter(blockHasPublishableContent).length)+' of '+activeBlocks.length+' active blocks complete':'Add at least one active teaching block'},
@@ -370,7 +371,7 @@ export default function ContentStudio(){
    {ok:submittedForReview,label:'Micro-topic submitted for review',detail:form.lessonStatus==='REVIEW'?'A reviewer can now approve or return the questions':form.lessonStatus==='PUBLISHED'?'Previously reviewed content is published':form.lessonStatus==='ARCHIVED'?'Archived content can be restored only after the remaining checks pass':'Save your changes, then select Submit for review'},
    {ok:questionsReady,label:'Practice questions are approved and valid',detail:activeQuestions.length?String(activeQuestions.filter(questionHasValidAnswer).length)+' of '+activeQuestions.length+' active questions approved and complete':'Ask a reviewer to approve the active questions'},
    {ok:sourceReady,label:'Official textbook mapping is complete',detail:sourceReady?'Source, HTTPS URL, edition and pages verified':'Add source title, HTTPS URL, edition and page range, then mark verified'},
-   {ok:chapterReady,label:'Parent chapter is published',detail:chapterReady?'Parent chapter is published and active':'Publish the parent chapter before this micro-topic'}
+   {ok:chapterReady,label:'Parent chapter is published',detail:chapterReady?'Parent chapter is published and active':parentChapterAvailable?'The active parent chapter can remain a draft during review, but must be published before this topic goes live.':'Restore or activate the parent chapter before submitting this topic'}
   ];
   const workflowSteps=[
    {label:'Basics',ok:basicsReady},
