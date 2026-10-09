@@ -38,16 +38,30 @@ public class AuthController {
         String.valueOf(body.getOrDefault("otp","")),
         String.valueOf(body.getOrDefault("purpose","LOGIN")),
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
-        Boolean.TRUE.equals(body.get("firstAccess")));
+        Boolean.TRUE.equals(body.get("firstAccess")),
+        body.get("password")==null?null:String.valueOf(body.get("password")));
     String token=auth.issueToken(context);
     if(context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Staff sign-in succeeded.");
     return withCookie(token,context);
   }
 
+  @PostMapping("/parent-login")
+  public ResponseEntity<Map<String,Object>> parentLogin(@RequestBody Map<String,Object> body) {
+    AuthContext context=auth.loginParent(String.valueOf(body.getOrDefault("mobile","")),
+        String.valueOf(body.getOrDefault("password","")));
+    return withCookie(auth.issueToken(context),context);
+  }
+
   @PostMapping("/student-login")
   public ResponseEntity<Map<String,Object>> studentLogin(@RequestBody Map<String,Object> body) {
-    AuthContext context=auth.loginStudent(String.valueOf(body.getOrDefault("studentId","")),
-        String.valueOf(body.getOrDefault("pin","")));
+    AuthContext context;
+    if(body.containsKey("parentMobile") || body.containsKey("username")) {
+      context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
+          String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
+    } else {
+      context=auth.loginStudent(String.valueOf(body.getOrDefault("studentId","")),
+          String.valueOf(body.getOrDefault("pin","")));
+    }
     return withCookie(auth.issueToken(context),context);
   }
 

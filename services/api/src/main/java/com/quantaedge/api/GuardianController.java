@@ -149,12 +149,13 @@ public class GuardianController {
     context=authorization.requireParent(context);
     return jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
-             gs.relationship,gs.consent_status,
+             slc.username as login_username,gs.relationship,gs.consent_status,
              coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
                join curriculum_subject s on s.id=ste.subject_id
                where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       join curriculum_class cc on cc.code=st.class_code
+      left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id and slc.student_id=st.id and slc.active=true
       where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
         and st.active=true and st.environment='PRODUCTION' order by st.created_at
       """,context.userId());
@@ -170,6 +171,7 @@ public class GuardianController {
       """,Boolean.class,context.userId(),studentId);
     if(!allowed) throw new SecurityException("Child access denied");
     jdbc.update("update guardian_student set active=false,consent_status='REVOKED' where guardian_user_id=? and student_id=?",context.userId(),studentId);
+    jdbc.update("update student_login_credential set active=false,updated_at=now() where guardian_user_id=? and student_id=?",context.userId(),studentId);
     Boolean anotherGuardian=jdbc.queryForObject("""
       select exists(select 1 from guardian_student where student_id=? and active=true and consent_status='CONSENTED')
       """,Boolean.class,studentId);
@@ -257,7 +259,8 @@ public class GuardianController {
     boolean consentAccepted=Boolean.TRUE.equals(body.get("consentAccepted"));
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
         String.valueOf(body.getOrDefault("classCode","7")),String.valueOf(body.getOrDefault("language","hi")),
-        String.valueOf(body.getOrDefault("pin","")),consentAccepted,
+        String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")),
+        consentAccepted,
         body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
@@ -265,6 +268,16 @@ public class GuardianController {
           join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from student st where st.id=?
       """,child.studentId());
+  }
+
+  @PutMapping("/children/{studentId}/credentials")
+  @Transactional
+  public Map<String,Object> updateChildCredentials(@PathVariable long studentId,
+      @RequestBody Map<String,Object> body,@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    auth.setChildCredentials(context.userId(),studentId,
+        String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
+    return Map.of("saved",true,"studentId",studentId);
   }
 
   @PutMapping("/children/{studentId}/tracks")

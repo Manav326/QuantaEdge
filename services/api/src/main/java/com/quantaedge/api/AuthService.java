@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -20,6 +21,7 @@ public class AuthService {
   public static final String COOKIE = "QE_SESSION";
   private final JdbcTemplate jdbc;
   private final SecureRandom random = new SecureRandom();
+  private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
   private final boolean demoSeed;
   private final int sessionHours;
   private final boolean secureCookies;
@@ -66,7 +68,7 @@ public class AuthService {
   }
 
   public String requestOtp(String mobile,String purpose) {
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose))
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
@@ -83,6 +85,11 @@ public class AuthService {
           throw new IllegalArgumentException("This mobile is not assigned to an active staff account.");
         }
       }
+    } else if ("PASSWORD_RESET".equals(purpose)) {
+      boolean parentExists=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=? and role='PARENT' and active=true)",
+          Boolean.class, normalized));
+      if(!parentExists) throw new IllegalArgumentException("No parent account found for this mobile number.");
     } else {
       // Staff and customer access are independent identities even if the mobile number matches.
       // The OTP purpose selects which identity is being authenticated.
@@ -139,15 +146,23 @@ public class AuthService {
 
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName) {
-    return verifyOtp(mobile, otp, purpose, displayName, false);
+    return verifyOtp(mobile, otp, purpose, displayName, false, null);
   }
 
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess) {
+    return verifyOtp(mobile, otp, purpose, displayName, firstAccess, null);
+  }
+
+  @Transactional
+  public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess,String newPassword) {
     String normalized=normalizeMobile(mobile);
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose)) throw new IllegalArgumentException("Invalid OTP purpose");
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose))
+      throw new IllegalArgumentException("Invalid OTP purpose");
     if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
       throw new IllegalArgumentException("Parent name must be between 2 and 120 characters");
+    if("SIGNUP".equals(purpose) || "PASSWORD_RESET".equals(purpose))
+      validatePassword(newPassword, 8, "Password");
 
     var rows=jdbc.queryForList("""
       select id,code_hash,attempts,expires_at,purpose
@@ -212,6 +227,19 @@ public class AuthService {
       return contextForStaff(staffId);
     }
 
+    if ("PASSWORD_RESET".equals(purpose)) {
+      List<Map<String,Object>> parentRows=jdbc.queryForList(
+          "select id from user_account where mobile_e164=? and active=true and role='PARENT'", normalized);
+      if(parentRows.isEmpty()) throw new SecurityException("Active parent account not found.");
+      long parentId=((Number)parentRows.getFirst().get("id")).longValue();
+      int changed=jdbc.update(
+          "update user_account set password_hash=?,updated_at=now() where id=? and active=true and role='PARENT'",
+          passwordEncoder.encode(newPassword), parentId);
+      if(changed!=1) throw new SecurityException("Active parent account not found.");
+      jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
+      return contextForUser(parentId);
+    }
+
     // LOGIN/SIGNUP authenticate the customer identity, independently of a matching staff identity.
     boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
@@ -223,18 +251,103 @@ public class AuthService {
     jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
 
     String role="PARENT";
+    String registrationPasswordHash="SIGNUP".equals(purpose)?passwordEncoder.encode(newPassword):null;
     Long userId;
     try {
       userId=jdbc.queryForObject("select id from user_account where mobile_e164=?",Long.class,normalized);
-      jdbc.update("update user_account set display_name=coalesce(?,display_name),active=true,updated_at=now(),role=? where id=?",
-          displayName,role,userId);
+      jdbc.update("update user_account set display_name=coalesce(?,display_name),active=true,updated_at=now(),role=?,password_hash=coalesce(?,password_hash) where id=?",
+          displayName,role,registrationPasswordHash,userId);
     } catch(EmptyResultDataAccessException ex) {
       userId=jdbc.queryForObject("""
-        insert into user_account(public_id,mobile_e164,display_name,role)
-        values (?,?,?,?) returning id
-        """,Long.class,UUID.randomUUID(),normalized,displayName,role);
+        insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
+        values (?,?,?,?,?) returning id
+        """,Long.class,UUID.randomUUID(),normalized,displayName,role,registrationPasswordHash);
     }
     return contextForUser(userId);
+  }
+
+
+  /** Password-based parent login. OTP is not required for returning parent sessions. */
+  public AuthContext loginParent(String mobile,String password) {
+    String normalized=normalizeMobile(mobile);
+    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
+      throw new IllegalArgumentException("Enter a valid 10-digit parent mobile number.");
+    if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your password.");
+    List<Map<String,Object>> rows=jdbc.queryForList(
+        "select id,password_hash from user_account where mobile_e164=? and active=true and role='PARENT'",
+        normalized);
+    if(rows.isEmpty()) throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    Map<String,Object> row=rows.getFirst();
+    Object storedValue=row.get("password_hash");
+    if(storedValue==null || String.valueOf(storedValue).isBlank())
+      throw new IllegalStateException("A password has not been set for this account. Use Forgot password to set one.");
+    if(!passwordEncoder.matches(password,String.valueOf(storedValue)))
+      throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    return contextForUser(((Number)row.get("id")).longValue());
+  }
+
+  /** Student credentials are scoped to the parent mobile; direct student login never receives parent-account access. */
+  public AuthContext loginStudentByParent(String parentMobile,String username,String password) {
+    String normalized=normalizeMobile(parentMobile);
+    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
+      throw new IllegalArgumentException("Enter a valid 10-digit parent mobile number.");
+    String cleanUsername=validateUsername(username);
+    if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your student password.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select c.student_id,c.password_hash
+      from user_account u
+      join student_login_credential c on c.guardian_user_id=u.id and c.active=true
+      join guardian_student gs on gs.guardian_user_id=u.id and gs.student_id=c.student_id
+      join student st on st.id=c.student_id
+      where u.mobile_e164=? and u.active=true and u.role='PARENT'
+        and lower(c.username)=? and gs.active=true and gs.consent_status='CONSENTED'
+        and st.active=true and st.environment='PRODUCTION'
+      """,normalized,cleanUsername);
+    if(rows.isEmpty()) throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
+    Map<String,Object> row=rows.getFirst();
+    String stored=String.valueOf(row.get("password_hash"));
+    if(!passwordEncoder.matches(password,stored))
+      throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
+    return contextForStudent(null,((Number)row.get("student_id")).longValue());
+  }
+
+  @Transactional
+  public void setChildCredentials(long parentUserId,long studentId,String username,String password) {
+    requireParent(parentUserId);
+    if(!hasGuardianAccess(parentUserId,studentId)) throw new SecurityException("Child access not granted");
+    String cleanUsername=validateUsername(username);
+    validatePassword(password,8,"Student password");
+    jdbc.update("""
+      insert into student_login_credential(guardian_user_id,student_id,username,password_hash,active,updated_at)
+      values (?,?,?,?,true,now())
+      on conflict(guardian_user_id,student_id) do update
+        set username=excluded.username,password_hash=excluded.password_hash,active=true,updated_at=now()
+      """,parentUserId,studentId,cleanUsername,passwordEncoder.encode(password));
+  }
+
+  @Transactional
+  public AuthContext createChild(long userId,String name,String classCode,String language,String username,String password,
+      boolean consentAccepted,List<String> trackCodes) {
+    String cleanUsername=validateUsername(username);
+    validatePassword(password,8,"Student password");
+    String legacyPin=String.format(java.util.Locale.ROOT,"%06d",random.nextInt(1_000_000));
+    AuthContext created=createChild(userId,name,classCode,language,legacyPin,consentAccepted,trackCodes);
+    setChildCredentials(userId,created.studentId(),cleanUsername,password);
+    return created;
+  }
+
+  private String validateUsername(String username) {
+    String clean=username==null?"":username.trim().toLowerCase(java.util.Locale.ROOT);
+    if(!clean.matches("^[a-z0-9][a-z0-9._-]{2,31}$"))
+      throw new IllegalArgumentException("Username must be 3–32 characters and use letters, numbers, dots, underscores or hyphens.");
+    return clean;
+  }
+
+  private void validatePassword(String password,int minimumLength,String label) {
+    if(password==null) throw new IllegalArgumentException(label+" must be at least "+minimumLength+" characters.");
+    int bytes=password.getBytes(StandardCharsets.UTF_8).length;
+    if(password.length()<minimumLength || bytes>72 || password.isBlank())
+      throw new IllegalArgumentException(label+" must be at least "+minimumLength+" characters and no more than 72 UTF-8 bytes.");
   }
 
   @Transactional
