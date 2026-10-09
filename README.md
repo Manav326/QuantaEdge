@@ -29,6 +29,19 @@ SCERT Bihar is the curriculum source of truth. The extraction workflow creates a
 
 The current minimum question-bank plan is 2,166 original questions across the canonical 102 chapter rows. This is a planning target, not content already prepared or published. No question rows are generated to make the numbers look complete.
 
+## AI-assisted question generation
+
+The extraction-to-question-generation link is implemented as an explicit, review-gated workflow:
+
+1. `scripts/scert_extract_review.py` creates a page-addressable `DRAFT_EXTRACTION_ONLY` review bundle.
+2. `scripts/generate_questions_from_extraction.py` reads that bundle and, only when both `--generate` and `--confirm-external-processing` are passed, uses a configured OpenAI-compatible API to generate original question/lesson candidates. Without those flags it prints an offline plan.
+3. Candidates are written as `AI_GENERATED_DRAFT` JSON, never imported or published automatically.
+4. `scripts/review_generated_question_bundle.py` requires a named editor to complete five explicit review confirmations.
+5. `scripts/import_reviewed_content.py` imports only the reviewed bundle as draft content. Use `--attach-to-existing-chapter` to add new draft lessons beneath the matching existing class/subject chapter instead of creating duplicate chapter rows.
+
+The question-generation model is configured separately using `OPENAI_API_KEY`, `OPENAI_API_BASE_URL` and `QUANTAEDGE_QUESTION_MODEL`. Generation sends extracted page text to that provider, so review its privacy/retention terms before enabling external processing. The generator validates question structure, answer keys, allowed question types, page citations and duplicates, but AI output still requires independent subject-matter review. No question generation was executed as part of this repository change; the existing four-question baseline remains the actual content count until candidates are generated, reviewed, imported and approved.
+
+
 ## Local preview student
 
 Local Docker development seeds exactly one student when APP_DEMO_SEED=true:
