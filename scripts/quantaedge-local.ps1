@@ -8,6 +8,12 @@ Set-Location (Join-Path $PSScriptRoot "..")
 
 $env:APP_DEMO_SEED = if ($env:APP_DEMO_SEED) { $env:APP_DEMO_SEED } else { "true" }
 
+# Keep this script compatible with Windows PowerShell 5.1, which does not
+# support the PowerShell 7 null-coalescing operator (??).
+$apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
+$webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
+$adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
+
 switch ($Action) {
   "up" {
     docker compose up -d --build --remove-orphans
@@ -39,10 +45,10 @@ Write-Host ""
 Write-Host "Waiting for API health..."
 for ($i = 0; $i -lt 30; $i++) {
   try {
-    Invoke-WebRequest -UseBasicParsing "http://localhost:$($env:API_PORT ?? 8080)/actuator/health" | Out-Null
-    Write-Host "API:   http://localhost:$($env:API_PORT ?? 8080)/actuator/health"
-    Write-Host "Web:   http://localhost:$($env:WEB_PORT ?? 3000)"
-    Write-Host "Admin: http://localhost:$($env:ADMIN_PORT ?? 3001)"
+    Invoke-WebRequest -UseBasicParsing "http://localhost:$apiPort/actuator/health" | Out-Null
+    Write-Host "API:   http://localhost:$apiPort/actuator/health"
+    Write-Host "Web:   http://localhost:$webPort"
+    Write-Host "Admin: http://localhost:$adminPort"
     Write-Host "Preview student: /student"
     exit 0
   } catch {
