@@ -315,7 +315,9 @@ public class AdminContentController {
       select ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
              ch.sort_order as chapter_sort_order, ch.content_status as chapter_status,
-             ch.active as chapter_active,
+             ch.active as chapter_active, ch.curriculum_source,
+             ch.curriculum_source_url, ch.curriculum_source_edition,
+             ch.curriculum_source_pages, ch.curriculum_source_verified,
              c.code as class_code, c.display_name as class_name,
              s.code as subject_code, s.display_name as subject_name,
              (select count(*) from lesson l where l.chapter_id=ch.id) as lesson_count
@@ -333,10 +335,14 @@ public class AdminContentController {
       select l.id as lesson_id, l.code as lesson_code, l.title as lesson_title,
              l.summary as lesson_summary, l.estimated_minutes,
              l.sort_order as lesson_sort_order, l.status as lesson_status,
-             l.active as lesson_active,
+             l.active as lesson_active, l.alignment_source_title,
+             l.alignment_source_url, l.alignment_source_edition,
+             l.alignment_page_range, l.alignment_source_verified,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
              ch.content_status as chapter_status, ch.active as chapter_active,
+             ch.curriculum_source, ch.curriculum_source_url, ch.curriculum_source_edition,
+             ch.curriculum_source_pages, ch.curriculum_source_verified,
              c.code as class_code, c.display_name as class_name,
              s.code as subject_code, s.display_name as subject_name
       from lesson l
