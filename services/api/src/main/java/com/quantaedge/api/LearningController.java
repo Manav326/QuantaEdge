@@ -62,7 +62,7 @@ public class LearningController {
 
     Map<String, Object> result = new LinkedHashMap<>(lessons.getFirst());
     result.put("blocks", jdbc.queryForList("""
-      select id, sequence_no, block_type, content::text as content
+      select id, sequence_no, block_type, strip_answer_keys(content)::text as content
       from lesson_block
       where lesson_id=? and active=true
       order by sequence_no
@@ -78,7 +78,7 @@ public class LearningController {
 
   private String publicQuestionsSql() {
     return """
-      select q.id, q.question_type, q.prompt, q.explanation,
+      select q.id, q.question_type, q.prompt,
              q.difficulty, q.sort_order,
              coalesce(
                (select jsonb_agg(
@@ -90,7 +90,8 @@ public class LearningController {
                '[]'::jsonb
              )::text as options
       from question q
-      where q.lesson_id=? and q.active=true and exists (
+      where q.lesson_id=? and q.active=true and q.review_status='APPROVED'
+        and q.question_type in ('MCQ','TRUE_FALSE') and exists (
         select 1 from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
         join curriculum_subject s on s.id=ch.subject_id
         join curriculum_class c on c.id=s.class_id
@@ -137,7 +138,7 @@ public class LearningController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where q.id=? and q.active=true and l.active=true and l.status='PUBLISHED'
+      where q.id=? and q.active=true and q.review_status='APPROVED' and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
         and s.active=true and c.active=true
       """, selectedOption, selectedOption, questionId);

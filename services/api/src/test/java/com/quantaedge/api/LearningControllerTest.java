@@ -38,6 +38,21 @@ class LearningControllerTest {
     assertTrue(sql.getValue().contains("'label', qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
     assertFalse(sql.getValue().contains("qo.is_correct"));
+    assertFalse(sql.getValue().contains("q.explanation"));
+    assertTrue(sql.getValue().contains("q.review_status='APPROVED'"));
+  }
+
+  @Test
+  void publicLessonBlocksStripAnswerKeysRecursively() {
+    when(jdbc.queryForList(contains("select l.id, l.code, l.title"), any(Object[].class)))
+        .thenReturn(List.of(Map.of("id", 42L)));
+    when(jdbc.queryForList(contains("from lesson_block"), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("select q.id, q.question_type"), any(Object[].class))).thenReturn(List.of());
+
+    LearningController controller = new LearningController(jdbc);
+    controller.lesson(42L);
+
+    verify(jdbc).queryForList(contains("strip_answer_keys(content)"), eq(42L));
   }
 
   @Test
