@@ -303,7 +303,13 @@ public class AdminContentController {
     if ("PUBLISHED".equals(currentStatus)||"ARCHIVED".equals(currentStatus)) {
       throw badRequest("Unpublish or restore this lesson before submitting it for review.");
     }
+    validateLessonForSubmission(lessonId);
     jdbc.update("update lesson set status='REVIEW', active=true, updated_at=now() where id=?",lessonId);
+    jdbc.update("""
+        update question
+        set review_status='REVIEW',review_notes=null,reviewed_at=null,reviewed_by_staff_id=null
+        where lesson_id=? and active=true and review_status not in ('APPROVED','PUBLISHED')
+        """,lessonId);
     return lessonById(lessonId);
   }
 
@@ -576,6 +582,60 @@ public class AdminContentController {
         return meaningfulTeachingText(firstBlockValue(content,"prompt","question","body"));
       default:
         return meaningfulTeachingText(firstBlockValue(content,"prompt","body","description","text"));
+    }
+  }
+
+  private void validateLessonForSubmission(long lessonId) {
+    Map<String,Object> lesson=lessonById(lessonId);
+    if(lesson.get("lesson_title")==null||String.valueOf(lesson.get("lesson_title")).isBlank()
+        ||lesson.get("lesson_summary")==null||String.valueOf(lesson.get("lesson_summary")).isBlank()) {
+      throw badRequest("Add a topic title and learner goal before submitting for review.");
+    }
+    Object minutes=lesson.get("estimated_minutes");
+    if(!(minutes instanceof Number n)||n.intValue()<1||n.intValue()>120) {
+      throw badRequest("Set a valid learning time from 1 to 120 minutes before submitting for review.");
+    }
+    Long parentReady=jdbc.queryForObject("""
+      select count(*) from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED'
+        and s.active=true and c.active=true
+      """,Long.class,lessonId);
+    if(parentReady==null||parentReady==0) {
+      throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
+    }
+    Long sourceReady=jdbc.queryForObject("""
+      select count(*) from lesson
+      where id=? and alignment_source_verified=true
+        and nullif(btrim(alignment_source_title),'') is not null
+        and lower(coalesce(alignment_source_url,'')) like 'https://%'
+        and nullif(btrim(alignment_source_edition),'') is not null
+        and nullif(btrim(alignment_page_range),'') is not null
+      """,Long.class,lessonId);
+    if(sourceReady==null||sourceReady==0) {
+      throw badRequest("Complete and verify the textbook source title, HTTPS URL, edition and page range before submitting.");
+    }
+    List<Map<String,Object>> blocks=jdbc.queryForList("""
+      select block_type,content::text as content
+      from lesson_block where lesson_id=? and active=true order by sequence_no
+      """,lessonId);
+    if(blocks.isEmpty()) throw badRequest("Add at least one complete teaching block before submitting for review.");
+    boolean hasCoreBlock=false;
+    for(Map<String,Object> row:blocks) {
+      String type=String.valueOf(row.get("block_type")).toUpperCase();
+      if(!blockHasPublishableContent(type,readBlockContent(row.get("content")))) {
+        throw badRequest("Complete the "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
+            " teaching block or deactivate it before submitting for review.");
+      }
+      if(!"AI_HELP".equals(type))hasCoreBlock=true;
+    }
+    if(!hasCoreBlock)throw badRequest("Add at least one complete teaching block beyond the AI tutor entry.");
+    Long activeQuestions=jdbc.queryForObject(
+        "select count(*) from question where lesson_id=? and active=true",Long.class,lessonId);
+    if(activeQuestions==null||activeQuestions==0) {
+      throw badRequest("Add at least one active practice question before submitting for review.");
     }
   }
 
