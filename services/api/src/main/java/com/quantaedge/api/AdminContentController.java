@@ -434,8 +434,8 @@ public class AdminContentController {
     if ("PUBLISHED".equals(status) && !"PUBLISHED".equals(previousStatus)) {
       throw badRequest("Use the separate Publish action after review checks are complete.");
     }
-    // Any save to a submitted or published topic creates a draft that must be previewed/submitted again.
-    if ("PUBLISHED".equals(previousStatus) || "REVIEW".equals(previousStatus)) status="DRAFT";
+    // Any save to submitted, published or archived content creates a draft that must be previewed/submitted again.
+    if (Set.of("PUBLISHED","REVIEW","ARCHIVED").contains(previousStatus)) status="DRAFT";
     if (sourceVerified) requireCompleteSourceReference(sourceTitle, sourceUrl, sourceEdition, sourcePages, "lesson");
     if ("PUBLISHED".equals(status) && !sourceVerified) {
       throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
