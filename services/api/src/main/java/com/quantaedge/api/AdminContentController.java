@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -105,6 +106,69 @@ public class AdminContentController {
       @PathVariable long lessonId,
       @RequestHeader(value = "X-Admin-Token", required = false) String token) {
     authorize(token);
+    return lessonById(lessonId);
+  }
+
+  @PostMapping("/chapters")
+  @Transactional
+  public Map<String, Object> createChapter(
+      @RequestBody Map<String, Object> body,
+      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
+    authorize(token);
+    String classCode = requiredText(body.get("classCode"), 30);
+    String subjectCode = requiredText(body.get("subjectCode"), 40);
+    String code = requiredText(body.get("code"), 60).toLowerCase();
+    if (!code.matches("[a-z0-9]+(?:-[a-z0-9]+)*")) {
+      throw badRequest("Chapter code must use lowercase letters, numbers, and hyphens.");
+    }
+    String name = requiredText(body.get("displayName"), 160);
+    String description = optionalText(body.get("description"), 500);
+    String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
+    if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
+    int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
+    List<Map<String, Object>> subjects = jdbc.queryForList("""
+      select s.id from curriculum_subject s
+      join curriculum_class c on c.id=s.class_id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+      """, classCode, subjectCode);
+    if (subjects.isEmpty()) throw badRequest("The selected class and subject track does not exist or is inactive.");
+    long subjectId = ((Number) subjects.getFirst().get("id")).longValue();
+    Long chapterId = jdbc.queryForObject("""
+      insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,active,content_status)
+      values(?,?,?,?,?,?,?)
+      returning id
+      """, Long.class, subjectId, code, name, description, sortOrder,
+      !"ARCHIVED".equals(status), status);
+    return chapterById(chapterId);
+  }
+
+  @PostMapping("/lessons")
+  @Transactional
+  public Map<String, Object> createLesson(
+      @RequestBody Map<String, Object> body,
+      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
+    authorize(token);
+    long chapterId = longValue(body.get("chapterId"), "chapterId");
+    chapterById(chapterId);
+    String code = requiredText(body.get("code"), 100).toLowerCase();
+    if (!code.matches("[a-z0-9]+(?:-[a-z0-9]+)*")) {
+      throw badRequest("Lesson code must use lowercase letters, numbers, and hyphens.");
+    }
+    String title = requiredText(body.get("title"), 240);
+    String summary = optionalText(body.get("summary"), 800);
+    int minutes = integerValue(body.getOrDefault("estimatedMinutes", 10), 1, 120, "estimatedMinutes");
+    int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
+    String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
+    if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
+    if ("PUBLISHED".equals(status)) {
+      throw badRequest("Create lessons as draft, add reviewed content and questions, then publish.");
+    }
+    Long lessonId = jdbc.queryForObject("""
+      insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active)
+      values(?,?,?,?,?,?,?,?)
+      returning id
+      """, Long.class, chapterId, code, title, summary, minutes, status, sortOrder,
+      !"ARCHIVED".equals(status));
     return lessonById(lessonId);
   }
 
