@@ -6,6 +6,18 @@ import { useState } from 'react';
 
 type Child={id:number;public_id:string;display_name:string;class_code:string;class_name?:string};
 
+async function readApiJson(response: Response): Promise<any> {
+  const body = await response.text();
+  try {
+    return body ? JSON.parse(body) : {};
+  } catch {
+    if (!response.ok) {
+      throw new Error(`QuantaEdge server error (${response.status}). The API may be unavailable; please retry after the service is healthy.`);
+    }
+    throw new Error(`QuantaEdge returned an unexpected response (${response.status}). Please retry.`);
+  }
+}
+
 export default function LoginPage(){
   const router=useRouter();
   const [mobile,setMobile]=useState('');
@@ -23,7 +35,7 @@ export default function LoginPage(){
     setError(''); setBusy(true);
     try{
       const r=await fetch('/api/v1/auth/request-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mobile,purpose:'LOGIN'})});
-      const b=await r.json(); if(!r.ok) throw new Error(b.message||'OTP request failed');
+      const b=await readApiJson(r); if(!r.ok) throw new Error(b.message||'OTP request failed');
       setDevCode(b.devCode||''); setStep('otp');
     }catch(e:any){setError(e.message||'OTP request failed')}finally{setBusy(false)}
   }
@@ -32,8 +44,8 @@ export default function LoginPage(){
     setError(''); setBusy(true);
     try{
       const r=await fetch('/api/v1/auth/verify-otp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mobile,otp,displayName:displayName||undefined})});
-      const b=await r.json(); if(!r.ok) throw new Error(b.message||'OTP verification failed');
-      const cr=await fetch('/api/v1/guardians/children'); const cb=await cr.json();
+      const b=await readApiJson(r); if(!r.ok) throw new Error(b.message||'OTP verification failed');
+      const cr=await fetch('/api/v1/guardians/children'); const cb=await readApiJson(cr);
       if(!cr.ok) throw new Error(cb.message||'Unable to load children');
       setChildren(cb);
       if(cb.length){ await selectChild(cb[0].id); }
@@ -45,14 +57,14 @@ export default function LoginPage(){
     setError(''); setBusy(true);
     try{
       const r=await fetch('/api/v1/guardians/children',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...child,consentAccepted})});
-      const b=await r.json(); if(!r.ok) throw new Error(b.message||'Child creation failed');
+      const b=await readApiJson(r); if(!r.ok) throw new Error(b.message||'Child creation failed');
       await selectChild(Number(b.id));
     }catch(e:any){setError(e.message||'Child creation failed')}finally{setBusy(false)}
   }
 
   async function selectChild(id:number){
     const r=await fetch('/api/v1/auth/select-student',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({studentId:id})});
-    const b=await r.json(); if(!r.ok) throw new Error(b.message||'Unable to open student');
+    const b=await readApiJson(r); if(!r.ok) throw new Error(b.message||'Unable to open student');
     router.replace('/student');
   }
 
