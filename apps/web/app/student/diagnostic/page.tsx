@@ -21,12 +21,12 @@ export default function DiagnosticPage(){
       const r=await fetch('/api/v1/diagnostic');
       if(r.status===401||r.status===403){router.replace('/login');return;}
       const b=await r.json();
-      if(!r.ok){setError(b.message||'Diagnostic unavailable');return;}
+      if(!r.ok){setError(b.message||'Diagnostic load nahi ho paaya');return;}
       if(b.completed){router.replace('/student');return;}
       setQs(b.questions||[]);
       const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'DIAGNOSTIC'})});
       if(sr.ok){const sb=await sr.json();setSession(Number(sb.sessionId));setStarted(Date.now());}
-    })().catch(e=>setError(e.message||'Diagnostic unavailable'));
+    })().catch(e=>setError(e.message||'Diagnostic load nahi ho paaya'));
   },[router]);
 
   useEffect(()=>()=>{if(session&&started){
@@ -34,8 +34,8 @@ export default function DiagnosticPage(){
     void fetch('/api/v1/learning/sessions/'+session+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
   }},[session,started]);
 
-  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Diagnostic unavailable</h1><p>{error}</p><Link href="/student" className="button button-dark">← वापस</Link></div></section></main>;
-  if(!qs.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Initial diagnostic तैयार हो रहा है…</div></section></main>;
+  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Diagnostic load nahi ho paaya</h1><p>{error}</p><Link href="/student" className="button button-dark">← वापस</Link></div></section></main>;
+  if(!qs.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Initial diagnostic ready ho raha hai…</div></section></main>;
 
   const q=qs[idx];
   let options:any[]=[];
@@ -59,12 +59,12 @@ export default function DiagnosticPage(){
   return <main className="practice-page">
     <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span>Initial diagnostic · {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
-      <div className="eyebrow">पहले diagnostic, फिर adaptive learning</div>
+      <div className="eyebrow">Pehle diagnostic, phir aapke hisaab se learning</div>
       <h1>{q.prompt}</h1>
-      <p>यह छोटा assessment आपकी शुरुआती learning recommendation बनाने में मदद करता है।</p>
+      <p>Yeh chhota assessment aapki starting learning recommendation banane mein help karta hai.</p>
       <div className="option-grid">{options.map(o=><button key={o.key} className={value===o.key?'selected':''} disabled={!!result} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}</div>
-      {result&&<div className="practice-feedback"><strong>{result.correct===true?'✓ सही':'अगला प्रयास learning signal बनेगा'}</strong><span>{result.feedback}</span></div>}
-      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button className="button button-dark" onClick={next}>{idx+1<qs.length?'अगला →':'Learning journey शुरू करें →'}</button></div>}
+      {result&&<div className="practice-feedback"><strong>{result.correct===true?'✓ सही':'Agla attempt humein aapki learning samajhne mein help karega'}</strong><span>{result.feedback}</span></div>}
+      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button className="button button-dark" onClick={next}>{idx+1<qs.length?'अगला →':'Learning journey shuru karein →'}</button></div>}
     </section>
   </main>;
 }

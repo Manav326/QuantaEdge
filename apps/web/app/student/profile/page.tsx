@@ -145,7 +145,7 @@ export default function StudentProfilePage() {
       const profileImageDataUrl = await prepareProfilePhoto(file);
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoName(file.name);
-      setNotice('Photo ready. Select Save changes to keep it on your profile.');
+      setNotice('Photo ready. Select Changes save karein to keep it on your profile.');
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
     } finally {
@@ -189,7 +189,7 @@ export default function StudentProfilePage() {
   function resetPhoto() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
     setPhotoName('');
-    setNotice('Photo removed from this draft. Save changes to confirm.');
+    setNotice('Photo removed from this draft. Changes save karein to confirm.');
     setError('');
   }
 
@@ -201,16 +201,16 @@ export default function StudentProfilePage() {
       </header>
       <div className="student-profile-page__wrap">
         <div className="student-profile-page__breadcrumb">
-          <Link href="/student">← Back to dashboard</Link>
+          <Link href="/student">← Dashboard par wapas</Link>
           <span>ACCOUNT</span>
         </div>
         <div className="student-profile-page__heading">
           <div>
-            <span className="eyebrow">YOUR SPACE · YOUR JOURNEY</span>
-            <h1>Profile &amp; settings</h1>
-            <p>Make this learning space yours. Your photo and details help personalise your experience.</p>
+            <span className="eyebrow">AAPKI SPACE · AAPKI JOURNEY</span>
+            <h1>Profile aur settings</h1>
+            <p>Apni learning space ko personalise karein. Photo aur details update kar sakte hain.</p>
           </div>
-          <div className="student-profile-page__class-pill"><span>YOUR CLASS</span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
+          <div className="student-profile-page__class-pill"><span>AAPKI CLASS</span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
         </div>
 
         {error && <div className="student-profile-page__alert is-error" role="alert">{error}</div>}
@@ -219,7 +219,7 @@ export default function StudentProfilePage() {
         {loading ? <div className="student-profile-page__loading"><span className="student-profile-page__spinner" /> Loading your profile…</div> : (
           <form className="student-profile-form" onSubmit={saveProfile}>
             <section className="student-profile-card student-profile-photo-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2>Your profile photo</h2><p>A friendly face for your learning space.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2>Aapki profile photo</h2><p>Aapki learning space ke liye ek friendly photo.</p></div></div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
                   <img src={draft.profileImageDataUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
@@ -227,40 +227,40 @@ export default function StudentProfilePage() {
                 </div>
                 <div className="student-profile-photo-editor__copy">
                   <strong>{draft.profileImageDataUrl ? 'Looking good!' : 'Add your photo'}</strong>
-                  <p>Choose a clear photo of yourself. We automatically resize it before saving.</p>
+                  <p>Apni clear photo choose karein. Save karne se pehle hum ise automatically resize kar denge.</p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Preparing photo…' : 'Upload photo'}</button>
-                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}>Remove photo</button>}
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Photo ready ho rahi hai…' : 'Photo upload karein'}</button>
+                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}>Photo hataayein</button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2>About you</h2><p>Keep your basic details up to date.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2>Aapke baare mein</h2><p>Apni basic details updated rakhein.</p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide">Your name<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="What should we call you?" autoComplete="name" /></label>
-                <label className="student-profile-field">City or town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
+                <label className="student-profile-field student-profile-field--wide">Aapka naam<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Aapko kis naam se bulayein?" autoComplete="name" /></label>
+                <label className="student-profile-field">Shehar ya town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
                 <label className="student-profile-field">State<input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
               </div>
               <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> City and state are enough. Please do not enter your full home address.</p>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2>School &amp; learning</h2><p>Help us make your learning experience more relevant.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2>School aur learning</h2><p>Apni learning ko aur relevant banane mein help karein.</p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide">School name<input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder="Enter your school name" autoComplete="organization" /></label>
-                <label className="student-profile-field">School medium<select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value="">Choose if you know it</option><option value="Hindi">Hindi</option><option value="English">English</option><option value="Hindi & English">Hindi &amp; English</option><option value="Other">Other</option></select></label>
-                <label className="student-profile-field">Favourite subject<select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value="">Choose a subject</option><option value="maths">Maths · गणित</option><option value="science">Science · विज्ञान</option><option value="both">Both · दोनों</option><option value="other">Another subject</option><option value="not_sure">Still exploring</option></select></label>
-                <label className="student-profile-field student-profile-field--wide">My learning goal<textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder="What would you like to get better at? e.g. I want to feel confident solving fractions." /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide">School ka naam<input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder="School ka naam daalein" autoComplete="organization" /></label>
+                <label className="student-profile-field">School medium<select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value="">Agar pata ho to choose karein</option><option value="Hindi">Hindi</option><option value="English">English</option><option value="Hindi & English">Hinglish (Hindi + English)</option><option value="Other">Other</option></select></label>
+                <label className="student-profile-field">Favourite subject<select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value="">Subject choose karein</option><option value="maths">Maths · गणित</option><option value="science">Science · विज्ञान</option><option value="both">Both · दोनों</option><option value="other">Koi aur subject</option><option value="not_sure">Abhi explore kar rahe hain</option></select></label>
+                <label className="student-profile-field student-profile-field--wide">Mera learning goal<textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder="Aap kis cheez mein better hona chahte hain? Jaise, fractions solve karne mein confidence badhana." /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
             </section>
 
             <div className="student-profile-form__footer">
-              <p>Your progress and practice records stay saved when you update these details.</p>
-              <div><Link href="/student" className="student-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Saving changes…' : 'Save changes'}</button></div>
+              <p>Ye details update karne par bhi aapki progress aur practice records save rahenge.</p>
+              <div><Link href="/student" className="student-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
             </div>
           </form>
         )}

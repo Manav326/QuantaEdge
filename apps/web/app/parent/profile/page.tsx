@@ -169,7 +169,7 @@ export default function ParentProfilePage() {
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoChanged(true);
       setPhotoName(file.name);
-      setNotice('Photo ready. Select Save changes to keep it on your profile.');
+      setNotice('Photo ready. Select Changes save karein to keep it on your profile.');
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
     } finally {
@@ -226,7 +226,7 @@ export default function ParentProfilePage() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
     setPhotoChanged(true);
     setPhotoName('');
-    setNotice('Photo removed from this draft. Save changes to confirm.');
+    setNotice('Photo removed from this draft. Changes save karein to confirm.');
     setError('');
   }
 
@@ -239,16 +239,16 @@ export default function ParentProfilePage() {
       </header>
       <div className="parent-profile-page__wrap">
         <div className="parent-profile-page__breadcrumb">
-          <Link href="/parent">← Back to family dashboard</Link>
+          <Link href="/parent">← Family dashboard par wapas</Link>
           <span>ACCOUNT</span>
         </div>
         <div className="parent-profile-page__heading">
           <div>
-            <span className="eyebrow">YOUR FAMILY · YOUR ACCOUNT</span>
-            <h1>Parent profile &amp; settings</h1>
-            <p>Keep your contact and personal details current so managing your family’s learning is easier.</p>
+            <span className="eyebrow">AAPKI FAMILY · AAPKA ACCOUNT</span>
+            <h1>Parent profile aur settings</h1>
+            <p>Contact aur personal details updated rakhein, taaki family ki learning manage karna easy rahe.</p>
           </div>
-          <div className="parent-profile-page__account-pill"><span>ACCOUNT STATUS</span><strong>Verified mobile</strong><small>{identity.mobile || 'Mobile used for sign-in'}</small></div>
+          <div className="parent-profile-page__account-pill"><span>ACCOUNT STATUS</span><strong>Mobile verified</strong><small>{identity.mobile || 'Sign in ke liye use hone wala mobile'}</small></div>
         </div>
 
         {error && <div className="parent-profile-page__alert is-error" role="alert">{error}</div>}
@@ -257,7 +257,7 @@ export default function ParentProfilePage() {
         {loading ? <div className="parent-profile-page__loading"><span className="parent-profile-page__spinner" /> Loading your profile…</div> : (
           <form className="parent-profile-form" onSubmit={saveProfile}>
             <section className="parent-profile-card parent-profile-photo-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2>Your profile photo</h2><p>A familiar face for your family account.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2>Aapki profile photo</h2><p>Aapke family account ke liye ek pehchaani si photo.</p></div></div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
                   <img src={(photoChanged ? draft.profileImageDataUrl : (identity.profileImageUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
@@ -265,41 +265,41 @@ export default function ParentProfilePage() {
                 </div>
                 <div className="parent-profile-photo-editor__copy">
                   <strong>{draft.profileImageDataUrl ? 'Photo selected' : 'Add your photo'}</strong>
-                  <p>Choose a clear photo. It is resized and compressed before being saved.</p>
+                  <p>Clear photo choose karein. Save karne se pehle photo resize aur compress ho jaayegi.</p>
                   {photoName && <small className="parent-profile-photo-editor__filename">{photoName}</small>}
                   <div className="parent-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="parent-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Preparing photo…' : 'Upload photo'}</button>
-                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}>Remove photo</button>}
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Photo ready ho rahi hai…' : 'Photo upload karein'}</button>
+                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}>Photo hataayein</button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2>Personal details</h2><p>Information for your parent account.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2>Personal details</h2><p>Aapke parent account ki details.</p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field parent-profile-field--wide">Full name<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Your name" autoComplete="name" /></label>
+                <label className="parent-profile-field parent-profile-field--wide">Poora naam<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Apna naam daalein" autoComplete="name" /></label>
                 <label className="parent-profile-field">Email address <span className="parent-profile-field__optional">Optional</span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
-                <label className="parent-profile-field">Mobile number<input value={identity.mobile} readOnly aria-readonly="true"/><small>Used for OTP sign-in. Contact support if it needs to change.</small></label>
-                <label className="parent-profile-field">City or town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
+                <label className="parent-profile-field">Mobile number<input value={identity.mobile} readOnly aria-readonly="true"/><small>OTP sign-in ke liye use hota hai. Change karwana ho to support se contact karein.</small></label>
+                <label className="parent-profile-field">Shehar ya town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
                 <label className="parent-profile-field">State<input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
               </div>
               <p className="parent-profile-privacy-note"><span aria-hidden="true">ⓘ</span> City and state are enough. Please do not enter your full home address.</p>
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2>About you</h2><p>Optional details to help personalise your account.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2>Aapke baare mein</h2><p>Account ko personalise karne ke liye optional details.</p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field">Occupation<input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder="e.g. Teacher, business owner" autoComplete="organization-title" /></label>
-                <label className="parent-profile-field">Organisation or workplace<input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder="Optional" autoComplete="organization" /></label>
+                <label className="parent-profile-field">Aap kya kaam karte hain?<input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder="e.g. Teacher, business owner" autoComplete="organization-title" /></label>
+                <label className="parent-profile-field">Organisation ya workplace<input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder="Optional" autoComplete="organization" /></label>
                 <label className="parent-profile-field parent-profile-field--wide">Preferred language<select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English">English</option><option value="Hindi">हिन्दी</option><option value="Hindi & English">Hindi &amp; English</option><option value="Other">Other</option></select></label>
               </div>
             </section>
 
             <div className="parent-profile-form__footer">
-              <p>Your child’s learning history and subject settings are not changed by these updates.</p>
-              <div><Link href="/parent" className="parent-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Saving changes…' : 'Save changes'}</button></div>
+              <p>In updates se bachche ki learning history ya subject settings change nahi hongi.</p>
+              <div><Link href="/parent" className="parent-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
             </div>
           </form>
         )}
