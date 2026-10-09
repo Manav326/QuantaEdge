@@ -11,7 +11,7 @@ type StaffRow = {
 type Permission = { permission_key:string; display_name:string; description:string };
 type AuditRow = {
   id:number; actor_staff_id:number|null; actor_role:string; http_method:string; request_path:string;
-  response_status:number; remote_address:string|null; user_agent:string|null; created_at:string; actor_name:string;
+  response_status:number; remote_address:string|null; user_agent:string|null; details:string|null; created_at:string; actor_name:string;
 };
 
 const roleOptions = [
@@ -285,7 +285,7 @@ export default function AdminStaffPage() {
         <div className="qe-audit-list">
           {audit.map(row=><article key={row.id} className="qe-audit-row">
             <span className={'qe-audit-status '+(row.response_status>=200&&row.response_status<400?'success':'failure')}>{row.response_status}</span>
-            <div className="qe-audit-event"><strong>{row.actor_name} <small>{row.actor_role}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at)} · {row.remote_address||'IP unavailable'}</small></div>
+            <div className="qe-audit-event"><strong>{row.actor_name} <small>{row.actor_role}</small></strong><span><b>{row.http_method}</b> {row.request_path}</span><small>{prettyDate(row.created_at)} · {row.remote_address||'IP unavailable'}</small>{row.details&&<small className="qe-audit-detail">{row.details}</small>}</div>
             <button type="button" className="qe-audit-info" title={row.user_agent||'No user-agent recorded'} onClick={()=>window.alert((row.user_agent||'No user-agent recorded')+'\n'+(row.remote_address||'IP unavailable'))}>Details</button>
           </article>)}
           {!audit.length&&<div className="qe-library-empty"><strong>No staff activity is recorded yet</strong><p>New staff API actions will appear here. Existing pre-audit events are not synthesized.</p></div>}
