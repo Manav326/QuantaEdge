@@ -203,6 +203,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requireAuth(context);
     Map<String,Object> current = chapterById(chapterId);
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
@@ -233,34 +234,8 @@ public class AdminContentController {
     if (sourceVerified) requireCompleteSourceReference(curriculumSource, sourceUrl, sourceEdition, sourcePages, "chapter");
     if ("PUBLISHED".equals(status)) {
       if (!sourceVerified) throw badRequest("A chapter cannot be published until its official source edition and page mapping are verified.");
-      Long readyLessons = jdbc.queryForObject("""
-        select count(*) from lesson l
-        where l.chapter_id=? and l.active=true
-          and exists(select 1 from lesson_block b where b.lesson_id=l.id and b.active=true)
-          and exists(select 1 from question q where q.lesson_id=l.id and q.active=true)
-          and not exists(
-            select 1 from question q where q.lesson_id=l.id and q.active=true
-              and (
-                q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
-                or q.review_status<>'APPROVED'
-                or (q.question_type in ('MCQ','TRUE_FALSE') and (
-                  (select count(*) from question_option qo where qo.question_id=q.id)<2
-                  or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
-                  or coalesce(q.answer_payload->>'kind','')<>'OPTION'
-                  or q.answer_payload->>'value' is distinct from (
-                    select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct limit 1
-                  )
-                ))
-                or (q.question_type='INPUT' and coalesce(q.answer_payload->>'kind','')<>'TEXT')
-                or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or not (q.answer_payload ? 'value')))
-                or (q.source_kind<>'AUTHOR_CREATED' and (
-                  q.source_id is null or nullif(btrim(q.source_ref),'') is null or q.source_year is null
-                  or nullif(btrim(q.board),'') is null
-                  or not exists(select 1 from content_source src where src.id=q.source_id and upper(src.status) in ('VERIFIED','APPROVED','PUBLISHED'))
-                ))
-              )
-          )
-        """, Long.class, chapterId);
+      Long readyLessons = current.get("publish_ready_lesson_count") instanceof Number n
+          ? n.longValue() : 0L;
       if (readyLessons == null || readyLessons == 0) {
         throw badRequest("Add at least one lesson with active teaching blocks and valid multiple-choice questions before publishing this chapter.");
       }
@@ -390,6 +365,7 @@ public class AdminContentController {
       @RequestBody Map<String, Object> body,
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requireAuth(context);
     Map<String,Object> current = lessonById(lessonId);
     String title = requiredText(body.get("title"), 240);
     String summary = optionalText(body.get("summary"), 800);
@@ -594,14 +570,19 @@ public class AdminContentController {
   }
 
   private void validateLessonForPublishing(long lessonId) {
+    validateLessonForPublishing(lessonId,true);
+  }
+
+  private void validateLessonForPublishing(long lessonId,boolean requirePublishedChapter) {
     Long parentReady = jdbc.queryForObject("""
       select count(*) from lesson l
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED'
+      where l.id=? and l.active=true and ch.active=true
+        and (not ? or ch.content_status='PUBLISHED')
         and s.active=true and c.active=true
-      """, Long.class, lessonId);
+      """, Long.class, lessonId, requirePublishedChapter);
     if (parentReady == null || parentReady == 0) {
       throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
     }
@@ -689,7 +670,20 @@ public class AdminContentController {
       where ch.id=?
       """, chapterId);
     if (rows.isEmpty()) throw notFound("Chapter", chapterId);
-    return new LinkedHashMap<>(rows.getFirst());
+    Map<String,Object> result=new LinkedHashMap<>(rows.getFirst());
+    List<Long> activeLessons=jdbc.queryForList(
+        "select id from lesson where chapter_id=? and active=true order by sort_order,id",Long.class,chapterId);
+    long publishReady=0;
+    for(Long lessonId:activeLessons) {
+      try {
+        validateLessonForPublishing(lessonId,false);
+        publishReady++;
+      } catch(ResponseStatusException notReady) {
+        // A chapter may contain draft topics, but at least one topic must be genuinely publishable.
+      }
+    }
+    result.put("publish_ready_lesson_count",publishReady);
+    return result;
   }
 
   private Map<String, Object> lessonById(long lessonId) {
