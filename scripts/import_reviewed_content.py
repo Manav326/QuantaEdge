@@ -327,15 +327,17 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
     ]
     if existing:
         raise RuntimeError("A chapter with this code already exists in this class/subject. Import does not overwrite existing content; use the admin CMS to review/update it.")
+    lesson_codes = {lesson["code"] for lesson in bundle["lessons"]}
+    existing_lesson_codes = {row.get("lesson_code") for row in rows if row.get("lesson_code")}
+    collisions = sorted(lesson_codes & existing_lesson_codes)
+    if collisions:
+        raise RuntimeError("Lesson code(s) already exist in the selected track: " + ", ".join(collisions) + ". Import stopped before creating anything.")
     created = api.request("POST", "/api/v1/admin/content/chapters", make_request_payloads(bundle)[0]["body"])
     if not isinstance(created, dict) or not created.get("chapter_id"):
         raise RuntimeError("Chapter creation returned no chapter_id; stop and inspect the admin CMS before retrying.")
     chapter_id = int(created["chapter_id"])
     lesson_ids: list[int] = []
     for index, lesson in enumerate(bundle["lessons"], 1):
-        existing_lesson = any(row.get("lesson_code") == lesson["code"] for row in rows)
-        if existing_lesson:
-            raise RuntimeError(f"Lesson code {lesson['code']} already exists in the selected track; import stopped to avoid overwriting.")
         lesson_body = {
             "chapterId": chapter_id,
             "code": lesson["code"],
