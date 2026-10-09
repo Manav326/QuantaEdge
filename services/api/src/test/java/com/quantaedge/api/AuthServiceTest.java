@@ -2,6 +2,8 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
@@ -27,9 +29,9 @@ class AuthServiceTest {
   @Mock private JdbcTemplate jdbc;
 
   @Test
-  void configuredLegacyAdminCanRequestStaffOtpEvenWhileLegacyUserRowExists() {
-    String mobile = "+919876543210";
-    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "9876543210");
+  void configuredBootstrapAdminCanRequestOtpWithoutExistingStaffRow() {
+    String mobile = "+917070107483";
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
     when(jdbc.queryForList("select active from staff_account where mobile_e164=?", mobile))
         .thenReturn(List.of());
     when(jdbc.queryForObject(contains("interval '1 second'"), eq(Long.class), eq(mobile), eq(60)))
@@ -37,15 +39,15 @@ class AuthServiceTest {
     when(jdbc.queryForObject(contains("interval '1 hour'"), eq(Long.class), eq(mobile)))
         .thenReturn(0L);
 
-    assertEquals("123456", auth.requestOtp("9876543210", "STAFF_LOGIN"));
+    assertEquals("123456", auth.requestOtp("7070107483", "STAFF_LOGIN"));
   }
 
   @Test
   void configuredLegacyAdminIsMovedToSeparateStaffIdentityAfterValidOtp() throws Exception {
-    String mobile = "+919876543210";
+    String mobile = "+917070107483";
     long otpId = 31L;
     long staffId = 41L;
-    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "9876543210");
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
     Map<String,Object> otpRow = Map.of(
         "id", otpId,
         "code_hash", hash("123456"),
@@ -63,7 +65,7 @@ class AuthServiceTest {
     when(jdbc.queryForMap("select role, display_name from staff_account where id=? and active=true", staffId))
         .thenReturn(Map.of("role", "ADMIN", "display_name", "Administrator"));
 
-    AuthContext context = auth.verifyOtp("9876543210", "123456", "STAFF_LOGIN", null, true);
+    AuthContext context = auth.verifyOtp("7070107483", "123456", "STAFF_LOGIN", null, true);
 
     assertNotNull(context);
     assertEquals(staffId, context.staffId());
@@ -71,6 +73,24 @@ class AuthServiceTest {
     verify(jdbc).update(contains("update auth_session set revoked_at=now()"), eq(mobile));
     verify(jdbc).update(contains("update user_account set role='PARENT', active=false"), eq(mobile));
     verify(jdbc).update(contains("insert into staff_permission_grant"), eq(staffId));
+  }
+
+  @Test
+  void allowlistedBootstrapMobileIsRecognizedAsFirstAccessBeforeStaffRowExists() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+    when(jdbc.queryForList("select last_login_at from staff_account where mobile_e164=?", "+917070107483"))
+        .thenReturn(List.of());
+
+    assertTrue(auth.isStaffFirstAccess("7070107483"));
+  }
+
+  @Test
+  void activatedStaffAccountIsRecognizedAsReturningLogin() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");
+    when(jdbc.queryForList("select last_login_at from staff_account where mobile_e164=?", "+917070107483"))
+        .thenReturn(List.of(Map.of("last_login_at", Timestamp.from(Instant.now()))));
+
+    assertFalse(auth.isStaffFirstAccess("7070107483"));
   }
 
   private static String hash(String value) throws Exception {
