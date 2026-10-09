@@ -250,3 +250,138 @@
   .student-profile-page__spinner{animation:none}
   .student-profile-field input,.student-profile-field select,.student-profile-field textarea{transition:none}
 }
+
+
+/* Parent account menu — intentionally separate from student learning navigation. */
+.parent-account{position:relative;display:flex;align-items:center;justify-content:flex-end;min-width:0;margin-left:auto}
+.parent-account__trigger{display:flex;align-items:center;gap:10px;min-height:54px;padding:5px 9px 5px 7px;border:1px solid transparent;border-radius:16px;background:transparent;color:var(--ink);cursor:pointer;text-align:left;transition:background .16s ease,border-color .16s ease,box-shadow .16s ease}
+.parent-account__trigger:hover,.parent-account__trigger[aria-expanded="true"]{background:#fff;border-color:#e9ebf2;box-shadow:0 5px 16px rgba(21,32,56,.05)}
+.parent-account__trigger:focus-visible,.parent-account__menu button:focus-visible,.parent-account__menu a:focus-visible{outline:3px solid #fdba74;outline-offset:3px}
+.parent-account__trigger-copy{display:flex;min-width:0;flex-direction:column;align-items:flex-end;gap:4px}
+.parent-account__trigger-copy strong{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:800;line-height:1.2}
+.parent-account__trigger-copy small{color:#8a93a5;font-size:10px;font-weight:600;line-height:1.2}
+.parent-account__avatar{display:block;flex:0 0 44px;width:44px;height:44px;overflow:hidden;border:2px solid white;border-radius:50%;background:#fff0e5;box-shadow:0 0 0 1px #f1d9c9,0 4px 12px rgba(21,32,56,.1)}
+.parent-account__avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.parent-account__chevron{flex:0 0 auto;color:#8791a4;transition:transform .18s ease}
+.parent-account__chevron.is-open{transform:rotate(180deg)}
+.parent-account__menu{position:absolute;top:calc(100% + 8px);right:0;z-index:65;width:min(340px,calc(100vw - 24px));padding:9px;border:1px solid #e7eaf1;border-radius:20px;background:rgba(255,255,255,.985);box-shadow:0 22px 60px rgba(21,32,56,.16),0 3px 10px rgba(21,32,56,.04);backdrop-filter:blur(14px);animation:parent-menu-in .16s ease-out}
+@keyframes parent-menu-in{from{opacity:0;transform:translateY(-5px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+.parent-account__identity{display:flex;align-items:center;gap:12px;padding:11px 10px 15px}
+.parent-account__identity>img{display:block;flex:0 0 50px;width:50px;height:50px;object-fit:cover;border-radius:16px;background:#fff0e5;box-shadow:0 0 0 1px #f1d9c9}
+.parent-account__identity>div{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.parent-account__identity strong{max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#152038;font-size:13px;line-height:1.25}
+.parent-account__identity span{color:#8992a4;font-size:10px}
+.parent-account__identity small{color:#7e899e;font-size:10px;line-height:1.4}
+.parent-account__section-label{padding:7px 10px 6px;color:#a0a7b6;font-size:9px;letter-spacing:1.15px;font-weight:800}
+.parent-account__item{display:flex;align-items:center;gap:11px;width:100%;min-height:58px;padding:9px 10px;border:0;border-radius:12px;background:transparent;color:#26344d;text-align:left;text-decoration:none;cursor:pointer;font:inherit;transition:background .15s ease,transform .15s ease}
+.parent-account__item:hover{background:#f7f8fc}
+.parent-account__item:active{transform:scale(.99)}
+.parent-account__icon{display:grid;place-items:center;flex:0 0 35px;width:35px;height:35px;border:1px solid #f0e4dd;border-radius:11px;background:#fff8f2;color:#c2410c}
+.parent-account__item>span:nth-child(2){display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.parent-account__item strong{color:#26344d;font-size:11px;font-weight:800;line-height:1.2}
+.parent-account__item small{color:#8992a4;font-size:9px;line-height:1.35}
+.parent-account__arrow{flex:0 0 auto;color:#a0a7b5;font-size:16px;transition:transform .15s ease}
+.parent-account__item:hover .parent-account__arrow{transform:translateX(2px);color:#c2410c}
+.parent-account__divider{height:1px;margin:7px 8px;background:#eef0f5}
+.parent-account__logout{display:flex;align-items:center;justify-content:flex-start;gap:11px;width:100%;min-height:43px;padding:9px 12px;border:0;border-radius:11px;background:transparent;color:#b33c2e;font:inherit;font-size:11px;font-weight:800;cursor:pointer;text-align:left}
+.parent-account__logout:hover{background:#fff3f1}
+.parent-account__logout:disabled{opacity:.6;cursor:wait}
+.parent-account__footnote{margin:5px 10px 7px;color:#a1a8b5;font-size:9px;line-height:1.5}
+@media(max-width:540px){
+  .parent-account__trigger{gap:7px;padding:4px 5px;min-height:48px}
+  .parent-account__avatar{flex-basis:40px;width:40px;height:40px}
+  .parent-account__chevron{width:13px;height:13px}
+  .parent-account__trigger-copy strong{max-width:105px;font-size:11px}
+  .parent-account__menu{top:calc(100% + 7px);width:min(320px,calc(100vw - 20px));border-radius:17px}
+}
+@media(max-width:390px){
+  .parent-account__trigger-copy{display:none}
+  .parent-account__trigger{padding:4px;gap:4px}
+  .parent-account__avatar{flex-basis:38px;width:38px;height:38px}
+}
+@media(prefers-reduced-motion:reduce){
+  .parent-account__menu{animation:none}
+  .parent-account__trigger,.parent-account__chevron,.parent-account__item,.parent-account__arrow{transition:none}
+}
+
+/* Parent profile & settings */
+.parent-profile-page__wrap{width:min(100%,1000px);margin:0 auto;padding:28px clamp(16px,3vw,34px) 90px}
+.parent-profile-page__breadcrumb{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 26px}
+.parent-profile-page__breadcrumb a{color:#758096;font-size:12px;font-weight:800;text-decoration:none}
+.parent-profile-page__breadcrumb a:hover{color:#c2410c}
+.parent-profile-page__breadcrumb>span{color:#a4abba;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.parent-profile-page__heading{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:28px}
+.parent-profile-page__heading h1{margin:13px 0 8px;color:#152038;font-size:clamp(30px,4vw,43px);line-height:1.08;letter-spacing:-1.8px}
+.parent-profile-page__heading p{max-width:550px;margin:0;color:#758096;font-size:13px;line-height:1.75}
+.parent-profile-page__account-pill{display:flex;flex:0 0 auto;flex-direction:column;gap:5px;min-width:180px;padding:15px 17px;border:1px solid #eceef4;border-radius:15px;background:linear-gradient(145deg,#fff,#fffaf6)}
+.parent-profile-page__account-pill>span{color:#9aa2b2;font-size:8px;font-weight:800;letter-spacing:1.3px}
+.parent-profile-page__account-pill strong{color:#218258;font-size:13px}
+.parent-profile-page__account-pill small{color:#7e899e;font-size:10px}
+.parent-profile-page__alert{margin:0 0 16px;padding:12px 15px;border:1px solid;border-radius:12px;font-size:12px;line-height:1.6}
+.parent-profile-page__alert.is-error{border-color:#f1c9c1;background:#fff5f2;color:#a63d23}
+.parent-profile-page__alert.is-success{border-color:#ccebdc;background:#f2fbf6;color:#217750}
+.parent-profile-page__loading{display:flex;align-items:center;justify-content:center;gap:10px;min-height:230px;border:1px solid #e8ebf2;border-radius:20px;background:#fff;color:#758096;font-size:12px}
+.parent-profile-page__spinner{width:18px;height:18px;border:2px solid #f4c7a9;border-top-color:#c2410c;border-radius:50%;animation:parent-profile-spin .75s linear infinite}
+@keyframes parent-profile-spin{to{transform:rotate(360deg)}}
+.parent-profile-form{display:grid;gap:16px}
+.parent-profile-card{min-width:0;padding:clamp(18px,3vw,27px);border:1px solid #e6e9f0;border-radius:20px;background:#fff;box-shadow:0 8px 28px rgba(21,32,56,.035)}
+.parent-profile-card__intro{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.parent-profile-card__number{display:grid;place-items:center;flex:0 0 35px;width:35px;height:35px;border:1px solid #f5dfd1;border-radius:12px;background:#fff5ed;color:#c2410c;font-size:10px;font-weight:900}
+.parent-profile-card__intro h2{margin:0;color:#1c2942;font-size:17px;line-height:1.3;letter-spacing:-.4px}
+.parent-profile-card__intro p{margin:5px 0 0;color:#8a93a5;font-size:11px;line-height:1.6}
+.parent-profile-photo-editor{display:flex;align-items:center;gap:22px;padding:19px;border:1px solid #f0e9e4;border-radius:17px;background:linear-gradient(105deg,#fffaf6 0%,#fff 65%)}
+.parent-profile-photo-editor__preview{position:relative;flex:0 0 116px;width:116px;height:116px}
+.parent-profile-photo-editor__preview>img{display:block;width:100%;height:100%;object-fit:cover;border:4px solid white;border-radius:30px;background:#fff0e5;box-shadow:0 0 0 1px #f0d8c7,0 8px 22px rgba(21,32,56,.09)}
+.parent-profile-photo-editor__camera{position:absolute;right:-5px;bottom:-4px;display:grid;place-items:center;width:33px;height:33px;border:3px solid white;border-radius:12px;background:#f97316;color:white;font-size:15px;font-weight:800;box-shadow:0 4px 10px rgba(194,65,12,.2)}
+.parent-profile-photo-editor__copy{min-width:0;flex:1}
+.parent-profile-photo-editor__copy>strong{display:block;color:#25324b;font-size:14px;font-weight:800}
+.parent-profile-photo-editor__copy>p{max-width:410px;margin:6px 0 10px;color:#7e899d;font-size:11px;line-height:1.65}
+.parent-profile-photo-editor__filename{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 0 10px;color:#a0a7b5;font-size:9px}
+.parent-profile-photo-editor__actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.parent-profile-photo-editor__file{display:none!important}
+.parent-profile-quiet-button{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:7px 10px;border:1px solid transparent;border-radius:9px;background:transparent;color:#78849a;font-size:11px;font-weight:800;text-decoration:none;cursor:pointer}
+.parent-profile-quiet-button:hover{border-color:#e7eaf1;background:#f8f9fc;color:#26344d}
+.parent-profile-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px}
+.parent-profile-field{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0;color:#35425b;font-size:11px;font-weight:800}
+.parent-profile-field--wide{grid-column:1/-1}
+.parent-profile-field input,.parent-profile-field select{display:block;width:100%;min-width:0;min-height:44px;padding:11px 12px;border:1px solid #dfe4ed;border-radius:11px;outline:0;background:#fff;color:#25324b;font:500 12px/1.5 'DM Sans','Noto Sans Devanagari',sans-serif;box-shadow:0 1px 2px rgba(21,32,56,.02);transition:border-color .16s ease,box-shadow .16s ease}
+.parent-profile-field input::placeholder{color:#b0b6c3;font-weight:400}
+.parent-profile-field input:focus,.parent-profile-field select:focus{border-color:#f4a46f;box-shadow:0 0 0 3px rgba(249,115,22,.11)}
+.parent-profile-field input[readonly]{background:#f8f9fc;color:#78849a}
+.parent-profile-field>small{color:#a0a7b5;font-size:9px;font-weight:500;line-height:1.5}
+.parent-profile-field__optional{display:inline;color:#a0a7b5;font-size:9px;font-weight:600}
+.parent-profile-privacy-note{display:flex;align-items:flex-start;gap:8px;margin:19px 0 0;padding:11px 13px;border-radius:11px;background:#f8f9fc;color:#8992a4;font-size:10px;line-height:1.6}
+.parent-profile-privacy-note>span{color:#c2410c;font-size:13px;line-height:1.2}
+.parent-profile-form__footer{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:8px 2px 18px}
+.parent-profile-form__footer>p{margin:0;color:#8b94a5;font-size:10px;line-height:1.6}
+.parent-profile-form__footer>div{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex:0 0 auto}
+.parent-profile-form__footer .button{min-height:42px;padding:11px 16px;border:0;cursor:pointer}
+.parent-profile-form__footer .button:disabled{opacity:.55;cursor:wait;transform:none}
+@media(max-width:650px){
+  .parent-profile-page__wrap{padding-top:22px}
+  .parent-profile-page__heading{align-items:flex-start;flex-direction:column;gap:15px}
+  .parent-profile-page__heading h1{font-size:33px}
+  .parent-profile-page__account-pill{min-width:0;width:100%;padding:11px 13px}
+  .parent-profile-photo-editor{align-items:flex-start;gap:15px;padding:14px}
+  .parent-profile-photo-editor__preview{flex-basis:88px;width:88px;height:88px}
+  .parent-profile-photo-editor__preview>img{border-radius:24px}
+  .parent-profile-photo-editor__camera{width:29px;height:29px;border-radius:10px}
+  .parent-profile-photo-editor__actions{gap:5px}
+  .parent-profile-form__footer{align-items:stretch;flex-direction:column}
+  .parent-profile-form__footer>div{width:100%}
+  .parent-profile-form__footer>div .button{flex:1}
+}
+@media(max-width:430px){
+  .parent-profile-fields{grid-template-columns:minmax(0,1fr);gap:15px}
+  .parent-profile-field--wide{grid-column:auto}
+  .parent-profile-card{padding:16px}
+  .parent-profile-photo-editor{flex-direction:column;align-items:center;text-align:center}
+  .parent-profile-photo-editor__copy{width:100%}
+  .parent-profile-photo-editor__actions{justify-content:center}
+  .parent-profile-photo-editor__filename{max-width:100%}
+  .parent-profile-privacy-note{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .parent-profile-page__spinner{animation:none}
+  .parent-profile-field input,.parent-profile-field select{transition:none}
+}
