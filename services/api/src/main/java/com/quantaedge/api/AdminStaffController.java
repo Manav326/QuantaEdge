@@ -227,7 +227,7 @@ public class AdminStaffController {
       case "ADMIN" -> jdbc.queryForList(
           "select permission_key from staff_permission_catalog order by permission_key",String.class);
       case "MANAGER" -> List.of("CONTENT_VIEW","CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT",
-          "CONTENT_REVIEW","AUDIT_VIEW","USER_MANAGE");
+          "CONTENT_REVIEW","AUDIT_VIEW");
       case "MODERATOR" -> List.of("CONTENT_VIEW","CONTENT_REVIEW");
       case "CONTENT_AUTHOR" -> List.of("CONTENT_VIEW","CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT");
       case "CONTENT_REVIEWER" -> List.of("CONTENT_VIEW","CONTENT_REVIEW");
