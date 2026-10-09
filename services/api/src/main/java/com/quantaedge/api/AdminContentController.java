@@ -407,9 +407,12 @@ public class AdminContentController {
       String difficulty = requiredText(q.get("difficulty"), 20).toUpperCase();
       String prompt = requiredText(q.get("prompt"), 1000);
       String explanation = optionalText(q.get("explanation"), 1200);
+      String reviewStatus = String.valueOf(q.getOrDefault("review_status", "DRAFT")).trim().toUpperCase();
+      String reviewNotes = optionalText(q.get("review_notes"), 1200);
       int order = integerValue(first(q, "sort_order", "sortOrder"), 1, 10000, "sort_order");
       if (!QUESTION_TYPES.contains(type)) throw badRequest("Unsupported question type: " + type);
       if (!DIFFICULTIES.contains(difficulty)) throw badRequest("Unsupported question difficulty: " + difficulty);
+      if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(reviewStatus)) throw badRequest("Question review status must be DRAFT, REVIEW, APPROVED, or REJECTED.");
 
       List<Map<String, Object>> options = objectList(q.get("options"), "question options");
       if (("MCQ".equals(type) || "TRUE_FALSE".equals(type)) && options.size() < 2) {
@@ -433,17 +436,19 @@ public class AdminContentController {
 
       if (create) {
         Long createdId = jdbc.queryForObject("""
-          insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active)
-          values(?,?,?,?,?,?,?)
+          insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,review_status,review_notes,reviewed_at)
+          values(?,?,?,?,?,?,?,?,?,case when ?='APPROVED' then now() else null end)
           returning id
           """, Long.class, lessonId, type, prompt, explanation, difficulty, order,
-          booleanValue(q.get("active"), true));
+          booleanValue(q.get("active"), true), reviewStatus, reviewNotes, reviewStatus);
         id = createdId;
       } else {
         jdbc.update("""
-          update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?
+          update question set question_type=?,prompt=?,explanation=?,difficulty=?,sort_order=?,active=?,
+              review_status=?,review_notes=?,reviewed_at=case when ?='APPROVED' then coalesce(reviewed_at,now()) else null end
           where id=? and lesson_id=?
-          """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true), id, lessonId);
+          """, type, prompt, explanation, difficulty, order, booleanValue(q.get("active"), true),
+          reviewStatus, reviewNotes, reviewStatus, id, lessonId);
       }
       submittedIds.add(id);
       jdbc.update("delete from question_option where question_id=?", id);
