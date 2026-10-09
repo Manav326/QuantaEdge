@@ -184,6 +184,24 @@ public class AdminContentController {
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
+    chapterById(chapterId);
+    if ("PUBLISHED".equals(status)) {
+      Long readyLessons = jdbc.queryForObject("""
+        select count(*) from lesson l
+        where l.chapter_id=? and l.active=true
+          and exists(select 1 from lesson_block b where b.lesson_id=l.id and b.active=true)
+          and exists(select 1 from question q where q.lesson_id=l.id and q.active=true)
+          and not exists(
+            select 1 from question q where q.lesson_id=l.id and q.active=true
+              and (q.question_type not in ('MCQ','TRUE_FALSE')
+                or (select count(*) from question_option qo where qo.question_id=q.id)<2
+                or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1)
+          )
+        """, Long.class, chapterId);
+      if (readyLessons == null || readyLessons == 0) {
+        throw badRequest("Add at least one lesson with active teaching blocks and valid multiple-choice questions before publishing this chapter.");
+      }
+    }
     int changed = jdbc.update("""
       update curriculum_chapter
       set display_name=?, description=?, sort_order=?, content_status=?, active=?
@@ -208,15 +226,50 @@ public class AdminContentController {
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
 
+    if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
+    if (body.containsKey("questions")) updateQuestions(lessonId, body.get("questions"));
+    if ("PUBLISHED".equals(status)) validateLessonForPublishing(lessonId);
+
     jdbc.update("""
       update lesson
       set title=?, summary=?, estimated_minutes=?, sort_order=?, status=?, active=?
       where id=?
       """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status), lessonId);
-
-    if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
-    if (body.containsKey("questions")) updateQuestions(lessonId, body.get("questions"));
     return lessonById(lessonId);
+  }
+
+  private void validateLessonForPublishing(long lessonId) {
+    Long parentReady = jdbc.queryForObject("""
+      select count(*) from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED'
+        and s.active=true and c.active=true
+      """, Long.class, lessonId);
+    if (parentReady == null || parentReady == 0) {
+      throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
+    }
+    Long blocks = jdbc.queryForObject(
+        "select count(*) from lesson_block where lesson_id=? and active=true", Long.class, lessonId);
+    if (blocks == null || blocks == 0) {
+      throw badRequest("Add at least one active teaching block before publishing this lesson.");
+    }
+    Long questions = jdbc.queryForObject(
+        "select count(*) from question where lesson_id=? and active=true", Long.class, lessonId);
+    if (questions == null || questions == 0) {
+      throw badRequest("Add at least one active practice question before publishing this lesson.");
+    }
+    Long invalidQuestions = jdbc.queryForObject("""
+      select count(*) from question q
+      where q.lesson_id=? and q.active=true
+        and (q.question_type not in ('MCQ','TRUE_FALSE')
+          or (select count(*) from question_option qo where qo.question_id=q.id)<2
+          or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1)
+      """, Long.class, lessonId);
+    if (invalidQuestions != null && invalidQuestions > 0) {
+      throw badRequest("Every published practice question must have at least two options and exactly one correct answer. Input questions are not yet supported for grading.");
+    }
   }
 
   private Map<String, Object> chapterById(long chapterId) {
