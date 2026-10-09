@@ -17,6 +17,11 @@ class ApplicationStartupSmokeTest {
   void cleanDatabaseMigratesAndRetainsAllSixClassSubjectTracks() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_class') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.question') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.student_track_enrollment') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version='28' and success=true
+      """, Integer.class));
     assertEquals(6, jdbc.queryForObject("""
       select count(*) from curriculum_class c
       join curriculum_subject s on s.class_id=c.id
