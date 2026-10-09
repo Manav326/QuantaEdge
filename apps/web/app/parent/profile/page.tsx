@@ -235,7 +235,7 @@ export default function ParentProfilePage() {
       <header className="parent-header">
         <QuantaEdgeBrand variant="compact" />
         <span>Parent account</span>
-        <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={draft.profileImageDataUrl || identity.profileImageUrl || undefined} />
+        <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={photoChanged ? (draft.profileImageDataUrl || undefined) : (identity.profileImageUrl || undefined)} />
       </header>
       <div className="parent-profile-page__wrap">
         <div className="parent-profile-page__breadcrumb">
@@ -260,7 +260,7 @@ export default function ParentProfilePage() {
               <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2>Your profile photo</h2><p>A familiar face for your family account.</p></div></div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
-                  <img src={draft.profileImageDataUrl || identity.profileImageUrl || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
+                  <img src={(photoChanged ? draft.profileImageDataUrl : (identity.profileImageUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
                   <span className="parent-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="parent-profile-photo-editor__copy">
