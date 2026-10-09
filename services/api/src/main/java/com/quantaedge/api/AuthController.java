@@ -54,14 +54,8 @@ public class AuthController {
 
   @PostMapping("/student-login")
   public ResponseEntity<Map<String,Object>> studentLogin(@RequestBody Map<String,Object> body) {
-    AuthContext context;
-    if(body.containsKey("parentMobile") || body.containsKey("username")) {
-      context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
-          String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
-    } else {
-      context=auth.loginStudent(String.valueOf(body.getOrDefault("studentId","")),
-          String.valueOf(body.getOrDefault("pin","")));
-    }
+    AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
+        String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
     return withCookie(auth.issueToken(context),context);
   }
 
@@ -72,23 +66,15 @@ public class AuthController {
   }
 
   @PostMapping("/select-student")
-  public ResponseEntity<Map<String,Object>> selectStudent(
-      @RequestAttribute(value="authContext",required=false) AuthContext context,
-      @RequestBody Map<String,Object> body) {
-    if(context==null || context.userId()==null) throw new SecurityException("Authentication required");
-    AuthContext selected=auth.selectStudent(context.userId(),Long.parseLong(String.valueOf(body.get("studentId"))));
-    return withCookie(auth.issueToken(selected),selected);
+  public ResponseEntity<Map<String,Object>> selectStudent() {
+    return ResponseEntity.status(403).body(Map.of(
+        "message","Parent profiles are read-only. Students must sign in with their own parent-created credentials."));
   }
 
   @PostMapping("/switch-parent")
-  public ResponseEntity<Map<String,Object>> switchParent(
-      @RequestAttribute(value="authContext",required=false) AuthContext context){
-    if(context==null || context.userId()==null || context.studentId()==null)
-      throw new SecurityException("Parent session unavailable");
-    AuthContext parent=auth.contextForUser(context.userId());
-    if(!"PARENT".equals(parent.role()) && !"ADMIN".equals(parent.role()))
-      throw new SecurityException("Parent session unavailable");
-    return withCookie(auth.issueToken(parent),parent);
+  public ResponseEntity<Map<String,Object>> switchParent() {
+    return ResponseEntity.status(403).body(Map.of(
+        "message","Parent and student accounts are separate. Sign out and sign in to the correct account."));
   }
 
   @GetMapping("/me")
