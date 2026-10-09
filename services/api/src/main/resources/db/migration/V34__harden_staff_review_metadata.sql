@@ -8,9 +8,16 @@ do $reviewed_by_staff_fk$
 begin
   if not exists (
     select 1
-    from pg_constraint
-    where conrelid='public.question'::regclass
-      and conname='question_reviewed_by_staff_fk'
+    from pg_constraint con
+    where con.conrelid='public.question'::regclass
+      and con.contype='f'
+      and con.confrelid='public.staff_account'::regclass
+      and exists (
+        select 1 from pg_attribute att
+        where att.attrelid=con.conrelid
+          and att.attnum=any(con.conkey)
+          and att.attname='reviewed_by_staff_id'
+      )
   ) then
     alter table public.question
       add constraint question_reviewed_by_staff_fk
