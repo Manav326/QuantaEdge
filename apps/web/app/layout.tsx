@@ -1,4 +1,6 @@
 import './globals.css';
+import SessionBoundary from './components/SessionBoundary';
+import WorkspaceLayout from './components/WorkspaceLayout';
 
 export const metadata = {
   title: { default: 'QuantaEdge | Smarter Decisions. Greater Growth.', template: '%s | QuantaEdge' },
@@ -8,5 +10,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="hi"><body>{children}</body></html>;
+  return <html lang="hi"><body><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></body></html>;
 }

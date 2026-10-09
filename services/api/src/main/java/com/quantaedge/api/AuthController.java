@@ -40,29 +40,28 @@ public class AuthController {
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
         Boolean.TRUE.equals(body.get("firstAccess")),
         body.get("password")==null?null:String.valueOf(body.get("password")));
-    String token=auth.issueToken(context);
     if(context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Staff sign-in succeeded.");
-    return withCookie(token,context);
+    return withCookie(auth.issueSession(context));
   }
 
   @PostMapping("/parent-login")
   public ResponseEntity<Map<String,Object>> parentLogin(@RequestBody Map<String,Object> body) {
     AuthContext context=auth.loginParent(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueToken(context),context);
+    return withCookie(auth.issueSession(context));
   }
 
   @PostMapping("/student-login")
   public ResponseEntity<Map<String,Object>> studentLogin(@RequestBody Map<String,Object> body) {
     AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueToken(context),context);
+    return withCookie(auth.issueSession(context));
   }
 
   @PostMapping("/preview-login")
   public ResponseEntity<Map<String,Object>> previewLogin() {
     AuthContext context=auth.previewLogin();
-    return withCookie(auth.issueToken(context),context);
+    return withCookie(auth.issueSession(context));
   }
 
   @PostMapping("/select-student")
@@ -91,20 +90,30 @@ public class AuthController {
     return result;
   }
 
+  @PostMapping("/refresh")
+  public ResponseEntity<Map<String,Object>> refresh(@CookieValue(value="QE_REFRESH",required=false) String refreshToken) {
+    return withCookie(auth.refreshSession(refreshToken));
+  }
+
   @PostMapping("/logout")
   public ResponseEntity<Map<String,Object>> logout(
       @CookieValue(value=AuthService.COOKIE,required=false) String token,
+      @CookieValue(value="QE_REFRESH",required=false) String refreshToken,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    auth.revoke(token);
+    auth.revoke(token,refreshToken);
     if(context!=null&&context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/logout","Staff signed out.");
     ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,"").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
-    return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).body(Map.of("loggedOut",true));
+    ResponseCookie refreshCookie=ResponseCookie.from("QE_REFRESH","").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
+    return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString()).body(Map.of("loggedOut",true));
   }
 
-  private ResponseEntity<Map<String,Object>> withCookie(String token,AuthContext context) {
-    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,token).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+  private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens) {
+    AuthContext context=tokens.context();
+    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,tokens.accessToken()).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+        .maxAge(Duration.ofMinutes(AuthService.ACCESS_TOKEN_MINUTES)).build();
+    ResponseCookie refreshCookie=ResponseCookie.from("QE_REFRESH",tokens.refreshToken()).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofHours(auth.getSessionHours())).build();
-    return ResponseEntity.ok().header("Set-Cookie",cookie.toString())
+    return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
         .body(Map.of("authenticated",true,"role",context.role(),
             "studentId",context.studentId()==null?0:context.studentId(),
             "userId",context.userId()==null?0:context.userId(),

@@ -20,11 +20,11 @@ export default function StudentHome(){
   const stats=data.lessonStats,q=data.questionStats;
   return <main className="app-shell">
     <header className="app-header"><QuantaEdgeBrand variant="compact" /><StudentAccountMenu displayName={data.display_name} classCode={data.class_code} profileImageUrl={data.profile_image_url} /></header>
-    <div className="app-layout"><aside className="side-nav"><Link className="side-active" href="/student">⌂ <span>आज</span></Link><Link href="/student/learn">▣ <span>पढ़ाई</span></Link><Link href="/student/practice">✦ <span>अभ्यास</span></Link><Link href="/student/progress">↗ <span>मेरी प्रगति</span></Link></aside>
+    <div className="app-layout"><aside className="side-nav"><Link className="side-active" href="/student">⌂ <span>आज</span></Link><Link href="/student/learn">▣ <span>Padhai</span></Link><Link href="/student/practice">✦ <span>Practice</span></Link><Link href="/student/progress">↗ <span>मेरी प्रगति</span></Link></aside>
       <section className="app-content">
-        <div className="welcome-row"><div><span className="eyebrow">आपकी learning journey · Class {data.class_code}</span><h1>नमस्ते, {data.display_name} 👋</h1><p>आज की पढ़ाई आपकी progress और mastery के आधार पर आगे बढ़ती है।</p></div><div className="streak-card">✓ <strong>{Math.round(Number(stats.completion_percent))}%</strong><span>curriculum complete</span></div></div>
+        <div className="welcome-row"><div><span className="eyebrow">Aapki learning journey · Class {data.class_code}</span><h1>Namaste, {data.display_name} 👋</h1><p>Aaj ki padhai aapki progress aur mastery ke hisaab se aage badhti hai.</p></div><div className="streak-card">✓ <strong>{Math.round(Number(stats.completion_percent))}%</strong><span>curriculum complete</span></div></div>
         <div className="goal-card"><div><span>Learning progress</span><strong>{stats.completed_lessons} / {stats.total_lessons} lessons</strong><small>{q.attempts} attempts · {q.accuracy_percent}% graded accuracy</small></div><div className="goal-ring">{Math.round(Number(stats.completion_percent))}%</div></div>
-        <div className="content-heading"><h2>आपके दो विषय</h2><span>Class {data.class_code}</span></div>
+        <div className="content-heading"><h2>Aapke do subjects</h2><span>Class {data.class_code}</span></div>
         <div className="task-list subject-tracks">
           {(['maths','science'] as const).map((subjectCode)=>{
             const track=(data.curriculum||[]).find((item:any)=>item.subject_code===subjectCode);
@@ -32,21 +32,21 @@ export default function StudentHome(){
             const count=Number(track?.lessons||0);
             return <Link key={subjectCode} href={'/student/learn?subjectCode='+subjectCode} className="app-task">
               <span className="task-icon">{subjectCode==='maths'?'∑':'⚗'}</span>
-              <div><strong>{title}</strong><small>{Number(track?.chapters||0)} अध्याय · {count} प्रकाशित पाठ</small>
-              <small>{count>0?'उपलब्ध पाठ देखें':'इस विषय के पाठ समीक्षा/लेखन में हैं; प्रकाशित होने पर यहाँ दिखेंगे।'}</small></div>
+              <div><strong>{title}</strong><small>{Number(track?.chapters||0)} अध्याय · {count} published lessons</small>
+              <small>{count>0?'उपलब्ध पाठ देखें':'Is subject ke lessons review ya writing mein hain; publish hone par yahan dikh jayenge.'}</small></div>
               <span className="task-action">→</span>
             </Link>;
           })}
         </div>
-        <div className="content-heading"><h2>आज क्या करें?</h2><span>mastery-driven</span></div>
+        <div className="content-heading"><h2>Aaj kya karein?</h2><span>mastery-driven</span></div>
         <div className="task-list">
-          {rec?.kind==='DIAGNOSTIC' ? <Link href="/student/diagnostic" className="app-task next"><span className="task-icon">◎</span><div><strong>पहला learning diagnostic</strong><small>छोटा assessment → आपकी शुरुआती recommendation</small></div><span className="task-action">→</span></Link> : rec?.lesson ? <Link href={'/student/learn?lessonId='+rec.lesson.id} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small>आपकी progress और mastery के आधार पर recommended lesson</small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong>पूरा curriculum पूरा हो गया 🎉</strong><small>अब आप अभ्यास दोहरा सकते हैं या अपनी mastery देख सकते हैं।</small></div></div> : null}
-          <Link href="/student/learn" className="app-task"><span className="task-icon">∑</span><div><strong>पढ़ाई</strong><small>Explanation · worked example · guided practice</small></div><span className="task-action">→</span></Link>
-          <Link href="/student/practice" className="app-task"><span className="task-icon">✦</span><div><strong>अभ्यास</strong><small>Answers save होंगे और mastery update होगी</small></div><span className="task-action">→</span></Link>
-          <Link href="/student/progress" className="app-task"><span className="task-icon">↗</span><div><strong>मेरी प्रगति</strong><small>Real learning records से progress</small></div><span className="task-action">→</span></Link>
+          {rec?.kind==='DIAGNOSTIC' ? <Link href="/student/diagnostic" className="app-task next"><span className="task-icon">◎</span><div><strong>Pehla learning diagnostic</strong><small>Chhota assessment → aapki starting recommendation</small></div><span className="task-action">→</span></Link> : rec?.lesson ? <Link href={'/student/learn?lessonId='+rec.lesson.id} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small>Aapki progress aur mastery ke basis par recommended lesson</small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong>Aapne poora curriculum complete kar liya 🎉</strong><small>Ab aap practice repeat kar sakte hain ya apni mastery dekh sakte hain.</small></div></div> : null}
+          <Link href="/student/learn" className="app-task"><span className="task-icon">∑</span><div><strong>Padhai</strong><small>Explanation · worked example · guided practice</small></div><span className="task-action">→</span></Link>
+          <Link href="/student/practice" className="app-task"><span className="task-icon">✦</span><div><strong>Practice</strong><small>Answers save होंगे और mastery update होगी</small></div><span className="task-action">→</span></Link>
+          <Link href="/student/progress" className="app-task"><span className="task-icon">↗</span><div><strong>मेरी प्रगति</strong><small>Real learning records se progress</small></div><span className="task-action">→</span></Link>
         </div>
       </section>
     </div>
-    <nav className="mobile-nav"><Link className="side-active" href="/student">⌂<span>आज</span></Link><Link href="/student/learn">▣<span>पढ़ाई</span></Link><Link href="/student/practice">✦<span>अभ्यास</span></Link><Link href="/student/progress">↗<span>प्रगति</span></Link></nav>
+    <nav className="mobile-nav"><Link className="side-active" href="/student">⌂<span>आज</span></Link><Link href="/student/learn">▣<span>Padhai</span></Link><Link href="/student/practice">✦<span>Practice</span></Link><Link href="/student/progress">↗<span>प्रगति</span></Link></nav>
   </main>;
 }

@@ -93,25 +93,25 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
               <small>Class {classCode}</small>
             </div>
           </div>
-          <div className="student-account-menu__section-label">YOUR LEARNING</div>
+          <div className="student-account-menu__section-label">AAPKI PADHAI</div>
           <Link href="/student/learn" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong>Continue learning</strong><small>Pick up where you left off</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong>Padhai continue karein</strong><small>Jahan chhoda tha, wahin se shuru karein</small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <Link href="/student/practice" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong>Practice questions</strong><small>Build confidence with practice</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong>Practice questions</strong><small>Practice se confidence badhayein</small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <Link href="/student/progress" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong>My progress</strong><small>Review your learning journey</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong>Meri progress</strong><small>Apni learning journey dekhein</small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
           <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile &amp; settings</strong><small>Photo, school and personal details</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile aur settings</strong><small>Photo, school aur personal details</small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
           <button type="button" className="student-account-menu__logout" onClick={() => void logout()} disabled={busy}>
-            <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Log out'}</span>
+            <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Sign out'}</span>
           </button>
-          <p className="student-account-menu__footnote">Your learning progress is saved automatically.</p>
+          <p className="student-account-menu__footnote">Aapki learning progress automatically save hoti hai.</p>
         </div>
       )}
     </div>
