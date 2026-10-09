@@ -197,7 +197,7 @@ export default function StudentProfilePage() {
     <main className="app-shell student-profile-page">
       <header className="app-header">
         <QuantaEdgeBrand variant="compact" />
-        <StudentAccountMenu displayName={draft.displayName || 'Student'} classCode={student?.class_code || '—'} profileImageDataUrl={draft.profileImageDataUrl} />
+        <StudentAccountMenu displayName={draft.displayName || 'Student'} classCode={student?.class_code || '—'} profileImageUrl={draft.profileImageDataUrl} />
       </header>
       <div className="student-profile-page__wrap">
         <div className="student-profile-page__breadcrumb">
