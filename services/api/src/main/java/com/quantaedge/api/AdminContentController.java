@@ -135,6 +135,9 @@ public class AdminContentController {
     String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
     String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
     if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
+    if ("PUBLISHED".equals(status)) {
+      throw badRequest("Create chapters as draft, verify the source and prepare reviewed lessons before publishing.");
+    }
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
     List<Map<String, Object>> subjects = jdbc.queryForList("""
       select s.id from curriculum_subject s
@@ -218,10 +221,25 @@ public class AdminContentController {
           and exists(select 1 from question q where q.lesson_id=l.id and q.active=true)
           and not exists(
             select 1 from question q where q.lesson_id=l.id and q.active=true
-              and (q.question_type not in ('MCQ','TRUE_FALSE')
-                or (select count(*) from question_option qo where qo.question_id=q.id)<2
-                or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
-                or q.review_status<>'APPROVED')
+              and (
+                q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
+                or q.review_status<>'APPROVED'
+                or (q.question_type in ('MCQ','TRUE_FALSE') and (
+                  (select count(*) from question_option qo where qo.question_id=q.id)<2
+                  or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
+                  or coalesce(q.answer_payload->>'kind','')<>'OPTION'
+                  or q.answer_payload->>'value' is distinct from (
+                    select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct limit 1
+                  )
+                ))
+                or (q.question_type='INPUT' and coalesce(q.answer_payload->>'kind','')<>'TEXT')
+                or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or not (q.answer_payload ? 'value')))
+                or (q.source_kind<>'AUTHOR_CREATED' and (
+                  q.source_id is null or nullif(btrim(q.source_ref),'') is null or q.source_year is null
+                  or nullif(btrim(q.board),'') is null
+                  or not exists(select 1 from content_source src where src.id=q.source_id and upper(src.status) in ('VERIFIED','APPROVED','PUBLISHED'))
+                ))
+              )
           )
         """, Long.class, chapterId);
       if (readyLessons == null || readyLessons == 0) {
@@ -305,10 +323,25 @@ public class AdminContentController {
     Long invalidQuestions = jdbc.queryForObject("""
       select count(*) from question q
       where q.lesson_id=? and q.active=true
-        and (q.question_type not in ('MCQ','TRUE_FALSE')
-          or (select count(*) from question_option qo where qo.question_id=q.id)<2
-          or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
-          or q.review_status<>'APPROVED')
+        and (
+          q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
+          or q.review_status<>'APPROVED'
+          or (q.question_type in ('MCQ','TRUE_FALSE') and (
+            (select count(*) from question_option qo where qo.question_id=q.id)<2
+            or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
+            or coalesce(q.answer_payload->>'kind','')<>'OPTION'
+            or q.answer_payload->>'value' is distinct from (
+              select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct limit 1
+            )
+          ))
+          or (q.question_type='INPUT' and coalesce(q.answer_payload->>'kind','')<>'TEXT')
+          or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or not (q.answer_payload ? 'value')))
+          or (q.source_kind<>'AUTHOR_CREATED' and (
+            q.source_id is null or nullif(btrim(q.source_ref),'') is null or q.source_year is null
+            or nullif(btrim(q.board),'') is null
+            or not exists(select 1 from content_source src where src.id=q.source_id and upper(src.status) in ('VERIFIED','APPROVED','PUBLISHED'))
+          ))
+        )
       """, Long.class, lessonId);
     if (invalidQuestions != null && invalidQuestions > 0) {
       throw badRequest("Every published practice question must have at least two options and exactly one correct answer. Input questions are not yet supported for grading.");
