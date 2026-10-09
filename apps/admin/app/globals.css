@@ -340,3 +340,43 @@
 @media(max-width:1200px){.qe-staff-layout{grid-template-columns:minmax(0,1fr)}.qe-staff-permission-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.admin-shell:has(.qe-shared-sidebar.is-collapsed),.qe-content-shell:has(.qe-shared-sidebar.is-collapsed){grid-template-columns:1fr}.qe-workspace-fullscreen .qe-authoring-layout{grid-template-columns:minmax(0,1fr)}.qe-fullscreen-bar{align-items:flex-start}.qe-fullscreen-bar strong{font-size:15px}}
 @media(max-width:600px){.qe-workspace-fullscreen{padding:12px 10px 24px!important}.qe-fullscreen-bar{gap:7px}.qe-fullscreen-bar .qe-secondary-button{font-size:10px;padding:8px}.qe-step-strip span{min-width:max-content}.qe-staff-permission-list{grid-template-columns:1fr}.qe-staff-directory,.qe-staff-editor,.qe-audit-panel{padding:14px}.qe-audit-row{gap:8px}.qe-audit-status{min-width:35px}.qe-audit-info{font-size:9px;padding:6px}}
+
+/* Content Studio full-screen workflow refinements */
+.qe-fullscreen-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.qe-workspace-fullscreen .qe-fullscreen-message{display:flex;gap:10px;align-items:center;max-width:1580px;margin:0 auto 12px;padding:11px 14px;border-radius:10px;font-size:12px;line-height:1.5}
+.qe-workspace-fullscreen .qe-fullscreen-message b{white-space:nowrap}
+.qe-workspace-fullscreen .qe-fullscreen-message.error{border:1px solid #f0c2b6;background:#fff3ef;color:#843723}
+.qe-workspace-fullscreen .qe-fullscreen-message.notice{border:1px solid #b9e4cf;background:#effaf4;color:#135c3b}
+.qe-content-main .qe-step-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:8px;background:#f1f4f8;border:1px solid #d7e0eb;border-radius:12px;margin:16px 0 4px}
+.qe-content-main .qe-step-strip>span{display:flex;align-items:center;gap:8px;min-width:0;padding:10px 11px;border:1px solid #dce3ec;border-radius:9px;background:#fff;color:#43526a;font-size:11px;font-weight:800}
+.qe-content-main .qe-step-strip>span>span{display:inline-flex;align-items:center;justify-content:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;font-size:10px;font-weight:900}
+.qe-content-main .qe-step-strip>span b{color:inherit;font-size:11px}
+.qe-content-main .qe-step-strip>span.current{background:#e8f0ff;border-color:#9fbaf1;color:#123d7e}
+.qe-content-main .qe-step-strip>span.current>span{background:#174b92;color:#fff}
+.qe-content-main .qe-step-strip>span.done{background:#eaf8f0;border-color:#a8d9be;color:#155d3d}
+.qe-content-main .qe-step-strip>span.done>span{background:#178251;color:#fff}
+.qe-content-main .qe-step-strip>span.todo{background:#f8fafc;border-color:#d7dfea;color:#56657b}
+.qe-content-main .qe-step-strip>span.todo>span{background:#e2e8f0;color:#46566d}
+.qe-content-main .qe-fullscreen-bar strong{font-size:17px;color:#142238}
+.qe-content-main .qe-fullscreen-bar p{font-size:12px;color:#3f4d63}
+.qe-content-main .qe-editor-section h3,.qe-content-main .qe-editor-section-title h3{color:#17273d}
+.qe-content-main .qe-editor-section label,.qe-content-main .qe-editor-section .qe-form-field{color:#223149}
+.qe-content-main .qe-editor-section input:not([type=checkbox]):not([type=radio]):not([type=color]),.qe-content-main .qe-editor-section textarea,.qe-content-main .qe-editor-section select{color:#142238;background-color:#fff}
+.qe-content-main .qe-editor-section input::placeholder,.qe-content-main .qe-editor-section textarea::placeholder{color:#65738a;opacity:1}
+.qe-content-main .qe-editor-section small,.qe-content-main .qe-editor-footnote{color:#46566e}
+.qe-content-main .qe-workflow-state{display:flex;flex-direction:column;gap:4px;min-height:42px;padding:7px 9px;border:1px solid #d6dfeb;border-radius:9px;background:#fff}
+.qe-content-main .qe-workflow-state>span,.qe-content-main .qe-workflow-state>small{font-size:9px;color:#475971}
+.qe-content-main .qe-workflow-state>b{font-size:11px;color:#183553}
+.qe-content-main .qe-question-workflow-state{display:flex;flex-direction:column;gap:4px;min-width:150px;padding:8px 10px;border:1px solid #d9e1ec;border-radius:9px;background:#f8fafc}
+.qe-content-main .qe-question-workflow-state span,.qe-content-main .qe-question-workflow-state small{color:#4a5b73;font-size:9px;line-height:1.45}
+.qe-content-main .qe-question-workflow-state b{color:#142640;font-size:11px}
+.qe-content-main .qe-question-review{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid #e2e8f0}
+.qe-content-main .qe-question-review small{margin-right:auto;color:#40526a;font-size:10px}
+.qe-content-main .qe-question-review button{border:1px solid #acd8c2;background:#eaf8f0;color:#125f3b;border-radius:9px;padding:9px 11px;font-size:10px;font-weight:850;cursor:pointer}
+.qe-content-main .qe-question-review button:last-child{border-color:#e3c6bf;background:#fff4f0;color:#833d2e}
+.qe-content-main .qe-question-review button:disabled,.qe-content-main .qe-question-remove:disabled,.qe-content-main .qe-editor-actions button:disabled{opacity:.46;cursor:not-allowed}
+.qe-content-main .qe-mark-preview-button{border:1px solid #a8d8be;border-radius:9px;padding:8px 10px;background:#e9f8f0;color:#145d3d;font-size:10px;font-weight:850;cursor:pointer;white-space:nowrap}
+.qe-content-main .qe-mark-preview-button:disabled{opacity:.48;cursor:not-allowed}
+.qe-content-main .qe-preview-mode{flex-wrap:wrap}
+@media(max-width:980px){.qe-workspace-fullscreen .qe-authoring-layout{grid-template-columns:minmax(0,1fr)}.qe-content-main .qe-step-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.qe-fullscreen-bar{align-items:flex-start}.qe-fullscreen-actions{max-width:100%}}
+@media(max-width:560px){.qe-content-main .qe-step-strip{grid-template-columns:1fr 1fr;gap:5px}.qe-content-main .qe-step-strip>span{padding:8px 6px;gap:5px;font-size:10px}.qe-content-main .qe-step-strip>span b{font-size:10px}.qe-fullscreen-bar{flex-direction:column}.qe-fullscreen-actions{width:100%;justify-content:space-between}.qe-content-main .qe-editor-actions{flex-wrap:wrap}.qe-content-main .qe-editor-actions button{flex:1 1 100%;min-height:40px}}
