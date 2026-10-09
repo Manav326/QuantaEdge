@@ -123,6 +123,7 @@ create table staff_audit_log (
   response_status integer not null,
   remote_address varchar(80),
   user_agent varchar(500),
+  details text,
   created_at timestamptz not null default now()
 );
 
