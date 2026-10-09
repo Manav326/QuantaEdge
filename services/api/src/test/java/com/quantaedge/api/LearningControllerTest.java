@@ -57,7 +57,7 @@ class LearningControllerTest {
     assertEquals(true, result.get("correct"));
     assertEquals(true, result.get("saved"));
     assertEquals("Subtract four from both sides.", result.get("explanation"));
-    verify(jdbc).update(contains("insert into student_question_attempt"), 7L, 42L, "B", true);
+    verify(jdbc).update(contains("insert into student_question_attempt"), eq(7L), eq(42L), eq("B"), eq(true));
   }
 
   @Test
