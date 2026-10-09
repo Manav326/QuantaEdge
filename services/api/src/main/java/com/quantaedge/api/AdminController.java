@@ -302,7 +302,7 @@ public class AdminController {
   private String toJson(Object value){
     try{
       return value instanceof String s ? s : mapper.writeValueAsString(value);
-    }catch(JsonProcessingException ex){
+    }catch(JacksonException ex){
       throw new IllegalArgumentException("Invalid JSON content");
     }
   }
