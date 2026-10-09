@@ -30,6 +30,13 @@ function parse<T=any>(value:string):T {
 
 function safeRichHtml(value:string) {
   let html=String(value||'');
+  html=html.replace(/<font\\b([^>]*)>/gi,(_m,attrs:string)=>{
+    const color=attrs.match(/\\bcolor\\s*=\\s*["']?(#[0-9a-f]{3,8}|[a-z]+)["']?/i)?.[1];
+    const size=attrs.match(/\\bsize\\s*=\\s*["']?([1-7])["']?/i)?.[1];
+    const sizes:Record<string,string>={'1':'12px','2':'14px','3':'16px','4':'20px','5':'24px','6':'30px','7':'36px'};
+    const styles=[color?'color:'+color:null,size?'font-size:'+sizes[size]:null].filter(Boolean).join(';');
+    return '<span'+(styles?' style="'+styles+'"':'')+'>';
+  }).replace(/<\\/font>/gi,'</span>');
   html=html.replace(/<\s*(script|style|iframe|object|embed|form|input|button)[\s\S]*?<\/\s*\1\s*>/gi,'');
   html=html.replace(/<\s*(script|style|iframe|object|embed|form|input|button)\b[^>]*\/?>/gi,'');
   html=html.replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,'');
