@@ -343,7 +343,32 @@ jobs:
 
           curl -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d '{"assetType":"IMAGE","title":"CI visual asset","altText":"CI visual","url":"https://example.invalid/ci-image","sourceKind":"AUTHOR_CREATED","status":"REVIEW"}'             http://localhost:8080/api/v1/admin/assets >/tmp/qe-asset.json
           ASSET_ID="$(python -c 'import json; print(json.load(open("/tmp/qe-asset.json"))["id"])')"
-          curl --request=PUT -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json'             -d "{\"assetId\":${ASSET_ID}}"             http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset >/tmp/qe-attach.json
+          set +e
+          curl --request=PUT -fsS -b /tmp/qe-admin.cookies -H 'Content-Type: application/json' \
+            -d "{\"assetId\":${ASSET_ID}}" --output /tmp/qe-attach.json \
+            --write-out 'HOST_ASSET_PUT http_code=%{http_code} remote=%{remote_ip}:%{remote_port} uploaded=%{size_upload} downloaded=%{size_download}\n' \
+            "http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset"
+          host_put_rc=$?
+          set -e
+          if [ "$host_put_rc" -ne 0 ]; then
+            echo "HOST_ASSET_PUT curl_exit=$host_put_rc response_bytes=$(wc -c < /tmp/qe-attach.json)"
+            set +e
+            curl -sS --max-time 5 -o /dev/null \
+              --write-out 'HOST_SYSTEM_STATUS http_code=%{http_code} remote=%{remote_ip}:%{remote_port}\n' \
+              "http://localhost:8080/api/v1/system/status"
+            echo "HOST_SYSTEM_STATUS curl_exit=$?"
+            docker compose -f docker-compose.yml exec -T api curl -sS --max-time 5 -o /dev/null \
+              --write-out 'CONTAINER_SYSTEM_STATUS http_code=%{http_code} remote=%{remote_ip}:%{remote_port}\n' \
+              "http://localhost:8080/api/v1/system/status"
+            echo "CONTAINER_SYSTEM_STATUS curl_exit=$?"
+            docker compose -f docker-compose.yml exec -T api curl -sS --max-time 5 --request=PUT \
+              -H 'Content-Type: application/json' -d '{"assetId":0}' --output /dev/null \
+              --write-out 'CONTAINER_LOOPBACK_ASSET_PUT http_code=%{http_code} remote=%{remote_ip}:%{remote_port} downloaded=%{size_download}\n' \
+              "http://localhost:8080/api/v1/admin/lessons/${LESSON_ID}/blocks/${BLOCK_ID}/asset"
+            echo "CONTAINER_LOOPBACK_ASSET_PUT curl_exit=$?; no session is supplied, so this probe must not modify application data."
+            set -e
+            exit "$host_put_rc"
+          fi
           test "$(python -c 'import json; print(json.load(open("/tmp/qe-attach.json"))["updated"])')" = "True"
 
       - name: Browser UI smoke test
