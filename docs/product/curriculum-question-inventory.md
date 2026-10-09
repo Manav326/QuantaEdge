@@ -26,7 +26,7 @@ The repository's `scripts/scert_extract_review.py` can extract page text from a 
 | 7 | Science | 18 | 0 | 0 | 0 | 180 | 0 / 18 |
 | 8 | Mathematics | 16 | 0 | 0 | 0 | 154 | 0 / 16 |
 | 8 | Science | 19 | 0 | 0 | 0 | 190 | 0 / 19 |
-| **Total** | | **102** | **4** | **102 actual target formats counted separately** | | **997** | **0 / 102** |
+| **Total** | | **102** | **4** | **3** | **1** | **997** | **0 / 102** |
 
 ### Required target breakdown by question type
 
