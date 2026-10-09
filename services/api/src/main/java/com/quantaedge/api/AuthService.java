@@ -60,10 +60,21 @@ public class AuthService {
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit))) throw new IllegalArgumentException("Invalid Indian mobile number");
 
     if ("STAFF_LOGIN".equals(purpose)) {
-      boolean staffExists = Boolean.TRUE.equals(jdbc.queryForObject(
-          "select exists(select 1 from staff_account where mobile_e164=? and active=true)", Boolean.class, normalized));
-      if (!staffExists && !adminMobiles.contains(normalized)) {
-        throw new IllegalArgumentException("This mobile is not assigned to an active staff account.");
+      List<Map<String,Object>> staffRows=jdbc.queryForList(
+          "select active from staff_account where mobile_e164=?", normalized);
+      if (!staffRows.isEmpty()) {
+        if (!Boolean.TRUE.equals(staffRows.getFirst().get("active"))) {
+          throw new SecurityException("This staff account is inactive. Contact an administrator.");
+        }
+      } else {
+        if (!adminMobiles.contains(normalized)) {
+          throw new IllegalArgumentException("This mobile is not assigned to an active staff account.");
+        }
+        Boolean linkedUser=Boolean.TRUE.equals(jdbc.queryForObject(
+            "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized));
+        if(linkedUser) {
+          throw new SecurityException("This mobile belongs to an existing parent account and cannot be used for a staff identity.");
+        }
       }
     } else {
       boolean isStaffMobile=Boolean.TRUE.equals(jdbc.queryForObject(
