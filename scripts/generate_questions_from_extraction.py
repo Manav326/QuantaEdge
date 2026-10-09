@@ -452,6 +452,7 @@ def main() -> int:
         parser.error("--max-api-calls and --timeout must be positive.")
 
     try:
+        extraction = json.loads(args.extraction.read_text(encoding="utf-8"))
         requested_types = {part.strip().upper() for part in args.question_types.split(",") if part.strip()}
         if args.question_types.strip() and (not requested_types or not requested_types <= SUPPORTED_TYPES):
             raise ValueError("Question types must be selected from MCQ,TRUE_FALSE,INPUT,NUMERICAL.")
@@ -460,7 +461,6 @@ def main() -> int:
                                if str(extraction.get("curriculum", {}).get("subject_code", "")) == "maths"
                                else {"MCQ", "TRUE_FALSE", "INPUT"})
         allowed_types = requested_types
-        extraction = json.loads(args.extraction.read_text(encoding="utf-8"))
         curriculum, source, chapters = validate_extraction(extraction)
         if args.chapter_code:
             missing = sorted(set(args.chapter_code) - {chapter["code"] for chapter in chapters})
