@@ -342,6 +342,10 @@ public class AdminContentController {
     if (!Set.of("DRAFT","REVIEW","APPROVED","REJECTED").contains(status)) {
       throw badRequest("Review status must be Draft, Needs review, Approved or Rejected.");
     }
+    Map<String,Object> lessonForReview=lessonById(lessonId);
+    if (!"REVIEW".equals(String.valueOf(lessonForReview.get("lesson_status")))) {
+      throw badRequest("Submit the micro-topic for review before approving or returning its questions.");
+    }
     String notes=optionalText(body.get("reviewNotes"),1200);
     if ("APPROVED".equals(status)) validateQuestionForReview(lessonId,questionId);
     int changed=jdbc.update("""
@@ -382,11 +386,17 @@ public class AdminContentController {
     if ("REVIEW".equals(status) && !"REVIEW".equals(String.valueOf(current.get("lesson_status")))) {
       authorization.requirePermission(context,"CONTENT_SUBMIT");
     }
+    String previousStatus=String.valueOf(current.get("lesson_status"));
     if ("PUBLISHED".equals(status) || "ARCHIVED".equals(status)
-        || "PUBLISHED".equals(String.valueOf(current.get("lesson_status")))
-        || "ARCHIVED".equals(String.valueOf(current.get("lesson_status")))) {
+        || "PUBLISHED".equals(previousStatus)
+        || "ARCHIVED".equals(previousStatus)) {
       authorization.requirePermission(context,"CONTENT_PUBLISH");
     }
+    if ("PUBLISHED".equals(status) && !"PUBLISHED".equals(previousStatus)) {
+      throw badRequest("Use the separate Publish action after review checks are complete.");
+    }
+    // Editing a currently published topic must remove the edited draft from learners until it is reviewed and republished.
+    if ("PUBLISHED".equals(previousStatus)) status="DRAFT";
     if (sourceVerified) requireCompleteSourceReference(sourceTitle, sourceUrl, sourceEdition, sourcePages, "lesson");
     if ("PUBLISHED".equals(status) && !sourceVerified) {
       throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
