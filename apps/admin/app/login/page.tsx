@@ -200,7 +200,7 @@ export default function AdminLogin() {
 
         <footer className="qe-login-panel-footer">
           <span>Need access? Contact your QuantaEdge administrator.</span>
-          <span>mPay Learn · Staff operations</span>
+          <span>QuantaEdge · Staff operations</span>
         </footer>
       </section>
     </main>
