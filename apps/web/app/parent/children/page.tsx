@@ -84,7 +84,7 @@ export default function ParentChildrenPage(){
       if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
       setDraft(emptyDraft);setConsent(false);
       await load();
-      setNotice('Student profile created and login credentials saved. Your child can now sign in with the username and password you created.');
+      setNotice('Student profile ban gaya hai aur login details save ho gayi hain. Ab bachcha aapke banaye username aur password se sign in kar sakta hai.');
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
   }
@@ -99,7 +99,7 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to save student login details.');
       await load();
-      setNotice('Login details saved for '+child.display_name+'. Share the username and password with this child securely.');
+      setNotice('Login details save ho gayi hain for '+child.display_name+'. Username aur password bachche ke saath safely share karein.');
     }catch(e:any){setError(e.message||'Unable to save student login details.');}
   }
 
@@ -140,8 +140,8 @@ export default function ParentChildrenPage(){
     </header>
     <section className="parent-dashboard parent-manage">
       <div className="parent-manage-hero">
-        <div><span className="eyebrow">FAMILY LEARNING</span><h1>Manage children</h1>
-          <p>Create up to your account limit, assign subjects individually, and keep each child's learning access separate.</p></div>
+        <div><span className="eyebrow">FAMILY LEARNING</span><h1>Bachchon ke profiles</h1>
+          <p>Apne account limit tak profiles banayein, har bachche ke subjects choose karein, aur unka learning access alag rakhein.</p></div>
         <div className="parent-capacity"><span>Active profiles</span><strong>{account?account.activeChildren:'—'} <small>/ {account?account.maxChildren:'—'}</small></strong><span>{account?.remainingSlots??'—'} profile slots remaining</span></div>
       </div>
 
@@ -149,28 +149,28 @@ export default function ParentChildrenPage(){
       {notice&&<div className="parent-notice" role="status">{notice}</div>}
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow">STUDENT PROFILES</span><h2>Your children</h2></div><span className="count">{children.length} active</span></div>
-        {!children.length?<div className="parent-empty"><strong>No active child profiles yet</strong><p>Create your first profile below and choose the subjects that child should access.</p></div>:<div className="parent-child-list">
+        <div className="parent-manage-panel-head"><div><span className="eyebrow">STUDENT PROFILES</span><h2>Aapke bachche</h2></div><span className="count">{children.length} active</span></div>
+        {!children.length?<div className="parent-empty"><strong>Abhi koi active child profile nahi hai</strong><p>Neeche pehla profile banayein aur bachche ke liye subjects choose karein.</p></div>:<div className="parent-child-list">
           {children.map(child=><article className="parent-child-card" key={child.id}>
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
               <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · Hindi</p>
                 <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
-              <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}>Archive profile</button>
+              <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}>Profile archive karein</button>
             </div>
             <div className="parent-child-credentials">
-              <div className="parent-credentials-heading"><strong>Student login details</strong><small>Step 1: set a username and password here. Step 2: give the child their login details. On Student Login, they must use your registered mobile number plus this username and password.</small></div>
+              <div className="parent-credentials-heading"><strong>Student login details</strong><small>Step 1: yahan username aur password set karein. Step 2: yeh details bachche ke saath share karein. Student Login par aapka registered mobile number, username aur password use hoga.</small></div>
               <div className="parent-credentials-status" role="status">
-                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?'✓ Student login is set up':'Student login is not set up yet'}</strong>
-                <p>{child.login_username?'This child has parent-created login credentials and can sign in.':'This child cannot sign in yet. Create a username and password below, then select “Save login details”.'}</p>
+                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?'✓ Student login ready hai':'Student login abhi set nahi hua hai'}</strong>
+                <p>{child.login_username?'Is bachche ka login ready hai; ab sign in kar sakta hai.':'Bachcha abhi sign in nahi kar sakta. Neeche username aur password banayein, phir “Login details save karein” select karein.'}</p>
               </div>
               {child.login_username&&<p className="parent-credentials-current">Current username: <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
                 <label>Student username<input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder="e.g. aarav07" autoComplete="off" /></label>
-                <label>Set / reset password<input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder="At least 8 characters" autoComplete="new-password" /></label>
+                <label>Password set / reset karein<input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder="Kam se kam 8 characters" autoComplete="new-password" /></label>
               </div>
-              <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}>Save login details</button>
+              <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}>Login details save karein</button>
             </div>
             <div className="parent-track-editor">
               <div><strong>Learning access</strong><small>Only selected subjects appear in the student's learning area.</small></div>
@@ -187,17 +187,17 @@ export default function ParentChildrenPage(){
       </section>
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow">ADD A CHILD</span><h2>New student profile</h2><p>Create the child profile and their login together. The child can sign in only after you finish this form and create their username and password.</p></div></div>
+        <div className="parent-manage-panel-head"><div><span className="eyebrow">ADD A CHILD</span><h2>Naya student profile</h2><p>Bachche ka profile aur login ek saath banayein. Form complete karke username aur password set karne ke baad hi bachcha sign in kar paayega.</p></div></div>
         {(account?.remainingSlots??0)<=0
-          ? <div className="parent-empty"><strong>You've reached the current profile limit.</strong><p>Contact support to request a higher child-profile limit. Existing profiles and learning history remain available.</p></div>
+          ? <div className="parent-empty"><strong>Aapke account ki profile limit poori ho gayi hai.</strong><p>Profile limit badhane ke liye support se contact karein. Existing profiles aur learning history available rahengi.</p></div>
           : <div className="parent-child-form">
-            <label>Child's name<input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder="Enter the child's name" autoComplete="off"/></label>
+            <label>Bachche ka naam<input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder="Bachche ka naam daalein" autoComplete="off"/></label>
             <label>Class<select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
             <label>Student username<input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder="e.g. aarav07" autoComplete="off"/></label>
-            <label>Student password<input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder="At least 8 characters" autoComplete="new-password"/></label>
-            <fieldset className="parent-track-fieldset"><legend>Choose subject tracks</legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{option.label}</span></label>)}</fieldset>
-            <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am the child's authorised guardian and consent to creating this profile and retaining learning records.</span></label>
-            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?'Creating profile…':'Create child profile →'}</button>
+            <label>Student password<input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder="Kam se kam 8 characters" autoComplete="new-password"/></label>
+            <fieldset className="parent-track-fieldset"><legend>Subjects choose karein</legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{option.label}</span></label>)}</fieldset>
+            <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>Main bachche ka authorised guardian hoon aur profile banane aur learning records rakhne ki permission deta/deti hoon.</span></label>
+            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?'Profile ban raha hai…':'Child profile banayein →'}</button>
           </div>}
       </section>
     </section>
