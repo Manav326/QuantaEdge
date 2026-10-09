@@ -385,3 +385,28 @@
 .brand-mark{background:#fff url('/branding/quantaedge-icon.png') center/cover no-repeat!important;color:transparent!important;font-size:0!important;border:1px solid #f5e3d8;box-shadow:0 5px 14px rgba(21,32,56,.12)!important}
 .admin-loading-mark{background:#fff url('/branding/quantaedge-icon.png') center/cover no-repeat!important;color:transparent!important;font-size:0!important;border:1px solid #f5e3d8}
 .admin-brand .brand-mark{flex:0 0 auto}
+
+/* Final contrast pass: make supporting content readable without relying on colour alone. */
+.qe-content-main .qe-editor-section label,
+.qe-content-main .qe-editor-section-title p,
+.qe-content-main .qe-editor-section>div>p,
+.qe-content-main .qe-block-editor-head p,
+.qe-content-main .qe-block-catalog p,
+.qe-content-main .qe-block-list-copy small,
+.qe-content-main .qe-readiness-list small,
+.qe-content-main .qe-readiness-summary p,
+.qe-content-main .qe-editor-hint,
+.qe-content-main .qe-staff-help{color:#34445b!important}
+.qe-content-main .qe-editor-section h3,
+.qe-content-main .qe-block-editor-head h4,
+.qe-content-main .qe-readiness-list b{color:#17273d!important}
+.qe-content-main .qe-form-grid label,
+.qe-content-main .qe-form-field{font-weight:650}
+.qe-content-main input:disabled,
+.qe-content-main textarea:disabled,
+.qe-content-main select:disabled{color:#526178!important;opacity:1}
+.qe-audit-event strong{color:#18283e}
+.qe-audit-event>span{color:#29394f}
+.qe-audit-event>small{color:#3d4e65!important}
+.qe-audit-detail{display:block;color:#24364e!important;font-size:11px;line-height:1.55;margin-top:7px;white-space:normal}
+.qe-staff-help{color:#34445b}
