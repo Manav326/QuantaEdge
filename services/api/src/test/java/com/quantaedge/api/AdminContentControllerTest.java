@@ -1,7 +1,6 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -41,6 +40,6 @@ class AdminContentControllerTest {
         () -> controller.chapter(7L, "legacy-shared-token", student));
 
     verify(authorization).requireAdmin(student);
-    verify(jdbc, never()).queryForList(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.<Object[]>any());
+    verifyNoInteractions(jdbc);
   }
 }
