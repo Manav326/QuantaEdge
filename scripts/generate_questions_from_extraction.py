@@ -123,10 +123,11 @@ def finish_chunk(pieces: list[dict[str, Any]]) -> dict[str, Any]:
 def make_chunks(pages: list[dict[str, Any]], max_chars: int) -> list[dict[str, Any]]:
     """Split text without dropping characters and preserve PDF page attribution."""
     pieces = []
+    piece_chars = max(1, max_chars - 50)
     for page in pages:
         page_text = page["text"]
-        for offset in range(0, len(page_text), max_chars):
-            pieces.append({"page_number": page["page_number"], "text": page_text[offset:offset + max_chars]})
+        for offset in range(0, len(page_text), piece_chars):
+            pieces.append({"page_number": page["page_number"], "text": page_text[offset:offset + piece_chars]})
     chunks, current, size = [], [], 0
     for piece in pieces:
         piece_size = len(piece["text"]) + 24
