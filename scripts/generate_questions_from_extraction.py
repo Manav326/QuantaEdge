@@ -154,13 +154,16 @@ def allocate_questions(chunks: list[dict[str, Any]], requested: int) -> list[tup
 
 
 def make_prompt(curriculum: dict[str, Any], chapter: dict[str, Any], chunk: dict[str, Any],
-                count: int, allowed_types: list[str], language: str) -> str:
-    types = ", ".join(allowed_types)
+                expected_types: list[str], language: str) -> str:
+    count = len(expected_types)
+    types = ", ".join(sorted(set(expected_types)))
+    type_quota = ", ".join(f"{qtype}: {expected_types.count(qtype)}" for qtype in sorted(set(expected_types)))
     return f"""Create {count} original practice questions and one short teaching lesson from the source excerpt.
 Return exactly one valid JSON object without Markdown fences or any text outside the JSON.
 
 Context: Bihar Board; Class {curriculum['class_code']}; Subject {curriculum['subject_code']};
 Language code {language}; Chapter {chapter['title']}; permitted question types: {types};
+Exact type quota for this request: {type_quota}. Include these counts exactly.
 difficulty must be EASY, MEDIUM, or HARD.
 
 Output shape:
@@ -256,7 +259,7 @@ def call_model(prompt: str, api_key: str, base_url: str, model: str, timeout: in
     return result
 
 
-def validate_model_output(result: dict[str, Any], expected_count: int, allowed_types: set[str],
+def validate_model_output(result: dict[str, Any], expected_types: list[str],
                           chunk: dict[str, Any]) -> dict[str, Any]:
     if result.get("insufficient_source") is True:
         fail("Model marked source excerpt insufficient. Improve extraction/OCR or manually review the chapter.")
@@ -264,6 +267,8 @@ def validate_model_output(result: dict[str, Any], expected_count: int, allowed_t
     summary = required_text(result.get("lesson_summary"), "lesson_summary", 800)
     explanation = required_text(result.get("lesson_explanation"), "lesson_explanation", 3500)
     questions = result.get("questions")
+    expected_count = len(expected_types)
+    allowed_types = set(expected_types)
     if not isinstance(questions, list) or len(questions) != expected_count:
         count = len(questions) if isinstance(questions, list) else "invalid data"
         fail(f"Model must return exactly {expected_count} questions; received {count}.")
@@ -327,7 +332,32 @@ def validate_model_output(result: dict[str, Any], expected_count: int, allowed_t
             "subtopic": str(question.get("subtopic", "")).strip()[:200],
             "skill": str(question.get("skill", "")).strip()[:200],
         })
+    if sorted(q["question_type"] for q in checked) != sorted(expected_types):
+        fail("Model did not follow the exact requested question-type quota; no candidate bundle was saved.")
     return {"lesson_title": title, "lesson_summary": summary, "lesson_explanation": explanation, "questions": checked}
+
+
+def scheduled_question_types(total: int, allowed_types: set[str], subject_code: str) -> list[str]:
+    """Create a balanced, deterministic chapter-level mix of supported question types."""
+    defaults = ({"MCQ": 0.50, "TRUE_FALSE": 1 / 6, "INPUT": 1 / 6, "NUMERICAL": 1 / 6}
+                if subject_code == "maths"
+                else {"MCQ": 0.60, "TRUE_FALSE": 0.20, "INPUT": 0.20})
+    weights = {qtype: defaults.get(qtype, 1.0) for qtype in sorted(allowed_types)}
+    weight_sum = sum(weights.values())
+    raw = {qtype: total * weights[qtype] / weight_sum for qtype in weights}
+    targets = {qtype: math.floor(value) for qtype, value in raw.items()}
+    remaining = total - sum(targets.values())
+    for qtype in sorted(weights, key=lambda item: (-(raw[item] - targets[item]), item))[:remaining]:
+        targets[qtype] += 1
+    actual = {qtype: 0 for qtype in targets}
+    schedule = []
+    stable_order = sorted(targets)
+    for position in range(1, total + 1):
+        available = [qtype for qtype in targets if actual[qtype] < targets[qtype]]
+        chosen = max(available, key=lambda item: (targets[item] * position / total - actual[item], -stable_order.index(item)))
+        schedule.append(chosen)
+        actual[chosen] += 1
+    return schedule
 
 
 def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], chapter: dict[str, Any],
@@ -400,7 +430,7 @@ def main() -> int:
     parser.add_argument("--extraction", required=True, type=Path, help="DRAFT_EXTRACTION_ONLY JSON from scert_extract_review.py")
     parser.add_argument("--output-dir", required=True, type=Path, help="Private folder for AI_GENERATED_DRAFT JSON bundles")
     parser.add_argument("--questions-per-chapter", type=int, default=12)
-    parser.add_argument("--question-types", default="MCQ,TRUE_FALSE,INPUT,NUMERICAL")
+    parser.add_argument("--question-types", default="", help="Comma-separated supported types; default mix varies by Maths/Science")
     parser.add_argument("--max-context-chars", type=int, default=14000)
     parser.add_argument("--chapter-code", action="append", default=[], help="Chapter code filter; repeat as needed")
     parser.add_argument("--max-chapters", type=int, default=0, help="Budget/test limit; zero means all mapped chapters")
@@ -422,9 +452,14 @@ def main() -> int:
         parser.error("--max-api-calls and --timeout must be positive.")
 
     try:
-        allowed_types = {part.strip().upper() for part in args.question_types.split(",") if part.strip()}
-        if not allowed_types or not allowed_types <= SUPPORTED_TYPES:
+        requested_types = {part.strip().upper() for part in args.question_types.split(",") if part.strip()}
+        if args.question_types.strip() and (not requested_types or not requested_types <= SUPPORTED_TYPES):
             raise ValueError("Question types must be selected from MCQ,TRUE_FALSE,INPUT,NUMERICAL.")
+        if not requested_types:
+            requested_types = ({"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL"}
+                               if str(extraction.get("curriculum", {}).get("subject_code", "")) == "maths"
+                               else {"MCQ", "TRUE_FALSE", "INPUT"})
+        allowed_types = requested_types
         extraction = json.loads(args.extraction.read_text(encoding="utf-8"))
         curriculum, source, chapters = validate_extraction(extraction)
         if args.chapter_code:
@@ -475,12 +510,22 @@ def main() -> int:
         generated = []
         for chapter, allocations in plan:
             chunk_results = []
+            type_schedule = scheduled_question_types(args.questions_per_chapter, allowed_types, curriculum["subject_code"])
+            type_cursor = 0
+            seen_prompts: set[str] = set()
             for chunk, count in allocations:
+                expected_types = type_schedule[type_cursor:type_cursor + count]
+                type_cursor += count
                 model_output = call_model(
-                    make_prompt(curriculum, chapter, chunk, count, sorted(allowed_types), str(curriculum.get("language", "hi"))),
+                    make_prompt(curriculum, chapter, chunk, expected_types, str(curriculum.get("language", "hi"))),
                     api_key, args.api_base_url, args.model, args.timeout,
                 )
-                checked = validate_model_output(model_output, count, allowed_types, chunk)
+                checked = validate_model_output(model_output, expected_types, chunk)
+                for question in checked["questions"]:
+                    fingerprint = re.sub(r"\W+", "", question["prompt"].casefold())
+                    if fingerprint in seen_prompts:
+                        raise ValueError(f"Duplicate question across chapter chunks: {question['prompt'][:100]}")
+                    seen_prompts.add(fingerprint)
                 chunk_results.append((chunk, checked))
             candidate = build_candidate_bundle(curriculum, source, chapter, chunk_results, args.model)
             destination = args.output_dir / f"{chapter['code']}.ai-generated-draft.json"
