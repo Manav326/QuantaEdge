@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import AdminSidebar from '../components/AdminSidebar';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
@@ -98,10 +99,7 @@ export default function AdminParents(){
   const childCount=parents.reduce((sum,p)=>sum+Number(p.active_children||0),0);
 
   return <main className="admin-shell">
-    <aside className="admin-sidebar">
-      <Link href="/" className="admin-brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>ADMIN</small></span></Link>
-      <nav><div className="nav-label">WORKSPACE</div><Link href="/">▦ Dashboard</Link><Link href="/content">◈ Content Studio</Link><Link href="/students">◉ Students</Link><Link href="/parents" className="active">♧ Parents & families</Link><Link href="/legacy-content">Detailed authoring</Link></nav>
-    </aside>
+    <AdminSidebar active="parents" />
     <section className="admin-main admin-parents-main">
       <header className="admin-top">
         <div><span className="admin-kicker">FAMILY & ACCESS MANAGEMENT</span><h1>Parents & children</h1><p>Manage parent access, child profiles and per-child learning subscriptions.</p></div>
