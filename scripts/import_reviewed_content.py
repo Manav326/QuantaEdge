@@ -255,7 +255,7 @@ def make_request_payloads(bundle: dict[str, Any], chapter_id: int | None = None)
                         "question_type": str(question["question_type"]).upper(),
                         "prompt": question["prompt"],
                         "explanation": question.get("explanation", ""),
-                        "difficulty": str(question.get("difficulty", "MEDIUM")).upper(),
+                        "difficulty": {"EASY": "FOUNDATION", "MEDIUM": "CORE", "HARD": "CHALLENGE", "FOUNDATION": "FOUNDATION", "CORE": "CORE", "CHALLENGE": "CHALLENGE"}.get(str(question.get("difficulty", "MEDIUM")).upper(), "CORE"),
                         "sort_order": int(question.get("sort_order", qi + 1)),
                         "active": True,
                         "review_status": "DRAFT",
@@ -263,8 +263,8 @@ def make_request_payloads(bundle: dict[str, Any], chapter_id: int | None = None)
                         "marks": question.get("marks"),
                         "exam_format": question.get("exam_format"),
                         "source_kind": "AUTHOR_CREATED",
-                        "source_title": "QuantaEdge original curriculum-aligned practice",
-                        "source_ref": None,
+                        "source_title": question.get("source_title", "QuantaEdge original curriculum-aligned practice"),
+                        "source_ref": question.get("source_ref"),
                         "source_year": None,
                         "source_id": None,
                         "board": "Bihar Board",
@@ -311,7 +311,7 @@ class AdminApi:
             raise RuntimeError(f"Cannot reach QuantaEdge admin API at {url}: {exc.reason}") from exc
 
 
-def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: bool) -> dict[str, Any]:
+def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: bool, attach_existing_chapter: bool = False) -> dict[str, Any]:
     validate_bundle(bundle)
     curriculum = bundle["curriculum"]
     chapter = bundle["chapter"]
@@ -321,6 +321,7 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
             "class_code": curriculum["class_code"],
             "subject_code": curriculum["subject_code"],
             "chapter_code": chapter["code"],
+            "chapter_mode": "ATTACH_TO_EXISTING" if attach_existing_chapter else "CREATE_NEW",
             "lessons": len(bundle["lessons"]),
             "questions": sum(len(x.get("questions", [])) for x in bundle["lessons"]),
             "all_statuses": "DRAFT",
@@ -339,17 +340,29 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
         and str(row.get("class_code")) == str(curriculum["class_code"])
         and row.get("subject_code") == curriculum["subject_code"]
     ]
-    if existing:
-        raise RuntimeError("A chapter with this code already exists in this class/subject. Import does not overwrite existing content; use the admin CMS to review/update it.")
     lesson_codes = {lesson["code"] for lesson in bundle["lessons"]}
     existing_lesson_codes = {row.get("lesson_code") for row in rows if row.get("lesson_code")}
     collisions = sorted(lesson_codes & existing_lesson_codes)
     if collisions:
         raise RuntimeError("Lesson code(s) already exist in the selected track: " + ", ".join(collisions) + ". Import stopped before creating anything.")
-    created = api.request("POST", "/api/v1/admin/content/chapters", make_request_payloads(bundle)[0]["body"])
-    if not isinstance(created, dict) or not created.get("chapter_id"):
-        raise RuntimeError("Chapter creation returned no chapter_id; stop and inspect the admin CMS before retrying.")
-    chapter_id = int(created["chapter_id"])
+
+    if attach_existing_chapter:
+        if not existing:
+            raise RuntimeError("No matching existing chapter was found for this class/subject/code. Import stopped before creating anything.")
+        chapter_ids = {int(row["chapter_id"]) for row in existing if row.get("chapter_id") is not None}
+        if len(chapter_ids) != 1:
+            raise RuntimeError("Matching chapter rows did not resolve to exactly one chapter ID. Inspect the Admin Content Studio before retrying.")
+        chapter_row = existing[0]
+        if chapter_row.get("chapter_active") is False or str(chapter_row.get("chapter_status", "")).upper() == "ARCHIVED":
+            raise RuntimeError("The matching chapter is inactive/archived. Reactivate it through the CMS before importing drafts.")
+        chapter_id = chapter_ids.pop()
+    else:
+        if existing:
+            raise RuntimeError("A chapter with this code already exists in this class/subject. Use --attach-to-existing-chapter to add new draft lessons under the existing chapter; existing content is never overwritten.")
+        created = api.request("POST", "/api/v1/admin/content/chapters", make_request_payloads(bundle)[0]["body"])
+        if not isinstance(created, dict) or not created.get("chapter_id"):
+            raise RuntimeError("Chapter creation returned no chapter_id; stop and inspect the admin CMS before retrying.")
+        chapter_id = int(created["chapter_id"])
     lesson_ids: list[int] = []
     for index, lesson in enumerate(bundle["lessons"], 1):
         lesson_body = {
@@ -391,6 +404,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", required=True, type=Path, help="Editor-reviewed authoring JSON; not the raw SCERT extraction JSON")
     parser.add_argument("--api-base-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
+    parser.add_argument("--attach-to-existing-chapter", action="store_true", help="Add new draft lessons beneath the matching existing chapter code instead of creating a duplicate chapter.")
     parser.add_argument("--apply", action="store_true", help="Write draft content to the admin API; without this flag the command only validates.")
     args = parser.parse_args()
     if not args.bundle.is_file():
@@ -400,7 +414,7 @@ def main() -> int:
         parser.error("Use HTTPS for non-local admin API URLs.")
     try:
         bundle = json.loads(args.bundle.read_text(encoding="utf-8"))
-        result = run_import(bundle, base, os.environ.get("QUANTAEDGE_ADMIN_SESSION", ""), dry_run=not args.apply)
+        result = run_import(bundle, base, os.environ.get("QUANTAEDGE_ADMIN_SESSION", ""), dry_run=not args.apply, attach_existing_chapter=args.attach_to_existing_chapter)
     except (ValueError, json.JSONDecodeError, RuntimeError) as exc:
         print(f"Import stopped safely: {exc}", file=sys.stderr)
         return 2
