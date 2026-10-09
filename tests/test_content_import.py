@@ -107,6 +107,16 @@ class ReviewedContentImportTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "do not use a placeholder"):
             MODULE.validate_bundle(bundle)
 
+    def test_page_ranges_must_be_explicit_and_inside_the_chapter(self):
+        bundle = valid_bundle()
+        bundle["lessons"][0]["source_pages"] = "PDF pages 19-23"
+        with self.assertRaisesRegex(ValueError, "inside the reviewed chapter page range"):
+            MODULE.validate_bundle(bundle)
+        bundle = valid_bundle()
+        bundle["chapter"]["source_pages"] = "PDF pages 95-105"
+        with self.assertRaisesRegex(ValueError, "within PDF pages"):
+            MODULE.validate_bundle(bundle)
+
     def test_payloads_force_draft_and_never_publish(self):
         bundle = valid_bundle()
         operations = MODULE.make_request_payloads(bundle)
