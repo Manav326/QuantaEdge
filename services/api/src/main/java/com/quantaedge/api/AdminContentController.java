@@ -445,6 +445,10 @@ public class AdminContentController {
 
       if (create) {
         questionContentChanged = true;
+        if ("APPROVED".equals(reviewStatus)) {
+          reviewStatus = "DRAFT";
+          reviewNotes = "New question requires review before approval.";
+        }
         Long createdId = jdbc.queryForObject("""
           insert into question(lesson_id,question_type,prompt,explanation,difficulty,sort_order,active,review_status,review_notes,reviewed_at)
           values(?,?,?,?,?,?,?,?,?,case when ?='APPROVED' then now() else null end)
