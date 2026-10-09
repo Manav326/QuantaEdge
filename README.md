@@ -6,7 +6,7 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 
 - Web landing: http://localhost:3000
 - Student home: http://localhost:3000/student
-- Student lesson: http://localhost:3000/student/learn
+- Student learning tracks: http://localhost:3000/student/learn
 - Interactive practice: http://localhost:3000/student/practice
 - Student progress: http://localhost:3000/student/progress
 - Parent view: http://localhost:3000/parent
@@ -15,23 +15,23 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 - Curriculum API: http://localhost:8080/api/v1/curriculum
 - API health: http://localhost:8080/actuator/health
 
-## Curriculum/content
+## Curriculum and content status
 
-The MVP curriculum foundation covers **Bihar Board / SCERT Class 6, 7 and 8 Maths + Science** in the canonical textbook order. The audited path contains **104 published curriculum sections**: Class 6 Maths 15 + Science 18; Class 7 Maths 16 + Science 20 (including the book's appendix/internal-organs reference sections); Class 8 Maths 16 + Science 19.
+The canonical curriculum outline contains 102 chapter rows across the six Class 6–8 Mathematics and Science tracks. Student pages and API requests are scoped to the authenticated student's class and the selected subject. The admin Content Studio lists chapters and lessons by class, subject, status and search; content can be created as draft, edited, reviewed and published/unpublished through authenticated admin access.
 
-Every canonical chapter follows the same teacher-shaped learning arc rather than a disconnected screen sequence:
+**Important:** chapter rows and lesson shells are not the same as completed teaching content. Generic generated lesson shells are kept unpublished until they contain original, reviewed teaching blocks and valid questions. In the clean-migration baseline, four active approved original questions exist (three MCQs and one True/False), all in Class 7 Mathematics. All six official textbook editions and chapter/page mappings still require editorial verification.
 
-1. पहले समझें — activate prior knowledge and build the core idea
-2. उदाहरण के साथ करें — teacher-modeled worked example and guided practice
-3. खुद करके पक्का करें — independent application and reasoning
+SCERT Bihar is the curriculum source of truth. The extraction workflow creates a page-addressable review bundle; a separate editor-reviewed authoring bundle is required for draft-only import. Extracted textbook text is never automatically published to students. See:
 
-The system generates a consistent lesson shell for every canonical chapter, while keeping curriculum order and chapter metadata in the database. QuantaEdge-authored content is not a copy of SCERT textbook text. The `/api/v1/curriculum/audit` endpoint exposes the expected chapter counts and actual teaching order for QA.
+- Content sourcing, extraction and draft-only import: docs/product/curriculum-content-pipeline.md
+- Actual question inventory vs planned targets: docs/product/curriculum-question-inventory.md
+- Complete chapter × question-type dataset: docs/product/curriculum-question-targets.csv
 
-SCERT Bihar officially publishes the Class 6–8 textbooks and teacher handbooks used as the curriculum reference for this mapping. The repository keeps the curriculum reference separate from QuantaEdge-authored lesson content.
+The current minimum question-bank plan is 2,166 original questions across 100? no, across the canonical 102 chapter rows. This is a planning target, not content already prepared or published. No question rows are generated to make the numbers look complete.
 
 ## Local preview student
 
-Local Docker development seeds **exactly one** student when `APP_DEMO_SEED=true`:
+Local Docker development seeds exactly one student when APP_DEMO_SEED=true:
 
 - Name: आर्यन
 - Class: 7
@@ -40,7 +40,7 @@ Local Docker development seeds **exactly one** student when `APP_DEMO_SEED=true`
 - Progress: every published lesson completed
 - Practice: every published question has a correct preview attempt
 
-This is a controlled QA fixture, not production customer data. The production compose file explicitly sets `APP_DEMO_SEED=false`.
+This is a controlled QA fixture, not production customer data. The production compose file explicitly sets APP_DEMO_SEED=false.
 
 ## One-command local run
 
@@ -65,7 +65,7 @@ bash scripts/quantaedge-local.sh reset
 bash scripts/quantaedge-local.sh logs
 ```
 
-Use `reset` only when you intentionally want to remove the local PostgreSQL/Redis volumes and rebuild the preview database from migrations.
+Use reset only when you intentionally want to remove the local PostgreSQL/Redis volumes and rebuild the preview database from migrations.
 
 ## Local runtime architecture
 
@@ -79,27 +79,25 @@ Spring Boot API
 PostgreSQL + Redis
 ```
 
-The browser does not need a hard-coded API host. Next.js proxies `/api/*` to the internal API service, which keeps local Docker and future production domains aligned.
+The browser does not need a hard-coded API host. Next.js proxies /api/* to the internal API service, which keeps local Docker and future production domains aligned.
 
 ## Production deployment shape
 
-GitHub Actions builds immutable SHA-tagged images and publishes them to GHCR on `main`. The production compose file consumes those images.
+GitHub Actions validates the API, runs content-import safeguards, and builds/publishes immutable SHA-tagged images to GHCR on main. A separate workflow is manual-dispatch only; no deployment was performed as part of the current content audit.
 
-The production compose configuration disables the local preview seed. No synthetic student is created there.
+The production compose configuration disables the local preview seed. The AI tutor is disabled until it is intentionally configured with real credentials.
 
-## Important market-readiness boundary
+## Market-readiness boundary
 
-The current branch is a production-shaped MVP, but external launch dependencies still need real credentials/configuration before accepting customers: real parent/guardian verification, SMS/OTP delivery, legal/privacy contact configuration, AI provider credentials and operational monitoring. These must not be replaced with fake/demo values.
+The app is not yet launch-ready. Remaining blockers include verified source/page mappings for all chapters, authoring and editorial review of the planned question bank, broader content coverage, production OTP/SMS and guardian verification, legal/privacy contact configuration, operational monitoring, version history and a dedicated structured block/question editor. Do not replace these with fake/demo values.
 
-## Reference sources
+## Official reference sources
 
 - SCERT Bihar textbook catalogue: https://scert.bihar.gov.in/textbooks
 - SCERT Bihar e-resources: https://scert.bihar.gov.in/eresources
-- SCERT Bihar Class 6 Maths: https://scert.bihar.gov.in/eresources/गणित-भाग-6-1707973215
-- SCERT Bihar Class 7 Maths: https://scert.bihar.gov.in/eresources/गणित-भाग-7-1708060463
-- SCERT Bihar Class 8 Maths: https://scert.bihar.gov.in/eresources/गणित-भाग-8-1708403831
-- SCERT Bihar Class 6 Science: https://scert.bihar.gov.in/eresources/विज्ञान-भाग-1-1707973674
+- Mathematics teacher handbook, Classes 6–8: https://scert.bihar.gov.in/eresources/mathematics-handbook-for-teachers-1753723347
+- Science teacher handbook, Classes 6–8: https://scert.bihar.gov.in/eresources/science-handbook-for-teachers-class-6-8-1753723306
 
 ## CI
 
-GitHub Actions validates the Spring Boot API and both Next.js applications, then builds Docker images. Main publishes the immutable SHA-tagged images to GHCR.
+GitHub Actions runs Spring Boot API verification and the reviewed-content import safety tests when relevant paths change. It builds the affected Next.js and API images. Main publishes immutable SHA-tagged images to GHCR; the deploy workflow is separate and manual.

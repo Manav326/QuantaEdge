@@ -1,6 +1,6 @@
--- V22: remove obsolete generic teaching-path questions created by the early V8 shell.
--- V11 provides the canonical assessment spine. These V8 records were only QA scaffolding
--- and must never remain in the learner-facing question set.
+-- V22: remove obsolete generic QA questions from the early V8 teaching-path seed.
+-- Canonical chapter/lesson shells are not completed teaching content. This migration
+-- does not synthesize assessment content; only reviewed, original questions should be active.
 update question
 set active=false,
     review_status='REJECTED'
