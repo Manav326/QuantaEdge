@@ -1,5 +1,13 @@
 # QuantaEdge
 
+> **Smarter Decisions. Greater Growth.**
+
+AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8.
+
+## Brand system
+
+The visual identity, approved tagline, palette, logo assets and placement map are documented in [docs/branding.md](docs/branding.md).
+
 AI-powered learning platform for Hindi-medium students, starting with Bihar Board Classes 6–8.
 
 ## Product surfaces

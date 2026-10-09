@@ -15,10 +15,7 @@ export default function Home() {
   return (
     <main className="site">
       <header className="topbar">
-        <Link href="/" className="brand" aria-label="QuantaEdge home">
-          <span className="brand-mark">Q</span>
-          <span><strong>Quanta</strong>Edge<small>LEARNING</small></span>
-        </Link>
+        <Link href="/" className="brand brand-lockup-wrap" aria-label="QuantaEdge home"><img className="brand-lockup" src="/branding/quantaedge-logo.png" alt="QuantaEdge — Smarter Decisions. Greater Growth." /></Link>
 
         <nav className="topnav" aria-label="मुख्य navigation">
           <a href="#how-it-works">कैसे काम करता है</a>
@@ -162,7 +159,7 @@ export default function Home() {
       </section>
 
       <footer className="footer">
-        <div className="brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></div>
+        <div className="brand brand-lockup-wrap"><img className="brand-lockup" src="/branding/quantaedge-logo.png" alt="QuantaEdge — Smarter Decisions. Greater Growth." /></div>
         <p>पढ़ाई, अब आपके बच्चे के हिसाब से।</p>
         <div className="footer-links"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></div>
         <span>© 2026 QuantaEdge Learning</span>
