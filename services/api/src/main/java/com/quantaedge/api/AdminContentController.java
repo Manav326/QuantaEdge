@@ -320,6 +320,44 @@ public class AdminContentController {
     return updateChapter(chapterId,body,null,context);
   }
 
+  @PostMapping("/chapters/{chapterId}/verify-source")
+  @Transactional
+  public Map<String,Object> verifyChapterSource(
+      @PathVariable long chapterId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_REVIEW");
+    Map<String,Object> current=chapterById(chapterId);
+    requireCompleteSourceReference(
+        current.get("curriculum_source")==null?null:String.valueOf(current.get("curriculum_source")),
+        current.get("curriculum_source_url")==null?null:String.valueOf(current.get("curriculum_source_url")),
+        current.get("curriculum_source_edition")==null?null:String.valueOf(current.get("curriculum_source_edition")),
+        current.get("curriculum_source_pages")==null?null:String.valueOf(current.get("curriculum_source_pages")),
+        "chapter");
+    jdbc.update("update curriculum_chapter set curriculum_source_verified=true where id=?",chapterId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/verify-source",
+        "Verified official curriculum source for chapter '"+current.get("chapter_name")+"'.");
+    return chapterById(chapterId);
+  }
+
+  @PostMapping("/lessons/{lessonId}/verify-source")
+  @Transactional
+  public Map<String,Object> verifyLessonSource(
+      @PathVariable long lessonId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requirePermission(context,"CONTENT_REVIEW");
+    Map<String,Object> current=lessonById(lessonId);
+    requireCompleteSourceReference(
+        current.get("alignment_source_title")==null?null:String.valueOf(current.get("alignment_source_title")),
+        current.get("alignment_source_url")==null?null:String.valueOf(current.get("alignment_source_url")),
+        current.get("alignment_source_edition")==null?null:String.valueOf(current.get("alignment_source_edition")),
+        current.get("alignment_page_range")==null?null:String.valueOf(current.get("alignment_page_range")),
+        "micro-topic");
+    jdbc.update("update lesson set alignment_source_verified=true,updated_at=now() where id=?",lessonId);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/verify-source",
+        "Verified official textbook mapping for micro-topic '"+current.get("lesson_title")+"'.");
+    return lessonById(lessonId);
+  }
+
   @PostMapping("/lessons/{lessonId}/submit")
   @Transactional
   public Map<String,Object> submitLessonForReview(
