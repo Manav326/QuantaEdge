@@ -379,7 +379,7 @@ public class AdminContentController {
     int updated=jdbc.update("""
         update lesson
         set preview_checked_revision=content_revision,preview_checked_at=now(),
-            preview_checked_by_staff_id=?,updated_at=now()
+            preview_checked_by_staff_id=?
         where id=? and content_revision=?
         """,context.staffId(),lessonId,expectedRevision);
     if(updated!=1) {
