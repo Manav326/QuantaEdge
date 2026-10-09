@@ -28,6 +28,7 @@ public class AuthController {
     var result=new LinkedHashMap<String,Object>();
     result.put("accepted",true); result.put("expiresInSeconds",300);
     if(devCode!=null) result.put("devCode",devCode);
+    if ("STAFF_LOGIN".equals(purpose)) result.put("firstAccess",auth.isStaffFirstAccess(mobile));
     return result;
   }
 
@@ -36,7 +37,8 @@ public class AuthController {
     AuthContext context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("otp","")),
         String.valueOf(body.getOrDefault("purpose","LOGIN")),
-        body.get("displayName")==null?null:String.valueOf(body.get("displayName")));
+        body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
+        Boolean.TRUE.equals(body.get("firstAccess")));
     String token=auth.issueToken(context);
     if(context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Staff sign-in succeeded.");
     return withCookie(token,context);
