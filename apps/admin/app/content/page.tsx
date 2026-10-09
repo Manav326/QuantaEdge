@@ -200,7 +200,6 @@ export default function ContentStudio(){
  const [rows,setRows]=useState<Row[]>([]);
  const [identity,setIdentity]=useState<any>(null);
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
- const [previewFingerprint,setPreviewFingerprint]=useState('');
  const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[statusFilter,setStatusFilter]=useState('ALL'),[search,setSearch]=useState('');
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
  const [blocks,setBlocks]=useState<ContentBlock[]>([]),[questions,setQuestions]=useState<any[]>([]);
@@ -254,14 +253,27 @@ export default function ContentStudio(){
   return '';
  },[selected,createType,createForm,form,blocks,questions,showAdvancedQuestions,questionJson]);
  const hasUnsavedChanges=createType?createHasInput:Boolean(baselineSnapshot&&baselineSnapshot!==draftSnapshot);
- const previewReviewed=Boolean((previewFingerprint&&previewFingerprint===draftSnapshot)||(!hasUnsavedChanges&&String(form.lessonStatus).toUpperCase()==='PUBLISHED'));
+ const previewReviewed=Boolean(!hasUnsavedChanges&&Number(detail?.content_revision)>0&&Number(detail?.preview_checked_revision)===Number(detail?.content_revision));
  const backToLibrary=()=>{
   if(hasUnsavedChanges&&!window.confirm('You have unsaved changes. Leave this editor and discard them?'))return;
-  setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setPreviewFingerprint('');setError('');setNotice('');
+  setSelected(null);setDetail(null);setCreateType(null);setBaselineSnapshot('');setError('');setNotice('');
  };
- const markPreviewReviewed=()=>{
-  setPreviewFingerprint(draftSnapshot);
-  setNotice('Learner preview checked. Any future change will require a new preview check.');
+ const markPreviewReviewed=async()=>{
+  if(!selected||selected.type!=='lesson'||!detail||saving||hasUnsavedChanges||!canSubmit)return;
+  const revision=Number(detail.content_revision);
+  if(!Number.isInteger(revision)||revision<1){
+   setError('The saved content version could not be identified. Refresh the topic and try again.');
+   return;
+  }
+  setSaving(true);setError('');setNotice('');
+  try{
+   await api('/api/v1/admin/content/lessons/'+selected.id+'/preview-check',{
+    method:'POST',body:JSON.stringify({contentRevision:revision})
+   });
+   await load();await open(selected);
+   setNotice('Preview confirmation saved for content version '+revision+'. Any future content edit will require another preview check.');
+  }catch(e){setError(e instanceof Error?e.message:'The learner preview confirmation could not be saved.')}
+  finally{setSaving(false)}
  };
  function updateContent(index:number,patch:Record<string,any>){setBlocks(old=>old.map((b,i)=>i===index?{...b,content:{...b.content,...patch}}:b))}
  async function open(item:Selection){
@@ -275,12 +287,12 @@ export default function ContentStudio(){
    const qs=(data.questions||[]).map((q:any)=>({...q,options:parsed(q.options,[]),tags:parsed(q.tags,[]),answer_payload:parsed(q.answer_payload,{})}));
    setBlocks(nextBlocks);setQuestions(qs);setQuestionJson(JSON.stringify(qs,null,2));
    setBaselineSnapshot(item.type==='chapter'?JSON.stringify({form:nextForm}):JSON.stringify({form:nextForm,blocks:nextBlocks,questions:qs}));
-   setPreviewFingerprint('');
+   
   }catch(e){setError(e instanceof Error?e.message:'Could not open this content.')}
  }
  function beginCreate(type:'chapter'|'lesson'){
   const chapter=rows.find(r=>r.chapter_id!==null&&(classFilter==='ALL'||r.class_code===classFilter)&&(subjectFilter==='ALL'||r.subject_code===subjectFilter));
-  setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');setPreviewFingerprint('');
+  setSelected(null);setDetail(null);setError('');setNotice('');setCreateType(type);setBaselineSnapshot('');
   setCreateForm({classCode:classFilter!=='ALL'?classFilter:chapter?.class_code||classOptions[0]?.[0]||'6',subjectCode:subjectFilter!=='ALL'?subjectFilter:chapter?.subject_code||'maths',chapterId:selected?.type==='chapter'?selected.id:Number(chapter?.chapter_id||0),code:'',displayName:'',description:'',curriculumSource:'',curriculumSourceUrl:'',curriculumSourceEdition:'',curriculumSourcePages:'',alignmentSourceTitle:'',alignmentSourceUrl:'',alignmentSourceEdition:'',alignmentPageRange:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
  }
  async function create(){
@@ -394,10 +406,12 @@ export default function ContentStudio(){
  }
  const basicsReady=Boolean(String(form.title||'').trim()&&String(form.summary||'').trim()&&Number(form.estimatedMinutes)>=1&&Number(form.estimatedMinutes)<=120);
   const activeBlocks=blocks.filter(block=>block.active!==false);
-  const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&activeBlocks.every(blockHasPublishableContent);
+  const blocksCompleteCount=activeBlocks.filter(blockHasPublishableContent).length;
+  const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&blocksCompleteCount===activeBlocks.length;
   const activeQuestions=questions.filter(question=>question.active!==false);
   const validActiveQuestionCount=activeQuestions.filter(questionHasValidAnswer).length;
   const invalidActiveQuestionDetails=activeQuestions.map((question:any,index:number)=>({number:index+1,issues:questionReadinessIssues(question)})).filter((item:any)=>item.issues.length>0);
+  const pendingQuestionReviewCount=activeQuestions.filter((question:any)=>!['APPROVED','PUBLISHED'].includes(String(question.review_status||'DRAFT').toUpperCase())).length;
   const questionsReady=activeQuestions.length>0&&validActiveQuestionCount===activeQuestions.length;
   const lessonSourceDetailsComplete=Boolean(String(form.alignmentSourceTitle||'').trim()&&/^https:\/\//i.test(String(form.alignmentSourceUrl||''))&&String(form.alignmentSourceEdition||'').trim()&&String(form.alignmentPageRange||'').trim());
   const chapterSourceDetailsComplete=Boolean(String(form.curriculumSource||'').trim()&&/^https:\/\//i.test(String(form.curriculumSourceUrl||''))&&String(form.curriculumSourceEdition||'').trim()&&String(form.curriculumSourcePages||'').trim());
@@ -419,30 +433,61 @@ export default function ContentStudio(){
   const parentChapterAvailable=Boolean(detail?.chapter_id)&&detail?.chapter_active!==false;
   const publishReadyLessonCount=Number(detail?.publish_ready_lesson_count||0);
   const chapterReadyToPublish=publishReadyLessonCount>0;
-  const submittedForReview=['REVIEW','PUBLISHED','ARCHIVED'].includes(String(form.lessonStatus));
+  const lessonStatus=String(form.lessonStatus||'DRAFT').toUpperCase();
+  const submittedForReview=['REVIEW','PUBLISHED'].includes(lessonStatus);
+  const savedContentRevision=Number(detail?.content_revision);
+  const checkedContentRevision=Number(detail?.preview_checked_revision);
+  const sourceReadinessDetail=sourceReady
+    ? 'Official source title, URL, edition and page range have been verified.'
+    : lessonSourceDetailsChanged
+      ? 'Source details have changed. Save them, then have a reviewer verify the mapping again.'
+      : !lessonSourceDetailsComplete
+        ? 'Enter the official source title, HTTPS URL, edition and exact page range.'
+        : canReview
+          ? 'Verify the completed source mapping against the official source.'
+          : 'A content reviewer must verify the completed source mapping before submission.';
+  const questionApprovalDetail=activeQuestions.length===0
+    ? 'Add and activate at least one practice question first.'
+    : lessonStatus==='DRAFT'
+      ? activeQuestions.length+' active question(s) included. Submit the topic first; then every active question must be reviewed and approved.'
+      : questionsReady
+        ? 'All '+activeQuestions.length+' active questions are approved and valid.'
+        : validActiveQuestionCount+' of '+activeQuestions.length+' active questions are approved and valid; '+pendingQuestionReviewCount+' still need review or correction.'+(invalidActiveQuestionDetails.length?' '+invalidActiveQuestionDetails.slice(0,2).map((item:any)=>'Q'+item.number+': '+item.issues[0]).join(' · ')+(invalidActiveQuestionDetails.length>2?' · and '+(invalidActiveQuestionDetails.length-2)+' more':''):'');
+  const chapterReadinessDetail=chapterReady
+    ? 'The parent chapter is published and active.'
+    : !parentChapterAvailable
+      ? 'The parent chapter is missing or inactive. Restore it before submitting this topic.'
+      : !submittedForReview
+        ? 'The chapter may remain a draft during review. Publish it after the questions are approved.'
+        : !questionsReady
+          ? 'Finish reviewing all active questions first. Then publish the parent chapter before this topic.'
+          : 'All question reviews are complete. Publish the parent chapter before publishing this micro-topic.';
   const canSubmitLessonForReview=basicsReady&&blocksReady&&previewReviewed&&activeQuestions.length>0&&sourceReady&&parentChapterAvailable;
   const readiness=[
-   {ok:basicsReady,label:'Topic title and learner goal are complete',detail:basicsReady?'Title, learner goal and learning time are present':'Add a clear topic title, learner goal and valid time'},
-   {ok:blocksReady,label:'Teaching blocks contain real content',detail:activeBlocks.length?String(activeBlocks.filter(blockHasPublishableContent).length)+' of '+activeBlocks.length+' active blocks complete':'Add at least one active teaching block'},
-   {ok:previewReviewed,label:'Current learner preview has been checked',detail:previewReviewed?'Preview checked against the current version':'Open the learner preview and mark it checked'},
-   {ok:activeQuestions.length>0,label:'At least one practice question is included',detail:activeQuestions.length?String(activeQuestions.length)+' active question(s) included':questions.length?String(questions.length)+' question(s) are listed, but none are active. Activate at least one to include it in publishing.':'Add at least one active practice question'},
-   {ok:submittedForReview,label:'Micro-topic submitted for review',detail:form.lessonStatus==='REVIEW'?'A reviewer can now approve or return the questions':form.lessonStatus==='PUBLISHED'?'Previously reviewed content is published':form.lessonStatus==='ARCHIVED'?'Archived content can be restored only after the remaining checks pass':'Save your changes, then select Submit for review'},
-   {ok:questionsReady,label:'Practice questions are approved and valid',detail:activeQuestions.length?String(validActiveQuestionCount)+' of '+activeQuestions.length+' active questions approved and complete'+(invalidActiveQuestionDetails.length?'; '+invalidActiveQuestionDetails.slice(0,2).map((item:any)=>'Q'+item.number+': '+item.issues[0]).join(' · ')+(invalidActiveQuestionDetails.length>2?' · and '+(invalidActiveQuestionDetails.length-2)+' more':''):'') : questions.length?String(questions.length)+' question(s) exist, but none are active. Activate a question and save.':'Add an active question, submit the micro-topic for review, then have a reviewer approve each question.'},
-   {ok:sourceReady,label:'Official textbook mapping is complete',detail:sourceReady?'Source, HTTPS URL, edition and pages verified':canReview?'Add the official source title, HTTPS URL, edition and page range, then verify it against the source':'Complete the source title, HTTPS URL, edition and page range; a reviewer must verify it'},
-   {ok:chapterReady,label:'Parent chapter is published',detail:chapterReady?'Parent chapter is published and active':parentChapterAvailable?'The active parent chapter can remain a draft during review, but must be published before this topic goes live.':'Restore or activate the parent chapter before submitting this topic'}
+   {ok:basicsReady,label:'1. Topic details are complete',detail:basicsReady?'Title, learner goal and a valid learning time are saved.':'Add a clear topic title, learner goal and learning time between 1 and 120 minutes.'},
+   {ok:blocksReady,label:'2. Teaching content is complete',detail:activeBlocks.length?blocksCompleteCount+' of '+activeBlocks.length+' active teaching blocks are complete'+(blocksReady?'':'. Complete or deactivate every unfinished block.'):'Add at least one active teaching block with real content.'},
+   {ok:sourceReady,label:'3. Official textbook mapping is verified',detail:sourceReadinessDetail},
+   {ok:activeQuestions.length>0,label:'4. Practice questions are included',detail:activeQuestions.length?activeQuestions.length+' active practice question(s) included. All active questions must be approved in step 7.':'Add at least one active practice question. Inactive questions do not count.'},
+   {ok:previewReviewed,label:'5. Current saved learner preview is checked',detail:hasUnsavedChanges?'Save your changes first. The preview confirmation must refer to the current saved version.':previewReviewed?'Saved content version '+savedContentRevision+' has been checked.':'Open the learner preview, inspect the current saved version and confirm it there.'},
+   {ok:submittedForReview,label:lessonStatus==='PUBLISHED'?'6. Review is complete':'6. Micro-topic is submitted for review',detail:lessonStatus==='REVIEW'?'Submitted. The topic is waiting for review and question decisions.':lessonStatus==='PUBLISHED'?'The review workflow is complete and the micro-topic is published.':lessonStatus==='ARCHIVED'?'This topic is archived. Restore it to draft before submitting it again.':'After checks 1–5 pass, save the topic and select “Submit for review”.'},
+   {ok:questionsReady,label:'7. Every active question is approved and valid',detail:questionApprovalDetail},
+   {ok:chapterReady,label:'8. Parent chapter is published',detail:chapterReadinessDetail}
   ];
+  const preparationReady=basicsReady&&blocksReady&&sourceReady&&activeQuestions.length>0;
+  const reviewStageReady=submittedForReview&&questionsReady;
+  const publishedStageReady=lessonStatus==='PUBLISHED'&&chapterReady;
   const workflowSteps=[
-   {label:'Basics',ok:basicsReady},
-   {label:'Teaching blocks',ok:blocksReady},
+   {label:'Prepare',ok:preparationReady},
    {label:'Preview',ok:previewReviewed},
-   {label:'Publish',ok:String(form.lessonStatus).toUpperCase()==='PUBLISHED'}
+   {label:'Review',ok:reviewStageReady},
+   {label:'Published',ok:publishedStageReady}
   ];
   const currentWorkflowStep=workflowSteps.findIndex(step=>!step.ok);
   const canPublishLessonReady=basicsReady&&blocksReady&&previewReviewed&&submittedForReview&&questionsReady&&sourceReady&&chapterReady;
   const canPublishThisContent=selected?.type==='chapter'?chapterSourceReady:canPublishLessonReady;
   const firstMissingRequirement=selected?.type==='chapter'
-    ? (chapterSourceReady?'All visible chapter checks are complete. The server will also validate its lessons.':(canReview?'Complete and verify the official curriculum source before publishing.':'Complete the official curriculum source details; a reviewer must verify them before publishing.'))
-    : (readiness.find(item=>!item.ok)?.detail||'All publish checks are complete.');
+    ? (chapterSourceReady?'The chapter meets its visible checks. The server will also validate the child micro-topics.':(canReview?'Complete and verify the official curriculum source before publishing.':'Complete the official curriculum source details; a reviewer must verify them before publication.'))
+    : (readiness.find(item=>!item.ok)?.detail||'All eight publishing checks are complete.');
  return <main className="admin-shell qe-content-shell">
   <AdminSidebar active="content" variant="content" />
   <section className="admin-main qe-content-main" id="top">
@@ -502,11 +547,11 @@ export default function ContentStudio(){
        <button type="button" className="qe-advanced-toggle" disabled={!canEdit||saving} onClick={()=>{setQuestionJson(JSON.stringify(questions,null,2));setShowAdvancedQuestions(v=>!v)}}>{showAdvancedQuestions?'Hide advanced question data':'Open advanced assessment editor (all question types)'} <span>{showAdvancedQuestions?'−':'＋'}</span></button>
        {showAdvancedQuestions&&<div className="qe-advanced-question"><p>Specialist question formats retain their full record. The API validates all saved fields.</p><textarea spellCheck={false} rows={14} value={questionJson} onChange={e=>setQuestionJson(e.target.value)}/><button type="button" className="qe-secondary-button" disabled={!canEdit||saving} onClick={applyQuestionJson}>Apply advanced data</button></div>}
       </div>
-      <div className="qe-editor-section"><div><h3>Source and publishing</h3><p>Record the exact source edition and page range before publishing academic content.</p></div><label className="qe-form-field">Official source title<input value={form.alignmentSourceTitle} onChange={e=>setForm({...form,alignmentSourceTitle:e.target.value})}/></label><label className="qe-form-field">Official HTTPS URL<input type="url" value={form.alignmentSourceUrl} onChange={e=>setForm({...form,alignmentSourceUrl:e.target.value})}/></label><div className="qe-form-grid"><label>Edition / session<input value={form.alignmentSourceEdition} onChange={e=>setForm({...form,alignmentSourceEdition:e.target.value})}/></label><label>Official page range<input value={form.alignmentPageRange} onChange={e=>setForm({...form,alignmentPageRange:e.target.value})}/></label><div className="qe-source-verification-panel"><span>Verification</span><b>{lessonSourceDetailsChanged?'Needs re-verification':form.alignmentSourceVerified?'Verified against source':'Not verified'}</b>{!form.alignmentSourceVerified&&canReview?<button type="button" disabled={saving||hasUnsavedChanges||!lessonSourceDetailsComplete} onClick={()=>void verifyLessonSource()}>Verify source</button>:null}{!canReview&&(!form.alignmentSourceVerified||lessonSourceDetailsChanged)?<small>A content reviewer must verify this source before publication.</small>:null}</div></div><div className="qe-readiness-summary"><div><strong>{canPublishLessonReady?'All publication checks complete':(readiness.filter(item=>item.ok).length)+' of '+readiness.length+' publishing checks complete'}</strong><p>{hasUnsavedChanges?'Save the pending changes before submitting or publishing.':firstMissingRequirement}</p></div><span className={'qe-status-pill '+(canPublishLessonReady?'published':'draft')}>{canPublishLessonReady?'Ready':'In progress'}</span></div><div className="qe-readiness-list">{readiness.map(item=><div key={item.label} className={item.ok?'ready':'todo'}><span>{item.ok?'✓':'○'}</span><div><b>{item.label}</b><small>{item.detail}</small></div></div>)}</div></div>
+      <div className="qe-editor-section"><div><h3>Source and publishing</h3><p>Record the exact source edition and page range before publishing academic content.</p></div><label className="qe-form-field">Official source title<input value={form.alignmentSourceTitle} onChange={e=>setForm({...form,alignmentSourceTitle:e.target.value})}/></label><label className="qe-form-field">Official HTTPS URL<input type="url" value={form.alignmentSourceUrl} onChange={e=>setForm({...form,alignmentSourceUrl:e.target.value})}/></label><div className="qe-form-grid"><label>Edition / session<input value={form.alignmentSourceEdition} onChange={e=>setForm({...form,alignmentSourceEdition:e.target.value})}/></label><label>Official page range<input value={form.alignmentPageRange} onChange={e=>setForm({...form,alignmentPageRange:e.target.value})}/></label><div className="qe-source-verification-panel"><span>Verification</span><b>{lessonSourceDetailsChanged?'Needs re-verification':form.alignmentSourceVerified?'Verified against source':'Not verified'}</b>{!form.alignmentSourceVerified&&canReview?<button type="button" disabled={saving||hasUnsavedChanges||!lessonSourceDetailsComplete} onClick={()=>void verifyLessonSource()}>Verify source</button>:null}{!canReview&&(!form.alignmentSourceVerified||lessonSourceDetailsChanged)?<small>A content reviewer must verify this source before publication.</small>:null}</div></div><div className="qe-readiness-summary"><div><strong>{lessonStatus==='PUBLISHED'?'Micro-topic is published':canPublishLessonReady?'Ready to publish':(readiness.filter(item=>item.ok).length)+' of '+readiness.length+' checks complete'}</strong><p>{hasUnsavedChanges?'Save changes first. Editing a submitted or published topic returns it to draft and resets its preview confirmation.':lessonStatus==='PUBLISHED'?'This topic is live. Any future content edit must be saved, previewed and reviewed again.':'Next action: '+firstMissingRequirement}</p></div><span className={'qe-status-pill '+(canPublishLessonReady?'published':'draft')}>{lessonStatus==='PUBLISHED'?'Published':canPublishLessonReady?'Ready':'In progress'}</span></div><div className="qe-readiness-list">{readiness.map(item=><div key={item.label} className={item.ok?'ready':'todo'}><span>{item.ok?'✓':'○'}</span><div><b>{item.label}</b><small>{item.detail}</small></div></div>)}</div></div>
       <div className="qe-editor-actions qe-sticky-actions"><button type="button" className="qe-primary-button" disabled={saving||!canEdit||!hasUnsavedChanges||(['PUBLISHED','ARCHIVED'].includes(String(form.lessonStatus))&&!canPublishPermission)} onClick={()=>void saveLesson()}>{saving?'Saving…':hasUnsavedChanges?'Save changes':'No changes to save'}</button><button type="button" className="qe-secondary-button" disabled={saving||!canSubmit||!canSubmitLessonForReview||hasUnsavedChanges||['REVIEW','PUBLISHED','ARCHIVED'].includes(String(form.lessonStatus))} title={!canSubmitLessonForReview?'Complete basics, teaching blocks, preview, source mapping and add a practice question first.':undefined} onClick={()=>void submitLessonForReview()}>{form.lessonStatus==='REVIEW'?'In review':'Submit for review'}</button><button type="button" className="qe-publish-button" disabled={saving||!canPublishPermission||hasUnsavedChanges||(form.lessonStatus!=='PUBLISHED'&&!canPublishThisContent)} onClick={()=>void setLessonPublication(form.lessonStatus!=='PUBLISHED')}>{saving?'Updating…':form.lessonStatus==='PUBLISHED'?'Unpublish micro-topic':'Publish micro-topic ↗'}</button></div>
       <p className="qe-editor-footnote">{hasUnsavedChanges?'Unsaved changes are not yet saved. Save them before reviewing or publishing.':!canPublishPermission?'You do not have publishing permission. The publication action is disabled.':canPublishLessonReady?'All visible requirements are complete; the API will perform final publication validation.':'Publishing is disabled until each requirement above is complete.'} The API remains authoritative for final validation.</p>
      </section>
-     {showPreview&&<aside className="qe-preview-column"><div className="qe-preview-head"><div><span className="admin-kicker">LIVE LEARNER VIEW</span><h3>Lesson preview</h3><p>Unsaved changes appear here before publishing.</p></div><button type="button" className="qe-icon-button" onClick={()=>setShowPreview(false)} title="Hide preview">×</button></div><div className="qe-preview-mode"><button type="button" className={previewMode==='desktop'?'active':''} onClick={()=>setPreviewMode('desktop')}>▭ Desktop</button><button type="button" className={previewMode==='phone'?'active':''} onClick={()=>setPreviewMode('phone')}>▯ Phone</button><button type="button" className="qe-mark-preview-button" disabled={saving||!showPreview} onClick={markPreviewReviewed}>{previewReviewed?'✓ Preview checked':'Mark preview checked'}</button></div><div className={'qe-device-frame '+previewMode}><div className="qe-device-screen"><header className="qe-student-topbar"><span className="qe-student-brand"><b>Q</b> QuantaEdge</span><span>Class {detail.class_code}</span></header><div className="qe-preview-lesson"><div className="qe-preview-breadcrumb">कक्षा {detail.class_code} · {detail.subject_name} · {detail.chapter_name}</div><div className="qe-preview-time">◷ {form.estimatedMinutes||10} min lesson <span>·</span> Preview</div><h2>{form.title||'Untitled micro-topic'}</h2><p className="qe-preview-intro">{form.summary||'A short, student-friendly explanation of what this topic will teach.'}</p><div className="qe-preview-path"><b>Learning path</b><span>Prior knowledge → explanation → worked example → guided practice → recap</span></div>{blocks.filter(b=>b.active!==false).map((block,i)=><LearnerBlock key={i} block={block}/>)}<section className="qe-preview-practice"><span className="qe-student-kicker">PRACTICE</span><h3>Check your understanding</h3>{questions.filter((q:any)=>q.active!==false).slice(0,3).map((q:any,i:number)=><div className="qe-preview-question" key={q.id||i}><p>{q.prompt||'Your question will appear here.'}</p>{(q.options||[]).map((o:any)=><div key={o.key} className="qe-preview-option">{o.key}. {o.label||'Answer choice'}</div>)}</div>)}{!questions.some((q:any)=>q.active!==false)&&<p>Practice questions will appear here when added.</p>}</section><footer className="qe-preview-footer">QuantaEdge Learning <span>Learn · Practise · Progress</span></footer></div></div></div><div className="qe-preview-disclaimer"><span>ⓘ</span><p>Preview reflects active blocks and the learner lesson layout. Final visibility depends on class/subject access, published chapter and server-side checks.</p></div></aside>}
+     {showPreview&&<aside className="qe-preview-column"><div className="qe-preview-head"><div><span className="admin-kicker">LEARNER PREVIEW</span><h3>Review the saved lesson</h3><p>{hasUnsavedChanges?'Save pending changes before confirming this preview.':'Confirmation is recorded against the current saved content version.'}</p></div><button type="button" className="qe-icon-button" onClick={()=>setShowPreview(false)} title="Hide preview">×</button></div><div className="qe-preview-mode"><button type="button" className={previewMode==='desktop'?'active':''} onClick={()=>setPreviewMode('desktop')}>▭ Desktop</button><button type="button" className={previewMode==='phone'?'active':''} onClick={()=>setPreviewMode('phone')}>▯ Phone</button><button type="button" className="qe-mark-preview-button" disabled={saving||!showPreview||hasUnsavedChanges||!canSubmit||previewReviewed||!(Number(detail?.content_revision)>0)} title={hasUnsavedChanges?'Save the current changes before confirming the preview.':!canSubmit?'You need submit permission to record this check.':undefined} onClick={()=>void markPreviewReviewed()}>{saving?'Saving check…':previewReviewed?'✓ Saved version checked':'Confirm saved version'}</button></div><div className={'qe-device-frame '+previewMode}><div className="qe-device-screen"><header className="qe-student-topbar"><span className="qe-student-brand"><b>Q</b> QuantaEdge</span><span>Class {detail.class_code}</span></header><div className="qe-preview-lesson"><div className="qe-preview-breadcrumb">कक्षा {detail.class_code} · {detail.subject_name} · {detail.chapter_name}</div><div className="qe-preview-time">◷ {form.estimatedMinutes||10} min lesson <span>·</span> Preview</div><h2>{form.title||'Untitled micro-topic'}</h2><p className="qe-preview-intro">{form.summary||'A short, student-friendly explanation of what this topic will teach.'}</p><div className="qe-preview-path"><b>Learning path</b><span>Prior knowledge → explanation → worked example → guided practice → recap</span></div>{blocks.filter(b=>b.active!==false).map((block,i)=><LearnerBlock key={i} block={block}/>)}<section className="qe-preview-practice"><span className="qe-student-kicker">PRACTICE</span><h3>Check your understanding</h3>{questions.filter((q:any)=>q.active!==false).slice(0,3).map((q:any,i:number)=><div className="qe-preview-question" key={q.id||i}><p>{q.prompt||'Your question will appear here.'}</p>{(q.options||[]).map((o:any)=><div key={o.key} className="qe-preview-option">{o.key}. {o.label||'Answer choice'}</div>)}</div>)}{!questions.some((q:any)=>q.active!==false)&&<p>Practice questions will appear here when added.</p>}</section><footer className="qe-preview-footer">QuantaEdge Learning <span>Learn · Practise · Progress</span></footer></div></div></div><div className="qe-preview-disclaimer"><span>ⓘ</span><p>Preview reflects active blocks and the learner lesson layout. Final visibility depends on class/subject access, published chapter and server-side checks.</p></div></aside>}
      {!showPreview&&<button type="button" className="qe-show-preview" onClick={()=>setShowPreview(true)}>▣ Show learner preview</button>}
     </div>}
    </section>}
