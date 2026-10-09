@@ -49,9 +49,9 @@ do $staff_auth_session_identity$ begin
     alter table public.auth_session
       add constraint auth_session_identity_required
       check (
-        (case when user_id is not null then 1 else 0 end) +
-        (case when student_id is not null then 1 else 0 end) +
-        (case when staff_id is not null then 1 else 0 end) = 1
+        (staff_id is not null and user_id is null and student_id is null)
+        or
+        (staff_id is null and (user_id is not null or student_id is not null))
       );
   end if;
 end $staff_auth_session_identity$;
