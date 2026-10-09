@@ -146,10 +146,9 @@ public class StudentController {
   @GetMapping("/{studentId}/lessons")
   public List<Map<String,Object>> lessons(@PathVariable long studentId,
       @RequestAttribute(value="authContext",required=false) AuthContext context){
-    context=authorization.requireAuth(context);
-    if(context.studentId()!=null && !context.studentId().equals(studentId)) throw new SecurityException("Student access denied");
-    if(context.studentId()==null && (context.userId()==null || !hasGuardian(context.userId(),studentId)))
-      throw new SecurityException("Child access denied");
+    context=authorization.requireStudent(context);
+    if(context.studentId()==null || !context.studentId().equals(studentId))
+      throw new SecurityException("Student access denied");
     return jdbc.queryForList("""
       select l.id,c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              ch.code as chapter_code,ch.display_name as chapter_name,l.code,l.title,l.summary,l.estimated_minutes,
@@ -163,12 +162,6 @@ public class StudentController {
         and c.code=(select class_code from student where id=?)
       order by c.sort_order,s.sort_order,ch.teaching_order,ch.sort_order,l.sort_order
       """,studentId,studentId,studentId);
-  }
-
-  private boolean hasGuardian(long userId,long studentId){
-    return jdbc.queryForObject("""
-      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED')
-      """,Boolean.class,userId,studentId);
   }
 
   private Map<String,Object> statsFor(long studentId){
