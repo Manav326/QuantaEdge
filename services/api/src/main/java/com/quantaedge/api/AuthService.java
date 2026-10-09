@@ -243,7 +243,14 @@ public class AuthService {
   }
 
   public AuthContext loginStudent(String publicId,String pin) {
-    var row=jdbc.queryForMap("select id,display_name,access_pin_hash from student where public_id=? and active=true and environment='PRODUCTION'",UUID.fromString(publicId));
+    var row=jdbc.queryForMap("""
+      select st.id,st.display_name,st.access_pin_hash
+      from student st
+      where st.public_id=? and st.active=true and st.environment='PRODUCTION'
+        and exists(select 1 from guardian_student gs join user_account u on u.id=gs.guardian_user_id
+          where gs.student_id=st.id and gs.active=true and gs.consent_status='CONSENTED' and u.active=true
+            and u.role in ('PARENT','ADMIN'))
+      """,UUID.fromString(publicId));
     String stored=String.valueOf(row.get("access_pin_hash"));
     if(stored==null || stored.isBlank() || !hash(pin).equals(stored)) throw new IllegalArgumentException("Invalid student access code");
     return contextForStudent(null,((Number)row.get("id")).longValue());

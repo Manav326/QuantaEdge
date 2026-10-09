@@ -1,23 +1,140 @@
 'use client';
 
 import Link from 'next/link';
-import {useEffect,useState} from 'react';
+import {useEffect,useMemo,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
+type AnyRow=Record<string,any>;
+
 export default function AdminHome(){
-  async function logout(){await fetch('/api/v1/auth/logout',{method:'POST'});router.replace('/login');}
-  const router=useRouter(); const [me,setMe]=useState<any>(null); const [overview,setOverview]=useState<any>(null); const [analytics,setAnalytics]=useState<any>(null); const [tutorAnalytics,setTutorAnalytics]=useState<any>(null); const [error,setError]=useState('');
-  useEffect(()=>{(async()=>{const mr=await fetch('/api/v1/auth/me');if(!mr.ok){router.replace('/login');return}const mb=await mr.json();if(mb.role!=='ADMIN'){router.replace('/login');return}setMe(mb);const r=await fetch('/api/v1/admin/overview');const b=await r.json();if(!r.ok)throw new Error(b.message||'Admin data unavailable');setOverview(b);const ar=await fetch('/api/v1/admin/analytics');if(ar.ok)setAnalytics(await ar.json());const tr=await fetch('/api/v1/admin/tutor/analytics');if(tr.ok)setTutorAnalytics(await tr.json())})().catch((e)=>setError(e.message||'Admin data unavailable'))},[router]);
-  if(error)return <main className="admin-shell"><section className="admin-main"><div className="auth-card"><h1>Admin unavailable</h1><p>{error}</p></div></section></main>;
-  if(!me||!overview)return <main className="admin-shell"><section className="admin-main"><div className="admin-kicker">QUANTAEDGE LEARNING</div><h1>Loading operations…</h1></section></main>;
-  return <main className="admin-shell"><aside className="admin-sidebar"><Link href="/" className="admin-brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>ADMIN</small></span></Link><nav><Link className="active" href="#top">▦ Dashboard</Link><Link href="/content">◈ Content Studio</Link><Link href="/students">◉ Students</Link><Link href="/legacy-content">Detailed authoring</Link><a href="#review">Review</a><a href="#sources">Provenance</a><a href="#assets">Assets</a></nav><div className="admin-user"><span className="avatar">A</span><div><strong>{me.displayName||'Admin'}</strong><small>Authorized operator</small></div></div></aside>
-    <section className="admin-main" id="top"><header className="admin-top"><div><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Content operations</h1></div><div className="top-status"><span className="status-dot"/> Authenticated admin <button className="text-link" onClick={logout}>Logout</button></div></header>
-      <div className="admin-grid stats">{Object.entries(overview.summary||{}).map(([k,v])=><article key={k}><span>{k.replaceAll('_',' ')}</span><strong>{String(v)}</strong><small>live database</small></article>)}</div>
-      {analytics&&<section className="admin-panel" id="analytics"><div className="panel-head"><div><span>LEARNING ANALYTICS</span><h2>Real usage</h2></div><Link href="/students" className="text-link">Students →</Link></div><div className="admin-grid stats"><article><span>Active students · 30d</span><strong>{analytics.summary.active_students_30d}</strong></article><article><span>Sessions · 30d</span><strong>{analytics.summary.sessions_30d}</strong></article><article><span>Avg session</span><strong>{analytics.summary.avg_session_minutes} min</strong></article><article><span>Accuracy · 30d</span><strong>{analytics.learning.accuracy_30d}%</strong></article></div></section>}
-      {tutorAnalytics&&<section className="admin-panel" id="tutor-analytics"><div className="panel-head"><div><span>AI TUTOR</span><h2>Tutor usage · 30d</h2></div></div><div className="admin-grid stats"><article><span>Active students</span><strong>{tutorAnalytics.summary.active_students_30d}</strong></article><article><span>Learner messages</span><strong>{tutorAnalytics.summary.user_messages_30d}</strong></article><article><span>Tutor replies</span><strong>{tutorAnalytics.summary.assistant_messages_30d}</strong></article><article><span>Output tokens</span><strong>{tutorAnalytics.summary.output_tokens_30d}</strong></article></div></section>}
-      <div className="admin-grid main-panels"><article className="admin-panel wide" id="review"><div className="panel-head"><div><span>CONTENT GOVERNANCE</span><h2>Question review</h2></div></div>{overview.review.map((x:any)=><div className="activity" key={x.review_status}><div><b>{x.count}</b><span>{x.review_status}</span></div></div>)}</article>
-        <article className="admin-panel" id="sources"><div className="panel-head"><div><span>PROVENANCE</span><h2>Question sources</h2></div></div>{overview.sources.map((x:any)=><div className="topic-line" key={x.source_kind}><b>{x.source_kind}</b><span>{x.count}</span></div>)}</article>
-        <article className="admin-panel" id="assets"><div className="panel-head"><div><span>VISUAL CONTENT</span><h2>Asset readiness</h2></div></div>{overview.assets.map((x:any)=><div className="topic-line" key={x.asset_type+x.status}><b>{x.asset_type}</b><span>{x.status} · {x.count}</span></div>)}</article>
+  const router=useRouter();
+  const [me,setMe]=useState<AnyRow|null>(null);
+  const [overview,setOverview]=useState<AnyRow|null>(null);
+  const [analytics,setAnalytics]=useState<AnyRow|null>(null);
+  const [tutorAnalytics,setTutorAnalytics]=useState<AnyRow|null>(null);
+  const [error,setError]=useState('');
+  const [loading,setLoading]=useState(true);
+
+  async function logout(){
+    await fetch('/api/v1/auth/logout',{method:'POST'});
+    router.replace('/login');
+  }
+
+  useEffect(()=>{
+    let mounted=true;
+    (async()=>{
+      const mr=await fetch('/api/v1/auth/me');
+      if(!mr.ok){router.replace('/login');return;}
+      const mb=await mr.json();
+      if(mb.role!=='ADMIN'){router.replace('/login');return;}
+      if(!mounted)return;
+      setMe(mb);
+      const responses=await Promise.all([
+        fetch('/api/v1/admin/overview'),
+        fetch('/api/v1/admin/analytics'),
+        fetch('/api/v1/admin/tutor/analytics')
+      ]);
+      const overviewBody=await responses[0].json();
+      if(!responses[0].ok)throw new Error(overviewBody.message||'Admin data unavailable');
+      if(!mounted)return;
+      setOverview(overviewBody);
+      if(responses[1].ok)setAnalytics(await responses[1].json());
+      if(responses[2].ok)setTutorAnalytics(await responses[2].json());
+    })().catch((e:any)=>{if(mounted)setError(e.message||'Admin data unavailable');})
+      .finally(()=>{if(mounted)setLoading(false);});
+    return ()=>{mounted=false;};
+  },[router]);
+
+  const summary=overview?.summary||{};
+  const reviewRows:AnyRow[]=overview?.review||[];
+  const sourceRows:AnyRow[]=overview?.sources||[];
+  const assetRows:AnyRow[]=overview?.assets||[];
+  const totalReview=useMemo(()=>reviewRows.reduce((n,row)=>n+Number(row.count||0),0),[reviewRows]);
+  const activeReview=useMemo(()=>reviewRows.filter(row=>['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0),[reviewRows]);
+
+  if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">QUANTAEDGE OPERATIONS</span><h1>Dashboard unavailable</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}>Try again</button></div></section></main>;
+  if(loading||!me||!overview)return <main className="admin-shell"><aside className="admin-sidebar"><Link href="/" className="admin-brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>ADMIN</small></span></Link><div className="sidebar-skeleton"/></aside><section className="admin-main"><div className="admin-loading"><span className="admin-loading-mark">Q</span><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Preparing your workspace</h1><p>Connecting to current content and learning records…</p></div></section></main>;
+
+  const pendingReview=reviewRows.filter(row=>!['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0);
+  const primaryStats=[
+    {label:'Active classes',value:summary.classes??'—',helper:'curriculum tracks enabled',tone:'violet',icon:'▦'},
+    {label:'Published chapters',value:summary.chapters??'—',helper:'ready to learn',tone:'mint',icon:'◈'},
+    {label:'Published lessons',value:summary.published_lessons??'—',helper:'available in the curriculum',tone:'blue',icon:'▤'},
+    {label:'Questions needing review',value:pendingReview,helper:'not yet approved or published',tone:'amber',icon:'✳'}
+  ];
+  const learningStats=[
+    {label:'Active students · 30 days',value:analytics?.summary?.active_students_30d??'—'},
+    {label:'Learning sessions',value:analytics?.summary?.sessions_30d??'—'},
+    {label:'Average session',value:analytics?.summary?.avg_session_minutes==null?'—':`${analytics.summary.avg_session_minutes} min`},
+    {label:'Answer accuracy',value:analytics?.learning?.accuracy_30d==null?'—':`${analytics.learning.accuracy_30d}%`}
+  ];
+
+  return <main className="admin-shell">
+    <aside className="admin-sidebar">
+      <Link href="/" className="admin-brand"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>ADMIN CONSOLE</small></span></Link>
+      <div className="sidebar-label">WORKSPACE</div>
+      <nav>
+        <Link className="active" href="/">▦ <span>Overview</span></Link>
+        <Link href="/content">◈ <span>Content Studio</span><small>01</small></Link>
+        <Link href="/students">◉ <span>Students</span></Link>
+        <Link href="/parents">♧ <span>Parents & families</span></Link>
+        <Link href="/legacy-content">✎ <span>Detailed authoring</span></Link>
+      </nav>
+      <div className="sidebar-divider"/>
+      <div className="sidebar-label">SYSTEM</div>
+      <a href="#analytics">◌ <span>Learning analytics</span></a>
+      <a href="#governance">✓ <span>Content governance</span></a>
+      <div className="admin-sidebar-footer"><span className="admin-security-icon">✓</span><div><strong>Secure workspace</strong><small>Access is role-restricted</small></div></div>
+      <div className="admin-user"><span className="avatar">{String(me.displayName||'A').slice(0,1).toUpperCase()}</span><div><strong>{me.displayName||'Admin'}</strong><small>Authorized operator</small></div><button aria-label="Logout" title="Logout" onClick={logout}>↗</button></div>
+    </aside>
+    <section className="admin-main" id="top">
+      <header className="admin-top">
+        <div><span className="admin-kicker">QUANTAEDGE LEARNING / OPERATIONS</span><h1>Good day, {me.displayName||'Admin'} <span className="admin-title-spark">✦</span></h1><p>Here’s your live view of the learning platform.</p></div>
+        <div className="admin-top-actions"><span className="top-status"><span className="status-dot"/> Connected to live data</span><button className="admin-refresh" onClick={()=>window.location.reload()} title="Refresh dashboard">↻</button></div>
+      </header>
+
+      <nav className="admin-mobile-nav" aria-label="Admin navigation">
+        <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
+      </nav>
+
+      <section className="admin-welcome">
+        <div className="admin-welcome-copy"><span className="admin-welcome-eyebrow"><span className="status-dot"/> OPERATIONS OVERVIEW</span><h2>Learning deserves<br/><em>great operations.</em></h2><p>Keep curriculum quality, family access and student learning moving forward from one place.</p>
+          <div className="admin-welcome-actions"><Link href="/content" className="admin-action-primary">Open Content Studio <span>↗</span></Link><Link href="/parents" className="admin-action-secondary">Manage families <span>→</span></Link></div>
+        </div>
+        <div className="admin-welcome-visual" aria-hidden="true"><div className="admin-orb admin-orb-one"/><div className="admin-orb admin-orb-two"/><div className="admin-visual-card"><div className="admin-visual-top"><span>LEARNING QUALITY</span><span className="admin-visual-live">LIVE</span></div><div className="admin-visual-glyph">Q</div><strong>Structured by design.</strong><p>Class · Subject · Chapter · Lesson</p><div className="admin-visual-track"><span/></div><small>Content with clear ownership</small></div><div className="admin-floating-token token-top">✦ <span>Review</span></div><div className="admin-floating-token token-bottom">✓ <span>Role secured</span></div></div>
+      </section>
+
+      <div className="admin-section-title"><div><span className="admin-kicker">PLATFORM SNAPSHOT</span><h2>At a glance</h2></div><span className="admin-live-label"><i/> Live records</span></div>
+      <div className="admin-grid stats admin-primary-stats">
+        {primaryStats.map((stat,i)=><article className="admin-kpi" key={stat.label}><div className={`admin-kpi-icon ${stat.tone}`}>{stat.icon}</div><span>{stat.label}</span><strong>{String(stat.value)}</strong><small>{stat.helper}</small><span className="admin-kpi-index">0{i+1}</span></article>)}
       </div>
-    </section></main>;
+
+      <section className="admin-panel admin-learning-panel" id="analytics">
+        <div className="panel-head"><div><span className="admin-kicker">LEARNING ANALYTICS</span><h2>Real usage, real progress</h2><p>Signals from actual student sessions and answer attempts.</p></div><Link href="/students" className="admin-inline-link">Inspect students <span>→</span></Link></div>
+        <div className="admin-learning-metrics">{learningStats.map((stat,i)=><article key={stat.label}><span className="admin-metric-index">0{i+1}</span><small>{stat.label}</small><strong>{String(stat.value)}</strong></article>)}</div>
+      </section>
+
+      {tutorAnalytics&&<section className="admin-panel admin-learning-panel"><div className="panel-head"><div><span className="admin-kicker">AI TUTOR</span><h2>Tutor activity · 30 days</h2><p>Observed usage only; no synthetic activity is shown.</p></div></div><div className="admin-learning-metrics">{[
+        {label:'Active students',value:tutorAnalytics.summary?.active_students_30d??'—'},
+        {label:'Learner messages',value:tutorAnalytics.summary?.user_messages_30d??'—'},
+        {label:'Tutor replies',value:tutorAnalytics.summary?.assistant_messages_30d??'—'},
+        {label:'Output tokens',value:tutorAnalytics.summary?.output_tokens_30d??'—'}
+      ].map((stat,i)=><article key={stat.label}><span className="admin-metric-index">0{i+1}</span><small>{stat.label}</small><strong>{String(stat.value)}</strong></article>)}</div></section>}
+
+      <div className="admin-section-title admin-governance-title" id="governance"><div><span className="admin-kicker">QUALITY CONTROL</span><h2>Content governance</h2></div><Link href="/content" className="admin-inline-link">Open authoring tools <span>→</span></Link></div>
+      <div className="admin-grid admin-governance-grid">
+        <article className="admin-panel admin-review-panel"><div className="panel-head"><div><span className="admin-kicker">QUESTION WORKFLOW</span><h2>Review pipeline</h2><p>Track what is ready and what needs editorial attention.</p></div><span className="admin-panel-icon">✓</span></div>
+          <div className="admin-review-summary"><div><strong>{activeReview}</strong><span>approved / published</span></div><div><strong>{Math.max(0,totalReview-activeReview)}</strong><span>other statuses</span></div></div>
+          <div className="admin-review-list">{reviewRows.map((row,i)=>{const count=Number(row.count||0);const pct=totalReview?Math.round(count*100/totalReview):0;const status=String(row.review_status||'unknown');return <div className="admin-review-row" key={status}><div className="admin-review-label"><span className={`review-status-mark status-${status.toLowerCase().replace(/[^a-z]+/g,'-')}`}/><strong>{status.replaceAll('_',' ')}</strong><b>{count}</b></div><div className="admin-review-bar"><span style={{width:`${pct}%`}}/></div></div>})}{!reviewRows.length&&<p className="admin-no-data">No review records available.</p>}</div>
+        </article>
+        <article className="admin-panel admin-breakdown-panel"><div className="panel-head"><div><span className="admin-kicker">PROVENANCE</span><h2>Question sources</h2><p>Origin of recorded question content.</p></div><span className="admin-panel-icon">⌁</span></div>
+          <div className="admin-breakdown-list">{sourceRows.map((row:any)=><div className="admin-breakdown-row" key={row.source_kind}><span className="admin-breakdown-dot"/><strong>{String(row.source_kind||'Unknown').replaceAll('_',' ')}</strong><span>{row.count}</span></div>)}{!sourceRows.length&&<p className="admin-no-data">No question-source records available.</p>}</div>
+        </article>
+        <article className="admin-panel admin-breakdown-panel"><div className="panel-head"><div><span className="admin-kicker">VISUAL CONTENT</span><h2>Asset readiness</h2><p>Editorial state of learning media.</p></div><span className="admin-panel-icon">▧</span></div>
+          <div className="admin-breakdown-list">{assetRows.map((row:any)=><div className="admin-breakdown-row" key={row.asset_type+row.status}><span className="admin-breakdown-dot asset-dot"/><strong>{String(row.asset_type||'Asset')} · {String(row.status||'Unknown')}</strong><span>{row.count}</span></div>)}{!assetRows.length&&<p className="admin-no-data">No asset records available.</p>}</div>
+        </article>
+      </div>
+      <footer className="admin-footer">QuantaEdge · Learning operations <span>Records reflect the connected database; this dashboard does not generate demo activity.</span></footer>
+    </section>
+  </main>;
 }

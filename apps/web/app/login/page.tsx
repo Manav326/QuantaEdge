@@ -28,7 +28,7 @@ export default function LoginPage(){
   const [otp,setOtp]=useState('');
   const [displayName,setDisplayName]=useState('');
   const [step,setStep]=useState<'mobile'|'otp'|'child'>('mobile');
-  const [child,setChild]=useState({displayName:'',classCode:'7',language:'hi',pin:''});
+  const [child,setChild]=useState({displayName:'',classCode:'7',language:'hi',pin:'',trackCodes:['maths','science'] as string[]});
   const [consentAccepted,setConsentAccepted]=useState(false);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
@@ -121,12 +121,20 @@ export default function LoginPage(){
         <label>बच्चे का नाम<input value={child.displayName} onChange={e=>setChild({...child,displayName:e.target.value})} placeholder="जैसे आर्यन" autoComplete="off"/></label>
         <label>कक्षा<select value={child.classCode} onChange={e=>setChild({...child,classCode:e.target.value})}><option value="6">कक्षा 6</option><option value="7">कक्षा 7</option><option value="8">कक्षा 8</option></select></label>
         <label>Student PIN<input value={child.pin} onChange={e=>setChild({...child,pin:e.target.value})} placeholder="4–8 digits" inputMode="numeric" maxLength={8} autoComplete="new-password"/></label>
+        <fieldset className="track-choices" style={{border:'1px solid var(--line)',borderRadius:12,padding:'12px 14px',margin:'0 0 16px'}}>
+          <legend style={{fontSize:13,fontWeight:700,padding:'0 5px'}}>Learning tracks</legend>
+          <p style={{fontSize:12,color:'var(--muted)',margin:'2px 0 10px'}}>Choose subjects this child can access. You can change this later.</p>
+          {[{code:'maths',label:'गणित · Maths'},{code:'science',label:'विज्ञान · Science'}].map(track=><label key={track.code} style={{display:'flex',alignItems:'center',gap:9,margin:'8px 0',fontSize:14}}>
+            <input type="checkbox" checked={child.trackCodes.includes(track.code)} onChange={e=>setChild({...child,trackCodes:e.target.checked?[...child.trackCodes,track.code]:child.trackCodes.filter(code=>code!==track.code)})}/>
+            <span>{track.label}</span>
+          </label>)}
+        </fieldset>
         <label className="consent-row">
           <input type="checkbox" checked={consentAccepted} onChange={e=>setConsentAccepted(e.target.checked)}/>
           <span>मैं इस बच्चे का अधिकृत अभिभावक हूँ और उसकी learning profile बनाने तथा learning records रखने की सहमति देता/देती हूँ।</span>
         </label>
         {error && <div className="feedback"><strong>समस्या</strong><span>{error}</span></div>}
-        <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4||!consentAccepted} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
+        <button className="button button-dark full" disabled={busy||!child.displayName.trim()||child.pin.length<4||child.trackCodes.length<1||!consentAccepted} onClick={createChild}>{busy?'Profile बना रहे हैं…':'Student profile बनाएं →'}</button>
       </>}
       <small className="auth-note">OTP verification is required before a parent account is created. Local preview mode displays a development OTP.</small>
     </section>
