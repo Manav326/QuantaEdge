@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -168,4 +170,62 @@ class AuthServiceTest {
         .digest(value.getBytes(StandardCharsets.UTF_8));
     return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
   }
+  @Test
+  void existingParentWithoutPasswordCanStillChooseOtpLogin() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
+        eq(Boolean.class), eq("+917070107483"))).thenReturn(true);
+    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class),
+        eq("+917070107483"), eq(60))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"),
+        eq(Long.class), eq("+917070107483"))).thenReturn(0L);
+
+    assertEquals("123456", auth.requestOtp("7070107483", "LOGIN"));
+  }
+
+  @Test
+  void parentCanSignInWithPasswordWithoutOtp() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String passwordHash = new BCryptPasswordEncoder(12).encode("ParentPass!2026");
+    when(jdbc.queryForList(contains("select id,password_hash from user_account"),
+        eq("+917070107483"))).thenReturn(List.of(Map.of("id", 52L, "password_hash", passwordHash)));
+    when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", 52L))
+        .thenReturn(Map.of("role", "PARENT", "display_name", "Existing Parent"));
+
+    AuthContext context = auth.loginParent("7070107483", "ParentPass!2026");
+
+    assertEquals(52L, context.userId());
+    assertEquals("PARENT", context.role());
+    assertEquals("Existing Parent", context.displayName());
+  }
+
+  @Test
+  void parentWithoutPasswordGetsRecoveryMessageRatherThanBeingLockedOut() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    when(jdbc.queryForList(contains("select id,password_hash from user_account"),
+        eq("+917070107483"))).thenReturn(List.of(Map.of("id", 52L)));
+
+    IllegalStateException error = assertThrows(IllegalStateException.class,
+        () -> auth.loginParent("7070107483", "some-password"));
+
+    assertTrue(error.getMessage().contains("Forgot password"));
+  }
+
+  @Test
+  void studentPasswordLoginOpensOnlyTheMatchedChildAccount() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String passwordHash = new BCryptPasswordEncoder(12).encode("StudentPass!2026");
+    when(jdbc.queryForList(contains("from user_account u"), eq("+917070107483"), eq("aarav07")))
+        .thenReturn(List.of(Map.of("student_id", 81L, "password_hash", passwordHash)));
+    when(jdbc.queryForObject("select display_name from student where id=?", String.class, 81L))
+        .thenReturn("Aarav");
+
+    AuthContext context = auth.loginStudentByParent("7070107483", "Aarav07", "StudentPass!2026");
+
+    assertEquals(null, context.userId());
+    assertEquals(81L, context.studentId());
+    assertEquals("STUDENT", context.role());
+    assertEquals("Aarav", context.displayName());
+  }
+
 }

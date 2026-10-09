@@ -7,15 +7,19 @@ import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 
 type Mode = 'login' | 'register' | 'reset';
 type Step = 'mobile' | 'otp';
+type LoginMethod = 'password' | 'otp';
+
 async function readApi(response: Response): Promise<any> {
   const raw = await response.text();
   if (!raw.trim()) return {};
-  try { return JSON.parse(raw); } catch { throw new Error('The server returned an unexpected response (' + response.status + ').'); }
+  try { return JSON.parse(raw); }
+  catch { throw new Error('The server returned an unexpected response (' + response.status + ').'); }
 }
 
 export default function ParentLoginPage() {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>('login');
+  const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
   const [step, setStep] = useState<Step>('mobile');
   const [mobile, setMobile] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -28,14 +32,20 @@ export default function ParentLoginPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const otpFlow = mode !== 'login' || loginMethod === 'otp';
 
   function resetState(next: Mode) {
-    setMode(next); setStep('mobile'); setOtp(''); setDevCode('');
+    setMode(next); setLoginMethod('password'); setStep('mobile'); setOtp(''); setDevCode('');
     setError(''); setNotice(''); setPassword(''); setConfirmPassword('');
     setNewPassword(''); setConfirmNewPassword('');
   }
 
-  async function signIn() {
+  function switchLoginMethod(next: LoginMethod) {
+    setLoginMethod(next); setStep('mobile'); setOtp(''); setDevCode('');
+    setError(''); setNotice('');
+  }
+
+  async function signInWithPassword() {
     setBusy(true); setError(''); setNotice('');
     try {
       const response = await fetch('/api/v1/auth/parent-login', {
@@ -43,7 +53,13 @@ export default function ParentLoginPage() {
         body: JSON.stringify({ mobile: mobile.trim(), password }),
       });
       const body = await readApi(response);
-      if (!response.ok) throw new Error(body.message || 'Unable to sign in. Check your mobile number and password.');
+      if (!response.ok) {
+        const message = String(body.message || '');
+        if (message.toLowerCase().includes('password has not been set')) {
+          throw new Error('No password is set on this parent account yet. Choose “Sign in with OTP” to enter your dashboard, or use “Forgot password?” to create one.');
+        }
+        throw new Error(message || 'Unable to sign in. Check your mobile number and password.');
+      }
       router.replace('/parent'); router.refresh();
     } catch (e: any) {
       setError(e?.message || 'Unable to sign in. Please try again.');
@@ -59,7 +75,7 @@ export default function ParentLoginPage() {
     }
     setBusy(true);
     try {
-      const purpose = mode === 'register' ? 'SIGNUP' : 'PASSWORD_RESET';
+      const purpose = mode === 'register' ? 'SIGNUP' : mode === 'reset' ? 'PASSWORD_RESET' : 'LOGIN';
       const response = await fetch('/api/v1/auth/request-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile: mobile.trim(), purpose }),
@@ -67,7 +83,11 @@ export default function ParentLoginPage() {
       const body = await readApi(response);
       if (!response.ok) throw new Error(body.message || 'Unable to send the verification code.');
       setDevCode(body.devCode || ''); setOtp(''); setStep('otp');
-      setNotice(mode === 'register' ? 'A verification code has been sent to your mobile number.' : 'A password reset code has been sent to your registered mobile number.');
+      setNotice(mode === 'register'
+        ? 'A verification code has been sent to your mobile number.'
+        : mode === 'reset'
+          ? 'A password reset code has been sent to your registered mobile number.'
+          : 'A login code has been sent to your registered mobile number.');
     } catch (e: any) {
       setError(e?.message || 'Unable to send the verification code.');
     } finally { setBusy(false); }
@@ -82,12 +102,14 @@ export default function ParentLoginPage() {
     }
     setBusy(true);
     try {
-      const purpose = mode === 'register' ? 'SIGNUP' : 'PASSWORD_RESET';
-      const payload: Record<string, string> = {
-        mobile: mobile.trim(), otp: otp.trim(), purpose,
-        password: mode === 'register' ? password : newPassword,
-      };
-      if (mode === 'register') payload.displayName = displayName.trim();
+      const purpose = mode === 'register' ? 'SIGNUP' : mode === 'reset' ? 'PASSWORD_RESET' : 'LOGIN';
+      const payload: Record<string, string> = { mobile: mobile.trim(), otp: otp.trim(), purpose };
+      if (mode === 'register') {
+        payload.displayName = displayName.trim();
+        payload.password = password;
+      } else if (mode === 'reset') {
+        payload.password = newPassword;
+      }
       const response = await fetch('/api/v1/auth/verify-otp', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
       });
@@ -102,13 +124,15 @@ export default function ParentLoginPage() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (mode === 'login') await signIn();
+    if (mode === 'login' && loginMethod === 'password') await signInWithPassword();
     else if (step === 'mobile') await requestOtp();
     else await verifyOtp();
   }
 
   const submitLabel = mode === 'login'
-    ? (busy ? 'Signing in…' : 'Sign in')
+    ? loginMethod === 'password'
+      ? (busy ? 'Signing in…' : 'Sign in')
+      : (busy ? (step === 'mobile' ? 'Sending login code…' : 'Verifying…') : (step === 'mobile' ? 'Send login OTP →' : 'Verify OTP and sign in →'))
     : mode === 'register'
       ? (busy ? (step === 'mobile' ? 'Sending code…' : 'Creating account…') : (step === 'mobile' ? 'Verify mobile number →' : 'Create parent account →'))
       : (busy ? (step === 'mobile' ? 'Sending code…' : 'Resetting password…') : (step === 'mobile' ? 'Send password reset code →' : 'Reset password →'));
@@ -121,20 +145,21 @@ export default function ParentLoginPage() {
         <span className="eyebrow">{mode === 'login' ? 'PARENT / GUARDIAN' : mode === 'register' ? 'CREATE FAMILY ACCOUNT' : 'ACCOUNT RECOVERY'}</span>
         <h1>{mode === 'login' ? 'Welcome back.' : mode === 'register' ? 'Your family learning space.' : 'Create a new password.'}</h1>
         <p>{mode === 'login'
-          ? 'Sign in with your registered mobile number and password. OTP is not required for everyday sign-in.'
+          ? 'Sign in with your registered mobile number and password, or choose OTP sign-in if you have not set a password yet.'
           : mode === 'register'
-            ? 'Verify your mobile number once, create a password, then add and manage your children from one dashboard.'
+            ? 'Verify your mobile number once and create your parent password. Then add and manage your children from one dashboard.'
             : 'We’ll verify your registered mobile with a one-time code. You can use your new password for future sign-ins.'}</p>
         {error && <div className="auth-message is-error" role="alert">{error}</div>}
         {notice && <div className="auth-message" role="status">{notice}</div>}
+
         <form className="auth-form" onSubmit={submit}>
           {mode === 'register' && <label>Parent / guardian name
             <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Enter your full name" autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
           </label>}
           <label>Registered mobile number
-            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit mobile number" inputMode="numeric" autoComplete="tel" required disabled={step === 'otp'} />
+            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit mobile number" inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
           </label>
-          {mode === 'login' && <label>Password
+          {mode === 'login' && loginMethod === 'password' && <label>Password
             <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" required />
           </label>}
           {mode === 'register' && step === 'mobile' && <>
@@ -145,7 +170,7 @@ export default function ParentLoginPage() {
               <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Enter the same password again" autoComplete="new-password" minLength={8} required />
             </label>
           </>}
-          {step === 'otp' && mode !== 'login' && <>
+          {otpFlow && step === 'otp' && <>
             {devCode && <div className="auth-dev-code"><span>Local development OTP</span><strong>{devCode}</strong></div>}
             <label>6-digit verification code
               <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="Enter OTP" inputMode="numeric" autoComplete="one-time-code" required />
@@ -160,23 +185,27 @@ export default function ParentLoginPage() {
             </>}
           </>}
           <button type="submit" className="button button-dark full" disabled={busy || mobile.length !== 10 ||
-            (mode === 'login' && !password) ||
+            (mode === 'login' && loginMethod === 'password' && !password) ||
             (mode === 'register' && step === 'mobile' && (displayName.trim().length < 2 || password.length < 8 || password !== confirmPassword)) ||
-            (mode === 'reset' && step === 'otp' && (otp.length !== 6 || newPassword.length < 8 || newPassword !== confirmNewPassword)) ||
-            (mode !== 'login' && step === 'otp' && otp.length !== 6)}>
+            (otpFlow && step === 'otp' && otp.length !== 6) ||
+            (mode === 'reset' && step === 'otp' && (newPassword.length < 8 || newPassword !== confirmNewPassword))}>
             {submitLabel}
           </button>
-          {step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}>← Change mobile number</button>}
+          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}>← Change mobile number</button>}
         </form>
+
         <div className="auth-mode-links">
           {mode === 'login' ? <>
             <button type="button" onClick={() => resetState('reset')}>Forgot password?</button>
+            <button type="button" onClick={() => switchLoginMethod(loginMethod === 'password' ? 'otp' : 'password')}>
+              {loginMethod === 'password' ? 'Sign in with OTP' : 'Sign in with password'}
+            </button>
             <button type="button" onClick={() => resetState('register')}>Create parent account</button>
           </> : <button type="button" onClick={() => resetState('login')}>Back to parent sign in</button>}
         </div>
         <div className="auth-separator"><span>OR</span></div>
         <Link href="/login/student" className="auth-alt-link">Student login <span>→</span></Link>
-        <small className="auth-note">OTP is used for mobile verification during registration and for password recovery — not for every login.</small>
+        <small className="auth-note">OTP is required for registration and password recovery, and is also available as an alternative for parent sign-in.</small>
       </section>
     </main>
   );
