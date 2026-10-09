@@ -20,26 +20,26 @@ class AdminContentControllerTest {
 
   @Test
   void legacySharedTokenCannotAuthorizeContentCms() {
-    when(authorization.requireAdmin(null)).thenThrow(new SecurityException("Admin access required"));
+    when(authorization.requirePermission(null, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", null));
 
-    verify(authorization).requireAdmin(null);
+    verify(authorization).requirePermission(null, "CONTENT_VIEW");
     verifyNoInteractions(jdbc);
   }
 
   @Test
   void studentSessionCannotReadAdminContentEvenWithLegacyToken() {
     AuthContext student = new AuthContext(10L, 20L, "STUDENT", "Student");
-    when(authorization.requireAdmin(student)).thenThrow(new SecurityException("Admin access required"));
+    when(authorization.requirePermission(student, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", student));
 
-    verify(authorization).requireAdmin(student);
+    verify(authorization).requirePermission(student, "CONTENT_VIEW");
     verifyNoInteractions(jdbc);
   }
 }
