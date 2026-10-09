@@ -48,6 +48,8 @@ function logoutAndSwitch() {
   void fetch('/api/v1/auth/logout', { method: 'POST' }).finally(() => window.location.replace('/'));
 }
 
+if (typeof window !== 'undefined') installRefreshRecovery();
+
 export default function SessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -66,6 +68,8 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     if (!requiresCheck) return () => { alive = false; };
     setReady(false);
     const check = async () => {
+      setReady(false);
+      setBlockedRole(null);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;

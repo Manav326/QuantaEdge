@@ -44,6 +44,8 @@ async function logoutToSwitch() {
   window.location.replace('/login');
 }
 
+if (typeof window !== 'undefined') installRefreshRecovery();
+
 export default function AdminSessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -55,6 +57,8 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
     let alive = true;
     setReady(false); setBlocked(false);
     const check = async () => {
+      setReady(false);
+      setBlocked(false);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;

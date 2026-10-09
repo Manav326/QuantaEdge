@@ -460,6 +460,8 @@ public class AuthService {
       left join student st on st.id=s.student_id
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
+        and (s.user_id is null or u.active=true)
+        and (s.student_id is null or st.active=true)
         and (s.staff_id is null or e.id is not null)
       """,hash(token));
     if(rows.isEmpty()) return null;
