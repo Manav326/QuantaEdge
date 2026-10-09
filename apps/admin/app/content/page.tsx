@@ -323,7 +323,7 @@ export default function ContentStudio(){
    const next=old.map((q,i)=>{
     if(i!==index)return q;
     const updated={...q,...patch};
-    if(editsQuestionContent&&['APPROVED','PUBLISHED'].includes(String(q.review_status||'').toUpperCase())&&!Object.prototype.hasOwnProperty.call(patch,'review_status')){
+    if(editsQuestionContent&&['APPROVED','PUBLISHED','REVIEW','REJECTED'].includes(String(q.review_status||'').toUpperCase())&&!Object.prototype.hasOwnProperty.call(patch,'review_status')){
      updated.review_status='DRAFT';
      updated.review_notes='Content changed; review it again before publishing.';
     }
