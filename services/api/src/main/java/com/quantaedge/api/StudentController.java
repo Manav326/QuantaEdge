@@ -79,7 +79,7 @@ public class StudentController {
   private String profileText(Object value,String label,int maxLength) {
     String text=value==null?"":String.valueOf(value).trim();
     if(text.length()>maxLength) throw new IllegalArgumentException(label+" must be "+maxLength+" characters or fewer.");
-    if(text.chars().anyMatch(ch -> Character.isISOControl(ch) && ch!='\\n' && ch!='\\t'))
+    if(text.chars().anyMatch(ch -> Character.isISOControl(ch) && ch!='\n' && ch!='\t'))
       throw new IllegalArgumentException(label+" contains unsupported characters.");
     return text;
   }
