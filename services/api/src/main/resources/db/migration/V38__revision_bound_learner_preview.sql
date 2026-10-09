@@ -33,7 +33,7 @@ end $preview_check_staff_fk$;
 -- Any subsequent edit moves the topic to draft and clears this acknowledgement.
 update lesson
 set preview_checked_revision=content_revision,
-    preview_checked_at=coalesce(updated_at,now())
+    preview_checked_at=now()
 where status='PUBLISHED' and active=true
   and preview_checked_revision is null;
 
