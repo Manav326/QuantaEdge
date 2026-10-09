@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type AdminSection = 'overview' | 'content' | 'students' | 'parents';
+type AdminSection = 'overview' | 'content' | 'students' | 'parents' | 'staff';
 type AdminSidebarProps = {
   active: AdminSection;
   variant?: 'default' | 'overview' | 'content';
@@ -77,7 +77,13 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
 
       <div className="sidebar-label">{variant === 'content' ? 'LEARNING OPERATIONS' : 'WORKSPACE'}</div>
       <nav aria-label="Admin navigation">
-        {links.map(item => (
+        {links.filter(item => {
+          if (!role) return true;
+          if (item.key === 'overview') return role === 'ADMIN';
+          if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
+          if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
+          return true;
+        }).map(item => (
           <Link key={item.key} href={item.href} title={collapsed ? item.label : undefined} className={active === item.key ? 'active' : ''}>
             <span className="qe-nav-icon" aria-hidden="true">{item.icon}</span>
             <span className="qe-nav-label">{item.label}</span>
@@ -87,9 +93,9 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
         <Link href="/legacy-content" title={collapsed ? 'Detailed authoring' : undefined} className="qe-legacy-nav">
           <span className="qe-nav-icon" aria-hidden="true">✎</span><span className="qe-nav-label">Detailed authoring</span>
         </Link>
-        {role === 'ADMIN' ? <Link href="/employees" title={collapsed ? 'Staff & audit' : undefined} className="qe-staff-nav">
+        {role === 'ADMIN' ? <Link href="/employees" title={collapsed ? 'Staff & audit' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
           <span className="qe-nav-icon" aria-hidden="true">♙</span><span className="qe-nav-label">Staff & audit</span>
-        </Link> : permissions.includes('AUDIT_VIEW') ? <Link href="/employees?view=audit" title={collapsed ? 'Activity trail' : undefined} className="qe-staff-nav">
+        </Link> : permissions.includes('AUDIT_VIEW') ? <Link href="/employees?view=audit" title={collapsed ? 'Activity trail' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
           <span className="qe-nav-icon" aria-hidden="true">◷</span><span className="qe-nav-label">Activity trail</span>
         </Link> : null}
       </nav>
