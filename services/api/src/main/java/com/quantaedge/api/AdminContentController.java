@@ -220,8 +220,19 @@ public class AdminContentController {
     String sourceUrl = optionalText(body.get("curriculumSourceUrl"), 2000);
     String sourceEdition = optionalText(body.get("curriculumSourceEdition"), 160);
     String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
+    boolean wasSourceVerified = Boolean.TRUE.equals(current.get("curriculum_source_verified"));
+    boolean sourceDetailsChanged = !Objects.equals(curriculumSource,current.get("curriculum_source"))
+        || !Objects.equals(sourceUrl,current.get("curriculum_source_url"))
+        || !Objects.equals(sourceEdition,current.get("curriculum_source_edition"))
+        || !Objects.equals(sourcePages,current.get("curriculum_source_pages"));
     boolean sourceVerified = booleanValue(body.get("curriculumSourceVerified"), false);
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
+    boolean canVerifySource = authorization.hasPermission(context,"CONTENT_REVIEW");
+    if (sourceDetailsChanged && wasSourceVerified && !canVerifySource) {
+      sourceVerified = false;
+    } else if (sourceVerified && (!wasSourceVerified || sourceDetailsChanged) && !canVerifySource) {
+      throw badRequest("A content reviewer must verify the official source before it can be marked verified.");
+    }
     boolean fieldsChanged = !Objects.equals(name,current.get("chapter_name"))
         || !Objects.equals(description,current.get("chapter_description"))
         || sortOrder != ((Number)current.get("chapter_sort_order")).intValue()
@@ -418,7 +429,18 @@ public class AdminContentController {
     String sourceUrl = optionalText(body.get("alignmentSourceUrl"), 2000);
     String sourceEdition = optionalText(body.get("alignmentSourceEdition"), 160);
     String sourcePages = optionalText(body.get("alignmentPageRange"), 160);
+    boolean wasSourceVerified = Boolean.TRUE.equals(current.get("alignment_source_verified"));
+    boolean sourceDetailsChanged = !Objects.equals(sourceTitle,current.get("alignment_source_title"))
+        || !Objects.equals(sourceUrl,current.get("alignment_source_url"))
+        || !Objects.equals(sourceEdition,current.get("alignment_source_edition"))
+        || !Objects.equals(sourcePages,current.get("alignment_page_range"));
     boolean sourceVerified = booleanValue(body.get("alignmentSourceVerified"), false);
+    boolean canVerifySource = authorization.hasPermission(context,"CONTENT_REVIEW");
+    if (sourceDetailsChanged && wasSourceVerified && !canVerifySource) {
+      sourceVerified = false;
+    } else if (sourceVerified && (!wasSourceVerified || sourceDetailsChanged) && !canVerifySource) {
+      throw badRequest("A content reviewer must verify the official source before it can be marked verified.");
+    }
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
     authorization.requirePermission(context,"CONTENT_EDIT");
