@@ -1,5 +1,6 @@
 'use client';
 
+import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -94,7 +95,7 @@ export default function LoginPage(){
   }
 
   return <main className="auth-page">
-    <div className="auth-brand"><Link href="/" className="brand brand-lockup-wrap" aria-label="QuantaEdge home"><img className="brand-lockup" src="/branding/quantaedge-logo.png" alt="QuantaEdge — Smarter Decisions. Greater Growth." /></Link></div>
+    <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
     <section className="auth-card">
       <span className="eyebrow">{step==='child'?'Student setup':mode==='register'?'Create parent account':'Secure sign in'}</span>
       {step!=='child' ? <>

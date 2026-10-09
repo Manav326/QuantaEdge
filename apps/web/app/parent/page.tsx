@@ -1,5 +1,6 @@
 'use client';
 
+import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -61,11 +62,11 @@ export default function ParentPage(){
 
   useEffect(()=>{void load();},[]);
 
-  if(loading)return <main className="parent-app"><header className="parent-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><span>Parent view</span></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Loading your report…</h1><p>Connecting to your child’s current learning records.</p></section></main>;
+  if(loading)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><span>Parent view</span></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Loading your report…</h1><p>Connecting to your child’s current learning records.</p></section></main>;
 
-  if(error)return <main className="parent-app"><header className="parent-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><Link href="/parent/children" className="text-link">Manage children</Link></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Your report couldn’t load</h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}>Retry report →</button><Link href="/parent/children" className="button button-light">Manage child profiles</Link><Link href="/login" className="text-link">Sign in again</Link></div></section></main>;
+  if(error)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><Link href="/parent/children" className="text-link">Manage children</Link></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Your report couldn’t load</h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}>Retry report →</button><Link href="/parent/children" className="button button-light">Manage child profiles</Link><Link href="/login" className="text-link">Sign in again</Link></div></section></main>;
 
-  if(!children.length)return <main className="parent-app"><header className="parent-header"><Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link><button className="text-link" onClick={logout}>Logout</button></header><section className="parent-dashboard"><span className="eyebrow">FAMILY LEARNING</span><h1>अभी कोई active child profile नहीं है</h1><p>आप नया student profile बना सकते हैं और child के लिए अलग subject access चुन सकते हैं।</p><Link href="/parent/children" className="button button-dark">Manage child profiles →</Link></section></main>;
+  if(!children.length)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><button className="text-link" onClick={logout}>Logout</button></header><section className="parent-dashboard"><span className="eyebrow">FAMILY LEARNING</span><h1>अभी कोई active child profile नहीं है</h1><p>आप नया student profile बना सकते हैं और child के लिए अलग subject access चुन सकते हैं।</p><Link href="/parent/children" className="button button-dark">Manage child profiles →</Link></section></main>;
 
   if(!selected)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>No report selected</h1><button className="button button-dark" onClick={()=>void load()}>Reload report →</button></section></main>;
 
@@ -79,7 +80,7 @@ export default function ParentPage(){
 
   return <main className="parent-app">
     <header className="parent-header">
-      <Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link>
+      <QuantaEdgeBrand variant="compact" />
       <span>Parent view · {selected.display_name||'Student'}</span>
       <div className="parent-header-actions"><Link href="/parent/children" className="text-link">Manage children</Link><button className="text-link" onClick={logout}>Logout</button></div>
     </header>

@@ -1,5 +1,6 @@
 'use client';
 
+import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -121,7 +122,7 @@ export default function ParentChildrenPage(){
 
   return <main className="parent-app">
     <header className="parent-header">
-      <Link href="/" className="brand compact"><span className="brand-mark">Q</span><span><strong>Quanta</strong>Edge<small>LEARNING</small></span></Link>
+      <QuantaEdgeBrand variant="compact" />
       <span>Parent account</span>
       <Link href="/parent" className="text-link">← Learning report</Link>
     </header>
