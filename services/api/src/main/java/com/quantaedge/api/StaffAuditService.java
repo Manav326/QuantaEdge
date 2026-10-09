@@ -28,8 +28,8 @@ public class StaffAuditService {
       jdbc.update("""
           insert into staff_audit_log(
             actor_staff_id, actor_role, http_method, request_path,
-            response_status, remote_address, user_agent
-          ) values (?,?,?,?,?,?,?)
+            response_status, remote_address, user_agent, details
+          ) values (?,?,?,?,?,?,?,?)
           """,
           actor.staffId(),
           actor.role() == null ? "UNKNOWN" : actor.role(),
@@ -37,9 +37,28 @@ public class StaffAuditService {
           path,
           response.getStatus(),
           address,
-          userAgent);
+          userAgent,
+          null);
     } catch (RuntimeException ex) {
       LOGGER.error("Could not append staff audit trail entry for {}", request.getRequestURI(), ex);
     }
   }
+  public void recordAction(AuthContext actor, String requestPath, String details) {
+    if (actor == null || !actor.isEmployee()) return;
+    try {
+      String path=requestPath==null?"/api/v1/admin":requestPath;
+      if(path.length()>500)path=path.substring(0,500);
+      String summary=details==null?"Staff action":details;
+      if(summary.length()>2000)summary=summary.substring(0,2000);
+      jdbc.update("""
+          insert into staff_audit_log(
+            actor_staff_id,actor_role,http_method,request_path,response_status,
+            remote_address,user_agent,details
+          ) values (?,?, 'ACTION', ?,200,null,null,?)
+          """,actor.staffId(),actor.role()==null?"UNKNOWN":actor.role(),path,summary);
+    } catch (RuntimeException ex) {
+      LOGGER.error("Could not append staff action audit for {}",requestPath,ex);
+    }
+  }
+
 }
