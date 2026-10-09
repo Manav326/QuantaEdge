@@ -42,16 +42,16 @@ export default function LandingAccountMenu() {
         <svg className={open ? 'qe-account-chevron is-open' : 'qe-account-chevron'} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       {open && <div className="qe-account-menu" id="qe-account-menu" role="menu" aria-label="QuantaEdge account options">
-        <div className="qe-account-menu__heading"><strong>Sign in to QuantaEdge</strong><span>Choose your account type</span></div>
+        <div className="qe-account-menu__heading"><strong>QuantaEdge mein sign in karein</strong><span>Apna account type chunein</span></div>
         <Link href="/login/student" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="student" /></span>
-          <span><strong>Student login</strong><small>Continue your own learning</small></span><span className="qe-account-menu__arrow">→</span>
+          <span><strong>Student login</strong><small>Apni padhai continue karein</small></span><span className="qe-account-menu__arrow">→</span>
         </Link>
         <Link href="/login" role="menuitem" className="qe-account-menu__item" onClick={close}>
           <span className="qe-account-menu__icon"><AccountIcon kind="parent" /></span>
-          <span><strong>Parent / guardian login</strong><small>Manage children and progress</small></span><span className="qe-account-menu__arrow">→</span>
+          <span><strong>Parent / guardian login</strong><small>Bachchon ki learning aur progress dekhein</small></span><span className="qe-account-menu__arrow">→</span>
         </Link>
-        <p className="qe-account-menu__footnote">Secure access for every part of the learning platform.</p>
+        <p className="qe-account-menu__footnote">Har account ke liye secure access.</p>
       </div>}
     </div>
   );

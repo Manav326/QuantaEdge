@@ -269,4 +269,14 @@ class AuthServiceTest {
     assertEquals("Aarav", context.displayName());
   }
 
+
+  @Test
+  void refreshRejectsMissingTokenAndRequiresAValidSession() {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+
+    SecurityException error = assertThrows(SecurityException.class, () -> auth.refreshSession(""));
+
+    assertTrue(error.getMessage().contains("Session expired"));
+  }
+
 }
