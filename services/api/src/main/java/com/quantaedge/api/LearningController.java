@@ -67,7 +67,7 @@ public class LearningController {
       where lesson_id=? and active=true
       order by sequence_no
       """, lessonId));
-    result.put("questions", publicQuestionsSql(), lessonId);
+    result.put("questions", jdbc.queryForList(publicQuestionsSql(), lessonId));
     return result;
   }
 
