@@ -54,8 +54,9 @@ public class AdminContentController {
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) String status) {
-    authorize(token);
+      @RequestParam(required = false) String status,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.display_name as class_name,
              s.code as subject_code, s.display_name as subject_name,
@@ -100,16 +101,18 @@ public class AdminContentController {
   @GetMapping("/chapters/{chapterId}")
   public Map<String, Object> chapter(
       @PathVariable long chapterId,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     return chapterById(chapterId);
   }
 
   @GetMapping("/lessons/{lessonId}")
   public Map<String, Object> lesson(
       @PathVariable long lessonId,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     return lessonById(lessonId);
   }
 
@@ -117,8 +120,9 @@ public class AdminContentController {
   @Transactional
   public Map<String, Object> createChapter(
       @RequestBody Map<String, Object> body,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     String classCode = requiredText(body.get("classCode"), 30);
     String subjectCode = requiredText(body.get("subjectCode"), 40);
     String code = requiredText(body.get("code"), 60).toLowerCase();
@@ -156,8 +160,9 @@ public class AdminContentController {
   @Transactional
   public Map<String, Object> createLesson(
       @RequestBody Map<String, Object> body,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     long chapterId = longValue(body.get("chapterId"), "chapterId");
     chapterById(chapterId);
     String code = requiredText(body.get("code"), 100).toLowerCase();
@@ -193,8 +198,9 @@ public class AdminContentController {
   public Map<String, Object> updateChapter(
       @PathVariable long chapterId,
       @RequestBody Map<String, Object> body,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
     String status = requiredText(body.get("status"), 20).toUpperCase();
@@ -241,8 +247,9 @@ public class AdminContentController {
   public Map<String, Object> updateLesson(
       @PathVariable long lessonId,
       @RequestBody Map<String, Object> body,
-      @RequestHeader(value = "X-Admin-Token", required = false) String token) {
-    authorize(token);
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context);
     lessonById(lessonId);
     String title = requiredText(body.get("title"), 240);
     String summary = optionalText(body.get("summary"), 800);
@@ -520,7 +527,8 @@ public class AdminContentController {
     catch (JacksonException ex) { throw badRequest("Content must contain valid JSON."); }
   }
 
-  private void authorize(String suppliedToken) {
+  private void authorize(String suppliedToken, AuthContext context) {
+    if (context != null && context.isAdmin()) return;
     if (localPreviewMode && adminToken.isBlank()) return;
     if (!adminToken.isBlank() && suppliedToken != null && MessageDigest.isEqual(
         adminToken.getBytes(StandardCharsets.UTF_8), suppliedToken.getBytes(StandardCharsets.UTF_8))) return;
