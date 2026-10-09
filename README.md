@@ -42,6 +42,18 @@ The extraction-to-question-generation link is implemented as an explicit, review
 The question-generation model is configured separately using `OPENAI_API_KEY`, `OPENAI_API_BASE_URL` and `QUANTAEDGE_QUESTION_MODEL`. Generation sends extracted page text to that provider, so review its privacy/retention terms before enabling external processing. The generator validates question structure, answer keys, allowed question types, page citations and duplicates, but AI output still requires independent subject-matter review. No question generation was executed as part of this repository change; the existing four-question baseline remains the actual content count until candidates are generated, reviewed, imported and approved.
 
 
+## AI-assisted question generation
+
+The extraction-to-question-generation link is implemented as an explicit, review-gated workflow:
+
+1. **scripts/scert_extract_review.py** creates a page-addressable extraction review bundle.
+2. **scripts/generate_questions_from_extraction.py** uses a configured OpenAI-compatible API to generate original lesson/question candidates only when both the explicit generation and external-processing confirmation flags are supplied. Without them, it prints an offline plan.
+3. Candidates remain AI_GENERATED_DRAFT JSON and are never imported or published automatically.
+4. **scripts/review_generated_question_bundle.py** requires a named editor to complete five explicit review confirmations.
+5. **scripts/import_reviewed_content.py** imports reviewed bundles as drafts. Use --attach-to-existing-chapter to add lessons beneath a matching class/subject chapter rather than creating a duplicate chapter.
+
+Configure the generation model separately with OPENAI_API_KEY, OPENAI_API_BASE_URL and QUANTAEDGE_QUESTION_MODEL. Generation sends extracted page text to the configured provider, so review its privacy/retention terms before enabling external processing. The generator validates structure, answer-key consistency, allowed question types, page citations and duplicates, but generated answers still require independent subject-matter review. No generation was executed as part of this code change; the existing four-question baseline remains the actual content count until candidates are generated, reviewed, imported and approved.
+
 ## Local preview student
 
 Local Docker development seeds exactly one student when APP_DEMO_SEED=true:
