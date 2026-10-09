@@ -9,3 +9,8 @@ target/
 .vscode/
 *.log
 .DS_Store
+
+# Private textbook extracts and generated/reviewed content bundles must stay out of Git.
+/private-review/
+/source-pdfs/
+*.ai-generated-draft.json
