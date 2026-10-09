@@ -57,7 +57,7 @@ export default function StudentLoginPage() {
           <button type="submit" className="button button-dark full" disabled={busy || parentMobile.length !== 10 || username.length < 3 || !password}>{busy ? 'Opening your learning space…' : 'Student sign in →'}</button>
         </form>
         <div className="auth-mode-links"><Link href="/login">Parent / guardian login</Link></div>
-        <small className="auth-note">Your student login opens only your learning profile. Ask your parent to reset your login details if you forget them.</small>
+        <small className="auth-note">Your student login opens only your learning profile. If you can’t sign in yet, ask your parent to open Parent Login → Manage child profiles and create your username and password first.</small>
       </section>
     </main>
   );
