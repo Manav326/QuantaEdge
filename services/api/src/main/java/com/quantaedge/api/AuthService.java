@@ -517,8 +517,12 @@ public class AuthService {
     var rows=jdbc.queryForList("""
       select s.id
       from auth_session s
+      left join user_account u on u.id=s.user_id and u.active=true
+      left join student st on st.id=s.student_id and st.active=true
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.refresh_token_hash=? and s.revoked_at is null and s.refresh_expires_at>now()
+        and (s.user_id is null or u.id is not null)
+        and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
       for update of s
       """,hash(refreshToken));

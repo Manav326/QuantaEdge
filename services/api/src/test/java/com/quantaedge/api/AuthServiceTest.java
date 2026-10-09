@@ -279,4 +279,34 @@ class AuthServiceTest {
     assertTrue(error.getMessage().contains("Session expired"));
   }
 
+
+  @Test
+  void refreshRotatesBothCredentialsAndRestoresTheSameParentIdentity() {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+    String oldRefresh = "existing-refresh-token";
+    Map<String,Object> sessionRow = Map.of("id", 91L);
+    Map<String,Object> parentRow = new java.util.HashMap<>();
+    parentRow.put("user_id", 52L);
+    parentRow.put("student_id", null);
+    parentRow.put("staff_id", null);
+    parentRow.put("role", "PARENT");
+    parentRow.put("display_name", "Parent Account");
+    parentRow.put("student_name", null);
+    parentRow.put("staff_role", null);
+    parentRow.put("staff_name", null);
+
+    when(jdbc.queryForList(contains("select s.id"), anyString())).thenReturn(List.of(sessionRow));
+    when(jdbc.update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L))).thenReturn(1);
+    when(jdbc.queryForList(contains("select s.user_id,s.student_id,s.staff_id"), anyString())).thenReturn(List.of(parentRow));
+
+    AuthService.SessionTokens tokens = auth.refreshSession(oldRefresh);
+
+    assertNotNull(tokens.accessToken());
+    assertNotNull(tokens.refreshToken());
+    assertFalse(oldRefresh.equals(tokens.refreshToken()));
+    assertEquals(52L, tokens.context().userId());
+    assertEquals("PARENT", tokens.context().role());
+    verify(jdbc).update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L));
+  }
+
 }

@@ -535,7 +535,7 @@
 .qe-workspace-layout.is-collapsed .qe-workspace-link-label,
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot>div{display:none}
 .qe-workspace-layout.is-collapsed .qe-workspace-collapse{top:72px;right:calc(50% - 12px)}
-.qe-workspace-layout.is-collapsed .qe-workspace-sidebar nav{margin-top:14px}
+.qe-workspace-layout.is-collapsed .qe-workspace-sidebar nav{margin-top:31px}
 .qe-workspace-layout.is-collapsed .qe-workspace-link{justify-content:center;padding:9px 4px;gap:0}
 .qe-workspace-layout.is-collapsed .qe-workspace-icon{flex-basis:34px;width:34px;height:34px;font-size:17px}
 .qe-workspace-layout.is-collapsed .qe-workspace-sidebar-foot{justify-content:center;padding-left:0;padding-right:0}

@@ -293,7 +293,7 @@ export default function ParentProfilePage() {
               <div className="parent-profile-fields">
                 <label className="parent-profile-field">Aap kya kaam karte hain?<input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder="e.g. Teacher, business owner" autoComplete="organization-title" /></label>
                 <label className="parent-profile-field">Organisation ya workplace<input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder="Optional" autoComplete="organization" /></label>
-                <label className="parent-profile-field parent-profile-field--wide">Preferred language<select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English">English</option><option value="Hindi">हिन्दी</option><option value="Hindi & English">Hindi &amp; English</option><option value="Other">Other</option></select></label>
+                <label className="parent-profile-field parent-profile-field--wide">Preferred language<select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English">English</option><option value="Hindi">हिन्दी</option><option value="Hindi & English">Hinglish (Hindi + English)</option><option value="Other">Other</option></select></label>
               </div>
             </section>
 
