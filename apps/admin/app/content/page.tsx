@@ -114,7 +114,9 @@ function questionHasValidAnswer(question:any){
  if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))return false;
  if(type==='MCQ'||type==='TRUE_FALSE'){
   const options=Array.isArray(question.options)?question.options:[];
-  return options.length>=2&&options.every((option:any)=>meaningfulContent(option.label))&&options.filter((option:any)=>Boolean(option.correct)).length===1;
+  const correctOptions=options.filter((option:any)=>Boolean(option.correct));
+  const answer=question.answer_payload||{};
+  return options.length>=2&&options.every((option:any)=>meaningfulContent(option.label))&&correctOptions.length===1&&answer.kind==='OPTION'&&String(answer.value)===String(correctOptions[0]?.key);
  }
  const answer=question.answer_payload||{};
  if(type==='INPUT')return answer.kind==='TEXT'&&meaningfulContent(answer.value);
@@ -299,6 +301,7 @@ export default function ContentStudio(){
   if(form.lessonStatus!=='REVIEW'){setError('Submit the micro-topic for review before approving or returning questions.');return;}
   const note=status==='REJECTED'?window.prompt('Tell the author what needs to change before resubmission:'):null;
   if(status==='REJECTED'&&note===null)return;
+  if(status==='REJECTED'&&!String(note||'').trim()){setError('Add feedback explaining what the author must correct.');return;}
   setSaving(true);setError('');setNotice('');
   try{
    await api('/api/v1/admin/content/lessons/'+selected.id+'/questions/'+questionId+'/review',{
