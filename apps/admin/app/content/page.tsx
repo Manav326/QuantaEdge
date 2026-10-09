@@ -351,7 +351,7 @@ export default function ContentStudio(){
    {label:'Basics',ok:basicsReady},
    {label:'Teaching blocks',ok:blocksReady},
    {label:'Preview',ok:previewReviewed},
-   {label:'Publish',ok:questionsReady&&sourceReady&&chapterReady}
+   {label:'Publish',ok:basicsReady&&blocksReady&&previewReviewed&&questionsReady&&sourceReady&&chapterReady}
   ];
   const currentWorkflowStep=workflowSteps.findIndex(step=>!step.ok);
   const canPublishLessonReady=workflowSteps.every(step=>step.ok);
