@@ -19,6 +19,8 @@ app:
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
   demo-seed: ${APP_DEMO_SEED:false}
+  admin:
+    content-token: ${APP_ADMIN_CONTENT_TOKEN:}
 management:
   endpoints:
     web:

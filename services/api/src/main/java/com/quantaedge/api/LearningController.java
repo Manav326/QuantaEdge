@@ -26,6 +26,7 @@ public class LearningController {
     return jdbc.queryForList("""
       select l.id, l.code, l.title, l.summary, l.estimated_minutes,
              l.status, ch.code as chapter_code, ch.display_name as chapter_name,
+             c.code as class_code, s.code as subject_code, s.display_name as subject_name,
              o.code as objective_code, o.title as objective_title
       from lesson l
       join curriculum_chapter ch on ch.id = l.chapter_id
@@ -33,7 +34,7 @@ public class LearningController {
       join curriculum_class c on c.id = s.class_id
       left join learning_objective o on o.id = l.objective_id
       where c.code = ? and s.code = ? and c.active = true and s.active = true and ch.active = true and ch.content_status = 'PUBLISHED' and l.active = true and l.status = 'PUBLISHED'
-      order by ch.sort_order, l.sort_order
+      order by coalesce(ch.teaching_order, ch.sort_order), l.sort_order
       """, classCode, subjectCode);
   }
 
@@ -50,7 +51,7 @@ public class LearningController {
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
       left join learning_objective o on o.id=l.objective_id
-      where l.id=? and l.active=true and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
+      where l.id=? and l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
       """, lessonId);
 
     if (lessons.isEmpty()) {
@@ -93,7 +94,8 @@ public class LearningController {
                (select jsonb_agg(
                   jsonb_build_object(
                     'key', qo.option_key,
-                    'label', qo.label
+                    'label', qo.label,
+                    'correct', qo.is_correct
                   ) order by qo.sort_order
                ) from question_option qo where qo.question_id=q.id),
                '[]'::jsonb
