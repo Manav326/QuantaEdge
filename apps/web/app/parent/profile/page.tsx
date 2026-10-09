@@ -102,6 +102,7 @@ export default function ParentProfilePage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [photoName, setPhotoName] = useState('');
+  const [photoChanged, setPhotoChanged] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -145,7 +146,7 @@ export default function ParentProfilePage() {
           occupation: body.occupation || '',
           organization: body.organization || '',
           preferredLanguage: body.preferred_language || 'English',
-          profileImageDataUrl: url || '',
+          profileImageDataUrl: '',
         });
       } catch (loadError) {
         if (active) setError(loadError instanceof Error ? loadError.message : 'Unable to load your profile.');
@@ -166,6 +167,7 @@ export default function ParentProfilePage() {
     try {
       const profileImageDataUrl = await prepareProfilePhoto(file);
       setDraft(current => ({ ...current, profileImageDataUrl }));
+      setPhotoChanged(true);
       setPhotoName(file.name);
       setNotice('Photo ready. Select Save changes to keep it on your profile.');
     } catch (photoError) {
@@ -185,7 +187,16 @@ export default function ParentProfilePage() {
       const response = await fetch('/api/v1/guardians/profile', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(draft),
+        body: JSON.stringify({
+          displayName: draft.displayName,
+          email: draft.email,
+          city: draft.city,
+          state: draft.state,
+          occupation: draft.occupation,
+          organization: draft.organization,
+          preferredLanguage: draft.preferredLanguage,
+          ...(photoChanged ? { profileImageDataUrl: draft.profileImageDataUrl } : {}),
+        }),
       });
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
@@ -199,10 +210,11 @@ export default function ParentProfilePage() {
         occupation: body.occupation || '',
         organization: body.organization || '',
         preferredLanguage: body.preferred_language || 'English',
-        profileImageDataUrl: url || '',
+        profileImageDataUrl: '',
       });
       setNotice('Your parent profile has been saved.');
       setPhotoName('');
+      setPhotoChanged(false);
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
     } finally {
@@ -212,6 +224,7 @@ export default function ParentProfilePage() {
 
   function removePhoto() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+    setPhotoChanged(true);
     setPhotoName('');
     setNotice('Photo removed from this draft. Save changes to confirm.');
     setError('');
@@ -222,7 +235,7 @@ export default function ParentProfilePage() {
       <header className="parent-header">
         <QuantaEdgeBrand variant="compact" />
         <span>Parent account</span>
-        <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={draft.profileImageDataUrl || undefined} />
+        <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={draft.profileImageDataUrl || identity.profileImageUrl || undefined} />
       </header>
       <div className="parent-profile-page__wrap">
         <div className="parent-profile-page__breadcrumb">
@@ -247,7 +260,7 @@ export default function ParentProfilePage() {
               <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2>Your profile photo</h2><p>A familiar face for your family account.</p></div></div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
-                  <img src={draft.profileImageDataUrl || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
+                  <img src={draft.profileImageDataUrl || identity.profileImageUrl || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
                   <span className="parent-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="parent-profile-photo-editor__copy">
