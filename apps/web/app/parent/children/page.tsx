@@ -45,14 +45,6 @@ export default function ParentChildrenPage(){
     const meResponse=await fetch('/api/v1/auth/me');
     if(!meResponse.ok){router.replace('/login');return;}
     let me=await readJson(meResponse);
-    // Child learning sessions carry the guardian user ID. Restore the parent session before management.
-    if(me.role==='STUDENT'&&me.userId){
-      const switched=await fetch('/api/v1/auth/switch-parent',{method:'POST'});
-      if(!switched.ok){router.replace('/login');return;}
-      const refreshed=await fetch('/api/v1/auth/me');
-      if(!refreshed.ok){router.replace('/login');return;}
-      me=await readJson(refreshed);
-    }
     if(me.role!=='PARENT'&&me.role!=='ADMIN'){router.replace('/login');return;}
     const [accountResponse,childrenResponse]=await Promise.all([
       fetch('/api/v1/guardians/account'),fetch('/api/v1/guardians/children')
@@ -92,7 +84,7 @@ export default function ParentChildrenPage(){
       if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
       setDraft(emptyDraft);setConsent(false);
       await load();
-      setNotice('Student profile created. The selected subjects are now assigned to this child.');
+      setNotice('Student profile created and login credentials saved. Your child can now sign in with the username and password you created.');
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
   }
@@ -168,7 +160,11 @@ export default function ParentChildrenPage(){
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}>Archive profile</button>
             </div>
             <div className="parent-child-credentials">
-              <div className="parent-credentials-heading"><strong>Student login details</strong><small>On Student Login, use the parent’s registered mobile number plus this username and password.</small></div>
+              <div className="parent-credentials-heading"><strong>Student login details</strong><small>Step 1: set a username and password here. Step 2: give the child their login details. On Student Login, they must use your registered mobile number plus this username and password.</small></div>
+              <div className="parent-credentials-status" role="status">
+                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?'✓ Student login is set up':'Student login is not set up yet'}</strong>
+                <p>{child.login_username?'This child has parent-created login credentials and can sign in.':'This child cannot sign in yet. Create a username and password below, then select “Save login details”.'}</p>
+              </div>
               {child.login_username&&<p className="parent-credentials-current">Current username: <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
                 <label>Student username<input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder="e.g. aarav07" autoComplete="off" /></label>
@@ -191,7 +187,7 @@ export default function ParentChildrenPage(){
       </section>
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow">ADD A CHILD</span><h2>New student profile</h2></div></div>
+        <div className="parent-manage-panel-head"><div><span className="eyebrow">ADD A CHILD</span><h2>New student profile</h2><p>Create the child profile and their login together. The child can sign in only after you finish this form and create their username and password.</p></div></div>
         {(account?.remainingSlots??0)<=0
           ? <div className="parent-empty"><strong>You've reached the current profile limit.</strong><p>Contact support to request a higher child-profile limit. Existing profiles and learning history remain available.</p></div>
           : <div className="parent-child-form">
