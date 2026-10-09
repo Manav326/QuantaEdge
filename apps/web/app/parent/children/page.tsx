@@ -12,11 +12,13 @@ type Child = {
   board:string;
   language:string;
   track_codes?:string;
+  login_username?:string|null;
 };
 type Account = { parentName:string; activeChildren:number; maxChildren:number; remainingSlots:number };
-type Draft = {displayName:string;classCode:string;language:string;pin:string;trackCodes:string[]};
+type Draft = {displayName:string;classCode:string;language:string;username:string;password:string;trackCodes:string[]};
+type CredentialDraft = {username:string;password:string};
 
-const emptyDraft:Draft={displayName:'',classCode:'7',language:'hi',pin:'',trackCodes:['maths','science']};
+const emptyDraft:Draft={displayName:'',classCode:'7',language:'hi',username:'',password:'',trackCodes:['maths','science']};
 
 async function readJson(response:Response):Promise<any>{
   const raw=await response.text();
@@ -31,6 +33,7 @@ export default function ParentChildrenPage(){
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
   const [trackDrafts,setTrackDrafts]=useState<Record<number,string[]>>({});
+  const [credentialDrafts,setCredentialDrafts]=useState<Record<number,CredentialDraft>>({});
   const [consent,setConsent]=useState(false);
   const [busy,setBusy]=useState(false);
   const [busyTrack,setBusyTrack]=useState<number|null>(null);
@@ -63,6 +66,9 @@ export default function ParentChildrenPage(){
     setTrackDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
       child.id,(child.track_codes||'').split(',').filter(Boolean)
     ])));
+    setCredentialDrafts(current=>Object.fromEntries(childrenBody.map((child:Child)=>[
+      child.id,{username:child.login_username||current[child.id]?.username||'',password:''}
+    ])));
   }
 
   useEffect(()=>{load().catch((e:any)=>setError(e.message||'Unable to load profiles'));},[router]);
@@ -89,6 +95,20 @@ export default function ParentChildrenPage(){
       setNotice('Student profile created. The selected subjects are now assigned to this child.');
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
+  }
+
+  async function saveCredentials(child:Child){
+    setError('');setNotice('');
+    const draft=credentialDrafts[child.id]||{username:'',password:''};
+    try{
+      const response=await fetch('/api/v1/guardians/children/'+child.id+'/credentials',{
+        method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(draft)
+      });
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.message||'Unable to save student login details.');
+      await load();
+      setNotice('Login details saved for '+child.display_name+'. Share the username and password with this child securely.');
+    }catch(e:any){setError(e.message||'Unable to save student login details.');}
   }
 
   async function saveTracks(child:Child){
@@ -147,6 +167,15 @@ export default function ParentChildrenPage(){
               </div>
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}>Archive profile</button>
             </div>
+            <div className="parent-child-credentials">
+              <div className="parent-credentials-heading"><strong>Student login details</strong><small>On Student Login, use the parent’s registered mobile number plus this username and password.</small></div>
+              {child.login_username&&<p className="parent-credentials-current">Current username: <strong>{child.login_username}</strong></p>}
+              <div className="parent-child-form parent-credentials-form">
+                <label>Student username<input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder="e.g. aarav07" autoComplete="off" /></label>
+                <label>Set / reset password<input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder="At least 8 characters" autoComplete="new-password" /></label>
+              </div>
+              <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}>Save login details</button>
+            </div>
             <div className="parent-track-editor">
               <div><strong>Learning access</strong><small>Only selected subjects appear in the student's learning area.</small></div>
               <div className="parent-track-options">{trackOptions.map(option=><label key={option.code}>
@@ -168,10 +197,11 @@ export default function ParentChildrenPage(){
           : <div className="parent-child-form">
             <label>Child's name<input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder="Enter the child's name" autoComplete="off"/></label>
             <label>Class<select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
-            <label>Student PIN<input value={draft.pin} onChange={e=>setDraft({...draft,pin:e.target.value.replace(/\D/g,'').slice(0,8)})} placeholder="4–8 digits" inputMode="numeric" autoComplete="new-password"/></label>
+            <label>Student username<input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder="e.g. aarav07" autoComplete="off"/></label>
+            <label>Student password<input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder="At least 8 characters" autoComplete="new-password"/></label>
             <fieldset className="parent-track-fieldset"><legend>Choose subject tracks</legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{option.label}</span></label>)}</fieldset>
             <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span>I am the child's authorised guardian and consent to creating this profile and retaining learning records.</span></label>
-            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.pin.length<4||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?'Creating profile…':'Create child profile →'}</button>
+            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?'Creating profile…':'Create child profile →'}</button>
           </div>}
       </section>
     </section>

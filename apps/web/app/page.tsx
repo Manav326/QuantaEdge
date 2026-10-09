@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import QuantaEdgeBrand from './components/QuantaEdgeBrand';
+import LandingAccountMenu from './components/LandingAccountMenu';
 
 const subjects = [
   { icon: '∑', name: 'गणित', meta: 'कक्षा 6–8 · हिन्दी', tone: 'violet' },
@@ -25,8 +26,7 @@ export default function Home() {
         </nav>
 
         <div className="top-actions">
-          <Link href="/login" className="text-link">Login</Link>
-          <Link href="/login" className="button button-dark button-small">मुफ़्त में शुरू करें</Link>
+          <LandingAccountMenu />
         </div>
       </header>
 
@@ -39,8 +39,8 @@ export default function Home() {
           </p>
 
           <div className="hero-actions">
-            <Link href="/login" className="button button-dark">अपनी पढ़ाई शुरू करें <span>→</span></Link>
-            <Link href="/parent" className="button button-light">मैं Parent हूँ</Link>
+            <Link href="/login/student" className="button button-dark">अपनी पढ़ाई शुरू करें <span>→</span></Link>
+            <Link href="/login" className="button button-light">मैं Parent हूँ</Link>
           </div>
 
           <div className="trust-row">
@@ -88,7 +88,7 @@ export default function Home() {
               <span className="arrow">→</span>
             </div>
 
-            <Link href="/login" className="device-cta">अपनी learning journey शुरू करें →</Link>
+            <Link href="/login/student" className="device-cta">अपनी learning journey शुरू करें →</Link>
           </div>
         </div>
       </section>
@@ -119,12 +119,12 @@ export default function Home() {
       <section id="subjects" className="section section-soft">
         <div className="section-heading">
           <div><span className="eyebrow">अभी से शुरू करें</span><h2>आपकी पढ़ाई का पहला कदम</h2></div>
-          <Link href="/login" className="text-link">शुरू करें →</Link>
+          <Link href="/login/student" className="text-link">शुरू करें →</Link>
         </div>
 
         <div className="subject-grid">
           {subjects.map(subject => (
-            <Link href="/login" className="subject-card" key={subject.name}>
+            <Link href="/login/student" className="subject-card" key={subject.name}>
               <div className={`subject-icon ${subject.tone}`}>{subject.icon}</div>
               <div><span>Class 6–8</span><h3>{subject.name}</h3><p>{subject.meta}</p></div>
               <span className="card-arrow">↗</span>
@@ -138,7 +138,7 @@ export default function Home() {
           <span className="eyebrow">Parents के लिए</span>
           <h2>बच्चा कितना पढ़ा नहीं —<br /><em>क्या सीखा, वह दिखे।</em></h2>
           <p>Linked child के वास्तविक lessons, attempts, sessions, completion और concept mastery का simple summary।</p>
-          <Link href="/parent" className="button button-dark">Parent view खोलें →</Link>
+          <Link href="/login" className="button button-dark">Parent view खोलें →</Link>
         </div>
 
         <div className="report-card">
