@@ -231,6 +231,10 @@ public class AdminContentController {
     } else if (!fieldsChanged) {
       authorization.requirePermission(context,"CONTENT_EDIT");
     }
+    // Editing a live chapter creates a new draft that must pass publication checks again.
+    if ("PUBLISHED".equals(oldStatus) && fieldsChanged && "PUBLISHED".equals(status)) {
+      status = "DRAFT";
+    }
     if (sourceVerified) requireCompleteSourceReference(curriculumSource, sourceUrl, sourceEdition, sourcePages, "chapter");
     if ("PUBLISHED".equals(status)) {
       if (!sourceVerified) throw badRequest("A chapter cannot be published until its official source edition and page mapping are verified.");
