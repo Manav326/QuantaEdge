@@ -269,7 +269,7 @@ export default function AdminStaffPage() {
             <div className="qe-staff-permissions-head"><strong>Task permissions</strong><span>{draftPermissions.length} selected</span></div>
             <p className="qe-staff-help">Choose the tasks this person is allowed to perform. Permissions are enforced by the API, not just by hiding buttons.</p>
             <div className="qe-staff-permission-list">{availablePermissions.map(permission=><label key={permission.permission_key} className="qe-permission-option">
-              <input type="checkbox" checked={draftPermissions.includes(permission.permission_key)} disabled={saving||draftRole==='ADMIN'||selected.isCurrentStaff} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked)}/>
+              <input type="checkbox" checked={draftPermissions.includes(permission.permission_key)} disabled={saving||draftRole==='ADMIN'||selected.isCurrentStaff||(permission.permission_key==='STAFF_MANAGE'&&draftRole!=='ADMIN')} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked)}/>
               <span><b>{permission.display_name}</b><small>{permission.description}</small><em>{permission.permission_key.replaceAll('_',' ')}</em></span>
             </label>)}</div>
             {draftRole==='ADMIN'&&<p className="qe-staff-help">Administrator accounts retain every permission. Assign the Administrator role only to trusted operators.</p>}
@@ -282,7 +282,7 @@ export default function AdminStaffPage() {
             <div className="qe-staff-permissions-head"><strong>Initial task permissions</strong><span>{newPermissions.length} selected</span></div>
             <p className="qe-staff-help">The role selects a starting set. You can then remove or add individual task permissions.</p>
             <div className="qe-staff-permission-list">{availablePermissions.map(permission=><label key={permission.permission_key} className="qe-permission-option">
-              <input type="checkbox" checked={newPermissions.includes(permission.permission_key)} disabled={saving||newRole==='ADMIN'} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked,true)}/>
+              <input type="checkbox" checked={newPermissions.includes(permission.permission_key)} disabled={saving||newRole==='ADMIN'||permission.permission_key==='STAFF_MANAGE'} onChange={e=>toggleDraftPermission(permission.permission_key,e.target.checked,true)}/>
               <span><b>{permission.display_name}</b><small>{permission.description}</small><em>{permission.permission_key.replaceAll('_',' ')}</em></span>
             </label>)}</div>
             <button type="button" className="qe-primary-button qe-save-staff" disabled={saving||!newReady||!adminPermissionsComplete} onClick={()=>void createStaff()}>{saving?'Creating…':'Create staff account'}</button>
