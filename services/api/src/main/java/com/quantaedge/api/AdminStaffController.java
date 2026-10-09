@@ -112,9 +112,21 @@ public class AdminStaffController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     requireStaffManager(context);
     Map<String,Object> existing=staffById(staffId);
+    if (context.staffId()!=null && context.staffId()==staffId) {
+      throw badRequest("You cannot change your own role or permissions.");
+    }
     String role=String.valueOf(body.getOrDefault("role",existing.get("role"))).trim().toUpperCase();
     if (!ROLES.contains(role)) throw badRequest("Choose a supported staff role.");
     if (body.get("permissions")==null) throw badRequest("Select the permissions this staff member needs.");
+    if ("ADMIN".equals(existing.get("role")) && !"ADMIN".equals(role)) {
+      Long otherAdmins=jdbc.queryForObject("""
+          select count(*) from staff_account
+          where role='ADMIN' and active=true and id<>?
+          """,Long.class,staffId);
+      if (otherAdmins==null||otherAdmins<1) {
+        throw badRequest("At least one active administrator must remain.");
+      }
+    }
     List<String> permissions=readPermissions(body.get("permissions"));
     validateStaffPermissions(role,permissions);
     jdbc.update("update staff_account set role=?,updated_at=now() where id=?",role,staffId);
