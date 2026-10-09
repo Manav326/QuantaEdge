@@ -18,7 +18,7 @@ set minimum_count = case
   else 0
 end,
 updated_at=now()
-from curriculum_ch ch
+from curriculum_chapter ch
 join curriculum_subject s on s.id=ch.subject_id
 join curriculum_class c on c.id=s.class_id
 where r.chapter_id=ch.id
