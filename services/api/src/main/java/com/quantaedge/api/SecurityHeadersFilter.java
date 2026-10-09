@@ -18,8 +18,7 @@ public class SecurityHeadersFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
       throws ServletException,IOException {
     String uri=request.getRequestURI();
-    boolean trace="PUT".equalsIgnoreCase(request.getMethod())
-        && uri.startsWith("/api/v1/admin/lessons/")
+    boolean trace=uri.startsWith("/api/v1/admin/lessons/")
         && uri.contains("/blocks/") && uri.endsWith("/asset");
     if(trace) LOGGER.info("HTTP_DIAG security-filter-enter method={} uri={} contentLength={} contentType={} remote={}",
         request.getMethod(),uri,request.getContentLengthLong(),request.getContentType(),request.getRemoteAddr());
