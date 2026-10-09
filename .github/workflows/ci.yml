@@ -62,7 +62,11 @@ jobs:
           if printf '%s\n' "$files" | grep -qE '^apps/web/'; then web=true; fi
           if printf '%s\n' "$files" | grep -qE '^apps/admin/'; then admin=true; fi
           if printf '%s\n' "$files" | grep -qE '^scripts/|^tests/test_.*\.py$|^\.github/workflows/'; then content=true; fi
-          if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml
+          if printf '%s\n' "$files" | grep -qE '^docker-compose(\.prod)?\.yml$'; then all=true; fi
+          # Production deploys a single SHA tag for API, web, and admin. Publish all
+          # three images on each main push so every deploy SHA has a tag for each service.
+          if [ "$EVENT_NAME" = "push" ]; then all=true; fi
+          if [ "$all" = "true" ]; then api=true; web=true; admin=true; content=true; fi
           echo "api=$api" >> "$GITHUB_OUTPUT"
           echo "web=$web" >> "$GITHUB_OUTPUT"
           echo "admin=$admin" >> "$GITHUB_OUTPUT"
