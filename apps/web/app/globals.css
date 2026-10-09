@@ -417,8 +417,13 @@
 .parent-report-switcher__copy small{color:var(--muted);font-size:10px;line-height:1.4}
 .parent-report-switcher__arrow{flex:0 0 auto;color:#b4521b;font-size:17px;font-weight:800}
 .parent-report-switcher__status{margin:0;color:var(--muted);font-size:11px}
-.parent-open-student-note{max-width:620px;margin:9px 0 0;color:var(--muted);font-size:11px;line-height:1.5}
-@media(max-width:640px){.parent-report-switcher{padding:14px;margin:18px 0 22px}.parent-report-switcher__profiles{grid-template-columns:1fr}.parent-report-switcher__profile{padding:11px}.parent-open-student-note{font-size:10px}}
+.parent-readonly-note{max-width:720px;margin:18px 0 0;padding:12px 14px;border:1px solid #f2d2bd;border-radius:12px;background:#fff8f2;color:#7c3b19;font-size:11px;line-height:1.6}
+.parent-credentials-status{display:flex;flex-direction:column;gap:4px;margin:12px 0 0;padding:10px 11px;border:1px solid #e6eaf1;border-radius:10px;background:#fff}
+.parent-credentials-status strong{font-size:11px;line-height:1.4}
+.parent-credentials-status strong.is-ready{color:#166534}
+.parent-credentials-status strong.is-pending{color:#9a3412}
+.parent-credentials-status p{margin:0;color:#68738a;font-size:10px;line-height:1.5}
+@media(max-width:640px){.parent-report-switcher{padding:14px;margin:18px 0 22px}.parent-report-switcher__profiles{grid-template-columns:1fr}.parent-report-switcher__profile{padding:11px}.parent-readonly-note{font-size:10px}}
 
 
 /* Landing account dropdown, inspired by the mPay top-right account menu. */
