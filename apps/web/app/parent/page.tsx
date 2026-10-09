@@ -1,12 +1,14 @@
 'use client';
 
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
+import ParentAccountMenu from '../components/ParentAccountMenu';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 type ChildRow={id:number;display_name:string};
 type ParentReport=Record<string,any>;
+type ParentProfile=Record<string,any>;
 
 async function readApi(response:Response):Promise<any>{
   const raw=await response.text();
@@ -21,13 +23,9 @@ export default function ParentPage(){
   const router=useRouter();
   const [children,setChildren]=useState<ChildRow[]>([]);
   const [selected,setSelected]=useState<ParentReport|null>(null);
+  const [parentProfile,setParentProfile]=useState<ParentProfile|null>(null);
   const [error,setError]=useState('');
   const [loading,setLoading]=useState(true);
-
-  async function logout(){
-    await fetch('/api/v1/auth/logout',{method:'POST'});
-    router.replace('/login');
-  }
 
   async function load(id?:number){
     setLoading(true);
@@ -44,6 +42,10 @@ export default function ParentPage(){
       if(!cr.ok)throw new Error(cb.message||`Unable to load child profiles (HTTP ${cr.status}).`);
       if(!Array.isArray(cb))throw new Error('The API returned an invalid child-profile list.');
       setChildren(cb);
+      const profileResponse=await fetch('/api/v1/guardians/profile',{cache:'no-store'});
+      const profileBody=await readApi(profileResponse);
+      if(!profileResponse.ok)throw new Error(profileBody.message||'Unable to load parent account.');
+      setParentProfile(profileBody);
       const child=cb.find((x:ChildRow)=>x.id===id)||cb[0];
       if(!child){setSelected(null);return;}
 
@@ -62,11 +64,11 @@ export default function ParentPage(){
 
   useEffect(()=>{void load();},[]);
 
-  if(loading)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><span>Parent view</span></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Loading your report…</h1><p>Connecting to your child’s current learning records.</p></section></main>;
+  if(loading)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><span>Parent view</span><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Loading your report…</h1><p>Connecting to your child’s current learning records.</p></section></main>;
 
-  if(error)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><Link href="/parent/children" className="text-link">Manage children</Link></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Your report couldn’t load</h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}>Retry report →</button><Link href="/parent/children" className="button button-light">Manage child profiles</Link><Link href="/login" className="text-link">Sign in again</Link></div></section></main>;
+  if(error)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>Your report couldn’t load</h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}>Retry report →</button><Link href="/parent/children" className="button button-light">Manage child profiles</Link><Link href="/login" className="text-link">Sign in again</Link></div></section></main>;
 
-  if(!children.length)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><button className="text-link" onClick={logout}>Logout</button></header><section className="parent-dashboard"><span className="eyebrow">FAMILY LEARNING</span><h1>अभी कोई active child profile नहीं है</h1><p>आप नया student profile बना सकते हैं और child के लिए अलग subject access चुन सकते हैं।</p><Link href="/parent/children" className="button button-dark">Manage child profiles →</Link></section></main>;
+  if(!children.length)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow">FAMILY LEARNING</span><h1>अभी कोई active child profile नहीं है</h1><p>आप नया student profile बना सकते हैं और child के लिए अलग subject access चुन सकते हैं।</p><Link href="/parent/children" className="button button-dark">Manage child profiles →</Link></section></main>;
 
   if(!selected)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow">PARENT REPORT</span><h1>No report selected</h1><button className="button button-dark" onClick={()=>void load()}>Reload report →</button></section></main>;
 
@@ -82,7 +84,7 @@ export default function ParentPage(){
     <header className="parent-header">
       <QuantaEdgeBrand variant="compact" />
       <span>Parent view · {selected.display_name||'Student'}</span>
-      <div className="parent-header-actions"><Link href="/parent/children" className="text-link">Manage children</Link><button className="text-link" onClick={logout}>Logout</button></div>
+      <ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} />
     </header>
     <section className="parent-dashboard">
       <div><span className="eyebrow">Learning summary</span><h1>{selected.display_name||'Student'} ने क्या सीखा?</h1><p>यह report आपके linked child के वास्तविक learning records से बनती है।</p></div>
