@@ -1,6 +1,6 @@
 -- Backfill the same three-stage teaching path for chapters added/corrected by V6/V7.
 do $$
-declare r record; obj_id bigint; lesson_id bigint; question_id bigint; stage record; answer text;
+declare r record; obj_id bigint; v_lesson_id bigint; question_id bigint; stage record; answer text;
 begin
   for r in
     select ch.id,ch.code,ch.display_name,ch.description
@@ -34,29 +34,29 @@ begin
       on conflict(chapter_id,code) do update set
         title=excluded.title,summary=excluded.summary,estimated_minutes=excluded.estimated_minutes,
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
-      returning id into lesson_id;
+      returning id into v_lesson_id;
 
       insert into lesson_block(lesson_id,sequence_no,block_type,content)
       values
-      (lesson_id,1,'EXPLANATION',jsonb_build_object(
+      (v_lesson_id,1,'EXPLANATION',jsonb_build_object(
         'heading',case stage.n when 1 then r.display_name||' को समझें' when 2 then 'शिक्षक के साथ करके देखें' else 'अब खुद समझाएं' end,
         'body',r.description,
         'teachingMove',case stage.n when 1 then 'Activate prior knowledge, introduce vocabulary, connect to daily life.' when 2 then 'Model one worked example and think aloud.' else 'Remove scaffolding and ask for reasoning.' end,
         'keyPoints',jsonb_build_array('मुख्य अवधारणा पहचानें।','उदाहरण देखकर तरीका समझें।','उत्तर का कारण बताना सीखें।')
       )),
-      (lesson_id,2,'CHALLENGE',jsonb_build_object(
+      (v_lesson_id,2,'CHALLENGE',jsonb_build_object(
         'title',case stage.n when 1 then 'देखो और सोचो' when 2 then 'साथ में हल करें' else 'अब तुम्हारी बारी' end,
         'prompt',case stage.n when 1 then 'इस विषय का एक रोज़मर्रा का उदाहरण पहचानिए और बताइए कि उसमें क्या हो रहा है।'
           when 2 then 'ऊपर दिए विचार को एक नए उदाहरण पर लागू कीजिए। पहले तरीका बताइए, फिर उत्तर दीजिए।'
           else 'एक नया उदाहरण खुद बनाइए, हल कीजिए और अपने उत्तर की जाँच कीजिए।' end,
         'hint','पहले मुख्य शब्द/मात्रा/आकृति/घटना पहचानें, फिर संबंधित नियम या कारण चुनें।'
       )),
-      (lesson_id,3,'AI_HELP',jsonb_build_object(
+      (v_lesson_id,3,'AI_HELP',jsonb_build_object(
         'title','अटकें तो QuantaEdge से पूछें',
         'actions',jsonb_build_array('EASY_EXPLANATION','EXAMPLE','DIAGRAM','STEP_BY_STEP','EXAM_ANSWER'),
         'socratic',true
       )),
-      (lesson_id,4,'SUMMARY',jsonb_build_object(
+      (v_lesson_id,4,'SUMMARY',jsonb_build_object(
         'points',jsonb_build_array(r.description,'मुख्य विचार को अपने शब्दों में दोहराएँ।','एक नए उदाहरण में लागू करके mastery जाँचें।')
       ))
       on conflict on constraint lesson_block_lesson_id_sequence_no_key do update set block_type=excluded.block_type,content=excluded.content,active=true;

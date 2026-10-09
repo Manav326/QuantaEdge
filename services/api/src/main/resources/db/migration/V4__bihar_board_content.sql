@@ -8,7 +8,7 @@ declare
   r record;
   ch_id bigint;
   obj_id bigint;
-  lesson_id bigint;
+  v_lesson_id bigint;
   question_id bigint;
   stage record;
   q record;
@@ -137,25 +137,25 @@ begin
       on conflict(chapter_id,code) do update set
         title=excluded.title,summary=excluded.summary,estimated_minutes=excluded.estimated_minutes,
         status='PUBLISHED',sort_order=excluded.sort_order,objective_id=excluded.objective_id
-      returning id into lesson_id;
+      returning id into v_lesson_id;
 
-      delete from question where question.lesson_id=lesson_id;
+      delete from question where question.lesson_id=v_lesson_id;
 
       insert into lesson_block(lesson_id,sequence_no,block_type,content)
       values
-      (lesson_id,1,'EXPLANATION',
+      (v_lesson_id,1,'EXPLANATION',
         jsonb_build_object(
           'heading',case stage.n when 1 then r.name||' आसान भाषा में' when 2 then 'कदम-दर-कदम तरीका' else 'महारत जाँच' end,
           'body',case stage.n when 1 then r.description when 2 then 'प्रश्न की जानकारी अलग करें। सही नियम चुनें। कदमों को क्रम से लागू करें। उत्तर को दूसरी विधि या अनुमान से जाँचें।' else 'अवधारणा को नए उदाहरण में लागू करें और अपने उत्तर का कारण भी बताएं।' end,
           'keyPoints',jsonb_build_array(r.description,'नए शब्दों का अर्थ अपने शब्दों में बताएं।','उत्तर देने के बाद जाँच जरूर करें।')
         )),
-      (lesson_id,2,'CHALLENGE',
+      (v_lesson_id,2,'CHALLENGE',
         jsonb_build_object(
           'title',case stage.n when 1 then 'सोचकर बताइए' when 2 then 'अब खुद करके देखें' else 'एक कदम आगे' end,
           'prompt','"'||r.name||'" को अपने आसपास की किसी स्थिति से जोड़कर एक उदाहरण बनाइए।',
           'hint','उत्तर में अध्याय की कम-से-कम एक मुख्य अवधारणा का नाम लें।'
         )),
-      (lesson_id,3,case stage.n when 2 then 'AI_HELP' else 'SUMMARY' end,
+      (v_lesson_id,3,case stage.n when 2 then 'AI_HELP' else 'SUMMARY' end,
         case when stage.n=2 then
           jsonb_build_object('title','अगर अटकें तो मदद लें','actions',jsonb_build_array('EASY_EXPLANATION','EXAMPLE','STEP_BY_STEP','EXAM_ANSWER'),'socratic',true)
         else
@@ -175,7 +175,7 @@ begin
         end if;
 
         insert into question(lesson_id,objective_id,question_type,prompt,explanation,difficulty,sort_order)
-        values(lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n) returning id into question_id;
+        values(v_lesson_id,obj_id,'MCQ',r.name||' — '||q.prompt,answer,q.difficulty,q.n) returning id into question_id;
 
         insert into question_option(question_id,option_key,label,is_correct,sort_order)
         select question_id,k,label,correct,ord
