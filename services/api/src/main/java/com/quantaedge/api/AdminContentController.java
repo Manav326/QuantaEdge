@@ -62,11 +62,19 @@ public class AdminContentController {
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
              ch.sort_order as chapter_sort_order, ch.content_status as chapter_status,
-             ch.active as chapter_active,
+             ch.active as chapter_active, ch.curriculum_source,
+             ch.curriculum_source_url, ch.curriculum_source_edition,
+             ch.curriculum_source_pages, ch.curriculum_source_verified, ch.curriculum_source,
+             ch.curriculum_source_url, ch.curriculum_source_edition,
+             ch.curriculum_source_pages, ch.curriculum_source_verified,
              l.id as lesson_id, l.code as lesson_code, l.title as lesson_title,
              l.summary as lesson_summary, l.estimated_minutes,
              l.sort_order as lesson_sort_order, l.status as lesson_status,
-             l.active as lesson_active,
+             l.active as lesson_active, l.alignment_source_title,
+             l.alignment_source_url, l.alignment_source_edition,
+             l.alignment_page_range, l.alignment_source_verified, l.alignment_source_title,
+             l.alignment_source_url, l.alignment_source_edition,
+             l.alignment_page_range, l.alignment_source_verified,
              (select count(*) from lesson_block b where b.lesson_id=l.id) as block_count,
              (select count(*) from question q where q.lesson_id=l.id) as question_count
       from curriculum_class c
@@ -123,6 +131,10 @@ public class AdminContentController {
     }
     String name = requiredText(body.get("displayName"), 160);
     String description = optionalText(body.get("description"), 500);
+    String curriculumSource = optionalText(body.get("curriculumSource"), 500);
+    String sourceUrl = optionalText(body.get("curriculumSourceUrl"), 2000);
+    String sourceEdition = optionalText(body.get("curriculumSourceEdition"), 160);
+    String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
     String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
     if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
@@ -134,11 +146,13 @@ public class AdminContentController {
     if (subjects.isEmpty()) throw badRequest("The selected class and subject track does not exist or is inactive.");
     long subjectId = ((Number) subjects.getFirst().get("id")).longValue();
     Long chapterId = jdbc.queryForObject("""
-      insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,active,content_status)
-      values(?,?,?,?,?,?,?)
+      insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,active,content_status,
+                                     curriculum_source,curriculum_source_url,curriculum_source_edition,
+                                     curriculum_source_pages,curriculum_source_verified)
+      values(?,?,?,?,?,?,?,?,?,?,?,false)
       returning id
       """, Long.class, subjectId, code, name, description, sortOrder,
-      !"ARCHIVED".equals(status), status);
+      !"ARCHIVED".equals(status), status, curriculumSource, sourceUrl, sourceEdition, sourcePages);
     return chapterById(chapterId);
   }
 
@@ -158,17 +172,23 @@ public class AdminContentController {
     String summary = optionalText(body.get("summary"), 800);
     int minutes = integerValue(body.getOrDefault("estimatedMinutes", 10), 1, 120, "estimatedMinutes");
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
+    String sourceTitle = optionalText(body.get("alignmentSourceTitle"), 300);
+    String sourceUrl = optionalText(body.get("alignmentSourceUrl"), 2000);
+    String sourceEdition = optionalText(body.get("alignmentSourceEdition"), 160);
+    String sourcePages = optionalText(body.get("alignmentPageRange"), 160);
     String status = String.valueOf(body.getOrDefault("status", "DRAFT")).trim().toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
     if ("PUBLISHED".equals(status)) {
       throw badRequest("Create lessons as draft, add reviewed content and questions, then publish.");
     }
     Long lessonId = jdbc.queryForObject("""
-      insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active)
-      values(?,?,?,?,?,?,?,?)
+      insert into lesson(chapter_id,code,title,summary,estimated_minutes,status,sort_order,active,
+                         alignment_source_title,alignment_source_url,alignment_source_edition,
+                         alignment_page_range,alignment_source_verified)
+      values(?,?,?,?,?,?,?,?,?,?,?, ?,false)
       returning id
       """, Long.class, chapterId, code, title, summary, minutes, status, sortOrder,
-      !"ARCHIVED".equals(status));
+      !"ARCHIVED".equals(status), sourceTitle, sourceUrl, sourceEdition, sourcePages);
     return lessonById(lessonId);
   }
 
@@ -183,6 +203,11 @@ public class AdminContentController {
     String description = optionalText(body.get("description"), 500);
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!CHAPTER_STATUSES.contains(status)) throw badRequest("Chapter status must be DRAFT, PUBLISHED, or ARCHIVED.");
+    String curriculumSource = optionalText(body.get("curriculumSource"), 500);
+    String sourceUrl = optionalText(body.get("curriculumSourceUrl"), 2000);
+    String sourceEdition = optionalText(body.get("curriculumSourceEdition"), 160);
+    String sourcePages = optionalText(body.get("curriculumSourcePages"), 160);
+    boolean sourceVerified = booleanValue(body.get("curriculumSourceVerified"), false);
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
     chapterById(chapterId);
     if ("PUBLISHED".equals(status)) {
@@ -195,7 +220,8 @@ public class AdminContentController {
             select 1 from question q where q.lesson_id=l.id and q.active=true
               and (q.question_type not in ('MCQ','TRUE_FALSE')
                 or (select count(*) from question_option qo where qo.question_id=q.id)<2
-                or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1)
+                or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
+                or q.review_status<>'APPROVED')
           )
         """, Long.class, chapterId);
       if (readyLessons == null || readyLessons == 0) {
@@ -204,9 +230,12 @@ public class AdminContentController {
     }
     int changed = jdbc.update("""
       update curriculum_chapter
-      set display_name=?, description=?, sort_order=?, content_status=?, active=?
+      set display_name=?, description=?, sort_order=?, content_status=?, active=?,
+          curriculum_source=?, curriculum_source_url=?, curriculum_source_edition=?,
+          curriculum_source_pages=?, curriculum_source_verified=?
       where id=?
-      """, name, description, sortOrder, status, !"ARCHIVED".equals(status), chapterId);
+      """, name, description, sortOrder, status, !"ARCHIVED".equals(status),
+      curriculumSource, sourceUrl, sourceEdition, sourcePages, sourceVerified, chapterId);
     if (changed == 0) throw notFound("Chapter", chapterId);
     return chapterById(chapterId);
   }
@@ -223,6 +252,11 @@ public class AdminContentController {
     String summary = optionalText(body.get("summary"), 800);
     int minutes = integerValue(body.get("estimatedMinutes"), 1, 120, "estimatedMinutes");
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
+    String sourceTitle = optionalText(body.get("alignmentSourceTitle"), 300);
+    String sourceUrl = optionalText(body.get("alignmentSourceUrl"), 2000);
+    String sourceEdition = optionalText(body.get("alignmentSourceEdition"), 160);
+    String sourcePages = optionalText(body.get("alignmentPageRange"), 160);
+    boolean sourceVerified = booleanValue(body.get("alignmentSourceVerified"), false);
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
 
@@ -232,9 +266,12 @@ public class AdminContentController {
 
     jdbc.update("""
       update lesson
-      set title=?, summary=?, estimated_minutes=?, sort_order=?, status=?, active=?
+      set title=?, summary=?, estimated_minutes=?, sort_order=?, status=?, active=?,
+          alignment_source_title=?, alignment_source_url=?, alignment_source_edition=?,
+          alignment_page_range=?, alignment_source_verified=?
       where id=?
-      """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status), lessonId);
+      """, title, summary, minutes, sortOrder, status, !"ARCHIVED".equals(status),
+      sourceTitle, sourceUrl, sourceEdition, sourcePages, sourceVerified, lessonId);
     return lessonById(lessonId);
   }
 
@@ -265,7 +302,8 @@ public class AdminContentController {
       where q.lesson_id=? and q.active=true
         and (q.question_type not in ('MCQ','TRUE_FALSE')
           or (select count(*) from question_option qo where qo.question_id=q.id)<2
-          or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1)
+          or (select count(*) from question_option qo where qo.question_id=q.id and qo.is_correct)<>1
+          or q.review_status<>'APPROVED')
       """, Long.class, lessonId);
     if (invalidQuestions != null && invalidQuestions > 0) {
       throw badRequest("Every published practice question must have at least two options and exactly one correct answer. Input questions are not yet supported for grading.");
@@ -315,7 +353,7 @@ public class AdminContentController {
       """, lessonId));
     result.put("questions", jdbc.queryForList("""
       select q.id, q.question_type, q.prompt, q.explanation, q.difficulty,
-             q.sort_order, q.active,
+             q.sort_order, q.active, q.review_status, q.review_notes, q.reviewed_at,
              coalesce(
                (select jsonb_agg(jsonb_build_object(
                  'key',qo.option_key,'label',qo.label,'correct',qo.is_correct,
