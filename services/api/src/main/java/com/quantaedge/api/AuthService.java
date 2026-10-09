@@ -81,9 +81,8 @@ public class AuthService {
         }
       }
     } else {
-      boolean isStaffMobile=Boolean.TRUE.equals(jdbc.queryForObject(
-          "select exists(select 1 from staff_account where mobile_e164=?)", Boolean.class, normalized));
-      if(isStaffMobile) throw new SecurityException("This mobile belongs to a staff identity. Use Staff access on the admin console.");
+      // Staff and customer access are independent identities even if the mobile number matches.
+      // The OTP purpose selects which identity is being authenticated.
       boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
           "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
       if("SIGNUP".equals(purpose) && accountExists)
@@ -145,9 +144,10 @@ public class AuthService {
 
     var rows=jdbc.queryForList("""
       select id,code_hash,attempts,expires_at,purpose
-      from otp_challenge where mobile_e164=? and consumed_at is null
+      from otp_challenge
+      where mobile_e164=? and purpose=? and consumed_at is null
       order by requested_at desc limit 1
-      """,normalized);
+      """,normalized,purpose);
     if(rows.isEmpty()) throw new IllegalArgumentException("OTP not found or expired");
     var row=rows.getFirst();
     if(!purpose.equals(String.valueOf(row.get("purpose"))))
@@ -187,18 +187,8 @@ public class AuthService {
           throw new IllegalStateException("Use First-time access to set up the bootstrap administrator.");
         }
         String staffName=displayName==null||displayName.isBlank()?"Administrator":displayName.trim();
-        // An explicitly configured bootstrap-admin mobile is authoritative. Retire any
-        // legacy user identity for this number so the phone cannot continue as both
-        // a parent identity and a staff identity. Keep the user row for FK/history integrity.
-        jdbc.update("""
-          update auth_session set revoked_at=now()
-          where revoked_at is null
-            and user_id in (select id from user_account where mobile_e164=?)
-          """, normalized);
-        jdbc.update("""
-          update user_account set role='PARENT', active=false, updated_at=now()
-          where mobile_e164=?
-          """, normalized);
+        // Do not mutate or revoke the separate customer identity. STAFF_LOGIN is
+        // isolated by OTP purpose and receives a staff_id-only session.
         staffId=jdbc.queryForObject("""
           insert into staff_account(public_id,mobile_e164,display_name,role,active)
           values (?,?,?,'ADMIN',true) returning id
