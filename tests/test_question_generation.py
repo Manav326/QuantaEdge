@@ -161,6 +161,17 @@ class QuestionGenerationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "finite numeric"):
             GEN.validate_model_output(output, 1, {"NUMERICAL"}, chunk)
 
+    def test_question_type_mix_is_deterministic_and_curriculum_aware(self):
+        maths = GEN.scheduled_question_types(12, {"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL"}, "maths")
+        self.assertEqual(6, maths.count("MCQ"))
+        self.assertEqual(2, maths.count("TRUE_FALSE"))
+        self.assertEqual(2, maths.count("INPUT"))
+        self.assertEqual(2, maths.count("NUMERICAL"))
+        science = GEN.scheduled_question_types(12, {"MCQ", "TRUE_FALSE", "INPUT"}, "science")
+        self.assertEqual(7, science.count("MCQ"))
+        self.assertEqual(3, science.count("INPUT"))
+        self.assertEqual(2, science.count("TRUE_FALSE"))
+
     def test_candidate_bundle_is_never_auto_approved(self):
         _, source, chapters = GEN.validate_extraction(sample_extraction())
         chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
