@@ -214,7 +214,9 @@ public class AdminContentController {
     boolean sourceVerified = booleanValue(body.get("curriculumSourceVerified"), false);
     int sortOrder = integerValue(body.get("sortOrder"), 1, 10000, "sortOrder");
     chapterById(chapterId);
+    if (sourceVerified) requireCompleteSourceReference(curriculumSource, sourceUrl, sourceEdition, sourcePages, "chapter");
     if ("PUBLISHED".equals(status)) {
+      if (!sourceVerified) throw badRequest("A chapter cannot be published until its official source edition and page mapping are verified.");
       Long readyLessons = jdbc.queryForObject("""
         select count(*) from lesson l
         where l.chapter_id=? and l.active=true
@@ -279,6 +281,10 @@ public class AdminContentController {
     boolean sourceVerified = booleanValue(body.get("alignmentSourceVerified"), false);
     String status = requiredText(body.get("status"), 20).toUpperCase();
     if (!LESSON_STATUSES.contains(status)) throw badRequest("Lesson status must be DRAFT, REVIEW, PUBLISHED, or ARCHIVED.");
+    if (sourceVerified) requireCompleteSourceReference(sourceTitle, sourceUrl, sourceEdition, sourcePages, "lesson");
+    if ("PUBLISHED".equals(status) && !sourceVerified) {
+      throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
+    }
 
     if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
     boolean questionContentChanged = body.containsKey("questions") && updateQuestions(lessonId, body.get("questions"));
@@ -534,11 +540,11 @@ public class AdminContentController {
             review_status,review_notes,reviewed_at,marks,exam_format,source_kind,source_title,
             source_ref,source_year,source_id,board,topic,subtopic,skill,tags,answer_payload
           )
-          values(?,?,?,?,?,?,?, ?,?,?, ?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?::jsonb)
+          values(?,?,?,?,?,?,?, ?,?,null, ?,?,?,?,?,?,?,?,?,?,?,?::jsonb,?::jsonb)
           returning id
           """, Long.class, lessonId, type, prompt, explanation, difficulty, order,
           booleanValue(q.get("active"), true), reviewStatus, reviewNotes,
-          reviewStatus, marks, examFormat, sourceKind, sourceTitle, sourceRef, sourceYear,
+          marks, examFormat, sourceKind, sourceTitle, sourceRef, sourceYear,
           sourceId, board, topic, subtopic, skill, tagsJson, answerPayload);
         id = createdId;
       } else {
@@ -648,6 +654,13 @@ public class AdminContentController {
   private String toJson(Object value) {
     try { return mapper.writeValueAsString(value); }
     catch (JacksonException ex) { throw badRequest("Content must contain valid JSON."); }
+  }
+
+  private void requireCompleteSourceReference(String title, String url, String edition, String pages, String type) {
+    if (title == null || title.isBlank() || url == null || !url.startsWith("https://")
+        || edition == null || edition.isBlank() || pages == null || pages.isBlank()) {
+      throw badRequest("Verified " + type + " source requires an official HTTPS URL, exact edition/session and page range.");
+    }
   }
 
   private void authorize(String suppliedToken, AuthContext context) {
