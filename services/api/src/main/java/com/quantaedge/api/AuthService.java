@@ -70,11 +70,6 @@ public class AuthService {
         if (!adminMobiles.contains(normalized)) {
           throw new IllegalArgumentException("This mobile is not assigned to an active staff account.");
         }
-        Boolean linkedUser=Boolean.TRUE.equals(jdbc.queryForObject(
-            "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized));
-        if(linkedUser) {
-          throw new SecurityException("This mobile belongs to an existing parent account and cannot be used for a staff identity.");
-        }
       }
     } else {
       boolean isStaffMobile=Boolean.TRUE.equals(jdbc.queryForObject(
@@ -168,12 +163,19 @@ public class AuthService {
         }
         staffId=((Number)staffRow.get("id")).longValue();
       } else if (adminMobiles.contains(normalized)) {
-        Boolean linkedUser=Boolean.TRUE.equals(jdbc.queryForObject(
-            "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized));
-        if(linkedUser) {
-          throw new SecurityException("This mobile is associated with a learner-family account. Create or migrate a separate staff identity before staff sign-in.");
-        }
         String staffName=displayName==null||displayName.isBlank()?"Administrator":displayName.trim();
+        // An explicitly configured bootstrap-admin mobile is authoritative. Retire any
+        // legacy user identity for this number so the phone cannot continue as both
+        // a parent identity and a staff identity. Keep the user row for FK/history integrity.
+        jdbc.update("""
+          update auth_session set revoked_at=now()
+          where revoked_at is null
+            and user_id in (select id from user_account where mobile_e164=?)
+          """, normalized);
+        jdbc.update("""
+          update user_account set role='PARENT', active=false, updated_at=now()
+          where mobile_e164=?
+          """, normalized);
         staffId=jdbc.queryForObject("""
           insert into staff_account(public_id,mobile_e164,display_name,role,active)
           values (?,?,?,'ADMIN',true) returning id
