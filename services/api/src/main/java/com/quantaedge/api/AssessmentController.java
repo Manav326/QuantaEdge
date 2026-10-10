@@ -835,6 +835,8 @@ public class AssessmentController {
       }
       if (staffView) {
         item.put("manualReviewRequired", "PENDING_REVIEW".equals(String.valueOf(row.get("answer_status"))));
+        item.put("answerKey", snapshot.get("answer_payload"));
+        item.put("teacherOptions", teacherOptions(snapshot));
       }
       questions.add(item);
     }
@@ -895,6 +897,21 @@ public class AssessmentController {
       }
     }
     result.put("options", options);
+    return result;
+  }
+
+  private List<Map<String, Object>> teacherOptions(Map<String, Object> snapshot) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    Object rawOptions = snapshot.get("options");
+    if (!(rawOptions instanceof List<?> entries)) return result;
+    for (Object raw : entries) {
+      if (!(raw instanceof Map<?, ?> option)) continue;
+      Map<String, Object> value = new LinkedHashMap<>();
+      value.put("key", option.getOrDefault("option_key", option.get("key")));
+      value.put("label", option.get("label"));
+      value.put("isCorrect", Boolean.TRUE.equals(option.get("is_correct")) || Boolean.TRUE.equals(option.get("correct")));
+      result.add(value);
+    }
     return result;
   }
 
