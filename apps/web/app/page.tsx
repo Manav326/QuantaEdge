@@ -4,14 +4,14 @@ import QuantaEdgeBrand from './components/QuantaEdgeBrand';
 import LandingAccountMenu from './components/LandingAccountMenu';
 
 const subjects = [
-  { icon: '∑', name: 'गणित', meta: 'Class 6–8 · Hindi medium', tone: 'violet' },
-  { icon: '⚗', name: 'विज्ञान', meta: 'Class 6–8 · Hindi medium', tone: 'blue' },
+  { icon: '∑', name: 'गणित', meta: 'कक्षा 6–8 · हिन्दी माध्यम', tone: 'violet' },
+  { icon: '⚗', name: 'विज्ञान', meta: 'कक्षा 6–8 · हिन्दी माध्यम', tone: 'blue' },
 ];
 
 const promises = [
-  ['01', 'Pehle concept samjhenge', 'Har lesson mein prerequisite, simple explanation aur worked example se concept clear hota hai.'],
-  ['02', 'Phir practice karenge', 'Short interactive questions, instant feedback aur saved learning progress.'],
-  ['03', 'Phir next step lenge', 'Diagnostic, progress aur concept mastery ke basis par next step decide hota hai.'],
+  ['01', 'पहले concept समझेंगे', 'First, understand the concept', 'हर lesson में prerequisite, simple explanation और worked example से concept clear होता है।', 'Each lesson builds understanding through prerequisites, a simple explanation, and a worked example.'],
+  ['02', 'फिर practice करेंगे', 'Then, practise', 'छोटे interactive questions, instant feedback और saved learning progress के साथ।', 'Short interactive questions, instant feedback, and saved learning progress.'],
+  ['03', 'फिर अगला step लेंगे', 'Then, take the next step', 'Diagnostic, progress और concept mastery के आधार पर अगला step तय होता है।', 'The next step is guided by diagnostics, progress, and concept mastery.'],
 ];
 
 export default function Home() {
@@ -36,7 +36,7 @@ export default function Home() {
           <div className="eyebrow"><span className="live-dot" /> <LocaleText hinglish="कक्षा 6–8 · Bihar Board · हिन्दी माध्यम" english="Classes 6–8 · Bihar Board · Hindi medium" /></div>
           <h1><LocaleText hinglish="पढ़ाई," english="Learning," /><br /><em><LocaleText hinglish="बच्चे के हिसाब से।" english="adapted to each child." /></em></h1>
           <p className="hero-lead">
-            QuantaEdge sirf answers nahi deta. Diagnostic, practice aur real learning records se bachche ka next learning step decide hota hai.
+            <LocaleText hinglish="QuantaEdge सिर्फ answers नहीं देता। Diagnostic, practice और real learning records के आधार पर बच्चे का अगला learning step तय होता है।" english="QuantaEdge does more than provide answers. Diagnostics, practice, and real learning records help choose each child's next learning step." />
           </p>
 
           <div className="hero-actions">
@@ -69,17 +69,17 @@ export default function Home() {
               <span className="streak">LIVE</span>
             </div>
 
-            <div className="section-title"><strong>Learning flow</strong><span>adaptive</span></div>
+            <div className="section-title"><strong><LocaleText hinglish="Learning flow" english="Learning flow" /></strong><span><LocaleText hinglish="adaptive" english="adaptive" /></span></div>
 
             <div className="task done">
               <span className="task-icon">↻</span>
-              <div><strong><LocaleText hinglish="समझें" english="Learn" /></strong><small>Prerequisite · explanation · worked example</small></div>
+              <div><strong><LocaleText hinglish="समझें" english="Learn" /></strong><small><LocaleText hinglish="Prerequisite · explanation · worked example" english="Prerequisite · explanation · worked example" /></small></div>
               <span className="check">✓</span>
             </div>
 
             <div className="task active">
               <span className="task-icon">∑</span>
-              <div><strong><LocaleText hinglish="Practice करें" english="Practise" /></strong><small>Interactive questions · instant feedback</small></div>
+              <div><strong><LocaleText hinglish="Practice करें" english="Practise" /></strong><small><LocaleText hinglish="Interactive questions · instant feedback" english="Interactive questions · instant feedback" /></small></div>
               <span className="arrow">→</span>
             </div>
 
@@ -107,11 +107,11 @@ export default function Home() {
         </div>
 
         <div className="promise-grid">
-          {promises.map(([n, title, description]) => (
+          {promises.map(([n, titleHi, titleEn, descriptionHi, descriptionEn]) => (
             <article className="promise" key={n}>
               <span>{n}</span>
-              <h3>{title}</h3>
-              <p>{description}</p>
+              <h3><LocaleText hinglish={titleHi} english={titleEn} /></h3>
+              <p><LocaleText hinglish={descriptionHi} english={descriptionEn} /></p>
             </article>
           ))}
         </div>
@@ -127,7 +127,7 @@ export default function Home() {
           {subjects.map(subject => (
             <Link href="/login/student" className="subject-card" key={subject.name}>
               <div className={`subject-icon ${subject.tone}`}>{subject.icon}</div>
-              <div><span>Class 6–8</span><h3>{subject.name}</h3><p>{subject.meta}</p></div>
+              <div><span><LocaleText hinglish="कक्षा 6–8" english="Classes 6–8" /></span><h3>{subject.name === 'गणित' ? <LocaleText hinglish="गणित" english="Mathematics" /> : <LocaleText hinglish="विज्ञान" english="Science" />}</h3><p><LocaleText hinglish={subject.meta} english="Classes 6–8 · Hindi medium" /></p></div>
               <span className="card-arrow">↗</span>
             </Link>
           ))}
@@ -144,19 +144,19 @@ export default function Home() {
 
         <div className="report-card">
           <div className="report-top">
-            <div><span>Real learning records</span><strong>Parent report</strong></div>
+            <div><span><LocaleText hinglish="Real learning records" english="Real learning records" /></span><strong><LocaleText hinglish="Parent report" english="Parent report" /></strong></div>
             <span className="up">LIVE</span>
           </div>
           <div className="report-stat">
-            <strong>Progress</strong>
-            <span>Lessons · attempts · mastery</span>
+            <strong><LocaleText hinglish="Progress" english="Progress" /></strong>
+            <span><LocaleText hinglish="Lessons · attempts · mastery" english="Lessons · attempts · mastery" /></span>
             <div className="mini-bars">
               <i style={{ height: '30%' }} /><i style={{ height: '44%' }} /><i style={{ height: '54%' }} />
               <i style={{ height: '61%' }} /><i style={{ height: '72%' }} /><i style={{ height: '81%' }} />
               <i style={{ height: '88%' }} />
             </div>
           </div>
-          <div className="report-bottom"><span>Strengths: mastery</span><span><LocaleText hinglish="Support: जिन concepts में मदद चाहिए" english="Support: concepts needing help" /></span></div>
+          <div className="report-bottom"><span><LocaleText hinglish="Strengths: mastery" english="Strengths: mastery" /></span><span><LocaleText hinglish="Support: जिन concepts में मदद चाहिए" english="Support: concepts needing help" /></span></div>
         </div>
       </section>
 
