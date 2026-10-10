@@ -63,11 +63,23 @@ public class SourceIngestionWorker {
         outline = detectOutline(pdf);
       }
       String hash = sha256(bytes);
+      if (assetId != null) {
+        jdbc.update("""
+          update learning_pdf_asset set review_status='REVIEW',
+            source_content_id=coalesce(source_content_id,?)
+          where id=? and review_status='REJECTED'
+          """, job.get("source_id"), assetId);
+      }
       if (assetId == null) {
         List<Map<String, Object>> sameHash = jdbc.queryForList(
             "select id from learning_pdf_asset where sha256=?", hash);
         if (!sameHash.isEmpty()) {
           assetId = ((Number) sameHash.getFirst().get("id")).longValue();
+          jdbc.update("""
+            update learning_pdf_asset set review_status='REVIEW',
+              source_content_id=coalesce(source_content_id,?)
+            where id=? and review_status='REJECTED'
+            """, job.get("source_id"), assetId);
         } else {
           String sourceReference = "source-ingestion:" + jobId + ":" + resolvedUrl;
           assetId = jdbc.queryForObject("""

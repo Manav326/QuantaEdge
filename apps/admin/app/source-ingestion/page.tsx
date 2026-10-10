@@ -109,6 +109,8 @@ export default function SourceIngestionPage() {
         setLanguage(sourceData[0].language || 'hi');
         setProvider(sourceData[0].provider || '');
         setSourceKind(sourceData[0].source_kind || 'BOARD_TEXTBOOK');
+      } else if (!selectedSource) {
+        setSelectedSource('new');
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Source ingestion data could not be loaded.');

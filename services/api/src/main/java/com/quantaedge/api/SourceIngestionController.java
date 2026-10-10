@@ -149,16 +149,12 @@ public class SourceIngestionController {
       sourceKind = String.valueOf(source.get("source_kind"));
       checksum = source.get("checksum") == null ? null : String.valueOf(source.get("checksum"));
       linkedAsset = source.get("learning_pdf_asset_id");
-      if (hasText(body.get("sourceUrl"))) {
-        jdbc.update("update content_source set source_url=?,updated_at=now() where id=?", sourceUrl, sourceId);
-      }
-      if (hasText(body.get("sourceTitle")) || hasText(body.get("edition")) || hasText(body.get("language"))) {
-        jdbc.update("update content_source set title=?,edition=?,language=?,updated_at=now() where id=?",
-            sourceTitle, edition, language, sourceId);
-      }
     } else {
       sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
       sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
+      if (!sourceUrl.toLowerCase(Locale.ROOT).startsWith("https://")) {
+        throw badRequest("Enter an official HTTPS source page or direct PDF URL.");
+      }
       edition = optionalText(body.get("edition"), 160);
       if (edition == null) edition = "UNVERIFIED";
       language = optionalText(body.get("language"), 20);
@@ -179,6 +175,24 @@ public class SourceIngestionController {
     }
     if (sourceUrl == null || !sourceUrl.toLowerCase(Locale.ROOT).startsWith("https://")) {
       throw badRequest("Enter an official HTTPS source page or direct PDF URL.");
+    }
+    if (requestedSourceId != null) {
+      if (hasText(body.get("sourceUrl"))) {
+        jdbc.update("update content_source set source_url=?,updated_at=now() where id=?", sourceUrl, sourceId);
+      }
+      if (hasText(body.get("sourceTitle")) || hasText(body.get("edition")) || hasText(body.get("language"))) {
+        jdbc.update("update content_source set title=?,edition=?,language=?,updated_at=now() where id=?",
+            sourceTitle, edition, language, sourceId);
+      }
+    }
+    Long activeJobId = jdbc.query("""
+      select id from source_ingestion_job
+      where source_id=? and subject_id=? and status='DOWNLOADING'
+        and created_at > now() - interval '15 minutes'
+      order by created_at desc,id desc limit 1
+      """, rs -> rs.next() ? rs.getLong(1) : null, sourceId, subjectId);
+    if (activeJobId != null) {
+      return jobDetails(activeJobId);
     }
     Long assetId = jdbc.query("""
       select a.id from learning_pdf_asset a
@@ -389,8 +403,13 @@ public class SourceIngestionController {
     }
     jdbc.update("""
       update learning_pdf_asset set review_status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now()
-      where source_reference like ? and review_status in ('DRAFT','REVIEW')
-      """, context.staffId(), "source-ingestion:" + jobId + ":%");
+      where id in (
+        select pdf_asset_id from source_ingestion_chapter
+        where job_id=? and pdf_asset_id is not null
+        union select book_asset_id from source_ingestion_job
+        where id=? and book_asset_id is not null
+      ) and review_status in ('DRAFT','REVIEW')
+      """, context.staffId(), jobId, jobId);
     jdbc.update("update content_source set status='REJECTED',updated_at=now() where id=?", job.get("source_id"));
     jdbc.update("""
       update source_ingestion_job set status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
@@ -474,7 +493,15 @@ public class SourceIngestionController {
   private Long storePendingAsset(String title, String filename, byte[] bytes, int pages, String hash,
       String sourceReference, long sourceId, Long staffId) {
     List<Map<String, Object>> existing = jdbc.queryForList("select id from learning_pdf_asset where sha256=?", hash);
-    if (!existing.isEmpty()) return ((Number) existing.getFirst().get("id")).longValue();
+    if (!existing.isEmpty()) {
+      long existingId = ((Number) existing.getFirst().get("id")).longValue();
+      jdbc.update("""
+        update learning_pdf_asset set review_status='REVIEW',
+          source_content_id=coalesce(source_content_id,?)
+        where id=? and review_status='REJECTED'
+        """, sourceId, existingId);
+      return existingId;
+    }
     return jdbc.queryForObject("""
       insert into learning_pdf_asset(
         title,original_filename,sha256,file_size_bytes,page_count,pdf_bytes,source_kind,

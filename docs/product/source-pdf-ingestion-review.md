@@ -19,3 +19,11 @@ QuantaEdge now exposes a reusable admin flow at Admin → Source ingestion. It r
 - The service can discover direct PDF links from ordinary anchor links ending in .pdf. For JavaScript-only catalogue pages, login-gated sources, or unusual download forms, paste the direct official PDF URL.
 - The PDF byte schema checked into the repository uses learning_pdf_asset. If a live installation has an additional legacy binary table not represented by these migrations, its rows still need a schema-specific adapter; the migration safely backfills links using the current source checksums/references.
 - No production migration or live database ingestion is run by this commit. Back up production database/media first, deploy after CI, and run through the admin review flow on a small source before bulk processing.
+
+
+## Duplicate and retry behavior
+
+- Clicking start again while the same source/subject already has a download running for the last 15 minutes returns that existing job instead of starting another fetch.
+- Invalid HTTPS source URLs are rejected before existing source metadata is edited or a new source record is registered.
+- When an administrator intentionally retries a previously rejected PDF, its checksum-matched asset returns to REVIEW. Existing APPROVED assets are not demoted by retries.
+- Rejection targets the asset IDs attached to that specific job rather than matching a broad source-reference prefix.
