@@ -74,6 +74,23 @@ public class LearningClassController {
 
   // ---------------- Staff: schedule and manage live classes ----------------
 
+  @GetMapping("/admin/class-chapters")
+  public List<Map<String, Object>> listClassChapters(
+      @RequestParam String classCode,
+      @RequestParam String subjectCode,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireClassView(context);
+    return jdbc.queryForList("""
+      select ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+             ch.content_status,ch.active
+      from curriculum_chapter ch
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where c.code=? and s.code=? and c.active=true and s.active=true and ch.active=true
+      order by coalesce(ch.teaching_order,ch.sort_order),ch.sort_order,ch.id
+      """, requiredText(classCode,"Class",30),requiredText(subjectCode,"Subject",40));
+  }
+
   @GetMapping("/admin/live-classes")
   public List<Map<String, Object>> adminLiveClasses(
       @RequestParam(required = false) String classCode,
