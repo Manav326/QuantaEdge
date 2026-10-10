@@ -79,8 +79,8 @@ export default function PracticePage(){
       q.question_type==='MATCH' ? <MatchInput disabled={!!result} onSubmit={answer}/> :
       <div className="concept-card">
         {q.question_type==='NUMERICAL'
-          ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Number wala answer yahan likhein…"/>
-          : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Apna answer ya reasoning yahan likhein…" rows={q.question_type==='LONG_ANSWER'?7:5}/>}
+          ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder={tx('Number वाला answer यहाँ लिखें…','Enter a numeric answer…')}/>
+          : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?7:5}/>}
         <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
       </div>}
 
@@ -94,7 +94,7 @@ export default function PracticePage(){
         <span>Question {index+1} of {questions.length}</span>
         {result && index+1<questions.length ? <button className="button button-dark" onClick={next}><LocaleText hinglish="अगला question →" english="Next question →" /></button>
           : result ? <Link href="/student/progress" className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link>
-          : <span>उत्तर दें</span>}
+          : <span><LocaleText hinglish="उत्तर दें" english="Answer" /></span>}
       </div>
     </section>
   </main>;
