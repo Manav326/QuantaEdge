@@ -69,6 +69,18 @@ function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
   } : {hinglish:'सीखने का रास्ता तैयार हो रहा है',english:'Learning path is being prepared'};
 }
 
+function stackFractionsInHtml(value:string) {
+  // Transform only text between tags; never rewrite a number-like URL or HTML attribute.
+  const fraction = /(^|[^\w./])(\d+)\s*\/\s*(\d+)(?![\w./])/g;
+  return String(value || '').replace(/(^|>)([^<]*)(?=<|$)/g, (_whole, prefix:string, text:string) => {
+    const rendered = text.replace(fraction, (_match, boundary:string, numerator:string, denominator:string) =>
+      boundary + '<span class="qe-inline-fraction" role="math" aria-label="' + numerator + ' over ' + denominator + '">' +
+      '<span class="qe-inline-fraction__numerator" aria-hidden="true">' + numerator + '</span>' +
+      '<span class="qe-inline-fraction__denominator" aria-hidden="true">' + denominator + '</span></span>');
+    return prefix + rendered;
+  });
+}
+
 function safeRichHtml(value:string) {
   let html=String(value||'');
   html=html.replace(/<font\b([^>]*)>/gi,(_m,attrs:string)=>{
@@ -95,7 +107,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<LocaleText hinglish="पहले से क्या जानते हैं?" english="What you already know" />:<LocaleText hinglish="समझें" english="Understand" />)}</span>
-    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(String(data.html).replace(/(?<![\\w.])(\\d+)\\s*\\/\\s*(\\d+)(?![\\w.])/g, '<span class="qe-inline-fraction" role="math" aria-label="$1 over $2"><span class="qe-inline-fraction__numerator" aria-hidden="true">$1</span><span class="qe-inline-fraction__denominator" aria-hidden="true">$2</span></span>'))}}/> : <p><MathText text={String(data.body ?? data.description ?? '')}/></p>}
+    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(stackFractionsInHtml(String(data.html)))}}/> : <p><MathText text={String(data.body ?? data.description ?? '')}/></p>}
     {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
