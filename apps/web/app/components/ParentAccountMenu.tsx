@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from './LanguageProvider';
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -78,7 +80,7 @@ export default function ParentAccountMenu({
       >
         <span className="parent-account__trigger-copy">
           <strong>{displayName}</strong>
-          <small>Parent account</small>
+          <small><LocaleText hinglish="Parent account" english="Parent account" /></small>
         </span>
         <span className="parent-account__avatar"><img src={avatarSrc} alt="" width="44" height="44" /></span>
         <svg className={`parent-account__chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
@@ -90,7 +92,7 @@ export default function ParentAccountMenu({
             <img src={avatarSrc} alt="" width="50" height="50" />
             <div>
               <strong>{displayName}</strong>
-              <span>Parent account</span>
+              <span><LocaleText hinglish="Parent account" english="Parent account" /></span>
               {mobile && <small>{mobile}</small>}
             </div>
           </div>
