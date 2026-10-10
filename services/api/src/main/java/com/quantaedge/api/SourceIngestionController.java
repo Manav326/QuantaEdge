@@ -104,7 +104,6 @@ public class SourceIngestionController {
 
   /** Start a review job from an already-synced, complete GHCR book without re-downloading it. */
   @PostMapping("/registry-books/{medium}/{bookId}/jobs")
-  @Transactional
   public Map<String, Object> startCachedBookJob(
       @PathVariable String medium, @PathVariable String bookId, @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -130,6 +129,18 @@ public class SourceIngestionController {
         String.valueOf(track.get("class_code")), String.valueOf(track.get("class_name")));
     if (!cached.classes().contains(grade)) {
       throw badRequest("The selected book does not list Class " + grade + " in its verified GHCR index.");
+    }
+    String targetSubject = String.valueOf(track.get("subject_code")) + " " + String.valueOf(track.get("subject_name"));
+    String sourceSubject = cached.subject() + " " + cached.title();
+    String sourceFamily = subjectFamily(sourceSubject);
+    String targetFamily = subjectFamily(targetSubject);
+    if (sourceFamily != null && targetFamily != null && !sourceFamily.equals(targetFamily)) {
+      throw badRequest("This cached book appears to be " + sourceFamily
+          + ", but the selected curriculum track is " + targetFamily
+          + ". Choose the matching track; the API will not attach a clearly mismatched subject book.");
+    }
+    if (!Boolean.TRUE.equals(body.get("confirmSubjectMapping"))) {
+      throw badRequest("Verify the book title/subject against the selected curriculum and confirm the class/subject mapping before ingestion.");
     }
 
     String language = "hindi".equals(cached.medium()) ? "hi" : "en";
@@ -835,6 +846,13 @@ public class SourceIngestionController {
 
   private boolean hasText(Object value) {
     return value != null && !String.valueOf(value).isBlank();
+  }
+
+  static String subjectFamily(String value) {
+    String normalized = value == null ? "" : value.toLowerCase(Locale.ROOT);
+    if (normalized.matches("(?s).*(math(?:s|ematics)?|ganit|ganita|गणित|हिसाब).*")) return "Mathematics";
+    if (normalized.matches("(?s).*(science|vigyan|विज्ञान|physics|chemistry|biology|भौतिक|रसायन|जीव विज्ञान).*")) return "Science";
+    return null;
   }
 
   private boolean isUnverifiedEdition(String value) {
