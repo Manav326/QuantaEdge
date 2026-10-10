@@ -139,7 +139,7 @@ export default function QuestionReviewPage(){
         {loading?<p className="admin-loading">Loading question history and current statuses…</p>:rows.length===0?<div className="admin-empty-state"><h3>No questions match this filter</h3><p>Try another status or search term. New questions appear after saving them in Content Studio.</p></div>:
           <div style={{display:'grid',gap:14}}>
             {rows.map(row=>{
-              const options=parse<{key:string;label:string}[]>(row.options,[]);
+              const options=parse(row.options,[]) as {key:string;label:string}[];
               const rejected=row.review_status==='REJECTED';
               const canReview=row.lesson_status==='REVIEW';
               return <article key={row.question_id} style={{border:'1px solid #e1e5ed',borderRadius:14,padding:16,background:'#fff'}}>
