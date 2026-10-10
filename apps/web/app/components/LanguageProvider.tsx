@@ -60,7 +60,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
         onChange={event => setLocale(event.target.value as Locale)}
         aria-label="भाषा चुनें / Choose language"
       >
-        <option value="hinglish">हिन्दी + English</option>
+        <option value="hinglish">Hinglish (हिन्दी + English)</option>
         <option value="english">English</option>
       </select>
     </label>
