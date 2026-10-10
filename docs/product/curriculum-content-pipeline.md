@@ -45,6 +45,12 @@ The source-ingestion worker verifies the entire cached book when the job starts.
 
 Every selected range must belong to an active chapter in the selected class/subject, ranges cannot overlap, and every resulting chapter PDF must be explicitly approved or rejected. Approved chapter PDFs are inserted into the existing library as DRAFT documents. A separate authorized publisher must verify metadata and publish individual learning documents before students can see them. The whole source stays in GHCR if it is too large for PostgreSQL; no chapter-by-chapter upstream downloader fallback is used.
 
+## Class-wise GHCR textbook storage
+
+Whole books are stored in fourteen stable GHCR images, from `quantaedge-textbooks-class-6-hindi` through `quantaedge-textbooks-class-12-english`. At runtime each class/medium index and complete-book PDF is mounted read-only under `/var/lib/quantaedge/textbook-cache/class-N/{hindi|english}`. The Admin picker filters the selected curriculum class first, then subject. Each ingestion job saves the class number and whole-book SHA-256 so a later preview/split cannot accidentally resolve a same-named entry from another class image.
+
+The PowerShell, Bash and production-deploy scripts pull those exact class/medium tags into directories expected by the API. GHCR remains the durable source; reviewed chapter PDFs continue through the existing private-library approval and publication workflow.
+
 ## Stage 1b — register extracted source PDFs for online reading
 
 The extraction review JSON records the source PDF filename, SHA-256, page count and extracted page text; it does not embed the original PDF bytes. The online textbook reader needs the original PDF, so register the unchanged source PDF in QuantaEdge's private PDF library. The importer checks the checksum against the extraction bundle before it sends anything, and uploads only to the authenticated API. The API de-duplicates by SHA-256 and keeps new assignments as drafts.
