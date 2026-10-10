@@ -3,6 +3,11 @@ package com.quantaedge.api;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
@@ -17,6 +22,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 /** Downloads source PDFs from HTTPS pages/direct links with SSRF and size guards. */
 @Component
@@ -29,8 +35,22 @@ public class SourcePdfDownloadService {
       .connectTimeout(Duration.ofSeconds(12))
       .followRedirects(HttpClient.Redirect.NEVER)
       .build();
+  private final Path textbookCacheRoot = Path.of(
+      System.getenv().getOrDefault("APP_TEXTBOOK_CACHE_DIR", "/var/lib/quantaedge/textbook-cache"))
+      .toAbsolutePath().normalize();
+  private final boolean textbookCacheOnly = Boolean.parseBoolean(
+      System.getenv().getOrDefault("APP_TEXTBOOK_CACHE_ONLY", "false"));
+  private final ObjectMapper cacheMapper = new ObjectMapper();
 
   public DownloadedPdf download(String sourceUrl, String sourceTitle) {
+    DownloadedPdf cached = findCachedTextbook(sourceUrl, sourceTitle);
+    if (cached != null) return cached;
+    if (textbookCacheOnly) {
+      throw new IllegalArgumentException(
+          "This environment is configured for textbook-cache-only downloads, but no matching book "
+              + "was found in the mounted Hindi/English GHCR cache. Sync the correct image and use "
+              + "the exact source URL/title from index.json.");
+    }
     URI source = safeUri(sourceUrl);
     HttpResult first = get(source);
     if (isPdf(first.bytes())) return result(first.bytes(), first.url());
@@ -55,6 +75,105 @@ public class SourcePdfDownloadService {
     throw last == null
         ? new IllegalArgumentException("No valid PDF download could be found on the registered source page.")
         : last;
+  }
+
+  private DownloadedPdf findCachedTextbook(String sourceUrl, String sourceTitle) {
+    String requestUrl = normalizeSourceUrl(sourceUrl);
+    String requestTitle = normalize(sourceTitle);
+    for (String language : List.of("hindi", "english")) {
+      Path indexPath = textbookCacheRoot.resolve(language).resolve("index.json").normalize();
+      if (!indexPath.startsWith(textbookCacheRoot) || !Files.isRegularFile(indexPath)) continue;
+      final Map<?, ?> index;
+      try {
+        index = cacheMapper.readValue(indexPath.toFile(), Map.class);
+      } catch (IOException ex) {
+        throw new IllegalArgumentException("The mounted " + language
+            + " textbook-cache index is unreadable: " + indexPath, ex);
+      }
+      Object rawBooks = index.get("books");
+      if (!(rawBooks instanceof List<?> books)) {
+        throw new IllegalArgumentException("The mounted " + language + " textbook-cache index has no books list.");
+      }
+      for (Object value : books) {
+        if (!(value instanceof Map<?, ?> item)) continue;
+        String title = valueOrEmpty(item.get("title"));
+        String publisher = valueOrEmpty(item.get("publisher"));
+        boolean ncert = publisher.toUpperCase(Locale.ROOT).contains("NCERT");
+        String indexedSource = normalizeSourceUrl(valueOrEmpty(item.get("source_url")));
+        String catalogUrl = normalizeSourceUrl(valueOrEmpty(item.get("catalog_entry_url")));
+        String pdfUrl = normalizeSourceUrl(valueOrEmpty(item.get("pdf_url")));
+        String bundleUrl = normalizeSourceUrl(valueOrEmpty(item.get("bundle_url")));
+        boolean exactSpecificUrl = !requestUrl.isBlank()
+            && (requestUrl.equals(catalogUrl) || requestUrl.equals(pdfUrl) || requestUrl.equals(bundleUrl));
+        boolean exactSourceUrl = !requestUrl.isBlank() && requestUrl.equals(indexedSource);
+        boolean exactTitle = !requestTitle.isBlank() && requestTitle.equals(normalize(title));
+        // NCERT's root catalogue URL is shared by every book; require title too.
+        boolean genericNcertCatalogue = ncert && (
+            indexedSource.equals("https://ncert.nic.in/textbook.php?ln=en")
+            || indexedSource.equals("https://ncert.nic.in/textbook.php?ln=hi")
+            || indexedSource.equals("https://ncert.ncert.org.in/textbook.php?ln=en"));
+        boolean matches = exactSpecificUrl
+            || (exactSourceUrl && (!genericNcertCatalogue || exactTitle))
+            || (genericNcertCatalogue && exactTitle);
+        if (!matches) continue;
+
+        String relativeName = valueOrEmpty(item.get("file"));
+        Path relative = Path.of(relativeName);
+        if (relative.isAbsolute() || relative.getNameCount() == 0 || relative.startsWith("..")) {
+          throw new IllegalArgumentException("The textbook cache contains an unsafe PDF path for " + title + ".");
+        }
+        Path languageRoot = textbookCacheRoot.resolve(language).normalize();
+        Path pdfPath = languageRoot.resolve(relative).normalize();
+        if (!pdfPath.startsWith(languageRoot)) {
+          throw new IllegalArgumentException("The textbook cache path escapes its language directory.");
+        }
+        if (!Files.isRegularFile(pdfPath)) {
+          throw new IllegalArgumentException("Textbook " + title + " is listed in the local cache index, but its PDF is missing.");
+        }
+        final byte[] bytes;
+        try {
+          bytes = Files.readAllBytes(pdfPath);
+        } catch (IOException ex) {
+          throw new IllegalArgumentException("Could not read cached textbook " + title + ".", ex);
+        }
+        String expectedHash = valueOrEmpty(item.get("sha256")).toLowerCase(Locale.ROOT);
+        if (expectedHash.isBlank() || !expectedHash.equals(sha256(bytes))) {
+          throw new IllegalArgumentException("Cached textbook checksum mismatch for " + title
+              + ". Re-sync the corresponding GHCR language image before retrying.");
+        }
+        if (bytes.length > MAX_PDF_BYTES) {
+          throw new IllegalArgumentException("Cached textbook " + title + " exceeds the 50 MiB database-library limit. "
+              + "Split it with the textbook_registry.py prepare-library command and import the smaller chapter PDFs.");
+        }
+        String filename = title.replaceAll("[^A-Za-z0-9._() -]", "_").trim();
+        if (filename.isBlank()) filename = "cached-source";
+        if (!filename.toLowerCase(Locale.ROOT).endsWith(".pdf")) filename += ".pdf";
+        if (filename.length() > 255) filename = filename.substring(filename.length() - 255);
+        return new DownloadedPdf(bytes, sourceUrl, filename);
+      }
+    }
+    return null;
+  }
+
+  private String valueOrEmpty(Object value) {
+    return value == null ? "" : String.valueOf(value);
+  }
+
+  private String normalizeSourceUrl(String value) {
+    if (value == null) return "";
+    String normalized = value.trim();
+    while (normalized.endsWith("/") && !normalized.endsWith("://")) {
+      normalized = normalized.substring(0, normalized.length() - 1);
+    }
+    return normalized;
+  }
+
+  private String sha256(byte[] bytes) {
+    try {
+      return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+    } catch (NoSuchAlgorithmException ex) {
+      throw new IllegalStateException("SHA-256 is unavailable.", ex);
+    }
   }
 
   private DownloadedPdf result(byte[] bytes, URI url) {
