@@ -1,6 +1,7 @@
 'use client';
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import MathText from '../../components/MathText';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -215,11 +216,11 @@ export default function PracticePage(){
         <span>{q.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" />:q.source_kind??<LocaleText hinglish="Content team का question" english="Content team question" />}</span>
         {q.source_year?<span>{q.source_year}</span>:null}
       </div>
-      <h1>{q.prompt}</h1>
+      <h1><MathText text={q.prompt}/></h1>
       <p><LocaleText hinglish="पहले सोचें, answer दें, फिर feedback पढ़कर अपनी reasoning check करें।" english="Think first, answer, then use the feedback to check your reasoning." /></p>
 
       {options.length>0?<div className="option-grid">
-        {options.map(o=><button key={o.key} disabled={!!result||Boolean((q as any).answered)} className={selected===o.key?'selected':''} onClick={()=>void answer(o.key)}>{o.key}. {o.label}</button>)}
+        {options.map(o=><button key={o.key} disabled={!!result||Boolean((q as any).answered)} className={selected===o.key?'selected':''} onClick={()=>void answer(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
       </div>:q.question_type==='ORDER'?<OrderInput prompt={q.prompt} disabled={!!result} onSubmit={answer}/>:
       q.question_type==='MATCH'?<MatchInput disabled={!!result} onSubmit={answer}/>:
       <div className="concept-card">
@@ -230,7 +231,7 @@ export default function PracticePage(){
 
       {result&&<div className="practice-feedback">
         <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
-        <span>{result.feedback}</span>{result.explanation&&<span>{result.explanation}</span>}
+        <span><MathText text={String(result.feedback ?? '')}/></span>{result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
       </div>}
 
       <div className="practice-footer">
