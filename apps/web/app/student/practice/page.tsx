@@ -1,6 +1,6 @@
-import { LocaleText } from '../../components/LanguageProvider';
-
 'use client';
+
+import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -21,20 +21,22 @@ export default function PracticePage(){
   const [result,setResult]=useState<any>(null);
   const [error,setError]=useState('');
   const router=useRouter();
+  const { locale } = useLocale();
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
 
   useEffect(()=>{
     async function load(){
       try{
         const me=await fetch('/api/v1/students/me');
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
-        const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||'Student profile nahi mila');
+        const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||tx('Student profile नहीं मिला','Student profile was not found'));
         setStudent(studentData);
         const rec=await fetch('/api/v1/recommendations/next'); const rb=await rec.json();
         if(rec.ok&&rb.kind==='DIAGNOSTIC'){router.replace('/student/diagnostic');return;}
-        if(!rec.ok||!rb.available||!rb.lesson) throw new Error('Abhi koi recommended lesson nahi mila');
+        if(!rec.ok||!rb.available||!rb.lesson) throw new Error(tx('अभी कोई recommended lesson नहीं मिला','No recommended lesson is available yet'));
         const qs=await fetch('/api/v1/learning/lessons/'+rb.lesson.id+'/questions').then(r=>r.json());
         setQuestions(qs);
-      }catch(e:any){setError(e.message||'Practice load nahi ho paayi.');}
+      }catch(e:any){setError(e.message||tx('Practice load नहीं हो पाई।','Unable to load practice.'));}
     }
     load();
   },[router]);
@@ -65,7 +67,7 @@ export default function PracticePage(){
       <div className="eyebrow">Class {student?.class_code ?? '—'} · {q.question_type}</div>
       <div className="feedback">
         <span>{q.exam_format ?? 'Concept practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
-        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?'SCERT se aligned question':q.source_kind ?? 'Content team ka question'}</span>
+        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" />:q.source_kind ?? <LocaleText hinglish="Content team का question" english="Content team question" />}</span>
         {q.source_year ? <span>{q.source_year}</span>:null}
       </div>
       <h1>{q.prompt}</h1>
@@ -83,7 +85,7 @@ export default function PracticePage(){
       </div>}
 
       {result&&<div className="practice-feedback">
-        <strong>{result.correct===true?'✓ सही जवाब':result.correct===false?'Abhi nahi':'Answer save ho gaya'}</strong>
+        <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
         <span>{result.feedback}</span>
         {result.explanation&&<span>{result.explanation}</span>}
       </div>}
@@ -104,7 +106,7 @@ function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;o
   const [order,setOrder]=useState<string[]>([]);
   function pick(letter:string){if(disabled||order.includes(letter))return;setOrder([...order,letter]);}
   function reset(){if(!disabled)setOrder([])}
-  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Sequence चुनें: हर option पर एक बार tap करें।" english="Choose the sequence by tapping each option once." /></div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'Abhi sequence choose nahi hua'}</div><div className="practice-footer"><button className="text-link" onClick={reset}><LocaleText hinglish="Reset" english="Reset" /></button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}><LocaleText hinglish="Sequence submit करें" english="Submit sequence" /></button></div></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Sequence चुनें: हर option पर एक बार tap करें।" english="Choose the sequence by tapping each option once." /></div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):<LocaleText hinglish="अभी sequence नहीं चुना गया" english="No sequence selected yet" />}</div><div className="practice-footer"><button className="text-link" onClick={reset}><LocaleText hinglish="Reset" english="Reset" /></button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}><LocaleText hinglish="Sequence submit करें" english="Submit sequence" /></button></div></div>;
 }
 
 function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string|object)=>void}){
