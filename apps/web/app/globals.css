@@ -590,3 +590,9 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
  .qe-workspace-topbar__context{max-width:50%}
  .qe-workspace-topbar .qe-language-switcher select{max-width:120px}
 }
+
+
+/* Accessible stacked fraction notation for learner content. */
+.qe-inline-fraction{display:inline-flex;flex-direction:column;align-items:stretch;justify-content:center;vertical-align:-.38em;line-height:1.02;text-align:center;font-size:.84em;white-space:nowrap;margin:0 .035em;min-width:1.05em}
+.qe-inline-fraction__numerator,.qe-inline-fraction__denominator{display:block;padding:0 .10em;line-height:1.05;font-variant-numeric:lining-nums}
+.qe-inline-fraction__denominator{border-top:1px solid currentColor;margin-top:.06em;padding-top:.07em}
