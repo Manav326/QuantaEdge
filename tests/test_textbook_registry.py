@@ -385,7 +385,7 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual([1, 2], book["content_availability"]["missing_chapters"])
 
     @staticmethod
-    def make_registry_book    @staticmethod
+    @staticmethod
     def make_registry_book(book_id, medium="hindi"):
         return {
             "book_id": book_id,
