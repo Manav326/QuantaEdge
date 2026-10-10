@@ -558,3 +558,9 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 @media(max-width:640px){.qe-language-toolbar{padding:7px 12px 0;min-height:40px}.qe-language-auth-float{top:8px;right:8px}.qe-language-switcher{padding:5px 8px;gap:5px}.qe-language-switcher__label{display:none}.qe-language-switcher select{max-width:125px}}
 
 .qe-session-language{display:flex;justify-content:flex-end;margin:-8px -8px 16px;}
+
+
+/* Site-wide accessible stacked fraction notation (stored answers remain plain a/b strings). */
+.qe-inline-fraction{display:inline-flex;flex-direction:column;align-items:stretch;justify-content:center;vertical-align:-.38em;line-height:1.02;text-align:center;font-size:.84em;white-space:nowrap;margin:0 .035em;min-width:1.05em}
+.qe-inline-fraction__numerator,.qe-inline-fraction__denominator{display:block;padding:0 .10em;line-height:1.05;font-variant-numeric:lining-nums}
+.qe-inline-fraction__denominator{border-top:1px solid currentColor;margin-top:.06em;padding-top:.07em}
