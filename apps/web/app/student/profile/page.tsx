@@ -1,6 +1,6 @@
 'use client';
 
-import { LocaleText } from '../../components/LanguageProvider';
+import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -94,6 +94,8 @@ async function prepareProfilePhoto(file: File): Promise<string> {
 
 export default function StudentProfilePage() {
   const router = useRouter();
+  const { locale } = useLocale();
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ProfileDraft>(emptyProfile);
   const [student, setStudent] = useState<{class_code: string; board: string} | null>(null);
@@ -147,7 +149,7 @@ export default function StudentProfilePage() {
       const profileImageDataUrl = await prepareProfilePhoto(file);
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoName(file.name);
-      setNotice('Photo ready. Changes save karein taaki photo profile par rahe.');
+      setNotice(tx('Photo ready है। Profile पर रखने के लिए changes save करें।','Photo is ready. Save your changes to keep it on your profile.'));
     } catch (photoError) {
       setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
     } finally {
@@ -180,7 +182,7 @@ export default function StudentProfilePage() {
         learningGoal: body.learning_goal || '',
         profileImageDataUrl: body.profile_image_data_url || '',
       });
-      setNotice('Aapki profile save ho gayi hai.');
+      setNotice(tx('आपकी profile save हो गई है।','Your profile has been saved.'));
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
     } finally {
@@ -191,7 +193,7 @@ export default function StudentProfilePage() {
   function resetPhoto() {
     setDraft(current => ({ ...current, profileImageDataUrl: '' }));
     setPhotoName('');
-    setNotice('Draft se photo hat gayi hai. Confirm karne ke liye changes save karein.');
+    setNotice(tx('Draft से photo हट गई है। Confirm करने के लिए changes save करें।','The photo has been removed from the draft. Save your changes to confirm.'));
     setError('');
   }
 
@@ -228,12 +230,12 @@ export default function StudentProfilePage() {
                   <span className="student-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="student-profile-photo-editor__copy">
-                  <strong>{draft.profileImageDataUrl ? 'Looking good!' : 'Add your photo'}</strong>
+                  <strong>{draft.profileImageDataUrl ? <LocaleText hinglish="अच्छा लग रहा है!" english="Looking good!" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
                   <p><LocaleText hinglish="अपनी clear photo चुनें। Save करने से पहले इसे automatically resize किया जाएगा।" english="Choose a clear photo. We’ll resize it automatically before saving." /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Photo ready ho rahi hai…' : 'Photo upload karein'}</button>
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : <LocaleText hinglish="Photo upload करें" english="Upload photo" />}</button>
                     {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
@@ -243,9 +245,9 @@ export default function StudentProfilePage() {
             <section className="student-profile-card">
               <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><LocaleText hinglish="आपके बारे में" english="About you" /></h2><p><LocaleText hinglish="अपनी basic details updated रखें।" english="Keep your basic details up to date." /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका नाम" english="Your name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Aapko kis naam se bulayein?" autoComplete="name" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका नाम" english="Your name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={tx('आपको किस नाम से बुलाएँ?','What should we call you?')} autoComplete="name" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={tx('जैसे Patna','e.g. Patna')} autoComplete="address-level2" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={tx('जैसे Bihar','e.g. Bihar')} autoComplete="address-level1" /></label>
               </div>
               <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <LocaleText hinglish="City और state काफ़ी हैं। कृपया घर का पूरा address न डालें।" english="City and state are enough. Please do not enter your full home address." /></p>
             </section>
@@ -253,16 +255,16 @@ export default function StudentProfilePage() {
             <section className="student-profile-card">
               <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><LocaleText hinglish="School और learning" english="School and learning" /></h2><p><LocaleText hinglish="अपनी learning को और relevant बनाने में मदद करें।" english="Help us make your learning more relevant." /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="School का नाम" english="School name" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder="School ka naam daalein" autoComplete="organization" /></label>
-                <label className="student-profile-field"><LocaleText hinglish="School medium" english="School medium" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><LocaleText hinglish="अगर पता हो तो चुनें" english="Choose if you know" /></option><option value="Hindi"><LocaleText hinglish="हिन्दी" english="Hindi" /></option><option value="English"><LocaleText hinglish="English" english="English" /></option><option value="Hindi & English"><LocaleText hinglish="Hinglish (हिन्दी + English)" english="Hinglish (Hindi + English)" /></option><option value="Other">Other</option></select></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="School का नाम" english="School name" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder={tx('School का नाम डालें','Enter your school name')} autoComplete="organization" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="School medium" english="School medium" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><LocaleText hinglish="अगर पता हो तो चुनें" english="Choose if you know" /></option><option value="Hindi"><LocaleText hinglish="हिन्दी" english="Hindi" /></option><option value="English"><LocaleText hinglish="English" english="English" /></option><option value="Hindi & English"><LocaleText hinglish="Hinglish (हिन्दी + English)" english="Hinglish (Hindi + English)" /></option><option value="Other">{locale==='english'?'Other':'अन्य'}</option></select></label>
                 <label className="student-profile-field"><LocaleText hinglish="पसंदीदा subject" english="Favourite subject" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><LocaleText hinglish="Subject चुनें" english="Choose a subject" /></option><option value="maths"><LocaleText hinglish="गणित · Maths" english="Maths" /></option><option value="science"><LocaleText hinglish="विज्ञान · Science" english="Science" /></option><option value="both"><LocaleText hinglish="दोनों" english="Both" /></option><option value="other"><LocaleText hinglish="कोई और subject" english="Another subject" /></option><option value="not_sure"><LocaleText hinglish="अभी explore कर रहे हैं" english="Still exploring" /></option></select></label>
-                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="मेरा learning goal" english="My learning goal" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder="Aap kis cheez mein better hona chahte hain? Jaise, fractions solve karne mein confidence badhana." /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="मेरा learning goal" english="My learning goal" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={tx('आप किस चीज़ में बेहतर होना चाहते हैं? जैसे, fractions solve करने में confidence बढ़ाना।','What would you like to improve? For example, build confidence in solving fractions.')} /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
             </section>
 
             <div className="student-profile-form__footer">
               <p><LocaleText hinglish="ये details update करने पर भी आपकी progress और practice records save रहेंगे।" english="Your progress and practice records remain saved when you update these details." /></p>
-              <div><Link href="/student" className="student-profile-quiet-button"><LocaleText hinglish="रद्द करें" english="Cancel" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
+              <div><Link href="/student" className="student-profile-quiet-button"><LocaleText hinglish="रद्द करें" english="Cancel" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? <LocaleText hinglish="Changes save हो रहे हैं…" english="Saving changes…" /> : <LocaleText hinglish="Changes save करें" english="Save changes" />}</button></div>
             </div>
           </form>
         )}
