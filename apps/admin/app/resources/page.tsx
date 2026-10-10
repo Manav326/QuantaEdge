@@ -55,6 +55,17 @@ async function api(url: string, init: RequestInit = {}) {
   return body;
 }
 
+function contentCoverageWarning(reference?: string | null): string | null {
+  if (!reference) return null;
+  const status = reference.match(/content_status=(PARTIAL|UNAVAILABLE)/i)?.[1]?.toUpperCase();
+  if (!status) return null;
+  const missing = reference.match(/missing_chapters=([^;]+)/i)?.[1]?.trim();
+  if (status === 'UNAVAILABLE') return 'SOURCE CONTENT UNAVAILABLE — do not treat this PDF as a complete book.';
+  return missing
+    ? 'PARTIAL SOURCE — missing chapters: ' + missing + '. Review the coverage report before assigning to students.'
+    : 'PARTIAL SOURCE — chapter coverage requires review before assigning to students.';
+}
+
 function formatBytes(value: number) {
   if (value < 1024 * 1024) return Math.max(1, Math.round(value / 1024)) + ' KB';
   return (value / (1024 * 1024)).toFixed(1) + ' MB';
@@ -311,7 +322,7 @@ export default function TextbookLibraryPage() {
             }}>
               <option value="">Select a stored PDF…</option>
               {library.map(pdf => <option key={pdf.pdf_asset_id || pdf.id} value={pdf.pdf_asset_id || pdf.id}>
-                {pdf.title} · {pdf.page_count} pages · {formatBytes(pdf.file_size_bytes)}
+                {pdf.title} · {pdf.page_count} pages · {formatBytes(pdf.file_size_bytes)}{contentCoverageWarning(pdf.source_reference) ? ' · ⚠ PARTIAL' : ''}
               </option>)}
             </select>
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
@@ -329,7 +340,10 @@ export default function TextbookLibraryPage() {
           </div>
         </div>
         {selectedPdf && <div className={styles.selectedSummary}>
-          <span className={styles.pdfBadge}>PDF</span><div><b>{selectedPdf.title}</b><small>{selectedPdf.original_filename} · {selectedPdf.page_count} pages · {formatBytes(selectedPdf.file_size_bytes)} · {selectedPdf.source_kind.replaceAll('_',' ')}</small></div><span className={styles.hash}>{selectedPdf.sha256.slice(0, 12)}…</span>
+          <span className={styles.pdfBadge}>PDF</span><div><b>{selectedPdf.title}</b><small>{selectedPdf.original_filename} · {selectedPdf.page_count} pages · {formatBytes(selectedPdf.file_size_bytes)} · {selectedPdf.source_kind.replaceAll('_',' ')}</small>
+            {contentCoverageWarning(selectedPdf.source_reference) && <small className={styles.coverageWarning}>{contentCoverageWarning(selectedPdf.source_reference)}</small>}
+            {selectedPdf.source_reference && <small>Source reference: {selectedPdf.source_reference}</small>}
+          </div><span className={styles.hash}>{selectedPdf.sha256.slice(0, 12)}…</span>
         </div>}
       </section>}
 

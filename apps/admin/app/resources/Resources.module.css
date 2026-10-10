@@ -75,3 +75,5 @@
 .roleHint{align-self:center;font-size:10px;color:#7b8495;max-width:125px;line-height:1.4}
 .publishHint{color:#946200!important}
 @media(max-width:680px){.previewPanel{padding:12px}.previewHeading{flex-direction:column}.previewControls{flex-wrap:wrap}.previewControls label{margin-left:0}.previewCanvas{padding:7px}}
+
+.coverageWarning{display:block!important;margin-top:5px;color:#9a3412!important;font-weight:800}

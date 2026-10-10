@@ -48,13 +48,45 @@ def load_bundle(path: Path) -> dict[str, Any]:
         raise ValueError(f"{path}: source.title is missing.")
     if not isinstance(pages, int) or not 1 <= pages <= MAX_PAGES:
         raise ValueError(f"{path}: source.pdf_page_count must be between 1 and {MAX_PAGES}.")
+    availability = value.get("content_availability")
+    if not isinstance(availability, dict):
+        availability = source.get("content_availability")
+    if not isinstance(availability, dict):
+        availability = {"status": value.get("asset_content_status", "complete")}
+    status = str(availability.get("status", value.get("asset_content_status", "complete"))).lower()
+    if status not in {"complete", "partial", "unavailable"}:
+        status = "complete"
+    missing_chapters = availability.get("missing_chapters", [])
+    available_chapters = availability.get("available_chapters", [])
     return {
         "bundle": path,
         "filename": Path(filename).name,
         "sha256": digest.lower(),
         "title": title.strip(),
         "page_count": pages,
+        "content_availability": availability,
+        "asset_content_status": status,
+        "source_url": str(source.get("source_url") or ""),
+        "missing_chapters": missing_chapters if isinstance(missing_chapters, list) else [],
+        "available_chapters": available_chapters if isinstance(available_chapters, list) else [],
     }
+
+
+def source_reference(item: dict[str, Any]) -> str:
+    """Make partial chapter coverage searchable and visible in the private PDF library."""
+    coverage = item.get("content_availability") or {}
+    status = str(item.get("asset_content_status") or coverage.get("status") or "complete").upper()
+    parts = []
+    if status != "COMPLETE":
+        parts.append("content_status=" + status)
+        missing = item.get("missing_chapters") or coverage.get("missing_chapters") or []
+        available = item.get("available_chapters") or coverage.get("available_chapters") or []
+        if missing:
+            parts.append("missing_chapters=" + ",".join(str(n) for n in missing))
+        if available:
+            parts.append("available_chapters=" + ",".join(str(n) for n in available))
+    parts.extend(["extraction-bundle=" + item["bundle"].name, "sha256=" + item["sha256"]])
+    return ";".join(parts)[:500]
 
 
 def find_matching_pdf(pdf_dir: Path, filename: str, expected_sha: str) -> Path | None:
@@ -104,7 +136,7 @@ def upload_pdf(api_base_url: str, cookie: str, path: Path, item: dict[str, Any])
     fields = {
         "title": item["title"],
         "sourceKind": "EXTRACTION_IMPORT",
-        "sourceReference": f"extraction-bundle={item['bundle'].name};sha256={item['sha256']}",
+        "sourceReference": source_reference(item),
     }
     boundary, body = multipart_body(fields, path.name, pdf_bytes)
     request = urllib.request.Request(
@@ -162,7 +194,10 @@ def main() -> int:
                 continue
             found += 1
             if not args.apply:
-                print(f"DRY RUN {pdf_path} -> library title={item['title']!r}, pages={item['page_count']}, sha256={item['sha256']}")
+                marker = ""
+                if item["asset_content_status"] == "partial":
+                    marker = " PARTIAL: missing chapter(s) " + ",".join(map(str, item["missing_chapters"]))
+                print(f"DRY RUN{marker} {pdf_path} -> library title={item['title']!r}, pages={item['page_count']}, sha256={item['sha256']}")
                 continue
             cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "")
             result = upload_pdf(args.api_base_url, cookie, pdf_path, item)
@@ -171,7 +206,10 @@ def main() -> int:
                 print(f"EXISTS {item['title']}: library item {result.get('pdf_asset_id')}")
             else:
                 uploaded += 1
-                print(f"IMPORTED {item['title']}: library item {result.get('pdf_asset_id')}, pages={result.get('page_count')}")
+                marker = ""
+                if item["asset_content_status"] == "partial":
+                    marker = " PARTIAL: missing chapter(s) " + ",".join(map(str, item["missing_chapters"]))
+                print(f"IMPORTED{marker} {item['title']}: library item {result.get('pdf_asset_id')}, pages={result.get('page_count')}")
         except (OSError, ValueError, json.JSONDecodeError, RuntimeError) as exc:
             errors += 1
             print(f"ERROR {bundle_path}: {exc}", file=sys.stderr)

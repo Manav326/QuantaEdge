@@ -31,6 +31,35 @@ class ImportExistingTextbookPdfsTest(unittest.TestCase):
             self.assertEqual("book.pdf", result["filename"])
             self.assertEqual(digest, result["sha256"])
             self.assertEqual(18, result["page_count"])
+            self.assertEqual("complete", result["asset_content_status"])
+
+    def test_partial_coverage_is_preserved_and_made_visible_in_library_reference(self):
+        from scripts.import_existing_textbook_pdfs import source_reference
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bundle = root / "class-12-english-flamingo.json"
+            digest = hashlib.sha256(b"%PDF-1.4 partial").hexdigest()
+            coverage = {
+                "status": "partial", "expected_chapters": list(range(1, 14)),
+                "available_chapters": [1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13],
+                "missing_chapters": [9, 10],
+            }
+            bundle.write_text(json.dumps({
+                "source": {
+                    "title": "Flamingo", "pdf_filename": "flamingo-partial.pdf",
+                    "pdf_sha256": digest, "pdf_page_count": 45,
+                },
+                "content_availability": coverage,
+                "asset_content_status": "partial",
+            }), encoding="utf-8")
+            item = load_bundle(bundle)
+            reference = source_reference(item)
+            self.assertEqual("partial", item["asset_content_status"])
+            self.assertEqual([9, 10], item["missing_chapters"])
+            self.assertIn("content_status=PARTIAL", reference)
+            self.assertIn("missing_chapters=9,10", reference)
+            self.assertIn("available_chapters=", reference)
+            self.assertLessEqual(len(reference), 500)
 
     def test_matching_pdf_requires_the_original_sha256(self):
         with tempfile.TemporaryDirectory() as directory:
