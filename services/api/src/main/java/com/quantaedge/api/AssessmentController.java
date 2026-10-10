@@ -633,6 +633,55 @@ public class AssessmentController {
     return Map.of("saved", true, "attemptId", attemptId, "attemptQuestionId", attemptQuestionId);
   }
 
+  @PutMapping("/learning/assessment-attempts/{attemptId}/answers")
+  @Transactional
+  public Map<String, Object> saveAnswers(
+      @PathVariable long attemptId,
+      @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    List<Map<String, Object>> attempts = jdbc.queryForList("""
+      select id,status,deadline_at,student_id from student_assessment_attempt
+      where id=? for update
+      """, attemptId);
+    if (attempts.isEmpty()
+        || ((Number) attempts.getFirst().get("student_id")).longValue() != context.studentId()) {
+      throw notFound("Assessment attempt", attemptId);
+    }
+    Map<String, Object> attempt = attempts.getFirst();
+    if (!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
+      throw conflict("Submitted test answers are locked and can no longer be changed.");
+    }
+    OffsetDateTime deadline = offsetDateTime(attempt.get("deadline_at"));
+    if (deadline != null && deadline.isBefore(OffsetDateTime.now())) {
+      throw conflict("The test time has expired. Submit the attempt to finalize your saved answers.");
+    }
+    Object rawAnswers = body.get("answers");
+    if (!(rawAnswers instanceof List<?> answers) || answers.size() > 200) {
+      throw badRequest("Answers must be a list of up to 200 saved responses.");
+    }
+    java.util.HashSet<Long> seen = new java.util.HashSet<>();
+    int saved = 0;
+    for (Object raw : answers) {
+      if (!(raw instanceof Map<?, ?> entry)) throw badRequest("Each saved answer must be an object.");
+      long questionId = longValue(entry.get("attemptQuestionId"), "Attempt question ID");
+      if (!seen.add(questionId)) throw badRequest("A question appears more than once in the save request.");
+      Long owned = jdbc.queryForObject("""
+        select count(*) from student_assessment_attempt_question
+        where id=? and attempt_id=?
+        """, Long.class, questionId, attemptId);
+      if (owned == null || owned == 0) throw badRequest("A question does not belong to this test attempt.");
+      Object value = entry.get("answer");
+      if (value == null) value = "";
+      jdbc.update("""
+        update student_assessment_answer set response_payload=?::jsonb,saved_at=now()
+        where attempt_question_id=?
+        """, json(value), questionId);
+      saved++;
+    }
+    return Map.of("saved", true, "savedCount", saved, "attemptId", attemptId);
+  }
+
   @PostMapping("/learning/assessment-attempts/{attemptId}/submit")
   @Transactional
   public Map<String, Object> submitAttempt(
