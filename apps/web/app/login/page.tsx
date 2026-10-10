@@ -59,22 +59,22 @@ export default function ParentLoginPage() {
       if (!response.ok) {
         const message = String(body.message || '');
         if (message.toLowerCase().includes('password has not been set')) {
-          throw new Error('No password is set on this parent account yet. Choose “OTP se sign in karein” to enter your dashboard, or use “Password bhool gaye?” to create one.');
+          throw new Error(tx('इस parent account पर अभी password set नहीं है। Dashboard खोलने के लिए “OTP से sign in करें” चुनें या “Password भूल गए?” से password बनाएँ।','No password is set on this parent account yet. Choose “Sign in with OTP” to open your dashboard, or use “Forgot password?” to create one.'));
         }
         throw new Error(message || 'Unable to sign in. Check your mobile number and password.');
       }
       router.replace('/parent'); router.refresh();
     } catch (e: any) {
-      setError(e?.message || 'Unable to sign in. Please try again.');
+      setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
     } finally { setBusy(false); }
   }
 
   async function requestOtp() {
     setError(''); setNotice('');
     if (mode === 'register') {
-      if (displayName.trim().length < 2) { setError('Enter your name.'); return; }
-      if (password.length < 8) { setError('Choose a password with at least 8 characters.'); return; }
-      if (password !== confirmPassword) { setError('The passwords do not match.'); return; }
+      if (displayName.trim().length < 2) { setError(tx('अपना नाम लिखें।','Enter your name.')); return; }
+      if (password.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
+      if (password !== confirmPassword) { setError(tx('दोनों passwords match नहीं कर रहे।','The passwords do not match.')); return; }
     }
     setBusy(true);
     try {
@@ -98,10 +98,10 @@ export default function ParentLoginPage() {
 
   async function verifyOtp() {
     setError(''); setNotice('');
-    if (otp.trim().length !== 6) { setError('Enter the 6-digit OTP.'); return; }
+    if (otp.trim().length !== 6) { setError(tx('6-digit OTP डालें।','Enter the 6-digit OTP.')); return; }
     if (mode === 'reset') {
-      if (newPassword.length < 8) { setError('Choose a password with at least 8 characters.'); return; }
-      if (newPassword !== confirmNewPassword) { setError('The new passwords do not match.'); return; }
+      if (newPassword.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
+      if (newPassword !== confirmNewPassword) { setError(tx('दोनों नए passwords match नहीं कर रहे।','The new passwords do not match.')); return; }
     }
     setBusy(true);
     try {
