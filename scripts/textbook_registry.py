@@ -6,8 +6,9 @@ the next book starts. Successful uploads survive failures/timeouts and are skipp
 """
 from __future__ import annotations
 
-import argparse, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile
+import argparse, copy, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import urllib.error, urllib.parse, urllib.request, zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,8 +26,12 @@ NCERT_CATALOG_FALLBACKS = (
 NCERT_PDF_BASES = ("https://ncert.nic.in/textbook/pdf", "https://ncert.ncert.org.in/textbook/pdf")
 LANGUAGES = {"hindi": "h", "english": "e"}
 ROMAN_CLASSES = {"vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10, "xi": 11, "xii": 12}
-MAX_BOOK_BYTES = 350 * 1024 * 1024
-MAX_ZIP_BYTES = 500 * 1024 * 1024
+# Textbook binary downloads and official complete-book bundles have no artificial size ceiling.
+MAX_BOOK_BYTES = None
+MAX_ZIP_BYTES = None
+DEFAULT_DOWNLOAD_WORKERS = 8
+DEFAULT_PUSH_BATCH_SIZE = 8
+MAX_RETRY_ROUNDS = 5
 CHUNK = 1024 * 1024
 IMAGE_PREFIX = "ghcr.io/manav326/quantaedge-textbooks"
 
@@ -58,7 +63,7 @@ def host_allowed(url: str) -> bool:
         return False
 
 
-def _get_url_once(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYTES) -> bytes | Path:
+def _get_url_once(url: str, destination: Path | None = None, limit: int | None = None) -> bytes | Path:
     if not host_allowed(url):
         raise ValueError("Refusing non-official or non-HTTPS URL: " + url)
     req = urllib.request.Request(url, headers={
@@ -78,8 +83,8 @@ def _get_url_once(url: str, destination: Path | None = None, limit: int = MAX_BO
                     if not block:
                         break
                     total += len(block)
-                    if total > limit:
-                        raise ValueError("Response exceeds size limit.")
+                    if limit is not None and total > limit:
+                        raise ValueError("Response exceeds configured metadata limit.")
                     data.extend(block)
                 result = bytes(data)
                 if "text/html" not in content_type and not (result.startswith(b"%PDF-") or result.startswith(b"PK\x03\x04")):
@@ -93,8 +98,8 @@ def _get_url_once(url: str, destination: Path | None = None, limit: int = MAX_BO
                     if not block:
                         break
                     total += len(block)
-                    if total > limit:
-                        raise ValueError("Download exceeds size limit.")
+                    if limit is not None and total > limit:
+                        raise ValueError("Download exceeds configured limit.")
                     handle.write(block)
             with part.open("rb") as handle:
                 sig = handle.read(5)
@@ -111,7 +116,7 @@ def _get_url_once(url: str, destination: Path | None = None, limit: int = MAX_BO
         raise RuntimeError("Download failed for " + url + ": " + str(exc)) from exc
 
 
-def get_url(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYTES) -> bytes | Path:
+def get_url(url: str, destination: Path | None = None, limit: int | None = None) -> bytes | Path:
     last_error: Exception | None = None
     for attempt in range(1, 5):
         try:
@@ -364,97 +369,110 @@ def sha256_file(path: Path) -> str:
 
 
 def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
+    """Download and validate a complete NCERT book bundle. No chapter fallback."""
     try:
         import fitz
     except ImportError as exc:
         raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
-    with tempfile.TemporaryDirectory(prefix="qe-textbook-") as td:
+
+    code = str(book["code"])
+    expected_chapters = int(book.get("chapter_count") or 0)
+    errors: list[str] = []
+    candidates = [str(book["bundle_url"])]
+    alternate = candidates[0].replace("https://ncert.nic.in", "https://ncert.ncert.org.in")
+    if alternate not in candidates:
+        candidates.append(alternate)
+
+    with tempfile.TemporaryDirectory(prefix="qe-textbook-fullbook-") as td:
         work = Path(td)
-        bundle = work / (book["code"] + "dd.zip")
+        archive_path = work / (code + "-complete-book.zip")
+        staged_pdf = work / (code + "-complete-book.pdf")
+        chosen_url: str | None = None
         members: list[tuple[int, str]] = []
-        bundle_ok = False
-        bundle_candidates = [book["bundle_url"]]
-        alt_bundle = book["bundle_url"].replace("https://ncert.nic.in", "https://ncert.ncert.org.in")
-        if alt_bundle not in bundle_candidates:
-            bundle_candidates.append(alt_bundle)
-        for bundle_url in bundle_candidates:
+
+        for bundle_url in candidates:
             try:
-                get_url(bundle_url, bundle, MAX_BOOK_BYTES)
-                with zipfile.ZipFile(bundle) as archive:
-                    if sum(entry.file_size for entry in archive.infolist() if not entry.is_dir()) > MAX_ZIP_BYTES:
-                        raise ValueError("NCERT bundle expands beyond 500 MB.")
-                    for entry in archive.infolist():
-                        name = Path(entry.filename).name
-                        chapter = re.match(r"^" + re.escape(book["code"]) + r"(\d{2})\.+pdf$", name, re.I)
-                        prelims = re.match(r"^" + re.escape(book["code"]) + r"ps\.+pdf$", name, re.I)
-                        if chapter:
-                            members.append((int(chapter.group(1)), entry.filename))
-                        elif prelims:
-                            members.append((0, entry.filename))
-                members.sort(key=lambda pair: (pair[0], pair[1]))
-                bundle_ok = bool(members)
-                if bundle_ok:
-                    book["pdf_url"] = bundle_url
+                get_url(bundle_url, archive_path, None)
+                with zipfile.ZipFile(archive_path) as archive:
+                    names: list[tuple[int, str]] = []
+                    for item in archive.infolist():
+                        if item.is_dir():
+                            continue
+                        basename = Path(item.filename).name
+                        chapter_match = re.match(r"^" + re.escape(code) + r"(\d{2})\.+pdf$", basename, re.I)
+                        prelims_match = re.match(r"^" + re.escape(code) + r"ps\.+pdf$", basename, re.I)
+                        if chapter_match:
+                            names.append((int(chapter_match.group(1)), item.filename))
+                        elif prelims_match:
+                            names.append((0, item.filename))
+                    chapter_numbers = sorted({number for number, _ in names if number > 0})
+                    if not names:
+                        raise ValueError("Official bundle has no recognisable complete-book PDF members.")
+                    if expected_chapters and chapter_numbers != list(range(1, expected_chapters + 1)):
+                        missing = sorted(set(range(1, expected_chapters + 1)) - set(chapter_numbers))
+                        raise ValueError(
+                            "Official book bundle is incomplete; expected chapters 1 through "
+                            + str(expected_chapters) + ", missing " + str(missing) + "."
+                        )
+                    members = sorted(names, key=lambda item: (item[0], item[1]))
+                    chosen_url = bundle_url
                     break
-            except FileNotFoundError:
-                continue
-            except (zipfile.BadZipFile, RuntimeError, ValueError) as exc:
-                # An oversized ZIP or transient official-host failure should
-                # fall back to bounded individual chapter PDFs, not discard a book.
-                log("NCERT bundle unavailable at " + bundle_url + "; falling back to chapters if needed: " + str(exc))
-                bundle.unlink(missing_ok=True)
-        if not bundle_ok:
-            members = []
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        output = fitz.open()
+            except (FileNotFoundError, RuntimeError, ValueError, zipfile.BadZipFile) as exc:
+                errors.append(bundle_url + ": " + str(exc))
+                archive_path.unlink(missing_ok=True)
+
+        if chosen_url is None:
+            raise RuntimeError(
+                "Could not retrieve one complete NCERT book bundle; no individual-chapter fallback was attempted. "
+                + " | ".join(errors)
+            )
+
+        merged = fitz.open()
         toc: list[list[Any]] = []
         try:
-            if members:
-                with zipfile.ZipFile(bundle) as archive:
-                    for chapter_no, member_name in members:
-                        content = archive.read(member_name)
-                        if not content.startswith(b"%PDF-"):
-                            continue
-                        source = fitz.open(stream=content, filetype="pdf")
-                        start_page = len(output) + 1
-                        output.insert_pdf(source)
-                        if chapter_no:
-                            toc.append([1, "Chapter " + str(chapter_no), start_page])
-                        source.close()
-            else:
-                for chapter_no in range(1, int(book["chapter_count"]) + 1):
-                    found_path = None
-                    last_error: Exception | None = None
-                    for pdf_base in NCERT_PDF_BASES:
-                        for dots in (1, 2):
-                            candidate = work / (book["code"] + f"{chapter_no:02d}" + ".pdf")
-                            url = pdf_base + "/" + book["code"] + f"{chapter_no:02d}" + ("." * dots) + "pdf"
-                            try:
-                                get_url(url, candidate, 50 * 1024 * 1024)
-                                found_path = candidate
-                                book["pdf_url"] = url
-                                break
-                            except (FileNotFoundError, RuntimeError, ValueError) as exc:
-                                last_error = exc
-                        if found_path:
-                            break
-                    if not found_path:
-                        log("Chapter fallback warning " + book["code"] + str(chapter_no) + ": " + str(last_error))
-                    if found_path:
-                        source = fitz.open(found_path)
-                        start_page = len(output) + 1
-                        output.insert_pdf(source)
+            with zipfile.ZipFile(archive_path) as archive:
+                for chapter_no, member_name in members:
+                    member_pdf = work / ("member-" + str(chapter_no) + ".pdf")
+                    with archive.open(member_name, "r") as source, member_pdf.open("wb") as target:
+                        shutil.copyfileobj(source, target, length=CHUNK)
+                    with member_pdf.open("rb") as handle:
+                        signature = handle.read(5)
+                    if signature != b"%PDF-":
+                        member_pdf.unlink(missing_ok=True)
+                        raise ValueError("Book bundle member is not a valid PDF: " + member_name)
+                    with fitz.open(member_pdf) as chapter:
+                        start_page = len(merged) + 1
+                        merged.insert_pdf(chapter)
+                    if chapter_no:
                         toc.append([1, "Chapter " + str(chapter_no), start_page])
-                        source.close()
-            if not len(output):
-                raise ValueError("No readable chapter PDFs found for " + book["code"])
-            output.set_toc(toc)
-            output.set_metadata({"title": book["title"], "author": "NCERT", "subject": str(book.get("subject", ""))})
-            output.save(destination, garbage=4, deflate=True)
-            pages = len(output)
+                    member_pdf.unlink(missing_ok=True)
+
+            if not len(merged):
+                raise ValueError("Complete NCERT book bundle contained no readable pages.")
+            actual_chapters = len([row for row in toc if row[1].startswith("Chapter ")])
+            if expected_chapters and actual_chapters != expected_chapters:
+                raise ValueError(
+                    "Merged PDF does not contain all " + str(expected_chapters) + " expected chapters."
+                )
+            merged.set_toc(toc)
+            merged.set_metadata({
+                "title": str(book["title"]), "author": "NCERT",
+                "subject": str(book.get("subject", "")),
+                "keywords": "QuantaEdge textbook cache; language=" + str(book["medium"]),
+            })
+            merged.save(staged_pdf, garbage=4, deflate=True)
         finally:
-            output.close()
-    return sha256_file(destination), pages, toc, "Merged official chapter PDFs; chapter bookmarks added"
+            merged.close()
+
+        with fitz.open(staged_pdf) as complete:
+            if complete.needs_pass or len(complete) < 1:
+                raise ValueError("Merged NCERT book is unreadable or password-protected.")
+            page_count = len(complete)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(staged_pdf, destination)
+        book["pdf_url"] = chosen_url
+
+    return sha256_file(destination), page_count, toc, "Merged from official complete-book ZIP; no chapter fallback"
 
 
 def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
@@ -462,7 +480,7 @@ def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, in
         import fitz
     except ImportError as exc:
         raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
-    get_url(book["pdf_url"], destination, MAX_BOOK_BYTES)
+    get_url(book["pdf_url"], destination, None)
     with fitz.open(destination) as pdf:
         if pdf.needs_pass:
             raise ValueError("Password-protected SCERT PDF is unsupported.")
@@ -479,24 +497,48 @@ def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, in
 
 
 def pull_index(image: str) -> tuple[bool, dict[str, Any]]:
+    """Read the existing persistent image before deciding which books are missing."""
     try:
-        subprocess.run(["docker", "pull", image], check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        subprocess.run(
+            ["docker", "pull", image], check=True, stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT, text=True,
+        )
     except subprocess.CalledProcessError as exc:
         message = exc.stdout or ""
-        log("Could not pull previous image; attempting initial image. " + message[-400:])
-        return False, {"schema_version": 1, "registry": image, "books": []}
+        lowered = message.casefold()
+        # Only initialise if Docker proves the manifest does not exist. Never
+        # mistake an auth/network failure for an empty cache and overwrite it.
+        missing = ("manifest unknown" in lowered or "manifest not found" in lowered
+                   or "no matching manifest" in lowered)
+        if missing and "denied" not in lowered and "unauthorized" not in lowered:
+            log("No existing manifest for " + image + "; initial registry push.")
+            return False, {"schema_version": 1, "registry": image, "books": [], "download_status": {}}
+        raise RuntimeError(
+            "Could not read existing GHCR cache " + image
+            + "; refusing to reset it. Docker said: " + message[-900:]
+        ) from exc
+
     container = "qe-index-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
-    subprocess.run(["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"], check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(
+        ["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"],
+        check=True, stdout=subprocess.DEVNULL,
+    )
     try:
         with tempfile.TemporaryDirectory(prefix="qe-index-") as td:
             path = Path(td) / "index.json"
-            subprocess.run(["docker", "cp", container + ":/index.json", str(path)], check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(
+                ["docker", "cp", container + ":/index.json", str(path)],
+                check=True, stdout=subprocess.DEVNULL,
+            )
             data = json.loads(path.read_text(encoding="utf-8"))
-            if not isinstance(data.get("books"), list):
-                raise ValueError("Existing GHCR image has invalid index.json.")
+            if not isinstance(data, dict) or not isinstance(data.get("books"), list):
+                raise ValueError("Existing GHCR cache has invalid index.json; refusing to reset it.")
+            if not isinstance(data.get("download_status", {}), dict):
+                data["download_status"] = {}
             return True, data
     finally:
-        subprocess.run(["docker", "rm", container], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["docker", "rm", container], check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def summary(line: str) -> None:
@@ -506,116 +548,372 @@ def summary(line: str) -> None:
             handle.write(line.rstrip() + "\n")
 
 
-def push_one(image: str, base_exists: bool, book: dict[str, Any], pdf: Path,
-             index: dict[str, Any], context: Path) -> None:
+def push_batch(image: str, base_exists: bool, books_to_add: list[dict[str, Any]],
+               files_by_id: dict[str, Path], index: dict[str, Any], context: Path) -> None:
+    """Build one multi-book layer batch and update the same persistent image tag."""
     if context.exists():
         shutil.rmtree(context)
-    (context / "books").mkdir(parents=True)
-    filename = book["book_id"] + ".pdf"
-    shutil.copyfile(pdf, context / "books" / filename)
-    (context / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    if base_exists:
-        dockerfile = "FROM " + image + "\nLABEL org.opencontainers.image.title=\"QuantaEdge textbook cache\"\nCOPY index.json /index.json\nCOPY books/" + filename + " /books/" + filename + "\n"
-    else:
-        dockerfile = "FROM scratch\nLABEL org.opencontainers.image.title=\"QuantaEdge textbook cache\"\nLABEL org.opencontainers.image.description=\"Official textbook cache; source and checksums are in /index.json\"\nCOPY index.json /index.json\nCOPY books/" + filename + " /books/" + filename + "\n"
-    (context / "Dockerfile").write_text(dockerfile, encoding="utf-8")
-    next_tag = image.rsplit(":", 1)[0] + ":qe-next"
-    subprocess.run(["docker", "build", "--pull=false", "-t", next_tag, str(context)], check=True)
-    subprocess.run(["docker", "tag", next_tag, image], check=True)
-    subprocess.run(["docker", "push", image], check=True)
-    subprocess.run(["docker", "image", "rm", next_tag], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    books_dir = context / "books"
+    books_dir.mkdir(parents=True, exist_ok=True)
+    for book in books_to_add:
+        book_id = str(book["book_id"])
+        shutil.copyfile(files_by_id[book_id], books_dir / (book_id + ".pdf"))
+    (context / "index.json").write_text(
+        json.dumps(index, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    lines = [
+        "FROM " + image if base_exists else "FROM scratch",
+        "LABEL org.opencontainers.image.title=\"QuantaEdge textbook cache\"",
+        "LABEL org.opencontainers.image.description=\"Persistent textbook cache; see /index.json\"",
+        "COPY index.json /index.json",
+    ]
+    # Separate COPY instructions create content-addressed layers for each whole
+    # book. Repeated pushes reuse prior layers; only new books add binary layers.
+    for book in books_to_add:
+        filename = str(book["book_id"]) + ".pdf"
+        lines.append("COPY books/" + filename + " /books/" + filename)
+    (context / "Dockerfile").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    local_tag = image.rsplit(":", 1)[0] + ":qe-batch-build"
+    try:
+        subprocess.run(["docker", "build", "--pull=false", "-t", local_tag, str(context)], check=True)
+        subprocess.run(["docker", "tag", local_tag, image], check=True)
+        # Durable source of truth: update this same package and tag every batch.
+        subprocess.run(["docker", "push", image], check=True)
+    finally:
+        subprocess.run(["docker", "image", "rm", local_tag], check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def _book_entry(book: dict[str, Any], digest: str, page_count: int,
+                toc: list[list[Any]], method: str, pdf_path: Path) -> dict[str, Any]:
+    return {
+        **book,
+        "class": str(book["class"]),
+        "classes": [str(value) for value in book.get("classes", [book["class"]])],
+        "sha256": digest,
+        "bytes": pdf_path.stat().st_size,
+        "page_count": page_count,
+        "toc": toc,
+        "file": "books/" + str(book["book_id"]) + ".pdf",
+        "download_method": method,
+        "rights_basis": (
+            "NCERT licence asserted by repository owner; confidential evidence is not committed"
+            if book["source_type"] == "NCERT"
+            else "Official SCERT Bihar E-resources; source URL retained for provenance"
+        ),
+        "cached_at": now(),
+    }
+
+
+def _index_add_books(index: dict[str, Any], entries: list[dict[str, Any]]) -> None:
+    current = {item.get("book_id"): item for item in index.get("books", []) if isinstance(item, dict)}
+    for entry in entries:
+        current[entry["book_id"]] = entry
+    index["books"] = sorted(current.values(), key=lambda item: (
+        min([int(n) for n in item.get("classes", [item.get("class", 0)])]),
+        item.get("publisher", ""),
+        str(item.get("title", "")).casefold(),
+        item.get("book_id", ""),
+    ))
 
 
 def publish_language(language: str, image: str, book_code: str | None = None, refresh: bool = False,
                      max_books: int = 0, ncert_only: bool = False,
-                     catalog: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+                     catalog: list[dict[str, Any]] | None = None,
+                     download_workers: int = DEFAULT_DOWNLOAD_WORKERS,
+                     push_batch_size: int = DEFAULT_PUSH_BATCH_SIZE,
+                     retry_rounds: int = MAX_RETRY_ROUNDS) -> dict[str, Any]:
+    if language not in LANGUAGES:
+        raise ValueError("Language must be hindi or english.")
+    if not 1 <= download_workers <= 32:
+        raise ValueError("download-workers must be between 1 and 32.")
+    if not 1 <= push_batch_size <= 32:
+        raise ValueError("push-batch-size must be between 1 and 32.")
+    if not 1 <= retry_rounds <= MAX_RETRY_ROUNDS:
+        raise ValueError("retry-rounds must be between 1 and 5.")
+
+    # Always pull the exact existing language image before attempting any source download.
     base_exists, index = pull_index(image)
     index.setdefault("schema_version", 1)
     index.setdefault("registry", image)
     index.setdefault("books", [])
+    index.setdefault("download_status", {})
+    if not isinstance(index["download_status"], dict):
+        index["download_status"] = {}
     existing = {item.get("book_id"): item for item in index["books"] if isinstance(item, dict)}
     catalog = catalog if catalog is not None else discover_books()
     selected = [item for item in catalog if item["medium"] == language]
     if ncert_only:
         selected = [item for item in selected if item["source_type"] == "NCERT"]
     if book_code:
-        selected = [item for item in selected if item.get("code", "").casefold() == book_code.casefold()
-                    or item["book_id"].casefold() == book_code.casefold()]
+        selected = [
+            item for item in selected
+            if item.get("code", "").casefold() == book_code.casefold()
+            or item["book_id"].casefold() == book_code.casefold()
+        ]
         if not selected:
             raise ValueError("No " + language + " book matched " + book_code)
-    log("Publishing " + language + ": " + str(len(selected)) + " official catalogue entries.")
-    uploaded, reused, failed = [], [], []
-    processed = 0
-    with tempfile.TemporaryDirectory(prefix="qe-textbook-one-book-") as td:
-        root = Path(td)
-        for book in selected:
-            book_id = book["book_id"]
-            previous = existing.get(book_id)
-            if previous and not refresh:
-                reused.append(book_id)
-                continue
-            if max_books and processed >= max_books:
-                break
-            processed += 1
-            log("BOOK_START " + str(processed) + "/" + str(len(selected)) + " " + book_id + " — " + book["title"])
-            path = root / (book_id + ".pdf")
+
+    already_cached = [item["book_id"] for item in selected if item["book_id"] in existing and not refresh]
+    candidates = [item for item in selected if refresh or item["book_id"] not in existing]
+    if max_books > 0:
+        candidates = candidates[:max_books]
+    log(
+        "Using persistent image " + image + "; books present before run=" + str(len(existing))
+        + "; catalog entries=" + str(len(selected)) + "; pending=" + str(len(candidates))
+        + "; concurrent downloads=" + str(download_workers)
+        + "; books per Docker push=" + str(push_batch_size)
+        + "; maximum rounds=" + str(retry_rounds)
+    )
+
+    downloaded: list[str] = []
+    unchanged: list[str] = []
+    failed_downloads: dict[str, dict[str, Any]] = {}
+    push_failures: dict[str, str] = {}
+    attempt_in_this_run: dict[str, int] = {item["book_id"]: 0 for item in candidates}
+    initial_attempt_totals: dict[str, int] = {
+        item["book_id"]: int(index.get("download_status", {}).get(item["book_id"], {}).get("attempts_total", 0))
+        for item in candidates
+    }
+    ready_for_push: dict[str, dict[str, Any]] = {}
+
+    with tempfile.TemporaryDirectory(prefix="qe-textbook-batched-") as td:
+        temp_root = Path(td)
+        downloads_root = temp_root / "downloads"
+        downloads_root.mkdir(parents=True, exist_ok=True)
+
+        def persist_index_only() -> bool:
+            nonlocal base_exists
+            candidate_index = copy.deepcopy(index)
+            candidate_index.update({
+                "schema_version": 1, "registry": image,
+                "language": language, "updated_at": now(),
+            })
             try:
-                if book["source_type"] == "NCERT":
-                    digest, pages, toc, method = download_ncert_merged(book, path)
-                else:
-                    digest, pages, toc, method = download_scert_pdf(book, path)
-                if path.stat().st_size > MAX_BOOK_BYTES:
-                    raise ValueError("Prepared book exceeds allowed size.")
-                if previous and previous.get("sha256") == digest:
-                    reused.append(book_id)
-                    log("UNCHANGED " + book_id + " sha256=" + digest)
-                    continue
-                rights_basis = (
-                    "NCERT licence asserted by repository owner; confidential evidence is not committed"
-                    if book["source_type"] == "NCERT"
-                    else "Official SCERT Bihar E-resources; source URL retained for provenance"
-                )
-                entry = {
-                    **book, "class": str(book["class"]),
-                    "classes": [str(value) for value in book.get("classes", [book["class"]])],
-                    "sha256": digest, "bytes": path.stat().st_size, "page_count": pages, "toc": toc,
-                    "file": "books/" + book_id + ".pdf", "download_method": method,
-                    "rights_basis": rights_basis, "cached_at": now(),
-                }
-                index["books"] = [item for item in index["books"] if item.get("book_id") != book_id]
-                index["books"].append(entry)
-                index["books"].sort(key=lambda item: (
-                    min([int(n) for n in item.get("classes", [item.get("class", 0)])]),
-                    item.get("publisher", ""), item.get("title", "").casefold(), item.get("book_id", "")
-                ))
-                index.update({"schema_version": 1, "registry": image, "language": language, "updated_at": now()})
-                push_one(image, base_exists, book, path, index, root / "oci-context")
+                push_batch(image, base_exists, [], {}, candidate_index, temp_root / "index-only")
+                index.clear()
+                index.update(candidate_index)
                 base_exists = True
-                existing[book_id] = entry
-                uploaded.append(book_id)
-                summary("| " + language.title() + " | " + str(book["class"]) + " | " + book["publisher"] + " | "
-                        + book["title"].replace("|", "\\|") + " | " + book_id + " | " + digest[:12] + " |")
-                log("PUSHED " + book_id + " image=" + image + " sha256=" + digest + " bytes=" + str(path.stat().st_size))
+                return True
             except Exception as exc:
-                item = {"book_id": book_id, "title": str(book["title"]), "error": str(exc)}
-                failed.append(item)
-                log("BOOK_FAILED " + json.dumps(item, ensure_ascii=False))
+                log("REGISTRY_STATUS_PUSH_FAILED " + image + ": " + str(exc))
+                return False
+
+        def push_ready(batch_ids: list[str]) -> bool:
+            nonlocal base_exists
+            if not batch_ids:
+                return True
+            entries = [ready_for_push[book_id]["entry"] for book_id in batch_ids]
+            candidate_index = copy.deepcopy(index)
+            _index_add_books(candidate_index, entries)
+            candidate_status = candidate_index.setdefault("download_status", {})
+            for book_id in batch_ids:
+                item = ready_for_push[book_id]
+                candidate_status[book_id] = {
+                    "status": "cached",
+                    "attempts_this_run": attempt_in_this_run.get(book_id, 0),
+                    "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
+                    "sha256": item["entry"]["sha256"],
+                    "bytes": item["entry"]["bytes"],
+                    "last_success_at": now(),
+                }
+            candidate_index.update({
+                "schema_version": 1, "registry": image,
+                "language": language, "updated_at": now(),
+            })
+            files_by_id = {book_id: ready_for_push[book_id]["path"] for book_id in batch_ids}
+            try:
+                push_batch(image, base_exists, entries, files_by_id, candidate_index, temp_root / "oci-context")
+                index.clear()
+                index.update(candidate_index)
+                base_exists = True
+                for book_id in batch_ids:
+                    downloaded.append(book_id)
+                    ready_for_push.pop(book_id, None)
+                    existing[book_id] = next(entry for entry in entries if entry["book_id"] == book_id)
+                    failed_downloads.pop(book_id, None)
+                    push_failures.pop(book_id, None)
+                    entry = existing[book_id]
+                    summary("| " + language.title() + " | " + str(entry["class"]) + " | " + str(entry["publisher"])
+                            + " | " + str(entry["title"]).replace("|", "\\|") + " | " + book_id
+                            + " | " + str(entry["sha256"])[:12] + " |")
+                    log("PUSHED " + book_id + " image=" + image + " sha256=" + str(entry["sha256"])
+                        + " bytes=" + str(entry["bytes"]))
+                return True
+            except Exception as exc:
+                for book_id in batch_ids:
+                    item = ready_for_push[book_id]
+                    push_failures[book_id] = str(exc)
+                    previous = index.get("download_status", {}).get(book_id, {})
+                    index.setdefault("download_status", {})[book_id] = {
+                        "status": "downloaded_pending_push",
+                        "attempts_this_run": attempt_in_this_run.get(book_id, 0),
+                        "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
+                        "sha256": item["entry"]["sha256"],
+                        "bytes": item["entry"]["bytes"],
+                        "last_error": "GHCR batch push failed: " + str(exc),
+                        "updated_at": now(),
+                    }
+                log("BATCH_PUSH_FAILED " + image + " books=" + ",".join(batch_ids) + ": " + str(exc))
+                persist_index_only()
+                return False
+
+        def download_batch(batch: list[dict[str, Any]], round_no: int) -> None:
+            futures = {}
+            for book in batch:
+                book_id = book["book_id"]
+                attempt_in_this_run[book_id] = attempt_in_this_run.get(book_id, 0) + 1
+            with ThreadPoolExecutor(max_workers=min(download_workers, len(batch))) as executor:
+                for book in batch:
+                    book_id = book["book_id"]
+                    destination = downloads_root / (book_id + ".pdf")
+                    futures[executor.submit(_download_full_book, book, destination)] = book
+                for future in as_completed(futures):
+                    book = futures[future]
+                    book_id = book["book_id"]
+                    try:
+                        digest, pages, toc, method, pdf_path = future.result()
+                        previous = existing.get(book_id)
+                        if previous and previous.get("sha256") == digest and refresh:
+                            unchanged.append(book_id)
+                            index.setdefault("download_status", {})[book_id] = {
+                                "status": "cached",
+                                "sha256": digest,
+                                "bytes": pdf_path.stat().st_size,
+                                "attempts_this_run": attempt_in_this_run.get(book_id, 0),
+                                "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
+                                "last_success_at": now(),
+                            }
+                            pdf_path.unlink(missing_ok=True)
+                            continue
+                        ready_for_push[book_id] = {
+                            "book": book,
+                            "path": pdf_path,
+                            "entry": _book_entry(book, digest, pages, toc, method, pdf_path),
+                        }
+                        previous_status = index.setdefault("download_status", {}).get(book_id, {})
+                        index["download_status"][book_id] = {
+                            "status": "downloaded_pending_push",
+                            "attempts_this_run": attempt_in_this_run.get(book_id, 0),
+                            "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
+                            "sha256": digest,
+                            "bytes": pdf_path.stat().st_size,
+                            "updated_at": now(),
+                        }
+                    except Exception as exc:
+                        previous_status = index.setdefault("download_status", {}).get(book_id, {})
+                        history = list(previous_status.get("attempt_history", []))
+                        history.append({"round": round_no, "at": now(), "error": str(exc)})
+                        index["download_status"][book_id] = {
+                            "status": "failed" if attempt_in_this_run[book_id] >= retry_rounds else "retry_pending",
+                            "attempts_this_run": attempt_in_this_run[book_id],
+                            "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run[book_id],
+                            "last_error": str(exc),
+                            "attempt_history": history[-20:],
+                            "updated_at": now(),
+                        }
+                        failed_downloads[book_id] = {
+                            "book_id": book_id, "title": book["title"],
+                            "attempts_this_run": attempt_in_this_run[book_id], "error": str(exc),
+                        }
+                        log("BOOK_FAILED round=" + str(round_no) + " "
+                            + json.dumps(failed_downloads[book_id], ensure_ascii=False))
+
+            successful_ids = [book_id for book_id in ready_for_push if book_id in {b["book_id"] for b in batch}]
+            for offset in range(0, len(successful_ids), push_batch_size):
+                push_ready(successful_ids[offset:offset + push_batch_size])
+            if not successful_ids:
+                persist_index_only()
+
+        for round_no in range(1, retry_rounds + 1):
+            log("RETRY_ROUND " + str(round_no) + "/" + str(retry_rounds) + " language=" + language)
+            pending_push_ids = list(ready_for_push)
+            for offset in range(0, len(pending_push_ids), push_batch_size):
+                push_ready(pending_push_ids[offset:offset + push_batch_size])
+
+            pending = [
+                item for item in candidates
+                if item["book_id"] not in existing
+                and item["book_id"] not in ready_for_push
+                and attempt_in_this_run.get(item["book_id"], 0) < retry_rounds
+            ]
+            if not pending:
+                if not ready_for_push:
+                    break
+                continue
+            chunks = [pending[offset:offset + push_batch_size] for offset in range(0, len(pending), push_batch_size)]
+            for batch in chunks:
+                download_batch(batch, round_no)
+
+        for offset in range(0, len(ready_for_push), push_batch_size):
+            push_ready(list(ready_for_push)[offset:offset + push_batch_size])
+        if any(item.get("status") in {"retry_pending", "failed", "downloaded_pending_push"}
+               for item in index.get("download_status", {}).values()):
+            persist_index_only()
+
+    for book in selected:
+        book_id = book["book_id"]
+        status = index.get("download_status", {}).get(book_id, {})
+        if book_id not in existing and status.get("status") in {"failed", "retry_pending", "downloaded_pending_push"}:
+            failed_downloads.setdefault(book_id, {
+                "book_id": book_id, "title": book["title"],
+                "attempts_this_run": attempt_in_this_run.get(book_id, 0),
+                "error": status.get("last_error", "Not present in the GHCR cache after retries."),
+            })
+
     report = {
-        "language": language, "image": image, "catalog_entries": len(selected),
-        "downloaded_and_pushed": uploaded, "reused_or_unchanged": reused,
-        "failed": failed, "books_in_registry": len(index["books"]), "updated_at": now(),
+        "language": language,
+        "image": image,
+        "persistent_tag": "latest",
+        "catalog_entries": len(selected),
+        "books_present_before_run": len(existing) - len(downloaded),
+        "already_cached": already_cached,
+        "downloaded_and_pushed": downloaded,
+        "unchanged_after_refresh": unchanged,
+        "failed_after_retries": list(failed_downloads.values()),
+        "push_failures": [{"book_id": key, "error": value} for key, value in push_failures.items()],
+        "books_in_registry": len(index.get("books", [])),
+        "retry_rounds": retry_rounds,
+        "download_workers": download_workers,
+        "push_batch_size": push_batch_size,
+        "updated_at": now(),
     }
     log("BOOK_CACHE_REPORT " + json.dumps(report, ensure_ascii=False))
     summary("\n## " + language.title() + " textbook-cache result\n\n"
-            + "- Registry image: " + image + "\n"
-            + "- Books newly downloaded and pushed: " + str(len(uploaded)) + "\n"
-            + "- Books reused or unchanged: " + str(len(reused)) + "\n"
-            + "- Failed book downloads: " + str(len(failed)) + "\n")
-    if failed:
-        summary("\n### Failed books\n\n" + "\n".join(
-            "- " + item["book_id"] + ": " + item["error"].replace("\n", " ") for item in failed
+            + "- Persistent image: " + image + "\n"
+            + "- Books already cached: " + str(len(already_cached)) + "\n"
+            + "- Books newly downloaded and pushed: " + str(len(downloaded)) + "\n"
+            + "- Unchanged on refresh: " + str(len(unchanged)) + "\n"
+            + "- Books still missing after retries: " + str(len(failed_downloads)) + "\n"
+            + "- Registry image books total: " + str(len(index.get("books", []))) + "\n"
+            + "- Download workers: " + str(download_workers) + "; push batch size: " + str(push_batch_size)
+            + "; retry rounds: " + str(retry_rounds) + "\n")
+    if failed_downloads:
+        summary("\n### Books not downloaded after retry rounds\n\n"
+                + "| Book ID | Title | Attempts | Last error |\n|---|---|---:|---|\n"
+                + "\n".join("| " + str(row["book_id"]) + " | " + str(row["title"]).replace("|", "\\|")
+                            + " | " + str(row["attempts_this_run"]) + " | "
+                            + str(row["error"]).replace("|", "\\|").replace("\n", " ") + " |"
+                            for row in failed_downloads.values()) + "\n")
+    if push_failures:
+        summary("\n### GHCR push failures\n\n" + "\n".join(
+            "- " + str(key) + ": " + error.replace("\n", " ") for key, error in push_failures.items()
         ) + "\n")
     return report
+
+
+def _download_full_book(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str, Path]:
+    """Worker entry: download and validate one complete book, never a partial fallback."""
+    if book["source_type"] == "NCERT":
+        digest, pages, toc, method = download_ncert_merged(book, destination)
+    else:
+        digest, pages, toc, method = download_scert_pdf(book, destination)
+    if not destination.is_file() or destination.stat().st_size == 0:
+        raise ValueError("Complete textbook PDF was not produced.")
+    return digest, pages, toc, method, destination
 
 
 def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
@@ -844,6 +1142,9 @@ def main(argv: list[str] | None = None) -> int:
     publish.add_argument("--refresh", action="store_true")
     publish.add_argument("--max-books", type=int, default=0, help="Zero means all pending books")
     publish.add_argument("--ncert-only", action="store_true")
+    publish.add_argument("--download-workers", type=int, default=DEFAULT_DOWNLOAD_WORKERS)
+    publish.add_argument("--push-batch-size", type=int, default=DEFAULT_PUSH_BATCH_SIZE)
+    publish.add_argument("--retry-rounds", type=int, default=MAX_RETRY_ROUNDS)
     pull = sub.add_parser("pull", help="Pull one language image locally and verify all checksums")
     pull.add_argument("--image", required=True)
     pull.add_argument("--output-dir", required=True, type=Path)
@@ -876,6 +1177,8 @@ def main(argv: list[str] | None = None) -> int:
                     reports.append(publish_language(
                         language, prefix + "-" + language + ":latest", args.book_code,
                         args.refresh, args.max_books, False, catalog=matched,
+                        download_workers=args.download_workers, push_batch_size=args.push_batch_size,
+                        retry_rounds=args.retry_rounds,
                     ))
             else:
                 # Bootstrap NCERT immediately. Do not wait for the larger SCERT
@@ -893,6 +1196,8 @@ def main(argv: list[str] | None = None) -> int:
                     reports.append(publish_language(
                         language, prefix + "-" + language + ":latest", args.book_code,
                         args.refresh, args.max_books, True, catalog=ncert_catalog,
+                        download_workers=args.download_workers, push_batch_size=args.push_batch_size,
+                        retry_rounds=args.retry_rounds,
                     ))
 
                 # Once all selected NCERT books have been pushed, discover SCERT.
@@ -903,6 +1208,8 @@ def main(argv: list[str] | None = None) -> int:
                         reports.append(publish_language(
                             language, prefix + "-" + language + ":latest", None,
                             args.refresh, args.max_books, False, catalog=scert_catalog,
+                            download_workers=args.download_workers, push_batch_size=args.push_batch_size,
+                            retry_rounds=args.retry_rounds,
                         ))
             print(json.dumps({"results": reports}, ensure_ascii=False, indent=2))
             return 1 if any(report["failed"] for report in reports) else 0
