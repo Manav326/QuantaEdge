@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 type InlineDocument = {
   document_id: number;
@@ -148,7 +149,7 @@ export default function InlineTextbookReader({
   );
 }
 
-function controlStyle(disabled: boolean): React.CSSProperties {
+function controlStyle(disabled: boolean): CSSProperties {
   return {
     border: '1px solid #dbe1e9',
     borderRadius: 8,
