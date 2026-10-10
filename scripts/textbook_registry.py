@@ -527,7 +527,17 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(merged_path, destination)
 
-    book.pop("content_availability", None)
+    complete_chapters = [int(row[1].split()[-1]) for row in toc]
+    book["content_availability"] = {
+        "status": "complete",
+        "expected_chapters": expected_numbers or complete_chapters,
+        "available_chapters": complete_chapters,
+        "missing_chapters": [],
+        "missing_chapter_labels": [],
+        "source_urls": [chosen_url],
+        "checked_at": now(),
+        "note": "All chapters from one complete official NCERT book bundle were validated and merged.",
+    }
     book["pdf_url"] = chosen_url
     return sha256_file(destination), page_count, toc, "Complete official NCERT book bundle merged and validated; no chapter fallback"
 
