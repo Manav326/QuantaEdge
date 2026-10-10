@@ -43,6 +43,7 @@ export default function ClassesPage(){
   const [statusFilter,setStatusFilter]=useState('ALL');
   const [sessions,setSessions]=useState<LiveSession[]>([]);
   const [recordings,setRecordings]=useState<Recording[]>([]);
+  const [revealedUrls,setRevealedUrls]=useState<Record<number,string>>({});
   const [chapters,setChapters]=useState<Chapter[]>([]);
   const [staff,setStaff]=useState<Staff[]>([]);
   const [title,setTitle]=useState('');
@@ -110,6 +111,24 @@ export default function ClassesPage(){
       await load();
     }catch(e){setError(e instanceof Error?e.message:'The live class could not be scheduled.');}
     finally{setBusy(false);}
+  }
+  async function revealMeetingLink(session:LiveSession){
+    if(revealedUrls[session.session_id]){
+      setRevealedUrls(old=>{const next={...old};delete next[session.session_id];return next;});
+      return;
+    }
+    setBusy(true);setError('');setNotice('');
+    try{
+      const result=await api('/api/v1/admin/live-classes/'+session.session_id+'/meeting-link');
+      setRevealedUrls(old=>({...old,[session.session_id]:String(result.joinUrl||'')}));
+    }catch(e){setError(e instanceof Error?e.message:'Meeting link could not be retrieved.');}
+    finally{setBusy(false);}
+  }
+  async function copyMeetingLink(sessionId:number){
+    const url=revealedUrls[sessionId];
+    if(!url)return;
+    try{await navigator.clipboard.writeText(url);setNotice('Private meeting link copied. Share it only with authorized participants.');}
+    catch{setNotice('Select the revealed meeting URL and copy it manually.');}
   }
   async function changeSessionStatus(session:LiveSession,status:'LIVE'|'COMPLETED'|'CANCELLED'|'SCHEDULED'){
     setBusy(true);setError('');setNotice('');
@@ -184,7 +203,7 @@ export default function ClassesPage(){
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>SESSION MANAGEMENT</span><h2>Scheduled and completed classes</h2><p>Change a session to Live when the meeting opens, then mark it completed when finished. Attendance records are retained.</p></div></div>
-          {loading?<p className={styles.empty}>Loading classes…</p>:sessions.length===0?<div className={styles.empty}><b>No live class records in this view</b><span>Schedule a session above to make it available to enrolled students.</span></div>:<div className={styles.list}>{sessions.map(session=><article className={styles.card} key={session.session_id}><span className={styles.sessionIcon}>◷</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{session.title}</h3><span className={styles['status'+session.status]}>{session.status}</span></div><p>{session.class_code} · {session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><small>{dateText(session.starts_at)} – {dateText(session.ends_at)}</small><small>Provider: {session.provider.replaceAll('_',' ')} · Host: {session.host_staff_name||'Not assigned'}</small><small>{session.attendee_count||0} attendees · {session.published_recording_count||0} published recording(s)</small>{session.description&&<small>{session.description}</small>}</div><div className={styles.actions}>{session.status==='SCHEDULED'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'LIVE')}>Mark live</button>}{session.status==='LIVE'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'COMPLETED')}>Complete</button>}{['SCHEDULED','LIVE'].includes(session.status)&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'CANCELLED')}>Cancel</button>}{session.status==='CANCELLED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'SCHEDULED')}>Restore</button>}</div></article>)}</div>}
+          {loading?<p className={styles.empty}>Loading classes…</p>:sessions.length===0?<div className={styles.empty}><b>No live class records in this view</b><span>Schedule a session above to make it available to enrolled students.</span></div>:<div className={styles.list}>{sessions.map(session=><article className={styles.card} key={session.session_id}><span className={styles.sessionIcon}>◷</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{session.title}</h3><span className={styles['status'+session.status]}>{session.status}</span></div><p>{session.class_code} · {session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><small>{dateText(session.starts_at)} – {dateText(session.ends_at)}</small><small>Provider: {session.provider.replaceAll('_',' ')} · Host: {session.host_staff_name||'Not assigned'}</small><small>{session.attendee_count||0} attendees · {session.published_recording_count||0} published recording(s)</small>{session.description&&<small>{session.description}</small>}{revealedUrls[session.session_id]&&<div className={styles.privateLink}><small>PRIVATE MEETING URL · STAFF ONLY</small><input aria-label="Private meeting URL" readOnly value={revealedUrls[session.session_id]}/><button type="button" className={styles.secondaryButton} onClick={()=>void copyMeetingLink(session.session_id)}>Copy link</button><a href={revealedUrls[session.session_id]} target="_blank" rel="noreferrer">Open meeting ↗</a></div>}</div><div className={styles.actions}><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void revealMeetingLink(session)}>{revealedUrls[session.session_id]?'Hide link':'Reveal link'}</button>{session.status==='SCHEDULED'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'LIVE')}>Mark live</button>}{session.status==='LIVE'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'COMPLETED')}>Complete</button>}{['SCHEDULED','LIVE'].includes(session.status)&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'CANCELLED')}>Cancel</button>}{session.status==='CANCELLED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'SCHEDULED')}>Restore</button>}</div></article>)}</div>}
         </section>
       </>:<>
         <section className={styles.panel}>
