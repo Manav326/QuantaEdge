@@ -26,17 +26,19 @@ public class RecommendationController {
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      left join question q on q.lesson_id=l.id and q.active=true
+      left join question q on q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
       left join student_concept_mastery m on m.student_id=? and m.concept_id=q.concept_id
       left join student_lesson_progress p on p.student_id=? and p.lesson_id=l.id
+      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
+        and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
         and coalesce(p.status,'NOT_STARTED') <> 'COMPLETED'
       group by l.id,ch.id,s.id,p.status
       order by case when coalesce(p.status,'NOT_STARTED')='COMPLETED' then 1 else 0 end,
                coalesce(round(avg(coalesce(m.mastery_percent,0))),0),s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       limit 1
-      """,context.studentId(),context.studentId(),context.studentId());
+      """,context.studentId(),context.studentId(),context.studentId(),context.studentId());
     if(rows.isEmpty()) return Map.of("available",false);
     return Map.of("available",true,"reason","PROGRESS_AND_MASTERY","lesson",rows.getFirst());
   }
