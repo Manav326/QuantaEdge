@@ -50,7 +50,8 @@ def load_checkpoints(path: Path, asset_sha256: str, page_count: int) -> dict[int
                 continue
             if not isinstance(row, dict):
                 continue
-            page_index = row.get("page_index")
+            # Records use the schema field asset_page_index; accept page_index for early drafts.
+            page_index = row.get("asset_page_index", row.get("page_index"))
             if (row.get("asset_pdf_sha256") == asset_sha256
                     and row.get("extractor_version") == EXTRACTOR_VERSION
                     and isinstance(page_index, int) and 0 <= page_index < page_count
