@@ -75,7 +75,7 @@ public class TextbookCacheService {
         }
         if (!Files.isRegularFile(pdfPath)) continue;
         long bytes = number(item.get("bytes"), -1);
-        if (bytes >= 0 && Files.size(pdfPath) != bytes) continue;
+        if (bytes >= 0 && safeFileSize(pdfPath) != bytes) continue;
         result.add(publicMap(item, language, classes));
       }
     }
@@ -110,7 +110,7 @@ public class TextbookCacheService {
       if (!Files.isRegularFile(pdfPath)) {
         throw new IllegalArgumentException("The cached PDF for " + bookId + " is missing. Re-sync its GHCR image.");
       }
-      long size = Files.size(pdfPath);
+      long size = safeFileSize(pdfPath);
       long declaredSize = number(item.get("bytes"), -1);
       if (size < 5 || (declaredSize >= 0 && size != declaredSize)) {
         throw new IllegalArgumentException("The cached PDF size does not match index.json for " + bookId + ".");
@@ -119,7 +119,7 @@ public class TextbookCacheService {
       if (!expectedHash.matches("[0-9a-f]{64}")) {
         throw new IllegalArgumentException("The cached book SHA-256 is invalid for " + bookId + ".");
       }
-      String actualHash = sha256(pdfPath);
+      String actualHash = safeSha256(pdfPath);
       if (!expectedHash.equals(actualHash)) {
         throw new IllegalArgumentException("The cached whole-book checksum does not match for " + bookId
             + ". Re-sync GHCR before ingesting it.");
@@ -242,6 +242,22 @@ public class TextbookCacheService {
 
   private String string(Object value) {
     return value == null ? "" : String.valueOf(value).trim();
+  }
+
+  private long safeFileSize(Path path) {
+    try {
+      return Files.size(path);
+    } catch (IOException ex) {
+      throw new IllegalArgumentException("Could not stat cached textbook " + path.getFileName() + ".", ex);
+    }
+  }
+
+  private String safeSha256(Path path) {
+    try {
+      return sha256(path);
+    } catch (IOException ex) {
+      throw new IllegalArgumentException("Could not read cached textbook " + path.getFileName() + " for checksum verification.", ex);
+    }
   }
 
   private String sha256(Path path) throws IOException {
