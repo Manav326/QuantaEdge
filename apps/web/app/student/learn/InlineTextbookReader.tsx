@@ -16,12 +16,14 @@ type InlineDocument = {
 export default function InlineTextbookReader({
   item,
   heading,
+  initiallyExpanded = false,
 }: {
   item: InlineDocument;
   heading: string;
+  initiallyExpanded?: boolean;
 }) {
   const [page, setPage] = useState(1);
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(initiallyExpanded);
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState('');
   const [retryKey, setRetryKey] = useState(0);
