@@ -85,8 +85,14 @@ public class LearningDocumentController {
       @RequestPart("file") MultipartFile file,
       @RequestParam("title") String suppliedTitle,
       @RequestParam(value = "sourceReference", required = false) String sourceReference,
+      @RequestParam(value = "sourceKind", defaultValue = "ADMIN_UPLOAD") String requestedSourceKind,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requirePermission(context, "CONTENT_EDIT");
+    String sourceKind = requiredText(requestedSourceKind, "sourceKind", 30).toUpperCase(Locale.ROOT);
+    if (!List.of("ADMIN_UPLOAD", "EXTRACTION_IMPORT", "LEGACY_IMPORT").contains(sourceKind)) {
+      throw badRequest("Choose a valid PDF source kind.");
+    }
+    if (!"ADMIN_UPLOAD".equals(sourceKind)) authorization.requirePermission(context, "CONTENT_REVIEW");
     if (file == null || file.isEmpty()) throw badRequest("Choose a PDF file to upload.");
     if (file.getSize() > MAX_PDF_BYTES) throw badRequest("PDF files must be 50 MB or smaller.");
     String title = requiredText(suppliedTitle, "PDF title", 240);
@@ -114,10 +120,10 @@ public class LearningDocumentController {
       insert into learning_pdf_asset(
         title,original_filename,sha256,file_size_bytes,page_count,pdf_bytes,
         source_kind,source_reference,created_by_staff_id
-      ) values(?,?,?,?,?,?,'ADMIN_UPLOAD',?,?)
+      ) values(?,?,?,?,?,?,?,?,?)
       returning id
       """, Long.class, title, filename, sha, bytes.length, pdfPageCount(bytes), bytes,
-      normalizedReference, context.staffId());
+      sourceKind, normalizedReference, context.staffId());
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("pdf_asset_id", assetId);
     result.put("title", title);
@@ -125,7 +131,7 @@ public class LearningDocumentController {
     result.put("sha256", sha);
     result.put("file_size_bytes", bytes.length);
     result.put("page_count", pdfPageCount(bytes));
-    result.put("source_kind", "ADMIN_UPLOAD");
+    result.put("source_kind", sourceKind);
     result.put("duplicate", false);
     staffAudit.recordAction(context, "/api/v1/admin/learning-pdfs/" + assetId + "/uploaded",
         "Added a PDF to the private source library: " + filename + " (" + sha + ").");
@@ -329,6 +335,7 @@ public class LearningDocumentController {
       where student_id=? and learning_document_id=?
       """, context.studentId(), documentId);
     if (!progress.isEmpty()) lastPage = ((Number) progress.getFirst().get("last_page")).intValue();
+    document.remove("pdf_asset_id");
     document.put("last_page", lastPage);
     return document;
   }
