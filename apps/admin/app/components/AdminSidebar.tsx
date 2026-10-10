@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type AdminSection = 'overview' | 'content' | 'questions' | 'resources' | 'students' | 'parents' | 'staff';
+type AdminSection = 'overview' | 'content' | 'questions' | 'resources' | 'assessments' | 'students' | 'parents' | 'staff';
 type AdminSidebarProps = {
   active: AdminSection;
   variant?: 'default' | 'overview' | 'content';
@@ -16,6 +16,7 @@ const links: Array<{ key: AdminSection; href: string; icon: string; label: strin
   { key: 'content', href: '/content', icon: '◈', label: 'Content Studio' },
   { key: 'questions', href: '/questions', icon: '✓', label: 'Question review' },
   { key: 'resources', href: '/resources', icon: '▤', label: 'Textbook library' },
+  { key: 'assessments', href: '/assessments', icon: '✓', label: 'Tests & grading' },
   { key: 'students', href: '/students', icon: '◉', label: 'Students' },
   { key: 'parents', href: '/parents', icon: '♧', label: 'Parents & families' },
 ];
@@ -93,6 +94,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
           if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
           if (item.key === 'questions') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_REVIEW');
           if (item.key === 'resources') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_EDIT');
+          if (item.key === 'assessments') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_CREATE') || permissions.includes('ASSESSMENT_GRADE');
           return true;
         }).map(item => (
           <Link key={item.key} href={item.href} title={collapsed ? item.label : undefined} className={active === item.key ? 'active' : ''}>
