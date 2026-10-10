@@ -3,7 +3,7 @@
 /** Renders stored a/b fraction notation as an accessible stacked fraction. */
 export default function MathText({ text, className }: { text: string | number | null | undefined; className?: string }) {
   const source = String(text ?? '');
-  const fractionPattern = /(?<![\w.])(\d+)\s*\/\s*(\d+)(?![\w.])/g;
+  const fractionPattern = /(?<![\w./])(\d+)\s*\/\s*(\d+)(?![\w.])/g;
   const output: React.ReactNode[] = [];
   let cursor = 0;
   for (const match of source.matchAll(fractionPattern)) {
