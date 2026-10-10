@@ -979,7 +979,8 @@ def _seed_class_image_from_legacy(
         raise ValueError("Invalid target class cache index; refusing to replace " + image)
 
     before = len(index["books"])
-    if index.get("legacy_migration_complete") is True:
+    migration_already_complete = index.get("legacy_migration_complete") is True
+    if migration_already_complete:
         report = {"image": image, "class": class_no, "medium": language,
                   "books_before_migration": before, "migrated_from_legacy": 0,
                   "books_after_migration": before, "migration_skipped": True}
@@ -1031,7 +1032,7 @@ def _seed_class_image_from_legacy(
         "schema_version": 1, "registry": image, "language": language, "class_no": class_no,
         "legacy_migration_complete": True, "legacy_migration_completed_at": now(), "updated_at": now(),
     })
-    if additions or not base_exists or not index.get("legacy_migration_complete"):
+    if additions or not base_exists or not migration_already_complete:
         push_batch(image, base_exists, additions, files_by_id, index,
                    work_root / ("seed-class-" + str(class_no) + "-" + language))
     report = {
