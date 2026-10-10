@@ -1929,7 +1929,10 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     container = "qe-textbook-pull-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
     subprocess.run(["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"], check=True, stdout=subprocess.DEVNULL)
-    temp_index = output_dir / ".index.json.download"
+    descriptor, temp_name = tempfile.mkstemp(prefix=".index-", suffix=".download", dir=output_dir)
+    os.close(descriptor)
+    temp_index = Path(temp_name)
+    temp_index.unlink(missing_ok=True)
     copied = reused = 0
     file_failures: list[dict[str, str]] = []
     try:
@@ -1938,10 +1941,10 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
         if not isinstance(index.get("books"), list):
             raise ValueError("Textbook image has an invalid index.json.")
         for item in index["books"]:
-            book_id = str(item.get("book_id", "unknown"))
+            book_id = _safe_registry_book_id(item.get("book_id"))
             relative = Path(str(item.get("file", "")))
-            if relative.is_absolute() or not relative.parts or ".." in relative.parts:
-                file_failures.append({"book_id": book_id, "error": "Unsafe relative path in index."})
+            if relative.as_posix() != "books/" + book_id + ".pdf":
+                file_failures.append({"book_id": book_id, "error": "Unsafe or non-canonical whole-book path in index."})
                 continue
             target = output_dir / relative
             expected = str(item.get("sha256", ""))
