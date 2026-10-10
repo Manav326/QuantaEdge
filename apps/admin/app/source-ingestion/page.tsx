@@ -16,6 +16,13 @@ type RegistryBook = {
   medium: 'hindi' | 'english'; title: string; subject: string; language: string; edition: string;
   source_url: string; catalog_entry_url: string; pdf_url: string; sha256: string; bytes: number; page_count: number;
 };
+type RegistryBookGap = {
+  book_id: string; title: string; publisher?: string; subject?: string;
+  class: number; classes?: number[]; medium: 'hindi' | 'english';
+  status: string; expected_chapters?: number[]; available_chapters?: number[];
+  missing_chapters?: number[]; note?: string; last_error?: string;
+  source_url?: string; attempts_total?: number; updated_at?: string;
+};
 type ExistingMapping = {
   chapter_source_id: number; chapter_id: number; chapter_code: string; chapter_name: string;
   source_chapter_no?: number | null; source_chapter_title?: string | null; source_locator?: string | null;
@@ -66,6 +73,7 @@ function normalized(value: string) {
 export default function SourceIngestionPage() {
   const [sources, setSources] = useState<Source[]>([]);
   const [registryBooks, setRegistryBooks] = useState<RegistryBook[]>([]);
+  const [registryBookGaps, setRegistryBookGaps] = useState<RegistryBookGap[]>([]);
   const [registryMedium, setRegistryMedium] = useState<'hindi' | 'english'>('hindi');
   const [selectedRegistryBook, setSelectedRegistryBook] = useState('');
   const [confirmSubjectMapping, setConfirmSubjectMapping] = useState(false);
@@ -100,17 +108,20 @@ export default function SourceIngestionPage() {
   const selectedGrade = gradeMatches.length ? Number(gradeMatches[gradeMatches.length - 1]) : 0;
   const registryBookOptions = registryBooks.filter(book =>
     book.medium === registryMedium && (book.classes || [book.class]).map(Number).includes(selectedGrade));
+  const registryBookGapRows = registryBookGaps.filter(book =>
+    book.medium === registryMedium && Number(book.class) === selectedGrade);
   const selectedRegistryBookRow = registryBookOptions.find(book => book.book_id === selectedRegistryBook)
     || registryBookOptions[0];
 
   const loadBase = useCallback(async () => {
     setLoading(true); setError('');
     try {
-      const [sourceRows, jobRows, curriculumRows, registryRows] = await Promise.all([
+      const [sourceRows, jobRows, curriculumRows, registryRows, registryGapRows] = await Promise.all([
         api('/api/v1/admin/source-ingestion/sources'),
         api('/api/v1/admin/source-ingestion/jobs'),
         api('/api/v1/curriculum'),
         api('/api/v1/admin/source-ingestion/registry-books?medium=both').catch(() => []),
+        api('/api/v1/admin/source-ingestion/registry-book-gaps?medium=both').catch(() => []),
       ]);
       const sourceData = Array.isArray(sourceRows) ? sourceRows : [];
       const jobData = Array.isArray(jobRows) ? jobRows : [];
@@ -123,6 +134,7 @@ export default function SourceIngestionPage() {
       setJobs(jobData);
       setTracks(nextTracks);
       setRegistryBooks(Array.isArray(registryRows) ? registryRows as RegistryBook[] : []);
+      setRegistryBookGaps(Array.isArray(registryGapRows) ? registryGapRows as RegistryBookGap[] : []);
       if (!classCode && nextTracks.length) {
         setClassCode(nextTracks[0].class_code);
         setSubjectCode(nextTracks[0].subject_code);
@@ -532,6 +544,33 @@ export default function SourceIngestionPage() {
             {busy ? 'Working…' : 'Review complete cached book'}
           </button>
         </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.heading}>
+          <div><span>SOURCE AVAILABILITY</span><h2>Unavailable books and missing chapters</h2>
+            <p>This inventory is read-only. It lists rejected/incomplete source bundles and failed downloads so content gaps can be planned. These rows are not eligible for ingestion as complete textbooks.</p>
+          </div>
+          <span className={styles.bigStatus}>{registryBookGapRows.length} gaps</span>
+        </div>
+        {registryBookGapRows.length === 0
+          ? <p className={styles.empty}>No reported source gaps for Class {selectedGrade || '—'} · {registryMedium}. This means no gap was recorded in the currently synced cache indexes; refresh the cache inventory to see newer source reports.</p>
+          : <div className={styles.gapList}>
+              {registryBookGapRows.map((gap) => <article className={styles.gapCard} key={gap.medium + ':' + gap.class + ':' + gap.book_id}>
+                <div className={styles.gapTop}>
+                  <div><b>{gap.title}</b><small>{gap.book_id} · {gap.publisher || 'Official source'} · {gap.subject || 'Subject unspecified'}</small></div>
+                  <span className={styles.gapBadge}>{gap.status.replaceAll('_', ' ').toUpperCase()}</span>
+                </div>
+                <div className={styles.gapCoverage}>
+                  <span><b>Available chapters:</b> {gap.available_chapters?.length ? gap.available_chapters.join(', ') : 'None verified'}</span>
+                  <span><b>Missing chapters:</b> {gap.missing_chapters?.length ? gap.missing_chapters.join(', ') : 'Not determined by source'}</span>
+                  {gap.expected_chapters?.length ? <span><b>Expected chapters:</b> {gap.expected_chapters.join(', ')}</span> : null}
+                </div>
+                {gap.note && <p>{gap.note}</p>}
+                {gap.last_error && <p className={styles.gapError}>{gap.last_error}</p>}
+                {gap.source_url && <a href={gap.source_url} target="_blank" rel="noreferrer">Open official source or bundle URL</a>}
+              </article>)}
+            </div>}
       </section>
 
       <section className={styles.panel}>

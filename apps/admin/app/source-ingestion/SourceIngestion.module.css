@@ -141,3 +141,18 @@
 }
 .mappingConfirm input { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 2px; }
 .mappingConfirm span { color: #465367; font-size: 12px; line-height: 1.55; }
+
+.gapList { display:flex; flex-direction:column; gap:10px; }
+.gapCard { border:1px solid #ead7c9; border-radius:12px; padding:14px; background:#fffaf6; min-width:0; }
+.gapTop { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.gapTop > div { min-width:0; display:flex; flex-direction:column; gap:5px; }
+.gapTop b { color:#2d3748; font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+.gapTop small { color:#798395; font-size:11px; overflow-wrap:anywhere; }
+.gapBadge { flex:0 0 auto; background:#fff0df; border:1px solid #f0d2b4; color:#92400e; border-radius:99px; padding:5px 8px; font-size:9px; font-weight:850; }
+.gapCoverage { display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:12px; }
+.gapCoverage span { color:#596577; font-size:11px; line-height:1.5; overflow-wrap:anywhere; }
+.gapCoverage b { color:#364152; }
+.gapCard p { margin:10px 0 0; color:#6b7280; font-size:11px; line-height:1.55; overflow-wrap:anywhere; }
+.gapCard .gapError { color:#a43125; }
+.gapCard a { display:inline-block; margin-top:10px; color:#aa4828; font-size:11px; font-weight:800; text-decoration:underline; overflow-wrap:anywhere; }
+@media (max-width:760px) { .gapTop { flex-direction:column; } }

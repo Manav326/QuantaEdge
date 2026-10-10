@@ -85,6 +85,57 @@ class TextbookCacheServiceTest {
   }
 
   @Test
+  void reportsMissingBooksAndChapterGapsWithoutMakingThemIngestible() throws Exception {
+    Path root = Files.createTempDirectory("qe-ghcr-textbook-gaps");
+    Path books = root.resolve("class-12/english/books");
+    Files.createDirectories(books);
+    byte[] bytes = "%PDF-1.4\npartial payload\n".getBytes(StandardCharsets.US_ASCII);
+    Path partialPdf = books.resolve("flamingo.pdf");
+    Files.write(partialPdf, bytes);
+    Map<String, Object> partial = registryEntry(
+        "ncert-c12-english-lefl1", "Flamingo", 12, "english", "English", partialPdf, sha256(bytes), bytes.length);
+    Map<String, Object> coverage = new LinkedHashMap<>();
+    coverage.put("status", "unavailable");
+    coverage.put("expected_chapters", List.of(1, 2, 3, 4));
+    coverage.put("available_chapters", List.of(1, 2));
+    coverage.put("missing_chapters", List.of(3, 4));
+    coverage.put("note", "The official bundle is missing chapters 3 and 4.");
+    coverage.put("diagnostic_bundle_url", "https://ncert.nic.in/textbook/pdf/lefl1dd.zip");
+    partial.put("content_availability", coverage);
+    partial.put("download_method", "Rejected incomplete whole-book bundle");
+
+    Map<String, Object> failedStatus = new LinkedHashMap<>();
+    failedStatus.put("status", "failed");
+    failedStatus.put("title", "Kaleidoscope");
+    failedStatus.put("last_error", "The official bundle is missing chapters 2 and 3.");
+    failedStatus.put("content_availability", Map.of(
+        "status", "unavailable", "expected_chapters", List.of(1, 2, 3),
+        "available_chapters", List.of(1), "missing_chapters", List.of(2, 3),
+        "note", "The official bundle is missing chapters 2 and 3."));
+    Path index = root.resolve("class-12/english/index.json");
+    Files.createDirectories(index.getParent());
+    new ObjectMapper().writeValue(index.toFile(), Map.of(
+        "books", List.of(partial),
+        "download_status", Map.of("ncert-c12-english-lekl1", failedStatus)));
+
+    TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
+    List<Map<String, Object>> gaps = cache.availabilityGaps("english", 12);
+
+    assertEquals(2, gaps.size());
+    Map<String, Object> flamingo = gaps.stream()
+        .filter(row -> "ncert-c12-english-lefl1".equals(row.get("book_id"))).findFirst().orElseThrow();
+    assertEquals(List.of(1, 2), flamingo.get("available_chapters"));
+    assertEquals(List.of(3, 4), flamingo.get("missing_chapters"));
+    assertTrue(String.valueOf(flamingo.get("note")).contains("missing chapters"));
+    assertEquals("unavailable", flamingo.get("status"));
+    Map<String, Object> kaleidoscope = gaps.stream()
+        .filter(row -> "ncert-c12-english-lekl1".equals(row.get("book_id"))).findFirst().orElseThrow();
+    assertEquals(List.of(2, 3), kaleidoscope.get("missing_chapters"));
+    assertTrue(String.valueOf(kaleidoscope.get("last_error")).contains("missing chapters"));
+    assertEquals(0, cache.list("english", 12).size());
+  }
+
+  @Test
   void rejectsAStaleJobWhenRegistryWholeBookChecksumChanges() throws Exception {
     Path root = Files.createTempDirectory("qe-ghcr-textbook-stale-job");
     Path books = root.resolve("class-6/hindi/books");

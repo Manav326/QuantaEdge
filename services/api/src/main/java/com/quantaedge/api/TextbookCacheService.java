@@ -77,6 +77,206 @@ public class TextbookCacheService {
     return result;
   }
 
+  /**
+   * Read-only inventory of books which are incomplete or could not be fetched.
+   * These rows are deliberately separate from list(), which only returns verified complete books.
+   */
+  public List<Map<String, Object>> availabilityGaps(String medium, Integer classNo) {
+    List<String> languages;
+    if (medium == null || medium.isBlank() || "both".equalsIgnoreCase(medium)) {
+      languages = List.of("hindi", "english");
+    } else {
+      String normalized = medium.trim().toLowerCase(Locale.ROOT);
+      if (!List.of("hindi", "english").contains(normalized)) {
+        throw new IllegalArgumentException("Medium must be hindi, english, or both.");
+      }
+      languages = List.of(normalized);
+    }
+    if (classNo != null && (classNo < 6 || classNo > 12)) {
+      throw new IllegalArgumentException("Class filter must be between 6 and 12.");
+    }
+
+    Map<String, Map<String, Object>> gaps = new LinkedHashMap<>();
+    for (String language : languages) {
+      if (hasClasswiseIndexes(language)) {
+        for (int grade = 6; grade <= 12; grade++) {
+          if (classNo != null && grade != classNo) continue;
+          Path path = classIndexPath(grade, language);
+          if (Files.isRegularFile(path)) appendIndexGaps(gaps, path, language, grade);
+        }
+      } else {
+        Path legacy = root.resolve(language).resolve("index.json").normalize();
+        if (Files.isRegularFile(legacy)) appendIndexGaps(gaps, legacy, language, classNo);
+      }
+    }
+    List<Map<String, Object>> result = new ArrayList<>(gaps.values());
+    result.sort(Comparator
+        .comparingInt((Map<String, Object> item) -> intValue(item.get("class"), 0))
+        .thenComparing(item -> string(item.get("medium")))
+        .thenComparing(item -> string(item.get("title")), String.CASE_INSENSITIVE_ORDER)
+        .thenComparing(item -> string(item.get("book_id"))));
+    return result;
+  }
+
+  private void appendIndexGaps(
+      Map<String, Map<String, Object>> target, Path indexPath, String language, Integer imageClass) {
+    Map<?, ?> index = readIndex(indexPath);
+    Map<String, Map<String, Object>> entriesById = new LinkedHashMap<>();
+    Object raw = index.get("books");
+    if (raw instanceof List<?> books) {
+      for (Object row : books) {
+        if (!(row instanceof Map<?, ?> item)) continue;
+        String id = string(item.get("book_id"));
+        if (id.isBlank()) continue;
+        entriesById.put(id, stringMap(item));
+        Map<?, ?> coverage = asMap(item.get("content_availability"));
+        boolean incomplete = !isCompleteWholeBook(item);
+        boolean missingFile = false;
+        if (!incomplete) {
+          try {
+            Path pdf = resolvePath(indexPath, string(item.get("file")));
+            long expectedBytes = number(item.get("bytes"), -1);
+            missingFile = !Files.isRegularFile(pdf)
+                || (expectedBytes >= 0 && safeFileSize(pdf) != expectedBytes);
+          } catch (IllegalArgumentException ex) {
+            missingFile = true;
+          }
+        }
+        if (!incomplete && !missingFile) continue;
+        String status = string(coverage.get("status")).toLowerCase(Locale.ROOT);
+        if (!List.of("partial", "unavailable").contains(status)) {
+          String method = string(item.get("download_method")).toLowerCase(Locale.ROOT);
+          status = method.contains("partial") ? "partial" : "unavailable";
+        }
+        Map<String, Object> gap = availabilityGapRow(item, coverage, language,
+            gradesForGap(item, imageClass), status, missingFile ? "The registry PDF file is missing or has the wrong byte size." : null);
+        for (Object grade : (List<?>) gap.get("classes")) {
+          int gradeNo = intValue(grade, 0);
+          if (gradeNo >= 6 && gradeNo <= 12) {
+            String key = language + ":" + gradeNo + ":" + id;
+            target.put(key, gap);
+          }
+        }
+      }
+    }
+
+    Object statusObject = index.get("download_status");
+    if (statusObject instanceof Map<?, ?> statuses) {
+      for (Map.Entry<?, ?> statusEntry : statuses.entrySet()) {
+        String bookId = string(statusEntry.getKey());
+        if (!(statusEntry.getValue() instanceof Map<?, ?> statusRow) || bookId.isBlank()) continue;
+        Map<String, Object> metadata = entriesById.getOrDefault(bookId, new LinkedHashMap<>());
+        Map<?, ?> coverage = asMap(statusRow.get("content_availability"));
+        String state = string(statusRow.get("status")).toLowerCase(Locale.ROOT);
+        String coverageState = string(coverage.get("status")).toLowerCase(Locale.ROOT);
+        boolean gap = List.of("failed", "retry_pending", "partial", "downloaded_pending_push", "unavailable").contains(state)
+            || List.of("partial", "unavailable").contains(coverageState);
+        if (!gap) continue;
+        // A stale failure status must not hide a book that is now verified complete.
+        if (!metadata.isEmpty() && isCompleteWholeBook(metadata)) continue;
+        Map<String, Object> mergedMetadata = new LinkedHashMap<>(metadata);
+        mergedMetadata.putAll(stringMap(statusRow));
+        Integer statusClass = imageClass;
+        if (statusClass == null) {
+          List<Integer> grades = classes(metadata);
+          if (!grades.isEmpty()) statusClass = grades.getFirst();
+          else {
+            int grade = intValue(statusRow.get("class"), 0);
+            if (grade >= 6 && grade <= 12) statusClass = grade;
+          }
+        }
+        if (statusClass == null || statusClass < 6 || statusClass > 12) continue;
+        Map<String, Object> gapRow = availabilityGapRow(mergedMetadata, coverage, language,
+            List.of(statusClass), coverageState.equals("partial") ? "partial" : "unavailable",
+            string(statusRow.get("last_error")));
+        String key = language + ":" + statusClass + ":" + bookId;
+        Map<String, Object> existing = target.get(key);
+        if (existing == null) {
+          target.put(key, gapRow);
+        } else {
+          if (!string(gapRow.get("last_error")).isBlank()) existing.put("last_error", gapRow.get("last_error"));
+          if (((List<?>) existing.getOrDefault("missing_chapters", List.of())).isEmpty()
+              && !((List<?>) gapRow.getOrDefault("missing_chapters", List.of())).isEmpty()) {
+            existing.put("expected_chapters", gapRow.get("expected_chapters"));
+            existing.put("available_chapters", gapRow.get("available_chapters"));
+            existing.put("missing_chapters", gapRow.get("missing_chapters"));
+            existing.put("content_availability", gapRow.get("content_availability"));
+          }
+          if (string(existing.get("note")).isBlank()) existing.put("note", gapRow.get("note"));
+          if (string(existing.get("source_url")).isBlank()) existing.put("source_url", gapRow.get("source_url"));
+        }
+      }
+    }
+  }
+
+  private List<Integer> gradesForGap(Map<?, ?> item, Integer imageClass) {
+    if (imageClass != null) return List.of(imageClass);
+    return classes(item);
+  }
+
+  private Map<String, Object> availabilityGapRow(
+      Map<?, ?> item, Map<?, ?> coverage, String language, List<Integer> grades,
+      String status, String supplementalError) {
+    List<Integer> expected = chapterNumbers(coverage.get("expected_chapters"));
+    List<Integer> available = chapterNumbers(coverage.get("available_chapters"));
+    List<Integer> missing = chapterNumbers(coverage.get("missing_chapters"));
+    if (missing.isEmpty() && !expected.isEmpty() && !available.isEmpty() && !status.equals("complete")) {
+      List<Integer> derived = new ArrayList<>(expected);
+      derived.removeAll(available);
+      missing = derived;
+    }
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("book_id", string(item.get("book_id")));
+    row.put("title", string(item.get("title")).isBlank() ? string(item.get("book_id")) : string(item.get("title")));
+    row.put("publisher", string(item.get("publisher")));
+    row.put("subject", string(item.get("subject")));
+    row.put("class", grades.isEmpty() ? intValue(item.get("class"), 0) : grades.getFirst());
+    row.put("classes", grades);
+    row.put("medium", language);
+    row.put("status", status);
+    row.put("expected_chapters", expected);
+    row.put("available_chapters", available);
+    row.put("missing_chapters", missing);
+    row.put("content_availability", new LinkedHashMap<>(stringMap(coverage)));
+    row.put("note", string(coverage.get("note")));
+    row.put("source_url", firstText(item.get("catalog_entry_url"), item.get("source_url"),
+        coverage.get("diagnostic_bundle_url"), coverage.get("source_url")));
+    row.put("last_error", firstText(item.get("last_error"), supplementalError, coverage.get("note")));
+    row.put("attempts_total", number(item.get("attempts_total"), 0));
+    row.put("updated_at", firstText(item.get("updated_at"), coverage.get("checked_at")));
+    return row;
+  }
+
+  private List<Integer> chapterNumbers(Object value) {
+    List<Integer> result = new ArrayList<>();
+    if (value instanceof List<?> values) {
+      for (Object item : values) {
+        int number = intValue(item, -1);
+        if (number > 0 && !result.contains(number)) result.add(number);
+      }
+    }
+    result.sort(Integer::compareTo);
+    return result;
+  }
+
+  private Map<?, ?> asMap(Object value) {
+    return value instanceof Map<?, ?> map ? map : Map.of();
+  }
+
+  private Map<String, Object> stringMap(Map<?, ?> value) {
+    Map<String, Object> result = new LinkedHashMap<>();
+    value.forEach((key, item) -> result.put(String.valueOf(key), item));
+    return result;
+  }
+
+  private String firstText(Object... values) {
+    for (Object value : values) {
+      String found = string(value);
+      if (!found.isBlank()) return found;
+    }
+    return "";
+  }
+
   public CachedBook requireBook(String medium, String bookId) {
     return resolveBook(medium, bookId, null, null, true);
   }

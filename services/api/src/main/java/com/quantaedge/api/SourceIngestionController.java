@@ -102,6 +102,23 @@ public class SourceIngestionController {
     }
   }
 
+  /** Lists unavailable/partial sources separately; rows here cannot be ingested as whole books. */
+  @GetMapping("/registry-book-gaps")
+  public List<Map<String, Object>> listRegistryBookGaps(
+      @RequestParam(defaultValue = "both") String medium,
+      @RequestParam(required = false) Integer classNo,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireReviewer(context);
+    if (classNo != null && (classNo < 6 || classNo > 12)) {
+      throw badRequest("Class filter must be between 6 and 12.");
+    }
+    try {
+      return textbookCache.availabilityGaps(medium, classNo);
+    } catch (IllegalArgumentException ex) {
+      throw badRequest(ex.getMessage());
+    }
+  }
+
   /** Start a review job from an already-synced, complete GHCR book without re-downloading it. */
   @PostMapping("/registry-books/{medium}/{bookId}/jobs")
   public Map<String, Object> startCachedBookJob(
