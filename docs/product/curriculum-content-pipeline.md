@@ -176,6 +176,24 @@ python scripts/import_reviewed_content.py --bundle ./private-review/class-6-math
 
 Use HTTPS for non-local API URLs. The importer creates DRAFT chapters, DRAFT lessons and DRAFT questions only; it leaves source verification false, never overwrites existing chapters, and stops on code collisions. The API uses an authenticated administrator session, not the old shared X-Admin-Token or demo-mode bypass. Since the API writes are separate requests, an API failure can leave partial draft records; inspect the CMS before retrying.
 
+## Stage 4b — import original content drafts into the admin for review
+
+AI-authored lesson bundles can now be staged in Admin Content Studio without pretending they are already editor-reviewed. Use the separate `scripts/import_site_content_draft.py` path for bundles with schema `quantaedge.site-content-authoring-draft.v1`. It creates only DRAFT chapters/lessons/questions, sets source verification false, leaves edition/page ranges unset for the editor, and does not submit, approve or publish anything.
+
+First run a local dry-run:
+
+    python scripts/import_site_content_draft.py --bundle class6-hindi-maths-fractions.site-content-draft.json --attach-to-existing-chapter
+
+For an intentional import into a local instance, set the authenticated staff cookie only in your shell and pass `--apply`:
+
+    export QUANTAEDGE_API_BASE_URL=http://localhost:8080
+    export QUANTAEDGE_ADMIN_SESSION='<QE_SESSION cookie value>'
+    python scripts/import_site_content_draft.py --bundle class6-hindi-maths-fractions.site-content-draft.json --attach-to-existing-chapter --apply
+
+On Windows PowerShell, use the same environment variables with `$env:`. For a remote API, use HTTPS. Never commit or paste the session cookie.
+
+The importer validates supported student question types, answer-key consistency, unique lesson/question codes, and requires at least one supported online question per lesson. It refuses to create a new chapter if that code already exists. A non-canonical chapter (such as the current Science “विज्ञान का अनूठा संसार” pilot) also requires the explicit `--allow-noncanonical-chapter` flag, and remains DRAFT; use it only after deciding to add that chapter. Importing a draft is not approval. The curriculum editor must verify source edition/page mapping and rights, check each answer, preview the saved learner view, then use the separate submit/review/publish workflow. Source verification remains false until an authorised editor records it.
+
 ## Stage 5 — editorial review and publication
 
 1. Open Admin Content Studio using an authenticated administrator account.
