@@ -45,6 +45,7 @@ export default function StudentClassesClient(){
   const [sessions,setSessions]=useState<LiveClass[]>([]);
   const [recordings,setRecordings]=useState<Recording[]>([]);
   const [joinedSessionId,setJoinedSessionId]=useState<number|null>(null);
+  const [activeJoinUrl,setActiveJoinUrl]=useState<string|null>(null);
   const joinedSessionRef=useRef<number|null>(null);
   const [selectedRecording,setSelectedRecording]=useState<Recording|null>(null);
   const videoRef=useRef<HTMLVideoElement|null>(null);
@@ -94,7 +95,7 @@ export default function StudentClassesClient(){
     setBusy(true);setError('');setNotice('');
     try{
       const result=await api('/api/v1/learning/live-classes/'+session.session_id+'/join',{method:'POST'});
-      joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);
+      joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);setActiveJoinUrl(String(result.joinUrl||''));
       if(popup&&!popup.closed){popup.location.replace(String(result.joinUrl));}
       else{setNotice('You are checked in. Use “Open meeting” below to enter the live class.');}
       setNotice('Attendance is saved for this session. Keep this page open so you can leave the class cleanly when finished.');
@@ -111,7 +112,7 @@ export default function StudentClassesClient(){
     try{
       const result=await api('/api/v1/learning/live-classes/'+sessionId+'/join',{method:'POST'});
       window.open(String(result.joinUrl),'_blank','noopener,noreferrer');
-      joinedSessionRef.current=sessionId;setJoinedSessionId(sessionId);
+      joinedSessionRef.current=sessionId;setJoinedSessionId(sessionId);setActiveJoinUrl(String(result.joinUrl||''));
       await load();
     }catch(e:any){setError(e instanceof Error?e.message:'Meeting access is not available.');}
     finally{setBusy(false);}
@@ -121,7 +122,7 @@ export default function StudentClassesClient(){
     setBusy(true);setError('');setNotice('');
     try{
       await api('/api/v1/learning/live-classes/'+sessionId+'/leave',{method:'POST'});
-      joinedSessionRef.current=null;setJoinedSessionId(null);
+      joinedSessionRef.current=null;setJoinedSessionId(null);setActiveJoinUrl(null);
       setNotice('You left the class. Your attendance duration has been saved.');
       await load();
     }catch(e:any){setError(e instanceof Error?e.message:'Attendance could not be updated.');}
@@ -204,7 +205,7 @@ export default function StudentClassesClient(){
     <section className={styles.wrap}>
       <div className={styles.hero}><div><span className={styles.eyebrow}>YOUR CLASSROOM · LIVE & ON DEMAND</span><h1><LocaleText hinglish="कक्षा में शामिल हों। बाद में वहीं से सीखना जारी रखें।" english="Join a class live. Continue learning on demand." /></h1><p><LocaleText hinglish="Live sessions में आपका attendance save होता है। Recorded classes में playback position save होती है ताकि आप वहीं से फिर शुरू कर सकें।" english="Attendance is recorded for live sessions, and recorded classes save your playback position so you can pick up where you stopped." /></p><div className={styles.heroChips}><span>◷ Attendance saved</span><span>▶ Resume playback</span><span>🔒 Enrollment checked</span></div></div><div className={styles.heroArt} aria-hidden="true"><div className={styles.orbitOne}/><div className={styles.orbitTwo}/><span>▶</span><small>LEARN<br/>TOGETHER</small></div></div>
       {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
-      {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>You are checked in</b><small>{activeJoined.title} · attendance is being recorded while your session is active.</small></div><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>Open meeting again ↗</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>Leave & save attendance</button></div>}
+      {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>You are checked in</b><small>{activeJoined.title} · attendance is being recorded while your session is active.</small></div>{activeJoinUrl&&joinedSessionId===activeJoined.session_id&&<a className={styles.openSecureLink} href={activeJoinUrl} target="_blank" rel="noreferrer">Open secure meeting ↗</a>}<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>Refresh meeting link</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>Leave & save attendance</button></div>}
       <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>Live classes <span>{filteredSessions.length}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>Recorded classes <span>{filteredRecordings.length}</span></button></div><label>Subject<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
 
       {tab==='live'?<>
