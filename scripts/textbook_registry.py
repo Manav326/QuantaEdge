@@ -483,7 +483,7 @@ def pull_index(image: str) -> tuple[bool, dict[str, Any]]:
         log("Could not pull previous image; attempting initial image. " + message[-400:])
         return False, {"schema_version": 1, "registry": image, "books": []}
     container = "qe-index-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
-    subprocess.run(["docker", "create", "--name", container, image], check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"], check=True, stdout=subprocess.DEVNULL)
     try:
         with tempfile.TemporaryDirectory(prefix="qe-index-") as td:
             path = Path(td) / "index.json"
@@ -620,7 +620,7 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
     subprocess.run(["docker", "pull", image], check=True)
     output_dir.mkdir(parents=True, exist_ok=True)
     container = "qe-textbook-pull-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
-    subprocess.run(["docker", "create", "--name", container, image], check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"], check=True, stdout=subprocess.DEVNULL)
     temp_index = output_dir / ".index.json.download"
     copied = reused = 0
     try:
