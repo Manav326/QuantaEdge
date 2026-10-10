@@ -850,6 +850,9 @@ public class SourceIngestionController {
 
   static String subjectFamily(String value) {
     String normalized = value == null ? "" : value.toLowerCase(Locale.ROOT);
+    if (normalized.matches("(?s).*(social science|social studies|social and political life|samajik vigyan|सामाजिक विज्ञान|समाज अध्ययन|इतिहास|भूगोल|राजनीतिक विज्ञान|economics|history|geography|civics).*")) {
+      return "Other";
+    }
     if (normalized.matches("(?s).*(math(?:s|ematics)?|ganit|ganita|गणित|हिसाब).*")) return "Mathematics";
     if (normalized.matches("(?s).*(science|vigyan|विज्ञान|physics|chemistry|biology|भौतिक|रसायन|जीव विज्ञान).*")) return "Science";
     return null;
