@@ -190,35 +190,58 @@ jobs:
                   for block in iter(lambda: handle.read(1024 * 1024), b""):
                       digest.update(block)
               return digest.hexdigest()
+          export_index = json.loads(json.dumps(index))
+          export_items = export_index.get("books", [])
+          exported_item_by_id = {str(item.get("book_id", "")): item for item in export_items}
           for item in items:
               coverage = item.get("content_availability") or {}
               coverage_status = str(coverage.get("status", "complete")).casefold()
-              if coverage_status != "complete" or "partial" in str(item.get("download_method", "")).casefold():
+              method_partial = "partial" in str(item.get("download_method", "")).casefold()
+              is_partial = coverage_status == "partial" or method_partial
+              row = None
+              if coverage_status == "unavailable":
                   row = {
                       "book_id": item.get("book_id"), "title": item.get("title"),
-                      "status": coverage_status if coverage_status else "incomplete",
+                      "status": "unavailable",
                       "available_chapters": coverage.get("available_chapters", []),
                       "missing_chapters": coverage.get("missing_chapters", []),
-                      "note": coverage.get("note") or "Incomplete source is excluded; only whole verified books are downloadable.",
+                      "note": coverage.get("note") or "No usable PDF was available from official sources.",
                       "source_url": item.get("catalog_entry_url") or item.get("source_url"),
                   }
                   incomplete_entries.append(row)
-                  if coverage_status == "partial":
-                      partial.append(row)
                   continue
+              if is_partial:
+                  row = {
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "partial",
+                      "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note") or "PARTIAL PDF; review missing chapters before use.",
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  }
+                  incomplete_entries.append(row)
+                  partial.append(row)
               relative = Path(str(item.get("file", "")))
               pdf = source / relative
               expected_hash = str(item.get("sha256", "")).lower()
               if (relative.is_absolute() or not relative.parts or ".." in relative.parts
                       or not pdf.is_file() or len(expected_hash) != 64 or sha256_file(pdf) != expected_hash):
-                  absent.append({
+                  missing_row = {
                       "book_id": item.get("book_id"), "title": item.get("title"),
                       "status": "file_missing_or_checksum_mismatch",
                       "error": f"Indexed PDF is missing, unsafe, or failed SHA-256 verification: {relative}",
                       "content_availability": coverage,
-                  })
+                  }
+                  absent.append(missing_row)
+                  if row is not None:
+                      row["pdf_included"] = False
+                      row["pdf_error"] = missing_row["error"]
               else:
-                  valid_files[str(item.get("book_id", ""))] = (pdf, relative)
+                  valid_files[str(item.get("book_id", ""))] = (pdf, relative, "partial" if is_partial else "complete")
+                  if row is not None:
+                      row["pdf_included"] = True
+                      row["download_path"] = "partial-books/" + str(item.get("book_id")) + ".pdf"
+                      exported_item_by_id[str(item.get("book_id", ""))]["file"] = row["download_path"]
           unavailable = []
           for book_id, status in statuses.items():
               if not isinstance(status, dict):
@@ -235,25 +258,28 @@ jobs:
               "schema_version": 1,
               "image": index.get("registry", f"quantaedge-textbooks-class-{grade}-{medium}"),
               "class": grade, "medium": medium, "registry_book_count": len(items),
-              "complete_books": len(valid_files),
-              "partial_books": partial, "incomplete_book_entries_rejected": incomplete_entries,
+              "complete_books": sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete"),
+              "partial_books": partial, "incomplete_book_entries_reported": incomplete_entries,
               "unavailable_books": unavailable,
               "indexed_files_missing_from_export": absent, "download_status": statuses,
-              "note": "ZIP includes only whole-book PDFs with verified SHA-256 and complete status. Partial or unavailable source entries are excluded.",
+              "note": "ZIP includes verified complete textbooks and separately stored partial PDFs under partial-books/. Every partial book lists missing chapter numbers here and remains excluded from the complete student textbook catalogue.",
           }
           report_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.availability.json"
           report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
-              archive.writestr("index.json", json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+              archive.writestr("index.json", json.dumps(export_index, ensure_ascii=False, indent=2) + "\n")
               archive.writestr("availability-report.json", json.dumps(report, ensure_ascii=False, indent=2) + "\n")
               for item in items:
                   book_id = str(item.get("book_id", ""))
                   if book_id not in valid_files:
                       continue
-                  pdf, relative = valid_files[book_id]
-                  archive.write(pdf, relative.as_posix())
+                  pdf, relative, status = valid_files[book_id]
+                  archive_path_in_zip = ("partial-books/" + book_id + ".pdf") if status == "partial" else relative.as_posix()
+                  archive.write(pdf, archive_path_in_zip)
                   included.append(book_id)
-          print(f"DOWNLOAD_BUNDLE {archive_path.name} index_entries={len(items)} complete_pdfs_included={len(included)} incomplete_entries_rejected={len(incomplete_entries)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
+          complete_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "complete")
+          partial_included = sum(1 for _pdf, _relative, status in valid_files.values() if status == "partial")
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} index_entries={len(items)} complete_pdfs_included={complete_included} partial_pdfs_included={partial_included} incomplete_entries_reported={len(incomplete_entries)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
           print(f"AVAILABILITY_REPORT {report_path.name}")
           PY
             done

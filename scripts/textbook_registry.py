@@ -390,7 +390,7 @@ def sha256_file(path: Path) -> str:
 
 
 def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
-    """Merge one complete official NCERT ZIP into a whole-book PDF; never fetch individual chapter URLs."""
+    """Merge every validated official chapter available and mark missing chapters on a partial book."""
     code = str(book["code"])
     expected_count = int(book.get("chapter_count") or 0)
     expected_numbers = list(range(1, expected_count + 1)) if expected_count else []
@@ -402,181 +402,250 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
             bundle_urls.append(mirror)
 
     source_errors: list[str] = []
-    best_available_chapters: list[int] = []
-    best_coverage_source = ""
-    with tempfile.TemporaryDirectory(prefix="qe-textbook-complete-ncert-") as td:
-        work = Path(td)
-        chosen_archive: Path | None = None
-        chosen_url = ""
-        chapter_members: list[tuple[int, str]] = []
-        prelim_member: str | None = None
+    chapter_errors: dict[int, list[str]] = {}
+    best_archive: Path | None = None
+    best_bundle_url = ""
+    best_members: list[tuple[int, str]] = []
+    best_prelim: str | None = None
+    best_suffixes: list[int] = []
+    chosen_archive: Path | None = None
+    chosen_url = ""
+    chosen_members: list[tuple[int, str]] = []
+    chosen_prelim: str | None = None
+    chosen_is_complete_bundle = False
 
+    with tempfile.TemporaryDirectory(prefix="qe-textbook-ncert-recovery-") as temp_dir:
+        work = Path(temp_dir)
         for attempt_no, bundle_url in enumerate(bundle_urls, start=1):
-            archive_path = work / ("official-book-bundle-" + str(attempt_no) + ".zip")
+            archive_path = work / ("official-bundle-" + str(attempt_no) + ".zip")
             try:
                 get_url(bundle_url, archive_path, None, attempts=1)
-                candidate_members: list[tuple[int, str]] = []
-                candidate_prelim: str | None = None
+                members: list[tuple[int, str]] = []
+                prelim_member: str | None = None
                 invalid_members: list[str] = []
                 with zipfile.ZipFile(archive_path) as archive:
                     for member in archive.infolist():
                         if member.is_dir():
                             continue
                         name = Path(member.filename).name
-                        chapter_match = re.match(
-                            r"^" + re.escape(code) + r"(\d{2})\.+pdf$", name, re.I)
+                        chapter_match = re.match(r"^" + re.escape(code) + r"(\d{2})\.+pdf$", name, re.I)
                         prelim_match = re.match(r"^" + re.escape(code) + r"ps\.+pdf$", name, re.I)
                         if not chapter_match and not prelim_match:
                             continue
-                        with archive.open(member) as handle:
+                        with archive.open(member.filename) as handle:
                             signature = handle.read(5)
                         if signature != b"%PDF-":
                             invalid_members.append(name)
                             continue
                         if prelim_match:
-                            if candidate_prelim is None:
-                                candidate_prelim = member.filename
+                            prelim_member = prelim_member or member.filename
                         else:
-                            candidate_members.append((int(chapter_match.group(1)), member.filename))
+                            members.append((int(chapter_match.group(1)), member.filename))
 
-                candidate_members.sort(key=lambda item: item[0])
-                candidate_numbers = [number for number, _ in candidate_members]
-                observed_numbers = sorted(set(candidate_numbers))
-                if len(observed_numbers) > len(best_available_chapters):
-                    best_available_chapters = observed_numbers
-                    best_coverage_source = bundle_url
+                members.sort(key=lambda item: item[0])
+                suffixes = [number for number, _ in members]
                 if invalid_members:
-                    raise ValueError("Complete-book bundle includes invalid PDF members: " + ", ".join(invalid_members[:10]))
-                if not candidate_members:
-                    raise ValueError("The official bundle contains no recognised whole-book PDF members.")
-                if len(candidate_numbers) != len(set(candidate_numbers)):
-                    raise ValueError("The official bundle contains duplicate chapter numbers.")
-                if expected_count:
-                    # NCERT keeps some legacy suffixes in the ZIP filenames
-                    # after chapters are rationalised (for example 01..08, 11..15).
-                    # The code suffix is not the current chapter ordinal. Validate
-                    # unique valid PDF count against the official listing instead.
-                    if len(candidate_members) != expected_count:
-                        raise ValueError(
-                            "The official complete-book bundle has "
-                            + str(len(candidate_members)) + " unique valid chapter PDFs; the current NCERT catalogue lists "
-                            + str(expected_count) + ". Observed source suffixes=" + str(candidate_numbers) + "."
-                        )
-                elif candidate_numbers != list(range(1, max(candidate_numbers) + 1)):
-                    raise ValueError("The complete-book bundle has non-contiguous chapter numbering.")
+                    source_errors.append(bundle_url + ": invalid PDF members: " + ", ".join(invalid_members[:8]))
+                if len(suffixes) != len(set(suffixes)):
+                    source_errors.append(bundle_url + ": duplicate chapter suffixes in whole-book bundle.")
+                    members = [item for pos, item in enumerate(members) if item[0] not in suffixes[:pos]]
+                    suffixes = [number for number, _ in members]
+                if members and len(suffixes) > len(best_suffixes):
+                    best_archive = work / "best-available-book.zip"
+                    shutil.copyfile(archive_path, best_archive)
+                    best_bundle_url = bundle_url
+                    best_members = list(members)
+                    best_prelim = prelim_member
+                    best_suffixes = list(suffixes)
 
+                if not members:
+                    raise ValueError("Official bundle contains no recognised valid chapter PDFs.")
+                if expected_count and len(members) != expected_count:
+                    raise ValueError(
+                        "Bundle contains " + str(len(members)) + " valid chapter PDFs; catalogue expects "
+                        + str(expected_count) + ". Observed source suffixes=" + str(suffixes) + "."
+                    )
+                if not expected_count and suffixes != list(range(1, max(suffixes) + 1)):
+                    raise ValueError("Bundle has non-contiguous chapter numbering and no catalogue chapter count.")
                 chosen_archive = archive_path
                 chosen_url = bundle_url
-                chapter_members = candidate_members
-                prelim_member = candidate_prelim
+                chosen_members = list(members)
+                chosen_prelim = prelim_member
+                chosen_is_complete_bundle = True
                 break
             except Exception as exc:
                 source_errors.append(bundle_url + ": " + str(exc))
-                archive_path.unlink(missing_ok=True)
-
-        if chosen_archive is None:
-            observed_numbers = best_available_chapters
-            suffixes_fit_current_sequence = bool(expected_numbers) and set(observed_numbers).issubset(set(expected_numbers))
-            if suffixes_fit_current_sequence:
-                reported_available = observed_numbers
-                missing = sorted(set(expected_numbers) - set(reported_available))
-                reported_expected = expected_numbers
-            elif expected_numbers:
-                reported_available = list(range(1, min(len(observed_numbers), expected_count) + 1))
-                missing = list(range(len(reported_available) + 1, expected_count + 1))
-                reported_expected = expected_numbers
-            else:
-                reported_available = observed_numbers
-                missing = []
-                reported_expected = observed_numbers
-            book["content_availability"] = {
-                "status": "unavailable",
-                "expected_chapters": reported_expected,
-                "available_chapters": reported_available,
-                "missing_chapters": missing,
-                "missing_chapter_labels": ["Chapter " + str(number) for number in missing],
-                "observed_source_suffixes": observed_numbers,
-                "observed_pdf_count": len(observed_numbers),
-                "expected_pdf_count": expected_count or None,
-                "diagnostic_bundle_url": best_coverage_source or None,
-                "source_errors": source_errors[-6:],
-                "checked_at": now(),
-                "note": (
-                    "No complete official NCERT book bundle passed validation. Observed source suffixes are diagnostic only; missing chapters were not downloaded separately and no partial book was stored. This book remains retryable."
-                ),
-            }
-            raise RuntimeError(
-                "No complete NCERT whole-book bundle could be downloaded and validated; no individual-chapter fallback was attempted. "
-                + " | ".join(source_errors[-4:])
-            )
+                if archive_path != best_archive:
+                    archive_path.unlink(missing_ok=True)
 
         try:
             import fitz
         except ImportError as exc:
             raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
 
+        # If no complete bundle is available, keep every valid chapter from the best
+        # official bundle and try to fill its gaps from official standalone PDFs.
+        chapter_sources: dict[int, tuple[str, Path, str, str]] = {}
+        prelim_source: tuple[Path, str, str] | None = None
+        if chosen_is_complete_bundle and chosen_archive:
+            # Filenames can retain legacy suffixes; for a complete bundle catalogue
+            # order is determined by sorted member order, not by the suffix.
+            for ordinal, (_suffix, member_name) in enumerate(chosen_members, start=1):
+                chapter_sources[ordinal] = ("zip", chosen_archive, member_name, chosen_url)
+            if chosen_prelim:
+                prelim_source = (chosen_archive, chosen_prelim, chosen_url)
+        else:
+            if best_archive:
+                suffixes_fit_sequence = bool(expected_numbers) and set(best_suffixes).issubset(set(expected_numbers))
+                for ordinal, (suffix, member_name) in enumerate(best_members, start=1):
+                    logical_number = suffix if suffixes_fit_sequence else ordinal
+                    chapter_sources.setdefault(logical_number, ("zip", best_archive, member_name, best_bundle_url))
+                if best_prelim:
+                    prelim_source = (best_archive, best_prelim, best_bundle_url)
+
+            chapters_to_try = expected_numbers
+            if not chapters_to_try:
+                chapters_to_try = sorted(set(range(1, len(chapter_sources) + 1)) - set(chapter_sources))
+            for chapter_no in chapters_to_try:
+                if chapter_no in chapter_sources:
+                    continue
+                errors: list[str] = []
+                for host in ("ncert.nic.in", "www.ncert.nic.in", "ncert.ncert.org.in"):
+                    chapter_url = "https://" + host + "/textbook/pdf/" + code + ("%02d" % chapter_no) + ".pdf"
+                    chapter_path = work / ("individual-chapter-" + ("%03d" % chapter_no) + ".pdf")
+                    try:
+                        get_url(chapter_url, chapter_path, None, attempts=1)
+                        with chapter_path.open("rb") as handle:
+                            if handle.read(5) != b"%PDF-":
+                                raise ValueError("Standalone URL did not return a PDF.")
+                        chapter_sources[chapter_no] = ("file", chapter_path, "", chapter_url)
+                        break
+                    except Exception as exc:
+                        errors.append(host + ": " + str(exc))
+                        chapter_path.unlink(missing_ok=True)
+                if errors:
+                    chapter_errors[chapter_no] = errors
+
+        if not chapter_sources:
+            missing = expected_numbers
+            book["content_availability"] = {
+                "status": "unavailable",
+                "expected_chapters": expected_numbers,
+                "available_chapters": [],
+                "missing_chapters": missing,
+                "missing_chapter_labels": ["Chapter " + str(n) for n in missing],
+                "observed_source_suffixes": best_suffixes,
+                "observed_pdf_count": len(best_suffixes),
+                "expected_pdf_count": expected_count or None,
+                "diagnostic_bundle_url": best_bundle_url or None,
+                "source_errors": source_errors[-6:],
+                "chapter_errors": [{"chapter": n, "errors": err[-3:]} for n, err in sorted(chapter_errors.items())],
+                "checked_at": now(),
+                "note": "No usable chapter PDF could be retrieved from the official bundle mirrors or standalone chapter URLs. The book remains retryable.",
+            }
+            raise RuntimeError("No usable NCERT chapter PDFs could be retrieved from official bundles or standalone chapter URLs. "
+                               + " | ".join(source_errors[-4:]))
+
         merged = fitz.open()
         toc: list[list[Any]] = []
+        actual_available: list[int] = []
+        validation_errors: list[str] = []
         try:
-            with zipfile.ZipFile(chosen_archive) as archive:
-                merge_members: list[tuple[int, str]] = []
-                if prelim_member is not None:
-                    merge_members.append((0, prelim_member))
-                merge_members.extend(chapter_members)
-                for chapter_no, member_name in merge_members:
-                    extracted = work / ("prelims.pdf" if chapter_no == 0 else "chapter-" + str(chapter_no) + ".pdf")
-                    with archive.open(member_name, "r") as incoming, extracted.open("wb") as outgoing:
-                        shutil.copyfileobj(incoming, outgoing, length=CHUNK)
-                    try:
-                        with fitz.open(extracted) as chapter:
-                            if chapter.needs_pass or len(chapter) < 1:
-                                raise ValueError("Empty or password-protected PDF member: " + member_name)
-                            start_page = len(merged) + 1
-                            merged.insert_pdf(chapter)
-                        if chapter_no:
-                            toc.append([1, "Chapter " + str(len(toc) + 1), start_page])
-                    finally:
-                        extracted.unlink(missing_ok=True)
+            if prelim_source:
+                archive_path, member_name, _prelim_url = prelim_source
+                extracted_prelim = work / "prelims.pdf"
+                with zipfile.ZipFile(archive_path) as archive, archive.open(member_name) as incoming, extracted_prelim.open("wb") as outgoing:
+                    shutil.copyfileobj(incoming, outgoing, length=CHUNK)
+                try:
+                    with fitz.open(extracted_prelim) as prelim_doc:
+                        if not prelim_doc.needs_pass and len(prelim_doc) > 0:
+                            merged.insert_pdf(prelim_doc)
+                finally:
+                    extracted_prelim.unlink(missing_ok=True)
 
-            if len(merged) < 1:
-                raise ValueError("The complete NCERT book bundle produced an empty PDF.")
-            merged_chapters = [int(row[1].split()[-1]) for row in toc]
-            if expected_count and len(merged_chapters) != expected_count:
-                raise ValueError("The merged whole-book PDF does not contain the expected count of NCERT chapter PDFs.")
-            if merged_chapters != list(range(1, len(merged_chapters) + 1)):
-                raise ValueError("The merged whole-book review outline is not sequential.")
+            for chapter_no in sorted(chapter_sources):
+                kind, source_path, member_name, source_url = chapter_sources[chapter_no]
+                chapter_path = source_path
+                extracted = False
+                try:
+                    if kind == "zip":
+                        chapter_path = work / ("chapter-" + ("%03d" % chapter_no) + ".pdf")
+                        with zipfile.ZipFile(source_path) as archive, archive.open(member_name) as incoming, chapter_path.open("wb") as outgoing:
+                            shutil.copyfileobj(incoming, outgoing, length=CHUNK)
+                        extracted = True
+                    with fitz.open(chapter_path) as chapter_doc:
+                        if chapter_doc.needs_pass or len(chapter_doc) < 1:
+                            raise ValueError("Empty or password-protected chapter PDF.")
+                        page_start = len(merged) + 1
+                        merged.insert_pdf(chapter_doc)
+                    actual_available.append(chapter_no)
+                    toc.append([1, "Chapter " + str(chapter_no), page_start])
+                except Exception as exc:
+                    validation_errors.append("Chapter " + str(chapter_no) + ": " + str(exc) + " (" + source_url + ")")
+                    chapter_errors.setdefault(chapter_no, []).append(str(exc))
+                finally:
+                    if extracted:
+                        chapter_path.unlink(missing_ok=True)
+
+            actual_available = sorted(set(actual_available))
+            missing = sorted(set(expected_numbers) - set(actual_available)) if expected_numbers else []
+            if len(merged) < 1 or not actual_available:
+                book["content_availability"] = {
+                    "status": "unavailable", "expected_chapters": expected_numbers,
+                    "available_chapters": [], "missing_chapters": missing or expected_numbers,
+                    "missing_chapter_labels": ["Chapter " + str(n) for n in (missing or expected_numbers)],
+                    "observed_source_suffixes": best_suffixes, "source_errors": (source_errors + validation_errors)[-8:],
+                    "checked_at": now(), "note": "No readable official chapter PDF survived validation; the book remains retryable.",
+                }
+                raise RuntimeError("No readable NCERT chapter PDFs survived validation. " + " | ".join(validation_errors[-4:]))
+
+            expected_list = expected_numbers or list(range(1, max(actual_available) + 1))
+            missing = sorted(set(expected_list) - set(actual_available))
+            status = "partial" if missing else "complete"
+            source_urls = sorted({source[3] for source in chapter_sources.values()})
+            coverage = {
+                "status": status,
+                "expected_chapters": expected_list,
+                "available_chapters": actual_available,
+                "missing_chapters": missing,
+                "missing_chapter_labels": ["Chapter " + str(number) for number in missing],
+                "observed_source_suffixes": best_suffixes,
+                "observed_pdf_count": len(best_suffixes),
+                "expected_pdf_count": expected_count or None,
+                "source_urls": source_urls,
+                "source_errors": source_errors[-6:],
+                "chapter_errors": [{"chapter": n, "errors": err[-3:]} for n, err in sorted(chapter_errors.items()) if n in missing],
+                "validation_errors": validation_errors[-6:],
+                "checked_at": now(),
+                "note": "Every expected chapter was retrieved and validated." if not missing
+                    else "PARTIAL BOOK: verified chapters are preserved in this PDF; missing chapter numbers are listed here. The cache/library keeps it labelled PARTIAL and excludes it from the complete student textbook catalogue. It will be retried later.",
+            }
+            book["content_availability"] = coverage
             merged.set_toc(toc)
             merged.set_metadata({
-                "title": str(book["title"]),
-                "author": "NCERT",
+                "title": str(book["title"]), "author": "NCERT",
                 "subject": str(book.get("subject", "")),
-                "keywords": "QuantaEdge complete textbook cache; language=" + str(book["medium"]),
+                "keywords": "QuantaEdge textbook cache; language=" + str(book["medium"]) + "; content_status=" + status,
             })
-            merged_path = work / (code + "-complete-book.pdf")
+            merged_path = work / (code + "-recovered-book.pdf")
             merged.save(merged_path, garbage=4, deflate=True)
         finally:
             merged.close()
 
         with fitz.open(merged_path) as validation:
             if validation.needs_pass or len(validation) < 1:
-                raise ValueError("The merged NCERT complete-book PDF is unreadable.")
+                raise ValueError("Recovered NCERT PDF is unreadable or password-protected.")
             page_count = len(validation)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(merged_path, destination)
 
-    complete_chapters = [int(row[1].split()[-1]) for row in toc]
-    book["content_availability"] = {
-        "status": "complete",
-        "expected_chapters": list(range(1, len(complete_chapters) + 1)),
-        "available_chapters": complete_chapters,
-        "missing_chapters": [],
-        "missing_chapter_labels": [],
-        "source_urls": [chosen_url],
-        "checked_at": now(),
-        "note": "All chapters from one complete official NCERT book bundle were validated and merged.",
-    }
-    book["pdf_url"] = chosen_url
-    return sha256_file(destination), page_count, toc, "Complete official NCERT book bundle merged and validated; no chapter fallback"
+    if book["content_availability"]["status"] == "partial":
+        log("BOOK_CONTENT_PARTIAL " + str(book["book_id"]) + " " + json.dumps(book["content_availability"], ensure_ascii=False))
+        method = "PARTIAL NCERT book assembled from official bundle/chapters; missing chapters " + ",".join(map(str, book["content_availability"]["missing_chapters"]))
+    else:
+        method = "Complete NCERT book assembled from official bundle/chapters; all expected chapters validated"
+    book["pdf_url"] = chosen_url or best_bundle_url or str(book.get("bundle_url", ""))
+    return sha256_file(destination), page_count, toc, method
 
 
 def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
@@ -1689,6 +1758,9 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                     previous = index.get("download_status", {}).get(book_id, {})
                     index.setdefault("download_status", {})[book_id] = {
                         "status": "downloaded_pending_push",
+                        "content_availability": copy.deepcopy(item["entry"].get("content_availability") or {"status": "complete"}),
+                        "title": item["entry"].get("title", book_id),
+                        "source_url": item["entry"].get("source_url") or item["entry"].get("catalog_entry_url"),
                         "attempts_this_run": attempt_in_this_run.get(book_id, 0),
                         "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
                         "sha256": item["entry"]["sha256"],
@@ -1717,14 +1789,11 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                     book_id = book["book_id"]
                     try:
                         digest, pages, toc, method, pdf_path = future.result()
-                        coverage = book.get("content_availability")
-                        if ((isinstance(coverage, dict)
-                             and str(coverage.get("status", "complete")).casefold() != "complete")
-                                or "partial" in str(method).casefold()):
+                        coverage = book.get("content_availability") or {"status": "complete"}
+                        coverage_status = str(coverage.get("status", "complete")).casefold()
+                        if coverage_status not in {"complete", "partial"}:
                             pdf_path.unlink(missing_ok=True)
-                            raise ValueError(
-                                "Refusing to cache an incomplete NCERT book. The whole book must be available and validated; no individual chapter fallback is allowed."
-                            )
+                            raise ValueError("NCERT source produced neither a complete nor a usable partial book.")
                         downloaded_successfully_ids.add(book_id)
                         previous = existing.get(book_id)
                         if previous and previous.get("sha256") == digest and refresh:
@@ -1937,13 +2006,13 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
 
 def _download_full_book(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str, Path]:
-    """Worker entry: download and validate one complete book or report failure."""
+    """Worker entry: download and validate a complete or explicitly marked partial NCERT book."""
     if book["source_type"] == "NCERT":
         digest, pages, toc, method = download_ncert_merged(book, destination)
         coverage = book.get("content_availability")
-        if not isinstance(coverage, dict) or coverage.get("status") != "complete":
+        if not isinstance(coverage, dict) or coverage.get("status") not in {"complete", "partial"}:
             destination.unlink(missing_ok=True)
-            raise ValueError("NCERT source did not produce one validated complete book; no chapter fallback is allowed.")
+            raise ValueError("NCERT source produced neither a complete nor a usable partial book.")
     else:
         digest, pages, toc, method = download_scert_pdf(book, destination)
     if not destination.is_file() or destination.stat().st_size == 0:
