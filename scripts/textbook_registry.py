@@ -305,12 +305,17 @@ def parse_scert_detail(url: str, page: str) -> list[dict[str, Any]]:
             break
     if not title:
         title = re.sub(r"-\d{6,}$", "", urllib.parse.unquote(urllib.parse.urlparse(url).path.rsplit("/", 1)[-1])).replace("-", " ")
+    # SCERT pages place the labels and values inside inline HTML tags. Parse the
+    # normalized rendered text rather than requiring "Class :", "Subject :" or
+    # "Language :" to appear contiguously in the raw markup.
     plain = strip_html(page)
-    match = re.search(r"(?is)class\s*:\s*(.{0,240}?)(?:subject\s*:|language\s*:)", page)
-    classes = parse_scert_classes(strip_html(match.group(1))) if match else parse_scert_classes(plain)
+    match = re.search(r"(?is)\bclass\s*:\s*(.{0,240}?)(?:\bsubject\s*:|\blanguage\s*:)", plain)
+    classes = parse_scert_classes(match.group(1)) if match else parse_scert_classes(plain)
     classes = [value for value in classes if 6 <= value <= 12]
-    language_match = re.search(r"(?is)language\s*:\s*(.{1,120}?)(?:publisher\s*:|viewed\s*:|downloaded\s*:|formate\s*:|format\s*:|$)", page)
-    medium = parse_scert_medium(strip_html(language_match.group(1)) if language_match else plain)
+    language_match = re.search(
+        r"(?is)\blanguage\s*:\s*(.{1,160}?)(?=\bpublisher\s*:|\bviewed\s*:|\bdownloaded\s*:|\bformate\s*:|\bformat\s*:|$)",
+        plain)
+    medium = parse_scert_medium(language_match.group(1) if language_match else plain)
     if not classes or medium is None:
         return []
     pdf_urls = []
@@ -321,8 +326,10 @@ def parse_scert_detail(url: str, page: str) -> list[dict[str, Any]]:
     if not pdf_urls:
         return []
     pdf_url = next((item for item in pdf_urls if "/public/uploads/eresources/" in urllib.parse.urlparse(item).path), pdf_urls[0])
-    subject_match = re.search(r"(?is)subject\s*:\s*(.{1,180}?)(?:language\s*:|publisher\s*:|viewed\s*:|downloaded\s*:|$)", page)
-    subject = strip_html(subject_match.group(1)) if subject_match else "Unspecified"
+    subject_match = re.search(
+        r"(?is)\bsubject\s*:\s*(.{1,180}?)(?=\blanguage\s*:|\bpublisher\s*:|\bviewed\s*:|\bdownloaded\s*:|$)",
+        plain)
+    subject = subject_match.group(1).strip(" ,") if subject_match else "Unspecified"
     id_match = re.search(r"(\d{6,})$", urllib.parse.urlparse(url).path)
     stable_id = id_match.group(1) if id_match else hashlib.sha256(url.encode()).hexdigest()[:12]
     result = []

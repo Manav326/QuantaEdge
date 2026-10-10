@@ -74,6 +74,47 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(6, int(by_medium["english"]["class"]))
         self.assertEqual(14, by_medium["english"]["chapter_count"])
 
+    def test_scert_detail_parser_handles_real_html_labels_and_absolute_pdf_link(self):
+        from scripts.textbook_registry import parse_scert_detail
+
+        detail_url = "https://scert.bihar.gov.in/eresources/विज्ञान-भाग-1-1707973674"
+        html_page = """
+        <html><body>
+          <h4>विज्ञान, भाग-1</h4>
+          <div><strong>Class :</strong> CLASS VI,</div>
+          <div><strong>Subject :</strong> भाग-1, ,विज्ञान,</div>
+          <div><strong>language :</strong> Hindi,</div>
+          <div><strong>Publisher :</strong> Bihar Education Project Council</div>
+          <a href="/public/uploads/eresources/vigyan-bhag-1.pdf">Download</a>
+        </body></html>
+        """
+        items = parse_scert_detail(detail_url, html_page)
+
+        self.assertEqual(1, len(items))
+        item = items[0]
+        self.assertEqual("scert-bihar-1707973674-hindi", item["book_id"])
+        self.assertEqual([6], item["classes"])
+        self.assertEqual("hindi", item["medium"])
+        self.assertEqual("Science", item["source_type"] and "Science" if "science" in item["subject"].casefold() else "not-normalized")
+        self.assertEqual("https://scert.bihar.gov.in/public/uploads/eresources/vigyan-bhag-1.pdf", item["pdf_url"])
+
+    def test_scert_detail_parser_splits_bilingual_entry_into_two_class_medium_records(self):
+        from scripts.textbook_registry import parse_scert_detail
+
+        html_page = """
+        <html><body>
+          <h3>Mathematics and Maths</h3>
+          <p>Class : CLASS VI, CLASS VII, CLASS VIII,</p>
+          <p>Subject : Math</p>
+          <p>Language : Hindi English</p>
+          <p>Publisher : SCERT Bihar</p>
+          <a href="https://scert.bihar.gov.in/public/uploads/eresources/math.pdf">PDF</a>
+        </body></html>
+        """
+        items = parse_scert_detail("https://scert.bihar.gov.in/eresources/math-1700000000", html_page)
+        self.assertEqual(["english", "hindi"], sorted(item["medium"] for item in items))
+        self.assertTrue(all(item["classes"] == [6, 7, 8] for item in items))
+
     def test_scert_class_detection_handles_roman_and_numeric(self):
         self.assertEqual([6, 7, 8], parse_scert_classes("Class : CLASS VI, ,CLASS VII, ,CLASS VIII,"))
         self.assertEqual([9, 10, 11, 12], parse_scert_classes("Class IX, Class X, Class 11, Class XII"))
