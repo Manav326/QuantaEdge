@@ -103,7 +103,8 @@ jobs:
             echo "Books download in parallel; an NCERT entry is cached only when one complete official book bundle validates. Individual chapter URL fallback is disabled."
             echo "Missing books and chapters are persisted in GHCR indexes and per-class/medium ZIP availability reports; content gaps do not stop other images."
             echo "Only registry publication or inventory-integrity errors fail the cache run."
-            echo "Optional ZIP artifacts last 90 days; GHCR :latest images are the persistent store."
+            echo "Each class/medium ZIP and its availability JSON are separate, individually downloadable 90-day artifacts."
+            echo "GHCR :latest images are the persistent store."
             echo
             echo "- Repository: ${{ github.repository }}"
             echo "- Commit: ${{ github.sha }}"
@@ -259,12 +260,170 @@ jobs:
           done
           if [ "$failures" -ne 0 ]; then exit 1; fi
 
-      - name: Upload direct book downloads and inventories
+      - name: Upload Class 6 Hindi textbook ZIP
         if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
-          name: quantaedge-textbooks-downloads-${{ github.run_number }}
-          path: ${{ runner.temp }}/textbook-downloads/*
-          if-no-files-found: error
+          name: quantaedge-textbooks-class-6-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 6 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-6-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-6-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 7 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-7-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-7-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 8 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-8-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-8-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 9 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-9-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-9-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 10 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-10-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-10-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 11 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-11-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-11-english.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 Hindi textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-hindi-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-hindi.availability.json
+          if-no-files-found: ignore
+          compression-level: 0
+          retention-days: 90
+
+      - name: Upload Class 12 English textbook ZIP
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-textbooks-class-12-english-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.zip
+            ${{ runner.temp }}/textbook-downloads/quantaedge-textbooks-class-12-english.availability.json
+          if-no-files-found: ignore
           compression-level: 0
           retention-days: 90
