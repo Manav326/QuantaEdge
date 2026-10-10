@@ -34,6 +34,10 @@ public class AdminContentController {
       "EXPLANATION", "IMAGE", "DIAGRAM", "VIDEO", "QUESTION", "MCQ", "TRUE_FALSE",
       "MATCH", "ORDER", "INPUT", "HINT", "AI_HELP", "SUMMARY", "CHALLENGE",
       "PREREQUISITE", "WORKED_EXAMPLE", "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE", "RECAP", "AUDIO", "ANIMATION");
+  private static final Set<String> LEARNER_RENDERED_BLOCK_TYPES = Set.of(
+      "EXPLANATION", "PREREQUISITE", "WORKED_EXAMPLE", "IMAGE", "DIAGRAM", "VIDEO",
+      "AUDIO", "ANIMATION", "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE", "CHALLENGE",
+      "HINT", "AI_HELP", "SUMMARY", "RECAP");
   private static final Set<String> QUESTION_TYPES = Set.of(
       "MCQ", "TRUE_FALSE", "INPUT", "MATCH", "ORDER", "ASSERTION_REASON",
       "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "NUMERICAL", "DIAGRAM", "MAP", "SOURCE_BASED");
@@ -65,7 +69,7 @@ public class AdminContentController {
              s.code as subject_code, s.display_name as subject_name,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
-             ch.sort_order as chapter_sort_order, ch.content_status as chapter_status,
+             coalesce(ch.teaching_order,ch.sort_order) as chapter_sort_order, ch.content_status as chapter_status,
              ch.active as chapter_active, ch.curriculum_source,
              ch.curriculum_source_url, ch.curriculum_source_edition,
              ch.curriculum_source_pages, ch.curriculum_source_verified,
@@ -152,12 +156,12 @@ public class AdminContentController {
     if (subjects.isEmpty()) throw badRequest("The selected class and subject track does not exist or is inactive.");
     long subjectId = ((Number) subjects.getFirst().get("id")).longValue();
     Long chapterId = jdbc.queryForObject("""
-      insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,active,content_status,
+      insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
                                      curriculum_source,curriculum_source_url,curriculum_source_edition,
                                      curriculum_source_pages,curriculum_source_verified)
-      values(?,?,?,?,?,?,?,?,?,?,?,false)
+      values(?,?,?,?,?,?,?,?,?,?,?,?,false)
       returning id
-      """, Long.class, subjectId, code, name, description, sortOrder,
+      """, Long.class, subjectId, code, name, description, sortOrder, sortOrder,
       !"ARCHIVED".equals(status), status, curriculumSource, sourceUrl, sourceEdition, sourcePages);
     staffAudit.recordAction(context,"/api/v1/admin/content/chapters/"+chapterId+"/created",
         "Created chapter '"+name+"' in class "+classCode+" / "+subjectCode+" as DRAFT.");
@@ -264,11 +268,11 @@ public class AdminContentController {
     }
     int changed = jdbc.update("""
       update curriculum_chapter
-      set display_name=?, description=?, sort_order=?, content_status=?, active=?,
+      set display_name=?, description=?, sort_order=?, teaching_order=?, content_status=?, active=?,
           curriculum_source=?, curriculum_source_url=?, curriculum_source_edition=?,
           curriculum_source_pages=?, curriculum_source_verified=?
       where id=?
-      """, name, description, sortOrder, status, !"ARCHIVED".equals(status),
+      """, name, description, sortOrder, sortOrder, status, !"ARCHIVED".equals(status),
       curriculumSource, sourceUrl, sourceEdition, sourcePages, sourceVerified, chapterId);
     if (changed == 0) throw notFound("Chapter", chapterId);
     String chapterAction = "PUBLISHED".equals(status) ? "publish"
@@ -718,6 +722,20 @@ public class AdminContentController {
     }
   }
 
+  private void validateLearnerLessonStages(Set<String> activeBlockTypes) {
+    if(!activeBlockTypes.contains("EXPLANATION")) {
+      throw badRequest("Add a complete Explanation block so the learner receives the core teaching before practice.");
+    }
+    if(!activeBlockTypes.contains("GUIDED_PRACTICE")
+        && !activeBlockTypes.contains("INDEPENDENT_PRACTICE")
+        && !activeBlockTypes.contains("CHALLENGE")) {
+      throw badRequest("Add guided practice, independent practice, or a challenge before the assessment.");
+    }
+    if(!activeBlockTypes.contains("SUMMARY") && !activeBlockTypes.contains("RECAP")) {
+      throw badRequest("Add a Recap block with meaningful takeaways after the learner assessment.");
+    }
+  }
+
   private void validateLessonForSubmission(long lessonId) {
     Map<String,Object> lesson=lessonById(lessonId);
     if(lesson.get("lesson_title")==null||String.valueOf(lesson.get("lesson_title")).isBlank()
@@ -756,15 +774,22 @@ public class AdminContentController {
       """,lessonId);
     if(blocks.isEmpty()) throw badRequest("Add at least one complete teaching block before submitting for review.");
     boolean hasCoreBlock=false;
+    Set<String> activeBlockTypes=new HashSet<>();
     for(Map<String,Object> row:blocks) {
       String type=String.valueOf(row.get("block_type")).toUpperCase();
+      if(!LEARNER_RENDERED_BLOCK_TYPES.contains(type)) {
+        throw badRequest("The "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
+            " block is a legacy format not rendered on the student screen. Move question content to the lesson Questions section or deactivate this block before submitting.");
+      }
       if(!blockHasPublishableContent(type,readBlockContent(row.get("content")))) {
         throw badRequest("Complete the "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
             " teaching block or deactivate it before submitting for review.");
       }
+      activeBlockTypes.add(type);
       if(!"AI_HELP".equals(type))hasCoreBlock=true;
     }
     if(!hasCoreBlock)throw badRequest("Add at least one complete teaching block beyond the AI tutor entry.");
+    validateLearnerLessonStages(activeBlockTypes);
     Long activeQuestions=jdbc.queryForObject(
         "select count(*) from question where lesson_id=? and active=true",Long.class,lessonId);
     if(activeQuestions==null||activeQuestions==0) {
@@ -821,18 +846,25 @@ public class AdminContentController {
       throw badRequest("Add at least one active teaching block before publishing this lesson.");
     }
     boolean hasCoreTeachingBlock=false;
+    Set<String> activeBlockTypes=new HashSet<>();
     for(Map<String,Object> row:activeBlocks) {
       String type=String.valueOf(row.get("block_type")).toUpperCase();
+      if(!LEARNER_RENDERED_BLOCK_TYPES.contains(type)) {
+        throw badRequest("The "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
+            " block is a legacy format not rendered on the student screen. Move question content to the lesson Questions section or deactivate this block before publishing.");
+      }
       Map<String,Object> content=readBlockContent(row.get("content"));
       if(!blockHasPublishableContent(type,content)) {
         throw badRequest("Complete the "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
             " teaching block or deactivate it before publishing.");
       }
+      activeBlockTypes.add(type);
       if(!"AI_HELP".equals(type)) hasCoreTeachingBlock=true;
     }
     if(!hasCoreTeachingBlock) {
       throw badRequest("Add at least one complete teaching block beyond the AI tutor entry.");
     }
+    validateLearnerLessonStages(activeBlockTypes);
     Long questions = jdbc.queryForObject(
         "select count(*) from question where lesson_id=? and active=true", Long.class, lessonId);
     if (questions == null || questions == 0) {
@@ -872,7 +904,7 @@ public class AdminContentController {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
-             ch.sort_order as chapter_sort_order, ch.content_status as chapter_status,
+             coalesce(ch.teaching_order,ch.sort_order) as chapter_sort_order, ch.content_status as chapter_status,
              ch.active as chapter_active, ch.curriculum_source,
              ch.curriculum_source_url, ch.curriculum_source_edition,
              ch.curriculum_source_pages, ch.curriculum_source_verified,
