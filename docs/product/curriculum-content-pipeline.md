@@ -37,6 +37,31 @@ python scripts/scert_extract_review.py \
   --output ./private-review/class-6-maths-extraction.json
 ```
 
+## Stage 1b — register extracted source PDFs for online reading
+
+The extraction review JSON records the source PDF filename, SHA-256, page count and extracted page text; it does not embed the original PDF bytes. The online textbook reader needs the original PDF, so register the unchanged source PDF in QuantaEdge's private PDF library. The importer checks the checksum against the extraction bundle before it sends anything, and uploads only to the authenticated API. The API de-duplicates by SHA-256 and keeps new assignments as drafts.
+
+First run a dry-run; it does not make API calls:
+
+```bash
+python scripts/import_existing_textbook_pdfs.py \
+  --bundle-dir ./private-review \
+  --pdf-dir ./source-pdfs
+```
+
+To populate the private database library, start the local API and use an authenticated staff session with both content-edit and content-review permission. Keep the cookie in a local shell, never in a committed file:
+
+```bash
+export QUANTAEDGE_API_BASE_URL='http://localhost:8080'
+export QUANTAEDGE_ADMIN_SESSION='<QE_SESSION cookie value>'
+python scripts/import_existing_textbook_pdfs.py \
+  --bundle-dir ./private-review \
+  --pdf-dir ./source-pdfs \
+  --apply
+```
+
+On Windows PowerShell, set the same variables with `$env:QUANTAEDGE_API_BASE_URL` and `$env:QUANTAEDGE_ADMIN_SESSION`. The importer skips duplicate bundle hashes, reports missing originals or checksum mismatches, and does not attach a PDF to a subject/chapter or publish it. Open Admin → **Textbook library** to select the registered PDF, attach it to the correct class/subject as a complete subject book or chapter PDF, enter the official source URL/edition, then publish with the appropriate permission. If the existing PDF bytes live in a separate legacy database table rather than source files, they must first be migrated through a schema-specific adapter; extracted text and hashes alone cannot recreate a PDF.
+
 ## Stage 2 — optional AI-assisted question generation
 
 The extractor intentionally does not call an AI model. Use this separate script to turn the extraction review bundle into original question/lesson candidates:
