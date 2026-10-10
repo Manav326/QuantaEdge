@@ -51,16 +51,19 @@ function orderLearnerBlocks(blocks: Detail['blocks']) {
 
 function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
   const types=new Set(blocks.map(block=>block.block_type));
-  const stages:string[]=[];
-  if(types.has('PREREQUISITE')) stages.push('पहले की जानकारी');
-  if(types.has('EXPLANATION')) stages.push('समझें');
-  if(['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].some(type=>types.has(type))) stages.push('visual से समझें');
-  if(types.has('WORKED_EXAMPLE')) stages.push('उदाहरण देखें');
-  if(types.has('GUIDED_PRACTICE')) stages.push('साथ में करें');
-  if(types.has('INDEPENDENT_PRACTICE')||types.has('CHALLENGE')) stages.push('खुद अभ्यास करें');
-  if(questionCount>0) stages.push('assessment');
-  if(types.has('SUMMARY')||types.has('RECAP')) stages.push('दोहराएँ');
-  return stages.join(' → ') || 'सीखने का रास्ता तैयार हो रहा है';
+  const stages:{hinglish:string;english:string}[]=[];
+  if(types.has('PREREQUISITE')) stages.push({hinglish:'पहले की जानकारी',english:'Prior knowledge'});
+  if(types.has('EXPLANATION')) stages.push({hinglish:'समझें',english:'Understand'});
+  if(['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].some(type=>types.has(type))) stages.push({hinglish:'visual से समझें',english:'Learn with visuals'});
+  if(types.has('WORKED_EXAMPLE')) stages.push({hinglish:'उदाहरण देखें',english:'Worked example'});
+  if(types.has('GUIDED_PRACTICE')) stages.push({hinglish:'साथ में करें',english:'Guided practice'});
+  if(types.has('INDEPENDENT_PRACTICE')||types.has('CHALLENGE')) stages.push({hinglish:'खुद अभ्यास करें',english:'Independent practice'});
+  if(questionCount>0) stages.push({hinglish:'assessment',english:'Assessment'});
+  if(types.has('SUMMARY')||types.has('RECAP')) stages.push({hinglish:'दोहराएँ',english:'Recap'});
+  return stages.length ? {
+    hinglish:stages.map(stage=>stage.hinglish).join(' → '),
+    english:stages.map(stage=>stage.english).join(' → ')
+  } : {hinglish:'सीखने का रास्ता तैयार हो रहा है',english:'Learning path is being prepared'};
 }
 
 function safeRichHtml(value:string) {
@@ -299,7 +302,7 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
-      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span>{learnerPathLabel(orderedBlocks,lesson.questions.length)}</span></div>
+      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lesson.questions.length).hinglish} english={learnerPathLabel(orderedBlocks,lesson.questions.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
