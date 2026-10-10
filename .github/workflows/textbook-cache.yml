@@ -21,9 +21,9 @@ on:
         default: 0
         required: true
       download_artifacts:
-        description: "Build optional 90-day ZIP downloads (extra image transfer)"
+        description: "Build 90-day browser-download ZIPs for selected class/medium images"
         type: boolean
-        default: false
+        default: true
         required: true
       book_code:
         description: "Optional one-book-only NCERT code or registry ID"
@@ -61,8 +61,9 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  # Never cancel an in-flight image publication: each successful batch is durable progress.
-  cancel-in-progress: false
+  # Every completed class/medium batch is durable. The next run resumes from image indexes.
+  # Supersede obsolete publishers instead of leaving the newest catalogue audit queued for hours.
+  cancel-in-progress: true
 
 jobs:
   cache-textbooks:
