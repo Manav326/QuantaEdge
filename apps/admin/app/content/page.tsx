@@ -5,7 +5,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import {useEffect,useMemo,useRef,useState} from 'react';
 
 type Row={class_code:string;class_name:string;subject_code:string;subject_name:string;chapter_id:number|null;chapter_code:string|null;chapter_name:string|null;chapter_description:string|null;chapter_sort_order:number|null;chapter_status:string|null;chapter_active:boolean|null;curriculum_source?:string|null;curriculum_source_url?:string|null;curriculum_source_edition?:string|null;curriculum_source_pages?:string|null;curriculum_source_verified?:boolean;lesson_id:number|null;lesson_code:string|null;lesson_title:string|null;lesson_summary:string|null;estimated_minutes:number|null;lesson_sort_order:number|null;lesson_status:string|null;lesson_active:boolean|null;alignment_source_title?:string|null;alignment_source_url?:string|null;alignment_source_edition?:string|null;alignment_page_range?:string|null;alignment_source_verified?:boolean;block_count:number|null;question_count:number|null};
-type ContentBlock={sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
+type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Record<string,any>;active:boolean};
 type Selection={type:'chapter'|'lesson';id:number};
 const LEARNER_BLOCK_STAGE:Record<string,number>={
  PREREQUISITE:0,EXPLANATION:1,IMAGE:2,DIAGRAM:2,VIDEO:2,AUDIO:2,ANIMATION:2,
@@ -14,9 +14,9 @@ const LEARNER_BLOCK_STAGE:Record<string,number>={
 };
 const LEARNER_BLOCK_TYPES=new Set(Object.keys(LEARNER_BLOCK_STAGE));
 function orderedLearnerBlocks(blocks:ContentBlock[]){
-  // sequence_no is the authored teaching sequence; never regroup blocks by type.
+  // sequence_no is the authored teaching sequence; use id only as a stable legacy tie-breaker.
   return blocks.filter(block=>block.active!==false&&LEARNER_BLOCK_TYPES.has(block.block_type)).slice()
-   .sort((a,b)=>a.sequence_no-b.sequence_no);
+   .sort((a,b)=>a.sequence_no-b.sequence_no||Number(a.id||0)-Number(b.id||0));
  }
 function learnerPathLabel(blocks:ContentBlock[],questionCount:number){
  const types=new Set(blocks.map(block=>block.block_type));
@@ -448,8 +448,10 @@ export default function ContentStudio(){
   const structureStageIssues=lessonStructureIssues(activeBlocks);
   const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&blocksCompleteCount===activeBlocks.length&&structureStageIssues.length===0;
   const previewBlocks=orderedLearnerBlocks(activeBlocks);
-  const previewTeachingBlocks=previewBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP');
-  const previewRecapBlocks=previewBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
+  // Preserve authored order; insert assessment before the first recap, without regrouping later blocks.
+  const previewPracticeIndex=previewBlocks.findIndex(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
+  const previewTeachingBlocks=previewPracticeIndex<0?previewBlocks:previewBlocks.slice(0,previewPracticeIndex);
+  const previewRecapBlocks=previewPracticeIndex<0?[]:previewBlocks.slice(previewPracticeIndex);
   const unsupportedActiveBlocks=activeBlocks.filter(block=>!LEARNER_BLOCK_TYPES.has(block.block_type));
   const activeQuestions=questions.filter(question=>question.active!==false);
   const validActiveQuestionCount=activeQuestions.filter(questionHasValidAnswer).length;
