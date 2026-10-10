@@ -157,7 +157,7 @@ export default function QuestionReviewPage(){
                   <b>{rejected?'Reason for rejection / return':'Latest reviewer note'}</b>
                   <p style={{margin:'5px 0 0'}}>{row.review_notes||row.latest_history_reason||(rejected?'This is a legacy rejection with no saved reason. The earlier reason cannot be reconstructed; review it and add a clear note.':'No reviewer note saved yet.')}</p>
                 </div>
-                {!canReview&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>Review actions are locked until this micro-topic is submitted for review. The question remains parked here and is not shown to students unless approved and published.</p>}
+                {!canReview&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>Review actions are locked until this micro-topic is submitted for review. The question remains parked here and is not shown to students unless approved and published. Open <a href="/content" style={{textDecoration:'underline',fontWeight:600}}>Content Studio</a> to revise or submit its micro-topic.</p>}
                 <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:14}}>
                   <button type="button" className="button button-dark" disabled={!canReview||busyId===row.question_id||row.review_status==='APPROVED'||row.review_status==='PUBLISHED'} onClick={()=>void act(row,'APPROVED')}>{busyId===row.question_id?'Saving…':'Approve'}</button>
                   <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status==='REJECTED'} onClick={()=>void act(row,'REJECTED')}>Reject / return with reason</button>
