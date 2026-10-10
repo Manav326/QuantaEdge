@@ -176,6 +176,10 @@ public class TextbookCacheService {
         if (!metadata.isEmpty() && isCompleteWholeBook(metadata)) continue;
         Map<String, Object> mergedMetadata = new LinkedHashMap<>(metadata);
         mergedMetadata.putAll(stringMap(statusRow));
+        // Failed entries are keyed by book ID in download_status; some status rows
+        // intentionally do not duplicate that key in their JSON value.
+        mergedMetadata.putIfAbsent("book_id", bookId);
+        mergedMetadata.putIfAbsent("medium", language);
         Integer statusClass = imageClass;
         if (statusClass == null) {
           List<Integer> grades = classes(metadata);
