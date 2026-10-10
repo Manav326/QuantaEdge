@@ -424,7 +424,7 @@ export default function TextbookLibraryPage() {
                 {row.scope === 'CHAPTER_PDF' && row.chapter_content_status !== 'PUBLISHED' && <small className={styles.publishHint}>Publish this curriculum chapter in Content Studio before publishing its PDF. Students will not see the chapter PDF until both are published.</small>}
               </div>
               <div className={styles.rowActions}>
-                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status && row.asset_review_status !== 'APPROVED'} onClick={() => { setPreviewDocumentId(row.document_id); setPreviewPage(1); }}>Preview</button>
+                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => { setPreviewDocumentId(row.document_id); setPreviewPage(1); }}>Preview</button>
                 {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
                   <button type="button" className={styles.publishButton}
                     disabled={busy || (row.scope === 'CHAPTER_PDF' && (row.chapter_active !== true || row.chapter_content_status !== 'PUBLISHED'))}

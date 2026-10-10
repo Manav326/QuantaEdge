@@ -33,7 +33,7 @@ type Job = {
   chapter_count?: number; approved_chapter_count?: number; rejected_chapter_count?: number;
   book_asset_id?: number; book_asset_title?: string; page_count?: number; class_code: string;
   class_name: string; subject_code: string; subject_name: string; detected_outline: Outline[];
-  chapters: Candidate[]; book_review_status?: string; chapter_count?: number; approved_chapter_count?: number;
+  chapters: Candidate[]; book_review_status?: string;
 };
 
 async function api(url: string, init: RequestInit = {}) {
