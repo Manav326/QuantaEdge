@@ -30,6 +30,39 @@ function parse<T=any>(value:string):T {
   try { return JSON.parse(value) as T; } catch { return {} as T; }
 }
 
+const LEARNER_BLOCK_STAGE: Record<string,number> = {
+  PREREQUISITE: 0,
+  EXPLANATION: 1,
+  IMAGE: 2, DIAGRAM: 2, VIDEO: 2, AUDIO: 2, ANIMATION: 2,
+  WORKED_EXAMPLE: 3,
+  GUIDED_PRACTICE: 4, HINT: 4,
+  INDEPENDENT_PRACTICE: 5, CHALLENGE: 5,
+  AI_HELP: 6,
+  SUMMARY: 7, RECAP: 7,
+};
+
+function orderLearnerBlocks(blocks: Detail['blocks']) {
+  return blocks
+    .filter(block => Object.prototype.hasOwnProperty.call(LEARNER_BLOCK_STAGE, block.block_type))
+    .slice()
+    .sort((a,b) => LEARNER_BLOCK_STAGE[a.block_type]-LEARNER_BLOCK_STAGE[b.block_type]
+      || a.sequence_no-b.sequence_no || a.id-b.id);
+}
+
+function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
+  const types=new Set(blocks.map(block=>block.block_type));
+  const stages:string[]=[];
+  if(types.has('PREREQUISITE')) stages.push('पहले की जानकारी');
+  if(types.has('EXPLANATION')) stages.push('समझें');
+  if(['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].some(type=>types.has(type))) stages.push('visual से समझें');
+  if(types.has('WORKED_EXAMPLE')) stages.push('उदाहरण देखें');
+  if(types.has('GUIDED_PRACTICE')) stages.push('साथ में करें');
+  if(types.has('INDEPENDENT_PRACTICE')||types.has('CHALLENGE')) stages.push('खुद अभ्यास करें');
+  if(questionCount>0) stages.push('assessment');
+  if(types.has('SUMMARY')||types.has('RECAP')) stages.push('दोहराएँ');
+  return stages.join(' → ') || 'सीखने का रास्ता तैयार हो रहा है';
+}
+
 function safeRichHtml(value:string) {
   let html=String(value||'');
   html=html.replace(/<font\b([^>]*)>/gi,(_m,attrs:string)=>{
@@ -150,6 +183,9 @@ export default function LearnClient() {
   const searchParams=useSearchParams();
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
+  const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
+  const learningBlocks=useMemo(()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),[orderedBlocks]);
+  const recapBlocks=useMemo(()=>orderedBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),[orderedBlocks]);
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
     const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
@@ -263,13 +299,15 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
-      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish="पहले की जानकारी → explanation → worked example → guided practice → खुद practice → assessment → recap" english="Prerequisites → explanation → worked example → guided practice → independent practice → assessment → recap" /></span></div>
+      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span>{learnerPathLabel(orderedBlocks,lesson.questions.length)}</span></div>
 
-      {lesson.blocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
+      {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
       <div className="content-heading"><h2><LocaleText hinglish="इस lesson के questions" english="Questions for this lesson" /></h2><span>{lesson.questions.length} questions</span></div>
       {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
+
+      {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
