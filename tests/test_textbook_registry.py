@@ -311,7 +311,7 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual("unavailable", coverage["status"])
         self.assertEqual([1], coverage["available_chapters"])
         self.assertEqual([2, 3], coverage["missing_chapters"])
-        self.assertIn("for planning only", coverage["note"])
+        self.assertIn("diagnostic only", coverage["note"])
 
     @staticmethod
     def make_registry_book(book_id, medium="hindi"):
