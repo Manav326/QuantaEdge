@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse, copy, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile, tarfile
 import time
+import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import urllib.error, urllib.parse, urllib.request, zipfile
 from datetime import datetime, timezone
@@ -1072,21 +1073,24 @@ def publish_classwise(
     with tempfile.TemporaryDirectory(prefix="qe-classwise-textbook-cache-") as temporary:
         work_root = Path(temporary)
 
+        legacy_lock = threading.Lock()
+
         def legacy_loader(medium: str) -> tuple[dict[str, Any], Path]:
-            if medium in legacy_cache:
+            with legacy_lock:
+                if medium in legacy_cache:
+                    return legacy_cache[medium]
+                legacy_image = image_prefix + "-" + medium + ":latest"
+                exists, legacy_index = pull_index(legacy_image)
+                legacy_root = work_root / ("legacy-" + medium)
+                (legacy_root / "books").mkdir(parents=True, exist_ok=True)
+                if exists:
+                    _extract_image_books(legacy_image, legacy_index, legacy_root)
+                else:
+                    log("LEGACY_IMAGE_ABSENT image=" + legacy_image)
+                legacy_cache[medium] = (legacy_index, legacy_root)
+                log("LEGACY_IMAGE_INVENTORY image=" + legacy_image
+                    + " books=" + str(len(legacy_index.get("books", []))))
                 return legacy_cache[medium]
-            legacy_image = image_prefix + "-" + medium + ":latest"
-            exists, legacy_index = pull_index(legacy_image)
-            legacy_root = work_root / ("legacy-" + medium)
-            (legacy_root / "books").mkdir(parents=True, exist_ok=True)
-            if exists:
-                _extract_image_books(legacy_image, legacy_index, legacy_root)
-            else:
-                log("LEGACY_IMAGE_ABSENT image=" + legacy_image)
-            legacy_cache[medium] = (legacy_index, legacy_root)
-            log("LEGACY_IMAGE_INVENTORY image=" + legacy_image
-                + " books=" + str(len(legacy_index.get("books", []))))
-            return legacy_cache[medium]
 
         if book_code:
             if book_code.casefold().startswith("scert-bihar-"):
@@ -1127,31 +1131,90 @@ def publish_classwise(
                     push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
                 ))
         else:
-            for medium in languages:
-                for grade in classes:
-                    image = class_image_reference(image_prefix, grade, medium)
-                    seed_reports[image] = _seed_class_image_from_legacy(
-                        image_prefix, grade, medium, legacy_loader, work_root)
+            # Seed each of the fourteen stable images from the legacy image indexes in
+            # parallel. The legacy loader itself is locked so each old medium image is
+            # downloaded/extracted no more than once per run.
+            seed_tasks = [
+                (medium, grade, class_image_reference(image_prefix, grade, medium))
+                for medium in languages for grade in classes
+            ]
+            seed_workers = min(2, len(seed_tasks)) if seed_tasks else 1
+            with ThreadPoolExecutor(max_workers=seed_workers) as executor:
+                future_to_seed = {
+                    executor.submit(
+                        _seed_class_image_from_legacy,
+                        image_prefix, grade, medium, legacy_loader, work_root,
+                    ): (medium, grade, image)
+                    for medium, grade, image in seed_tasks
+                }
+                for future in as_completed(future_to_seed):
+                    medium, grade, image = future_to_seed[future]
+                    try:
+                        seed_reports[image] = future.result()
+                    except Exception as exc:
+                        message = str(exc) or exc.__class__.__name__
+                        seed_reports[image] = {
+                            "image": image, "class": grade, "medium": medium,
+                            "migration_error": message, "migration_skipped": False,
+                        }
+                        log("CLASS_IMAGE_SEED_FAILED " + image + ": " + message)
+                        summary("- MIGRATION FAILED: " + image + " — " + message.replace("\n", " "))
 
-            # Push NCERT first, before the slower SCERT catalogue discovery.
+            def run_class_phase(catalog: list[dict[str, Any]], ncert_only: bool, phase: str) -> None:
+                tasks = [
+                    (medium, grade, class_image_reference(image_prefix, grade, medium))
+                    for medium in languages for grade in classes
+                    if not seed_reports.get(
+                        class_image_reference(image_prefix, grade, medium), {}
+                    ).get("migration_error")
+                ]
+                if not tasks:
+                    return
+                # Two class-image publishers × eight book downloaders prevents one slow
+                # class/source from blocking every other image while limiting concurrent
+                # temporary large-book files on a standard GitHub-hosted runner.
+                with ThreadPoolExecutor(max_workers=min(2, len(tasks))) as executor:
+                    future_to_task = {
+                        executor.submit(
+                            publish_language,
+                            medium, image, None, refresh, max_books, ncert_only,
+                            catalog=catalog, download_workers=download_workers,
+                            push_batch_size=push_batch_size, retry_rounds=retry_rounds,
+                            class_no=grade,
+                        ): (medium, grade, image)
+                        for medium, grade, image in tasks
+                    }
+                    for future in as_completed(future_to_task):
+                        medium, grade, image = future_to_task[future]
+                        try:
+                            reports.append(future.result())
+                        except Exception as exc:
+                            message = str(exc) or exc.__class__.__name__
+                            failure_report = {
+                                "language": medium, "class_no": grade, "image": image,
+                                "catalog_entries": 0, "books_present_before_run": 0,
+                                "pending_at_start": 0, "pending_after_retries": 0,
+                                "resolved_candidates": 0, "already_cached": [],
+                                "downloaded_successfully": [], "downloaded_and_pushed": [],
+                                "unchanged_after_refresh": [],
+                                "failed_after_retries": [{
+                                    "book_id": "__CLASS_PUBLISHER__", "title": "Class image publisher",
+                                    "attempts_this_run": 0, "error": message,
+                                }],
+                                "push_failures": [{"book_id": "__CLASS_PUBLISHER__", "error": message}],
+                                "books_in_registry": 0, "cached_book_ids": [],
+                                "retry_rounds": retry_rounds, "download_workers": download_workers,
+                                "push_batch_size": push_batch_size, "updated_at": now(),
+                            }
+                            reports.append(failure_report)
+                            log("CLASS_IMAGE_PUBLISH_FAILED phase=" + phase + " image=" + image + ": " + message)
+                            summary("- PUBLISH FAILED: " + image + " — " + message.replace("\n", " "))
+
+            # Bootstrap NCERT first, before the slower SCERT catalogue discovery.
             ncert_catalog = discover_ncert_books()
-            for medium in languages:
-                for grade in classes:
-                    image = class_image_reference(image_prefix, grade, medium)
-                    reports.append(publish_language(
-                        medium, image, None, refresh, max_books, True,
-                        catalog=ncert_catalog, download_workers=download_workers,
-                        push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
-                    ))
+            run_class_phase(ncert_catalog, True, "NCERT")
             scert_catalog = discover_scert_books()
-            for medium in languages:
-                for grade in classes:
-                    image = class_image_reference(image_prefix, grade, medium)
-                    reports.append(publish_language(
-                        medium, image, None, refresh, max_books, False,
-                        catalog=scert_catalog, download_workers=download_workers,
-                        push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
-                    ))
+            run_class_phase(scert_catalog, False, "SCERT Bihar")
 
         reports_by_image: dict[str, list[dict[str, Any]]] = {}
         for report in reports:
@@ -1198,7 +1261,9 @@ def publish_classwise(
                     "missing_book_ids": missing_ids,
                     "failed_after_retries": failed_ids,
                     "push_failures": push_failure_count,
-                    "status": "COMPLETE" if not missing_ids and not failed_count and not push_failure_count else "INCOMPLETE",
+                    "migration_error": seed.get("migration_error"),
+                    "status": "COMPLETE" if not missing_ids and not failed_count and not push_failure_count
+                        and not seed.get("migration_error") else "INCOMPLETE",
                 }
                 final_rows.append(row)
         final_report = {"layout": "class-and-medium", "image_count": len(final_rows),
@@ -1218,7 +1283,10 @@ def publish_classwise(
         summary("\nThe same class/medium image and its index are checked before each source download. "
                 "A successful book ID is skipped on later runs; only missing books are eligible for download.")
         incomplete = any(row["status"] != "COMPLETE" for row in final_rows)
-        source_failures = any(report.get("failed_after_retries") or report.get("push_failures") for report in reports)
+        source_failures = (
+            any(report.get("failed_after_retries") or report.get("push_failures") for report in reports)
+            or any(seed.get("migration_error") for seed in seed_reports.values())
+        )
         final_report["exit_code"] = 1 if source_failures or (incomplete and not book_code and max_books == 0) else 0
         return final_report
 
@@ -1248,7 +1316,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
     if not isinstance(index["download_status"], dict):
         index["download_status"] = {}
     existing = {item.get("book_id"): item for item in index["books"] if isinstance(item, dict)}
-    catalog = catalog if catalog is not None else discover_books()
+    catalog = copy.deepcopy(catalog) if catalog is not None else discover_books()
     selected = [item for item in catalog if item["medium"] == language]
     if class_no is not None:
         if class_no not in range(6, 13):
