@@ -686,7 +686,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         candidates = candidates[:max_books]
     log(
         "Using persistent image " + image + "; books present before run=" + str(len(existing))
-        + "; catalog entries=" + str(len(selected)) + "; pending=" + str(len(candidates))
+        + "; catalog entries=" + str(len(selected)) + "; pending at start=" + str(len(candidates))
         + "; concurrent downloads=" + str(download_workers)
         + "; books per Docker push=" + str(push_batch_size)
         + "; maximum rounds=" + str(retry_rounds)
@@ -771,6 +771,17 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                             + " | " + str(entry["sha256"])[:12] + " |")
                     log("PUSHED " + book_id + " image=" + image + " sha256=" + str(entry["sha256"])
                         + " bytes=" + str(entry["bytes"]))
+                remaining_downloads = sum(
+                    1 for candidate in candidates
+                    if candidate["book_id"] not in resolved_ids
+                    and candidate["book_id"] not in ready_for_push
+                    and attempt_in_this_run.get(candidate["book_id"], 0) < retry_rounds
+                )
+                log("CACHE_PROGRESS language=" + language + " phase=batch-pushed"
+                    + " pushed_this_run=" + str(len(downloaded))
+                    + " registry_books=" + str(len(index.get("books", [])))
+                    + " pending_downloads=" + str(remaining_downloads)
+                    + " waiting_for_push=" + str(len(ready_for_push)))
                 return True
             except Exception as exc:
                 for book_id in batch_ids:
@@ -872,6 +883,16 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                 and item["book_id"] not in ready_for_push
                 and attempt_in_this_run.get(item["book_id"], 0) < retry_rounds
             ]
+            terminal_failures = sum(
+                1 for row in failed_downloads.values()
+                if attempt_in_this_run.get(row["book_id"], 0) >= retry_rounds
+            )
+            log("CACHE_PROGRESS language=" + language + " round=" + str(round_no) + "/" + str(retry_rounds)
+                + " resolved=" + str(len(resolved_ids))
+                + " pushed_this_run=" + str(len(downloaded))
+                + " pending_downloads=" + str(len(pending))
+                + " waiting_for_push=" + str(len(ready_for_push))
+                + " terminal_failures=" + str(terminal_failures))
             if not pending:
                 if not ready_for_push:
                     break
@@ -905,6 +926,9 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         "persistent_tag": "latest",
         "catalog_entries": len(selected),
         "books_present_before_run": books_present_before_run,
+        "pending_at_start": len(candidates),
+        "pending_after_retries": sum(1 for item in candidates if item["book_id"] not in resolved_ids),
+        "resolved_candidates": sum(1 for item in candidates if item["book_id"] in resolved_ids),
         "already_cached": already_cached,
         "downloaded_and_pushed": downloaded,
         "unchanged_after_refresh": unchanged,
@@ -922,6 +946,8 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
             + "- Books already cached: " + str(len(already_cached)) + "\n"
             + "- Books newly downloaded and pushed: " + str(len(downloaded)) + "\n"
             + "- Unchanged on refresh: " + str(len(unchanged)) + "\n"
+            + "- Pending at start: " + str(len(candidates)) + "\n"
+            + "- Pending after retries: " + str(report["pending_after_retries"]) + "\n"
             + "- Books still missing after retries: " + str(len(failed_downloads)) + "\n"
             + "- Registry image books total: " + str(len(index.get("books", []))) + "\n"
             + "- Download workers: " + str(download_workers) + "; push batch size: " + str(push_batch_size)
