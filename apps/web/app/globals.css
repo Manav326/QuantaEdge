@@ -543,3 +543,16 @@
 
 /* Cover any browser back/forward cache snapshot until the session guard finishes. */
 body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha hai…';position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:var(--paper,#f7f8fc);color:var(--ink,#152038);font:700 13px/1.6 'DM Sans','Noto Sans Devanagari',sans-serif;text-align:center;letter-spacing:0;}
+
+
+/* Accessible, persistent Hinglish / English language control */
+.qe-language-switcher{display:inline-flex;align-items:center;gap:7px;max-width:100%;border:1px solid rgba(116,130,151,.28);border-radius:999px;background:rgba(255,255,255,.94);padding:6px 10px;color:#263446;box-shadow:0 3px 12px rgba(29,42,61,.06);font:inherit}
+.qe-language-switcher>span:first-child{font-size:14px;line-height:1;color:#d65b35}
+.qe-language-switcher__label{font-size:11px;font-weight:650;white-space:nowrap}
+.qe-language-switcher select{max-width:150px;border:0;background:transparent;color:inherit;font:inherit;font-size:12px;font-weight:650;outline-offset:3px;cursor:pointer}
+.qe-language-switcher.is-compact{padding:5px 8px;gap:5px}
+.qe-language-switcher.is-compact .qe-language-switcher__label{display:none}
+.qe-language-toolbar{display:flex;align-items:center;justify-content:flex-end;min-height:44px;padding:8px 22px 0;position:relative;z-index:4}
+.qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}
+.qe-language-switcher:focus-within{outline:2px solid #e7a087;outline-offset:2px}
+@media(max-width:640px){.qe-language-toolbar{padding:7px 12px 0;min-height:40px}.qe-language-auth-float{top:8px;right:8px}.qe-language-switcher{padding:5px 8px;gap:5px}.qe-language-switcher__label{display:none}.qe-language-switcher select{max-width:125px}}
