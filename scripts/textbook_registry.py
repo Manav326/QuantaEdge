@@ -116,9 +116,12 @@ def _get_url_once(url: str, destination: Path | None = None, limit: int | None =
         raise RuntimeError("Download failed for " + url + ": " + str(exc)) from exc
 
 
-def get_url(url: str, destination: Path | None = None, limit: int | None = None) -> bytes | Path:
+def get_url(url: str, destination: Path | None = None, limit: int | None = None,
+            attempts: int = 4) -> bytes | Path:
+    if not 1 <= attempts <= 5:
+        raise ValueError("Download attempts per URL must be between 1 and 5.")
     last_error: Exception | None = None
-    for attempt in range(1, 5):
+    for attempt in range(1, attempts + 1):
         try:
             return _get_url_once(url, destination, limit)
         except FileNotFoundError:
@@ -127,7 +130,7 @@ def get_url(url: str, destination: Path | None = None, limit: int | None = None)
             raise
         except (RuntimeError, OSError, TimeoutError) as exc:
             last_error = exc
-            if attempt < 4:
+            if attempt < attempts:
                 delay = attempt * 2
                 log("Transient source failure; retry " + str(attempt + 1) + "/4 in " + str(delay) + "s: " + url)
                 time.sleep(delay)
@@ -387,7 +390,7 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
 
         for bundle_url in candidates:
             try:
-                get_url(bundle_url, archive_path, None)
+                get_url(bundle_url, archive_path, None, attempts=1)
                 with zipfile.ZipFile(archive_path) as archive:
                     names: list[tuple[int, str]] = []
                     for item in archive.infolist():
@@ -480,7 +483,7 @@ def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, in
         import fitz
     except ImportError as exc:
         raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
-    get_url(book["pdf_url"], destination, None)
+    get_url(book["pdf_url"], destination, None, attempts=1)
     with fitz.open(destination) as pdf:
         if pdf.needs_pass:
             raise ValueError("Password-protected SCERT PDF is unsupported.")
