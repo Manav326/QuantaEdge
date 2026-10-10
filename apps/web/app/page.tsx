@@ -55,7 +55,7 @@ export default function Home() {
           <div className="device-glow" />
           <div className="student-card">
             <div className="student-head">
-              <div><span className="muted-small">Learning journey</span><h3><LocaleText hinglish="आपके बच्चे के लिए" english="For your child" /></h3></div>
+              <div><span className="muted-small"><LocaleText hinglish="Learning journey" english="Learning journey" /></span><h3><LocaleText hinglish="आपके बच्चे के लिए" english="For your child" /></h3></div>
               <div className="avatar">Q</div>
             </div>
 
@@ -66,7 +66,7 @@ export default function Home() {
                 <div className="progress-track"><span style={{ width: '58%' }} /></div>
                 <small><LocaleText hinglish="Answers के साथ progress save होती है" english="Progress saves as you answer" /></small>
               </div>
-              <span className="streak">LIVE</span>
+              <span className="streak"><LocaleText hinglish="LIVE" english="LIVE" /></span>
             </div>
 
             <div className="section-title"><strong><LocaleText hinglish="Learning flow" english="Learning flow" /></strong><span><LocaleText hinglish="adaptive" english="adaptive" /></span></div>
