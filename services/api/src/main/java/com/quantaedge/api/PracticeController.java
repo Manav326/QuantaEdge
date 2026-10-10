@@ -128,6 +128,8 @@ public class PracticeController {
         """,sessionId,questionId,sequence++,json(snapshot));
       questions.add(toPublicQuestion(snapshot));
     }
+    if(questions.isEmpty())throw badRequest("The selected questions are no longer available. Refresh the topic catalogue and try again.");
+    jdbc.update("update student_practice_session set selected_question_count=? where id=?",questions.size(),sessionId);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("sessionId",sessionId);
     result.put("status","IN_PROGRESS");
