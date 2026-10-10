@@ -70,6 +70,15 @@ class TextbookRegistryTests(unittest.TestCase):
 
 
 
+    def test_large_book_url_uses_one_attempt_when_requested_for_a_retry_round(self):
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "book.pdf"
+            with patch("scripts.textbook_registry._get_url_once", side_effect=RuntimeError("source unavailable")) as get_once:
+                from scripts.textbook_registry import get_url
+                with self.assertRaisesRegex(RuntimeError, "Failed after 1 attempt"):
+                    get_url("https://ncert.nic.in/textbook/pdf/bookdd.zip", destination, None, attempts=1)
+            self.assertEqual(1, get_once.call_count)
+
     def test_textbook_binary_size_is_not_artificially_capped(self):
         self.assertIsNone(MAX_BOOK_BYTES)
         self.assertIsNone(MAX_ZIP_BYTES)
