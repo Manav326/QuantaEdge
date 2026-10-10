@@ -10,7 +10,8 @@ target/
 *.log
 .DS_Store
 
-# Private textbook extracts and generated/reviewed content bundles must stay out of Git.
+# Private textbook cache, source PDFs and extraction/review bundles stay out of Git.
 /private-review/
 /source-pdfs/
+/.cache/
 *.ai-generated-draft.json
