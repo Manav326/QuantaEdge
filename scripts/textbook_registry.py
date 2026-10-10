@@ -1202,7 +1202,7 @@ def publish_classwise(
                                     "attempts_this_run": 0, "error": message,
                                 }],
                                 "push_failures": [{"book_id": "__CLASS_PUBLISHER__", "error": message}],
-                                "books_in_registry": 0, "cached_book_ids": [],
+                                "books_in_registry": 0,
                                 "retry_rounds": retry_rounds, "download_workers": download_workers,
                                 "push_batch_size": push_batch_size, "updated_at": now(),
                             }
@@ -1225,7 +1225,11 @@ def publish_classwise(
             for grade in classes:
                 image = class_image_reference(image_prefix, grade, medium)
                 phase_reports = reports_by_image.get(image, [])
-                last_report = phase_reports[-1] if phase_reports else None
+                last_report = next(
+                    (item for item in reversed(phase_reports) if "cached_book_ids" in item),
+                    None,
+                )
+                latest_phase_report = phase_reports[-1] if phase_reports else None
                 cached_ids = set(last_report.get("cached_book_ids", [])) if last_report else set()
                 expected = [scoped_book] if scoped_book is not None else [
                     item for item in complete_catalog
@@ -1242,13 +1246,13 @@ def publish_classwise(
                     for item in report.get("failed_after_retries", [])
                 })
                 seed = seed_reports.get(image, {})
-                cached_count = last_report.get("books_in_registry", 0) if last_report else seed.get("books_after_migration", 0)
+                cached_count = last_report.get("books_in_registry", seed.get("books_after_migration", 0)) if last_report else seed.get("books_after_migration", 0)
                 failed_count = sum(len(report.get("failed_after_retries", [])) for report in phase_reports)
                 push_failure_count = sum(len(report.get("push_failures", [])) for report in phase_reports)
                 row = {
                     "image": image, "class": grade, "medium": medium,
                     "catalog_books_expected": len(expected_ids),
-                    "already_cached_before_download": len(last_report.get("already_cached", [])) if last_report else 0,
+                    "already_cached_before_download": len(latest_phase_report.get("already_cached", [])) if latest_phase_report else 0,
                     "migrated_from_legacy": int(seed.get("migrated_from_legacy", 0)),
                     "books_downloaded_this_run": len({
                         str(book_id) for report in phase_reports
