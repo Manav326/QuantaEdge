@@ -360,7 +360,7 @@ export default function LearnClient() {
       {studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
         (Boolean(item.chapter_code)&&item.chapter_code===lesson.chapter_code)||
         (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
-      )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')}/>)}
+      )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')} initiallyExpanded={true}/>)}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lesson.questions.length).hinglish} english={learnerPathLabel(orderedBlocks,lesson.questions.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
