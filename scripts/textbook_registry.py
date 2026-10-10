@@ -616,23 +616,215 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
 
 def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
+    """Synchronize an image into a local cache, copying only missing/changed PDFs."""
     subprocess.run(["docker", "pull", image], check=True)
     output_dir.mkdir(parents=True, exist_ok=True)
     container = "qe-textbook-pull-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
     subprocess.run(["docker", "create", "--name", container, image], check=True, stdout=subprocess.DEVNULL)
+    temp_index = output_dir / ".index.json.download"
+    copied = reused = 0
     try:
-        books_dir = output_dir / "books"
-        books_dir.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["docker", "cp", container + ":/books/.", str(books_dir)], check=True)
-        subprocess.run(["docker", "cp", container + ":/index.json", str(output_dir / "index.json")], check=True)
+        subprocess.run(["docker", "cp", container + ":/index.json", str(temp_index)], check=True)
+        index = json.loads(temp_index.read_text(encoding="utf-8"))
+        if not isinstance(index.get("books"), list):
+            raise ValueError("Textbook image has an invalid index.json.")
+        for item in index["books"]:
+            relative = Path(str(item.get("file", "")))
+            if relative.is_absolute() or not relative.parts or ".." in relative.parts:
+                raise ValueError("Unsafe file path in registry index for " + str(item.get("book_id", "unknown")))
+            target = output_dir / relative
+            expected = str(item.get("sha256", ""))
+            if target.is_file() and expected and sha256_file(target) == expected:
+                reused += 1
+                continue
+            target.parent.mkdir(parents=True, exist_ok=True)
+            staged = target.with_name(target.name + ".download")
+            source = "/" + relative.as_posix().lstrip("/")
+            subprocess.run(["docker", "cp", container + ":" + source, str(staged)], check=True)
+            if not staged.is_file() or not expected or sha256_file(staged) != expected:
+                staged.unlink(missing_ok=True)
+                raise ValueError("Checksum verification failed while extracting " + str(item.get("book_id", "unknown")))
+            staged.replace(target)
+            copied += 1
+        # Swap index only after every declared PDF has passed SHA-256 verification.
+        temp_index.replace(output_dir / "index.json")
     finally:
+        temp_index.unlink(missing_ok=True)
         subprocess.run(["docker", "rm", container], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     index = json.loads((output_dir / "index.json").read_text(encoding="utf-8"))
-    bad = [item.get("book_id", "unknown") for item in index.get("books", [])
-           if not (output_dir / item["file"]).is_file() or sha256_file(output_dir / item["file"]) != item.get("sha256")]
-    if bad:
-        raise ValueError("Checksum verification failed for: " + ", ".join(bad))
-    report = {"image": image, "output_dir": str(output_dir), "book_count": len(index.get("books", [])), "checksum_failures": bad}
+    report = {
+        "image": image, "output_dir": str(output_dir), "book_count": len(index.get("books", [])),
+        "downloaded_or_updated_files": copied, "reused_local_files": reused, "checksum_failures": [],
+    }
+    print(json.dumps(report, ensure_ascii=False, indent=2))
+    return report
+
+
+def _safe_filename(value: str, limit: int = 150) -> str:
+    slug = re.sub(r"[^A-Za-z0-9._-]+", "-", value).strip("-._").lower()
+    return (slug or "textbook")[:limit]
+
+
+def _pdf_ranges_from_toc(document: Any, index_item: dict[str, Any]) -> tuple[list[tuple[str, int, int]], str]:
+    page_count = len(document)
+    raw_toc = index_item.get("toc") or document.get_toc() or []
+    candidates: list[tuple[str, int]] = []
+    for entry in raw_toc:
+        try:
+            level, title, page = int(entry[0]), str(entry[1]).strip(), int(entry[2])
+        except (IndexError, TypeError, ValueError):
+            continue
+        if level == 1 and title and 1 <= page <= page_count:
+            candidates.append((title, page))
+    method = "pdf_outline"
+    if not candidates:
+        # Conservative fallback: detect explicit chapter/lesson headings at page starts.
+        method = "text_heading_suggestion"
+        patterns = (
+            re.compile(r"^(?:chapter|lesson)\s+(?:no\.?\s*)?([0-9]{1,3}|[ivxlcdm]{1,8})\b[\s.:—-]*(.*)$", re.I),
+            re.compile(r"^(?:अध्याय|पाठ)\s*([0-9०-९]{1,3}|[ivxlcdm]{1,8})\b[\s.:—-]*(.*)$", re.I),
+        )
+        for page_no in range(page_count):
+            text = document[page_no].get_text("text") or ""
+            lines = [line.strip() for line in text.splitlines() if line.strip()]
+            for line in lines[:8]:
+                match = next((pattern.match(line) for pattern in patterns if pattern.match(line)), None)
+                if match:
+                    title = line[:200]
+                    candidates.append((title, page_no + 1))
+                    break
+    by_page: dict[int, str] = {}
+    for title, page in candidates:
+        by_page.setdefault(page, title)
+    ordered = sorted(by_page.items())
+    ranges: list[tuple[str, int, int]] = []
+    for index, (start, title) in enumerate(ordered):
+        end = (ordered[index + 1][0] - 1) if index + 1 < len(ordered) else page_count
+        if 1 <= start <= end <= page_count:
+            ranges.append((title, start, end))
+    # Ignore a lone heading at page 1 that appears to describe the front cover
+    # unless there are at least two distinct chapter boundaries to split on.
+    if len(ranges) < 2:
+        return [], method
+    return ranges, method
+
+
+def prepare_library(registry_dir: Path, output_dir: Path) -> dict[str, Any]:
+    """Create <=50 MiB PDF assets and SHA-verified bundles for the existing private library importer."""
+    try:
+        import fitz
+    except ImportError as exc:
+        raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
+    index_path = registry_dir / "index.json"
+    if not index_path.is_file():
+        raise ValueError("No registry index found at " + str(index_path) + "; run textbook_registry.py pull first.")
+    index = json.loads(index_path.read_text(encoding="utf-8"))
+    books = index.get("books")
+    if not isinstance(books, list):
+        raise ValueError("The registry index does not contain a books array.")
+    pdf_dir, bundle_dir = output_dir / "pdfs", output_dir / "bundles"
+    pdf_dir.mkdir(parents=True, exist_ok=True)
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    report: dict[str, Any] = {"registry": str(registry_dir), "output_dir": str(output_dir),
+                              "books_seen": len(books), "pdfs_created": 0, "bundles_created": 0,
+                              "whole_books_over_library_limit": [], "no_verified_chapter_boundaries": [],
+                              "too_large_chapter_assets": [], "failures": []}
+    max_library_bytes = 50 * 1024 * 1024
+
+    def write_asset(source_pdf: Path, item: dict[str, Any], title: str,
+                    chapter_title: str | None, page_start: int, page_end: int) -> None:
+        slug = _safe_filename(str(item.get("book_id", "book")))
+        suffix = "whole-book" if chapter_title is None else "chapter-" + _safe_filename(chapter_title, 50)
+        filename = (slug[:75] + "--" + suffix[:100] + ".pdf")[:220]
+        destination = pdf_dir / filename
+        if chapter_title is None:
+            if source_pdf.stat().st_size > max_library_bytes:
+                report["whole_books_over_library_limit"].append({
+                    "book_id": item.get("book_id"), "title": title,
+                    "bytes": source_pdf.stat().st_size, "reason": "The current PostgreSQL PDF library has a 50 MiB file limit.",
+                })
+                return
+            shutil.copyfile(source_pdf, destination)
+            pages = int(item.get("page_count") or page_end)
+        else:
+            with fitz.open(source_pdf) as parent:
+                child = fitz.open()
+                try:
+                    child.insert_pdf(parent, from_page=page_start - 1, to_page=page_end - 1)
+                    child.set_metadata({"title": title, "author": str(item.get("publisher", "")),
+                                        "subject": str(item.get("subject", ""))})
+                    child.save(destination, garbage=4, deflate=True)
+                    pages = len(child)
+                finally:
+                    child.close()
+            if destination.stat().st_size > max_library_bytes:
+                destination.unlink(missing_ok=True)
+                report["too_large_chapter_assets"].append({
+                    "book_id": item.get("book_id"), "title": title,
+                    "page_start": page_start, "page_end": page_end,
+                    "reason": "Chapter split still exceeds the current 50 MiB library limit.",
+                })
+                return
+        digest = sha256_file(destination)
+        bundle = {
+            "bundle_status": "DRAFT_EXTRACTION_ONLY",
+            "source": {
+                "pdf_filename": filename, "pdf_sha256": digest, "pdf_page_count": pages,
+                "title": title, "source_title": item.get("title"),
+                "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                "edition": item.get("edition"), "publisher": item.get("publisher"),
+                "language": item.get("medium"), "class": item.get("class"), "classes": item.get("classes"),
+                "subject": item.get("subject"), "book_id": item.get("book_id"),
+                "scope": "SUBJECT_BOOK" if chapter_title is None else "CHAPTER_PDF",
+                "chapter_title": chapter_title, "chapter_page_start": page_start,
+                "chapter_page_end": page_end, "original_book_sha256": item.get("sha256"),
+            },
+            "pages": [],
+            "chapter_map": [],
+        }
+        (bundle_dir / (filename + ".json")).write_text(
+            json.dumps(bundle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        report["pdfs_created"] += 1
+        report["bundles_created"] += 1
+
+    for item in books:
+        try:
+            relative = Path(str(item.get("file", "")))
+            if relative.is_absolute() or not relative.parts or ".." in relative.parts:
+                raise ValueError("Unsafe relative PDF path in index.")
+            source_pdf = registry_dir / relative
+            if not source_pdf.is_file():
+                raise FileNotFoundError("Cached source PDF missing: " + str(source_pdf))
+            actual_hash = sha256_file(source_pdf)
+            if actual_hash != item.get("sha256"):
+                raise ValueError("Original cached book checksum does not match registry index.")
+            with fitz.open(source_pdf) as document:
+                if document.needs_pass:
+                    raise ValueError("Password-protected source PDF cannot be processed.")
+                page_count = len(document)
+                if not 1 <= page_count <= 2000:
+                    raise ValueError("Source book must have 1–2,000 pages.")
+                ranges, method = _pdf_ranges_from_toc(document, item)
+            # The complete book is useful for reader assignment when it fits the existing
+            # database limit. Large originals stay in GHCR and are split into chapter assets.
+            write_asset(source_pdf, item, str(item.get("title", item.get("book_id", "Textbook"))),
+                        None, 1, page_count)
+            if not ranges:
+                report["no_verified_chapter_boundaries"].append({
+                    "book_id": item.get("book_id"), "title": item.get("title"),
+                    "page_count": page_count, "detection_method": method,
+                    "note": "A reviewer must provide a chapter/page map; no reliable split was inferred.",
+                })
+                continue
+            for title, start, end in ranges:
+                write_asset(source_pdf, item, str(item.get("title", "Textbook")) + " — " + title,
+                            title, start, end)
+        except Exception as exc:
+            failure = {"book_id": item.get("book_id"), "title": item.get("title"), "error": str(exc)}
+            report["failures"].append(failure)
+            log("PREPARE_FAILED " + json.dumps(failure, ensure_ascii=False))
+    report_path = output_dir / "prepare-report.json"
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return report
 
@@ -652,6 +844,9 @@ def main(argv: list[str] | None = None) -> int:
     pull = sub.add_parser("pull", help="Pull one language image locally and verify all checksums")
     pull.add_argument("--image", required=True)
     pull.add_argument("--output-dir", required=True, type=Path)
+    prepare = sub.add_parser("prepare-library", help="Split cached books into draft assets for the existing PDF library importer")
+    prepare.add_argument("--registry-dir", required=True, type=Path)
+    prepare.add_argument("--output-dir", required=True, type=Path)
     args = parser.parse_args(argv)
     try:
         if args.command == "discover":
@@ -660,6 +855,9 @@ def main(argv: list[str] | None = None) -> int:
                 entries = [item for item in entries if item["medium"] == args.language]
             print(json.dumps(entries, ensure_ascii=False, indent=2))
             return 0
+        if args.command == "prepare-library":
+            report = prepare_library(args.registry_dir, args.output_dir)
+            return 1 if report["failures"] else 0
         if args.command == "publish":
             languages = ["hindi", "english"] if args.language == "both" else [args.language]
             reports = []
