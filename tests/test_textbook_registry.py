@@ -282,6 +282,25 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual([], report["failed_after_retries"])
         self.assertEqual(2, push.call_count)
 
+    def test_class_image_reference_is_stable_for_all_fourteen_registries(self):
+        from scripts.textbook_registry import class_image_reference
+
+        for grade in range(6, 13):
+            for language in ("hindi", "english"):
+                with self.subTest(grade=grade, language=language):
+                    self.assertEqual(
+                        f"ghcr.io/manav326/quantaedge-textbooks-class-{grade}-{language}:latest",
+                        class_image_reference("ghcr.io/Manav326/quantaedge-textbooks", grade, language),
+                    )
+
+    def test_class_image_reference_rejects_unsupported_classes(self):
+        from scripts.textbook_registry import class_image_reference
+
+        with self.assertRaises(ValueError):
+            class_image_reference("ghcr.io/manav326/quantaedge-textbooks", 5, "hindi")
+        with self.assertRaises(ValueError):
+            class_image_reference("ghcr.io/manav326/quantaedge-textbooks", 13, "english")
+
     def test_persistent_failure_is_reported_after_five_rounds(self):
         book = self.make_registry_book("always-fails")
         attempts = {"count": 0}
