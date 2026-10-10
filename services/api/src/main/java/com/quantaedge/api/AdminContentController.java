@@ -722,7 +722,7 @@ public class AdminContentController {
     }
   }
 
-  private void validateLearnerLessonStages(Set<String> activeBlockTypes) {
+  void validateLearnerLessonStages(Set<String> activeBlockTypes) {
     if(!activeBlockTypes.contains("EXPLANATION")) {
       throw badRequest("Add a complete Explanation block so the learner receives the core teaching before practice.");
     }
