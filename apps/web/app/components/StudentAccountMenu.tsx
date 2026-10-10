@@ -103,6 +103,9 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
           <Link href="/student/textbooks" className="student-account-menu__item" onClick={closeMenu}>
             <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="Textbook library" english="Textbook library" /></strong><small><LocaleText hinglish="अपनी किताबें online पढ़ें" english="Read your books online" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
+          <Link href="/student/classes" className="student-account-menu__item" onClick={closeMenu}>
+            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="Live और recorded classes" english="Live and recorded classes" /></strong><small><LocaleText hinglish="Live class join करें या recording जारी रखें" english="Join a live class or resume a recording" /></small></span><span className="student-account-menu__arrow">→</span>
+          </Link>
           <Link href="/student/tests" className="student-account-menu__item" onClick={closeMenu}>
             <span className="student-account-menu__icon"><MenuIcon kind="assessment" /></span><span><strong><LocaleText hinglish="Tests और results" english="Tests and results" /></strong><small><LocaleText hinglish="अपनी कोशिशें और checked scores देखें" english="Take tests and review saved scores" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
