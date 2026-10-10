@@ -268,9 +268,8 @@ public class LearningDocumentController {
         throw badRequest("Only an approved PDF asset can be published to students.");
       }
       if ("CHAPTER_PDF".equals(String.valueOf(current.get("scope")))
-          && (!Boolean.TRUE.equals(current.get("chapter_active"))
-              || !"PUBLISHED".equals(String.valueOf(current.get("chapter_content_status"))))) {
-        throw badRequest("Publish the matching curriculum chapter in Content Studio first. Chapter PDFs stay hidden from students until that chapter is published.");
+          && !Boolean.TRUE.equals(current.get("chapter_active"))) {
+        throw badRequest("This curriculum chapter is inactive. Reactivate it before publishing its chapter PDF.");
       }
       if (!hasText(current.get("source_title")) || !hasText(current.get("edition"))
           || !hasText(current.get("source_url")) || !String.valueOf(current.get("source_url")).startsWith("https://")) {
@@ -378,7 +377,7 @@ public class LearningDocumentController {
       where d.status='PUBLISHED'
         and (?='' or s.code=?)
         and a.review_status='APPROVED'
-        and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true and ch.content_status='PUBLISHED'))
+        and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
       order by s.sort_order,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
       """, context.studentId(), subjectFilter, subjectFilter);
@@ -477,7 +476,7 @@ public class LearningDocumentController {
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
-        and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true and ch.content_status='PUBLISHED'))
+        and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
       """, studentId, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());

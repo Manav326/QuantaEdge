@@ -378,8 +378,10 @@ public class SourceIngestionController {
       where id in (
         select pdf_asset_id from source_ingestion_chapter
         where job_id=? and status='REJECTED' and pdf_asset_id is not null
-      ) and review_status in ('DRAFT','REVIEW')
-      """, staffId, jobId);
+      )
+        and id is distinct from (select book_asset_id from source_ingestion_job where id=?)
+        and review_status in ('DRAFT','REVIEW')
+      """, staffId, jobId, jobId);
     jdbc.update("""
       update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
       where id=? and review_status in ('DRAFT','REVIEW')

@@ -421,14 +421,14 @@ export default function TextbookLibraryPage() {
                 <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
                 <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
                 <small>{row.source_url || 'Official source URL not set'}</small>
-                {row.scope === 'CHAPTER_PDF' && row.chapter_content_status !== 'PUBLISHED' && <small className={styles.publishHint}>Publish this curriculum chapter in Content Studio before publishing its PDF. Students will not see the chapter PDF until both are published.</small>}
+                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
               </div>
               <div className={styles.rowActions}>
                 <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => { setPreviewDocumentId(row.document_id); setPreviewPage(1); }}>Preview</button>
                 {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
                   <button type="button" className={styles.publishButton}
-                    disabled={busy || (row.scope === 'CHAPTER_PDF' && (row.chapter_active !== true || row.chapter_content_status !== 'PUBLISHED'))}
-                    title={row.scope === 'CHAPTER_PDF' && row.chapter_content_status !== 'PUBLISHED' ? 'Publish this chapter in Content Studio first.' : 'Publish this resource for eligible students.'}
+                    disabled={busy || (row.scope === 'CHAPTER_PDF' && row.chapter_active !== true)}
+                    title={row.scope === 'CHAPTER_PDF' && row.chapter_active !== true ? 'Reactivate this curriculum chapter first.' : 'Publish this resource for eligible students.'}
                     onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
                 {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
                 {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}

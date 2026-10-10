@@ -81,7 +81,7 @@ class LearningDocumentControllerTest {
   }
 
   @Test
-  void chapterPdfCannotBePublishedBeforeItsCurriculumChapterIsPublished() {
+  void activeChapterPdfCanBePublishedBeforeLessonContentIsPublished() {
     when(authorization.requireAuth(author)).thenReturn(author);
     when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
     when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
@@ -96,10 +96,20 @@ class LearningDocumentControllerTest {
         )
     ));
 
-    ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author));
+    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
 
-    assertEquals(400, error.getStatusCode().value());
+    assertEquals(88L, result.get("document_id"));
+  }
+
+  @Test
+  void dedicatedPublisherCanListResourceAssignments() {
+    when(authorization.requireAuth(author)).thenReturn(author);
+    when(authorization.hasPermission(author, "CONTENT_VIEW")).thenReturn(false);
+    when(authorization.hasPermission(author, "CONTENT_EDIT")).thenReturn(false);
+    when(authorization.hasPermission(author, "CONTENT_PUBLISH")).thenReturn(true);
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of());
+
+    assertTrue(controller.listAssignments(null, null, null, author).isEmpty());
   }
 
   @Test
