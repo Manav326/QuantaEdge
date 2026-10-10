@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Incremental per-language GHCR cache for official NCERT and SCERT Bihar textbooks.
+"""Batched, resumable textbook cache publisher for the persistent Hindi/English GHCR images.
 
-One book is downloaded, checksummed, appended as an OCI image layer and pushed before
-the next book starts. Successful uploads survive failures/timeouts and are skipped on rerun.
+The publisher reads the current image index before downloading, downloads whole books
+concurrently, pushes each complete batch to the same :latest image, and retries only
+unresolved books for at most five rounds. No arbitrary binary size limit is imposed.
 """
 from __future__ import annotations
 
@@ -23,7 +24,6 @@ NCERT_CATALOG_FALLBACKS = (
     "https://www.ncert.nic.in/textbook.php?ln=en",
     "https://ncert.ncert.org.in/textbook.php?ln=en",
 )
-NCERT_PDF_BASES = ("https://ncert.nic.in/textbook/pdf", "https://ncert.ncert.org.in/textbook/pdf")
 LANGUAGES = {"hindi": "h", "english": "e"}
 ROMAN_CLASSES = {"vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10, "xi": 11, "xii": 12}
 # Textbook binary downloads and official complete-book bundles have no artificial size ceiling.
@@ -798,6 +798,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                                 "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
                                 "last_success_at": now(),
                             }
+                            status_revision += 1
                             pdf_path.unlink(missing_ok=True)
                             continue
                         ready_for_push[book_id] = {
@@ -859,8 +860,10 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
             if status_revision > persisted_status_revision:
                 persist_index_only()
 
-        for offset in range(0, len(ready_for_push), push_batch_size):
-            push_ready(list(ready_for_push)[offset:offset + push_batch_size])
+        while ready_for_push:
+            batch_ids = list(ready_for_push)[:push_batch_size]
+            if not push_ready(batch_ids):
+                break
         if status_revision > persisted_status_revision:
             persist_index_only()
 
@@ -1222,7 +1225,7 @@ def main(argv: list[str] | None = None) -> int:
                             retry_rounds=args.retry_rounds,
                         ))
             print(json.dumps({"results": reports}, ensure_ascii=False, indent=2))
-            return 1 if any(report["failed"] for report in reports) else 0
+            return 1 if any(report["failed_after_retries"] or report["push_failures"] for report in reports) else 0
         pull_image(args.image, args.output_dir)
         return 0
     except (ValueError, RuntimeError, OSError, subprocess.CalledProcessError, zipfile.BadZipFile) as exc:

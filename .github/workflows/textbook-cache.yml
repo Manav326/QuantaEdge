@@ -29,6 +29,21 @@ on:
         type: boolean
         default: false
         required: true
+      download_workers:
+        description: "Number of parallel whole-book downloads"
+        type: number
+        default: 8
+        required: true
+      push_batch_size:
+        description: "Number of completed books per Docker build/push batch"
+        type: number
+        default: 8
+        required: true
+      retry_rounds:
+        description: "Maximum attempts for unresolved books (1–5)"
+        type: number
+        default: 5
+        required: true
 
 permissions:
   contents: read
@@ -36,11 +51,11 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   cache-textbooks:
-    name: Download one book and push it before continuing
+    name: Parallel whole-book downloads and persistent batch pushes
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -68,7 +83,9 @@ jobs:
           {
             echo "# QuantaEdge textbook cache"
             echo
-            echo "Each PDF is downloaded, checksummed, added as one OCI layer, and pushed before the next book starts."
+            echo "Whole books download in parallel batches. Complete batches update the existing GHCR :latest image before the next batch." 
+            echo "Unresolved books are retried for up to five rounds. Binary size is not capped, and NCERT partial chapter fallback is disabled." 
+            echo "GHCR is the persistent cache; the downloadable Actions artifact is retained for 90 days only as a convenience."
             echo
             echo "- Repository: ${{ github.repository }}"
             echo "- Commit: ${{ github.sha }}"
@@ -85,11 +102,17 @@ jobs:
           INPUT_BOOK_CODE: ${{ inputs.book_code }}
           INPUT_MAX_BOOKS: ${{ inputs.max_books }}
           INPUT_REFRESH: ${{ inputs.refresh }}
+          INPUT_DOWNLOAD_WORKERS: ${{ inputs.download_workers }}
+          INPUT_PUSH_BATCH_SIZE: ${{ inputs.push_batch_size }}
+          INPUT_RETRY_ROUNDS: ${{ inputs.retry_rounds }}
         run: |
           set -euo pipefail
           language="$INPUT_LANGUAGE"
           if [ -z "$language" ]; then language="both"; fi
-          args=(python scripts/textbook_registry.py publish --language "$language" --image-prefix "ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/quantaedge-textbooks")
+          workers="${INPUT_DOWNLOAD_WORKERS:-8}"
+          batch_size="${INPUT_PUSH_BATCH_SIZE:-8}"
+          retry_rounds="${INPUT_RETRY_ROUNDS:-5}"
+          args=(python scripts/textbook_registry.py publish --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/quantaedge-textbooks")
           if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "${INPUT_BOOK_CODE}" ]; then args+=(--book-code "$INPUT_BOOK_CODE"); fi
           if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_MAX_BOOKS" ] && [ "$INPUT_MAX_BOOKS" != "0" ]; then args+=(--max-books "$INPUT_MAX_BOOKS"); fi
           if [ "$INPUT_REFRESH" = "true" ]; then args+=(--refresh); fi
@@ -164,4 +187,4 @@ jobs:
           path: ${{ runner.temp }}/textbook-downloads/*
           if-no-files-found: ignore
           compression-level: 0
-          retention-days: 30
+          retention-days: 90

@@ -7,17 +7,31 @@ Two GHCR images are maintained independently:
 
 The image index is stored at /index.json and each complete book at /books/<book_id>.pdf. NCERT individual chapter PDFs are merged sequentially into one PDF with Chapter N bookmarks so the existing QuantaEdge source-ingestion and chapter-map tools can detect page boundaries. SCERT Bihar E-resources are cached as original PDFs. Every entry records source page, publisher, class, subject, language, edition note, byte size, SHA-256 and download method.
 
-## One-book-at-a-time behavior
+## Parallel batches, retries, and persistent GHCR tags
 
-scripts/textbook_registry.py discovers the official NCERT catalogue for Classes 6–12 and official SCERT Bihar E-resources, filtered to Hindi or English. It pulls the current language image, reads index.json and skips entries already stored there. For each missing book it downloads and validates one source, computes SHA-256, updates the index, creates one new OCI layer, pushes the language tag immediately, and only then begins the next book. Completed books remain available if a later source times out. A rerun resumes from the image index and does not re-download completed entries. Use --refresh only when deliberately checking for new editions.
+The publisher first pulls and reads the current image index from the same existing GHCR package. It skips every matching book ID already present in that image before making source requests. By default, eight whole books download concurrently; once the batch finishes, complete PDFs are checksum-recorded and pushed together as one Docker build/push. Each book is stored as a separate content-addressed layer, and subsequent pushes reuse prior layers. A later batch is not started until the previous batch's GHCR push has been attempted.
+
+If a source book fails, its error, timestamps, attempt count and recent attempt history remain in index.json. The publisher continues through the rest of the batch/catalogue, then retries unresolved books for up to five rounds. It finishes with a report listing cached, newly pushed, unchanged and still-failed books. It has no arbitrary binary-size cap and streams binaries to disk; a complete NCERT bundle is required, with no individual-chapter download fallback. A source bundle that is incomplete is reported as a failed whole book.
+
+Every update pushes to the same two package names and the same latest tag; no run-specific GHCR package or tag is created:
+- ghcr.io/manav326/quantaedge-textbooks-hindi:latest
+- ghcr.io/manav326/quantaedge-textbooks-english:latest
+
+GHCR is the durable source of truth. GitHub Actions artifacts are only browser-download conveniences and expire after 90 days; the GHCR package remains until the package or tag is explicitly deleted. Docker pulls of the existing image and its layers are the resume/checkpoint mechanism. Use --refresh only when deliberately checking for changed official editions.
 
 The NCERT permission was confirmed by the repository owner; confidential licence evidence is not committed. SCERT Bihar resources retain their original official source URLs. Keep both GHCR packages private unless all book licences explicitly authorize public redistribution.
 
 ## GitHub Actions and browser download
 
-Pushes that change the registry publisher launch the incremental cache workflow. It can also be run manually with a language selector, an optional single NCERT book code/registry ID, and a batch limit. Each PDF is pushed to GHCR as it completes. At the end, the workflow publishes two ZIP bundles as GitHub Actions artifacts for browser download. Bundles include cached PDFs and index.json and are retained for 30 days; GHCR is the durable cache.
+Pushes that change the registry publisher launch the incremental cache workflow. It can also be run manually with a language selector, an optional single NCERT book code/registry ID, and a batch limit. Each PDF is pushed to GHCR as it completes. At the end, the workflow publishes two ZIP bundles as GitHub Actions artifacts for browser download. Bundles include cached PDFs and index.json and are retained for 90 days; GHCR is the durable cache.
 
 ## Commands
+
+Update both existing GHCR images in place, checking their current indexes first:
+
+    python scripts/textbook_registry.py publish --language both --image-prefix ghcr.io/manav326/quantaedge-textbooks --download-workers 8 --push-batch-size 8 --retry-rounds 5
+
+This command always targets the same Hindi and English packages and updates their latest tags. For a local push, log Docker in to ghcr.io first using a GitHub token with package write access. In GitHub Actions, the workflow logs in automatically and runs the same command.
 
 List the current inventory without downloading PDFs:
 

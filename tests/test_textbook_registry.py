@@ -1,6 +1,19 @@
+import hashlib
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
-from scripts.textbook_registry import host_allowed, parse_ncert_catalog, parse_scert_classes, parse_scert_medium
+from scripts.textbook_registry import (
+    MAX_BOOK_BYTES,
+    MAX_ZIP_BYTES,
+    download_ncert_merged,
+    host_allowed,
+    parse_ncert_catalog,
+    parse_scert_classes,
+    parse_scert_medium,
+    publish_language,
+)
 
 NCERT_FIXTURE = r"""
 <script>
@@ -54,6 +67,135 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual("english", parse_scert_medium("language : English"))
         self.assertEqual("both", parse_scert_medium("language : Hindi English"))
         self.assertIsNone(parse_scert_medium("language : Urdu"))
+
+
+
+    def test_textbook_binary_size_is_not_artificially_capped(self):
+        self.assertIsNone(MAX_BOOK_BYTES)
+        self.assertIsNone(MAX_ZIP_BYTES)
+
+    def test_ncert_bundle_failure_does_not_fall_back_to_individual_chapters(self):
+        with tempfile.TemporaryDirectory() as temp:
+            book = {
+                "book_id": "ncert-c6-english-fegp1",
+                "code": "fegp1",
+                "chapter_count": 2,
+                "title": "Ganita Prakash",
+                "medium": "english",
+                "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+            }
+            with patch("scripts.textbook_registry.get_url", side_effect=FileNotFoundError("book bundle missing")) as getter:
+                with self.assertRaisesRegex(RuntimeError, "no individual-chapter fallback"):
+                    download_ncert_merged(book, Path(temp) / "whole-book.pdf")
+            self.assertEqual(2, getter.call_count)
+            self.assertTrue(all(call.args[0].endswith("fegp1dd.zip") for call in getter.call_args_list))
+
+    @staticmethod
+    def make_registry_book(book_id, medium="hindi"):
+        return {
+            "book_id": book_id,
+            "publisher": "SCERT Bihar",
+            "source_type": "SCERT_BIHAR",
+            "class": 6,
+            "classes": [6],
+            "medium": medium,
+            "language": "Hindi" if medium == "hindi" else "English",
+            "title": "Textbook " + book_id,
+            "subject": "Mathematics",
+            "edition": "Official listing",
+            "source_url": "https://scert.bihar.gov.in/eresources/sample",
+            "catalog_entry_url": "https://scert.bihar.gov.in/eresources/sample",
+            "pdf_url": "https://scert.bihar.gov.in/public/uploads/eresources/sample.pdf",
+            "bundle_url": "https://scert.bihar.gov.in/public/uploads/eresources/sample.pdf",
+            "code": "",
+            "chapter_count": None,
+        }
+
+    def test_existing_registry_is_checked_first_and_new_books_push_as_one_batch(self):
+        cached = self.make_registry_book("already-cached")
+        new_a = self.make_registry_book("new-a")
+        new_b = self.make_registry_book("new-b")
+        existing_index = {
+            "schema_version": 1,
+            "registry": "ghcr.io/example/quantaedge-textbooks-hindi:latest",
+            "books": [{**cached, "sha256": "cached-hash", "file": "books/already-cached.pdf"}],
+            "download_status": {},
+        }
+        calls = []
+
+        def fake_download(book, destination):
+            calls.append(book["book_id"])
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            payload = ("%PDF-1.4\n" + book["book_id"] + "\n").encode()
+            destination.write_bytes(payload)
+            return hashlib.sha256(payload).hexdigest(), 1, [[1, "Chapter 1", 1]], "test whole-book PDF", destination
+
+        with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \
+             patch("scripts.textbook_registry._download_full_book", side_effect=fake_download), \
+             patch("scripts.textbook_registry.push_batch") as push:
+            report = publish_language(
+                "hindi", "ghcr.io/example/quantaedge-textbooks-hindi:latest",
+                catalog=[cached, new_a, new_b], download_workers=2, push_batch_size=2, retry_rounds=1,
+            )
+
+        self.assertEqual(["already-cached"], report["already_cached"])
+        self.assertCountEqual(["new-a", "new-b"], report["downloaded_and_pushed"])
+        self.assertCountEqual(["new-a", "new-b"], calls)
+        self.assertEqual(1, push.call_count)
+        self.assertEqual("ghcr.io/example/quantaedge-textbooks-hindi:latest", push.call_args.args[0])
+        self.assertEqual(2, len(push.call_args.args[2]))
+
+    def test_failed_book_is_retried_without_redownloading_successful_book(self):
+        retry_book = self.make_registry_book("retry-book")
+        good_book = self.make_registry_book("good-book")
+        attempts = {"retry-book": 0, "good-book": 0}
+
+        def fake_download(book, destination):
+            book_id = book["book_id"]
+            attempts[book_id] += 1
+            if book_id == "retry-book" and attempts[book_id] == 1:
+                raise RuntimeError("temporary source timeout")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            payload = ("%PDF-1.4\n" + book_id + "\n").encode()
+            destination.write_bytes(payload)
+            return hashlib.sha256(payload).hexdigest(), 1, [[1, "Chapter 1", 1]], "test whole-book PDF", destination
+
+        with patch("scripts.textbook_registry.pull_index", return_value=(False, {
+            "schema_version": 1, "books": [], "download_status": {},
+        })), patch("scripts.textbook_registry._download_full_book", side_effect=fake_download), \
+             patch("scripts.textbook_registry.push_batch") as push:
+            report = publish_language(
+                "hindi", "ghcr.io/example/quantaedge-textbooks-hindi:latest",
+                catalog=[retry_book, good_book], download_workers=2, push_batch_size=2, retry_rounds=2,
+            )
+
+        self.assertEqual(2, attempts["retry-book"])
+        self.assertEqual(1, attempts["good-book"])
+        self.assertCountEqual(["retry-book", "good-book"], report["downloaded_and_pushed"])
+        self.assertEqual([], report["failed_after_retries"])
+        self.assertEqual(2, push.call_count)
+
+    def test_persistent_failure_is_reported_after_five_rounds(self):
+        book = self.make_registry_book("always-fails")
+        attempts = {"count": 0}
+
+        def fail_download(_book, _destination):
+            attempts["count"] += 1
+            raise RuntimeError("official source stayed unavailable")
+
+        with patch("scripts.textbook_registry.pull_index", return_value=(False, {
+            "schema_version": 1, "books": [], "download_status": {},
+        })), patch("scripts.textbook_registry._download_full_book", side_effect=fail_download), \
+             patch("scripts.textbook_registry.push_batch") as push:
+            report = publish_language(
+                "hindi", "ghcr.io/example/quantaedge-textbooks-hindi:latest",
+                catalog=[book], download_workers=1, push_batch_size=1, retry_rounds=5,
+            )
+
+        self.assertEqual(5, attempts["count"])
+        self.assertEqual(1, len(report["failed_after_retries"]))
+        self.assertEqual(5, report["failed_after_retries"][0]["attempts_this_run"])
+        self.assertEqual(5, push.call_count)
 
 
 if __name__ == "__main__":
