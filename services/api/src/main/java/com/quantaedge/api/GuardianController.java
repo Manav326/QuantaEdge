@@ -247,7 +247,7 @@ public class GuardianController {
       join chapter_concept cc on cc.id=m.concept_id
       join curriculum_chapter ch on ch.id=cc.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
-      where m.student_id=? order by m.mastery_percent asc,ch.teaching_order,cc.concept_order limit 20
+      where m.student_id=? order by m.mastery_percent asc,coalesce(ch.teaching_order,ch.sort_order),cc.concept_order limit 20
       """,studentId));
     return result;
   }

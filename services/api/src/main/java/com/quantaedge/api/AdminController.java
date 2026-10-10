@@ -114,14 +114,14 @@ public class AdminController {
              c.code as class_code,s.code as subject_code
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true order by c.sort_order,s.sort_order,ch.sort_order,l.sort_order
+      where l.active=true order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """);
     return jdbc.queryForList("""
       select l.id,l.code,l.title,l.status,l.sort_order,ch.display_name as chapter_name,
              c.code as class_code,s.code as subject_code
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      where l.active=true and c.code=? and s.code=? order by ch.sort_order,l.sort_order
+      where l.active=true and c.code=? and s.code=? order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """,classCode,subjectCode);
   }
 
