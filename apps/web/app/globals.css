@@ -556,3 +556,5 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-language-auth-float{position:fixed;top:12px;right:14px;z-index:1000}
 .qe-language-switcher:focus-within{outline:2px solid #e7a087;outline-offset:2px}
 @media(max-width:640px){.qe-language-toolbar{padding:7px 12px 0;min-height:40px}.qe-language-auth-float{top:8px;right:8px}.qe-language-switcher{padding:5px 8px;gap:5px}.qe-language-switcher__label{display:none}.qe-language-switcher select{max-width:125px}}
+
+.qe-session-language{display:flex;justify-content:flex-end;margin:-8px -8px 16px;}
