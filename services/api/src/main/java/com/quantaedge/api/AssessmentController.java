@@ -774,7 +774,7 @@ public class AssessmentController {
       item.put("attemptQuestionId", row.get("attempt_question_id"));
       item.put("answerId", row.get("answer_id"));
       item.put("maxMarks", row.get("max_marks"));
-      item.put("answer", parseValue(String.valueOf(row.get("response_payload")));
+      item.put("answer", parseValue(String.valueOf(row.get("response_payload"))));
       item.put("answerStatus", row.get("answer_status"));
       if (resultReleased || staffView) {
         item.put("isCorrect", row.get("is_correct"));
