@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
 <title id="title">दो पौधों की निष्पक्ष तुलना</title><desc id="desc">दो समान गमलों में पानी की अलग मात्रा दी जाती है। बीज, मिट्टी, प्रकाश और समय समान रखे जाते हैं; दस दिन बाद पौधे की ऊँचाई मापी जाती है।</desc>
 <defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#18233F" flood-opacity=".10"/></filter></defs>
 <rect width="1200" height="620" rx="28" fill="#FBFCFE"/>

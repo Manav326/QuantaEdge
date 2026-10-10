@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 350" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="350" viewBox="0 0 1200 350" role="img" aria-labelledby="title desc">
 <title id="title">संख्या रेखा पर चौथाई</title><desc id="desc">शून्य से एक तक की संख्या रेखा चार बराबर भागों में विभाजित है। बिंदु 1/4, 2/4 बराबर 1/2, 3/4 और 1 के स्थान दिखाते हैं।</desc>
 <rect width="1200" height="350" rx="24" fill="#FBFCFE"/>
 <text x="600" y="46" text-anchor="middle" font-family="Noto Sans Devanagari, Nirmala UI, Mangal, sans-serif" font-size="30" font-weight="700" fill="#17233F">संख्या रेखा पर चौथाई</text>
