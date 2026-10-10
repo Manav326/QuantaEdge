@@ -30,7 +30,7 @@ export default function StudentHome(){
         <div className="task-list subject-tracks">
           {(['maths','science'] as const).map((subjectCode)=>{
             const track=(data.curriculum||[]).find((item:any)=>item.subject_code===subjectCode);
-            const title=subjectCode==='maths'?'गणित':'विज्ञान';
+            const title=subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />;
             const count=Number(track?.lessons||0);
             return <Link key={subjectCode} href={'/student/learn?subjectCode='+subjectCode} className="app-task">
               <span className="task-icon">{subjectCode==='maths'?'∑':'⚗'}</span>
@@ -49,6 +49,6 @@ export default function StudentHome(){
         </div>
       </section>
     </div>
-    <nav className="mobile-nav"><Link className="side-active" href="/student">⌂<span><LocaleText hinglish="आज" english="Today" /></span></Link><Link href="/student/learn">▣<span>Padhai</span></Link><Link href="/student/practice">✦<span>Practice</span></Link><Link href="/student/progress">↗<span>प्रगति</span></Link></nav>
+    <nav className="mobile-nav"><Link className="side-active" href="/student">⌂<span><LocaleText hinglish="आज" english="Today" /></span></Link><Link href="/student/learn">▣<span><LocaleText hinglish="पढ़ाई" english="Learning" /></span></Link><Link href="/student/practice">✦<span><LocaleText hinglish="अभ्यास" english="Practice" /></span></Link><Link href="/student/progress">↗<span><LocaleText hinglish="प्रगति" english="Progress" /></span></Link></nav>
   </main>;
 }
