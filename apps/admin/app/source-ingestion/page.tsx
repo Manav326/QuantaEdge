@@ -68,6 +68,7 @@ export default function SourceIngestionPage() {
   const [registryBooks, setRegistryBooks] = useState<RegistryBook[]>([]);
   const [registryMedium, setRegistryMedium] = useState<'hindi' | 'english'>('hindi');
   const [selectedRegistryBook, setSelectedRegistryBook] = useState('');
+  const [confirmSubjectMapping, setConfirmSubjectMapping] = useState(false);
   const [existingMappings, setExistingMappings] = useState<ExistingMapping[]>([]);
   const [mappingError, setMappingError] = useState('');
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -242,12 +243,13 @@ export default function SourceIngestionPage() {
   async function startCachedBookJob() {
     if (!classCode || !subjectCode) { setError('Choose a curriculum class and subject first.'); return; }
     if (!selectedRegistryBookRow) { setError('No complete cached book is available for this class and medium.'); return; }
+    if (!confirmSubjectMapping) { setError('Confirm that this complete textbook belongs to the selected curriculum class and subject.'); return; }
     setBusy(true); setError(''); setNotice('');
     try {
       const created = normalizeJob(await api(
         '/api/v1/admin/source-ingestion/registry-books/' + encodeURIComponent(registryMedium)
           + '/' + encodeURIComponent(selectedRegistryBookRow.book_id) + '/jobs',
-        { method: 'POST', body: JSON.stringify({ classCode, subjectCode }) },
+        { method: 'POST', body: JSON.stringify({ classCode, subjectCode, confirmSubjectMapping }) },
       ));
       setJob(created);
       await loadBase();
@@ -492,13 +494,13 @@ export default function SourceIngestionPage() {
         </div>
         <div className={styles.fields}>
           <label>Medium
-            <select value={registryMedium} onChange={e => setRegistryMedium(e.target.value as 'hindi' | 'english')}>
+            <select value={registryMedium} onChange={e => { setRegistryMedium(e.target.value as 'hindi' | 'english'); setConfirmSubjectMapping(false); }}>
               <option value="hindi">Hindi</option>
               <option value="english">English</option>
             </select>
           </label>
           <label>Complete textbook for {activeTrack?.class_name || 'selected class'}
-            <select value={selectedRegistryBookRow?.book_id || ''} onChange={e => setSelectedRegistryBook(e.target.value)}
+            <select value={selectedRegistryBookRow?.book_id || ''} onChange={e => { setSelectedRegistryBook(e.target.value); setConfirmSubjectMapping(false); }}
               disabled={!registryBookOptions.length}>
               {registryBookOptions.length === 0 && <option value="">No cached books for this class/medium</option>}
               {registryBookOptions.map(book => <option key={book.book_id} value={book.book_id}>
@@ -512,6 +514,10 @@ export default function SourceIngestionPage() {
           <span>{selectedRegistryBookRow.publisher} · Class {(selectedRegistryBookRow.classes || [selectedRegistryBookRow.class]).join(', ')} · {selectedRegistryBookRow.subject || 'Subject unspecified'}</span>
           <span>{(Number(selectedRegistryBookRow.bytes || 0) / (1024 * 1024)).toFixed(1)} MiB · {selectedRegistryBookRow.page_count || 'Page count pending'} pages · {selectedRegistryBookRow.medium} medium</span>
           <code>{selectedRegistryBookRow.book_id} · SHA-256 {String(selectedRegistryBookRow.sha256 || '').slice(0, 16)}…</code>
+          <label className={styles.mappingConfirm}>
+            <input type="checkbox" checked={confirmSubjectMapping} onChange={e => setConfirmSubjectMapping(e.target.checked)} />
+            <span>I checked this book and confirm it belongs to {activeTrack?.class_name || classCode} · {subjects.find(t => t.subject_code === subjectCode)?.subject_name || subjectCode}.</span>
+          </label>
         </div> : <p className={styles.help}>
           {registryBooks.length === 0
             ? 'No GHCR cache index is mounted in this API environment yet. Sync both language images using scripts/quantaedge-textbook-sync.ps1 or scripts/quantaedge-textbook-sync.sh, then refresh this screen.'
@@ -520,7 +526,7 @@ export default function SourceIngestionPage() {
         <div className={styles.actions}>
           <p>The downloaded source must be a complete book. We do not fall back to individual NCERT chapter downloads. Page ranges and curriculum chapter assignments remain review decisions; approval creates private library drafts, not student-visible content.</p>
           <button className={styles.primary} type="button"
-            disabled={busy || !selectedRegistryBookRow || !subjectCode || !classCode}
+            disabled={busy || !selectedRegistryBookRow || !subjectCode || !classCode || !confirmSubjectMapping}
             onClick={() => void startCachedBookJob()}>
             {busy ? 'Working…' : 'Review complete cached book'}
           </button>
