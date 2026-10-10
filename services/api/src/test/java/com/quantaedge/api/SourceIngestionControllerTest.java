@@ -24,13 +24,14 @@ class SourceIngestionControllerTest {
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
   @Mock private SourceIngestionWorker worker;
+  @Mock private TextbookCacheService textbookCache;
 
   private SourceIngestionController controller;
   private final AuthContext reviewer = new AuthContext(1L, null, 9L, "CONTENT_REVIEWER", "Reviewer");
 
   @BeforeEach
   void setUp() {
-    controller = new SourceIngestionController(jdbc, authorization, staffAudit, worker);
+    controller = new SourceIngestionController(jdbc, authorization, staffAudit, worker, textbookCache);
   }
 
   @Test
