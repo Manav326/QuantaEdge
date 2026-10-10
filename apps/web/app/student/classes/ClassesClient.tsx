@@ -13,7 +13,7 @@ type LiveClass = {
 };
 type Recording = {
   recorded_class_id:number;title:string;description?:string;media_type:string;file_size_bytes:number;
-  duration_seconds?:number|null;subject_code:string;subject_name:string;class_code:string;
+  duration_seconds?:number|null;created_at?:string|null;subject_code:string;subject_name:string;class_code:string;
   chapter_id?:number|null;chapter_name?:string|null;session_id?:number|null;session_title?:string|null;
   session_starts_at?:string|null;last_position_seconds:number;watched_seconds:number;completed:boolean;
 };
