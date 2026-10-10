@@ -45,7 +45,7 @@ class LearningDocumentControllerTest {
         "file", "textbook.pdf", "application/pdf", "this is not a PDF".getBytes());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.uploadPdf(file, "Class book", null, author));
+        () -> controller.uploadPdf(file, "Class book", null, "ADMIN_UPLOAD", author));
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc, staffAudit);
