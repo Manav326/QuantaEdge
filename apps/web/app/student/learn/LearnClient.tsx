@@ -316,7 +316,8 @@ export default function LearnClient() {
         <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
       </div> : trackGroups.map(group=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
-          (item.chapter_code&&item.chapter_code===group.code)||(!item.chapter_code&&item.chapter_name?.trim().toLocaleLowerCase()===group.name.trim().toLocaleLowerCase())));
+          (Boolean(item.chapter_code)&&item.chapter_code===group.code)||
+          (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===group.name.trim().toLocaleLowerCase())));
         return <section className="concept-card" key={group.code}>
           <span className="concept-kicker"><LocaleText hinglish="Chapter" english="Chapter" /></span><h2>{group.name}</h2>
           {chapterDocuments.map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','This chapter’s PDF')}/>)}
@@ -339,7 +340,8 @@ export default function LearnClient() {
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
       {studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
-        (item.chapter_code&&item.chapter_code===lesson.chapter_code)||(!item.chapter_code&&item.chapter_name?.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
+        (Boolean(item.chapter_code)&&item.chapter_code===lesson.chapter_code)||
+        (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
       )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')}/>)}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lesson.questions.length).hinglish} english={learnerPathLabel(orderedBlocks,lesson.questions.length).english} /></span></div>
 
