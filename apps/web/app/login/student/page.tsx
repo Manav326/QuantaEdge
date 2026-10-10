@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
+import { LanguageSwitcher, LocaleText } from '../../components/LanguageProvider';
 
 async function readApi(response: Response): Promise<any> {
   const raw = await response.text();
