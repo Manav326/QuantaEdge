@@ -101,6 +101,17 @@ Add secure chapter/book resources, durable test attempts and results, teacher re
 - Only then deploy the migrations and service images to production.
 - Upload the actual supplied book/chapter PDFs and configure any conferencing/video provider credentials after the management UI and storage are available.
 
+## Implementation and rollout status
+
+The implementation is committed on `main` as forward-only migrations and the existing Next.js/Spring Boot applications; check the latest GitHub Actions run before tagging a release. CI success verifies the tested code and images, not a migration or a production deployment.
+
+- **Phase 1 — PDF resources:** V41 adds `learning_pdf_asset` and `learning_document`. Admin can select a registered PDF or upload one once; checksum-based de-duplication prevents a second binary copy. Student catalog and page-render endpoints check active enrollment and published scope. Original PDFs are stored as PostgreSQL `bytea`, with rendered pages delivered privately as PNG images.
+- **Phase 2 — assessments:** V42 persists assessments, frozen question snapshots, attempts, answers, grading state, released results, grader assignments, and test-level audit. The audit table intentionally holds no per-question events.
+- **Phase 3 — classes:** V43 persists live-session scheduling, private join URLs, recorded-class metadata, attendance clocks, and recorded playback progress. Recorded media files live under `APP_MEDIA_STORAGE_DIR` (default `/var/lib/quantaedge/media`) on the named `quantaedge_media` Compose volume and are streamed with access checks and HTTP byte ranges.
+- **Runtime upload limits:** `APP_MAX_UPLOAD_SIZE` defaults to `500MB`; `APP_MAX_REQUEST_SIZE` defaults to `512MB`. Textbook PDFs are separately limited by the API to 50 MB and 2,000 pages. Keep the media volume persistent, backed up, and mounted when recreating the API container.
+- **Extracted source PDFs:** the source extraction JSON includes filename, SHA-256, page count and page text, but not the PDF bytes themselves. Use `scripts/import_existing_textbook_pdfs.py` with the unchanged original PDFs to register them in the library; the script is dry-run by default. If the deployed database has a separate legacy table that actually stores PDF bytes, a schema-specific backfill must be run against that table before expecting those items in the dropdown. Do not treat extracted text or a hash as the PDF file.
+- **Before production rollout:** back up PostgreSQL and the private-media volume; deploy the Flyway migrations; run the source-PDF import dry-run and apply only after checking checksum matches; assign `CLASS_MANAGE` to any staff who schedule classes or upload recordings; add real meeting links and uploaded recordings; smoke-test a student outside the enrolled class/subject (must be denied) and one enrolled student (must pass); verify backup and restore for both database bytes and media files. No production migration/deployment is implied by the code changes alone.
+
 ## Definition of done
 
 - Every feature is committed directly to main as requested; no task-specific feature branch is created.
