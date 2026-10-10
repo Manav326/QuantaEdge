@@ -35,12 +35,22 @@ public class SourcePdfDownloadService {
       .connectTimeout(Duration.ofSeconds(12))
       .followRedirects(HttpClient.Redirect.NEVER)
       .build();
-  private final Path textbookCacheRoot = Path.of(
-      System.getenv().getOrDefault("APP_TEXTBOOK_CACHE_DIR", "/var/lib/quantaedge/textbook-cache"))
-      .toAbsolutePath().normalize();
-  private final boolean textbookCacheOnly = Boolean.parseBoolean(
-      System.getenv().getOrDefault("APP_TEXTBOOK_CACHE_ONLY", "false"));
-  private final ObjectMapper cacheMapper = new ObjectMapper();
+  private final Path textbookCacheRoot;
+  private final boolean textbookCacheOnly;
+  private final ObjectMapper cacheMapper;
+
+  public SourcePdfDownloadService() {
+    this(Path.of(System.getenv().getOrDefault(
+        "APP_TEXTBOOK_CACHE_DIR", "/var/lib/quantaedge/textbook-cache")),
+        Boolean.parseBoolean(System.getenv().getOrDefault("APP_TEXTBOOK_CACHE_ONLY", "false")),
+        new ObjectMapper());
+  }
+
+  SourcePdfDownloadService(Path textbookCacheRoot, boolean textbookCacheOnly, ObjectMapper cacheMapper) {
+    this.textbookCacheRoot = textbookCacheRoot.toAbsolutePath().normalize();
+    this.textbookCacheOnly = textbookCacheOnly;
+    this.cacheMapper = cacheMapper;
+  }
 
   public DownloadedPdf download(String sourceUrl, String sourceTitle) {
     DownloadedPdf cached = findCachedTextbook(sourceUrl, sourceTitle);
@@ -137,6 +147,10 @@ public class SourcePdfDownloadService {
           throw new IllegalArgumentException("Could not read cached textbook " + title + ".", ex);
         }
         String expectedHash = valueOrEmpty(item.get("sha256")).toLowerCase(Locale.ROOT);
+        if (bytes.length < 5 || bytes[0] != '%' || bytes[1] != 'P' || bytes[2] != 'D'
+            || bytes[3] != 'F' || bytes[4] != '-') {
+          throw new IllegalArgumentException("Cached source for " + title + " is not a PDF.");
+        }
         if (expectedHash.isBlank() || !expectedHash.equals(sha256(bytes))) {
           throw new IllegalArgumentException("Cached textbook checksum mismatch for " + title
               + ". Re-sync the corresponding GHCR language image before retrying.");
