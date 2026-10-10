@@ -63,7 +63,10 @@ export default function PracticePage(){
         const catalogBody=await catalogResponse.json();
         if(!catalogResponse.ok)throw new Error(catalogBody.detail||catalogBody.message||'Unable to load practice topics.');
         if(!active)return;
-        setCatalog(Array.isArray(catalogBody)?catalogBody:[]);
+        const catalogTopics:PracticeTopic[]=Array.isArray(catalogBody)?catalogBody:[];
+        setCatalog(catalogTopics);
+        const foundTypes=Array.from(new Set(catalogTopics.flatMap(topic=>parse<string[]>(topic.question_types)||[]))).filter(type=>TYPE_LABELS[type]);
+        if(foundTypes.length)setQuestionTypes([foundTypes.includes('MCQ')?'MCQ':foundTypes[0]]);
         const sessionParam=new URLSearchParams(window.location.search).get('sessionId');
         if(sessionParam&&/^\d+$/.test(sessionParam)){
           const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionParam,{cache:'no-store'});
