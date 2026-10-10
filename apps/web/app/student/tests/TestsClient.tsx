@@ -51,10 +51,12 @@ export default function TestsClient(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [subjectFilter,setSubjectFilter]=useState('ALL');
-  const [pendingSave,setPendingSave]=useState<{questionId:number;value:any}|null>(null);
+  const [dirtyAnswers,setDirtyAnswers]=useState<Record<number,any>>({});
   const [showSubmit,setShowSubmit]=useState(false);
   const attemptRef=useRef<Attempt|null>(null);
   const responsesRef=useRef<Record<number,any>>({});
+  const dirtyRef=useRef<Record<number,any>>({});
+  const saveQueueRef=useRef<Promise<void>>(Promise.resolve());
   const submitFnRef=useRef<(automatic?:boolean)=>Promise<void>>(async()=>{});
   const autoSubmitted=useRef(false);
 
@@ -89,33 +91,44 @@ export default function TestsClient(){
   }
   function updateResponse(question:AttemptQuestion,value:any){
     setResponses(old=>({...old,[question.attemptQuestionId]:value}));
-    setPendingSave({questionId:question.attemptQuestionId,value});
+    const next={...dirtyRef.current,[question.attemptQuestionId]:value};
+    dirtyRef.current=next;
+    setDirtyAnswers(next);
     setNotice('');
   }
 
-  async function saveAnswer(questionId:number,value:any,quiet=false){
+  const saveAnswersBatch=useCallback(async(entries:Array<[string|number,any]>)=>{
     const currentAttempt=attemptRef.current;
-    if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS')return;
-    if(!quiet)setSaving(true);
-    try{
-      await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/answers/'+questionId,{
-        method:'PUT',body:JSON.stringify({answer:value})
+    if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS'||entries.length===0)return;
+    setSaving(true);
+    const run=saveQueueRef.current.then(async()=>{
+      await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/answers',{
+        method:'PUT',
+        body:JSON.stringify({answers:entries.map(([attemptQuestionId,answer])=>({attemptQuestionId:Number(attemptQuestionId),answer}))})
       });
-      if(!quiet)setNotice('Answer saved.');
-    }catch(e:any){
-      if(!quiet)setError(e instanceof Error?e.message:'Answer could not be saved.');
-      throw e;
-    }finally{if(!quiet)setSaving(false);}
-  }
+    });
+    saveQueueRef.current=run.catch(()=>undefined);
+    try{await run;}finally{setSaving(false);}
+  },[]);
 
   useEffect(()=>{
-    if(!pendingSave||!attempt||attempt.status!=='IN_PROGRESS')return;
-    const item=pendingSave;
-    const timer=window.setTimeout(()=>{
-      void saveAnswer(item.questionId,item.value,true).catch(()=>setNotice('Could not save the latest edit. Try again before submitting.'));
+    if(!Object.keys(dirtyAnswers).length||!attempt||attempt.status!=='IN_PROGRESS')return;
+    const snapshot=Object.entries(dirtyAnswers);
+    const timer=window.setTimeout(async()=>{
+      try{
+        await saveAnswersBatch(snapshot);
+        const remaining={...dirtyRef.current};
+        for(const [key,value] of snapshot){
+          if(Object.prototype.hasOwnProperty.call(remaining,key)&&JSON.stringify(remaining[key])===JSON.stringify(value))delete remaining[key];
+        }
+        dirtyRef.current=remaining;
+        setDirtyAnswers(remaining);
+      }catch{
+        setNotice('Could not save the latest edit. It will be retried when you submit the test.');
+      }
     },550);
     return()=>window.clearTimeout(timer);
-  },[pendingSave,attempt?.attempt_id,attempt?.status]);
+  },[dirtyAnswers,attempt?.attempt_id,attempt?.status,saveAnswersBatch]);
 
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
@@ -123,7 +136,7 @@ export default function TestsClient(){
       const data=await api('/api/v1/learning/assessments/'+testId+'/attempts',{method:'POST'});
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
-      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;setIndex(0);setTab('tests');
+      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');
       if(data.status==='IN_PROGRESS')setNotice('Your attempt is saved. Answers save automatically; you can return and resume until the deadline.');
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not start this test.');}
     finally{setBusy(false);}
@@ -135,26 +148,29 @@ export default function TestsClient(){
       const data=await api('/api/v1/learning/assessment-attempts/'+attemptId);
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
-      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;setIndex(0);setTab('results');
+      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not open this result.');}
     finally{setBusy(false);}
   }
 
-  async function flushSavedAnswers(){
+  const flushSavedAnswers=useCallback(async()=>{
     const currentAttempt=attemptRef.current;
     if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS')return;
-    const values=responsesRef.current;
-    const items=currentAttempt.questions.filter(q=>Object.prototype.hasOwnProperty.call(values,q.attemptQuestionId));
-    await Promise.all(items.map(q=>saveAnswer(q.attemptQuestionId,values[q.attemptQuestionId],true)));
-    setPendingSave(null);
-  }
+    const entries=Object.entries(dirtyRef.current);
+    if(entries.length)await saveAnswersBatch(entries);
+    dirtyRef.current={};setDirtyAnswers({});
+  },[saveAnswersBatch]);
 
   const submitTest=useCallback(async(automatic=false)=>{
     const currentAttempt=attemptRef.current;
     if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS'||autoSubmitted.current)return;
     autoSubmitted.current=true;setBusy(true);setError('');setNotice('');
     try{
-      await flushSavedAnswers();
+      try{await flushSavedAnswers();}
+      catch(e){
+        if(!automatic)throw e;
+        setNotice('Time expired. The test is being finalized with the answers already saved.');
+      }
       const data=await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/submit',{method:'POST'});
       setAttempt(data);attemptRef.current=data;setShowSubmit(false);
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Written answers are waiting for teacher review; your result will appear here after release.');
@@ -163,7 +179,7 @@ export default function TestsClient(){
       autoSubmitted.current=false;
       setError(e instanceof Error?e.message:'Could not submit your test. Saved answers are still preserved.');
     }finally{setBusy(false);}
-  },[loadOverview]);
+  },[loadOverview,flushSavedAnswers]);
   useEffect(()=>{submitFnRef.current=submitTest;},[submitTest]);
 
   useEffect(()=>{
@@ -178,7 +194,7 @@ export default function TestsClient(){
   },[attempt?.attempt_id,attempt?.deadline_at,attempt?.status]);
 
   function closeAttempt(){
-    setAttempt(null);setResponses({});setIndex(0);setShowSubmit(false);setPendingSave(null);setError('');setNotice('');autoSubmitted.current=false;
+    setAttempt(null);setResponses({});responsesRef.current={};dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
     void loadOverview();
   }
 
@@ -214,7 +230,7 @@ export default function TestsClient(){
           <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>QUESTION {index+1} OF {attempt.questions.length}</span><b>{current.maxMarks} mark(s)</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><h2>{current.prompt}</h2>{current.options?.length>0&&<div className={styles.options}>{current.options.map(o=><label key={o.key} className={[styles.option,answerText(currentResponse)===o.key?styles.optionSelected:''].join(' ')}><input type="radio" name={'question-'+current.attemptQuestionId} value={o.key} checked={answerText(currentResponse)===o.key} disabled={submitted} onChange={()=>updateResponse(current,o.key)}/><span className={styles.optionKey}>{o.key}</span><span>{o.label}</span></label>)}</div>}
             {(!current.options||current.options.length===0)&&<label className={styles.answerField}><span>{current.question_type==='NUMERICAL'?'Your numerical answer':'Your answer'}</span>{current.question_type==='INPUT'||current.question_type==='NUMERICAL'?<input value={answerText(currentResponse)} disabled={submitted} type={current.question_type==='NUMERICAL'?'number':'text'} onChange={e=>updateResponse(current,e.target.value)} placeholder="Type your answer here…"/>:<textarea value={answerText(currentResponse)} disabled={submitted} rows={6} onChange={e=>updateResponse(current,e.target.value)} placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(current.question_type)?'Write your answer or reasoning clearly…':'Enter your answer here…'}/>}<small>{['SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(current.question_type)?'This answer will be saved and checked by your teacher.':''}</small></label>}
             {released&&<div className={styles.answerFeedback}><b>{current.isCorrect===true?'✓ Correct':current.isCorrect===false?'Review this answer':'Teacher checked'}</b><span>Marks: {current.awardedMarks??0} / {current.maxMarks}</span>{current.teacherFeedback&&<p>{current.teacherFeedback}</p>}{current.explanation&&<p>{current.explanation}</p>}</div>}
-            <div className={styles.questionFooter}><span>{saving?'Saving…':pendingSave?'Save pending':'✓ Saved answers are preserved'}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← Previous</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>Next question →</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>Review & submit</button>:null}</div></div>
+            <div className={styles.questionFooter}><span>{saving?'Saving…':Object.keys(dirtyAnswers).length?'Save pending':'✓ Saved answers are preserved'}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← Previous</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>Next question →</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>Review & submit</button>:null}</div></div>
           </section>
         </div>}
         {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>FINAL CHECK</span><h2>Submit this test?</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>Keep working</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?'Submitting…':'Submit test'}</button></div></section></div>}
