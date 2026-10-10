@@ -187,8 +187,17 @@ export default function LearnClient() {
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
   const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
-  const learningBlocks=useMemo(()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),[orderedBlocks]);
-  const recapBlocks=useMemo(()=>orderedBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),[orderedBlocks]);
+  // Keep every authored block in sequence. The assessment is inserted immediately before
+  // the first recap block, while blocks on either side retain their authored relative order.
+  const firstRecapIndex=useMemo(
+    ()=>orderedBlocks.findIndex(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),
+    [orderedBlocks]);
+  const learningBlocks=useMemo(
+    ()=>firstRecapIndex<0?orderedBlocks:orderedBlocks.slice(0,firstRecapIndex),
+    [orderedBlocks,firstRecapIndex]);
+  const blocksAfterPractice=useMemo(
+    ()=>firstRecapIndex<0?[]:orderedBlocks.slice(firstRecapIndex),
+    [orderedBlocks,firstRecapIndex]);
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
     const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
@@ -310,7 +319,7 @@ export default function LearnClient() {
       <div className="content-heading"><h2><LocaleText hinglish="इस lesson के questions" english="Questions for this lesson" /></h2><span>{lesson.questions.length} questions</span></div>
       {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
 
-      {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+      {blocksAfterPractice.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
