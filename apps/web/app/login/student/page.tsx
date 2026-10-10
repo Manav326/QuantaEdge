@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
-import { LanguageSwitcher, LocaleText } from '../../components/LanguageProvider';
+import { LanguageSwitcher, LocaleText, useLocale } from '../../components/LanguageProvider';
 
 async function readApi(response: Response): Promise<any> {
   const raw = await response.text();
@@ -15,6 +15,8 @@ async function readApi(response: Response): Promise<any> {
 
 export default function StudentLoginPage() {
   const router = useRouter();
+  const { locale } = useLocale();
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [parentMobile, setParentMobile] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -48,13 +50,13 @@ export default function StudentLoginPage() {
         {error && <div className="auth-message is-error" role="alert">{error}</div>}
         <form className="auth-form" onSubmit={submit}>
           <label><LocaleText hinglish="Parent का registered mobile number" english="Parent’s registered mobile number" />
-            <input value={parentMobile} onChange={e => setParentMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit parent mobile" inputMode="numeric" autoComplete="tel" required />
+            <input value={parentMobile} onChange={e => setParentMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={tx('Parent का 10 अंकों का mobile number', '10-digit parent mobile number')} inputMode="numeric" autoComplete="tel" required />
           </label>
           <label><LocaleText hinglish="आपका username" english="Your username" />
-            <input value={username} onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 32))} placeholder="Enter your username" autoComplete="username" required />
+            <input value={username} onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g, '').slice(0, 32))} placeholder={tx('अपना username डालें', 'Enter your username')} autoComplete="username" required />
           </label>
           <label><LocaleText hinglish="आपका password" english="Your password" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Apna password daalein" autoComplete="current-password" required />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('अपना password डालें', 'Enter your password')} autoComplete="current-password" required />
           </label>
           <button type="submit" className="button button-dark full" disabled={busy || parentMobile.length !== 10 || username.length < 3 || !password}>{busy ? <LocaleText hinglish="आपकी learning space खुल रही है…" english="Opening your learning space…" /> : <LocaleText hinglish="Student sign in करें →" english="Sign in as student →" />}</button>
         </form>
