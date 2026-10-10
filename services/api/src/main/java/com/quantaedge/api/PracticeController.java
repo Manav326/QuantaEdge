@@ -99,13 +99,14 @@ public class PracticeController {
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       where q.active=true and q.review_status in ('APPROVED','PUBLISHED')
-        and q.question_type in ("""+typePlaceholders+""")
+        and q.question_type in (__TYPE_PLACEHOLDERS__)
         and exists(select 1 from student_track_enrollment ste
                    where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
-        and ("""+topicFilter+""")
+        and (__TOPIC_FILTER__)
       order by random()
       limit ?
-      """;
+      """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders)
+         .replace("__TOPIC_FILTER__",topicFilter.toString());
     List<Long> selectedIds=jdbc.queryForList(sql,Long.class,args.toArray());
     if(selectedIds.isEmpty()) {
       throw badRequest("No approved questions match the selected topics and question types. Choose additional topics or question types.");
