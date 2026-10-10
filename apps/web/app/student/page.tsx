@@ -1,22 +1,58 @@
 'use client';
 
 import { LocaleText } from '../components/LanguageProvider';
-
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import StudentAccountMenu from '../components/StudentAccountMenu';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
+type StudentTextbook = {
+  document_id: number;
+  scope: 'SUBJECT_BOOK' | 'CHAPTER_PDF';
+  title: string;
+  page_count: number;
+  class_code: string;
+  subject_code: string;
+  subject_name: string;
+  chapter_code?: string | null;
+  chapter_name?: string | null;
+};
+
 export default function StudentHome(){
   const router=useRouter();
-  const [data,setData]=useState<any>(null); const [rec,setRec]=useState<any>(null); const [error,setError]=useState('');
+  const [data,setData]=useState<any>(null);
+  const [rec,setRec]=useState<any>(null);
+  const [error,setError]=useState('');
+  const [textbookDocuments,setTextbookDocuments]=useState<StudentTextbook[]>([]);
+  const [textbooksLoading,setTextbooksLoading]=useState(true);
+  const [textbooksError,setTextbooksError]=useState('');
+
   useEffect(()=>{(async()=>{try{
     const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login/student');return}
     const b=await r.json(); if(!r.ok) throw new Error(b.message||'Unable to load student');
     setData(b);
     const rr=await fetch('/api/v1/recommendations/next'); if(rr.ok) setRec(await rr.json());
   }catch(e:any){setError(e.message||'Student data unavailable')}})()},[router]);
+
+  useEffect(()=>{
+    let active=true;
+    (async()=>{
+      try {
+        const response=await fetch('/api/v1/learning/documents',{credentials:'same-origin',cache:'no-store'});
+        if(response.status===401||response.status===403){router.replace('/login/student');return}
+        const body=await response.json();
+        if(!response.ok) throw new Error(body.detail||body.message||body.error||'Textbooks could not be loaded.');
+        if(active) setTextbookDocuments(Array.isArray(body)?body:[]);
+      } catch(e:any) {
+        if(active) setTextbooksError(e.message||'Textbooks could not be loaded.');
+      } finally {
+        if(active) setTextbooksLoading(false);
+      }
+    })();
+    return ()=>{active=false};
+  },[router]);
+
   if(error)return <main className="app-shell"><section className="app-content"><div className="auth-card"><h1><LocaleText hinglish="Student उपलब्ध नहीं है" english="Student unavailable" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><LocaleText hinglish="Login करें" english="Log in" /></Link></div></section></main>;
   if(!data)return <main className="app-shell"><section className="app-content"><div className="eyebrow"><LocaleText hinglish="Learning profile load हो रही है…" english="Loading learning profile…" /></div></section></main>;
   const stats=data.lessonStats,q=data.questionStats;
@@ -40,6 +76,25 @@ export default function StudentHome(){
             </Link>;
           })}
         </div>
+
+        <div className="content-heading"><h2><LocaleText hinglish="किताबें और chapter PDFs" english="Textbooks & chapter PDFs" /></h2><span>{textbooksLoading?'…':textbookDocuments.length+' available'}</span></div>
+        <div className="task-list textbook-dashboard-list" aria-live="polite">
+          {textbooksLoading ? <div className="app-task"><span className="task-icon">▤</span><div><strong>Loading your textbooks…</strong><small>Checking books published for your class and enrolled subjects.</small></div></div>
+            : textbooksError ? <div className="app-task"><span className="task-icon">!</span><div><strong>Textbooks could not be loaded</strong><small>{textbooksError}</small></div><Link className="task-action" href="/student/textbooks">Retry →</Link></div>
+            : textbookDocuments.length===0 ? <div className="app-task"><span className="task-icon">▤</span><div><strong>No books or chapter PDFs published for you yet</strong><small>They will appear here after an admin approves the PDF, attaches it to your class and subject, and publishes it. Your subject enrollment must also be active.</small></div><Link className="task-action" href="/student/textbooks">Open library →</Link></div>
+            : <>
+              {textbookDocuments.slice(0,4).map((item)=>{
+                const isBook=item.scope==='SUBJECT_BOOK';
+                return <Link key={item.document_id} href={'/student/textbooks?documentId='+item.document_id} className="app-task">
+                  <span className="task-icon">{isBook?'▤':'▧'}</span>
+                  <div><strong>{item.title}</strong><small>{item.subject_name}{item.chapter_name?' · '+item.chapter_name:''} · {item.page_count} pages</small><small>{isBook?'Complete subject book':('Chapter PDF'+(item.chapter_code?' · '+item.chapter_code:''))} · Read online</small></div>
+                  <span className="task-action">→</span>
+                </Link>;
+              })}
+              <Link href="/student/textbooks" className="app-task"><span className="task-icon">＋</span><div><strong>Open textbook library</strong><small>View all {textbookDocuments.length} published book and chapter PDF{textbookDocuments.length===1?'':'s'}.</small></div><span className="task-action">→</span></Link>
+            </>}
+        </div>
+
         <div className="content-heading"><h2><LocaleText hinglish="आज क्या करें?" english="What should you do today?" /></h2><span><LocaleText hinglish="mastery-driven" english="mastery-driven" /></span></div>
         <div className="task-list">
           {rec?.kind==='DIAGNOSTIC' ? <Link href="/student/diagnostic" className="app-task next"><span className="task-icon">◎</span><div><strong><LocaleText hinglish="पहला learning diagnostic" english="First learning diagnostic" /></strong><small><LocaleText hinglish="छोटा assessment → आपकी शुरुआती recommendation" english="A short assessment → your starting recommendation" /></small></div><span className="task-action">→</span></Link> : rec?.lesson ? <Link href={'/student/learn?lessonId='+rec.lesson.id} className="app-task next"><span className="task-icon">◎</span><div><strong>{rec.lesson.title}</strong><small><LocaleText hinglish="आपकी progress और mastery के आधार पर recommended lesson" english="Recommended based on your progress and mastery" /></small></div><span className="task-action">→</span></Link> : rec?.available===false ? <div className="app-task next complete"><span className="task-icon">✓</span><div><strong><LocaleText hinglish="आपने पूरा curriculum complete कर लिया 🎉" english="You’ve completed the curriculum 🎉" /></strong><small><LocaleText hinglish="अब आप practice दोहरा सकते हैं या अपनी mastery देख सकते हैं।" english="You can repeat practice or review your mastery now." /></small></div></div> : null}
