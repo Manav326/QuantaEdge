@@ -139,7 +139,7 @@ jobs:
           "${args[@]}"
 
       - name: Pull selected class images and create optional browser-download ZIPs
-        if: always() && inputs.download_artifacts == true
+        if: always() && (github.event_name == 'push' || inputs.download_artifacts == true)
         shell: bash
         env:
           INPUT_LANGUAGE: ${{ inputs.language }}
@@ -190,7 +190,7 @@ jobs:
           if [ "$failures" -ne 0 ]; then exit 1; fi
 
       - name: Upload direct book downloads and inventories
-        if: always() && inputs.download_artifacts == true
+        if: always() && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-downloads-${{ github.run_number }}
