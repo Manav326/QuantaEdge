@@ -549,7 +549,7 @@ export default function SourceIngestionPage() {
       <section className={styles.panel}>
         <div className={styles.heading}>
           <div><span>SOURCE AVAILABILITY</span><h2>Unavailable books and missing chapters</h2>
-            <p>This inventory is read-only. It lists rejected/incomplete source bundles and failed downloads so content gaps can be planned. These rows are not eligible for ingestion as complete textbooks.</p>
+            <p>This inventory is read-only. Chapter numbers detected in rejected/incomplete official bundles are for planning only; those partial bundles are not cached or available to students. These rows cannot be ingested as complete textbooks.</p>
           </div>
           <span className={styles.bigStatus}>{registryBookGapRows.length} gaps</span>
         </div>
@@ -562,8 +562,8 @@ export default function SourceIngestionPage() {
                   <span className={styles.gapBadge}>{gap.status.replaceAll('_', ' ').toUpperCase()}</span>
                 </div>
                 <div className={styles.gapCoverage}>
-                  <span><b>Available chapters:</b> {gap.available_chapters?.length ? gap.available_chapters.join(', ') : 'None verified'}</span>
-                  <span><b>Missing chapters:</b> {gap.missing_chapters?.length ? gap.missing_chapters.join(', ') : 'Not determined by source'}</span>
+                  <span><b>Chapters detected in rejected bundle (not cached):</b> {gap.available_chapters?.length ? gap.available_chapters.join(', ') : 'None verified'}</span>
+                  <span><b>Missing chapter numbers:</b> {gap.missing_chapters?.length ? gap.missing_chapters.join(', ') : 'Not determined by source'}</span>
                   {gap.expected_chapters?.length ? <span><b>Expected chapters:</b> {gap.expected_chapters.join(', ')}</span> : null}
                 </div>
                 {gap.note && <p>{gap.note}</p>}
