@@ -370,11 +370,6 @@ def sha256_file(path: Path) -> str:
 
 def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
     """Download and validate a complete NCERT book bundle. No chapter fallback."""
-    try:
-        import fitz
-    except ImportError as exc:
-        raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
-
     code = str(book["code"])
     expected_chapters = int(book.get("chapter_count") or 0)
     errors: list[str] = []
@@ -426,6 +421,11 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                 "Could not retrieve one complete NCERT book bundle; no individual-chapter fallback was attempted. "
                 + " | ".join(errors)
             )
+
+        try:
+            import fitz
+        except ImportError as exc:
+            raise RuntimeError("Missing PyMuPDF: install with python -m pip install pymupdf.") from exc
 
         merged = fitz.open()
         toc: list[list[Any]] = []
