@@ -398,8 +398,11 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                     break
             except FileNotFoundError:
                 continue
-            except (zipfile.BadZipFile, RuntimeError) as exc:
-                log("NCERT bundle unavailable at " + bundle_url + ": " + str(exc))
+            except (zipfile.BadZipFile, RuntimeError, ValueError) as exc:
+                # An oversized ZIP or transient official-host failure should
+                # fall back to bounded individual chapter PDFs, not discard a book.
+                log("NCERT bundle unavailable at " + bundle_url + "; falling back to chapters if needed: " + str(exc))
+                bundle.unlink(missing_ok=True)
         if not bundle_ok:
             members = []
         destination.parent.mkdir(parents=True, exist_ok=True)
