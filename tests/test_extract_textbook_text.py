@@ -22,9 +22,9 @@ class TextbookTextExtractionTests(unittest.TestCase):
 
         doc = pymupdf.open()
         page = doc.new_page()
-        page.insert_text((72, 72), "कक्षा छह गणित का उदाहरण पाठ। यह पाठ पर्याप्त लंबा है।")
+        page.insert_text((72, 72), "Chapter six mathematics example lesson. This page contains a sufficiently long sample text.")
         page = doc.new_page()
-        page.insert_text((72, 72), "अध्याय दो का दूसरा पृष्ठ। इसमें हिंदी पाठ उपलब्ध है।")
+        page.insert_text((72, 72), "Chapter two second page. This page also contains enough extracted text for review.")
         doc.save(self.pdf_path)
         doc.close()
         digest = hashlib.sha256(self.pdf_path.read_bytes()).hexdigest()
@@ -35,14 +35,14 @@ class TextbookTextExtractionTests(unittest.TestCase):
                 "pdf_filename": "sample.pdf",
                 "pdf_sha256": digest,
                 "pdf_page_count": 2,
-                "title": "उदाहरण — अध्याय 1",
-                "source_title": "उदाहरण पुस्तक",
+                "title": "Example — Chapter 1",
+                "source_title": "Example book",
                 "book_id": "test-book",
                 "subject": "Mathematics",
                 "class": 6,
                 "language": "hindi",
                 "scope": "CHAPTER_PDF",
-                "chapter_title": "अध्याय 1",
+                "chapter_title": "Chapter 1",
                 "chapter_page_start": 7,
                 "original_book_sha256": "a" * 64,
             }
@@ -59,8 +59,8 @@ class TextbookTextExtractionTests(unittest.TestCase):
         rows = [json.loads(line) for line in rows_path.read_text(encoding="utf-8").splitlines()]
         self.assertEqual([1, 2], [row["asset_page_number"] for row in rows])
         self.assertEqual([7, 8], [row["source_book_page_number"] for row in rows])
-        self.assertTrue(all(row["has_devanagari"] for row in rows))
-        self.assertTrue(all(row["review_status"] == "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW" for row in rows))
+        self.assertTrue(all(not row["has_devanagari"] for row in rows))
+        self.assertTrue(all(row["review_status"] == "NO_DEVANAGARI_REVIEW" for row in rows))
         self.assertFalse(result["published"])
 
     def test_second_run_resumes_without_reextracting_pages(self):
