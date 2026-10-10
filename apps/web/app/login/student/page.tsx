@@ -31,10 +31,10 @@ export default function StudentLoginPage() {
         body: JSON.stringify({ parentMobile: parentMobile.trim(), username: username.trim(), password }),
       });
       const body = await readApi(response);
-      if (!response.ok) throw new Error(body.message || 'Login details did not match. Check with your parent and try again.');
+      if (!response.ok) throw new Error(body.message || tx('Login details match नहीं हुईं। Parent से check करके दोबारा प्रयास करें।','Login details did not match. Check with your parent and try again.'));
       router.replace('/student'); router.refresh();
     } catch (e: any) {
-      setError(e?.message || 'Unable to sign in. Please try again.');
+      setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
     } finally { setBusy(false); }
   }
 
