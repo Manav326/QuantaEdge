@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -93,6 +94,7 @@ public class LearningController {
   }
 
   @PostMapping("/questions/{questionId}/answer")
+  @Transactional
   public Map<String,Object> answer(@PathVariable long questionId,
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
@@ -102,13 +104,15 @@ public class LearningController {
     if(sessionValue!=null) {
       try { practiceSessionId=Long.valueOf(String.valueOf(sessionValue)); }
       catch(NumberFormatException ex) { throw new IllegalArgumentException("Practice session is invalid."); }
-      Long membership=jdbc.queryForObject("""
-        select count(*) from student_practice_session_question psq
+      List<Map<String,Object>> membership=jdbc.queryForList("""
+        select psq.question_id
+        from student_practice_session_question psq
         join student_practice_session ps on ps.id=psq.practice_session_id
         where ps.id=? and ps.student_id=? and psq.question_id=?
           and ps.status='IN_PROGRESS' and psq.answered_at is null
-        """,Long.class,practiceSessionId,context.studentId(),questionId);
-      if(membership==null||membership==0)throw new SecurityException("Question is not part of this practice session.");
+        for update of psq,ps
+        """,practiceSessionId,context.studentId(),questionId);
+      if(membership.isEmpty())throw new SecurityException("Question is not part of this active practice session or was already answered.");
     }
     var rows=jdbc.queryForList("""
       select q.id,q.lesson_id,q.question_type,q.explanation,q.answer_payload::text as answer_payload
@@ -121,7 +125,8 @@ public class LearningController {
     var q=rows.getFirst();
     long lessonId=((Number)q.get("lesson_id")).longValue();
     ensureStudentLessonAccess(context.studentId(),lessonId);
-    Object submittedObject=body.getOrDefault("answer","");
+    Object submittedObject=body.get("answer");
+    if(submittedObject==null)submittedObject="";
     String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : submittedObject.toString();
     String payload=String.valueOf(q.get("answer_payload"));
     QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
