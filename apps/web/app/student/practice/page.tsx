@@ -151,8 +151,6 @@ export default function PracticePage(){
   }
 
   if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="Topics load हो रहे हैं…" english="Loading practice topics…" /></div></section></main>;
-  if(error&&!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><LocaleText hinglish="Practice load नहीं हो पाई" english="Unable to load practice" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home" english="← Student home" /></Link><button type="button" className="button" onClick={()=>{setError('');setLoading(true);window.location.reload()}}>Try again</button></div></section></main>;
-
   if(!questions.length)return <main className="practice-page">
     <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice setup</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
