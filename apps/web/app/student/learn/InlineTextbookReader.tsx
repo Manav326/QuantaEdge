@@ -64,7 +64,7 @@ export default function InlineTextbookReader({
         justifyContent: 'space-between',
         gap: 12,
         padding: '13px 15px',
-        borderBottom: expanded ? '1px solid #edf0f4' : 0,
+        borderBottom: expanded ? '1px solid #edf0f4' : 'none',
         background: '#fffaf6',
       }}>
         <div style={{ minWidth: 0 }}>
