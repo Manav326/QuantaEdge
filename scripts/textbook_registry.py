@@ -7,12 +7,12 @@ unresolved books for at most five rounds. No arbitrary binary size limit is impo
 """
 from __future__ import annotations
 
-import argparse, copy, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile
+import argparse, copy, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile, tarfile
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import urllib.error, urllib.parse, urllib.request, zipfile
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any
 
 NCERT = "https://ncert.nic.in"
@@ -499,6 +499,181 @@ def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, in
     return sha256_file(destination), pages, toc, "Official SCERT Bihar PDF download"
 
 
+
+
+CACHE_COMPACT_LAYER_THRESHOLD = 90
+
+
+def _ensure_skopeo() -> str:
+    """Install the registry-copy utility only when an over-deep image needs recovery."""
+    executable = shutil.which("skopeo")
+    if executable:
+        return executable
+    if os.name != "nt" and shutil.which("apt-get"):
+        prefix = []
+        if hasattr(os, "geteuid") and os.geteuid() != 0:
+            if not shutil.which("sudo"):
+                raise RuntimeError("The textbook image is too deep for Docker; install skopeo to recover it.")
+            prefix = ["sudo"]
+        log("CACHE_RECOVERY installing skopeo to recover the existing image without Docker layer unpacking")
+        subprocess.run(prefix + ["apt-get", "update"], check=True)
+        subprocess.run(prefix + ["apt-get", "install", "-y", "skopeo"], check=True)
+        executable = shutil.which("skopeo")
+    if not executable:
+        raise RuntimeError(
+            "The textbook image exceeded Docker's layer-depth limit. "
+            "Install skopeo, then rerun to recover and flatten the existing GHCR image."
+        )
+    return executable
+
+
+def _oci_blob_path(layout: Path, digest: str) -> Path:
+    if not re.fullmatch(r"sha256:[0-9a-f]{64}", str(digest)):
+        raise ValueError("OCI cache image contains an unsupported blob digest.")
+    algorithm, value = digest.split(":", 1)
+    path = layout / "blobs" / algorithm / value
+    if not path.is_file():
+        raise ValueError("OCI cache recovery is missing blob " + digest + ".")
+    return path
+
+
+def _cache_layer_path(rootfs: Path, parts: tuple[str, ...]) -> Path | None:
+    """Allow only the cache index and book files from the upstream image rootfs."""
+    if parts == ("index.json",) or (len(parts) >= 2 and parts[0] == "books"):
+        return rootfs.joinpath(*parts)
+    if parts == ("books",):
+        return rootfs / "books"
+    return None
+
+
+def _extract_oci_cache_rootfs(layout: Path, rootfs: Path) -> dict[str, Any]:
+    """Merge the cache's OCI layers without asking Docker to register deep overlay layers."""
+    rootfs.mkdir(parents=True, exist_ok=True)
+    layout_index = json.loads((layout / "index.json").read_text(encoding="utf-8"))
+    manifests = layout_index.get("manifests")
+    if not isinstance(manifests, list) or not manifests:
+        raise ValueError("The GHCR cache did not contain an OCI manifest.")
+    descriptor = next(
+        (row for row in manifests
+         if (row.get("annotations") or {}).get("org.opencontainers.image.ref.name") == "cache"),
+        manifests[0],
+    )
+    manifest = json.loads(_oci_blob_path(layout, str(descriptor.get("digest", ""))).read_text(encoding="utf-8"))
+    layers = manifest.get("layers")
+    if not isinstance(layers, list):
+        raise ValueError("The GHCR cache OCI manifest has no layers array.")
+
+    for layer_number, layer in enumerate(layers, start=1):
+        layer_path = _oci_blob_path(layout, str(layer.get("digest", "")))
+        with tarfile.open(layer_path, mode="r:*") as archive:
+            for member in archive:
+                raw_name = member.name.replace("\\", "/")
+                parsed = PurePosixPath(raw_name)
+                if parsed.is_absolute() or any(part == ".." for part in parsed.parts):
+                    raise ValueError("Unsafe path in OCI cache layer " + str(layer_number) + ".")
+                parts = tuple(part for part in parsed.parts if part not in ("", ".", "/"))
+                if not parts:
+                    continue
+
+                parent_parts, basename = parts[:-1], parts[-1]
+                if basename == ".wh..wh..opq":
+                    if parent_parts in ((), ("books",)):
+                        parent = rootfs.joinpath(*parent_parts) if parent_parts else rootfs
+                        if parent.is_dir():
+                            for child in parent.iterdir():
+                                shutil.rmtree(child) if child.is_dir() else child.unlink(missing_ok=True)
+                    continue
+                if basename.startswith(".wh."):
+                    hidden_parts = parent_parts + (basename[4:],)
+                    hidden = _cache_layer_path(rootfs, hidden_parts)
+                    if hidden is not None and hidden.exists():
+                        shutil.rmtree(hidden) if hidden.is_dir() else hidden.unlink(missing_ok=True)
+                    continue
+
+                destination = _cache_layer_path(rootfs, parts)
+                if destination is None:
+                    continue
+                if member.isdir():
+                    destination.mkdir(parents=True, exist_ok=True)
+                    continue
+                if not member.isfile():
+                    raise ValueError("Unexpected non-file object in textbook cache layer: " + member.name)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                source = archive.extractfile(member)
+                if source is None:
+                    raise ValueError("Could not read textbook cache layer entry: " + member.name)
+                with source, destination.open("wb") as target:
+                    shutil.copyfileobj(source, target, length=CHUNK)
+
+    index_path = rootfs / "index.json"
+    if not index_path.is_file():
+        raise ValueError("The over-deep GHCR image has no recoverable /index.json.")
+    data = json.loads(index_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or not isinstance(data.get("books"), list):
+        raise ValueError("The recovered GHCR image has an invalid index.json.")
+    for item in data["books"]:
+        if not isinstance(item, dict):
+            raise ValueError("The recovered cache index contains an invalid book entry.")
+        relative = PurePosixPath(str(item.get("file", "")))
+        if relative.is_absolute() or any(part in ("", ".", "..") for part in relative.parts) or len(relative.parts) < 2 or relative.parts[0] != "books":
+            raise ValueError("Unsafe cache file path for " + str(item.get("book_id", "unknown")) + ".")
+        pdf_path = rootfs.joinpath(*relative.parts)
+        if not pdf_path.is_file():
+            raise ValueError("Cannot recover cached PDF " + str(item.get("book_id", "unknown")) + "; its indexed file is missing.")
+        expected_size = item.get("bytes")
+        if expected_size is not None and int(expected_size) != pdf_path.stat().st_size:
+            raise ValueError("Cached PDF size does not match index.json for " + str(item.get("book_id", "unknown")) + ".")
+        expected_hash = str(item.get("sha256", "")).lower()
+        if not re.fullmatch(r"[0-9a-f]{64}", expected_hash) or sha256_file(pdf_path) != expected_hash:
+            raise ValueError("Cached PDF checksum failed during recovery for " + str(item.get("book_id", "unknown")) + ".")
+        with pdf_path.open("rb") as handle:
+            if handle.read(5) != b"%PDF-":
+                raise ValueError("Recovered cache entry is not a PDF: " + str(item.get("book_id", "unknown")) + ".")
+    return data
+
+
+def _flatten_remote_cache_image(image: str) -> None:
+    """Recover an image that Docker cannot pull, verify its contents, and republish it flat."""
+    skopeo = _ensure_skopeo()
+    log("CACHE_RECOVERY source=GHCR image=" + image + " method=skopeo-OCI")
+    with tempfile.TemporaryDirectory(prefix="qe-textbook-image-recovery-") as temporary:
+        temp_root = Path(temporary)
+        layout = temp_root / "oci"
+        layout.mkdir()
+        config_root = Path(os.environ.get("DOCKER_CONFIG", str(Path.home() / ".docker")))
+        auth_file = config_root if config_root.name == "config.json" else config_root / "config.json"
+        command = [skopeo, "copy"]
+        if auth_file.is_file():
+            command.extend(["--src-authfile", str(auth_file)])
+        command.extend(["docker://" + image, "oci:" + str(layout) + ":cache"])
+        subprocess.run(command, check=True)
+
+        rootfs = temp_root / "rootfs"
+        recovered_index = _extract_oci_cache_rootfs(layout, rootfs)
+        context = temp_root / "flattened-image"
+        context.mkdir()
+        shutil.copy2(rootfs / "index.json", context / "index.json")
+        books_source = rootfs / "books"
+        if books_source.is_dir():
+            shutil.copytree(books_source, context / "books")
+        else:
+            (context / "books").mkdir()
+
+        dockerfile = [
+            "FROM scratch",
+            'LABEL org.opencontainers.image.title="QuantaEdge textbook cache"',
+            'LABEL org.opencontainers.image.description="Flattened persistent textbook cache; see /index.json"',
+            "COPY index.json /index.json",
+            "COPY books/ /books/",
+        ]
+        (context / "Dockerfile").write_text("\n".join(dockerfile) + "\n", encoding="utf-8")
+        subprocess.run(["docker", "build", "--pull=false", "-t", image, str(context)], check=True)
+        subprocess.run(["docker", "push", image], check=True)
+        log("CACHE_RECOVERY_COMPLETE image=" + image
+            + " verified_books=" + str(len(recovered_index["books"]))
+            + " action=flattened-and-pushed")
+
+
 def pull_index(image: str) -> tuple[bool, dict[str, Any]]:
     """Read the existing persistent image before deciding which books are missing."""
     try:
@@ -511,15 +686,31 @@ def pull_index(image: str) -> tuple[bool, dict[str, Any]]:
         lowered = message.casefold()
         # Only initialise if Docker proves the manifest does not exist. Never
         # mistake an auth/network failure for an empty cache and overwrite it.
-        missing = ("manifest unknown" in lowered or "manifest not found" in lowered
-                   or "no matching manifest" in lowered)
-        if missing and "denied" not in lowered and "unauthorized" not in lowered:
-            log("No existing manifest for " + image + "; initial registry push.")
-            return False, {"schema_version": 1, "registry": image, "books": [], "download_status": {}}
-        raise RuntimeError(
-            "Could not read existing GHCR cache " + image
-            + "; refusing to reset it. Docker said: " + message[-900:]
-        ) from exc
+        if "max depth exceeded" in lowered:
+            log("CACHE_RECOVERY required image=" + image + " reason=docker-max-layer-depth")
+            _flatten_remote_cache_image(image)
+            try:
+                subprocess.run(
+                    ["docker", "pull", image], check=True, stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT, text=True,
+                )
+            except subprocess.CalledProcessError as recovered_exc:
+                raise RuntimeError(
+                    "The GHCR cache was flattened but Docker still cannot pull " + image + ": "
+                    + (recovered_exc.stdout or "")[-900:]
+                ) from recovered_exc
+        else:
+            # Only initialise if Docker proves the manifest does not exist. Never
+            # mistake an auth/network failure for an empty cache and overwrite it.
+            missing = ("manifest unknown" in lowered or "manifest not found" in lowered
+                       or "no matching manifest" in lowered)
+            if missing and "denied" not in lowered and "unauthorized" not in lowered:
+                log("No existing manifest for " + image + "; initial registry push.")
+                return False, {"schema_version": 1, "registry": image, "books": [], "download_status": {}}
+            raise RuntimeError(
+                "Could not read existing GHCR cache " + image
+                + "; refusing to reset it. Docker said: " + message[-900:]
+            ) from exc
 
     container = "qe-index-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
     subprocess.run(
