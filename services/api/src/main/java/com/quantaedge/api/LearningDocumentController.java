@@ -154,7 +154,7 @@ public class LearningDocumentController {
     String normalizedSubject = subjectCode == null ? "" : subjectCode.trim();
     return jdbc.queryForList("""
       select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,
-             d.page_start,d.page_end,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -217,6 +217,7 @@ public class LearningDocumentController {
     int start = body.containsKey("pageStart") ? integerValue(body.get("pageStart"), "pageStart", 1, sourcePageCount) : 1;
     int end = body.containsKey("pageEnd") ? integerValue(body.get("pageEnd"), "pageEnd", start, sourcePageCount) : sourcePageCount;
     if (end < start) throw badRequest("The ending PDF page must be equal to or after the starting page.");
+    String language = normalizeDocumentLanguage(body.getOrDefault("language", "hi"));
     String title = optionalText(body.get("title"), 240);
     if (title == null) title = String.valueOf(assets.getFirst().get("title"));
     String sourceTitle = optionalText(body.get("sourceTitle"), 300);
@@ -225,12 +226,12 @@ public class LearningDocumentController {
 
     Long documentId = jdbc.queryForObject("""
       insert into learning_document(
-        pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,
+        pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
         page_start,page_end,status,version_no,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?)
+      ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?)
       returning id
       """, Long.class, assetId, scope, subjectId, chapterId, title, sourceTitle, sourceUrl,
-      edition, start, end, context.staffId());
+      edition, language, start, end, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/created",
         "Attached a private PDF to " + scope + " for class " + classCode + ", subject " + subjectCode
             + (chapterId == null ? "" : ", chapter " + chapterId) + ".");
@@ -254,7 +255,7 @@ public class LearningDocumentController {
       authorization.requirePermission(context, "CONTENT_EDIT");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id,d.scope,d.subject_id,d.chapter_id,d.status,d.source_title,d.source_url,d.edition,
+      select d.id,d.scope,d.subject_id,d.chapter_id,d.language,d.status,d.source_title,d.source_url,d.edition,
              d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id,a.review_status as asset_review_status,
              ch.active as chapter_active,ch.content_status as chapter_content_status
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
@@ -283,10 +284,11 @@ public class LearningDocumentController {
       }
       jdbc.update("""
         update learning_document set status='ARCHIVED',updated_at=now()
-        where scope=? and subject_id=? and (chapter_id=? or (chapter_id is null and ? is null))
+        where scope=? and subject_id=? and language=?
+          and (chapter_id=? or (chapter_id is null and ? is null))
           and status='PUBLISHED' and id<>?
-        """, current.get("scope"), current.get("subject_id"), current.get("chapter_id"),
-        current.get("chapter_id"), documentId);
+        """, current.get("scope"), current.get("subject_id"), current.get("language"),
+        current.get("chapter_id"), current.get("chapter_id"), documentId);
       jdbc.update("""
         update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
         where id=?
@@ -354,11 +356,13 @@ public class LearningDocumentController {
   @GetMapping("/learning/documents")
   public List<Map<String, Object>> studentDocumentCatalog(
       @RequestParam(required = false) String subjectCode,
+      @RequestParam(defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     String subjectFilter = subjectCode == null ? "" : subjectCode.trim();
+    String languageFilter = normalizeDocumentLanguage(language);
     return jdbc.queryForList("""
-      select d.id as document_id,d.scope,d.title,d.edition,d.page_start,d.page_end,
+      select d.id as document_id,d.scope,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
              d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
@@ -375,12 +379,13 @@ public class LearningDocumentController {
       left join student_learning_document_progress p
         on p.learning_document_id=d.id and p.student_id=st.id
       where d.status='PUBLISHED'
+        and d.language=?
         and (?='' or s.code=?)
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
-      order by s.sort_order,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
+      order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
-      """, context.studentId(), subjectFilter, subjectFilter);
+      """, context.studentId(), languageFilter, subjectFilter, subjectFilter);
   }
 
   @GetMapping("/learning/documents/{documentId}")
@@ -484,7 +489,7 @@ public class LearningDocumentController {
 
   private Map<String, Object> assignmentById(long documentId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,
+      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,d.language,
              d.page_start,d.page_end,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
@@ -550,6 +555,15 @@ public class LearningDocumentController {
     } catch (NoSuchAlgorithmException ex) {
       throw new IllegalStateException("SHA-256 is not available.", ex);
     }
+  }
+
+  private String normalizeDocumentLanguage(Object value) {
+    String normalized = value == null ? "hi" : String.valueOf(value).trim().toLowerCase(Locale.ROOT);
+    return switch (normalized) {
+      case "hi", "hindi", "hinglish" -> "hi";
+      case "en", "english" -> "en";
+      default -> throw badRequest("Resource language must be Hindi (hi) or English (en).");
+    };
   }
 
   private String requiredText(Object value, String name, int max) {

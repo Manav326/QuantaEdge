@@ -229,6 +229,7 @@ public class SourceIngestionController {
         from learning_document ld
         join learning_pdf_asset a on a.id=ld.pdf_asset_id
         where ld.chapter_id=cs.chapter_id and ld.scope='CHAPTER_PDF'
+          and ld.language=case when lower(coalesce(src.language,'')) in ('en','english') then 'en' else 'hi' end
           and (
             (src.source_url is not null and ld.source_url=src.source_url)
             or ld.source_title=src.title
@@ -558,6 +559,7 @@ public class SourceIngestionController {
     Long sourceId = ((Number) job.get("source_id")).longValue();
     Long subjectId = ((Number) job.get("subject_id")).longValue();
     Long staffId = context.staffId();
+    String documentLanguage = "en".equalsIgnoreCase(String.valueOf(job.get("language"))) ? "en" : "hi";
     jdbc.update("""
       update learning_pdf_asset set review_status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now()
       where id in (
@@ -574,12 +576,12 @@ public class SourceIngestionController {
         """, staffId, bookId);
       jdbc.queryForObject("""
         insert into learning_document(
-          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,
+          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
           page_start,page_end,status,version_no,created_by_staff_id
-        ) values(?,'SUBJECT_BOOK',?,null,?,?,?,?,1,?,'DRAFT',1,?)
+        ) values(?,'SUBJECT_BOOK',?,null,?,?,?,?,?,1,?,'DRAFT',1,?)
         returning id
         """, Long.class, bookId, subjectId, truncate(String.valueOf(job.get("source_title")), 240),
-        job.get("source_title"), job.get("source_url"), job.get("edition"),
+        job.get("source_title"), job.get("source_url"), job.get("edition"), documentLanguage,
         job.get("page_count"), staffId);
     }
     for (Map<String, Object> chapter : chapters) {
@@ -593,12 +595,12 @@ public class SourceIngestionController {
         """, staffId, assetId);
       Long documentId = jdbc.queryForObject("""
         insert into learning_document(
-          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,
+          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
           page_start,page_end,status,version_no,created_by_staff_id
-        ) values(?,'CHAPTER_PDF',?,?,?,?,?,?,1,?,'DRAFT',1,?)
+        ) values(?,'CHAPTER_PDF',?,?,?,?,?,?,?,1,?,'DRAFT',1,?)
         returning id
         """, Long.class, assetId, subjectId, chapterId, chapter.get("chapter_title"), job.get("source_title"),
-        job.get("source_url"), job.get("edition"), chapter.get("page_count"), staffId);
+        job.get("source_url"), job.get("edition"), documentLanguage, chapter.get("page_count"), staffId);
       jdbc.update("update source_ingestion_chapter set learning_document_id=?,updated_at=now() where id=?",
           documentId, chapter.get("id"));
       jdbc.update("""

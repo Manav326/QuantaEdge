@@ -16,7 +16,7 @@ type Lesson = {
 type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
 };
-type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null};
+type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null;language?:'hi'|'en'};
 type Question = {
   id:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
@@ -262,18 +262,10 @@ export default function LearnClient() {
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
           if(cancelled)return;
           const trackLessons=listBody as Lesson[];
-          let availableDocuments:StudentDocument[]=[];
-          try{
-            const documentResponse=await fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(selectedSubject),{cache:'no-store'});
-            if(documentResponse.ok){
-              const documentBody=await documentResponse.json();
-              if(Array.isArray(documentBody))availableDocuments=documentBody as StudentDocument[];
-            }
-          }catch{/* The lesson list remains usable if the textbook catalogue is temporarily unavailable. */}
           if(cancelled)return;
           const subjectName=selectedSubject==='maths'?'गणित':'विज्ञान';
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);
-          setStudentDocuments(availableDocuments);
+          setStudentDocuments([]);
           setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons});
           return;
         }
@@ -290,24 +282,34 @@ export default function LearnClient() {
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
         const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code).then(r=>r.json()) as Lesson[];
-        let availableDocuments:StudentDocument[]=[];
-        try{
-          const documentResponse=await fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(d.subject_code),{cache:'no-store'});
-          if(documentResponse.ok){
-            const documentBody=await documentResponse.json();
-            if(Array.isArray(documentBody))availableDocuments=documentBody as StudentDocument[];
-          }
-        }catch{/* Lessons remain usable if the textbook catalogue is temporarily unavailable. */}
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
-        if(!cancelled){setStudentDocuments(availableDocuments);setTrackBrowse(null);setLesson(d);}
+        if(!cancelled){setStudentDocuments([]);setTrackBrowse(null);setLesson(d);}
       }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
     }
     void load();
     return ()=>{cancelled=true;};
   },[router,searchParams]);
+
+  // Fetch the selected language edition independently: changing locale must not restart
+  // the lesson, reset the session, or issue a second progress-start request.
+  useEffect(()=>{
+    const subjectCode=trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
+    if(!subjectCode||!['maths','science'].includes(subjectCode)){
+      setStudentDocuments([]);
+      return;
+    }
+    let cancelled=false;
+    const language=locale==='english'?'en':'hi';
+    setStudentDocuments([]);
+    fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language,{cache:'no-store'})
+      .then(async response=>response.ok?response.json():null)
+      .then(body=>{if(!cancelled&&Array.isArray(body))setStudentDocuments(body as StudentDocument[]);})
+      .catch(()=>undefined);
+    return()=>{cancelled=true;};
+  },[locale,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
 
   useEffect(()=>{
     return ()=>{

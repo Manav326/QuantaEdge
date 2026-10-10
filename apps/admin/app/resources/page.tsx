@@ -29,6 +29,7 @@ type Assignment = {
   page_start: number;
   page_end: number;
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
+  language: 'hi' | 'en';
   original_filename: string;
   sha256: string;
   file_size_bytes: number;
@@ -88,6 +89,7 @@ export default function TextbookLibraryPage() {
   const [previewDocumentId, setPreviewDocumentId] = useState<number | null>(null);
   const [previewPage, setPreviewPage] = useState(1);
   const [scope, setScope] = useState<'SUBJECT_BOOK' | 'CHAPTER_PDF'>('CHAPTER_PDF');
+  const [resourceLanguage, setResourceLanguage] = useState<'hi' | 'en'>('hi');
   const [chapterId, setChapterId] = useState('');
   const [library, setLibrary] = useState<PdfAsset[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
@@ -262,7 +264,7 @@ export default function TextbookLibraryPage() {
         method: 'POST',
         body: JSON.stringify({
           pdfAssetId: Number(selectedPdf.pdf_asset_id || selectedPdf.id),
-          scope, classCode, subjectCode,
+          scope, classCode, subjectCode, language: resourceLanguage,
           chapterId: scope === 'CHAPTER_PDF' ? Number(chapterId) : null,
           title: title.trim(), sourceTitle: sourceTitle.trim(),
           sourceUrl: sourceUrl.trim(), edition: edition.trim(),
@@ -378,6 +380,11 @@ export default function TextbookLibraryPage() {
               <option value="CHAPTER_PDF">Chapter PDF</option><option value="SUBJECT_BOOK">Complete subject book</option>
             </select>
           </label>
+          <label className={styles.field}>Content medium
+            <select value={resourceLanguage} onChange={e => setResourceLanguage(e.target.value as 'hi' | 'en')}>
+              <option value="hi">Hindi (हिन्दी)</option><option value="en">English</option>
+            </select>
+          </label>
           {scope === 'CHAPTER_PDF' && <label className={styles.field}>Chapter
             <select value={chapterId} onChange={e => setChapterId(e.target.value)}>
               <option value="">Select chapter…</option>
@@ -404,7 +411,7 @@ export default function TextbookLibraryPage() {
           </label>
         </div>
         <div className={styles.attachFooter}>
-          <p>{scope === 'SUBJECT_BOOK' ? 'This complete-book PDF will be visible from the selected subject.' : 'This PDF will be linked to the selected chapter only.'} The saved page range can map a chapter to its own extracted PDF or to a range within a complete book.</p>
+          <p>{scope === 'SUBJECT_BOOK' ? 'Complete book: include all concepts and practice questions.' : 'Chapter PDF: include concepts and QuantaEdge Advanced / Next Level material, with no practice questions.'} This {resourceLanguage === 'hi' ? 'Hindi' : 'English'} edition is delivered when a student selects the matching language. The saved page range can map a chapter to its own PDF or to a range within a complete book.</p>
           <button type="button" className={styles.primaryButton} disabled={busy || !selectedPdf || (scope === 'CHAPTER_PDF' && !chapterId) || !title.trim()} onClick={() => void attachPdf()}>{busy ? 'Saving…' : 'Attach as draft'}</button>
         </div>
       </section>}
@@ -416,7 +423,7 @@ export default function TextbookLibraryPage() {
         {previewAssignment && <div className={styles.previewPanel}>
           <div className={styles.previewHeading}>
             <div><span>FINAL REVIEW</span><h3>{previewAssignment.title}</h3>
-              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · Page {previewPage} of {previewPageCount}</p>
+              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · Page {previewPage} of {previewPageCount}</p>
             </div>
             <button type="button" className={styles.secondaryButton} onClick={() => setPreviewDocumentId(null)}>Close preview</button>
           </div>
@@ -440,7 +447,7 @@ export default function TextbookLibraryPage() {
               <div className={styles.assignmentIcon}>{row.scope === 'SUBJECT_BOOK' ? '▤' : '▧'}</div>
               <div className={styles.assignmentBody}>
                 <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{row.status}</span></div>
-                <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
+                <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · {row.language === 'en' ? 'English' : 'Hindi'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
                 <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
                 <small>{row.source_url || 'Official source URL not set'}</small>
                 {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}

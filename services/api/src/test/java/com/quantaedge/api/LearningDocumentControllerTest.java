@@ -57,15 +57,37 @@ class LearningDocumentControllerTest {
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
         .thenReturn(List.of());
 
-    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, student);
+    List<Map<String, Object>> rows = controller.studentDocumentCatalog(null, "hi", student);
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq(""), eq(""));
+        contains("d.status='PUBLISHED'"), eq(7L), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("ste.status='ACTIVE'"), eq(7L), eq(""), eq(""));
+        contains("ste.status='ACTIVE'"), eq(7L), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(""), eq(""));
+        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq("hi"), eq(""), eq(""));
+  }
+
+  @Test
+  void englishStudentCatalogFiltersToEnglishAssignments() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    assertTrue(controller.studentDocumentCatalog("science", "english", student).isEmpty());
+
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("science"), eq("science"));
+  }
+
+  @Test
+  void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.studentDocumentCatalog(null, "fr", student));
+
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc);
   }
 
   @Test
@@ -91,7 +113,7 @@ class LearningDocumentControllerTest {
             Map.entry("id", 88L), Map.entry("document_id", 88L), Map.entry("scope", "CHAPTER_PDF"), Map.entry("subject_id", 3L),
             Map.entry("chapter_id", 9L), Map.entry("status", "DRAFT"),
             Map.entry("source_title", "Textbook"), Map.entry("source_url", "https://example.org/book.pdf"),
-            Map.entry("edition", "2026"), Map.entry("title", "Chapter 1"),
+            Map.entry("edition", "2026"), Map.entry("language", "en"), Map.entry("title", "Chapter 1"),
             Map.entry("page_start", 1), Map.entry("page_end", 3), Map.entry("page_count", 3),
             Map.entry("asset_id", 10L), Map.entry("asset_review_status", "APPROVED"),
             Map.entry("chapter_active", true), Map.entry("chapter_content_status", "DRAFT")
@@ -101,6 +123,9 @@ class LearningDocumentControllerTest {
     Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
 
     assertEquals(88L, result.get("document_id"));
+    verify(jdbc).update(
+        contains("where scope=? and subject_id=? and language=?"),
+        eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(9L), eq(88L));
   }
 
   @Test
