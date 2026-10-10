@@ -60,6 +60,18 @@ public class LearningClassController {
     this.mediaStorage = mediaStorage;
   }
 
+  // A safe staff picker for live-class host assignment; no login/contact secrets are returned.
+  @GetMapping("/admin/class-staff")
+  public List<Map<String, Object>> listClassStaff(
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireClassView(context);
+    return jdbc.queryForList("""
+      select id as staff_id,display_name,role
+      from staff_account where active=true
+      order by case when role='ADMIN' then 0 else 1 end,lower(display_name),id
+      """);
+  }
+
   // ---------------- Staff: schedule and manage live classes ----------------
 
   @GetMapping("/admin/live-classes")
