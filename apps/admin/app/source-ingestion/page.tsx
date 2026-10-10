@@ -11,6 +11,11 @@ type Source = {
   pdf_page_count?: number | null; pdf_review_status?: string | null; chapter_mapping_count?: number;
 };
 type Track = { class_code: string; class_name: string; subject_code: string; subject_name: string };
+type RegistryBook = {
+  book_id: string; publisher: string; source_type: string; class: number; classes: number[];
+  medium: 'hindi' | 'english'; title: string; subject: string; language: string; edition: string;
+  source_url: string; catalog_entry_url: string; pdf_url: string; sha256: string; bytes: number; page_count: number;
+};
 type ExistingMapping = {
   chapter_source_id: number; chapter_id: number; chapter_code: string; chapter_name: string;
   source_chapter_no?: number | null; source_chapter_title?: string | null; source_locator?: string | null;
@@ -29,6 +34,7 @@ type Candidate = {
 };
 type Job = {
   job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
+  cache_medium?: string | null; cache_book_id?: string | null; cache_sha256?: string | null;
   edition: string; language: string; status: string; error_message?: string | null;
   chapter_count?: number; approved_chapter_count?: number; rejected_chapter_count?: number;
   book_asset_id?: number; book_asset_title?: string; page_count?: number; class_code: string;
@@ -59,6 +65,9 @@ function normalized(value: string) {
 
 export default function SourceIngestionPage() {
   const [sources, setSources] = useState<Source[]>([]);
+  const [registryBooks, setRegistryBooks] = useState<RegistryBook[]>([]);
+  const [registryMedium, setRegistryMedium] = useState<'hindi' | 'english'>('hindi');
+  const [selectedRegistryBook, setSelectedRegistryBook] = useState('');
   const [existingMappings, setExistingMappings] = useState<ExistingMapping[]>([]);
   const [mappingError, setMappingError] = useState('');
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -85,14 +94,22 @@ export default function SourceIngestionPage() {
   const tracksByClass = useMemo(() => [...new Map(tracks.map(t => [t.class_code, t])).values()], [tracks]);
   const subjects = useMemo(() => [...new Map(tracks.filter(t => t.class_code === classCode).map(t => [t.subject_code, t])).values()], [tracks, classCode]);
   const latestReviewJobs = jobs.filter(item => ['DOWNLOADING', 'REVIEW', 'FAILED'].includes(item.status));
+  const activeTrack = tracks.find(track => track.class_code === classCode);
+  const gradeMatches = (classCode + ' ' + (activeTrack?.class_name || '')).match(/\d+/g) || [];
+  const selectedGrade = gradeMatches.length ? Number(gradeMatches[gradeMatches.length - 1]) : 0;
+  const registryBookOptions = registryBooks.filter(book =>
+    book.medium === registryMedium && (book.classes || [book.class]).map(Number).includes(selectedGrade));
+  const selectedRegistryBookRow = registryBookOptions.find(book => book.book_id === selectedRegistryBook)
+    || registryBookOptions[0];
 
   const loadBase = useCallback(async () => {
     setLoading(true); setError('');
     try {
-      const [sourceRows, jobRows, curriculumRows] = await Promise.all([
+      const [sourceRows, jobRows, curriculumRows, registryRows] = await Promise.all([
         api('/api/v1/admin/source-ingestion/sources'),
         api('/api/v1/admin/source-ingestion/jobs'),
         api('/api/v1/curriculum'),
+        api('/api/v1/admin/source-ingestion/registry-books?medium=both').catch(() => []),
       ]);
       const sourceData = Array.isArray(sourceRows) ? sourceRows : [];
       const jobData = Array.isArray(jobRows) ? jobRows : [];
@@ -104,6 +121,7 @@ export default function SourceIngestionPage() {
       setSources(sourceData);
       setJobs(jobData);
       setTracks(nextTracks);
+      setRegistryBooks(Array.isArray(registryRows) ? registryRows as RegistryBook[] : []);
       if (!classCode && nextTracks.length) {
         setClassCode(nextTracks[0].class_code);
         setSubjectCode(nextTracks[0].subject_code);
@@ -213,6 +231,30 @@ export default function SourceIngestionPage() {
       else setJob(created);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'The source ingestion could not be started.');
+    } finally { setBusy(false); }
+  }
+
+  async function startCachedBookJob() {
+    if (!classCode || !subjectCode) { setError('Choose a curriculum class and subject first.'); return; }
+    if (!selectedRegistryBookRow) { setError('No complete cached book is available for this class and medium.'); return; }
+    setBusy(true); setError(''); setNotice('');
+    try {
+      const created = normalizeJob(await api(
+        '/api/v1/admin/source-ingestion/registry-books/' + encodeURIComponent(registryMedium)
+          + '/' + encodeURIComponent(selectedRegistryBookRow.book_id) + '/jobs',
+        { method: 'POST', body: JSON.stringify({ classCode, subjectCode }) },
+      ));
+      setJob(created);
+      await loadBase();
+      if (created.status === 'REVIEW') await loadJob(created.job_id);
+      else setJob(created);
+      setNotice(created.status === 'APPROVED'
+        ? 'This GHCR textbook has already completed source review for the selected track.'
+        : created.status === 'REVIEW'
+          ? 'Complete book opened from GHCR. Inspect its detected outline, map curriculum chapters and review every split before approval.'
+          : 'Created source-ingestion job #' + created.job_id + ' from the checksummed GHCR complete book. Refresh status after PDF inspection finishes.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'The cached whole-book ingestion could not be started.');
     } finally { setBusy(false); }
   }
 
@@ -393,9 +435,53 @@ export default function SourceIngestionPage() {
           </>}
         </div>
         <div className={styles.actions}>
-          <p>Only public HTTPS URLs are accepted. The downloader checks the PDF signature and limits files to 50 MB and 2,000 pages. New files stay hidden until reviewed.</p>
+          <p>Manual website downloads are limited to the private library's 50 MiB per-file limit. Use the GHCR complete-book cache above for larger books; its full PDF is reviewed from disk and only approved chapter PDFs are copied into PostgreSQL.</p>
           <button className={styles.primary} type="button" disabled={busy || !sourceTitle.trim() || !sourceUrl.trim() || !subjectCode} onClick={() => void startJob()}>
             {busy ? 'Working…' : 'Check database & start download'}
+          </button>
+        </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.heading}>
+          <div><span>GHCR CACHE</span><h2>Use a persistent complete textbook</h2>
+            <p>These books are already stored in the Hindi/English GHCR images. The selected whole book is checksum-verified and reviewed from the mounted cache; the source website is not downloaded again.</p>
+          </div>
+          <span className={styles.bigStatus}>{registryBooks.length} indexed books</span>
+        </div>
+        <div className={styles.fields}>
+          <label>Medium
+            <select value={registryMedium} onChange={e => setRegistryMedium(e.target.value as 'hindi' | 'english')}>
+              <option value="hindi">Hindi</option>
+              <option value="english">English</option>
+            </select>
+          </label>
+          <label>Complete textbook for {activeTrack?.class_name || 'selected class'}
+            <select value={selectedRegistryBookRow?.book_id || ''} onChange={e => setSelectedRegistryBook(e.target.value)}
+              disabled={!registryBookOptions.length}>
+              {registryBookOptions.length === 0 && <option value="">No cached books for this class/medium</option>}
+              {registryBookOptions.map(book => <option key={book.book_id} value={book.book_id}>
+                {book.title} — {book.subject || 'Subject not specified'} · {book.publisher}
+              </option>)}
+            </select>
+          </label>
+        </div>
+        {selectedRegistryBookRow ? <div className={styles.cacheMeta}>
+          <b>{selectedRegistryBookRow.title}</b>
+          <span>{selectedRegistryBookRow.publisher} · Class {(selectedRegistryBookRow.classes || [selectedRegistryBookRow.class]).join(', ')} · {selectedRegistryBookRow.subject || 'Subject unspecified'}</span>
+          <span>{(Number(selectedRegistryBookRow.bytes || 0) / (1024 * 1024)).toFixed(1)} MiB · {selectedRegistryBookRow.page_count || 'Page count pending'} pages · {selectedRegistryBookRow.medium} medium</span>
+          <code>{selectedRegistryBookRow.book_id} · SHA-256 {String(selectedRegistryBookRow.sha256 || '').slice(0, 16)}…</code>
+        </div> : <p className={styles.help}>
+          {registryBooks.length === 0
+            ? 'No GHCR cache index is mounted in this API environment yet. Sync both language images using scripts/quantaedge-textbook-sync.ps1 or scripts/quantaedge-textbook-sync.sh, then refresh this screen.'
+            : 'No complete cached book matches the selected class and medium. Check the GHCR inventory and retry any missing registry entries.'}
+        </p>}
+        <div className={styles.actions}>
+          <p>The downloaded source must be a complete book. We do not fall back to individual NCERT chapter downloads. Page ranges and curriculum chapter assignments remain review decisions; approval creates private library drafts, not student-visible content.</p>
+          <button className={styles.primary} type="button"
+            disabled={busy || !selectedRegistryBookRow || !subjectCode || !classCode}
+            onClick={() => void startCachedBookJob()}>
+            {busy ? 'Working…' : 'Review complete cached book'}
           </button>
         </div>
       </section>
@@ -468,7 +554,7 @@ export default function SourceIngestionPage() {
                   value={previewPage} onChange={e => setPreviewPage(e.target.value)} />
               </label>
             </div>
-            {job.book_asset_id && <img className={styles.previewImage} src={previewUrl} alt="Privately rendered PDF page preview" />}
+            {(job.book_asset_id || job.cache_book_id) && <img className={styles.previewImage} src={previewUrl} alt="Privately rendered PDF page preview" />}
           </div>
           <div className={styles.outline}>
             <div className={styles.outlineHeading}><div><h3>Detected chapter outline</h3><p>Bookmarks or recognizable chapter headings are suggestions, not trusted mappings. Correct them before splitting.</p></div>
