@@ -1,3 +1,4 @@
+import { LocaleText } from '../../components/LanguageProvider';
 
 'use client';
 
@@ -25,7 +26,7 @@ export default function PracticePage(){
     async function load(){
       try{
         const me=await fetch('/api/v1/students/me');
-        if(me.status===401||me.status===403){router.replace('/login');return;}
+        if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const studentData=await me.json(); if(!me.ok) throw new Error(studentData.message||'Student profile nahi mila');
         setStudent(studentData);
         const rec=await fetch('/api/v1/recommendations/next'); const rb=await rec.json();
@@ -38,8 +39,8 @@ export default function PracticePage(){
     load();
   },[router]);
 
-  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1>Practice load nahi ho paayi</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home</Link></div></section></main>;
-  if(!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow">Practice load ho rahi hai…</div></section></main>;
+  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><LocaleText hinglish="Practice load नहीं हो पाई" english="Unable to load practice" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home" english="← Student home" /></Link></div></section></main>;
+  if(!questions.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="Practice load हो रही है…" english="Loading practice…" /></div></section></main>;
 
   const q=questions[index];
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
@@ -59,7 +60,7 @@ export default function PracticePage(){
   };
 
   return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
+    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow">Class {student?.class_code ?? '—'} · {q.question_type}</div>
       <div className="feedback">
@@ -68,7 +69,7 @@ export default function PracticePage(){
         {q.source_year ? <span>{q.source_year}</span>:null}
       </div>
       <h1>{q.prompt}</h1>
-      <p>Pehle socho, answer do, phir feedback padhkar apni reasoning check karo.</p>
+      <p><LocaleText hinglish="पहले सोचें, answer दें, फिर feedback पढ़कर अपनी reasoning check करें।" english="Think first, answer, then use the feedback to check your reasoning." /></p>
 
       {options.length>0 ? <div className="option-grid">
         {options.map(o=><button key={o.key} disabled={!!result} className={selected===o.key?'selected':''} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}
@@ -78,7 +79,7 @@ export default function PracticePage(){
         {q.question_type==='NUMERICAL'
           ? <input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Number wala answer yahan likhein…"/>
           : <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder="Apna answer ya reasoning yahan likhein…" rows={q.question_type==='LONG_ANSWER'?7:5}/>}
-        <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}>Answer submit karein</button>
+        <button className="button button-dark" disabled={!selected.trim()||!!result} onClick={()=>answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
       </div>}
 
       {result&&<div className="practice-feedback">
@@ -89,8 +90,8 @@ export default function PracticePage(){
 
       <div className="practice-footer">
         <span>Question {index+1} of {questions.length}</span>
-        {result && index+1<questions.length ? <button className="button button-dark" onClick={next}>Agla question →</button>
-          : result ? <Link href="/student/progress" className="button button-dark">Progress dekhein →</Link>
+        {result && index+1<questions.length ? <button className="button button-dark" onClick={next}><LocaleText hinglish="अगला question →" english="Next question →" /></button>
+          : result ? <Link href="/student/progress" className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link>
           : <span>उत्तर दें</span>}
       </div>
     </section>
@@ -103,7 +104,7 @@ function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;o
   const [order,setOrder]=useState<string[]>([]);
   function pick(letter:string){if(disabled||order.includes(letter))return;setOrder([...order,letter]);}
   function reset(){if(!disabled)setOrder([])}
-  return <div className="concept-card structured-card"><div className="structured-hint">Sequence choose karein: har option par ek baar tap karein.</div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'Abhi sequence choose nahi hua'}</div><div className="practice-footer"><button className="text-link" onClick={reset}>Reset</button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}>Sequence submit karein</button></div></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Sequence चुनें: हर option पर एक बार tap करें।" english="Choose the sequence by tapping each option once." /></div><div className="structured-chips">{letters.map(x=><button disabled={disabled||order.includes(x)} key={x} onClick={()=>pick(x)}>{x}</button>)}</div><div className="structured-answer">{order.length?order.join(' → '):'Abhi sequence choose nahi hua'}</div><div className="practice-footer"><button className="text-link" onClick={reset}><LocaleText hinglish="Reset" english="Reset" /></button><button className="button button-dark" disabled={disabled||!order.length} onClick={()=>onSubmit(order)}><LocaleText hinglish="Sequence submit करें" english="Submit sequence" /></button></div></div>;
 }
 
 function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string|object)=>void}){
@@ -114,5 +115,5 @@ function MatchInput({disabled,onSubmit}:{disabled:boolean;onSubmit:(value:string
     },{} as Record<string,string>);
     if(Object.keys(mapping).length) onSubmit(mapping);
   }
-  return <div className="concept-card structured-card"><div className="structured-hint">Matching likhein: <b>1:A, 2:B, 3:C</b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}>Matching submit karein</button></div>;
+  return <div className="concept-card structured-card"><div className="structured-hint"><LocaleText hinglish="Matching लिखें:" english="Enter your matches:" /> <b><LocaleText hinglish="1:A, 2:B, 3:C" english="1:A, 2:B, 3:C" /></b></div><input disabled={disabled} value={text} onChange={e=>setText(e.target.value)} placeholder="1:A, 2:B, 3:C"/><button className="button button-dark" disabled={disabled||!text.trim()} onClick={submit}><LocaleText hinglish="Matching submit करें" english="Submit matches" /></button></div>;
 }
