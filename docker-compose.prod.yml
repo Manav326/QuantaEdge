@@ -33,6 +33,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
+      APP_MEDIA_STORAGE_DIR: /var/lib/quantaedge/media
       APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS}
       APP_DEMO_SEED: "false"
       APP_ADMIN_CONTENT_TOKEN: ${QUANTAEDGE_ADMIN_TOKEN:-}
@@ -47,6 +48,8 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       APP_AI_TUTOR_MODEL: ${APP_AI_TUTOR_MODEL:-gpt-5.6-luna}
       OPENAI_API_BASE_URL: ${OPENAI_API_BASE_URL:-https://api.openai.com}
+    volumes:
+      - quantaedge_media:/var/lib/quantaedge/media
     ports:
       - "${API_PORT:-8080}:8080"
     restart: unless-stopped
@@ -79,3 +82,4 @@ services:
 volumes:
   quantaedge_postgres:
   quantaedge_redis:
+  quantaedge_media:
