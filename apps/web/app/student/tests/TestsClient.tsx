@@ -54,7 +54,6 @@ export default function TestsClient(){
   const [dirtyAnswers,setDirtyAnswers]=useState<Record<number,any>>({});
   const [showSubmit,setShowSubmit]=useState(false);
   const attemptRef=useRef<Attempt|null>(null);
-  const responsesRef=useRef<Record<number,any>>({});
   const dirtyRef=useRef<Record<number,any>>({});
   const saveQueueRef=useRef<Promise<void>>(Promise.resolve());
   const submitFnRef=useRef<(automatic?:boolean)=>Promise<void>>(async()=>{});
@@ -74,7 +73,6 @@ export default function TestsClient(){
   },[router]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
-  useEffect(()=>{responsesRef.current=responses;},[responses]);
 
   const filteredTests=tests.filter(t=>subjectFilter==='ALL'||t.subject_code===subjectFilter);
   const current=attempt?.questions?.[index];
@@ -107,7 +105,7 @@ export default function TestsClient(){
         body:JSON.stringify({answers:entries.map(([attemptQuestionId,answer])=>({attemptQuestionId:Number(attemptQuestionId),answer}))})
       });
     });
-    saveQueueRef.current=run.catch(()=>undefined);
+    saveQueueRef.current=run.catch(()=>{});
     try{await run;}finally{setSaving(false);}
   },[]);
 
@@ -136,7 +134,7 @@ export default function TestsClient(){
       const data=await api('/api/v1/learning/assessments/'+testId+'/attempts',{method:'POST'});
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
-      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');
+      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');
       if(data.status==='IN_PROGRESS')setNotice('Your attempt is saved. Answers save automatically; you can return and resume until the deadline.');
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not start this test.');}
     finally{setBusy(false);}
@@ -194,7 +192,7 @@ export default function TestsClient(){
   },[attempt?.attempt_id,attempt?.deadline_at,attempt?.status]);
 
   function closeAttempt(){
-    setAttempt(null);setResponses({});responsesRef.current={};dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
+    setAttempt(null);setResponses({});dirtyRef.current={};setDirtyAnswers({});setIndex(0);setShowSubmit(false);setError('');setNotice('');autoSubmitted.current=false;
     void loadOverview();
   }
 
