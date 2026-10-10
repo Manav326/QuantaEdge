@@ -95,3 +95,19 @@
   .existingMapping { grid-template-columns:1fr; }
   .mappingAsset { padding-left:0; border-left:0; border-top:1px solid #e5e9f0; padding-top:12px; }
 }
+
+
+.cacheMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid #e2e7ef;
+  border-radius: 11px;
+  background: #f8fafc;
+  overflow-wrap: anywhere;
+}
+.cacheMeta b { color: #273244; font-size: 13px; }
+.cacheMeta span { color: #6f7b8d; font-size: 12px; line-height: 1.5; }
+.cacheMeta code { color: #6b4b3c; font-size: 10px; line-height: 1.6; overflow-wrap: anywhere; white-space: normal; }
