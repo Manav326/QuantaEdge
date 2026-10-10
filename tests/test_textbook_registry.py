@@ -141,12 +141,18 @@ class TextbookRegistryTests(unittest.TestCase):
 
         with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \
              patch("scripts.textbook_registry._download_full_book", side_effect=fake_download), \
-             patch("scripts.textbook_registry.push_batch") as push:
+             patch("scripts.textbook_registry.push_batch") as push, \
+             patch("scripts.textbook_registry.log") as progress_log:
             report = publish_language(
                 "hindi", "ghcr.io/example/quantaedge-textbooks-hindi:latest",
                 catalog=[cached, new_a, new_b], download_workers=2, push_batch_size=2, retry_rounds=1,
             )
 
+        log_messages = [str(call.args[0]) for call in progress_log.call_args_list]
+        self.assertTrue(any("pending at start=2" in message for message in log_messages))
+        self.assertTrue(any("CACHE_PROGRESS" in message and "pending_downloads=0" in message for message in log_messages))
+        self.assertEqual(0, report["pending_after_retries"])
+        self.assertEqual(2, report["resolved_candidates"])
         self.assertEqual(["already-cached"], report["already_cached"])
         self.assertCountEqual(["new-a", "new-b"], report["downloaded_and_pushed"])
         self.assertCountEqual(["new-a", "new-b"], calls)
