@@ -97,6 +97,19 @@ public class LearningController {
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    Long practiceSessionId=null;
+    Object sessionValue=body.get("practiceSessionId");
+    if(sessionValue!=null) {
+      try { practiceSessionId=Long.valueOf(String.valueOf(sessionValue)); }
+      catch(NumberFormatException ex) { throw new IllegalArgumentException("Practice session is invalid."); }
+      Long membership=jdbc.queryForObject("""
+        select count(*) from student_practice_session_question psq
+        join student_practice_session ps on ps.id=psq.practice_session_id
+        where ps.id=? and ps.student_id=? and psq.question_id=?
+          and ps.status='IN_PROGRESS' and psq.answered_at is null
+        """,Long.class,practiceSessionId,context.studentId(),questionId);
+      if(membership==null||membership==0)throw new SecurityException("Question is not part of this practice session.");
+    }
     var rows=jdbc.queryForList("""
       select q.id,q.lesson_id,q.question_type,q.explanation,q.answer_payload::text as answer_payload
       from question q join lesson l on l.id=q.lesson_id
@@ -104,7 +117,7 @@ public class LearningController {
       where q.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
       """,questionId);
-    if(rows.isEmpty()) throw new IllegalArgumentException("Question not found");
+    if(rows.isEmpty()) throw new IllegalArgumentException("Question not found or no longer eligible for student practice.");
     var q=rows.getFirst();
     long lessonId=((Number)q.get("lesson_id")).longValue();
     ensureStudentLessonAccess(context.studentId(),lessonId);
@@ -112,7 +125,11 @@ public class LearningController {
     String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : submittedObject.toString();
     String payload=String.valueOf(q.get("answer_payload"));
     QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
-    state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct());
+    if(practiceSessionId==null) {
+      state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct());
+    } else {
+      state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct(),practiceSessionId);
+    }
 
     var result=new LinkedHashMap<String,Object>();
     result.put("questionId",questionId); result.put("questionType",q.get("question_type"));

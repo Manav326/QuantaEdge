@@ -1,5 +1,6 @@
 package com.quantaedge.api;
 
+import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -24,13 +25,48 @@ public class LearningStateService {
 
   @Transactional
   public void recordAttempt(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,Boolean correct){
+    recordAttempt(studentId,questionId,lessonId,answer,autoGraded,correct,null);
+  }
+
+  @Transactional
+  public void recordAttempt(long studentId,long questionId,long lessonId,String answer,boolean autoGraded,Boolean correct,Long practiceSessionId){
     ensureStudentCanAnswer(studentId,questionId,lessonId);
     if(answer!=null && answer.length()>5000) throw new IllegalArgumentException("Answer is too long");
+    if(practiceSessionId!=null) {
+      List<Map<String,Object>> membership=jdbc.queryForList("""
+        select psq.question_id
+        from student_practice_session_question psq
+        join student_practice_session ps on ps.id=psq.practice_session_id
+        where ps.id=? and ps.student_id=? and psq.question_id=?
+          and ps.status='IN_PROGRESS' and psq.answered_at is null
+        for update of psq,ps
+        """,practiceSessionId,studentId,questionId);
+      if(membership.isEmpty())throw new SecurityException("Question is not assigned to this active practice session or was already answered.");
+    }
     String selected=answer!=null&&answer.length()<=20?answer:null;
     jdbc.update("""
-      insert into student_question_attempt(student_id,question_id,selected_option,answer_text,correct,answered_at)
-      values(?,?,?,?,?,now())
-      """,studentId,questionId,selected,answer,correct);
+      insert into student_question_attempt(student_id,question_id,selected_option,answer_text,correct,answered_at,practice_session_id)
+      values(?,?,?,?,?,now(),?)
+      """,studentId,questionId,selected,answer,correct,practiceSessionId);
+    if(practiceSessionId!=null) {
+      jdbc.update("""
+        update student_practice_session_question
+        set answered_at=coalesce(answered_at,now())
+        where practice_session_id=? and question_id=?
+        """,practiceSessionId,questionId);
+      jdbc.update("""
+        update student_practice_session ps set
+          status=case when not exists(
+            select 1 from student_practice_session_question psq
+            where psq.practice_session_id=ps.id and psq.answered_at is null
+          ) then 'COMPLETED' else 'IN_PROGRESS' end,
+          completed_at=case when not exists(
+            select 1 from student_practice_session_question psq
+            where psq.practice_session_id=ps.id and psq.answered_at is null
+          ) then coalesce(ps.completed_at,now()) else null end
+        where ps.id=? and ps.student_id=?
+        """,practiceSessionId,studentId);
+    }
 
     long total=jdbc.queryForObject("select count(*) from question where lesson_id=? and active=true and review_status in ('APPROVED','PUBLISHED')",Long.class,lessonId);
     long answered=jdbc.queryForObject("""

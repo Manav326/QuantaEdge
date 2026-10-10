@@ -14,9 +14,10 @@ const LEARNER_BLOCK_STAGE:Record<string,number>={
 };
 const LEARNER_BLOCK_TYPES=new Set(Object.keys(LEARNER_BLOCK_STAGE));
 function orderedLearnerBlocks(blocks:ContentBlock[]){
- return blocks.filter(block=>block.active!==false&&LEARNER_BLOCK_TYPES.has(block.block_type)).slice()
-  .sort((a,b)=>LEARNER_BLOCK_STAGE[a.block_type]-LEARNER_BLOCK_STAGE[b.block_type]||a.sequence_no-b.sequence_no);
-}
+  // sequence_no is the authored teaching sequence; never regroup blocks by type.
+  return blocks.filter(block=>block.active!==false&&LEARNER_BLOCK_TYPES.has(block.block_type)).slice()
+   .sort((a,b)=>a.sequence_no-b.sequence_no);
+ }
 function learnerPathLabel(blocks:ContentBlock[],questionCount:number){
  const types=new Set(blocks.map(block=>block.block_type));
  const stages:string[]=[];

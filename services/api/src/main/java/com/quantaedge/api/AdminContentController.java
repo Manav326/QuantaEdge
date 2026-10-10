@@ -47,13 +47,15 @@ public class AdminContentController {
   private final ObjectMapper mapper;
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
+  private final QuestionHistoryService questionHistory;
 
   public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization,
-      StaffAuditService staffAudit) {
+      StaffAuditService staffAudit, QuestionHistoryService questionHistory) {
     this.jdbc = jdbc;
     this.mapper = mapper;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
+    this.questionHistory = questionHistory;
   }
 
   @GetMapping
@@ -103,6 +105,82 @@ public class AdminContentController {
     }
     sql.append(" order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id");
     return jdbc.queryForList(sql.toString(), args.toArray());
+  }
+
+  @GetMapping("/questions/review-queue")
+  public List<Map<String,Object>> questionReviewQueue(
+      @RequestParam(required=false, defaultValue="ALL") String status,
+      @RequestParam(required=false) String classCode,
+      @RequestParam(required=false) String subjectCode,
+      @RequestParam(required=false) String query,
+      @RequestParam(required=false, defaultValue="150") Integer limit,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    if (!authorization.hasPermission(context,"CONTENT_VIEW")
+        && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
+      throw new SecurityException("Content review access required");
+    }
+    String normalizedStatus=status==null?"ALL":status.trim().toUpperCase();
+    if (!Set.of("ALL","DRAFT","REVIEW","APPROVED","PUBLISHED","REJECTED").contains(normalizedStatus)) {
+      throw badRequest("Choose a valid question status filter.");
+    }
+    int rowLimit=Math.max(1,Math.min(limit==null?150:limit,250));
+    StringBuilder sql=new StringBuilder("""
+      select q.id as question_id,q.lesson_id,q.question_type,q.prompt,q.explanation,q.difficulty,
+             q.sort_order,q.active,q.review_status,q.review_notes,q.reviewed_at,
+             q.marks,q.exam_format,q.source_kind,q.source_title,q.source_ref,q.source_year,
+             q.board,q.topic,q.subtopic,q.skill,q.tags::text as tags,
+             l.title as lesson_title,l.status as lesson_status,
+             ch.id as chapter_id,ch.display_name as chapter_name,
+             c.code as class_code,c.display_name as class_name,
+             s.code as subject_code,s.display_name as subject_name,
+             coalesce((select jsonb_agg(jsonb_build_object(
+                 'key',qo.option_key,'label',qo.label,'is_correct',qo.is_correct
+               ) order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)::text as options,
+             (select count(*) from question_review_history h where h.question_id=q.id) as history_count,
+             (select h.change_reason from question_review_history h
+               where h.question_id=q.id order by h.occurred_at desc,h.id desc limit 1) as latest_history_reason
+      from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where 1=1
+      """);
+    List<Object> args=new ArrayList<>();
+    if (!"ALL".equals(normalizedStatus)) { sql.append(" and upper(q.review_status)=?"); args.add(normalizedStatus); }
+    if (classCode!=null&&!classCode.isBlank()) { sql.append(" and c.code=?"); args.add(classCode.trim()); }
+    if (subjectCode!=null&&!subjectCode.isBlank()) { sql.append(" and s.code=?"); args.add(subjectCode.trim()); }
+    if (query!=null&&!query.isBlank()) {
+      sql.append(" and (q.prompt ilike ? or coalesce(q.topic,'') ilike ? or ch.display_name ilike ? or l.title ilike ?)");
+      String pattern="%"+query.trim().substring(0,Math.min(query.trim().length(),160))+"%";
+      args.add(pattern);args.add(pattern);args.add(pattern);args.add(pattern);
+    }
+    sql.append("""
+      order by case upper(q.review_status) when 'REJECTED' then 0 when 'REVIEW' then 1
+        when 'DRAFT' then 2 when 'APPROVED' then 3 when 'PUBLISHED' then 4 else 5 end,
+        l.id,q.sort_order,q.id
+      limit ?
+      """);
+    args.add(rowLimit);
+    return jdbc.queryForList(sql.toString(),args.toArray());
+  }
+
+  @GetMapping("/questions/{questionId}/history")
+  public Map<String,Object> questionHistory(
+      @PathVariable long questionId,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    if (!authorization.hasPermission(context,"CONTENT_VIEW")
+        && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
+      throw new SecurityException("Question history access required");
+    }
+    Map<String,Object> current=questionHistory.snapshot(questionId);
+    if (current.isEmpty()) throw notFound("Question",questionId);
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("question",current);
+    result.put("history",questionHistory.history(questionId));
+    return result;
   }
 
   @GetMapping("/chapters/{chapterId}")
@@ -417,11 +495,23 @@ public class AdminContentController {
     }
     validateLessonForSubmission(lessonId);
     jdbc.update("update lesson set status='REVIEW', active=true where id=?",lessonId);
+    // Keep rejected questions parked with their feedback until the author edits them.
+    List<Long> resubmittedQuestionIds=jdbc.queryForList(
+        "select id from question where lesson_id=? and active=true and review_status='DRAFT' order by id",
+        Long.class,lessonId);
+    Map<Long,Map<String,Object>> resubmittedBefore=new LinkedHashMap<>();
+    for(Long questionId:resubmittedQuestionIds) resubmittedBefore.put(questionId,questionHistory.snapshot(questionId));
     jdbc.update("""
         update question
-        set review_status='REVIEW',review_notes=null,reviewed_at=null,reviewed_by_staff_id=null
-        where lesson_id=? and active=true and review_status not in ('APPROVED','PUBLISHED')
+        set review_status='REVIEW',
+            review_notes=coalesce(review_notes,'Submitted with this micro-topic for review.'),
+            reviewed_at=null,reviewed_by_staff_id=null
+        where lesson_id=? and active=true and review_status='DRAFT'
         """,lessonId);
+    for(Long questionId:resubmittedQuestionIds) {
+      questionHistory.recordChange(questionId,lessonId,"STATUS_CHANGED",context,
+          "Question submitted for review with its micro-topic.",resubmittedBefore.get(questionId),questionHistory.snapshot(questionId));
+    }
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/submit",
         "Submitted micro-topic '"+current.get("lesson_title")+"' for review.");
     return lessonById(lessonId);
@@ -480,6 +570,7 @@ public class AdminContentController {
       throw badRequest("Add clear feedback so the author knows what must be corrected.");
     }
     if ("APPROVED".equals(status)) validateQuestionForReview(lessonId,questionId);
+    Map<String,Object> beforeSnapshot=questionHistory.snapshot(questionId);
     int changed=jdbc.update("""
         update question
         set review_status=?, review_notes=?,
@@ -488,6 +579,9 @@ public class AdminContentController {
         where id=? and lesson_id=?
         """,status,notes,status,status,context.staffId(),questionId,lessonId);
     if (changed==0) throw notFound("Question",questionId);
+    Map<String,Object> afterSnapshot=questionHistory.snapshot(questionId);
+    questionHistory.recordChange(questionId,lessonId,"REVIEW_DECISION",context,
+        notes==null||notes.isBlank()?"Reviewer set status to "+status+".":notes,beforeSnapshot,afterSnapshot);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/questions/"+questionId+"/review",
         "Question review state changed to "+status+"; reviewer notes "+(notes==null||notes.isBlank()?"not supplied":"supplied")+".");
     return jdbc.queryForMap("""
@@ -548,7 +642,7 @@ public class AdminContentController {
     }
 
     if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
-    boolean questionContentChanged = body.containsKey("questions") && updateQuestions(lessonId, body.get("questions"));
+    boolean questionContentChanged = body.containsKey("questions") && updateQuestions(lessonId, body.get("questions"), context);
     if ("PUBLISHED".equals(status) && questionContentChanged) {
       status = "REVIEW";
     } else if ("PUBLISHED".equals(status)) {
@@ -1013,7 +1107,7 @@ public class AdminContentController {
     }
   }
 
-  private boolean updateQuestions(long lessonId, Object value) {
+  private boolean updateQuestions(long lessonId, Object value, AuthContext context) {
     List<Map<String, Object>> questions = objectList(value, "questions");
     List<Map<String, Object>> current = jdbc.queryForList("select id from question where lesson_id=?", lessonId);
     Set<Long> currentIds = new HashSet<>();
@@ -1027,6 +1121,7 @@ public class AdminContentController {
       if (!create && (!currentIds.contains(id) || submittedIds.contains(id))) {
         throw badRequest("Question IDs must be unique and belong to this lesson.");
       }
+      Map<String,Object> beforeSnapshot=create?Map.of():questionHistory.snapshot(id);
       String type = requiredText(first(q, "question_type", "questionType"), 30).toUpperCase();
       String difficulty = requiredText(q.get("difficulty"), 20).toUpperCase();
       String prompt = requiredText(q.get("prompt"), 1000);
@@ -1190,9 +1285,18 @@ public class AdminContentController {
           booleanValue(first(option, "correct", "is_correct"), false), optionOrder);
         index++;
       }
+      Map<String,Object> afterSnapshot=questionHistory.snapshot(id);
+      questionHistory.recordChange(id,lessonId,create?"CREATED":"CONTENT_CHANGED",context,
+          create?"Question created as draft.":"Question content, options, status, ordering, or activation changed.",
+          beforeSnapshot,afterSnapshot);
     }
     for (Long id : currentIds) {
-      if (!submittedIds.contains(id)) jdbc.update("update question set active=false where id=? and lesson_id=?", id, lessonId);
+      if (!submittedIds.contains(id)) {
+        Map<String,Object> beforeSnapshot=questionHistory.snapshot(id);
+        int changed=jdbc.update("update question set active=false where id=? and lesson_id=? and active=true",id,lessonId);
+        if(changed>0) questionHistory.recordChange(id,lessonId,"CONTENT_CHANGED",context,
+            "Question removed from the editor and deactivated; history is retained.",beforeSnapshot,questionHistory.snapshot(id));
+      }
     }
     return questionContentChanged;
   }

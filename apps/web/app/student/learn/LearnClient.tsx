@@ -42,12 +42,12 @@ const LEARNER_BLOCK_STAGE: Record<string,number> = {
 };
 
 function orderLearnerBlocks(blocks: Detail['blocks']) {
+  // Match the Admin preview: preserve every active block in its authored sequence.
   return blocks
     .filter(block => Object.prototype.hasOwnProperty.call(LEARNER_BLOCK_STAGE, block.block_type))
     .slice()
-    .sort((a,b) => LEARNER_BLOCK_STAGE[a.block_type]-LEARNER_BLOCK_STAGE[b.block_type]
-      || a.sequence_no-b.sequence_no || a.id-b.id);
-}
+    .sort((a,b) => a.sequence_no-b.sequence_no || a.id-b.id);
+ }
 
 function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
   const types=new Set(blocks.map(block=>block.block_type));

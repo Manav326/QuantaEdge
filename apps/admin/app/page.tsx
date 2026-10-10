@@ -85,7 +85,7 @@ export default function AdminHome(){
       </header>
 
       <nav className="admin-mobile-nav" aria-label="Admin navigation">
-        <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
+        <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/questions">Question review</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
       </nav>
 
       
