@@ -454,9 +454,15 @@ public class SourceIngestionController {
       if (bookBytes == null) throw badRequest("The source PDF bytes are not available for splitting.");
     } else if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
       try {
-        cachedBookPath = textbookCache.requireBookForJob(
-            String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
-            String.valueOf(job.get("cache_sha256"))).path();
+        Integer cacheClassNo = job.get("cache_class_no") == null
+            ? null : ((Number) job.get("cache_class_no")).intValue();
+        cachedBookPath = cacheClassNo == null
+            ? textbookCache.requireBookForJob(
+                String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                String.valueOf(job.get("cache_sha256"))).path()
+            : textbookCache.requireBookForJob(
+                String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                String.valueOf(job.get("cache_sha256")), cacheClassNo).path();
       } catch (IllegalArgumentException ex) {
         throw badRequest(ex.getMessage());
       }
@@ -658,9 +664,15 @@ public class SourceIngestionController {
         assetId = ((Number) job.get("book_asset_id")).longValue();
       } else if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
         try {
-          cachedBookPath = textbookCache.requireBookForJob(
-              String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
-              String.valueOf(job.get("cache_sha256"))).path();
+          Integer cacheClassNo = job.get("cache_class_no") == null
+              ? null : ((Number) job.get("cache_class_no")).intValue();
+          cachedBookPath = cacheClassNo == null
+              ? textbookCache.requireBookForJob(
+                  String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                  String.valueOf(job.get("cache_sha256"))).path()
+              : textbookCache.requireBookForJob(
+                  String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                  String.valueOf(job.get("cache_sha256")), cacheClassNo).path();
         } catch (IllegalArgumentException ex) {
           throw badRequest(ex.getMessage());
         }
