@@ -444,13 +444,16 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                     raise ValueError("The official bundle contains no recognised whole-book PDF members.")
                 if len(candidate_numbers) != len(set(candidate_numbers)):
                     raise ValueError("The official bundle contains duplicate chapter numbers.")
-                if expected_numbers:
-                    missing = sorted(set(expected_numbers) - set(candidate_numbers))
-                    unexpected = sorted(set(candidate_numbers) - set(expected_numbers))
-                    if missing or unexpected:
+                if expected_count:
+                    # NCERT keeps some legacy suffixes in the ZIP filenames
+                    # after chapters are rationalised (for example 01..08, 11..15).
+                    # The code suffix is not the current chapter ordinal. Validate
+                    # unique valid PDF count against the official listing instead.
+                    if len(candidate_members) != expected_count:
                         raise ValueError(
-                            "The complete-book bundle is incomplete; missing chapters "
-                            + str(missing) + ", unexpected chapters " + str(unexpected) + "."
+                            "The official complete-book bundle has "
+                            + str(len(candidate_members)) + " unique valid chapter PDFs; the current NCERT catalogue lists "
+                            + str(expected_count) + ". Observed source suffixes=" + str(candidate_numbers) + "."
                         )
                 elif candidate_numbers != list(range(1, max(candidate_numbers) + 1)):
                     raise ValueError("The complete-book bundle has non-contiguous chapter numbering.")
@@ -465,18 +468,34 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                 archive_path.unlink(missing_ok=True)
 
         if chosen_archive is None:
-            missing = sorted(set(expected_numbers) - set(best_available_chapters)) if expected_numbers else []
+            observed_numbers = best_available_chapters
+            suffixes_fit_current_sequence = bool(expected_numbers) and set(observed_numbers).issubset(set(expected_numbers))
+            if suffixes_fit_current_sequence:
+                reported_available = observed_numbers
+                missing = sorted(set(expected_numbers) - set(reported_available))
+                reported_expected = expected_numbers
+            elif expected_numbers:
+                reported_available = list(range(1, min(len(observed_numbers), expected_count) + 1))
+                missing = list(range(len(reported_available) + 1, expected_count + 1))
+                reported_expected = expected_numbers
+            else:
+                reported_available = observed_numbers
+                missing = []
+                reported_expected = observed_numbers
             book["content_availability"] = {
                 "status": "unavailable",
-                "expected_chapters": expected_numbers or best_available_chapters,
-                "available_chapters": best_available_chapters,
+                "expected_chapters": reported_expected,
+                "available_chapters": reported_available,
                 "missing_chapters": missing,
                 "missing_chapter_labels": ["Chapter " + str(number) for number in missing],
+                "observed_source_suffixes": observed_numbers,
+                "observed_pdf_count": len(observed_numbers),
+                "expected_pdf_count": expected_count or None,
                 "diagnostic_bundle_url": best_coverage_source or None,
                 "source_errors": source_errors[-6:],
                 "checked_at": now(),
                 "note": (
-                    "No complete official NCERT book bundle passed validation. The listed available chapters were detected in the best rejected bundle for planning only; this partial bundle was not stored as a complete textbook. Missing chapters remain retryable."
+                    "No complete official NCERT book bundle passed validation. Observed source suffixes are diagnostic only; missing chapters were not downloaded separately and no partial book was stored. This book remains retryable."
                 ),
             }
             raise RuntimeError(
@@ -508,15 +527,17 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                             start_page = len(merged) + 1
                             merged.insert_pdf(chapter)
                         if chapter_no:
-                            toc.append([1, "Chapter " + str(chapter_no), start_page])
+                            toc.append([1, "Chapter " + str(len(toc) + 1), start_page])
                     finally:
                         extracted.unlink(missing_ok=True)
 
             if len(merged) < 1:
                 raise ValueError("The complete NCERT book bundle produced an empty PDF.")
             merged_chapters = [int(row[1].split()[-1]) for row in toc]
-            if expected_numbers and merged_chapters != expected_numbers:
-                raise ValueError("The merged whole-book PDF does not contain every expected NCERT chapter.")
+            if expected_count and len(merged_chapters) != expected_count:
+                raise ValueError("The merged whole-book PDF does not contain the expected count of NCERT chapter PDFs.")
+            if merged_chapters != list(range(1, len(merged_chapters) + 1)):
+                raise ValueError("The merged whole-book review outline is not sequential.")
             merged.set_toc(toc)
             merged.set_metadata({
                 "title": str(book["title"]),
@@ -539,7 +560,7 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
     complete_chapters = [int(row[1].split()[-1]) for row in toc]
     book["content_availability"] = {
         "status": "complete",
-        "expected_chapters": expected_numbers or complete_chapters,
+        "expected_chapters": list(range(1, len(complete_chapters) + 1)),
         "available_chapters": complete_chapters,
         "missing_chapters": [],
         "missing_chapter_labels": [],

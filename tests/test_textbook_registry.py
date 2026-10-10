@@ -231,6 +231,52 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(1, len(requested))
         self.assertTrue(requested[0].endswith("fegp1dd.zip"))
 
+    def test_complete_ncert_bundle_accepts_legacy_nonconsecutive_suffixes_by_count(self):
+        import io
+        import zipfile
+        import fitz
+        from scripts.textbook_registry import download_ncert_merged
+
+        def make_pdf(label):
+            document = fitz.open()
+            page = document.new_page()
+            page.insert_text((72, 72), label)
+            result = document.tobytes()
+            document.close()
+            return result
+
+        bundle = io.BytesIO()
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("fegp101.pdf", make_pdf("section one"))
+            archive.writestr("fegp111.pdf", make_pdf("section two"))
+            archive.writestr("fegp131.pdf", make_pdf("section three"))
+        requested = []
+
+        def fake_get_url(url, destination=None, limit=None, attempts=4):
+            requested.append(url)
+            destination.write_bytes(bundle.getvalue())
+            return destination
+
+        book = {
+            "book_id": "ncert-c6-english-fegp1", "code": "fegp1", "chapter_count": 3,
+            "title": "Example current edition", "medium": "english",
+            "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+        }
+        with tempfile.TemporaryDirectory() as temp, patch(
+            "scripts.textbook_registry.get_url", side_effect=fake_get_url
+        ):
+            destination = Path(temp) / "whole-book.pdf"
+            digest, pages, toc, method = download_ncert_merged(book, destination)
+            self.assertTrue(destination.is_file())
+            self.assertTrue(digest)
+            self.assertEqual("complete", book["content_availability"]["status"])
+            self.assertEqual([1, 2, 3], book["content_availability"]["available_chapters"])
+            self.assertEqual(["Chapter 1", "Chapter 2", "Chapter 3"], [row[1] for row in toc])
+            with fitz.open(destination) as merged:
+                self.assertEqual(3, len(merged))
+        self.assertEqual(1, len(requested))
+        self.assertTrue(requested[0].endswith("fegp1dd.zip"))
+
     def test_incomplete_ncert_bundle_is_rejected_but_reports_observed_missing_chapters(self):
         import io
         import zipfile

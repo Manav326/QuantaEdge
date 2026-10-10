@@ -61,9 +61,9 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  # Do not cancel an in-flight publisher after it has begun changing persistent class images.
-  # New runs resume from the same image indexes after the active run exits.
-  cancel-in-progress: false
+  # Every class-image write is a complete atomic batch to the same :latest tag.
+  # A newer publisher can supersede a stale parser run and resumes from each stored index.
+  cancel-in-progress: true
 
 jobs:
   cache-textbooks:
