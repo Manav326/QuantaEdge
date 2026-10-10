@@ -216,7 +216,7 @@ export default function LearnClient() {
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){setTrackBrowse(null);setLesson(d);}
-      }catch(e:any){if(!cancelled)setError(e.message==='Student profile nahi मिला'||e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
+      }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
     }
     void load();
     return ()=>{cancelled=true;};
@@ -235,8 +235,8 @@ export default function LearnClient() {
   if(trackBrowse) return <main className="lesson-page">
     <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress"><LocaleText hinglish="Class" english="Class" /> {trackBrowse.classCode} · <LocaleText hinglish="Published syllabus" english="Published syllabus" /></span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</span><span>{trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
-      <h1>{trackBrowse.subjectName} <LocaleText hinglish="की पढ़ाई" english="learning" /></h1>
+      <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
+      <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
       <p className="lesson-intro"><LocaleText hinglish="यहाँ सिर्फ published lessons दिखते हैं। Review या writing में मौजूद content अभी students को नहीं दिखता।" english="Only published lessons appear here. Content still in review or being written is not visible to students." /></p>
       {trackGroups.length===0 ? <div className="concept-card">
         <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
@@ -258,7 +258,7 @@ export default function LearnClient() {
     <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress">Published syllabus · {lesson.estimated_minutes} min</span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
       <div className="lesson-meta">
-        <span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_name} · {lesson.chapter_name}</span>
+        <span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_code==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />} · {lesson.chapter_name}</span>
         <span>Lesson {currentIndex+1} / {lessons.length}</span>
       </div>
       <h1>{lesson.title}</h1>
