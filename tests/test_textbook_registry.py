@@ -1,18 +1,24 @@
 import hashlib
+import io
+import json
+import tarfile
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from subprocess import CompletedProcess
 
 from scripts.textbook_registry import (
     MAX_BOOK_BYTES,
     MAX_ZIP_BYTES,
+    _extract_oci_cache_rootfs,
     download_ncert_merged,
     host_allowed,
     parse_ncert_catalog,
     parse_scert_classes,
     parse_scert_medium,
     publish_language,
+    push_batch,
 )
 
 NCERT_FIXTURE = r"""
@@ -211,6 +217,113 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(1, len(report["failed_after_retries"]))
         self.assertEqual(5, report["failed_after_retries"][0]["attempts_this_run"])
         self.assertEqual(5, push.call_count)
+
+
+    def test_oci_cache_recovery_merges_layers_and_verifies_all_book_checksums(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            layout = root / "oci"
+            blobs = layout / "blobs" / "sha256"
+            blobs.mkdir(parents=True)
+            layout_index = layout / "index.json"
+
+            pdf_a = b"%PDF-1.4\ncache book a\n"
+            pdf_b = b"%PDF-1.4\ncache book b\n"
+            entry_a = {
+                "book_id": "book-a", "file": "books/book-a.pdf",
+                "sha256": hashlib.sha256(pdf_a).hexdigest(), "bytes": len(pdf_a),
+            }
+            entry_b = {
+                "book_id": "book-b", "file": "books/book-b.pdf",
+                "sha256": hashlib.sha256(pdf_b).hexdigest(), "bytes": len(pdf_b),
+            }
+
+            def make_layer(files):
+                buffer = io.BytesIO()
+                with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
+                    for name, content in files:
+                        info = tarfile.TarInfo(name)
+                        info.size = len(content)
+                        archive.addfile(info, io.BytesIO(content))
+                raw = buffer.getvalue()
+                digest = hashlib.sha256(raw).hexdigest()
+                (blobs / digest).write_bytes(raw)
+                return {"mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+                        "digest": "sha256:" + digest, "size": len(raw)}
+
+            old_index = json.dumps({"books": [entry_a], "download_status": {}}).encode()
+            new_index = json.dumps({"books": [entry_a, entry_b], "download_status": {}}).encode()
+            layers = [
+                make_layer([("index.json", old_index), ("books/book-a.pdf", pdf_a)]),
+                make_layer([("index.json", new_index), ("books/book-b.pdf", pdf_b)]),
+            ]
+            manifest = {
+                "schemaVersion": 2,
+                "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                "config": {"mediaType": "application/vnd.oci.image.config.v1+json",
+                           "digest": "sha256:" + "0" * 64, "size": 0},
+                "layers": layers,
+            }
+            manifest_raw = json.dumps(manifest).encode()
+            manifest_digest = hashlib.sha256(manifest_raw).hexdigest()
+            (blobs / manifest_digest).write_bytes(manifest_raw)
+            layout_index.write_text(json.dumps({
+                "schemaVersion": 2,
+                "manifests": [{
+                    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                    "digest": "sha256:" + manifest_digest,
+                    "size": len(manifest_raw),
+                    "annotations": {"org.opencontainers.image.ref.name": "cache"},
+                }],
+            }), encoding="utf-8")
+
+            rootfs = root / "rootfs"
+            recovered = _extract_oci_cache_rootfs(layout, rootfs)
+
+            self.assertEqual(["book-a", "book-b"], [item["book_id"] for item in recovered["books"]])
+            self.assertEqual(pdf_a, (rootfs / "books/book-a.pdf").read_bytes())
+            self.assertEqual(pdf_b, (rootfs / "books/book-b.pdf").read_bytes())
+            self.assertEqual(new_index, (rootfs / "index.json").read_bytes())
+
+    def test_push_batch_flattens_near_layer_limit(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            context = root / "context"
+            new_pdf = root / "new-book.pdf"
+            old_pdf = b"%PDF-1.4\nalready cached\n"
+            new_pdf.write_bytes(b"%PDF-1.4\nnew book\n")
+            image = "ghcr.io/example/quantaedge-textbooks-hindi:latest"
+            index = {
+                "books": [
+                    {"book_id": "old-book", "file": "books/old-book.pdf"},
+                    {"book_id": "new-book", "file": "books/new-book.pdf"},
+                ],
+                "download_status": {},
+            }
+
+            def fake_run(command, **kwargs):
+                if command[:3] == ["docker", "image", "inspect"]:
+                    return CompletedProcess(
+                        command, 0,
+                        stdout=("sha256:previous\n" if command[3] == "--format={{.Id}}" else "89\n"),
+                    )
+                if command[:2] == ["docker", "cp"]:
+                    destination = Path(command[3])
+                    destination.mkdir(parents=True, exist_ok=True)
+                    (destination / "old-book.pdf").write_bytes(old_pdf)
+                return CompletedProcess(command, 0, stdout="")
+
+            with patch("scripts.textbook_registry.subprocess.run", side_effect=fake_run):
+                push_batch(
+                    image, True, [{"book_id": "new-book"}],
+                    {"new-book": new_pdf}, index, context,
+                )
+
+            dockerfile = (context / "Dockerfile").read_text(encoding="utf-8")
+            self.assertIn("FROM scratch", dockerfile)
+            self.assertIn("COPY books/ /books/", dockerfile)
+            self.assertTrue((context / "books/old-book.pdf").is_file())
+            self.assertTrue((context / "books/new-book.pdf").is_file())
 
 
 if __name__ == "__main__":
