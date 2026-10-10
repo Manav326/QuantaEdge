@@ -1,0 +1,31 @@
+{
+  "bundle_status": "DRAFT_EXTRACTION_ONLY",
+  "source": {
+    "pdf_filename": "ncert-c6-hindi-fhgp1--chapter-chapter-7.pdf",
+    "pdf_sha256": "268e15e14c68a2907b7d59768396fb3436b2c53695c290f753c6da1f4110bba8",
+    "pdf_page_count": 36,
+    "title": "Ganita Prakash (Hindi) — Chapter 7",
+    "source_title": "Ganita Prakash (Hindi)",
+    "source_url": "https://ncert.nic.in/textbook.php?fhgp1=0-10",
+    "edition": "Current official catalogue; retain printed reprint year from the source PDF",
+    "publisher": "NCERT",
+    "language": "hindi",
+    "class": "6",
+    "classes": [
+      "6"
+    ],
+    "subject": "Mathematics",
+    "book_id": "ncert-c6-hindi-fhgp1",
+    "scope": "CHAPTER_PDF",
+    "content_availability": {
+      "status": "complete"
+    },
+    "asset_content_status": "complete",
+    "chapter_title": "Chapter 7",
+    "chapter_page_start": 171,
+    "chapter_page_end": 206,
+    "original_book_sha256": "35e96258ae139a2444c8a57f880312899e5364cb57a094e414c7b591900146ef"
+  },
+  "pages": [],
+  "chapter_map": []
+}
