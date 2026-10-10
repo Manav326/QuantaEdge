@@ -11,10 +11,13 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.time.OffsetDateTime;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,6 +26,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @ExtendWith(MockitoExtension.class)
 class LearningClassControllerTest {
+  @TempDir Path tempDirectory;
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
@@ -96,12 +100,18 @@ class LearningClassControllerTest {
             "original_filename", "class.mp4", "media_type", "video/mp4",
             "file_size_bytes", 128L, "sha256", "0".repeat(64),
             "duration_seconds", 60, "status", "PUBLISHED")));
+    Path mediaFile = tempDirectory.resolve("class.mp4");
+    try {
+      Files.write(mediaFile, "private video bytes for byte-range test".getBytes());
+    } catch (java.io.IOException ex) {
+      throw new AssertionError(ex);
+    }
     when(mediaStorage.resolve("afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4"))
-        .thenReturn(java.nio.file.Path.of("/private/class.mp4"));
-    // File is not present, so the controller denies the read before consuming any stream bytes.
+        .thenReturn(mediaFile);
+
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.streamRecordedClass(88L, "bytes=bad-range", student));
 
-    assertEquals(404, error.getStatusCode().value());
+    assertEquals(416, error.getStatusCode().value());
   }
 }
