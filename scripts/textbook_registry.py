@@ -134,7 +134,7 @@ def get_url(url: str, destination: Path | None = None, limit: int | None = None,
                 delay = attempt * 2
                 log("Transient source failure; retry " + str(attempt + 1) + "/4 in " + str(delay) + "s: " + url)
                 time.sleep(delay)
-    raise RuntimeError("Failed after four attempts: " + url + " (" + str(last_error) + ")")
+    raise RuntimeError("Failed after " + str(attempts) + " attempt(s): " + url + " (" + str(last_error) + ")")
 
 
 def fetch_text(url: str) -> str:
