@@ -79,7 +79,7 @@ public class LearningController {
              strip_answer_keys(b.content) as content,
              a.url as asset_url,a.alt_text as asset_alt
       from lesson_block b left join content_asset a on a.id=b.asset_id and a.status='PUBLISHED'
-      where b.lesson_id=? and b.active=true order by b.sequence_no
+      where b.lesson_id=? and b.active=true order by b.sequence_no,b.id
       """,lessonId));
     result.put("questions",publicQuestions(lessonId));
     return result;
