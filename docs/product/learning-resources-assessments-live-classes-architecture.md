@@ -18,11 +18,11 @@ Add secure chapter/book resources, durable test attempts and results, teacher re
 
 ### 1. Textbook library (subject book + chapter PDF)
 
-- A learning_document record identifies the logical resource, its scope (SUBJECT_BOOK or CHAPTER_PDF), curriculum subject/chapter, title, current version, upload metadata, page count, checksum, lifecycle state, and uploader.
-- Each upload version gets a separate immutable version record. Replacements create a new version; older versions can be retained for traceability and rolled back by an authorized editor.
-- Original PDFs and derived page images are stored outside the database in a private persistent storage directory mounted into the API container. The database stores opaque storage keys, not user-supplied paths or public URLs.
-- Upload validation checks the PDF signature, size/page limits, rendering success, safe file naming, checksum, and ownership of the selected subject/chapter.
-- PDF pages are server-rendered to image tiles for the view-only student viewer. Student endpoints return only the requested page after authorization; they never serve the original PDF or a filesystem path. Student pages use Cache-Control: no-store and restrictive response headers.
+- A database-backed `learning_pdf_asset` library stores each original PDF once, with original filename, checksum, page count, provenance (`EXTRACTION_IMPORT`, `LEGACY_IMPORT`, or `ADMIN_UPLOAD`), and the PDF bytes. `learning_document` maps one library PDF to a subject book or an individual chapter PDF. Reusing a library row never duplicates the binary; replacing an assignment creates a new document version/assignment and keeps old results/audit references intact.
+- The Admin Resources screen has two paths: (1) **Select existing PDF** from the registered extraction/source PDF catalog and attach it to a subject/chapter; (2) **Upload new PDF**, which adds the binary to the library once and then attaches it. Duplicate uploads are detected by SHA-256 and reuse the existing library item.
+- Existing extraction bundles record the original filename, SHA-256, page count, and extracted page text, but those fields are not themselves the PDF binary. A one-time importer/backfill must match the actual source PDF bytes by SHA-256 and register them in the library. Do not invent a missing PDF or treat extracted text as a PDF. If a deployment has a separate legacy PDF table, add a narrow adapter from that table into the library rather than copying its bytes repeatedly.
+- Upload/import validation checks the PDF signature, size/page limits, successful PDF parsing/rendering, checksum, and ownership of the selected subject/chapter. The original PDF is stored privately in PostgreSQL, never in public Next.js assets or a public bucket.
+- PDF pages are rendered server-side with Apache PDFBox to page images for the view-only student viewer. Student endpoints return only the requested page after authorization; they never serve the original PDF bytes or a filesystem path. Student pages use Cache-Control: no-store and restrictive response headers. Database backups/restore plans must include the PDF binary library.
 - Subject-book access is controlled by active student subject enrollment. Chapter PDF access additionally verifies that the chapter belongs to the student's class and an enrolled subject, and follows the same active/published curriculum availability rules.
 - The viewer supports page navigation, thumbnails, zoom, fit-to-width, fit-to-page, fullscreen, page count, progress/resume, and keyboard navigation, with a mobile-friendly layout. The viewer omits built-in download/print controls. This deters casual copying but is not absolute DRM: an authorized viewer can still capture screenshots or save delivered page images.
 - Admin upload/manage UI uses the existing staff authentication and explicit content permissions. Never put a PDF into the public Next.js assets directory or make an object-storage bucket public.
@@ -73,11 +73,12 @@ Add secure chapter/book resources, durable test attempts and results, teacher re
 ### Phase 1 — protected PDF resources
 1. Add versioned metadata and page tables in a new Flyway migration.
 2. Add private storage and safe PDF validation/rasterization, with configurable limits and persistent Docker volume.
-3. Add permission-checked admin upload/list/retire APIs for subject books and chapter PDFs.
-4. Add student resource catalog and protected page endpoints scoped to active enrollments.
-5. Add admin resource management UI and a polished responsive student page viewer.
-6. Add tests for upload validation, page authorization, document scope and no-original-PDF delivery.
-7. CI gate: API tests, admin build, web build, container builds all green.
+3. Add permission-checked admin PDF-library catalog/upload and subject-book/chapter assignment APIs.
+4. Add the admin dropdown to choose an existing PDF or upload a new one; add a one-time checksum-based importer for existing extracted source PDFs.
+5. Add student resource catalog and protected page endpoints scoped to active enrollments.
+6. Add admin resource management UI and a polished responsive student page viewer.
+7. Add tests for upload validation, page authorization, document scope, duplicate detection and no-original-PDF delivery.
+8. CI gate: API tests, admin build, web build, container builds all green.
 
 ### Phase 2 — durable tests and results
 1. Add assessment definition, question snapshot, attempt, answer and test-level audit tables.
