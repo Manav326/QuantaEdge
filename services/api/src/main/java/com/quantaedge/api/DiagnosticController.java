@@ -38,7 +38,7 @@ public class DiagnosticController {
         and ch.active=true and ch.content_status='PUBLISHED'
         and c.code=(select class_code from student where id=?)
         and q.question_type in ('MCQ','TRUE_FALSE')
-      order by s.sort_order,ch.teaching_order,l.sort_order,q.sort_order
+      order by s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id
       limit 10
       """,context.studentId());
 

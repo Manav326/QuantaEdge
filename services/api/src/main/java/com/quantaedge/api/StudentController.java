@@ -160,7 +160,7 @@ public class StudentController {
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
-      order by c.sort_order,s.sort_order,ch.teaching_order,ch.sort_order,l.sort_order
+      order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """,studentId,studentId,studentId);
   }
 

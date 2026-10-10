@@ -34,7 +34,7 @@ public class RecommendationController {
         and coalesce(p.status,'NOT_STARTED') <> 'COMPLETED'
       group by l.id,ch.id,s.id,p.status
       order by case when coalesce(p.status,'NOT_STARTED')='COMPLETED' then 1 else 0 end,
-               coalesce(round(avg(coalesce(m.mastery_percent,0))),0),ch.sort_order,l.sort_order
+               coalesce(round(avg(coalesce(m.mastery_percent,0))),0),s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       limit 1
       """,context.studentId(),context.studentId(),context.studentId());
     if(rows.isEmpty()) return Map.of("available",false);

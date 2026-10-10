@@ -49,7 +49,7 @@ public class CurriculumAuditController {
       join curriculum_class c on c.id=s.class_id
       where c.code in ('6','7','8') and s.code in ('maths','science')
         and ch.active=true and ch.content_status='PUBLISHED'
-      order by c.sort_order,s.sort_order,ch.teaching_order
+      order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),ch.id
       """));
     result.put("strict", strictAudit());
     return result;
@@ -65,7 +65,7 @@ public class CurriculumAuditController {
       join curriculum_class c on c.id=s.class_id
       where c.code in ('6','7','8') and s.code in ('maths','science')
         and ch.active=true and ch.content_status='PUBLISHED'
-      order by c.sort_order,s.sort_order,ch.teaching_order,ch.sort_order
+      order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),ch.id
       """);
 
     var failures = new ArrayList<Map<String, Object>>();
