@@ -871,8 +871,8 @@ public class AdminContentController {
       throw badRequest("Complete and verify the textbook source title, HTTPS URL, edition and page range before submitting.");
     }
     List<Map<String,Object>> blocks=jdbc.queryForList("""
-      select block_type,content::text as content
-      from lesson_block where lesson_id=? and active=true order by sequence_no
+      select id,block_type,content::text as content
+      from lesson_block where lesson_id=? and active=true order by sequence_no,id
       """,lessonId);
     if(blocks.isEmpty()) throw badRequest("Add at least one complete teaching block before submitting for review.");
     boolean hasCoreBlock=false;
@@ -1061,8 +1061,8 @@ public class AdminContentController {
     if (rows.isEmpty()) throw notFound("Lesson", lessonId);
     Map<String, Object> result = new LinkedHashMap<>(rows.getFirst());
     result.put("blocks", jdbc.queryForList("""
-      select sequence_no, block_type, content::text as content, active
-      from lesson_block where lesson_id=? order by sequence_no
+      select id, sequence_no, block_type, content::text as content, active
+      from lesson_block where lesson_id=? order by sequence_no,id
       """, lessonId));
     result.put("questions", jdbc.queryForList("""
       select q.id, q.question_type, q.prompt, q.explanation, q.difficulty,
