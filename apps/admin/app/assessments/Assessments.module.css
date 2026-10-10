@@ -74,6 +74,7 @@
 .questionHeading b{color:#78849a;font-size:9px;letter-spacing:0}
 .reviewQuestion h3{font-size:12px;line-height:1.7;color:#25334a;margin:0;font-weight:700}
 .reviewQuestion ul{display:grid;gap:6px;margin:0;padding-left:23px;color:#68758a;font-size:10px;line-height:1.6}
+.teacherReference{display:grid;gap:7px;padding:12px;border:1px solid #f0d2bd;border-radius:10px;background:#fffaf6}.teacherReference small{font-size:8px;letter-spacing:1px;font-weight:900;color:#a54b20}.teacherReference pre{max-height:180px;overflow:auto;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;color:#455168;font:10px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
 .studentAnswer{padding:12px;border:1px solid #e8ebf1;border-radius:10px;background:#f8f9fb}
 .studentAnswer small{font-size:8px;font-weight:900;letter-spacing:1px;color:#8a95a8}
 .studentAnswer p{font-size:11px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;color:#344258;margin:8px 0 0}
