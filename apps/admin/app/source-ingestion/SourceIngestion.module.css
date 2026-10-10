@@ -127,3 +127,17 @@
 .metadataReview b { display: block; margin-bottom: 5px; color: #624615; font-size: 13px; }
 .metadataReview p { margin: 0; color: #75644b; font-size: 12px; line-height: 1.55; }
 @media (max-width:760px) { .metadataReview { align-items: stretch; flex-direction: column; } }
+
+
+.mappingConfirm {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 5px;
+  padding-top: 10px;
+  border-top: 1px solid #e7eaf0;
+  cursor: pointer;
+}
+.mappingConfirm input { flex: 0 0 auto; width: 16px; height: 16px; margin-top: 2px; }
+.mappingConfirm span { color: #465367; font-size: 12px; line-height: 1.55; }
