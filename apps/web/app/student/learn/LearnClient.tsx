@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
+import InlineTextbookReader from './InlineTextbookReader';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
@@ -15,7 +16,7 @@ type Lesson = {
 type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
 };
-type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;subject_code:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null};
+type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null};
 type Question = {
   id:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
@@ -271,11 +272,19 @@ export default function LearnClient() {
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
         const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code).then(r=>r.json()) as Lesson[];
+        let availableDocuments:StudentDocument[]=[];
+        try{
+          const documentResponse=await fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(d.subject_code),{cache:'no-store'});
+          if(documentResponse.ok){
+            const documentBody=await documentResponse.json();
+            if(Array.isArray(documentBody))availableDocuments=documentBody as StudentDocument[];
+          }
+        }catch{/* Lessons remain usable if the textbook catalogue is temporarily unavailable. */}
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
-        if(!cancelled){setTrackBrowse(null);setLesson(d);}
+        if(!cancelled){setStudentDocuments(availableDocuments);setTrackBrowse(null);setLesson(d);}
       }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
     }
     void load();
@@ -298,7 +307,7 @@ export default function LearnClient() {
       <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
       <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
       <p className="lesson-intro"><LocaleText hinglish="यहाँ सिर्फ published lessons दिखते हैं। Review या writing में मौजूद content अभी students को नहीं दिखता।" english="Only published lessons appear here. Content still in review or being written is not visible to students." /></p>
-      {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=><Link key={item.document_id} href={'/student/textbooks?documentId='+item.document_id} className="app-task" style={{display:'flex',alignItems:'center',gap:12,margin:'14px 0',padding:'14px 16px',border:'1px solid #f0d0b7',borderRadius:13,background:'linear-gradient(100deg,#fff8f1,#fff)'}}><span className="task-icon" style={{background:'#fff0e5',color:'#c2410c'}}>▤</span><div style={{flex:1}}><strong><LocaleText hinglish="पूरी subject book पढ़ें" english="Read the complete subject book" /></strong><small>{item.title} · {item.page_count} pages · {item.edition||'Textbook PDF'}</small></div><span className="task-action">↗</span></Link>)}
+      {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('पूरी subject book','Complete subject book')}/>)}
       {trackGroups.length===0 ? <div className="concept-card">
         <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
         <h2><LocaleText hinglish="अभी कोई published lesson available नहीं है" english="No published lessons are available yet" /></h2>
@@ -306,11 +315,11 @@ export default function LearnClient() {
         <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
         <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
       </div> : trackGroups.map(group=>{
-        const chapterDocument=studentDocuments.find(item=>item.scope==='CHAPTER_PDF'&&(
-          (item.chapter_code&&item.chapter_code===group.code)||(!item.chapter_code&&item.chapter_name===group.name)));
+        const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
+          (item.chapter_code&&item.chapter_code===group.code)||(!item.chapter_code&&item.chapter_name?.trim().toLocaleLowerCase()===group.name.trim().toLocaleLowerCase())));
         return <section className="concept-card" key={group.code}>
           <span className="concept-kicker"><LocaleText hinglish="Chapter" english="Chapter" /></span><h2>{group.name}</h2>
-          {chapterDocument&&<Link href={'/student/textbooks?documentId='+chapterDocument.document_id} className="app-task" style={{display:'flex',alignItems:'center',gap:11,margin:'10px 0 13px',padding:'12px 14px',border:'1px solid #f1d3bd',borderRadius:12,background:'#fffaf5'}}><span className="task-icon" style={{background:'#fff0e5',color:'#c2410c'}}>▤</span><div style={{flex:1}}><strong><LocaleText hinglish="Chapter PDF online पढ़ें" english="Read chapter PDF online" /></strong><small>{chapterDocument.title} · {chapterDocument.page_count} pages</small></div><span className="task-action">↗</span></Link>}
+          {chapterDocuments.map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','This chapter’s PDF')}/>)}
           <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
             <span className="task-icon">▣</span><div><strong>{item.title}</strong><small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित पाठ" english="min · published lesson" /></small></div><span className="task-action">→</span>
           </Link>)}</div>
@@ -329,6 +338,9 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
+      {studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
+        (item.chapter_code&&item.chapter_code===lesson.chapter_code)||(!item.chapter_code&&item.chapter_name?.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
+      )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')}/>)}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lesson.questions.length).hinglish} english={learnerPathLabel(orderedBlocks,lesson.questions.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
