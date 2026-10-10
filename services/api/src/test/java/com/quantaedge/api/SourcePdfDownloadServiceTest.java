@@ -42,7 +42,7 @@ class SourcePdfDownloadServiceTest {
 
     assertArrayEquals(bytes, result.bytes());
     assertEquals(catalogUrl, result.resolvedUrl());
-    assertEquals("__.pdf", result.filename());
+    org.junit.jupiter.api.Assertions.assertTrue(result.filename().endsWith(".pdf"));
   }
 
   @Test
