@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
+import { LanguageSwitcher, LocaleText, useLocale } from '../components/LanguageProvider';
 
 type Mode = 'login' | 'register' | 'reset';
 type Step = 'mobile' | 'otp';
@@ -18,6 +19,8 @@ async function readApi(response: Response): Promise<any> {
 
 export default function ParentLoginPage() {
   const router = useRouter();
+  const { locale } = useLocale();
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [mode, setMode] = useState<Mode>('login');
   const [loginMethod, setLoginMethod] = useState<LoginMethod>('password');
   const [step, setStep] = useState<Step>('mobile');
@@ -56,22 +59,22 @@ export default function ParentLoginPage() {
       if (!response.ok) {
         const message = String(body.message || '');
         if (message.toLowerCase().includes('password has not been set')) {
-          throw new Error('No password is set on this parent account yet. Choose “OTP se sign in karein” to enter your dashboard, or use “Password bhool gaye?” to create one.');
+          throw new Error(tx('इस parent account पर अभी password set नहीं है। Dashboard खोलने के लिए “OTP से sign in करें” चुनें या “Password भूल गए?” से password बनाएँ।','No password is set on this parent account yet. Choose “Sign in with OTP” to open your dashboard, or use “Forgot password?” to create one.'));
         }
         throw new Error(message || 'Unable to sign in. Check your mobile number and password.');
       }
       router.replace('/parent'); router.refresh();
     } catch (e: any) {
-      setError(e?.message || 'Unable to sign in. Please try again.');
+      setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
     } finally { setBusy(false); }
   }
 
   async function requestOtp() {
     setError(''); setNotice('');
     if (mode === 'register') {
-      if (displayName.trim().length < 2) { setError('Enter your name.'); return; }
-      if (password.length < 8) { setError('Choose a password with at least 8 characters.'); return; }
-      if (password !== confirmPassword) { setError('The passwords do not match.'); return; }
+      if (displayName.trim().length < 2) { setError(tx('अपना नाम लिखें।','Enter your name.')); return; }
+      if (password.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
+      if (password !== confirmPassword) { setError(tx('दोनों passwords match नहीं कर रहे।','The passwords do not match.')); return; }
     }
     setBusy(true);
     try {
@@ -84,10 +87,10 @@ export default function ParentLoginPage() {
       if (!response.ok) throw new Error(body.message || 'Unable to send the verification code.');
       setDevCode(body.devCode || ''); setOtp(''); setStep('otp');
       setNotice(mode === 'register'
-        ? 'Aapke mobile number par OTP bhej diya gaya hai.'
+        ? tx('आपके mobile number पर OTP भेज दिया गया है।', 'An OTP has been sent to your mobile number.')
         : mode === 'reset'
-          ? 'Registered mobile number par password reset OTP bhej diya gaya hai.'
-          : 'Registered mobile number par login OTP bhej diya gaya hai.');
+          ? tx('Registered mobile number पर password reset OTP भेज दिया गया है।', 'A password reset OTP has been sent to your registered mobile number.')
+          : tx('Registered mobile number पर login OTP भेज दिया गया है।', 'A login OTP has been sent to your registered mobile number.'));
     } catch (e: any) {
       setError(e?.message || 'Unable to send the verification code.');
     } finally { setBusy(false); }
@@ -95,10 +98,10 @@ export default function ParentLoginPage() {
 
   async function verifyOtp() {
     setError(''); setNotice('');
-    if (otp.trim().length !== 6) { setError('Enter the 6-digit OTP.'); return; }
+    if (otp.trim().length !== 6) { setError(tx('6-digit OTP डालें।','Enter the 6-digit OTP.')); return; }
     if (mode === 'reset') {
-      if (newPassword.length < 8) { setError('Choose a password with at least 8 characters.'); return; }
-      if (newPassword !== confirmNewPassword) { setError('The new passwords do not match.'); return; }
+      if (newPassword.length < 8) { setError(tx('कम से कम 8 characters का password चुनें।','Choose a password with at least 8 characters.')); return; }
+      if (newPassword !== confirmNewPassword) { setError(tx('दोनों नए passwords match नहीं कर रहे।','The new passwords do not match.')); return; }
     }
     setBusy(true);
     try {
@@ -131,56 +134,63 @@ export default function ParentLoginPage() {
 
   const submitLabel = mode === 'login'
     ? loginMethod === 'password'
-      ? (busy ? 'Sign in ho raha hai…' : 'Sign in karein')
-      : (busy ? (step === 'mobile' ? 'Login OTP bheja ja raha hai…' : 'Verifying…') : (step === 'mobile' ? 'Login OTP bhejein →' : 'OTP verify karke sign in karein →'))
+      ? (busy ? tx('Sign in हो रहा है…', 'Signing in…') : tx('Sign in करें', 'Sign in'))
+      : busy
+        ? (step === 'mobile' ? tx('Login OTP भेजा जा रहा है…', 'Sending login OTP…') : tx('Verify हो रहा है…', 'Verifying…'))
+        : step === 'mobile' ? tx('Login OTP भेजें →', 'Send login OTP →') : tx('OTP verify करके sign in करें →', 'Verify OTP and sign in →')
     : mode === 'register'
-      ? (busy ? (step === 'mobile' ? 'OTP bheja ja raha hai…' : 'Account ban raha hai…') : (step === 'mobile' ? 'Mobile verify karein →' : 'Parent account banayein →'))
-      : (busy ? (step === 'mobile' ? 'OTP bheja ja raha hai…' : 'Password reset ho raha hai…') : (step === 'mobile' ? 'Password reset OTP bhejein →' : 'Password reset karein →'));
+      ? busy
+        ? (step === 'mobile' ? tx('OTP भेजा जा रहा है…', 'Sending OTP…') : tx('Account बन रहा है…', 'Creating account…'))
+        : step === 'mobile' ? tx('Mobile verify करें →', 'Verify mobile →') : tx('Parent account बनाएँ →', 'Create parent account →')
+      : busy
+        ? (step === 'mobile' ? tx('OTP भेजा जा रहा है…', 'Sending OTP…') : tx('Password reset हो रहा है…', 'Resetting password…'))
+        : step === 'mobile' ? tx('Password reset OTP भेजें →', 'Send password reset OTP →') : tx('Password reset करें →', 'Reset password →');
 
   return (
     <main className="auth-page">
+      <div className="qe-language-auth-float"><LanguageSwitcher /></div>
       <div className="auth-brand"><QuantaEdgeBrand variant="auth" /></div>
       <section className="auth-card parent-auth-card">
-        <Link href="/" className="auth-back-link">← QuantaEdge par wapas</Link>
-        <span className="eyebrow">{mode === 'login' ? 'PARENT / GUARDIAN' : mode === 'register' ? 'CREATE FAMILY ACCOUNT' : 'ACCOUNT RECOVERY'}</span>
-        <h1>{mode === 'login' ? 'Wapas swagat hai.' : mode === 'register' ? 'Aapki family learning space.' : 'Naya password banayein.'}</h1>
+        <Link href="/" className="auth-back-link"><LocaleText hinglish="← QuantaEdge पर वापस" english="← Back to QuantaEdge" /></Link>
+        <span className="eyebrow">{mode === 'login' ? <LocaleText hinglish="PARENT / GUARDIAN" english="PARENT / GUARDIAN" /> : mode === 'register' ? <LocaleText hinglish="FAMILY ACCOUNT बनाएँ" english="CREATE FAMILY ACCOUNT" /> : <LocaleText hinglish="ACCOUNT RECOVERY" english="ACCOUNT RECOVERY" />}</span>
+        <h1>{mode === 'login' ? <LocaleText hinglish="वापस स्वागत है।" english="Welcome back." /> : mode === 'register' ? <LocaleText hinglish="आपकी family learning space।" english="Your family learning space." /> : <LocaleText hinglish="नया password बनाएँ।" english="Create a new password." />}</h1>
         <p>{mode === 'login'
-          ? 'Apne registered mobile number aur password se sign in karein. Password set nahi hai to OTP sign-in choose karein.'
+          ? <LocaleText hinglish="अपने registered mobile number और password से sign in करें। Password set नहीं है तो OTP sign-in चुनें।" english="Sign in with your registered mobile number and password. If you haven't set a password, choose OTP sign-in." />
           : mode === 'register'
-            ? 'Mobile number verify karein aur parent password banayein. Phir ek hi dashboard se bachchon ke profiles manage karein.'
-            : 'Registered mobile par aaya OTP verify karke naya password banayein. Aage se isi password se sign in kar sakte hain.'}</p>
+            ? <LocaleText hinglish="Mobile number verify करें और parent password बनाएँ। फिर एक ही dashboard से बच्चों के Profiles manage करें।" english="Verify your mobile number and create a parent password. Then manage all your children's profiles from one dashboard." />
+            : <LocaleText hinglish="Registered mobile पर आया OTP verify करके नया password बनाएँ। आगे से इसी password से sign in कर सकते हैं।" english="Verify the OTP sent to your registered mobile number to create a new password." />}</p>
         {error && <div className="auth-message is-error" role="alert">{error}</div>}
         {notice && <div className="auth-message" role="status">{notice}</div>}
 
         <form className="auth-form" onSubmit={submit}>
-          {mode === 'register' && <label>Parent / guardian name
-            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Enter your full name" autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
+          {mode === 'register' && <label><LocaleText hinglish="Parent / guardian का नाम" english="Parent / guardian name" />
+            <input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder={tx('अपना पूरा नाम लिखें', 'Enter your full name')} autoComplete="name" maxLength={120} required={step === 'mobile'} disabled={step === 'otp'} />
           </label>}
-          <label>Registered mobile number
-            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-digit mobile number daalein" inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
+          <label><LocaleText hinglish="Registered mobile number" english="Registered mobile number" />
+            <input value={mobile} onChange={e => setMobile(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder={tx('10 अंकों का mobile number डालें', 'Enter 10-digit mobile number')} inputMode="numeric" autoComplete="tel" required disabled={otpFlow && step === 'otp'} />
           </label>
-          {mode === 'login' && loginMethod === 'password' && <label>Password
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Apna password daalein" autoComplete="current-password" required />
+          {mode === 'login' && loginMethod === 'password' && <label><LocaleText hinglish="Password" english="Password" />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('अपना password डालें', 'Enter your password')} autoComplete="current-password" required />
           </label>}
           {mode === 'register' && step === 'mobile' && <>
-            <label>Password banayein
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Kam se kam 8 characters" autoComplete="new-password" minLength={8} required />
+            <label><LocaleText hinglish="Password बनाएँ" english="Create password" />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder={tx('कम से कम 8 characters', 'At least 8 characters')} autoComplete="new-password" minLength={8} required />
             </label>
-            <label>Password dobara daalein
-              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Wahi password dobara daalein" autoComplete="new-password" minLength={8} required />
+            <label><LocaleText hinglish="Password दोबारा डालें" english="Re-enter password" />
+              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
             </label>
           </>}
           {otpFlow && step === 'otp' && <>
-            {devCode && <div className="auth-dev-code"><span>Local development OTP</span><strong>{devCode}</strong></div>}
-            <label>6-digit OTP
-              <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="OTP daalein" inputMode="numeric" autoComplete="one-time-code" required />
+            {devCode && <div className="auth-dev-code"><span><LocaleText hinglish="Local development OTP" english="Local development OTP" /></span><strong>{devCode}</strong></div>}
+            <label><LocaleText hinglish="6-digit OTP" english="6-digit OTP" />
+              <input value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))} placeholder={tx('OTP डालें', 'Enter OTP')} inputMode="numeric" autoComplete="one-time-code" required />
             </label>
             {mode === 'reset' && <>
-              <label>New password
+              <label><LocaleText hinglish="नया password" english="New password" />
                 <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Kam se kam 8 characters" autoComplete="new-password" minLength={8} required />
               </label>
-              <label>Naya password dobara daalein
-                <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder="Wahi password dobara daalein" autoComplete="new-password" minLength={8} required />
+              <label><LocaleText hinglish="नया password दोबारा डालें" english="Re-enter new password" />
+                <input type="password" value={confirmNewPassword} onChange={e => setConfirmNewPassword(e.target.value)} placeholder={tx('वही password दोबारा डालें', 'Re-enter the same password')} autoComplete="new-password" minLength={8} required />
               </label>
             </>}
           </>}
@@ -191,21 +201,21 @@ export default function ParentLoginPage() {
             (mode === 'reset' && step === 'otp' && (newPassword.length < 8 || newPassword !== confirmNewPassword))}>
             {submitLabel}
           </button>
-          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}>← Mobile number badlein</button>}
+          {otpFlow && step === 'otp' && <button type="button" className="auth-secondary-action" onClick={() => { setStep('mobile'); setOtp(''); setDevCode(''); setError(''); setNotice(''); }} disabled={busy}><LocaleText hinglish="← Mobile number बदलें" english="← Change mobile number" /></button>}
         </form>
 
         <div className="auth-mode-links">
           {mode === 'login' ? <>
-            <button type="button" onClick={() => resetState('reset')}>Password bhool gaye?</button>
+            <button type="button" onClick={() => resetState('reset')}><LocaleText hinglish="Password भूल गए?" english="Forgot password?" /></button>
             <button type="button" onClick={() => switchLoginMethod(loginMethod === 'password' ? 'otp' : 'password')}>
-              {loginMethod === 'password' ? 'OTP se sign in karein' : 'Password se sign in karein'}
+              {loginMethod === 'password' ? <LocaleText hinglish="OTP से sign in करें" english="Sign in with OTP" /> : <LocaleText hinglish="Password से sign in करें" english="Sign in with password" />}
             </button>
-            <button type="button" onClick={() => resetState('register')}>Create parent account</button>
-          </> : <button type="button" onClick={() => resetState('login')}>Parent sign in par wapas</button>}
+            <button type="button" onClick={() => resetState('register')}><LocaleText hinglish="Parent account बनाएँ" english="Create parent account" /></button>
+          </> : <button type="button" onClick={() => resetState('login')}><LocaleText hinglish="Parent sign in पर वापस" english="Back to parent sign-in" /></button>}
         </div>
-        <div className="auth-separator"><span>OR</span></div>
-        <Link href="/login/student" className="auth-alt-link">Student login <span>→</span></Link>
-        <small className="auth-note">Registration aur password reset ke liye OTP zaroori hai. Parent sign-in ke liye bhi OTP ka option available hai.</small>
+        <div className="auth-separator"><span><LocaleText hinglish="या" english="OR" /></span></div>
+        <Link href="/login/student" className="auth-alt-link"><LocaleText hinglish="Student login" english="Student login" /> <span>→</span></Link>
+        <small className="auth-note"><LocaleText hinglish="Registration और password reset के लिए OTP ज़रूरी है। Parent sign-in के लिए भी OTP का option available है।" english="OTP is required for registration and password reset. Parents can also sign in with an OTP." /></small>
       </section>
     </main>
   );

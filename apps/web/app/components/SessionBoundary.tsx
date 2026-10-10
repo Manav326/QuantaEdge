@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { LanguageSwitcher, LocaleText } from './LanguageProvider';
 import { usePathname, useRouter } from 'next/navigation';
 
 type Session = { role?: string; staffId?: number; studentId?: number; userId?: number; permissions?: string[] };
@@ -116,7 +117,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     };
   }, [pathname, router, isPublicEntry, isProtected, requiresCheck]);
 
-  if (blockedRole) return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">SECURE WORKSPACE</span><h1>This account belongs to another workspace.</h1><p>Your current sign-in is for {blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'the staff console' : 'a different account type'}. Sign out before switching accounts.</p><button className="button button-dark" onClick={logoutAndSwitch}>Log out to switch accounts</button></section></main>;
-  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE</span><h1>Checking your workspace…</h1><p>Your account and saved session are being verified.</p></section></main>;
+  if (blockedRole) return <main className="qe-session-gate"><section><div className="qe-session-language"><LanguageSwitcher /></div><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow"><LocaleText hinglish="SECURE WORKSPACE" english="SECURE WORKSPACE" /></span><h1><LocaleText hinglish="यह account किसी दूसरे workspace का है।" english="This account belongs to another workspace." /></h1><p><LocaleText hinglish={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'आपका current sign-in staff console के लिए है। Account बदलने से पहले sign out करें।' : 'आपका current sign-in दूसरे account type के लिए है। Account बदलने से पहले sign out करें।'} english={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'Your current sign-in is for the staff console. Sign out before switching accounts.' : 'Your current sign-in is for a different account type. Sign out before switching accounts.'} /></p><button className="button button-dark" onClick={logoutAndSwitch}><LocaleText hinglish="Account बदलने के लिए sign out करें" english="Log out to switch accounts" /></button></section></main>;
+  if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE</span><h1><LocaleText hinglish="आपका workspace check हो रहा है…" english="Checking your workspace…" /></h1><p><LocaleText hinglish="आपका account और saved session verify किया जा रहा है।" english="Your account and saved session are being verified." /></p></section></main>;
   return <>{children}</>;
 }

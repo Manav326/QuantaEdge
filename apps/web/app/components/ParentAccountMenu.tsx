@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from './LanguageProvider';
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -78,7 +80,7 @@ export default function ParentAccountMenu({
       >
         <span className="parent-account__trigger-copy">
           <strong>{displayName}</strong>
-          <small>Parent account</small>
+          <small><LocaleText hinglish="Parent account" english="Parent account" /></small>
         </span>
         <span className="parent-account__avatar"><img src={avatarSrc} alt="" width="44" height="44" /></span>
         <svg className={`parent-account__chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
@@ -90,32 +92,32 @@ export default function ParentAccountMenu({
             <img src={avatarSrc} alt="" width="50" height="50" />
             <div>
               <strong>{displayName}</strong>
-              <span>Parent account</span>
+              <span><LocaleText hinglish="Parent account" english="Parent account" /></span>
               {mobile && <small>{mobile}</small>}
             </div>
           </div>
-          <div className="parent-account__section-label">AAPKI FAMILY</div>
+          <div className="parent-account__section-label"><LocaleText hinglish="आपका परिवार" english="YOUR FAMILY" /></div>
           <Link href="/parent" className="parent-account__item" onClick={closeMenu}>
             <span className="parent-account__icon"><ParentMenuIcon kind="report" /></span>
-            <span><strong>Family learning report</strong><small>Bachche ki learning summary dekhein</small></span>
+            <span><strong><LocaleText hinglish="परिवार की learning report" english="Family learning report" /></strong><small><LocaleText hinglish="बच्चे की learning summary देखें" english="View your child’s learning summary" /></small></span>
             <span className="parent-account__arrow">→</span>
           </Link>
           <Link href="/parent/children" className="parent-account__item" onClick={closeMenu}>
             <span className="parent-account__icon"><ParentMenuIcon kind="children" /></span>
-            <span><strong>Bachchon ke profiles manage karein</strong><small>Subjects aur login access set karein</small></span>
+            <span><strong><LocaleText hinglish="बच्चों के Profiles manage करें" english="Manage children’s profiles" /></strong><small><LocaleText hinglish="Subjects और login access set करें" english="Set subjects and login access" /></small></span>
             <span className="parent-account__arrow">→</span>
           </Link>
           <div className="parent-account__divider" />
           <Link href="/parent/profile" className="parent-account__item" onClick={closeMenu}>
             <span className="parent-account__icon"><ParentMenuIcon kind="profile" /></span>
-            <span><strong>Parent profile aur settings</strong><small>Photo, contact aur personal details</small></span>
+            <span><strong><LocaleText hinglish="Parent Profile और settings" english="Parent profile and settings" /></strong><small><LocaleText hinglish="Photo, contact और personal details" english="Photo, contact, and personal details" /></small></span>
             <span className="parent-account__arrow">→</span>
           </Link>
           <div className="parent-account__divider" />
           <button type="button" className="parent-account__logout" onClick={() => void logout()} disabled={busy}>
             <ParentMenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Sign out'}</span>
           </button>
-          <p className="parent-account__footnote">Aapki family details sirf account aur bachche ki learning support ke liye use hoti hain.</p>
+          <p className="parent-account__footnote"><LocaleText hinglish="आपकी family details सिर्फ account और बच्चे की learning support के लिए इस्तेमाल होती हैं।" english="Your family details are used only to support your account and your child’s learning." /></p>
         </div>
       )}
     </div>

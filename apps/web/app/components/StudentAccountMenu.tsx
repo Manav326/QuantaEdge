@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from './LanguageProvider';
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -55,7 +57,7 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
     try {
       await fetch('/api/v1/auth/logout', { method: 'POST' });
     } finally {
-      router.replace('/login');
+      router.replace('/login/student');
       router.refresh();
       setBusy(false);
     }
@@ -93,25 +95,25 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
               <small>Class {classCode}</small>
             </div>
           </div>
-          <div className="student-account-menu__section-label">AAPKI PADHAI</div>
+          <div className="student-account-menu__section-label"><LocaleText hinglish="आपकी पढ़ाई" english="YOUR LEARNING" /></div>
           <Link href="/student/learn" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong>Padhai continue karein</strong><small>Jahan chhoda tha, wahin se shuru karein</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="पढ़ाई जारी रखें" english="Continue learning" /></strong><small><LocaleText hinglish="जहाँ छोड़ा था, वहीं से शुरू करें" english="Pick up where you left off" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <Link href="/student/practice" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong>Practice questions</strong><small>Practice se confidence badhayein</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong><LocaleText hinglish="Practice questions" english="Practice questions" /></strong><small><LocaleText hinglish="Practice से confidence बढ़ाएँ" english="Build confidence with practice" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <Link href="/student/progress" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong>Meri progress</strong><small>Apni learning journey dekhein</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong><LocaleText hinglish="मेरी progress" english="My progress" /></strong><small><LocaleText hinglish="अपनी learning journey देखें" english="View your learning journey" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
           <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong>Profile aur settings</strong><small>Photo, school aur personal details</small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong><LocaleText hinglish="Profile और settings" english="Profile and settings" /></strong><small><LocaleText hinglish="Photo, school और personal details" english="Photo, school, and personal details" /></small></span><span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
           <button type="button" className="student-account-menu__logout" onClick={() => void logout()} disabled={busy}>
             <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Sign out'}</span>
           </button>
-          <p className="student-account-menu__footnote">Aapki learning progress automatically save hoti hai.</p>
+          <p className="student-account-menu__footnote"><LocaleText hinglish="आपकी learning progress अपने-आप save होती है।" english="Your learning progress saves automatically." /></p>
         </div>
       )}
     </div>

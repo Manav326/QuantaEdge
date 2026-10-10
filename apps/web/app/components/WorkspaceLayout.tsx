@@ -3,23 +3,26 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { LanguageSwitcher, useLocale } from './LanguageProvider';
 
-type Item = { href: string; label: string; icon: string; match?: string };
+type Item = { href: string; hinglish: string; english: string; icon: string; match?: string };
 const studentItems: Item[] = [
-  { href: '/student', label: 'Aaj ka plan', icon: '⌂', match: '/student' },
-  { href: '/student/learn', label: 'Padhai', icon: '▤' },
-  { href: '/student/practice', label: 'Abhyas', icon: '✦' },
-  { href: '/student/progress', label: 'Meri progress', icon: '↗' },
-  { href: '/student/profile', label: 'Profile', icon: '◉' },
+  { href: '/student', hinglish: 'आज की योजना', english: "Today's plan", icon: '⌂', match: '/student' },
+  { href: '/student/learn', hinglish: 'पढ़ाई', english: 'Learning', icon: '▤' },
+  { href: '/student/practice', hinglish: 'अभ्यास', english: 'Practice', icon: '✦' },
+  { href: '/student/progress', hinglish: 'मेरी प्रगति', english: 'My progress', icon: '↗' },
+  { href: '/student/profile', hinglish: 'Profile', english: 'Profile', icon: '◉' },
 ];
 const parentItems: Item[] = [
-  { href: '/parent', label: 'Family report', icon: '⌂', match: '/parent' },
-  { href: '/parent/children', label: 'Bachchon ke profiles', icon: '♧' },
-  { href: '/parent/profile', label: 'Parent profile', icon: '◉' },
+  { href: '/parent', hinglish: 'परिवार की रिपोर्ट', english: 'Family report', icon: '⌂', match: '/parent' },
+  { href: '/parent/children', hinglish: 'बच्चों के Profiles', english: 'Children’s profiles', icon: '♧' },
+  { href: '/parent/profile', hinglish: 'Parent Profile', english: 'Parent profile', icon: '◉' },
 ];
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { locale } = useLocale();
+  const itemLabel = (item: Item) => locale === 'english' ? item.english : item.hinglish;
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const [collapsed, setCollapsed] = useState(false);
   useEffect(() => {
@@ -40,18 +43,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     <aside className="qe-workspace-sidebar">
       <Link href={role === 'student' ? '/student' : '/parent'} className="qe-workspace-brand" aria-label="QuantaEdge workspace">
         <img src="/branding/quantaedge-icon.png" alt="" width="38" height="38" />
-        <span><strong>QuantaEdge</strong><small>{role === 'student' ? 'LEARNING SPACE' : 'FAMILY SPACE'}</small></span>
+        <span><strong>QuantaEdge</strong><small>{role === 'student' ? (locale === 'english' ? 'LEARNING SPACE' : 'सीखने की जगह') : (locale === 'english' ? 'FAMILY SPACE' : 'परिवार की जगह')}</small></span>
       </Link>
-      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'} aria-expanded={!collapsed} title={collapsed ? 'Expand navigation' : 'Collapse navigation'}>{collapsed ? '»' : '«'}</button>
-      <p className="qe-workspace-label">{role === 'student' ? 'YOUR LEARNING' : 'YOUR FAMILY'}</p>
+      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
+      <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
       <nav aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
-        {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? item.label : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{item.label}</span></Link>)}
+        {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
       </nav>
-      <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>Safe learning space</strong><small>{role === 'student' ? 'Progress auto-save hoti hai' : 'Child reports are private'}</small></div></div>
+      <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{locale === 'english' ? 'Safe learning space' : 'सुरक्षित learning space'}</strong><small>{role === 'student' ? (locale === 'english' ? 'Progress saves automatically' : 'Progress अपने-आप save होती है') : (locale === 'english' ? 'Child reports are private' : 'बच्चों की reports private रहती हैं')}</small></div></div>
     </aside>
-    <div className="qe-workspace-content">{children}</div>
+    <div className="qe-workspace-content"><div className="qe-language-toolbar"><LanguageSwitcher compact /></div>{children}</div>
     <nav className="qe-workspace-mobile-nav" aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
-      {items.slice(0, 4).map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span><small>{item.label}</small></Link>)}
+      {items.slice(0, 4).map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small></Link>)}
     </nav>
   </div>;
 }
