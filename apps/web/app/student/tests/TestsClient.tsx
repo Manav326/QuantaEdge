@@ -117,7 +117,8 @@ export default function TestsClient(){
         await saveAnswersBatch(snapshot);
         const remaining={...dirtyRef.current};
         for(const [key,value] of snapshot){
-          if(Object.prototype.hasOwnProperty.call(remaining,key)&&JSON.stringify(remaining[key])===JSON.stringify(value))delete remaining[key];
+          const questionId=Number(key);
+          if(Object.prototype.hasOwnProperty.call(remaining,questionId)&&JSON.stringify(remaining[questionId])===JSON.stringify(value))delete remaining[questionId];
         }
         dirtyRef.current=remaining;
         setDirtyAnswers(remaining);
@@ -146,7 +147,7 @@ export default function TestsClient(){
       const data=await api('/api/v1/learning/assessment-attempts/'+attemptId);
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
-      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);responsesRef.current=nextResponses;dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
+      setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not open this result.');}
     finally{setBusy(false);}
   }
