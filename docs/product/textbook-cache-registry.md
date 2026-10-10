@@ -51,6 +51,24 @@ Register the ready bundles in the existing private library, using an authenticat
 
 Set QUANTAEDGE_ADMIN_SESSION in the shell that runs the importer. Repeat for the English output directory. Each imported item remains a draft/private asset; source-to-chapter mapping, approval and publishing remain explicit review steps. The complete original remains in GHCR even when it is too large for the database PDF library.
 
+## One-command pull and draft preparation
+
+After the cache image contains the books you need, from PowerShell on Windows run:
+
+    .\scripts\quantaedge-textbook-sync.ps1
+
+Or select one language:
+
+    .\scripts\quantaedge-textbook-sync.ps1 -Language hindi
+    .\scripts\quantaedge-textbook-sync.ps1 -Language english
+
+On Linux/macOS:
+
+    bash scripts/quantaedge-textbook-sync.sh
+    bash scripts/quantaedge-textbook-sync.sh hindi
+
+The helper pulls from GHCR, verifies SHA-256, reuses unchanged local PDFs, and splits supported chapter-bookmarks into draft library assets. It writes a prepare-report.json per language. Importing and publication are kept separate so reviewers can verify page mappings, class/subject, chapter assignments and rights before students can see the content.
+
 ## Direct download links
 
 - [Hindi-medium GHCR package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-hindi)
