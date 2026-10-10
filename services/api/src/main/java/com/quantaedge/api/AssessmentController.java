@@ -64,7 +64,6 @@ public class AssessmentController {
     String chapterFilter = chapterId == null ? "" : " and ch.id=?";
     List<Object> args = new ArrayList<>(List.of(classCode.trim(), subjectCode.trim()));
     if (chapterId != null) args.add(chapterId);
-    args.add("%" + term + "%");
     String sql = """
       select q.id as question_id,q.question_type,q.prompt,q.difficulty,q.marks,q.sort_order,
              l.id as lesson_id,l.title as lesson_title,ch.id as chapter_id,
@@ -82,9 +81,7 @@ public class AssessmentController {
         and (?='' or q.prompt ilike ? or l.title ilike ? or ch.display_name ilike ?)
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id
       limit 500
-      """.replace("__CHAPTER_FILTER__", chapterFilter)
-         .replace("and (?='' or q.prompt ilike ? or l.title ilike ? or ch.display_name ilike ?)",
-             "and (?='' or q.prompt ilike ? or l.title ilike ? or ch.display_name ilike ?)");
+      """.replace("__CHAPTER_FILTER__", chapterFilter);
     args.add(term);
     args.add("%" + term + "%");
     args.add("%" + term + "%");
@@ -111,13 +108,13 @@ public class AssessmentController {
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
-             count(distinct aq.id) as question_count,coalesce(sum(distinct aq.max_marks),0) as max_score,
+             (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
+             (select coalesce(sum(aq.max_marks),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
              count(distinct att.id) filter (where att.status<>'ABANDONED') as attempt_count,
              count(distinct att.id) filter (where att.status='AWAITING_REVIEW') as review_count
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
-      left join assessment_question aq on aq.assessment_id=a.id
       left join student_assessment_attempt att on att.assessment_id=a.id
       where (?='' or c.code=?) and (?='' or s.code=?)
         and (?='ALL' or a.status=?)
@@ -513,6 +510,9 @@ public class AssessmentController {
       @PathVariable long assessmentId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
+    List<Map<String, Object>> assessmentLock = jdbc.queryForList(
+        "select id from assessment where id=? and status='PUBLISHED' for update", assessmentId);
+    if (assessmentLock.isEmpty()) throw notFound("Published assessment", assessmentId);
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
       select a.id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              s.id as subject_id,s.code as subject_code,s.display_name as subject_name,
@@ -527,7 +527,6 @@ public class AssessmentController {
       where a.id=? and a.status='PUBLISHED'
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
-      for update of a
       """, context.studentId(), assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Published assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
