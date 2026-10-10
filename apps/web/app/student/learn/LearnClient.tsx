@@ -1,6 +1,7 @@
 'use client';
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import MathText from '../../components/MathText';
 
 
 import Link from 'next/link';
@@ -68,6 +69,18 @@ function learnerPathLabel(blocks: Detail['blocks'], questionCount: number) {
   } : {hinglish:'सीखने का रास्ता तैयार हो रहा है',english:'Learning path is being prepared'};
 }
 
+function stackFractionsInHtml(value:string) {
+  // Transform only text between tags; never rewrite a number-like URL or HTML attribute.
+  const fraction = /(^|[^\w./])(\d+)\s*\/\s*(\d+)(?![\w./])/g;
+  return String(value || '').replace(/(^|>)([^<]*)(?=<|$)/g, (_whole, prefix:string, text:string) => {
+    const rendered = text.replace(fraction, (_match, boundary:string, numerator:string, denominator:string) =>
+      boundary + '<span class="qe-inline-fraction" role="math" aria-label="' + numerator + ' over ' + denominator + '">' +
+      '<span class="qe-inline-fraction__numerator" aria-hidden="true">' + numerator + '</span>' +
+      '<span class="qe-inline-fraction__denominator" aria-hidden="true">' + denominator + '</span></span>');
+    return prefix + rendered;
+  });
+}
+
 function safeRichHtml(value:string) {
   let html=String(value||'');
   html=html.replace(/<font\b([^>]*)>/gi,(_m,attrs:string)=>{
@@ -94,16 +107,16 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<LocaleText hinglish="पहले से क्या जानते हैं?" english="What you already know" />:<LocaleText hinglish="समझें" english="Understand" />)}</span>
-    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(String(data.html))}}/> : <p>{data.body || data.description}</p>}
+    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(stackFractionsInHtml(String(data.html)))}}/> : <p><MathText text={String(data.body ?? data.description ?? '')}/></p>}
     {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
-    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p>{data.problem || data.prompt}</p>
-    {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. {x}</span></div>)}
-    {data.answer && <p><strong><LocaleText hinglish="उत्तर:" english="Answer:" /></strong> {data.answer}</p>}
+    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p><MathText text={String(data.problem || data.prompt || '')}/></p>
+    {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. <MathText text={x}/></span></div>)}
+    {data.answer && <p><strong><LocaleText hinglish="उत्तर:" english="Answer:" /></strong> <MathText text={String(data.answer)}/></p>}
   </div>;
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
-    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p>{data.prompt || data.body || ''}</p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> {data.hint}</span></div>}
+    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p><MathText text={String(data.prompt || data.body || '')}/></p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> <MathText text={String(data.hint)}/></span></div>}
   </div>;
   if (['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
     const url=String(data.url||'');
@@ -124,7 +137,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     </div>;
   }
   if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><LocaleText hinglish="AI tutor" english="AI tutor" /></strong><p><LocaleText hinglish="अगर कहीं अटकें, तो इसी lesson के context में hint, explanation, example या step-by-step help लें।" english="If you get stuck, ask for a hint, explanation, example, or step-by-step help in the context of this lesson." /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><LocaleText hinglish="Tutor खोलें →" english="Open tutor →" /></button></div></div>;
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker"><LocaleText hinglish="Recap" english="Recap" /></span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ {x}</span></div>)}</div>;
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker"><LocaleText hinglish="Recap" english="Recap" /></span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
   return null;
 }
 
@@ -155,9 +168,9 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
       <span className="concept-kicker">{q.question_type} · {q.exam_format ? q.exam_format : 'Practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
       <span>{q.source_kind === 'TEXTBOOK_ALIGNED' ? <LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" /> : q.source_kind ?? <LocaleText hinglish="Content team का question" english="Content team question" />}</span>
     </div>
-    <p><strong>{q.prompt}</strong></p>
+    <p><strong><MathText text={q.prompt}/></strong></p>
     {options.length>0 ? <div className="answer-row">
-      {options.map(o=><button key={o.key} disabled={busy} className={value===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.key}. {o.label}</button>)}
+      {options.map(o=><button key={o.key} disabled={busy} className={value===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
     </div> : <div>
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
         <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
@@ -166,8 +179,8 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
     </div>}
     {result && <div className="feedback">
       <b>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</b>
-      <span>{result.feedback}</span>
-      {result.explanation && <span>{result.explanation}</span>}
+      <span><MathText text={String(result.feedback ?? '')}/></span>
+      {result.explanation && <span><MathText text={String(result.explanation)}/></span>}
     </div>}
   </article>;
 }
