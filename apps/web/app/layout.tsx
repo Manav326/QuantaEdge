@@ -1,4 +1,5 @@
 import './globals.css';
+import { LanguageProvider } from './components/LanguageProvider';
 import SessionBoundary from './components/SessionBoundary';
 import WorkspaceLayout from './components/WorkspaceLayout';
 
@@ -10,5 +11,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="hi"><body><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></body></html>;
+  return <html lang="hi"><body><LanguageProvider><SessionBoundary><WorkspaceLayout>{children}</WorkspaceLayout></SessionBoundary></LanguageProvider></body></html>;
 }
