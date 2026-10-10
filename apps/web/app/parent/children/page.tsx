@@ -1,6 +1,6 @@
 'use client';
 
-import { LocaleText } from '../../components/LanguageProvider';
+import { LocaleText, useLocale } from '../../components/LanguageProvider';
 
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import Link from 'next/link';
@@ -31,6 +31,8 @@ async function readJson(response:Response):Promise<any>{
 
 export default function ParentChildrenPage(){
   const router=useRouter();
+  const { locale } = useLocale();
+  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [account,setAccount]=useState<Account|null>(null);
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
@@ -86,7 +88,7 @@ export default function ParentChildrenPage(){
       if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
       setDraft(emptyDraft);setConsent(false);
       await load();
-      setNotice('Student profile ban gaya hai aur login details save ho gayi hain. Ab bachcha aapke banaye username aur password se sign in kar sakta hai.');
+      setNotice(tx('Student profile बन गया है और login details save हो गई हैं। अब बच्चा आपके बनाए username और password से sign in कर सकता है।','Student profile and login details are saved. Your child can now sign in with the username and password you created.'));
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
   }
@@ -101,7 +103,7 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to save student login details.');
       await load();
-      setNotice('Login details '+child.display_name+' ke liye save ho gayi hain. Username aur password bachche ke saath safely share karein.');
+      setNotice(tx('Login details '+child.display_name+' के लिए save हो गई हैं। Username और password बच्चे के साथ safely share करें.','Login details for '+child.display_name+' have been saved. Share the username and password with your child securely.'));
     }catch(e:any){setError(e.message||'Unable to save student login details.');}
   }
 
@@ -115,20 +117,20 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to update tracks.');
       await load();
-      setNotice(`${child.display_name} ke learning subjects save ho gaye hain.`);
+      setNotice(tx(`${child.display_name} के learning subjects save हो गए हैं।`,`Learning subjects for ${child.display_name} have been saved.`));
     }catch(e:any){setError(e.message||'Unable to update tracks.');}
     finally{setBusyTrack(null);}
   }
 
   async function archiveChild(child:Child){
-    if(!window.confirm(`Archive ${child.display_name}'s profile? Their learning history is retained, but this parent link will be revoked.`))return;
+    if(!window.confirm(tx(`${child.display_name} का profile archive करें? Learning history बनी रहेगी, लेकिन parent link हट जाएगा.`,`Archive ${child.display_name}'s profile? Their learning history will be retained, but this parent link will be revoked.`)))return;
     setError('');setNotice('');
     try{
       const response=await fetch(`/api/v1/guardians/children/${child.id}`,{method:'DELETE'});
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to archive the profile.');
       await load();
-      setNotice(`${child.display_name} ka profile archive ho gaya hai. Purane learning records safe rakhe gaye hain.`);
+      setNotice(tx(`${child.display_name} का profile archive हो गया है। पुराने learning records सुरक्षित हैं।`,`The profile for ${child.display_name} has been archived. Previous learning records are retained.`));
     }catch(e:any){setError(e.message||'Unable to archive profile.');}
   }
 
@@ -144,19 +146,19 @@ export default function ParentChildrenPage(){
       <div className="parent-manage-hero">
         <div><span className="eyebrow"><LocaleText hinglish="FAMILY LEARNING" english="FAMILY LEARNING" /></span><h1><LocaleText hinglish="बच्चों के Profiles" english="Children’s profiles" /></h1>
           <p><LocaleText hinglish="अपने account limit तक profiles बनाएँ, हर बच्चे के subjects चुनें और उनका learning access अलग रखें।" english="Create profiles up to your account limit, choose each child’s subjects, and keep their learning access separate." /></p></div>
-        <div className="parent-capacity"><span><LocaleText hinglish="Active profiles" english="Active profiles" /></span><strong>{account?account.activeChildren:'—'} <small>/ {account?account.maxChildren:'—'}</small></strong><span>{account?.remainingSlots??'—'} profile slots remaining</span></div>
+        <div className="parent-capacity"><span><LocaleText hinglish="Active profiles" english="Active profiles" /></span><strong>{account?account.activeChildren:'—'} <small>/ {account?account.maxChildren:'—'}</small></strong><span>{account?.remainingSlots??'—'} <LocaleText hinglish="profile slots बाकी" english="profile slots remaining" /></span></div>
       </div>
 
       {error&&<div className="feedback" role="alert">{error}</div>}
       {notice&&<div className="parent-notice" role="status">{notice}</div>}
 
       <section className="parent-manage-panel">
-        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="STUDENT PROFILES" english="STUDENT PROFILES" /></span><h2><LocaleText hinglish="आपके बच्चे" english="Your children" /></h2></div><span className="count">{children.length} active</span></div>
+        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="STUDENT PROFILES" english="STUDENT PROFILES" /></span><h2><LocaleText hinglish="आपके बच्चे" english="Your children" /></h2></div><span className="count">{children.length} <LocaleText hinglish="active" english="active" /></span></div>
         {!children.length?<div className="parent-empty"><strong><LocaleText hinglish="अभी कोई active child profile नहीं है" english="No active child profile yet" /></strong><p><LocaleText hinglish="नीचे पहला profile बनाएँ और बच्चे के लिए subjects चुनें।" english="Create the first profile below and choose subjects for your child." /></p></div>:<div className="parent-child-list">
           {children.map(child=><article className="parent-child-card" key={child.id}>
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
-              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · Hindi</p>
+              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · <LocaleText hinglish="हिन्दी माध्यम" english="Hindi medium" /></p>
                 <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><LocaleText hinglish="Profile archive करें" english="Archive profile" /></button>
@@ -164,13 +166,13 @@ export default function ParentChildrenPage(){
             <div className="parent-child-credentials">
               <div className="parent-credentials-heading"><strong><LocaleText hinglish="Student login details" english="Student login details" /></strong><small><LocaleText hinglish="Step 1: यहाँ username और password set करें। Step 2: ये details बच्चे के साथ share करें। Student Login पर आपका registered mobile number, username और password use होगा।" english="Step 1: Set a username and password here. Step 2: Share these details with your child. Student Login uses your registered mobile number, the username, and the password." /></small></div>
               <div className="parent-credentials-status" role="status">
-                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?'✓ Student login ready hai':'Student login abhi set nahi hua hai'}</strong>
-                <p>{child.login_username?'Is bachche ka login ready hai; ab sign in kar sakta hai.':'Bachcha abhi sign in nahi kar sakta. Neeche username aur password banayein, phir “Login details save karein” select karein.'}</p>
+                <strong className={child.login_username?'is-ready':'is-pending'}>{child.login_username?<LocaleText hinglish="✓ Student login ready है" english="✓ Student login is ready" />:<LocaleText hinglish="Student login अभी set नहीं हुआ है" english="Student login is not set yet" />}</strong>
+                <p>{child.login_username?<LocaleText hinglish="इस बच्चे का login ready है; अब sign in कर सकता है।" english="This child can now sign in." />:<LocaleText hinglish="बच्चा अभी sign in नहीं कर सकता। नीचे username और password बनाएँ, फिर “Login details save करें” चुनें।" english="Your child cannot sign in yet. Create a username and password below, then select “Save login details”." />}</p>
               </div>
               {child.login_username&&<p className="parent-credentials-current"><LocaleText hinglish="Current username:" english="Current username:" /> <strong>{child.login_username}</strong></p>}
               <div className="parent-child-form parent-credentials-form">
-                <label><LocaleText hinglish="Student username" english="Student username" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder="e.g. aarav07" autoComplete="off" /></label>
-                <label><LocaleText hinglish="Password set / reset करें" english="Set or reset password" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder="Kam se kam 8 characters" autoComplete="new-password" /></label>
+                <label><LocaleText hinglish="Student username" english="Student username" /><input value={credentialDrafts[child.id]?.username||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:e.target.value,password:current[child.id]?.password||''}}))} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off" /></label>
+                <label><LocaleText hinglish="Password set / reset करें" english="Set or reset password" /><input type="password" value={credentialDrafts[child.id]?.password||''} onChange={e=>setCredentialDrafts(current=>({...current,[child.id]:{username:current[child.id]?.username||'',password:e.target.value}}))} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password" /></label>
               </div>
               <button type="button" className="button button-light button-small" disabled={(credentialDrafts[child.id]?.username||'').trim().length<3||(credentialDrafts[child.id]?.password||'').length<8} onClick={()=>void saveCredentials(child)}><LocaleText hinglish="Login details save करें" english="Save login details" /></button>
             </div>
@@ -179,10 +181,10 @@ export default function ParentChildrenPage(){
               <div className="parent-track-options">{trackOptions.map(option=><label key={option.code}>
                 <input type="checkbox" checked={(trackDrafts[child.id]||[]).includes(option.code)}
                   onChange={e=>toggleTrack(child.id,option.code,e.target.checked)}/>
-                <span>{option.label}</span>
+                <span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):(option.label)}</span>
               </label>)}</div>
               <button className="button button-dark button-small" disabled={busyTrack===child.id||(trackDrafts[child.id]||[]).length===0}
-                onClick={()=>saveTracks(child)}>{busyTrack===child.id?'Saving…':'Save subjects'}</button>
+                onClick={()=>saveTracks(child)}>{busyTrack===child.id?<LocaleText hinglish="Save हो रहा है…" english="Saving…" />:<LocaleText hinglish="Subjects save करें" english="Save subjects" />}</button>
             </div>
           </article>)}
         </div>}
@@ -199,7 +201,7 @@ export default function ParentChildrenPage(){
             <label><LocaleText hinglish="Student password" english="Student password" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder="Kam se kam 8 characters" autoComplete="new-password"/></label>
             <fieldset className="parent-track-fieldset"><legend><LocaleText hinglish="Subjects चुनें" english="Choose subjects" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{option.label}</span></label>)}</fieldset>
             <label className="consent-row"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/><span><LocaleText hinglish="मैं बच्चे का authorised guardian हूँ और profile बनाने व learning records रखने की permission देता/देती हूँ।" english="I am the child’s authorised guardian and consent to creating this profile and maintaining learning records." /></span></label>
-            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?'Profile ban raha hai…':'Child profile banayein →'}</button>
+            <button className="button button-dark" disabled={busy||draft.displayName.trim().length<2||draft.username.trim().length<3||draft.password.length<8||draft.trackCodes.length===0||!consent} onClick={createChild}>{busy?<LocaleText hinglish="Profile बन रहा है…" english="Creating profile…" />:<LocaleText hinglish="Student profile बनाएँ →" english="Create student profile →" />}</button>
           </div>}
       </section>
     </section>
