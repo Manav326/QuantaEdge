@@ -67,11 +67,14 @@ export default function ClassesPage(){
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,status:statusFilter});
+      const sessionStatus=['SCHEDULED','LIVE','COMPLETED','CANCELLED'].includes(statusFilter)?statusFilter:'ALL';
+      const recordingStatus=['DRAFT','PUBLISHED','ARCHIVED'].includes(statusFilter)?statusFilter:'ALL';
+      const sessionParams=new URLSearchParams({classCode,subjectCode,status:sessionStatus});
+      const recordingParams=new URLSearchParams({classCode,subjectCode,status:recordingStatus});
       const chapterParams=new URLSearchParams({classCode,subjectCode});
       const [sessionRows,recordingRows,contentRows,staffRows]=await Promise.all([
-        api('/api/v1/admin/live-classes?'+params.toString()),
-        api('/api/v1/admin/recorded-classes?'+params.toString()),
+        api('/api/v1/admin/live-classes?'+sessionParams.toString()),
+        api('/api/v1/admin/recorded-classes?'+recordingParams.toString()),
         api('/api/v1/admin/content?'+chapterParams.toString()),
         api('/api/v1/admin/class-staff')
       ]);
