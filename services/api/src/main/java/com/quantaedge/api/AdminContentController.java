@@ -134,8 +134,9 @@ public class AdminContentController {
              ch.id as chapter_id,ch.display_name as chapter_name,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
-             coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
-               order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)::text as options,
+             coalesce((select jsonb_agg(jsonb_build_object(
+                 'key',qo.option_key,'label',qo.label,'is_correct',qo.is_correct
+               ) order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)::text as options,
              (select count(*) from question_review_history h where h.question_id=q.id) as history_count,
              (select h.change_reason from question_review_history h
                where h.question_id=q.id order by h.occurred_at desc,h.id desc limit 1) as latest_history_reason
