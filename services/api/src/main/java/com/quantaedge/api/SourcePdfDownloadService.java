@@ -177,9 +177,9 @@ public class SourcePdfDownloadService {
     try {
       String host = URI.create(sourceUrl).getHost();
       if (host == null) return false;
-      host = host.toLowerCase(Locale.ROOT);
+      String normalizedHost = host.toLowerCase(Locale.ROOT);
       return List.of("ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in")
-          .stream().anyMatch(domain -> host.equals(domain) || host.endsWith("." + domain));
+          .stream().anyMatch(domain -> normalizedHost.equals(domain) || normalizedHost.endsWith("." + domain));
     } catch (IllegalArgumentException ex) {
       return false;
     }
