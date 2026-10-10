@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText } from '../../components/LanguageProvider';
+import './textbooks.css';
 
 type LearningDocument = {
   document_id: number;
@@ -155,6 +156,12 @@ export default function TextbooksClient() {
 
   const progressPercent = pageCount ? Math.round((currentPage / pageCount) * 100) : 0;
 
+  useEffect(() => {
+    if (!selected) return;
+    setImageLoading(true);
+    setPageError('');
+  }, [selected?.document_id, currentPage]);
+
   return <main className="app-shell qe-textbook-shell">
     <header className="app-header qe-textbook-header">
       <Link href="/student" className="qe-textbook-brand"><span className="qe-textbook-mark">Q</span><span><b>QuantaEdge</b><small>STUDENT LEARNING</small></span></Link>
@@ -197,7 +204,7 @@ export default function TextbooksClient() {
           })}
         </div>}
       <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page. Screenshots or capturing displayed pages cannot be fully prevented by a website.</p></div>
-    </section> : <section className="qe-document-reader" ref={readerRef as React.RefObject<HTMLElement>}>
+    </section> : <section className="qe-document-reader" ref={readerRef}>
       <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← Textbook library</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected?.chapter_name || 'Chapter PDF'}</span></div>
         <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? 'SUBJECT TEXTBOOK' : 'CHAPTER READING'} · {subjectLabel.toUpperCase()}</span><h1>{selected?.title || 'Loading textbook…'}</h1><p>{selected?.chapter_name ? selected.chapter_name + ' · ' : ''}{selected?.edition || 'View-only online reader'}</p></div>
           {selected && <div className="qe-reader-progress"><strong>{progressPercent}%</strong><span>read</span><div><i style={{width: progressPercent + '%'}}/></div></div>}
@@ -221,7 +228,7 @@ export default function TextbooksClient() {
             <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className="qe-reader-canvas-top"><span><i/> Secured page rendering</span><span>{currentPage} / {pageCount}</span></div>
               <div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '')} key={selected.document_id + '-' + currentPage}>
                 {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> Rendering page {currentPage}…</div>}
-                <img className="qe-reader-page-image" src={pageUrl} alt={'Page ' + currentPage + ' of ' + selected.title} draggable={false} onLoad={() => {setImageLoading(false);setPageError('');}} onLoadStart={() => setImageLoading(true)} onError={() => {setImageLoading(false);setPageError('This page could not be rendered. Try again or return to the library.');}} style={{width: fitWidth ? '100%' : zoom + '%'}} />
+                <img className="qe-reader-page-image" src={pageUrl} alt={'Page ' + currentPage + ' of ' + selected.title} draggable={false} onLoad={() => {setImageLoading(false);setPageError('');}} onError={() => {setImageLoading(false);setPageError('This page could not be rendered. Try again or return to the library.');}} style={{width: fitWidth ? '100%' : zoom + '%'}} />
                 {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => {setPageError('');setImageLoading(true);const image=document.querySelector('.qe-reader-page-image') as HTMLImageElement|null;if(image)image.src=pageUrl+'?retry='+(Date.now());}}>Retry page</button></div>}
               </div>
               <div className="qe-reader-canvas-bottom"><span>Private textbook viewer · Page {currentPage}</span><span>Use ← → or Page Up / Page Down to navigate</span></div>
