@@ -907,7 +907,8 @@ public class AssessmentController {
     for (Object raw : entries) {
       if (!(raw instanceof Map<?, ?> option)) continue;
       Map<String, Object> value = new LinkedHashMap<>();
-      value.put("key", option.getOrDefault("option_key", option.get("key")));
+      Object optionKey = option.containsKey("option_key") ? option.get("option_key") : option.get("key");
+      value.put("key", optionKey);
       value.put("label", option.get("label"));
       value.put("isCorrect", Boolean.TRUE.equals(option.get("is_correct")) || Boolean.TRUE.equals(option.get("correct")));
       result.add(value);
