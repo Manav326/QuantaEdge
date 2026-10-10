@@ -35,12 +35,14 @@ permissions:
   packages: write
 
 concurrency:
-  group: quantaedge-textbook-cache-v3
-  cancel-in-progress: false
+  group: quantaedge-textbook-cache-v2
+  cancel-in-progress: true
 
 jobs:
   cache-textbooks:
     name: Download one book and push it before continuing
+    # Push events are temporarily skipped to terminate the obsolete concurrent v2 publisher.
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
