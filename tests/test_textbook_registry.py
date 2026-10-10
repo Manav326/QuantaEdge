@@ -264,7 +264,7 @@ class TextbookRegistryTests(unittest.TestCase):
             self.assertEqual("complete", book["content_availability"]["status"])
             self.assertEqual([1, 2], book["content_availability"]["available_chapters"])
             self.assertEqual([], book["content_availability"]["missing_chapters"])
-            self.assertIn("no chapter fallback", method.lower())
+            self.assertIn("all expected chapters validated", method.lower())
             with fitz.open(destination) as merged:
                 self.assertEqual(3, len(merged))
             self.assertEqual(2, len(toc))
