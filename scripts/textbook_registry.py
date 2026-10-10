@@ -7,6 +7,7 @@ the next book starts. Successful uploads survive failures/timeouts and are skipp
 from __future__ import annotations
 
 import argparse, hashlib, html, json, os, re, shutil, subprocess, sys, tempfile
+import time
 import urllib.error, urllib.parse, urllib.request, zipfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,7 +16,13 @@ from typing import Any
 NCERT = "https://ncert.nic.in"
 NCERT_CATALOG = NCERT + "/textbook.php?ln=en"
 SCERT_CATALOG = "https://scert.bihar.gov.in/eresources?per_page=100"
-OFFICIAL_HOSTS = {"ncert.nic.in", "scert.bihar.gov.in", "bstbpc.gov.in"}
+OFFICIAL_HOSTS = {"ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in"}
+NCERT_CATALOG_FALLBACKS = (
+    "https://ncert.nic.in/textbook.php?ln=en",
+    "https://www.ncert.nic.in/textbook.php?ln=en",
+    "https://ncert.ncert.org.in/textbook.php?ln=en",
+)
+NCERT_PDF_BASES = ("https://ncert.nic.in/textbook/pdf", "https://ncert.ncert.org.in/textbook/pdf")
 LANGUAGES = {"hindi": "h", "english": "e"}
 ROMAN_CLASSES = {"vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10, "xi": 11, "xii": 12}
 MAX_BOOK_BYTES = 350 * 1024 * 1024
@@ -51,7 +58,7 @@ def host_allowed(url: str) -> bool:
         return False
 
 
-def get_url(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYTES) -> bytes | Path:
+def _get_url_once(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYTES) -> bytes | Path:
     if not host_allowed(url):
         raise ValueError("Refusing non-official or non-HTTPS URL: " + url)
     req = urllib.request.Request(url, headers={
@@ -104,10 +111,36 @@ def get_url(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYT
         raise RuntimeError("Download failed for " + url + ": " + str(exc)) from exc
 
 
+def get_url(url: str, destination: Path | None = None, limit: int = MAX_BOOK_BYTES) -> bytes | Path:
+    last_error: Exception | None = None
+    for attempt in range(1, 5):
+        try:
+            return _get_url_once(url, destination, limit)
+        except FileNotFoundError:
+            raise
+        except ValueError:
+            raise
+        except (RuntimeError, OSError, TimeoutError) as exc:
+            last_error = exc
+            if attempt < 4:
+                delay = attempt * 2
+                log("Transient source failure; retry " + str(attempt + 1) + "/4 in " + str(delay) + "s: " + url)
+                time.sleep(delay)
+    raise RuntimeError("Failed after four attempts: " + url + " (" + str(last_error) + ")")
+
+
 def fetch_text(url: str) -> str:
-    data = get_url(url, None, 8 * 1024 * 1024)
-    assert isinstance(data, bytes)
-    return data.decode("utf-8", errors="replace")
+    candidates = list(NCERT_CATALOG_FALLBACKS) if url == NCERT_CATALOG else [url]
+    errors = []
+    for candidate in candidates:
+        try:
+            data = get_url(candidate, None, 8 * 1024 * 1024)
+            assert isinstance(data, bytes)
+            return data.decode("utf-8", errors="replace")
+        except Exception as exc:
+            errors.append(candidate + ": " + str(exc))
+            log("Official catalogue fallback warning: " + errors[-1])
+    raise RuntimeError("Could not load an official catalogue. " + " | ".join(errors))
 
 
 def parse_ncert_catalog(source: str) -> list[dict[str, Any]]:
@@ -324,23 +357,35 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
         work = Path(td)
         bundle = work / (book["code"] + "dd.zip")
         members: list[tuple[int, str]] = []
-        try:
-            get_url(book["bundle_url"], bundle, MAX_BOOK_BYTES)
-            with zipfile.ZipFile(bundle) as archive:
-                if sum(entry.file_size for entry in archive.infolist() if not entry.is_dir()) > MAX_ZIP_BYTES:
-                    raise ValueError("NCERT bundle expands beyond 500 MB.")
-                for entry in archive.infolist():
-                    name = Path(entry.filename).name
-                    chapter = re.match(r"^" + re.escape(book["code"]) + r"(\d{2})\.+pdf$", name, re.I)
-                    prelims = re.match(r"^" + re.escape(book["code"]) + r"ps\.+pdf$", name, re.I)
-                    if chapter:
-                        members.append((int(chapter.group(1)), entry.filename))
-                    elif prelims:
-                        members.append((0, entry.filename))
-            members.sort(key=lambda pair: (pair[0], pair[1]))
-        except FileNotFoundError:
-            members = []
-        except zipfile.BadZipFile:
+        bundle_ok = False
+        bundle_candidates = [book["bundle_url"]]
+        alt_bundle = book["bundle_url"].replace("https://ncert.nic.in", "https://ncert.ncert.org.in")
+        if alt_bundle not in bundle_candidates:
+            bundle_candidates.append(alt_bundle)
+        for bundle_url in bundle_candidates:
+            try:
+                get_url(bundle_url, bundle, MAX_BOOK_BYTES)
+                with zipfile.ZipFile(bundle) as archive:
+                    if sum(entry.file_size for entry in archive.infolist() if not entry.is_dir()) > MAX_ZIP_BYTES:
+                        raise ValueError("NCERT bundle expands beyond 500 MB.")
+                    for entry in archive.infolist():
+                        name = Path(entry.filename).name
+                        chapter = re.match(r"^" + re.escape(book["code"]) + r"(\d{2})\.+pdf$", name, re.I)
+                        prelims = re.match(r"^" + re.escape(book["code"]) + r"ps\.+pdf$", name, re.I)
+                        if chapter:
+                            members.append((int(chapter.group(1)), entry.filename))
+                        elif prelims:
+                            members.append((0, entry.filename))
+                members.sort(key=lambda pair: (pair[0], pair[1]))
+                bundle_ok = bool(members)
+                if bundle_ok:
+                    book["pdf_url"] = bundle_url
+                    break
+            except FileNotFoundError:
+                continue
+            except (zipfile.BadZipFile, RuntimeError) as exc:
+                log("NCERT bundle unavailable at " + bundle_url + ": " + str(exc))
+        if not bundle_ok:
             members = []
         destination.parent.mkdir(parents=True, exist_ok=True)
         output = fitz.open()
@@ -361,15 +406,22 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
             else:
                 for chapter_no in range(1, int(book["chapter_count"]) + 1):
                     found_path = None
-                    for dots in (1, 2):
-                        candidate = work / (book["code"] + f"{chapter_no:02d}" + ".pdf")
-                        url = NCERT + "/textbook/pdf/" + book["code"] + f"{chapter_no:02d}" + ("." * dots) + "pdf"
-                        try:
-                            get_url(url, candidate, 50 * 1024 * 1024)
-                            found_path = candidate
+                    last_error: Exception | None = None
+                    for pdf_base in NCERT_PDF_BASES:
+                        for dots in (1, 2):
+                            candidate = work / (book["code"] + f"{chapter_no:02d}" + ".pdf")
+                            url = pdf_base + "/" + book["code"] + f"{chapter_no:02d}" + ("." * dots) + "pdf"
+                            try:
+                                get_url(url, candidate, 50 * 1024 * 1024)
+                                found_path = candidate
+                                book["pdf_url"] = url
+                                break
+                            except (FileNotFoundError, RuntimeError, ValueError) as exc:
+                                last_error = exc
+                        if found_path:
                             break
-                        except (FileNotFoundError, RuntimeError, ValueError) as exc:
-                            log("Chapter fallback warning " + book["code"] + str(chapter_no) + ": " + str(exc))
+                    if not found_path:
+                        log("Chapter fallback warning " + book["code"] + str(chapter_no) + ": " + str(last_error))
                     if found_path:
                         source = fitz.open(found_path)
                         start_page = len(output) + 1
