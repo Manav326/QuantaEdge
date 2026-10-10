@@ -183,9 +183,41 @@ public class LearningClassController {
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
     String previous = String.valueOf(rows.getFirst().get("status"));
     jdbc.update("update learning_class_session set status=?,updated_at=now() where id=?", status, sessionId);
+    if ("COMPLETED".equals(status)) {
+      // Close open attendance clocks against the scheduled end time so an abandoned tab
+      // cannot leave an active attendance session running indefinitely.
+      jdbc.update("""
+        update learning_class_attendance att set
+          total_seconds=att.total_seconds
+            + greatest(0,floor(extract(epoch from (least(now(),cs.ends_at)-att.active_since_at)))::bigint),
+          active_since_at=null,last_left_at=now(),updated_at=now()
+        from learning_class_session cs
+        where att.session_id=cs.id and cs.id=? and att.active_since_at is not null
+        """, sessionId);
+    }
     staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + sessionId + "/status",
         "Changed live class status from " + previous + " to " + status + ".");
     return adminSessionById(sessionId);
+  }
+
+  @GetMapping("/admin/live-classes/{sessionId}/meeting-link")
+  public Map<String, Object> revealLiveClassMeetingLink(
+      @PathVariable long sessionId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireClassManage(context);
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+      select id,title,provider,private_join_url from learning_class_session where id=?
+      """, sessionId);
+    if (rows.isEmpty()) throw notFound("Live class", sessionId);
+    Map<String, Object> row = rows.getFirst();
+    staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + sessionId + "/meeting-link",
+        "Retrieved the private meeting link for live class #" + sessionId + ".");
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("sessionId", sessionId);
+    result.put("title", row.get("title"));
+    result.put("provider", row.get("provider"));
+    result.put("joinUrl", row.get("private_join_url"));
+    return result;
   }
 
   // ---------------- Staff: upload and publish private recordings ----------------
