@@ -744,40 +744,80 @@ def summary(line: str) -> None:
 
 def push_batch(image: str, base_exists: bool, books_to_add: list[dict[str, Any]],
                files_by_id: dict[str, Path], index: dict[str, Any], context: Path) -> None:
-    """Build one multi-book layer batch and update the same persistent image tag."""
+    """Update the persistent tag, compacting filesystem layers before Docker's depth limit."""
     if context.exists():
         shutil.rmtree(context)
+    context.mkdir(parents=True, exist_ok=True)
     books_dir = context / "books"
     books_dir.mkdir(parents=True, exist_ok=True)
-    for book in books_to_add:
-        book_id = str(book["book_id"])
-        shutil.copyfile(files_by_id[book_id], books_dir / (book_id + ".pdf"))
-    (context / "index.json").write_text(
-        json.dumps(index, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-
-    lines = [
-        "FROM " + image if base_exists else "FROM scratch",
-        "LABEL org.opencontainers.image.title=\"QuantaEdge textbook cache\"",
-        "LABEL org.opencontainers.image.description=\"Persistent textbook cache; see /index.json\"",
-        "COPY index.json /index.json",
-    ]
-    # Separate COPY instructions create content-addressed layers for each whole
-    # book. Repeated pushes reuse prior layers; only new books add binary layers.
-    for book in books_to_add:
-        filename = str(book["book_id"]) + ".pdf"
-        lines.append("COPY books/" + filename + " /books/" + filename)
-    (context / "Dockerfile").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     local_tag = image.rsplit(":", 1)[0] + ":qe-batch-build"
     previous_image_id = None
+    layer_depth = 0
     if base_exists:
         inspected = subprocess.run(
             ["docker", "image", "inspect", "--format={{.Id}}", image],
             check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
         )
         previous_image_id = inspected.stdout.strip()
+        depth_result = subprocess.run(
+            ["docker", "image", "inspect", "--format={{len .RootFS.Layers}}", image],
+            check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+        )
+        layer_depth = int(depth_result.stdout.strip() or "0")
+
+    compact_image = (not base_exists) or (
+        layer_depth + 1 + len(books_to_add) >= CACHE_COMPACT_LAYER_THRESHOLD
+    )
+    if compact_image:
+        log("CACHE_IMAGE_COMPACTION image=" + image
+            + " prior_layers=" + str(layer_depth)
+            + " incoming_books=" + str(len(books_to_add))
+            + " mode=flat-scratch-image")
+
+    # For compaction, rehydrate the existing /books directory into the context, then
+    # overwrite any refreshed entries with their newly downloaded whole-book PDFs.
+    if compact_image and base_exists and index.get("books"):
+        container = "qe-compact-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
+        subprocess.run(
+            ["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"],
+            check=True, stdout=subprocess.DEVNULL,
+        )
+        try:
+            subprocess.run(
+                ["docker", "cp", container + ":/books/.", str(books_dir)],
+                check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+            )
+        finally:
+            subprocess.run(["docker", "rm", container], check=False,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    for book in books_to_add:
+        book_id = str(book["book_id"])
+        shutil.copyfile(files_by_id[book_id], books_dir / (book_id + ".pdf"))
+
+    (context / "index.json").write_text(
+        json.dumps(index, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    lines = [
+        "FROM scratch" if compact_image else "FROM " + image,
+        'LABEL org.opencontainers.image.title="QuantaEdge textbook cache"',
+        'LABEL org.opencontainers.image.description="Persistent textbook cache; see /index.json"',
+        "COPY index.json /index.json",
+    ]
+    if compact_image:
+        # One aggregate data layer keeps the image safely below Docker's overlay depth limit.
+        if any(books_dir.iterdir()):
+            lines.append("COPY books/ /books/")
+    else:
+        # In ordinary batches, keep each PDF in its own content-addressed reusable layer.
+        for book in books_to_add:
+            filename = str(book["book_id"]) + ".pdf"
+            lines.append("COPY books/" + filename + " /books/" + filename)
+    (context / "Dockerfile").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
     try:
         subprocess.run(["docker", "build", "--pull=false", "-t", local_tag, str(context)], check=True)
         subprocess.run(["docker", "tag", local_tag, image], check=True)
@@ -798,7 +838,6 @@ def push_batch(image: str, base_exists: bool, books_to_add: list[dict[str, Any]]
     finally:
         subprocess.run(["docker", "image", "rm", local_tag], check=False,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
 
 def _book_entry(book: dict[str, Any], digest: str, page_count: int,
                 toc: list[list[Any]], method: str, pdf_path: Path) -> dict[str, Any]:
