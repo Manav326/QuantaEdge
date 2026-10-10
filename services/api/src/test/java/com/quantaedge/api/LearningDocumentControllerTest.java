@@ -88,7 +88,7 @@ class LearningDocumentControllerTest {
     when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
     when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
         Map.ofEntries(
-            Map.entry("id", 88L), Map.entry("scope", "CHAPTER_PDF"), Map.entry("subject_id", 3L),
+            Map.entry("id", 88L), Map.entry("document_id", 88L), Map.entry("scope", "CHAPTER_PDF"), Map.entry("subject_id", 3L),
             Map.entry("chapter_id", 9L), Map.entry("status", "DRAFT"),
             Map.entry("source_title", "Textbook"), Map.entry("source_url", "https://example.org/book.pdf"),
             Map.entry("edition", "2026"), Map.entry("title", "Chapter 1"),
