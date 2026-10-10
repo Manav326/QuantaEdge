@@ -171,7 +171,7 @@ export default function QuestionReviewPage(){
       </section>
 
       {historyFor!==null&&<section className="admin-panel" style={{marginTop:20}}>
-        <div className="admin-section-title"><div><span className="admin-kicker">IMMUTABLE EVENT LOG</span><h2>Question #{historyFor} — full history</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([])}}>Close</button></div>
+        <div className="admin-section-title"><div><span className="admin-kicker">QUESTION CHANGE LOG</span><h2>Question #{historyFor} — full history</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([])}}>Close</button></div>
         {historyLoading?<p>Loading history…</p>:history.length===0?<p>No history rows were found.</p>:
           <div style={{display:'grid',gap:12,marginTop:14}}>
             {history.map(entry=><article key={entry.id} style={{border:'1px solid #e1e5ed',borderRadius:12,padding:14}}>
