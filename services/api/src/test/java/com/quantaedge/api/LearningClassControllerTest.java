@@ -109,9 +109,8 @@ class LearningClassControllerTest {
     when(mediaStorage.resolve("afe0cdee-218f-4668-a5b6-8e52a66bb718.mp4"))
         .thenReturn(mediaFile);
 
-    ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.streamRecordedClass(88L, "bytes=bad-range", student));
+    var response = controller.streamRecordedClass(88L, "bytes=bad-range", student);
 
-    assertEquals(416, error.getStatusCode().value());
+    assertEquals(416, response.getStatusCode().value());
   }
 }
