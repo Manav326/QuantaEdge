@@ -71,14 +71,55 @@ public class SourceIngestionController {
         select x.id,x.title,x.page_count,x.review_status,x.sha256
         from learning_pdf_asset x
         where x.id=cs.learning_pdf_asset_id
+           or x.source_content_id=cs.id
            or (nullif(cs.checksum,'') is not null and lower(x.sha256)=lower(cs.checksum))
            or (cs.source_url is not null and x.source_reference=cs.source_url)
-        order by case when x.id=cs.learning_pdf_asset_id then 0 else 1 end,x.id desc
+        order by case when x.id=cs.learning_pdf_asset_id then 0 when x.source_content_id=cs.id then 1 else 2 end,x.id desc
         limit 1
       ) a on true
       order by case when a.id is null then 0 else 1 end,cs.updated_at desc,cs.id
       limit 500
       """);
+  }
+
+  @GetMapping("/sources/{sourceId}/chapter-mappings")
+  public List<Map<String, Object>> listExistingChapterMappings(
+      @PathVariable long sourceId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireReviewer(context);
+    return jdbc.queryForList("""
+      select cs.id as chapter_source_id,cs.chapter_id,ch.code as chapter_code,
+             ch.display_name as chapter_name,cs.source_chapter_no,cs.source_chapter_title,
+             cs.source_locator,cs.coverage_type,cs.coverage_status,cs.notes,
+             d.document_id,d.document_title,d.document_status,d.document_source_title,d.document_source_url,
+             d.pdf_asset_id,d.pdf_title,d.pdf_page_count,d.pdf_review_status,d.pdf_sha256
+      from chapter_source cs
+      join content_source src on src.id=cs.source_id
+      join curriculum_chapter ch on ch.id=cs.chapter_id
+      left join lateral (
+        select ld.id as document_id,ld.title as document_title,ld.status as document_status,
+               ld.source_title as document_source_title,ld.source_url as document_source_url,
+               a.id as pdf_asset_id,a.title as pdf_title,a.page_count as pdf_page_count,
+               a.review_status as pdf_review_status,a.sha256 as pdf_sha256
+        from learning_document ld
+        join learning_pdf_asset a on a.id=ld.pdf_asset_id
+        where ld.chapter_id=cs.chapter_id and ld.scope='CHAPTER_PDF'
+          and (
+            (src.source_url is not null and ld.source_url=src.source_url)
+            or ld.source_title=src.title
+            or a.source_content_id=src.id
+            or (src.source_url is not null and a.source_reference=src.source_url)
+          )
+        order by case when a.source_content_id=src.id then 0
+                      when src.source_url is not null and ld.source_url=src.source_url then 1
+                      else 2 end,
+                 case when ld.status='PUBLISHED' then 0 when ld.status='DRAFT' then 1 else 2 end,
+                 ld.updated_at desc,ld.id desc
+        limit 1
+      ) d on true
+      where cs.source_id=?
+      order by ch.sort_order,ch.teaching_order,ch.id,cs.id
+      """, sourceId);
   }
 
   @GetMapping("/jobs")

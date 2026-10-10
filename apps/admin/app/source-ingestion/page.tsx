@@ -11,6 +11,15 @@ type Source = {
   pdf_page_count?: number | null; pdf_review_status?: string | null; chapter_mapping_count?: number;
 };
 type Track = { class_code: string; class_name: string; subject_code: string; subject_name: string };
+type ExistingMapping = {
+  chapter_source_id: number; chapter_id: number; chapter_code: string; chapter_name: string;
+  source_chapter_no?: number | null; source_chapter_title?: string | null; source_locator?: string | null;
+  coverage_type: string; coverage_status: string; notes?: string | null;
+  document_id?: number | null; document_title?: string | null; document_status?: string | null;
+  document_source_title?: string | null; document_source_url?: string | null;
+  pdf_asset_id?: number | null; pdf_title?: string | null; pdf_page_count?: number | null;
+  pdf_review_status?: string | null; pdf_sha256?: string | null;
+};
 type Chapter = { chapter_id: number; chapter_code: string; chapter_name: string };
 type Outline = { title: string; pageStart: number; pageEnd: number };
 type Candidate = {
@@ -49,6 +58,8 @@ function normalized(value: string) {
 
 export default function SourceIngestionPage() {
   const [sources, setSources] = useState<Source[]>([]);
+  const [existingMappings, setExistingMappings] = useState<ExistingMapping[]>([]);
+  const [mappingError, setMappingError] = useState('');
   const [tracks, setTracks] = useState<Track[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedSource, setSelectedSource] = useState('');
@@ -163,6 +174,21 @@ export default function SourceIngestionPage() {
   }, []);
 
   useEffect(() => { void loadBase(); }, [loadBase]);
+
+  useEffect(() => {
+    let active = true;
+    setMappingError('');
+    if (!selectedSource || selectedSource === 'new') {
+      setExistingMappings([]);
+      return () => { active = false; };
+    }
+    api('/api/v1/admin/source-ingestion/sources/' + encodeURIComponent(selectedSource) + '/chapter-mappings')
+      .then(rows => { if (active) setExistingMappings(Array.isArray(rows) ? rows : []); })
+      .catch(e => {
+        if (active) setMappingError(e instanceof Error ? e.message : 'Existing chapter-source mappings could not be loaded.');
+      });
+    return () => { active = false; };
+  }, [selectedSource]);
 
   async function startJob() {
     if (!classCode || !subjectCode) { setError('Choose a class and subject first.'); return; }
@@ -371,6 +397,36 @@ export default function SourceIngestionPage() {
             {busy ? 'Working…' : 'Check database & start download'}
           </button>
         </div>
+      </section>
+
+      <section className={styles.panel}>
+        <div className={styles.heading}><div><span>DATABASE CHECK</span><h2>Existing chapter/source records</h2>
+          <p>Compare stored chapter mappings with any chapter PDFs already associated with the registered source before processing a new download.</p></div>
+          <span className={styles.bigStatus}>{existingMappings.length} mappings</span>
+        </div>
+        {mappingError && <div className={styles.error} role="alert">{mappingError}</div>}
+        {selectedSource === 'new' || !selectedSource
+          ? <p className={styles.empty}>Select an existing source record above to inspect its chapter_source relationships.</p>
+          : existingMappings.length === 0
+            ? <p className={styles.empty}>No chapter_source mappings are registered for this source yet. A new book download can create mappings after the chapter PDFs are reviewed and approved.</p>
+            : <div className={styles.existingMappingList}>{existingMappings.map(row => <article className={styles.existingMapping} key={row.chapter_source_id}>
+              <div className={styles.mappingIdentity}>
+                <b>{row.chapter_code} — {row.chapter_name}</b>
+                <small>Mapping: {row.coverage_status} · {row.coverage_type}</small>
+                {row.source_chapter_title && <small>Source chapter: {row.source_chapter_title}{row.source_chapter_no ? ' · No. ' + row.source_chapter_no : ''}</small>}
+                {row.source_locator && <small>Source locator: {row.source_locator}</small>}
+                {row.notes && <p>{row.notes}</p>}
+              </div>
+              <div className={styles.mappingAsset}>
+                {row.pdf_asset_id
+                  ? <><b>{row.pdf_title || row.document_title || 'Stored chapter PDF'}</b>
+                    <span>{row.document_status || 'No document status'} · {row.pdf_page_count || '—'} pages · Asset #{row.pdf_asset_id}</span>
+                    <span>Asset review: {row.pdf_review_status || 'unknown'}</span>
+                    {row.document_source_url && <a href={row.document_source_url} target="_blank" rel="noreferrer">Open recorded source URL</a>}
+                  </>
+                  : <><b>No source-linked chapter PDF detected</b><span>Mapping metadata exists, but no chapter PDF could be confidently linked to this source. Verify the URL and process the book above.</span></>}
+              </div>
+            </article>)}</div>}
       </section>
 
       <section className={styles.panel}>
