@@ -447,12 +447,13 @@ export default function SourceIngestionPage() {
             <select value={classCode} onChange={e => {
               const value = e.target.value; setClassCode(value);
               setSubjectCode(tracks.find(t => t.class_code === value)?.subject_code || '');
+              setConfirmSubjectMapping(false);
             }}>
               {tracksByClass.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name} ({track.class_code})</option>)}
             </select>
           </label>
           <label>Subject
-            <select value={subjectCode} onChange={e => setSubjectCode(e.target.value)}>
+            <select value={subjectCode} onChange={e => { setSubjectCode(e.target.value); setConfirmSubjectMapping(false); }}>
               {subjects.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
             </select>
           </label>
