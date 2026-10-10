@@ -1,5 +1,6 @@
 import './globals.css';
 import AdminSessionBoundary from './components/AdminSessionBoundary';
+import AdminWorkspaceLayout from './components/AdminWorkspaceLayout';
 
 export const metadata = {
   title: { default: 'QuantaEdge Admin', template: '%s | QuantaEdge' },
@@ -9,5 +10,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body><AdminSessionBoundary>{children}</AdminSessionBoundary></body></html>;
+  return <html lang="en"><body><AdminSessionBoundary><AdminWorkspaceLayout>{children}</AdminWorkspaceLayout></AdminSessionBoundary></body></html>;
 }
