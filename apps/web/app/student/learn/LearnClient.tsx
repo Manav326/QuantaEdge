@@ -16,7 +16,7 @@ type Lesson = {
 type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
 };
-type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null};
+type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null};
 type Question = {
   id:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
