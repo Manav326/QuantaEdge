@@ -61,9 +61,9 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  # Every class-image write is a complete atomic batch to the same :latest tag.
-  # A newer publisher can supersede a stale parser run and resumes from each stored index.
-  cancel-in-progress: true
+  # Never interrupt a writer or its recovery/export steps mid-run; the next publisher
+  # resumes from the last atomically pushed class-image index.
+  cancel-in-progress: false
 
 jobs:
   cache-textbooks:
@@ -113,6 +113,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish and report all selected class/medium GHCR images
+        id: publish
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -140,7 +141,7 @@ jobs:
           "${args[@]}"
 
       - name: Pull selected class images and create optional browser-download ZIPs
-        if: always() && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
         shell: bash
         env:
           INPUT_LANGUAGE: ${{ inputs.language }}
@@ -259,7 +260,7 @@ jobs:
           if [ "$failures" -ne 0 ]; then exit 1; fi
 
       - name: Upload direct book downloads and inventories
-        if: always() && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-downloads-${{ github.run_number }}
