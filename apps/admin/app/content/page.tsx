@@ -454,6 +454,7 @@ export default function ContentStudio(){
   const validActiveQuestionCount=activeQuestions.filter(questionHasValidAnswer).length;
   const invalidActiveQuestionDetails=activeQuestions.map((question:any,index:number)=>({number:index+1,issues:questionReadinessIssues(question)})).filter((item:any)=>item.issues.length>0);
   const pendingQuestionReviewCount=activeQuestions.filter((question:any)=>!['APPROVED','PUBLISHED'].includes(String(question.review_status||'DRAFT').toUpperCase())).length;
+  const learnerVisibleQuestions=activeQuestions.filter((question:any)=>['APPROVED','PUBLISHED'].includes(String(question.review_status||'DRAFT').toUpperCase())).slice(0,3);
   const questionsReady=activeQuestions.length>0&&validActiveQuestionCount===activeQuestions.length;
   const lessonSourceDetailsComplete=Boolean(String(form.alignmentSourceTitle||'').trim()&&/^https:\/\//i.test(String(form.alignmentSourceUrl||''))&&String(form.alignmentSourceEdition||'').trim()&&String(form.alignmentPageRange||'').trim());
   const chapterSourceDetailsComplete=Boolean(String(form.curriculumSource||'').trim()&&/^https:\/\//i.test(String(form.curriculumSourceUrl||''))&&String(form.curriculumSourceEdition||'').trim()&&String(form.curriculumSourcePages||'').trim());
