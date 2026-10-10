@@ -100,7 +100,7 @@ jobs:
             echo
             echo "Fourteen persistent GHCR images: Classes 6–12 × Hindi/English."
             echo "Each class image is checked before downloading; successful whole-book IDs are skipped on reruns."
-            echo "Books download in parallel; incomplete NCERT bundles fall back to individual official chapter PDFs."
+            echo "Books download in parallel; an NCERT entry is cached only when one complete official book bundle validates. Individual chapter URL fallback is disabled."
             echo "Missing books and chapters are persisted in GHCR indexes and per-class/medium ZIP availability reports; content gaps do not stop other images."
             echo "Only registry publication or inventory-integrity errors fail the cache run."
             echo "Optional ZIP artifacts last 90 days; GHCR :latest images are the persistent store."
@@ -180,6 +180,7 @@ jobs:
           included = []
           absent = []
           partial = []
+          incomplete_entries = []
           valid_files = {}
           def sha256_file(path):
               digest = hashlib.sha256()
@@ -189,14 +190,20 @@ jobs:
               return digest.hexdigest()
           for item in items:
               coverage = item.get("content_availability") or {}
-              if coverage.get("status") == "partial":
-                  partial.append({
+              coverage_status = str(coverage.get("status", "complete")).casefold()
+              if coverage_status != "complete" or "partial" in str(item.get("download_method", "")).casefold():
+                  row = {
                       "book_id": item.get("book_id"), "title": item.get("title"),
-                      "status": "partial", "available_chapters": coverage.get("available_chapters", []),
+                      "status": coverage_status if coverage_status else "incomplete",
+                      "available_chapters": coverage.get("available_chapters", []),
                       "missing_chapters": coverage.get("missing_chapters", []),
-                      "note": coverage.get("note"),
+                      "note": coverage.get("note") or "Incomplete source is excluded; only whole verified books are downloadable.",
                       "source_url": item.get("catalog_entry_url") or item.get("source_url"),
-                  })
+                  }
+                  incomplete_entries.append(row)
+                  if coverage_status == "partial":
+                      partial.append(row)
+                  continue
               relative = Path(str(item.get("file", "")))
               pdf = source / relative
               expected_hash = str(item.get("sha256", "")).lower()
@@ -226,10 +233,11 @@ jobs:
               "schema_version": 1,
               "image": index.get("registry", f"quantaedge-textbooks-class-{grade}-{medium}"),
               "class": grade, "medium": medium, "registry_book_count": len(items),
-              "complete_books": sum(1 for item in items if (item.get("content_availability") or {}).get("status", "complete") == "complete"),
-              "partial_books": partial, "unavailable_books": unavailable,
+              "complete_books": len(valid_files),
+              "partial_books": partial, "incomplete_book_entries_rejected": incomplete_entries,
+              "unavailable_books": unavailable,
               "indexed_files_missing_from_export": absent, "download_status": statuses,
-              "note": "ZIP contains every cached PDF that could be verified; review this report before treating any partial book as complete.",
+              "note": "ZIP includes only whole-book PDFs with verified SHA-256 and complete status. Partial or unavailable source entries are excluded.",
           }
           report_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.availability.json"
           report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -243,7 +251,7 @@ jobs:
                   pdf, relative = valid_files[book_id]
                   archive.write(pdf, relative.as_posix())
                   included.append(book_id)
-          print(f"DOWNLOAD_BUNDLE {archive_path.name} books_in_index={len(items)} pdfs_included={len(included)} partial={len(partial)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} index_entries={len(items)} complete_pdfs_included={len(included)} incomplete_entries_rejected={len(incomplete_entries)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
           print(f"AVAILABILITY_REPORT {report_path.name}")
           PY
             done
