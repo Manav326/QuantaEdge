@@ -457,13 +457,14 @@ def push_one(image: str, base_exists: bool, book: dict[str, Any], pdf: Path,
 
 
 def publish_language(language: str, image: str, book_code: str | None = None, refresh: bool = False,
-                     max_books: int = 0, ncert_only: bool = False) -> dict[str, Any]:
+                     max_books: int = 0, ncert_only: bool = False,
+                     catalog: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     base_exists, index = pull_index(image)
     index.setdefault("schema_version", 1)
     index.setdefault("registry", image)
     index.setdefault("books", [])
     existing = {item.get("book_id"): item for item in index["books"] if isinstance(item, dict)}
-    catalog = discover_books()
+    catalog = catalog if catalog is not None else discover_books()
     selected = [item for item in catalog if item["medium"] == language]
     if ncert_only:
         selected = [item for item in selected if item["source_type"] == "NCERT"]
@@ -596,10 +597,11 @@ def main(argv: list[str] | None = None) -> int:
             languages = ["hindi", "english"] if args.language == "both" else [args.language]
             reports = []
             prefix = args.image_prefix.lower()
+            catalog = discover_books()
             for language in languages:
                 reports.append(publish_language(
                     language, prefix + "-" + language + ":latest", args.book_code,
-                    args.refresh, args.max_books, args.ncert_only,
+                    args.refresh, args.max_books, args.ncert_only, catalog=catalog,
                 ))
             print(json.dumps({"results": reports}, ensure_ascii=False, indent=2))
             return 1 if any(report["failed"] for report in reports) else 0
