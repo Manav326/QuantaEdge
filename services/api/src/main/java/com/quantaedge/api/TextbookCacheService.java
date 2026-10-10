@@ -42,41 +42,29 @@ public class TextbookCacheService {
 
   public List<Map<String, Object>> list(String medium, Integer classNo) {
     List<String> languages;
-    if (medium == null || medium.isBlank() || "both".equalsIgnoreCase(medium)) {
-      languages = List.of("hindi", "english");
-    } else {
+    if (medium == null || medium.isBlank() || "both".equalsIgnoreCase(medium)) languages = List.of("hindi", "english");
+    else {
       String normalized = medium.trim().toLowerCase(Locale.ROOT);
       if (!List.of("hindi", "english").contains(normalized)) {
         throw new IllegalArgumentException("Medium must be hindi, english, or both.");
       }
       languages = List.of(normalized);
     }
-
+    if (classNo != null && (classNo < 6 || classNo > 12)) {
+      throw new IllegalArgumentException("Class filter must be between 6 and 12.");
+    }
     List<Map<String, Object>> result = new ArrayList<>();
     for (String language : languages) {
-      Path indexPath = root.resolve(language).resolve("index.json").normalize();
-      if (!indexPath.startsWith(root) || !Files.isRegularFile(indexPath)) continue;
-      Map<?, ?> index = readIndex(indexPath);
-      Object raw = index.get("books");
-      if (!(raw instanceof List<?> books)) {
-        throw new IllegalArgumentException("The " + language + " textbook cache index has no books array.");
-      }
-      for (Object row : books) {
-        if (!(row instanceof Map<?, ?> item)) continue;
-        String bookId = string(item.get("book_id"));
-        if (bookId.isBlank()) continue;
-        List<Integer> classes = classes(item);
-        if (classNo != null && !classes.contains(classNo)) continue;
-        Path pdfPath;
-        try {
-          pdfPath = resolvePath(language, string(item.get("file")));
-        } catch (IllegalArgumentException ex) {
-          continue;
+      boolean classwise = hasClasswiseIndexes(language);
+      if (classwise) {
+        for (int grade = 6; grade <= 12; grade++) {
+          if (classNo != null && classNo != grade) continue;
+          Path path = classIndexPath(grade, language);
+          if (Files.isRegularFile(path)) appendIndexBooks(result, path, language, grade);
         }
-        if (!Files.isRegularFile(pdfPath)) continue;
-        long bytes = number(item.get("bytes"), -1);
-        if (bytes >= 0 && safeFileSize(pdfPath) != bytes) continue;
-        result.add(publicMap(item, language, classes));
+      } else {
+        Path legacy = root.resolve(language).resolve("index.json").normalize();
+        if (Files.isRegularFile(legacy)) appendIndexBooks(result, legacy, language, classNo);
       }
     }
     result.sort(Comparator
@@ -90,7 +78,12 @@ public class TextbookCacheService {
   }
 
   public CachedBook requireBook(String medium, String bookId) {
-    return resolveBook(medium, bookId, null, true);
+    return resolveBook(medium, bookId, null, null, true);
+  }
+
+  public CachedBook requireBook(String medium, String bookId, int classNo) {
+    validateClassNo(classNo);
+    return resolveBook(medium, bookId, classNo, null, true);
   }
 
   /** Re-resolve a previously verified job without re-hashing a huge book for every preview. */
@@ -98,27 +91,63 @@ public class TextbookCacheService {
     if (expectedSha256 == null || !expectedSha256.matches("(?i)[0-9a-f]{64}")) {
       throw new IllegalArgumentException("The ingestion job has no valid expected whole-book checksum.");
     }
-    return resolveBook(medium, bookId, expectedSha256.toLowerCase(Locale.ROOT), false);
+    return resolveBook(medium, bookId, null, expectedSha256.toLowerCase(Locale.ROOT), false);
   }
 
-  private CachedBook resolveBook(String medium, String bookId, String expectedSha256, boolean verifyHash) {
+  public CachedBook requireBookForJob(String medium, String bookId, String expectedSha256, int classNo) {
+    validateClassNo(classNo);
+    if (expectedSha256 == null || !expectedSha256.matches("(?i)[0-9a-f]{64}")) {
+      throw new IllegalArgumentException("The ingestion job has no valid expected whole-book checksum.");
+    }
+    return resolveBook(medium, bookId, classNo, expectedSha256.toLowerCase(Locale.ROOT), false);
+  }
+
+  private CachedBook resolveBook(
+      String medium, String bookId, Integer classNo, String expectedSha256, boolean verifyHash) {
     String language = normalizeMedium(medium);
     if (bookId == null || bookId.isBlank() || bookId.length() > 240) {
       throw new IllegalArgumentException("A valid cached textbook ID is required.");
     }
-    Path indexPath = root.resolve(language).resolve("index.json").normalize();
-    if (!indexPath.startsWith(root) || !Files.isRegularFile(indexPath)) {
-      throw new IllegalArgumentException("The " + language + " GHCR textbook cache is not mounted. Sync the image first.");
+    boolean classwise = hasClasswiseIndexes(language);
+    if (classwise) {
+      int first = classNo == null ? 6 : classNo;
+      int last = classNo == null ? 12 : classNo;
+      for (int grade = first; grade <= last; grade++) {
+        Path path = classIndexPath(grade, language);
+        if (!Files.isRegularFile(path)) continue;
+        CachedBook found = findBookInIndex(path, language, grade, bookId, expectedSha256, verifyHash);
+        if (found != null) return found;
+      }
+      throw new IllegalArgumentException("Textbook " + bookId + " is not listed in the "
+          + language + (classNo == null ? "" : " Class " + classNo) + " GHCR cache.");
     }
+    Path legacy = root.resolve(language).resolve("index.json").normalize();
+    if (Files.isRegularFile(legacy)) {
+      CachedBook found = findBookInIndex(legacy, language, classNo, bookId, expectedSha256, verifyHash);
+      if (found != null) return found;
+    }
+    throw new IllegalArgumentException("Textbook " + bookId + " is not listed in the "
+        + language + (classNo == null ? "" : " Class " + classNo) + " GHCR cache.");
+  }
+
+  private CachedBook findBookInIndex(
+      Path indexPath, String language, Integer requestedClass, String bookId,
+      String expectedSha256, boolean verifyHash) {
     Map<?, ?> index = readIndex(indexPath);
     Object raw = index.get("books");
     if (!(raw instanceof List<?> books)) {
-      throw new IllegalArgumentException("The " + language + " textbook cache index has no books array.");
+      throw new IllegalArgumentException("The textbook cache index has no books array: " + indexPath);
     }
-
     for (Object row : books) {
       if (!(row instanceof Map<?, ?> item) || !bookId.equals(string(item.get("book_id")))) continue;
-      Path pdfPath = resolvePath(language, string(item.get("file")));
+      List<Integer> mappedClasses = classes(item);
+      int grade = requestedClass != null
+          ? requestedClass
+          : mappedClasses.stream().findFirst().orElse(intValue(item.get("class"), 0));
+      if (grade < 6 || grade > 12 || !mappedClasses.contains(grade)) {
+        throw new IllegalArgumentException("The selected textbook's class metadata does not match its cache image.");
+      }
+      Path pdfPath = resolvePath(indexPath, string(item.get("file")));
       if (!Files.isRegularFile(pdfPath)) {
         throw new IllegalArgumentException("The cached PDF for " + bookId + " is missing. Re-sync its GHCR image.");
       }
@@ -149,14 +178,59 @@ public class TextbookCacheService {
       }
       return new CachedBook(
           bookId, string(item.get("title")), string(item.get("publisher")),
-          string(item.get("source_type")), intValue(item.get("class"), classes(item).stream().findFirst().orElse(0)),
-          classes(item), language, string(item.get("subject")), string(item.get("source_url")),
+          string(item.get("source_type")), grade, List.of(grade), language,
+          string(item.get("subject")), string(item.get("source_url")),
           string(item.get("catalog_entry_url")), string(item.get("pdf_url")), string(item.get("bundle_url")),
           string(item.get("edition")), indexHash, size, intValue(item.get("page_count"), 0), pdfPath);
     }
-    throw new IllegalArgumentException("Textbook " + bookId + " is not listed in the " + language + " GHCR cache.");
+    return null;
   }
 
+  private void appendIndexBooks(
+      List<Map<String, Object>> target, Path indexPath, String language, Integer imageClass) {
+    Map<?, ?> index = readIndex(indexPath);
+    Object raw = index.get("books");
+    if (!(raw instanceof List<?> books)) {
+      throw new IllegalArgumentException("The textbook cache index has no books array: " + indexPath);
+    }
+    for (Object row : books) {
+      if (!(row instanceof Map<?, ?> item)) continue;
+      String bookId = string(item.get("book_id"));
+      if (bookId.isBlank()) continue;
+      List<Integer> mappedClasses = classes(item);
+      List<Integer> rowGrades;
+      if (imageClass != null) {
+        if (!mappedClasses.contains(imageClass)) continue;
+        rowGrades = List.of(imageClass);
+      } else {
+        rowGrades = mappedClasses;
+      }
+      Path pdf;
+      try { pdf = resolvePath(indexPath, string(item.get("file"))); }
+      catch (IllegalArgumentException ex) { continue; }
+      if (!Files.isRegularFile(pdf)) continue;
+      long size = number(item.get("bytes"), -1);
+      if (size >= 0 && safeFileSize(pdf) != size) continue;
+      for (int grade : rowGrades) target.add(publicMap(item, language, List.of(grade), grade));
+    }
+  }
+
+  private boolean hasClasswiseIndexes(String language) {
+    for (int grade = 6; grade <= 12; grade++) {
+      if (Files.isRegularFile(classIndexPath(grade, language))) return true;
+    }
+    return false;
+  }
+
+  private Path classIndexPath(int classNo, String language) {
+    return root.resolve("class-" + classNo).resolve(language).resolve("index.json").normalize();
+  }
+
+  private void validateClassNo(int classNo) {
+    if (classNo < 6 || classNo > 12) {
+      throw new IllegalArgumentException("Class must be between 6 and 12.");
+    }
+  }
 
   public int classNumber(String classCode, String className) {
     String combined = string(classCode) + " " + string(className);
@@ -185,26 +259,26 @@ public class TextbookCacheService {
     }
   }
 
-  private Path resolvePath(String language, String filename) {
+  private Path resolvePath(Path indexPath, String filename) {
     if (filename.isBlank()) throw new IllegalArgumentException("A cache file path is missing.");
     Path relative = Path.of(filename).normalize();
     if (relative.isAbsolute() || relative.getNameCount() == 0 || relative.startsWith("..")) {
       throw new IllegalArgumentException("A cache index contains an unsafe file path.");
     }
-    Path languageRoot = root.resolve(language).normalize();
-    Path resolved = languageRoot.resolve(relative).normalize();
-    if (!languageRoot.startsWith(root) || !resolved.startsWith(languageRoot)) {
-      throw new IllegalArgumentException("A cache index path escapes the configured registry directory.");
+    Path registryRoot = indexPath.getParent().toAbsolutePath().normalize();
+    Path resolved = registryRoot.resolve(relative).normalize();
+    if (!resolved.startsWith(registryRoot)) {
+      throw new IllegalArgumentException("A cache index path escapes its class/medium registry directory.");
     }
     return resolved;
   }
 
-  private Map<String, Object> publicMap(Map<?, ?> item, String language, List<Integer> classes) {
+  private Map<String, Object> publicMap(Map<?, ?> item, String language, List<Integer> classes, int grade) {
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("book_id", string(item.get("book_id")));
     result.put("publisher", string(item.get("publisher")));
     result.put("source_type", string(item.get("source_type")));
-    result.put("class", intValue(item.get("class"), classes.isEmpty() ? 0 : classes.getFirst()));
+    result.put("class", grade);
     result.put("classes", classes);
     result.put("medium", language);
     result.put("title", string(item.get("title")));

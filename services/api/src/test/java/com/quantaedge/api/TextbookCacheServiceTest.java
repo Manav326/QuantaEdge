@@ -19,23 +19,23 @@ class TextbookCacheServiceTest {
   @Test
   void resolvesAndHashesWholeBookFromSelectedLanguageCache() throws Exception {
     Path root = Files.createTempDirectory("qe-ghcr-textbook-cache");
-    Path books = root.resolve("hindi/books");
+    Path books = root.resolve("class-6/hindi/books");
     Files.createDirectories(books);
     byte[] bytes = "%PDF-1.4\nwhole textbook fixture\n".getBytes(StandardCharsets.US_ASCII);
     Path bookPath = books.resolve("ncert-c6-hindi-fhgp1.pdf");
     Files.write(bookPath, bytes);
     String hash = sha256(bytes);
-    writeIndex(root.resolve("hindi/index.json"), registryEntry(
+    writeIndex(root.resolve("class-6/hindi/index.json"), registryEntry(
         "ncert-c6-hindi-fhgp1", "गणित प्रकाश", 6, "hindi", "Mathematics", bookPath, hash, bytes.length));
 
     TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
-    TextbookCacheService.CachedBook cached = cache.requireBook("hindi", "ncert-c6-hindi-fhgp1");
+    TextbookCacheService.CachedBook cached = cache.requireBook("hindi", "ncert-c6-hindi-fhgp1", 6);
 
     assertEquals(hash, cached.sha256());
     assertEquals("गणित प्रकाश", cached.title());
     assertEquals(6, cached.classNo());
     assertEquals(bytes.length, cached.bytes());
-    assertTrue(cached.path().startsWith(root.resolve("hindi")));
+    assertTrue(cached.path().startsWith(root.resolve("class-6/hindi")));
     assertEquals(1, cache.list("hindi", 6).size());
     assertEquals(0, cache.list("english", 6).size());
   }
@@ -43,38 +43,63 @@ class TextbookCacheServiceTest {
   @Test
   void rejectsCacheFileWhenWholeBookChecksumWasModified() throws Exception {
     Path root = Files.createTempDirectory("qe-ghcr-textbook-bad-hash");
-    Path books = root.resolve("english/books");
+    Path books = root.resolve("class-7/english/books");
     Files.createDirectories(books);
     byte[] original = "%PDF-1.4\noriginal\n".getBytes(StandardCharsets.US_ASCII);
     byte[] tampered = "%PDF-1.4\ntampered\n".getBytes(StandardCharsets.US_ASCII);
     Path bookPath = books.resolve("book.pdf");
     Files.write(bookPath, tampered);
-    writeIndex(root.resolve("english/index.json"), registryEntry(
+    writeIndex(root.resolve("class-7/english/index.json"), registryEntry(
         "ncert-c7-english-book", "Test textbook", 7, "english", "Mathematics",
         bookPath, sha256(original), tampered.length));
 
     TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
     IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
-        () -> cache.requireBook("english", "ncert-c7-english-book"));
+        () -> cache.requireBook("english", "ncert-c7-english-book", 7));
     assertTrue(error.getMessage().toLowerCase().contains("checksum"));
   }
 
   @Test
   void rejectsAStaleJobWhenRegistryWholeBookChecksumChanges() throws Exception {
     Path root = Files.createTempDirectory("qe-ghcr-textbook-stale-job");
-    Path books = root.resolve("hindi/books");
+    Path books = root.resolve("class-6/hindi/books");
     Files.createDirectories(books);
     byte[] bytes = "%PDF-1.4\nbook\n".getBytes(StandardCharsets.US_ASCII);
     Path bookPath = books.resolve("book.pdf");
     Files.write(bookPath, bytes);
     String hash = sha256(bytes);
-    writeIndex(root.resolve("hindi/index.json"), registryEntry(
+    writeIndex(root.resolve("class-6/hindi/index.json"), registryEntry(
         "scert-bihar-123456-hindi", "State textbook", 6, "hindi", "Science", bookPath, hash, bytes.length));
 
     TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
     IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
-        () -> cache.requireBookForJob("hindi", "scert-bihar-123456-hindi", "0".repeat(64)));
+        () -> cache.requireBookForJob("hindi", "scert-bihar-123456-hindi", "0".repeat(64), 6));
     assertTrue(error.getMessage().toLowerCase().contains("changed"));
+  }
+
+  @Test
+  void sameBookIdIsResolvedOnlyFromRequestedClassImage() throws Exception {
+    Path root = Files.createTempDirectory("qe-ghcr-class-isolation");
+    Path grade6Books = root.resolve("class-6/hindi/books");
+    Path grade7Books = root.resolve("class-7/hindi/books");
+    Files.createDirectories(grade6Books);
+    Files.createDirectories(grade7Books);
+    byte[] grade6 = "%PDF-1.4\nclass six edition\n".getBytes(StandardCharsets.US_ASCII);
+    byte[] grade7 = "%PDF-1.4\nclass seven edition\n".getBytes(StandardCharsets.US_ASCII);
+    Path p6 = grade6Books.resolve("same-book.pdf");
+    Path p7 = grade7Books.resolve("same-book.pdf");
+    Files.write(p6, grade6);
+    Files.write(p7, grade7);
+    writeIndex(root.resolve("class-6/hindi/index.json"), registryEntry(
+        "same-book", "Same title", 6, "hindi", "Mathematics", p6, sha256(grade6), grade6.length));
+    writeIndex(root.resolve("class-7/hindi/index.json"), registryEntry(
+        "same-book", "Same title", 7, "hindi", "Mathematics", p7, sha256(grade7), grade7.length));
+
+    TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
+
+    assertEquals(sha256(grade6), cache.requireBook("hindi", "same-book", 6).sha256());
+    assertEquals(sha256(grade7), cache.requireBook("hindi", "same-book", 7).sha256());
+    assertEquals(2, cache.list("hindi", null).size());
   }
 
   private static Map<String, Object> registryEntry(

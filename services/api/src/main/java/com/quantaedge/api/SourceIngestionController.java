@@ -108,13 +108,6 @@ public class SourceIngestionController {
       @PathVariable String medium, @PathVariable String bookId, @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = requireReviewer(context);
-    final TextbookCacheService.CachedBook cached;
-    try {
-      cached = textbookCache.requireBook(medium, bookId);
-    } catch (IllegalArgumentException ex) {
-      throw badRequest(ex.getMessage());
-    }
-
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
     List<Map<String, Object>> tracks = jdbc.queryForList("""
@@ -127,6 +120,12 @@ public class SourceIngestionController {
     Map<String, Object> track = tracks.getFirst();
     int grade = textbookCache.classNumber(
         String.valueOf(track.get("class_code")), String.valueOf(track.get("class_name")));
+    final TextbookCacheService.CachedBook cached;
+    try {
+      cached = textbookCache.requireBook(medium, bookId, grade);
+    } catch (IllegalArgumentException ex) {
+      throw badRequest(ex.getMessage());
+    }
     if (!cached.classes().contains(grade)) {
       throw badRequest("The selected book does not list Class " + grade + " in its verified GHCR index.");
     }
@@ -179,11 +178,11 @@ public class SourceIngestionController {
     Long jobId = jdbc.queryForObject("""
       insert into source_ingestion_job(
         source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
-        cache_medium,cache_book_id,cache_sha256,status,created_by_staff_id
-      ) values(?,?,?,?,?,?,null,?,?,?,'DOWNLOADING',?)
+        cache_medium,cache_book_id,cache_sha256,cache_class_no,status,created_by_staff_id
+      ) values(?,?,?,?,?,?,null,?,?,?,?,'DOWNLOADING',?)
       returning id
       """, Long.class, sourceId, track.get("subject_id"), title, sourceUrl, edition, language,
-      cached.medium(), cached.bookId(), cached.sha256(), context.staffId());
+      cached.medium(), cached.bookId(), cached.sha256(), grade, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/registry-books/" + cached.medium()
         + "/" + cached.bookId() + "/jobs",
         "Started source-ingestion review from a SHA-256-verified complete book in the persistent GHCR cache.");
@@ -720,7 +719,7 @@ public class SourceIngestionController {
   private Map<String, Object> jobDetails(long jobId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select j.id as job_id,j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
-             j.language,j.book_asset_id,j.cache_medium,j.cache_book_id,j.cache_sha256,
+             j.language,j.book_asset_id,j.cache_medium,j.cache_book_id,j.cache_sha256,j.cache_class_no,
              j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
              j.created_at,j.updated_at,j.reviewed_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,a.title as book_asset_title,

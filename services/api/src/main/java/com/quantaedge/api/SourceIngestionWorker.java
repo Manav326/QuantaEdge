@@ -39,7 +39,7 @@ public class SourceIngestionWorker {
     try {
       Map<String, Object> job = jdbc.queryForMap("""
         select j.id,j.source_id,j.source_title,j.source_url,j.book_asset_id,j.created_by_staff_id,
-               j.cache_medium,j.cache_book_id,j.cache_sha256
+               j.cache_medium,j.cache_book_id,j.cache_sha256,j.cache_class_no
         from source_ingestion_job j where j.id=?
         """, jobId);
       byte[] bytes = null;
@@ -50,9 +50,15 @@ public class SourceIngestionWorker {
       Long assetId = job.get("book_asset_id") == null ? null : ((Number) job.get("book_asset_id")).longValue();
 
       if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
-        TextbookCacheService.CachedBook cached = textbookCache.requireBookForJob(
-            String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
-            String.valueOf(job.get("cache_sha256")));
+        Integer cacheClassNo = job.get("cache_class_no") == null
+            ? null : ((Number) job.get("cache_class_no")).intValue();
+        TextbookCacheService.CachedBook cached = cacheClassNo == null
+            ? textbookCache.requireBookForJob(
+                String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                String.valueOf(job.get("cache_sha256")))
+            : textbookCache.requireBookForJob(
+                String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+                String.valueOf(job.get("cache_sha256")), cacheClassNo);
         cachedBookPath = cached.path();
         cachedHash = cached.sha256();
         resolvedUrl = cached.pdfUrl().isBlank() ? cached.sourceUrl() : cached.pdfUrl();
