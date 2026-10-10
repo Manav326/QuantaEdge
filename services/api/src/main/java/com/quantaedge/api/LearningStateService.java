@@ -32,13 +32,15 @@ public class LearningStateService {
     ensureStudentCanAnswer(studentId,questionId,lessonId);
     if(answer!=null && answer.length()>5000) throw new IllegalArgumentException("Answer is too long");
     if(practiceSessionId!=null) {
-      Long membership=jdbc.queryForObject("""
-        select count(*) from student_practice_session_question psq
+      List<Map<String,Object>> membership=jdbc.queryForList("""
+        select psq.question_id
+        from student_practice_session_question psq
         join student_practice_session ps on ps.id=psq.practice_session_id
         where ps.id=? and ps.student_id=? and psq.question_id=?
           and ps.status='IN_PROGRESS' and psq.answered_at is null
-        """,Long.class,practiceSessionId,studentId,questionId);
-      if(membership==null||membership==0)throw new SecurityException("Question is not assigned to this practice session.");
+        for update of psq,ps
+        """,practiceSessionId,studentId,questionId);
+      if(membership.isEmpty())throw new SecurityException("Question is not assigned to this active practice session or was already answered.");
     }
     String selected=answer!=null&&answer.length()<=20?answer:null;
     jdbc.update("""
