@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './Assessments.module.css';
 
 type BankQuestion = { question_id:number; question_type:string; prompt:string; difficulty:string; marks?:number|null; lesson_title:string; chapter_id:number; chapter_name:string; chapter_code:string; subject_name:string; };
-type Assessment = { assessment_id:number; title:string; description?:string; duration_minutes:number; max_attempts:number; status:string; class_code:string; subject_code:string; subject_name:string; chapter_id?:number|null; chapter_name?:string|null; question_count:number; max_score:number; attempt_count:number; review_count:number; assigned_graders?:Array<{staff_id:number;display_name:string;role:string}>; };
+type Assessment = { assessment_id:number; title:string; description?:string; duration_minutes:number; max_attempts:number; status:string; class_code:string; subject_code:string; subject_name:string; chapter_id?:number|null; chapter_name?:string|null; question_count:number; max_score:number; attempt_count:number; review_count:number; assigned_grader_names?:string|null; };
 type Staff = {staff_id:number;display_name:string;role:string;can_grade:boolean};
-type ReviewQuestion = {attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;awardedMarks?:number|string|null;teacherFeedback?:string|null;manualReviewRequired?:boolean};
+type ReviewQuestion = {attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;awardedMarks?:number|string|null;isCorrect?:boolean|null;teacherFeedback?:string|null;manualReviewRequired?:boolean};
 type ReviewAttempt = {attempt_id:number;assessment_id:number;assessment_title:string;student_name:string;class_code:string;subject_name:string;status:string;final_score?:number|null;auto_score?:number|null;max_score:number;questions:ReviewQuestion[];audit?:Array<{id:number;actor_name:string;actor_role:string;action:string;previous_status?:string;new_status?:string;note?:string;occurred_at:string}>};
 
 async function api(url:string,init:RequestInit={}) {
@@ -55,7 +55,6 @@ export default function AssessmentsPage(){
   const chapters=useMemo(()=>{const m=new Map<number,{id:number;code:string;name:string}>();bank.forEach(q=>m.set(q.chapter_id,{id:q.chapter_id,code:q.chapter_code,name:q.chapter_name}));return [...m.values()]},[bank]);
   const eligibleStaff=staff.filter(s=>s.can_grade);
   const filteredBank=bank.filter(q=>!search.trim()||q.prompt.toLowerCase().includes(search.toLowerCase())||q.lesson_title.toLowerCase().includes(search.toLowerCase())||q.chapter_name.toLowerCase().includes(search.toLowerCase()));
-  const maxMarksByAssessment=useMemo(()=>new Map(assessments.map(a=>[a.assessment_id,Number(a.max_score||0)])),[assessments]);
 
   const loadAssessments=useCallback(async()=>{
     setLoading(true);setError('');
@@ -208,7 +207,7 @@ export default function AssessmentsPage(){
           {loading?<p className={styles.empty}>Loading tests…</p>:assessments.length===0?<div className={styles.empty}><b>No assessments in this filter</b><span>Create a draft from approved questions above.</span></div>:<div className={styles.testList}>{assessments.map(row=><article className={styles.testCard} key={row.assessment_id}>
             <div className={styles.testIcon}>✓</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.title}</h3><span className={styles['status'+row.status]}>{row.status}</span></div><p>Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{row.question_count} questions · {row.max_score} marks · {row.duration_minutes} min · {row.max_attempts} attempt(s)</small><small>{row.attempt_count} submitted/started · {row.review_count} awaiting review</small>
               <div className={styles.inlineAssign}><select aria-label={'Assign grader for '+row.title} value={graderByAssessment[row.assessment_id]||''} onChange={e=>setGraderByAssessment(m=>({...m,[row.assessment_id]:e.target.value}))}><option value="">Assign staff reviewer…</option>{eligibleStaff.map(s=><option key={s.staff_id} value={s.staff_id}>{s.display_name} · {s.role}</option>)}</select><button type="button" disabled={busy||!eligibleStaff.length||!graderByAssessment[row.assessment_id]} onClick={()=>void assignGrader(row)}>Assign grader</button></div>
-              {row.assigned_graders?.length? <small>Assigned: {row.assigned_graders.map(g=>g.display_name).join(', ')}</small>:null}
+              {row.assigned_grader_names? <small>Assigned: {row.assigned_grader_names}</small>:null}
             </div><div className={styles.testActions}>{row.status==='DRAFT'&&<button className={styles.primaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'PUBLISHED')}>Publish</button>}{row.status==='PUBLISHED'&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'ARCHIVED')}>Archive</button>}{row.status==='ARCHIVED'&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'DRAFT')}>Restore draft</button>}</div>
           </article>)}</div>}
         </section>
