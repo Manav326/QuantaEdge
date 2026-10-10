@@ -860,6 +860,20 @@ def _book_entry(book: dict[str, Any], digest: str, page_count: int,
     }
 
 
+
+def _class_scoped_book_entry(
+    book: dict[str, Any], digest: str, page_count: int,
+    toc: list[list[Any]], method: str, pdf_path: Path, class_no: int | None,
+) -> dict[str, Any]:
+    entry = _book_entry(book, digest, page_count, toc, method, pdf_path)
+    if class_no is not None:
+        entry["source_classes"] = book.get("classes") or [book.get("class")]
+        entry["class"] = str(class_no)
+        entry["classes"] = [str(class_no)]
+        entry["registry_class"] = class_no
+    return entry
+
+
 def _index_add_books(index: dict[str, Any], entries: list[dict[str, Any]]) -> None:
     current = {item.get("book_id"): item for item in index.get("books", []) if isinstance(item, dict)}
     for entry in entries:
@@ -872,12 +886,344 @@ def _index_add_books(index: dict[str, Any], entries: list[dict[str, Any]]) -> No
     ))
 
 
+
+def _entry_class_numbers(item: dict[str, Any]) -> list[int]:
+    raw = item.get("classes")
+    values = raw if isinstance(raw, list) else [item.get("class")]
+    found: set[int] = set()
+    for value in values:
+        text = str(value or "").strip().lower()
+        if text in ROMAN_CLASSES:
+            number = ROMAN_CLASSES[text]
+        else:
+            match = re.search(r"(?i)(?:class\s*)?(6|7|8|9|10|11|12)\b", text)
+            if not match:
+                continue
+            number = int(match.group(1))
+        if 6 <= number <= 12:
+            found.add(number)
+    return sorted(found)
+
+
+def class_image_reference(image_prefix: str, class_no: int, language: str) -> str:
+    if class_no not in range(6, 13):
+        raise ValueError("Class-specific GHCR image requires class 6 through 12.")
+    if language not in LANGUAGES:
+        raise ValueError("Class-specific GHCR image requires hindi or english medium.")
+    return image_prefix.rstrip("-").lower() + "-class-" + str(class_no) + "-" + language + ":latest"
+
+
+def _safe_registry_book_id(value: Any) -> str:
+    book_id = str(value or "")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,239}", book_id):
+        raise ValueError("Unsafe textbook ID in GHCR index: " + repr(book_id))
+    return book_id
+
+
+def _extract_image_books(image: str, index: dict[str, Any], output_root: Path) -> Path:
+    """Extract a language image's indexed complete books once for one-time class migration."""
+    books_root = output_root / "books"
+    books_root.mkdir(parents=True, exist_ok=True)
+    container = "qe-cache-migrate-" + hashlib.sha1((image + now()).encode()).hexdigest()[:10]
+    subprocess.run(
+        ["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"],
+        check=True, stdout=subprocess.DEVNULL,
+    )
+    try:
+        for item in index.get("books", []):
+            if not isinstance(item, dict):
+                raise ValueError("A GHCR cache index contains a non-object book entry.")
+            book_id = _safe_registry_book_id(item.get("book_id"))
+            if str(item.get("file", "")) != "books/" + book_id + ".pdf":
+                raise ValueError("Unsafe whole-book file path in the old GHCR index for " + book_id)
+            expected = str(item.get("sha256", "")).lower()
+            if not re.fullmatch(r"[0-9a-f]{64}", expected):
+                raise ValueError("The old GHCR index has no valid whole-book SHA-256 for " + book_id)
+            target = books_root / (book_id + ".pdf")
+            if target.is_file() and sha256_file(target) == expected:
+                if item.get("bytes") is not None and target.stat().st_size != int(item["bytes"]):
+                    raise ValueError("The old cached book has a size mismatch: " + book_id)
+                continue
+            staged = target.with_name(target.name + ".copying")
+            staged.unlink(missing_ok=True)
+            subprocess.run(
+                ["docker", "cp", container + ":/books/" + book_id + ".pdf", str(staged)],
+                check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+            )
+            if not staged.is_file() or sha256_file(staged) != expected:
+                staged.unlink(missing_ok=True)
+                raise ValueError("The old GHCR whole-book checksum failed during migration: " + book_id)
+            if item.get("bytes") is not None and staged.stat().st_size != int(item["bytes"]):
+                staged.unlink(missing_ok=True)
+                raise ValueError("The old GHCR whole-book size failed during migration: " + book_id)
+            staged.replace(target)
+    finally:
+        subprocess.run(["docker", "rm", container], check=False,
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return output_root
+
+
+def _seed_class_image_from_legacy(
+    image_prefix: str, class_no: int, language: str, legacy_loader: Any, work_root: Path,
+) -> dict[str, Any]:
+    """Migrate the previous medium-wide image into one class image, once and resumably."""
+    image = class_image_reference(image_prefix, class_no, language)
+    base_exists, index = pull_index(image)
+    index.setdefault("schema_version", 1)
+    index.setdefault("registry", image)
+    index.setdefault("language", language)
+    index.setdefault("class_no", class_no)
+    index.setdefault("books", [])
+    index.setdefault("download_status", {})
+    if not isinstance(index.get("books"), list) or not isinstance(index.get("download_status"), dict):
+        raise ValueError("Invalid target class cache index; refusing to replace " + image)
+
+    before = len(index["books"])
+    if index.get("legacy_migration_complete") is True:
+        report = {"image": image, "class": class_no, "medium": language,
+                  "books_before_migration": before, "migrated_from_legacy": 0,
+                  "books_after_migration": before, "migration_skipped": True}
+        log("CLASS_IMAGE_SEED_REPORT " + json.dumps(report, ensure_ascii=False))
+        return report
+
+    legacy_index, legacy_root = legacy_loader(language)
+    legacy_status = legacy_index.get("download_status", {})
+    entries_by_id = {item.get("book_id"): item for item in index["books"] if isinstance(item, dict)}
+    source_items = [item for item in legacy_index.get("books", [])
+                    if isinstance(item, dict) and class_no in _entry_class_numbers(item)]
+    additions: list[dict[str, Any]] = []
+    files_by_id: dict[str, Path] = {}
+    for old_item in source_items:
+        book_id = _safe_registry_book_id(old_item.get("book_id"))
+        if book_id in entries_by_id:
+            continue
+        source = legacy_root / "books" / (book_id + ".pdf")
+        expected = str(old_item.get("sha256", "")).lower()
+        if not source.is_file():
+            raise FileNotFoundError(
+                "The old registry index includes " + book_id + " but its PDF could not be extracted. "
+                "Migration stopped without re-downloading or replacing that book."
+            )
+        if not re.fullmatch(r"[0-9a-f]{64}", expected) or sha256_file(source) != expected:
+            raise ValueError("The old registry SHA-256 did not verify for " + book_id
+                             + "; refusing migration or silent re-download.")
+        if old_item.get("bytes") is not None and source.stat().st_size != int(old_item["bytes"]):
+            raise ValueError("Old registry size mismatch for " + book_id + "; refusing migration.")
+        entry = copy.deepcopy(old_item)
+        entry["source_classes"] = old_item.get("source_classes") or old_item.get("classes") or [old_item.get("class")]
+        entry["class"] = str(class_no)
+        entry["classes"] = [str(class_no)]
+        entry["registry_class"] = class_no
+        entry["medium"] = language
+        entry["file"] = "books/" + book_id + ".pdf"
+        additions.append(entry)
+        files_by_id[book_id] = source
+        entries_by_id[book_id] = entry
+
+    _index_add_books(index, additions)
+    if isinstance(legacy_status, dict):
+        target_status = index.setdefault("download_status", {})
+        for old_item in source_items:
+            book_id = str(old_item.get("book_id", ""))
+            if book_id and book_id not in target_status and book_id in legacy_status:
+                target_status[book_id] = copy.deepcopy(legacy_status[book_id])
+    index.update({
+        "schema_version": 1, "registry": image, "language": language, "class_no": class_no,
+        "legacy_migration_complete": True, "legacy_migration_completed_at": now(), "updated_at": now(),
+    })
+    if additions or not base_exists or not index.get("legacy_migration_complete"):
+        push_batch(image, base_exists, additions, files_by_id, index,
+                   work_root / ("seed-class-" + str(class_no) + "-" + language))
+    report = {
+        "image": image, "class": class_no, "medium": language, "books_before_migration": before,
+        "legacy_books_for_class": len(source_items), "migrated_from_legacy": len(additions),
+        "books_after_migration": len(index.get("books", [])), "migration_skipped": False,
+    }
+    log("CLASS_IMAGE_SEED_REPORT " + json.dumps(report, ensure_ascii=False))
+    summary("- Migration checkpoint: " + image + "; carried forward " + str(len(additions))
+            + " existing book(s); total image inventory " + str(len(index.get("books", []))) + ".")
+    return report
+
+
+def publish_classwise(
+    language: str, image_prefix: str, class_no: int | None = None, book_code: str | None = None,
+    refresh: bool = False, max_books: int = 0,
+    download_workers: int = DEFAULT_DOWNLOAD_WORKERS,
+    push_batch_size: int = DEFAULT_PUSH_BATCH_SIZE,
+    retry_rounds: int = MAX_RETRY_ROUNDS,
+) -> dict[str, Any]:
+    """Publish to stable class/medium images and report the full coverage of each image."""
+    if language not in {"hindi", "english", "both"}:
+        raise ValueError("Language must be hindi, english, or both.")
+    if class_no is not None and class_no not in range(6, 13):
+        raise ValueError("Class filter must be from 6 through 12.")
+    image_prefix = image_prefix.rstrip("-").lower()
+    languages = ["hindi", "english"] if language == "both" else [language]
+    classes = [class_no] if class_no is not None else list(range(6, 13))
+    reports: list[dict[str, Any]] = []
+    seed_reports: dict[str, dict[str, Any]] = {}
+    legacy_cache: dict[str, tuple[dict[str, Any], Path]] = {}
+    ncert_catalog: list[dict[str, Any]] = []
+    scert_catalog: list[dict[str, Any]] = []
+    scoped_book: dict[str, Any] | None = None
+    scoped_source = ""
+
+    with tempfile.TemporaryDirectory(prefix="qe-classwise-textbook-cache-") as temporary:
+        work_root = Path(temporary)
+
+        def legacy_loader(medium: str) -> tuple[dict[str, Any], Path]:
+            if medium in legacy_cache:
+                return legacy_cache[medium]
+            legacy_image = image_prefix + "-" + medium + ":latest"
+            exists, legacy_index = pull_index(legacy_image)
+            legacy_root = work_root / ("legacy-" + medium)
+            (legacy_root / "books").mkdir(parents=True, exist_ok=True)
+            if exists:
+                _extract_image_books(legacy_image, legacy_index, legacy_root)
+            else:
+                log("LEGACY_IMAGE_ABSENT image=" + legacy_image)
+            legacy_cache[medium] = (legacy_index, legacy_root)
+            log("LEGACY_IMAGE_INVENTORY image=" + legacy_image
+                + " books=" + str(len(legacy_index.get("books", []))))
+            return legacy_cache[medium]
+
+        if book_code:
+            if book_code.casefold().startswith("scert-bihar-"):
+                scert_catalog = discover_scert_books()
+                matches = [item for item in scert_catalog
+                           if item.get("book_id", "").casefold() == book_code.casefold()]
+                scoped_source = "SCERT Bihar"
+            else:
+                ncert_catalog = discover_ncert_books()
+                matches = [item for item in ncert_catalog
+                           if item.get("code", "").casefold() == book_code.casefold()
+                           or item.get("book_id", "").casefold() == book_code.casefold()]
+                scoped_source = "NCERT"
+                if not matches:
+                    scert_catalog = discover_scert_books()
+                    matches = [item for item in scert_catalog
+                               if item.get("book_id", "").casefold() == book_code.casefold()]
+                    scoped_source = "SCERT Bihar"
+            if not matches:
+                raise ValueError("No official NCERT/SCERT book matched " + book_code)
+            scoped_book = matches[0]
+            languages = [str(scoped_book["medium"])]
+            classes = [number for number in _entry_class_numbers(scoped_book)
+                       if class_no is None or number == class_no]
+            if not classes:
+                raise ValueError("The requested book does not match the selected class.")
+            if scoped_source == "NCERT":
+                ncert_catalog, scert_catalog = [scoped_book], []
+            else:
+                scert_catalog, ncert_catalog = [scoped_book], []
+            for grade in classes:
+                image = class_image_reference(image_prefix, grade, languages[0])
+                seed_reports[image] = _seed_class_image_from_legacy(
+                    image_prefix, grade, languages[0], legacy_loader, work_root)
+                reports.append(publish_language(
+                    languages[0], image, book_code, refresh, max_books, False,
+                    catalog=[scoped_book], download_workers=download_workers,
+                    push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
+                ))
+        else:
+            for medium in languages:
+                for grade in classes:
+                    image = class_image_reference(image_prefix, grade, medium)
+                    seed_reports[image] = _seed_class_image_from_legacy(
+                        image_prefix, grade, medium, legacy_loader, work_root)
+
+            # Push NCERT first, before the slower SCERT catalogue discovery.
+            ncert_catalog = discover_ncert_books()
+            for medium in languages:
+                for grade in classes:
+                    image = class_image_reference(image_prefix, grade, medium)
+                    reports.append(publish_language(
+                        medium, image, None, refresh, max_books, True,
+                        catalog=ncert_catalog, download_workers=download_workers,
+                        push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
+                    ))
+            scert_catalog = discover_scert_books()
+            for medium in languages:
+                for grade in classes:
+                    image = class_image_reference(image_prefix, grade, medium)
+                    reports.append(publish_language(
+                        medium, image, None, refresh, max_books, False,
+                        catalog=scert_catalog, download_workers=download_workers,
+                        push_batch_size=push_batch_size, retry_rounds=retry_rounds, class_no=grade,
+                    ))
+
+        reports_by_image: dict[str, list[dict[str, Any]]] = {}
+        for report in reports:
+            reports_by_image.setdefault(report["image"], []).append(report)
+        complete_catalog = ncert_catalog + scert_catalog
+        final_rows: list[dict[str, Any]] = []
+        for medium in languages:
+            for grade in classes:
+                image = class_image_reference(image_prefix, grade, medium)
+                phase_reports = reports_by_image.get(image, [])
+                last_report = phase_reports[-1] if phase_reports else None
+                cached_ids = set(last_report.get("cached_book_ids", [])) if last_report else set()
+                expected = [scoped_book] if scoped_book is not None else [
+                    item for item in complete_catalog
+                    if item.get("medium") == medium and grade in _entry_class_numbers(item)
+                ]
+                expected_ids = {str(item["book_id"]) for item in expected}
+                missing_ids = sorted(expected_ids - cached_ids)
+                downloaded_ids = sorted({
+                    str(book_id) for report in phase_reports
+                    for book_id in report.get("downloaded_and_pushed", [])
+                })
+                failed_ids = sorted({
+                    str(item.get("book_id")) for report in phase_reports
+                    for item in report.get("failed_after_retries", [])
+                })
+                seed = seed_reports.get(image, {})
+                cached_count = last_report.get("books_in_registry", 0) if last_report else seed.get("books_after_migration", 0)
+                failed_count = sum(len(report.get("failed_after_retries", [])) for report in phase_reports)
+                push_failure_count = sum(len(report.get("push_failures", [])) for report in phase_reports)
+                row = {
+                    "image": image, "class": grade, "medium": medium,
+                    "catalog_books_expected": len(expected_ids),
+                    "already_cached_before_download": len(last_report.get("already_cached", [])) if last_report else 0,
+                    "migrated_from_legacy": int(seed.get("migrated_from_legacy", 0)),
+                    "newly_downloaded_and_pushed": len(downloaded_ids),
+                    "pushed_to_image_this_run": int(seed.get("migrated_from_legacy", 0)) + len(downloaded_ids),
+                    "books_in_registry": cached_count,
+                    "remaining_expected": len(missing_ids),
+                    "missing_book_ids": missing_ids,
+                    "failed_after_retries": failed_ids,
+                    "push_failures": push_failure_count,
+                    "status": "COMPLETE" if not missing_ids and not failed_count and not push_failure_count else "INCOMPLETE",
+                }
+                final_rows.append(row)
+        final_report = {"layout": "class-and-medium", "image_count": len(final_rows),
+                        "images": final_rows, "updated_at": now()}
+        log("CLASSWISE_GHCR_FINAL_REPORT " + json.dumps(final_report, ensure_ascii=False))
+        summary("\n## Final per-GHCR coverage summary\n\n"
+                + "| GHCR image | Catalogue books | Cached total | Migrated | Newly downloaded/pushed | Remaining | Failed | Status |\n"
+                + "|---|---:|---:|---:|---:|---:|---:|---|\n"
+                + "\n".join(
+                    "| " + row["image"] + " | " + str(row["catalog_books_expected"])
+                    + " | " + str(row["books_in_registry"]) + " | " + str(row["migrated_from_legacy"])
+                    + " | " + str(row["newly_downloaded_and_pushed"]) + " | " + str(row["remaining_expected"])
+                    + " | " + str(len(row["failed_after_retries"])) + " | " + row["status"] + " |"
+                    for row in final_rows
+                ) + "\n")
+        summary("\nThe same class/medium image and its index are checked before each source download. "
+                "A successful book ID is skipped on later runs; only missing books are eligible for download.")
+        incomplete = any(row["status"] != "COMPLETE" for row in final_rows)
+        source_failures = any(report.get("failed_after_retries") or report.get("push_failures") for report in reports)
+        final_report["exit_code"] = 1 if source_failures or (incomplete and not book_code and max_books == 0) else 0
+        return final_report
+
+
 def publish_language(language: str, image: str, book_code: str | None = None, refresh: bool = False,
                      max_books: int = 0, ncert_only: bool = False,
                      catalog: list[dict[str, Any]] | None = None,
                      download_workers: int = DEFAULT_DOWNLOAD_WORKERS,
                      push_batch_size: int = DEFAULT_PUSH_BATCH_SIZE,
-                     retry_rounds: int = MAX_RETRY_ROUNDS) -> dict[str, Any]:
+                     retry_rounds: int = MAX_RETRY_ROUNDS,
+                     class_no: int | None = None) -> dict[str, Any]:
     if language not in LANGUAGES:
         raise ValueError("Language must be hindi or english.")
     if not 1 <= download_workers <= 32:
@@ -898,6 +1244,10 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
     existing = {item.get("book_id"): item for item in index["books"] if isinstance(item, dict)}
     catalog = catalog if catalog is not None else discover_books()
     selected = [item for item in catalog if item["medium"] == language]
+    if class_no is not None:
+        if class_no not in range(6, 13):
+            raise ValueError("Class filter must be from 6 through 12.")
+        selected = [item for item in selected if class_no in _entry_class_numbers(item)]
     if ncert_only:
         selected = [item for item in selected if item["source_type"] == "NCERT"]
     if book_code:
@@ -1007,9 +1357,10 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                     and candidate["book_id"] not in ready_for_push
                     and attempt_in_this_run.get(candidate["book_id"], 0) < retry_rounds
                 )
-                log("CACHE_PROGRESS language=" + language + " phase=batch-pushed"
+                log("CACHE_PROGRESS image=" + image + " phase=batch-pushed"
+                    + " catalog_expected=" + str(len(selected))
+                    + " cached_now=" + str(len(existing))
                     + " pushed_this_run=" + str(len(downloaded))
-                    + " registry_books=" + str(len(index.get("books", [])))
                     + " pending_downloads=" + str(remaining_downloads)
                     + " waiting_for_push=" + str(len(ready_for_push)))
                 return True
@@ -1067,7 +1418,8 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         ready_for_push[book_id] = {
                             "book": book,
                             "path": pdf_path,
-                            "entry": _book_entry(book, digest, pages, toc, method, pdf_path),
+                            "entry": _class_scoped_book_entry(
+                                book, digest, pages, toc, method, pdf_path, class_no),
                         }
                         previous_status = index.setdefault("download_status", {}).get(book_id, {})
                         index["download_status"][book_id] = {
@@ -1117,7 +1469,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                 1 for row in failed_downloads.values()
                 if attempt_in_this_run.get(row["book_id"], 0) >= retry_rounds
             )
-            log("CACHE_PROGRESS language=" + language + " round=" + str(round_no) + "/" + str(retry_rounds)
+            log("CACHE_PROGRESS image=" + image + " round=" + str(round_no) + "/" + str(retry_rounds)
                 + " resolved=" + str(len(resolved_ids))
                 + " pushed_this_run=" + str(len(downloaded))
                 + " pending_downloads=" + str(len(pending))
@@ -1152,6 +1504,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
     report = {
         "language": language,
+        "class_no": class_no,
         "image": image,
         "persistent_tag": "latest",
         "catalog_entries": len(selected),
@@ -1165,13 +1518,15 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         "failed_after_retries": list(failed_downloads.values()),
         "push_failures": [{"book_id": key, "error": value} for key, value in push_failures.items()],
         "books_in_registry": len(index.get("books", [])),
+        "cached_book_ids": sorted(str(book_id) for book_id in existing.keys()),
         "retry_rounds": retry_rounds,
         "download_workers": download_workers,
         "push_batch_size": push_batch_size,
         "updated_at": now(),
     }
     log("BOOK_CACHE_REPORT " + json.dumps(report, ensure_ascii=False))
-    summary("\n## " + language.title() + " textbook-cache result\n\n"
+    scope_label = language.title() + ((" · Class " + str(class_no)) if class_no is not None else "")
+    summary("\n## " + scope_label + " textbook-cache result — " + image + "\n\n"
             + "- Persistent image: " + image + "\n"
             + "- Books already cached: " + str(len(already_cached)) + "\n"
             + "- Books newly downloaded and pushed: " + str(len(downloaded)) + "\n"
@@ -1436,6 +1791,10 @@ def main(argv: list[str] | None = None) -> int:
     publish.add_argument("--download-workers", type=int, default=DEFAULT_DOWNLOAD_WORKERS)
     publish.add_argument("--push-batch-size", type=int, default=DEFAULT_PUSH_BATCH_SIZE)
     publish.add_argument("--retry-rounds", type=int, default=MAX_RETRY_ROUNDS)
+    publish.add_argument("--class-wise", action="store_true",
+                         help="Publish into separate class/medium GHCR images.")
+    publish.add_argument("--class-no", type=int, choices=range(6, 13),
+                         help="Limit class-wise publishing to one grade; default is Classes 6–12.")
     pull = sub.add_parser("pull", help="Pull one language image locally and verify all checksums")
     pull.add_argument("--image", required=True)
     pull.add_argument("--output-dir", required=True, type=Path)
@@ -1453,6 +1812,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "prepare-library":
             report = prepare_library(args.registry_dir, args.output_dir)
             return 1 if report["failures"] else 0
+        if args.command == "publish" and args.class_wise:
+            final_report = publish_classwise(
+                args.language, args.image_prefix, args.class_no, args.book_code,
+                args.refresh, args.max_books, args.download_workers,
+                args.push_batch_size, args.retry_rounds,
+            )
+            print(json.dumps(final_report, ensure_ascii=False, indent=2))
+            return int(final_report.get("exit_code", 1))
         if args.command == "publish":
             languages = ["hindi", "english"] if args.language == "both" else [args.language]
             reports = []
