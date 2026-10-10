@@ -33,6 +33,31 @@ Pull the English image:
 
 After pulling, use the local PDFs with QuantaEdge's existing SCERT extraction review and Admin Source ingestion flow. Use source and edition metadata from index.json rather than downloading the same book again.
 
+## Prepare cached books for the private library
+
+The cache sync does not upload textbook binaries to Git. Once an image is pulled, prepare a separate draft folder with checksum-verified PDFs and metadata bundles:
+
+    python scripts/textbook_registry.py prepare-library --registry-dir source-pdfs/registry-cache/hindi --output-dir private-review/cache-library-hindi
+
+For English:
+
+    python scripts/textbook_registry.py prepare-library --registry-dir source-pdfs/registry-cache/english --output-dir private-review/cache-library-english
+
+The preparer keeps the original cached books untouched. If a PDF has top-level chapter bookmarks (including the Chapter N bookmarks created for NCERT), it splits the PDF into per-chapter PDFs and creates one DRAFT_EXTRACTION_ONLY bundle per asset. Where a complete book is under the existing 50 MiB API library limit, it also creates a complete-book asset. For larger books, chapter-sized assets are created only when reliable page boundaries can be detected; the report flags books that need a reviewed page map instead of inventing one.
+
+Register the ready bundles in the existing private library, using an authenticated staff session with CONTENT_EDIT and CONTENT_REVIEW permissions:
+
+    python scripts/import_existing_textbook_pdfs.py --bundle-dir private-review/cache-library-hindi/bundles --pdf-dir private-review/cache-library-hindi/pdfs --api-base-url http://localhost:8080 --apply
+
+Set QUANTAEDGE_ADMIN_SESSION in the shell that runs the importer. Repeat for the English output directory. Each imported item remains a draft/private asset; source-to-chapter mapping, approval and publishing remain explicit review steps. The complete original remains in GHCR even when it is too large for the database PDF library.
+
+## Direct download links
+
+- [Hindi-medium GHCR package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-hindi)
+- [English-medium GHCR package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-english)
+
+The GitHub Actions run page also exposes class-wise ZIP artifacts after successful pulls. Use the GHCR package for the durable cache; artifacts are convenience downloads with limited retention.
+
 ## Source coverage notes
 
 The NCERT catalogue is dynamic, so the workflow lists actual cached titles and hashes rather than hard-coding a misleading total. SCERT Bihar catalogue pages may occasionally omit details or time out; failures are logged and can be retried without losing already-pushed books. The final GitHub Actions summary lists class, publisher, title, registry ID and SHA-256 prefix for every newly cached book.
