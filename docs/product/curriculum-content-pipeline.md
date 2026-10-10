@@ -37,6 +37,14 @@ python scripts/scert_extract_review.py \
   --output ./private-review/class-6-maths-extraction.json
 ```
 
+## Cached complete textbooks from GHCR
+
+For already-synchronized NCERT and SCERT Bihar source books, prefer Admin → **Source ingestion & chapter review → GHCR cache**. The admin UI lists complete books in the locally mounted Hindi/English registry, filters by curriculum grade, and starts a source-ingestion job using the cache's stable book ID and SHA-256. It does not revisit the publisher's website.
+
+The source-ingestion worker verifies the entire cached book when the job starts. Small whole-book files can be stored in the private PDF library. A complete book over the library's 50 MiB file ceiling remains in GHCR and is opened from the read-only cache for private page preview and chapter extraction. Reviewer-selected page ranges create chapter PDFs; only those PDF assets, each constrained to the current library size limit, are stored in PostgreSQL.
+
+Every selected range must belong to an active chapter in the selected class/subject, ranges cannot overlap, and every resulting chapter PDF must be explicitly approved or rejected. Approved chapter PDFs are inserted into the existing library as DRAFT documents. A separate authorized publisher must verify metadata and publish individual learning documents before students can see them. The whole source stays in GHCR if it is too large for PostgreSQL; no chapter-by-chapter upstream downloader fallback is used.
+
 ## Stage 1b — register extracted source PDFs for online reading
 
 The extraction review JSON records the source PDF filename, SHA-256, page count and extracted page text; it does not embed the original PDF bytes. The online textbook reader needs the original PDF, so register the unchanged source PDF in QuantaEdge's private PDF library. The importer checks the checksum against the extraction bundle before it sends anything, and uploads only to the authenticated API. The API de-duplicates by SHA-256 and keeps new assignments as drafts.
