@@ -37,7 +37,7 @@ public class LearningController {
       left join learning_objective o on o.id=l.objective_id
       where c.code=? and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
-      order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order
+      order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """,context.studentId(),classCode,subjectCode);
   }
 
