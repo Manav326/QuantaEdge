@@ -97,8 +97,9 @@ export default function StudentClassesClient(){
       const result=await api('/api/v1/learning/live-classes/'+session.session_id+'/join',{method:'POST'});
       joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);setActiveJoinUrl(String(result.joinUrl||''));
       if(popup&&!popup.closed){popup.location.replace(String(result.joinUrl));}
-      else{setNotice('You are checked in. Use “Open meeting” below to enter the live class.');}
-      setNotice('Attendance is saved for this session. Keep this page open so you can leave the class cleanly when finished.');
+      setNotice(popup&&!popup.closed
+        ? 'Attendance is saved for this session. Keep this page open so you can leave cleanly when finished.'
+        : 'You are checked in. Use the secure meeting link below to enter the class.');
       await load();
     }catch(e:any){
       if(popup&&!popup.closed)popup.close();
