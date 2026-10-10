@@ -482,7 +482,7 @@ public class SourceIngestionController {
       where ch.job_id=? order by ch.page_start,ch.id
       """, jobId);
     chapters = chaptersReadyForPublishing(chapters);
-    Long bookId = ((Number) job.get("book_asset_id")).longValue();
+    Long bookId = job.get("book_asset_id") == null ? null : ((Number) job.get("book_asset_id")).longValue();
     Long sourceId = ((Number) job.get("source_id")).longValue();
     Long subjectId = ((Number) job.get("subject_id")).longValue();
     Long staffId = context.staffId();
@@ -495,19 +495,21 @@ public class SourceIngestionController {
         and id is distinct from (select book_asset_id from source_ingestion_job where id=?)
         and review_status in ('DRAFT','REVIEW')
       """, staffId, jobId, jobId);
-    jdbc.update("""
-      update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
-      where id=? and review_status in ('DRAFT','REVIEW')
-      """, staffId, bookId);
-    Long bookDocumentId = jdbc.queryForObject("""
-      insert into learning_document(
-        pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,
-        page_start,page_end,status,version_no,created_by_staff_id
-      ) values(?,'SUBJECT_BOOK',?,null,?,?,?,?,1,?,'DRAFT',1,?)
-      returning id
-      """, Long.class, bookId, subjectId, truncate(String.valueOf(job.get("source_title")), 240),
-      job.get("source_title"), job.get("source_url"), job.get("edition"),
-      job.get("page_count"), staffId);
+    if (bookId != null) {
+      jdbc.update("""
+        update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
+        where id=? and review_status in ('DRAFT','REVIEW')
+        """, staffId, bookId);
+      jdbc.queryForObject("""
+        insert into learning_document(
+          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,
+          page_start,page_end,status,version_no,created_by_staff_id
+        ) values(?,'SUBJECT_BOOK',?,null,?,?,?,?,1,?,'DRAFT',1,?)
+        returning id
+        """, Long.class, bookId, subjectId, truncate(String.valueOf(job.get("source_title")), 240),
+        job.get("source_title"), job.get("source_url"), job.get("edition"),
+        job.get("page_count"), staffId);
+    }
     for (Map<String, Object> chapter : chapters) {
       long chapterId = ((Number) chapter.get("chapter_id")).longValue();
       long assetId = ((Number) chapter.get("pdf_asset_id")).longValue();
@@ -538,16 +540,26 @@ public class SourceIngestionController {
         "Source PDF pages " + start + "–" + end,
         "Reviewed source PDF; chapter PDF stored as learning document " + documentId + ".");
     }
-    jdbc.update("""
-      update content_source set learning_pdf_asset_id=?,status='APPROVED',updated_at=now()
-      where id=?
-      """, bookId, sourceId);
+    if (bookId != null) {
+      jdbc.update("""
+        update content_source set learning_pdf_asset_id=?,status='APPROVED',updated_at=now()
+        where id=?
+        """, bookId, sourceId);
+    } else {
+      // The complete book remains in the GHCR cache; only the explicitly reviewed chapter
+      // PDFs are copied to PostgreSQL and made available for individual library publication.
+      jdbc.update("""
+        update content_source set status='APPROVED',updated_at=now() where id=?
+        """, sourceId);
+    }
     jdbc.update("""
       update source_ingestion_job set status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now()
       where id=?
       """, staffId, jobId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/jobs/" + jobId + "/approve",
-        "Approved the source book and chapter PDFs into the admin library as unpublished drafts.");
+        bookId != null
+            ? "Approved the complete source book and approved chapter PDFs into the admin library as unpublished drafts."
+            : "Approved chapter PDFs from a complete GHCR-cached source book into the admin library as unpublished drafts.");
     return jobDetails(jobId);
   }
 
@@ -731,6 +743,32 @@ public class SourceIngestionController {
       return result;
     } catch (IOException ex) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The selected chapter pages could not be split.", ex);
+    }
+  }
+
+  private byte[] extractRange(Path sourcePath, int start, int end) {
+    try (PDDocument source = Loader.loadPDF(sourcePath.toFile());
+        ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+      Splitter splitter = new Splitter();
+      splitter.setStartPage(start);
+      splitter.setEndPage(end);
+      splitter.setSplitAtPage(end - start + 1);
+      List<PDDocument> pieces = splitter.split(source);
+      if (pieces.isEmpty()) throw new IllegalArgumentException("The selected chapter page range produced no PDF.");
+      try {
+        pieces.getFirst().save(output);
+      } finally {
+        for (PDDocument piece : pieces) {
+          try { piece.close(); } catch (IOException ignored) { }
+        }
+      }
+      byte[] result = output.toByteArray();
+      if (result.length < 5 || result.length > SourcePdfDownloadService.MAX_PDF_BYTES) {
+        throw badRequest("A split chapter PDF is empty or exceeds the 50 MiB library limit. Review a smaller page range.");
+      }
+      return result;
+    } catch (IOException ex) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The cached whole-book page range could not be split.", ex);
     }
   }
 
