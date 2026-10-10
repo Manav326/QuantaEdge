@@ -1,7 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './Assessments.module.css';
 
 type BankQuestion = { question_id:number; question_type:string; prompt:string; difficulty:string; marks?:number|null; lesson_title:string; chapter_id:number; chapter_name:string; chapter_code:string; subject_name:string; };
