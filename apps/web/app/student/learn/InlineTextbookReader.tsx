@@ -11,6 +11,7 @@ type InlineDocument = {
   edition?: string | null;
   chapter_name?: string | null;
   chapter_code?: string | null;
+  last_page?: number;
 };
 
 export default function InlineTextbookReader({
@@ -22,7 +23,7 @@ export default function InlineTextbookReader({
   heading: string;
   initiallyExpanded?: boolean;
 }) {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(() => Math.max(1, Math.min(Math.max(1, Number(item.page_count || 1)), Number(item.last_page || 1))));
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState('');
@@ -36,6 +37,7 @@ export default function InlineTextbookReader({
   }, [item.document_id, page, retryKey]);
 
   useEffect(() => {
+    if (!expanded) return;
     const timeout = window.setTimeout(() => {
       void fetch('/api/v1/learning/documents/' + item.document_id + '/progress', {
         method: 'PUT',
@@ -45,7 +47,7 @@ export default function InlineTextbookReader({
       }).catch(() => undefined);
     }, 350);
     return () => window.clearTimeout(timeout);
-  }, [item.document_id, page]);
+  }, [item.document_id, page, expanded]);
 
   return (
     <section className="qe-inline-textbook" aria-label={heading} style={{
