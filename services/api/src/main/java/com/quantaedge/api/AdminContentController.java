@@ -688,13 +688,13 @@ public class AdminContentController {
     return items.stream().allMatch(this::meaningfulTeachingText);
   }
 
-  private boolean blockHasPublishableContent(String type,Map<String,Object> content) {
+  boolean blockHasPublishableContent(String type,Map<String,Object> content) {
     switch(type) {
       case "EXPLANATION":
       case "PREREQUISITE":
-        return meaningfulTeachingText(firstBlockValue(content,"html","body","text"));
+        return meaningfulTeachingText(firstBlockValue(content,"html","body","description"));
       case "WORKED_EXAMPLE":
-        return meaningfulTeachingText(content.get("problem"))
+        return meaningfulTeachingText(firstBlockValue(content,"problem","prompt"))
             && everyMeaningfulItem(content.get("steps"))
             && meaningfulTeachingText(content.get("answer"));
       case "IMAGE":
@@ -707,7 +707,7 @@ public class AdminContentController {
       case "GUIDED_PRACTICE":
       case "INDEPENDENT_PRACTICE":
       case "CHALLENGE":
-        return meaningfulTeachingText(firstBlockValue(content,"prompt","instructions"));
+        return meaningfulTeachingText(firstBlockValue(content,"prompt","body"));
       case "SUMMARY":
       case "RECAP":
         return everyMeaningfulItem(content.get("points"));

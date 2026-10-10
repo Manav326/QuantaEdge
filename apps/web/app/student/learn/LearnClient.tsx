@@ -92,16 +92,16 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<LocaleText hinglish="पहले से क्या जानते हैं?" english="What you already know" />:<LocaleText hinglish="समझें" english="Understand" />)}</span>
-    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(String(data.html))}}/> : <p>{data.body ?? data.description}</p>}
+    {data.html ? <div className="lesson-rich-content" dangerouslySetInnerHTML={{__html:safeRichHtml(String(data.html))}}/> : <p>{data.body || data.description}</p>}
     {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
-    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p>{data.problem ?? data.prompt}</p>
+    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p>{data.problem || data.prompt}</p>
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. {x}</span></div>)}
     {data.answer && <p><strong><LocaleText hinglish="उत्तर:" english="Answer:" /></strong> {data.answer}</p>}
   </div>;
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
-    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p>{data.prompt ?? data.body}</p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> {data.hint}</span></div>}
+    <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p>{data.prompt || data.body || ''}</p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> {data.hint}</span></div>}
   </div>;
   if (['IMAGE','DIAGRAM','VIDEO','AUDIO','ANIMATION'].includes(block.block_type)) {
     const url=String(data.url||'');

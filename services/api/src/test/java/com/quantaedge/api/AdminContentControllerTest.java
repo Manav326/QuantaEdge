@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -24,6 +25,23 @@ class AdminContentControllerTest {
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
 
+
+  @Test
+  void blockReadinessMatchesContentRenderedToLearners() {
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit);
+
+    assertTrue(controller.blockHasPublishableContent(
+        "EXPLANATION", java.util.Map.of("description", "Visible explanation")));
+    assertFalse(controller.blockHasPublishableContent(
+        "EXPLANATION", java.util.Map.of("text", "Legacy text that the learner renderer ignores")));
+    assertTrue(controller.blockHasPublishableContent(
+        "GUIDED_PRACTICE", java.util.Map.of("body", "Try this step")));
+    assertFalse(controller.blockHasPublishableContent(
+        "GUIDED_PRACTICE", java.util.Map.of("instructions", "Not rendered as a practice prompt")));
+    assertTrue(controller.blockHasPublishableContent(
+        "WORKED_EXAMPLE", java.util.Map.of(
+            "prompt", "Find the sum", "steps", java.util.List.of("Add the numbers"), "answer", "12")));
+  }
 
   @Test
   void learnerPathRequiresExplanationPracticeAndRecap() {

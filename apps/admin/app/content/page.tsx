@@ -122,17 +122,17 @@ function blockHasPublishableContent(block:ContentBlock){
  const value=block.content||{};
  switch(block.block_type){
   case 'EXPLANATION': case 'PREREQUISITE':
-   return meaningfulContent(value.html||value.body);
+   return meaningfulContent(value.html||value.body||value.description);
   case 'WORKED_EXAMPLE':
-   return meaningfulContent(value.problem)&&Array.isArray(value.steps)&&value.steps.length>0&&value.steps.every((step:unknown)=>meaningfulContent(step))&&meaningfulContent(value.answer);
+   return meaningfulContent(value.problem||value.prompt)&&Array.isArray(value.steps)&&value.steps.length>0&&value.steps.every((step:unknown)=>meaningfulContent(step))&&meaningfulContent(value.answer);
   case 'IMAGE': case 'DIAGRAM': case 'ANIMATION': case 'VIDEO': case 'AUDIO':
    return /^https:\/\//i.test(String(value.url||''))&&meaningfulContent(value.description);
   case 'GUIDED_PRACTICE': case 'INDEPENDENT_PRACTICE': case 'CHALLENGE':
-   return meaningfulContent(value.prompt);
+   return meaningfulContent(value.prompt||value.body);
   case 'SUMMARY': case 'RECAP':
    return Array.isArray(value.points)&&value.points.length>0&&value.points.every((point:unknown)=>meaningfulContent(point));
   case 'HINT':
-   return meaningfulContent(value.body);
+   return meaningfulContent(value.body||value.hint);
   case 'AI_HELP':
    return true;
   case 'MCQ': case 'TRUE_FALSE': case 'QUESTION':
@@ -224,7 +224,7 @@ function MediaElement({type,content}:{type:string;content:Record<string,any>}){
 function LearnerBlock({block}:{block:ContentBlock}){
  const c=block.content||{};
  if(block.block_type==='EXPLANATION'||block.block_type==='PREREQUISITE')return <article className="qe-student-card"><span className="qe-student-kicker">{c.heading||c.title||(block.block_type==='PREREQUISITE'?'पहले से क्या जानते हैं?':'समझें')}</span>{c.html?<div className="qe-student-rich" dangerouslySetInnerHTML={{__html:safeRichHtml(String(c.html))}}/>:<p>{c.body||c.description||''}</p>}{Array.isArray(c.keyPoints)&&c.keyPoints.map((point:string,i:number)=><div className="qe-preview-feedback" key={i}>• {point}</div>)}</article>;
- if(block.block_type==='WORKED_EXAMPLE')return <article className="qe-student-card"><span className="qe-student-kicker">Worked example</span><h3>{c.title||'उदाहरण'}</h3><p>{c.problem||''}</p>{(c.steps||[]).filter(Boolean).map((step:string,i:number)=><div className="qe-preview-feedback" key={i}>{i+1}. {step}</div>)}{c.answer&&<p><strong>उत्तर:</strong> {c.answer}</p>}</article>;
+ if(block.block_type==='WORKED_EXAMPLE')return <article className="qe-student-card"><span className="qe-student-kicker">Worked example</span><h3>{c.title||'उदाहरण'}</h3><p>{c.problem||c.prompt||''}</p>{(c.steps||[]).filter(Boolean).map((step:string,i:number)=><div className="qe-preview-feedback" key={i}>{i+1}. {step}</div>)}{c.answer&&<p><strong>उत्तर:</strong> {c.answer}</p>}</article>;
  if(['IMAGE','DIAGRAM','ANIMATION','VIDEO','AUDIO'].includes(block.block_type))return <article className="qe-student-card"><span className="qe-student-kicker">{c.title||(block.block_type==='AUDIO'?'सुनकर समझें':block.block_type==='VIDEO'?'देखकर समझें':'Visual')}</span>{c.description&&<p>{c.description}</p>}<MediaElement type={block.block_type} content={c}/>{c.caption&&<p className="qe-preview-caption">{c.caption}</p>}</article>;
  if(['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type))return <article className={'qe-student-card qe-student-callout '+block.block_type.toLowerCase()}><span className="qe-student-kicker">{c.title||(block.block_type==='GUIDED_PRACTICE'?'साथ में करें':block.block_type==='HINT'?'Helpful hint':'अब खुद करें')}</span><p>{c.prompt||c.body||''}</p>{c.hint&&<div className="qe-preview-feedback">Hint: {c.hint}</div>}</article>;
  if(['SUMMARY','RECAP'].includes(block.block_type))return <article className="qe-student-card"><span className="qe-student-kicker">Recap</span>{(c.points||[]).filter(Boolean).map((point:string,i:number)=><div className="qe-preview-feedback" key={i}>✓ {point}</div>)}</article>;
