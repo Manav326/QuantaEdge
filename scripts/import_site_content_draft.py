@@ -249,7 +249,7 @@ def _question_for_api(item: dict[str, Any], index: int) -> dict[str, Any]:
         "prompt": item["prompt"],
         "explanation": item.get("explanation", ""),
         "difficulty": difficulty,
-        "sort_order": int(item.get("sort_order", index)),
+        "sort_order": index,  # Re-sequence within each lesson to avoid colliding source draft sort_order values.
         "active": True,
         "review_status": "DRAFT",
         "review_notes": "Imported as an AI-authored draft. Verify content, source alignment and answer key before approval.",

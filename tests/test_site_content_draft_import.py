@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from import_site_content_draft import dry_run_summary, validate_site_bundle
+from import_site_content_draft import _question_for_api, dry_run_summary, validate_site_bundle
 
 
 def make_bundle() -> dict:
@@ -127,6 +127,12 @@ class SiteContentDraftImportTests(unittest.TestCase):
         bundle["online_question_bank"][0]["lesson_code"] = "not-a-real-lesson"
         with self.assertRaisesRegex(ValueError, "maps to missing lesson"):
             validate_site_bundle(bundle)
+
+    def test_imported_question_order_is_unique_within_lesson(self) -> None:
+        item = make_bundle()["online_question_bank"][0]
+        item["sort_order"] = 99  # Draft authoring order is advisory; CMS order is sequential per lesson.
+        self.assertEqual(_question_for_api(item, 1)["sort_order"], 1)
+        self.assertEqual(_question_for_api(item, 2)["sort_order"], 2)
 
     def test_requires_unique_block_sequences(self) -> None:
         bundle = make_bundle()
