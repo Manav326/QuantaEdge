@@ -60,6 +60,31 @@ class TextbookCacheServiceTest {
   }
 
   @Test
+  void partialWholeBookEntriesAreHiddenAndCannotBeIngested() throws Exception {
+    Path root = Files.createTempDirectory("qe-ghcr-textbook-partial");
+    Path books = root.resolve("class-6/hindi/books");
+    Files.createDirectories(books);
+    byte[] bytes = "%PDF-1.4\nonly-part-of-the-book\n".getBytes(StandardCharsets.US_ASCII);
+    Path bookPath = books.resolve("partial-book.pdf");
+    Files.write(bookPath, bytes);
+    Map<String, Object> item = registryEntry(
+        "ncert-c6-hindi-partial", "Incomplete Mathematics", 6, "hindi", "Mathematics",
+        bookPath, sha256(bytes), bytes.length);
+    item.put("content_availability", Map.of(
+        "status", "partial", "expected_chapters", List.of(1, 2),
+        "available_chapters", List.of(1), "missing_chapters", List.of(2)));
+    item.put("download_method", "Merged official sources; PARTIAL");
+    writeIndex(root.resolve("class-6/hindi/index.json"), item);
+
+    TextbookCacheService cache = new TextbookCacheService(root, new ObjectMapper());
+
+    assertEquals(0, cache.list("hindi", 6).size());
+    IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+        () -> cache.requireBook("hindi", "ncert-c6-hindi-partial", 6));
+    assertTrue(error.getMessage().toLowerCase().contains("incomplete"));
+  }
+
+  @Test
   void rejectsAStaleJobWhenRegistryWholeBookChecksumChanges() throws Exception {
     Path root = Files.createTempDirectory("qe-ghcr-textbook-stale-job");
     Path books = root.resolve("class-6/hindi/books");
