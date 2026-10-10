@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -106,6 +107,47 @@ class LearningControllerTest {
         () -> controller.answer(42L, Map.of("answer", "Z"), student));
     verify(state, never()).recordAttempt(eq(7L), eq(42L), eq(9L),
         anyString(), anyBoolean(), any());
+  }
+
+  @Test
+  void nullAnswerIsHandledAsAnEmptyAnswerInsteadOfThrowing() {
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+        .thenReturn(List.of(Map.of(
+            "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
+            "explanation", "Explanation", "answer_payload", "{}")));
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+        .thenReturn(1L);
+    when(answerService.evaluate("{}", "")).thenReturn(
+        new QuestionAnswerService.Evaluation(false, null, ""));
+
+    Map<String, Object> body = new java.util.HashMap<>();
+    body.put("answer", null);
+
+    Map<String, Object> result = controller.answer(42L, body, student);
+
+    assertEquals(42L, result.get("questionId"));
+    verify(state).recordAttempt(eq(7L), eq(42L), eq(9L), eq(""), eq(false), isNull());
+  }
+
+  @Test
+  void practiceAnswerLocksTheSessionQuestionBeforeGrading() {
+    when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
+        .thenReturn(List.of(Map.of("question_id", 42L)));
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+        .thenReturn(List.of(Map.of(
+            "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
+            "explanation", "Explanation", "answer_payload", "{}")));
+    when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
+        .thenReturn(1L);
+    when(answerService.evaluate("{}", "A")).thenReturn(
+        new QuestionAnswerService.Evaluation(true, true, "OPTION"));
+
+    Map<String, Object> result = controller.answer(42L,
+        Map.of("answer", "A", "practiceSessionId", 5L), student);
+
+    assertEquals(true, result.get("correct"));
+    verify(jdbc).queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L));
+    verify(state).recordAttempt(7L, 42L, 9L, "A", true, true, 5L);
   }
 
   @Test
