@@ -75,7 +75,7 @@ export default function ClassesPage(){
       const [sessionRows,recordingRows,contentRows,staffRows]=await Promise.all([
         api('/api/v1/admin/live-classes?'+sessionParams.toString()),
         api('/api/v1/admin/recorded-classes?'+recordingParams.toString()),
-        api('/api/v1/admin/content?'+chapterParams.toString()),
+        api('/api/v1/admin/class-chapters?'+chapterParams.toString()),
         api('/api/v1/admin/class-staff')
       ]);
       setSessions(Array.isArray(sessionRows)?sessionRows:[]);
