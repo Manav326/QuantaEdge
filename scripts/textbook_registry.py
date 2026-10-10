@@ -320,24 +320,39 @@ def parse_scert_detail(url: str, page: str) -> list[dict[str, Any]]:
     return result
 
 
-def discover_books() -> list[dict[str, Any]]:
-    log("Discovering current official NCERT catalogue...")
-    books = parse_ncert_catalog(fetch_text(NCERT_CATALOG))
-    log("NCERT entries: " + str(len(books)))
-    log("Discovering SCERT Bihar E-resources...")
-    urls = discover_scert_urls()
-    log("SCERT detail pages found: " + str(len(urls)))
-    for index, url in enumerate(urls, start=1):
-        try:
-            books.extend(parse_scert_detail(url, fetch_text(url)))
-        except Exception as exc:
-            log("SCERT detail warning " + str(index) + ": " + url + " (" + str(exc) + ")")
+def sort_catalog(books: list[dict[str, Any]]) -> list[dict[str, Any]]:
     unique = {item["book_id"]: item for item in books if item["medium"] in LANGUAGES}
     return sorted(unique.values(), key=lambda item: (
         item["medium"], min(item.get("classes") or [item["class"]]),
         0 if item["source_type"] == "SCERT_BIHAR" else 1,
         str(item["title"]).casefold(), item["book_id"],
     ))
+
+
+def discover_ncert_books() -> list[dict[str, Any]]:
+    log("Discovering current official NCERT catalogue...")
+    books = sort_catalog(parse_ncert_catalog(fetch_text(NCERT_CATALOG)))
+    log("NCERT entries: " + str(len(books)))
+    return books
+
+
+def discover_scert_books() -> list[dict[str, Any]]:
+    log("Discovering SCERT Bihar E-resources...")
+    urls = discover_scert_urls()
+    log("SCERT detail pages found: " + str(len(urls)))
+    books: list[dict[str, Any]] = []
+    for index, url in enumerate(urls, start=1):
+        try:
+            books.extend(parse_scert_detail(url, fetch_text(url)))
+        except Exception as exc:
+            log("SCERT detail warning " + str(index) + ": " + url + " (" + str(exc) + ")")
+    result = sort_catalog(books)
+    log("SCERT Hindi/English Class 6–12 entries parsed: " + str(len(result)))
+    return result
+
+
+def discover_books() -> list[dict[str, Any]]:
+    return sort_catalog(discover_ncert_books() + discover_scert_books())
 
 
 def sha256_file(path: Path) -> str:
@@ -649,12 +664,45 @@ def main(argv: list[str] | None = None) -> int:
             languages = ["hindi", "english"] if args.language == "both" else [args.language]
             reports = []
             prefix = args.image_prefix.lower()
-            catalog = discover_books()
-            for language in languages:
-                reports.append(publish_language(
-                    language, prefix + "-" + language + ":latest", args.book_code,
-                    args.refresh, args.max_books, args.ncert_only, catalog=catalog,
-                ))
+
+            if args.book_code and args.book_code.casefold().startswith("scert-bihar-"):
+                scert_catalog = discover_scert_books()
+                matched = [item for item in scert_catalog if item["book_id"].casefold() == args.book_code.casefold()]
+                if not matched:
+                    raise ValueError("No SCERT textbook matched book_id " + args.book_code)
+                languages = [matched[0]["medium"]]
+                for language in languages:
+                    reports.append(publish_language(
+                        language, prefix + "-" + language + ":latest", args.book_code,
+                        args.refresh, args.max_books, False, catalog=matched,
+                    ))
+            else:
+                # Bootstrap NCERT immediately. Do not wait for the larger SCERT
+                # E-resources crawl before the first official book is pushed.
+                ncert_catalog = discover_ncert_books()
+                if args.book_code:
+                    matched = [item for item in ncert_catalog
+                               if item.get("code", "").casefold() == args.book_code.casefold()
+                               or item["book_id"].casefold() == args.book_code.casefold()]
+                    if not matched:
+                        raise ValueError("No NCERT textbook matched code/book_id " + args.book_code)
+                    languages = [matched[0]["medium"]]
+                    ncert_catalog = matched
+                for language in languages:
+                    reports.append(publish_language(
+                        language, prefix + "-" + language + ":latest", args.book_code,
+                        args.refresh, args.max_books, True, catalog=ncert_catalog,
+                    ))
+
+                # Once all selected NCERT books have been pushed, discover SCERT.
+                # Each SCERT PDF is still pushed immediately by the same one-book loop.
+                if not args.ncert_only and not args.book_code:
+                    scert_catalog = discover_scert_books()
+                    for language in languages:
+                        reports.append(publish_language(
+                            language, prefix + "-" + language + ":latest", None,
+                            args.refresh, args.max_books, False, catalog=scert_catalog,
+                        ))
             print(json.dumps({"results": reports}, ensure_ascii=False, indent=2))
             return 1 if any(report["failed"] for report in reports) else 0
         pull_image(args.image, args.output_dir)
