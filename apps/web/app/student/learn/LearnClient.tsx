@@ -204,13 +204,31 @@ export default function LearnClient() {
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
     const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
+    const sameName=(left:string,right:string)=>left.trim().toLocaleLowerCase()===right.trim().toLocaleLowerCase();
     trackBrowse.lessons.forEach(item=>{
       const key=item.chapter_code||item.chapter_name||'chapter';
-      const current=grouped.get(key)||{code:key,name:item.chapter_name||'अध्याय',lessons:[]};
+      const current=grouped.get(key)||{code:key,name:item.chapter_name||'Chapter',lessons:[]};
       current.lessons.push(item);grouped.set(key,current);
     });
+    // A reviewed, published chapter PDF can establish its chapter section even if authored lesson content
+    // is not published yet. Merge on curriculum code first, then display name as a safe fallback.
+    studentDocuments
+      .filter(item=>item.scope==='CHAPTER_PDF'&&item.subject_code===trackBrowse.subjectCode)
+      .forEach(document=>{
+        const existing=Array.from(grouped.values()).find(group=>
+          (Boolean(document.chapter_code)&&group.code===document.chapter_code)||
+          (Boolean(document.chapter_name)&&sameName(group.name,document.chapter_name!))
+        );
+        if(existing){
+          if(document.chapter_code&&existing.code===existing.name)existing.code=document.chapter_code;
+          return;
+        }
+        const name=document.chapter_name||document.title;
+        const key=document.chapter_code||name||('chapter-'+document.document_id);
+        grouped.set(key,{code:key,name,lessons:[]});
+      });
     return Array.from(grouped.values());
-  },[trackBrowse]);
+  },[trackBrowse,studentDocuments]);
 
   async function loadLesson(id:number) {
     try {
@@ -321,9 +339,9 @@ export default function LearnClient() {
         return <section className="concept-card" key={group.code}>
           <span className="concept-kicker"><LocaleText hinglish="Chapter" english="Chapter" /></span><h2>{group.name}</h2>
           {chapterDocuments.map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','This chapter’s PDF')}/>)}
-          <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
+          {group.lessons.length>0 ? <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
             <span className="task-icon">▣</span><div><strong>{item.title}</strong><small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित पाठ" english="min · published lesson" /></small></div><span className="task-action">→</span>
-          </Link>)}</div>
+          </Link>)}</div> : <p className="lesson-intro" style={{margin:'8px 0 0'}}><LocaleText hinglish="इस chapter का PDF उपलब्ध है; lesson content अभी publish नहीं हुआ है।" english="The chapter PDF is available above; lesson content has not been published yet." /></p>}
         </section>;
       })}
     </section>
