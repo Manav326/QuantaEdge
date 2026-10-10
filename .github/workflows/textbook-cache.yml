@@ -35,7 +35,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: quantaedge-textbook-cache-v2
+  group: quantaedge-textbook-cache-v3
   cancel-in-progress: true
 
 jobs:
