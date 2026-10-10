@@ -27,3 +27,14 @@ QuantaEdge now exposes a reusable admin flow at Admin → Source ingestion. It r
 - Invalid HTTPS source URLs are rejected before existing source metadata is edited or a new source record is registered.
 - When an administrator intentionally retries a previously rejected PDF, its checksum-matched asset returns to REVIEW. Existing APPROVED assets are not demoted by retries.
 - Rejection targets the asset IDs attached to that specific job rather than matching a broad source-reference prefix.
+
+
+## End-to-end admin-to-student visibility
+
+- Admin / Source ingestion is the source discovery and review queue. It displays existing content_source/chapter_source relationships, detects or reuses PDF assets, previews downloaded books and split chapters, and requires an explicit approve/reject decision for each chapter candidate.
+- Final ingestion approval creates a complete-book resource plus only approved chapter resources as DRAFT assignments. Rejected chapter candidates are not attached to student resources. The complete book's asset is protected from being marked rejected just because a chapter split shares its checksum.
+- Admin / Textbook library is the publishing surface. Editors can upload/attach resources; staff with CONTENT_PUBLISH can view the resource queue, preview the actual assigned pages, publish approved assets, and archive already-published entries. Chapter PDFs require an active curriculum chapter; authored/published lesson text is independent of textbook-source availability.
+- Student / Textbooks at /student/textbooks shows complete-book cards and chapter PDF cards grouped by the subject name returned by the curriculum database. Subject filters and groups are dynamic, not limited to Mathematics and Science.
+- Students see only documents whose assignment status is PUBLISHED, whose PDF asset is APPROVED, and whose class/subject is active and matches the student's class plus active subject enrollment. Chapter PDFs also require an active curriculum chapter. Complete books and chapter PDFs open in the protected page-image reader; page progress is saved per student.
+- The student navigation and account menu both link to Textbooks. A newly approved ingestion is intentionally not immediately visible to students: publishers must preview and publish its book/chapter assignments first.
+- Preview routes are staff-permission protected and return rendered PNG pages only. Student routes enforce enrollment on catalog, document-detail, progress and each page request; they do not send the original PDF bytes.

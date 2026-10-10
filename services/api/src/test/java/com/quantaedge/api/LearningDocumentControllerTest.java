@@ -64,6 +64,8 @@ class LearningDocumentControllerTest {
         contains("d.status='PUBLISHED'"), eq(7L), eq(""), eq(""));
     verify(jdbc).queryForList(
         contains("ste.status='ACTIVE'"), eq(7L), eq(""), eq(""));
+    verify(jdbc).queryForList(
+        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq(""), eq(""));
   }
 
   @Test
