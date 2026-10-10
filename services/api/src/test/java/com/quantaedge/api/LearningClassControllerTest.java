@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
@@ -76,6 +77,32 @@ class LearningClassControllerTest {
 
     assertEquals(400, error.getStatusCode().value());
     verifyNoInteractions(jdbc, staffAudit, mediaStorage);
+  }
+
+  @Test
+  void staffWithoutClassManageCannotRetrievePrivateMeetingLink() {
+    AuthContext author = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Author");
+    when(authorization.requirePermission(author, "CLASS_MANAGE"))
+        .thenThrow(new SecurityException("Class management permission required"));
+
+    assertThrows(SecurityException.class, () -> controller.revealLiveClassMeetingLink(44L, author));
+
+    verifyNoInteractions(jdbc, staffAudit, mediaStorage);
+  }
+
+  @Test
+  void completingASessionClosesOpenAttendanceClocks() {
+    when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
+    when(jdbc.queryForList(contains("select id,status,title from learning_class_session"), eq(44L)))
+        .thenReturn(List.of(Map.of("id", 44L, "status", "LIVE", "title", "Revision class")));
+    when(jdbc.queryForList(contains("select cs.id as session_id"), eq(44L)))
+        .thenReturn(List.of(Map.of("session_id", 44L, "title", "Revision class", "status", "COMPLETED")));
+
+    Map<String, Object> result = controller.setLiveClassStatus(44L, Map.of("status", "COMPLETED"), admin);
+
+    assertEquals("COMPLETED", result.get("status"));
+    verify(jdbc).update(contains("update learning_class_attendance att set"), eq(44L));
+    verify(staffAudit).recordAction(eq(admin), contains("/admin/live-classes/44/status"), anyString());
   }
 
   @Test
