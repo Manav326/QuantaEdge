@@ -577,11 +577,30 @@ def push_batch(image: str, base_exists: bool, books_to_add: list[dict[str, Any]]
     (context / "Dockerfile").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     local_tag = image.rsplit(":", 1)[0] + ":qe-batch-build"
+    previous_image_id = None
+    if base_exists:
+        inspected = subprocess.run(
+            ["docker", "image", "inspect", "--format={{.Id}}", image],
+            check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+        )
+        previous_image_id = inspected.stdout.strip()
     try:
         subprocess.run(["docker", "build", "--pull=false", "-t", local_tag, str(context)], check=True)
         subprocess.run(["docker", "tag", local_tag, image], check=True)
         # Durable source of truth: update this same package and tag every batch.
-        subprocess.run(["docker", "push", image], check=True)
+        try:
+            subprocess.run(["docker", "push", image], check=True)
+        except Exception:
+            # A failed registry push must not leave the local latest tag pointing at
+            # a candidate image that was never confirmed in GHCR. Restore the last
+            # pulled base before any retry or status-only commit.
+            if previous_image_id:
+                subprocess.run(["docker", "tag", previous_image_id, image], check=False,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            else:
+                subprocess.run(["docker", "image", "rm", image], check=False,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            raise
     finally:
         subprocess.run(["docker", "image", "rm", local_tag], check=False,
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
