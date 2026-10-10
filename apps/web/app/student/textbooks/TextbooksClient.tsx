@@ -101,8 +101,29 @@ export default function TextbooksClient() {
     return Array.from({ length: count }, (_v, index) => firstThumb + index);
   }, [firstThumb, pageCount]);
   const pageUrl = selected ? '/api/v1/learning/documents/' + selected.document_id + '/pages/' + currentPage : '';
-  const visibleDocuments = documents.filter(item => subjectFilter === 'ALL' || item.subject_code === subjectFilter);
-  const subjectLabel = selected?.subject_code === 'maths' ? 'Mathematics' : selected?.subject_name || 'Science';
+  const availableSubjects = useMemo(() => {
+    const subjects = new Map<string, string>();
+    for (const item of documents) {
+      if (!subjects.has(item.subject_code)) subjects.set(item.subject_code, item.subject_name);
+    }
+    return [...subjects.entries()].map(([code, name]) => ({ code, name }));
+  }, [documents]);
+  const visibleDocuments = useMemo(
+    () => documents.filter(item => subjectFilter === 'ALL' || item.subject_code === subjectFilter),
+    [documents, subjectFilter],
+  );
+  const subjectGroups = useMemo(() => {
+    const grouped = new Map<string, LearningDocument[]>();
+    for (const item of visibleDocuments) {
+      const rows = grouped.get(item.subject_code) || [];
+      rows.push(item);
+      grouped.set(item.subject_code, rows);
+    }
+    return [...grouped.entries()].map(([code, rows]) => ({
+      code, name: rows[0]?.subject_name || code, rows,
+    }));
+  }, [visibleDocuments]);
+  const subjectLabel = selected?.subject_name || 'TEXTBOOK';
 
   useEffect(() => {
     if (!selected || currentPage < 1 || currentPage > pageCount) return;
@@ -183,21 +204,20 @@ export default function TextbooksClient() {
 
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
       <div className="qe-textbook-library-toolbar"><div><span className="qe-textbook-eyebrow">RESOURCE LIBRARY</span><h2>Available textbooks</h2><p>Only the books and chapters available to your enrolled subjects are shown.</p></div>
-        <label>Subject <select value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
+        <label>Subject <select value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
       </div>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> Loading your textbook library…</div>
         : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>No published PDFs available yet</h3><p>When your teacher publishes a subject book or chapter PDF for your class, it will appear here.</p><Link href="/student/learn">Continue with lessons →</Link></div>
         : <div className="qe-textbook-resource-groups">
-          {(['maths', 'science'] as const).filter(code => subjectFilter === 'ALL' || subjectFilter === code).map(code => {
-            const rows = visibleDocuments.filter(item => item.subject_code === code);
-            if (!rows.length) return null;
+          {subjectGroups.map(({ code, name, rows }) => {
             const subjectBooks = rows.filter(item => item.scope === 'SUBJECT_BOOK');
             const chapterBooks = rows.filter(item => item.scope === 'CHAPTER_PDF');
+            const symbol = code === 'maths' ? '∑' : code === 'science' ? '⚗' : '▤';
             return <section className="qe-textbook-subject" key={code}>
-              <div className="qe-textbook-subject-heading"><span className="qe-subject-symbol">{code === 'maths' ? '∑' : '⚗'}</span><div><h3>{code === 'maths' ? 'Mathematics' : 'Science'}</h3><small>Class {rows[0].class_code} · {rows[0].subject_name}</small></div><span className="qe-textbook-resource-count">{rows.length} resource{rows.length === 1 ? '' : 's'}</span></div>
+              <div className="qe-textbook-subject-heading"><span className="qe-subject-symbol">{symbol}</span><div><h3>{name}</h3><small>Class {rows[0].class_code} · {name}</small></div><span className="qe-textbook-resource-count">{rows.length} resource{rows.length === 1 ? '' : 's'}</span></div>
               {subjectBooks.length > 0 && <div className="qe-textbook-book-grid">{subjectBooks.map(item => <article className="qe-textbook-resource-card qe-book-card" key={item.document_id}>
-                <div className="qe-resource-card-top"><span className="qe-resource-type">COMPLETE BOOK</span><span className="qe-resource-pages">{item.page_count} pages</span></div><div className="qe-resource-cover large-cover"><span>{code === 'maths' ? '∑' : '⚗'}</span><b>{item.title}</b><small>{item.edition || 'Official textbook'}</small></div><div className="qe-resource-card-bottom"><div><h4>{item.title}</h4><p>{item.edition || 'Complete subject book'}</p></div><button type="button" onClick={() => openDocument(item.document_id)}>Read online <span>↗</span></button></div>
+                <div className="qe-resource-card-top"><span className="qe-resource-type">COMPLETE BOOK</span><span className="qe-resource-pages">{item.page_count} pages</span></div><div className="qe-resource-cover large-cover"><span>{symbol}</span><b>{item.title}</b><small>{item.edition || 'Official textbook'}</small></div><div className="qe-resource-card-bottom"><div><h4>{item.title}</h4><p>{item.edition || 'Complete subject book'}</p></div><button type="button" onClick={() => openDocument(item.document_id)}>Read online <span>↗</span></button></div>
               </article>)}</div>}
               {chapterBooks.length > 0 && <><div className="qe-textbook-chapter-heading"><h4>Chapter PDFs</h4><span>{chapterBooks.length} chapters</span></div><div className="qe-textbook-chapter-grid">{chapterBooks.map(item => <article className="qe-textbook-chapter-card" key={item.document_id}><div className="qe-chapter-pdf-icon">▤</div><div className="qe-chapter-copy"><span>{item.chapter_code || 'CHAPTER'}</span><h4>{item.chapter_name || item.title}</h4><p>{item.title} · {item.page_count} pages</p></div><button type="button" onClick={() => openDocument(item.document_id)} aria-label={'Read ' + (item.chapter_name || item.title) + ' online'}>→</button></article>)}</div></>}
             </section>;

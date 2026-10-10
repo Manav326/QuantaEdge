@@ -81,6 +81,28 @@ class LearningDocumentControllerTest {
   }
 
   @Test
+  void chapterPdfCannotBePublishedBeforeItsCurriculumChapterIsPublished() {
+    when(authorization.requireAuth(author)).thenReturn(author);
+    when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
+    when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
+        Map.ofEntries(
+            Map.entry("id", 88L), Map.entry("scope", "CHAPTER_PDF"), Map.entry("subject_id", 3L),
+            Map.entry("chapter_id", 9L), Map.entry("status", "DRAFT"),
+            Map.entry("source_title", "Textbook"), Map.entry("source_url", "https://example.org/book.pdf"),
+            Map.entry("edition", "2026"), Map.entry("title", "Chapter 1"),
+            Map.entry("page_start", 1), Map.entry("page_end", 3), Map.entry("page_count", 3),
+            Map.entry("asset_id", 10L), Map.entry("asset_review_status", "APPROVED"),
+            Map.entry("chapter_active", true), Map.entry("chapter_content_status", "DRAFT")
+        )
+    ));
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author));
+
+    assertEquals(400, error.getStatusCode().value());
+  }
+
+  @Test
   void pdfLibraryListRequiresContentViewOrEditPermission() {
     when(authorization.requireAuth(null)).thenThrow(new SecurityException("Authentication required"));
 

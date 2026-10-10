@@ -158,7 +158,9 @@ public class LearningDocumentController {
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
+             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+             ch.active as chapter_active,ch.content_status as chapter_content_status,
+             a.review_status as asset_review_status
       from learning_document d
       join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id
@@ -253,13 +255,23 @@ public class LearningDocumentController {
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select d.id,d.scope,d.subject_id,d.chapter_id,d.status,d.source_title,d.source_url,d.edition,
-             d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id
+             d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id,a.review_status as asset_review_status,
+             ch.active as chapter_active,ch.content_status as chapter_content_status
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=?
       """, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     Map<String, Object> current = rows.getFirst();
     if ("PUBLISHED".equals(nextStatus)) {
+      if (!"APPROVED".equals(String.valueOf(current.get("asset_review_status")))) {
+        throw badRequest("Only an approved PDF asset can be published to students.");
+      }
+      if ("CHAPTER_PDF".equals(String.valueOf(current.get("scope")))
+          && (!Boolean.TRUE.equals(current.get("chapter_active"))
+              || !"PUBLISHED".equals(String.valueOf(current.get("chapter_content_status"))))) {
+        throw badRequest("Publish the matching curriculum chapter in Content Studio first. Chapter PDFs stay hidden from students until that chapter is published.");
+      }
       if (!hasText(current.get("source_title")) || !hasText(current.get("edition"))
           || !hasText(current.get("source_url")) || !String.valueOf(current.get("source_url")).startsWith("https://")) {
         throw badRequest("Add the official HTTPS source URL, source title, and edition before publishing this PDF.");
@@ -293,6 +305,53 @@ public class LearningDocumentController {
     return assignmentById(documentId);
   }
 
+
+  @GetMapping(value = "/admin/learning-documents/{documentId}/pages/{pageNumber}", produces = MediaType.IMAGE_PNG_VALUE)
+  public ResponseEntity<byte[]> previewLearningDocumentPage(
+      @PathVariable long documentId,
+      @PathVariable int pageNumber,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireAuth(context);
+    if (!authorization.hasPermission(context, "CONTENT_VIEW")
+        && !authorization.hasPermission(context, "CONTENT_EDIT")
+        && !authorization.hasPermission(context, "CONTENT_PUBLISH")) {
+      throw new SecurityException("Learning document preview permission required.");
+    }
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+      select d.pdf_asset_id,d.page_start,d.page_end,a.review_status
+      from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
+      where d.id=?
+      """, documentId);
+    if (rows.isEmpty()) throw notFound("Learning document", documentId);
+    Map<String, Object> row = rows.getFirst();
+    if (!"APPROVED".equals(String.valueOf(row.get("review_status")))) {
+      throw notFound("Approved learning document", documentId);
+    }
+    int start = ((Number) row.get("page_start")).intValue();
+    int end = ((Number) row.get("page_end")).intValue();
+    int visiblePages = end - start + 1;
+    if (pageNumber < 1 || pageNumber > visiblePages) throw notFound("Document preview page", pageNumber);
+    long assetId = ((Number) row.get("pdf_asset_id")).longValue();
+    byte[] bytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
+    try (PDDocument pdf = Loader.loadPDF(bytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+      int sourceIndex = start + pageNumber - 2;
+      if (sourceIndex < 0 || sourceIndex >= pdf.getNumberOfPages()) throw notFound("PDF page", pageNumber);
+      BufferedImage image = new PDFRenderer(pdf).renderImageWithDPI(sourceIndex, 90f, ImageType.RGB);
+      if (!javax.imageio.ImageIO.write(image, "png", output)) {
+        throw new IllegalStateException("PNG rendering is not available.");
+      }
+      image.flush();
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.IMAGE_PNG);
+      headers.setCacheControl(CacheControl.noStore());
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("X-Robots-Tag", "noindex, noarchive");
+      return new ResponseEntity<>(output.toByteArray(), headers, HttpStatus.OK);
+    } catch (IOException ex) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This PDF page could not be rendered.", ex);
+    }
+  }
+
   @GetMapping("/learning/documents")
   public List<Map<String, Object>> studentDocumentCatalog(
       @RequestParam(required = false) String subjectCode,
@@ -318,6 +377,7 @@ public class LearningDocumentController {
         on p.learning_document_id=d.id and p.student_id=st.id
       where d.status='PUBLISHED'
         and (?='' or s.code=?)
+        and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true and ch.content_status='PUBLISHED'))
       order by s.sort_order,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
@@ -416,6 +476,7 @@ public class LearningDocumentController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=? and d.status='PUBLISHED'
+        and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true and ch.content_status='PUBLISHED'))
       """, studentId, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
@@ -443,8 +504,9 @@ public class LearningDocumentController {
   private AuthContext requireContentView(AuthContext context) {
     context = authorization.requireAuth(context);
     if (!authorization.hasPermission(context, "CONTENT_VIEW")
-        && !authorization.hasPermission(context, "CONTENT_EDIT")) {
-      throw new SecurityException("Content view permission required.");
+        && !authorization.hasPermission(context, "CONTENT_EDIT")
+        && !authorization.hasPermission(context, "CONTENT_PUBLISH")) {
+      throw new SecurityException("Content view, edit, or publish permission required.");
     }
     return context;
   }

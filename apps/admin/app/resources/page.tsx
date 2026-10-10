@@ -17,6 +17,7 @@ type PdfAsset = {
   assignment_count?: number;
 };
 type Chapter = { chapter_id: number; chapter_code: string; chapter_name: string; chapter_status?: string };
+type Track = { class_code: string; class_name: string; subject_code: string; subject_name: string };
 type Assignment = {
   document_id: number;
   pdf_asset_id: number;
@@ -36,6 +37,9 @@ type Assignment = {
   subject_code: string;
   chapter_id?: number | null;
   chapter_name?: string | null;
+  chapter_active?: boolean | null;
+  chapter_content_status?: string | null;
+  asset_review_status?: string | null;
 };
 
 async function api(url: string, init: RequestInit = {}) {
@@ -59,6 +63,11 @@ function formatBytes(value: number) {
 export default function TextbookLibraryPage() {
   const [classCode, setClassCode] = useState('6');
   const [subjectCode, setSubjectCode] = useState('maths');
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [role, setRole] = useState('');
+  const [permissions, setPermissions] = useState<string[]>([]);
+  const [previewDocumentId, setPreviewDocumentId] = useState<number | null>(null);
+  const [previewPage, setPreviewPage] = useState(1);
   const [scope, setScope] = useState<'SUBJECT_BOOK' | 'CHAPTER_PDF'>('CHAPTER_PDF');
   const [chapterId, setChapterId] = useState('');
   const [library, setLibrary] = useState<PdfAsset[]>([]);
@@ -80,19 +89,73 @@ export default function TextbookLibraryPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
+  const canEdit = role === 'ADMIN' || permissions.includes('CONTENT_EDIT');
+  const canPublish = role === 'ADMIN' || permissions.includes('CONTENT_PUBLISH');
+  const classOptions = useMemo(
+    () => [...new Map(tracks.map(track => [track.class_code, track])).values()],
+    [tracks],
+  );
+  const subjectOptions = useMemo(
+    () => tracks.filter(track => track.class_code === classCode),
+    [tracks, classCode],
+  );
   const selectedPdf = useMemo(
     () => library.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
     [library, selectedPdfId],
   );
+  const previewAssignment = useMemo(
+    () => assignments.find(item => item.document_id === previewDocumentId) || null,
+    [assignments, previewDocumentId],
+  );
+  const previewPageCount = previewAssignment
+    ? Math.max(1, previewAssignment.page_end - previewAssignment.page_start + 1)
+    : 0;
+
+  useEffect(() => {
+    fetch('/api/v1/auth/me', { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(me => {
+        if (!me) return;
+        setRole(String(me.role || ''));
+        setPermissions(Array.isArray(me.permissions) ? me.permissions : []);
+      })
+      .catch(() => undefined);
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
-      const params = new URLSearchParams({ classCode, subjectCode, status: statusFilter });
+      const curriculumRows = await api('/api/v1/curriculum');
+      const trackMap = new Map<string, Track>();
+      (Array.isArray(curriculumRows) ? curriculumRows : []).forEach((row: any) => {
+        if (!row.class_code || !row.subject_code) return;
+        const track: Track = {
+          class_code: String(row.class_code),
+          class_name: String(row.class_name || ('Class ' + row.class_code)),
+          subject_code: String(row.subject_code),
+          subject_name: String(row.subject_name || row.subject_code),
+        };
+        trackMap.set(track.class_code + ':' + track.subject_code, track);
+      });
+      const nextTracks = [...trackMap.values()];
+      setTracks(nextTracks);
+      const nextClassCode = nextTracks.some(track => track.class_code === classCode)
+        ? classCode : (nextTracks[0]?.class_code || '');
+      const nextSubjectCode = nextTracks.some(track => track.class_code === nextClassCode && track.subject_code === subjectCode)
+        ? subjectCode : (nextTracks.find(track => track.class_code === nextClassCode)?.subject_code || '');
+      if (nextClassCode !== classCode) setClassCode(nextClassCode);
+      if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
+
+      const params = new URLSearchParams({ status: statusFilter });
+      if (nextClassCode) params.set('classCode', nextClassCode);
+      if (nextSubjectCode) params.set('subjectCode', nextSubjectCode);
+      const chapterPromise = canEdit && nextClassCode && nextSubjectCode
+        ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
+        : Promise.resolve([]);
       const [pdfRows, contentRows, resourceRows] = await Promise.all([
         api('/api/v1/admin/learning-pdfs'),
-        api('/api/v1/admin/content?classCode=' + encodeURIComponent(classCode) + '&subjectCode=' + encodeURIComponent(subjectCode)),
+        chapterPromise,
         api('/api/v1/admin/learning-documents?' + params.toString()),
       ]);
       const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
@@ -114,16 +177,23 @@ export default function TextbookLibraryPage() {
       const nextChapters = [...distinct.values()];
       setChapters(nextChapters);
       setAssignments(resources);
-      if (!selectedPdfId && pdfs.length > 0) setSelectedPdfId(String(pdfs[0].pdf_asset_id || pdfs[0].id));
+      if (selectedPdfId && !pdfs.some(pdf => String(pdf.pdf_asset_id || pdf.id) === selectedPdfId)) {
+        setSelectedPdfId('');
+      } else if (!selectedPdfId && pdfs.length > 0) {
+        setSelectedPdfId(String(pdfs[0].pdf_asset_id || pdfs[0].id));
+      }
       if (!chapterId || !nextChapters.some(chapter => String(chapter.chapter_id) === chapterId)) {
         setChapterId(nextChapters.length ? String(nextChapters[0].chapter_id) : '');
+      }
+      if (previewDocumentId && !resources.some(resource => resource.document_id === previewDocumentId)) {
+        setPreviewDocumentId(null);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'The textbook library could not be loaded.');
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, statusFilter, selectedPdfId, chapterId]);
+  }, [classCode, subjectCode, statusFilter, selectedPdfId, chapterId, canEdit, previewDocumentId]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -230,7 +300,7 @@ export default function TextbookLibraryPage() {
       {error && <div className={styles.alertError} role="alert">{error}</div>}
       {notice && <div className={styles.alertSuccess} role="status">{notice}</div>}
 
-      <section className={styles.panel}>
+      {canEdit && <section className={styles.panel}>
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
           <label className={styles.field}>Existing PDF library
@@ -261,16 +331,25 @@ export default function TextbookLibraryPage() {
         {selectedPdf && <div className={styles.selectedSummary}>
           <span className={styles.pdfBadge}>PDF</span><div><b>{selectedPdf.title}</b><small>{selectedPdf.original_filename} · {selectedPdf.page_count} pages · {formatBytes(selectedPdf.file_size_bytes)} · {selectedPdf.source_kind.replaceAll('_',' ')}</small></div><span className={styles.hash}>{selectedPdf.sha256.slice(0, 12)}…</span>
         </div>}
-      </section>
+      </section>}
 
-      <section className={styles.panel}>
+      {canEdit && <section className={styles.panel}>
         <div className={styles.sectionHeading}><div><span>STEP 02</span><h2>Attach PDF to a book or chapter</h2><p>Subject books appear at subject level. Chapter PDFs appear with the matching chapter in the student library.</p></div><span className={styles.stepIcon}>02</span></div>
         <div className={styles.assignmentFields}>
           <label className={styles.field}>Class
-            <select value={classCode} onChange={e => setClassCode(e.target.value)}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select>
+            <select value={classCode} disabled={!classOptions.length} onChange={e => {
+              const nextClass = e.target.value;
+              setClassCode(nextClass);
+              setSubjectCode(tracks.find(track => track.class_code === nextClass)?.subject_code || '');
+              setChapterId('');
+            }}>
+              {classOptions.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name} ({track.class_code})</option>)}
+            </select>
           </label>
           <label className={styles.field}>Subject
-            <select value={subjectCode} onChange={e => setSubjectCode(e.target.value)}><option value="maths">Mathematics</option><option value="science">Science</option></select>
+            <select value={subjectCode} disabled={!subjectOptions.length} onChange={e => { setSubjectCode(e.target.value); setChapterId(''); }}>
+              {subjectOptions.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
+            </select>
           </label>
           <label className={styles.field}>Placement
             <select value={scope} onChange={e => setScope(e.target.value as 'SUBJECT_BOOK' | 'CHAPTER_PDF')}>
@@ -306,12 +385,33 @@ export default function TextbookLibraryPage() {
           <p>{scope === 'SUBJECT_BOOK' ? 'This complete-book PDF will be visible from the selected subject.' : 'This PDF will be linked to the selected chapter only.'} The saved page range can map a chapter to its own extracted PDF or to a range within a complete book.</p>
           <button type="button" className={styles.primaryButton} disabled={busy || !selectedPdf || (scope === 'CHAPTER_PDF' && !chapterId) || !title.trim()} onClick={() => void attachPdf()}>{busy ? 'Saving…' : 'Attach as draft'}</button>
         </div>
-      </section>
+      </section>}
 
       <section className={styles.panel}>
         <div className={styles.sectionHeading}><div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Drafts remain invisible to students until a permitted publisher publishes them.</p></div>
           <select className={styles.filter} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select>
         </div>
+        {previewAssignment && <div className={styles.previewPanel}>
+          <div className={styles.previewHeading}>
+            <div><span>FINAL REVIEW</span><h3>{previewAssignment.title}</h3>
+              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · Page {previewPage} of {previewPageCount}</p>
+            </div>
+            <button type="button" className={styles.secondaryButton} onClick={() => setPreviewDocumentId(null)}>Close preview</button>
+          </div>
+          <div className={styles.previewControls}>
+            <button type="button" className={styles.secondaryButton} disabled={previewPage <= 1} onClick={() => setPreviewPage(page => Math.max(1, page - 1))}>Previous page</button>
+            <label>Page <input type="number" min="1" max={previewPageCount} value={previewPage} onChange={e => {
+              const value = Number(e.target.value);
+              if (Number.isFinite(value)) setPreviewPage(Math.max(1, Math.min(previewPageCount, value)));
+            }} /></label>
+            <button type="button" className={styles.secondaryButton} disabled={previewPage >= previewPageCount} onClick={() => setPreviewPage(page => Math.min(previewPageCount, page + 1))}>Next page</button>
+          </div>
+          <div className={styles.previewCanvas}>
+            <img key={previewDocumentId + '-' + previewPage}
+              src={'/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage}
+              alt={'Preview page ' + previewPage + ' of ' + previewAssignment.title} />
+          </div>
+        </div>}
         {loading ? <p className={styles.empty}>Loading resource assignments…</p> : assignments.length === 0 ? <div className={styles.empty}><b>No assignments in this view</b><span>Choose a PDF above and attach it to this class/subject.</span></div> :
           <div className={styles.assignmentList}>
             {assignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
@@ -321,11 +421,18 @@ export default function TextbookLibraryPage() {
                 <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
                 <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
                 <small>{row.source_url || 'Official source URL not set'}</small>
+                {row.scope === 'CHAPTER_PDF' && row.chapter_content_status !== 'PUBLISHED' && <small className={styles.publishHint}>Publish this curriculum chapter in Content Studio before publishing its PDF. Students will not see the chapter PDF until both are published.</small>}
               </div>
               <div className={styles.rowActions}>
-                {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
-                {row.status === 'PUBLISHED' && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
-                {row.status === 'ARCHIVED' && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}
+                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status && row.asset_review_status !== 'APPROVED'} onClick={() => { setPreviewDocumentId(row.document_id); setPreviewPage(1); }}>Preview</button>
+                {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
+                  <button type="button" className={styles.publishButton}
+                    disabled={busy || (row.scope === 'CHAPTER_PDF' && (row.chapter_active !== true || row.chapter_content_status !== 'PUBLISHED'))}
+                    title={row.scope === 'CHAPTER_PDF' && row.chapter_content_status !== 'PUBLISHED' ? 'Publish this chapter in Content Studio first.' : 'Publish this resource for eligible students.'}
+                    onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
+                {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
+                {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}
+                {row.status === 'DRAFT' && !canPublish && <small className={styles.roleHint}>Awaiting a publisher</small>}
               </div>
             </article>)}
           </div>}

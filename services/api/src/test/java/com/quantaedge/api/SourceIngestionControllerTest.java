@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -39,6 +40,32 @@ class SourceIngestionControllerTest {
 
     assertThrows(SecurityException.class, () -> controller.listSources(null));
     verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void finalApprovalCanExcludeRejectedChapterCandidates() {
+    Map<String, Object> approved = Map.of("status", "APPROVED", "chapter_id", 12L);
+    Map<String, Object> rejected = Map.of("status", "REJECTED", "chapter_id", 13L);
+
+    List<Map<String, Object>> ready = SourceIngestionController.chaptersReadyForPublishing(
+        List.of(approved, rejected));
+
+    assertEquals(1, ready.size());
+    assertTrue(ready.contains(approved));
+  }
+
+  @Test
+  void finalApprovalRequiresEveryChapterToHaveAnExplicitDecision() {
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> SourceIngestionController.chaptersReadyForPublishing(
+            List.of(Map.of("status", "APPROVED"), Map.of("status", "NEEDS_REVIEW"))));
+  }
+
+  @Test
+  void finalApprovalRequiresAtLeastOneApprovedChapter() {
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> SourceIngestionController.chaptersReadyForPublishing(
+            List.of(Map.of("status", "REJECTED"))));
   }
 
   @Test

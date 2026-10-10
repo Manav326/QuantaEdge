@@ -30,6 +30,7 @@ type Candidate = {
 type Job = {
   job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
   edition: string; language: string; status: string; error_message?: string | null;
+  chapter_count?: number; approved_chapter_count?: number; rejected_chapter_count?: number;
   book_asset_id?: number; book_asset_title?: string; page_count?: number; class_code: string;
   class_name: string; subject_code: string; subject_name: string; detected_outline: Outline[];
   chapters: Candidate[]; book_review_status?: string; chapter_count?: number; approved_chapter_count?: number;
@@ -290,7 +291,7 @@ export default function SourceIngestionPage() {
       const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve', { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
-      setNotice('Approved PDFs have been added to the textbook library as drafts. A publisher must still publish them for students.');
+      setNotice('The complete book and approved chapter PDFs are now library drafts. Rejected chapters were excluded; preview and publish each resource from Textbook library.');
     } catch (e) { setError(e instanceof Error ? e.message : 'The source book could not be approved.'); }
     finally { setBusy(false); }
   }
@@ -440,7 +441,7 @@ export default function SourceIngestionPage() {
             <span className={styles.jobStatus + ' ' + styles['status' + row.status]}>{row.status}</span>
             <b>#{row.job_id} · {row.source_title}</b>
             <small>{row.class_name} · {row.subject_name} · {row.page_count ? row.page_count + ' pages' : 'PDF not ready'}</small>
-            <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved</small>
+            <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved · {row.rejected_chapter_count || 0} rejected</small>
             {row.error_message && <small className={styles.jobError}>{row.error_message}</small>}
           </button>)}</div>}
         {latestReviewJobs.length > 0 && <p className={styles.help}>Jobs still marked DOWNLOADING may need a minute for the PDF to be fetched and inspected. Select the job and refresh its status.</p>}
@@ -513,8 +514,8 @@ export default function SourceIngestionPage() {
               </div>
             </article>)}
             <div className={styles.actions}>
-              <p>Final approval adds the complete book and approved chapter PDFs to the textbook library as drafts. Publication for students remains a separate permission-protected step.</p>
-              <button className={styles.primary} type="button" disabled={busy || !job.chapters.length || job.chapters.some(ch => ch.status !== 'APPROVED')} onClick={() => void approveJob()}>Approve book & add PDFs to library</button>
+              <p>Final approval adds the complete book and only the approved chapter PDFs to the textbook library as drafts. Every chapter must be explicitly approved or rejected, and at least one chapter must be approved. A publisher must then preview and publish each resource for students.</p>
+              <button className={styles.primary} type="button" disabled={busy || !job.chapters.length || job.chapters.some(ch => !['APPROVED', 'REJECTED'].includes(ch.status)) || !job.chapters.some(ch => ch.status === 'APPROVED')} onClick={() => void approveJob()}>Approve book & approved chapters</button>
               <button className={styles.reject} type="button" disabled={busy} onClick={() => void rejectJob()}>Reject entire ingestion</button>
             </div>
           </div>}

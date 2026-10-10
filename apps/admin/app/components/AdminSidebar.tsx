@@ -95,7 +95,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName 
           if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
           if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
           if (item.key === 'questions') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_REVIEW');
-          if (item.key === 'resources') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_EDIT');
+          if (item.key === 'resources') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_EDIT') || permissions.includes('CONTENT_PUBLISH');
           if (item.key === 'sources') return role === 'ADMIN' || permissions.includes('CONTENT_REVIEW');
           if (item.key === 'assessments') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_CREATE') || permissions.includes('ASSESSMENT_GRADE');
           if (item.key === 'classes') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CLASS_MANAGE');

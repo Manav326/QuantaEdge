@@ -132,7 +132,8 @@ public class SourceIngestionController {
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id) as chapter_count,
-             (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='APPROVED') as approved_chapter_count
+             (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='APPROVED') as approved_chapter_count,
+             (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='REJECTED') as rejected_chapter_count
       from source_ingestion_job j
       join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
@@ -367,14 +368,18 @@ public class SourceIngestionController {
       from source_ingestion_chapter ch join learning_pdf_asset a on a.id=ch.pdf_asset_id
       where ch.job_id=? order by ch.page_start,ch.id
       """, jobId);
-    if (chapters.isEmpty()) throw badRequest("Split the source book into chapter PDFs before approval.");
-    if (chapters.stream().anyMatch(row -> !"APPROVED".equals(String.valueOf(row.get("status"))))) {
-      throw badRequest("Approve every chapter mapping individually before adding the book to the library.");
-    }
+    chapters = chaptersReadyForPublishing(chapters);
     Long bookId = ((Number) job.get("book_asset_id")).longValue();
     Long sourceId = ((Number) job.get("source_id")).longValue();
     Long subjectId = ((Number) job.get("subject_id")).longValue();
     Long staffId = context.staffId();
+    jdbc.update("""
+      update learning_pdf_asset set review_status='REJECTED',reviewed_by_staff_id=?,reviewed_at=now()
+      where id in (
+        select pdf_asset_id from source_ingestion_chapter
+        where job_id=? and status='REJECTED' and pdf_asset_id is not null
+      ) and review_status in ('DRAFT','REVIEW')
+      """, staffId, jobId);
     jdbc.update("""
       update learning_pdf_asset set review_status='APPROVED',reviewed_by_staff_id=?,reviewed_at=now()
       where id=? and review_status in ('DRAFT','REVIEW')
@@ -498,6 +503,27 @@ public class SourceIngestionController {
     } catch (IOException ex) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This PDF page could not be rendered.", ex);
     }
+  }
+
+
+  static List<Map<String, Object>> chaptersReadyForPublishing(List<Map<String, Object>> candidates) {
+    if (candidates == null || candidates.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Split the source book into chapter PDFs before approval.");
+    }
+    if (candidates.stream().anyMatch(row ->
+        !List.of("APPROVED", "REJECTED").contains(String.valueOf(row.get("status"))))) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Review every chapter mapping as approved or rejected before adding the book to the library.");
+    }
+    List<Map<String, Object>> approved = candidates.stream()
+        .filter(row -> "APPROVED".equals(String.valueOf(row.get("status"))))
+        .toList();
+    if (approved.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Approve at least one chapter before adding the book to the library.");
+    }
+    return approved;
   }
 
   private Map<String, Object> jobDetails(long jobId) {
