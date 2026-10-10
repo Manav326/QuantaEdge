@@ -56,7 +56,7 @@ public class SourcePdfDownloadService {
   public DownloadedPdf download(String sourceUrl, String sourceTitle) {
     DownloadedPdf cached = findCachedTextbook(sourceUrl, sourceTitle);
     if (cached != null) return cached;
-    if (textbookCacheOnly) {
+    if (textbookCacheOnly && isOfficialTextbookPortal(sourceUrl)) {
       throw new IllegalArgumentException(
           "This environment is configured for textbook-cache-only downloads, but no matching book "
               + "was found in the mounted Hindi/English GHCR cache. Sync the correct image and use "
@@ -123,9 +123,12 @@ public class SourcePdfDownloadService {
             indexedSource.equals("https://ncert.nic.in/textbook.php?ln=en")
             || indexedSource.equals("https://ncert.nic.in/textbook.php?ln=hi")
             || indexedSource.equals("https://ncert.ncert.org.in/textbook.php?ln=en"));
+        boolean requestIsNcertCatalogue = ncert && requestUrl.matches(
+            "https://(?:www\\.)?(?:ncert\\.nic\\.in|ncert\\.ncert\\.org\\.in)/textbook\\.php(?:\\?.*)?");
         boolean matches = exactSpecificUrl
             || (exactSourceUrl && (!genericNcertCatalogue || exactTitle))
-            || (genericNcertCatalogue && exactTitle);
+            || (genericNcertCatalogue && exactTitle)
+            || (requestIsNcertCatalogue && exactTitle);
         if (!matches) continue;
 
         String relativeName = valueOrEmpty(item.get("file"));
@@ -168,6 +171,18 @@ public class SourcePdfDownloadService {
       }
     }
     return null;
+  }
+
+  private boolean isOfficialTextbookPortal(String sourceUrl) {
+    try {
+      String host = URI.create(sourceUrl).getHost();
+      if (host == null) return false;
+      host = host.toLowerCase(Locale.ROOT);
+      return List.of("ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in")
+          .stream().anyMatch(domain -> host.equals(domain) || host.endsWith("." + domain));
+    } catch (IllegalArgumentException ex) {
+      return false;
+    }
   }
 
   private String valueOrEmpty(Object value) {
