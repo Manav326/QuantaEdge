@@ -1,6 +1,8 @@
 package com.quantaedge.api;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -23,24 +25,45 @@ import org.springframework.stereotype.Component;
 public class SourceIngestionWorker {
   private final JdbcTemplate jdbc;
   private final SourcePdfDownloadService downloader;
+  private final TextbookCacheService textbookCache;
 
-  public SourceIngestionWorker(JdbcTemplate jdbc, SourcePdfDownloadService downloader) {
+  public SourceIngestionWorker(
+      JdbcTemplate jdbc, SourcePdfDownloadService downloader, TextbookCacheService textbookCache) {
     this.jdbc = jdbc;
     this.downloader = downloader;
+    this.textbookCache = textbookCache;
   }
 
   @Async("sourceIngestionExecutor")
   public void process(long jobId) {
     try {
       Map<String, Object> job = jdbc.queryForMap("""
-        select j.id,j.source_id,j.source_title,j.source_url,j.book_asset_id,j.created_by_staff_id
+        select j.id,j.source_id,j.source_title,j.source_url,j.book_asset_id,j.created_by_staff_id,
+               j.cache_medium,j.cache_book_id,j.cache_sha256
         from source_ingestion_job j where j.id=?
         """, jobId);
-      byte[] bytes;
+      byte[] bytes = null;
+      Path cachedBookPath = null;
       String resolvedUrl;
       String filename;
+      String cachedHash = null;
       Long assetId = job.get("book_asset_id") == null ? null : ((Number) job.get("book_asset_id")).longValue();
-      if (assetId != null) {
+
+      if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
+        TextbookCacheService.CachedBook cached = textbookCache.requireBookForJob(
+            String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+            String.valueOf(job.get("cache_sha256")));
+        cachedBookPath = cached.path();
+        cachedHash = cached.sha256();
+        resolvedUrl = cached.pdfUrl().isBlank() ? cached.sourceUrl() : cached.pdfUrl();
+        filename = safeFilename(cached.title());
+        long cacheFileSize = Files.size(cachedBookPath);
+        // Keep the full book in the read-only GHCR cache when it exceeds the private
+        // PostgreSQL library's 50 MiB asset limit. Chapter PDFs will be split from disk.
+        if (cacheFileSize <= SourcePdfDownloadService.MAX_PDF_BYTES) {
+          bytes = Files.readAllBytes(cachedBookPath);
+        }
+      } else if (assetId != null) {
         bytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
         resolvedUrl = String.valueOf(job.get("source_url"));
         filename = "existing-source.pdf";
@@ -51,18 +74,35 @@ public class SourceIngestionWorker {
         resolvedUrl = download.resolvedUrl();
         filename = download.filename();
       }
-      if (bytes == null || bytes.length < 5 || bytes.length > SourcePdfDownloadService.MAX_PDF_BYTES) {
-        throw new IllegalArgumentException("The stored source PDF is empty or exceeds the 50 MB limit.");
+
+      if (cachedBookPath == null && (bytes == null || bytes.length < 5
+          || bytes.length > SourcePdfDownloadService.MAX_PDF_BYTES)) {
+        throw new IllegalArgumentException("The downloaded source PDF is empty or exceeds the 50 MiB library limit.");
       }
+      if (cachedBookPath != null && bytes != null
+          && (bytes.length < 5 || bytes.length > SourcePdfDownloadService.MAX_PDF_BYTES)) {
+        throw new IllegalArgumentException("The cached source PDF bytes are invalid.");
+      }
+
       int pages;
       List<Map<String, Object>> outline;
-      try (PDDocument pdf = Loader.loadPDF(bytes)) {
-        if (pdf.isEncrypted()) throw new IllegalArgumentException("Password-protected PDFs are not supported.");
-        pages = pdf.getNumberOfPages();
-        if (pages < 1 || pages > 2000) throw new IllegalArgumentException("Books must contain 1–2,000 PDF pages.");
-        outline = detectOutline(pdf);
+      if (cachedBookPath != null) {
+        try (PDDocument pdf = Loader.loadPDF(cachedBookPath.toFile())) {
+          if (pdf.isEncrypted()) throw new IllegalArgumentException("Password-protected PDFs are not supported.");
+          pages = pdf.getNumberOfPages();
+          if (pages < 1 || pages > 2000) throw new IllegalArgumentException("Books must contain 1–2,000 PDF pages.");
+          outline = detectOutline(pdf);
+        }
+      } else {
+        try (PDDocument pdf = Loader.loadPDF(bytes)) {
+          if (pdf.isEncrypted()) throw new IllegalArgumentException("Password-protected PDFs are not supported.");
+          pages = pdf.getNumberOfPages();
+          if (pages < 1 || pages > 2000) throw new IllegalArgumentException("Books must contain 1–2,000 PDF pages.");
+          outline = detectOutline(pdf);
+        }
       }
-      String hash = sha256(bytes);
+
+      String hash = bytes == null ? cachedHash : sha256(bytes);
       if (assetId != null) {
         jdbc.update("""
           update learning_pdf_asset set review_status='REVIEW',
@@ -70,7 +110,7 @@ public class SourceIngestionWorker {
           where id=? and review_status='REJECTED'
           """, job.get("source_id"), assetId);
       }
-      if (assetId == null) {
+      if (assetId == null && bytes != null) {
         List<Map<String, Object>> sameHash = jdbc.queryForList(
             "select id from learning_pdf_asset where sha256=?", hash);
         if (!sameHash.isEmpty()) {
@@ -86,16 +126,23 @@ public class SourceIngestionWorker {
             insert into learning_pdf_asset(
               title,original_filename,sha256,file_size_bytes,page_count,pdf_bytes,
               source_kind,source_reference,created_by_staff_id,review_status,source_content_id
-            ) values(?,?,?,?,?,?,'SOURCE_INGESTION',?,?, 'REVIEW',?)
+            ) values(?,?,?,?,?,?,'SOURCE_INGESTION',?,?,'REVIEW',?)
             returning id
             """, Long.class, String.valueOf(job.get("source_title")), safeFilename(filename), hash, bytes.length,
             pages, bytes, sourceReference, job.get("created_by_staff_id"), job.get("source_id"));
         }
       }
+
       jdbc.update("""
-        update content_source set learning_pdf_asset_id=?,checksum=?,accessed_at=now(),status='REVIEW',updated_at=now()
+        update content_source set
+          learning_pdf_asset_id=case
+            when ? is not null then ?
+            when lower(coalesce(checksum,''))<>lower(?) then null
+            else learning_pdf_asset_id
+          end,
+          checksum=?,accessed_at=now(),status='REVIEW',updated_at=now()
         where id=?
-        """, assetId, hash, job.get("source_id"));
+        """, assetId, assetId, hash, hash, job.get("source_id"));
       jdbc.update("""
         update source_ingestion_job set book_asset_id=?,page_count=?,final_pdf_url=?,
           detected_outline=cast(? as jsonb),status='REVIEW',error_message=null,updated_at=now()
@@ -112,6 +159,7 @@ public class SourceIngestionWorker {
       } catch (Exception ignored) { }
     }
   }
+
 
   private List<Map<String, Object>> detectOutline(PDDocument pdf) {
     List<Map<String, Object>> found = new ArrayList<>();
