@@ -140,6 +140,10 @@ public class TextbookCacheService {
     }
     for (Object row : books) {
       if (!(row instanceof Map<?, ?> item) || !bookId.equals(string(item.get("book_id")))) continue;
+      if (!isCompleteWholeBook(item)) {
+        throw new IllegalArgumentException("Textbook " + bookId
+            + " is incomplete or partial in the GHCR index; only verified complete whole books may be ingested.");
+      }
       List<Integer> mappedClasses = classes(item);
       int grade = requestedClass != null
           ? requestedClass
@@ -194,7 +198,7 @@ public class TextbookCacheService {
       throw new IllegalArgumentException("The textbook cache index has no books array: " + indexPath);
     }
     for (Object row : books) {
-      if (!(row instanceof Map<?, ?> item)) continue;
+      if (!(row instanceof Map<?, ?> item) || !isCompleteWholeBook(item)) continue;
       String bookId = string(item.get("book_id"));
       if (bookId.isBlank()) continue;
       List<Integer> mappedClasses = classes(item);
@@ -213,6 +217,15 @@ public class TextbookCacheService {
       if (size >= 0 && safeFileSize(pdf) != size) continue;
       for (int grade : rowGrades) target.add(publicMap(item, language, List.of(grade), grade));
     }
+  }
+
+  private boolean isCompleteWholeBook(Map<?, ?> item) {
+    Object coverageValue = item.get("content_availability");
+    if (coverageValue instanceof Map<?, ?> coverage) {
+      String status = string(coverage.get("status")).toLowerCase(Locale.ROOT);
+      if (!status.isBlank() && !status.equals("complete")) return false;
+    }
+    return !string(item.get("download_method")).toLowerCase(Locale.ROOT).contains("partial");
   }
 
   private boolean hasClasswiseIndexes(String language) {
