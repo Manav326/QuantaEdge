@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -46,14 +47,16 @@ public class SourceIngestionController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final SourceIngestionWorker worker;
+  private final TextbookCacheService textbookCache;
 
   public SourceIngestionController(
       JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit,
-      SourceIngestionWorker worker) {
+      SourceIngestionWorker worker, TextbookCacheService textbookCache) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.worker = worker;
+    this.textbookCache = textbookCache;
   }
 
   @GetMapping("/sources")
@@ -80,6 +83,100 @@ public class SourceIngestionController {
       order by case when a.id is null then 0 else 1 end,cs.updated_at desc,cs.id
       limit 500
       """);
+  }
+
+  @GetMapping("/registry-books")
+  public List<Map<String, Object>> listRegistryBooks(
+      @RequestParam(defaultValue = "both") String medium,
+      @RequestParam(required = false) Integer classNo,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireReviewer(context);
+    if (classNo != null && (classNo < 6 || classNo > 12)) {
+      throw badRequest("Class filter must be between 6 and 12.");
+    }
+    try {
+      return textbookCache.list(medium, classNo);
+    } catch (IllegalArgumentException ex) {
+      throw badRequest(ex.getMessage());
+    }
+  }
+
+  /** Start a review job from an already-synced, complete GHCR book without re-downloading it. */
+  @PostMapping("/registry-books/{medium}/{bookId}/jobs")
+  @Transactional
+  public Map<String, Object> startCachedBookJob(
+      @PathVariable String medium, @PathVariable String bookId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    final TextbookCacheService.CachedBook cached;
+    try {
+      cached = textbookCache.requireBook(medium, bookId);
+    } catch (IllegalArgumentException ex) {
+      throw badRequest(ex.getMessage());
+    }
+
+    String classCode = requiredText(body.get("classCode"), "classCode", 30);
+    String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
+    List<Map<String, Object>> tracks = jdbc.queryForList("""
+      select c.id as class_id,c.code as class_code,c.display_name as class_name,
+             s.id as subject_id,s.code as subject_code,s.display_name as subject_name
+      from curriculum_class c join curriculum_subject s on s.class_id=c.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+      """, classCode, subjectCode);
+    if (tracks.isEmpty()) throw badRequest("Select an active class and subject from the curriculum.");
+    Map<String, Object> track = tracks.getFirst();
+    int grade = textbookCache.classNumber(
+        String.valueOf(track.get("class_code")), String.valueOf(track.get("class_name")));
+    if (!cached.classes().contains(grade)) {
+      throw badRequest("The selected book does not list Class " + grade + " in its verified GHCR index.");
+    }
+
+    String language = "hindi".equals(cached.medium()) ? "hi" : "en";
+    String sourceUrl = !cached.catalogEntryUrl().isBlank() ? cached.catalogEntryUrl() : cached.sourceUrl();
+    if (sourceUrl.isBlank() || !sourceUrl.toLowerCase(Locale.ROOT).startsWith("https://")) {
+      throw badRequest("This registry entry has no official HTTPS source page.");
+    }
+    String title = requiredText(cached.title(), "cached book title", 300);
+    String edition = "UNVERIFIED";
+    String sourceKind = (cached.sourceType().toUpperCase(Locale.ROOT).contains("NCERT")
+        ? "NCERT_CACHE_" : "SCERT_CACHE_")
+        + sha256(cached.bookId().getBytes(StandardCharsets.UTF_8)).substring(0, 12);
+    String provider = cached.publisher().isBlank() ? cached.sourceType() : cached.publisher();
+
+    Long sourceId = jdbc.queryForObject("""
+      insert into content_source(source_kind,title,provider,source_url,edition,language,checksum,status)
+      values(?,?,?,?,?,?,?,'REGISTERED')
+      on conflict(source_kind,title,edition) do update set
+        provider=excluded.provider,source_url=excluded.source_url,language=excluded.language,
+        checksum=excluded.checksum,updated_at=now()
+      returning id
+      """, Long.class, sourceKind, title, provider, sourceUrl, edition, language, cached.sha256());
+
+    List<Map<String, Object>> recent = jdbc.queryForList("""
+      select id,status from source_ingestion_job
+      where source_id=? and subject_id=? and cache_medium=? and cache_book_id=?
+      order by created_at desc,id desc limit 1
+      """, sourceId, track.get("subject_id"), cached.medium(), cached.bookId());
+    if (!recent.isEmpty()) {
+      String priorStatus = String.valueOf(recent.getFirst().get("status"));
+      if (!List.of("FAILED", "REJECTED").contains(priorStatus)) {
+        return jobDetails(((Number) recent.getFirst().get("id")).longValue());
+      }
+    }
+
+    Long jobId = jdbc.queryForObject("""
+      insert into source_ingestion_job(
+        source_id,subject_id,source_title,source_url,edition,language,book_asset_id,
+        cache_medium,cache_book_id,cache_sha256,status,created_by_staff_id
+      ) values(?,?,?,?,?,?,null,?,?,?,'DOWNLOADING',?)
+      returning id
+      """, Long.class, sourceId, track.get("subject_id"), title, sourceUrl, edition, language,
+      cached.medium(), cached.bookId(), cached.sha256(), context.staffId());
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/registry-books/" + cached.medium()
+        + "/" + cached.bookId() + "/jobs",
+        "Started source-ingestion review from a SHA-256-verified complete book in the persistent GHCR cache.");
+    worker.process(jobId);
+    return jobDetails(jobId);
   }
 
   @GetMapping("/sources/{sourceId}/chapter-mappings")
@@ -303,16 +400,32 @@ public class SourceIngestionController {
         throw badRequest("Chapter page ranges overlap. Correct the page numbers before splitting.");
       }
     }
-    Long bookAssetId = ((Number) job.get("book_asset_id")).longValue();
-    byte[] bookBytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, bookAssetId);
-    if (bookBytes == null) throw badRequest("The source PDF bytes are not available for splitting.");
+    Long bookAssetId = job.get("book_asset_id") == null ? null : ((Number) job.get("book_asset_id")).longValue();
+    byte[] bookBytes = null;
+    Path cachedBookPath = null;
+    if (bookAssetId != null) {
+      bookBytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, bookAssetId);
+      if (bookBytes == null) throw badRequest("The source PDF bytes are not available for splitting.");
+    } else if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
+      try {
+        cachedBookPath = textbookCache.requireBookForJob(
+            String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+            String.valueOf(job.get("cache_sha256"))).path();
+      } catch (IllegalArgumentException ex) {
+        throw badRequest(ex.getMessage());
+      }
+    } else {
+      throw badRequest("The complete source book is not available in the PDF library or GHCR cache.");
+    }
     jdbc.update("""
       update learning_pdf_asset set review_status='REJECTED'
       where source_reference like ? and review_status='REVIEW'
       """, "source-ingestion:" + jobId + ":chapter:%");
     jdbc.update("delete from source_ingestion_chapter where job_id=?", jobId);
     for (ChapterCandidate candidate : ordered) {
-      byte[] chapterPdf = extractRange(bookBytes, candidate.pageStart(), candidate.pageEnd());
+      byte[] chapterPdf = cachedBookPath == null
+          ? extractRange(bookBytes, candidate.pageStart(), candidate.pageEnd())
+          : extractRange(cachedBookPath, candidate.pageStart(), candidate.pageEnd());
       String hash = sha256(chapterPdf);
       String reference = "source-ingestion:" + jobId + ":chapter:" + candidate.chapterCode();
       Long chapterAssetId = storePendingAsset(
@@ -475,12 +588,24 @@ public class SourceIngestionController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireReviewer(context);
     Map<String, Object> job = jobRow(jobId);
-    Long assetId;
+    Long assetId = null;
     int pageCount;
+    Path cachedBookPath = null;
     if (chapterRowId == null) {
-      if (job.get("book_asset_id") == null) throw notFound("Source PDF", jobId);
-      assetId = ((Number) job.get("book_asset_id")).longValue();
-      pageCount = ((Number) job.get("page_count")).intValue();
+      pageCount = ((Number) job.getOrDefault("page_count", 0)).intValue();
+      if (job.get("book_asset_id") != null) {
+        assetId = ((Number) job.get("book_asset_id")).longValue();
+      } else if (job.get("cache_medium") != null && job.get("cache_book_id") != null) {
+        try {
+          cachedBookPath = textbookCache.requireBookForJob(
+              String.valueOf(job.get("cache_medium")), String.valueOf(job.get("cache_book_id")),
+              String.valueOf(job.get("cache_sha256"))).path();
+        } catch (IllegalArgumentException ex) {
+          throw badRequest(ex.getMessage());
+        }
+      } else {
+        throw notFound("Source PDF", jobId);
+      }
     } else {
       List<Map<String, Object>> rows = jdbc.queryForList("""
         select ch.pdf_asset_id,a.page_count from source_ingestion_chapter ch
@@ -491,8 +616,11 @@ public class SourceIngestionController {
       pageCount = ((Number) rows.getFirst().get("page_count")).intValue();
     }
     if (pageNumber < 1 || pageNumber > pageCount) throw notFound("PDF page", pageNumber);
-    byte[] bytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
-    try (PDDocument pdf = Loader.loadPDF(bytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+    byte[] bytes = assetId == null ? null
+        : jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
+    try (PDDocument pdf = cachedBookPath != null
+            ? Loader.loadPDF(cachedBookPath.toFile()) : Loader.loadPDF(bytes);
+        ByteArrayOutputStream output = new ByteArrayOutputStream()) {
       BufferedImage image = new PDFRenderer(pdf).renderImageWithDPI(pageNumber - 1, 90f, ImageType.RGB);
       if (!javax.imageio.ImageIO.write(image, "png", output)) throw new IllegalStateException("PNG rendering is unavailable.");
       image.flush();
@@ -506,7 +634,6 @@ public class SourceIngestionController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This PDF page could not be rendered.", ex);
     }
   }
-
 
   static List<Map<String, Object>> chaptersReadyForPublishing(List<Map<String, Object>> candidates) {
     if (candidates == null || candidates.isEmpty()) {
@@ -531,7 +658,8 @@ public class SourceIngestionController {
   private Map<String, Object> jobDetails(long jobId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select j.id as job_id,j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
-             j.language,j.book_asset_id,j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
+             j.language,j.book_asset_id,j.cache_medium,j.cache_book_id,j.cache_sha256,
+             j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
              j.created_at,j.updated_at,j.reviewed_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,a.title as book_asset_title,
              a.original_filename,a.file_size_bytes,a.sha256,a.review_status as book_review_status
