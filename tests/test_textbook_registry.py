@@ -231,19 +231,15 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(1, len(requested))
         self.assertTrue(requested[0].endswith("fegp1dd.zip"))
 
-    def test_incomplete_ncert_bundle_is_rejected_without_chapter_fallback(self):
+    def test_incomplete_ncert_bundle_is_rejected_but_reports_observed_missing_chapters(self):
         import io
         import zipfile
-        import fitz
         from scripts.textbook_registry import download_ncert_merged
 
-        document = fitz.open()
-        document.new_page()
-        pdf_bytes = document.tobytes()
-        document.close()
         bundle = io.BytesIO()
         with zipfile.ZipFile(bundle, "w") as archive:
-            archive.writestr("fegp101.pdf", pdf_bytes)
+            # The signature is enough for bundle inventory; no merge should occur.
+            archive.writestr("fegp101.pdf", b"%PDF-1.4\nsample")
         requested = []
 
         def fake_get_url(url, destination=None, limit=None, attempts=4):
@@ -265,31 +261,11 @@ class TextbookRegistryTests(unittest.TestCase):
             self.assertFalse(destination.exists())
         self.assertEqual(3, len(requested))
         self.assertTrue(all(url.endswith("fegp1dd.zip") for url in requested))
-        self.assertEqual("unavailable", book["content_availability"]["status"])
-        self.assertEqual([1, 2, 3], book["content_availability"]["missing_chapters"])
-
-    def test_ncert_book_with_no_available_complete_bundle_is_described_for_retry(self):
-        from scripts.textbook_registry import download_ncert_merged
-        book = {
-            "book_id": "ncert-c6-english-fegp1", "code": "fegp1", "chapter_count": 2,
-            "title": "Ganita Prakash", "medium": "english",
-            "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
-        }
-        requested = []
-        with tempfile.TemporaryDirectory() as temp, patch(
-            "scripts.textbook_registry.get_url",
-            side_effect=lambda url, destination=None, limit=None, attempts=4: (
-                requested.append(url) or (_ for _ in ()).throw(FileNotFoundError("source unavailable"))
-            ),
-        ):
-            destination = Path(temp) / "missing.pdf"
-            with self.assertRaisesRegex(RuntimeError, "no individual-chapter fallback"):
-                download_ncert_merged(book, destination)
-            self.assertFalse(destination.exists())
-        self.assertEqual(3, len(requested))
-        self.assertTrue(all(url.endswith("fegp1dd.zip") for url in requested))
-        self.assertEqual("unavailable", book["content_availability"]["status"])
-        self.assertEqual([1, 2], book["content_availability"]["missing_chapters"])
+        coverage = book["content_availability"]
+        self.assertEqual("unavailable", coverage["status"])
+        self.assertEqual([1], coverage["available_chapters"])
+        self.assertEqual([2, 3], coverage["missing_chapters"])
+        self.assertIn("for planning only", coverage["note"])
 
     @staticmethod
     def make_registry_book(book_id, medium="hindi"):

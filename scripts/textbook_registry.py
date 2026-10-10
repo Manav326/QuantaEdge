@@ -395,6 +395,8 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
             bundle_urls.append(mirror)
 
     source_errors: list[str] = []
+    best_available_chapters: list[int] = []
+    best_coverage_source = ""
     with tempfile.TemporaryDirectory(prefix="qe-textbook-complete-ncert-") as td:
         work = Path(td)
         chosen_archive: Path | None = None
@@ -432,6 +434,10 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
 
                 candidate_members.sort(key=lambda item: item[0])
                 candidate_numbers = [number for number, _ in candidate_members]
+                observed_numbers = sorted(set(candidate_numbers))
+                if len(observed_numbers) > len(best_available_chapters):
+                    best_available_chapters = observed_numbers
+                    best_coverage_source = bundle_url
                 if invalid_members:
                     raise ValueError("Complete-book bundle includes invalid PDF members: " + ", ".join(invalid_members[:10]))
                 if not candidate_members:
@@ -459,16 +465,19 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                 archive_path.unlink(missing_ok=True)
 
         if chosen_archive is None:
-            missing = expected_numbers
+            missing = sorted(set(expected_numbers) - set(best_available_chapters)) if expected_numbers else []
             book["content_availability"] = {
                 "status": "unavailable",
-                "expected_chapters": expected_numbers,
-                "available_chapters": [],
+                "expected_chapters": expected_numbers or best_available_chapters,
+                "available_chapters": best_available_chapters,
                 "missing_chapters": missing,
                 "missing_chapter_labels": ["Chapter " + str(number) for number in missing],
+                "diagnostic_bundle_url": best_coverage_source or None,
                 "source_errors": source_errors[-6:],
                 "checked_at": now(),
-                "note": "No complete official NCERT book bundle was available. Individual chapter URLs were not attempted; the whole book remains absent and is eligible for a later retry.",
+                "note": (
+                    "No complete official NCERT book bundle passed validation. The listed available chapters were detected in the best rejected bundle for planning only; this partial bundle was not stored as a complete textbook. Missing chapters remain retryable."
+                ),
             }
             raise RuntimeError(
                 "No complete NCERT whole-book bundle could be downloaded and validated; no individual-chapter fallback was attempted. "
@@ -1955,7 +1964,6 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
                 file_failures.append({"book_id": book_id, "error": str(exc)})
                 log("PULL_BOOK_MISSING " + book_id + ": " + str(exc))
         # Export the index even when some PDF files are missing; the manifest shows gaps.
-        temp_index.replace(output_dir / "index.json")        # Swap index only after every declared PDF has passed SHA-256 verification.
         temp_index.replace(output_dir / "index.json")
     finally:
         temp_index.unlink(missing_ok=True)
