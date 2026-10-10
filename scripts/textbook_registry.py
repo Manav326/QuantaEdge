@@ -1186,6 +1186,10 @@ def publish_classwise(
                     "catalog_books_expected": len(expected_ids),
                     "already_cached_before_download": len(last_report.get("already_cached", [])) if last_report else 0,
                     "migrated_from_legacy": int(seed.get("migrated_from_legacy", 0)),
+                    "books_downloaded_this_run": len({
+                        str(book_id) for report in phase_reports
+                        for book_id in report.get("downloaded_successfully", [])
+                    }),
                     "newly_downloaded_and_pushed": len(downloaded_ids),
                     "pushed_to_image_this_run": int(seed.get("migrated_from_legacy", 0)) + len(downloaded_ids),
                     "books_in_registry": cached_count,
@@ -1200,12 +1204,13 @@ def publish_classwise(
                         "images": final_rows, "updated_at": now()}
         log("CLASSWISE_GHCR_FINAL_REPORT " + json.dumps(final_report, ensure_ascii=False))
         summary("\n## Final per-GHCR coverage summary\n\n"
-                + "| GHCR image | Catalogue books | Cached total | Migrated | Newly downloaded/pushed | Remaining | Failed | Status |\n"
-                + "|---|---:|---:|---:|---:|---:|---:|---|\n"
+                + "| GHCR image | Catalogue books | Cached total | Migrated | Downloaded this run | Pushed this run | Remaining | Failed | Status |\n"
+                + "|---|---:|---:|---:|---:|---:|---:|---:|---|\n"
                 + "\n".join(
                     "| " + row["image"] + " | " + str(row["catalog_books_expected"])
                     + " | " + str(row["books_in_registry"]) + " | " + str(row["migrated_from_legacy"])
-                    + " | " + str(row["newly_downloaded_and_pushed"]) + " | " + str(row["remaining_expected"])
+                    + " | " + str(row["books_downloaded_this_run"]) + " | " + str(row["pushed_to_image_this_run"])
+                    + " | " + str(row["remaining_expected"])
                     + " | " + str(len(row["failed_after_retries"])) + " | " + row["status"] + " |"
                     for row in final_rows
                 ) + "\n")
@@ -1273,6 +1278,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
     )
 
     downloaded: list[str] = []
+    downloaded_successfully_ids: set[str] = set()
     unchanged: list[str] = []
     failed_downloads: dict[str, dict[str, Any]] = {}
     push_failures: dict[str, str] = {}
@@ -1399,6 +1405,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                     book_id = book["book_id"]
                     try:
                         digest, pages, toc, method, pdf_path = future.result()
+                        downloaded_successfully_ids.add(book_id)
                         previous = existing.get(book_id)
                         if previous and previous.get("sha256") == digest and refresh:
                             unchanged.append(book_id)
@@ -1513,6 +1520,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         "pending_after_retries": sum(1 for item in candidates if item["book_id"] not in resolved_ids),
         "resolved_candidates": sum(1 for item in candidates if item["book_id"] in resolved_ids),
         "already_cached": already_cached,
+        "downloaded_successfully": sorted(downloaded_successfully_ids),
         "downloaded_and_pushed": downloaded,
         "unchanged_after_refresh": unchanged,
         "failed_after_retries": list(failed_downloads.values()),
