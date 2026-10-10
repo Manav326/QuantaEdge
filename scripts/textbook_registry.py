@@ -659,6 +659,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
     already_cached = [item["book_id"] for item in selected if item["book_id"] in existing and not refresh]
     candidates = [item for item in selected if refresh or item["book_id"] not in existing]
+    books_present_before_run = len(existing)
     if max_books > 0:
         candidates = candidates[:max_books]
     log(
@@ -679,6 +680,9 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         for item in candidates
     }
     ready_for_push: dict[str, dict[str, Any]] = {}
+    resolved_ids = set(already_cached)
+    status_revision = 0
+    persisted_status_revision = 0
 
     with tempfile.TemporaryDirectory(prefix="qe-textbook-batched-") as td:
         temp_root = Path(td)
@@ -686,7 +690,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         downloads_root.mkdir(parents=True, exist_ok=True)
 
         def persist_index_only() -> bool:
-            nonlocal base_exists
+            nonlocal base_exists, persisted_status_revision
             candidate_index = copy.deepcopy(index)
             candidate_index.update({
                 "schema_version": 1, "registry": image,
@@ -697,13 +701,14 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                 index.clear()
                 index.update(candidate_index)
                 base_exists = True
+                persisted_status_revision = status_revision
                 return True
             except Exception as exc:
                 log("REGISTRY_STATUS_PUSH_FAILED " + image + ": " + str(exc))
                 return False
 
         def push_ready(batch_ids: list[str]) -> bool:
-            nonlocal base_exists
+            nonlocal base_exists, persisted_status_revision, status_revision
             if not batch_ids:
                 return True
             entries = [ready_for_push[book_id]["entry"] for book_id in batch_ids]
@@ -730,7 +735,9 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                 index.clear()
                 index.update(candidate_index)
                 base_exists = True
+                persisted_status_revision = status_revision
                 for book_id in batch_ids:
+                    resolved_ids.add(book_id)
                     downloaded.append(book_id)
                     ready_for_push.pop(book_id, None)
                     existing[book_id] = next(entry for entry in entries if entry["book_id"] == book_id)
@@ -757,11 +764,13 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         "last_error": "GHCR batch push failed: " + str(exc),
                         "updated_at": now(),
                     }
+                    status_revision += 1
                 log("BATCH_PUSH_FAILED " + image + " books=" + ",".join(batch_ids) + ": " + str(exc))
                 persist_index_only()
                 return False
 
         def download_batch(batch: list[dict[str, Any]], round_no: int) -> None:
+            nonlocal status_revision
             futures = {}
             for book in batch:
                 book_id = book["book_id"]
@@ -779,6 +788,8 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         previous = existing.get(book_id)
                         if previous and previous.get("sha256") == digest and refresh:
                             unchanged.append(book_id)
+                            resolved_ids.add(book_id)
+                            failed_downloads.pop(book_id, None)
                             index.setdefault("download_status", {})[book_id] = {
                                 "status": "cached",
                                 "sha256": digest,
@@ -821,13 +832,11 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         }
                         log("BOOK_FAILED round=" + str(round_no) + " "
                             + json.dumps(failed_downloads[book_id], ensure_ascii=False))
+                    status_revision += 1
 
             successful_ids = [book_id for book_id in ready_for_push if book_id in {b["book_id"] for b in batch}]
             for offset in range(0, len(successful_ids), push_batch_size):
                 push_ready(successful_ids[offset:offset + push_batch_size])
-            if not successful_ids:
-                persist_index_only()
-
         for round_no in range(1, retry_rounds + 1):
             log("RETRY_ROUND " + str(round_no) + "/" + str(retry_rounds) + " language=" + language)
             pending_push_ids = list(ready_for_push)
@@ -836,7 +845,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
             pending = [
                 item for item in candidates
-                if item["book_id"] not in existing
+                if item["book_id"] not in resolved_ids
                 and item["book_id"] not in ready_for_push
                 and attempt_in_this_run.get(item["book_id"], 0) < retry_rounds
             ]
@@ -847,17 +856,18 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
             chunks = [pending[offset:offset + push_batch_size] for offset in range(0, len(pending), push_batch_size)]
             for batch in chunks:
                 download_batch(batch, round_no)
+            if status_revision > persisted_status_revision:
+                persist_index_only()
 
         for offset in range(0, len(ready_for_push), push_batch_size):
             push_ready(list(ready_for_push)[offset:offset + push_batch_size])
-        if any(item.get("status") in {"retry_pending", "failed", "downloaded_pending_push"}
-               for item in index.get("download_status", {}).values()):
+        if status_revision > persisted_status_revision:
             persist_index_only()
 
-    for book in selected:
+    for book in candidates:
         book_id = book["book_id"]
         status = index.get("download_status", {}).get(book_id, {})
-        if book_id not in existing and status.get("status") in {"failed", "retry_pending", "downloaded_pending_push"}:
+        if book_id not in resolved_ids and status.get("status") in {"failed", "retry_pending", "downloaded_pending_push"}:
             failed_downloads.setdefault(book_id, {
                 "book_id": book_id, "title": book["title"],
                 "attempts_this_run": attempt_in_this_run.get(book_id, 0),
@@ -869,7 +879,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         "image": image,
         "persistent_tag": "latest",
         "catalog_entries": len(selected),
-        "books_present_before_run": len(existing) - len(downloaded),
+        "books_present_before_run": books_present_before_run,
         "already_cached": already_cached,
         "downloaded_and_pushed": downloaded,
         "unchanged_after_refresh": unchanged,
