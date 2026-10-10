@@ -125,7 +125,11 @@ public class LearningController {
     String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : submittedObject.toString();
     String payload=String.valueOf(q.get("answer_payload"));
     QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
-    state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct(),practiceSessionId);
+    if(practiceSessionId==null) {
+      state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct());
+    } else {
+      state.recordAttempt(context.studentId(),questionId,lessonId,submitted,evaluation.autoGraded(),evaluation.correct(),practiceSessionId);
+    }
 
     var result=new LinkedHashMap<String,Object>();
     result.put("questionId",questionId); result.put("questionType",q.get("question_type"));
