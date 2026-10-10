@@ -71,7 +71,8 @@ public class LearningDocumentController {
              (select count(*) from learning_document d
               where d.pdf_asset_id=a.id and d.status<>'ARCHIVED') as assignment_count
       from learning_pdf_asset a
-      where (?='' or a.title ilike ? or a.original_filename ilike ?
+      where a.review_status='APPROVED'
+        and (?='' or a.title ilike ? or a.original_filename ilike ?
              or coalesce(a.source_reference,'') ilike ?)
       order by a.created_at desc,a.id desc
       limit 300
