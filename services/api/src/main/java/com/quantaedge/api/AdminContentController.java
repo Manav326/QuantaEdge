@@ -246,6 +246,14 @@ public class AdminContentController {
         || !Objects.equals(sourcePages,current.get("curriculum_source_pages"))
         || sourceVerified != Boolean.TRUE.equals(current.get("curriculum_source_verified"));
     String oldStatus=String.valueOf(current.get("chapter_status"));
+    if (status.equals(oldStatus) && !fieldsChanged) {
+      if ("PUBLISHED".equals(status) || "ARCHIVED".equals(status)) {
+        authorization.requirePermission(context,"CONTENT_PUBLISH");
+      } else {
+        authorization.requirePermission(context,"CONTENT_EDIT");
+      }
+      return current;
+    }
     if (fieldsChanged) authorization.requirePermission(context,"CONTENT_EDIT");
     if (!status.equals(oldStatus) || "PUBLISHED".equals(status) || "ARCHIVED".equals(status)
         || "PUBLISHED".equals(oldStatus) || "ARCHIVED".equals(oldStatus)) {
