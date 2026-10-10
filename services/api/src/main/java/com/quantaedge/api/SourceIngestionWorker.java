@@ -134,15 +134,10 @@ public class SourceIngestionWorker {
       }
 
       jdbc.update("""
-        update content_source set
-          learning_pdf_asset_id=case
-            when ? is not null then ?
-            when lower(coalesce(checksum,''))<>lower(?) then null
-            else learning_pdf_asset_id
-          end,
-          checksum=?,accessed_at=now(),status='REVIEW',updated_at=now()
+        update content_source set learning_pdf_asset_id=?,checksum=?,
+          accessed_at=now(),status='REVIEW',updated_at=now()
         where id=?
-        """, assetId, assetId, hash, hash, job.get("source_id"));
+        """, assetId, hash, job.get("source_id"));
       jdbc.update("""
         update source_ingestion_job set book_asset_id=?,page_count=?,final_pdf_url=?,
           detected_outline=cast(? as jsonb),status='REVIEW',error_message=null,updated_at=now()
