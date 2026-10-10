@@ -64,10 +64,20 @@ def host_allowed(url: str) -> bool:
         return False
 
 
+def iri_to_uri(url: str) -> str:
+    """Percent-encode Unicode URL path/query characters (for Hindi SCERT slugs)."""
+    parts = urllib.parse.urlsplit(url)
+    path = urllib.parse.quote(parts.path, safe="/%:@!$&'()*+,;=-._~")
+    query = urllib.parse.quote(parts.query, safe="/?@!$&'()*+,;=:%-._~")
+    fragment = urllib.parse.quote(parts.fragment, safe="/?@!$&'()*+,;=:%-._~")
+    return urllib.parse.urlunsplit((parts.scheme, parts.netloc, path, query, fragment))
+
+
 def _get_url_once(url: str, destination: Path | None = None, limit: int | None = None) -> bytes | Path:
     if not host_allowed(url):
         raise ValueError("Refusing non-official or non-HTTPS URL: " + url)
-    req = urllib.request.Request(url, headers={
+    request_url = iri_to_uri(url)
+    req = urllib.request.Request(request_url, headers={
         "User-Agent": "QuantaEdge-TextbookRegistry/1.0",
         "Accept": "application/pdf,application/zip,text/html,*/*;q=0.8",
     })
@@ -373,58 +383,89 @@ def sha256_file(path: Path) -> str:
 
 
 def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
-    """Download and validate a complete NCERT book bundle. No chapter fallback."""
+    """Cache a complete NCERT book when possible, or an explicitly marked partial chapter merge."""
     code = str(book["code"])
-    expected_chapters = int(book.get("chapter_count") or 0)
-    errors: list[str] = []
-    candidates = [str(book["bundle_url"])]
-    alternate = candidates[0].replace("https://ncert.nic.in", "https://ncert.ncert.org.in")
-    if alternate not in candidates:
-        candidates.append(alternate)
+    expected_count = int(book.get("chapter_count") or 0)
+    expected_numbers = list(range(1, expected_count + 1)) if expected_count else []
+    bundle_urls = [str(book["bundle_url"])]
+    for host in ("www.ncert.nic.in", "ncert.ncert.org.in"):
+        mirror = re.sub(r"^https://[^/]+", "https://" + host, bundle_urls[0])
+        if mirror not in bundle_urls:
+            bundle_urls.append(mirror)
 
     with tempfile.TemporaryDirectory(prefix="qe-textbook-fullbook-") as td:
         work = Path(td)
-        archive_path = work / (code + "-complete-book.zip")
-        staged_pdf = work / (code + "-complete-book.pdf")
-        chosen_url: str | None = None
-        members: list[tuple[int, str]] = []
-
-        for bundle_url in candidates:
+        # source tuple: kind, archive-or-file path, archive member, URL
+        sources: dict[int, tuple[str, Path, str, str]] = {}
+        prelim: tuple[Path, str, str] | None = None
+        source_errors: list[str] = []
+        chapter_errors: dict[int, list[str]] = {}
+        for n, bundle_url in enumerate(bundle_urls, start=1):
+            archive_path = work / ("bundle-" + str(n) + ".zip")
             try:
                 get_url(bundle_url, archive_path, None, attempts=1)
                 with zipfile.ZipFile(archive_path) as archive:
-                    names: list[tuple[int, str]] = []
-                    for item in archive.infolist():
-                        if item.is_dir():
+                    for member in archive.infolist():
+                        if member.is_dir():
                             continue
-                        basename = Path(item.filename).name
-                        chapter_match = re.match(r"^" + re.escape(code) + r"(\d{2})\.+pdf$", basename, re.I)
-                        prelims_match = re.match(r"^" + re.escape(code) + r"ps\.+pdf$", basename, re.I)
-                        if chapter_match:
-                            names.append((int(chapter_match.group(1)), item.filename))
-                        elif prelims_match:
-                            names.append((0, item.filename))
-                    chapter_numbers = sorted({number for number, _ in names if number > 0})
-                    if not names:
-                        raise ValueError("Official bundle has no recognisable complete-book PDF members.")
-                    if expected_chapters and chapter_numbers != list(range(1, expected_chapters + 1)):
-                        missing = sorted(set(range(1, expected_chapters + 1)) - set(chapter_numbers))
-                        raise ValueError(
-                            "Official book bundle is incomplete; expected chapters 1 through "
-                            + str(expected_chapters) + ", missing " + str(missing) + "."
-                        )
-                    members = sorted(names, key=lambda item: (item[0], item[1]))
-                    chosen_url = bundle_url
+                        name = Path(member.filename).name
+                        chapter_match = re.match(r"^" + re.escape(code) + r"(\d{2})\.+pdf$", name, re.I)
+                        prelim_match = re.match(r"^" + re.escape(code) + r"ps\.+pdf$", name, re.I)
+                        if not chapter_match and not prelim_match:
+                            continue
+                        with archive.open(member.filename) as handle:
+                            signature = handle.read(5)
+                        if signature != b"%PDF-":
+                            source_errors.append(bundle_url + ": invalid PDF member " + name)
+                            continue
+                        if prelim_match:
+                            if prelim is None:
+                                prelim = (archive_path, member.filename, bundle_url)
+                        else:
+                            chapter_no = int(chapter_match.group(1))
+                            sources.setdefault(chapter_no, ("zip", archive_path, member.filename, bundle_url))
+                if expected_numbers and all(n in sources for n in expected_numbers):
                     break
-            except (FileNotFoundError, RuntimeError, ValueError, zipfile.BadZipFile) as exc:
-                errors.append(bundle_url + ": " + str(exc))
+            except Exception as exc:
+                source_errors.append(bundle_url + ": " + str(exc))
                 archive_path.unlink(missing_ok=True)
 
-        if chosen_url is None:
-            raise RuntimeError(
-                "Could not retrieve one complete NCERT book bundle; no individual-chapter fallback was attempted. "
-                + " | ".join(errors)
-            )
+        # Fill gaps in official NCERT ZIPs using individually published chapter PDFs.
+        for chapter_no in (expected_numbers or sorted(sources)):
+            if chapter_no in sources:
+                continue
+            host_errors: list[str] = []
+            for host in ("ncert.nic.in", "www.ncert.nic.in", "ncert.ncert.org.in"):
+                chapter_url = "https://" + host + "/textbook/pdf/" + code + ("%02d" % chapter_no) + ".pdf"
+                chapter_path = work / ("chapter-" + ("%03d" % chapter_no) + ".pdf")
+                try:
+                    get_url(chapter_url, chapter_path, None, attempts=1)
+                    with chapter_path.open("rb") as handle:
+                        if handle.read(5) != b"%PDF-":
+                            raise ValueError("URL did not return a PDF")
+                    sources[chapter_no] = ("file", chapter_path, "", chapter_url)
+                    break
+                except Exception as exc:
+                    host_errors.append(host + ": " + str(exc))
+                    chapter_path.unlink(missing_ok=True)
+            if host_errors:
+                chapter_errors[chapter_no] = host_errors
+
+        found = sorted(sources)
+        missing = sorted(set(expected_numbers) - set(found)) if expected_numbers else []
+        if not sources:
+            book["content_availability"] = {
+                "status": "unavailable", "expected_chapters": expected_numbers,
+                "available_chapters": [], "missing_chapters": missing,
+                "missing_chapter_labels": ["Chapter " + str(n) for n in missing],
+                "source_errors": source_errors[-6:],
+                "chapter_errors": [{"chapter": k, "errors": v[-3:]} for k, v in sorted(chapter_errors.items())],
+                "checked_at": now(),
+                "note": "No usable chapter PDF was retrieved. The book remains unavailable and will be retried on a later run.",
+            }
+            raise RuntimeError("No usable NCERT chapters could be retrieved. Missing chapters "
+                               + str(missing) + "; bundle and individual official chapter URLs were attempted. "
+                               + " | ".join(source_errors[-4:]))
 
         try:
             import fitz
@@ -433,50 +474,88 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
 
         merged = fitz.open()
         toc: list[list[Any]] = []
+        actual: list[int] = []
+        validation_errors: list[str] = []
         try:
-            with zipfile.ZipFile(archive_path) as archive:
-                for chapter_no, member_name in members:
-                    member_pdf = work / ("member-" + str(chapter_no) + ".pdf")
-                    with archive.open(member_name, "r") as source, member_pdf.open("wb") as target:
-                        shutil.copyfileobj(source, target, length=CHUNK)
-                    with member_pdf.open("rb") as handle:
-                        signature = handle.read(5)
-                    if signature != b"%PDF-":
-                        member_pdf.unlink(missing_ok=True)
-                        raise ValueError("Book bundle member is not a valid PDF: " + member_name)
-                    with fitz.open(member_pdf) as chapter:
+            merge_sources: list[tuple[int, str, Path, str, str]] = []
+            if prelim:
+                merge_sources.append((0, "zip", prelim[0], prelim[1], prelim[2]))
+            for chapter_no in found:
+                kind, path, member_name, source_url = sources[chapter_no]
+                merge_sources.append((chapter_no, kind, path, member_name, source_url))
+            for chapter_no, kind, source_path, member_name, source_url in merge_sources:
+                pdf_path = source_path
+                temporary_member = False
+                try:
+                    if kind == "zip":
+                        pdf_path = work / (("prelims" if chapter_no == 0 else "chapter-member-" + str(chapter_no)) + ".pdf")
+                        with zipfile.ZipFile(source_path) as archive, archive.open(member_name) as incoming, pdf_path.open("wb") as outgoing:
+                            shutil.copyfileobj(incoming, outgoing, length=CHUNK)
+                        temporary_member = True
+                    with fitz.open(pdf_path) as chapter:
+                        if chapter.needs_pass or len(chapter) < 1:
+                            raise ValueError("empty or password-protected PDF")
                         start_page = len(merged) + 1
                         merged.insert_pdf(chapter)
                     if chapter_no:
+                        actual.append(chapter_no)
                         toc.append([1, "Chapter " + str(chapter_no), start_page])
-                    member_pdf.unlink(missing_ok=True)
+                except Exception as exc:
+                    validation_errors.append("chapter " + str(chapter_no) + ": " + str(exc) + " (" + source_url + ")")
+                finally:
+                    if temporary_member:
+                        pdf_path.unlink(missing_ok=True)
 
-            if not len(merged):
-                raise ValueError("Complete NCERT book bundle contained no readable pages.")
-            actual_chapters = len([row for row in toc if row[1].startswith("Chapter ")])
-            if expected_chapters and actual_chapters != expected_chapters:
-                raise ValueError(
-                    "Merged PDF does not contain all " + str(expected_chapters) + " expected chapters."
-                )
+            actual = sorted(set(actual))
+            missing = sorted(set(expected_numbers) - set(actual)) if expected_numbers else []
+            if not len(merged) or not actual:
+                book["content_availability"] = {
+                    "status": "unavailable", "expected_chapters": expected_numbers,
+                    "available_chapters": [], "missing_chapters": expected_numbers,
+                    "missing_chapter_labels": ["Chapter " + str(n) for n in expected_numbers],
+                    "source_errors": (source_errors + validation_errors)[-10:],
+                    "chapter_errors": [{"chapter": k, "errors": v[-3:]} for k, v in sorted(chapter_errors.items())],
+                    "checked_at": now(), "note": "No readable chapter PDF passed validation.",
+                }
+                raise RuntimeError("No readable NCERT chapter PDFs survived validation. " + " | ".join(validation_errors[-4:]))
+
+            status = "partial" if missing else "complete"
+            coverage = {
+                "status": status, "expected_chapters": expected_numbers or actual,
+                "available_chapters": actual, "missing_chapters": missing,
+                "missing_chapter_labels": ["Chapter " + str(n) for n in missing],
+                "source_urls": sorted({entry[4] for entry in merge_sources}),
+                "source_errors": source_errors[-6:],
+                "chapter_errors": [{"chapter": k, "errors": v[-3:]} for k, v in sorted(chapter_errors.items()) if k in missing],
+                "validation_errors": validation_errors[-6:], "checked_at": now(),
+                "note": "Complete book: all expected chapters were validated." if not missing
+                    else "PARTIAL BOOK: retrieved chapters were preserved; listed chapters are unavailable and this book will be retried later.",
+            }
+            book["content_availability"] = coverage
             merged.set_toc(toc)
             merged.set_metadata({
-                "title": str(book["title"]), "author": "NCERT",
-                "subject": str(book.get("subject", "")),
-                "keywords": "QuantaEdge textbook cache; language=" + str(book["medium"]),
+                "title": str(book["title"]), "author": "NCERT", "subject": str(book.get("subject", "")),
+                "keywords": "QuantaEdge textbook cache; language=" + str(book["medium"]) + "; content_status=" + status,
             })
-            merged.save(staged_pdf, garbage=4, deflate=True)
+            merged_path = work / (code + "-merged.pdf")
+            merged.save(merged_path, garbage=4, deflate=True)
         finally:
             merged.close()
 
-        with fitz.open(staged_pdf) as complete:
-            if complete.needs_pass or len(complete) < 1:
-                raise ValueError("Merged NCERT book is unreadable or password-protected.")
-            page_count = len(complete)
+        with fitz.open(merged_path) as check:
+            if check.needs_pass or len(check) < 1:
+                raise ValueError("Merged NCERT PDF is unreadable or password-protected.")
+            page_count = len(check)
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(staged_pdf, destination)
-        book["pdf_url"] = chosen_url
+        shutil.copyfile(merged_path, destination)
 
-    return sha256_file(destination), page_count, toc, "Merged from official complete-book ZIP; no chapter fallback"
+    if missing:
+        method = "Merged from official NCERT sources; PARTIAL; available chapters " + ",".join(map(str, actual)) \
+            + "; missing chapters " + ",".join(map(str, missing))
+        log("BOOK_CONTENT_PARTIAL " + str(book["book_id"]) + " " + json.dumps(book["content_availability"], ensure_ascii=False))
+    else:
+        method = "Merged from official NCERT sources; all expected chapters validated"
+    return sha256_file(destination), page_count, toc, method
 
 
 def download_scert_pdf(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
@@ -1210,16 +1289,31 @@ def publish_classwise(
                             log("CLASS_IMAGE_PUBLISH_FAILED phase=" + phase + " image=" + image + ": " + message)
                             summary("- PUBLISH FAILED: " + image + " — " + message.replace("\n", " "))
 
-            # Bootstrap NCERT first, before the slower SCERT catalogue discovery.
-            ncert_catalog = discover_ncert_books()
+            # A source catalogue failure must not block other sources or published images.
+            catalogue_errors: list[dict[str, str]] = []
+            try:
+                ncert_catalog = discover_ncert_books()
+            except Exception as exc:
+                ncert_catalog = []
+                catalogue_errors.append({"source": "NCERT", "error": str(exc)})
+                log("NCERT_CATALOG_DISCOVERY_FAILED: " + str(exc))
+                summary("\n- NCERT catalogue unavailable; existing images preserved. Error: " + str(exc).replace("\n", " "))
             run_class_phase(ncert_catalog, True, "NCERT")
-            scert_catalog = discover_scert_books()
+            try:
+                scert_catalog = discover_scert_books()
+            except Exception as exc:
+                scert_catalog = []
+                catalogue_errors.append({"source": "SCERT Bihar", "error": str(exc)})
+                log("SCERT_CATALOG_DISCOVERY_FAILED: " + str(exc))
+                summary("\n- SCERT Bihar catalogue unavailable; existing images preserved. Error: " + str(exc).replace("\n", " "))
             run_class_phase(scert_catalog, False, "SCERT Bihar")
 
         reports_by_image: dict[str, list[dict[str, Any]]] = {}
         for report in reports:
             reports_by_image.setdefault(report["image"], []).append(report)
         complete_catalog = ncert_catalog + scert_catalog
+        catalogue_errors = locals().get("catalogue_errors", [])
+        has_catalogue_errors = bool(catalogue_errors)
         final_rows: list[dict[str, Any]] = []
         for medium in languages:
             for grade in classes:
@@ -1237,6 +1331,34 @@ def publish_classwise(
                 ]
                 expected_ids = {str(item["book_id"]) for item in expected}
                 missing_ids = sorted(expected_ids - cached_ids)
+                partial_by_id = {
+                    str(row.get("book_id")): row for report in phase_reports
+                    for row in report.get("partial_books", [])
+                    if row.get("book_id")
+                }
+                unavailable_by_id = {
+                    str(row.get("book_id")): row for report in phase_reports
+                    for row in report.get("unavailable_books", report.get("failed_after_retries", []))
+                    if row.get("book_id") and str(row.get("book_id")) in expected_ids
+                }
+                partial_ids = sorted(expected_ids.intersection(partial_by_id))
+                failure_by_id = {
+                    str(row.get("book_id")): row for report in phase_reports
+                    for row in report.get("failed_after_retries", []) if row.get("book_id")
+                }
+                missing_book_details = []
+                for expected_item in expected:
+                    expected_id = str(expected_item["book_id"])
+                    if expected_id not in missing_ids:
+                        continue
+                    failure = failure_by_id.get(expected_id, {})
+                    missing_book_details.append({
+                        "book_id": expected_id, "title": expected_item.get("title"),
+                        "subject": expected_item.get("subject"), "publisher": expected_item.get("publisher"),
+                        "source_url": expected_item.get("catalog_entry_url") or expected_item.get("source_url"),
+                        "status": "unavailable", "last_error": failure.get("error"),
+                        "content_availability": failure.get("content_availability"),
+                    })
                 downloaded_ids = sorted({
                     str(book_id) for report in phase_reports
                     for book_id in report.get("downloaded_and_pushed", [])
@@ -1261,17 +1383,26 @@ def publish_classwise(
                     "newly_downloaded_and_pushed": len(downloaded_ids),
                     "pushed_to_image_this_run": int(seed.get("migrated_from_legacy", 0)) + len(downloaded_ids),
                     "books_in_registry": cached_count,
-                    "remaining_expected": len(missing_ids),
+                    "remaining_expected": len(missing_ids) + len(partial_ids),
                     "missing_book_ids": missing_ids,
+                    "partial_book_ids": partial_ids,
+                    "partial_books": [partial_by_id[book_id] for book_id in partial_ids],
+                    "missing_book_details": missing_book_details,
+                    "unavailable_books": [unavailable_by_id[key] for key in sorted(unavailable_by_id)],
+                    "incomplete_book_count": len(set(missing_ids) | set(partial_ids)),
                     "failed_after_retries": failed_ids,
                     "push_failures": push_failure_count,
                     "migration_error": seed.get("migration_error"),
-                    "status": "COMPLETE" if not missing_ids and not failed_count and not push_failure_count
-                        and not seed.get("migration_error") else "INCOMPLETE",
+                    "catalogue_errors": copy.deepcopy(catalogue_errors),
+                    "status": "COMPLETE" if not missing_ids and not partial_ids and not failed_count and not push_failure_count
+                        and not seed.get("migration_error") and not has_catalogue_errors else (
+                            "PARTIAL" if not push_failure_count and not seed.get("migration_error") else "FAILED"
+                        ),
                 }
                 final_rows.append(row)
         final_report = {"layout": "class-and-medium", "image_count": len(final_rows),
-                        "images": final_rows, "updated_at": now()}
+                        "images": final_rows, "catalogue_errors": locals().get("catalogue_errors", []),
+                        "updated_at": now()}
         log("CLASSWISE_GHCR_FINAL_REPORT " + json.dumps(final_report, ensure_ascii=False))
         summary("\n## Final per-GHCR coverage summary\n\n"
                 + "| GHCR image | Catalogue books | Cached total | Migrated | Downloaded this run | Pushed this run | Remaining | Failed | Status |\n"
@@ -1287,11 +1418,14 @@ def publish_classwise(
         summary("\nThe same class/medium image and its index are checked before each source download. "
                 "A successful book ID is skipped on later runs; only missing books are eligible for download.")
         incomplete = any(row["status"] != "COMPLETE" for row in final_rows)
-        source_failures = (
-            any(report.get("failed_after_retries") or report.get("push_failures") for report in reports)
+        # Source content gaps are persisted and reported, but must not prevent other
+        # class/medium images from publishing. Only publication/migration failures fail the action.
+        critical_failures = (
+            any(report.get("push_failures") for report in reports)
             or any(seed.get("migration_error") for seed in seed_reports.values())
         )
-        final_report["exit_code"] = 1 if source_failures or (incomplete and not book_code and max_books == 0) else 0
+        final_report["content_incomplete"] = incomplete
+        final_report["exit_code"] = 1 if critical_failures else 0
         return final_report
 
 
@@ -1337,8 +1471,18 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         if not selected:
             raise ValueError("No " + language + " book matched " + book_code)
 
-    already_cached = [item["book_id"] for item in selected if item["book_id"] in existing and not refresh]
-    candidates = [item for item in selected if refresh or item["book_id"] not in existing]
+    def entry_is_complete(entry: dict[str, Any] | None) -> bool:
+        coverage = (entry or {}).get("content_availability")
+        return not isinstance(coverage, dict) or coverage.get("status", "complete") == "complete"
+
+    already_cached = [
+        item["book_id"] for item in selected
+        if item["book_id"] in existing and not refresh and entry_is_complete(existing[item["book_id"]])
+    ]
+    candidates = [
+        item for item in selected
+        if refresh or item["book_id"] not in existing or not entry_is_complete(existing.get(item["book_id"]))
+    ]
     books_present_before_run = len(existing)
     if max_books > 0:
         candidates = candidates[:max_books]
@@ -1398,8 +1542,13 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
             candidate_status = candidate_index.setdefault("download_status", {})
             for book_id in batch_ids:
                 item = ready_for_push[book_id]
+                coverage = item["entry"].get("content_availability") or {"status": "complete"}
                 candidate_status[book_id] = {
-                    "status": "cached",
+                    "status": "partial" if coverage.get("status") == "partial" else "cached",
+                    "content_availability": copy.deepcopy(coverage),
+                    "title": item["entry"].get("title", book_id),
+                    "publisher": item["entry"].get("publisher"),
+                    "source_url": item["entry"].get("source_url") or item["entry"].get("catalog_entry_url"),
                     "attempts_this_run": attempt_in_this_run.get(book_id, 0),
                     "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
                     "sha256": item["entry"]["sha256"],
@@ -1484,8 +1633,12 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                             unchanged.append(book_id)
                             resolved_ids.add(book_id)
                             failed_downloads.pop(book_id, None)
+                            coverage = book.get("content_availability") or {"status": "complete"}
                             index.setdefault("download_status", {})[book_id] = {
-                                "status": "cached",
+                                "status": "partial" if coverage.get("status") == "partial" else "cached",
+                                "content_availability": copy.deepcopy(coverage),
+                                "title": book.get("title", book_id),
+                                "source_url": book.get("source_url") or book.get("catalog_entry_url"),
                                 "sha256": digest,
                                 "bytes": pdf_path.stat().st_size,
                                 "attempts_this_run": attempt_in_this_run.get(book_id, 0),
@@ -1502,8 +1655,12 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                                 book, digest, pages, toc, method, pdf_path, class_no),
                         }
                         previous_status = index.setdefault("download_status", {}).get(book_id, {})
+                        coverage = book.get("content_availability") or {"status": "complete"}
                         index["download_status"][book_id] = {
                             "status": "downloaded_pending_push",
+                            "content_availability": copy.deepcopy(coverage),
+                            "title": book.get("title", book_id),
+                            "source_url": book.get("source_url") or book.get("catalog_entry_url"),
                             "attempts_this_run": attempt_in_this_run.get(book_id, 0),
                             "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run.get(book_id, 0),
                             "sha256": digest,
@@ -1514,8 +1671,22 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         previous_status = index.setdefault("download_status", {}).get(book_id, {})
                         history = list(previous_status.get("attempt_history", []))
                         history.append({"round": round_no, "at": now(), "error": str(exc)})
+                        coverage = book.get("content_availability")
+                        if not isinstance(coverage, dict) and book.get("source_type") == "NCERT":
+                            expected = list(range(1, int(book.get("chapter_count") or 0) + 1))
+                            coverage = {
+                                "status": "unavailable", "expected_chapters": expected,
+                                "available_chapters": [], "missing_chapters": expected,
+                                "missing_chapter_labels": ["Chapter " + str(n) for n in expected],
+                                "checked_at": now(),
+                                "note": "No usable book/chapter PDF was produced; retry on a later run.",
+                            }
                         index["download_status"][book_id] = {
                             "status": "failed" if attempt_in_this_run[book_id] >= retry_rounds else "retry_pending",
+                            "content_availability": copy.deepcopy(coverage) if coverage else None,
+                            "title": book.get("title", book_id),
+                            "publisher": book.get("publisher"),
+                            "source_url": book.get("source_url") or book.get("catalog_entry_url"),
                             "attempts_this_run": attempt_in_this_run[book_id],
                             "attempts_total": initial_attempt_totals.get(book_id, 0) + attempt_in_this_run[book_id],
                             "last_error": str(exc),
@@ -1525,6 +1696,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
                         failed_downloads[book_id] = {
                             "book_id": book_id, "title": book["title"],
                             "attempts_this_run": attempt_in_this_run[book_id], "error": str(exc),
+                            "content_availability": copy.deepcopy(coverage) if coverage else None,
                         }
                         log("BOOK_FAILED round=" + str(round_no) + " "
                             + json.dumps(failed_downloads[book_id], ensure_ascii=False))
@@ -1597,6 +1769,30 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
         "downloaded_and_pushed": downloaded,
         "unchanged_after_refresh": unchanged,
         "failed_after_retries": list(failed_downloads.values()),
+        "partial_books": [
+            {
+                "book_id": entry.get("book_id"), "title": entry.get("title"),
+                "content_availability": copy.deepcopy(entry.get("content_availability")),
+                "last_error": index.get("download_status", {}).get(entry.get("book_id"), {}).get("last_error"),
+            }
+            for entry in existing.values()
+            if isinstance(entry.get("content_availability"), dict)
+            and entry["content_availability"].get("status") == "partial"
+        ],
+        "unavailable_books": [
+            {
+                "book_id": row.get("book_id"), "title": row.get("title"),
+                "error": row.get("error"),
+                "content_availability": copy.deepcopy(row.get("content_availability")),
+            }
+            for row in failed_downloads.values()
+        ],
+        "complete_book_count": sum(1 for entry in existing.values() if entry_is_complete(entry)),
+        "partial_book_count": sum(
+            1 for entry in existing.values()
+            if isinstance(entry.get("content_availability"), dict)
+            and entry["content_availability"].get("status") == "partial"
+        ),
         "push_failures": [{"book_id": key, "error": value} for key, value in push_failures.items()],
         "books_in_registry": len(index.get("books", [])),
         "cached_book_ids": sorted(str(book_id) for book_id in existing.keys()),
@@ -1618,6 +1814,16 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
             + "- Registry image books total: " + str(len(index.get("books", []))) + "\n"
             + "- Download workers: " + str(download_workers) + "; push batch size: " + str(push_batch_size)
             + "; retry rounds: " + str(retry_rounds) + "\n")
+    if report["partial_books"]:
+        summary("\n### Books cached with missing chapters\n\n"
+                + "| Book ID | Title | Available chapters | Missing chapters | Next action |\n|---|---|---|---|---|\n"
+                + "\n".join(
+                    "| " + str(row["book_id"]) + " | " + str(row.get("title", "")).replace("|", "\\|")
+                    + " | " + ", ".join(map(str, (row.get("content_availability") or {}).get("available_chapters", [])))
+                    + " | " + ", ".join(map(str, (row.get("content_availability") or {}).get("missing_chapters", [])))
+                    + " | Retry later; cached partial PDF is preserved |"
+                    for row in report["partial_books"]
+                ) + "\n")
     if failed_downloads:
         summary("\n### Books not downloaded after retry rounds\n\n"
                 + "| Book ID | Title | Attempts | Last error |\n|---|---|---:|---|\n"
@@ -1633,7 +1839,7 @@ def publish_language(language: str, image: str, book_code: str | None = None, re
 
 
 def _download_full_book(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str, Path]:
-    """Worker entry: download and validate one complete book, never a partial fallback."""
+    """Worker entry: download and validate a complete or explicitly marked partial book."""
     if book["source_type"] == "NCERT":
         digest, pages, toc, method = download_ncert_merged(book, destination)
     else:
@@ -1651,30 +1857,40 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
     subprocess.run(["docker", "create", "--name", container, image, "/__quantaedge_cache_inspection_only"], check=True, stdout=subprocess.DEVNULL)
     temp_index = output_dir / ".index.json.download"
     copied = reused = 0
+    file_failures: list[dict[str, str]] = []
     try:
         subprocess.run(["docker", "cp", container + ":/index.json", str(temp_index)], check=True)
         index = json.loads(temp_index.read_text(encoding="utf-8"))
         if not isinstance(index.get("books"), list):
             raise ValueError("Textbook image has an invalid index.json.")
         for item in index["books"]:
+            book_id = str(item.get("book_id", "unknown"))
             relative = Path(str(item.get("file", "")))
             if relative.is_absolute() or not relative.parts or ".." in relative.parts:
-                raise ValueError("Unsafe file path in registry index for " + str(item.get("book_id", "unknown")))
+                file_failures.append({"book_id": book_id, "error": "Unsafe relative path in index."})
+                continue
             target = output_dir / relative
             expected = str(item.get("sha256", ""))
             if target.is_file() and expected and sha256_file(target) == expected:
                 reused += 1
                 continue
+            # Never leave a stale or corrupt local copy eligible for ZIP export if its refresh fails.
+            target.unlink(missing_ok=True)
             target.parent.mkdir(parents=True, exist_ok=True)
             staged = target.with_name(target.name + ".download")
             source = "/" + relative.as_posix().lstrip("/")
-            subprocess.run(["docker", "cp", container + ":" + source, str(staged)], check=True)
-            if not staged.is_file() or not expected or sha256_file(staged) != expected:
+            try:
+                subprocess.run(["docker", "cp", container + ":" + source, str(staged)], check=True)
+                if not staged.is_file() or not expected or sha256_file(staged) != expected:
+                    raise ValueError("Checksum verification failed while extracting " + book_id)
+                staged.replace(target)
+                copied += 1
+            except Exception as exc:
                 staged.unlink(missing_ok=True)
-                raise ValueError("Checksum verification failed while extracting " + str(item.get("book_id", "unknown")))
-            staged.replace(target)
-            copied += 1
-        # Swap index only after every declared PDF has passed SHA-256 verification.
+                file_failures.append({"book_id": book_id, "error": str(exc)})
+                log("PULL_BOOK_MISSING " + book_id + ": " + str(exc))
+        # Export the index even when some PDF files are missing; the manifest shows gaps.
+        temp_index.replace(output_dir / "index.json")        # Swap index only after every declared PDF has passed SHA-256 verification.
         temp_index.replace(output_dir / "index.json")
     finally:
         temp_index.unlink(missing_ok=True)
@@ -1682,7 +1898,8 @@ def pull_image(image: str, output_dir: Path) -> dict[str, Any]:
     index = json.loads((output_dir / "index.json").read_text(encoding="utf-8"))
     report = {
         "image": image, "output_dir": str(output_dir), "book_count": len(index.get("books", [])),
-        "downloaded_or_updated_files": copied, "reused_local_files": reused, "checksum_failures": [],
+        "downloaded_or_updated_files": copied, "reused_local_files": reused,
+        "checksum_failures": file_failures, "missing_files": file_failures,
     }
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return report
@@ -1755,6 +1972,16 @@ def prepare_library(registry_dir: Path, output_dir: Path) -> dict[str, Any]:
     bundle_dir.mkdir(parents=True, exist_ok=True)
     report: dict[str, Any] = {"registry": str(registry_dir), "output_dir": str(output_dir),
                               "books_seen": len(books), "pdfs_created": 0, "bundles_created": 0,
+                              "partial_books": [
+                                  {
+                                      "book_id": item.get("book_id"), "title": item.get("title"),
+                                      "available_chapters": (item.get("content_availability") or {}).get("available_chapters", []),
+                                      "missing_chapters": (item.get("content_availability") or {}).get("missing_chapters", []),
+                                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                                  }
+                                  for item in books
+                                  if (item.get("content_availability") or {}).get("status") == "partial"
+                              ],
                               "whole_books_over_library_limit": [], "no_verified_chapter_boundaries": [],
                               "too_large_chapter_assets": [], "failures": []}
     max_library_bytes = 50 * 1024 * 1024
@@ -1804,6 +2031,8 @@ def prepare_library(registry_dir: Path, output_dir: Path) -> dict[str, Any]:
                 "language": item.get("medium"), "class": item.get("class"), "classes": item.get("classes"),
                 "subject": item.get("subject"), "book_id": item.get("book_id"),
                 "scope": "SUBJECT_BOOK" if chapter_title is None else "CHAPTER_PDF",
+                "content_availability": item.get("content_availability") or {"status": "complete"},
+                "asset_content_status": (item.get("content_availability") or {}).get("status", "complete"),
                 "chapter_title": chapter_title, "chapter_page_start": page_start,
                 "chapter_page_end": page_end, "original_book_sha256": item.get("sha256"),
             },
@@ -1951,7 +2180,8 @@ def main(argv: list[str] | None = None) -> int:
                             retry_rounds=args.retry_rounds,
                         ))
             print(json.dumps({"results": reports}, ensure_ascii=False, indent=2))
-            return 1 if any(report["failed_after_retries"] or report["push_failures"] for report in reports) else 0
+            # Source gaps are included in reports; missing books are retried on later runs.
+            return 1 if any(report["push_failures"] for report in reports) else 0
         pull_image(args.image, args.output_dir)
         return 0
     except (ValueError, RuntimeError, OSError, subprocess.CalledProcessError, zipfile.BadZipFile) as exc:

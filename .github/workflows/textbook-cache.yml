@@ -61,9 +61,9 @@ permissions:
 
 concurrency:
   group: quantaedge-textbook-cache-final
-  # Every completed class/medium batch is durable. The next run resumes from image indexes.
-  # Supersede obsolete publishers instead of leaving the newest catalogue audit queued for hours.
-  cancel-in-progress: true
+  # Do not cancel an in-flight publisher after it has begun changing persistent class images.
+  # New runs resume from the same image indexes after the active run exits.
+  cancel-in-progress: false
 
 jobs:
   cache-textbooks:
@@ -100,8 +100,9 @@ jobs:
             echo
             echo "Fourteen persistent GHCR images: Classes 6–12 × Hindi/English."
             echo "Each class image is checked before downloading; successful whole-book IDs are skipped on reruns."
-            echo "Whole books download in parallel; up to five rounds retry only failed books. No arbitrary size cap; no NCERT chapter fallback."
-            echo "The final action summary reports expected, cached, migrated, downloaded, pushed, remaining and failed counts per image."
+            echo "Books download in parallel; incomplete NCERT bundles fall back to individual official chapter PDFs."
+            echo "Missing books and chapters are persisted in GHCR indexes and per-class/medium ZIP availability reports; content gaps do not stop other images."
+            echo "Only registry publication or inventory-integrity errors fail the cache run."
             echo "Optional ZIP artifacts last 90 days; GHCR :latest images are the persistent store."
             echo
             echo "- Repository: ${{ github.repository }}"
@@ -166,7 +167,7 @@ jobs:
                 continue
               fi
               python - "$target" "$out_root" "$grade" "$medium" <<'PY'
-          import json, sys, zipfile
+          import hashlib, json, sys, zipfile
           from pathlib import Path
           source = Path(sys.argv[1])
           out = Path(sys.argv[2])
@@ -174,16 +175,76 @@ jobs:
           medium = sys.argv[4]
           index = json.loads((source / "index.json").read_text(encoding="utf-8"))
           items = index.get("books", [])
+          statuses = index.get("download_status", {})
           archive_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.zip"
+          included = []
+          absent = []
+          partial = []
+          valid_files = {}
+          def sha256_file(path):
+              digest = hashlib.sha256()
+              with path.open("rb") as handle:
+                  for block in iter(lambda: handle.read(1024 * 1024), b""):
+                      digest.update(block)
+              return digest.hexdigest()
+          for item in items:
+              coverage = item.get("content_availability") or {}
+              if coverage.get("status") == "partial":
+                  partial.append({
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "partial", "available_chapters": coverage.get("available_chapters", []),
+                      "missing_chapters": coverage.get("missing_chapters", []),
+                      "note": coverage.get("note"),
+                      "source_url": item.get("catalog_entry_url") or item.get("source_url"),
+                  })
+              relative = Path(str(item.get("file", "")))
+              pdf = source / relative
+              expected_hash = str(item.get("sha256", "")).lower()
+              if (relative.is_absolute() or not relative.parts or ".." in relative.parts
+                      or not pdf.is_file() or len(expected_hash) != 64 or sha256_file(pdf) != expected_hash):
+                  absent.append({
+                      "book_id": item.get("book_id"), "title": item.get("title"),
+                      "status": "file_missing_or_checksum_mismatch",
+                      "error": f"Indexed PDF is missing, unsafe, or failed SHA-256 verification: {relative}",
+                      "content_availability": coverage,
+                  })
+              else:
+                  valid_files[str(item.get("book_id", ""))] = (pdf, relative)
+          unavailable = []
+          for book_id, status in statuses.items():
+              if not isinstance(status, dict):
+                  continue
+              state = str(status.get("status", ""))
+              coverage = status.get("content_availability") or {}
+              if state in ("failed", "retry_pending", "downloaded_pending_push") or coverage.get("status") == "unavailable":
+                  unavailable.append({
+                      "book_id": book_id, "title": status.get("title", book_id),
+                      "status": state or "unavailable", "last_error": status.get("last_error"),
+                      "content_availability": coverage, "source_url": status.get("source_url"),
+                  })
+          report = {
+              "schema_version": 1,
+              "image": index.get("registry", f"quantaedge-textbooks-class-{grade}-{medium}"),
+              "class": grade, "medium": medium, "registry_book_count": len(items),
+              "complete_books": sum(1 for item in items if (item.get("content_availability") or {}).get("status", "complete") == "complete"),
+              "partial_books": partial, "unavailable_books": unavailable,
+              "indexed_files_missing_from_export": absent, "download_status": statuses,
+              "note": "ZIP contains every cached PDF that could be verified; review this report before treating any partial book as complete.",
+          }
+          report_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.availability.json"
+          report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
               archive.writestr("index.json", json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+              archive.writestr("availability-report.json", json.dumps(report, ensure_ascii=False, indent=2) + "\n")
               for item in items:
-                  relative = Path(item["file"])
-                  pdf = source / relative
-                  if not pdf.is_file():
-                      raise FileNotFoundError(f"{medium} Class {grade}: {item.get('book_id')} PDF missing at {pdf}")
+                  book_id = str(item.get("book_id", ""))
+                  if book_id not in valid_files:
+                      continue
+                  pdf, relative = valid_files[book_id]
                   archive.write(pdf, relative.as_posix())
-          print(f"DOWNLOAD_BUNDLE {archive_path.name} books={len(items)} bytes={archive_path.stat().st_size}")
+                  included.append(book_id)
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} books_in_index={len(items)} pdfs_included={len(included)} partial={len(partial)} unavailable={len(unavailable)} missing_files={len(absent)} bytes={archive_path.stat().st_size}")
+          print(f"AVAILABILITY_REPORT {report_path.name}")
           PY
             done
           done
