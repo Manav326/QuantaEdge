@@ -1,6 +1,10 @@
 spring:
   application:
     name: quantaedge-api
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 52MB
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/quantaedge}
     username: ${SPRING_DATASOURCE_USERNAME:quantaedge}
