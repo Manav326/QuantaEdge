@@ -90,6 +90,18 @@ public class TextbookCacheService {
   }
 
   public CachedBook requireBook(String medium, String bookId) {
+    return resolveBook(medium, bookId, null, true);
+  }
+
+  /** Re-resolve a previously verified job without re-hashing a huge book for every preview. */
+  public CachedBook requireBookForJob(String medium, String bookId, String expectedSha256) {
+    if (expectedSha256 == null || !expectedSha256.matches("(?i)[0-9a-f]{64}")) {
+      throw new IllegalArgumentException("The ingestion job has no valid expected whole-book checksum.");
+    }
+    return resolveBook(medium, bookId, expectedSha256.toLowerCase(Locale.ROOT), false);
+  }
+
+  private CachedBook resolveBook(String medium, String bookId, String expectedSha256, boolean verifyHash) {
     String language = normalizeMedium(medium);
     if (bookId == null || bookId.isBlank() || bookId.length() > 240) {
       throw new IllegalArgumentException("A valid cached textbook ID is required.");
@@ -115,14 +127,12 @@ public class TextbookCacheService {
       if (size < 5 || (declaredSize >= 0 && size != declaredSize)) {
         throw new IllegalArgumentException("The cached PDF size does not match index.json for " + bookId + ".");
       }
-      String expectedHash = string(item.get("sha256")).toLowerCase(Locale.ROOT);
-      if (!expectedHash.matches("[0-9a-f]{64}")) {
+      String indexHash = string(item.get("sha256")).toLowerCase(Locale.ROOT);
+      if (!indexHash.matches("[0-9a-f]{64}")) {
         throw new IllegalArgumentException("The cached book SHA-256 is invalid for " + bookId + ".");
       }
-      String actualHash = safeSha256(pdfPath);
-      if (!expectedHash.equals(actualHash)) {
-        throw new IllegalArgumentException("The cached whole-book checksum does not match for " + bookId
-            + ". Re-sync GHCR before ingesting it.");
+      if (expectedSha256 != null && !expectedSha256.equals(indexHash)) {
+        throw new IllegalArgumentException("The cached book changed since this ingestion job was created. Start a new job.");
       }
       byte[] signature = new byte[5];
       try (InputStream input = Files.newInputStream(pdfPath)) {
@@ -130,16 +140,23 @@ public class TextbookCacheService {
             || signature[2] != 'D' || signature[3] != 'F' || signature[4] != '-') {
           throw new IllegalArgumentException("The cache entry " + bookId + " is not a PDF.");
         }
+      } catch (IOException ex) {
+        throw new IllegalArgumentException("Could not read the cached PDF signature for " + bookId + ".", ex);
+      }
+      if (verifyHash && !indexHash.equals(safeSha256(pdfPath))) {
+        throw new IllegalArgumentException("The cached whole-book checksum does not match for " + bookId
+            + ". Re-sync GHCR before ingesting it.");
       }
       return new CachedBook(
           bookId, string(item.get("title")), string(item.get("publisher")),
           string(item.get("source_type")), intValue(item.get("class"), classes(item).stream().findFirst().orElse(0)),
           classes(item), language, string(item.get("subject")), string(item.get("source_url")),
           string(item.get("catalog_entry_url")), string(item.get("pdf_url")), string(item.get("bundle_url")),
-          string(item.get("edition")), expectedHash, size, intValue(item.get("page_count"), 0), pdfPath);
+          string(item.get("edition")), indexHash, size, intValue(item.get("page_count"), 0), pdfPath);
     }
     throw new IllegalArgumentException("Textbook " + bookId + " is not listed in the " + language + " GHCR cache.");
   }
+
 
   public int classNumber(String classCode, String className) {
     String combined = string(classCode) + " " + string(className);
