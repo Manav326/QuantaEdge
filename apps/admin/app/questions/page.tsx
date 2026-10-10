@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 type QuestionRow = {
   question_id:number; lesson_id:number; question_type:string; prompt:string;
   explanation?:string; review_status:string; review_notes?:string|null; active:boolean;
+  difficulty?:string; source_kind?:string; source_title?:string|null; source_ref?:string|null;
+  source_year?:number|null; board?:string|null; marks?:number|null; exam_format?:string|null;
   lesson_title:string; lesson_status:string; chapter_name:string; class_code:string;
   class_name:string; subject_code:string; subject_name:string; topic?:string|null; subtopic?:string|null;
   options?:string; history_count?:number; latest_history_reason?:string|null;
@@ -46,6 +48,8 @@ export default function QuestionReviewPage(){
   const [historyFor,setHistoryFor]=useState<number|null>(null);
   const [history,setHistory]=useState<HistoryEntry[]>([]);
   const [historyLoading,setHistoryLoading]=useState(false);
+  const [canManage,setCanManage]=useState(false);
+  const [permissionLoading,setPermissionLoading]=useState(true);
 
   const load=useCallback(async()=>{
     setLoading(true);setError('');
@@ -60,7 +64,25 @@ export default function QuestionReviewPage(){
 
   useEffect(()=>{void load();},[load]);
 
+  useEffect(()=>{
+    let active=true;
+    api('/api/v1/auth/me')
+      .then(me=>{
+        if(!active)return;
+        const role=String(me.role||'').toUpperCase();
+        const permissions=Array.isArray(me.permissions)?me.permissions:[];
+        setCanManage(role==='ADMIN'||permissions.includes('CONTENT_REVIEW'));
+      })
+      .catch(()=>{if(active)setCanManage(false);})
+      .finally(()=>{if(active)setPermissionLoading(false);});
+    return()=>{active=false;};
+  },[]);
+
   async function act(row:QuestionRow,nextStatus:'APPROVED'|'REJECTED'|'DRAFT'|'REVIEW'){
+    if(!canManage){
+      setError('Your account can view questions but does not have permission to approve or reject them. Ask an administrator for CONTENT_REVIEW access.');
+      return;
+    }
     if(row.lesson_status!=='REVIEW'){
       setError('Submit this micro-topic for review in Content Studio before changing question review status.');
       return;
@@ -139,25 +161,28 @@ export default function QuestionReviewPage(){
         {loading?<p className="admin-loading">Loading question history and current statuses…</p>:rows.length===0?<div className="admin-empty-state"><h3>No questions match this filter</h3><p>Try another status or search term. New questions appear after saving them in Content Studio.</p></div>:
           <div style={{display:'grid',gap:14}}>
             {rows.map(row=>{
-              const options=parse(row.options,[]) as {key:string;label:string}[];
+              const options=parse(row.options,[]) as {key:string;label:string;is_correct?:boolean}[];
               const rejected=row.review_status==='REJECTED';
-              const canReview=row.lesson_status==='REVIEW';
+              const canReview=row.lesson_status==='REVIEW'&&canManage&&!permissionLoading;
               return <article key={row.question_id} style={{border:'1px solid #e1e5ed',borderRadius:14,padding:16,background:'#fff'}}>
                 <div style={{display:'flex',gap:10,justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap'}}>
                   <div><div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}><strong>Question #{row.question_id}</strong><span className="admin-live-label">{row.review_status}</span>{!row.active&&<span className="admin-live-label">INACTIVE</span>}</div>
                     <p style={{margin:'7px 0 3px',fontSize:13,color:'#647084'}}>{row.class_name} · {row.subject_name} · {row.chapter_name} · {row.lesson_title}</p>
                     <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>Micro-topic status: <b>{row.lesson_status}</b>{row.topic?' · Topic: '+row.topic:''}{row.subtopic?' / '+row.subtopic:''}</p>
+                    <p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>Question type: {row.question_type} · Difficulty: {row.difficulty||'—'}{row.marks?' · '+row.marks+' marks':''}{row.exam_format?' · '+row.exam_format:''}</p>
+                    {(row.source_title||row.source_ref||row.board||row.source_year)&&<p style={{margin:'4px 0',fontSize:13,color:'#647084'}}>Source: {[row.source_title,row.board,row.source_year,row.source_ref].filter(Boolean).join(' · ')}</p>}
                   </div>
                   <button type="button" className="text-link" onClick={()=>void showHistory(row.question_id)}>{historyFor===row.question_id?'History selected':'View full history'} · {row.history_count||0}</button>
                 </div>
                 <h3 style={{fontSize:17,lineHeight:1.5,margin:'12px 0'}}>{row.prompt}</h3>
-                {options.length>0&&<ol type="A" style={{paddingLeft:24,margin:'8px 0',display:'grid',gap:5}}>{options.map((o,i)=><li key={o.key||i}>{o.label}</li>)}</ol>}
+                {options.length>0&&<ol type="A" style={{paddingLeft:24,margin:'8px 0',display:'grid',gap:5}}>{options.map((o,i)=><li key={o.key||i}>{o.label}{o.is_correct&&<span style={{marginLeft:8,fontSize:12,fontWeight:700,color:'#147848'}}>✓ Correct answer</span>}</li>)}</ol>}
                 {row.explanation&&<p style={{fontSize:14,color:'#4b5565'}}><b>Explanation:</b> {row.explanation}</p>}
                 <div style={{marginTop:12,padding:'11px 13px',borderRadius:10,background:rejected?'#fff3ef':'#f5f7fa',color:rejected?'#893b28':'#475467'}}>
                   <b>{rejected?'Reason for rejection / return':'Latest reviewer note'}</b>
                   <p style={{margin:'5px 0 0'}}>{row.review_notes||row.latest_history_reason||(rejected?'This is a legacy rejection with no saved reason. The earlier reason cannot be reconstructed; review it and add a clear note.':'No reviewer note saved yet.')}</p>
                 </div>
-                {!canReview&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>Review actions are locked until this micro-topic is submitted for review. The question remains parked here and is not shown to students unless approved and published. Open <a href="/content" style={{textDecoration:'underline',fontWeight:600}}>Content Studio</a> to revise or submit its micro-topic.</p>}
+                {!canManage&&!permissionLoading&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>View-only access: an administrator must grant CONTENT_REVIEW permission before status changes can be made.</p>}
+                {canManage&&row.lesson_status!=='REVIEW'&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>Review actions are locked until this micro-topic is submitted for review. The question remains parked here and is not shown to students unless approved and published. Open <a href="/content" style={{textDecoration:'underline',fontWeight:600}}>Content Studio</a> to revise or submit its micro-topic.</p>}
                 <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:14}}>
                   <button type="button" className="button button-dark" disabled={!canReview||busyId===row.question_id||row.review_status==='APPROVED'||row.review_status==='PUBLISHED'} onClick={()=>void act(row,'APPROVED')}>{busyId===row.question_id?'Saving…':'Approve'}</button>
                   <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status==='REJECTED'} onClick={()=>void act(row,'REJECTED')}>Reject / return with reason</button>
