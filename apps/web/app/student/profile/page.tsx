@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from '../../components/LanguageProvider';
+
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -108,7 +110,7 @@ export default function StudentProfilePage() {
       try {
         const response = await fetch('/api/v1/students/me/profile');
         if (response.status === 401 || response.status === 403) {
-          router.replace('/login');
+          router.replace('/login/student');
           return;
         }
         const body = await readJson(response);
