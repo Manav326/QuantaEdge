@@ -95,7 +95,7 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual("scert-bihar-1707973674-hindi", item["book_id"])
         self.assertEqual([6], item["classes"])
         self.assertEqual("hindi", item["medium"])
-        self.assertEqual("Science", item["source_type"] and "Science" if "science" in item["subject"].casefold() else "not-normalized")
+        self.assertIn("विज्ञान", item["subject"])
         self.assertEqual("https://scert.bihar.gov.in/public/uploads/eresources/vigyan-bhag-1.pdf", item["pdf_url"])
 
     def test_scert_detail_parser_splits_bilingual_entry_into_two_class_medium_records(self):
