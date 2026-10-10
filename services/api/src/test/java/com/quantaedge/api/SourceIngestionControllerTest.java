@@ -44,6 +44,28 @@ class SourceIngestionControllerTest {
   }
 
   @Test
+  void sourceMetadataUpdateRequiresContentReviewPermission() {
+    when(authorization.requirePermission(null, "CONTENT_REVIEW"))
+        .thenThrow(new SecurityException("Permission required: CONTENT_REVIEW"));
+
+    assertThrows(SecurityException.class, () -> controller.updateJobMetadata(44L, Map.of(
+        "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
+        "edition", "2025 reprint"), null));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void verifiedEditionCannotBeUnverifiedBeforeDatabaseUpdate() {
+    when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.updateJobMetadata(44L, Map.of(
+            "sourceTitle", "Book", "sourceUrl", "https://ncert.nic.in/textbook.php",
+            "edition", "UNVERIFIED"), reviewer));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
   void finalApprovalCanExcludeRejectedChapterCandidates() {
     Map<String, Object> approved = Map.of("status", "APPROVED", "chapter_id", 12L);
     Map<String, Object> rejected = Map.of("status", "REJECTED", "chapter_id", 13L);

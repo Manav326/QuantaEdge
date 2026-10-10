@@ -357,6 +357,41 @@ public class SourceIngestionController {
     return jobDetails(jobId);
   }
 
+  @PatchMapping("/jobs/{jobId}/metadata")
+  @Transactional
+  public Map<String, Object> updateJobMetadata(
+      @PathVariable long jobId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
+    String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
+    if (!sourceUrl.regionMatches(true, 0, "https://", 0, 8)) {
+      throw badRequest("The reviewed source URL must use HTTPS.");
+    }
+    String edition = requiredText(body.get("edition"), "edition", 160);
+    if (isUnverifiedEdition(edition)) {
+      throw badRequest("Enter the actual printed edition, reprint year, or academic session after checking the book.");
+    }
+    Map<String, Object> job = jobRow(jobId);
+    if (!"REVIEW".equals(String.valueOf(job.get("status")))) {
+      throw badRequest("Source metadata can be edited after the whole-book inspection finishes and before final approval.");
+    }
+    long sourceId = ((Number) job.get("source_id")).longValue();
+    jdbc.update("""
+      update source_ingestion_job
+      set source_title=?,source_url=?,edition=?,updated_at=now()
+      where id=?
+      """, sourceTitle, sourceUrl, edition, jobId);
+    jdbc.update("""
+      update content_source
+      set title=?,source_url=?,edition=?,updated_at=now()
+      where id=?
+      """, sourceTitle, sourceUrl, edition, sourceId);
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/jobs/" + jobId + "/metadata",
+        "Updated official source title, URL and verified edition/session before chapter approval.");
+    return jobDetails(jobId);
+  }
+
   @PostMapping("/jobs/{jobId}/chapters")
   @Transactional
   public Map<String, Object> splitIntoChapters(
@@ -476,6 +511,9 @@ public class SourceIngestionController {
     Map<String, Object> job = jobRow(jobId);
     if ("APPROVED".equals(String.valueOf(job.get("status")))) return jobDetails(jobId);
     if (!"REVIEW".equals(String.valueOf(job.get("status")))) throw badRequest("Only a downloaded book in review can be approved.");
+    if (isUnverifiedEdition(String.valueOf(job.get("edition")))) {
+      throw badRequest("Verify the printed edition/reprint year or academic session and save source metadata before approval.");
+    }
     List<Map<String, Object>> chapters = jdbc.queryForList("""
       select ch.id,ch.chapter_id,ch.chapter_title,ch.page_start,ch.page_end,ch.pdf_asset_id,ch.status,
              a.page_count,a.title as asset_title
@@ -797,6 +835,18 @@ public class SourceIngestionController {
 
   private boolean hasText(Object value) {
     return value != null && !String.valueOf(value).isBlank();
+  }
+
+  private boolean isUnverifiedEdition(String value) {
+    String normalized = value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+    return normalized.isBlank()
+        || normalized.equals("unverified")
+        || normalized.equals("unknown")
+        || normalized.equals("tbd")
+        || normalized.equals("n/a")
+        || normalized.contains("verify edition")
+        || normalized.contains("to be verified")
+        || normalized.contains("not specified");
   }
 
   private Long optionalLong(Object value, String name) {

@@ -150,6 +150,11 @@ export default function SourceIngestionPage() {
   const loadJob = useCallback(async (id: number) => {
     const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
     setJob(item);
+    setSelectedSource(String(item.source_id));
+    setSourceTitle(item.source_title || '');
+    setSourceUrl(item.source_url || '');
+    setEdition(item.edition || 'UNVERIFIED');
+    setLanguage(item.language || 'hi');
     setPreviewPage('1');
     setPreviewChapterRow('');
     const rows = await api('/api/v1/admin/content?classCode=' + encodeURIComponent(item.class_code)
@@ -287,6 +292,42 @@ export default function SourceIngestionPage() {
       };
     });
     setMapping(next);
+  }
+
+  async function saveJobMetadata() {
+    if (!job) return;
+    if (!sourceTitle.trim() || !sourceUrl.trim() || !edition.trim()) {
+      setError('Source title, official HTTPS URL, and the printed edition/reprint year or session are required before approval.');
+      return;
+    }
+    if (!/^https:\/\//i.test(sourceUrl.trim())) {
+      setError('The reviewed source URL must use HTTPS.');
+      return;
+    }
+    if (/^(unverified|unknown|tbd|n\/a)$/i.test(edition.trim())
+        || /verify edition|to be verified|not specified/i.test(edition.trim())) {
+      setError('Read the book cover or publication page and enter the printed edition, reprint year, or academic session.');
+      return;
+    }
+    setBusy(true); setError(''); setNotice('');
+    try {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/metadata', {
+        method: 'PATCH',
+        body: JSON.stringify({
+          sourceTitle: sourceTitle.trim(),
+          sourceUrl: sourceUrl.trim(),
+          edition: edition.trim(),
+        }),
+      }));
+      setJob(updated);
+      setSourceTitle(updated.source_title || '');
+      setSourceUrl(updated.source_url || '');
+      setEdition(updated.edition || '');
+      await loadBase();
+      setNotice('Official source metadata saved. You can continue chapter mapping and review.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Source metadata could not be saved.');
+    } finally { setBusy(false); }
   }
 
   async function splitChapters() {
@@ -538,6 +579,11 @@ export default function SourceIngestionPage() {
           <p>{job.class_name} · {job.subject_name} · {job.edition} · {job.page_count || '—'} pages · <b>{job.status}</b></p></div>
           <span className={styles.bigStatus}>{job.status}</span></div>
         {job.error_message && <div className={styles.error}>{job.error_message}</div>}
+        {job.status === 'REVIEW' && <div className={styles.metadataReview}>
+          <div><b>Source provenance</b><p>Before approving this book, verify the printed edition/reprint year or academic session in the PDF. Edit the source title, official HTTPS URL and edition in Step 01 above, then save them here.</p></div>
+          <button className={styles.secondary} type="button" disabled={busy}
+            onClick={() => void saveJobMetadata()}>Save verified source metadata</button>
+        </div>}
         {job.status === 'DOWNLOADING' && <div className={styles.empty}>The source is being checked and downloaded. Select “Refresh status” above to see the detected PDF outline.</div>}
         {job.status === 'REVIEW' && <>
           <div className={styles.preview}>
@@ -600,7 +646,7 @@ export default function SourceIngestionPage() {
               </div>
             </article>)}
             <div className={styles.actions}>
-              <p>Final approval adds the complete book and only the approved chapter PDFs to the textbook library as drafts. Every chapter must be explicitly approved or rejected, and at least one chapter must be approved. A publisher must then preview and publish each resource for students.</p>
+              <p>Final approval requires saved, verified source edition/session metadata. It adds the complete book when it fits the library limit and only approved chapter PDFs to the library as drafts. Every chapter must be explicitly approved or rejected, and at least one chapter must be approved. A publisher must then preview and publish each resource for students.</p>
               <button className={styles.primary} type="button" disabled={busy || !job.chapters.length || job.chapters.some(ch => !['APPROVED', 'REJECTED'].includes(ch.status)) || !job.chapters.some(ch => ch.status === 'APPROVED')} onClick={() => void approveJob()}>Approve book & approved chapters</button>
               <button className={styles.reject} type="button" disabled={busy} onClick={() => void rejectJob()}>Reject entire ingestion</button>
             </div>
