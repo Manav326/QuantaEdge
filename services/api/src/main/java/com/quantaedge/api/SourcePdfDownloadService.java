@@ -97,7 +97,7 @@ public class SourcePdfDownloadService {
       final Map<?, ?> index;
       try {
         index = cacheMapper.readValue(indexPath.toFile(), Map.class);
-      } catch (IOException ex) {
+      } catch (RuntimeException ex) {
         throw new IllegalArgumentException("The mounted " + language
             + " textbook-cache index is unreadable: " + indexPath, ex);
       }
