@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from '../../components/LanguageProvider';
+
 import Link from 'next/link';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -234,30 +236,30 @@ export default function ParentProfilePage() {
     <main className="parent-app parent-profile-page">
       <header className="parent-header">
         <QuantaEdgeBrand variant="compact" />
-        <span>Parent account</span>
+        <span><LocaleText hinglish="Parent account" english="Parent account" /></span>
         <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={photoChanged ? (draft.profileImageDataUrl || undefined) : (identity.profileImageUrl || undefined)} />
       </header>
       <div className="parent-profile-page__wrap">
         <div className="parent-profile-page__breadcrumb">
-          <Link href="/parent">← Family dashboard par wapas</Link>
-          <span>ACCOUNT</span>
+          <Link href="/parent"><LocaleText hinglish="← Family dashboard पर वापस" english="← Back to family dashboard" /></Link>
+          <span><LocaleText hinglish="ACCOUNT" english="ACCOUNT" /></span>
         </div>
         <div className="parent-profile-page__heading">
           <div>
-            <span className="eyebrow">AAPKI FAMILY · AAPKA ACCOUNT</span>
-            <h1>Parent profile aur settings</h1>
-            <p>Contact aur personal details updated rakhein, taaki family ki learning manage karna easy rahe.</p>
+            <span className="eyebrow"><LocaleText hinglish="आपकी FAMILY · आपका ACCOUNT" english="YOUR FAMILY · YOUR ACCOUNT" /></span>
+            <h1><LocaleText hinglish="Parent Profile और settings" english="Parent profile and settings" /></h1>
+            <p><LocaleText hinglish="Contact और personal details updated रखें, ताकि family की learning manage करना आसान रहे।" english="Keep your contact and personal details up to date to manage your family’s learning easily." /></p>
           </div>
-          <div className="parent-profile-page__account-pill"><span>ACCOUNT STATUS</span><strong>Mobile verified</strong><small>{identity.mobile || 'Sign in ke liye use hone wala mobile'}</small></div>
+          <div className="parent-profile-page__account-pill"><span><LocaleText hinglish="ACCOUNT STATUS" english="ACCOUNT STATUS" /></span><strong><LocaleText hinglish="Mobile verified" english="Mobile verified" /></strong><small>{identity.mobile || 'Sign in ke liye use hone wala mobile'}</small></div>
         </div>
 
         {error && <div className="parent-profile-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="parent-profile-page__alert is-success" role="status">{notice}</div>}
 
-        {loading ? <div className="parent-profile-page__loading"><span className="parent-profile-page__spinner" /> Loading your profile…</div> : (
+        {loading ? <div className="parent-profile-page__loading"><span className="parent-profile-page__spinner" /> <LocaleText hinglish="आपकी profile load हो रही है…" english="Loading your profile…" /></div> : (
           <form className="parent-profile-form" onSubmit={saveProfile}>
             <section className="parent-profile-card parent-profile-photo-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2>Aapki profile photo</h2><p>Aapke family account ke liye ek pehchaani si photo.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">01</span><div><h2><LocaleText hinglish="आपकी profile photo" english="Your profile photo" /></h2><p><LocaleText hinglish="आपके family account के लिए एक पहचान वाली photo।" english="A familiar photo for your family account." /></p></div></div>
               <div className="parent-profile-photo-editor">
                 <div className="parent-profile-photo-editor__preview">
                   <img src={(photoChanged ? draft.profileImageDataUrl : (identity.profileImageUrl || draft.profileImageDataUrl)) || '/branding/parent-avatar.svg'} alt="Parent profile preview" />
@@ -265,41 +267,41 @@ export default function ParentProfilePage() {
                 </div>
                 <div className="parent-profile-photo-editor__copy">
                   <strong>{draft.profileImageDataUrl ? 'Photo selected' : 'Add your photo'}</strong>
-                  <p>Clear photo choose karein. Save karne se pehle photo resize aur compress ho jaayegi.</p>
+                  <p><LocaleText hinglish="Clear photo चुनें। Save करने से पहले photo resize और compress हो जाएगी।" english="Choose a clear photo. It will be resized and compressed before saving." /></p>
                   {photoName && <small className="parent-profile-photo-editor__filename">{photoName}</small>}
                   <div className="parent-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="parent-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
                     <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Photo ready ho rahi hai…' : 'Photo upload karein'}</button>
-                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}>Photo hataayein</button>}
+                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2>Personal details</h2><p>Aapke parent account ki details.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">02</span><div><h2><LocaleText hinglish="Personal details" english="Personal details" /></h2><p><LocaleText hinglish="आपके parent account की details।" english="Your parent account details." /></p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field parent-profile-field--wide">Poora naam<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Apna naam daalein" autoComplete="name" /></label>
-                <label className="parent-profile-field">Email address <span className="parent-profile-field__optional">Optional</span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
-                <label className="parent-profile-field">Mobile number<input value={identity.mobile} readOnly aria-readonly="true"/><small>OTP sign-in ke liye use hota hai. Change karwana ho to support se contact karein.</small></label>
-                <label className="parent-profile-field">Shehar ya town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
-                <label className="parent-profile-field">State<input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
+                <label className="parent-profile-field parent-profile-field--wide"><LocaleText hinglish="पूरा नाम" english="Full name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Apna naam daalein" autoComplete="name" /></label>
+                <label className="parent-profile-field"><LocaleText hinglish="Email address" english="Email address" /> <span className="parent-profile-field__optional"><LocaleText hinglish="Optional" english="Optional" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
+                <label className="parent-profile-field"><LocaleText hinglish="Mobile number" english="Mobile number" /><input value={identity.mobile} readOnly aria-readonly="true"/><small><LocaleText hinglish="OTP sign-in के लिए use होता है। इसे बदलने के लिए support से contact करें।" english="Used for OTP sign-in. Contact support if you need to change it." /></small></label>
+                <label className="parent-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
+                <label className="parent-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
               </div>
-              <p className="parent-profile-privacy-note"><span aria-hidden="true">ⓘ</span> City and state are enough. Please do not enter your full home address.</p>
+              <p className="parent-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <LocaleText hinglish="City और state काफ़ी हैं। कृपया घर का पूरा address न डालें।" english="City and state are enough. Please do not enter your full home address." /></p>
             </section>
 
             <section className="parent-profile-card">
-              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2>Aapke baare mein</h2><p>Account ko personalise karne ke liye optional details.</p></div></div>
+              <div className="parent-profile-card__intro"><span className="parent-profile-card__number">03</span><div><h2><LocaleText hinglish="आपके बारे में" english="About you" /></h2><p><LocaleText hinglish="Account को personalise करने के लिए optional details।" english="Optional details to personalise your account." /></p></div></div>
               <div className="parent-profile-fields">
-                <label className="parent-profile-field">Aap kya kaam karte hain?<input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder="e.g. Teacher, business owner" autoComplete="organization-title" /></label>
-                <label className="parent-profile-field">Organisation ya workplace<input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder="Optional" autoComplete="organization" /></label>
-                <label className="parent-profile-field parent-profile-field--wide">Preferred language<select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English">English</option><option value="Hindi">हिन्दी</option><option value="Hindi & English">Hinglish (Hindi + English)</option><option value="Other">Other</option></select></label>
+                <label className="parent-profile-field"><LocaleText hinglish="आप क्या काम करते हैं?" english="What is your occupation?" /><input maxLength={120} value={draft.occupation} onChange={e => setDraft({ ...draft, occupation: e.target.value })} placeholder="e.g. Teacher, business owner" autoComplete="organization-title" /></label>
+                <label className="parent-profile-field"><LocaleText hinglish="Organisation या workplace" english="Organisation or workplace" /><input maxLength={180} value={draft.organization} onChange={e => setDraft({ ...draft, organization: e.target.value })} placeholder="Optional" autoComplete="organization" /></label>
+                <label className="parent-profile-field parent-profile-field--wide"><LocaleText hinglish="Preferred language" english="Preferred language" /><select value={draft.preferredLanguage} onChange={e => setDraft({ ...draft, preferredLanguage: e.target.value })}><option value="English"><LocaleText hinglish="English" english="English" /></option><option value="Hindi">हिन्दी</option><option value="Hindi & English"><LocaleText hinglish="Hinglish (हिन्दी + English)" english="Hinglish (Hindi + English)" /></option><option value="Other"><LocaleText hinglish="Other" english="Other" /></option></select></label>
               </div>
             </section>
 
             <div className="parent-profile-form__footer">
-              <p>In updates se bachche ki learning history ya subject settings change nahi hongi.</p>
-              <div><Link href="/parent" className="parent-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
+              <p><LocaleText hinglish="इन updates से बच्चे की learning history या subject settings नहीं बदलेंगी।" english="These updates will not change your child’s learning history or subject settings." /></p>
+              <div><Link href="/parent" className="parent-profile-quiet-button"><LocaleText hinglish="रद्द करें" english="Cancel" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
             </div>
           </form>
         )}
