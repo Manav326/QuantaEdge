@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from '../../components/LanguageProvider';
+
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
@@ -58,7 +60,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     {data.keyPoints?.map((x:string,i:number)=><div className="feedback" key={i}><span>• {x}</span></div>)}
   </div>;
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
-    <span className="concept-kicker">Worked example</span><h3>{data.title ?? 'उदाहरण'}</h3><p>{data.problem ?? data.prompt}</p>
+    <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? 'उदाहरण'}</h3><p>{data.problem ?? data.prompt}</p>
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. {x}</span></div>)}
     {data.answer && <p><strong>उत्तर:</strong> {data.answer}</p>}
   </div>;
@@ -77,14 +79,14 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
       {url && block.block_type==='VIDEO' && directVideo && <video className="lesson-visual-video" controls preload="metadata" src={url}/>}
       {url && block.block_type==='VIDEO' && youtube && <div className="lesson-visual-embed"><iframe src={embed} title={String(data.title||'Lesson video')} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>}
       {url && block.block_type==='AUDIO' && <audio className="lesson-visual-audio" controls preload="metadata" src={url}/>}
-      {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small">Video देखें ↗</a>}
-      {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link">Audio open karein ↗</a>}
+      {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small"><LocaleText hinglish="Video देखें ↗" english="Watch video ↗" /></a>}
+      {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link"><LocaleText hinglish="Audio खोलें ↗" english="Open audio ↗" /></a>}
       {!url && <div className="feedback"><span>◈</span><span>{data.description ?? data.alt ?? 'इस concept का labelled visual देखें।'}</span></div>}
       {data.caption && <p className="lesson-media-caption">{data.caption}</p>}
     </div>;
   }
-  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>AI tutor</strong><p>Agar kahin atkein, to isi lesson ke context mein hint, explanation, example ya step-by-step help lein.</p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}>Tutor open karein →</button></div></div>;
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker">Recap</span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ {x}</span></div>)}</div>;
+  if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong>AI tutor</strong><p>Agar kahin atkein, to isi lesson ke context mein hint, explanation, example ya step-by-step help lein.</p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><LocaleText hinglish="Tutor खोलें →" english="Open tutor →" /></button></div></div>;
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker"><LocaleText hinglish="Recap" english="Recap" /></span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ {x}</span></div>)}</div>;
   return null;
 }
 
@@ -120,7 +122,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
         <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder="Apna answer ya reasoning yahan likhein…" rows={q.question_type==='LONG_ANSWER'?6:4}/> :
         <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
-      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}>Answer check karein</button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}>✦ Tutor</button></div>
+      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}><LocaleText hinglish="Answer check करें" english="Check answer" /></button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}><LocaleText hinglish="✦ Tutor" english="✦ Tutor" /></button></div>
     </div>}
     {result && <div className="feedback">
       <b>{result.correct===true?'✓ सही':result.correct===false?'अभी सही नहीं':'Answer save ho gaya'}</b>
@@ -175,7 +177,7 @@ export default function LearnClient() {
       setError('');
       try{
         const me=await fetch('/api/v1/students/me');
-        if(me.status===401||me.status===403){router.replace('/login');return;}
+        if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const student=await me.json();
         if(!me.ok) throw new Error(student.message||'Student profile nahi mila');
         const requestedId=Number(searchParams.get('lessonId')||0);
@@ -225,21 +227,21 @@ export default function LearnClient() {
     };
   },[sessionId,sessionStarted]);
 
-  if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1>Lesson load nahi ho paaya</h1><p>{error}</p><Link href="/student" className="button button-dark">← Student home par</Link></div></section></main>;
+  if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page">
-    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span className="lesson-progress">Class {trackBrowse.classCode} · Published syllabus</span><span className="avatar">अ</span></header>
+    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress">Class {trackBrowse.classCode} · Published syllabus</span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
       <div className="lesson-meta"><span className="eyebrow">कक्षा {trackBrowse.classCode} · {trackBrowse.subjectName}</span><span>{trackBrowse.lessons.length} प्रकाशित पाठ</span></div>
       <h1>{trackBrowse.subjectName} की पढ़ाई</h1>
-      <p className="lesson-intro">Yahan sirf published lessons dikhte hain. Review ya writing mein maujood content abhi students ko nahi dikhta.</p>
+      <p className="lesson-intro"><LocaleText hinglish="यहाँ सिर्फ published lessons दिखते हैं। Review या writing में मौजूद content अभी students को नहीं दिखता।" english="Only published lessons appear here. Content still in review or being written is not visible to students." /></p>
       {trackGroups.length===0 ? <div className="concept-card">
-        <span className="concept-kicker">विषय की सामग्री</span>
-        <h2>Abhi koi published lesson available nahi hai</h2>
-        <p>इस विषय के अध्याय सूचीबद्ध हैं, लेकिन उनके वास्तविक पाठ अभी लेखन/समीक्षा में हैं। जैसे ही पाठ तैयार और प्रकाशित होंगे, वे यहाँ दिखाई देंगे।</p>
-        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark">Doosra subject dekhein →</Link>
-        <p><Link href="/student" className="text-link">Student home par wapas jaayein</Link></p>
+        <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
+        <h2><LocaleText hinglish="अभी कोई published lesson available नहीं है" english="No published lessons are available yet" /></h2>
+        <p><LocaleText hinglish="इस विषय के chapters listed हैं, लेकिन उनके actual lessons अभी writing/review में हैं। Lessons तैयार और publish होते ही यहाँ दिखेंगे।" english="Chapters are listed for this subject, but their lessons are still being written or reviewed. They’ll appear here when ready and published." /></p>
+        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
+        <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
       </div> : trackGroups.map(group=><section className="concept-card" key={group.code}>
-        <span className="concept-kicker">Chapter</span><h2>{group.name}</h2>
+        <span className="concept-kicker"><LocaleText hinglish="Chapter" english="Chapter" /></span><h2>{group.name}</h2>
         <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
           <span className="task-icon">▣</span><div><strong>{item.title}</strong><small>{item.estimated_minutes} मिनट · प्रकाशित पाठ</small></div><span className="task-action">→</span>
         </Link>)}</div>
@@ -249,7 +251,7 @@ export default function LearnClient() {
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow">Lesson load ho raha hai…</div></section></main>;
 
   return <main className="lesson-page">
-    <header className="lesson-header"><Link href="/student" className="back">← आज</Link><span className="lesson-progress">Published syllabus · {lesson.estimated_minutes} min</span><span className="avatar">अ</span></header>
+    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress">Published syllabus · {lesson.estimated_minutes} min</span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
       <div className="lesson-meta">
         <span className="eyebrow">कक्षा {lesson.class_code} · {lesson.subject_name} · {lesson.chapter_name}</span>
@@ -257,22 +259,22 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
-      <div className="feedback"><span>Learning path</span><span>Pehle ki jaankari → explanation → worked example → guided practice → khud practice → assessment → recap</span></div>
+      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish="पहले की जानकारी → explanation → worked example → guided practice → खुद practice → assessment → recap" english="Prerequisites → explanation → worked example → guided practice → independent practice → assessment → recap" /></span></div>
 
       {lesson.blocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
-      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span>Pehle concept ko apne words mein samjhein, phir example dekhkar dobara try karein.</span></div>}
+      {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} सहायता</b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
-      <div className="content-heading"><h2>Is lesson ke questions</h2><span>{lesson.questions.length} questions</span></div>
+      <div className="content-heading"><h2><LocaleText hinglish="इस lesson के questions" english="Questions for this lesson" /></h2><span>{lesson.questions.length} questions</span></div>
       {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
 
-      <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label="AI tutor खोलें">✦ <span>AI Tutor</span></button>
+      <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label="AI tutor खोलें">✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
-        {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}>← पिछला</button> : <span/>}
+        {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><LocaleText hinglish="← पिछला" english="← Previous" /></button> : <span/>}
         {currentIndex>=0 && currentIndex<lessons.length-1
-          ? <button className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}>अगला lesson →</button>
-          : <Link href="/student/practice" className="button button-dark button-small">Practice खोलें →</Link>}
+          ? <button className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><LocaleText hinglish="अगला lesson →" english="Next lesson →" /></button>
+          : <Link href="/student/practice" className="button button-dark button-small"><LocaleText hinglish="Practice खोलें →" english="Open practice →" /></Link>}
       </div>
     </section>
   </main>;
