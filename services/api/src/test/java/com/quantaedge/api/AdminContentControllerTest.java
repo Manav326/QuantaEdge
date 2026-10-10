@@ -87,6 +87,21 @@ class AdminContentControllerTest {
   }
 
   @Test
+  void questionReviewRequiresReviewerPermissionBeforeReadingOrChangingAQuestion() {
+    AuthContext author = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Content author");
+    when(authorization.requirePermission(author, "CONTENT_REVIEW"))
+        .thenThrow(new SecurityException("Question review permission required"));
+    AdminContentController controller =
+        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+
+    assertThrows(SecurityException.class,
+        () -> controller.reviewQuestion(7L, 9L, java.util.Map.of("status", "APPROVED"), author));
+
+    verify(authorization).requirePermission(author, "CONTENT_REVIEW");
+    verifyNoInteractions(jdbc, questionHistory, staffAudit);
+  }
+
+  @Test
   void legacySharedTokenCannotAuthorizeContentCms() {
     when(authorization.requirePermission(null, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
     AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
