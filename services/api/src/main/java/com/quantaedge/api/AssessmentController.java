@@ -110,6 +110,9 @@ public class AssessmentController {
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
              (select coalesce(sum(aq.max_marks),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
+             (select string_agg(gs.display_name, ', ' order by gs.display_name)
+              from assessment_staff_assignment asa join staff_account gs on gs.id=asa.staff_id
+              where asa.assessment_id=a.id and asa.active=true) as assigned_grader_names,
              count(distinct att.id) filter (where att.status<>'ABANDONED') as attempt_count,
              count(distinct att.id) filter (where att.status='AWAITING_REVIEW') as review_count
       from assessment a join curriculum_subject s on s.id=a.subject_id
