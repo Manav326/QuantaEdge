@@ -45,7 +45,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         <img src="/branding/quantaedge-icon.png" alt="" width="38" height="38" />
         <span><strong>QuantaEdge</strong><small>{role === 'student' ? (locale === 'english' ? 'LEARNING SPACE' : 'सीखने की जगह') : (locale === 'english' ? 'FAMILY SPACE' : 'परिवार की जगह')}</small></span>
       </Link>
-      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? 'Expand navigation' : 'Collapse navigation'} aria-expanded={!collapsed} title={collapsed ? 'Expand navigation' : 'Collapse navigation'}>{collapsed ? '»' : '«'}</button>
+      <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
       <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
       <nav aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
         {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
@@ -54,7 +54,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     </aside>
     <div className="qe-workspace-content"><div className="qe-language-toolbar"><LanguageSwitcher compact /></div>{children}</div>
     <nav className="qe-workspace-mobile-nav" aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
-      {items.slice(0, 4).map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span><small>{item.label}</small></Link>)}
+      {items.slice(0, 4).map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small></Link>)}
     </nav>
   </div>;
 }
