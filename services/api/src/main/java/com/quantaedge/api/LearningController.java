@@ -106,6 +106,7 @@ public class LearningController {
         select count(*) from student_practice_session_question psq
         join student_practice_session ps on ps.id=psq.practice_session_id
         where ps.id=? and ps.student_id=? and psq.question_id=?
+          and ps.status='IN_PROGRESS' and psq.answered_at is null
         """,Long.class,practiceSessionId,context.studentId(),questionId);
       if(membership==null||membership==0)throw new SecurityException("Question is not part of this practice session.");
     }
