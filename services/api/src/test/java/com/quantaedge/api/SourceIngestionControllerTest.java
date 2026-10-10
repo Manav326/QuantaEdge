@@ -66,6 +66,15 @@ class SourceIngestionControllerTest {
   }
 
   @Test
+  void cachedBookSubjectClassifierProtectsMathAndScienceTracks() {
+    assertEquals("Mathematics", SourceIngestionController.subjectFamily("गणित भाग-1 · Mathematics"));
+    assertEquals("Science", SourceIngestionController.subjectFamily("विज्ञान भाग-1 · Science"));
+    assertEquals("Other", SourceIngestionController.subjectFamily("Social Science and Political Life"));
+    assertEquals("Other", SourceIngestionController.subjectFamily("इतिहास की दुनिया"));
+    assertEquals(null, SourceIngestionController.subjectFamily("Panorama Reader"));
+  }
+
+  @Test
   void finalApprovalCanExcludeRejectedChapterCandidates() {
     Map<String, Object> approved = Map.of("status", "APPROVED", "chapter_id", 12L);
     Map<String, Object> rejected = Map.of("status", "REJECTED", "chapter_id", 13L);
