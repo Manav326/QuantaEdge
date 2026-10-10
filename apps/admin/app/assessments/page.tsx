@@ -31,6 +31,7 @@ export default function AssessmentsPage(){
   const [assessments,setAssessments]=useState<Assessment[]>([]);
   const [bank,setBank]=useState<BankQuestion[]>([]);
   const [staff,setStaff]=useState<Staff[]>([]);
+  const [chapters,setChapters]=useState<Array<{id:number;code:string;name:string}>>([]);
   const [selectedQuestionIds,setSelectedQuestionIds]=useState<number[]>([]);
   const [search,setSearch]=useState('');
   const [title,setTitle]=useState('');
@@ -52,7 +53,6 @@ export default function AssessmentsPage(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
 
-  const chapters=useMemo(()=>{const m=new Map<number,{id:number;code:string;name:string}>();bank.forEach(q=>m.set(q.chapter_id,{id:q.chapter_id,code:q.chapter_code,name:q.chapter_name}));return [...m.values()]},[bank]);
   const eligibleStaff=staff.filter(s=>s.can_grade);
   const filteredBank=bank.filter(q=>!search.trim()||q.prompt.toLowerCase().includes(search.toLowerCase())||q.lesson_title.toLowerCase().includes(search.toLowerCase())||q.chapter_name.toLowerCase().includes(search.toLowerCase()));
 
@@ -60,12 +60,20 @@ export default function AssessmentsPage(){
     setLoading(true);setError('');
     try{
       const params=new URLSearchParams({classCode,subjectCode,status:statusFilter});
-      const [assessmentRows,staffRows]=await Promise.all([
+      const [assessmentRows,staffRows,contentRows]=await Promise.all([
         api('/api/v1/admin/assessments?'+params.toString()),
-        api('/api/v1/admin/assessment-staff')
+        api('/api/v1/admin/assessment-staff'),
+        api('/api/v1/admin/content?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode))
       ]);
       setAssessments(Array.isArray(assessmentRows)?assessmentRows:[]);
       setStaff(Array.isArray(staffRows)?staffRows:[]);
+      const chapterMap=new Map<number,{id:number;code:string;name:string}>();
+      (Array.isArray(contentRows)?contentRows:[]).forEach((row:any)=>{
+        const id=Number(row.chapter_id);
+        if(id>0&&row.chapter_name)chapterMap.set(id,{id,code:String(row.chapter_code||''),name:String(row.chapter_name)});
+      });
+      setChapters([...chapterMap.values()]);
+      setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
     }catch(e){setError(e instanceof Error?e.message:'Could not load tests and staff permissions.');}
     finally{setLoading(false);}
   },[classCode,subjectCode,statusFilter]);
