@@ -143,24 +143,25 @@ export default function StudentClassesClient(){
   async function persistPlayback(recording:Recording,positionSeconds:number,completed=false){
     if(watchRef.current.recordingId!==recording.recorded_class_id)return;
     const safePosition=Math.max(0,Math.floor(positionSeconds));
+    const watchedSeconds=Math.max(0,Math.floor(watchRef.current.watchedSeconds));
     setSavingProgress(true);
     try{
       const result=await api('/api/v1/learning/recorded-classes/'+recording.recorded_class_id+'/progress',{
         method:'PUT',body:JSON.stringify({
           positionSeconds:safePosition,
-          watchedSeconds:Math.max(watchRef.current.watchedSeconds,safePosition),
+          watchedSeconds,
           completed
         })
       });
       watchRef.current.lastSavedPosition=safePosition;
       setRecordings(rows=>rows.map(row=>row.recorded_class_id===recording.recorded_class_id?{
         ...row,last_position_seconds:safePosition,
-        watched_seconds:Math.max(row.watched_seconds||0,Math.max(watchRef.current.watchedSeconds,safePosition)),
+        watched_seconds:Math.max(row.watched_seconds||0,watchedSeconds),
         completed:Boolean(result.completed)
       }:row));
       setSelectedRecording(old=>old&&old.recorded_class_id===recording.recorded_class_id?{
         ...old,last_position_seconds:safePosition,
-        watched_seconds:Math.max(old.watched_seconds||0,Math.max(watchRef.current.watchedSeconds,safePosition)),
+        watched_seconds:Math.max(old.watched_seconds||0,watchedSeconds),
         completed:Boolean(result.completed)
       }:old);
     }catch(e:any){
