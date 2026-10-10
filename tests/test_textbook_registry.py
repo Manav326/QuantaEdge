@@ -19,6 +19,9 @@ from scripts.textbook_registry import (
     parse_scert_medium,
     publish_language,
     push_batch,
+    class_image_reference,
+    _entry_class_numbers,
+    _seed_class_image_from_legacy,
 )
 
 NCERT_FIXTURE = r"""
@@ -84,6 +87,89 @@ class TextbookRegistryTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "Failed after 1 attempt"):
                     get_url("https://ncert.nic.in/textbook/pdf/bookdd.zip", destination, None, attempts=1)
             self.assertEqual(1, get_once.call_count)
+
+
+    def test_class_image_reference_is_stable_and_separated_by_grade_and_medium(self):
+        prefix = "ghcr.io/manav326/quantaedge-textbooks"
+        self.assertEqual("ghcr.io/manav326/quantaedge-textbooks-class-6-hindi:latest",
+                         class_image_reference(prefix, 6, "hindi"))
+        self.assertEqual("ghcr.io/manav326/quantaedge-textbooks-class-12-english:latest",
+                         class_image_reference(prefix, 12, "english"))
+        self.assertEqual([6, 8], _entry_class_numbers({"classes": ["6", "8"]}))
+        self.assertEqual([7], _entry_class_numbers({"class": "VII"}))
+
+    def test_class_filter_does_not_download_books_for_other_grades(self):
+        def book(book_id, grade):
+            return {
+                "book_id": book_id, "code": book_id, "publisher": "SCERT Bihar",
+                "source_type": "SCERT_BIHAR", "class": grade, "classes": [grade],
+                "medium": "hindi", "language": "Hindi", "title": "Book " + book_id,
+                "subject": "Science", "edition": "2025", "source_url": "https://scert.bihar.gov.in/eresources",
+                "catalog_entry_url": "https://scert.bihar.gov.in/eresources",
+                "pdf_url": "https://scert.bihar.gov.in/public/uploads/book.pdf",
+                "bundle_url": "https://scert.bihar.gov.in/public/uploads/book.pdf", "chapter_count": None,
+            }
+        class_six, class_seven = book("book-six", 6), book("book-seven", 7)
+        attempted = []
+
+        def fake_download(item, destination):
+            attempted.append(item["book_id"])
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            data = ("%PDF-1.4\n" + item["book_id"] + "\n").encode()
+            destination.write_bytes(data)
+            return hashlib.sha256(data).hexdigest(), 1, [[1, "Chapter 1", 1]], "whole-book fixture", destination
+
+        with patch("scripts.textbook_registry.pull_index", return_value=(False, {
+            "schema_version": 1, "books": [], "download_status": {},
+        })), patch("scripts.textbook_registry._download_full_book", side_effect=fake_download), \
+             patch("scripts.textbook_registry.push_batch"):
+            report = publish_language(
+                "hindi", "ghcr.io/example/quantaedge-textbooks-class-6-hindi:latest",
+                catalog=[class_six, class_seven], class_no=6,
+                download_workers=1, push_batch_size=1, retry_rounds=1,
+            )
+
+        self.assertEqual(["book-six"], attempted)
+        self.assertEqual(1, report["catalog_entries"])
+        self.assertEqual(["book-six"], report["cached_book_ids"])
+
+    def test_existing_legacy_book_is_migrated_without_a_source_download_and_checkpointed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            legacy_root = root / "legacy-hindi"
+            (legacy_root / "books").mkdir(parents=True)
+            payload = b"%PDF-1.4\nalready cached in old image\n"
+            (legacy_root / "books" / "old-book.pdf").write_bytes(payload)
+            entry = {
+                "book_id": "old-book", "file": "books/old-book.pdf", "class": "6",
+                "classes": ["6"], "medium": "hindi", "publisher": "NCERT",
+                "source_type": "NCERT", "title": "Existing Class Six", "subject": "Mathematics",
+                "bytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+            legacy_index = {"books": [entry], "download_status": {}}
+            target_index = {
+                "schema_version": 1, "books": [{**entry, "classes": ["6"], "registry_class": 6}],
+                "download_status": {}, "legacy_migration_complete": True,
+            }
+            with patch("scripts.textbook_registry.pull_index", side_effect=[
+                (False, {"schema_version": 1, "books": [], "download_status": {}}),
+                (True, target_index),
+            ]), patch("scripts.textbook_registry.push_batch") as push, \
+                 patch("scripts.textbook_registry._extract_image_books") as extract:
+                def loader(language):
+                    self.assertEqual("hindi", language)
+                    return legacy_index, legacy_root
+                first = _seed_class_image_from_legacy(
+                    "ghcr.io/example/quantaedge-textbooks", 6, "hindi", loader, root)
+                second = _seed_class_image_from_legacy(
+                    "ghcr.io/example/quantaedge-textbooks", 6, "hindi",
+                    lambda _language: self.fail("completed migration must not reload legacy"), root)
+
+            self.assertEqual(1, first["migrated_from_legacy"])
+            self.assertEqual(0, second["migrated_from_legacy"])
+            self.assertTrue(second["migration_skipped"])
+            self.assertEqual(1, push.call_count)
+            extract.assert_not_called()
 
     def test_textbook_binary_size_is_not_artificially_capped(self):
         self.assertIsNone(MAX_BOOK_BYTES)

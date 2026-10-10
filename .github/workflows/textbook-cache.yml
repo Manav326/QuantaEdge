@@ -10,10 +10,20 @@ on:
   workflow_dispatch:
     inputs:
       language:
-        description: "Which image to extend"
+        description: "Which medium's class-specific registries to update"
         type: choice
         options: [both, hindi, english]
         default: both
+        required: true
+      class_no:
+        description: "One class (6–12), or 0 to process every class"
+        type: number
+        default: 0
+        required: true
+      download_artifacts:
+        description: "Build optional 90-day ZIP downloads (extra image transfer)"
+        type: boolean
+        default: false
         required: true
       book_code:
         description: "Optional one-book-only NCERT code or registry ID"
@@ -87,9 +97,11 @@ jobs:
           {
             echo "# QuantaEdge textbook cache"
             echo
-            echo "Whole books download in parallel batches. Complete batches update the existing GHCR :latest image before the next batch." 
-            echo "Unresolved books are retried for up to five rounds. Binary size is not capped, and NCERT partial chapter fallback is disabled." 
-            echo "GHCR is the persistent cache; the downloadable Actions artifact is retained for 90 days only as a convenience."
+            echo "Fourteen persistent GHCR images: Classes 6–12 × Hindi/English."
+            echo "Each class image is checked before downloading; successful whole-book IDs are skipped on reruns."
+            echo "Whole books download in parallel; up to five rounds retry only failed books. No arbitrary size cap; no NCERT chapter fallback."
+            echo "The final action summary reports expected, cached, migrated, downloaded, pushed, remaining and failed counts per image."
+            echo "Optional ZIP artifacts last 90 days; GHCR :latest images are the persistent store."
             echo
             echo "- Repository: ${{ github.repository }}"
             echo "- Commit: ${{ github.sha }}"
@@ -98,11 +110,12 @@ jobs:
             echo "|---|---:|---|---|---|---|"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Publish textbooks incrementally to language-specific images
+      - name: Publish and report all selected class/medium GHCR images
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_LANGUAGE: ${{ inputs.language }}
+          INPUT_CLASS_NO: ${{ inputs.class_no }}
           INPUT_BOOK_CODE: ${{ inputs.book_code }}
           INPUT_MAX_BOOKS: ${{ inputs.max_books }}
           INPUT_REFRESH: ${{ inputs.refresh }}
@@ -113,82 +126,74 @@ jobs:
           set -euo pipefail
           language="$INPUT_LANGUAGE"
           if [ -z "$language" ]; then language="both"; fi
+          class_no="${INPUT_CLASS_NO:-0}"
           workers="${INPUT_DOWNLOAD_WORKERS:-8}"
           batch_size="${INPUT_PUSH_BATCH_SIZE:-8}"
           retry_rounds="${INPUT_RETRY_ROUNDS:-5}"
-          args=(python scripts/textbook_registry.py publish --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/quantaedge-textbooks")
+          args=(python scripts/textbook_registry.py publish --class-wise --language "$language" --download-workers "$workers" --push-batch-size "$batch_size" --retry-rounds "$retry_rounds" --image-prefix "ghcr.io/$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')/quantaedge-textbooks")
+          if [ "$class_no" != "0" ] && [ -n "$class_no" ]; then args+=(--class-no "$class_no"); fi
           if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "${INPUT_BOOK_CODE}" ]; then args+=(--book-code "$INPUT_BOOK_CODE"); fi
           if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_MAX_BOOKS" ] && [ "$INPUT_MAX_BOOKS" != "0" ]; then args+=(--max-books "$INPUT_MAX_BOOKS"); fi
           if [ "$INPUT_REFRESH" = "true" ]; then args+=(--refresh); fi
           "${args[@]}"
 
-      - name: Pull caches and assemble browser-download archives by class and medium
-        if: always()
+      - name: Pull selected class images and create optional browser-download ZIPs
+        if: always() && inputs.download_artifacts == true
         shell: bash
+        env:
+          INPUT_LANGUAGE: ${{ inputs.language }}
+          INPUT_CLASS_NO: ${{ inputs.class_no }}
         run: |
-          set +e
+          set -euo pipefail
           owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
-          mkdir -p "$RUNNER_TEMP/textbook-inventory"
-          python scripts/textbook_registry.py pull \
-            --image "ghcr.io/$owner/quantaedge-textbooks-hindi:latest" \
-            --output-dir "$RUNNER_TEMP/textbook-inventory/hindi"
-          hindi_status=$?
-          python scripts/textbook_registry.py pull \
-            --image "ghcr.io/$owner/quantaedge-textbooks-english:latest" \
-            --output-dir "$RUNNER_TEMP/textbook-inventory/english"
-          english_status=$?
-          python - "$RUNNER_TEMP/textbook-inventory" "$RUNNER_TEMP/textbook-downloads" <<'PY'
+          language="$INPUT_LANGUAGE"
+          if [ -z "$language" ] || [ "$language" = "both" ]; then languages=(hindi english); else languages=("$language"); fi
+          class_no="${INPUT_CLASS_NO:-0}"
+          if [ "$class_no" = "0" ] || [ -z "$class_no" ]; then classes=(6 7 8 9 10 11 12); else classes=("$class_no"); fi
+          inv_root="$RUNNER_TEMP/textbook-inventory"
+          out_root="$RUNNER_TEMP/textbook-downloads"
+          mkdir -p "$inv_root" "$out_root"
+          failures=0
+          for grade in "${classes[@]}"; do
+            for medium in "${languages[@]}"; do
+              image="ghcr.io/$owner/quantaedge-textbooks-class-$grade-$medium:latest"
+              target="$inv_root/class-$grade/$medium"
+              echo "Pulling optional downloadable archive from $image"
+              if ! python scripts/textbook_registry.py pull --image "$image" --output-dir "$target"; then
+                echo "ARTIFACT_PULL_FAILED image=$image" | tee -a "$GITHUB_STEP_SUMMARY"
+                failures=1
+                continue
+              fi
+              python - "$target" "$out_root" "$grade" "$medium" <<'PY'
           import json, sys, zipfile
           from pathlib import Path
-
-          source_root = Path(sys.argv[1])
-          out_root = Path(sys.argv[2])
-          out_root.mkdir(parents=True, exist_ok=True)
-          for medium in ("hindi", "english"):
-              folder = source_root / medium
-              index_path = folder / "index.json"
-              if not index_path.is_file():
-                  print(f"{medium}: no registry image/index available in this run")
-                  continue
-              index = json.loads(index_path.read_text(encoding="utf-8"))
-              full_inventory = out_root / f"inventory-{medium}.json"
-              full_inventory.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-              entries = index.get("books", [])
-              for class_no in range(6, 13):
-                  items = []
-                  for item in entries:
-                      classes = item.get("classes") or [item.get("class")]
-                      if class_no in [int(value) for value in classes if value is not None]:
-                          items.append(item)
-                  if not items:
-                      continue
-                  archive_path = out_root / f"quantaedge-textbooks-{medium}-class-{class_no}.zip"
-                  class_index = dict(index)
-                  class_index["books"] = items
-                  class_index["book_count"] = len(items)
-                  class_index["download_bundle"] = f"{medium} medium, Class {class_no}"
-                  with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
-                      archive.writestr("index.json", json.dumps(class_index, ensure_ascii=False, indent=2) + "\n")
-                      for item in items:
-                          relative = Path(item["file"])
-                          pdf = folder / relative
-                          if not pdf.is_file():
-                              raise FileNotFoundError(f"{medium}/{item['book_id']}: cached PDF missing at {pdf}")
-                          archive.write(pdf, relative.as_posix())
-                  print(f"DOWNLOAD_BUNDLE {archive_path.name} books={len(items)} bytes={archive_path.stat().st_size}")
-              print(f"INVENTORY {medium} books={len(entries)}")
+          source = Path(sys.argv[1])
+          out = Path(sys.argv[2])
+          grade = int(sys.argv[3])
+          medium = sys.argv[4]
+          index = json.loads((source / "index.json").read_text(encoding="utf-8"))
+          items = index.get("books", [])
+          archive_path = out / f"quantaedge-textbooks-class-{grade}-{medium}.zip"
+          with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+              archive.writestr("index.json", json.dumps(index, ensure_ascii=False, indent=2) + "\n")
+              for item in items:
+                  relative = Path(item["file"])
+                  pdf = source / relative
+                  if not pdf.is_file():
+                      raise FileNotFoundError(f"{medium} Class {grade}: {item.get('book_id')} PDF missing at {pdf}")
+                  archive.write(pdf, relative.as_posix())
+          print(f"DOWNLOAD_BUNDLE {archive_path.name} books={len(items)} bytes={archive_path.stat().st_size}")
           PY
-          mkdir -p "$RUNNER_TEMP/textbook-downloads"
-          if [ "$hindi_status" -ne 0 ]; then echo "Hindi image could not be pulled for the direct-download artifact." >> "$GITHUB_STEP_SUMMARY"; fi
-          if [ "$english_status" -ne 0 ]; then echo "English image could not be pulled for the direct-download artifact." >> "$GITHUB_STEP_SUMMARY"; fi
-          exit 0
+            done
+          done
+          if [ "$failures" -ne 0 ]; then exit 1; fi
 
       - name: Upload direct book downloads and inventories
-        if: always()
+        if: always() && inputs.download_artifacts == true
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-downloads-${{ github.run_number }}
           path: ${{ runner.temp }}/textbook-downloads/*
-          if-no-files-found: ignore
+          if-no-files-found: error
           compression-level: 0
           retention-days: 90
