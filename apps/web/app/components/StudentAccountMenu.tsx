@@ -1,5 +1,7 @@
 'use client';
 
+import { LocaleText } from './LanguageProvider';
+
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
