@@ -24,7 +24,7 @@ public class SourcePdfDownloadService {
   static final int MAX_PDF_BYTES = 50 * 1024 * 1024;
   private static final int MAX_HTML_BYTES = 4 * 1024 * 1024;
   private static final Pattern PDF_LINK = Pattern.compile(
-      "(?is)<a\\b[^>]*?href\\s*=\\s*['\u0022]([^'\u0022]+)['\u0022][^>]*>(.*?)</a>");
+      "(?is)<a\\b[^>]*?href\\s*=\\s*['\\x22]([^'\\x22]+)['\\x22][^>]*>(.*?)</a>");
   private final HttpClient client = HttpClient.newBuilder()
       .connectTimeout(Duration.ofSeconds(12))
       .followRedirects(HttpClient.Redirect.NEVER)

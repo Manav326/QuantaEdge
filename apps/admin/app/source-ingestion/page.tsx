@@ -16,14 +16,14 @@ type Outline = { title: string; pageStart: number; pageEnd: number };
 type Candidate = {
   chapter_id: number; chapter_row_id: number; chapter_title: string; chapter_code: string;
   page_start: number; page_end: number; status: string; pdf_asset_id?: number; pdf_title?: string;
-  pdf_page_count?: number; review_notes?: string;
+  pdf_page_count?: number; pdf_review_status?: string; pdf_sha256?: string; review_notes?: string;
 };
 type Job = {
   job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
   edition: string; language: string; status: string; error_message?: string | null;
   book_asset_id?: number; book_asset_title?: string; page_count?: number; class_code: string;
   class_name: string; subject_code: string; subject_name: string; detected_outline: Outline[];
-  chapters: Candidate[]; book_review_status?: string;
+  chapters: Candidate[]; book_review_status?: string; chapter_count?: number; approved_chapter_count?: number;
 };
 
 async function api(url: string, init: RequestInit = {}) {
@@ -133,7 +133,7 @@ export default function SourceIngestionPage() {
       const outline = Array.isArray(item.detected_outline) ? item.detected_outline : [];
       if (outline.length) {
         const next = outline.map((entry, index) => {
-          const found = distinct.values().find(ch => {
+          const found = [...distinct.values()].find(ch => {
             const a = normalized(ch.chapter_name); const b = normalized(entry.title);
             return a === b || b.includes(a) || a.includes(b) || normalized(ch.chapter_code) === b;
           });
@@ -145,7 +145,7 @@ export default function SourceIngestionPage() {
         });
         setMapping(next);
       } else {
-        setMapping(distinct.map(ch => ({
+        setMapping([...distinct.values()].map(ch => ({
           key: 'chapter-' + ch.chapter_id, included: false, chapterId: String(ch.chapter_id),
           title: ch.chapter_name, start: '', end: '',
         })));

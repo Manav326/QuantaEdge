@@ -208,7 +208,7 @@ public class LearningDocumentController {
     }
 
     List<Map<String, Object>> assets = jdbc.queryForList("""
-      select id,page_count,title from learning_pdf_asset where id=?
+      select id,page_count,title from learning_pdf_asset where id=? and review_status='APPROVED'
       """, assetId);
     if (assets.isEmpty()) throw notFound("PDF library item", assetId);
     int sourcePageCount = ((Number) assets.getFirst().get("page_count")).intValue();

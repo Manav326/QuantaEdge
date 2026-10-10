@@ -13,7 +13,6 @@ import java.util.Map;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -110,9 +109,8 @@ public class SourceIngestionWorker {
     if (root != null) {
       for (PDOutlineItem item : root.children()) {
         try {
-          PDPageDestination destination = item.findDestinationPage(pdf);
-          if (destination == null) continue;
-          PDPage page = destination.getPage();
+          PDPage page = item.findDestinationPage(pdf);
+          if (page == null) continue;
           int pageNo = pdf.getPages().indexOf(page) + 1;
           if (pageNo < 1 || pageNo > pdf.getNumberOfPages()) continue;
           String title = item.getTitle() == null ? "" : item.getTitle().trim();
