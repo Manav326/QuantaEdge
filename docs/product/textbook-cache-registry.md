@@ -5,7 +5,7 @@ Two GHCR images are maintained independently:
 - Hindi: ghcr.io/manav326/quantaedge-textbooks-hindi:latest
 - English: ghcr.io/manav326/quantaedge-textbooks-english:latest
 
-The image index is stored at /index.json and each complete book at /books/<book_id>.pdf. NCERT individual chapter PDFs are merged sequentially into one PDF with Chapter N bookmarks so the existing QuantaEdge source-ingestion and chapter-map tools can detect page boundaries. SCERT Bihar E-resources are cached as original PDFs. Every entry records source page, publisher, class, subject, language, edition note, byte size, SHA-256 and download method.
+The image index is stored at /index.json and each complete book at /books/<book_id>.pdf. The publisher only accepts a complete NCERT book bundle; it validates all expected members and merges the bundle contents into one whole-book PDF with chapter bookmarks. It never attempts individual chapter URL downloads as a fallback. SCERT Bihar E-resources are cached as original PDFs. Every entry records source page, publisher, class, subject, language, edition note, byte size, SHA-256 and download method.
 
 ## Parallel batches, retries, and persistent GHCR tags
 
@@ -24,6 +24,17 @@ The NCERT permission was confirmed by the repository owner; confidential licence
 ## GitHub Actions and browser download
 
 Pushes that change the registry publisher launch the incremental cache workflow. It can also be run manually with a language selector, an optional single NCERT book code/registry ID, and a batch limit. Each PDF is pushed to GHCR as it completes. At the end, the workflow publishes two ZIP bundles as GitHub Actions artifacts for browser download. Bundles include cached PDFs and index.json and are retained for 90 days; GHCR is the durable cache.
+
+## End-to-end QuantaEdge source ingestion
+
+1. Sync the two GHCR images to the API host through `scripts/quantaedge-deploy.sh` or run `scripts/quantaedge-textbook-sync.ps1` locally.
+2. In Admin → **Source ingestion & chapter review**, select the class and subject, then use **Use a persistent complete textbook → Review complete cached book**. This starts an ingestion job against the cache book ID and expected SHA-256; it does not revisit the official website.
+3. For books under 50 MiB, the API can keep a deduplicated whole-book asset in PostgreSQL. For bigger complete books, the source remains on the read-only GHCR mount; admin preview and chapter splitting read from disk.
+4. Review the original page preview and detected outline. Match every chapter to the correct active curriculum chapter and exact one-based page range, then create chapter PDFs. Each chapter PDF must fit the existing 50 MiB library limit.
+5. Approve the reviewed chapter decisions. Approved chapter files are added to the private PDF library as **DRAFT** learning documents. The full original for a larger book remains in GHCR.
+6. Open Admin → **Textbook library**, check source URL/title/edition and page mapping, and publish each resource deliberately. Only published documents are exposed through the authenticated student textbook reader.
+
+The upstream source needs to provide a complete NCERT book bundle. A missing, corrupt, or incomplete complete-book bundle is recorded as a failed whole book and retried; the downloader never falls back to fetching individual chapter URLs. The index and source PDF are verified when a cached ingestion job starts. Chapter boundaries, subject placement and publishing still require reviewer decisions.
 
 ## Commands
 
