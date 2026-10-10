@@ -61,6 +61,30 @@ class ImportExistingTextbookPdfsTest(unittest.TestCase):
             self.assertIn("available_chapters=", reference)
             self.assertLessEqual(len(reference), 500)
 
+    def test_available_chapter_asset_distinguishes_parent_book_gaps(self):
+        from scripts.import_existing_textbook_pdfs import source_reference
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            bundle = root / "chapter-one.json"
+            coverage = {
+                "status": "partial", "expected_chapters": [1, 2, 3],
+                "available_chapters": [1, 3], "missing_chapters": [2],
+            }
+            bundle.write_text(json.dumps({
+                "source": {
+                    "title": "Book — Chapter 1", "pdf_filename": "chapter-one.pdf",
+                    "pdf_sha256": hashlib.sha256(b"%PDF-1.4 chapter").hexdigest(),
+                    "pdf_page_count": 10, "scope": "CHAPTER_PDF", "chapter_title": "Chapter 1",
+                    "content_availability": coverage,
+                },
+                "asset_content_status": "partial",
+            }), encoding="utf-8")
+            reference = source_reference(load_bundle(bundle))
+            self.assertIn("asset_scope=CHAPTER_PDF", reference)
+            self.assertIn("parent_book_status=PARTIAL", reference)
+            self.assertIn("parent_missing_chapters=2", reference)
+            self.assertNotIn("content_status=PARTIAL", reference)
+
     def test_matching_pdf_requires_the_original_sha256(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

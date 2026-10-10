@@ -66,6 +66,8 @@ def load_bundle(path: Path) -> dict[str, Any]:
         "page_count": pages,
         "content_availability": availability,
         "asset_content_status": status,
+        "scope": str(source.get("scope") or "SUBJECT_BOOK").upper(),
+        "chapter_title": str(source.get("chapter_title") or ""),
         "source_url": str(source.get("source_url") or ""),
         "missing_chapters": missing_chapters if isinstance(missing_chapters, list) else [],
         "available_chapters": available_chapters if isinstance(available_chapters, list) else [],
@@ -77,10 +79,19 @@ def source_reference(item: dict[str, Any]) -> str:
     coverage = item.get("content_availability") or {}
     status = str(item.get("asset_content_status") or coverage.get("status") or "complete").upper()
     parts = []
-    if status != "COMPLETE":
+    missing = item.get("missing_chapters") or coverage.get("missing_chapters") or []
+    available = item.get("available_chapters") or coverage.get("available_chapters") or []
+    scope = str(item.get("scope") or "SUBJECT_BOOK").upper()
+    if status != "COMPLETE" and scope == "CHAPTER_PDF":
+        # A recovered chapter can be a valid standalone chapter even if its parent book is incomplete.
+        parts.extend(["asset_scope=CHAPTER_PDF", "parent_book_status=" + status])
+        if missing:
+            parts.append("parent_missing_chapters=" + ",".join(str(n) for n in missing))
+        if item.get("chapter_title"):
+            parts.append("chapter_asset=" + str(item["chapter_title"]))
+    elif status != "COMPLETE":
+        parts.append("asset_scope=SUBJECT_BOOK")
         parts.append("content_status=" + status)
-        missing = item.get("missing_chapters") or coverage.get("missing_chapters") or []
-        available = item.get("available_chapters") or coverage.get("available_chapters") or []
         if missing:
             parts.append("missing_chapters=" + ",".join(str(n) for n in missing))
         if available:

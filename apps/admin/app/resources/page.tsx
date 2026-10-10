@@ -57,6 +57,14 @@ async function api(url: string, init: RequestInit = {}) {
 
 function contentCoverageWarning(reference?: string | null): string | null {
   if (!reference) return null;
+  const parentStatus = reference.match(/parent_book_status=(PARTIAL|UNAVAILABLE)/i)?.[1]?.toUpperCase();
+  const parentMissing = reference.match(/parent_missing_chapters=([^;]+)/i)?.[1]?.trim();
+  if (parentStatus) {
+    return parentMissing
+      ? 'PARENT BOOK ' + parentStatus + ' — chapters missing from the original book: ' + parentMissing
+        + '. This individual chapter PDF may still be complete.'
+      : 'PARENT BOOK ' + parentStatus + ' — review the original book coverage report.';
+  }
   const status = reference.match(/content_status=(PARTIAL|UNAVAILABLE)/i)?.[1]?.toUpperCase();
   if (!status) return null;
   const missing = reference.match(/missing_chapters=([^;]+)/i)?.[1]?.trim();
