@@ -32,9 +32,10 @@ export default function InlineTextbookReader({
   const imageUrl = '/api/v1/learning/documents/' + item.document_id + '/pages/' + page + (retryKey ? '?retry=' + retryKey : '');
 
   useEffect(() => {
+    if (!expanded) return;
     setLoading(true);
     setPageError('');
-  }, [item.document_id, page, retryKey]);
+  }, [item.document_id, page, retryKey, expanded]);
 
   useEffect(() => {
     if (!expanded) return;
