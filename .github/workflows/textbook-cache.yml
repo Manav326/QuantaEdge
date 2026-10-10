@@ -35,7 +35,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: quantaedge-textbook-cache-v2
+  group: quantaedge-textbook-cache-v3
   cancel-in-progress: false
 
 jobs:
@@ -95,7 +95,7 @@ jobs:
           if [ "$INPUT_REFRESH" = "true" ]; then args+=(--refresh); fi
           "${args[@]}"
 
-      - name: Pull inventories for direct inspection
+      - name: Pull caches and assemble browser-download archives by class and medium
         if: always()
         shell: bash
         run: |
@@ -110,21 +110,58 @@ jobs:
             --image "ghcr.io/$owner/quantaedge-textbooks-english:latest" \
             --output-dir "$RUNNER_TEMP/textbook-inventory/english"
           english_status=$?
-          mkdir -p "$RUNNER_TEMP/textbook-inventory-json"
-          for lang in hindi english; do
-            if [ -f "$RUNNER_TEMP/textbook-inventory/$lang/index.json" ]; then
-              cp "$RUNNER_TEMP/textbook-inventory/$lang/index.json" "$RUNNER_TEMP/textbook-inventory-json/index-$lang.json"
-            fi
-          done
-          if [ "$hindi_status" -ne 0 ]; then echo "Hindi image inventory was not available in this run." >> "$GITHUB_STEP_SUMMARY"; fi
-          if [ "$english_status" -ne 0 ]; then echo "English image inventory was not available in this run." >> "$GITHUB_STEP_SUMMARY"; fi
+          python - "$RUNNER_TEMP/textbook-inventory" "$RUNNER_TEMP/textbook-downloads" <<'PY'
+          import json, sys, zipfile
+          from pathlib import Path
+
+          source_root = Path(sys.argv[1])
+          out_root = Path(sys.argv[2])
+          out_root.mkdir(parents=True, exist_ok=True)
+          for medium in ("hindi", "english"):
+              folder = source_root / medium
+              index_path = folder / "index.json"
+              if not index_path.is_file():
+                  print(f"{medium}: no registry image/index available in this run")
+                  continue
+              index = json.loads(index_path.read_text(encoding="utf-8"))
+              full_inventory = out_root / f"inventory-{medium}.json"
+              full_inventory.write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              entries = index.get("books", [])
+              for class_no in range(6, 13):
+                  items = []
+                  for item in entries:
+                      classes = item.get("classes") or [item.get("class")]
+                      if class_no in [int(value) for value in classes if value is not None]:
+                          items.append(item)
+                  if not items:
+                      continue
+                  archive_path = out_root / f"quantaedge-textbooks-{medium}-class-{class_no}.zip"
+                  class_index = dict(index)
+                  class_index["books"] = items
+                  class_index["book_count"] = len(items)
+                  class_index["download_bundle"] = f"{medium} medium, Class {class_no}"
+                  with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_STORED, allowZip64=True) as archive:
+                      archive.writestr("index.json", json.dumps(class_index, ensure_ascii=False, indent=2) + "\n")
+                      for item in items:
+                          relative = Path(item["file"])
+                          pdf = folder / relative
+                          if not pdf.is_file():
+                              raise FileNotFoundError(f"{medium}/{item['book_id']}: cached PDF missing at {pdf}")
+                          archive.write(pdf, relative.as_posix())
+                  print(f"DOWNLOAD_BUNDLE {archive_path.name} books={len(items)} bytes={archive_path.stat().st_size}")
+              print(f"INVENTORY {medium} books={len(entries)}")
+          PY
+          mkdir -p "$RUNNER_TEMP/textbook-downloads"
+          if [ "$hindi_status" -ne 0 ]; then echo "Hindi image could not be pulled for the direct-download artifact." >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ "$english_status" -ne 0 ]; then echo "English image could not be pulled for the direct-download artifact." >> "$GITHUB_STEP_SUMMARY"; fi
           exit 0
 
-      - name: Upload small inventory JSON files
+      - name: Upload direct book downloads and inventories
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quantaedge-textbook-inventory-${{ github.run_number }}
-          path: ${{ runner.temp }}/textbook-inventory-json/index-*.json
+          name: quantaedge-textbooks-downloads-\${{ github.run_number }}
+          path: \${{ runner.temp }}/textbook-downloads/*
           if-no-files-found: ignore
+          compression-level: 0
           retention-days: 30
