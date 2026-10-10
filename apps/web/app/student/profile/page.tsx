@@ -203,25 +203,25 @@ export default function StudentProfilePage() {
       </header>
       <div className="student-profile-page__wrap">
         <div className="student-profile-page__breadcrumb">
-          <Link href="/student">← Dashboard par wapas</Link>
-          <span>ACCOUNT</span>
+          <Link href="/student"><LocaleText hinglish="← Dashboard पर वापस" english="← Back to dashboard" /></Link>
+          <span><LocaleText hinglish="ACCOUNT" english="ACCOUNT" /></span>
         </div>
         <div className="student-profile-page__heading">
           <div>
-            <span className="eyebrow">AAPKI SPACE · AAPKI JOURNEY</span>
-            <h1>Profile aur settings</h1>
-            <p>Apni learning space ko personalise karein. Photo aur details update kar sakte hain.</p>
+            <span className="eyebrow"><LocaleText hinglish="आपकी learning space · आपकी journey" english="YOUR SPACE · YOUR JOURNEY" /></span>
+            <h1><LocaleText hinglish="Profile और settings" english="Profile and settings" /></h1>
+            <p><LocaleText hinglish="अपनी learning space को personalise करें। Photo और details update कर सकते हैं।" english="Personalise your learning space by updating your photo and details." /></p>
           </div>
-          <div className="student-profile-page__class-pill"><span>AAPKI CLASS</span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
+          <div className="student-profile-page__class-pill"><span><LocaleText hinglish="आपकी Class" english="YOUR CLASS" /></span><strong>{student?.class_code ? `Class ${student.class_code}` : '—'}</strong><small>{student?.board || 'School board'}</small></div>
         </div>
 
         {error && <div className="student-profile-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="student-profile-page__alert is-success" role="status">{notice}</div>}
 
-        {loading ? <div className="student-profile-page__loading"><span className="student-profile-page__spinner" /> Loading your profile…</div> : (
+        {loading ? <div className="student-profile-page__loading"><span className="student-profile-page__spinner" /> <LocaleText hinglish="आपकी profile load हो रही है…" english="Loading your profile…" /></div> : (
           <form className="student-profile-form" onSubmit={saveProfile}>
             <section className="student-profile-card student-profile-photo-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2>Aapki profile photo</h2><p>Aapki learning space ke liye ek friendly photo.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><LocaleText hinglish="आपकी profile photo" english="Your profile photo" /></h2><p><LocaleText hinglish="आपकी learning space के लिए एक friendly photo।" english="A friendly photo for your learning space." /></p></div></div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
                   <img src={draft.profileImageDataUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
@@ -229,40 +229,40 @@ export default function StudentProfilePage() {
                 </div>
                 <div className="student-profile-photo-editor__copy">
                   <strong>{draft.profileImageDataUrl ? 'Looking good!' : 'Add your photo'}</strong>
-                  <p>Apni clear photo choose karein. Save karne se pehle hum ise automatically resize kar denge.</p>
+                  <p><LocaleText hinglish="अपनी clear photo चुनें। Save करने से पहले इसे automatically resize किया जाएगा।" english="Choose a clear photo. We’ll resize it automatically before saving." /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
                     <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? 'Photo ready ho rahi hai…' : 'Photo upload karein'}</button>
-                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}>Photo hataayein</button>}
+                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
               </div>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2>Aapke baare mein</h2><p>Apni basic details updated rakhein.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><LocaleText hinglish="आपके बारे में" english="About you" /></h2><p><LocaleText hinglish="अपनी basic details updated रखें।" english="Keep your basic details up to date." /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide">Aapka naam<input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Aapko kis naam se bulayein?" autoComplete="name" /></label>
-                <label className="student-profile-field">Shehar ya town<input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
-                <label className="student-profile-field">State<input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका नाम" english="Your name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder="Aapko kis naam se bulayein?" autoComplete="name" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder="e.g. Patna" autoComplete="address-level2" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder="e.g. Bihar" autoComplete="address-level1" /></label>
               </div>
-              <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> City and state are enough. Please do not enter your full home address.</p>
+              <p className="student-profile-privacy-note"><span aria-hidden="true">ⓘ</span> <LocaleText hinglish="City और state काफ़ी हैं। कृपया घर का पूरा address न डालें।" english="City and state are enough. Please do not enter your full home address." /></p>
             </section>
 
             <section className="student-profile-card">
-              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2>School aur learning</h2><p>Apni learning ko aur relevant banane mein help karein.</p></div></div>
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">03</span><div><h2><LocaleText hinglish="School और learning" english="School and learning" /></h2><p><LocaleText hinglish="अपनी learning को और relevant बनाने में मदद करें।" english="Help us make your learning more relevant." /></p></div></div>
               <div className="student-profile-fields">
-                <label className="student-profile-field student-profile-field--wide">School ka naam<input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder="School ka naam daalein" autoComplete="organization" /></label>
-                <label className="student-profile-field">School medium<select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value="">Agar pata ho to choose karein</option><option value="Hindi">Hindi</option><option value="English">English</option><option value="Hindi & English">Hinglish (Hindi + English)</option><option value="Other">Other</option></select></label>
-                <label className="student-profile-field">Favourite subject<select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value="">Subject choose karein</option><option value="maths">Maths · गणित</option><option value="science">Science · विज्ञान</option><option value="both">Both · दोनों</option><option value="other">Koi aur subject</option><option value="not_sure">Abhi explore kar rahe hain</option></select></label>
-                <label className="student-profile-field student-profile-field--wide">Mera learning goal<textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder="Aap kis cheez mein better hona chahte hain? Jaise, fractions solve karne mein confidence badhana." /><small>{draft.learningGoal.length}/300 characters</small></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="School का नाम" english="School name" /><input maxLength={180} value={draft.schoolName} onChange={e => setDraft({ ...draft, schoolName: e.target.value })} placeholder="School ka naam daalein" autoComplete="organization" /></label>
+                <label className="student-profile-field"><LocaleText hinglish="School medium" english="School medium" /><select value={draft.schoolMedium} onChange={e => setDraft({ ...draft, schoolMedium: e.target.value })}><option value=""><LocaleText hinglish="अगर पता हो तो चुनें" english="Choose if you know" /></option><option value="Hindi"><LocaleText hinglish="हिन्दी" english="Hindi" /></option><option value="English"><LocaleText hinglish="English" english="English" /></option><option value="Hindi & English"><LocaleText hinglish="Hinglish (हिन्दी + English)" english="Hinglish (Hindi + English)" /></option><option value="Other">Other</option></select></label>
+                <label className="student-profile-field"><LocaleText hinglish="पसंदीदा subject" english="Favourite subject" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><LocaleText hinglish="Subject चुनें" english="Choose a subject" /></option><option value="maths"><LocaleText hinglish="गणित · Maths" english="Maths" /></option><option value="science"><LocaleText hinglish="विज्ञान · Science" english="Science" /></option><option value="both"><LocaleText hinglish="दोनों" english="Both" /></option><option value="other"><LocaleText hinglish="कोई और subject" english="Another subject" /></option><option value="not_sure"><LocaleText hinglish="अभी explore कर रहे हैं" english="Still exploring" /></option></select></label>
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="मेरा learning goal" english="My learning goal" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder="Aap kis cheez mein better hona chahte hain? Jaise, fractions solve karne mein confidence badhana." /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
             </section>
 
             <div className="student-profile-form__footer">
-              <p>Ye details update karne par bhi aapki progress aur practice records save rahenge.</p>
-              <div><Link href="/student" className="student-profile-quiet-button">Cancel</Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
+              <p><LocaleText hinglish="ये details update करने पर भी आपकी progress और practice records save रहेंगे।" english="Your progress and practice records remain saved when you update these details." /></p>
+              <div><Link href="/student" className="student-profile-quiet-button"><LocaleText hinglish="रद्द करें" english="Cancel" /></Link><button type="submit" className="button button-dark" disabled={saving || photoBusy}>{saving ? 'Changes save ho rahe hain…' : 'Changes save karein'}</button></div>
             </div>
           </form>
         )}
