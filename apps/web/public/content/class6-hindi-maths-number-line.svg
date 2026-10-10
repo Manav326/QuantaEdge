@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 350" role="img" aria-labelledby="title desc">
+<title id="title">संख्या रेखा पर चौथाई</title><desc id="desc">शून्य से एक तक की संख्या रेखा चार बराबर भागों में विभाजित है। बिंदु 1/4, 2/4 बराबर 1/2, 3/4 और 1 के स्थान दिखाते हैं।</desc>
+<rect width="1200" height="350" rx="24" fill="#FBFCFE"/>
+<text x="600" y="46" text-anchor="middle" font-family="Noto Sans Devanagari, Nirmala UI, Mangal, sans-serif" font-size="30" font-weight="700" fill="#17233F">संख्या रेखा पर चौथाई</text>
+<line x1="130" y1="164" x2="1070" y2="164" stroke="#17233F" stroke-width="6" stroke-linecap="round"/><path d="M1055 151 L1080 164 L1055 177" fill="none" stroke="#17233F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<g stroke="#17233F" stroke-width="5"><line x1="150" y1="135" x2="150" y2="193"/><line x1="375" y1="135" x2="375" y2="193"/><line x1="600" y1="130" x2="600" y2="198"/><line x1="825" y1="135" x2="825" y2="193"/><line x1="1050" y1="135" x2="1050" y2="193"/></g>
+<g fill="#E77925"><circle cx="375" cy="164" r="9"/><circle cx="600" cy="164" r="9"/><circle cx="825" cy="164" r="9"/></g>
+<g font-family="Noto Sans Devanagari, Nirmala UI, Mangal, sans-serif" text-anchor="middle" fill="#17233F"><g font-size="27" font-weight="700"><text x="150" y="230">0</text><text x="375" y="230">1/4</text><text x="600" y="230">2/4 = 1/2</text><text x="825" y="230">3/4</text><text x="1050" y="230">1</text></g><text x="600" y="282" font-size="20" fill="#53617A">हर बराबर भागों की संख्या बताता है; अंश गिने गए भागों की संख्या।</text><text x="600" y="315" font-size="18" fill="#9A4B16">समान अंतराल • स्पष्ट लेबल • बराबर दूरी</text></g>
+</svg>

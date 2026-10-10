@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+<title id="title">वैज्ञानिक जाँच का प्रवाह</title><desc id="desc">अवलोकन, स्पष्ट प्रश्न, परिकल्पना, योजना और जाँच, परिणामों का विश्लेषण, निष्कर्ष — छह चरणों का क्रम।</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M0,0 L9,5 L0,10 Z" fill="#E77925"/></marker><filter id="shadow" x="-10%" y="-10%" width="120%" height="125%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#18233F" flood-opacity=".10"/></filter></defs>
+<rect x="0" y="0" width="1200" height="820" rx="28" fill="#FBFCFE"/>
+<text x="600" y="52" text-anchor="middle" font-family="Noto Sans Devanagari, Nirmala UI, Mangal, sans-serif" font-size="30" font-weight="700" fill="#17233F">वैज्ञानिक जाँच के छह चरण</text>
+<g filter="url(#shadow)">
+<rect x="180" y="82" width="840" height="88" rx="18" fill="#FFF0E3" stroke="#E77925" stroke-width="2"/>
+<rect x="180" y="204" width="840" height="88" rx="18" fill="#FFFFFF" stroke="#D8E0EC" stroke-width="2"/>
+<rect x="180" y="326" width="840" height="88" rx="18" fill="#FFFFFF" stroke="#D8E0EC" stroke-width="2"/>
+<rect x="180" y="448" width="840" height="88" rx="18" fill="#FFFFFF" stroke="#D8E0EC" stroke-width="2"/>
+<rect x="180" y="570" width="840" height="88" rx="18" fill="#FFFFFF" stroke="#D8E0EC" stroke-width="2"/>
+<rect x="180" y="692" width="840" height="88" rx="18" fill="#EAF5EF" stroke="#418565" stroke-width="2"/>
+</g>
+<g font-family="Noto Sans Devanagari, Nirmala UI, Mangal, sans-serif" text-anchor="middle">
+<g fill="#E77925" font-size="20" font-weight="700"><text x="235" y="135">चरण 1</text><text x="235" y="257">चरण 2</text><text x="235" y="379">चरण 3</text><text x="235" y="501">चरण 4</text><text x="235" y="623">चरण 5</text><text x="235" y="745">चरण 6</text></g>
+<g fill="#17233F" font-size="27" font-weight="700"><text x="640" y="135">अवलोकन</text><text x="640" y="257">स्पष्ट प्रश्न</text><text x="640" y="379">परिकल्पना</text><text x="640" y="501">योजना और जाँच</text><text x="640" y="623">परिणामों का विश्लेषण</text><text x="640" y="745">निष्कर्ष</text></g>
+</g>
+<g fill="none" stroke="#E77925" stroke-width="4" marker-end="url(#arrow)"><path d="M600 170 V196"/><path d="M600 292 V318"/><path d="M600 414 V440"/><path d="M600 536 V562"/><path d="M600 658 V684"/></g>
+</svg>
