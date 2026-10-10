@@ -13,9 +13,19 @@ The publisher first pulls and reads the current image index from the same existi
 
 If a source book fails, its error, timestamps, attempt count and recent attempt history remain in index.json. The publisher continues through the rest of the batch/catalogue, then retries unresolved books for up to five rounds. It finishes with a report listing cached, newly pushed, unchanged and still-failed books. It has no arbitrary binary-size cap and streams binaries to disk; a complete NCERT bundle is required, with no individual-chapter download fallback. A source bundle that is incomplete is reported as a failed whole book.
 
-Every update pushes to the same two package names and the same latest tag; no run-specific GHCR package or tag is created:
-- ghcr.io/manav326/quantaedge-textbooks-hindi:latest
-- ghcr.io/manav326/quantaedge-textbooks-english:latest
+Every update targets fourteen fixed packages—Classes 6–12, each in Hindi and English—and updates the same `latest` tag. No run-specific package is created:
+
+| Class | Hindi GHCR package | English GHCR package |
+|---:|---|---|
+| 6 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-6-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-6-english) |
+| 7 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-7-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-7-english) |
+| 8 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-8-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-8-english) |
+| 9 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-9-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-9-english) |
+| 10 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-10-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-10-english) |
+| 11 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-11-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-11-english) |
+| 12 | [Hindi package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-12-hindi) | [English package](https://github.com/Manav326/QuantaEdge/pkgs/container/quantaedge-textbooks-class-12-english) |
+
+The on-disk mirrors use `source-pdfs/registry-cache/class-N/{hindi|english}`; each API volume path corresponds to exactly one package, and every index is class-scoped.
 
 GHCR is the durable source of truth. GitHub Actions artifacts are only browser-download conveniences and expire after 90 days; the GHCR package remains until the package or tag is explicitly deleted. Docker pulls of the existing image and its layers are the resume/checkpoint mechanism. Use --refresh only when deliberately checking for changed official editions.
 
@@ -23,7 +33,7 @@ The NCERT permission was confirmed by the repository owner; confidential licence
 
 ## GitHub Actions and browser download
 
-Pushes that change the registry publisher launch the incremental cache workflow. It can also be run manually with a language selector, an optional single NCERT book code/registry ID, and a batch limit. Each PDF is pushed to GHCR as it completes. At the end, the workflow publishes two ZIP bundles as GitHub Actions artifacts for browser download. Bundles include cached PDFs and index.json and are retained for 90 days; GHCR is the durable cache.
+Pushes to the publisher start the resumable class-wise cache workflow. A manual run can select a medium, a single class (or all Classes 6–12), and whether to produce direct downloadable ZIPs. The optional ZIP artifact contains one whole-book archive per selected class/medium and lasts 90 days; the fourteen GHCR `latest` tags remain the durable source.
 
 ## End-to-end QuantaEdge source ingestion
 
@@ -41,7 +51,7 @@ The upstream source needs to provide a complete NCERT book bundle. A missing, co
 
 Update both existing GHCR images in place, checking their current indexes first:
 
-    python scripts/textbook_registry.py publish --language both --image-prefix ghcr.io/manav326/quantaedge-textbooks --download-workers 8 --push-batch-size 8 --retry-rounds 5
+    python scripts/textbook_registry.py publish --class-wise --language both --image-prefix ghcr.io/manav326/quantaedge-textbooks --download-workers 8 --push-batch-size 8 --retry-rounds 5
 
 This command always targets the same Hindi and English packages and updates their latest tags. For a local push, log Docker in to ghcr.io first using a GitHub token with package write access. In GitHub Actions, the workflow logs in automatically and runs the same command.
 
