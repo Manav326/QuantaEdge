@@ -3,8 +3,8 @@ spring:
     name: quantaedge-api
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 52MB
+      max-file-size: ${APP_MAX_UPLOAD_SIZE:500MB}
+      max-request-size: ${APP_MAX_REQUEST_SIZE:512MB}
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/quantaedge}
     username: ${SPRING_DATASOURCE_USERNAME:quantaedge}
@@ -20,6 +20,8 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 app:
+  media:
+    storage-dir: ${APP_MEDIA_STORAGE_DIR:/var/lib/quantaedge/media}
   cors:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
   demo-seed: ${APP_DEMO_SEED:false}
