@@ -627,7 +627,6 @@ public class LearningClassController {
       }
       return uri.toASCIIString();
     } catch (IllegalArgumentException ex) {
-      if (ex instanceof ResponseStatusException responseStatusException) throw responseStatusException;
       throw badRequest("Enter a valid HTTPS meeting URL.");
     }
   }
