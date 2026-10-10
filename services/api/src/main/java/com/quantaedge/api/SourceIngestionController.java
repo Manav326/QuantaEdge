@@ -1,6 +1,5 @@
 package com.quantaedge.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.postgresql.util.PGobject;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,7 +41,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/v1/admin/source-ingestion")
 public class SourceIngestionController {
-  private static final ObjectMapper JSON = new ObjectMapper();
   private static final int MAX_PDF_PAGES = 2000;
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -446,7 +443,7 @@ public class SourceIngestionController {
   private Map<String, Object> jobDetails(long jobId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select j.id as job_id,j.source_id,j.subject_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,
-             j.language,j.book_asset_id,j.page_count,j.detected_outline,j.status,j.error_message,
+             j.language,j.book_asset_id,j.page_count,j.detected_outline::text as detected_outline,j.status,j.error_message,
              j.created_at,j.updated_at,j.reviewed_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,a.title as book_asset_title,
              a.original_filename,a.file_size_bytes,a.sha256,a.review_status as book_review_status
@@ -456,7 +453,6 @@ public class SourceIngestionController {
       """, jobId);
     if (rows.isEmpty()) throw notFound("Source ingestion job", jobId);
     Map<String, Object> result = new LinkedHashMap<>(rows.getFirst());
-    result.put("detected_outline", jsonValue(result.get("detected_outline")));
     result.put("chapters", jdbc.queryForList("""
       select ch.id as chapter_row_id,ch.chapter_id,ch.chapter_title,ch.page_start,ch.page_end,
              ch.pdf_asset_id,ch.learning_document_id,ch.status,ch.review_notes,ch.reviewed_at,
@@ -473,15 +469,6 @@ public class SourceIngestionController {
     List<Map<String, Object>> rows = jdbc.queryForList("select * from source_ingestion_job where id=?", jobId);
     if (rows.isEmpty()) throw notFound("Source ingestion job", jobId);
     return rows.getFirst();
-  }
-
-  private Object jsonValue(Object value) {
-    if (value == null) return List.of();
-    try {
-      if (value instanceof PGobject pg) return JSON.readValue(pg.getValue(), Object.class);
-      if (value instanceof String text) return JSON.readValue(text, Object.class);
-    } catch (IOException ignored) { }
-    return value;
   }
 
   private Long storePendingAsset(String title, String filename, byte[] bytes, int pages, String hash,

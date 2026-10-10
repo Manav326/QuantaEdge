@@ -36,6 +36,13 @@ async function api(url: string, init: RequestInit = {}) {
   if (!response.ok) throw new Error(body.detail || body.message || body.error || ('Request failed (' + response.status + ')'));
   return body;
 }
+function normalizeJob(value: any): Job {
+  let outline = value?.detected_outline;
+  if (typeof outline === 'string') {
+    try { outline = JSON.parse(outline); } catch { outline = []; }
+  }
+  return { ...value, detected_outline: Array.isArray(outline) ? outline : [], chapters: Array.isArray(value?.chapters) ? value.chapters : [] } as Job;
+}
 function normalized(value: string) {
   return value.toLowerCase().replace(/chapter|अध्याय|पाठ/gi, '').replace(/[^\p{L}\p{N}]+/gu, '').trim();
 }
@@ -109,7 +116,7 @@ export default function SourceIngestionPage() {
   }, [classCode, subjectCode, selectedSource]);
 
   const loadJob = useCallback(async (id: number) => {
-    const item = await api('/api/v1/admin/source-ingestion/jobs/' + id) as Job;
+    const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
     setJob(item);
     setPreviewPage('1');
     setPreviewChapterRow('');
@@ -161,7 +168,7 @@ export default function SourceIngestionPage() {
     if (!/^https:\/\//i.test(sourceUrl.trim())) { setError('Source downloads must use HTTPS.'); return; }
     setBusy(true); setError(''); setNotice('');
     try {
-      const created = await api('/api/v1/admin/source-ingestion/jobs', {
+      const created = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs', {
         method: 'POST',
         body: JSON.stringify({
           sourceId: selectedSource === 'new' ? null : Number(selectedSource),
@@ -169,7 +176,7 @@ export default function SourceIngestionPage() {
           edition: edition.trim() || 'UNVERIFIED', language: language.trim() || 'hi',
           provider: provider.trim(), sourceKind: sourceKind.trim() || 'BOARD_TEXTBOOK',
         }),
-      }) as Job;
+      }));
       setNotice('Ingestion job #' + created.job_id + ' started. Refresh its status after the download finishes.');
       await loadBase();
       setJob(created);
@@ -220,12 +227,12 @@ export default function SourceIngestionPage() {
     }
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters', {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters', {
         method: 'POST',
         body: JSON.stringify({ chapters: selected.map(row => ({
           chapterId: Number(row.chapterId), title: row.title, pageStart: Number(row.start), pageEnd: Number(row.end),
         })) }),
-      }) as Job;
+      }));
       setJob(updated);
       await loadJob(updated.job_id);
       await loadBase();
@@ -238,9 +245,9 @@ export default function SourceIngestionPage() {
     if (!job) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters/' + row.chapter_row_id, {
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/chapters/' + row.chapter_row_id, {
         method: 'PATCH', body: JSON.stringify({ status }),
-      }) as Job;
+      }));
       setJob(updated);
       setNotice(row.chapter_title + ' marked ' + status.toLowerCase() + '.');
       await loadBase();
@@ -252,7 +259,7 @@ export default function SourceIngestionPage() {
     if (!job) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve', { method: 'POST', body: '{}' }) as Job;
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/approve', { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
       setNotice('Approved PDFs have been added to the textbook library as drafts. A publisher must still publish them for students.');
@@ -264,7 +271,7 @@ export default function SourceIngestionPage() {
     if (!job || !window.confirm('Reject this entire source ingestion? Its pending PDFs will remain hidden from the library.')) return;
     setBusy(true); setError(''); setNotice('');
     try {
-      const updated = await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/reject', { method: 'POST', body: '{}' }) as Job;
+      const updated = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + job.job_id + '/reject', { method: 'POST', body: '{}' }));
       setJob(updated);
       await loadBase();
       setNotice('Source ingestion rejected. Its pending PDF assets remain hidden from the library.');

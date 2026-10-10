@@ -1,6 +1,5 @@
 package com.quantaedge.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Component;
 /** Executes network/PDF work away from the request thread and leaves files in REVIEW. */
 @Component
 public class SourceIngestionWorker {
-  private static final ObjectMapper JSON = new ObjectMapper();
   private final JdbcTemplate jdbc;
   private final SourcePdfDownloadService downloader;
 
@@ -90,7 +88,7 @@ public class SourceIngestionWorker {
         update source_ingestion_job set book_asset_id=?,page_count=?,final_pdf_url=?,
           detected_outline=cast(? as jsonb),status='REVIEW',error_message=null,updated_at=now()
         where id=?
-        """, assetId, pages, resolvedUrl, JSON.writeValueAsString(outline), jobId);
+        """, assetId, pages, resolvedUrl, outlineJson(outline), jobId);
     } catch (Exception ex) {
       String message = ex.getMessage() == null ? "The source could not be processed." : ex.getMessage();
       if (message.length() > 1200) message = message.substring(0, 1200);
@@ -162,6 +160,34 @@ public class SourceIngestionWorker {
       found.get(i).put("pageEnd", Math.max(start, end));
     }
     return found.stream().limit(100).toList();
+  }
+
+  private String outlineJson(List<Map<String, Object>> rows) {
+    StringBuilder result = new StringBuilder("[");
+    for (int i = 0; i < rows.size(); i++) {
+      if (i > 0) result.append(',');
+      Map<String, Object> row = rows.get(i);
+      result.append("{\"title\":\"").append(escapeJson(String.valueOf(row.get("title"))))
+          .append("\",\"pageStart\":").append(((Number) row.get("pageStart")).intValue())
+          .append(",\"pageEnd\":").append(((Number) row.getOrDefault("pageEnd", row.get("pageStart"))).intValue())
+          .append('}');
+    }
+    return result.append(']').toString();
+  }
+
+  private String escapeJson(String value) {
+    StringBuilder escaped = new StringBuilder();
+    for (int i = 0; i < value.length(); i++) {
+      char ch = value.charAt(i);
+      if (ch == '\\') escaped.append("\\\\");
+      else if (ch == '"') escaped.append("\\\"");
+      else if (ch == '\n') escaped.append("\\n");
+      else if (ch == '\r') escaped.append("\\r");
+      else if (ch == '\t') escaped.append("\\t");
+      else if (ch < 0x20) escaped.append(String.format("\\u%04x", (int) ch));
+      else escaped.append(ch);
+    }
+    return escaped.toString();
   }
 
   private String safeFilename(String name) {
