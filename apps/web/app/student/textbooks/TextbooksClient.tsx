@@ -294,7 +294,7 @@ export default function TextbooksClient() {
               </div>}
             </section>;
           })}
-        </div>
+        </div>}
       <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page. Screenshots or capturing displayed pages cannot be fully prevented by a website.</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
       <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected?.chapter_name || 'Chapter PDF'}</span></div>
