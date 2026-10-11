@@ -182,8 +182,16 @@ def main() -> int:
     }, ensure_ascii=False, indent=2))
 
     if not args.apply:
-        print("\nDry run only. Review the list, then rerun with --apply to submit and approve these questions.")
+        if failures:
+            print("\nDry run incomplete: one or more review queues failed to load. Fix the API errors and rerun; do not use --apply yet.")
+        else:
+            print("\nDry run only. Review the list, then rerun with --apply to submit and approve these questions.")
         return 1 if failures else 0
+
+    # Never mutate questions after a partial/failed queue read: the plan must be complete.
+    if failures:
+        print("\nRefusing to apply because one or more review queues failed to load or failed preflight. Fix the errors and rerun a clean dry run first.", file=sys.stderr)
+        return 1
 
     assert api is not None
     results: list[dict[str, Any]] = []
