@@ -386,7 +386,7 @@ def main() -> int:
         summary["mapping_preflight"] = "PASSED_ALL_SELECTED_BANKS"
         summary["mapped_lesson_batches"] = len(plans)
         total_added = total_skipped = 0
-        for plan in plans:
+        for plan_index, plan in enumerate(plans):
             lesson_id = plan["lesson_id"]
             bank = plan["bank"]
             try:
@@ -425,18 +425,47 @@ def main() -> int:
                     file=sys.stderr,
                 )
             except Exception as exc:
+                error_text = str(exc)
                 summary["results"].append({
                     "class_code": plan["class_code"], "subject_code": plan["subject_code"],
                     "chapter_code": plan["chapter_code"], "lesson_code": plan["lesson_code"],
                     "lesson_id": lesson_id, "requested": len(plan["questions"]),
-                    "error": str(exc), "status": "FAILED_NO_PUBLISH",
+                    "error": error_text, "status": "FAILED_NO_PUBLISH",
                 })
+                # Stop on systemic failures. Repeating a broken/auth-failing request
+                # against every lesson is slow and obscures the first root cause.
+                systemic_failure = (
+                    any(f"HTTP {code}" in error_text for code in (401, 403, 408, 425, 429, 500, 501, 502, 503, 504))
+                    or "Cannot reach QuantaEdge admin API" in error_text
+                    or "timed out" in error_text.lower()
+                    or "remote end closed connection" in error_text.lower()
+                )
+                if systemic_failure:
+                    not_attempted = plans[plan_index + 1:]
+                    for remaining in not_attempted:
+                        summary["results"].append({
+                            "class_code": remaining["class_code"],
+                            "subject_code": remaining["subject_code"],
+                            "chapter_code": remaining["chapter_code"],
+                            "lesson_code": remaining["lesson_code"],
+                            "lesson_id": remaining["lesson_id"],
+                            "requested": len(remaining["questions"]),
+                            "status": "NOT_ATTEMPTED_SYSTEMIC_FAILURE",
+                            "reason": error_text,
+                        })
+                    print(
+                        f"Stopping safely after systemic API failure at lesson {lesson_id}; "
+                        f"{len(not_attempted)} batches were not attempted.",
+                        file=sys.stderr, flush=True,
+                    )
+                    break
 
         failed = sum(1 for result in summary["results"] if result.get("error"))
         summary.update({
             "added_as_draft": total_added,
             "skipped_duplicate": total_skipped,
             "failed_batches": failed,
+            "not_attempted_batches": sum(1 for result in summary["results"] if result.get("status") == "NOT_ATTEMPTED_SYSTEMIC_FAILURE"),
             "publication_attempted": False,
             "student_delivery_allowed_by_import": False,
         })
