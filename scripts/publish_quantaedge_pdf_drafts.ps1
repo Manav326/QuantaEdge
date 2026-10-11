@@ -75,7 +75,7 @@ $report = @{
     actions = @()
     failures = @()
     publish_actions_taken = 0
-    content_depth_warning = '54 Class 7–8 chapter PDFs failed the current content-depth gate (three pages and one distinct worked example detected). Publishing does not correct this quality issue.'
+    content_depth_warning = '54 Class 7-8 chapter PDFs failed the current content-depth gate (three pages and one distinct worked example detected). Publishing does not correct this quality issue.'
 }
 
 try {
@@ -124,7 +124,7 @@ try {
     foreach ($row in $rows) {
         $id = [string]$row.document_id
         if (-not $liveById.ContainsKey($id)) {
-            $failures.Add("Document #$id was not returned by the Admin API for Classes 6–8.")
+            $failures.Add("Document #$id was not returned by the Admin API for Classes 6-8.")
             continue
         }
         $doc = $liveById[$id]
@@ -203,7 +203,7 @@ try {
         Write-Host 'Existing published versions in the same slots will be archived by the Admin API:' -ForegroundColor Yellow
         @($replacements | Select-Object -Unique) | ForEach-Object { Write-Host " - $_" -ForegroundColor Yellow }
     }
-    Write-Host 'CONTENT WARNING: 54 Class 7–8 chapter PDFs are below the content-depth thresholds. Publishing does not resolve this.' -ForegroundColor Yellow
+    Write-Host 'CONTENT WARNING: 54 Class 7-8 chapter PDFs are below the content-depth thresholds. Publishing does not resolve this.' -ForegroundColor Yellow
 
     if (-not $Apply) {
         $report.result = 'PREFLIGHT_OK_NO_WRITES'
@@ -237,7 +237,7 @@ try {
             $report.replacements = @($replacements | Select-Object -Unique)
             $report.result = 'IN_PROGRESS'
             Save-PublishReport $report
-            Write-Host "[$($published + $already)/82] PUBLISHED #$id — Class $($item.class_code) $($item.subject_code) | $($item.scope) | $($item.chapter_title)"
+            Write-Host "[$($published + $already)/82] PUBLISHED #$id - Class $($item.class_code) $($item.subject_code) | $($item.scope) | $($item.chapter_title)"
         } catch {
             $item.result = 'ERROR'
             $item.error = $_.Exception.Message
