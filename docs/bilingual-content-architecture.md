@@ -30,12 +30,12 @@ Live sessions and recorded classes have an optional primary language. `recorded_
 
 After the V51 migration and the student delivery/CMS changes have been deployed, use Python 3.12 and the repository's Docker Compose Postgres service.
 
-1. Run a read-only inventory:
+1. The script reads `OPENAI_API_KEY`, `OPENAI_API_BASE_URL`, and the translation model from the local root `.env` file when present. Explicit command-line flags and process environment variables take precedence. Secrets are never printed. Run a read-only inventory first:
    ```powershell
    & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
    ```
 
-2. Test a representative pilot across Hindi and English and across the main entity types. Set `OPENAI_API_KEY` in your local process environment and set `OPENAI_TRANSLATION_MODEL` to a model supported by your configured API provider. `--max-items` is balanced across available languages and content types rather than taking only the first items:
+2. Test a representative pilot across Hindi and English and across the main entity types. Ensure `.env` contains a valid `OPENAI_API_KEY` and either `OPENAI_TRANSLATION_MODEL` or the already configured `APP_AI_TUTOR_MODEL`; ensure `OPENAI_API_BASE_URL` points to the correct provider. `--max-items` is balanced across available languages and content types rather than taking only the first items:
    ```powershell
    & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --model "$env:OPENAI_TRANSLATION_MODEL"
    ```
