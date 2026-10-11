@@ -149,17 +149,19 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
   const [result,setResult]=useState<any>(null);
   const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
+  const submitted=result?.correct===true;
+  const questionLabel=q.question_type==='MCQ'?tx('बहुविकल्पीय प्रश्न','Multiple choice'):q.question_type==='TRUE_FALSE'?tx('सही या गलत','True or false'):q.question_type==='NUMERICAL'?tx('संख्यात्मक प्रश्न','Numerical question'):tx(q.question_type.replaceAll('_',' '),q.question_type.replaceAll('_',' '));
 
   async function submit(next:string) {
     setValue(next);
-    if (!next.trim() || result?.correct===true) return;
+    if (!next.trim() || submitted || busy) return;
     setBusy(true);setAnswerError('');setResult(null);
     try {
       const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
-      if(!response.ok) throw new Error(body.detail||body.message||'Answer could not be checked.');
+      if(!response.ok) throw new Error(body.detail||body.message||tx('उत्तर जाँच नहीं पाया।','Answer could not be checked.'));
       setResult(body);
       onResult(q.id,body);
     } catch(e:any) {
@@ -167,25 +169,46 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
     } finally { setBusy(false); }
   }
 
-  return <article className="concept-card">
-    <div className="lesson-meta">
-      <span className="concept-kicker">{q.question_type} · {q.exam_format ? q.exam_format : 'Practice'}{q.marks ? ' · '+q.marks+' marks' : ''}</span>
-      <span>{q.source_kind === 'TEXTBOOK_ALIGNED' ? <LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" /> : q.source_kind ?? <LocaleText hinglish="Content team का question" english="Content team question" />}</span>
+  return <article className="qe-question-card">
+    <div className="qe-question-card__top">
+      <span className="qe-question-index"><icon aria-hidden="true"> </icon><span>{q.sort_order||'Q'}</span></span>
+      <div className="qe-question-card__labels">
+        <span className="qe-question-type">{questionLabel}</span>
+        <span className="qe-question-context">{q.exam_format||tx('Lesson check','Lesson check')}{q.marks?' · '+q.marks+' '+tx('अंक','marks'):''}</span>
+      </div>
+      <span className="qe-question-source">{q.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="पाठ्यपुस्तक आधारित" english="Textbook-aligned" />:q.source_kind?<MathText text={q.source_kind.replaceAll('_',' ').toLowerCase()}/>:<LocaleText hinglish="QuantaEdge प्रश्न" english="QuantaEdge question" />}</span>
     </div>
-    <p><strong><MathText text={q.prompt}/></strong></p>
-    {options.length>0 ? <div className="answer-row">
-      {options.map(o=><button key={o.key} disabled={busy||result?.correct===true} className={value===o.key?(result?.correct===false?'incorrect':result?.correct===true?'correct':'selected'):''} onClick={()=>submit(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
-    </div> : <div>
+    <div className="qe-question-card__prompt"><MathText text={q.prompt}/></div>
+
+    {options.length>0 ? <div className="qe-answer-options" role="group" aria-label={tx('उत्तर के विकल्प','Answer choices')}>
+      {options.map((o,i)=>{
+        const chosen=value===o.key;
+        const stateClass=chosen&&result?.correct===false?'is-incorrect':chosen&&result?.correct===true?'is-correct':chosen?'is-selected':'';
+        return <button type="button" key={o.key} disabled={busy||submitted} aria-pressed={chosen} className={'qe-answer-option '+stateClass} onClick={()=>void submit(o.key)}>
+          <span className="qe-answer-option__key">{o.key||String.fromCharCode(65+i)}</span>
+          <span className="qe-answer-option__text"><MathText text={o.label}/></span>
+          {chosen&&result?.correct===true&&<span className="qe-answer-option__status" aria-label={tx('सही','Correct')}>✓</span>}
+          {chosen&&result?.correct===false&&<span className="qe-answer-option__status" aria-label={tx('गलत','Incorrect')}>!</span>}
+        </button>;
+      })}
+    </div> : <div className="qe-answer-entry">
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
-        <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
-        <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
-      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim() || result?.correct===true} onClick={()=>submit(value)}><LocaleText hinglish="Answer check करें" english="Check answer" /></button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}><LocaleText hinglish="✦ Tutor" english="✦ Tutor" /></button></div>
+        <textarea value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
+        <input value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर लिखें…','Type your answer…')}/>}
+      <div className="qe-answer-entry__actions">
+        <button type="button" className="button button-dark button-small" disabled={busy||!value.trim()||submitted} onClick={()=>void submit(value)}>{busy?<LocaleText hinglish="जाँच रहे हैं…" english="Checking…" />:<LocaleText hinglish="उत्तर जाँचें" english="Check answer" />}</button>
+        <button type="button" className="qe-tutor-link" onClick={()=>onTutorOpen(q.id)}><span>✦</span><LocaleText hinglish="Tutor से मदद लें" english="Ask the tutor" /></button>
+      </div>
     </div>}
-    {answerError && <div className="feedback feedback-incorrect" role="alert"><span><MathText text={answerError}/></span></div>}
-    {result && <div className={"feedback "+(result.correct===false?"feedback-incorrect":result.correct===true?"feedback-correct":"feedback-ungraded")} role={result.correct===false?"alert":"status"}>
-      <b>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</b>
-      <span>{result.correct===true?<LocaleText hinglish="सही। Explanation पढ़ें और समझें कि उत्तर सही क्यों है।" english="Correct. Review the explanation to understand why this answer works." />:result.correct===false?<LocaleText hinglish="अभी सही नहीं। Explanation पढ़ें और फिर प्रयास करें।" english="Not quite. Review the explanation and try again." />:<LocaleText hinglish="उत्तर save हो गया। इस प्रश्न के लिए teacher की जाँच आवश्यक हो सकती है।" english="Your answer was saved. This question may require teacher or rubric review." />}</span>
-      {result.explanation && <span><MathText text={String(result.explanation)}/></span>}
+
+    {answerError && <div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="उत्तर जाँच नहीं पाया" english="Could not check answer" /></strong><p><MathText text={answerError}/></p></div></div>}
+    {result && <div className={'qe-answer-feedback '+(result.correct===false?'is-incorrect':result.correct===true?'is-correct':'is-ungraded')} role={result.correct===false?'alert':'status'}>
+      <span className="qe-answer-feedback__icon">{result.correct===true?'✓':result.correct===false?'!':'i'}</span>
+      <div className="qe-answer-feedback__body">
+        <strong>{result.correct===true?<LocaleText hinglish="बिल्कुल सही!" english="That's correct!" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं — फिर प्रयास करें" english="Not quite — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}</strong>
+        <p>{result.correct===true?<LocaleText hinglish="बहुत बढ़िया। Explanation पढ़कर अपनी समझ पक्की करें।" english="Great work. Review the explanation to strengthen your understanding." />:result.correct===false?<LocaleText hinglish="घबराएँ नहीं। Explanation पढ़ें, फिर विकल्प दोबारा चुनें।" english="No worries. Read the explanation, then choose again." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}</p>
+        {result.explanation && <div className="qe-answer-feedback__explanation"><span><LocaleText hinglish="समझें क्यों" english="Why this works" /></span><MathText text={String(result.explanation)}/></div>}
+      </div>
     </div>}
   </article>;
 }
