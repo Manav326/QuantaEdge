@@ -28,28 +28,42 @@ Live sessions and recorded classes have an optional primary language. `recorded_
 
 ## Local workflow
 
-After the V51 migration and the student delivery/CMS changes have been deployed, use Python 3.12 and the repository's Docker Compose Postgres service.
+After the V51 migration and student delivery/CMS changes are deployed, use Python 3.12 and the local Docker Compose services.
 
-1. The script reads `OPENAI_API_KEY`, `OPENAI_API_BASE_URL`, and the translation model from the local root `.env` file when present. Explicit command-line flags and process environment variables take precedence. Secrets are never printed. Run a read-only inventory first:
-   ```powershell
-   & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
-   ```
+1. **Import the standalone practice-bank JSON into existing CMS lessons first.** The importer validates answer keys and class/subject/chapter/lesson mappings, then appends only missing questions as DRAFT. It never publishes. Run a no-write file validation first:
 
-2. Test a representative pilot across Hindi and English and across the main entity types. Ensure `.env` contains a valid `OPENAI_API_KEY` and either `OPENAI_TRANSLATION_MODEL` or the already configured `APP_AI_TUTOR_MODEL`; ensure `OPENAI_API_BASE_URL` points to the correct provider. `--max-items` is balanced across available languages and content types rather than taking only the first items:
-   ```powershell
-   & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --model "$env:OPENAI_TRANSLATION_MODEL"
-   ```
-   This writes a local JSONL draft bundle and does not write to the database.
+       & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json"
 
-3. After checking the pilot's JSONL output and counts, add `--apply` to insert generated records with `translation_status='DRAFT'`. This is the staff-review queue; nothing becomes student-visible until staff review and publish it:
-   ```powershell
-   & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --apply --model "$env:OPENAI_TRANSLATION_MODEL"
-   ```
+   For database mapping preflight and safe import, sign in to local Admin, set QUANTAEDGE_ADMIN_SESSION from the QE_SESSION cookie in the current PowerShell session (never paste it into chat or put it on the command line), then run:
 
-4. Once the pilot is accepted, run the same resumable command for all active Class 6–8 Maths and Science data in both locales, omitting `--max-items` to process all eligible structured records. Keep PDF translation separate for a later project. Use `--include-archived` only when translating legacy/archived learning paths is explicitly needed.
+       & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json" --apply --api-url "http://localhost:8080"
 
-The script is resumable: current-source translations already in draft/review/approved/published states are skipped; failures are logged and can be retried. All outputs are written under `QuantaEdge_Bilingual_Draft_Bundle`, which is ignored by Git. The script does not publish translations. Do not treat draft generation as bilingual readiness until the CMS review, API delivery and coverage checks are complete.
+   The report lists newly added questions and exact duplicates skipped. If mapping preflight fails, it writes nothing. If a later network error interrupts the run, rerunning is safe because each question has a stable qe-practice-id tag and content-aware duplicate checking.
 
+2. **Run a read-only inventory of structured records in the local database:**
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
+
+3. **Generate a representative translation pilot across Hindi and English.** The script reads OPENAI_API_KEY, OPENAI_API_BASE_URL, and the model from the root .env file when present. Ensure a valid OPENAI_API_KEY and either OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL are configured. The --max-items cap is balanced across languages and content types:
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40
+
+   This writes a local JSONL draft bundle and does not write to the database. Inspect the translated prose, Devanagari quality, numeric values, options, and answer-preservation checks.
+
+4. **After the pilot looks correct, insert it as DRAFT translations:**
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --apply
+
+   Drafts become visible in the Language review panel for staff editing/review; they are not student-visible until separately approved and published.
+
+5. **Run the full structured-content translation.** Once staff accepts the pilot, omit --max-items to process all eligible active Class 6–8 Maths and Science records in both locales:
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --apply --batch-size 20 --max-retries 5
+
+   This covers curriculum labels, chapters, objectives, lessons, JSON teaching blocks, questions/options/explanations, assessments and available live/recorded class metadata. It does not translate PDFs or textbook assets; those are a separate phase. Use --include-archived only when legacy/archived learning paths are explicitly required.
+
+The translator is resumable: current-source translations already in DRAFT, IN_REVIEW, APPROVED, or PUBLISHED are skipped; failures are logged for retry. Reports and JSONL files are written under QuantaEdge_Bilingual_Draft_Bundle, which is ignored by Git. The translation process never publishes. The staff workflow remains review → approve → publish.
+ 
 ## Acceptance gates
 
 - Every required active lesson, block, question, option, assessment and media text has a current approved/published Hindi and English version.
