@@ -38,6 +38,7 @@ class ApplicationStartupSmokeTest {
     Map<String,Object> sourceInventory = contentTranslationController.inventory("", "", "ALL", "ALL", 20, 0, admin);
     assertTrue(sourceInventory.get("items") instanceof List<?>);
     assertTrue(sourceInventory.get("total") instanceof Number);
+    assertTrue(((Number) sourceInventory.get("total")).longValue() > 0, "Untranslated source inventory should include current class/subject content.");
   }
 
   @Test
