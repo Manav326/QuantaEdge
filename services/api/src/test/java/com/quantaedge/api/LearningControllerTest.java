@@ -63,12 +63,12 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "class_code", "7", "subject_code", "maths",
             "chapter_code", "algebraic-expressions", "title", "Expressions")));
-    when(jdbc.queryForList(contains("strip_answer_keys(b.content)"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("strip_answer_keys(b.content)::text as content"), eq(42L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), eq(42L))).thenReturn(List.of());
 
     Map<String, Object> lesson = controller.lesson(42L, student);
 
-    verify(jdbc).queryForList(contains("strip_answer_keys(b.content)"), eq(42L));
+    verify(jdbc).queryForList(contains("strip_answer_keys(b.content)::text as content"), eq(42L));
     verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq(42L));
     assertTrue(lesson.containsKey("blocks"));
     assertTrue(lesson.containsKey("questions"));
