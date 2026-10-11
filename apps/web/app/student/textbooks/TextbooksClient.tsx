@@ -230,6 +230,15 @@ export default function TextbooksClient() {
     router.push(returnTarget);
   }
 
+  function changeSubjectFilter(value: string) {
+    setSubjectFilter(value);
+    const group = value === 'ALL' ? subjectGroups[0] : subjectGroups.find(item => item.code === value);
+    const code = group?.code || '';
+    setExpandedSubject(code);
+    const classCode = String(group?.rows[0]?.class_code || 'default');
+    if (code) localStorage.setItem('qe:student:textbooks:open:' + classCode, code);
+  }
+
   const progressPercent = pageCount ? Math.round((currentPage / pageCount) * 100) : 0;
 
   useEffect(() => {
@@ -243,7 +252,7 @@ export default function TextbooksClient() {
     {!documentId ? <section className="qe-textbook-library">
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
       <div className="qe-textbook-library-toolbar"><div><span className="qe-textbook-eyebrow">RESOURCE LIBRARY</span><h2>Available textbooks</h2><p>Only the books and chapters available to your enrolled subjects are shown.</p></div>
-        <label>Subject <select value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
+        <label>Subject <select value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
       </div>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> Loading your textbook library…</div>
