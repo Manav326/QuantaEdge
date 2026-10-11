@@ -294,7 +294,7 @@ def process(entity_type, rows, index, translations, args, cookie, candidate_limi
                 # and connection failures won't heal by retrying every remaining row.
                 # Stop immediately and report what remains unattempted.
                 systemic = bool(
-                    re.search(r"HTTP\\s+(?:401|403|408|425|429|5\\d\\d)\\b", error, flags=re.IGNORECASE)
+                    re.search(r"HTTP\s+(?:401|403|408|425|429|5\d\d)\b", error, flags=re.IGNORECASE)
                     or "API connection failed:" in error
                     or "timed out" in error.lower()
                     or "remote end closed connection" in error.lower()
@@ -342,6 +342,7 @@ def main() -> int:
     if args.timeout < 1 or args.delay < 0: parser.error("Invalid timeout or delay")
     if not args.api_base_url.startswith(("http://localhost", "http://127.0.0.1")):
         parser.error("This importer reads IDs from the local Docker Postgres database; use a localhost API URL.")
+    run_started_at = datetime.now(timezone.utc)
     try:
         queue, translations, index = load_assets(args.queue,args.translations)
         print(f"Loaded {len(queue):,} queue records and {len(translations):,} translations.")
@@ -389,7 +390,9 @@ def main() -> int:
             "schema":"quantaedge.offline-translation-import-report.v2",
             "mode":"APPLY_DRAFTS" if args.apply else "DRY_RUN",
             "status":fatal_status,
-            "started_at":datetime.now(timezone.utc).isoformat(),
+            "started_at":run_started_at.isoformat(),
+            "finished_at":datetime.now(timezone.utc).isoformat(),
+            "duration_seconds":round((datetime.now(timezone.utc)-run_started_at).total_seconds(),2),
             "queue_entries":len(queue),
             "translation_entries":len(translations),
             "limit_total_ready_candidates":args.limit,
