@@ -11,6 +11,45 @@ pipeline = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(pipeline)
 
 
+class TranslationPromptTests(unittest.TestCase):
+    def test_hindi_prompt_requires_contextual_devanagari_school_translation(self):
+        prompt = pipeline.build_system_prompt("hi")
+        self.assertIn("pedagogical localization", prompt)
+        self.assertIn("Hindi in Devanagari script", prompt)
+        self.assertIn("not word-for-word", prompt)
+        self.assertIn("Contextual terminology guide", prompt)
+        self.assertIn("preserve that representation", prompt)
+
+    def test_english_prompt_requires_natural_age_appropriate_textbook_english(self):
+        prompt = pipeline.build_system_prompt("en")
+        self.assertIn("idiomatic, age-appropriate Indian school textbook English", prompt)
+        self.assertIn("Translate the intended concept", prompt)
+        self.assertIn("not a literal substitution dictionary", prompt)
+
+    def test_small_translation_pilot_balances_both_languages_and_content_types(self):
+        sources = [
+            {"entity_type": "lesson", "entity_id": 1},
+            {"entity_type": "lesson_block", "entity_id": 2},
+            {"entity_type": "question", "entity_id": 3},
+            {"entity_type": "lesson", "entity_id": 1},
+            {"entity_type": "lesson_block", "entity_id": 2},
+            {"entity_type": "question", "entity_id": 3},
+        ]
+        todo = [
+            (sources[0], "hi", 1),
+            (sources[0], "en", 1),
+            (sources[1], "hi", 1),
+            (sources[1], "en", 1),
+            (sources[2], "hi", 1),
+            (sources[2], "en", 1),
+        ]
+        selected = pipeline.cap_tasks_balanced_by_language_and_type(todo, 4)
+        self.assertEqual(len(selected), 4)
+        self.assertEqual({language for _row, language, _version in selected}, {"hi", "en"})
+        selected_types = {row["entity_type"] for row, _language, _version in selected}
+        self.assertGreaterEqual(len(selected_types), 2)
+
+
 class TranslationShapeTests(unittest.TestCase):
     def test_accepts_contextual_text_translation(self):
         source = {
