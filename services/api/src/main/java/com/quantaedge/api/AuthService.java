@@ -43,7 +43,9 @@ public class AuthService {
       @Value("${app.auth.admin-mobiles:7070107483}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
-    this.sessionHours=sessionHours;
+    // Keep the idle timeout predictable even if an older deployment still sets 168 hours.
+    // Refresh credentials are renewed by authenticated activity, not by elapsed wall-clock time.
+    this.sessionHours=Math.min(4,Math.max(1,sessionHours));
     this.secureCookies=secureCookies;
     this.otpCooldownSeconds=otpCooldownSeconds;
     this.adminMobiles=List.of(adminMobiles.split(",")).stream()
@@ -460,6 +462,7 @@ public class AuthService {
       left join student st on st.id=s.student_id
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
+        and (s.refresh_expires_at is null or s.refresh_expires_at>now())
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
         and (s.staff_id is null or e.id is not null)
@@ -475,7 +478,12 @@ public class AuthService {
       jdbc.update("update auth_session set revoked_at=now() where token_hash=? and revoked_at is null",hash(token));
       return null;
     }
-    jdbc.update("update auth_session set last_seen_at=now() where token_hash=?",hash(token));
+    jdbc.update("""
+      update auth_session set last_seen_at=now(),
+        refresh_expires_at=case when refresh_token_hash is not null
+          then now()+(? * interval '1 hour') else refresh_expires_at end
+      where token_hash=? and revoked_at is null
+      """,sessionHours,hash(token));
     String name=studentId!=null?String.valueOf(r.get("student_name")):
         staffId!=null?String.valueOf(r.get("staff_name")):
         (r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
