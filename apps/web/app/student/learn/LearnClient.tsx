@@ -226,6 +226,7 @@ export default function LearnClient() {
   const [error,setError]=useState('');
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStarted,setSessionStarted]=useState<number|null>(null);
+  const [mcqAttempted,setMcqAttempted]=useState<Record<number,boolean>>({});
   const router=useRouter();
   const searchParams=useSearchParams();
 
@@ -239,6 +240,8 @@ export default function LearnClient() {
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
     [lesson]);
+  const attemptedMcqs=lessonMcqs.filter(question=>mcqAttempted[question.id]).length;
+  const canStartTopicPractice=lessonMcqs.length===0||attemptedMcqs===lessonMcqs.length;
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
     const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
@@ -406,14 +409,17 @@ export default function LearnClient() {
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
-      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{lessonMcqs.length} questions</span></div>
-      {lessonMcqs.length ? lessonMcqs.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
+      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <LocaleText hinglish="attempt किए" english="attempted" /></span></div>
+      {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={tx('MCQ की प्रगति','MCQ progress')}><div><span><LocaleText hinglish="सभी सवालों के उत्तर दें" english="Answer every question to continue" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
+      {lessonMcqs.length ? lessonMcqs.map(q=><QuestionCard key={q.id} q={q} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
 
       <section className="concept-card practice-launch-card">
         <span className="concept-kicker"><LocaleText hinglish="अगला चरण" english="Next step" /></span>
         <h2><LocaleText hinglish="अब इसी micro-topic का अभ्यास करें" english="Now practise this micro-topic" /></h2>
-        <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective. You do not need to choose topics or question types." /></p>
-        <Link href={'/student/practice?lessonId='+lesson.id} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
+        <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective/concept से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective and concept. You do not need to choose topics or question types." /></p>
+        {canStartTopicPractice
+          ? <Link href={'/student/practice?lessonId='+lesson.id} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
+          : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
