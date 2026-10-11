@@ -161,6 +161,53 @@ function Sync-QeSessionFromState {
     }
 }
 
+function Invoke-QeStaffRefreshRequest {
+    param(
+        [Parameter(Mandatory = $true)][string]$RefreshCookieValue,
+        [Parameter(Mandatory = $true)][string]$Uri
+    )
+    if ([string]::IsNullOrWhiteSpace($RefreshCookieValue)) {
+        return [pscustomobject]@{ StatusCode=0; Body='No refresh cookie supplied.'; AccessCookie=''; RefreshCookie='' }
+    }
+
+    Add-Type -AssemblyName System.Net.Http -ErrorAction SilentlyContinue
+    $handler = $null
+    $client = $null
+    $request = $null
+    $response = $null
+    try {
+        $handler = [System.Net.Http.HttpClientHandler]::new()
+        $handler.UseCookies = $true
+        $handler.CookieContainer = [System.Net.CookieContainer]::new()
+        $targetUri = [Uri]$Uri
+        $cookie = [System.Net.Cookie]::new("QE_STAFF_REFRESH", $RefreshCookieValue.Trim(), "/")
+        $handler.CookieContainer.Add($targetUri, $cookie)
+        $client = [System.Net.Http.HttpClient]::new($handler)
+        $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Post, $targetUri)
+        [void]$request.Headers.TryAddWithoutValidation("Accept", "application/json")
+        [void]$request.Headers.TryAddWithoutValidation("X-QE-Workspace", "STAFF")
+        $response = $client.SendAsync($request).GetAwaiter().GetResult()
+        $body = $response.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+        $cookies = $handler.CookieContainer.GetCookies($targetUri)
+        $access = ''
+        $refresh = ''
+        if ($null -ne $cookies["QE_STAFF_SESSION"]) { $access = $cookies["QE_STAFF_SESSION"].Value }
+        if ($null -ne $cookies["QE_STAFF_REFRESH"]) { $refresh = $cookies["QE_STAFF_REFRESH"].Value }
+        return [pscustomobject]@{
+            StatusCode = [int]$response.StatusCode
+            Body = $body
+            AccessCookie = $access
+            RefreshCookie = $refresh
+        }
+    }
+    finally {
+        if ($null -ne $response) { $response.Dispose() }
+        if ($null -ne $request) { $request.Dispose() }
+        if ($null -ne $client) { $client.Dispose() }
+        if ($null -ne $handler) { $handler.Dispose() }
+    }
+}
+
 function Invoke-QeStaffAuthRequest {
     param(
         [Parameter(Mandatory = $true)][string]$CookieValue,
@@ -372,21 +419,51 @@ try {
                 throw "Staff-session validation failed with HTTP $($authResponse.StatusCode): $($authResponse.Body). No content was written."
             }
 
-            # Ask for a fresh token only after the API is up. The HTTP client above
-            # explicitly sends Cookie; do not use Invoke-RestMethod -Headers for this.
-            Write-Warning "The API rejected the staff session (HTTP $($authResponse.StatusCode)). Sign in at http://localhost:3001 and copy the current QE_STAFF_SESSION value."
-            $secureRetry = Read-Host "Fresh QE_STAFF_SESSION value (hidden)" -AsSecureString
-            $retryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRetry)
-            try { $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($retryPtr) }
-            finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($retryPtr) }
-            if ([string]::IsNullOrWhiteSpace($session)) { throw "No staff session value was supplied; stopped before writing any content." }
-            $env:QUANTAEDGE_ADMIN_SESSION = $session
-            $env:QE_SESSION = $session
+            # The short-lived access token may have expired while its refresh cookie is
+            # still valid. Try refresh before asking the editor to copy a new cookie pair.
+            $refreshUrl = $ApiBaseUrl.TrimEnd([char]47) + "/api/v1/auth/refresh"
+            $renewed = Invoke-QeStaffRefreshRequest -RefreshCookieValue $script:RefreshCookie -Uri $refreshUrl
+            if ($renewed.StatusCode -eq 200 -and
+                -not [string]::IsNullOrWhiteSpace($renewed.AccessCookie) -and
+                -not [string]::IsNullOrWhiteSpace($renewed.RefreshCookie)) {
+                $script:SessionCookie = $renewed.AccessCookie
+                $script:RefreshCookie = $renewed.RefreshCookie
+                $session = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+                $env:QE_SESSION = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+                $env:QE_STAFF_REFRESH = $script:RefreshCookie
+                Save-QeSessionState
+                $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+            }
 
-            $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
             if ($authResponse.StatusCode -ne 200) {
-                Get-QeStaffSessionDiagnostics -CookieValue $session
-                throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). The local database diagnosis above distinguishes a missing/expired session from a request-authentication problem. No content was written."
+                # Ask for a complete, paired cookie set only after refresh has failed.
+                Write-Warning "Staff authentication failed; sign in at http://localhost:3001 and copy both staff cookies from DevTools > Application > Cookies > http://localhost:3001."
+                $secureRetry = Read-Host "Fresh QE_STAFF_SESSION value (hidden)" -AsSecureString
+                $retryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRetry)
+                try { $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($retryPtr) }
+                finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($retryPtr) }
+                $secureRefreshRetry = Read-Host "Paired QE_STAFF_REFRESH value (hidden)" -AsSecureString
+                $refreshRetryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRefreshRetry)
+                try { $refresh = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($refreshRetryPtr) }
+                finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($refreshRetryPtr) }
+                if ([string]::IsNullOrWhiteSpace($session) -or [string]::IsNullOrWhiteSpace($refresh)) {
+                    throw "Both fresh staff cookie values are required; stopped before writing any content."
+                }
+                $script:SessionCookie = $session.Trim()
+                $script:RefreshCookie = $refresh.Trim()
+                $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+                $env:QE_SESSION = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+                $env:QE_STAFF_REFRESH = $script:RefreshCookie
+                Save-QeSessionState
+                $session = $script:SessionCookie
+                $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+                if ($authResponse.StatusCode -ne 200) {
+                    Get-QeStaffSessionDiagnostics -CookieValue $session
+                    throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). The local database diagnosis above distinguishes a missing/expired session from a request-authentication problem. No content was written."
+                }
             }
         }
         try { $authCheck = $authResponse.Body | ConvertFrom-Json -ErrorAction Stop }
