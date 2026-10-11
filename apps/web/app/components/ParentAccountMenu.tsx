@@ -1,6 +1,7 @@
 'use client';
 
 import { LocaleText } from './LanguageProvider';
+import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -24,7 +25,6 @@ export default function ParentAccountMenu({
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
-  const avatarSrc = profileImageUrl || '/branding/parent-avatar.svg';
 
   useEffect(() => {
     if (!open) return;
@@ -65,7 +65,7 @@ export default function ParentAccountMenu({
           <strong>{displayName}</strong>
           <small><LocaleText hinglish="Parent account" english="Parent account" /></small>
         </span>
-        <span className="parent-account__avatar"><img src={avatarSrc} alt="" width="44" height="44" /></span>
+        <span className="parent-account__avatar"><AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/parent-avatar.svg" alt="" width={44} height={44} /></span>
         <svg className={`parent-account__chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
 

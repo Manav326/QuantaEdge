@@ -6,7 +6,14 @@ export const metadata = {
   title: { default: 'QuantaEdge Admin', template: '%s | QuantaEdge' },
   description: 'QuantaEdge learning platform administration and curriculum operations.',
   applicationName: 'QuantaEdge',
-  icons: { icon: '/branding/quantaedge-icon.png', apple: '/branding/quantaedge-icon.png' },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/branding/quantaedge-icon.png', type: 'image/png' },
+    ],
+    shortcut: '/branding/quantaedge-icon.png',
+    apple: '/branding/quantaedge-icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

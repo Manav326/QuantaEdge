@@ -1,6 +1,7 @@
 'use client';
 
 import { LocaleText } from './LanguageProvider';
+import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
@@ -17,7 +18,6 @@ function MenuIcon() {
 }
 
 export default function StudentAccountMenu({ displayName, classCode, profileImageUrl }: StudentAccountMenuProps) {
-  const avatarSrc = profileImageUrl || '/branding/student-avatar.svg';
   const accountRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -62,7 +62,7 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
           <small>Class {classCode}</small>
         </span>
         <span className="student-avatar">
-          <img src={avatarSrc} alt="" width="44" height="44" />
+          <AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/student-avatar.svg" alt="" width={44} height={44} />
         </span>
         <svg className={`student-account-chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>

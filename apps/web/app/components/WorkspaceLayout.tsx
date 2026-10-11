@@ -55,7 +55,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       setProfile(null);
       return () => { active = false; };
     }
-    const endpoint = role === 'student' ? '/api/v1/students/me' : '/api/v1/guardians/profile';
+    const endpoint = role === 'student' ? '/api/v1/students/me/profile' : '/api/v1/guardians/profile';
     const loadProfile = () => {
       fetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
         .then(response => response.ok ? response.json() : null)

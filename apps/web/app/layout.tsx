@@ -7,7 +7,14 @@ export const metadata = {
   title: { default: 'QuantaEdge | Smarter Decisions. Greater Growth.', template: '%s | QuantaEdge' },
   description: 'AI-powered learning for Hindi-medium students, starting with Bihar Board Classes 6–8. Smarter Decisions. Greater Growth.',
   applicationName: 'QuantaEdge',
-  icons: { icon: '/branding/quantaedge-icon.png', apple: '/branding/quantaedge-icon.png' },
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/branding/quantaedge-icon.png', type: 'image/png' },
+    ],
+    shortcut: '/branding/quantaedge-icon.png',
+    apple: '/branding/quantaedge-icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
