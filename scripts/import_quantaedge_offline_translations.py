@@ -263,8 +263,13 @@ def post_draft(base_url, cookie, entity_type, entity_id, payload, timeout):
 
 def process(entity_type, rows, index, translations, args, cookie):
     report = []
-    chosen = rows[:args.limit] if args.limit else rows
-    for number, row in enumerate(chosen, 1):
+    prepared = 0
+    for number, row in enumerate(rows, 1):
+        # --limit caps ready import candidates, not arbitrary database rows. This
+        # lets a pilot find translated catalog entries even when older CMS rows
+        # appear first in database order.
+        if args.limit is not None and prepared >= args.limit:
+            break
         entity_id = int(row["entity_id"])
         item = {k:row.get(k) for k in ("class_code","subject_code","chapter_code")}
         item.update(entity_type=entity_type, entity_id=entity_id)
@@ -273,6 +278,7 @@ def process(entity_type, rows, index, translations, args, cookie):
         payload, issues = chapter_payload(row,index,translations) if entity_type == "curriculum_chapter" else question_payload(row,index,translations)
         if issues or payload is None:
             item.update(status="skipped_incomplete", issues=issues); report.append(item); continue
+        prepared += 1
         if not args.apply:
             item["status"] = "ready_dry_run"
         else:
@@ -283,7 +289,7 @@ def process(entity_type, rows, index, translations, args, cookie):
                 item.update(status="api_error",error=str(exc))
             if args.delay: time.sleep(args.delay)
         report.append(item)
-        if number % 100 == 0: print(f"{entity_type}: checked {number}/{len(chosen)}",flush=True)
+        if number % 100 == 0: print(f"{entity_type}: scanned {number}/{len(rows)}; ready {prepared}",flush=True)
     return report
 
 
