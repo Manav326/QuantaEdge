@@ -88,6 +88,16 @@ export default function TextbookLibraryPage() {
   const [permissions, setPermissions] = useState<string[]>([]);
   const [previewDocumentId, setPreviewDocumentId] = useState<number | null>(null);
   const [previewPage, setPreviewPage] = useState(1);
+  const [previewPageDraft, setPreviewPageDraft] = useState('1');
+  const [previewZoom, setPreviewZoom] = useState(100);
+  const [previewFitWidth, setPreviewFitWidth] = useState(false);
+  const [previewFitPage, setPreviewFitPage] = useState(true);
+  const [previewThumbnailsOpen, setPreviewThumbnailsOpen] = useState(false);
+  const [previewFullscreen, setPreviewFullscreen] = useState(false);
+  const [previewImageLoading, setPreviewImageLoading] = useState(false);
+  const [previewImageError, setPreviewImageError] = useState('');
+  const previewDialogRef = useRef<HTMLElement | null>(null);
+  const previewPageImageRef = useRef<HTMLImageElement | null>(null);
   const [scope, setScope] = useState<'SUBJECT_BOOK' | 'CHAPTER_PDF'>('CHAPTER_PDF');
   const [resourceLanguage, setResourceLanguage] = useState<'hi' | 'en'>('hi');
   const [chapterId, setChapterId] = useState('');
@@ -135,6 +145,12 @@ export default function TextbookLibraryPage() {
   const previewPageCount = previewAssignment
     ? Math.max(1, previewAssignment.page_end - previewAssignment.page_start + 1)
     : 0;
+  const firstPreviewThumb = Math.max(1, Math.min(previewPage - 6, previewPageCount - 19));
+  const previewThumbnails = Array.from({ length: Math.min(20, previewPageCount) }, (_value, index) => firstPreviewThumb + index);
+  const previewPageUrl = previewDocumentId
+    ? '/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage
+    : '';
+  const previewPageTitle = previewAssignment?.title || 'textbook PDF';
 
   const openPdfPreview = useCallback((documentId: number) => {
     previewOriginScrollY.current = window.scrollY;
@@ -145,6 +161,13 @@ export default function TextbookLibraryPage() {
     window.history.pushState({ ...(window.history.state || {}), qePdfPreview: true }, '', url);
     setPreviewDocumentId(documentId);
     setPreviewPage(1);
+    setPreviewPageDraft('1');
+    setPreviewZoom(100);
+    setPreviewFitWidth(false);
+    setPreviewFitPage(true);
+    setPreviewThumbnailsOpen(false);
+    setPreviewImageError('');
+    setPreviewImageLoading(true);
   }, []);
 
   const closePdfPreview = useCallback(() => {
@@ -165,6 +188,9 @@ export default function TextbookLibraryPage() {
   const changePreviewPage = useCallback((requestedPage: number) => {
     const nextPage = Math.max(1, Math.min(Math.max(1, previewPageCount), Number(requestedPage) || 1));
     setPreviewPage(nextPage);
+    setPreviewPageDraft(String(nextPage));
+    setPreviewImageLoading(true);
+    setPreviewImageError('');
     const url = new URL(window.location.href);
     url.searchParams.set('previewPage', String(nextPage));
     window.history.replaceState({ ...(window.history.state || {}), qePdfPreview: true }, '', url);
@@ -177,7 +203,9 @@ export default function TextbookLibraryPage() {
       if (Number.isSafeInteger(documentId) && documentId > 0) {
         setPreviewDocumentId(documentId);
         const page = Number(params.get('previewPage') || 1);
-        setPreviewPage(Number.isSafeInteger(page) && page > 0 ? page : 1);
+        const safePage = Number.isSafeInteger(page) && page > 0 ? page : 1;
+        setPreviewPage(safePage);
+        setPreviewPageDraft(String(safePage));
         previewHistoryEntry.current = Boolean(window.history.state?.qePdfPreview);
         return;
       }
@@ -198,9 +226,38 @@ export default function TextbookLibraryPage() {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(target.tagName)) return;
+      if (event.altKey) return;
+      if ((event.ctrlKey || event.metaKey) && ['0', '+', '=', '-'].includes(event.key)) {
+        event.preventDefault();
+        if (event.key === '0') { setPreviewFitPage(true); setPreviewFitWidth(false); }
+        else if (event.key === '-') { setPreviewFitPage(false); setPreviewFitWidth(false); setPreviewZoom(value => Math.max(60, value - 10)); }
+        else { setPreviewFitPage(false); setPreviewFitWidth(false); setPreviewZoom(value => Math.min(160, value + 10)); }
+        return;
+      }
+      if (event.ctrlKey || event.metaKey) return;
       if (event.key === 'Escape') {
         event.preventDefault();
+        if (document.fullscreenElement && previewDialogRef.current) {
+          void document.exitFullscreen().catch(() => undefined);
+          return;
+        }
         closePdfPreview();
+      } else if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+        event.preventDefault(); changePreviewPage(previewPage + 1);
+      } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+        event.preventDefault(); changePreviewPage(previewPage - 1);
+      } else if (event.key === 'Home') {
+        event.preventDefault(); changePreviewPage(1);
+      } else if (event.key === 'End') {
+        event.preventDefault(); changePreviewPage(previewPageCount);
+      } else if (event.key === '0') {
+        event.preventDefault(); setPreviewFitPage(true); setPreviewFitWidth(false);
+      } else if (event.key === '+' || event.key === '=') {
+        event.preventDefault(); setPreviewFitPage(false); setPreviewFitWidth(false); setPreviewZoom(value => Math.min(160, value + 10));
+      } else if (event.key === '-') {
+        event.preventDefault(); setPreviewFitPage(false); setPreviewFitWidth(false); setPreviewZoom(value => Math.max(60, value - 10));
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -208,7 +265,28 @@ export default function TextbookLibraryPage() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [previewDocumentId, closePdfPreview]);
+  }, [previewDocumentId, previewPage, previewPageCount, closePdfPreview, changePreviewPage]);
+
+  useEffect(() => {
+    const updateFullscreen = () => setPreviewFullscreen(Boolean(document.fullscreenElement && document.fullscreenElement === previewDialogRef.current));
+    document.addEventListener('fullscreenchange', updateFullscreen);
+    return () => document.removeEventListener('fullscreenchange', updateFullscreen);
+  }, []);
+
+  useEffect(() => {
+    if (previewDocumentId === null) return;
+    setPreviewImageLoading(true);
+    setPreviewImageError('');
+  }, [previewDocumentId, previewPage]);
+
+  async function togglePreviewFullscreen() {
+    try {
+      if (!document.fullscreenElement && previewDialogRef.current) await previewDialogRef.current.requestFullscreen();
+      else if (document.fullscreenElement) await document.exitFullscreen();
+    } catch {
+      setPreviewImageError('Full-screen mode is not available in this browser.');
+    }
+  }
 
   useEffect(() => {
     fetch('/api/v1/auth/me', { cache: 'no-store' })
@@ -408,24 +486,51 @@ export default function TextbookLibraryPage() {
       {previewAssignment && <div className={styles.previewBackdrop} role="presentation" onMouseDown={event => {
         if (event.target === event.currentTarget) closePdfPreview();
       }}>
-        <section className={styles.previewDialog} role="dialog" aria-modal="true" aria-labelledby="qe-pdf-preview-title" tabIndex={-1}>
+        <section ref={node => { previewDialogRef.current = node; }} className={styles.previewDialog} role="dialog" aria-modal="true" aria-labelledby="qe-pdf-preview-title" tabIndex={-1}>
           <div className={styles.previewHeading}>
-            <div><span>PDF PREVIEW · READ ONLY</span><h2 id="qe-pdf-preview-title">{previewAssignment.title}</h2>
-              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · Page {previewPage} of {previewPageCount}</p>
+            <div className={styles.previewTitleCopy}><span>PDF PREVIEW · READ ONLY</span><h2 id="qe-pdf-preview-title">{previewAssignment.title}</h2>
+              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · {previewPageCount} pages</p>
             </div>
             <button type="button" className={styles.secondaryButton} onClick={closePdfPreview}>← Back to assignments</button>
           </div>
-          <div className={styles.previewControls}>
-            <button type="button" className={styles.secondaryButton} disabled={previewPage <= 1} onClick={() => changePreviewPage(previewPage - 1)}>Previous page</button>
-            <label>Page <input type="number" min="1" max={previewPageCount} value={previewPage} onChange={e => changePreviewPage(Number(e.target.value))} /></label>
-            <button type="button" className={styles.secondaryButton} disabled={previewPage >= previewPageCount} onClick={() => changePreviewPage(previewPage + 1)}>Next page</button>
+
+          <div className={styles.previewReaderToolbar} role="toolbar" aria-label="PDF reader controls">
+            <div className={styles.previewPageControls}>
+              <button type="button" className={styles.previewIconButton} aria-label="Previous page" title="Previous page" disabled={previewPage <= 1} onClick={() => changePreviewPage(previewPage - 1)}>‹</button>
+              <label>Page <input type="number" min="1" max={previewPageCount} value={previewPageDraft} onChange={event => setPreviewPageDraft(event.target.value)} onBlur={() => changePreviewPage(Number(previewPageDraft))} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); changePreviewPage(Number(previewPageDraft)); } }} /><span>of {previewPageCount}</span></label>
+              <button type="button" className={styles.previewIconButton} aria-label="Next page" title="Next page" disabled={previewPage >= previewPageCount} onClick={() => changePreviewPage(previewPage + 1)}>›</button>
+            </div>
+            <span className={styles.previewToolbarDivider} aria-hidden="true"/>
+            <div className={styles.previewZoomControls}>
+              <button type="button" className={styles.previewIconButton} aria-label="Zoom out" title="Zoom out" disabled={previewZoom <= 60} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.max(60,value-10));}}>−</button>
+              <span>{previewFitPage?'Fit page':previewFitWidth?'Fit width':previewZoom+'%'}</span>
+              <button type="button" className={styles.previewIconButton} aria-label="Zoom in" title="Zoom in" disabled={previewZoom >= 160} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(false);setPreviewZoom(value => Math.min(160,value+10));}}>＋</button>
+            </div>
+            <button type="button" className={styles.previewToolButton+(previewFitPage?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(true);setPreviewFitWidth(false);}}>Fit page</button>
+            <button type="button" className={styles.previewToolButton+(previewFitWidth?' '+styles.isSelected:'')} onClick={() => {setPreviewFitPage(false);setPreviewFitWidth(value => !value);}}>{previewFitWidth?'Actual size':'Fit width'}</button>
+            <button type="button" className={styles.previewToolButton+(previewThumbnailsOpen?' '+styles.isSelected:'')} onClick={() => setPreviewThumbnailsOpen(value => !value)}>▤ Pages</button>
+            <button type="button" className={styles.previewToolButton+' '+styles.previewFullscreenButton} onClick={() => void togglePreviewFullscreen()}>{previewFullscreen?'Exit full screen':'⛶ Full screen'}</button>
           </div>
-          <div className={styles.previewCanvas}>
-            <img key={previewDocumentId + '-' + previewPage}
-              src={'/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage}
-              alt={'Preview page ' + previewPage + ' of ' + previewAssignment.title} />
+
+          <div className={styles.previewReaderWorkspace+(previewThumbnailsOpen?' '+styles.withThumbnails:'')}>
+            {previewThumbnailsOpen && <aside className={styles.previewThumbnails} aria-label="Page thumbnails">
+              <div className={styles.previewThumbsHeader}><b>Pages</b><small>{previewPageCount} total</small></div>
+              <div className={styles.previewThumbList}>{previewThumbnails.map(pageNumber=><button type="button" key={pageNumber} className={pageNumber===previewPage?styles.activeThumb:''} onClick={() => changePreviewPage(pageNumber)}>
+                <img src={'/api/v1/admin/learning-documents/'+previewDocumentId+'/pages/'+pageNumber} alt="" loading="lazy" draggable={false}/><span>Page {pageNumber}</span>
+              </button>)}</div>
+              <div className={styles.previewThumbsFooter}>Showing pages {previewThumbnails[0]||0}–{previewThumbnails[previewThumbnails.length-1]||0}</div>
+            </aside>}
+            <div className={styles.previewPageStage}>
+              <div className={styles.previewCanvasTop}><span><i/> Secured source preview</span><span>Page {previewPage} / {previewPageCount}</span></div>
+              <div className={styles.previewPageViewport+(previewFitWidth?' '+styles.fitWidth:'')+(previewFitPage?' '+styles.fitPage:'')} key={previewDocumentId+'-'+previewPage}>
+                {previewImageLoading&&<div className={styles.previewImageLoading}><span className={styles.previewSpinner}/> Rendering page {previewPage}…</div>}
+                <img ref={previewPageImageRef} className={styles.previewPageImage} src={previewPageUrl} alt={'Page '+previewPage+' of '+previewPageTitle} draggable={false} onLoad={() => {setPreviewImageLoading(false);setPreviewImageError('');}} onError={() => {setPreviewImageLoading(false);setPreviewImageError('This page could not be rendered. Try again or return to assignments.');}} style={{width:previewFitPage?'auto':previewFitWidth?'100%':previewZoom+'%'}}/>
+                {previewImageError&&<div className={styles.previewPageError} role="alert"><span>{previewImageError}</span><button type="button" className={styles.secondaryButton} onClick={() => {setPreviewImageError('');setPreviewImageLoading(true);if(previewPageImageRef.current)previewPageImageRef.current.src=previewPageUrl+'?retry='+Date.now();}}>Retry page</button></div>}
+              </div>
+              <div className={styles.previewCanvasBottom}><span>Private source preview · Page {previewPage}</span><span>Use ← → or Page Up / Page Down to navigate</span></div>
+            </div>
           </div>
-          <div className={styles.previewDialogFooter}><span>Private source preview</span><span>Use the page controls to inspect the selected range</span></div>
+          <div className={styles.previewDialogFooter}><span>Read-only secure page rendering</span><span>Original PDF bytes are not exposed in this preview</span></div>
         </section>
       </div>}
 
