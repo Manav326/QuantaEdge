@@ -91,8 +91,8 @@ def main() -> int:
     args = parser.parse_args()
 
     session = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
-    if args.apply and not session:
-        parser.error("--apply requires QUANTAEDGE_ADMIN_SESSION from the authenticated QE_SESSION cookie.")
+    if not session:
+        parser.error("Set QUANTAEDGE_ADMIN_SESSION from the authenticated QE_SESSION cookie (the review queue is protected even for dry runs).")
     if args.apply and not args.api_url.startswith(("https://", "http://localhost", "http://127.0.0.1")):
         parser.error("Use HTTPS for a remote API; HTTP is permitted only for localhost.")
     if args.limit < 0:
@@ -128,6 +128,22 @@ def main() -> int:
     skipped: list[dict[str, Any]] = []
     for row in unique.values():
         qid = int(row["question_id"])
+        raw_tags = row.get("tags", "[]")
+        try:
+            parsed_tags = json.loads(raw_tags) if isinstance(raw_tags, str) else raw_tags
+        except (TypeError, json.JSONDecodeError):
+            parsed_tags = []
+        tags = [str(tag).lower() for tag in parsed_tags] if isinstance(parsed_tags, list) else []
+        # Avoid accidentally approving unrelated drafts. Imported practice packs use
+        # editorial-review-required, qe-practice-id, or import/source tags.
+        imported_marker = any(
+            "editorial-review-required" in tag or tag.startswith("qe-practice-id:")
+            or "imported" in tag or "ncert" in tag or "scert" in tag
+            for tag in tags
+        )
+        if not imported_marker:
+            skipped.append({"question_id": qid, "reason": "No known imported-practice tag; left untouched."})
+            continue
         qtype = str(row.get("question_type", "")).upper()
         lesson_status = str(row.get("lesson_status", "")).upper()
         item = {
@@ -158,7 +174,7 @@ def main() -> int:
         "api_url": args.api_url,
         "scope": {"classes": list(classes), "subjects": list(subjects)},
         "draft_questions_found": len(unique),
-        "eligible_questions": len(planned),
+        "eligible_imported_questions": len(planned),
         "eligible_by_type": dict(sorted(counts.items())),
         "skipped": skipped,
         "load_failures": failures,
