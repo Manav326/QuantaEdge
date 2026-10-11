@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import AdminSidebar, { type AdminSection } from './AdminSidebar';
 import { AdminWorkspaceContext, type AdminLocale } from './AdminWorkspaceContext';
 
@@ -55,6 +55,8 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
   const publicRoute = pathname === '/login' || pathname === '/session';
   const [locale, setLocale] = useState<AdminLocale>('hinglish');
   const [session, setSession] = useState<StaffSession | null>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     try {
@@ -92,6 +94,19 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
     try { window.localStorage.setItem('qe-locale', next); } catch { /* Keep the in-memory preference. */ }
   }
 
+  async function logout() {
+    setLoggingOut(true);
+    try {
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch {
+      // The UI still returns to login if the logout request cannot reach the server.
+    } finally {
+      router.replace('/login');
+      router.refresh();
+      setLoggingOut(false);
+    }
+  }
+
   if (publicRoute) return <AdminWorkspaceContext.Provider value={value}>{children}</AdminWorkspaceContext.Provider>;
 
   const active = activeSection(pathname);
@@ -116,6 +131,7 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
                 <option value="english">English</option>
               </select>
             </label>
+            <button type="button" className="qe-admin-logout-button" onClick={() => void logout()} disabled={loggingOut} aria-label="Log out">{loggingOut ? 'Logging out…' : 'Logout'}</button>
           </div>
         </header>
         <div className="qe-admin-workspace-page-slot">{children}</div>
