@@ -32,7 +32,7 @@ For a database where the source Hindi questions are already present and you only
 
     .\scripts\import_quantaedge_offline_translation_bundle.ps1 -SkipHindiSourceImport -PilotLimit 10
 
-The script asks for a fresh QE_SESSION cookie with hidden input if QUANTAEDGE_ADMIN_SESSION or QE_SESSION is not already set. The Admin account needs CONTENT_EDIT or CONTENT_REVIEW permission. The cookie is never included in the command arguments or the report. Existing English drafts for the same source hash are skipped, so the full run can resume after a partial run.
+The script uses the staff access cookie `QE_STAFF_SESSION` and the `X-QE-Workspace: STAFF` header. It asks for the cookie with hidden input if `QUANTAEDGE_ADMIN_SESSION` or `QE_SESSION` is not already set, then validates it against `/api/v1/auth/me` after Docker startup. Staff access cookies expire after 15 minutes; if a saved value has expired during startup, the script prompts for a fresh value before any content writes. The Admin account needs CONTENT_EDIT or CONTENT_REVIEW permission. The cookie is never included in command arguments or the report. Existing English drafts for the same source hash are skipped, so the full run can resume after a partial run.
 
 Reports are written under reports\offline-translation-imports. Nothing is approved or published automatically; staff must review the language, question intent, option alignment, and explanations in Content Studio.
 
