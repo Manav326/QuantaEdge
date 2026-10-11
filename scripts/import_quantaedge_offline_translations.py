@@ -21,6 +21,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from import_site_content_draft import AdminApi
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_QUEUE = ROOT / "translation-queue.jsonl"
 DEFAULT_MAP = ROOT / "english-translation-map-complete.jsonl"
@@ -243,25 +245,22 @@ def question_payload(row, index, translations):
     return (None, issues) if issues else (payload, [])
 
 
-def post_draft(base_url, cookie, entity_type, entity_id, payload, timeout):
-    body = json.dumps({"translatedContent":payload,"qualityNotes":
-        "Offline English translation draft; verify subject meaning, mathematical fidelity, terminology, and options before approval. DRAFT only; not published."},
-        ensure_ascii=False).encode("utf-8")
-    req = urllib.request.Request(
-        f"{base_url.rstrip('/')}/api/v1/admin/translations/{entity_type}/{entity_id}/draft?language=en",
-        data=body, method="POST",
-        headers={"Content-Type":"application/json; charset=utf-8","Accept":"application/json","Cookie":f"QE_STAFF_SESSION={cookie}","X-QE-Workspace":"STAFF"})
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", "replace")[:1500]
-        raise RuntimeError(f"HTTP {exc.code}: {detail}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"API connection failed: {exc.reason}") from exc
+def post_draft(api: AdminApi, entity_type, entity_id, payload):
+    body = {
+        "translatedContent": payload,
+        "qualityNotes": (
+            "Offline English translation draft; verify subject meaning, mathematical fidelity, "
+            "terminology, and options before approval. DRAFT only; not published."
+        ),
+    }
+    return api.request(
+        "POST",
+        f"/api/v1/admin/translations/{entity_type}/{entity_id}/draft?language=en",
+        body,
+    )
 
 
-def process(entity_type, rows, index, translations, args, cookie, candidate_limit=None):
+def process(entity_type, rows, index, translations, args, api: AdminApi | None, candidate_limit=None):
     report = []
     prepared = 0
     if candidate_limit is None:
@@ -284,7 +283,7 @@ def process(entity_type, rows, index, translations, args, cookie, candidate_limi
             item["status"] = "ready_dry_run"
         else:
             try:
-                response = post_draft(args.api_base_url,cookie,entity_type,entity_id,payload,args.timeout)
+                response = post_draft(api,entity_type,entity_id,payload)
                 item.update(status="created_draft" if response.get("translationStatus") == "DRAFT" else "api_response",api_response=response)
             except Exception as exc:
                 error = str(exc)
@@ -349,19 +348,36 @@ def main() -> int:
         chapters = [] if args.questions_only else db_rows(CHAPTER_SQL)
         questions = [] if args.chapters_only else db_rows(QUESTION_SQL)
         print(f"Current database: {len(chapters):,} chapters; {len(questions):,} questions.")
-        cookie = ""
+        api = None
         if args.apply:
-            cookie = (os.environ.get("QUANTAEDGE_ADMIN_SESSION","").strip()
-                     or os.environ.get("QE_SESSION","").strip()
-                     or getpass.getpass("Paste fresh QE_STAFF_SESSION cookie value (input hidden): ").strip())
-            if not cookie: raise ValueError("A fresh QE_STAFF_SESSION cookie is required for --apply.")
+            cookie = (
+                os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
+                or os.environ.get("QE_SESSION", "").strip()
+                or getpass.getpass("Paste QE_STAFF_SESSION cookie value (input hidden): ").strip()
+            )
+            refresh_cookie = (
+                os.environ.get("QUANTAEDGE_ADMIN_REFRESH", "").strip()
+                or os.environ.get("QE_STAFF_REFRESH", "").strip()
+            )
+            if not refresh_cookie:
+                refresh_cookie = getpass.getpass(
+                    "Paste paired QE_STAFF_REFRESH cookie value (input hidden; enables automatic 15-minute renewal): "
+                ).strip()
+            if not cookie:
+                raise ValueError("A QE_STAFF_SESSION cookie is required for --apply.")
+            if not refresh_cookie:
+                raise ValueError("A paired QE_STAFF_REFRESH cookie is required for safe long-running --apply.")
+            os.environ["QUANTAEDGE_ADMIN_REFRESH"] = refresh_cookie
+            os.environ["QE_STAFF_REFRESH"] = refresh_cookie
+            api = AdminApi(args.api_base_url, cookie, args.timeout)
             print("Apply mode only creates English DRAFTs; nothing is published.")
+            print("Automatic staff-session refresh is enabled; cookie values are never printed or reported.")
         report = []
         remaining_budget = args.limit
         systemic_stop = False
         if chapters:
             chapter_results = process(
-                "curriculum_chapter", chapters, index, translations, args, cookie,
+                "curriculum_chapter", chapters, index, translations, args, api,
                 candidate_limit=remaining_budget,
             )
             report.extend(chapter_results)
@@ -373,7 +389,7 @@ def main() -> int:
             systemic_stop = any(row.get("status") == "stopped_early" for row in chapter_results)
         if questions and not systemic_stop and (remaining_budget is None or remaining_budget > 0):
             question_results = process(
-                "question", questions, index, translations, args, cookie,
+                "question", questions, index, translations, args, api,
                 candidate_limit=remaining_budget,
             )
             report.extend(question_results)
