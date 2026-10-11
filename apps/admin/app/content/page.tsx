@@ -397,9 +397,9 @@ export default function ContentStudio(){
    setNotice('Submitted to the review queue. An authorized reviewer—including an administrator—can approve or return the active questions before publication.');
   }catch(e){setError(e instanceof Error?e.message:'Could not submit this micro-topic for review.')}finally{setSaving(false)}
  }
- async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'){
+ async function reviewQuestion(questionId:number,status:'APPROVED'|'REJECTED'|'REVIEW'){
   if(!selected||selected.type!=='lesson'||saving||hasUnsavedChanges||!canReview||!questionId)return;
-  if(form.lessonStatus!=='REVIEW'){setError('Submit the micro-topic for review before approving or returning questions.');return;}
+  if(!['REVIEW','PUBLISHED'].includes(String(form.lessonStatus||'').toUpperCase())){setError('Submit a draft micro-topic for review first. Questions on a published topic can be reviewed without unpublishing it.');return;}
   const note=status==='REJECTED'?window.prompt('Tell the author what needs to change before resubmission:'):null;
   if(status==='REJECTED'&&note===null)return;
   if(status==='REJECTED'&&!String(note||'').trim()){setError('Add feedback explaining what the author must correct.');return;}
