@@ -12,6 +12,10 @@ import TutorDock from './TutorDock';
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
   chapter_name:string; subject_name:string; subject_code:string; chapter_code:string;
+  mcq_count?:number; mcq_answered_count?:number;
+  practice_completed_attempts?:number; practice_best_correct_count?:number|null;
+  practice_best_graded_count?:number|null; practice_best_percent?:number|null;
+  practice_active_answered_count?:number|null; practice_active_question_count?:number|null;
 };
 type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
@@ -20,7 +24,7 @@ type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';ti
 type Question = {
   id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
-  topic?:string; subtopic?:string; skill?:string; response_mode?:string;
+  topic?:string; subtopic?:string; skill?:string; response_mode?:string; attempted?:boolean;
 };
 type Detail = Lesson & {
   class_code:string; class_name:string;
@@ -282,6 +286,9 @@ export default function LearnClient() {
         return r.json();
       }) as Detail;
       setLesson(detail);
+      setMcqAttempted(Object.fromEntries(detail.questions
+        .filter(question=>question.question_type==='MCQ'&&question.attempted)
+        .map(question=>[question.id,true])));
     } catch {
       setError(tx('इस पाठ को खोलने या progress save करने में समस्या हुई। फिर प्रयास करें।','There was a problem opening this lesson or saving progress. Please try again.'));
     }
@@ -307,7 +314,7 @@ export default function LearnClient() {
           const trackLessons=listBody as Lesson[];
           if(cancelled)return;
           const subjectName=selectedSubject==='maths'?'गणित':'विज्ञान';
-          setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);
+          setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
           setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons});
           return;
@@ -329,7 +336,12 @@ export default function LearnClient() {
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
-        if(!cancelled){setStudentDocuments([]);setTrackBrowse(null);setLesson(d);}
+        if(!cancelled){
+          setStudentDocuments([]);setTrackBrowse(null);setLesson(d);
+          setMcqAttempted(Object.fromEntries(d.questions
+            .filter(question=>question.question_type==='MCQ'&&question.attempted)
+            .map(question=>[question.id,true])));
+        }
       }catch(e:any){if(!cancelled)setError(e.message==='Student profile नहीं मिला'?tx('Student login ज़रूरी है।','Student sign-in is required.'):tx('Lesson load नहीं हो पाया।','Unable to load the lesson.'));}
     }
     void load();
@@ -479,15 +491,44 @@ export default function LearnClient() {
             <span className="qe-student-chapter-title"><small><LocaleText hinglish="CHAPTER" english="CHAPTER" /> {group.code!==group.name?'· '+group.code:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
             <span className="qe-student-chapter-indicator">{expanded?'−':'+'}</span>
           </button>
+          {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
+            <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
+            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||group.name}</small></span>
+            <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
+          </Link>)}
           {expanded&&<div className="qe-student-chapter-content">
-            {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
-              <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-              <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||group.name}</small></span>
-              <span className="qe-student-pdf-action"><LocaleText hinglish="पढ़ें" english="Read" /> ↗</span>
-            </Link>)}
-            {group.lessons.length>0&&<div className="qe-student-topic-list">{group.lessons.map(item=><Link key={item.id} className="qe-student-topic-row" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
-              <span className="qe-student-topic-icon" aria-hidden="true">▣</span><span><strong>{item.title}</strong><small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित पाठ" english="min · published lesson" /></small></span><span className="qe-student-topic-arrow">→</span>
-            </Link>)}</div>}
+            {group.lessons.length>0&&<div className="qe-student-topic-list">{group.lessons.map((item,topicIndex)=>{
+              const mcqCount=Math.max(0,Number(item.mcq_count||0));
+              const mcqAnswered=Math.max(0,Math.min(mcqCount,Number(item.mcq_answered_count||0)));
+              const mcqsComplete=mcqCount===0||mcqAnswered>=mcqCount;
+              const practiceCompleted=Number(item.practice_completed_attempts||0)>0;
+              const topicComplete=mcqsComplete&&practiceCompleted;
+              const bestCorrect=Number(item.practice_best_correct_count||0);
+              const bestGraded=Number(item.practice_best_graded_count||0);
+              const bestPercent=Number(item.practice_best_percent||0);
+              const activeAnswered=Math.max(0,Number(item.practice_active_answered_count||0));
+              const activeQuestionCount=Math.max(0,Number(item.practice_active_question_count||0));
+              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
+                <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
+                <span className="qe-student-topic-copy"><strong>{item.title}</strong>
+                  <small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित microtopic" english="min · published microtopic" /></small>
+                  <span className="qe-student-topic-progress">
+                    <small className={mcqsComplete?'is-done':''}>{mcqCount>0?'MCQ '+mcqAnswered+'/'+mcqCount:'MCQs not required'}</small>
+                    {bestGraded>0
+                      ? <small className="is-best"><LocaleText hinglish="Best" english="Best" /> {bestCorrect}/{bestGraded} · {bestPercent}%</small>
+                      : practiceCompleted
+                        ? <small className="is-best"><LocaleText hinglish="Practice complete" english="Practice complete" /></small>
+                        : activeQuestionCount>0
+                          ? <small><LocaleText hinglish="Practice saved" english="Practice saved" /> {activeAnswered}/{activeQuestionCount}</small>
+                          : <small><LocaleText hinglish="Practice शुरू नहीं" english="Practice not started" /></small>}
+                    {practiceCompleted&&activeQuestionCount>0&&<small><LocaleText hinglish="New attempt" english="New attempt" /> {activeAnswered}/{activeQuestionCount}</small>}
+                  </span>
+                </span>
+                {topicComplete
+                  ? <span className="qe-student-topic-complete" role="img" aria-label={tx('विषय पूरा हुआ','Topic completed')} title={tx('MCQ और practice पूरे','MCQs and practice completed')}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.1L19 6.8"/></svg></span>
+                  : <span className="qe-student-topic-arrow" aria-hidden="true">→</span>}
+              </Link>;
+            })}</div>}
             {chapterDocuments.length===0&&group.lessons.length===0&&<p className="qe-student-chapter-empty"><LocaleText hinglish="इस chapter में अभी PDF या published topic नहीं है।" english="No PDF or published topic is available in this chapter yet." /></p>}
           </div>}
         </section>;
@@ -505,14 +546,6 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
-      {studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
-        (Boolean(item.chapter_code)&&item.chapter_code===lesson.chapter_code)||
-        (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
-      )).map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-lesson-pdf-link" href={'/student/textbooks?documentId='+item.document_id+'&returnTo='+encodeURIComponent('/student/learn?lessonId='+lesson.id)} onClick={rememberLessonPosition}>
-        <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-        <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||lesson.chapter_name}</small></span>
-        <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
-      </Link>)}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
