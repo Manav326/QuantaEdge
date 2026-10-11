@@ -486,7 +486,7 @@ public class AssessmentController {
     return jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
-             a.created_at,a.published_at,s.code as subject_code,coalesce(max(st.display_name),s.display_name) as subject_name,
+             a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
              (select count(*) from student_assessment_attempt att
@@ -514,7 +514,7 @@ public class AssessmentController {
         where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
           and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
         order by t.version_no desc,t.id desc limit 1
-      ) st on true
+      ) subject_tx on true
       left join lateral (
         select t.id,t.display_name from curriculum_chapter_translation t
         where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
@@ -525,7 +525,7 @@ public class AssessmentController {
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
-      """, language, language, language, context.studentId(), subjectFilter, subjectFilter);
+      """, context.studentId(), language, language, language, subjectFilter, subjectFilter);
   }
 
   @PostMapping("/learning/assessments/{assessmentId}/attempts")
@@ -543,7 +543,7 @@ public class AssessmentController {
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
              a.duration_minutes,a.max_attempts,a.status,
-             s.id as subject_id,s.code as subject_code,coalesce(max(st.display_name),s.display_name) as subject_name,
+             s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
@@ -563,7 +563,7 @@ public class AssessmentController {
         where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
           and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
         order by t.version_no desc,t.id desc limit 1
-      ) st on true
+      ) subject_tx on true
       left join lateral (
         select t.id,t.display_name from curriculum_chapter_translation t
         where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
