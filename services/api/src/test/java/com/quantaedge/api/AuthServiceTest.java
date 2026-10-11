@@ -310,4 +310,49 @@ class AuthServiceTest {
     verify(jdbc).update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L));
   }
 
+
+  @Test
+  void authSessionIdleTimeoutNeverExceedsFourHoursEvenWithLegacyConfiguration() {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+
+    assertEquals(4, auth.getSessionHours());
+  }
+
+  @Test
+  void authenticatedActivitySlidesTheRefreshExpiry() throws Exception {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+    String token = "active-access-token";
+    Map<String,Object> parentRow = new java.util.HashMap<>();
+    parentRow.put("user_id", 52L);
+    parentRow.put("student_id", null);
+    parentRow.put("staff_id", null);
+    parentRow.put("role", "PARENT");
+    parentRow.put("display_name", "Parent Account");
+    parentRow.put("student_name", null);
+    parentRow.put("staff_role", null);
+    parentRow.put("staff_name", null);
+    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+        .thenReturn(List.of(parentRow));
+
+    AuthContext context = auth.current(token);
+
+    assertNotNull(context);
+    assertEquals("PARENT", context.role());
+    verify(jdbc).update(
+        contains("refresh_expires_at=case when refresh_token_hash is not null"),
+        eq(4), eq(hash(token)));
+  }
+
+  @Test
+  void passwordResetOtpUsesAValidPurposeAndStillEnforcesRateLimits() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    String mobile = "+917070107483";
+    when(jdbc.queryForObject(contains("role='PARENT'"), eq(Boolean.class), eq(mobile))).thenReturn(true);
+    when(jdbc.queryForObject(contains("requested_at > now() -"), eq(Long.class), eq(mobile), eq(60))).thenReturn(0L);
+    when(jdbc.queryForObject(contains("requested_at > now()-interval '1 hour'"), eq(Long.class), eq(mobile))).thenReturn(0L);
+
+    assertEquals("123456", auth.requestOtp("7070107483", "PASSWORD_RESET"));
+    verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString());
+  }
+
 }
