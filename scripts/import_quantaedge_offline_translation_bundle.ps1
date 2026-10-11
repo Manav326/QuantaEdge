@@ -17,6 +17,97 @@ $TranslationImporter = Join-Path $RepoRoot "scripts\import_quantaedge_offline_tr
 $OldAdminSession = $env:QUANTAEDGE_ADMIN_SESSION
 $OldQeSession = $env:QE_SESSION
 
+$script:RunId = Get-Date -Format 'yyyyMMdd-HHmmss-fff'
+$script:RunStartedAt = Get-Date
+$script:ReportDirectory = Join-Path $RepoRoot 'reports\offline-translation-imports'
+$script:RunReportPath = Join-Path $script:ReportDirectory "bundle-import-run-$($script:RunId).json"
+$script:RunLogPath = Join-Path $script:ReportDirectory "bundle-import-run-$($script:RunId).log"
+$script:RunStatus = 'RUNNING'
+$script:RunError = $null
+$script:StageRecords = New-Object System.Collections.ArrayList
+$script:CurrentStage = $null
+$script:TranscriptStarted = $false
+$script:AuthConfirmed = $false
+$script:SourceApplyStarted = $false
+$script:TranslationApplyStarted = $false
+
+function Start-QeRunStage {
+    param([Parameter(Mandatory = $true)][string]$Name)
+    $stage = [pscustomobject]@{ name=$Name; status='RUNNING'; started_at=(Get-Date).ToString('o'); ended_at=$null; duration_seconds=$null; exit_code=$null; message='' }
+    [void]$script:StageRecords.Add($stage)
+    $script:CurrentStage = $stage
+    Write-Host "=== START: $Name ==="
+    return $stage
+}
+
+function Complete-QeRunStage {
+    param([Parameter(Mandatory = $true)]$Stage, [Parameter(Mandatory = $true)][string]$Status, [string]$Message='', [int]$ExitCode=-999)
+    $Stage.status = $Status
+    $Stage.message = $Message
+    $Stage.ended_at = (Get-Date).ToString('o')
+    $Stage.duration_seconds = [math]::Round(((Get-Date) - [datetime]$Stage.started_at).TotalSeconds, 2)
+    if ($ExitCode -ne -999) { $Stage.exit_code = $ExitCode }
+    if ($script:CurrentStage -eq $Stage) { $script:CurrentStage = $null }
+    Write-Host "=== $Status - $($Stage.name) ($($Stage.duration_seconds)s) ==="
+}
+
+function Get-QeChildReportSummaries {
+    $files = @()
+    $candidateDirs = @($script:ReportDirectory, (Join-Path $RepoRoot 'QuantaEdge_Bilingual_Draft_Bundle'))
+    foreach ($dir in $candidateDirs) {
+        if (Test-Path -LiteralPath $dir -PathType Container) {
+            $files += Get-ChildItem -LiteralPath $dir -Filter '*.json' -File -ErrorAction SilentlyContinue |
+                Where-Object { $_.LastWriteTime -ge $script:RunStartedAt.AddSeconds(-3) -and $_.FullName -ne $script:RunReportPath }
+        }
+    }
+    $summaries = @()
+    foreach ($file in ($files | Sort-Object LastWriteTime -Unique)) {
+        try {
+            $doc = Get-Content -LiteralPath $file.FullName -Raw -Encoding UTF8 | ConvertFrom-Json -ErrorAction Stop
+            $summaries += [pscustomobject]@{
+                path = $file.FullName
+                status = if ($doc.status) { $doc.status } elseif ($doc.mode) { $doc.mode } else { 'REPORT_WRITTEN' }
+                summary = $doc.summary
+                created_drafts = $doc.created_drafts
+                api_error_count = $doc.api_error_count
+                failed_batches = $doc.failed_batches
+                mapping_preflight = $doc.mapping_preflight
+                added_as_draft = $doc.added_as_draft
+                skipped_duplicate = $doc.skipped_duplicate
+                fatal_error = $doc.fatal_error
+            }
+        } catch {
+            $summaries += [pscustomobject]@{ path=$file.FullName; status='REPORT_PARSE_FAILED'; error=$_.Exception.Message }
+        }
+    }
+    return ,$summaries
+}
+
+function Save-QeRunReport {
+    try {
+        New-Item -ItemType Directory -Path $script:ReportDirectory -Force | Out-Null
+        $report = [ordered]@{
+            schema = 'quantaedge.offline-translation-bundle-run.v1'
+            run_id = $script:RunId
+            status = $script:RunStatus
+            started_at = $script:RunStartedAt.ToString('o')
+            finished_at = (Get-Date).ToString('o')
+            duration_seconds = [math]::Round(((Get-Date) - $script:RunStartedAt).TotalSeconds, 2)
+            configuration = @{ pilot_limit=$PilotLimit; skip_hindi_source_import=[bool]$SkipHindiSourceImport; api_base_url=$ApiBaseUrl; source_catalog=[IO.Path]::GetFileName($CatalogPath); translation_queue=[IO.Path]::GetFileName($QueuePath); translation_map=[IO.Path]::GetFileName($TranslationPath) }
+            stages = @($script:StageRecords | ForEach-Object { @{ name=$_.name; status=$_.status; started_at=$_.started_at; ended_at=$_.ended_at; duration_seconds=$_.duration_seconds; exit_code=$_.exit_code; message=$_.message } })
+            child_report_summaries = @(Get-QeChildReportSummaries)
+            safety = @{ staff_authentication_confirmed=[bool]$script:AuthConfirmed; source_apply_started=[bool]$script:SourceApplyStarted; translation_apply_started=[bool]$script:TranslationApplyStarted; publication_attempted=$false; draft_only_workflow=$true; cookie_value_recorded=$false }
+            error = $script:RunError
+            full_log = $script:RunLogPath
+        }
+        $tmp = "$($script:RunReportPath).tmp"
+        [IO.File]::WriteAllText($tmp, (ConvertTo-Json -InputObject $report -Depth 12) + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
+        Move-Item -LiteralPath $tmp -Destination $script:RunReportPath -Force
+    } catch {
+        Write-Warning "Could not save the bundle run report: $($_.Exception.Message)"
+    }
+}
+
 
 function Invoke-QeStaffAuthRequest {
     param(
@@ -106,9 +197,27 @@ function Get-QeStaffSessionDiagnostics {
 
 function Invoke-CheckedPython {
     param([string[]]$Arguments)
-    & $PythonExe @Arguments
-    if ($LASTEXITCODE -ne 0) {
-        throw "Python command failed with exit code ${LASTEXITCODE}: $PythonExe $($Arguments -join ' ')"
+    $scriptName = [IO.Path]::GetFileName($Arguments[0])
+    if ($scriptName -eq 'import_quantaedge_practice_banks.py') {
+        if ($Arguments -contains '--apply') { $stageName = 'Import Hindi question drafts after full mapping preflight'; $script:SourceApplyStarted = $true }
+        else { $stageName = 'Validate Hindi source catalog (dry run)' }
+    } elseif ($scriptName -eq 'import_quantaedge_offline_translations.py') {
+        $stageName = 'Import English translation drafts'
+        $script:TranslationApplyStarted = $true
+    } else { $stageName = "Run Python: $scriptName" }
+
+    $stage = Start-QeRunStage -Name $stageName
+    try {
+        & $PythonExe @Arguments
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -ne 0) {
+            Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message 'Python returned a non-zero exit code; inspect full log and child report.' -ExitCode $exitCode
+            throw "Python command failed with exit code ${exitCode}: $PythonExe $($Arguments -join ' ')"
+        }
+        Complete-QeRunStage -Stage $stage -Status 'SUCCEEDED' -Message 'Python exited successfully.' -ExitCode 0
+    } catch {
+        if ($stage.status -eq 'RUNNING') { Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message $_.Exception.Message }
+        throw
     }
 }
 
@@ -151,14 +260,27 @@ try {
     $env:QUANTAEDGE_ADMIN_SESSION = $session
     $env:QE_SESSION = $session
 
+    New-Item -ItemType Directory -Path $script:ReportDirectory -Force | Out-Null
+    try {
+        Start-Transcript -Path $script:RunLogPath -Force | Out-Null
+        $script:TranscriptStarted = $true
+    } catch { Write-Warning "Could not start full transcript: $($_.Exception.Message)" }
+
     Push-Location $RepoRoot
     try {
         Write-Host ""
+        $dockerStage = Start-QeRunStage -Name 'Build and start Postgres, API, Admin'
         Write-Host "[1/4] Starting the database, API, and Admin services..."
         & docker compose up -d --build postgres api admin
-        if ($LASTEXITCODE -ne 0) { throw "docker compose failed with exit code ${LASTEXITCODE}." }
+        $dockerExit = $LASTEXITCODE
+        if ($dockerExit -ne 0) {
+            Complete-QeRunStage -Stage $dockerStage -Status 'FAILED' -Message 'docker compose returned a non-zero exit code.' -ExitCode $dockerExit
+            throw "docker compose failed with exit code ${dockerExit}."
+        }
+        Complete-QeRunStage -Stage $dockerStage -Status 'SUCCEEDED' -Message 'Required services are running.' -ExitCode 0
 
         Write-Host ""
+        $apiStage = Start-QeRunStage -Name 'Check API health and validate staff session'
         Write-Host "[2/4] Checking API health..."
         $health = & curl.exe -fsS "$ApiBaseUrl/actuator/health"
         if ($LASTEXITCODE -ne 0) { throw "API health check failed at $ApiBaseUrl/actuator/health." }
@@ -196,6 +318,8 @@ try {
             throw "The API did not confirm an authenticated staff account. No content was written."
         }
         Write-Host "Staff authentication confirmed for role $($authCheck.role)." -ForegroundColor Green
+        $script:AuthConfirmed = $true
+        Complete-QeRunStage -Stage $apiStage -Status 'SUCCEEDED' -Message 'API ready and staff authentication confirmed.' -ExitCode 0
 
         if (-not $SkipHindiSourceImport) {
             Write-Host ""
@@ -222,10 +346,31 @@ try {
     finally {
         Pop-Location
     }
+    $script:RunStatus = 'SUCCEEDED'
+}
+catch {
+    $script:RunStatus = 'FAILED'
+    $script:RunError = $_.Exception.Message
+    if ($null -ne $script:CurrentStage -and $script:CurrentStage.status -eq 'RUNNING') {
+        Complete-QeRunStage -Stage $script:CurrentStage -Status 'FAILED' -Message $script:RunError
+    }
+    Write-Host "Bundle import failed safely: $script:RunError" -ForegroundColor Red
+    throw
 }
 finally {
     $env:QUANTAEDGE_ADMIN_SESSION = $OldAdminSession
     $env:QE_SESSION = $OldQeSession
     $session = $null
     $secure = $null
+    if ($script:TranscriptStarted) { try { Stop-Transcript | Out-Null } catch {} }
+    Save-QeRunReport
+    Write-Host ''
+    Write-Host '========== QUANTAEDGE IMPORT FINAL REPORT =========='
+    Write-Host "Status: $script:RunStatus"
+    Write-Host "Duration: $([math]::Round(((Get-Date) - $script:RunStartedAt).TotalSeconds, 2)) seconds"
+    Write-Host "JSON report: $script:RunReportPath"
+    Write-Host "Full log:    $script:RunLogPath"
+    Write-Host 'Published automatically: NO'
+    Write-Host 'Cookie recorded: NO'
+    Write-Host '===================================================='
 }
