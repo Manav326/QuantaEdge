@@ -29,9 +29,13 @@ try {
     if (-not (Test-Path -LiteralPath $PythonExe -PathType Leaf)) {
         throw "Python was not found at '$PythonExe'. Pass -PythonExe if your Python 3.12 path differs."
     }
-    foreach ($path in @($CatalogPath, $QueuePath, $TranslationPath, $SourceImporter, $TranslationImporter)) {
+    $requiredFiles = @($QueuePath, $TranslationPath, $TranslationImporter)
+    if (-not $SkipHindiSourceImport) {
+        $requiredFiles += @($CatalogPath, $SourceImporter)
+    }
+    foreach ($path in $requiredFiles) {
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
-            throw "Required file not found: $path. Pull main and put the translation ZIP's JSONL files and source catalog in the repository root."
+            throw "Required file not found: $path. Pull main and put the translation JSONL files and source catalog in the repository root."
         }
     }
     if ($PilotLimit -lt 0) {
