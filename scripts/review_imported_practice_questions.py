@@ -64,29 +64,30 @@ class AdminApi:
             raise RuntimeError(f"Cannot reach QuantaEdge Admin API at {self.base_url}: {exc.reason}") from exc
 
 
-def get_drafts(api: AdminApi, class_code: str, subject_code: str) -> list[dict[str, Any]]:
+def get_reviewable_questions(api: AdminApi, class_code: str, subject_code: str) -> list[dict[str, Any]]:
+    """Load both DRAFT and REVIEW imported questions so interrupted applies can resume."""
     rows: list[dict[str, Any]] = []
-    offset = 0
     limit = 250
-    while True:
-        query = urllib.parse.urlencode({
-            "status": "DRAFT",
-            "classCode": class_code,
-            "subjectCode": subject_code,
-            "limit": limit,
-            "offset": offset,
-        })
-        result = api.request("GET", "/api/v1/admin/content/questions/review-queue?" + query)
-        if not isinstance(result, dict) or not isinstance(result.get("items"), list):
-            raise RuntimeError("Question review queue returned an unexpected response.")
-        page = result["items"]
-        rows.extend(page)
-        total = int(result.get("total", len(rows)))
-        offset += len(page)
-        if not page or offset >= total:
-            break
+    for status in ("DRAFT", "REVIEW"):
+        offset = 0
+        while True:
+            query = urllib.parse.urlencode({
+                "status": status,
+                "classCode": class_code,
+                "subjectCode": subject_code,
+                "limit": limit,
+                "offset": offset,
+            })
+            result = api.request("GET", "/api/v1/admin/content/questions/review-queue?" + query)
+            if not isinstance(result, dict) or not isinstance(result.get("items"), list):
+                raise RuntimeError("Question review queue returned an unexpected response.")
+            page = result["items"]
+            rows.extend(page)
+            total = int(result.get("total", len(rows)))
+            offset += len(page)
+            if not page or offset >= total:
+                break
     return rows
-
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -95,6 +96,8 @@ def main() -> int:
     parser.add_argument("--class-code", choices=CLASSES, help="Limit to one class; default checks Classes 6–8.")
     parser.add_argument("--subject", choices=SUBJECTS, help="Limit to Maths or Science; default checks both.")
     parser.add_argument("--limit", type=int, default=0, help="Optional maximum number of questions to process (0 = all).")
+    parser.add_argument("--show-items", action="store_true", help="Print every planned/skipped question (large output).")
+    parser.add_argument("--report-file", help="Write the full JSON report here; --apply defaults to practice_question_review_report.json.")
     args = parser.parse_args()
 
     session = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
@@ -116,9 +119,9 @@ def main() -> int:
                 # Queue endpoint is authenticated; use the same session for dry-run only when supplied.
                 if api is None:
                     dry_api = AdminApi(args.api_url, session)
-                    rows = get_drafts(dry_api, class_code, subject_code)
+                    rows = get_reviewable_questions(dry_api, class_code, subject_code)
                 else:
-                    rows = get_drafts(api, class_code, subject_code)
+                    rows = get_reviewable_questions(api, class_code, subject_code)
                 targets.extend(rows)
             except Exception as exc:
                 failures.append({"class": class_code, "subject": subject_code, "stage": "load", "error": str(exc)})
@@ -153,6 +156,7 @@ def main() -> int:
             continue
         qtype = str(row.get("question_type", "")).upper()
         lesson_status = str(row.get("lesson_status", "")).upper()
+        review_status = str(row.get("review_status") or "DRAFT").upper()
         item = {
             "question_id": qid,
             "class": row.get("class_code"),
@@ -162,8 +166,11 @@ def main() -> int:
             "lesson_id": row.get("lesson_id"),
             "question_type": qtype,
             "lesson_status": lesson_status,
+            "review_status": review_status,
         }
-        if not bool(row.get("active", True)):
+        if review_status not in {"DRAFT", "REVIEW"}:
+            skipped.append({**item, "reason": "Question is not in a resumable DRAFT or REVIEW state."})
+        elif not bool(row.get("active", True)):
             skipped.append({**item, "reason": "Question is inactive; script will not reactivate it."})
         elif qtype not in SUPPORTED_SCORING_TYPES:
             skipped.append({**item, "reason": "This specialist type is not enabled for automatic approval/scoring yet."})
@@ -176,23 +183,82 @@ def main() -> int:
         planned = planned[:args.limit]
 
     counts = Counter(item["question_type"] for item in planned)
-    print(json.dumps({
-        "mode": "APPLY" if args.apply else "DRY_RUN",
+    by_current_status = Counter(item["review_status"] for item in planned)
+    skipped_by_reason = Counter(item.get("reason", "Unspecified") for item in skipped)
+    report_path = args.report_file or ("practice_question_review_report.json" if args.apply else None)
+    report: dict[str, Any] = {
+        "mode": "APPLY_RUNNING" if args.apply else "DRY_RUN",
         "api_url": args.api_url,
         "scope": {"classes": list(classes), "subjects": list(subjects)},
-        "draft_questions_found": len(unique),
+        "reviewable_questions_found": len(unique),
         "eligible_imported_questions": len(planned),
         "eligible_by_type": dict(sorted(counts.items())),
-        "skipped": skipped,
+        "eligible_by_current_status": dict(sorted(by_current_status.items())),
+        "skipped_count": len(skipped),
+        "skipped_by_reason": dict(sorted(skipped_by_reason.items())),
         "load_failures": failures,
         "planned": planned,
-    }, ensure_ascii=False, indent=2))
+        "skipped": skipped,
+        "results": [],
+        "attempted": 0,
+        "approved": 0,
+        "failed_or_left_in_review": 0,
+        "in_flight": None,
+    }
+
+    def save_report() -> None:
+        if not report_path:
+            return
+        absolute_path = os.path.abspath(report_path)
+        os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
+        temporary_path = absolute_path + ".tmp"
+        with open(temporary_path, "w", encoding="utf-8") as report_stream:
+            json.dump(report, report_stream, ensure_ascii=False, indent=2)
+            report_stream.write("\n")
+        os.replace(temporary_path, absolute_path)
+
+    def print_summary(include_items: bool = False) -> None:
+        results = report.get("results", [])
+        planned_sample = report.get("planned", [])
+        skipped_sample = report.get("skipped", [])
+        output: dict[str, Any] = {
+            "mode": report["mode"],
+            "api_url": report["api_url"],
+            "scope": report["scope"],
+            "reviewable_questions_found": report["reviewable_questions_found"],
+            "eligible_imported_questions": report["eligible_imported_questions"],
+            "eligible_by_type": report["eligible_by_type"],
+            "eligible_by_current_status": report["eligible_by_current_status"],
+            "skipped_count": report["skipped_count"],
+            "skipped_by_reason": report["skipped_by_reason"],
+            "load_failures": report["load_failures"],
+        }
+        output["planned_sample"] = planned_sample if include_items else planned_sample[:10]
+        output["planned_omitted_from_console"] = 0 if include_items else max(0, len(planned_sample) - 10)
+        output["skipped_sample"] = skipped_sample if include_items else skipped_sample[:10]
+        if "attempted" in report:
+            output["attempted"] = report["attempted"]
+            output["approved"] = report["approved"]
+            output["failed_or_left_in_review"] = report["failed_or_left_in_review"]
+            output["failed_sample"] = [r for r in results if r.get("result") != "APPROVED"][:10]
+            output["results_sample"] = results if include_items else results[-10:]
+            output["results_omitted_from_console"] = 0 if include_items else max(0, len(results) - 10)
+        if report.get("in_flight"):
+            output["in_flight"] = report["in_flight"]
+        if report.get("note"):
+            output["note"] = report["note"]
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+        if report_path:
+            print(f"Full report/checkpoint: {os.path.abspath(report_path)}")
 
     if not args.apply:
+        if report_path:
+            save_report()
+        print_summary(args.show_items)
         if failures:
-            print("\nDry run incomplete: one or more review queues failed to load. Fix the API errors and rerun; do not use --apply yet.")
+            print("\nDry run incomplete: one or more review queues failed to load. Fix the API errors; do not use --apply yet.")
         else:
-            print("\nDry run only. Review the list, then rerun with --apply to submit and approve these questions.")
+            print("\nDry run only; no questions were changed.")
         return 1 if failures else 0
 
     # Never mutate questions after a partial/failed queue read: the plan must be complete.
@@ -201,33 +267,104 @@ def main() -> int:
         return 1
 
     assert api is not None
-    results: list[dict[str, Any]] = []
-    for item in planned:
-        qid = item["question_id"]
-        lesson_id = item["lesson_id"]
-        path = f"/api/v1/admin/content/lessons/{lesson_id}/questions/{qid}/review"
-        try:
-            # Same two-step moderation path used in Admin UI: DRAFT -> REVIEW -> APPROVED.
-            api.request("POST", path, {"status": "REVIEW", "reviewNotes": "Imported practice question submitted for standard editorial review."})
-            approved = api.request("POST", path, {"status": "APPROVED", "reviewNotes": "Approved through standard question review workflow; recheck and correct if an issue is later reported."})
-            results.append({"question_id": qid, "question_type": item["question_type"],
-                            "result": "APPROVED", "server_response": approved})
-        except Exception as exc:
-            results.append({"question_id": qid, "question_type": item["question_type"],
-                            "result": "FAILED_OR_LEFT_IN_REVIEW", "error": str(exc)})
+    if failures:
+        report["mode"] = "STOPPED_SAFELY"
+        print_summary(args.show_items)
+        print("\nRefusing to apply because one or more review queues failed to load or failed preflight. Fix the errors and rerun a clean dry run first.", file=sys.stderr)
+        return 1
 
-    succeeded = sum(1 for row in results if row["result"] == "APPROVED")
-    failed = len(results) - succeeded
-    print(json.dumps({
-        "mode": "APPLY_RESULT",
-        "attempted": len(results),
-        "approved": succeeded,
-        "failed_or_left_in_review": failed,
-        "skipped": len(skipped),
-        "results": results,
-        "note": "Question approval does not publish draft lessons/chapters or certify source provenance. Fix reported validation failures in Admin before retrying.",
-    }, ensure_ascii=False, indent=2))
-    return 1 if failed or failures else 0
+    print_summary(args.show_items)
+    save_report()
+    results: list[dict[str, Any]] = report["results"]
+    total = len(planned)
+    interrupted = False
+
+    try:
+        for index, item in enumerate(planned, start=1):
+            qid = int(item["question_id"])
+            lesson_id = int(item["lesson_id"])
+            path = f"/api/v1/admin/content/lessons/{lesson_id}/questions/{qid}/review"
+            current_status = str(item.get("review_status") or "DRAFT").upper()
+            location = f"Class {item.get('class')} {item.get('subject')} / Q{qid}"
+
+            try:
+                if current_status == "DRAFT":
+                    print(f"[{index}/{total}] {location}: DRAFT -> REVIEW", flush=True)
+                    report["in_flight"] = {"question_id": qid, "stage": "SUBMIT_TO_REVIEW", "note": "If interrupted, next run rechecks server status."}
+                    save_report()
+                    api.request(
+                        "POST", path,
+                        {"status": "REVIEW", "reviewNotes": "Imported practice question submitted for standard editorial review."},
+                    )
+                    item["review_status"] = "REVIEW"
+                    report["in_flight"] = {"question_id": qid, "stage": "APPROVE", "note": "Question is now in REVIEW; next run resumes from REVIEW if interrupted."}
+                    save_report()
+                else:
+                    print(f"[{index}/{total}] {location}: resuming from REVIEW -> APPROVED", flush=True)
+                    report["in_flight"] = {"question_id": qid, "stage": "APPROVE", "note": "Question was already in REVIEW before this run."}
+                    save_report()
+
+                approved = api.request(
+                    "POST", path,
+                    {"status": "APPROVED", "reviewNotes": "Approved through standard question review workflow; recheck and correct if an issue is later reported."},
+                )
+                results.append({
+                    "question_id": qid,
+                    "class": item.get("class"),
+                    "subject": item.get("subject"),
+                    "question_type": item["question_type"],
+                    "result": "APPROVED",
+                    "server_response": approved,
+                })
+                report["attempted"] = len(results)
+                report["approved"] = sum(1 for row in results if row["result"] == "APPROVED")
+                report["failed_or_left_in_review"] = sum(1 for row in results if row["result"] != "APPROVED")
+                report["in_flight"] = None
+                save_report()
+                print(f"    APPROVED ({report['approved']} of {total} complete)", flush=True)
+            except KeyboardInterrupt:
+                raise
+            except Exception as exc:
+                result = {
+                    "question_id": qid,
+                    "class": item.get("class"),
+                    "subject": item.get("subject"),
+                    "question_type": item["question_type"],
+                    "result": "FAILED_OR_LEFT_IN_REVIEW",
+                    "error": str(exc),
+                }
+                results.append(result)
+                report["attempted"] = len(results)
+                report["approved"] = sum(1 for row in results if row["result"] == "APPROVED")
+                report["failed_or_left_in_review"] = sum(1 for row in results if row["result"] != "APPROVED")
+                report["in_flight"] = None
+                save_report()
+                print(f"    FAILED/LEFT IN REVIEW: {str(exc)[:240]}", file=sys.stderr, flush=True)
+                if any(token in str(exc) for token in ("HTTP 401", "HTTP 403", "Cannot reach QuantaEdge Admin API")):
+                    print("Stopping early because authentication or API connectivity failed. Correct it and rerun; DRAFT and REVIEW items are resumable.", file=sys.stderr)
+                    break
+    except KeyboardInterrupt:
+        interrupted = True
+        report["mode"] = "INTERRUPTED"
+        report["interrupted"] = True
+        # Keep the in-flight stage: the server may have completed a request before
+        # Ctrl+C arrived. A fresh run reads actual DRAFT/REVIEW states from the API.
+        save_report()
+        print("\nInterrupted by Ctrl+C. The report/checkpoint was saved. Rerun the same command to resume; the queue is reread from the server.", file=sys.stderr)
+
+    report["attempted"] = len(results)
+    report["approved"] = sum(1 for row in results if row["result"] == "APPROVED")
+    report["failed_or_left_in_review"] = sum(1 for row in results if row["result"] != "APPROVED")
+    if not interrupted:
+        report["mode"] = "APPLY_RESULT"
+        report["note"] = (
+            "Approved questions are eligible for student practice when their lesson and chapter are published. "
+            "This does not publish draft lessons/chapters or certify source provenance. "
+            "The report file is a checkpoint; a new run re-reads DRAFT and REVIEW questions to resume safely."
+        )
+    save_report()
+    print_summary(args.show_items)
+    return 130 if interrupted else (1 if report["failed_or_left_in_review"] or failures else 0)
 
 
 if __name__ == "__main__":
