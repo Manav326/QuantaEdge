@@ -19,7 +19,7 @@ type TrackBrowse = {
 };
 type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null;language?:'hi'|'en'};
 type Question = {
-  id:number; question_type:string; prompt:string; explanation:string; options:string;
+  id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
   topic?:string; subtopic?:string; skill?:string; response_mode?:string;
 };
@@ -171,7 +171,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
 
   return <article className="qe-question-card">
     <div className="qe-question-card__top">
-      <span className="qe-question-index"><icon aria-hidden="true"> </icon><span>{q.sort_order||'Q'}</span></span>
+      <span className="qe-question-index"><span>{q.sort_order||'Q'}</span></span>
       <div className="qe-question-card__labels">
         <span className="qe-question-type">{questionLabel}</span>
         <span className="qe-question-context">{q.exam_format||tx('Lesson check','Lesson check')}{q.marks?' · '+q.marks+' '+tx('अंक','marks'):''}</span>
