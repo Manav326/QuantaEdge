@@ -144,15 +144,6 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
         <a href="#governance" title={collapsed ? 'Content governance' : undefined}><span className="qe-nav-icon" aria-hidden="true">✓</span><span className="qe-nav-label">Content governance</span></a>
       </> : null}
 
-      {variant === 'content' ? <>
-        <div className="sidebar-divider" />
-        <div className="sidebar-label qe-sidebar-extra">CONTENT WORKFLOW</div>
-        <div className="qe-sidebar-guide qe-sidebar-extra"><span>01</span><div><b>Organise</b><small>Class → subject → chapter</small></div></div>
-        <div className="qe-sidebar-guide qe-sidebar-extra"><span>02</span><div><b>Author</b><small>Teaching blocks and examples</small></div></div>
-        <div className="qe-sidebar-guide qe-sidebar-extra"><span>03</span><div><b>Preview</b><small>Check desktop and phone</small></div></div>
-        <div className="qe-sidebar-guide qe-sidebar-extra"><span>04</span><div><b>Publish safely</b><small>Complete all checks first</small></div></div>
-      </> : null}
-
       </div>
       <div className="admin-user">
         <span className="avatar">{visibleAccountName.trim().slice(0, 1).toUpperCase() || 'A'}</span>
