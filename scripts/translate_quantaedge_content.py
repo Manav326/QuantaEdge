@@ -767,7 +767,7 @@ def main() -> int:
                                 "model_name": model,
                             }
                             output_rows.append(record)
-                            statements.append(insert_statement(row, lang, translated, version, args.model))
+                            statements.append(insert_statement(row, lang, translated, version, model))
                         for record in output_rows:
                             drafts.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
                         drafts.flush()
