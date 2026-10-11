@@ -722,8 +722,22 @@ finally {
     }
     $env:QUANTAEDGE_ADMIN_SESSION = $OldAdminSession
     $env:QE_SESSION = $OldQeSession
+    $env:QUANTAEDGE_ADMIN_REFRESH = $OldAdminRefresh
+    $env:QE_STAFF_REFRESH = $OldQeRefresh
+    $env:QUANTAEDGE_SESSION_STATE_FILE = $OldSessionStateFile
     $session = $null
+    $refresh = $null
     $secure = $null
+    $secureRefresh = $null
+    $secureRetry = $null
+    $secureRefreshRetry = $null
+    $script:SessionCookie = $null
+    $script:RefreshCookie = $null
+    foreach ($statePath in @($script:SessionStatePath, "$($script:SessionStatePath).tmp")) {
+        if (Test-Path -LiteralPath $statePath -PathType Leaf) {
+            try { Remove-Item -LiteralPath $statePath -Force } catch { Write-Warning "Could not remove temporary credential state file." }
+        }
+    }
     if ($script:TranscriptStarted) { try { Stop-Transcript | Out-Null } catch {} }
     Save-QeRunReport
     Write-Host ''
