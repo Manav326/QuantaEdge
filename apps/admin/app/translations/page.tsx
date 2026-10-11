@@ -328,7 +328,9 @@ export default function TranslationsPage() {
               <div className={styles.rowTop}><span className={styles.language}>{row.language === 'hi' ? 'हिन्दी' : 'English'}</span><span className={badgeClass(row.translation_status)}>{row.translation_status.replaceAll('_', ' ')}</span></div>
               <strong>{ENTITY_LABELS[row.entity_type] || row.entity_type}</strong>
               <small>{contextLabel(row)}</small>
-              <span className={styles.rowMeta}>#{row.entity_id} · v{row.version_no} · {row.translation_status === 'NOT_STARTED' ? 'Source · no translation yet' : row.translation_method === 'AI' ? 'AI draft' : 'Human edited'}</span>
+              <span className={styles.rowMeta}>{row.translation_id == null
+                ? '#' + row.entity_id + ' · Source · no translation yet'
+                : '#' + row.entity_id + ' · v' + row.version_no + ' · ' + (row.translation_method === 'AI' ? 'AI draft' : 'Human edited')}</span>
               {row.is_current_revision === false && <span className={styles.staleFlag}>Source has changed</span>}
             </button>)}
           </div>
