@@ -104,11 +104,33 @@ public class GuardianController {
         .body(bytes);
   }
 
+  @PutMapping("/profile-photo")
+  @Transactional
+  public Map<String,Object> updateProfilePhoto(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    if(context.userId()==null) throw new SecurityException("Parent account required");
+    if(!body.containsKey("profileImageDataUrl"))
+      throw new IllegalArgumentException("Choose a photo or remove the current photo.");
+
+    String image=validatedProfileImage(body.get("profileImageDataUrl"));
+    int changed=jdbc.update(
+        "update user_account set profile_image_data_url=?,profile_updated_at=now(),updated_at=now() where id=? and active=true and role='PARENT'",
+        image,context.userId());
+    if(changed!=1) throw new SecurityException("Active parent account not found.");
+
+    Map<String,Object> result=new java.util.LinkedHashMap<>();
+    result.put("saved",true);
+    result.put("profile_image_url",image==null?null:"/api/v1/guardians/profile-photo?v="+System.currentTimeMillis());
+    return result;
+  }
+
   private Map<String,Object> parentProfile(long userId) {
     return jdbc.queryForMap("""
       select id,public_id,display_name,mobile_e164,email,city,state,occupation,
              organization,preferred_language,
-             case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo' else null end as profile_image_url,
+             case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint else null end as profile_image_url,
              profile_updated_at
       from user_account
       where id=? and active=true and role='PARENT'
