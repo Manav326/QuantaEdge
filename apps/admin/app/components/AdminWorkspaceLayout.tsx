@@ -119,11 +119,10 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
       <div className="qe-admin-workspace-content">
         <header className="qe-admin-global-header">
           <div className="qe-admin-global-context">
-            <span>QUANTAEDGE · LEARNING OPERATIONS</span>
-            <strong>{locale === 'english' ? 'Staff workspace' : 'Staff workspace · Learning operations'}</strong>
+            <span>QUANTAEDGE</span>
+            <strong>Staff workspace</strong>
           </div>
           <div className="qe-admin-global-actions">
-            <span className="qe-admin-secure-indicator"><i />Secure workspace</span>
             <label className="qe-admin-language-switcher">
               <span aria-hidden="true">文</span><span className="qe-admin-language-label">भाषा / Language</span>
               <select value={locale} onChange={event => changeLocale(event.target.value as AdminLocale)} aria-label="भाषा चुनें / Choose language">
@@ -131,7 +130,6 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
                 <option value="english">English</option>
               </select>
             </label>
-            <button type="button" className="qe-admin-logout-button" onClick={() => void logout()} disabled={loggingOut} aria-label="Log out">{loggingOut ? 'Logging out…' : 'Logout'}</button>
           </div>
         </header>
         <div className="qe-admin-workspace-page-slot">{children}</div>
@@ -140,6 +138,9 @@ export default function AdminWorkspaceLayout({ children }: { children: React.Rea
         {visibleItems.map(item => <Link key={item.key} href={item.href} aria-current={active === item.key ? 'page' : undefined} className={active === item.key ? 'is-active' : ''} title={locale === 'english' ? item.english : item.hinglish}>
           <span aria-hidden="true">{item.icon}</span><small>{locale === 'english' ? item.english : item.hinglish}</small>
         </Link>)}
+        <button type="button" className="qe-admin-mobile-logout" onClick={() => void logout()} disabled={loggingOut} aria-label="Log out">
+          <span aria-hidden="true">↗</span><small>{loggingOut ? 'Logging out…' : 'Logout'}</small>
+        </button>
       </nav>
     </div>
   </AdminWorkspaceContext.Provider>;
