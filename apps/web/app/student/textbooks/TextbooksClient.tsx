@@ -184,24 +184,8 @@ export default function TextbooksClient() {
   }, [selected?.document_id, currentPage]);
 
   return <main className="app-shell qe-textbook-shell">
-    <header className="app-header qe-textbook-header">
-      <Link href="/student" className="qe-textbook-brand"><span className="qe-textbook-mark">Q</span><span><b>QuantaEdge</b><small>STUDENT LEARNING</small></span></Link>
-      <div className="qe-textbook-header-actions">
-        <Link href="/student/learn" className="qe-textbook-back"><span>←</span><LocaleText hinglish="पढ़ाई" english="Learning" /></Link>
-        <Link href="/student" className="qe-textbook-home">⌂</Link>
-      </div>
-    </header>
 
     {!documentId ? <section className="qe-textbook-library">
-      <div className="qe-textbook-library-hero">
-        <div className="qe-textbook-hero-copy"><span className="qe-textbook-eyebrow"><i/> YOUR PERSONAL READING SPACE</span>
-          <h1><LocaleText hinglish="आपकी किताबें, एक जगह" english="Your textbooks, all in one place" /></h1>
-          <p><LocaleText hinglish="अपनी subject book खोलें या chapter के हिसाब से पढ़ें। आपकी reading progress अपने-आप save होती है।" english="Open the complete subject book or read a specific chapter. Your reading progress saves automatically." /></p>
-          <div className="qe-textbook-hero-chips"><span>↔ Page navigation</span><span>＋ Zoom controls</span><span>✓ Progress saved</span></div>
-        </div>
-        <div className="qe-textbook-book-art" aria-hidden="true"><div className="qe-book-orbit orbit-one"/><div className="qe-book-orbit orbit-two"/><div className="qe-book-cover"><span>Q</span><b>LEARN<br/>EVERY DAY</b><small>YOUR TEXTBOOK</small></div></div>
-      </div>
-
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
       <div className="qe-textbook-library-toolbar"><div><span className="qe-textbook-eyebrow">RESOURCE LIBRARY</span><h2>Available textbooks</h2><p>Only the books and chapters available to your enrolled subjects are shown.</p></div>
         <label>Subject <select value={subjectFilter} onChange={e => setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
