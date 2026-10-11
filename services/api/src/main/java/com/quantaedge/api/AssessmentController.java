@@ -620,13 +620,18 @@ public class AssessmentController {
         attempt_id,source_assessment_question_id,source_question_id,sequence_no,max_marks,question_snapshot
       )
       select ?,aq.id,aq.source_question_id,aq.sequence_no,aq.max_marks,
-             case when aqt.id is null then aq.question_snapshot else
+             case when aqt.id is null then
+               jsonb_set(aq.question_snapshot,'{_translation_applied}','false'::jsonb,true)
+             else
                jsonb_set(
                  jsonb_set(
-                   jsonb_set(aq.question_snapshot,'{prompt}',to_jsonb(aqt.prompt),true),
-                   '{explanation}',coalesce(to_jsonb(aqt.explanation),'null'::jsonb),true
+                   jsonb_set(
+                     jsonb_set(aq.question_snapshot,'{prompt}',to_jsonb(aqt.prompt),true),
+                     '{explanation}',coalesce(to_jsonb(aqt.explanation),'null'::jsonb),true
+                   ),
+                   '{options}',aqt.options,true
                  ),
-                 '{options}',aqt.options,true
+                 '{_translation_applied}','true'::jsonb,true
                )
              end
       from assessment_question aq
@@ -934,6 +939,10 @@ public class AssessmentController {
       questions.add(item);
     }
     attempt.put("questions", questions);
+    if (assessmentSnapshot.containsKey("language")) {
+      attempt.put("translation_complete", questions.stream()
+          .allMatch(question -> Boolean.TRUE.equals(question.get("translated"))));
+    }
     attempt.put("resultReleased", resultReleased);
     if (staffView) attempt.put("audit", auditHistory(((Number) attempt.get("assessment_id")).longValue(), attemptId));
     return attempt;
@@ -990,6 +999,7 @@ public class AssessmentController {
       }
     }
     result.put("options", options);
+    result.put("translated", Boolean.TRUE.equals(snapshot.get("_translation_applied")));
     return result;
   }
 

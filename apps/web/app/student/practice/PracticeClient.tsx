@@ -9,14 +9,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
   source_kind?:string;source_year?:number;board?:string;marks?:number;exam_format?:string;
-  topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean;attemptCount?:number;lastCorrect?:boolean|null
+  topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean;attemptCount?:number;lastCorrect?:boolean|null;translated?:boolean
 };
 type LessonBlock={id:number;sequence_no:number;block_type:string;content:string};
 type LessonDetail={
   id:number;title:string;summary?:string;class_code?:string;chapter_name?:string;
   subject_name?:string;subject_code?:string;objective_title?:string;blocks:LessonBlock[];
 };
-type ApiBody={detail?:string;message?:string;sessionId?:number;status?:string;questions?:Question[];selectedCount?:number};
+type ApiBody={detail?:string;message?:string;sessionId?:number;status?:string;questions?:Question[];selectedCount?:number;translationComplete?:boolean;language?:string};
 
 function parse<T=any>(v:string):T{try{return JSON.parse(v) as T}catch{return [] as T}}
 async function readBody(response:Response):Promise<any>{
@@ -52,6 +52,7 @@ export default function PracticePage(){
   const [lesson,setLesson]=useState<LessonDetail|null>(null);
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStatus,setSessionStatus]=useState('IN_PROGRESS');
+  const [translationComplete,setTranslationComplete]=useState(false);
   const [index,setIndex]=useState(0);
   const [selected,setSelected]=useState('');
   const [result,setResult]=useState<any>(null);
@@ -111,6 +112,8 @@ export default function PracticePage(){
           const resumed:Array<Question>=Array.isArray(body.questions)?body.questions:[];
           setSessionId(Number(body.sessionId));
           setSessionStatus(String(body.status||'IN_PROGRESS'));
+          setTranslationComplete(typeof body.translationComplete==='boolean'
+            ? body.translationComplete : resumed.length>0&&resumed.every(q=>q.translated===true));
           setQuestions(resumed);
           const firstUnanswered=resumed.findIndex(q=>!q.answered);
           setIndex(firstUnanswered<0?resumed.length:firstUnanswered);
@@ -152,6 +155,8 @@ export default function PracticePage(){
         }
         setSessionId(Number(startBody.sessionId));
         setSessionStatus(String(startBody.status||'IN_PROGRESS'));
+        setTranslationComplete(typeof startBody.translationComplete==='boolean'
+          ? startBody.translationComplete : loaded.length>0&&loaded.every(q=>q.translated===true));
         setQuestions(loaded);setIndex(0);setSelected('');setResult(null);setScoreByQuestion({});
         setNotice(String(startBody.message||tx('इस lesson का practice तैयार है।','Practice for this lesson is ready.')));
         const url=new URL(window.location.href);
@@ -186,6 +191,7 @@ export default function PracticePage(){
       if(sessionResponse.ok){
         const sessionBody=await readBody(sessionResponse);
         setSessionStatus(String(sessionBody.status||'IN_PROGRESS'));
+        if(typeof sessionBody.translationComplete==='boolean')setTranslationComplete(sessionBody.translationComplete);
         if(Array.isArray(sessionBody.questions))setQuestions(sessionBody.questions);
       }
     }catch(e:any){
@@ -270,6 +276,10 @@ export default function PracticePage(){
         <div className="qe-practice-progress__track"><span style={{width:progressPercent+'%'}}/></div>
       </div>
 
+      {!translationComplete&&<div className="qe-practice-notice" role="status"><span>文</span><p><LocaleText
+        hinglish="भाषा कवरेज: कुछ practice प्रश्नों की चुनी हुई भाषा में अलग, समीक्षा-स्वीकृत प्रति उपलब्ध नहीं है। जहाँ ज़रूरी हो, मूल प्रश्न दिखेगा; answer key नहीं बदलती।"
+        english="Language coverage: some practice questions do not yet have a separately reviewed version in the selected language. Original text is retained where needed; answer keys are unchanged."
+      /></p></div>}
       {notice&&<div className="qe-practice-notice" role="status"><span>✦</span><p>{notice}</p></div>}
       {error&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="कुछ ठीक नहीं हुआ" english="Something went wrong" /></strong><p>{error}</p></div></div>}
 

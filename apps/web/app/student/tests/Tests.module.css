@@ -133,3 +133,6 @@
 .resultActions{display:flex;justify-content:flex-end;padding-top:3px}
 @media(max-width:850px){.resultScoreGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.resultScorePrimary{grid-column:1/-1}.resultQuestionList{grid-template-columns:1fr}}
 @media(max-width:480px){.releasedResult{padding:15px;gap:14px}.resultHero{align-items:flex-start}.resultHeroIcon{width:40px;height:40px;flex-basis:40px;border-radius:12px;font-size:20px}.resultScoreGrid{gap:7px}.resultMetric{min-height:90px;padding:9px 3px}.resultMetric strong{font-size:23px}.resultMetric span{font-size:9px}.resultQuestionRow{grid-template-columns:29px minmax(0,1fr) auto;padding:9px;gap:8px}.resultQuestionNumber{width:28px;height:28px}.resultActions .primaryButton{width:100%}}
+
+
+.languageNotice{display:flex;flex-direction:column;gap:4px;margin:12px 0;padding:12px 15px;border:1px solid #e7dcb4;background:#fffaf0;border-radius:11px;color:#735a21;font-size:12px;line-height:1.6}.languageNotice b{font-size:11px;color:#6d5212}

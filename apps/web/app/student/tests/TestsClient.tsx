@@ -14,12 +14,12 @@ type AssessmentCard = {
 type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
   options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;
-  isCorrect?:boolean|null;awardedMarks?:number|string|null;teacherFeedback?:string|null;
+  isCorrect?:boolean|null;awardedMarks?:number|string|null;teacherFeedback?:string|null;translated?:boolean;
 };
 type Attempt = {
   attempt_id:number;assessment_id:number;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
-  questions:AttemptQuestion[];resultReleased:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
+  questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
 type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;assessment_title:string;subject_name:string;chapter_name?:string|null;question_count:number};
 
@@ -228,6 +228,13 @@ export default function TestsClient(){
         <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← Tests & results</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
         <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1><p>Attempt {attempt.attempt_number} · {attempt.questions.length} questions · {attempt.max_score} marks</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>TIME REMAINING</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?'Saving answer…':'Answers auto-save'}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
+        {attempt.translation_complete===false&&<div className={styles.languageNotice} role="status">
+          <b><LocaleText hinglish="भाषा कवरेज" english="Language coverage" /></b>
+          <span><LocaleText
+            hinglish="कुछ test प्रश्नों की चुनी हुई भाषा में अलग, समीक्षा-स्वीकृत प्रति उपलब्ध नहीं है। जहाँ ज़रूरी हो, मूल पाठ रखा गया है; अंक और answer keys नहीं बदले गए।"
+            english="Some test questions do not yet have a separately reviewed version in the selected language. Original text is retained where needed; marks and answer keys are unchanged."
+          /></span>
+        </div>}
         {released?<section className={styles.releasedResult} aria-live="polite">
           <div className={styles.resultHero}>
             <span className={styles.resultHeroIcon}>✓</span>

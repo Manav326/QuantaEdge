@@ -95,6 +95,21 @@ public class StudentController {
     return profileFor(studentId);
   }
 
+  @PatchMapping("/me/language")
+  @Transactional
+  public Map<String,Object> updateMyLanguage(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    String language=body.get("language")==null?"":String.valueOf(body.get("language")).trim().toLowerCase(java.util.Locale.ROOT);
+    if(!List.of("hi","en").contains(language)) {
+      throw new IllegalArgumentException("Language must be 'hi' for Hindi or 'en' for English.");
+    }
+    int changed=jdbc.update("update student set language=? where id=? and active=true",language,context.studentId());
+    if(changed!=1) throw new SecurityException("Active student profile not found.");
+    return Map.of("language",language);
+  }
+
   private Map<String,Object> profileFor(long studentId) {
     return jdbc.queryForMap("""
       select id,public_id,display_name,class_code,board,language,
