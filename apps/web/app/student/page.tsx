@@ -52,6 +52,22 @@ export default function StudentHome(){
     return ()=>{active=false};
   },[router]);
 
+
+  useEffect(()=>{
+    if(!data||textbooksLoading)return;
+    const key='qe:student:home:scrollY';
+    const raw=localStorage.getItem(key);
+    if(raw===null)return;
+    const target=Math.max(0,Number(raw)||0);
+    requestAnimationFrame(()=>{
+      window.scrollTo({top:target,behavior:'auto'});
+      requestAnimationFrame(()=>{
+        window.scrollTo({top:target,behavior:'auto'});
+        localStorage.removeItem(key);
+      });
+    });
+  },[data,textbooksLoading]);
+
   if(error)return <main className="app-shell"><section className="app-content"><div className="auth-card"><h1><LocaleText hinglish="Student उपलब्ध नहीं है" english="Student unavailable" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><LocaleText hinglish="Login करें" english="Log in" /></Link></div></section></main>;
   if(!data)return <main className="app-shell"><section className="app-content"><div className="eyebrow"><LocaleText hinglish="Learning profile load हो रही है…" english="Loading learning profile…" /></div></section></main>;
   const stats=data.lessonStats || {},q=data.questionStats || {};
@@ -70,31 +86,30 @@ export default function StudentHome(){
             const track=(data.curriculum||[]).find((item:any)=>item.subject_code===subjectCode);
             const title=subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />;
             const count=Number(track?.lessons||0);
-            return <Link key={subjectCode} href={'/student/learn?subjectCode='+subjectCode} className="app-task">
-              <span className="task-icon">{subjectCode==='maths'?'∑':'⚗'}</span>
-              <div><strong>{title}</strong><small>{Number(track?.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {count} <LocaleText hinglish="published lessons" english="published lessons" /></small>
-              <small>{count>0?<LocaleText hinglish="उपलब्ध पाठ देखें" english="View available lessons" />:<LocaleText hinglish="इस subject के lessons अभी review या writing में हैं। Publish होने पर यहाँ दिखेंगे।" english="Lessons for this subject are being written or reviewed. They will appear here when published." />}</small></div>
-              <span className="task-action">→</span>
-            </Link>;
+            const subjectBook=textbookDocuments.find(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===subjectCode);
+            const chapterPdfCount=textbookDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&item.subject_code===subjectCode).length;
+            const saveHomeScroll=()=>localStorage.setItem('qe:student:home:scrollY',String(window.scrollY));
+            const subjectHref='/student/learn?subjectCode='+subjectCode;
+            const bookHref=subjectBook?'/student/textbooks?documentId='+subjectBook.document_id+'&returnTo='+encodeURIComponent('/student'):'#';
+            return <article key={subjectCode} className="app-task subject-track-card">
+              <Link href={subjectHref} className="subject-track-main">
+                <span className="task-icon">{subjectCode==='maths'?'∑':'⚗'}</span>
+                <span className="subject-track-copy"><strong>{title}</strong>
+                  <small>{Number(track?.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {count} <LocaleText hinglish="published lessons" english="published lessons" /></small>
+                  <small>{chapterPdfCount>0?chapterPdfCount+' chapter PDFs available':'Open subject and explore chapters'}</small>
+                </span>
+                <span className="task-action">→</span>
+              </Link>
+              {subjectBook ? <Link href={bookHref} onClick={saveHomeScroll} className="subject-book-link" aria-label={'Open complete textbook PDF: '+subjectBook.title}>
+                <span className="subject-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
+                <span className="subject-book-copy"><strong>{subjectBook.title}</strong><small>Complete textbook · {subjectBook.page_count} pages</small></span>
+                <span className="subject-book-open">Open ↗</span>
+              </Link> : textbooksLoading ? <span className="subject-pdf-status">Checking available PDFs…</span>
+                : textbooksError ? <Link href="/student/textbooks" className="subject-pdf-status" onClick={saveHomeScroll}>Open textbook library →</Link>
+                : chapterPdfCount>0 ? <Link href={subjectHref} className="subject-pdf-status">{chapterPdfCount} chapter PDFs · View chapters →</Link>
+                : <span className="subject-pdf-status">Textbook PDF not published yet</span>}
+            </article>;
           })}
-        </div>
-
-        <div className="content-heading"><h2><LocaleText hinglish="किताबें और chapter PDFs" english="Textbooks & chapter PDFs" /></h2><span>{textbooksLoading?'…':textbookDocuments.length+' available'}</span></div>
-        <div className="task-list textbook-dashboard-list" aria-live="polite">
-          {textbooksLoading ? <div className="app-task"><span className="task-icon">▤</span><div><strong>Loading your textbooks…</strong><small>Checking books published for your class and enrolled subjects.</small></div></div>
-            : textbooksError ? <div className="app-task"><span className="task-icon">!</span><div><strong>Textbooks could not be loaded</strong><small>{textbooksError}</small></div><Link className="task-action" href="/student/textbooks">Retry →</Link></div>
-            : textbookDocuments.length===0 ? <div className="app-task"><span className="task-icon">▤</span><div><strong>No books or chapter PDFs published for you yet</strong><small>They will appear here after an admin approves the PDF, attaches it to your class and subject, and publishes it. Your subject enrollment must also be active.</small></div><Link className="task-action" href="/student/textbooks">Open library →</Link></div>
-            : <>
-              {textbookDocuments.slice(0,4).map((item)=>{
-                const isBook=item.scope==='SUBJECT_BOOK';
-                return <Link key={item.document_id} href={'/student/textbooks?documentId='+item.document_id} className="app-task">
-                  <span className="task-icon">{isBook?'▤':'▧'}</span>
-                  <div><strong>{item.title}</strong><small>{item.subject_name}{item.chapter_name?' · '+item.chapter_name:''} · {item.page_count} pages</small><small>{isBook?'Complete subject book':('Chapter PDF'+(item.chapter_code?' · '+item.chapter_code:''))} · Read online</small></div>
-                  <span className="task-action">→</span>
-                </Link>;
-              })}
-              <Link href="/student/textbooks" className="app-task"><span className="task-icon">＋</span><div><strong>Open textbook library</strong><small>View all {textbookDocuments.length} published book and chapter PDF{textbookDocuments.length===1?'':'s'}.</small></div><span className="task-action">→</span></Link>
-            </>}
         </div>
 
         <div className="content-heading"><h2><LocaleText hinglish="आज क्या करें?" english="What should you do today?" /></h2><span><LocaleText hinglish="mastery-driven" english="mastery-driven" /></span></div>
