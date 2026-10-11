@@ -219,7 +219,9 @@ export default function PracticePage(){
     </section>
   </main>;
 
-  if(sessionStatus==='COMPLETED'||index>=questions.length)return <main className="practice-page">
+  // Keep the final answer's feedback visible until the learner advances to the summary.
+  // A server-completed session alone must not unmount the current question immediately.
+  if(index>=questions.length)return <main className="practice-page">
     <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice complete</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow"><LocaleText hinglish="Micro-topic पूरा हुआ" english="Micro-topic complete" /></div>
