@@ -106,6 +106,29 @@ INSERT_SPECS = {
     },
 }
 
+def read_env_file(path: Path) -> dict[str, str]:
+    """Read simple KEY=VALUE entries without printing or exporting secrets."""
+    if not path.is_file():
+        return {}
+    values: dict[str, str] = {}
+    for raw_line in path.read_text(encoding="utf-8-sig").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[7:].lstrip()
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if value.startswith(("'", '"')) and len(value) >= 2 and value[-1] == value[0]:
+            value = value[1:-1]
+        if key and value:
+            values[key] = value
+    return values
+
+
 def sql_literal(value: str) -> str:
     return "'" + value.replace("'", "''") + "'"
 
@@ -612,8 +635,10 @@ def main() -> int:
                         help="Inventory eligible source rows and existing translation statuses; no model calls or writes.")
     parser.add_argument("--apply", action="store_true",
                         help="Insert generated translations as DRAFT rows. No translations are published.")
-    parser.add_argument("--model", default=os.getenv("OPENAI_TRANSLATION_MODEL", "").strip())
-    parser.add_argument("--base-url", default=os.getenv("OPENAI_API_BASE_URL", "https://api.openai.com").strip())
+    parser.add_argument("--env-file", default=str(REPO_ROOT / ".env"),
+                        help="Local env file for API settings; process environment and explicit flags take precedence.")
+    parser.add_argument("--model", default="", help="Translation model; falls back to OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL.")
+    parser.add_argument("--base-url", default="", help="API base URL; falls back to OPENAI_API_BASE_URL or https://api.openai.com.")
     parser.add_argument("--batch-size", type=int, default=20)
     parser.add_argument("--max-items", type=int, default=0, help="Cap translated source entities for a pilot; 0 means all.")
     parser.add_argument("--max-retries", type=int, default=5)
@@ -622,6 +647,16 @@ def main() -> int:
     args = parser.parse_args()
 
     try:
+        file_env = read_env_file(Path(args.env_file).expanduser())
+        model = (args.model.strip()
+                 or os.getenv("OPENAI_TRANSLATION_MODEL", "").strip()
+                 or file_env.get("OPENAI_TRANSLATION_MODEL", "").strip()
+                 or os.getenv("APP_AI_TUTOR_MODEL", "").strip()
+                 or file_env.get("APP_AI_TUTOR_MODEL", "").strip())
+        base_url = (args.base_url.strip()
+                    or os.getenv("OPENAI_API_BASE_URL", "").strip()
+                    or file_env.get("OPENAI_API_BASE_URL", "").strip()
+                    or "https://api.openai.com")
         classes = validate_codes(args.classes, ALLOWED_CLASSES, "classes")
         subjects = validate_codes(args.subjects, ALLOWED_SUBJECTS, "subjects")
         languages = validate_codes(args.languages, ALLOWED_LANGUAGES, "languages")
@@ -631,9 +666,9 @@ def main() -> int:
             raise ValueError("--max-retries must be between 1 and 5.")
         if args.max_items < 0:
             raise ValueError("--max-items cannot be negative.")
-        if not args.audit_only and not args.model:
-            raise ValueError("Set OPENAI_TRANSLATION_MODEL or pass --model.")
-        api_key = os.getenv("OPENAI_API_KEY", "").strip()
+        if not args.audit_only and not model:
+            raise ValueError("Set OPENAI_TRANSLATION_MODEL/APP_AI_TUTOR_MODEL in the env file/environment or pass --model.")
+        api_key = os.getenv("OPENAI_API_KEY", "").strip() or file_env.get("OPENAI_API_KEY", "").strip()
         if not args.audit_only and not api_key:
             raise ValueError("OPENAI_API_KEY is required to generate translations.")
         output_dir = Path(args.output_dir).resolve()
@@ -686,6 +721,8 @@ def main() -> int:
         if args.max_items:
             todo = cap_tasks_balanced_by_language_and_type(todo, args.max_items)
             audit["translation_tasks_selected_after_cap"] = len(todo)
+        audit["translation_model"] = model if not args.audit_only else None
+        audit["api_base_url"] = base_url if not args.audit_only else None
         audit["translation_tasks_selected_by_language"] = dict(sorted(
             collections.Counter(language for _row, language, _version in todo).items()
         ))
@@ -705,8 +742,8 @@ def main() -> int:
                     batch = lang_tasks[offset:offset + args.batch_size]
                     try:
                         translated_by_id = translate_batch(
-                            [row for row, _, _ in batch], language, args.model, api_key,
-                            args.base_url, args.timeout, args.max_retries,
+                            [row for row, _, _ in batch], language, model, api_key,
+                            base_url, args.timeout, args.max_retries,
                         )
                         statements: list[str] = []
                         output_rows: list[dict[str, Any]] = []
@@ -727,7 +764,7 @@ def main() -> int:
                                 "translated_content": translated,
                                 "translation_status": "DRAFT",
                                 "translation_method": "AI",
-                                "model_name": args.model,
+                                "model_name": model,
                             }
                             output_rows.append(record)
                             statements.append(insert_statement(row, lang, translated, version, args.model))
