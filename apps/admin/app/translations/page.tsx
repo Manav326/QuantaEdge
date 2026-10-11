@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import AdminSidebar from '../components/AdminSidebar';
 import styles from './Translations.module.css';
 
 type Row = {
   entity_type: string;
-  translation_id: number;
+  translation_id: number | null;
   entity_id: number;
   language: 'hi' | 'en';
   source_hash: string;
@@ -82,7 +82,7 @@ async function api<T = any>(url: string, init: RequestInit = {}): Promise<T> {
   if (!response.ok) throw new Error(errorMessage(body, response.status));
   return body as T;
 }
-function rowKey(row: Row) { return row.entity_type + ':' + row.translation_id; }
+function rowKey(row: Row) { return row.entity_type + ':' + (row.translation_id == null ? 'source:' + row.entity_id + ':' + row.language : row.translation_id); }
 function contextLabel(row: Row) {
   return [
     row.class_code ? 'Class ' + row.class_code : '',
@@ -93,6 +93,7 @@ function contextLabel(row: Row) {
 }
 function badgeClass(status: string) {
   const classes: Record<string, string> = {
+    NOT_STARTED: styles.statusNOTSTARTED,
     DRAFT: styles.statusDRAFT,
     IN_REVIEW: styles.statusINREVIEW,
     APPROVED: styles.statusAPPROVED,
@@ -121,6 +122,7 @@ export default function TranslationsPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const pageSize = 100;
+  const loadSequence = useRef(0);
 
   const isAdmin = identity?.role === 'ADMIN';
   const permissions = Array.isArray(identity?.permissions) ? identity.permissions : [];
@@ -132,8 +134,16 @@ export default function TranslationsPage() {
   const selected = useMemo(() => items.find(row => rowKey(row) === selectedKey) || null, [items, selectedKey]);
 
   const load = useCallback(async (nextOffset = 0, clearSelection = false): Promise<Row[]> => {
+    const sequence = ++loadSequence.current;
     setLoading(true);
     setError('');
+    if (clearSelection) {
+      setItems([]);
+      setTotal(0);
+      setSelectedKey('');
+      setEditor('');
+      setQualityNotes('');
+    }
     try {
       const params = new URLSearchParams({
         language, status, entityType,
@@ -142,21 +152,46 @@ export default function TranslationsPage() {
         limit: String(pageSize), offset: String(nextOffset)
       });
       const body = await api<ApiResult<{ items: Row[]; total: number; limit: number; offset: number }>>('/api/v1/admin/translations?' + params.toString());
-      const nextItems = Array.isArray(body.items) ? body.items : [];
-      setItems(nextItems);
-      setTotal(Number(body.total || 0));
-      setOffset(nextOffset);
-      if (clearSelection) {
-        setSelectedKey('');
-        setEditor('');
-        setQualityNotes('');
+      if (sequence !== loadSequence.current) return [];
+      const existingItems = Array.isArray(body.items) ? body.items : [];
+      const existingTotal = Number(body.total || 0);
+      let nextItems = existingItems;
+      let combinedTotal = existingTotal;
+
+      // Existing translation versions are listed first. When the page has room,
+      // fill it with source content that still has no translation for this target language.
+      if (status === 'ALL' && existingItems.length < pageSize) {
+        const inventoryLimit = pageSize - existingItems.length;
+        const inventoryOffset = Math.max(0, nextOffset + existingItems.length - existingTotal);
+        const inventoryParams = new URLSearchParams({
+          language, entityType,
+          classCode: classCode === 'ALL' ? '' : classCode,
+          subjectCode: subjectCode === 'ALL' ? '' : subjectCode,
+          limit: String(inventoryLimit), offset: String(inventoryOffset)
+        });
+        const inventory = await api<ApiResult<{ items: Row[]; total: number; limit: number; offset: number }>>(
+          '/api/v1/admin/translations/inventory?' + inventoryParams.toString()
+        );
+        if (sequence !== loadSequence.current) return [];
+        const sourceItems = Array.isArray(inventory.items) ? inventory.items : [];
+        nextItems = [...existingItems, ...sourceItems];
+        combinedTotal = existingTotal + Number(inventory.total || 0);
       }
+
+      if (sequence !== loadSequence.current) return [];
+      setItems(nextItems);
+      setTotal(combinedTotal);
+      setOffset(nextOffset);
       return nextItems;
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Translation review could not be loaded.');
+      if (sequence === loadSequence.current) {
+        setItems([]);
+        setTotal(0);
+        setError(e instanceof Error ? e.message : 'Translation review could not be loaded.');
+      }
       return [];
     } finally {
-      setLoading(false);
+      if (sequence === loadSequence.current) setLoading(false);
     }
   }, [language, status, entityType, classCode, subjectCode]);
 
@@ -188,7 +223,7 @@ export default function TranslationsPage() {
 
   function selectRow(row: Row) {
     setSelectedKey(rowKey(row));
-    setEditor(pretty(row.translated_content_text));
+    setEditor(pretty(row.translated_content_text ?? row.source_content_text));
     setQualityNotes(row.quality_notes || '');
     setNotice('');
     setError('');
@@ -200,14 +235,18 @@ export default function TranslationsPage() {
     catch (e) { setError(e instanceof Error ? e.message : 'Invalid translation JSON.'); return; }
     setSaving(true); setError(''); setNotice('');
     try {
+      const isNewSource = selected.translation_id == null;
+      const draftUrl = isNewSource
+        ? '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.entity_id + '/draft?language=' + encodeURIComponent(selected.language)
+        : '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/draft';
       const result = await api<{ translationId: number; translationStatus: string; createdNewVersion: boolean }>(
-        '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/draft',
-        { method: 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
+        draftUrl,
+        { method: isNewSource ? 'POST' : 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
       );
       setNotice(result.createdNewVersion
         ? 'Saved as a new draft version. The previously approved or published version is unchanged.'
         : 'Draft saved. Student delivery is unchanged until review and publication are complete.');
-      const nextItems = await load(offset, false);
+      const nextItems = await load(selected.translation_id == null ? 0 : offset, false);
       const saved = nextItems.find(row => row.entity_type === selected.entity_type && row.translation_id === result.translationId);
       if (saved) { setSelectedKey(rowKey(saved)); setEditor(pretty(saved.translated_content_text)); }
     } catch (e) {
@@ -250,7 +289,7 @@ export default function TranslationsPage() {
       </header>
 
       <div className={styles.statGrid}>
-        <article><span>Matching versions</span><strong>{total.toLocaleString('en-IN')}</strong><small>for current filters</small></article>
+        <article><span>Matching queue items</span><strong>{total.toLocaleString('en-IN')}</strong><small>Existing translations and sources not yet translated</small></article>
         <article><span>Awaiting review on this page</span><strong>{pending}</strong><small>IN_REVIEW</small></article>
         <article><span>Stale source versions on this page</span><strong>{stale}</strong><small>Cannot be approved or published</small></article>
       </div>
@@ -269,14 +308,14 @@ export default function TranslationsPage() {
 
       <div className={styles.workspace}>
         <section className={styles.listPanel}>
-          <div className={styles.panelHeader}><div><h2>Translation queue</h2><p>{total.toLocaleString('en-IN')} matching versions</p></div><span>{loading ? 'Loading…' : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
+          <div className={styles.panelHeader}><div><h2>Translation queue</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span>{loading ? 'Loading…' : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
           <div className={styles.rows}>
-            {!loading && items.length === 0 && <div className={styles.empty}><strong>No translation versions found</strong><p>Generate language drafts with the local translation pipeline, then refresh this queue.</p></div>}
+            {!loading && items.length === 0 && <div className={styles.empty}><strong>No content matches these filters</strong><p>Try another class, subject, language, or reset the filters. Source content is included when no current translation exists.</p></div>}
             {items.map(row => <button type="button" key={rowKey(row)} className={styles.row + (selectedKey === rowKey(row) ? ' ' + styles.rowSelected : '')} onClick={() => selectRow(row)}>
               <div className={styles.rowTop}><span className={styles.language}>{row.language === 'hi' ? 'हिन्दी' : 'English'}</span><span className={badgeClass(row.translation_status)}>{row.translation_status.replaceAll('_', ' ')}</span></div>
               <strong>{ENTITY_LABELS[row.entity_type] || row.entity_type}</strong>
               <small>{contextLabel(row)}</small>
-              <span className={styles.rowMeta}>#{row.entity_id} · v{row.version_no} · {row.translation_method === 'AI' ? 'AI draft' : 'Human edited'}</span>
+              <span className={styles.rowMeta}>#{row.entity_id} · v{row.version_no} · {row.translation_status === 'NOT_STARTED' ? 'Source · no translation yet' : row.translation_method === 'AI' ? 'AI draft' : 'Human edited'}</span>
               {row.is_current_revision === false && <span className={styles.staleFlag}>Source has changed</span>}
             </button>)}
           </div>
@@ -300,6 +339,7 @@ export default function TranslationsPage() {
               <label><span>Translated version (editable JSON)</span><textarea value={editor} onChange={e => setEditor(e.target.value)} disabled={saving || (!canEdit && !canReview)} spellCheck={false} /></label>
             </div>
             <label className={styles.notes}><span>Reviewer notes / quality observations</span><textarea value={qualityNotes} maxLength={2000} onChange={e => setQualityNotes(e.target.value)} placeholder="Terminology, mathematics, grammar, missing labels, source alignment…" disabled={saving || (!canEdit && !canReview)} rows={3}/></label>
+            {selected.translation_id == null && <div className={styles.notice}><strong>Translation not started</strong> This is the original source content. Edit the right-hand JSON in ${selected.language === 'hi' ? 'Hindi (Devanagari)' : 'English'} and save it as a draft. It will not be shown to students until approved and published.</div>}
             <div className={styles.workflowHint}><strong>Safe publication path</strong><span>Save draft → Submit for review → Approve → Publish. Publishing is blocked for stale source revisions, invalid structure or missing reviewer/publisher metadata.</span></div>
             <div className={styles.actions}>
               <button type="button" onClick={() => void saveDraft()} disabled={saving || (!canEdit && !canReview) || selected.is_current_revision === false}>{saving ? 'Saving…' : 'Save draft'}</button>
