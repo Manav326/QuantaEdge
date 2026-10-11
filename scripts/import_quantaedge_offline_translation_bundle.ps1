@@ -298,16 +298,22 @@ function Invoke-CheckedPython {
     param([string[]]$Arguments)
     $scriptName = [IO.Path]::GetFileName($Arguments[0])
     if ($scriptName -eq 'import_quantaedge_practice_banks.py') {
-        if ($Arguments -contains '--apply') { $stageName = 'Import Hindi question drafts after full mapping preflight'; $script:SourceApplyStarted = $true }
-        else { $stageName = 'Validate Hindi source catalog (dry run)' }
+        if ($Arguments -contains '--apply') {
+            $stageName = 'Import Hindi question drafts after full mapping preflight'
+            $script:SourceApplyStarted = $true
+        } else {
+            $stageName = 'Validate Hindi source catalog (dry run)'
+        }
     } elseif ($scriptName -eq 'import_quantaedge_offline_translations.py') {
         $stageName = 'Import English translation drafts'
         $script:TranslationApplyStarted = $true
-    } else { $stageName = "Run Python: $scriptName" }
+    } else {
+        $stageName = "Run Python: $scriptName"
+    }
 
     $stage = Start-QeRunStage -Name $stageName
     try {
-        # Merge native stdout/stderr so a traceback cannot bypass the final-report finally block.
+        # Merge native stdout/stderr so a traceback cannot bypass final-report cleanup.
         $pythonOutput = @(& $PythonExe @Arguments 2>&1)
         $exitCode = $LASTEXITCODE
         # A child may rotate the refresh token when the 15-minute access token expires.
@@ -316,11 +322,23 @@ function Invoke-CheckedPython {
         foreach ($entry in $pythonOutput) {
             $line = [string]$entry
             Write-Host $line
-            if ($line -match '(?i)^Report:\s*(.+\.json)\s*
-        if ($stage.status -eq 'RUNNING') { Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message $_.Exception.Message }
+            if ($line -match '(?i)^Report:\s*(.+\.json)\s*$') {
+                Write-Host "Child report: $($Matches[1].Trim())"
+            }
+        }
+        if ($exitCode -ne 0) {
+            Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message 'Python returned a non-zero exit code; inspect full log and child report.' -ExitCode $exitCode
+            throw "Python command failed with exit code ${exitCode}: $PythonExe $($Arguments -join ' ')"
+        }
+        Complete-QeRunStage -Stage $stage -Status 'SUCCEEDED' -Message 'Python exited successfully.' -ExitCode 0
+    } catch {
+        if ($stage.status -eq 'RUNNING') {
+            Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message $_.Exception.Message
+        }
         throw
     }
 }
+
 
 try {
     if (-not (Test-Path -LiteralPath $PythonExe -PathType Leaf)) {
