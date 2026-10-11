@@ -309,6 +309,8 @@ def main() -> int:
     if args.chapters_only and args.questions_only: parser.error("Choose at most one of --chapters-only/--questions-only")
     if args.limit is not None and args.limit < 1: parser.error("--limit must be >= 1")
     if args.timeout < 1 or args.delay < 0: parser.error("Invalid timeout or delay")
+    if not args.api_base_url.startswith(("http://localhost", "http://127.0.0.1")):
+        parser.error("This importer reads IDs from the local Docker Postgres database; use a localhost API URL.")
     try:
         queue, translations, index = load_assets(args.queue,args.translations)
         print(f"Loaded {len(queue):,} queue records and {len(translations):,} translations.")
