@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Review and approve imported QuantaEdge practice-question drafts through the Admin API.
 
-Default is a read-only dry run. With --apply, each eligible DRAFT question is
-submitted to REVIEW and then APPROVED through the same permissioned endpoint used
-by the Admin UI. NUMERICAL uses the same workflow as MCQ, TRUE_FALSE and INPUT.
+Default is a read-only dry run. With --apply, eligible DRAFT questions are
+submitted to REVIEW and then APPROVED; questions already in REVIEW are resumed
+directly at approval. Progress and a checkpoint report are saved during the run.
+NUMERICAL uses the same workflow as MCQ, TRUE_FALSE and INPUT.
 
 The script does not write directly to the database, publish lessons/chapters, alter
 answer keys, mark source provenance verified, or bypass server-side validation.
@@ -236,7 +237,7 @@ def main() -> int:
         output["planned_sample"] = planned_sample if include_items else planned_sample[:10]
         output["planned_omitted_from_console"] = 0 if include_items else max(0, len(planned_sample) - 10)
         output["skipped_sample"] = skipped_sample if include_items else skipped_sample[:10]
-        if "attempted" in report:
+        if report.get("mode") != "DRY_RUN":
             output["attempted"] = report["attempted"]
             output["approved"] = report["approved"]
             output["failed_or_left_in_review"] = report["failed_or_left_in_review"]
@@ -263,15 +264,13 @@ def main() -> int:
 
     # Never mutate questions after a partial/failed queue read: the plan must be complete.
     if failures:
+        report["mode"] = "STOPPED_SAFELY"
+        save_report()
+        print_summary(args.show_items)
         print("\nRefusing to apply because one or more review queues failed to load or failed preflight. Fix the errors and rerun a clean dry run first.", file=sys.stderr)
         return 1
 
     assert api is not None
-    if failures:
-        report["mode"] = "STOPPED_SAFELY"
-        print_summary(args.show_items)
-        print("\nRefusing to apply because one or more review queues failed to load or failed preflight. Fix the errors and rerun a clean dry run first.", file=sys.stderr)
-        return 1
 
     print_summary(args.show_items)
     save_report()
