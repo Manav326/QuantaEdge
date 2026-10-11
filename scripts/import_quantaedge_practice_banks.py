@@ -12,6 +12,7 @@ import argparse
 import collections
 import datetime as dt
 import json
+import math
 import os
 import sys
 import urllib.parse
@@ -99,8 +100,18 @@ def load_catalog(path: Path) -> dict[str, Any]:
                 raise ValueError(f"{qwhere}: marks must be a positive integer.")
             if not isinstance(question.get("lesson_code"), str) or not question["lesson_code"].strip():
                 raise ValueError(f"{qwhere}: lesson_code is required.")
-            if not isinstance(question.get("prompt"), str) or not question["prompt"].strip():
-                raise ValueError(f"{qwhere}: prompt is required.")
+            if not isinstance(question.get("prompt"), str) or not question["prompt"].strip() or len(question["prompt"].strip()) > 1000:
+                raise ValueError(f"{qwhere}: prompt must be non-empty text of at most 1,000 characters.")
+            explanation = question.get("explanation", "")
+            if explanation is not None and (not isinstance(explanation, str) or len(explanation) > 1200):
+                raise ValueError(f"{qwhere}: explanation must be text of at most 1,200 characters.")
+            if len(str(question.get("exam_format", "Practice"))) > 40:
+                raise ValueError(f"{qwhere}: exam_format exceeds the CMS limit of 40 characters.")
+            for field_name, field_limit in (("source_title", 300), ("board", 80), ("topic", 200),
+                                            ("subtopic", 200), ("skill", 200)):
+                field_value = question.get(field_name)
+                if field_value is not None and len(str(field_value)) > field_limit:
+                    raise ValueError(f"{qwhere}: {field_name} exceeds the CMS limit of {field_limit} characters.")
             answer = question.get("answer_payload")
             if not isinstance(answer, dict):
                 raise ValueError(f"{qwhere}: answer_payload must be an object.")
@@ -115,6 +126,13 @@ def load_catalog(path: Path) -> dict[str, Any]:
                            if isinstance(opt, dict) and opt.get("correct") is True]
                 if len(keys) != len(options) or any(not value for value in keys) or len(set(keys)) != len(keys):
                     raise ValueError(f"{qwhere}: option keys must be non-empty and unique.")
+                if any(len(key) > 20 for key in keys):
+                    raise ValueError(f"{qwhere}: option keys may not exceed 20 characters.")
+                if any(not isinstance(opt.get("label"), str) or not opt["label"].strip() or len(opt["label"]) > 500
+                       for opt in options):
+                    raise ValueError(f"{qwhere}: each option label must be non-empty text of at most 500 characters.")
+                if len(options) > 10:
+                    raise ValueError(f"{qwhere}: questions may not contain more than 10 options.")
                 if len(correct) != 1 or answer.get("kind") != "OPTION" or answer.get("value") != correct[0]:
                     raise ValueError(f"{qwhere}: answer payload must match the single correct option.")
             elif options:
@@ -123,8 +141,9 @@ def load_catalog(path: Path) -> dict[str, Any]:
                 raise ValueError(f"{qwhere}: INPUT requires a non-empty TEXT answer.")
             if question_type == "NUMERICAL":
                 numeric_answer = answer.get("value")
-                if answer.get("kind") != "NUMERIC" or isinstance(numeric_answer, bool) or not isinstance(numeric_answer, (int, float)):
-                    raise ValueError(f"{qwhere}: NUMERICAL requires a numeric NUMERIC answer payload.")
+                if (answer.get("kind") != "NUMERIC" or isinstance(numeric_answer, bool)
+                        or not isinstance(numeric_answer, (int, float)) or not math.isfinite(float(numeric_answer))):
+                    raise ValueError(f"{qwhere}: NUMERICAL requires a finite numeric NUMERIC answer payload.")
     return catalog
 
 
