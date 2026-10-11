@@ -5,8 +5,6 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
-import StudentAccountMenu from '../../components/StudentAccountMenu';
 
 type ProfileDraft = {
   displayName: string;
@@ -199,10 +197,6 @@ export default function StudentProfilePage() {
 
   return (
     <main className="app-shell student-profile-page">
-      <header className="app-header">
-        <QuantaEdgeBrand variant="compact" />
-        <StudentAccountMenu displayName={draft.displayName || 'Student'} classCode={student?.class_code || '—'} profileImageUrl={draft.profileImageDataUrl} />
-      </header>
       <div className="student-profile-page__wrap">
         <div className="student-profile-page__breadcrumb">
           <Link href="/student"><LocaleText hinglish="← Dashboard पर वापस" english="← Back to dashboard" /></Link>
