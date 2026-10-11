@@ -117,13 +117,36 @@ class PracticeBankImportTests(unittest.TestCase):
 
     def test_payload_keeps_answer_and_stable_identity_but_stays_draft(self):
         source = valid_question()
-        payload = importer.question_payload(source, 61, "6", "maths", "hi")
+        payload = importer.question_payload(source, 61, "6", "maths", "hi", "fractions")
         self.assertEqual(payload["answer_payload"], source["answer_payload"])
         self.assertEqual(payload["options"][0]["correct"], True)
-        self.assertIn("qe-practice-id:fractions-micro-01-q1", payload["tags"])
+        self.assertIn("qe-practice-id:6:maths:fractions:fractions-micro-01-q1", payload["tags"])
         self.assertEqual(payload["review_status"], "DRAFT")
         self.assertEqual(payload["sort_order"], 61)
         self.assertEqual(payload["source_kind"], "AUTHOR_CREATED")
+
+    def test_same_question_id_can_exist_in_different_class_banks(self):
+        catalog = valid_catalog()
+        second_bank = json.loads(json.dumps(catalog["chapter_banks"][0], ensure_ascii=False))
+        second_bank["class_code"] = "7"
+        second_bank["chapter"]["code"] = "large-numbers-around-us"
+        second_bank["chapter"]["display_name"] = "बड़ी संख्याएँ"
+        catalog["chapter_banks"].append(second_bank)
+        loaded = self.load_from_object(catalog)
+        first = loaded["chapter_banks"][0]["questions"][0]
+        second = loaded["chapter_banks"][1]["questions"][0]
+        first_tag = importer.question_payload(first, 1, "6", "maths", "hi", "fractions")["tags"]
+        second_tag = importer.question_payload(second, 1, "7", "maths", "hi", "large-numbers-around-us")["tags"]
+        self.assertIn("qe-practice-id:6:maths:fractions:fractions-micro-01-q1", first_tag)
+        self.assertIn("qe-practice-id:7:maths:large-numbers-around-us:fractions-micro-01-q1", second_tag)
+
+    def test_rejects_reused_question_id_within_the_same_bank(self):
+        catalog = valid_catalog()
+        duplicate = valid_question()
+        catalog["chapter_banks"][0]["questions"].append(duplicate)
+        catalog["chapter_banks"][0]["question_count"] = 2
+        with self.assertRaisesRegex(ValueError, "duplicated within this class/subject/chapter"):
+            self.load_from_object(catalog)
 
 
 if __name__ == "__main__":
