@@ -39,6 +39,14 @@ class ApplicationStartupSmokeTest {
     assertTrue(sourceInventory.get("items") instanceof List<?>);
     assertTrue(sourceInventory.get("total") instanceof Number);
     assertTrue(((Number) sourceInventory.get("total")).longValue() > 0, "Untranslated source inventory should include current class/subject content.");
+    @SuppressWarnings("unchecked")
+    List<Map<String,Object>> filteredItems = (List<Map<String,Object>>) contentTranslationController
+        .inventory("6", "maths", "en", "ALL", 20, 0, admin).get("items");
+    assertTrue(!filteredItems.isEmpty(), "Class 6 Mathematics source should be filterable for English.");
+    assertTrue(filteredItems.stream().allMatch(row -> "6".equals(String.valueOf(row.get("class_code")))
+        && "maths".equals(String.valueOf(row.get("subject_code")))
+        && "en".equals(String.valueOf(row.get("language")))),
+        "Source inventory results must match class, subject and target-language filters.");
   }
 
   @Test
