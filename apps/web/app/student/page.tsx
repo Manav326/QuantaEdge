@@ -1,11 +1,10 @@
 'use client';
 
 import { LocaleText } from '../components/LanguageProvider';
-import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
-import StudentAccountMenu from '../components/StudentAccountMenu';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
+import { displayCount, displayPercent, lessonProgress, safeCount, safePercent } from './progressMetrics';
 
 type StudentTextbook = {
   document_id: number;
@@ -55,13 +54,16 @@ export default function StudentHome(){
 
   if(error)return <main className="app-shell"><section className="app-content"><div className="auth-card"><h1><LocaleText hinglish="Student उपलब्ध नहीं है" english="Student unavailable" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><LocaleText hinglish="Login करें" english="Log in" /></Link></div></section></main>;
   if(!data)return <main className="app-shell"><section className="app-content"><div className="eyebrow"><LocaleText hinglish="Learning profile load हो रही है…" english="Loading learning profile…" /></div></section></main>;
-  const stats=data.lessonStats,q=data.questionStats;
+  const stats=data.lessonStats || {},q=data.questionStats || {};
+  const lessons = lessonProgress(stats);
+  const completionLabel = displayPercent(lessons.percent);
+  const attemptsLabel = displayCount(safeCount(q.attempts));
+  const accuracyLabel = displayPercent(safePercent(q.accuracy_percent));
   return <main className="app-shell">
-    <header className="app-header"><QuantaEdgeBrand variant="compact" /><StudentAccountMenu displayName={data.display_name} classCode={data.class_code} profileImageUrl={data.profile_image_url} /></header>
-    <div className="app-layout"><aside className="side-nav"><Link className="side-active" href="/student">⌂ <span><LocaleText hinglish="आज" english="Today" /></span></Link><Link href="/student/learn">▣ <span><LocaleText hinglish="पढ़ाई" english="Learning" /></span></Link><Link href="/student/textbooks">▤ <span><LocaleText hinglish="किताबें" english="Textbooks" /></span></Link><Link href="/student/tests">✓ <span><LocaleText hinglish="Tests & results" english="Tests & results" /></span></Link><Link href="/student/classes">◷ <span><LocaleText hinglish="Live & recorded classes" english="Live & recorded classes" /></span></Link><Link href="/student/practice">✦ <span><LocaleText hinglish="अभ्यास" english="Practice" /></span></Link><Link href="/student/progress">↗ <span><LocaleText hinglish="मेरी प्रगति" english="My progress" /></span></Link></aside>
+    <div className="app-layout">
       <section className="app-content">
-        <div className="welcome-row"><div><span className="eyebrow"><LocaleText hinglish="आपकी learning journey · Class" english="Your learning journey · Class" /> {data.class_code}</span><h1><LocaleText hinglish="नमस्ते" english="Hello" />, {data.display_name} 👋</h1><p><LocaleText hinglish="आज की पढ़ाई आपकी progress और mastery के हिसाब से आगे बढ़ती है।" english="Your learning plan adapts to your progress and mastery." /></p></div><div className="streak-card">✓ <strong>{Math.round(Number(stats.completion_percent))}%</strong><span><LocaleText hinglish="curriculum पूरा" english="curriculum complete" /></span></div></div>
-        <div className="goal-card"><div><span><LocaleText hinglish="Learning progress" english="Learning progress" /></span><strong>{stats.completed_lessons} / {stats.total_lessons} <LocaleText hinglish="lessons" english="lessons" /></strong><small>{q.attempts} <LocaleText hinglish="attempts" english="attempts" /> · {q.accuracy_percent}% <LocaleText hinglish="graded accuracy" english="graded accuracy" /></small></div><div className="goal-ring">{Math.round(Number(stats.completion_percent))}%</div></div>
+        <div className="welcome-row"><div><span className="eyebrow"><LocaleText hinglish="आपकी learning journey · Class" english="Your learning journey · Class" /> {data.class_code}</span><h1><LocaleText hinglish="नमस्ते" english="Hello" />, {data.display_name} 👋</h1><p><LocaleText hinglish="आज की पढ़ाई आपकी progress और mastery के हिसाब से आगे बढ़ती है।" english="Your learning plan adapts to your progress and mastery." /></p></div><div className="streak-card">✓ <strong>{completionLabel}</strong><span><LocaleText hinglish="curriculum पूरा" english="curriculum complete" /></span></div></div>
+        <div className="goal-card"><div><span><LocaleText hinglish="Learning progress" english="Learning progress" /></span><strong>{displayCount(lessons.completed)} / {displayCount(lessons.total)} <LocaleText hinglish="lessons" english="lessons" /></strong><small>{attemptsLabel} <LocaleText hinglish="attempts" english="attempts" /> · {accuracyLabel} <LocaleText hinglish="graded accuracy" english="graded accuracy" /></small></div><div className="goal-ring">{completionLabel}</div></div>
         <div className="content-heading"><h2><LocaleText hinglish="आपके दो subjects" english="Your two subjects" /></h2><span>Class {data.class_code}</span></div>
         <div className="task-list subject-tracks">
           {(['maths','science'] as const).map((subjectCode)=>{
@@ -104,6 +106,5 @@ export default function StudentHome(){
         </div>
       </section>
     </div>
-    <nav className="mobile-nav"><Link className="side-active" href="/student">⌂<span><LocaleText hinglish="आज" english="Today" /></span></Link><Link href="/student/learn">▣<span><LocaleText hinglish="पढ़ाई" english="Learning" /></span></Link><Link href="/student/textbooks">▤<span><LocaleText hinglish="किताबें" english="Books" /></span></Link><Link href="/student/tests">✓<span><LocaleText hinglish="Tests" english="Tests" /></span></Link><Link href="/student/classes">◷<span><LocaleText hinglish="Classes" english="Classes" /></span></Link><Link href="/student/practice">✦<span><LocaleText hinglish="अभ्यास" english="Practice" /></span></Link><Link href="/student/progress">↗<span><LocaleText hinglish="प्रगति" english="Progress" /></span></Link></nav>
   </main>;
 }
