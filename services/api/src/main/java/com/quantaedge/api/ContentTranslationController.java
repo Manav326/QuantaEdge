@@ -49,7 +49,8 @@ public class ContentTranslationController {
       "marks", "max_marks", "asset_url", "asset_alt", "image_url", "video_url",
       "audio_url", "mime_type");
   private static final Pattern NUMBER_PATTERN =
-      Pattern.compile("(?<![A-Za-z])[-+]?\\d+(?:[.,]\\d+)?(?:\\s*/\\s*\\d+)?");
+      Pattern.compile("(?<![\\p{L}\\d°²³])[-+]?\\d+(?:,\\d{3})*(?:\\.\\d+)?(?:\\s*/\\s*\\d+)?");
+  private static final Pattern SUPERSCRIPT_PATTERN = Pattern.compile("(\\d)([⁰¹²³⁴⁵⁶⁷⁸⁹]+)");
   private static final Pattern HTML_TAG_PATTERN = Pattern.compile("</?[A-Za-z][^>]*>");
 
   private final JdbcTemplate jdbc;
@@ -929,9 +930,7 @@ public class ContentTranslationController {
       List<String> translatedTags = tags(translatedText);
       if (!sourceTags.equals(translatedTags)) throw badRequest("HTML structure at " + path + " cannot be changed while translating.");
     }
-    List<String> sourceNumbers = numbers(normalizeFractions(sourceText));
-    List<String> translatedNumbers = numbers(normalizeFractions(translatedText));
-    if (!sourceNumbers.equals(translatedNumbers)) {
+    if (!numbersPreserved(sourceText, translatedText)) {
       throw badRequest("Numerical values at " + path + " must be preserved during translation.");
     }
   }
@@ -948,10 +947,76 @@ public class ContentTranslationController {
         .replaceAll("(\\d+)\\s+बटा\\s+(\\d+)", "$1/$2");
   }
 
+  private boolean numbersPreserved(String sourceText, String translatedText) {
+    List<String> sourceNumbers = numbers(normalizeMathNumbers(sourceText));
+    List<String> translatedNumbers = numbers(normalizeMathNumbers(translatedText));
+    String remainingText = normalizeMathNumbers(translatedText);
+    Map<String, String> numberWords = Map.ofEntries(
+        Map.entry("zero", "0"), Map.entry("one", "1"), Map.entry("two", "2"),
+        Map.entry("three", "3"), Map.entry("four", "4"), Map.entry("five", "5"),
+        Map.entry("six", "6"), Map.entry("seven", "7"), Map.entry("eight", "8"),
+        Map.entry("nine", "9"), Map.entry("ten", "10"), Map.entry("eleven", "11"),
+        Map.entry("twelve", "12"), Map.entry("thirteen", "13"), Map.entry("fourteen", "14"),
+        Map.entry("fifteen", "15"), Map.entry("sixteen", "16"), Map.entry("seventeen", "17"),
+        Map.entry("eighteen", "18"), Map.entry("nineteen", "19"), Map.entry("twenty", "20"),
+        Map.entry("thirty", "30"), Map.entry("forty", "40"), Map.entry("fifty", "50"),
+        Map.entry("sixty", "60"), Map.entry("seventy", "70"), Map.entry("eighty", "80"),
+        Map.entry("ninety", "90"));
+    for (Map.Entry<String, String> word : numberWords.entrySet()) {
+      int sourceCount = java.util.Collections.frequency(sourceNumbers, word.getValue());
+      int targetCount = java.util.Collections.frequency(translatedNumbers, word.getValue());
+      Pattern wordPattern = Pattern.compile("(?i)\\\\b" + Pattern.quote(word.getKey()) + "\\\\b");
+      Matcher wordMatcher = wordPattern.matcher(remainingText);
+      while (targetCount < sourceCount && wordMatcher.find()) {
+        translatedNumbers.add(word.getValue());
+        targetCount++;
+        remainingText = wordMatcher.replaceFirst(" ");
+        wordMatcher = wordPattern.matcher(remainingText);
+      }
+    }
+    sourceNumbers.sort(String::compareTo);
+    translatedNumbers.sort(String::compareTo);
+    return sourceNumbers.equals(translatedNumbers);
+  }
+
+  private String normalizeMathNumbers(String text) {
+    String normalized = normalizeFractions(text == null ? "" : text).replace('−', '-');
+    Matcher matcher = SUPERSCRIPT_PATTERN.matcher(normalized);
+    StringBuffer out = new StringBuffer();
+    while (matcher.find()) {
+      String exponent = asciiDigits(matcher.group(2));
+      matcher.appendReplacement(out, Matcher.quoteReplacement(matcher.group(1) + "^" + exponent));
+    }
+    matcher.appendTail(out);
+    return out.toString();
+  }
+
+  private String asciiDigits(String superscriptDigits) {
+    StringBuilder out = new StringBuilder(superscriptDigits.length());
+    for (int i = 0; i < superscriptDigits.length(); i++) {
+      out.append(switch (superscriptDigits.charAt(i)) {
+        case '⁰' -> '0';
+        case '¹' -> '1';
+        case '²' -> '2';
+        case '³' -> '3';
+        case '⁴' -> '4';
+        case '⁵' -> '5';
+        case '⁶' -> '6';
+        case '⁷' -> '7';
+        case '⁸' -> '8';
+        case '⁹' -> '9';
+        default -> superscriptDigits.charAt(i);
+      });
+    }
+    return out.toString();
+  }
+
   private List<String> numbers(String text) {
     List<String> out = new ArrayList<>();
     Matcher matcher = NUMBER_PATTERN.matcher(text);
-    while (matcher.find()) out.add(matcher.group().replaceAll("\\s+", ""));
+    while (matcher.find()) {
+      out.add(matcher.group().replaceAll("\\s+", "").replace(",", "").replace('−', '-'));
+    }
     return out;
   }
 
