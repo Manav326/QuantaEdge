@@ -45,7 +45,7 @@ public class AuthService {
     this.demoSeed=demoSeed;
     // Keep the idle timeout predictable even if an older deployment still sets 168 hours.
     // Refresh credentials are renewed by authenticated activity, not by elapsed wall-clock time.
-    this.sessionHours=Math.min(4,Math.max(1,sessionHours));
+    this.sessionHours=4;
     this.secureCookies=secureCookies;
     this.otpCooldownSeconds=otpCooldownSeconds;
     this.adminMobiles=List.of(adminMobiles.split(",")).stream()
