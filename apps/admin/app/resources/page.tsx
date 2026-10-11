@@ -227,6 +227,15 @@ export default function TextbookLibraryPage() {
     document.body.style.overflow = 'hidden';
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        if (document.fullscreenElement && previewDialogRef.current) {
+          void document.exitFullscreen().catch(() => undefined);
+          return;
+        }
+        closePdfPreview();
+        return;
+      }
       if (target && ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(target.tagName)) return;
       if (event.altKey) return;
       if ((event.ctrlKey || event.metaKey) && ['0', '+', '=', '-'].includes(event.key)) {
@@ -237,14 +246,7 @@ export default function TextbookLibraryPage() {
         return;
       }
       if (event.ctrlKey || event.metaKey) return;
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        if (document.fullscreenElement && previewDialogRef.current) {
-          void document.exitFullscreen().catch(() => undefined);
-          return;
-        }
-        closePdfPreview();
-      } else if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown') {
         event.preventDefault(); changePreviewPage(previewPage + 1);
       } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
         event.preventDefault(); changePreviewPage(previewPage - 1);
