@@ -1,7 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
 
 type PdfAsset = {
@@ -109,6 +109,8 @@ export default function TextbookLibraryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const previewOriginScrollY = useRef(0);
+  const previewHistoryEntry = useRef(false);
 
   const isAdmin = role === 'ADMIN';
   const maxPdfBytes = isAdmin ? 500 * 1024 * 1024 : 50 * 1024 * 1024;
@@ -133,6 +135,80 @@ export default function TextbookLibraryPage() {
   const previewPageCount = previewAssignment
     ? Math.max(1, previewAssignment.page_end - previewAssignment.page_start + 1)
     : 0;
+
+  const openPdfPreview = useCallback((documentId: number) => {
+    previewOriginScrollY.current = window.scrollY;
+    previewHistoryEntry.current = true;
+    const url = new URL(window.location.href);
+    url.searchParams.set('previewDocumentId', String(documentId));
+    url.searchParams.set('previewPage', '1');
+    window.history.pushState({ ...(window.history.state || {}), qePdfPreview: true }, '', url);
+    setPreviewDocumentId(documentId);
+    setPreviewPage(1);
+  }, []);
+
+  const closePdfPreview = useCallback(() => {
+    if (previewHistoryEntry.current && window.history.state?.qePdfPreview === true) {
+      window.history.back();
+      return;
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.delete('previewDocumentId');
+    url.searchParams.delete('previewPage');
+    window.history.replaceState(window.history.state, '', url);
+    previewHistoryEntry.current = false;
+    setPreviewDocumentId(null);
+    setPreviewPage(1);
+    window.requestAnimationFrame(() => window.scrollTo({ top: previewOriginScrollY.current, behavior: 'auto' }));
+  }, []);
+
+  const changePreviewPage = useCallback((requestedPage: number) => {
+    const nextPage = Math.max(1, Math.min(Math.max(1, previewPageCount), Number(requestedPage) || 1));
+    setPreviewPage(nextPage);
+    const url = new URL(window.location.href);
+    url.searchParams.set('previewPage', String(nextPage));
+    window.history.replaceState({ ...(window.history.state || {}), qePdfPreview: true }, '', url);
+  }, [previewPageCount]);
+
+  useEffect(() => {
+    const syncPreviewWithHistory = () => {
+      const params = new URLSearchParams(window.location.search);
+      const documentId = Number(params.get('previewDocumentId') || 0);
+      if (Number.isSafeInteger(documentId) && documentId > 0) {
+        setPreviewDocumentId(documentId);
+        const page = Number(params.get('previewPage') || 1);
+        setPreviewPage(Number.isSafeInteger(page) && page > 0 ? page : 1);
+        previewHistoryEntry.current = Boolean(window.history.state?.qePdfPreview);
+        return;
+      }
+      setPreviewDocumentId(null);
+      setPreviewPage(1);
+      if (previewHistoryEntry.current) {
+        previewHistoryEntry.current = false;
+        window.requestAnimationFrame(() => window.scrollTo({ top: previewOriginScrollY.current, behavior: 'auto' }));
+      }
+    };
+    window.addEventListener('popstate', syncPreviewWithHistory);
+    syncPreviewWithHistory();
+    return () => window.removeEventListener('popstate', syncPreviewWithHistory);
+  }, []);
+
+  useEffect(() => {
+    if (previewDocumentId === null) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closePdfPreview();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [previewDocumentId, closePdfPreview]);
 
   useEffect(() => {
     fetch('/api/v1/auth/me', { cache: 'no-store' })
@@ -329,6 +405,30 @@ export default function TextbookLibraryPage() {
       {error && <div className={styles.alertError} role="alert">{error}</div>}
       {notice && <div className={styles.alertSuccess} role="status">{notice}</div>}
 
+      {previewAssignment && <div className={styles.previewBackdrop} role="presentation" onMouseDown={event => {
+        if (event.target === event.currentTarget) closePdfPreview();
+      }}>
+        <section className={styles.previewDialog} role="dialog" aria-modal="true" aria-labelledby="qe-pdf-preview-title" tabIndex={-1}>
+          <div className={styles.previewHeading}>
+            <div><span>PDF PREVIEW · READ ONLY</span><h2 id="qe-pdf-preview-title">{previewAssignment.title}</h2>
+              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · Page {previewPage} of {previewPageCount}</p>
+            </div>
+            <button type="button" className={styles.secondaryButton} onClick={closePdfPreview}>← Back to assignments</button>
+          </div>
+          <div className={styles.previewControls}>
+            <button type="button" className={styles.secondaryButton} disabled={previewPage <= 1} onClick={() => changePreviewPage(previewPage - 1)}>Previous page</button>
+            <label>Page <input type="number" min="1" max={previewPageCount} value={previewPage} onChange={e => changePreviewPage(Number(e.target.value))} /></label>
+            <button type="button" className={styles.secondaryButton} disabled={previewPage >= previewPageCount} onClick={() => changePreviewPage(previewPage + 1)}>Next page</button>
+          </div>
+          <div className={styles.previewCanvas}>
+            <img key={previewDocumentId + '-' + previewPage}
+              src={'/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage}
+              alt={'Preview page ' + previewPage + ' of ' + previewAssignment.title} />
+          </div>
+          <div className={styles.previewDialogFooter}><span>Private source preview</span><span>Use the page controls to inspect the selected range</span></div>
+        </section>
+      </div>}
+
       {canEdit && <section className={styles.panel}>
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
@@ -438,27 +538,6 @@ export default function TextbookLibraryPage() {
         <div className={styles.sectionHeading}><div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Drafts remain invisible to students until a permitted publisher publishes them.</p></div>
           <select className={styles.filter} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select>
         </div>
-        {previewAssignment && <div className={styles.previewPanel}>
-          <div className={styles.previewHeading}>
-            <div><span>FINAL REVIEW</span><h3>{previewAssignment.title}</h3>
-              <p>{previewAssignment.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : (previewAssignment.chapter_name || 'Chapter PDF')} · {previewAssignment.language === 'en' ? 'English' : 'Hindi'} · Page {previewPage} of {previewPageCount}</p>
-            </div>
-            <button type="button" className={styles.secondaryButton} onClick={() => setPreviewDocumentId(null)}>Close preview</button>
-          </div>
-          <div className={styles.previewControls}>
-            <button type="button" className={styles.secondaryButton} disabled={previewPage <= 1} onClick={() => setPreviewPage(page => Math.max(1, page - 1))}>Previous page</button>
-            <label>Page <input type="number" min="1" max={previewPageCount} value={previewPage} onChange={e => {
-              const value = Number(e.target.value);
-              if (Number.isFinite(value)) setPreviewPage(Math.max(1, Math.min(previewPageCount, value)));
-            }} /></label>
-            <button type="button" className={styles.secondaryButton} disabled={previewPage >= previewPageCount} onClick={() => setPreviewPage(page => Math.min(previewPageCount, page + 1))}>Next page</button>
-          </div>
-          <div className={styles.previewCanvas}>
-            <img key={previewDocumentId + '-' + previewPage}
-              src={'/api/v1/admin/learning-documents/' + previewDocumentId + '/pages/' + previewPage}
-              alt={'Preview page ' + previewPage + ' of ' + previewAssignment.title} />
-          </div>
-        </div>}
         {loading ? <p className={styles.empty}>Loading resource assignments…</p> : assignments.length === 0 ? <div className={styles.empty}><b>No assignments in this view</b><span>Choose a PDF above and attach it to this class/subject.</span></div> :
           <div className={styles.assignmentList}>
             {assignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
@@ -471,7 +550,7 @@ export default function TextbookLibraryPage() {
                 {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
               </div>
               <div className={styles.rowActions}>
-                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => { setPreviewDocumentId(row.document_id); setPreviewPage(1); }}>Preview</button>
+                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>Preview</button>
                 {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
                   <button type="button" className={styles.publishButton}
                     disabled={busy || (row.scope === 'CHAPTER_PDF' && row.chapter_active !== true)}

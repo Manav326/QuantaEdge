@@ -346,13 +346,40 @@ export default function LearnClient() {
       return;
     }
     let cancelled=false;
-    const language=locale==='english'?'en':'hi';
+    const preferredLanguage=locale==='english'?'en':'hi';
+    const fallbackLanguage=preferredLanguage==='en'?'hi':'en';
     setDocumentsLoaded(false);
     setStudentDocuments([]);
-    fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language,{cache:'no-store'})
-      .then(async response=>response.ok?response.json():null)
-      .then(body=>{if(!cancelled)setStudentDocuments(Array.isArray(body)?body as StudentDocument[]:[]);})
-      .catch(()=>undefined)
+
+    // Show the chosen language first, but do not hide a chapter when its only
+    // published PDF is available in the other language.
+    const loadLanguage=(language:string):Promise<StudentDocument[]> =>
+      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language,{cache:'no-store'})
+        .then(async response=>response.ok?response.json():[])
+        .then(body=>Array.isArray(body)?body as StudentDocument[]:[])
+        .catch(()=>[]);
+
+    Promise.all([loadLanguage(preferredLanguage),loadLanguage(fallbackLanguage)])
+      .then(([preferredDocuments,fallbackDocuments])=>{
+        if(cancelled)return;
+        const resourceKey=(item:StudentDocument)=>{
+          const resource=item.scope==='SUBJECT_BOOK'
+            ? 'subject-book'
+            : item.chapter_code
+              ? 'chapter-code:'+item.chapter_code.trim().toLocaleLowerCase()
+              : item.chapter_name
+                ? 'chapter-name:'+item.chapter_name.trim().toLocaleLowerCase()
+                : 'document:'+item.document_id;
+          return item.scope+':'+item.subject_code+':'+resource;
+        };
+        const merged=[...preferredDocuments];
+        const seen=new Set(merged.map(resourceKey));
+        for(const item of fallbackDocuments){
+          const key=resourceKey(item);
+          if(!seen.has(key)){seen.add(key);merged.push(item);}
+        }
+        setStudentDocuments(merged);
+      })
       .finally(()=>{if(!cancelled)setDocumentsLoaded(true);});
     return()=>{cancelled=true;};
   },[locale,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
