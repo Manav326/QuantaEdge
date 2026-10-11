@@ -381,7 +381,15 @@ def main() -> int:
             "new_online_questions_to_add": sum(p["new_questions"] for p in plans),
             "already_present_or_duplicate": sum(p["already_present"] for p in plans),
             "publication_or_approval_attempted": False,
+            "chapter_end_online_questions_in_packages": summary["chapter_end_online_questions"],
+            "chapter_end_online_questions_planned_to_add": sum(
+                1 for plan in to_write for question in plan["questions"]
+                if "chapter-end" in question_tags(question)
+            ),
+            "separate_written_practice_items_in_packages": summary["separate_written_practice_items"],
             "separate_written_practice_items_imported": 0,
+            "separate_written_practice_items_left_in_packages": summary["separate_written_practice_items"],
+            "package_inventory": summary["packages"],
             "results": [],
         }
         # All catalogue and lesson mappings are preflighted before the first write.
@@ -413,8 +421,9 @@ def main() -> int:
         report["writes_performed"] = True
         report["note"] = (
             "Only online_question_bank records were merged. All new questions remain DRAFT. "
-            "The complete_book_extended_practice arrays remain in the ZIP because the current Admin API "
-            "does not expose a safe dedicated chapter-end written-practice import contract."
+            "Online chapter-end items are counted separately above. The complete_book_extended_practice arrays "
+            "remain unimported in the ZIP because the current Admin API does not expose a safe dedicated "
+            "chapter-end written-practice import contract; review the reported count and package inventory."
         )
         print(json.dumps(report, ensure_ascii=False, indent=2))
     except Exception as exc:
