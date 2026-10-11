@@ -160,8 +160,8 @@ export default function TranslationsPage() {
 
       // Existing translation versions are listed first. When the page has room,
       // fill it with source content that still has no translation for this target language.
-      if (status === 'ALL' && existingItems.length < pageSize) {
-        const inventoryLimit = pageSize - existingItems.length;
+      if (status === 'ALL') {
+        const inventoryLimit = Math.max(1, pageSize - existingItems.length);
         const inventoryOffset = Math.max(0, nextOffset + existingItems.length - existingTotal);
         const inventoryParams = new URLSearchParams({
           language, entityType,
@@ -174,7 +174,7 @@ export default function TranslationsPage() {
         );
         if (sequence !== loadSequence.current) return [];
         const sourceItems = Array.isArray(inventory.items) ? inventory.items : [];
-        nextItems = [...existingItems, ...sourceItems];
+        if (existingItems.length < pageSize) nextItems = [...existingItems, ...sourceItems];
         combinedTotal = existingTotal + Number(inventory.total || 0);
       }
 
@@ -243,9 +243,11 @@ export default function TranslationsPage() {
         draftUrl,
         { method: isNewSource ? 'POST' : 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
       );
-      setNotice(result.createdNewVersion
-        ? 'Saved as a new draft version. The previously approved or published version is unchanged.'
-        : 'Draft saved. Student delivery is unchanged until review and publication are complete.');
+      setNotice(isNewSource
+        ? 'Translation draft created. Student delivery is unchanged until review and publication are complete.'
+        : result.createdNewVersion
+          ? 'Saved as a new draft version. The previously approved or published version is unchanged.'
+          : 'Draft saved. Student delivery is unchanged until review and publication are complete.');
       const nextItems = await load(selected.translation_id == null ? 0 : offset, false);
       const saved = nextItems.find(row => row.entity_type === selected.entity_type && row.translation_id === result.translationId);
       if (saved) { setSelectedKey(rowKey(saved)); setEditor(pretty(saved.translated_content_text)); }
