@@ -2,36 +2,40 @@
 
 This workflow imports the offline English draft map for the Class 6–8 Bihar Board Maths and Science practice catalog. It requires no OpenAI key and does not generate new questions. It creates separate en translation records against the current question and curriculum-chapter IDs; it does not rewrite Hindi source text, options, answers, or publication status.
 
-The pack contains 5,595 translation entries matched to 5,595 queue IDs. The source catalog contains 76 chapter banks and 3,572 questions. A local source-catalog preflight successfully built 3,572 question payloads and 76 chapter payloads with no numeric-signature mismatches. These are structural checks, not proofread-by-a-subject-editor checks. All imported translations stay in DRAFT.
+The translation pack contains 5,595 matching queue/map entries. The source catalog contains 76 chapter banks and 3,572 questions. Local source-catalog preflight resolved 3,572/3,572 question payloads and 76/76 chapter title/description payloads with no numeric-signature mismatches. This is structural validation, not subject-editor proofreading. All imported translations stay in DRAFT.
 
-## Prerequisites
+## Prepare the files
 
-- Switch to main and pull the latest commit.
-- Postgres, API, and Admin services are running.
-- The Hindi source questions have already been imported to the Admin database. If not, first validate and apply scripts/import_quantaedge_practice_banks.py.
-- The user has CONTENT_EDIT or CONTENT_REVIEW permission.
-- The downloaded pack's translation-queue.jsonl and english-translation-map-complete.jsonl are in the repository root.
-
-## Import
+From D:\QuantaEdge\QuantaEdge:
 
     git switch main
     git pull --ff-only origin main
-    docker compose up -d --build postgres api admin
-    curl.exe -fsS http://localhost:8080/actuator/health
+    Expand-Archive .\QuantaEdge_English_Offline_Translation_Import.zip -DestinationPath .\_offline-english-import -Force
+    Copy-Item .\_offline-english-import\translation-queue.jsonl .\translation-queue.jsonl -Force
+    Copy-Item .\_offline-english-import\english-translation-map-complete.jsonl .\english-translation-map-complete.jsonl -Force
 
-    # Read-only source/database preflight; no API writes
-    & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_offline_translations.py --limit 10
+Make sure QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json is also in the repository root. The script will validate and idempotently import missing Hindi source questions first; if they are already in the database, it skips duplicates.
 
-    # Small apply pilot; imports up to 10 chapters and 10 questions, DRAFT only
-    & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_offline_translations.py --apply --limit 10
+## One-command import
 
-    # After reviewing the English drafts in http://localhost:3001/translations:
-    & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_offline_translations.py --apply --delay 0.03
+Start with a small English draft pilot:
 
-On --apply, the script reads QUANTAEDGE_ADMIN_SESSION (or QE_SESSION as a fallback) from the environment, or asks for the fresh QE_SESSION cookie with hidden input. It talks only to the configured local API by default. Each execution writes a JSON report under reports/offline-translation-imports. It skips translations already present for the current source hash, so successful rows can be resumed after an interrupted run.
+    .\scripts\import_quantaedge_offline_translation_bundle.ps1 -PilotLimit 10
 
-## Review and later AI-generated questions
+The script starts/rebuilds Postgres, API, and Admin; checks /actuator/health; validates the Hindi catalog; applies any missing Hindi question drafts; and creates up to 10 ready English chapter/question translation drafts. PilotLimit limits English translations, not the idempotent source-catalog import.
 
-Filter the Admin translation screen to English and Draft, check question wording/options and chapter labels, then follow the existing review/approve/publish process. This import does not publish automatically.
+Review the pilot in http://localhost:3001/translations with language English and status Draft. If it looks correct, run the full import:
 
-When an OpenAI key is available later, configure it only in the application's approved server-side environment. The future AI question-generation/insertion flow is separate from this offline translation import and must still produce reviewable drafts.
+    .\scripts\import_quantaedge_offline_translation_bundle.ps1
+
+For a database where the source Hindi questions are already present and you only want to add English drafts, use:
+
+    .\scripts\import_quantaedge_offline_translation_bundle.ps1 -SkipHindiSourceImport -PilotLimit 10
+
+The script asks for a fresh QE_SESSION cookie with hidden input if QUANTAEDGE_ADMIN_SESSION or QE_SESSION is not already set. The Admin account needs CONTENT_EDIT or CONTENT_REVIEW permission. The cookie is never included in the command arguments or the report. Existing English drafts for the same source hash are skipped, so the full run can resume after a partial run.
+
+Reports are written under reports\offline-translation-imports. Nothing is approved or published automatically; staff must review the language, question intent, option alignment, and explanations in Content Studio.
+
+## OpenAI for future generated questions
+
+This offline pack is not OpenAI-generated and does not need a key. It supplies an offline-assisted first English draft that has not been professionally proofread. For future AI-generated question creation, configure the key only in the approved server-side environment and retain the draft/review/publish process.
