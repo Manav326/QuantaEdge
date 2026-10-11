@@ -97,3 +97,39 @@
 @media(max-width:1000px){.testGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.examLayout{grid-template-columns:150px minmax(0,1fr)}.questionNumbers{grid-template-columns:repeat(4,minmax(0,1fr))}.resultCard{grid-template-columns:38px minmax(0,1fr) auto}.resultOpen{grid-column:2/-1;justify-self:start}}
 @media(max-width:680px){.header{height:62px;padding:0 12px}.header nav{gap:1px}.header nav a{padding:8px 6px;font-size:8px}.brand>span{width:33px;height:33px}.brand b{font-size:13px}.wrap{padding:14px 10px}.hero{grid-template-columns:minmax(0,1fr) 90px;padding:20px 16px;gap:5px;min-height:unset}.hero h1{font-size:24px;letter-spacing:-.8px}.hero p{font-size:10px}.heroArt{width:83px;height:130px;padding:9px;gap:9px;transform:rotate(4deg)}.heroArt>span{width:28px;height:28px;font-size:19px}.heroArt small{font-size:11px}.toolbar{align-items:flex-start;flex-direction:column}.toolbar>label{width:100%;justify-content:space-between}.toolbar select{max-width:200px;flex:1}.testGrid{grid-template-columns:1fr}.testCard{padding:15px}.testCard>p{min-height:unset}.resultCard{grid-template-columns:35px minmax(0,1fr) auto;gap:9px;padding:12px}.resultIcon{width:34px;height:34px}.score>b{font-size:14px}.resultOpen{grid-column:2/-1}.attemptTitle{align-items:flex-start;flex-direction:column;gap:11px}.timerBox{width:100%;grid-template-columns:1fr auto;align-items:center}.timerBox>span{grid-column:1/-1}.examLayout{grid-template-columns:1fr}.questionRail{padding:10px}.questionRail>div:first-child{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px}.questionNumbers{grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;padding:8px 0}.questionNumbers button{border-radius:7px;font-size:8px}.railLegend{display:flex;gap:12px}.questionPanel>h2{padding:17px 14px;font-size:14px}.questionPanelTop{padding:12px 14px}.options{padding:0 13px 15px}.option{grid-template-columns:14px 26px minmax(0,1fr);gap:8px;padding:10px;font-size:10px}.optionKey{width:25px;height:25px}.answerField{padding:0 13px 17px}.questionFooter{align-items:stretch;flex-direction:column;padding:10px}.questionFooter>div{justify-content:space-between}.questionFooter>div button{flex:1}.confirmModal{padding:20px}.confirmModal>div{flex-direction:column-reverse}.confirmModal>div button{width:100%}}
 @media(max-width:400px){.hero{grid-template-columns:1fr}.heroArt{display:none}.header nav a:last-child{display:none}.questionNumbers{grid-template-columns:repeat(6,minmax(0,1fr))}.resultCard{grid-template-columns:32px minmax(0,1fr)}.score{grid-column:2;display:flex;align-items:center;gap:9px;text-align:left}.resultOpen{grid-column:2}.questionFooter>div{gap:5px}.questionFooter>div button{padding:8px 6px}}
+
+/* Result-only view: submitted tests no longer render the interactive exam navigator. */
+.releasedResult{display:grid;gap:18px;padding:clamp(16px,3vw,28px);border:1px solid #e3e9f0;border-radius:18px;background:#fff;box-shadow:0 12px 34px rgba(25,42,68,.045)}
+.resultHero{display:flex;align-items:center;gap:14px;padding:4px 0 16px;border-bottom:1px solid #edf0f5}
+.resultHeroIcon{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:15px;background:#e7f8ef;color:#17794f;font-size:24px;font-weight:900}
+.resultHero h2{margin:5px 0;color:#1d2c43;font-size:clamp(19px,2.3vw,25px);letter-spacing:-.6px}
+.resultHero p{margin:0;color:#718096;font-size:11px;line-height:1.6}
+.resultScoreGrid{display:grid;grid-template-columns:minmax(200px,1.7fr) repeat(3,minmax(90px,1fr));gap:10px}
+.resultScorePrimary{display:grid;align-content:center;gap:7px;padding:17px;border:1px solid #cdebd9;border-radius:13px;background:linear-gradient(145deg,#f0fbf5,#f8fcfa)}
+.resultScorePrimary>small{font-size:9px;font-weight:900;letter-spacing:1.2px;color:#24764f}
+.resultScorePrimary>strong{color:#1b6d48;font-size:clamp(25px,3vw,34px);letter-spacing:-1px;line-height:1.1}
+.resultScorePrimary>strong span{color:#779487;font-size:15px;letter-spacing:0}
+.resultScorePrimary>b{color:#22784e;font-size:12px}
+.resultScorePrimary>p{margin:0;color:#718b7c;font-size:10px}
+.resultScoreProgress{height:7px;overflow:hidden;border-radius:999px;background:#d8eee1}
+.resultScoreProgress i{display:block;height:100%;border-radius:inherit;background:#249561;transition:width .2s ease}
+.resultMetric{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:125px;padding:12px 7px;border:1px solid #e4e9f0;border-radius:13px;background:#fafbfd;text-align:center}
+.resultMetric strong{font-size:clamp(23px,2.5vw,30px);letter-spacing:-.6px;color:#26364d}
+.resultMetric span{font-size:10px;font-weight:750;color:#758197}
+.resultDetails{display:grid;gap:11px}
+.resultDetailsHeading h3{margin:0 0 5px;color:#27364d;font-size:14px}
+.resultDetailsHeading p{margin:0;color:#8390a3;font-size:10px;line-height:1.6}
+.resultQuestionList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.resultQuestionRow{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 11px;border:1px solid #e8ecf2;border-radius:11px;background:#fff}
+.resultQuestionNumber{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:#f0f3f7;color:#516078;font-size:11px;font-weight:850}
+.resultQuestionInfo{display:grid;gap:4px;min-width:0}
+.resultQuestionInfo>b{font-size:10px;color:#344259}
+.resultQuestionInfo>small{font-size:9px;font-weight:850}
+.resultQuestionRow>strong{font-size:11px;white-space:nowrap;color:#26364d}
+.resultQuestionRow>strong small{font-size:9px;font-weight:650;color:#929bad}
+.reviewCorrect{color:#198351}
+.reviewIncorrect{color:#bb3e30}
+.reviewNeutral{color:#7b8495}
+.resultActions{display:flex;justify-content:flex-end;padding-top:3px}
+@media(max-width:850px){.resultScoreGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.resultScorePrimary{grid-column:1/-1}.resultQuestionList{grid-template-columns:1fr}}
+@media(max-width:480px){.releasedResult{padding:15px;gap:14px}.resultHero{align-items:flex-start}.resultHeroIcon{width:40px;height:40px;flex-basis:40px;border-radius:12px;font-size:20px}.resultScoreGrid{gap:7px}.resultMetric{min-height:90px;padding:9px 3px}.resultMetric strong{font-size:23px}.resultMetric span{font-size:9px}.resultQuestionRow{grid-template-columns:29px minmax(0,1fr) auto;padding:9px;gap:8px}.resultQuestionNumber{width:28px;height:28px}.resultActions .primaryButton{width:100%}}
