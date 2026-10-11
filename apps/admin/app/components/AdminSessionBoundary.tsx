@@ -25,8 +25,12 @@ function installRefreshRecovery() {
     if (skip || (response.status !== 401 && response.status !== 403)) return response;
     if (!refreshInFlight) refreshInFlight = nativeFetch('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }).then(r => r.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     if (!await refreshInFlight) {
-      if (response.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
-      return response;
+      // A different tab may have won the rotating-refresh-token race and already
+      // updated the shared browser cookies. Retry once before declaring expiry.
+      const crossTabRetry = await nativeFetch(retryInput, init);
+      if (crossTabRetry.ok) return crossTabRetry;
+      if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+      return crossTabRetry;
     }
     return nativeFetch(retryInput, init);
   };
