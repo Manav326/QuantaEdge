@@ -21,7 +21,7 @@ function Invoke-CheckedPython {
     param([string[]]$Arguments)
     & $PythonExe @Arguments
     if ($LASTEXITCODE -ne 0) {
-        throw "Python command failed with exit code $LASTEXITCODE: $PythonExe $($Arguments -join ' ')"
+        throw "Python command failed with exit code ${LASTEXITCODE}: $PythonExe $($Arguments -join ' ')"
     }
 }
 
@@ -69,7 +69,7 @@ try {
         Write-Host ""
         Write-Host "[1/4] Starting the database, API, and Admin services..."
         & docker compose up -d --build postgres api admin
-        if ($LASTEXITCODE -ne 0) { throw "docker compose failed with exit code $LASTEXITCODE." }
+        if ($LASTEXITCODE -ne 0) { throw "docker compose failed with exit code ${LASTEXITCODE}." }
 
         Write-Host ""
         Write-Host "[2/4] Checking API health..."
