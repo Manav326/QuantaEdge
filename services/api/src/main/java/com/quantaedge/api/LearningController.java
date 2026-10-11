@@ -28,14 +28,80 @@ public class LearningController {
     String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
     if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
     return jdbc.queryForList("""
+      with learner as (select id from student where id=? and active=true)
       select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,
              c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              ch.code as chapter_code,ch.display_name as chapter_name,
-             o.code as objective_code,o.title as objective_title
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
+             o.code as objective_code,o.title as objective_title,
+             coalesce(mcq.mcq_count,0) as mcq_count,
+             coalesce(mcq.mcq_answered_count,0) as mcq_answered_count,
+             coalesce(practice_count.completed_attempt_count,0) as practice_completed_attempts,
+             best.correct_count as practice_best_correct_count,
+             best.graded_count as practice_best_graded_count,
+             best.percent as practice_best_percent,
+             active_practice.answered_count as practice_active_answered_count,
+             active_practice.question_count as practice_active_question_count
+      from learner
+      join lesson l on true
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student_track_enrollment ste on ste.student_id=learner.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join learning_objective o on o.id=l.objective_id
+      left join lateral (
+        select count(*) filter(where q.question_type='MCQ') as mcq_count,
+               count(*) filter(where q.question_type='MCQ' and exists(
+                 select 1 from student_question_attempt a
+                 where a.student_id=learner.id and a.question_id=q.id
+               )) as mcq_answered_count
+        from question q
+        where q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+      ) mcq on true
+      left join lateral (
+        select count(*) as completed_attempt_count
+        from student_practice_session ps
+        where ps.student_id=learner.id and ps.status='COMPLETED'
+          and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
+      ) practice_count on true
+      left join lateral (
+        select score.correct_count,score.graded_count,
+               case when score.graded_count>0
+                 then round(100.0*score.correct_count/nullif(score.graded_count,0))::int
+                 else null end as percent
+        from student_practice_session ps
+        cross join lateral (
+          select count(*) filter(where latest.correct is true) as correct_count,
+                 count(*) filter(where latest.correct is not null) as graded_count
+          from student_practice_session_question psq
+          left join lateral (
+            select a.correct
+            from student_question_attempt a
+            where a.practice_session_id=ps.id and a.question_id=psq.question_id
+            order by a.answered_at desc,a.id desc limit 1
+          ) latest on true
+          where psq.practice_session_id=ps.id
+        ) score
+        where ps.student_id=learner.id and ps.status='COMPLETED'
+          and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
+        order by case when score.graded_count>0
+                      then score.correct_count::numeric/score.graded_count end desc nulls last,
+                 ps.completed_at desc,ps.id desc
+        limit 1
+      ) best on true
+      left join lateral (
+        select session_progress.answered_count,session_progress.question_count
+        from student_practice_session ps
+        cross join lateral (
+          select count(*) as question_count,
+                 count(*) filter(where psq.answered_at is not null) as answered_count
+          from student_practice_session_question psq
+          where psq.practice_session_id=ps.id
+        ) session_progress
+        where ps.student_id=learner.id and ps.status='IN_PROGRESS'
+          and ps.topic_selections @> jsonb_build_array(jsonb_build_object('sourceLessonId',l.id))
+        order by ps.created_at desc,ps.id desc
+        limit 1
+      ) active_practice on true
       where c.code=? and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
@@ -81,7 +147,7 @@ public class LearningController {
       from lesson_block b left join content_asset a on a.id=b.asset_id and a.status='PUBLISHED'
       where b.lesson_id=? and b.active=true order by b.sequence_no,b.id
       """,lessonId));
-    result.put("questions",publicQuestions(lessonId));
+    result.put("questions",publicQuestions(lessonId,context.studentId()));
     return result;
   }
 
@@ -90,7 +156,7 @@ public class LearningController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     ensureStudentLessonAccess(context.studentId(),lessonId);
-    return publicQuestions(lessonId);
+    return publicQuestions(lessonId,context.studentId());
   }
 
   @PostMapping("/questions/{questionId}/answer")
@@ -146,11 +212,13 @@ public class LearningController {
     return result;
   }
 
-  private List<Map<String,Object>> publicQuestions(long lessonId){
+  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId){
     return jdbc.queryForList("""
       select q.id,q.question_type,q.prompt,q.difficulty,q.sort_order,q.concept_id,
              q.source_kind,q.source_title,q.source_ref,q.source_year,q.board,q.marks,q.exam_format,
              q.topic,q.subtopic,q.skill,q.tags::text as tags,
+             exists(select 1 from student_question_attempt a
+                    where a.student_id=? and a.question_id=q.id) as attempted,
              case when q.question_type in ('MCQ','TRUE_FALSE') then
                coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
                  order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)
@@ -159,7 +227,7 @@ public class LearningController {
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode
       from question q where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
-      """,lessonId);
+      """,studentId,lessonId);
   }
 
   private void ensureStudentLessonAccess(long studentId,long lessonId){
