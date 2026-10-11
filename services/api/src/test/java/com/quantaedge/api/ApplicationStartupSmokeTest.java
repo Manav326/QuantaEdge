@@ -35,6 +35,9 @@ class ApplicationStartupSmokeTest {
     Map<String,Object> result = contentTranslationController.list(null, null, "ALL", "ALL", "ALL", 20, 0, admin);
     assertTrue(result.get("items") instanceof List<?>);
     assertTrue(result.get("total") instanceof Number);
+    Map<String,Object> sourceInventory = contentTranslationController.inventory("ALL", "ALL", "ALL", "ALL", 20, 0, admin);
+    assertTrue(sourceInventory.get("items") instanceof List<?>);
+    assertTrue(sourceInventory.get("total") instanceof Number);
   }
 
   @Test
