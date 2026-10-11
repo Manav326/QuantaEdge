@@ -41,7 +41,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/v1")
 public class LearningDocumentController {
-  private static final long MAX_PDF_BYTES = 50L * 1024 * 1024;
+  private static final long STANDARD_MAX_PDF_BYTES = 50L * 1024 * 1024;
+  // Align with application.yml spring.servlet.multipart.max-file-size (500MB).
+  // Admins may upload larger official textbook PDFs; the framework still enforces the
+  // configured multipart/request ceilings before this controller is invoked.
+  private static final long ADMIN_MAX_PDF_BYTES = 500L * 1024 * 1024;
   private static final int MAX_PDF_PAGES = 2000;
   private static final float PAGE_RENDER_DPI = 120f;
 
@@ -95,7 +99,12 @@ public class LearningDocumentController {
     }
     if (!"ADMIN_UPLOAD".equals(sourceKind)) authorization.requirePermission(context, "CONTENT_REVIEW");
     if (file == null || file.isEmpty()) throw badRequest("Choose a PDF file to upload.");
-    if (file.getSize() > MAX_PDF_BYTES) throw badRequest("PDF files must be 50 MB or smaller.");
+    long maxPdfBytes = "ADMIN".equalsIgnoreCase(String.valueOf(context.role()))
+        ? ADMIN_MAX_PDF_BYTES : STANDARD_MAX_PDF_BYTES;
+    if (file.getSize() > maxPdfBytes) {
+      String limit = "ADMIN".equalsIgnoreCase(String.valueOf(context.role())) ? "500 MB for Admin uploads" : "50 MB";
+      throw badRequest("PDF files must be " + limit + " or smaller.");
+    }
     String title = requiredText(suppliedTitle, "PDF title", 240);
     String filename = safeFilename(file.getOriginalFilename());
     byte[] bytes;
