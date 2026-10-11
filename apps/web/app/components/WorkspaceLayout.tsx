@@ -4,8 +4,17 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { LanguageSwitcher, useLocale } from './LanguageProvider';
+import QuantaEdgeBrand from './QuantaEdgeBrand';
+import StudentAccountMenu from './StudentAccountMenu';
+import ParentAccountMenu from './ParentAccountMenu';
 
 type Item = { href: string; hinglish: string; english: string; icon: string; match?: string };
+type WorkspaceProfile = {
+  display_name?: string | null;
+  class_code?: string | number | null;
+  profile_image_url?: string | null;
+  mobile_e164?: string | null;
+};
 const studentItems: Item[] = [
   { href: '/student', hinglish: 'आज की योजना', english: "Today's plan", icon: '⌂', match: '/student' },
   { href: '/student/learn', hinglish: 'पढ़ाई', english: 'Learning', icon: '▤' },
@@ -25,34 +34,53 @@ const parentItems: Item[] = [
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { locale } = useLocale();
-  const itemLabel = (item: Item) => locale === 'english' ? item.english : item.hinglish;
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
+  const items = role === 'student' ? studentItems : parentItems;
+  const itemLabel = (item: Item) => locale === 'english' ? item.english : item.hinglish;
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+  const [profile, setProfile] = useState<WorkspaceProfile | null>(null);
+
   useEffect(() => {
     if (!role) return;
     try { setCollapsed(window.localStorage.getItem('qe-' + role + '-sidebar-collapsed') === 'true'); } catch {}
   }, [role]);
+
+  // Keep account identity in the persistent header; fetch once per workspace role,
+  // not on each route change, so navigation doesn't flash or restart the header.
+  useEffect(() => {
+    let active = true;
+    if (!role) {
+      setProfile(null);
+      return () => { active = false; };
+    }
+    const endpoint = role === 'student' ? '/api/v1/students/me' : '/api/v1/guardians/profile';
+    fetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
+      .then(response => response.ok ? response.json() : null)
+      .then(data => { if (active) setProfile(data && typeof data === 'object' ? data : null); })
+      .catch(() => { if (active) setProfile(null); });
+    return () => { active = false; };
+  }, [role]);
+
   useEffect(() => { setMobileMoreOpen(false); }, [pathname]);
+
   function toggleCollapsed() {
     const next = !collapsed;
     setCollapsed(next);
     try { window.localStorage.setItem('qe-' + role + '-sidebar-collapsed', String(next)); } catch {}
   }
+
   if (!role) return <>{children}</>;
-  const items = role === 'student' ? studentItems : parentItems;
+
   const active = (item: Item) => item.href === '/student' || item.href === '/parent'
     ? pathname === item.href || pathname === item.href + '/diagnostic'
     : pathname === item.href || pathname.startsWith(item.href + '/');
-  const currentItem = items.find(active);
   const mobilePrimaryItems = role === 'student' ? items.slice(0, 4) : items;
   const mobileMoreItems = role === 'student' ? items.slice(4) : [];
+
   return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
     <aside className="qe-workspace-sidebar">
-      <Link href={role === 'student' ? '/student' : '/parent'} className="qe-workspace-brand" aria-label="QuantaEdge workspace">
-        <img src="/branding/quantaedge-icon.png" alt="" width="38" height="38" />
-        <span><strong>QuantaEdge</strong><small>{role === 'student' ? (locale === 'english' ? 'LEARNING SPACE' : 'सीखने की जगह') : (locale === 'english' ? 'FAMILY SPACE' : 'परिवार की जगह')}</small></span>
-      </Link>
+      <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
       <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
       <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
       <nav aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
@@ -62,11 +90,13 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     </aside>
     <div className="qe-workspace-content">
       <header className="qe-workspace-topbar">
-        <div className="qe-workspace-topbar__context">
-          <span>{role === 'student' ? 'QUANTAEDGE / LEARNING SPACE' : 'QUANTAEDGE / FAMILY SPACE'}</span>
-          <strong>{currentItem ? itemLabel(currentItem) : (role === 'student' ? 'Learning' : 'Family report')}</strong>
+        <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
+        <div className="qe-workspace-topbar-actions">
+          {role === 'student'
+            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} />
+            : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} />}
+          <LanguageSwitcher compact />
         </div>
-        <LanguageSwitcher />
       </header>
       {children}
     </div>
