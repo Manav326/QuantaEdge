@@ -3,6 +3,8 @@ package com.quantaedge.api;
 import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -91,27 +93,63 @@ public class AuthController {
   }
 
   @PostMapping("/refresh")
-  public ResponseEntity<Map<String,Object>> refresh(@CookieValue(value="QE_REFRESH",required=false) String refreshToken) {
-    return withCookie(auth.refreshSession(refreshToken));
+  public ResponseEntity<Map<String,Object>> refresh(
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER,required=false) String workspaceHeader,
+      HttpServletRequest request) {
+    String workspace = AuthService.normalizeWorkspace(workspaceHeader);
+    if (workspace == null) {
+      String refreshToken = firstNonBlank(
+          cookieValue(request, AuthService.REFRESH_COOKIE),
+          cookieValue(request, AuthService.STAFF_REFRESH_COOKIE),
+          cookieValue(request, AuthService.LEARNING_REFRESH_COOKIE));
+      return withCookie(auth.refreshSession(refreshToken));
+    }
+    String refreshToken = firstNonBlank(
+        cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)),
+        cookieValue(request, AuthService.REFRESH_COOKIE));
+    return withCookie(auth.refreshSession(refreshToken, workspace));
   }
 
   @PostMapping("/logout")
   public ResponseEntity<Map<String,Object>> logout(
-      @CookieValue(value=AuthService.COOKIE,required=false) String token,
-      @CookieValue(value="QE_REFRESH",required=false) String refreshToken,
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER,required=false) String workspaceHeader,
+      HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    auth.revoke(token,refreshToken);
+    String workspace = AuthService.normalizeWorkspace(workspaceHeader);
+    int legacyRevoked = 0;
+    if (workspace == null) {
+      auth.revoke(cookieValue(request, AuthService.COOKIE), cookieValue(request, AuthService.REFRESH_COOKIE));
+    } else {
+      auth.revokeForWorkspace(
+          cookieValue(request, AuthService.sessionCookieForWorkspace(workspace)),
+          cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)), workspace);
+      // A legacy cookie is cleared only when its backing session belonged to this
+      // portal, so signing out of one workspace cannot revoke the other workspace.
+      legacyRevoked = auth.revokeForWorkspace(
+          cookieValue(request, AuthService.COOKIE), cookieValue(request, AuthService.REFRESH_COOKIE), workspace);
+    }
     if(context!=null&&context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/logout","Staff signed out.");
-    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,"").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
-    ResponseCookie refreshCookie=ResponseCookie.from("QE_REFRESH","").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/").maxAge(Duration.ZERO).build();
-    return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString()).body(Map.of("loggedOut",true));
+
+    ResponseEntity.BodyBuilder result = ResponseEntity.ok();
+    String sessionCookie = workspace == null ? AuthService.COOKIE : AuthService.sessionCookieForWorkspace(workspace);
+    String refreshCookie = workspace == null ? AuthService.REFRESH_COOKIE : AuthService.refreshCookieForWorkspace(workspace);
+    result.header("Set-Cookie", expiredCookie(sessionCookie).toString());
+    result.header("Set-Cookie", expiredCookie(refreshCookie).toString());
+    if (workspace == null || legacyRevoked > 0) {
+      result.header("Set-Cookie", expiredCookie(AuthService.COOKIE).toString());
+      result.header("Set-Cookie", expiredCookie(AuthService.REFRESH_COOKIE).toString());
+    }
+    return result.body(Map.of("loggedOut",true));
   }
 
   private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens) {
     AuthContext context=tokens.context();
-    ResponseCookie cookie=ResponseCookie.from(AuthService.COOKIE,tokens.accessToken()).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+    String workspace = AuthService.workspaceForContext(context);
+    ResponseCookie cookie=ResponseCookie.from(AuthService.sessionCookieForWorkspace(workspace),tokens.accessToken())
+        .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofMinutes(AuthService.ACCESS_TOKEN_MINUTES)).build();
-    ResponseCookie refreshCookie=ResponseCookie.from("QE_REFRESH",tokens.refreshToken()).httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+    ResponseCookie refreshCookie=ResponseCookie.from(AuthService.refreshCookieForWorkspace(workspace),tokens.refreshToken())
+        .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofHours(auth.getSessionHours())).build();
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
         .body(Map.of("authenticated",true,"role",context.role(),
@@ -119,5 +157,25 @@ public class AuthController {
             "userId",context.userId()==null?0:context.userId(),
             "staffId",context.staffId()==null?0:context.staffId(),
             "displayName",context.displayName()==null?"":context.displayName()));
+  }
+
+  private ResponseCookie expiredCookie(String name) {
+    return ResponseCookie.from(name,"").httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
+        .maxAge(Duration.ZERO).build();
+  }
+
+  private String cookieValue(HttpServletRequest request, String name) {
+    if (request.getCookies() == null) return null;
+    for (Cookie cookie : request.getCookies()) {
+      if (name.equals(cookie.getName()) && cookie.getValue() != null && !cookie.getValue().isBlank()) {
+        return cookie.getValue();
+      }
+    }
+    return null;
+  }
+
+  private String firstNonBlank(String... values) {
+    for (String value : values) if (value != null && !value.isBlank()) return value;
+    return null;
   }
 }

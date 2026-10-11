@@ -22,6 +22,16 @@ public class AuthFilter extends OncePerRequestFilter {
     this.staffAudit = staffAudit;
   }
 
+  private static String cookieValue(HttpServletRequest request, String name) {
+    if (request.getCookies() == null) return null;
+    for (Cookie cookie : request.getCookies()) {
+      if (name.equals(cookie.getName()) && cookie.getValue() != null && !cookie.getValue().isBlank()) {
+        return cookie.getValue();
+      }
+    }
+    return null;
+  }
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
       throws ServletException, IOException {
@@ -31,21 +41,37 @@ public class AuthFilter extends OncePerRequestFilter {
     AuthContext context = null;
     if (trace) LOGGER.info("HTTP_DIAG auth-filter-enter uri={} hasCookies={}", uri, request.getCookies() != null);
     try {
+      String workspace = AuthService.normalizeWorkspace(request.getHeader(AuthService.WORKSPACE_HEADER));
       String token = null;
-      if (request.getCookies() != null) {
-        for (Cookie cookie : request.getCookies()) {
-          if (AuthService.COOKIE.equals(cookie.getName())) {
-            token = cookie.getValue();
-            break;
+      if (workspace != null) {
+        String scopedCookie = AuthService.sessionCookieForWorkspace(workspace);
+        token = cookieValue(request, scopedCookie);
+        if (token != null) context = auth.currentForWorkspace(token, workspace);
+        // Existing browsers can have the old shared cookie. Accept it only when the
+        // session record itself belongs to this workspace.
+        if (context == null) {
+          String legacyToken = cookieValue(request, AuthService.COOKIE);
+          if (legacyToken != null) {
+            context = auth.currentForWorkspace(legacyToken, workspace);
+            if (context != null) token = legacyToken;
           }
         }
+      } else {
+        token = cookieValue(request, AuthService.COOKIE);
+        if (token != null) context = auth.current(token);
+        // Compatibility for non-browser API clients that do not yet send the workspace header.
+        if (context == null) {
+          String staffToken = cookieValue(request, AuthService.STAFF_COOKIE);
+          if (staffToken != null) context = auth.currentForWorkspace(staffToken, "STAFF");
+        }
+        if (context == null) {
+          String learningToken = cookieValue(request, AuthService.LEARNING_COOKIE);
+          if (learningToken != null) context = auth.currentForWorkspace(learningToken, "LEARNING");
+        }
       }
-      if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={}", token != null);
-      if (token != null) {
-        context = auth.current(token);
-        if (trace) LOGGER.info("HTTP_DIAG auth-filter-context-present={}", context != null);
-        if (context != null) request.setAttribute("authContext", context);
-      }
+      if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
+          token != null, workspace, context != null);
+      if (context != null) request.setAttribute("authContext", context);
       chain.doFilter(request, response);
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-chain-returned status={} committed={}", response.getStatus(), response.isCommitted());
     } catch (IOException | ServletException | RuntimeException ex) {

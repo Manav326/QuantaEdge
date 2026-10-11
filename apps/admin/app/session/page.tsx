@@ -24,7 +24,9 @@ export default function AdminSessionLandingPage() {
         const identity = await response.json() as StaffSession;
         const home = identity.staffId ? staffHome(identity) : null;
         if (home) { router.replace(home); return; }
-        setError('This sign-in does not have staff-console access. Sign out before switching accounts.');
+        // Do not turn a stale or cross-portal cookie into a sign-out trap.
+        // The admin login page will verify staff access using the isolated cookie.
+        window.location.replace('/login');
         return;
       }
       if (response.status === 401 || response.status === 403) {

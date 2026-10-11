@@ -24,7 +24,9 @@ export default function SessionLandingPage() {
         const identity = await response.json() as Identity;
         const home = homeFor(identity);
         if (home) { router.replace(home); return; }
-        setError('Yeh sign-in learning site ke liye nahi hai. Account switch karne ke liye sign out karein.');
+        // A staff or stale legacy cookie should never force a learner to sign out.
+        // Return to the learning site's public entry; scoped cookies remain isolated.
+        window.location.replace('/');
         return;
       }
       if (response.status === 401 || response.status === 403) {

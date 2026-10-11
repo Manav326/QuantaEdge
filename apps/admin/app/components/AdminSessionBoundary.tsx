@@ -6,6 +6,13 @@ import { usePathname, useRouter } from 'next/navigation';
 type StaffSession = { role?: string; staffId?: number; permissions?: string[] };
 let recoveryInstalled = false;
 
+function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
+  const headers = new Headers(input instanceof Request ? input.headers : undefined);
+  new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
+  headers.set('X-QE-Workspace', 'STAFF');
+  return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
+}
+
 function installRefreshRecovery() {
   if (recoveryInstalled || typeof window === 'undefined') return () => {};
   recoveryInstalled = true;
@@ -20,19 +27,23 @@ function installRefreshRecovery() {
     } catch { return nativeFetch(input, init); }
     const isApi = target.origin === window.location.origin && target.pathname.startsWith('/api/v1/');
     const skip = !isApi || excluded.some(path => target.pathname.startsWith(path));
-    const retryInput = input instanceof Request ? input.clone() : input;
-    const response = await nativeFetch(input, init);
+    // Attach the portal identity to every API request, including login, refresh,
+    // and logout. Ports do not isolate browser cookies on localhost.
+    const requestInput = isApi ? workspaceRequest(input, init) : input;
+    const requestInit = isApi ? undefined : init;
+    const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
+    const response = await nativeFetch(requestInput, requestInit);
     if (skip || (response.status !== 401 && response.status !== 403)) return response;
-    if (!refreshInFlight) refreshInFlight = nativeFetch('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }).then(r => r.ok).catch(() => false).finally(() => { refreshInFlight = null; });
+    if (!refreshInFlight) refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' })).then(r => r.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     if (!await refreshInFlight) {
       // A different tab may have won the rotating-refresh-token race and already
       // updated the shared browser cookies. Retry once before declaring expiry.
-      const crossTabRetry = await nativeFetch(retryInput, init);
+      const crossTabRetry = await nativeFetch(retryInput);
       if (crossTabRetry.ok) return crossTabRetry;
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
       return crossTabRetry;
     }
-    const retriedResponse = await nativeFetch(retryInput, init);
+    const retriedResponse = await nativeFetch(retryInput);
     if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
     return retriedResponse;
   };
@@ -48,28 +59,21 @@ function staffHome(session: StaffSession) {
   return '/login';
 }
 
-async function logoutToSwitch() {
-  await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
-  window.location.replace('/login');
-}
-
 if (typeof window !== 'undefined') installRefreshRecovery();
 
 export default function AdminSessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [blocked, setBlocked] = useState(false);
   const isLogin = pathname === '/login';
   const isSession = pathname === '/session';
   useEffect(() => installRefreshRecovery(), []);
   useEffect(() => {
     let alive = true;
-    if (isSession) { setReady(true); setBlocked(false); return; }
-    setReady(false); setBlocked(false);
+    if (isSession) { setReady(true); return; }
+    setReady(false);
     const check = async () => {
       setReady(false);
-      setBlocked(false);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;
@@ -79,7 +83,12 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
         }
         const session = await response.json() as StaffSession;
         if (!alive) return;
-        if (!session.staffId) { setBlocked(true); return; }
+        if (!session.staffId) {
+          // A legacy cookie from the learning site must never trap the staff portal
+          // on a workspace warning. Route to this portal's own sign-in instead.
+          if (isLogin) setReady(true); else router.replace('/login');
+          return;
+        }
         const home = staffHome(session);
         if (isLogin || (pathname === '/' && home !== '/')) { router.replace(home); return; }
         setReady(true);
@@ -109,7 +118,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   }, [pathname, router, isLogin, isSession]);
 
   useEffect(() => {
-    if (isLogin || isSession || !ready || blocked) return;
+    if (isLogin || isSession || !ready) return;
     let lastActivity = Date.now();
     const markActivity = () => { lastActivity = Date.now(); };
     const activityEvents = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'];
@@ -123,7 +132,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
       window.clearInterval(heartbeat);
       activityEvents.forEach(name => window.removeEventListener(name, markActivity));
     };
-  }, [ready, blocked, isLogin, isSession]);
+  }, [ready, isLogin, isSession]);
 
   useEffect(() => {
     const onSessionExpired = () => {
@@ -134,7 +143,6 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   }, [isLogin, isSession]);
 
   if (isSession) return <>{children}</>;
-  if (blocked) return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">SECURE WORKSPACE</span><h1>This sign-in belongs to the learning site.</h1><p>To keep accounts separate, sign out before entering the staff console.</p><button className="button button-dark" onClick={() => void logoutToSwitch()}>Log out to switch accounts</button></section></main>;
   if (!ready) return <main className="qe-session-gate" aria-live="polite"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE STAFF</span><h1>Verifying secure access…</h1><p>Your staff role and saved session are being checked.</p></section></main>;
   return <>{children}</>;
 }

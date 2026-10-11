@@ -10,6 +10,13 @@ type WorkspaceRole = 'student' | 'parent';
 let fetchRecoveryInstalled = false;
 let verifiedWorkspace: WorkspaceRole | null = null;
 
+function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
+  const headers = new Headers(input instanceof Request ? input.headers : undefined);
+  new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
+  headers.set('X-QE-Workspace', 'LEARNING');
+  return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
+}
+
 function installRefreshRecovery() {
   if (fetchRecoveryInstalled || typeof window === 'undefined') return () => {};
   fetchRecoveryInstalled = true;
@@ -24,22 +31,26 @@ function installRefreshRecovery() {
     } catch { return nativeFetch(input, init); }
     const isApi = target.origin === window.location.origin && target.pathname.startsWith('/api/v1/');
     const skip = !isApi || excluded.some(path => target!.pathname.startsWith(path));
-    const retryInput = input instanceof Request ? input.clone() : input;
-    const response = await nativeFetch(input, init);
+    // Attach the portal identity to every API request, including login, refresh,
+    // and logout. Ports do not isolate browser cookies on localhost.
+    const requestInput = isApi ? workspaceRequest(input, init) : input;
+    const requestInit = isApi ? undefined : init;
+    const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
+    const response = await nativeFetch(requestInput, requestInit);
     if (skip || (response.status !== 401 && response.status !== 403)) return response;
     if (!refreshInFlight) {
-      refreshInFlight = nativeFetch('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' })
+      refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     const refreshed = await refreshInFlight;
     if (!refreshed) {
       // Another tab may already have rotated the shared refresh cookie.
-      const crossTabRetry = await nativeFetch(retryInput, init);
+      const crossTabRetry = await nativeFetch(retryInput);
       if (crossTabRetry.ok) return crossTabRetry;
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
       return crossTabRetry;
     }
-    const retriedResponse = await nativeFetch(retryInput, init);
+    const retriedResponse = await nativeFetch(retryInput);
     if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
     return retriedResponse;
   };
@@ -60,20 +71,12 @@ function workspaceRole(home: string | null): WorkspaceRole | null {
   if (home?.startsWith('/parent')) return 'parent';
   return null;
 }
-function logoutAndSwitch() {
-  void fetch('/api/v1/auth/logout', { method: 'POST' }).finally(() => {
-    verifiedWorkspace = null;
-    window.location.replace('/');
-  });
-}
-
 if (typeof window !== 'undefined') installRefreshRecovery();
 
 export default function SessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [blockedRole, setBlockedRole] = useState<string | null>(null);
   const isPublicEntry = pathname === '/' || pathname === '/login' || pathname === '/login/student';
   const protectedWorkspace: WorkspaceRole | null = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const isProtected = protectedWorkspace !== null;
@@ -85,7 +88,6 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     let alive = true;
     if (!requiresCheck) {
       verifiedWorkspace = null;
-      setBlockedRole(null);
       setReady(true);
       return () => { alive = false; };
     }
@@ -96,12 +98,10 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     const check = async (force = false) => {
       if (isPublicEntry) verifiedWorkspace = null;
       if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
-        setBlockedRole(null);
         setReady(true);
         return;
       }
       setReady(false);
-      setBlockedRole(null);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;
@@ -127,7 +127,10 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         }
         if ((isPublicEntry || isProtected) && !home) {
           verifiedWorkspace = null;
-          setBlockedRole(signedIn.role || (signedIn.staffId ? 'STAFF' : 'UNKNOWN'));
+          // A staff/legacy session must not block the learning site. Let the
+          // appropriate public entry render or send a protected route to login.
+          if (isProtected) router.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+          else setReady(true);
           return;
         }
         verifiedWorkspace = protectedWorkspace;
@@ -166,7 +169,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
 
 
   useEffect(() => {
-    if (!isProtected || !ready || blockedRole) return;
+    if (!isProtected || !ready) return;
     let lastActivity = Date.now();
     const markActivity = () => { lastActivity = Date.now(); };
     const activityEvents = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'];
@@ -180,7 +183,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       window.clearInterval(heartbeat);
       activityEvents.forEach(name => window.removeEventListener(name, markActivity));
     };
-  }, [isProtected, ready, blockedRole]);
+  }, [isProtected, ready]);
 
   useEffect(() => {
     const onSessionExpired = () => {
@@ -190,7 +193,6 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     return () => window.removeEventListener('qe:session-expired', onSessionExpired);
   }, [isProtected, pathname]);
 
-  if (blockedRole) return <main className="qe-session-gate"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow"><LocaleText hinglish="SECURE WORKSPACE" english="SECURE WORKSPACE" /></span><h1><LocaleText hinglish="यह account किसी दूसरे workspace का है।" english="This account belongs to another workspace." /></h1><p><LocaleText hinglish={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'आपका current sign-in staff console के लिए है। Account बदलने से पहले sign out करें।' : 'आपका current sign-in दूसरे account type के लिए है। Account बदलने से पहले sign out करें।'} english={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'Your current sign-in is for the staff console. Sign out before switching accounts.' : 'Your current sign-in is for a different account type. Sign out before switching accounts.'} /></p><button className="button button-dark" onClick={logoutAndSwitch}><LocaleText hinglish="Account बदलने के लिए sign out करें" english="Log out to switch accounts" /></button></section></main>;
   if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">QUANTAEDGE</span><h1><LocaleText hinglish="आपका workspace check हो रहा है…" english="Checking your workspace…" /></h1><p><LocaleText hinglish="आपका account और saved session verify किया जा रहा है।" english="Your account and saved session are being verified." /></p></section></main>;
   return <>{children}</>;
 }
