@@ -92,17 +92,7 @@ try {
         throw 'The import report contains duplicate or invalid document IDs. Refusing to publish.'
     }
     $report.target_count = $rows.Count
-    $report.targets = @($rows | ForEach-Object {
-        [ordered]@{
-            document_id = [long]$_.document_id
-            class_code = [string]$_.class_code
-            subject_code = $(if ($_.subject_code) { [string]$_.subject_code } else { [string]$_.subject })
-            scope = [string]$_.scope
-            chapter_title = [string]$_.chapter_title
-            title = [string]$_.title
-            import_action = [string]$_.action
-        }
-    })
+    $report.targets = $rows
 
     $me = Invoke-QEApi -Path '/api/v1/auth/me'
     if (-not $me.authenticated) { throw 'The API did not confirm an authenticated session.' }
