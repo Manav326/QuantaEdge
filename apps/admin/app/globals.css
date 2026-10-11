@@ -598,3 +598,11 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
  .qe-admin-global-context>strong{max-width:44vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .qe-admin-language-switcher select{max-width:112px}
 }
+
+
+/* Direct admin logout remains available in the global header at every viewport. */
+.qe-admin-logout-button{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:8px 13px;border:1px solid #efc5a7;border-radius:999px;background:#fff7f0;color:#9a3412;font:700 11px/1 'DM Sans',Arial,sans-serif;white-space:nowrap;cursor:pointer;transition:background .16s,border-color .16s}
+.qe-admin-logout-button:hover:not(:disabled){border-color:#e7a36f;background:#ffeddc}
+.qe-admin-logout-button:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+.qe-admin-logout-button:disabled{opacity:.6;cursor:wait}
+@media(max-width:620px){.qe-admin-logout-button{min-height:33px;padding:7px 9px;font-size:10px}}

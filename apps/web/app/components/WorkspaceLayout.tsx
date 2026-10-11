@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LanguageSwitcher, useLocale } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
@@ -33,13 +33,14 @@ const parentItems: Item[] = [
 
 export default function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { locale } = useLocale();
   const role = pathname.startsWith('/student') ? 'student' : pathname.startsWith('/parent') ? 'parent' : null;
   const items = role === 'student' ? studentItems : parentItems;
   const itemLabel = (item: Item) => locale === 'english' ? item.english : item.hinglish;
   const [collapsed, setCollapsed] = useState(false);
-  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const [profile, setProfile] = useState<WorkspaceProfile | null>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     if (!role) return;
@@ -62,7 +63,6 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     return () => { active = false; };
   }, [role]);
 
-  useEffect(() => { setMobileMoreOpen(false); }, [pathname]);
 
   function toggleCollapsed() {
     const next = !collapsed;
@@ -70,15 +70,25 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     try { window.localStorage.setItem('qe-' + role + '-sidebar-collapsed', String(next)); } catch {}
   }
 
+  async function logout() {
+    setLoggingOut(true);
+    try {
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch {
+      // Always leave the workspace after the logout request, even if the network fails.
+    } finally {
+      router.replace(role === 'student' ? '/login/student' : '/login');
+      router.refresh();
+      setLoggingOut(false);
+    }
+  }
+
   if (!role) return <>{children}</>;
 
   const active = (item: Item) => item.href === '/student' || item.href === '/parent'
     ? pathname === item.href || pathname === item.href + '/diagnostic'
     : pathname === item.href || pathname.startsWith(item.href + '/');
-  const mobilePrimaryItems = role === 'student' ? items.slice(0, 4) : items;
-  const mobileMoreItems = role === 'student' ? items.slice(4) : [];
-
-  return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
+ return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
     <aside className="qe-workspace-sidebar">
       <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
       <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
@@ -95,17 +105,11 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} />
             : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} />}
+          <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}><span aria-hidden="true">↗</span><span>{loggingOut ? (locale === 'english' ? 'Logging out…' : 'लॉग आउट…') : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</span></button>
           <LanguageSwitcher compact />
         </div>
       </header>
       {children}
     </div>
-    {role === 'student' && mobileMoreOpen && <div className="qe-workspace-mobile-more" aria-label={locale === 'english' ? 'More student pages' : 'और student pages'}>
-      {mobileMoreItems.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span>{itemLabel(item)}</Link>)}
-    </div>}
-    <nav className="qe-workspace-mobile-nav" aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
-      {mobilePrimaryItems.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''}><span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small></Link>)}
-      {role === 'student' && mobileMoreItems.length > 0 && <button type="button" aria-expanded={mobileMoreOpen} aria-label={locale === 'english' ? 'More student pages' : 'और pages'} onClick={() => setMobileMoreOpen(value => !value)} className={mobileMoreOpen || mobileMoreItems.some(active) ? 'is-active' : ''}><span aria-hidden="true">···</span><small>{locale === 'english' ? 'More' : 'और'}</small></button>}
-    </nav>
   </div>;
 }
