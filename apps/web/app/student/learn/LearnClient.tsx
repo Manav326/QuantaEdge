@@ -141,7 +141,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   return null;
 }
 
-function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
+function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
   const { locale } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [value,setValue]=useState('');
@@ -171,7 +171,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
 
   return <article className="qe-question-card">
     <div className="qe-question-card__top">
-      <span className="qe-question-index"><span>{q.sort_order||'Q'}</span></span>
+      <span className="qe-question-index"><span>{String(index).padStart(2,'0')}</span></span>
       <div className="qe-question-card__labels">
         <span className="qe-question-type">{questionLabel}</span>
         <span className="qe-question-context">{q.exam_format||tx('Lesson check','Lesson check')}{q.marks?' · '+q.marks+' '+tx('अंक','marks'):''}</span>
@@ -411,7 +411,7 @@ export default function LearnClient() {
 
       <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <LocaleText hinglish="attempt किए" english="attempted" /></span></div>
       {lessonMcqs.length>0&&<div className="qe-mcq-progress" aria-label={tx('MCQ की प्रगति','MCQ progress')}><div><span><LocaleText hinglish="सभी सवालों के उत्तर दें" english="Answer every question to continue" /></span><strong>{Math.round(attemptedMcqs/lessonMcqs.length*100)}%</strong></div><i><span style={{width:(attemptedMcqs/lessonMcqs.length*100)+'%'}}/></i></div>}
-      {lessonMcqs.length ? lessonMcqs.map(q=><QuestionCard key={q.id} q={q} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
+      {lessonMcqs.length ? lessonMcqs.map((q,index)=><QuestionCard key={q.id} q={q} index={index+1} onResult={id=>setMcqAttempted(old=>({...old,[id]:true}))} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
 
       <section className="concept-card practice-launch-card">
         <span className="concept-kicker"><LocaleText hinglish="अगला चरण" english="Next step" /></span>
