@@ -64,6 +64,37 @@ function Get-QEField {
     return $null
 }
 
+function Get-QEHttpErrorDetails {
+    param(
+        [Parameter(Mandatory = $true)][System.Management.Automation.ErrorRecord]$ErrorRecord,
+        [Parameter(Mandatory = $true)][string]$Path
+    )
+    $statusCode = 0
+    $statusText = ''
+    $bodyText = ''
+    try {
+        $response = $ErrorRecord.Exception.Response
+        if ($null -ne $response) {
+            try { $statusCode = [int]$response.StatusCode } catch { }
+            try { $statusText = [string]$response.StatusDescription } catch { }
+            try {
+                $stream = $response.GetResponseStream()
+                if ($null -ne $stream) {
+                    $reader = New-Object System.IO.StreamReader($stream)
+                    try { $bodyText = $reader.ReadToEnd() } finally { $reader.Dispose() }
+                }
+            } catch { }
+        }
+    } catch { }
+    if ($bodyText.Length -gt 3000) { $bodyText = $bodyText.Substring(0, 3000) + ' [truncated]' }
+    $label = if ($statusCode -gt 0) { "HTTP $statusCode $statusText" } else { 'HTTP request failed' }
+    $detail = "$label calling $Path. $($ErrorRecord.Exception.Message)"
+    if (-not [string]::IsNullOrWhiteSpace($bodyText)) {
+        $detail += " Response body: $bodyText"
+    }
+    return $detail
+}
+
 function Invoke-QEApi {
     param(
         [Parameter(Mandatory = $true)][string]$Path,
@@ -88,7 +119,7 @@ function Invoke-QEApi {
         if ($statusCode -in @(401, 403) -and $Path -eq '/api/v1/auth/me') {
             throw 'QuantaEdge rejected QE_SESSION. Access tokens expire after 15 minutes. Sign in to Admin and set a fresh QE_SESSION cookie; for automatic refresh, also set QE_REFRESH in QUANTAEDGE_ADMIN_REFRESH.'
         }
-        throw
+        throw (Get-QEHttpErrorDetails -ErrorRecord $_ -Path $Path)
     }
 }
 
@@ -130,10 +161,13 @@ $report = @{
     replacements = @()
     actions = @()
     failures = @()
+    remaining_document_ids = @()
+    summary = $null
     publish_actions_taken = 0
     content_depth_warning = '54 Class 7-8 chapter PDFs failed the current content-depth gate (three pages and one distinct worked example detected). Publishing does not correct this quality issue.'
 }
 
+$rows = @()
 try {
     $import = Get-Content -LiteralPath $ImportReport -Raw | ConvertFrom-Json
     if ([string]$import.result -ne 'COMPLETED') {
@@ -340,8 +374,70 @@ try {
     if (-not $report.failures -or $report.failures.Count -eq 0) { $report.failures = $failures.ToArray() }
     $report.actions = $actions.ToArray()
     $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
-    try { Save-PublishReport $report } catch { }
-    Write-Host "PUBLISH SCRIPT STOPPED SAFELY: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "Inspect $PublishReport. If result is PARTIAL_FAILURE, rerun only after reviewing recorded statuses." -ForegroundColor Yellow
-    throw
+    # Final reconciliation always runs, including preflight failures and HTTP 5xx responses.
+    $actionById = @{}
+    foreach ($item in @($actions.ToArray())) {
+        $actionById[[string]$item.document_id] = $item
+    }
+    $publishedInRun = @($actions | Where-Object { $_.result -eq 'PUBLISHED' }).Count
+    $alreadyPublishedNow = @($actions | Where-Object { $_.result -eq 'ALREADY_PUBLISHED' }).Count
+    $failedIds = @($actions | Where-Object { $_.result -eq 'ERROR' } | ForEach-Object { [string]$_.document_id })
+    $remainingIds = New-Object 'System.Collections.Generic.List[string]'
+    $notAttemptedIds = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($targetRow in @($rows)) {
+        $targetId = [string]$targetRow.document_id
+        if (-not $actionById.ContainsKey($targetId)) {
+            $remainingIds.Add($targetId)
+            $notAttemptedIds.Add($targetId)
+            continue
+        }
+        $targetResult = [string]$actionById[$targetId].result
+        if ($targetResult -notin @('PUBLISHED','ALREADY_PUBLISHED')) {
+            $remainingIds.Add($targetId)
+            if ($targetResult -ne 'ERROR') { $notAttemptedIds.Add($targetId) }
+        }
+    }
+    $report.published_count = $publishedInRun
+    $report.already_published_count = $alreadyPublishedNow
+    $report.failed_count = $failedIds.Count
+    $report.publish_actions_taken = $publishedInRun
+    $report.remaining_document_ids = $remainingIds.ToArray()
+    $report.summary = [ordered]@{
+        intended_count = [int]$report.target_count
+        already_published_count = $alreadyPublishedNow
+        published_this_run_count = $publishedInRun
+        failed_item_count = $failedIds.Count
+        not_attempted_count = $notAttemptedIds.Count
+        remaining_to_publish_count = $remainingIds.Count
+        failed_document_ids = $failedIds
+        not_attempted_document_ids = $notAttemptedIds.ToArray()
+        remaining_document_ids = $remainingIds.ToArray()
+        result = [string]$report.result
+    }
+    try { Save-PublishReport $report } catch {
+        Write-Host "WARNING: Could not save the final audit report: $($_.Exception.Message)" -ForegroundColor Red
+    }
+
+    Write-Host ''
+    Write-Host '========== PUBLISH RUN SUMMARY ==========' -ForegroundColor Cyan
+    Write-Host "Intended batch:              $($report.target_count) resource(s)"
+    Write-Host "Already published (verified): $alreadyPublishedNow"
+    Write-Host "Published during this run:    $publishedInRun"
+    Write-Host "Failed item(s):               $($failedIds.Count)"
+    Write-Host "Not attempted:                $($notAttemptedIds.Count)"
+    Write-Host "Still remaining to publish:   $($remainingIds.Count)"
+    if ($failedIds.Count -gt 0) {
+        Write-Host "Failed document ID(s):        $($failedIds -join ', ')" -ForegroundColor Red
+    }
+    if ($remainingIds.Count -gt 0) {
+        Write-Host "Remaining document ID(s):     $($remainingIds -join ', ')" -ForegroundColor Yellow
+    }
+    Write-Host "Final result:                 $($report.result)" -ForegroundColor $(if ($report.result -eq 'COMPLETED') { 'Green' } else { 'Red' })
+    Write-Host "Audit report:                 $PublishReport"
+    if ($report.result -ne 'COMPLETED') {
+        Write-Host 'SAFE STOP: no further publish requests were sent after the first failure. Review the API error/report before resuming.' -ForegroundColor Yellow
+        $global:LASTEXITCODE = 1
+    } else {
+        $global:LASTEXITCODE = 0
+    }
 }
