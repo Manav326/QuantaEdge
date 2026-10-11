@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -9,6 +10,23 @@ SPEC = importlib.util.spec_from_file_location("translate_quantaedge_content", SC
 assert SPEC and SPEC.loader
 pipeline = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(pipeline)
+
+
+class LocalEnvironmentTests(unittest.TestCase):
+    def test_reads_local_env_file_without_printing_or_exporting_values(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            env_file = Path(temp_dir) / ".env"
+            env_file.write_text(
+                "# local API settings\n"
+                'OPENAI_API_KEY="test-secret"\n'
+                "export OPENAI_API_BASE_URL=https://example.invalid/v1\n"
+                "APP_AI_TUTOR_MODEL=translator-model\n",
+                encoding="utf-8",
+            )
+            values = pipeline.read_env_file(env_file)
+        self.assertEqual(values["OPENAI_API_KEY"], "test-secret")
+        self.assertEqual(values["OPENAI_API_BASE_URL"], "https://example.invalid/v1")
+        self.assertEqual(values["APP_AI_TUTOR_MODEL"], "translator-model")
 
 
 class TranslationPromptTests(unittest.TestCase):
