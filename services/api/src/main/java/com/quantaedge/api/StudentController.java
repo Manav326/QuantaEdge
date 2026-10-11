@@ -55,6 +55,27 @@ public class StudentController {
         .body(bytes);
   }
 
+  @PutMapping("/me/profile-photo")
+  @Transactional
+  public Map<String,Object> updateMyProfilePhoto(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    if(!body.containsKey("profileImageDataUrl"))
+      throw new IllegalArgumentException("Choose a photo or remove the current photo.");
+
+    String image=validatedProfileImage(body.get("profileImageDataUrl"));
+    int changed=jdbc.update(
+        "update student set profile_image_data_url=?,profile_updated_at=now() where id=? and active=true",
+        image,context.studentId());
+    if(changed!=1) throw new SecurityException("Active student profile not found.");
+
+    Map<String,Object> result=new java.util.LinkedHashMap<>();
+    result.put("saved",true);
+    result.put("profile_image_url",image==null?null:"/api/v1/students/me/profile-photo?v="+System.currentTimeMillis());
+    return result;
+  }
+
   @PutMapping("/me/profile")
   @Transactional
   public Map<String,Object> updateMyProfile(
@@ -181,7 +202,7 @@ public class StudentController {
 
   private Map<String,Object> statsFor(long studentId){
     Map<String,Object> student=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language,case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo' else null end as profile_image_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
+      select id,public_id,display_name,class_code,board,language,case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
       """,studentId);
     Map<String,Object> result=new LinkedHashMap<>(student);
     result.put("lessonStats",jdbc.queryForMap("""

@@ -47,8 +47,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     try { setCollapsed(window.localStorage.getItem('qe-' + role + '-sidebar-collapsed') === 'true'); } catch {}
   }, [role]);
 
-  // Keep account identity in the persistent header; fetch once per workspace role,
-  // not on each route change, so navigation doesn't flash or restart the header.
+  // Keep account identity in the persistent header; refresh only when the role changes
+  // or when a profile page explicitly reports a saved profile/photo.
   useEffect(() => {
     let active = true;
     if (!role) {
@@ -56,11 +56,30 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       return () => { active = false; };
     }
     const endpoint = role === 'student' ? '/api/v1/students/me' : '/api/v1/guardians/profile';
-    fetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
-      .then(response => response.ok ? response.json() : null)
-      .then(data => { if (active) setProfile(data && typeof data === 'object' ? data : null); })
-      .catch(() => { if (active) setProfile(null); });
-    return () => { active = false; };
+    const loadProfile = () => {
+      fetch(endpoint, { credentials: 'same-origin', cache: 'no-store' })
+        .then(response => response.ok ? response.json() : null)
+        .then(data => {
+          if (!active) return;
+          if (data && typeof data === 'object') {
+            const nextProfile = { ...data };
+            if (typeof nextProfile.profile_image_url === 'string' && nextProfile.profile_image_url) {
+              const photoPath = nextProfile.profile_image_url.split('?')[0];
+              nextProfile.profile_image_url = photoPath + '?v=' + Date.now();
+            }
+            setProfile(nextProfile);
+          } else {
+            setProfile(null);
+          }
+        })
+        .catch(() => { if (active) setProfile(null); });
+    };
+    loadProfile();
+    window.addEventListener('qe:profile-updated', loadProfile);
+    return () => {
+      active = false;
+      window.removeEventListener('qe:profile-updated', loadProfile);
+    };
   }, [role]);
 
 

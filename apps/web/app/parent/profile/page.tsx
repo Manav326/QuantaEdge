@@ -170,12 +170,21 @@ export default function ParentProfilePage() {
     setPhotoBusy(true);
     try {
       const profileImageDataUrl = await prepareProfilePhoto(file);
-      setDraft(current => ({ ...current, profileImageDataUrl }));
-      setPhotoChanged(true);
+      const response = await fetch('/api/v1/guardians/profile-photo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileImageDataUrl }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
+      setIdentity(current => ({ ...current, profileImageUrl: body.profile_image_url || null }));
+      setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setPhotoChanged(false);
       setPhotoName(file.name);
-      setNotice(tx('Photo ready है। Profile पर रखने के लिए changes save करें।','Photo is ready. Save your changes to keep it on your profile.'));
+      setNotice(tx('आपकी photo profile में save हो गई है।','Your photo has been saved to your profile.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
-      setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
+      setError(photoError instanceof Error ? photoError.message : 'Unable to save this photo.');
     } finally {
       setPhotoBusy(false);
       event.target.value = '';
@@ -217,6 +226,7 @@ export default function ParentProfilePage() {
         profileImageDataUrl: '',
       });
       setNotice(tx('आपकी parent profile save हो गई है।','Your parent profile has been saved.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
       setPhotoName('');
       setPhotoChanged(false);
     } catch (saveError) {
@@ -226,12 +236,29 @@ export default function ParentProfilePage() {
     }
   }
 
-  function removePhoto() {
-    setDraft(current => ({ ...current, profileImageDataUrl: '' }));
-    setPhotoChanged(true);
-    setPhotoName('');
-    setNotice(tx('Draft से photo हट गई है। Confirm करने के लिए changes save करें।','The photo has been removed from the draft. Save your changes to confirm.'));
+  async function removePhoto() {
     setError('');
+    setNotice('');
+    setPhotoBusy(true);
+    try {
+      const response = await fetch('/api/v1/guardians/profile-photo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileImageDataUrl: '' }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
+      setIdentity(current => ({ ...current, profileImageUrl: body.profile_image_url || null }));
+      setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setPhotoChanged(false);
+      setPhotoName('');
+      setNotice(tx('आपकी photo profile से हटा दी गई है।','Your photo has been removed from your profile.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
+    } catch (photoError) {
+      setError(photoError instanceof Error ? photoError.message : 'Your photo could not be removed.');
+    } finally {
+      setPhotoBusy(false);
+    }
   }
 
   return (
@@ -263,13 +290,13 @@ export default function ParentProfilePage() {
                   <span className="parent-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="parent-profile-photo-editor__copy">
-                  <strong>{draft.profileImageDataUrl ? <LocaleText hinglish="Photo select हो गई" english="Photo selected" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
+                  <strong>{((photoChanged && draft.profileImageDataUrl) || (!photoChanged && identity.profileImageUrl)) ? <LocaleText hinglish="आपकी photo set है" english="Your photo is set" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
                   <p><LocaleText hinglish="Clear photo चुनें। Save करने से पहले photo resize और compress हो जाएगी।" english="Choose a clear photo. It will be resized and compressed before saving." /></p>
                   {photoName && <small className="parent-profile-photo-editor__filename">{photoName}</small>}
                   <div className="parent-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="parent-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
                     <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : (photoChanged ? Boolean(draft.profileImageDataUrl) : Boolean(identity.profileImageUrl)) ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
-                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
+                    {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" disabled={photoBusy} onClick={removePhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
               </div>

@@ -47,7 +47,7 @@ class LearningControllerTest {
         .thenReturn(1L);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
 
-    controller.questions(42L, student);
+    controller.questions(42L, "hi", student);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq(42L));
@@ -68,7 +68,7 @@ class LearningControllerTest {
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
         "practice_best_graded_count", 10L, "practice_best_percent", 80)));
 
-    List<Map<String,Object>> rows = controller.lessons("7", "maths", student);
+    List<Map<String,Object>> rows = controller.lessons("7", "maths", "hi", student);
 
     assertEquals(1, rows.size());
     assertEquals(3L, rows.getFirst().get("mcq_count"));
@@ -94,7 +94,7 @@ class LearningControllerTest {
     when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
-    Map<String, Object> lesson = controller.lesson(42L, student);
+    Map<String, Object> lesson = controller.lesson(42L, "hi", student);
 
     verify(jdbc).queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L));
     verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq("hi"), eq(42L));
@@ -113,7 +113,7 @@ class LearningControllerTest {
     when(answerService.evaluate(anyString(), eq("B"))).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
-    Map<String, Object> result = controller.answer(42L, Map.of("answer", "B"), student);
+    Map<String, Object> result = controller.answer(42L, "hi", Map.of("answer", "B"), student);
 
     assertEquals(true, result.get("correct"));
     assertEquals(true, result.get("autoGraded"));
@@ -133,7 +133,7 @@ class LearningControllerTest {
         .thenReturn(0L);
 
     assertThrows(SecurityException.class,
-        () -> controller.answer(42L, Map.of("answer", "Z"), student));
+        () -> controller.answer(42L, "hi", Map.of("answer", "Z"), student));
     verify(state, never()).recordAttempt(eq(7L), eq(42L), eq(9L),
         anyString(), anyBoolean(), any());
   }
@@ -152,7 +152,7 @@ class LearningControllerTest {
     Map<String, Object> body = new java.util.HashMap<>();
     body.put("answer", null);
 
-    Map<String, Object> result = controller.answer(42L, body, student);
+    Map<String, Object> result = controller.answer(42L, "hi", body, student);
 
     assertEquals(42L, result.get("questionId"));
     verify(state).recordAttempt(eq(7L), eq(42L), eq(9L), eq(""), eq(false), isNull());
@@ -171,7 +171,7 @@ class LearningControllerTest {
     when(answerService.evaluate("{}", "A")).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
-    Map<String, Object> result = controller.answer(42L,
+    Map<String, Object> result = controller.answer(42L, "hi",
         Map.of("answer", "A", "practiceSessionId", 5L), student);
 
     assertEquals(true, result.get("correct"));
@@ -183,7 +183,7 @@ class LearningControllerTest {
   void anonymousRequestsAreRejectedBeforeReadingQuestions() {
     when(authorization.requireStudent(null)).thenThrow(new SecurityException("Authentication required"));
 
-    assertThrows(SecurityException.class, () -> controller.questions(42L, null));
+    assertThrows(SecurityException.class, () -> controller.questions(42L, "hi", null));
     verify(jdbc, never()).queryForList(anyString(), any(Object[].class));
   }
 }

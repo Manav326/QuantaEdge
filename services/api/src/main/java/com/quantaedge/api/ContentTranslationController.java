@@ -493,7 +493,7 @@ public class ContentTranslationController {
               order by opt.ordinality)
               from jsonb_array_elements(case when jsonb_typeof(aq.question_snapshot->'options')='array'
                 then aq.question_snapshot->'options' else '[]'::jsonb end) with ordinality as opt(value,ordinality)
-            ),'[]'::jsonb))::text,
+            ),'[]'::jsonb))::text),
           jsonb_build_object('prompt',aq.question_snapshot->>'prompt','explanation',aq.question_snapshot->>'explanation',
             'options',coalesce((select jsonb_agg(jsonb_build_object(
               'key',coalesce(opt.value->>'key',opt.value->>'option_key'),'label',opt.value->>'label')
