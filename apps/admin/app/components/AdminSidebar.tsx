@@ -34,6 +34,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
   const { insideWorkspace, locale, role: workspaceRole, permissions: workspacePermissions, displayName: workspaceDisplayName } = workspace;
   const visibleRole = insideWorkspace ? workspaceRole : role;
   const visiblePermissions = insideWorkspace ? workspacePermissions : permissions;
+  const visibleAccountName = displayName || (insideWorkspace ? workspaceDisplayName : accountName) || 'Staff account';
   const router = useRouter();
 
   useEffect(() => {
@@ -103,6 +104,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
         >{collapsed ? '»' : '«'}</button>
       </div>
 
+      <div className="qe-sidebar-scroll">
       <div className="sidebar-label">{variant === 'content' ? 'LEARNING OPERATIONS' : 'WORKSPACE'}</div>
       <nav aria-label="Admin navigation">
         {links.filter(item => {
@@ -149,15 +151,14 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
         <div className="qe-sidebar-guide qe-sidebar-extra"><span>04</span><div><b>Publish safely</b><small>Complete all checks first</small></div></div>
       </> : null}
 
-      <div className="admin-sidebar-footer">
-        <span className="admin-security-icon">✓</span>
-        <div><strong>Secure workspace</strong><small>{locale === 'english' ? 'Access is role-restricted' : 'Role ke according access'}</small></div>
       </div>
-      {(displayName || (insideWorkspace ? workspaceDisplayName : accountName)) ? <div className="admin-user">
-        <span className="avatar">{(displayName || (insideWorkspace ? workspaceDisplayName : accountName)).trim().slice(0, 1).toUpperCase() || 'A'}</span>
-        <div><strong>{displayName || (insideWorkspace ? workspaceDisplayName : accountName)}</strong><small>Authorized operator</small></div>
-        <button type="button" aria-label="Logout" title="Logout" onClick={logout}>↗</button>
-      </div> : null}
+      <div className="admin-user">
+        <span className="avatar">{visibleAccountName.trim().slice(0, 1).toUpperCase() || 'A'}</span>
+        <div className="admin-user-copy"><strong>{visibleAccountName}</strong><small>Authorized operator</small></div>
+        <button className="qe-sidebar-logout" type="button" aria-label="Logout" title="Logout" onClick={logout}>
+          <span aria-hidden="true">↗</span><span className="qe-sidebar-logout-label">Logout</span>
+        </button>
+      </div>
     </aside>
   );
 }

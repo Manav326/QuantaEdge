@@ -268,7 +268,7 @@ export default function ParentProfilePage() {
                   {photoName && <small className="parent-profile-photo-editor__filename">{photoName}</small>}
                   <div className="parent-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="parent-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : <LocaleText hinglish="Photo upload करें" english="Upload photo" />}</button>
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : (photoChanged ? Boolean(draft.profileImageDataUrl) : Boolean(identity.profileImageUrl)) ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
                     {draft.profileImageDataUrl && <button className="parent-profile-quiet-button" type="button" onClick={removePhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>

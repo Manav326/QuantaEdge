@@ -92,11 +92,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     <aside className="qe-workspace-sidebar">
       <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
       <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
-      <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
-      <nav aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
-        {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
-      </nav>
-      <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{locale === 'english' ? 'Safe learning space' : 'सुरक्षित learning space'}</strong><small>{role === 'student' ? (locale === 'english' ? 'Progress saves automatically' : 'Progress अपने-आप save होती है') : (locale === 'english' ? 'Child reports are private' : 'बच्चों की reports private रहती हैं')}</small></div></div>
+      <div className="qe-workspace-nav-scroll">
+        <p className="qe-workspace-label">{role === 'student' ? (locale === 'english' ? 'YOUR LEARNING' : 'आपकी पढ़ाई') : (locale === 'english' ? 'YOUR FAMILY' : 'आपका परिवार')}</p>
+        <nav aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
+          {items.map(item => <Link key={item.href} href={item.href} title={collapsed ? itemLabel(item) : undefined} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}><span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span><span className="qe-workspace-link-label">{itemLabel(item)}</span></Link>)}
+        </nav>
+      </div>
+      <div className="qe-workspace-sidebar-footer">
+        <div className="qe-workspace-sidebar-foot"><span>✓</span><div><strong>{locale === 'english' ? 'Safe learning space' : 'सुरक्षित learning space'}</strong><small>{role === 'student' ? (locale === 'english' ? 'Progress saves automatically' : 'Progress अपने-आप save होती है') : (locale === 'english' ? 'Child reports are private' : 'बच्चों की reports private रहती हैं')}</small></div></div>
+        <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}>
+          <span aria-hidden="true">↗</span><span>{loggingOut ? (locale === 'english' ? 'Logging out…' : 'लॉग आउट…') : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</span>
+        </button>
+      </div>
     </aside>
     <div className="qe-workspace-content">
       <header className="qe-workspace-topbar">
@@ -105,11 +112,18 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} />
             : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} />}
-          <button type="button" className="qe-workspace-logout" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}><span aria-hidden="true">↗</span><span>{loggingOut ? (locale === 'english' ? 'Logging out…' : 'लॉग आउट…') : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</span></button>
           <LanguageSwitcher compact />
         </div>
       </header>
       {children}
     </div>
+    <nav className="qe-workspace-mobile-nav" aria-label={role === 'student' ? 'Student navigation' : 'Parent navigation'}>
+      {items.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''} title={itemLabel(item)}>
+        <span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small>
+      </Link>)}
+      <button type="button" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}>
+        <span aria-hidden="true">↗</span><small>{loggingOut ? '…' : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</small>
+      </button>
+    </nav>
   </div>;
 }

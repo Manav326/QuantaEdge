@@ -4,7 +4,6 @@ import { LocaleText } from './LanguageProvider';
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 type ParentAccountMenuProps = {
   displayName?: string;
@@ -12,10 +11,9 @@ type ParentAccountMenuProps = {
   profileImageUrl?: string | null;
 };
 
-function ParentMenuIcon({ kind }: { kind: 'profile' | 'logout' }) {
+function ParentMenuIcon() {
   const common = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true as const };
-  if (kind === 'profile') return <svg {...common}><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>;
-  return <svg {...common}><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>;
+  return <svg {...common}><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>;
 }
 
 export default function ParentAccountMenu({
@@ -23,11 +21,9 @@ export default function ParentAccountMenu({
   mobile = '',
   profileImageUrl,
 }: ParentAccountMenuProps) {
-  const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
-  const [busy, setBusy] = useState(false);
   const avatarSrc = profileImageUrl || '/branding/parent-avatar.svg';
 
   useEffect(() => {
@@ -53,17 +49,6 @@ export default function ParentAccountMenu({
     setOpen(false);
   }
 
-  async function logout() {
-    setBusy(true);
-    try {
-      await fetch('/api/v1/auth/logout', { method: 'POST' });
-    } finally {
-      router.replace('/login');
-      router.refresh();
-      setBusy(false);
-    }
-  }
-
   return (
     <div className="parent-account" ref={menuRef}>
       <button
@@ -87,14 +72,10 @@ export default function ParentAccountMenu({
       {open && (
         <div className="parent-account__menu" id="parent-account-menu" aria-label="Parent account options">
           <Link href="/parent/profile" className="parent-account__item" onClick={closeMenu}>
-            <span className="parent-account__icon"><ParentMenuIcon kind="profile" /></span>
+            <span className="parent-account__icon"><ParentMenuIcon /></span>
             <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>
             <span className="parent-account__arrow">→</span>
           </Link>
-          <div className="parent-account__divider" />
-          <button type="button" className="parent-account__logout" onClick={() => void logout()} disabled={busy}>
-            <ParentMenuIcon kind="logout" /><span>{busy ? 'Please wait…' : <LocaleText hinglish="लॉग आउट" english="Logout" />}</span>
-          </button>
         </div>
       )}
     </div>

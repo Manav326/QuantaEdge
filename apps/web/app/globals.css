@@ -908,3 +908,60 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
  .qe-student-topic-progress small{font-size:7px;padding:3px 5px}
  .qe-student-topic-complete{width:23px;height:23px}
 }
+
+
+
+/* Keep the sidebar brand and logout anchored while allowing only its menu to scroll. */
+.qe-workspace-sidebar{overflow:hidden}
+.qe-workspace-nav-scroll{display:flex;flex:1 1 auto;flex-direction:column;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:0 0 10px;scrollbar-width:thin;scrollbar-color:#d9dfe8 transparent}
+.qe-workspace-nav-scroll .qe-workspace-label,.qe-workspace-nav-scroll nav{flex:0 0 auto}
+.qe-workspace-sidebar-footer{display:flex;flex:0 0 auto;flex-direction:column;gap:8px;margin-top:auto;padding-top:8px;background:#fff}
+.qe-workspace-sidebar-footer .qe-workspace-sidebar-foot{margin-top:0;padding:11px 5px 4px}
+.qe-workspace-sidebar-footer .qe-workspace-logout{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:42px;padding:9px 12px;border:1px solid #ffdfc4;border-radius:11px;background:#fff7f0;color:#9a3412;font:700 12px/1.2 'DM Sans','Noto Sans Devanagari',sans-serif;cursor:pointer}
+.qe-workspace-sidebar-footer .qe-workspace-logout:hover{background:#fff0e5;border-color:#f4c29f}
+.qe-workspace-sidebar-footer .qe-workspace-logout:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+.qe-workspace-sidebar-footer .qe-workspace-logout:disabled{opacity:.6;cursor:wait}
+.qe-workspace-mobile-nav{display:none}
+.qe-workspace-content{min-width:0;overflow-x:clip}
+.qe-workspace-content :where(img,video,iframe,canvas,svg){max-width:100%}
+.qe-workspace-content :where(input,select,textarea){max-width:100%;min-width:0}
+.qe-workspace-content :where(main,section,article,form,fieldset,details,.student-profile-card,.parent-profile-card,.panel,.card,.modal,.dialog){min-width:0;max-width:100%}
+.qe-workspace-content table{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+.qe-workspace-content :where(button,a){overflow-wrap:anywhere}
+.qe-workspace-layout.is-collapsed .qe-workspace-nav-scroll .qe-workspace-label{display:none}
+.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-footer .qe-workspace-logout{min-height:36px;padding:7px 4px}
+.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-footer .qe-workspace-logout>span:last-child{display:none}
+.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-footer .qe-workspace-logout>span:first-child{font-size:16px}
+@media(max-width:900px){
+ .qe-workspace-content{padding-bottom:84px}
+ .qe-workspace-content>.app-shell,.qe-workspace-content>.parent-app{padding-bottom:max(84px,calc(68px + env(safe-area-inset-bottom)))}
+ .qe-workspace-mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:100;display:flex;align-items:stretch;gap:4px;overflow-x:auto;overscroll-behavior-x:contain;padding:7px 7px max(8px,env(safe-area-inset-bottom));border-top:1px solid #e4e8ef;background:rgba(255,255,255,.97);backdrop-filter:blur(18px);box-shadow:0 -8px 28px rgba(21,32,56,.08);scrollbar-width:none}
+ .qe-workspace-mobile-nav::-webkit-scrollbar{display:none}
+ .qe-workspace-mobile-nav a,.qe-workspace-mobile-nav button{display:flex;flex:0 0 auto;min-width:62px;max-width:120px;min-height:44px;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 8px;border:1px solid transparent;border-radius:11px;background:transparent;color:#81899a;font:inherit;font-size:16px;text-decoration:none;cursor:pointer}
+ .qe-workspace-mobile-nav a.is-active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
+ .qe-workspace-mobile-nav button:hover,.qe-workspace-mobile-nav button:focus-visible{border-color:#ffdfc4;background:#fff7f0;color:#9a3412}
+ .qe-workspace-mobile-nav button:disabled{opacity:.6;cursor:wait}
+ .qe-workspace-mobile-nav small{display:block;max-width:110px;overflow-wrap:normal;text-align:center;font-size:8px;font-weight:800;line-height:1.2;white-space:normal}
+}
+@media(max-width:560px){
+ .qe-workspace-content .student-profile-page__wrap,.qe-workspace-content .parent-profile-page__wrap{width:100%;max-width:100%;padding-left:13px;padding-right:13px}
+ .qe-workspace-content .student-profile-page__heading h1,.qe-workspace-content .parent-profile-page__heading h1{font-size:clamp(25px,7vw,33px);overflow-wrap:break-word}
+ .qe-workspace-content .student-profile-form__footer>div,.qe-workspace-content .parent-profile-form__footer>div{flex-wrap:wrap}
+ .qe-workspace-content .student-profile-form__footer>div>*,.qe-workspace-content .parent-profile-form__footer>div>*{min-width:0}
+ .qe-workspace-content .qe-question-card{padding:clamp(14px,4vw,22px);gap:14px}
+ .qe-workspace-content .qe-question-card :where(button,select,input){max-width:100%}
+}
+@media(max-width:390px){
+ .qe-workspace-topbar{gap:5px}
+ .qe-workspace-topbar .qe-workspace-topbar-brand{max-width:38%;min-width:0;overflow:hidden}
+ .qe-workspace-topbar .qe-workspace-topbar-actions{min-width:0;gap:5px}
+ .qe-workspace-topbar .qe-language-switcher select{max-width:95px}
+ .qe-workspace-mobile-nav a,.qe-workspace-mobile-nav button{min-width:58px;padding-left:5px;padding-right:5px}
+ .qe-workspace-mobile-nav small{font-size:7px}
+}
+@media(hover:none){
+ .qe-workspace-link,.qe-workspace-sidebar-footer .qe-workspace-logout,.qe-workspace-mobile-nav button{min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){
+ .qe-workspace-layout *{scroll-behavior:auto!important;transition:none!important}
+}
