@@ -187,7 +187,7 @@ WITH sources AS (
   WHERE c.code IN ({classes}) AND s.code IN ({subjects}) {lesson_filter}{current_chapter_filter}
 
   UNION ALL
-  SELECT 'lesson_block',b.id, md5(b.content::text), b.content,
+  SELECT 'lesson_block',b.id, md5(b.content::text), jsonb_build_object('content',b.content),
          jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
                             'lesson_title',l.title,'block_type',b.block_type)
   FROM lesson_block b JOIN lesson l ON l.id=b.lesson_id

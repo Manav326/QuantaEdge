@@ -352,6 +352,24 @@ public class LearningController {
       """,studentId,language,lessonId);
   }
 
+  // Source-compatible overloads retain the original Java call signatures used by tests and services.
+  // HTTP handlers continue to use the language-aware methods above.
+  public List<Map<String,Object>> lessons(String classCode,String subjectCode,AuthContext context) {
+    return lessons(classCode,subjectCode,"hi",context);
+  }
+
+  public Map<String,Object> lesson(long lessonId,AuthContext context) {
+    return lesson(lessonId,"hi",context);
+  }
+
+  public List<Map<String,Object>> questions(long lessonId,AuthContext context) {
+    return questions(lessonId,"hi",context);
+  }
+
+  public Map<String,Object> answer(long questionId,Map<String,Object> body,AuthContext context) {
+    return answer(questionId,"hi",body,context);
+  }
+
   private String normalizeLanguage(String language) {
     String normalized = language == null ? "hi" : language.trim().toLowerCase(Locale.ROOT);
     if ("hi".equals(normalized) || "en".equals(normalized)) return normalized;

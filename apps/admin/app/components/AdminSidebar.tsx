@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { AdminWorkspaceContext } from './AdminWorkspaceContext';
 import { useRouter } from 'next/navigation';
 
-export type AdminSection = 'overview' | 'content' | 'questions' | 'resources' | 'sources' | 'assessments' | 'classes' | 'students' | 'parents' | 'staff';
+export type AdminSection = 'overview' | 'content' | 'questions' | 'resources' | 'sources' | 'assessments' | 'classes' | 'students' | 'parents' | 'staff' | 'translations';
 type AdminSidebarProps = {
   active: AdminSection;
   variant?: 'default' | 'overview' | 'content';
@@ -16,6 +16,7 @@ type AdminSidebarProps = {
 const links: Array<{ key: AdminSection; href: string; icon: string; label: string }> = [
   { key: 'overview', href: '/', icon: '▦', label: 'Overview' },
   { key: 'content', href: '/content', icon: '◈', label: 'Content Studio' },
+  { key: 'translations', href: '/translations', icon: '文', label: 'Language review' },
   { key: 'questions', href: '/questions', icon: '✓', label: 'Question review' },
   { key: 'resources', href: '/resources', icon: '▤', label: 'Textbook library' },
   { key: 'sources', href: '/source-ingestion', icon: '⇣', label: 'Source ingestion' },
@@ -112,6 +113,7 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
           if (item.key === 'overview') return visibleRole === 'ADMIN';
           if (item.key === 'students' || item.key === 'parents') return visibleRole === 'ADMIN';
           if (item.key === 'content') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW');
+          if (item.key === 'translations') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_REVIEW') || visiblePermissions.includes('CONTENT_EDIT');
           if (item.key === 'questions') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_REVIEW');
           if (item.key === 'resources') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_EDIT') || visiblePermissions.includes('CONTENT_PUBLISH');
           if (item.key === 'sources') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_REVIEW');

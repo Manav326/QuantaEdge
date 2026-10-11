@@ -66,6 +66,7 @@ class TranslationSqlTests(unittest.TestCase):
             self.assertIn(entity, sql)
         self.assertIn("md5(jsonb_build_object", sql)
         self.assertIn("translation_status", sql)
+        self.assertIn("jsonb_build_object('content',b.content)", sql)
         self.assertIn("AND l.active = true", sql)
 
     def test_archived_mode_does_not_add_active_row_filters(self):
