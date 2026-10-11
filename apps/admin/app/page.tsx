@@ -90,7 +90,7 @@ export default function AdminHome(){
       </header>
 
       <nav className="admin-mobile-nav" aria-label="Admin navigation">
-        <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/questions">Question review</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
+        <Link className="active" href="/">Overview</Link><Link href="/content">Content</Link><Link href="/translations">Language review</Link><Link href="/questions">Question review</Link><Link href="/students">Students</Link><Link href="/parents">Parents</Link>
       </nav>
 
       
@@ -112,7 +112,7 @@ export default function AdminHome(){
         {label:'Output tokens',value:tutorAnalytics.summary?.output_tokens_30d??'—'}
       ].map((stat,i)=><article key={stat.label}><span className="admin-metric-index">0{i+1}</span><small>{stat.label}</small><strong>{String(stat.value)}</strong></article>)}</div></section>}
 
-      <div className="admin-section-title admin-governance-title" id="governance"><div><span className="admin-kicker">QUALITY CONTROL</span><h2>Content governance</h2></div><Link href="/content" className="admin-inline-link">Open authoring tools <span>→</span></Link></div>
+      <div className="admin-section-title admin-governance-title" id="governance"><div><span className="admin-kicker">QUALITY CONTROL</span><h2>Content governance</h2></div><Link href="/translations" className="admin-inline-link">Review Hindi ↔ English translations <span>→</span></Link></div>
       <div className="admin-grid admin-governance-grid">
         <article className="admin-panel admin-review-panel"><div className="panel-head"><div><span className="admin-kicker">QUESTION WORKFLOW</span><h2>Review pipeline</h2><p>Track what is ready and what needs editorial attention.</p></div><span className="admin-panel-icon">✓</span></div>
           <div className="admin-review-summary">
