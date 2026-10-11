@@ -102,3 +102,79 @@
  .previewDialog .previewCanvas img{max-height:calc(100dvh - 265px)}
  .previewDialogFooter{padding:9px 12px;flex-direction:column;gap:4px}
 }
+
+
+/* Full reading toolkit for the admin PDF review modal. */
+.previewTitleCopy{display:grid;gap:3px;min-width:0}
+.previewTitleCopy h2{max-width:760px;overflow-wrap:anywhere}
+.previewReaderToolbar{position:relative;z-index:2;display:flex;flex:0 0 auto;align-items:center;gap:7px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #dfe4ec;background:#fff;box-shadow:0 3px 12px #18243a06}
+.previewPageControls{display:flex;align-items:center;gap:7px}
+.previewPageControls>label{display:flex;align-items:center;gap:6px;color:#6d788b;font-size:10px;font-weight:750;white-space:nowrap}
+.previewPageControls input{width:64px;padding:7px 6px;border:1px solid #dce2eb;border-radius:8px;background:#fff;color:#243047;font:inherit;font-size:11px;text-align:center}
+.previewPageControls label>span{color:#919aaa;font-size:9px}
+.previewIconButton{display:grid;place-items:center;min-width:29px;height:29px;border:1px solid #e3e8f0;border-radius:8px;background:#fff;color:#39465c;font-size:17px;line-height:1;cursor:pointer}
+.previewIconButton:hover,.previewToolButton:hover,.previewToolButton.isSelected{border-color:#efc5a7;background:#fff7f0;color:#a13a12}
+.previewIconButton:disabled{opacity:.32;cursor:not-allowed}
+.previewToolbarDivider{width:1px;height:25px;background:#e5e9f0;margin:0 2px}
+.previewZoomControls{display:flex;align-items:center;gap:6px}
+.previewZoomControls>span{min-width:55px;text-align:center;color:#5c687c;font-size:9px;font-weight:800;white-space:nowrap}
+.previewToolButton{display:inline-flex;justify-content:center;align-items:center;gap:5px;min-height:29px;padding:6px 9px;border:1px solid #e2e7ef;border-radius:8px;background:#fff;color:#637087;font:inherit;font-size:9px;font-weight:800;white-space:nowrap;cursor:pointer}
+.previewFullscreenButton{margin-left:auto}
+.previewReaderWorkspace{display:grid;grid-template-columns:minmax(0,1fr);flex:1 1 auto;min-height:220px;overflow:hidden;background:#e9edf4}
+.previewReaderWorkspace.withThumbnails{grid-template-columns:190px minmax(0,1fr)}
+.previewThumbnails{display:flex;flex-direction:column;min-width:0;min-height:0;max-height:100%;border-right:1px solid #dce2eb;background:#f8f9fc}
+.previewThumbsHeader{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 10px;border-bottom:1px solid #e6eaf1}
+.previewThumbsHeader b{font-size:10px;color:#2d3950}
+.previewThumbsHeader small{font-size:9px;color:#8993a5}
+.previewThumbList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:9px;padding:10px;overflow:auto}
+.previewThumbList button{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0;padding:6px;border:1px solid transparent;border-radius:8px;background:transparent;color:#7e899b;cursor:pointer}
+.previewThumbList button:hover,.previewThumbList button.activeThumb{border-color:#efc6a8;background:#fff}
+.previewThumbList img{display:block;width:100%;max-height:100px;object-fit:contain;background:#fff;box-shadow:0 2px 7px #1c2a4116}
+.previewThumbList button span{font-size:8px;font-weight:750}
+.previewThumbsFooter{padding:8px 10px;border-top:1px solid #e6eaf1;color:#919bad;font-size:8px}
+.previewPageStage{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden}
+.previewCanvasTop,.previewCanvasBottom{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:0 0 auto;padding:9px 14px;color:#8a95a8;font-size:9px}
+.previewCanvasTop{background:#e9edf4;border-bottom:1px solid #dfe4ec}
+.previewCanvasTop>span:first-child{display:flex;align-items:center;gap:7px}
+.previewCanvasTop i{width:6px;height:6px;border-radius:50%;background:#21a16d;box-shadow:0 0 0 4px #21a16d14}
+.previewCanvasBottom{background:#edf0f5;border-top:1px solid #dfe4ec}
+.previewPageViewport{position:relative;display:flex;justify-content:center;align-items:flex-start;flex:1 1 auto;min-width:0;min-height:0;overflow:auto;padding:18px;background:#e6eaf1}
+.previewPageViewport.fitWidth{padding:0 0 12px}
+.previewPageViewport.fitPage{align-items:center;padding:14px}
+.previewPageImage{display:block;flex:0 0 auto;height:auto;max-width:none;background:#fff;box-shadow:0 10px 30px #1c2a411c;user-select:none;-webkit-user-drag:none}
+.previewPageViewport.fitWidth .previewPageImage{width:100%!important;max-width:none;object-fit:contain}
+.previewPageViewport.fitPage .previewPageImage{width:auto!important;max-width:100%;max-height:calc(100dvh - 270px);object-fit:contain}
+.previewImageLoading{position:absolute;z-index:1;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid #dfe4ed;border-radius:99px;background:#ffffffed;color:#6f7b8f;font-size:10px;box-shadow:0 4px 14px #18243a0b}
+.previewSpinner{width:13px;height:13px;border:2px solid #e8d4c7;border-top-color:#b94c1d;border-radius:50%;animation:qeAdminPreviewSpin .65s linear infinite}
+@keyframes qeAdminPreviewSpin{to{transform:rotate(360deg)}}
+.previewPageError{position:absolute;z-index:2;top:50%;left:50%;transform:translate(-50%,-50%);display:grid;justify-items:center;gap:10px;width:min(330px,90%);padding:17px;border:1px solid #f0c7bf;border-radius:12px;background:#fff8f6;color:#96372b;text-align:center;font-size:11px;line-height:1.5;box-shadow:0 12px 34px #1c2a4114}
+.previewDialog:fullscreen{width:100%;height:100%;min-height:0;max-height:none;border:0;border-radius:0}
+.previewDialog:fullscreen .previewReaderWorkspace{min-height:0}
+.previewDialog:fullscreen .previewPageViewport.fitPage .previewPageImage{max-height:calc(100dvh - 225px)}
+.previewDialog:fullscreen .previewPageViewport{padding:12px}
+.previewDialog:fullscreen .previewPageViewport.fitWidth{padding:0}
+@media(max-width:920px){
+ .previewReaderToolbar{gap:6px;padding:9px}
+ .previewFullscreenButton{margin-left:0}
+ .previewReaderWorkspace.withThumbnails{grid-template-columns:150px minmax(0,1fr)}
+ .previewToolButton{padding:6px 7px}
+}
+@media(max-width:680px){
+ .previewDialog .previewHeading{flex-direction:column;align-items:stretch;gap:12px}
+ .previewDialog .previewHeading h2{font-size:16px}
+ .previewReaderToolbar{gap:6px;padding:8px}
+ .previewToolbarDivider{display:none}
+ .previewPageControls{gap:4px}
+ .previewPageControls input{width:48px;padding:6px 3px}
+ .previewZoomControls{gap:4px}
+ .previewZoomControls>span{min-width:47px;font-size:8px}
+ .previewToolButton{min-height:28px;padding:5px 6px;font-size:8px}
+ .previewReaderWorkspace.withThumbnails{grid-template-columns:112px minmax(0,1fr)}
+ .previewThumbList{grid-template-columns:1fr;padding:7px;gap:6px}
+ .previewThumbsHeader{padding:9px 7px}
+ .previewPageViewport{padding:8px}
+ .previewPageViewport.fitPage .previewPageImage{max-height:calc(100dvh - 310px)}
+ .previewCanvasTop,.previewCanvasBottom{padding:8px;font-size:8px}
+ .previewDialogFooter{font-size:9px}
+ .previewDialog:fullscreen .previewPageViewport.fitPage .previewPageImage{max-height:calc(100dvh - 250px)}
+}
