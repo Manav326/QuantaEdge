@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Generate contextual Hindi/English draft translations from the QuantaEdge database.
+"""Generate contextual Hindi/English draft translations from QuantaEdge database records.
+
+Source boundary:
+- Reads active/canonical structured records already present in the local database.
+- It does not read standalone source-package ZIP/JSON files or translate PDFs directly.
+- Import chapter/lesson JSON bundles as DRAFT records first; standalone question-bank
+  catalogs need their own validated CMS import/mapping before their questions can be
+  attached to translation records.
 
 Safety guarantees:
 - Reads are performed through the local Postgres Docker service; no production URL is assumed.
@@ -704,6 +711,9 @@ def main() -> int:
             "subjects": subjects,
             "languages": languages,
             "include_archived": args.include_archived,
+            "source_of_truth": "current_database_records",
+            "standalone_json_packages_read": False,
+            "pdfs_translated": 0,
             "source_entities_total": len(sources),
             "source_entities_by_type": dict(sorted(type_counts.items())),
             "existing_translation_rows_by_language_status": dict(sorted(existing_counts.items())),
