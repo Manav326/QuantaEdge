@@ -47,10 +47,17 @@ class AdminApi:
                 return json.loads(raw) if raw.strip() else {}
         except urllib.error.HTTPError as exc:
             message = exc.read().decode("utf-8", errors="replace")[:800]
-            if exc.code in {401, 403}:
+            if exc.code == 401:
+                detail = message.strip() or "The server did not accept the session cookie."
                 raise RuntimeError(
-                    "Admin session/permission rejected. Sign in as an admin or reviewer, "
-                    "then refresh QUANTAEDGE_ADMIN_SESSION."
+                    f"{method} {path} failed with HTTP 401 (session missing, invalid, or expired): "
+                    f"{detail} Sign in again and refresh QUANTAEDGE_ADMIN_SESSION."
+                ) from exc
+            if exc.code == 403:
+                detail = message.strip() or "The server rejected the permission check."
+                raise RuntimeError(
+                    f"{method} {path} failed with HTTP 403 (permission denied): {detail} "
+                    "Use an admin account or a reviewer with CONTENT_VIEW or CONTENT_REVIEW."
                 ) from exc
             raise RuntimeError(f"{method} {path} failed with HTTP {exc.code}: {message}") from exc
         except urllib.error.URLError as exc:
