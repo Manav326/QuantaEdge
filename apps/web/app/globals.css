@@ -746,3 +746,48 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-practice-gate{display:flex;align-items:flex-start;flex-direction:column;gap:8px}
 .qe-practice-gate .button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
 .qe-practice-gate>p{margin:0;text-align:left;color:#858da0;font-size:11px;line-height:1.6}
+
+
+/* One persistent authenticated workspace header; all route-level shell headers are suppressed. */
+.qe-workspace-topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px;padding:10px clamp(18px,3vw,38px);border-bottom:1px solid var(--line,#e6e9f0);background:rgba(255,255,255,.96);backdrop-filter:blur(16px);box-shadow:0 5px 22px rgba(21,32,56,.025)}
+.qe-workspace-topbar-brand{min-width:0;max-width:240px;align-items:center}
+.qe-workspace-topbar-brand .qe-brand__wordmark{width:180px;max-width:100%}
+.qe-workspace-topbar-brand .qe-brand__tagline{font-size:7.4px}
+.qe-workspace-topbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;min-width:0}
+.qe-workspace-topbar-actions .student-profile,.qe-workspace-topbar-actions .parent-account{flex:0 0 auto}
+.qe-workspace-sidebar-brand{display:flex;align-items:center;justify-content:flex-start;min-height:48px;max-width:calc(100% - 29px);margin:0 5px;padding:2px 0}
+.qe-workspace-sidebar-brand .qe-brand__wordmark{width:175px;max-width:100%}
+.qe-workspace-sidebar-brand .qe-brand__tagline{font-size:6.8px}
+.qe-workspace-layout.is-collapsed .qe-workspace-sidebar-brand{display:none}
+.qe-workspace-layout.is-collapsed .qe-workspace-collapse{top:22px;right:calc(50% - 12px)}
+.qe-workspace-content>.app-shell>.app-header,
+.qe-workspace-content>.lesson-page>.lesson-header,
+.qe-workspace-content>.practice-page>.lesson-header,
+.qe-workspace-content>.parent-app>.parent-header,
+.qe-workspace-content>.qe-textbook-shell>.qe-textbook-header{display:none!important}
+.qe-workspace-content>.app-shell,.qe-workspace-content>.parent-app{min-height:calc(100vh - 72px)}
+.qe-session-brand{justify-content:center;margin:0 auto 17px}
+.qe-session-brand .qe-brand{align-items:center}
+@media(max-width:900px){
+  .qe-workspace-topbar{min-height:64px;padding:8px 14px;gap:10px}
+  .qe-workspace-topbar-brand{max-width:150px}
+  .qe-workspace-topbar-brand .qe-brand__wordmark{width:132px}
+  .qe-workspace-topbar-brand .qe-brand__tagline{font-size:6.2px}
+  .qe-workspace-topbar-actions{gap:7px}
+}
+@media(max-width:600px){
+  .qe-workspace-topbar{min-height:60px;padding:7px 10px;gap:7px}
+  .qe-workspace-topbar-brand{max-width:118px}
+  .qe-workspace-topbar-brand .qe-brand__wordmark{width:108px}
+  .qe-workspace-topbar-brand .qe-brand__tagline{font-size:5.7px;white-space:normal}
+  .qe-workspace-topbar .student-account-trigger__copy{display:none}
+  .qe-workspace-topbar .student-account-trigger{gap:5px;padding:3px}
+  .qe-workspace-topbar .student-avatar,.qe-workspace-topbar .student-avatar img{width:36px;height:36px}
+  .qe-workspace-topbar .student-account-chevron{display:none}
+  .qe-workspace-topbar .parent-account__trigger-copy{display:none}
+  .qe-workspace-topbar .parent-account__trigger{gap:5px;padding:3px}
+  .qe-workspace-topbar .parent-account__avatar,.qe-workspace-topbar .parent-account__avatar img{width:36px;height:36px}
+  .qe-workspace-topbar .parent-account__chevron{display:none}
+  .qe-workspace-topbar .qe-language-switcher{padding:5px 7px}
+  .qe-workspace-topbar .qe-language-switcher select{max-width:106px;font-size:10px}
+}
