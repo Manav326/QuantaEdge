@@ -79,6 +79,8 @@ def load_catalog(path: Path) -> dict[str, Any]:
         questions = bank.get("questions")
         if not isinstance(questions, list):
             raise ValueError(f"{where}: questions must be a JSON array.")
+        if int(bank.get("question_count", -1)) != len(questions):
+            raise ValueError(f"{where}: question_count does not match the actual questions array length.")
         for question_index, question in enumerate(questions):
             qwhere = f"{where}.questions[{question_index}]"
             if not isinstance(question, dict):
@@ -91,6 +93,10 @@ def load_catalog(path: Path) -> dict[str, Any]:
             difficulty = str(question.get("difficulty", "")).strip().upper()
             if question_type not in ALLOWED_TYPES or difficulty not in DIFFICULTY_MAP:
                 raise ValueError(f"{qwhere}: unsupported question_type/difficulty.")
+            if not isinstance(question.get("tags", []), list) or any(not isinstance(tag, str) for tag in question.get("tags", [])):
+                raise ValueError(f"{qwhere}: tags must be an array of strings.")
+            if isinstance(question.get("marks", 1), bool) or not isinstance(question.get("marks", 1), int) or question.get("marks", 1) < 1:
+                raise ValueError(f"{qwhere}: marks must be a positive integer.")
             if not isinstance(question.get("lesson_code"), str) or not question["lesson_code"].strip():
                 raise ValueError(f"{qwhere}: lesson_code is required.")
             if not isinstance(question.get("prompt"), str) or not question["prompt"].strip():
@@ -115,8 +121,10 @@ def load_catalog(path: Path) -> dict[str, Any]:
                 raise ValueError(f"{qwhere}: only MCQ/true-false questions may have choice options.")
             if question_type == "INPUT" and (answer.get("kind") != "TEXT" or not str(answer.get("value", "")).strip()):
                 raise ValueError(f"{qwhere}: INPUT requires a non-empty TEXT answer.")
-            if question_type == "NUMERICAL" and answer.get("kind") != "NUMERIC":
-                raise ValueError(f"{qwhere}: NUMERICAL requires a NUMERIC answer payload.")
+            if question_type == "NUMERICAL":
+                numeric_answer = answer.get("value")
+                if answer.get("kind") != "NUMERIC" or isinstance(numeric_answer, bool) or not isinstance(numeric_answer, (int, float)):
+                    raise ValueError(f"{qwhere}: NUMERICAL requires a numeric NUMERIC answer payload.")
     return catalog
 
 
