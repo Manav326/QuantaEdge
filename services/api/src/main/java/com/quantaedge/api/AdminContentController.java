@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.text.Normalizer;
+import java.util.Locale;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -590,6 +592,93 @@ public class AdminContentController {
         """,questionId,lessonId);
   }
 
+  @PostMapping("/lessons/{lessonId}/questions/append-drafts")
+  @Transactional
+  public Map<String,Object> appendDraftQuestions(
+      @PathVariable long lessonId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context=authorization.requirePermission(context,"CONTENT_EDIT");
+    Map<String,Object> lesson=lessonById(lessonId);
+    String lessonStatus=String.valueOf(lesson.get("lesson_status")).toUpperCase(Locale.ROOT);
+    if ("ARCHIVED".equals(lessonStatus)
+        || Boolean.FALSE.equals(lesson.get("lesson_active"))
+        || Boolean.FALSE.equals(lesson.get("chapter_active"))) {
+      throw badRequest("Practice questions can only be appended to an active, non-archived lesson.");
+    }
+    List<Map<String,Object>> requested=objectList(body.get("questions"),"questions");
+    if (requested.isEmpty() || requested.size()>200) {
+      throw badRequest("Append between 1 and 200 draft questions per request.");
+    }
+
+    Set<String> existingPrompts=new HashSet<>();
+    Set<String> existingPackageIds=new HashSet<>();
+    List<Map<String,Object>> stored=jdbc.queryForList(
+        "select prompt,tags::text as tags from question where lesson_id=?",lessonId);
+    for (Map<String,Object> row:stored) {
+      existingPrompts.add(normalizeQuestionPrompt(String.valueOf(row.get("prompt"))));
+      for (String tag:questionTagValues(row.get("tags"))) {
+        if (tag.startsWith("qe-practice-id:")) existingPackageIds.add(tag);
+      }
+    }
+
+    List<Map<String,Object>> additions=new ArrayList<>();
+    int skipped=0;
+    for (Map<String,Object> question:requested) {
+      if (question.get("id")!=null) {
+        throw badRequest("The append-drafts endpoint accepts new questions only; existing question IDs are not allowed.");
+      }
+      List<String> tags=questionTagValues(question.get("tags"));
+      String packageTag=tags.stream().filter(tag->tag.startsWith("qe-practice-id:")).findFirst()
+          .orElseThrow(()->badRequest("Each appended question needs a stable qe-practice-id tag for safe retries."));
+      String promptKey=normalizeQuestionPrompt(requiredText(question.get("prompt"),1000));
+      if (existingPackageIds.contains(packageTag) || existingPrompts.contains(promptKey)) {
+        skipped++;
+        continue;
+      }
+      existingPackageIds.add(packageTag);
+      existingPrompts.add(promptKey);
+      additions.add(question);
+    }
+
+    if (!additions.isEmpty()) updateQuestions(lessonId,additions,context,false);
+    staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/questions/append-drafts",
+        "Appended "+additions.size()+" new practice question(s) as DRAFT; lesson status remained "+lessonStatus+".");
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("lessonId",lessonId);
+    result.put("lessonStatus",lessonStatus);
+    result.put("requested",requested.size());
+    result.put("added",additions.size());
+    result.put("skippedDuplicate",skipped);
+    result.put("newQuestionStatus","DRAFT");
+    result.put("lessonStatusChanged",false);
+    result.put("teachingBlocksChanged",false);
+    result.put("publishedOrApproved",false);
+    return result;
+  }
+
+  private String normalizeQuestionPrompt(String value) {
+    return Normalizer.normalize(value,Normalizer.Form.NFKC)
+        .toLowerCase(Locale.ROOT).replaceAll("\\s+"," ").trim();
+  }
+
+  private List<String> questionTagValues(Object raw) {
+    Object parsed;
+    try {
+      parsed=mapper.readValue(jsonText(raw,"tags","[]"),Object.class);
+    } catch(JacksonException ex) {
+      throw badRequest("Question tags must be a valid JSON array.");
+    }
+    if (!(parsed instanceof List<?> values)) throw badRequest("Question tags must be a JSON array.");
+    List<String> result=new ArrayList<>();
+    for(Object value:values) {
+      if(value==null) continue;
+      String tag=String.valueOf(value).trim();
+      if(!tag.isBlank()) result.add(tag);
+    }
+    return result;
+  }
+
   @PatchMapping("/lessons/{lessonId}")
   @Transactional
   public Map<String, Object> updateLesson(
@@ -1108,6 +1197,10 @@ public class AdminContentController {
   }
 
   private boolean updateQuestions(long lessonId, Object value, AuthContext context) {
+    return updateQuestions(lessonId,value,context,true);
+  }
+
+  private boolean updateQuestions(long lessonId, Object value, AuthContext context, boolean deactivateOmitted) {
     List<Map<String, Object>> questions = objectList(value, "questions");
     List<Map<String, Object>> current = jdbc.queryForList("select id from question where lesson_id=?", lessonId);
     Set<Long> currentIds = new HashSet<>();
@@ -1290,12 +1383,14 @@ public class AdminContentController {
           create?"Question created as draft.":"Question content, options, status, ordering, or activation changed.",
           beforeSnapshot,afterSnapshot);
     }
-    for (Long id : currentIds) {
-      if (!submittedIds.contains(id)) {
-        Map<String,Object> beforeSnapshot=questionHistory.snapshot(id);
-        int changed=jdbc.update("update question set active=false where id=? and lesson_id=? and active=true",id,lessonId);
-        if(changed>0) questionHistory.recordChange(id,lessonId,"CONTENT_CHANGED",context,
-            "Question removed from the editor and deactivated; history is retained.",beforeSnapshot,questionHistory.snapshot(id));
+    if (deactivateOmitted) {
+      for (Long id : currentIds) {
+        if (!submittedIds.contains(id)) {
+          Map<String,Object> beforeSnapshot=questionHistory.snapshot(id);
+          int changed=jdbc.update("update question set active=false where id=? and lesson_id=? and active=true",id,lessonId);
+          if(changed>0) questionHistory.recordChange(id,lessonId,"CONTENT_CHANGED",context,
+              "Question removed from the editor and deactivated; history is retained.",beforeSnapshot,questionHistory.snapshot(id));
+        }
       }
     }
     return questionContentChanged;
