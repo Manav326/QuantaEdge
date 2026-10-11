@@ -312,19 +312,261 @@ function Invoke-CheckedPython {
 
     $stage = Start-QeRunStage -Name $stageName
     try {
-        # Merge native stdout/stderr so a traceback cannot bypass final-report cleanup.
-        $pythonOutput = @(& $PythonExe @Arguments 2>&1)
+        # Stream native stdout/stderr as it arrives. -u disables Python buffering,
+        # so database/import progress remains visible during long runs. Keep a copy
+        # in memory for transcript/report discovery, but never capture the whole run
+        # before displaying it.
+        $pythonOutput = New-Object 'System.Collections.Generic.List[string]'
+        & $PythonExe -u @Arguments 2>&1 | ForEach-Object {
+            $line = [string]$_
+            [void]$pythonOutput.Add($line)
+            Write-Host $line
+            if ($line -match '(?i)^Report:\s*(.+\.json)\s*
+            Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message 'Python returned a non-zero exit code; inspect full log and child report.' -ExitCode $exitCode
+            throw "Python command failed with exit code ${exitCode}: $PythonExe $($Arguments -join ' ')"
+        }
+        Complete-QeRunStage -Stage $stage -Status 'SUCCEEDED' -Message 'Python exited successfully.' -ExitCode 0
+    } catch {
+        if ($stage.status -eq 'RUNNING') {
+            Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message $_.Exception.Message
+        }
+        throw
+    }
+}
+
+
+try {
+    if (-not (Test-Path -LiteralPath $PythonExe -PathType Leaf)) {
+        throw "Python was not found at '$PythonExe'. Pass -PythonExe if your Python 3.12 path differs."
+    }
+    $requiredFiles = @($QueuePath, $TranslationPath, $TranslationImporter)
+    if (-not $SkipHindiSourceImport) {
+        $requiredFiles += @($CatalogPath, $SourceImporter)
+    }
+    foreach ($path in $requiredFiles) {
+        if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+            throw "Required file not found: $path. Pull main and put the translation JSONL files and source catalog in the repository root."
+        }
+    }
+    if ($PilotLimit -lt 0) {
+        throw "-PilotLimit must be 0 (full import) or a positive number."
+    }
+    if (-not $ApiBaseUrl.StartsWith("http://localhost") -and
+        -not $ApiBaseUrl.StartsWith("http://127.0.0.1")) {
+        throw "This script reads IDs from local Docker Postgres; ApiBaseUrl must point to localhost."
+    }
+
+    $session = $env:QUANTAEDGE_ADMIN_SESSION
+    if ([string]::IsNullOrWhiteSpace($session)) { $session = $env:QE_SESSION }
+    if ([string]::IsNullOrWhiteSpace($session)) {
+        $secure = Read-Host "Paste the fresh QE_STAFF_SESSION cookie value (value only; input is hidden)" -AsSecureString
+        $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+        try {
+            $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
+        }
+        finally {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
+        }
+    }
+    $refresh = $env:QUANTAEDGE_ADMIN_REFRESH
+    if ([string]::IsNullOrWhiteSpace($refresh)) { $refresh = $env:QE_STAFF_REFRESH }
+    if ([string]::IsNullOrWhiteSpace($refresh)) {
+        Write-Host "Chrome/Edge: F12 > Application > Storage > Cookies > http://localhost:3001; copy the QE_STAFF_REFRESH Value." -ForegroundColor Yellow
+        Write-Host "HttpOnly cookies appear in DevTools even when document.cookie is empty. Paste the value only." -ForegroundColor Yellow
+        $secureRefresh = Read-Host "Paste the paired QE_STAFF_REFRESH cookie value (input is hidden)" -AsSecureString
+        $refreshPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRefresh)
+        try {
+            $refresh = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($refreshPtr)
+        }
+        finally {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($refreshPtr)
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($session)) {
+        throw "A fresh QE_STAFF_SESSION cookie is required to call the protected Admin API."
+    }
+    if ([string]::IsNullOrWhiteSpace($refresh)) {
+        throw "The paired QE_STAFF_REFRESH cookie is required for a long import because staff access cookies expire after 15 minutes."
+    }
+    $script:SessionCookie = $session.Trim()
+    $script:RefreshCookie = $refresh.Trim()
+    $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+    $env:QE_SESSION = $script:SessionCookie
+    $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+    $env:QE_STAFF_REFRESH = $script:RefreshCookie
+    $env:QUANTAEDGE_SESSION_STATE_FILE = $script:SessionStatePath
+    Save-QeSessionState
+
+    New-Item -ItemType Directory -Path $script:ReportDirectory -Force | Out-Null
+    try {
+        Start-Transcript -Path $script:RunLogPath -Force | Out-Null
+        $script:TranscriptStarted = $true
+    } catch { Write-Warning "Could not start full transcript: $($_.Exception.Message)" }
+
+    Push-Location $RepoRoot
+    try {
+        Write-Host ""
+        $dockerStage = Start-QeRunStage -Name 'Build and start Postgres, API, Admin'
+        Write-Host "[1/4] Starting the database, API, and Admin services..."
+        & docker compose up -d --build postgres api admin
+        $dockerExit = $LASTEXITCODE
+        if ($dockerExit -ne 0) {
+            Complete-QeRunStage -Stage $dockerStage -Status 'FAILED' -Message 'docker compose returned a non-zero exit code.' -ExitCode $dockerExit
+            throw "docker compose failed with exit code ${dockerExit}."
+        }
+        Complete-QeRunStage -Stage $dockerStage -Status 'SUCCEEDED' -Message 'Required services are running.' -ExitCode 0
+
+        Write-Host ""
+        $apiStage = Start-QeRunStage -Name 'Check API health and validate staff session'
+        Write-Host "[2/4] Checking API health..."
+        $health = & curl.exe -fsS "$ApiBaseUrl/actuator/health"
+        if ($LASTEXITCODE -ne 0) { throw "API health check failed at $ApiBaseUrl/actuator/health." }
+        Write-Host $health
+
+        Write-Host ""
+        Write-Host "[Auth] Validating the staff session against the running API..."
+        $authUrl = $ApiBaseUrl.TrimEnd([char]47) + "/api/v1/auth/me"
+        $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+        if ($authResponse.StatusCode -ne 200) {
+            if ($authResponse.StatusCode -ne 401 -and $authResponse.StatusCode -ne 403) {
+                throw "Staff-session validation failed with HTTP $($authResponse.StatusCode): $($authResponse.Body). No content was written."
+            }
+
+            # The short-lived access token may have expired while its refresh cookie is
+            # still valid. Try refresh before asking the editor to copy a new cookie pair.
+            $refreshUrl = $ApiBaseUrl.TrimEnd([char]47) + "/api/v1/auth/refresh"
+            $renewed = Invoke-QeStaffRefreshRequest -RefreshCookieValue $script:RefreshCookie -Uri $refreshUrl
+            if ($renewed.StatusCode -eq 200 -and
+                -not [string]::IsNullOrWhiteSpace($renewed.AccessCookie) -and
+                -not [string]::IsNullOrWhiteSpace($renewed.RefreshCookie)) {
+                $script:SessionCookie = $renewed.AccessCookie
+                $script:RefreshCookie = $renewed.RefreshCookie
+                $session = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+                $env:QE_SESSION = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+                $env:QE_STAFF_REFRESH = $script:RefreshCookie
+                Save-QeSessionState
+                $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+            }
+
+            if ($authResponse.StatusCode -ne 200) {
+                # Ask for a complete, paired cookie set only after refresh has failed.
+                Write-Warning "Staff authentication failed; sign in at http://localhost:3001 and copy both staff cookies from DevTools > Application > Cookies > http://localhost:3001."
+                $secureRetry = Read-Host "Fresh QE_STAFF_SESSION value (hidden)" -AsSecureString
+                $retryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRetry)
+                try { $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($retryPtr) }
+                finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($retryPtr) }
+                $secureRefreshRetry = Read-Host "Paired QE_STAFF_REFRESH value (hidden)" -AsSecureString
+                $refreshRetryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRefreshRetry)
+                try { $refresh = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($refreshRetryPtr) }
+                finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($refreshRetryPtr) }
+                if ([string]::IsNullOrWhiteSpace($session) -or [string]::IsNullOrWhiteSpace($refresh)) {
+                    throw "Both fresh staff cookie values are required; stopped before writing any content."
+                }
+                $script:SessionCookie = $session.Trim()
+                $script:RefreshCookie = $refresh.Trim()
+                $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+                $env:QE_SESSION = $script:SessionCookie
+                $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+                $env:QE_STAFF_REFRESH = $script:RefreshCookie
+                Save-QeSessionState
+                $session = $script:SessionCookie
+                $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+                if ($authResponse.StatusCode -ne 200) {
+                    Get-QeStaffSessionDiagnostics -CookieValue $session
+                    throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). The local database diagnosis above distinguishes a missing/expired session from a request-authentication problem. No content was written."
+                }
+            }
+        }
+        try { $authCheck = $authResponse.Body | ConvertFrom-Json -ErrorAction Stop }
+        catch { throw "The API returned an invalid JSON response during staff-session validation. No content was written." }
+        if ($authCheck.authenticated -ne $true -or [int]$authCheck.staffId -le 0) {
+            throw "The API did not confirm an authenticated staff account. No content was written."
+        }
+        Write-Host "Staff authentication confirmed for role $($authCheck.role)." -ForegroundColor Green
+        $script:AuthConfirmed = $true
+        Complete-QeRunStage -Stage $apiStage -Status 'SUCCEEDED' -Message 'API ready and staff authentication confirmed.' -ExitCode 0
+
+        if (-not $SkipHindiSourceImport) {
+            Write-Host ""
+            Write-Host "[3/4] Validating Hindi source catalog, then importing missing Hindi questions as DRAFTs..."
+            Invoke-CheckedPython @($SourceImporter, "--package", $CatalogPath)
+            Invoke-CheckedPython @($SourceImporter, "--package", $CatalogPath, "--apply")
+        }
+        else {
+            Write-Host ""
+            Write-Host "[3/4] Skipping Hindi source import as requested."
+        }
+
+        Write-Host ""
+        Write-Host "[4/4] Creating English translation DRAFTs (no OpenAI key required)..."
+        $translateArgs = @($TranslationImporter, "--queue", $QueuePath, "--translations", $TranslationPath,
+                           "--api-base-url", $ApiBaseUrl, "--apply", "--delay", "0.03")
+        if ($PilotLimit -gt 0) { $translateArgs += @("--limit", "$PilotLimit") }
+        Invoke-CheckedPython $translateArgs
+
+        Write-Host ""
+        Write-Host "Completed. All imported records are DRAFT; nothing was published."
+        Write-Host "Review English content at http://localhost:3001/translations."
+    }
+    finally {
+        Pop-Location
+    }
+    $script:RunStatus = 'SUCCEEDED'
+}
+catch {
+    $script:RunStatus = 'FAILED'
+    $script:RunError = $_.Exception.Message
+    if ($null -ne $script:CurrentStage -and $script:CurrentStage.status -eq 'RUNNING') {
+        Complete-QeRunStage -Stage $script:CurrentStage -Status 'FAILED' -Message $script:RunError
+    }
+    Write-Host "Bundle import failed safely: $script:RunError" -ForegroundColor Red
+    throw
+}
+finally {
+    if ($script:RunStatus -eq 'RUNNING') {
+        $script:RunStatus = 'INTERRUPTED_OR_ABORTED'
+        if ($null -ne $script:CurrentStage -and $script:CurrentStage.status -eq 'RUNNING') {
+            Complete-QeRunStage -Stage $script:CurrentStage -Status 'INTERRUPTED' -Message 'Execution ended before this stage reported success.'
+        }
+    }
+    $env:QUANTAEDGE_ADMIN_SESSION = $OldAdminSession
+    $env:QE_SESSION = $OldQeSession
+    $env:QUANTAEDGE_ADMIN_REFRESH = $OldAdminRefresh
+    $env:QE_STAFF_REFRESH = $OldQeRefresh
+    $env:QUANTAEDGE_SESSION_STATE_FILE = $OldSessionStateFile
+    $session = $null
+    $refresh = $null
+    $secure = $null
+    $secureRefresh = $null
+    $script:SessionCookie = $null
+    $script:RefreshCookie = $null
+    foreach ($statePath in @($script:SessionStatePath, "$($script:SessionStatePath).tmp")) {
+        if (Test-Path -LiteralPath $statePath -PathType Leaf) {
+            try { Remove-Item -LiteralPath $statePath -Force } catch { Write-Warning "Could not remove temporary credential state file." }
+        }
+    }
+    if ($script:TranscriptStarted) { try { Stop-Transcript | Out-Null } catch {} }
+    Save-QeRunReport
+    Write-Host ''
+    Write-Host '========== QUANTAEDGE IMPORT FINAL REPORT =========='
+    Write-Host "Status: $script:RunStatus"
+    Write-Host "Duration: $([math]::Round(((Get-Date) - $script:RunStartedAt).TotalSeconds, 2)) seconds"
+    Write-Host "JSON report: $script:RunReportPath"
+    Write-Host "Full log:    $script:RunLogPath"
+    Write-Host 'Published automatically: NO'
+    Write-Host 'Cookie recorded: NO'
+    Write-Host '===================================================='
+}
+) {
+                Write-Host "Child report: $($Matches[1].Trim())"
+            }
+        }
         $exitCode = $LASTEXITCODE
         # A child may rotate the refresh token when the 15-minute access token expires.
         # Synchronize the rotated pair before a subsequent stage starts.
         Sync-QeSessionFromState
-        foreach ($entry in $pythonOutput) {
-            $line = [string]$entry
-            Write-Host $line
-            if ($line -match '(?i)^Report:\s*(.+\.json)\s*$') {
-                Write-Host "Child report: $($Matches[1].Trim())"
-            }
-        }
         if ($exitCode -ne 0) {
             Complete-QeRunStage -Stage $stage -Status 'FAILED' -Message 'Python returned a non-zero exit code; inspect full log and child report.' -ExitCode $exitCode
             throw "Python command failed with exit code ${exitCode}: $PythonExe $($Arguments -join ' ')"
