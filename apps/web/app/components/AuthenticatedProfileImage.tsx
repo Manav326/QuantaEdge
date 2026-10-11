@@ -30,7 +30,7 @@ export default function AuthenticatedProfileImage({
     setObjectUrl(null);
     setFailed(false);
 
-    const imageUrl = src;
+    const imageUrl: string = src ?? '';
     if (!imageUrl) {
       return () => {
         active = false;
