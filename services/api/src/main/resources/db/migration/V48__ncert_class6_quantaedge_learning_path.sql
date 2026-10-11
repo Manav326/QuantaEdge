@@ -146,7 +146,7 @@ begin
     select cc.id into matched_concept_id
     from chapter_concept cc
     where cc.chapter_id=chapter_key
-      and lower(btrim(cc.title))=lower(btrim(coalesce(nullif(new.subtopic,''),nullif(new.topic,''),'\u0000')))
+      and lower(btrim(cc.title))=lower(btrim(coalesce(nullif(new.subtopic,''),nullif(new.topic,''),'' )))
       and cc.status <> 'ARCHIVED'
     order by cc.concept_order,cc.id
     limit 1;
