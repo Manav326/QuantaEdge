@@ -53,6 +53,17 @@ function Invoke-QERaw {
     return Invoke-RestMethod -Uri $uri -Method $Method -WebSession $script:WebSession -Headers @{ Accept = 'application/json' } -TimeoutSec 60
 }
 
+function Get-QEField {
+    param([object]$Object, [string[]]$Names)
+    if ($null -eq $Object) { return $null }
+    foreach ($name in $Names) {
+        $property = $Object.PSObject.Properties | Where-Object { $_.Name -ieq $name } | Select-Object -First 1
+        if ($null -ne $property) { return $property.Value }
+        if ($Object -is [System.Collections.IDictionary] -and $Object.Contains($name)) { return $Object[$name] }
+    }
+    return $null
+}
+
 function Invoke-QEApi {
     param(
         [Parameter(Mandatory = $true)][string]$Path,
@@ -147,14 +158,21 @@ try {
     }
     Write-Host "Authenticated: role=$($me.role); staffId=$($me.staffId); publish permission verified."
 
-    # Admin list API caps results at 500 per request; these per-class batches are below that.
+    # The Admin list API returns up to 500 records. Request one unfiltered status=ALL
+    # page so class-code filter quirks cannot hide a batch whose assignments already exist.
     $liveById = @{}
-    foreach ($classCode in @('6','7','8')) {
-        $classDocs = @(Invoke-QEApi -Path "/api/v1/admin/learning-documents?classCode=$classCode&status=ALL")
-        foreach ($doc in $classDocs) {
-            if ($null -ne $doc.document_id) { $liveById[[string]$doc.document_id] = $doc }
-        }
+    $rawDocuments = Invoke-QEApi -Path '/api/v1/admin/learning-documents?status=ALL'
+    $documentList = @($rawDocuments)
+    if ($documentList.Count -eq 1 -and $null -ne $documentList[0].items) {
+        $documentList = @($documentList[0].items)
+    } elseif ($documentList.Count -eq 1 -and $null -ne $documentList[0].documents) {
+        $documentList = @($documentList[0].documents)
     }
+    foreach ($doc in $documentList) {
+        $docId = Get-QEField -Object $doc -Names @('document_id','documentId','id')
+        if ($null -ne $docId) { $liveById[[string]$docId] = $doc }
+    }
+    Write-Host "Admin API returned $($documentList.Count) learning-document record(s); indexed $($liveById.Count) record ID(s)."
 
     foreach ($row in $rows) {
         $id = [string]$row.document_id
@@ -164,7 +182,10 @@ try {
         }
         $doc = $liveById[$id]
         $rowSubject = if ($row.subject_code) { [string]$row.subject_code } else { [string]$row.subject }
-        if ([string]$doc.class_code -ne [string]$row.class_code -or [string]$doc.subject_code -ne $rowSubject -or [string]$doc.scope -ne [string]$row.scope) {
+        $docClass = Get-QEField -Object $doc -Names @('class_code','classCode')
+        $docSubject = Get-QEField -Object $doc -Names @('subject_code','subjectCode')
+        $docScope = Get-QEField -Object $doc -Names @('scope')
+        if ([string]$docClass -ne [string]$row.class_code -or [string]$docSubject -ne $rowSubject -or [string]$docScope -ne [string]$row.scope) {
             $failures.Add("Document #$id does not match the import report class/subject/scope mapping.")
             continue
         }
