@@ -76,6 +76,17 @@ class TranslationShapeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Numeric values changed"):
             pipeline.check_shape(source, translated)
 
+    def test_preserves_fraction_written_as_words(self):
+        source = {"body": "Shade 1 over 4 of the shape."}
+        translated = {"body": "आकृति के 1 over 4 भाग में रंग भरें।"}
+        pipeline.check_shape(source, translated)
+
+    def test_rejects_fraction_notation_change(self):
+        source = {"body": "Shade 1 over 4 of the shape."}
+        translated = {"body": "Shade 1/4 of the shape."}
+        with self.assertRaisesRegex(ValueError, "Numeric values changed"):
+            pipeline.check_shape(source, translated)
+
     def test_rejects_changed_json_shape(self):
         with self.assertRaisesRegex(ValueError, "JSON keys changed"):
             pipeline.check_shape({"title": "Title", "summary": "Summary"}, {"title": "शीर्षक"})
@@ -112,6 +123,14 @@ class TranslationSqlTests(unittest.TestCase):
         sql = pipeline.make_source_sql(["6"], ["maths"], True)
         self.assertNotIn("AND l.active = true AND l.status <> 'ARCHIVED'", sql)
         self.assertNotIn("AND ch.active=true AND ch.content_status <> 'ARCHIVED' AND l.active=true", sql)
+
+    def test_translation_source_uses_structured_records_not_pdfs(self):
+        sql = pipeline.make_source_sql(["6", "7", "8"], ["maths", "science"], False)
+        self.assertIn("jsonb_build_object('content',b.content)", sql)
+        self.assertIn("'question'", sql)
+        self.assertIn("'assessment_question'", sql)
+        self.assertNotIn("learning_document", sql)
+        self.assertNotIn("learning_pdf_asset", sql)
 
     def test_insert_is_draft_and_does_not_publish(self):
         item = {
