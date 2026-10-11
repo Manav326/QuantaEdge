@@ -408,19 +408,19 @@ public class ContentTranslationController {
           md5(jsonb_build_object('display_name',c.display_name)::text) source_hash,
           jsonb_build_object('display_name',c.display_name) source_content,
           c.code::text class_code,null::text subject_code,null::text chapter_code,null::text chapter_name,null::text lesson_title
-        from curriculum_class c where c.active=true
+        from curriculum_class c where c.active=true and c.code in ('6','7','8')
 
         union all
         select 'curriculum_program',p.id,md5(jsonb_build_object('display_name',p.display_name)::text),
           jsonb_build_object('display_name',p.display_name),c.code::text,null::text,null::text,p.display_name::text,null::text
         from curriculum_program p join curriculum_class c on c.id=p.class_id
-        where c.active=true and p.status<>'ARCHIVED'
+        where c.active=true and c.code in ('6','7','8') and p.status<>'ARCHIVED'
 
         union all
         select 'curriculum_subject',s.id,md5(jsonb_build_object('display_name',s.display_name)::text),
           jsonb_build_object('display_name',s.display_name),c.code::text,s.code::text,null::text,null::text,null::text
         from curriculum_subject s join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science')
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science')
 
         union all
         select 'curriculum_chapter',ch.id,md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text),
@@ -428,7 +428,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,null::text
         from curriculum_chapter ch join curriculum_subject s on s.id=ch.subject_id
         join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science')
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science')
           and ch.active=true and ch.content_status<>'ARCHIVED'
 
         union all
@@ -437,7 +437,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,o.title::text
         from learning_objective o join curriculum_chapter ch on ch.id=o.chapter_id
         join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and ch.active=true
           and ch.content_status<>'ARCHIVED' and o.active=true
 
         union all
@@ -446,7 +446,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,l.title::text
         from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
         join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and ch.active=true
           and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED'
 
         union all
@@ -455,7 +455,7 @@ public class ContentTranslationController {
         from lesson_block b join lesson l on l.id=b.lesson_id
         join curriculum_chapter ch on ch.id=l.chapter_id
         join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and ch.active=true
           and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED' and b.active=true
 
         union all
@@ -472,7 +472,7 @@ public class ContentTranslationController {
         from question q join lesson l on l.id=q.lesson_id
         join curriculum_chapter ch on ch.id=l.chapter_id join curriculum_subject s on s.id=ch.subject_id
         join curriculum_class c on c.id=s.class_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and ch.active=true
           and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED'
           and q.active=true and q.review_status not in ('REJECTED','ARCHIVED')
 
@@ -482,7 +482,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,a.title::text
         from assessment a join curriculum_subject s on s.id=a.subject_id
         join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=a.chapter_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
           and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
 
         union all
@@ -505,7 +505,7 @@ public class ContentTranslationController {
         from assessment_question aq join assessment a on a.id=aq.assessment_id
         join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
         left join curriculum_chapter ch on ch.id=a.chapter_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
           and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
 
         union all
@@ -514,7 +514,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,cs.title::text
         from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
         join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=cs.chapter_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and cs.status<>'CANCELLED'
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and cs.status<>'CANCELLED'
           and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
 
         union all
@@ -523,7 +523,7 @@ public class ContentTranslationController {
           c.code::text,s.code::text,ch.code::text,ch.display_name::text,rc.title::text
         from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
         join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=rc.chapter_id
-        where c.active=true and s.active=true and s.code in ('maths','science') and rc.status<>'ARCHIVED'
+        where c.active=true and c.code in ('6','7','8') and s.active=true and s.code in ('maths','science') and rc.status<>'ARCHIVED'
           and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
       ), existing as (
         select 'curriculum_class'::text entity_type,class_id entity_id,language,source_hash::text source_hash,translation_status from curriculum_class_translation
