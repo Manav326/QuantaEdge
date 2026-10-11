@@ -50,17 +50,17 @@ After the V51 migration and student delivery/CMS changes are deployed, use Pytho
 
        & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
 
-3. **Generate a representative translation pilot across Hindi and English.** The script reads OPENAI_API_KEY, OPENAI_API_BASE_URL, and the model from the root .env file when present. Ensure a valid OPENAI_API_KEY and either OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL are configured. The --max-items cap is balanced across languages and content types:
-
-       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40
-
-   This writes a local JSONL draft bundle and does not write to the database. Inspect the translated prose, Devanagari quality, numeric values, options, and answer-preservation checks.
-
-4. **After the pilot looks correct, insert it as DRAFT translations:**
+3. **Generate and insert a representative 40-task pilot as DRAFT translations** across Hindi, English, and the main content types. This lets staff review the exact generated text inside the Language review panel and avoids paying to generate the same pilot twice. The script reads OPENAI_API_KEY, OPENAI_API_BASE_URL, and the model from the root .env file when present. Ensure OPENAI_API_KEY plus either OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL are configured:
 
        & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --classes 6 --subjects maths --languages hi,en --max-items 40 --apply
 
-   Drafts become visible in the Language review panel for staff editing/review; they are not student-visible until separately approved and published.
+   The run also saves a JSONL audit copy and a summary under QuantaEdge_Bilingual_Draft_Bundle. Check Hindi Devanagari quality, contextual terminology, worked explanations, number/fraction formatting, option labels, and answer-preservation checks in the Language review panel. These 40 records remain DRAFT and are not visible to students until staff separately approves and publishes them.
+
+4. **After the pilot is accepted, translate the remaining structured content:**
+
+       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --apply --batch-size 20 --max-retries 5
+
+   This processes all remaining eligible active Class 6–8 Maths and Science records in both locales. It is resumable and skips existing current-source drafts/reviewed translations, so it will not overwrite the pilot or staff edits. It covers curriculum labels, chapters, objectives, lessons, JSON teaching blocks, questions/options/explanations, assessments, and available live/recorded class metadata. It does not translate PDFs or textbook assets; those are a separate phase. Use --include-archived only when legacy/archived learning paths are explicitly required.
 
 5. **Run the full structured-content translation.** Once staff accepts the pilot, omit --max-items to process all eligible active Class 6–8 Maths and Science records in both locales:
 
