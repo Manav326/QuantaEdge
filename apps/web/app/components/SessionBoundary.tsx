@@ -86,7 +86,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     // the verified role: API routes still enforce authentication and the shared
     // refresh interceptor handles expired access sessions without blanking the UI.
     if (isPublicEntry) verifiedWorkspace = null;
-    if (protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
+    if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
       setBlockedRole(null);
       setReady(true);
       return () => { alive = false; };
@@ -94,7 +94,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
 
     setReady(false);
     setBlockedRole(null);
-    const check = async () => {
+    const check = async (force = false) => {
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;
@@ -134,7 +134,27 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       }
     };
     void check();
-    return () => { alive = false; };
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      document.body.classList.add('qe-session-bfcache-guard');
+      verifiedWorkspace = null;
+      void check(true).finally(() => document.body.classList.remove('qe-session-bfcache-guard'));
+    };
+    const onPopState = () => {
+      verifiedWorkspace = null;
+      void check(true).finally(() => document.body.classList.remove('qe-session-bfcache-guard'));
+    };
+    const onPageHide = () => document.body.classList.add('qe-session-bfcache-guard');
+    window.addEventListener('pageshow', onPageShow);
+    window.addEventListener('popstate', onPopState);
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      alive = false;
+      window.removeEventListener('pageshow', onPageShow);
+      window.removeEventListener('popstate', onPopState);
+      window.removeEventListener('pagehide', onPageHide);
+      document.body.classList.remove('qe-session-bfcache-guard');
+    };
   }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected]);
 
   if (blockedRole) return <main className="qe-session-gate"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow"><LocaleText hinglish="SECURE WORKSPACE" english="SECURE WORKSPACE" /></span><h1><LocaleText hinglish="यह account किसी दूसरे workspace का है।" english="This account belongs to another workspace." /></h1><p><LocaleText hinglish={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'आपका current sign-in staff console के लिए है। Account बदलने से पहले sign out करें।' : 'आपका current sign-in दूसरे account type के लिए है। Account बदलने से पहले sign out करें।'} english={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'Your current sign-in is for the staff console. Sign out before switching accounts.' : 'Your current sign-in is for a different account type. Sign out before switching accounts.'} /></p><button className="button button-dark" onClick={logoutAndSwitch}><LocaleText hinglish="Account बदलने के लिए sign out करें" english="Log out to switch accounts" /></button></section></main>;
