@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import datetime as dt
 import json
 import os
 import sys
@@ -297,6 +298,23 @@ def main() -> int:
                             f"has {len(questions)} questions, greater than the API limit {MAX_APPEND_BATCH}."
                         )
                         continue
+                    # Read the real question sequence before any writes so new items
+                    # follow existing questions rather than being sorted ahead of them.
+                    detail = api.request("GET", f"/api/v1/admin/content/lessons/{lesson_id}")
+                    if not isinstance(detail, dict):
+                        raise RuntimeError(f"Lesson detail #{lesson_id} returned an unexpected shape.")
+                    if (str(detail.get("class_code")) != track[0]
+                            or str(detail.get("subject_code", "")).lower() != track[1]
+                            or str(detail.get("chapter_code", "")) != str(bank["chapter"]["code"])):
+                        raise RuntimeError(f"Lesson #{lesson_id} failed class/subject/chapter integrity checks.")
+                    detail_questions = detail.get("questions") or []
+                    if not isinstance(detail_questions, list):
+                        raise RuntimeError(f"Lesson #{lesson_id} did not return a valid questions array.")
+                    max_sort_order = max(
+                        (int(q.get("sort_order") or q.get("sortOrder") or 0)
+                         for q in detail_questions if isinstance(q, dict)),
+                        default=0,
+                    )
                     plans.append({
                         "bank": bank,
                         "class_code": track[0],
@@ -305,6 +323,7 @@ def main() -> int:
                         "lesson_id": lesson_id,
                         "lesson_code": requested_codes[lesson_id],
                         "bank_language": str(bank["language"]),
+                        "max_existing_sort_order": max_sort_order,
                         "questions": questions,
                     })
             except Exception as exc:
@@ -328,7 +347,8 @@ def main() -> int:
                 questions_payload = []
                 for index, question in enumerate(plan["questions"], start=1):
                     questions_payload.append(question_payload(
-                        question, index, plan["class_code"], plan["subject_code"], plan["bank_language"]
+                        question, plan["max_existing_sort_order"] + index,
+                        plan["class_code"], plan["subject_code"], plan["bank_language"]
                     ))
                 result = api.request(
                     "POST",
@@ -374,9 +394,10 @@ def main() -> int:
             "student_delivery_allowed_by_import": False,
         })
         args.output_dir.mkdir(parents=True, exist_ok=True)
-        report_path = args.output_dir / "practice-bank-import-report.json"
-        report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        report_path = args.output_dir / f"practice-bank-import-report-{timestamp}.json"
         summary["report_file"] = str(report_path)
+        report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(summary, ensure_ascii=False, indent=2))
         return 2 if failed else 0
     except Exception as exc:
