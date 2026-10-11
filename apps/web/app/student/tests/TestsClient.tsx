@@ -80,6 +80,12 @@ export default function TestsClient(){
   const released=attempt?.status==='RELEASED';
   const submitted=Boolean(attempt&&attempt.status!=='IN_PROGRESS');
   const answeredCount=attempt?.questions?.filter(q=>!isEmpty(responses[q.attemptQuestionId]??q.answer)).length||0;
+  const resultScore=Number(attempt?.final_score??attempt?.auto_score??0);
+  const resultMax=Number(attempt?.max_score??0);
+  const resultPercent=resultMax>0?Math.round(resultScore/resultMax*100):0;
+  const correctCount=attempt?.questions?.filter(q=>q.isCorrect===true).length||0;
+  const incorrectCount=attempt?.questions?.filter(q=>q.isCorrect===false).length||0;
+  const unansweredCount=attempt?.questions?.filter(q=>isEmpty(q.answer)).length||0;
 
   function isEmpty(value:any):boolean{
     if(value===null||value===undefined||value==='')return true;
@@ -172,6 +178,7 @@ export default function TestsClient(){
       }
       const data=await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/submit',{method:'POST'});
       setAttempt(data);attemptRef.current=data;setShowSubmit(false);
+      setTab(data.status==='RELEASED'?'results':'tests');
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Written answers are waiting for teacher review; your result will appear here after release.');
       await loadOverview();
     }catch(e:any){
@@ -219,9 +226,41 @@ export default function TestsClient(){
         <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← Tests & results</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
         <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1><p>Attempt {attempt.attempt_number} · {attempt.questions.length} questions · {attempt.max_score} marks</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>TIME REMAINING</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?'Saving answer…':'Answers auto-save'}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
-        {attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED'?<div className={styles.pendingResult}><span>◷</span><h2>Test submitted successfully</h2><p>Your answers are preserved. Some answers need a teacher to check them, so your final score and feedback will appear after the result is released.</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
+        {released?<section className={styles.releasedResult} aria-live="polite">
+          <div className={styles.resultHero}>
+            <span className={styles.resultHeroIcon}>✓</span>
+            <div><span className={styles.eyebrow}>RESULT READY</span><h2>Test submitted successfully</h2><p>Your test is closed. Here is your result; the active question navigator is no longer available.</p></div>
+          </div>
+          <div className={styles.resultScoreGrid}>
+            <article className={styles.resultScorePrimary}>
+              <small>YOUR SCORE</small>
+              <strong>{resultScore} <span>/ {resultMax}</span></strong>
+              <div className={styles.resultScoreProgress}><i style={{width:Math.min(100,Math.max(0,resultPercent))+'%'}}/></div>
+              <b>{resultPercent}%</b><p>Overall score</p>
+            </article>
+            <article className={styles.resultMetric}><strong>{correctCount}</strong><span>Correct</span></article>
+            <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>Incorrect</span></article>
+            <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>Not answered</span></article>
+          </div>
+          <section className={styles.resultDetails}>
+            <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
+            <div className={styles.resultQuestionList}>
+              {attempt.questions.map((question,questionIndex)=>{
+                const outcome=question.isCorrect===true?'Correct':question.isCorrect===false?'Incorrect':isEmpty(question.answer)?'Not answered':'Reviewed';
+                const outcomeClass=question.isCorrect===true?styles.reviewCorrect:question.isCorrect===false?styles.reviewIncorrect:styles.reviewNeutral;
+                return <article className={styles.resultQuestionRow} key={question.attemptQuestionId}>
+                  <span className={styles.resultQuestionNumber}>{questionIndex+1}</span>
+                  <div className={styles.resultQuestionInfo}><b>Question {questionIndex+1}</b><small className={outcomeClass}>{outcome}</small></div>
+                  <strong>{Number(question.awardedMarks??0)} <small>/ {Number(question.maxMarks??0)}</small></strong>
+                </article>;
+              })}
+            </div>
+          </section>
+          <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to results</button></div>
+        </section>
+        :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>Test submitted successfully</h2><p>Your answers are preserved. Some answers need a teacher to check them, so your final score and feedback will appear after the result is released.</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
         :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>This attempt is closed</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests</button></div>
-        :!current?<div className={styles.pendingResult}><h2>No questions are available in this attempt.</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests</button></div>
+        :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>This attempt is closed.</h2><p>You cannot return to the question navigator after submission.</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>Questions</b><small>{answeredCount}/{attempt.questions.length} answered</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={'Question '+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>Current</span><span><i className={styles.legendAnswered}/>Answered</span></div></aside>
           <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>QUESTION {index+1} OF {attempt.questions.length}</span><b>{current.maxMarks} mark(s)</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><h2>{current.prompt}</h2>{current.options?.length>0&&<div className={styles.options}>{current.options.map(o=><label key={o.key} className={[styles.option,answerText(currentResponse)===o.key?styles.optionSelected:''].join(' ')}><input type="radio" name={'question-'+current.attemptQuestionId} value={o.key} checked={answerText(currentResponse)===o.key} disabled={submitted} onChange={()=>updateResponse(current,o.key)}/><span className={styles.optionKey}>{o.key}</span><span>{o.label}</span></label>)}</div>}
