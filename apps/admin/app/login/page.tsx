@@ -32,11 +32,13 @@ export default function AdminLogin() {
     try {
       const response = await fetch('/api/v1/auth/request-otp', {
         method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({mobile, purpose: 'STAFF_LOGIN'})
       });
       const body = await readApiJson(response);
-      if (!response.ok) throw new Error(body.message || 'We could not send your sign-in code.');
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || 'We could not send your sign-in code.');
       setFirstAccess(Boolean(body.firstAccess));
       setDevCode(body.devCode || '');
       setOtp('');
