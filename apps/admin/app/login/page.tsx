@@ -32,11 +32,13 @@ export default function AdminLogin() {
     try {
       const response = await fetch('/api/v1/auth/request-otp', {
         method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({mobile, purpose: 'STAFF_LOGIN'})
       });
       const body = await readApiJson(response);
-      if (!response.ok) throw new Error(body.message || 'We could not send your sign-in code.');
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || 'We could not send your sign-in code.');
       setFirstAccess(Boolean(body.firstAccess));
       setDevCode(body.devCode || '');
       setOtp('');
@@ -54,15 +56,31 @@ export default function AdminLogin() {
     try {
       const response = await fetch('/api/v1/auth/verify-otp', {
         method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({mobile, otp, purpose: 'STAFF_LOGIN', firstAccess})
       });
       const body = await readApiJson(response);
-      if (!response.ok) throw new Error(body.message || 'The code could not be verified.');
-      const meResponse = await fetch('/api/v1/auth/me', {cache: 'no-store'});
+      if (!response.ok) throw new Error(body.message || body.detail || body.error || 'The code could not be verified.');
+
+      // The successful verification response already includes the authenticated staff
+      // identity and sets both HttpOnly cookies. Avoid an unnecessary immediate /me
+      // round-trip for administrators; the protected workspace boundary validates the
+      // cookie normally after navigation.
+      if (Number(body.staffId) > 0 && body.role === 'ADMIN') {
+        router.replace('/');
+        router.refresh();
+        return;
+      }
+
+      if (!(Number(body.staffId) > 0)) {
+        throw new Error('OTP was accepted, but the server did not create a staff session. Please retry once or contact your administrator.');
+      }
+      const meResponse = await fetch('/api/v1/auth/me', {cache: 'no-store', credentials: 'same-origin'});
       const me = await readApiJson(meResponse);
       if (!meResponse.ok || !me.staffId) {
-        throw new Error('This is not a staff session. Use learner sign-in on the learning site.');
+        throw new Error(me.message || me.detail || 'Your staff session could not be confirmed. Please retry sign-in.');
       }
 
       const permissions: string[] = Array.isArray(me.permissions) ? me.permissions : [];

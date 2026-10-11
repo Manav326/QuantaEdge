@@ -10,8 +10,14 @@ public class ApiExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public Map<String,String> lessonNotFound(LessonNotFoundException ex){return Map.of("error","LESSON_NOT_FOUND","message",ex.getMessage());}
   @ExceptionHandler(SecurityException.class)
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  public Map<String,String> security(SecurityException ex){return Map.of("error","FORBIDDEN","message",ex.getMessage());}
+  public org.springframework.http.ResponseEntity<Map<String,String>> security(SecurityException ex){
+    String message=ex.getMessage()==null?"Access denied":ex.getMessage();
+    boolean unauthenticated="Authentication required".equalsIgnoreCase(message)
+        || message.startsWith("Session expired");
+    HttpStatus status=unauthenticated?HttpStatus.UNAUTHORIZED:HttpStatus.FORBIDDEN;
+    return org.springframework.http.ResponseEntity.status(status)
+        .body(Map.of("error",unauthenticated?"UNAUTHENTICATED":"FORBIDDEN","message",message));
+  }
   @ExceptionHandler(TutorUnavailableException.class)
   @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
   public Map<String,String> tutorUnavailable(TutorUnavailableException ex){return Map.of("error","TUTOR_UNAVAILABLE","message",ex.getMessage());}

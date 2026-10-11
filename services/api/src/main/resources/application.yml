@@ -28,7 +28,7 @@ app:
   admin:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
   auth:
-    session-hours: ${APP_AUTH_SESSION_HOURS:168}
+    session-hours: ${APP_AUTH_SESSION_HOURS:4}
     secure-cookies: ${APP_AUTH_SECURE_COOKIES:false}
     otp-cooldown-seconds: ${APP_AUTH_OTP_COOLDOWN_SECONDS:60}
     allow-repeated-demo-otp: ${APP_AUTH_ALLOW_REPEATED_DEMO_OTP:false}

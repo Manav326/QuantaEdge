@@ -24,8 +24,17 @@ function installRefreshRecovery() {
     const response = await nativeFetch(input, init);
     if (skip || (response.status !== 401 && response.status !== 403)) return response;
     if (!refreshInFlight) refreshInFlight = nativeFetch('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }).then(r => r.ok).catch(() => false).finally(() => { refreshInFlight = null; });
-    if (!await refreshInFlight) return response;
-    return nativeFetch(retryInput, init);
+    if (!await refreshInFlight) {
+      // A different tab may have won the rotating-refresh-token race and already
+      // updated the shared browser cookies. Retry once before declaring expiry.
+      const crossTabRetry = await nativeFetch(retryInput, init);
+      if (crossTabRetry.ok) return crossTabRetry;
+      if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+      return crossTabRetry;
+    }
+    const retriedResponse = await nativeFetch(retryInput, init);
+    if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+    return retriedResponse;
   };
   window.fetch = enhancedFetch;
   return () => { if (window.fetch === enhancedFetch) window.fetch = nativeFetch; recoveryInstalled = false; };
@@ -98,6 +107,32 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
       document.body.classList.remove('qe-session-bfcache-guard');
     };
   }, [pathname, router, isLogin, isSession]);
+
+  useEffect(() => {
+    if (isLogin || isSession || !ready || blocked) return;
+    let lastActivity = Date.now();
+    const markActivity = () => { lastActivity = Date.now(); };
+    const activityEvents = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'];
+    activityEvents.forEach(name => window.addEventListener(name, markActivity, { passive: true }));
+    const heartbeat = window.setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - lastActivity > 5 * 60 * 1000) return;
+      void fetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
+    }, 2 * 60 * 1000);
+    return () => {
+      window.clearInterval(heartbeat);
+      activityEvents.forEach(name => window.removeEventListener(name, markActivity));
+    };
+  }, [ready, blocked, isLogin, isSession]);
+
+  useEffect(() => {
+    const onSessionExpired = () => {
+      if (!isLogin && !isSession) window.location.replace('/login');
+    };
+    window.addEventListener('qe:session-expired', onSessionExpired);
+    return () => window.removeEventListener('qe:session-expired', onSessionExpired);
+  }, [isLogin, isSession]);
+
   if (isSession) return <>{children}</>;
   if (blocked) return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">SECURE WORKSPACE</span><h1>This sign-in belongs to the learning site.</h1><p>To keep accounts separate, sign out before entering the staff console.</p><button className="button button-dark" onClick={() => void logoutToSwitch()}>Log out to switch accounts</button></section></main>;
   if (!ready) return <main className="qe-session-gate" aria-live="polite"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE STAFF</span><h1>Verifying secure access…</h1><p>Your staff role and saved session are being checked.</p></section></main>;
