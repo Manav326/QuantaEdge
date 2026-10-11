@@ -1,9 +1,11 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -16,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Map;
 import java.util.Set;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,6 +102,30 @@ class AdminContentControllerTest {
 
     verify(authorization).requirePermission(author, "CONTENT_REVIEW");
     verifyNoInteractions(jdbc, questionHistory, staffAudit);
+  }
+
+  @Test
+  void questionReviewSummaryCountsAllStatusesAndSeparatesInactiveQuestions() {
+    AuthContext reviewer = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Content author");
+    when(authorization.requireAuth(reviewer)).thenReturn(reviewer);
+    when(authorization.hasPermission(reviewer, "CONTENT_VIEW")).thenReturn(true);
+    when(jdbc.queryForList(anyString())).thenReturn(java.util.List.of(
+        Map.of("review_status", "DRAFT", "active", true, "count", 4L),
+        Map.of("review_status", "REVIEW", "active", true, "count", 3L),
+        Map.of("review_status", "REJECTED", "active", true, "count", 2L),
+        Map.of("review_status", "APPROVED", "active", true, "count", 8L),
+        Map.of("review_status", "PUBLISHED", "active", true, "count", 5L),
+        Map.of("review_status", "DRAFT", "active", false, "count", 6L)));
+
+    AdminContentController controller =
+        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+
+    Map<String,Object> summary = controller.questionReviewSummary(reviewer);
+
+    assertEquals(28L, summary.get("totalQuestions"));
+    assertEquals(22L, summary.get("activeQuestions"));
+    assertEquals(6L, summary.get("inactiveQuestions"));
+    assertEquals(6, ((java.util.List<?>)summary.get("byStatus")).size());
   }
 
   @Test
