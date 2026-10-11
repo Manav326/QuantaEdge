@@ -171,7 +171,7 @@ class LearningControllerTest {
     when(answerService.evaluate("{}", "A")).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "OPTION"));
 
-    Map<String, Object> result = controller.answer(42L,
+    Map<String, Object> result = controller.answer(42L, "hi",
         Map.of("answer", "A", "practiceSessionId", 5L), student);
 
     assertEquals(true, result.get("correct"));
@@ -183,7 +183,7 @@ class LearningControllerTest {
   void anonymousRequestsAreRejectedBeforeReadingQuestions() {
     when(authorization.requireStudent(null)).thenThrow(new SecurityException("Authentication required"));
 
-    assertThrows(SecurityException.class, () -> controller.questions(42L, null));
+    assertThrows(SecurityException.class, () -> controller.questions(42L, "hi", null));
     verify(jdbc, never()).queryForList(anyString(), any(Object[].class));
   }
 }
