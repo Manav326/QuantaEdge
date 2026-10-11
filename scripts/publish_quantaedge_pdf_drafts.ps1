@@ -184,8 +184,29 @@ try {
     $report.target_count = $rows.Count
     $report.targets = $rows
 
-    $me = Invoke-QEApi -Path '/api/v1/auth/me'
-    if (-not $me.authenticated) { throw 'The API did not confirm an authenticated session.' }
+    # Always refresh first. Never make Admin list/publish calls using a possibly stale access cookie.
+    if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+        throw 'A refresh cookie is required before publishing. Sign in to QuantaEdge Admin, copy the current QE_REFRESH cookie, set it in the QUANTAEDGE_ADMIN_REFRESH environment variable, then rerun. No publish requests were sent.'
+    }
+    Write-Host 'Refreshing the Admin session before preflight...'
+    try {
+        Invoke-QERaw -Path '/api/v1/auth/refresh' -Method 'POST' | Out-Null
+        Sync-QEAuthEnvironment
+    } catch {
+        throw "The supplied QE_REFRESH cookie was rejected or could not refresh the session. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, set it in the QUANTAEDGE_ADMIN_REFRESH environment variable, then rerun. Details: $($_.Exception.Message)"
+    }
+    if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
+        throw 'Refresh returned without a QE_SESSION cookie. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie (and QE_SESSION if shown), update the environment variables, then rerun.'
+    }
+    if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+        throw 'Refresh did not provide a current QE_REFRESH cookie. No publish requests were sent. Sign in to QuantaEdge Admin and set the CURRENT QE_REFRESH cookie in QUANTAEDGE_ADMIN_REFRESH, then rerun.'
+    }
+
+    # Verify the newly refreshed session directly. Do not auto-refresh here: failure must stop and request a current cookie.
+    $me = Invoke-QERaw -Path '/api/v1/auth/me'
+    if (-not $me.authenticated) {
+        throw 'The refreshed Admin session failed /auth/me verification. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, set it in QUANTAEDGE_ADMIN_REFRESH, and rerun.'
+    }
     $permissions = @($me.permissions | ForEach-Object { [string]$_ })
     if ([string]$me.role -ne 'ADMIN' -and $permissions -notcontains 'CONTENT_PUBLISH') {
         throw "The authenticated staff account lacks CONTENT_PUBLISH (role=$($me.role)). No documents were changed."
