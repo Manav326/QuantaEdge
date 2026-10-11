@@ -2,40 +2,35 @@
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
   source_kind?:string;source_year?:number;board?:string;marks?:number;exam_format?:string;
-  topic?:string;subtopic?:string;skill?:string;response_mode?:string
+  topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean
 };
+type LessonBlock={id:number;sequence_no:number;block_type:string;content:string};
+type LessonDetail={
+  id:number;title:string;summary?:string;class_code?:string;chapter_name?:string;
+  subject_name?:string;subject_code?:string;objective_title?:string;blocks:LessonBlock[];
+};
+type ApiBody={detail?:string;message?:string;sessionId?:number;status?:string;questions?:Question[];selectedCount?:number};
+
 function parse<T=any>(v:string):T{try{return JSON.parse(v) as T}catch{return [] as T}}
-
-
-type PracticeTopic={
-  chapter_id:number; chapter_name:string; subject_code:string; subject_name:string;
-  topic_name:string; subtopic_name:string; question_count:number; question_types:string;
-};
-const TYPE_LABELS:Record<string,string>={
-  MCQ:'Multiple choice',TRUE_FALSE:'True / false',INPUT:'Short input',NUMERICAL:'Numerical',
-  MATCH:'Match pairs',ORDER:'Arrange in order',ASSERTION_REASON:'Assertion & reason',
-  CASE_BASED:'Case-based',SHORT_ANSWER:'Short answer',LONG_ANSWER:'Long answer',
-  DIAGRAM:'Diagram-based',MAP:'Map-based',SOURCE_BASED:'Source-based'
-};
-function topicKey(topic:PracticeTopic){
-  return JSON.stringify({chapterId:Number(topic.chapter_id),topic:topic.topic_name,subtopic:topic.subtopic_name||''});
+async function readBody(response:Response):Promise<any>{
+  const value=await response.text();
+  if(!value)return {};
+  try{return JSON.parse(value)}catch{return {message:value}}
+}
+function recapBlocks(lesson:LessonDetail|null){
+  return (lesson?.blocks||[]).filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
 }
 
 export default function PracticePage(){
   const [questions,setQuestions]=useState<Question[]>([]);
-  const [catalog,setCatalog]=useState<PracticeTopic[]>([]);
-  const [student,setStudent]=useState<any>(null);
-  const [selectedTopicKeys,setSelectedTopicKeys]=useState<string[]>([]);
-  const [questionTypes,setQuestionTypes]=useState<string[]>(['MCQ']);
-  const [questionCount,setQuestionCount]=useState('10');
+  const [lesson,setLesson]=useState<LessonDetail|null>(null);
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [sessionStatus,setSessionStatus]=useState('IN_PROGRESS');
   const [index,setIndex]=useState(0);
@@ -45,210 +40,232 @@ export default function PracticePage(){
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [loading,setLoading]=useState(true);
-  const [starting,setStarting]=useState(false);
+  const [saving,setSaving]=useState(false);
+  const [noPractice,setNoPractice]=useState(false);
+  const [answerError,setAnswerError]=useState('');
   const router=useRouter();
-  const { locale }=useLocale();
+  const searchParams=useSearchParams();
+  const {locale}=useLocale();
   const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;
+  const lessonIdRaw=searchParams.get('lessonId')||'';
+  const sessionIdRaw=searchParams.get('sessionId')||'';
+  const lessonId=/^\d+$/.test(lessonIdRaw)?Number(lessonIdRaw):0;
+  const requestedSessionId=/^\d+$/.test(sessionIdRaw)?Number(sessionIdRaw):0;
+
+  const current=questions[index];
+  const options=current?parse<{key:string;label:string}[]>(current.options||'[]'):[];
+  const correctCount=Object.values(scoreByQuestion).filter(value=>value?.correct===true).length;
+  const gradedCount=Object.values(scoreByQuestion).filter(value=>value?.autoGraded&&typeof value?.correct==='boolean').length;
+  const recap=useMemo(()=>recapBlocks(lesson),[lesson]);
 
   useEffect(()=>{
     let active=true;
     async function load(){
+      setLoading(true);setError('');setNoPractice(false);setAnswerError('');
+      if(!lessonId&&!requestedSessionId){
+        setLoading(false);
+        return;
+      }
       try{
         const me=await fetch('/api/v1/students/me',{cache:'no-store'});
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
-        const studentData=await me.json();
-        if(!me.ok)throw new Error(studentData.message||tx('Student profile नहीं मिला','Student profile was not found'));
+        const studentBody=await readBody(me);
+        if(!me.ok)throw new Error(studentBody.detail||studentBody.message||tx('Student profile नहीं मिला।','Student profile was not found.'));
         if(!active)return;
-        setStudent(studentData);
-        const catalogResponse=await fetch('/api/v1/learning/practice/catalog',{cache:'no-store'});
-        const catalogBody=await catalogResponse.json();
-        if(!catalogResponse.ok)throw new Error(catalogBody.detail||catalogBody.message||'Unable to load practice topics.');
-        if(!active)return;
-        const catalogTopics:PracticeTopic[]=Array.isArray(catalogBody)?catalogBody:[];
-        setCatalog(catalogTopics);
-        const foundTypes=Array.from(new Set(catalogTopics.flatMap(topic=>parse<string[]>(topic.question_types)||[]))).filter(type=>TYPE_LABELS[type]);
-        if(foundTypes.length)setQuestionTypes([foundTypes.includes('MCQ')?'MCQ':foundTypes[0]]);
-        const sessionParam=new URLSearchParams(window.location.search).get('sessionId');
-        if(sessionParam&&/^\d+$/.test(sessionParam)){
-          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionParam,{cache:'no-store'});
-          const sessionBody=await sessionResponse.json();
-          if(sessionResponse.ok&&active){
-            setSessionId(Number(sessionBody.sessionId));
-            setSessionStatus(String(sessionBody.status||'IN_PROGRESS'));
-            const resumed=Array.isArray(sessionBody.questions)?sessionBody.questions:[];
-            setQuestions(resumed);
-            const firstUnanswered=resumed.findIndex((q:any)=>!q.answered);
-            setIndex(firstUnanswered<0?Math.max(0,resumed.length-1):firstUnanswered);
-            if(firstUnanswered<0&&resumed.length)setSessionStatus('COMPLETED');
-            setNotice('Your saved practice session has been reopened.');
-          }
+
+        let lessonBody:LessonDetail|null=null;
+        if(lessonId){
+          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId,{cache:'no-store'});
+          const body=await readBody(lessonResponse);
+          if(!lessonResponse.ok)throw new Error(body.detail||body.message||tx('Lesson उपलब्ध नहीं है।','This lesson is unavailable.'));
+          lessonBody=body as LessonDetail;
+          if(active)setLesson(lessonBody);
         }
-      }catch(e:any){if(active)setError(e.message||tx('Practice load नहीं हो पाई।','Unable to load practice.'));}
-      finally{if(active)setLoading(false);}
+
+        if(requestedSessionId){
+          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId,{cache:'no-store'});
+          const body=await readBody(sessionResponse);
+          if(!sessionResponse.ok)throw new Error(body.detail||body.message||tx('Practice session दोबारा नहीं खुल पाया।','Could not reopen this practice session.'));
+          if(!active)return;
+          const resumed:Array<Question>=Array.isArray(body.questions)?body.questions:[];
+          setSessionId(Number(body.sessionId));
+          setSessionStatus(String(body.status||'IN_PROGRESS'));
+          setQuestions(resumed);
+          const firstUnanswered=resumed.findIndex(q=>!q.answered);
+          setIndex(firstUnanswered<0?resumed.length:firstUnanswered);
+          setSelected('');setResult(null);
+          if(firstUnanswered<0&&resumed.length)setSessionStatus('COMPLETED');
+          setNotice(tx('आपका saved practice session फिर से खुल गया।','Your saved practice session has been reopened.'));
+          return;
+        }
+
+        if(!lessonId)throw new Error(tx('Practice शुरू करने के लिए पहले lesson खोलें।','Open a lesson before starting practice.'));
+        const startResponse=await fetch('/api/v1/learning/practice/sessions/from-lesson',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({lessonId})
+        });
+        const startBody:ApiBody=await readBody(startResponse);
+        if(startResponse.status===409){
+          if(active){
+            setNoPractice(true);
+            setNotice(startBody.detail||startBody.message||tx(
+              'इस micro-topic के लिए अतिरिक्त approved practice questions अभी publish नहीं हुए हैं।',
+              'Additional approved practice questions have not been published for this micro-topic yet.'
+            ));
+          }
+          return;
+        }
+        if(!startResponse.ok)throw new Error(startBody.detail||startBody.message||tx('इस topic का practice set नहीं बन पाया।','Could not prepare practice for this topic.'));
+        if(!active)return;
+        const loaded:Array<Question>=Array.isArray(startBody.questions)?startBody.questions:[];
+        if(!loaded.length){
+          setNoPractice(true);
+          setNotice(tx('इस micro-topic के लिए अभी practice questions उपलब्ध नहीं हैं।','No practice questions are currently available for this micro-topic.'));
+          return;
+        }
+        setSessionId(Number(startBody.sessionId));
+        setSessionStatus(String(startBody.status||'IN_PROGRESS'));
+        setQuestions(loaded);setIndex(0);setSelected('');setResult(null);setScoreByQuestion({});
+        setNotice(String(startBody.message||tx('इस lesson का practice तैयार है।','Practice for this lesson is ready.')));
+        const url=new URL(window.location.href);
+        url.searchParams.set('sessionId',String(startBody.sessionId));
+        window.history.replaceState({},'',url.toString());
+      }catch(e:any){
+        if(active)setError(e.message||tx('Practice load नहीं हो पाई।','Unable to load practice.'));
+      }finally{
+        if(active)setLoading(false);
+      }
     }
     void load();
     return()=>{active=false;};
-  },[router,locale]);
-
-  const selectedTopics=catalog.filter(topic=>selectedTopicKeys.includes(topicKey(topic)));
-  const availableTypes=Array.from(new Set(catalog.flatMap(topic=>parse<string[]>(topic.question_types)||[]))).filter(type=>TYPE_LABELS[type]);
-  const current=questions[index];
-  const options=current?parse<{key:string;label:string}[]>(current.options||'[]'):[];
-  const scoreValues=Object.values(scoreByQuestion);
-  const correctCount=scoreValues.filter(value=>value?.correct===true).length;
-  const gradedCount=scoreValues.filter(value=>value?.autoGraded&&typeof value?.correct==='boolean').length;
-
-  async function startPractice(){
-    if(!selectedTopicKeys.length){setError('Select at least one topic to practise.');return;}
-    if(!questionTypes.length){setError('Choose at least one question type.');return;}
-    setStarting(true);setError('');setNotice('');
-    try{
-      const topicSelections=selectedTopicKeys.map(key=>JSON.parse(key));
-      const response=await fetch('/api/v1/learning/practice/sessions',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({topicSelections,questionTypes,questionCount:Number(questionCount)})
-      });
-      const body=await response.json();
-      if(!response.ok)throw new Error(body.detail||body.message||'Could not create practice session.');
-      setSessionId(Number(body.sessionId));
-      setSessionStatus(String(body.status||'IN_PROGRESS'));
-      setQuestions(Array.isArray(body.questions)?body.questions:[]);
-      setIndex(0);setSelected('');setResult(null);setScoreByQuestion({});
-      setNotice(String(body.message||'Practice set created.'));
-      const url=new URL(window.location.href);
-      url.searchParams.set('sessionId',String(body.sessionId));
-      window.history.replaceState({},'',url.toString());
-    }catch(e:any){setError(e.message||'Could not start practice.');}
-    finally{setStarting(false);}
-  }
-
-  function resetPractice(){
-    setQuestions([]);setSessionId(null);setSessionStatus('IN_PROGRESS');
-    setIndex(0);setSelected('');setResult(null);setScoreByQuestion({});
-    setError('');setNotice('');
-    const url=new URL(window.location.href);url.searchParams.delete('sessionId');window.history.replaceState({},'',url.toString());
-  }
+  },[lessonId,requestedSessionId,router,locale]);
 
   async function answer(value:string|object){
-    if(!current||!sessionId||result)return;
+    if(!current||!sessionId||saving||result?.correct===true)return;
     const serialized=typeof value==='string'?value:JSON.stringify(value);
     if(!serialized.trim())return;
-    setSelected(serialized);setError('');
+    setSaving(true);setAnswerError('');setError('');setSelected(serialized);
     try{
       const response=await fetch('/api/v1/learning/questions/'+current.id+'/answer',{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({answer:value,practiceSessionId:sessionId})
       });
-      const body=await response.json();
-      if(!response.ok)throw new Error(body.detail||body.message||'Could not save answer.');
-      setResult(body);setScoreByQuestion(old=>({...old,[current.id]:body}));
+      const body=await readBody(response);
+      if(!response.ok)throw new Error(body.detail||body.message||tx('उत्तर save नहीं हुआ।','Could not save your answer.'));
+      setResult(body);
+      setScoreByQuestion(old=>({...old,[current.id]:body}));
       const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionId,{cache:'no-store'});
       if(sessionResponse.ok){
-        const sessionBody=await sessionResponse.json();
-        if(sessionBody.status==='COMPLETED')setSessionStatus('COMPLETED');
+        const sessionBody=await readBody(sessionResponse);
+        setSessionStatus(String(sessionBody.status||'IN_PROGRESS'));
+        if(Array.isArray(sessionBody.questions))setQuestions(sessionBody.questions);
       }
-    }catch(e:any){setError(e.message||'Could not save answer.');}
+    }catch(e:any){
+      setAnswerError(e.message||tx('उत्तर save नहीं हुआ। फिर प्रयास करें।','Could not save your answer. Please try again.'));
+    }finally{
+      setSaving(false);
+    }
+  }
+
+  function tryAgain(){
+    if(result?.correct!==false)return;
+    setSelected('');setResult(null);setAnswerError('');setNotice('');
   }
 
   function next(){
-    if(index+1<questions.length){setIndex(index+1);setSelected('');setResult(null);}
+    if(!result||result.correct===false)return;
+    setSelected('');setResult(null);setAnswerError('');
+    if(index+1<questions.length)setIndex(index+1);
+    else setIndex(questions.length);
   }
 
-  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="Topics load हो रहे हैं…" english="Loading practice topics…" /></div></section></main>;
-  if(!questions.length)return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice setup</span><span className="avatar">अ</span></header>
+  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="आपके topic का practice तैयार हो रहा है…" english="Preparing practice for your topic…" /></div></section></main>;
+
+  if(!lessonId&&!requestedSessionId)return <main className="practice-page">
+    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
-      <div className="eyebrow">Class {student?.class_code??'—'} · Personal practice</div>
-      <h1><LocaleText hinglish="अपना practice set बनाएँ" english="Build your practice set" /></h1>
-      <p><LocaleText hinglish="एक या कई अध्यायों के topics चुनें, फिर questions की संख्या और प्रकार चुनें। सिर्फ approved questions ही शामिल होंगे।" english="Choose topics across one or more chapters, then choose the question count and types. Only approved questions are included." /></p>
-      {error&&<div className="practice-feedback" role="alert"><strong>Could not start practice</strong><span>{error}</span></div>}
-      {notice&&<div className="feedback" role="status"><span>{notice}</span></div>}
-      {!catalog.length?<div className="concept-card"><h2><LocaleText hinglish="अभी approved questions उपलब्ध नहीं हैं" english="No approved practice questions yet" /></h2><p><LocaleText hinglish="जैसे ही content team questions approve और publish करेगी, वे यहाँ topic-wise दिखाई देंगे।" english="Approved and published questions will appear here by topic as the content team makes them available." /></p><Link href="/student/learn" className="button button-dark">Browse learning</Link></div>:
-      <>
-        <section className="concept-card">
-          <h2><LocaleText hinglish="1. Topics चुनें" english="1. Choose topics" /></h2>
-          <p><LocaleText hinglish="आप अलग-अलग chapters से कई topics चुन सकते हैं।" english="You can select multiple topics from different chapters." /></p>
-          <div style={{display:'grid',gap:9}}>
-            {catalog.map(topic=>{
-              const key=topicKey(topic);const checked=selectedTopicKeys.includes(key);
-              const types=parse<string[]>(topic.question_types)||[];
-              return <label key={key} style={{display:'flex',alignItems:'flex-start',gap:10,padding:12,border:'1px solid '+(checked?'#d07a32':'#dce2ea'),borderRadius:10,background:checked?'#fff7ed':'#fff',cursor:'pointer'}}>
-                <input type="checkbox" checked={checked} onChange={e=>setSelectedTopicKeys(old=>e.target.checked?[...old.filter(x=>x!==key),key]:old.filter(x=>x!==key))} style={{marginTop:4}}/>
-                <span style={{flex:1}}><strong>{topic.topic_name}</strong>{topic.subtopic_name&&<span> / {topic.subtopic_name}</span>}<small style={{display:'block',color:'#667085',marginTop:4}}>{topic.subject_name} · {topic.chapter_name} · {topic.question_count} questions · {types.map(type=>TYPE_LABELS[type]||type).join(', ')}</small></span>
-              </label>;
-            })}
-          </div>
-          <p style={{fontSize:13,color:'#667085',marginBottom:0}}>{selectedTopics.length} topic(s) selected · {selectedTopics.reduce((sum,topic)=>sum+Number(topic.question_count||0),0)} question entries available before type filters</p>
-        </section>
-        <section className="concept-card">
-          <h2><LocaleText hinglish="2. Questions की संख्या" english="2. Number of questions" /></h2>
-          <label style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap'}}>Questions in this set
-            <select value={questionCount} onChange={e=>setQuestionCount(e.target.value)} style={{padding:'10px 12px',borderRadius:8,border:'1px solid #d0d5dd',background:'#fff'}}>
-              {[5,10,15,20,30,50,100].map(n=><option key={n} value={n}>{n} questions</option>)}
-            </select>
-          </label>
-        </section>
-        <section className="concept-card">
-          <h2><LocaleText hinglish="3. Question types चुनें" english="3. Choose question types" /></h2>
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(185px,1fr))',gap:9}}>
-            {availableTypes.map(type=><label key={type} style={{display:'flex',alignItems:'center',gap:8,padding:10,border:'1px solid #dce2ea',borderRadius:9}}>
-              <input type="checkbox" checked={questionTypes.includes(type)} onChange={e=>setQuestionTypes(old=>e.target.checked?[...old,type]:old.filter(x=>x!==type))}/>
-              {TYPE_LABELS[type]||type}
-            </label>)}
-          </div>
-        </section>
-        <button type="button" className="button button-dark" disabled={starting||!selectedTopicKeys.length||!questionTypes.length} onClick={()=>void startPractice()}>{starting?'Preparing questions…':'Start practice →'}</button>
-      </>}
-      <p style={{fontSize:13,color:'#667085',marginTop:14}}><LocaleText hinglish="Questions इस session में repeat नहीं होंगे। आपके answers और completion progress save होंगे।" english="Questions will not repeat within this session. Your answers and completion progress are saved." /></p>
+      <div className="eyebrow"><LocaleText hinglish="सीखें → अभ्यास करें" english="Learn → Practise" /></div>
+      <h1><LocaleText hinglish="पहले एक lesson चुनें" english="Start with a lesson" /></h1>
+      <p><LocaleText hinglish="आप lesson के MCQs के बाद सीधे उसी micro-topic का practice करेंगे। Questions QuantaEdge अपने-आप चुनेगा।" english="After the lesson MCQs, you will go straight into practice for the same micro-topic. QuantaEdge selects the questions automatically." /></p>
+      <div className="concept-card"><Link href="/student/learn" className="button button-dark"><LocaleText hinglish="अपने lessons खोलें →" english="Open your lessons →" /></Link></div>
     </section>
   </main>;
 
-  const q=current;
-  if(!q)return <main className="practice-page"><section className="practice-wrap"><p>No questions in this set.</p><button onClick={resetPractice}>Create another set</button></section></main>;
-  return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
+  if(error)return <main className="practice-page">
+    <header className="lesson-header"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student'} className="back"><LocaleText hinglish="← वापस" english="← Back" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
+    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="Practice नहीं खुल पाई" english="Practice could not be opened" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student/learn'} className="button button-dark" style={{marginTop:20}}><LocaleText hinglish="Lesson पर लौटें" english="Return to lesson" /></Link></section>
+  </main>;
+
+  if(noPractice)return <main className="practice-page">
+    <header className="lesson-header"><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
-      <div className="eyebrow">Class {student?.class_code??'—'} · {q.question_type} · Session #{sessionId}</div>
+      <div className="eyebrow">{lesson?.subject_name||'QuantaEdge'} · {lesson?.chapter_name||tx('अध्याय','Chapter')}</div>
+      <h1><LocaleText hinglish="Practice set अभी उपलब्ध नहीं है" english="Practice set is not available yet" /></h1>
+      <p>{notice}</p>
+      <div className="concept-card"><h2>{lesson?.title||tx('इस micro-topic','This micro-topic')}</h2><p><LocaleText hinglish="अलग topic के questions दिखाने के बजाय, QuantaEdge सिर्फ सही micro-topic के approved questions उपलब्ध होने पर ही practice देगा। आपके lesson के answers save हैं।" english="Instead of showing questions from an unrelated topic, QuantaEdge only starts practice when approved questions for the correct micro-topic are available. Your lesson answers are saved." /></p></div>
+      {recap.map(block=>{
+        const data=parse<any>(block.content||'{}');
+        return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
+      })}
+      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student/learn'} className="button button-dark" style={{marginTop:22}}><LocaleText hinglish="दूसरा lesson चुनें" english="Choose another lesson" /></Link>
+    </section>
+  </main>;
+
+  if(sessionStatus==='COMPLETED'||index>=questions.length)return <main className="practice-page">
+    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice complete</span><span className="avatar">अ</span></header>
+    <section className="practice-wrap">
+      <div className="eyebrow"><LocaleText hinglish="Micro-topic पूरा हुआ" english="Micro-topic complete" /></div>
+      <h1><LocaleText hinglish="बहुत अच्छा! अभ्यास पूरा हुआ।" english="Well done! Practice complete." /></h1>
+      <p>{lesson?.title||tx('आपका practice session','Your practice session')} · {questions.length} <LocaleText hinglish="questions" english="questions" /></p>
+      <div className="concept-card"><h2><LocaleText hinglish="इस session का परिणाम" english="Session result" /></h2><p>{correctCount} / {gradedCount} <LocaleText hinglish="graded answers सही" english="graded answers correct" /></p><small><LocaleText hinglish="Progress आपके answers से save हुआ है। Mastery केवल जाँचे गए सही/गलत उत्तरों से update होती है।" english="Your answers have been saved. Mastery is updated from graded answers, not from simply opening a question." /></small></div>
+      {recap.map(block=>{
+        const data=parse<any>(block.content||'{}');
+        return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="अब दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
+      })}
+      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student/learn'} className="text-link"><LocaleText hinglish="अध्याय के lessons" english="Chapter lessons" /></Link><Link href="/student/progress" className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link></div>
+    </section>
+  </main>;
+
+  return <main className="practice-page">
+    <header className="lesson-header"><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
+    <section className="practice-wrap">
+      <div className="eyebrow">Class {lesson?.class_code??'—'} · {lesson?.chapter_name||tx('Topic practice','Topic practice')} · Session #{sessionId}</div>
       {notice&&<div className="feedback" role="status"><span>{notice}</span></div>}
-      {error&&<div className="practice-feedback" role="alert"><strong>Answer not saved</strong><span>{error}</span></div>}
+      {error&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong>Practice error</strong><span>{error}</span></div>}
       <div className="feedback">
-        <span>{q.exam_format??'Topic practice'}{q.marks?' · '+q.marks+' marks':''}</span>
-        <span>{q.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" />:q.source_kind??<LocaleText hinglish="Content team का question" english="Content team question" />}</span>
-        {q.source_year?<span>{q.source_year}</span>:null}
+        <span>{current.exam_format??tx('Topic practice','Topic practice')}{current.marks?' · '+current.marks+' marks':''}</span>
+        <span>{current.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" />:current.source_kind??<LocaleText hinglish="Content team का question" english="Content team question" />}</span>
+        {current.source_year?<span>{current.source_year}</span>:null}
       </div>
-      <h1><MathText text={q.prompt}/></h1>
-      <p><LocaleText hinglish="पहले सोचें, answer दें, फिर feedback पढ़कर अपनी reasoning check करें।" english="Think first, answer, then use the feedback to check your reasoning." /></p>
+      <h1><MathText text={current.prompt}/></h1>
+      <p><LocaleText hinglish="पहले सोचें, answer दें, फिर feedback पढ़ें। गलत होने पर इसी question को दोबारा try कर सकते हैं।" english="Think first, answer, then review the feedback. If it is incorrect, you can retry this same question." /></p>
 
       {options.length>0?<div className="option-grid">
-        {options.map(o=><button key={o.key} disabled={!!result||Boolean((q as any).answered)} className={selected===o.key?'selected':''} onClick={()=>void answer(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
-      </div>:q.question_type==='ORDER'?<OrderInput prompt={q.prompt} disabled={!!result} onSubmit={answer}/>:
-      q.question_type==='MATCH'?<MatchInput disabled={!!result} onSubmit={answer}/>:
+        {options.map(option=><button key={option.key} disabled={saving||result?.correct===true} className={selected===option.key?(result?.correct===false?'incorrect':result?.correct===true?'correct':'selected'):''} onClick={()=>void answer(option.key)}>{option.key}. <MathText text={option.label}/></button>)}
+      </div>:current.question_type==='ORDER'?<OrderInput prompt={current.prompt} disabled={saving||result?.correct===true} onSubmit={answer}/>:
+      current.question_type==='MATCH'?<MatchInput disabled={saving||result?.correct===true} onSubmit={answer}/>:
       <div className="concept-card">
-        {q.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} onChange={e=>setSelected(e.target.value)} placeholder={tx('Number वाला answer यहाँ लिखें…','Enter a numeric answer…')}/>:
-          <textarea value={selected} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?7:5}/>}
-        <button className="button button-dark" disabled={!selected.trim()||!!result||Boolean((q as any).answered)} onClick={()=>void answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
+        {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('Number वाला answer यहाँ लिखें…','Enter a numeric answer…')}/>:
+          <textarea value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
+        <button className="button button-dark" disabled={saving||!selected.trim()||result?.correct===true} onClick={()=>void answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
       </div>}
 
-      {result&&<div className={"practice-feedback "+(result.correct===false?"practice-feedback-incorrect":result.correct===true?"practice-feedback-correct":"practice-feedback-ungraded")} role={result.correct===false?"alert":"status"}>
-        <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
-        <span><MathText text={String(result.feedback ?? '')}/></span>{result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
+      {answerError&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="उत्तर save नहीं हुआ" english="Answer was not saved" /></strong><span>{answerError}</span></div>}
+      {result&&<div className={'practice-feedback '+(result.correct===false?'practice-feedback-incorrect':result.correct===true?'practice-feedback-correct':'practice-feedback-ungraded')} role={result.correct===false?'alert':'status'}>
+        <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not correct yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
+        <span><MathText text={String(result.feedback??'')}/></span>
+        {result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
       </div>}
 
       <div className="practice-footer">
         <span>Question {index+1} of {questions.length} · {sessionStatus.toLowerCase().replace('_',' ')}</span>
-        {result&&index+1<questions.length?<button className="button button-dark" onClick={next}><LocaleText hinglish="अगला question →" english="Next question →" /></button>:
-          result?<button className="button button-dark" onClick={resetPractice}><LocaleText hinglish="नया practice set बनाएँ →" english="Create another practice set →" /></button>:
+        {result?.correct===false?<button className="button button-dark" onClick={tryAgain}><LocaleText hinglish="फिर से प्रयास करें ↻" english="Try again ↻" /></button>:
+          result?<button className="button button-dark" onClick={next}>{index+1<questions.length?<LocaleText hinglish="अगला question →" english="Next question →" />:<LocaleText hinglish="Practice complete →" english="Finish practice →" />}</button>:
           <span><LocaleText hinglish="उत्तर दें" english="Answer" /></span>}
       </div>
-      <div style={{marginTop:16,display:'flex',justifyContent:'space-between',gap:10,flexWrap:'wrap'}}>
-        <small style={{color:'#667085'}}>Practice score (this visit): {correctCount} correct of {gradedCount} graded</small>
-        <button type="button" className="text-link" onClick={resetPractice}>Change topics / question types</button>
-      </div>
-      {sessionStatus==='COMPLETED'&&<div className="concept-card"><h2><LocaleText hinglish="Practice session complete" english="Practice session complete" /></h2><p>{questions.length} question(s) in this set. Your responses have been saved.</p><Link href="/student/progress" className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link></div>}
     </section>
   </main>;
 }
-
 
 function OrderInput({prompt,disabled,onSubmit}:{prompt:string;disabled:boolean;onSubmit:(value:string|object)=>void}){
   const letters=Array.from(new Set(prompt.match(/[A-D]/g)||[]));
