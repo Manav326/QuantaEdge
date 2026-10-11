@@ -32,7 +32,9 @@ function installRefreshRecovery() {
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
       return crossTabRetry;
     }
-    return nativeFetch(retryInput, init);
+    const retriedResponse = await nativeFetch(retryInput, init);
+    if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+    return retriedResponse;
   };
   window.fetch = enhancedFetch;
   return () => { if (window.fetch === enhancedFetch) window.fetch = nativeFetch; recoveryInstalled = false; };
