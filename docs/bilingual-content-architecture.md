@@ -62,12 +62,6 @@ After the V51 migration and student delivery/CMS changes are deployed, use Pytho
 
    This processes all remaining eligible active Class 6–8 Maths and Science records in both locales. It is resumable and skips existing current-source drafts/reviewed translations, so it will not overwrite the pilot or staff edits. It covers curriculum labels, chapters, objectives, lessons, JSON teaching blocks, questions/options/explanations, assessments, and available live/recorded class metadata. It does not translate PDFs or textbook assets; those are a separate phase. Use --include-archived only when legacy/archived learning paths are explicitly required.
 
-5. **Run the full structured-content translation.** Once staff accepts the pilot, omit --max-items to process all eligible active Class 6–8 Maths and Science records in both locales:
-
-       & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --apply --batch-size 20 --max-retries 5
-
-   This covers curriculum labels, chapters, objectives, lessons, JSON teaching blocks, questions/options/explanations, assessments and available live/recorded class metadata. It does not translate PDFs or textbook assets; those are a separate phase. Use --include-archived only when legacy/archived learning paths are explicitly required.
-
 The translator is resumable: current-source translations already in DRAFT, IN_REVIEW, APPROVED, or PUBLISHED are skipped; failures are logged for retry. Reports and JSONL files are written under QuantaEdge_Bilingual_Draft_Bundle, which is ignored by Git. The translation process never publishes. The staff workflow remains review → approve → publish.
  
 ## Acceptance gates
