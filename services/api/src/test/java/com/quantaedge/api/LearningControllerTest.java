@@ -125,7 +125,7 @@ class LearningControllerTest {
 
   @Test
   void answerRejectsQuestionsOutsideThePublishedStudentTrack() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
@@ -140,7 +140,7 @@ class LearningControllerTest {
 
   @Test
   void nullAnswerIsHandledAsAnEmptyAnswerInsteadOfThrowing() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
@@ -162,7 +162,7 @@ class LearningControllerTest {
   void practiceAnswerLocksTheSessionQuestionBeforeGrading() {
     when(jdbc.queryForList(contains("for update of psq,ps"), eq(5L), eq(7L), eq(42L)))
         .thenReturn(List.of(Map.of("question_id", 42L)));
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Explanation", "answer_payload", "{}")));
