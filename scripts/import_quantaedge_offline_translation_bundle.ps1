@@ -24,20 +24,23 @@ function Invoke-QeStaffAuthRequest {
         [Parameter(Mandatory = $true)][string]$Uri
     )
 
-    # Invoke-RestMethod -Headers does not support manually setting Cookie in
-    # Windows PowerShell 5.1. Use HttpClient so the actual Cookie header is sent.
+    # Let .NET serialize the cookie from a CookieContainer. This avoids differences
+    # between PowerShell versions when manually setting the restricted Cookie header.
     Add-Type -AssemblyName System.Net.Http -ErrorAction SilentlyContinue
+    $handler = $null
     $client = $null
     $request = $null
     $response = $null
     try {
-        $client = [System.Net.Http.HttpClient]::new()
-        $request = [System.Net.Http.HttpRequestMessage]::new(
-            [System.Net.Http.HttpMethod]::Get,
-            [Uri]$Uri
-        )
+        $handler = [System.Net.Http.HttpClientHandler]::new()
+        $handler.UseCookies = $true
+        $handler.CookieContainer = [System.Net.CookieContainer]::new()
+        $targetUri = [Uri]$Uri
+        $staffCookie = [System.Net.Cookie]::new("QE_STAFF_SESSION", $CookieValue.Trim(), "/")
+        $handler.CookieContainer.Add($targetUri, $staffCookie)
+        $client = [System.Net.Http.HttpClient]::new($handler)
+        $request = [System.Net.Http.HttpRequestMessage]::new([System.Net.Http.HttpMethod]::Get, $targetUri)
         [void]$request.Headers.TryAddWithoutValidation("Accept", "application/json")
-        [void]$request.Headers.TryAddWithoutValidation("Cookie", "QE_STAFF_SESSION=$CookieValue")
         [void]$request.Headers.TryAddWithoutValidation("X-QE-Workspace", "STAFF")
 
         $response = $client.SendAsync($request).GetAwaiter().GetResult()
@@ -51,7 +54,54 @@ function Invoke-QeStaffAuthRequest {
         if ($null -ne $response) { $response.Dispose() }
         if ($null -ne $request) { $request.Dispose() }
         if ($null -ne $client) { $client.Dispose() }
+        if ($null -ne $handler) { $handler.Dispose() }
     }
+}
+
+function Get-QeStaffSessionDiagnostics {
+    param([Parameter(Mandatory = $true)][string]$CookieValue)
+
+    # The raw token is hashed in-process. Only the one-way hash is used in the
+    # SQL query/output; never print or persist the cookie itself.
+    $sha = [System.Security.Cryptography.SHA256]::Create()
+    try {
+        $raw = [System.Text.Encoding]::UTF8.GetBytes($CookieValue.Trim())
+        $digest = $sha.ComputeHash($raw)
+        $tokenHash = [Convert]::ToBase64String($digest).TrimEnd([char]'=').Replace('+','-').Replace('/','_')
+    }
+    finally {
+        if ($null -ne $sha) { $sha.Dispose() }
+        $raw = $null
+        $digest = $null
+    }
+
+    $sql = "SELECT count(*)::text, coalesce(bool_or(s.revoked_at IS NULL),'false')::text, coalesce(bool_or(s.expires_at > now()),'false')::text, coalesce(bool_or(s.refresh_expires_at > now()),'false')::text, coalesce(bool_or(s.last_seen_at > now()-interval '4 hours'),'false')::text, coalesce(bool_or(s.staff_id IS NOT NULL AND s.user_id IS NULL AND s.student_id IS NULL),'false')::text, coalesce(bool_or(st.active = true),'false')::text FROM auth_session s LEFT JOIN staff_account st ON st.id=s.staff_id WHERE s.token_hash='$tokenHash';"
+    $shellScript = 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -At -F "|" -c "$1"'
+    $output = & docker compose exec -T postgres sh -lc $shellScript qe-session-diagnostic $sql 2>&1
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) {
+        Write-Warning "Could not inspect the session row in local Postgres: $($output -join ' ')"
+        return
+    }
+    $line = ($output | Select-Object -Last 1).ToString().Trim()
+    $parts = $line.Split('|')
+    if ($parts.Count -lt 7) {
+        Write-Warning "Postgres returned an unexpected session diagnostic result."
+        return
+    }
+    Write-Host ""
+    Write-Host "Local session diagnosis (cookie value is not shown):"
+    Write-Host "  matching session rows: $($parts[0])"
+    if ($parts[0] -eq "0") {
+        Write-Host "  result: this token is not stored in this Docker database." -ForegroundColor Yellow
+        return
+    }
+    Write-Host "  not revoked: $($parts[1])"
+    Write-Host "  access token unexpired: $($parts[2])"
+    Write-Host "  refresh session unexpired: $($parts[3])"
+    Write-Host "  recent session activity: $($parts[4])"
+    Write-Host "  staff-only identity: $($parts[5])"
+    Write-Host "  staff account active: $($parts[6])"
 }
 
 function Invoke-CheckedPython {
@@ -136,7 +186,8 @@ try {
 
             $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
             if ($authResponse.StatusCode -ne 200) {
-                throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). No content was written."
+                Get-QeStaffSessionDiagnostics -CookieValue $session
+                throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). The local database diagnosis above distinguishes a missing/expired session from a request-authentication problem. No content was written."
             }
         }
         try { $authCheck = $authResponse.Body | ConvertFrom-Json -ErrorAction Stop }
