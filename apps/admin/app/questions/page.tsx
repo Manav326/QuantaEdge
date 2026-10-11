@@ -161,7 +161,7 @@ export default function QuestionReviewPage(){
         <article className="admin-kpi"><span>Inactive questions</span><strong>{inactiveQuestions}</strong><small>Across all review statuses</small></article>
       </div>
 
-      <section className="admin-panel"" style={{marginTop:20}}>
+      <section className="admin-panel" style={{marginTop:20}}>
         <div className="admin-section-title"><div><span className="admin-kicker">REVIEW QUEUE</span><h2>All questions</h2><p style={{fontSize:12,color:"#6f7b90",marginTop:5}}>{totalQuestions.toLocaleString()} total records · {activeQuestions.toLocaleString()} active · {inactiveQuestions.toLocaleString()} inactive</p></div><span className="admin-live-label">{totalMatching.toLocaleString()} matching</span></div>
         <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center',margin:'16px 0'}}>
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600}}>Status
@@ -188,7 +188,7 @@ export default function QuestionReviewPage(){
             {rows.map(row=>{
               const options=parse(row.options,[]) as {key:string;label:string;is_correct?:boolean}[];
               const rejected=row.review_status==='REJECTED';
-              const canReview=row.lesson_status==='REVIEW'&&canManage&&!permissionLoading;
+              const canReview=['REVIEW','PUBLISHED'].includes(String(row.lesson_status||'').toUpperCase())&&canManage&&!permissionLoading;
               return <article key={row.question_id} style={{border:'1px solid #e1e5ed',borderRadius:14,padding:16,background:'#fff'}}>
                 <div style={{display:'flex',gap:10,justifyContent:'space-between',alignItems:'flex-start',flexWrap:'wrap'}}>
                   <div><div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap'}}><strong>Question #{row.question_id}</strong><span className="admin-live-label">{row.review_status}</span>{!row.active&&<span className="admin-live-label">INACTIVE</span>}</div>
