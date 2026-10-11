@@ -672,12 +672,18 @@ public class AdminContentController {
       throw badRequest("Append between 1 and 200 draft questions per request.");
     }
 
-    Set<String> existingPrompts=new HashSet<>();
+    Set<String> existingContentFingerprints=new HashSet<>();
     Set<String> existingPackageIds=new HashSet<>();
-    List<Map<String,Object>> stored=jdbc.queryForList(
-        "select prompt,tags::text as tags from question where lesson_id=?",lessonId);
+    List<Map<String,Object>> stored=jdbc.queryForList("""
+        select q.question_type,q.prompt,q.explanation,q.difficulty,q.marks,q.exam_format,
+               q.answer_payload::text as answer_payload,q.tags::text as tags,
+               coalesce((select jsonb_agg(jsonb_build_object(
+                 'key',qo.option_key,'label',qo.label,'correct',qo.is_correct,'sort_order',qo.sort_order
+               ) order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)::text as options
+        from question q where q.lesson_id=?
+        """,lessonId);
     for (Map<String,Object> row:stored) {
-      existingPrompts.add(normalizeQuestionPrompt(String.valueOf(row.get("prompt"))));
+      existingContentFingerprints.add(questionContentFingerprint(row));
       for (String tag:questionTagValues(row.get("tags"))) {
         if (tag.startsWith("qe-practice-id:")) existingPackageIds.add(tag);
       }
@@ -692,13 +698,17 @@ public class AdminContentController {
       List<String> tags=questionTagValues(question.get("tags"));
       String packageTag=tags.stream().filter(tag->tag.startsWith("qe-practice-id:")).findFirst()
           .orElseThrow(()->badRequest("Each appended question needs a stable qe-practice-id tag for safe retries."));
-      String promptKey=normalizeQuestionPrompt(requiredText(question.get("prompt"),1000));
-      if (existingPackageIds.contains(packageTag) || existingPrompts.contains(promptKey)) {
+      requiredText(question.get("prompt"),1000);
+      String contentFingerprint=questionContentFingerprint(question);
+      // An ID-tag match guarantees safe retries. Otherwise skip only an exact
+      // content+answer duplicate; equal prompt text alone is not enough because
+      // different choices or expected answers can be legitimate distinct questions.
+      if (existingPackageIds.contains(packageTag) || existingContentFingerprints.contains(contentFingerprint)) {
         skipped++;
         continue;
       }
       existingPackageIds.add(packageTag);
-      existingPrompts.add(promptKey);
+      existingContentFingerprints.add(contentFingerprint);
       additions.add(question);
     }
 
@@ -715,6 +725,78 @@ public class AdminContentController {
     result.put("lessonStatusChanged",false);
     result.put("teachingBlocksChanged",false);
     result.put("publishedOrApproved",false);
+    return result;
+  }
+
+  String questionContentFingerprint(Map<String,Object> question) {
+    Map<String,Object> signature=new LinkedHashMap<>();
+    signature.put("question_type",String.valueOf(first(question,"question_type","questionType")).toUpperCase(Locale.ROOT));
+    signature.put("prompt",normalizeQuestionPrompt(String.valueOf(question.get("prompt"))));
+    signature.put("explanation",question.get("explanation")==null?"":String.valueOf(question.get("explanation")).trim());
+    signature.put("difficulty",String.valueOf(question.get("difficulty")).toUpperCase(Locale.ROOT));
+    signature.put("marks",question.get("marks"));
+    signature.put("exam_format",question.get("exam_format")==null?question.get("examFormat"):question.get("exam_format"));
+    signature.put("answer_payload",canonicalJson(parsePotentialJson(first(question,"answer_payload","answerPayload"))));
+    signature.put("options",canonicalOptions(question.get("options")));
+    try {
+      return mapper.writeValueAsString(canonicalJson(signature));
+    } catch(JacksonException ex) {
+      throw new IllegalStateException("Could not fingerprint question content.",ex);
+    }
+  }
+
+  private Object parsePotentialJson(Object raw) {
+    if (!(raw instanceof String text)) return raw;
+    try {
+      return mapper.readValue(text,Object.class);
+    } catch(JacksonException ex) {
+      return raw;
+    }
+  }
+
+  private Object canonicalJson(Object value) {
+    if(value instanceof Map<?,?> map) {
+      Map<String,Object> sorted=new java.util.TreeMap<>();
+      for(Map.Entry<?,?> entry:map.entrySet()) {
+        if(entry.getKey() instanceof String key) sorted.put(key,canonicalJson(entry.getValue()));
+      }
+      return sorted;
+    }
+    if(value instanceof List<?> list) {
+      List<Object> ordered=new ArrayList<>();
+      for(Object item:list) ordered.add(canonicalJson(item));
+      return ordered;
+    }
+    return value;
+  }
+
+  private List<Map<String,Object>> canonicalOptions(Object raw) {
+    Object parsed=parsePotentialJson(raw);
+    if(!(parsed instanceof List<?> values)) return List.of();
+    List<Map<String,Object>> options=new ArrayList<>();
+    int index=0;
+    for(Object item:values) {
+      if(!(item instanceof Map<?,?> option)) continue;
+      index++;
+      Map<String,Object> normalized=new LinkedHashMap<>();
+      Object key=first(stringKeyed(option),"key","option_key");
+      Object label=option.get("label");
+      Object correct=first(stringKeyed(option),"correct","is_correct");
+      Object order=first(stringKeyed(option),"sort_order","sortOrder");
+      normalized.put("key",key==null?"":String.valueOf(key));
+      normalized.put("label",label==null?"":String.valueOf(label).trim());
+      normalized.put("correct",booleanValue(correct,false));
+      normalized.put("sort_order",order instanceof Number number?number.intValue():index);
+      options.add(normalized);
+    }
+    return options;
+  }
+
+  private Map<String,Object> stringKeyed(Map<?,?> source) {
+    Map<String,Object> result=new LinkedHashMap<>();
+    for(Map.Entry<?,?> entry:source.entrySet()) {
+      if(entry.getKey() instanceof String key) result.put(key,entry.getValue());
+    }
     return result;
   }
 
