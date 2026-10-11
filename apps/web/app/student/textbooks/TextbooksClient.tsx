@@ -183,9 +183,17 @@ export default function TextbooksClient() {
   useEffect(() => {
     if (!documentId) return;
     function onKeyDown(event: KeyboardEvent) {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.altKey) return;
       const target = event.target as HTMLElement | null;
       if (target && ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes(target.tagName)) return;
+      if ((event.ctrlKey || event.metaKey) && ['0', '+', '=', '-'].includes(event.key)) {
+        event.preventDefault();
+        if (event.key === '0') { setFitPage(true); setFitWidth(false); }
+        else if (event.key === '-') { setFitPage(false); setFitWidth(false); setZoom(z => Math.max(60, z - 10)); }
+        else { setFitPage(false); setFitWidth(false); setZoom(z => Math.min(160, z + 10)); }
+        return;
+      }
+      if (event.ctrlKey || event.metaKey) return;
       if (event.key === 'ArrowRight' || event.key === 'PageDown') {
         event.preventDefault(); setCurrentPage(p => Math.min(pageCount, p + 1));
       } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
@@ -309,7 +317,7 @@ export default function TextbooksClient() {
           <div className="qe-reader-toolbar" role="toolbar" aria-label="Textbook viewer controls">
             <div className="qe-reader-page-controls"><button type="button" aria-label="Previous page" disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button><label><span>Page</span><input type="number" min="1" max={pageCount} value={currentPage} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value)) setCurrentPage(Math.max(1, Math.min(pageCount, value))); }} onBlur={() => setCurrentPage(p => Math.max(1, Math.min(pageCount, p)))}/><span>of {pageCount}</span></label><button type="button" aria-label="Next page" disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>›</button></div>
             <div className="qe-reader-toolbar-divider"/>
-            <div className="qe-reader-zoom"><button type="button" aria-label="Zoom out" disabled={zoom <= 60} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.max(60, z - 10));}}>−</button><span>{fitWidth ? 'Fit width' : zoom + '%'}</span><button type="button" aria-label="Zoom in" disabled={zoom >= 160} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.min(160, z + 10));}}>＋</button></div>
+            <div className="qe-reader-zoom"><button type="button" aria-label="Zoom out" disabled={zoom <= 60} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.max(60, z - 10));}}>−</button><span>{fitPage ? 'Fit page' : fitWidth ? 'Fit width' : zoom + '%'}</span><button type="button" aria-label="Zoom in" disabled={zoom >= 160} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.min(160, z + 10));}}>＋</button></div>
             <button type="button" className={'qe-reader-tool-button' + (fitPage ? ' selected' : '')} onClick={() => {setFitPage(true);setFitWidth(false);}}>Fit page</button>
             <button type="button" className={'qe-reader-tool-button' + (fitWidth ? ' selected' : '')} onClick={() => {setFitPage(false);setFitWidth(value => !value);}}>{fitWidth ? 'Actual size' : 'Fit width'}</button>
             <button type="button" className={'qe-reader-tool-button' + (thumbnailsOpen ? ' selected' : '')} onClick={() => setThumbnailsOpen(value => !value)}>▤ Pages</button>
