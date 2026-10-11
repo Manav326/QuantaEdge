@@ -184,7 +184,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
     {answerError && <div className="feedback feedback-incorrect" role="alert"><span><MathText text={answerError}/></span></div>}
     {result && <div className={"feedback "+(result.correct===false?"feedback-incorrect":result.correct===true?"feedback-correct":"feedback-ungraded")} role={result.correct===false?"alert":"status"}>
       <b>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</b>
-      <span><MathText text={String(result.feedback ?? '')}/></span>
+      <span>{result.correct===true?<LocaleText hinglish="सही। Explanation पढ़ें और समझें कि उत्तर सही क्यों है।" english="Correct. Review the explanation to understand why this answer works." />:result.correct===false?<LocaleText hinglish="अभी सही नहीं। Explanation पढ़ें और फिर प्रयास करें।" english="Not quite. Review the explanation and try again." />:<LocaleText hinglish="उत्तर save हो गया। इस प्रश्न के लिए teacher की जाँच आवश्यक हो सकती है।" english="Your answer was saved. This question may require teacher or rubric review." />}</span>
       {result.explanation && <span><MathText text={String(result.explanation)}/></span>}
     </div>}
   </article>;
