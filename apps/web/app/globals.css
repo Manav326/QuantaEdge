@@ -597,16 +597,6 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-inline-fraction__numerator,.qe-inline-fraction__denominator{display:block;padding:0 .10em;line-height:1.05;font-variant-numeric:lining-nums}
 .qe-inline-fraction__denominator{border-top:1px solid currentColor;margin-top:.06em;padding-top:.07em}
 
-/* Answer feedback must communicate correctness through clear, accessible color. */
-.feedback.feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;border-radius:10px;padding:12px 15px;color:#b42318;}
-.feedback.feedback-incorrect b{color:#b42318;}
-.feedback.feedback-correct{background:#ecfdf3;border:1px solid #abefc6;border-radius:10px;padding:12px 15px;color:#067647;}
-.feedback.feedback-correct b{color:#067647;}
-.practice-feedback.practice-feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;color:#b42318;}
-.practice-feedback.practice-feedback-correct{background:#ecfdf3;border:1px solid #abefc6;color:#067647;}
-.practice-feedback.practice-feedback-ungraded{background:#f2f4f7;border:1px solid #d0d5dd;color:#475467;}
-
-
 /* Student assessment states: an incorrect choice must never look successful. */
 .answer-row button.incorrect,.option-grid button.incorrect{background:#fff0f0;border-color:#fda29b;color:#b42318;}
 .answer-row button.correct,.option-grid button.correct{background:#ecfdf3;border-color:#abefc6;color:#067647;}
