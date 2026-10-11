@@ -145,11 +145,19 @@ export default function StudentProfilePage() {
     setPhotoBusy(true);
     try {
       const profileImageDataUrl = await prepareProfilePhoto(file);
+      const response = await fetch('/api/v1/students/me/profile-photo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileImageDataUrl }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
       setDraft(current => ({ ...current, profileImageDataUrl }));
       setPhotoName(file.name);
-      setNotice(tx('Photo ready है। Profile पर रखने के लिए changes save करें।','Photo is ready. Save your changes to keep it on your profile.'));
+      setNotice(tx('आपकी photo profile में save हो गई है।','Your photo has been saved to your profile.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (photoError) {
-      setError(photoError instanceof Error ? photoError.message : 'Unable to use this photo.');
+      setError(photoError instanceof Error ? photoError.message : 'Unable to save this photo.');
     } finally {
       setPhotoBusy(false);
       event.target.value = '';
@@ -181,6 +189,7 @@ export default function StudentProfilePage() {
         profileImageDataUrl: body.profile_image_data_url || '',
       });
       setNotice(tx('आपकी profile save हो गई है।','Your profile has been saved.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
     } catch (saveError) {
       setError(saveError instanceof Error ? saveError.message : 'Your profile could not be saved. Please try again.');
     } finally {
@@ -188,11 +197,27 @@ export default function StudentProfilePage() {
     }
   }
 
-  function resetPhoto() {
-    setDraft(current => ({ ...current, profileImageDataUrl: '' }));
-    setPhotoName('');
-    setNotice(tx('Draft से photo हट गई है। Confirm करने के लिए changes save करें।','The photo has been removed from the draft. Save your changes to confirm.'));
+  async function resetPhoto() {
     setError('');
+    setNotice('');
+    setPhotoBusy(true);
+    try {
+      const response = await fetch('/api/v1/students/me/profile-photo', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileImageDataUrl: '' }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
+      setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setPhotoName('');
+      setNotice(tx('आपकी photo profile से हटा दी गई है।','Your photo has been removed from your profile.'));
+      window.dispatchEvent(new Event('qe:profile-updated'));
+    } catch (photoError) {
+      setError(photoError instanceof Error ? photoError.message : 'Your photo could not be removed.');
+    } finally {
+      setPhotoBusy(false);
+    }
   }
 
   return (
@@ -230,7 +255,7 @@ export default function StudentProfilePage() {
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
                     <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : draft.profileImageDataUrl ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
-                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
+                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
               </div>
