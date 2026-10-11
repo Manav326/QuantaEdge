@@ -10,6 +10,13 @@ type WorkspaceRole = 'student' | 'parent';
 let fetchRecoveryInstalled = false;
 let verifiedWorkspace: WorkspaceRole | null = null;
 
+function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
+  const headers = new Headers(input instanceof Request ? input.headers : undefined);
+  new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
+  headers.set('X-QE-Workspace', 'LEARNING');
+  return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
+}
+
 function installRefreshRecovery() {
   if (fetchRecoveryInstalled || typeof window === 'undefined') return () => {};
   fetchRecoveryInstalled = true;
@@ -24,22 +31,26 @@ function installRefreshRecovery() {
     } catch { return nativeFetch(input, init); }
     const isApi = target.origin === window.location.origin && target.pathname.startsWith('/api/v1/');
     const skip = !isApi || excluded.some(path => target!.pathname.startsWith(path));
-    const retryInput = input instanceof Request ? input.clone() : input;
-    const response = await nativeFetch(input, init);
+    // Attach the portal identity to every API request, including login, refresh,
+    // and logout. Ports do not isolate browser cookies on localhost.
+    const requestInput = isApi ? workspaceRequest(input, init) : input;
+    const requestInit = isApi ? undefined : init;
+    const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
+    const response = await nativeFetch(requestInput, requestInit);
     if (skip || (response.status !== 401 && response.status !== 403)) return response;
     if (!refreshInFlight) {
-      refreshInFlight = nativeFetch('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' })
+      refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     const refreshed = await refreshInFlight;
     if (!refreshed) {
       // Another tab may already have rotated the shared refresh cookie.
-      const crossTabRetry = await nativeFetch(retryInput, init);
+      const crossTabRetry = await nativeFetch(retryInput);
       if (crossTabRetry.ok) return crossTabRetry;
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
       return crossTabRetry;
     }
-    const retriedResponse = await nativeFetch(retryInput, init);
+    const retriedResponse = await nativeFetch(retryInput);
     if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
     return retriedResponse;
   };
