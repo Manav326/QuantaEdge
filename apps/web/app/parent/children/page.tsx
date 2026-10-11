@@ -137,11 +137,6 @@ export default function ParentChildrenPage(){
   const trackOptions=[{code:'maths',label:'गणित · Maths'},{code:'science',label:'विज्ञान · Science'}];
 
   return <main className="parent-app">
-    <header className="parent-header">
-      <QuantaEdgeBrand variant="compact" />
-      <span><LocaleText hinglish="Parent account" english="Parent account" /></span>
-      <Link href="/parent" className="text-link"><LocaleText hinglish="← Learning report" english="← Learning report" /></Link>
-    </header>
     <section className="parent-dashboard parent-manage">
       <div className="parent-manage-hero">
         <div><span className="eyebrow"><LocaleText hinglish="FAMILY LEARNING" english="FAMILY LEARNING" /></span><h1><LocaleText hinglish="बच्चों के Profiles" english="Children’s profiles" /></h1>

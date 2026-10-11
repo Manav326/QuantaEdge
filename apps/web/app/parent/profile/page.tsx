@@ -236,11 +236,6 @@ export default function ParentProfilePage() {
 
   return (
     <main className="parent-app parent-profile-page">
-      <header className="parent-header">
-        <QuantaEdgeBrand variant="compact" />
-        <span><LocaleText hinglish="Parent account" english="Parent account" /></span>
-        <ParentAccountMenu displayName={draft.displayName || 'Parent account'} mobile={identity.mobile} profileImageUrl={photoChanged ? (draft.profileImageDataUrl || undefined) : (identity.profileImageUrl || undefined)} />
-      </header>
       <div className="parent-profile-page__wrap">
         <div className="parent-profile-page__breadcrumb">
           <Link href="/parent"><LocaleText hinglish="← Family dashboard पर वापस" english="← Back to family dashboard" /></Link>

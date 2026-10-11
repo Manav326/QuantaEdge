@@ -363,7 +363,6 @@ export default function LearnClient() {
 
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress"><LocaleText hinglish="Class" english="Class" /> {trackBrowse.classCode} · <LocaleText hinglish="Published syllabus" english="Published syllabus" /></span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
       <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
       <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
@@ -392,7 +391,6 @@ export default function LearnClient() {
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><LocaleText hinglish="Lesson load हो रहा है…" english="Loading lesson…" /></div></section></main>;
 
   return <main className="lesson-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span className="lesson-progress">Published syllabus · {lesson.estimated_minutes} min</span><span className="avatar">अ</span></header>
     <section className="lesson-wrap">
       <div className="lesson-meta">
         <span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_code==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />} · {lesson.chapter_name}</span>

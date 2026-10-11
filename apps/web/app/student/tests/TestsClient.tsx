@@ -198,10 +198,8 @@ export default function TestsClient(){
   }
 
   return <main className={styles.shell}>
-    <header className={styles.header}><Link href="/student" className={styles.brand}><span>Q</span><b>QuantaEdge<small>STUDENT LEARNING</small></b></Link><nav><Link href="/student/learn"><LocaleText hinglish="पढ़ाई" english="Learning"/></Link><Link href="/student/textbooks"><LocaleText hinglish="किताबें" english="Textbooks"/></Link><Link href="/student">Home</Link></nav></header>
     <section className={styles.wrap}>
       {!attempt?<>
-        <div className={styles.hero}><div><span className={styles.eyebrow}>TESTS · RESULTS · PROGRESS</span><h1><LocaleText hinglish="अपनी तैयारी जाँचें। अपनी प्रगति सुरक्षित रखें।" english="Test your learning. Keep every result." /></h1><p><LocaleText hinglish="हर test attempt save होता है। अगर किसी answer को teacher की जाँच चाहिए, result approve होने तक सुरक्षित रहेगा।" english="Every test attempt is saved. Answers that need teacher review stay safely recorded until the result is released." /></p></div><div className={styles.heroArt} aria-hidden="true"><span>✓</span><i/><b/><small>YOUR<br/>PROGRESS</small></div></div>
         {error&&<div className={styles.error} role="alert">{error}</div>}
         <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{tests.length}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{results.length}</span></button></div>
         {tab==='tests'?<>
