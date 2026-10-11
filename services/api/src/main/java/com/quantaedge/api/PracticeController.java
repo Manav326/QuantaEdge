@@ -115,6 +115,31 @@ public class PracticeController {
       where lesson_id=? and concept_id is not null and active=true
         and review_status in ('APPROVED','PUBLISHED')
       """,Long.class,lessonId);
+
+    // Imported draft bundles can have useful topic/subtopic labels without canonical
+    // objective_id/concept_id mappings. Use those labels only as exact-match scope;
+    // never broaden practice to arbitrary questions elsewhere in the chapter.
+    List<String> topicNames=new ArrayList<>();
+    List<String> subtopicNames=new ArrayList<>();
+    String lessonTitleForScope=String.valueOf(lesson.get("title")).trim().toLowerCase(java.util.Locale.ROOT);
+    if(!lessonTitleForScope.isBlank() && !"null".equals(lessonTitleForScope)) topicNames.add(lessonTitleForScope);
+    List<Map<String,Object>> metadataRows=jdbc.queryForList("""
+      select distinct nullif(lower(btrim(topic)),'') as topic,
+             nullif(lower(btrim(subtopic)),'') as subtopic
+      from question
+      where lesson_id=? and active=true
+      """,lessonId);
+    for(Map<String,Object> row:metadataRows) {
+      Object topic=row.get("topic");
+      if(topic!=null && !String.valueOf(topic).isBlank() && !topicNames.contains(String.valueOf(topic))) {
+        topicNames.add(String.valueOf(topic));
+      }
+      Object subtopic=row.get("subtopic");
+      if(subtopic!=null && !String.valueOf(subtopic).isBlank() && !subtopicNames.contains(String.valueOf(subtopic))) {
+        subtopicNames.add(String.valueOf(subtopic));
+      }
+    }
+
     String scopeFilter;
     List<Object> scopeArgs=new ArrayList<>();
     if(objective instanceof Number objectiveNumber) {
@@ -139,6 +164,23 @@ public class PracticeController {
       // widening the set to unrelated questions from the same chapter.
       scopeFilter="q.lesson_id=?";
       scopeArgs.add((long)lessonId);
+    }
+
+    List<String> exactTagClauses=new ArrayList<>();
+    List<Object> exactTagArgs=new ArrayList<>();
+    if(!topicNames.isEmpty()) {
+      exactTagClauses.add("lower(btrim(coalesce(q.topic,''))) in ("+
+          String.join(",",java.util.Collections.nCopies(topicNames.size(),"?"))+")");
+      exactTagArgs.addAll(topicNames);
+    }
+    if(!subtopicNames.isEmpty()) {
+      exactTagClauses.add("lower(btrim(coalesce(q.subtopic,''))) in ("+
+          String.join(",",java.util.Collections.nCopies(subtopicNames.size(),"?"))+")");
+      exactTagArgs.addAll(subtopicNames);
+    }
+    if(!exactTagClauses.isEmpty()) {
+      scopeFilter="("+scopeFilter+" or "+String.join(" or ",exactTagClauses)+")";
+      scopeArgs.addAll(exactTagArgs);
     }
 
     int requestedCount=10;
