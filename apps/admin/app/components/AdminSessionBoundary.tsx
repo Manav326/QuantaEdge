@@ -59,28 +59,21 @@ function staffHome(session: StaffSession) {
   return '/login';
 }
 
-async function logoutToSwitch() {
-  await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
-  window.location.replace('/login');
-}
-
 if (typeof window !== 'undefined') installRefreshRecovery();
 
 export default function AdminSessionBoundary({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [ready, setReady] = useState(false);
-  const [blocked, setBlocked] = useState(false);
   const isLogin = pathname === '/login';
   const isSession = pathname === '/session';
   useEffect(() => installRefreshRecovery(), []);
   useEffect(() => {
     let alive = true;
-    if (isSession) { setReady(true); setBlocked(false); return; }
-    setReady(false); setBlocked(false);
+    if (isSession) { setReady(true); return; }
+    setReady(false);
     const check = async () => {
       setReady(false);
-      setBlocked(false);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;
@@ -90,7 +83,12 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
         }
         const session = await response.json() as StaffSession;
         if (!alive) return;
-        if (!session.staffId) { setBlocked(true); return; }
+        if (!session.staffId) {
+          // A legacy cookie from the learning site must never trap the staff portal
+          // on a workspace warning. Route to this portal's own sign-in instead.
+          if (isLogin) setReady(true); else router.replace('/login');
+          return;
+        }
         const home = staffHome(session);
         if (isLogin || (pathname === '/' && home !== '/')) { router.replace(home); return; }
         setReady(true);
@@ -120,7 +118,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   }, [pathname, router, isLogin, isSession]);
 
   useEffect(() => {
-    if (isLogin || isSession || !ready || blocked) return;
+    if (isLogin || isSession || !ready) return;
     let lastActivity = Date.now();
     const markActivity = () => { lastActivity = Date.now(); };
     const activityEvents = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'];
@@ -134,7 +132,7 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
       window.clearInterval(heartbeat);
       activityEvents.forEach(name => window.removeEventListener(name, markActivity));
     };
-  }, [ready, blocked, isLogin, isSession]);
+  }, [ready, isLogin, isSession]);
 
   useEffect(() => {
     const onSessionExpired = () => {
@@ -145,7 +143,6 @@ export default function AdminSessionBoundary({ children }: { children: React.Rea
   }, [isLogin, isSession]);
 
   if (isSession) return <>{children}</>;
-  if (blocked) return <main className="qe-session-gate"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">SECURE WORKSPACE</span><h1>This sign-in belongs to the learning site.</h1><p>To keep accounts separate, sign out before entering the staff console.</p><button className="button button-dark" onClick={() => void logoutToSwitch()}>Log out to switch accounts</button></section></main>;
   if (!ready) return <main className="qe-session-gate" aria-live="polite"><section><img src="/branding/quantaedge-icon.png" alt="" width="48" height="48" /><span className="eyebrow">QUANTAEDGE STAFF</span><h1>Verifying secure access…</h1><p>Your staff role and saved session are being checked.</p></section></main>;
   return <>{children}</>;
 }
