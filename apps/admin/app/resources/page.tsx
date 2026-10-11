@@ -110,8 +110,10 @@ export default function TextbookLibraryPage() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
-  const canEdit = role === 'ADMIN' || permissions.includes('CONTENT_EDIT');
-  const canPublish = role === 'ADMIN' || permissions.includes('CONTENT_PUBLISH');
+  const isAdmin = role === 'ADMIN';
+  const maxPdfBytes = isAdmin ? 500 * 1024 * 1024 : 50 * 1024 * 1024;
+  const canEdit = isAdmin || permissions.includes('CONTENT_EDIT');
+  const canPublish = isAdmin || permissions.includes('CONTENT_PUBLISH');
   const classOptions = useMemo(
     () => [...new Map(tracks.map(track => [track.class_code, track])).values()],
     [tracks],
@@ -220,6 +222,12 @@ export default function TextbookLibraryPage() {
 
   async function uploadPdf() {
     if (!file) { setError('Choose the existing textbook PDF file first.'); return; }
+    if (file.size > maxPdfBytes) {
+      setError(isAdmin
+        ? 'Admin PDF uploads are limited to 500 MB per file by the API configuration.'
+        : 'PDF uploads for this staff account are limited to 50 MB per file.');
+      return;
+    }
     if (!pdfTitle.trim()) { setError('Give this PDF a recognizable library title.'); return; }
     setBusy(true); setError(''); setNotice('');
     try {
@@ -338,14 +346,24 @@ export default function TextbookLibraryPage() {
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
           </label>
           <div className={styles.uploadBox}>
-            <div className={styles.uploadTitle}><b>Add a PDF to the library</b><small>PDF only · maximum 50 MB · up to 2,000 pages</small></div>
+            <div className={styles.uploadTitle}><b>Add a PDF to the library</b><small>PDF only · maximum {isAdmin ? '500 MB for Admin' : '50 MB'} · up to 2,000 pages</small></div>
             <label className={styles.field}>Library title
               <input value={pdfTitle} onChange={e => setPdfTitle(e.target.value)} placeholder="e.g. Bihar Board Class 6 Mathematics" />
             </label>
             <label className={styles.field}>Extraction source reference (optional)
               <input value={sourceReference} onChange={e => setSourceReference(e.target.value)} placeholder="Source filename, SHA-256, extraction bundle ID…" />
             </label>
-            <label className={styles.fileInput} htmlFor="qe-pdf-file"><span>Choose PDF file</span><input id="qe-pdf-file" type="file" accept="application/pdf,.pdf" onChange={e => setFile(e.target.files?.[0] || null)} /><small>{file ? file.name + ' · ' + formatBytes(file.size) : 'No file selected'}</small></label>
+            <label className={styles.fileInput} htmlFor="qe-pdf-file"><span>Choose PDF file</span><input id="qe-pdf-file" type="file" accept="application/pdf,.pdf" onChange={e => {
+              const nextFile = e.target.files?.[0] || null;
+              setFile(nextFile);
+              if (nextFile && nextFile.size > maxPdfBytes) {
+                setError(isAdmin
+                  ? 'This file exceeds the 500 MB Admin upload limit.'
+                  : 'This file exceeds the 50 MB upload limit for this staff account.');
+              } else {
+                setError('');
+              }
+            }} /><small>{file ? file.name + ' · ' + formatBytes(file.size) : 'No file selected'}</small></label>
             <button type="button" className={styles.primaryButton} disabled={busy || !file || !pdfTitle.trim()} onClick={() => void uploadPdf()}>{busy ? 'Processing…' : 'Validate and save PDF'}</button>
           </div>
         </div>
