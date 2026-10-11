@@ -25,7 +25,26 @@ async function readBody(response:Response):Promise<any>{
   try{return JSON.parse(value)}catch{return {message:value}}
 }
 function recapBlocks(lesson:LessonDetail|null){
-  return (lesson?.blocks||[]).filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
+  const candidates=(lesson?.blocks||[])
+    .filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP')
+    .filter(block=>{
+      const content=parse<any>(block.content||'{}');
+      return Array.isArray(content?.points)&&content.points.some((point:unknown)=>typeof point==='string'&&point.trim());
+    });
+  // Some imported lessons contain the same recap twice: once as SUMMARY and again
+  // as RECAP. Prefer the explicit RECAP block and render identical point lists once.
+  const byContent=new Map<string,LessonBlock>();
+  for(const block of candidates){
+    const content=parse<any>(block.content||'{}');
+    const points=(content.points as string[])
+      .map(point=>point.trim().replace(/\\s+/g,' ').toLocaleLowerCase());
+    const key=JSON.stringify(points);
+    const previous=byContent.get(key);
+    if(!previous || (block.block_type==='RECAP'&&previous.block_type!=='RECAP')){
+      byContent.set(key,block);
+    }
+  }
+  return Array.from(byContent.values()).sort((a,b)=>a.sequence_no-b.sequence_no);
 }
 
 export default function PracticePage(){
