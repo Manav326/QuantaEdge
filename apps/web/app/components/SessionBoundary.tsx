@@ -85,16 +85,15 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
     // Validate sign-in at workspace entry. On intra-workspace navigation, reuse
     // the verified role: API routes still enforce authentication and the shared
     // refresh interceptor handles expired access sessions without blanking the UI.
-    if (isPublicEntry) verifiedWorkspace = null;
-    if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
-      setBlockedRole(null);
-      setReady(true);
-      return () => { alive = false; };
-    }
-
-    setReady(false);
-    setBlockedRole(null);
     const check = async (force = false) => {
+      if (isPublicEntry) verifiedWorkspace = null;
+      if (!force && protectedWorkspace && verifiedWorkspace === protectedWorkspace) {
+        setBlockedRole(null);
+        setReady(true);
+        return;
+      }
+      setReady(false);
+      setBlockedRole(null);
       try {
         const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
         if (!alive) return;
