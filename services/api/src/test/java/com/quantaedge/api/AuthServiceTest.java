@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -205,6 +206,66 @@ class AuthServiceTest {
     assertEquals(null, auth.current(token));
 
     verify(jdbc).update(contains("update auth_session set revoked_at=now()"), eq(hash(token)));
+  }
+
+  @Test
+  void learningSessionCookieIsRejectedByStaffWorkspaceWithoutSlidingItsTimeout() throws Exception {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+    String token = "parent-session-cookie";
+    Map<String,Object> parentRow = new java.util.HashMap<>();
+    parentRow.put("user_id", 52L);
+    parentRow.put("student_id", null);
+    parentRow.put("staff_id", null);
+    parentRow.put("role", "PARENT");
+    parentRow.put("display_name", "Parent Account");
+    parentRow.put("student_name", null);
+    parentRow.put("staff_role", null);
+    parentRow.put("staff_name", null);
+    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+        .thenReturn(List.of(parentRow));
+
+    assertNull(auth.currentForWorkspace(token, "STAFF"));
+
+    verify(jdbc, never()).update(
+        contains("refresh_expires_at=case when refresh_token_hash is not null"),
+        eq(4), eq(hash(token)));
+  }
+
+  @Test
+  void staffSessionIsAcceptedOnlyInTheStaffWorkspace() throws Exception {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+    String token = "staff-session-cookie";
+    Map<String,Object> staffRow = new java.util.HashMap<>();
+    staffRow.put("user_id", null);
+    staffRow.put("student_id", null);
+    staffRow.put("staff_id", 41L);
+    staffRow.put("role", null);
+    staffRow.put("display_name", null);
+    staffRow.put("student_name", null);
+    staffRow.put("staff_role", "ADMIN");
+    staffRow.put("staff_name", "Administrator");
+    when(jdbc.queryForList(contains("where s.token_hash=?"), eq(hash(token))))
+        .thenReturn(List.of(staffRow));
+
+    AuthContext staff = auth.currentForWorkspace(token, "STAFF");
+
+    assertEquals(41L, staff.staffId());
+    assertEquals("ADMIN", staff.role());
+    assertNull(auth.currentForWorkspace(token, "LEARNING"));
+  }
+
+  @Test
+  void refreshQueryScopesLegacyRefreshTokensToTheRequestedWorkspace() throws Exception {
+    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+    String refreshToken = "legacy-staff-refresh";
+    when(jdbc.queryForList(contains("select s.id"), eq(hash(refreshToken))))
+        .thenReturn(List.of());
+
+    assertThrows(SecurityException.class, () -> auth.refreshSession(refreshToken, "LEARNING"));
+
+    verify(jdbc).queryForList(contains("and s.staff_id is null"), eq(hash(refreshToken)));
+    verify(jdbc, never()).update(contains("set token_hash=?,refresh_token_hash=?"),
+        any(), any(), any(), any(), any());
   }
 
   private static String hash(String value) throws Exception {
