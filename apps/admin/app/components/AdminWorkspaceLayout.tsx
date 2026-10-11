@@ -12,6 +12,7 @@ type NavItem = { key: AdminSection; href: string; icon: string; english: string;
 const navItems: NavItem[] = [
   { key: 'overview', href: '/', icon: '▦', english: 'Overview', hinglish: 'Overview' },
   { key: 'content', href: '/content', icon: '◈', english: 'Content Studio', hinglish: 'Content Studio' },
+  { key: 'translations', href: '/translations', icon: '文', english: 'Language review', hinglish: 'भाषा अनुवाद समीक्षा' },
   { key: 'questions', href: '/questions', icon: '✓', english: 'Question review', hinglish: 'MCQ समीक्षा' },
   { key: 'resources', href: '/resources', icon: '▤', english: 'Textbook library', hinglish: 'Textbook library' },
   { key: 'sources', href: '/source-ingestion', icon: '⇣', english: 'Source ingestion', hinglish: 'Source जोड़ें' },
@@ -25,6 +26,7 @@ const navItems: NavItem[] = [
 function activeSection(pathname: string): AdminSection {
   if (pathname === '/') return 'overview';
   if (pathname.startsWith('/content') || pathname.startsWith('/legacy-content')) return 'content';
+  if (pathname.startsWith('/translations')) return 'translations';
   if (pathname.startsWith('/questions')) return 'questions';
   if (pathname.startsWith('/resources')) return 'resources';
   if (pathname.startsWith('/source-ingestion')) return 'sources';
@@ -41,6 +43,7 @@ function canSee(item: NavItem, role: string, permissions: string[]) {
   if (item.key === 'overview') return role === 'ADMIN';
   if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
   if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
+  if (item.key === 'translations') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_REVIEW') || permissions.includes('CONTENT_EDIT');
   if (item.key === 'questions') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_REVIEW');
   if (item.key === 'resources') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW') || permissions.includes('CONTENT_EDIT') || permissions.includes('CONTENT_PUBLISH');
   if (item.key === 'sources') return role === 'ADMIN' || permissions.includes('CONTENT_REVIEW');
