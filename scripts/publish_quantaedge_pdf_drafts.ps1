@@ -123,27 +123,6 @@ function Invoke-QEApi {
     }
 }
 
-if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION) -and [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
-    throw 'Set a current QE_SESSION in QUANTAEDGE_ADMIN_SESSION or a QE_REFRESH in QUANTAEDGE_ADMIN_REFRESH after signing into QuantaEdge Admin.'
-}
-if (-not (Test-Path -LiteralPath $ImportReport -PathType Leaf)) {
-    throw "Import report not found: $ImportReport. Run from the PDF bundle directory or pass -ImportReport explicitly."
-}
-$script:BaseUri = [Uri]$ApiUrl
-$isLocal = $script:BaseUri.Host -in @('localhost','127.0.0.1','::1')
-if ($script:BaseUri.Scheme -ne 'https' -and -not ($script:BaseUri.Scheme -eq 'http' -and $isLocal)) {
-    throw 'Use HTTPS for a non-local API URL. HTTP is allowed only for localhost development.'
-}
-
-# Let PowerShell's cookie container send, receive, and rotate HttpOnly-style auth cookies.
-# A raw Cookie header can be mishandled by Windows PowerShell; never print the cookie values.
-$script:WebSession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
-    $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_SESSION', $env:QUANTAEDGE_ADMIN_SESSION, '/'))
-}
-if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
-    $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_REFRESH', $env:QUANTAEDGE_ADMIN_REFRESH, '/'))
-}
 $startedAt = (Get-Date).ToString('o')
 $actions = New-Object 'System.Collections.Generic.List[object]'
 $failures = New-Object 'System.Collections.Generic.List[string]'
@@ -169,6 +148,27 @@ $report = @{
 
 $rows = @()
 try {
+    if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION) -and [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+        throw 'A QE_REFRESH cookie is required. Sign in to QuantaEdge Admin and set the current QE_REFRESH cookie in QUANTAEDGE_ADMIN_REFRESH. No publish requests were sent.'
+    }
+    if (-not (Test-Path -LiteralPath $ImportReport -PathType Leaf)) {
+        throw "Import report not found: $ImportReport. Run from the PDF bundle directory or pass -ImportReport explicitly."
+    }
+    $script:BaseUri = [Uri]$ApiUrl
+    $isLocal = $script:BaseUri.Host -in @('localhost','127.0.0.1','::1')
+    if ($script:BaseUri.Scheme -ne 'https' -and -not ($script:BaseUri.Scheme -eq 'http' -and $isLocal)) {
+        throw 'Use HTTPS for a non-local API URL. HTTP is allowed only for localhost development.'
+    }
+
+    # The web session captures cookie rotation from refresh; never print cookie values.
+    $script:WebSession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+    if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
+        $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_SESSION', $env:QUANTAEDGE_ADMIN_SESSION, '/'))
+    }
+    if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+        $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_REFRESH', $env:QUANTAEDGE_ADMIN_REFRESH, '/'))
+    }
+
     $import = Get-Content -LiteralPath $ImportReport -Raw | ConvertFrom-Json
     if ([string]$import.result -ne 'COMPLETED') {
         throw "Import report result must be COMPLETED; found '$($import.result)'."
@@ -203,7 +203,12 @@ try {
     }
 
     # Verify the newly refreshed session directly. Do not auto-refresh here: failure must stop and request a current cookie.
-    $me = Invoke-QERaw -Path '/api/v1/auth/me'
+    try {
+        $me = Invoke-QERaw -Path '/api/v1/auth/me'
+    } catch {
+        $detail = Get-QEHttpErrorDetails -ErrorRecord $_ -Path '/api/v1/auth/me'
+        throw "The refreshed Admin session could not be verified. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, set it in QUANTAEDGE_ADMIN_REFRESH, and rerun. Details: $detail"
+    }
     if (-not $me.authenticated) {
         throw 'The refreshed Admin session failed /auth/me verification. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, set it in QUANTAEDGE_ADMIN_REFRESH, and rerun.'
     }
@@ -397,6 +402,17 @@ try {
     Write-Host "PUBLISH SCRIPT STOPPED SAFELY: $caughtMessage" -ForegroundColor Red
 }
 finally {
+    # Recover the intended batch from the import report even when setup/auth failed early.
+    if ((@($rows)).Count -eq 0 -and (Test-Path -LiteralPath $ImportReport -PathType Leaf)) {
+        try {
+            $savedImport = Get-Content -LiteralPath $ImportReport -Raw | ConvertFrom-Json
+            $rows = @($savedImport.rows | Where-Object { $_.action -eq 'CREATED_DRAFT' -and $null -ne $_.document_id })
+            if ($report.target_count -eq 0 -and $rows.Count -gt 0) {
+                $report.target_count = $rows.Count
+                $report.targets = $rows
+            }
+        } catch { }
+    }
     # Always reconcile and print the end-state, for successful, dry-run, and failed executions.
     $actionById = @{}
     foreach ($item in @($actions.ToArray())) {
