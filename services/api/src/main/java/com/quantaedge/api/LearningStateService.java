@@ -49,11 +49,16 @@ public class LearningStateService {
       values(?,?,?,?,?,now(),?)
       """,studentId,questionId,selected,answer,correct,practiceSessionId);
     if(practiceSessionId!=null) {
-      jdbc.update("""
-        update student_practice_session_question
-        set answered_at=coalesce(answered_at,now())
-        where practice_session_id=? and question_id=?
-        """,practiceSessionId,questionId);
+      // Wrong auto-graded answers stay open so the learner can retry this question.
+      // Correct answers and rubric/ungraded answers complete the item and advance the session.
+      boolean itemComplete=!(autoGraded && Boolean.FALSE.equals(correct));
+      if(itemComplete) {
+        jdbc.update("""
+          update student_practice_session_question
+          set answered_at=coalesce(answered_at,now())
+          where practice_session_id=? and question_id=?
+          """,practiceSessionId,questionId);
+      }
       jdbc.update("""
         update student_practice_session ps set
           status=case when not exists(
