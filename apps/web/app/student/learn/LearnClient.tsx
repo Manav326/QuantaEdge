@@ -5,10 +5,9 @@ import MathText from '../../components/MathText';
 
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
-import InlineTextbookReader from './InlineTextbookReader';
 
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
@@ -220,6 +219,9 @@ export default function LearnClient() {
   const [lesson,setLesson]=useState<Detail|null>(null);
   const [trackBrowse,setTrackBrowse]=useState<TrackBrowse|null>(null);
   const [studentDocuments,setStudentDocuments]=useState<StudentDocument[]>([]);
+  const [documentsLoaded,setDocumentsLoaded]=useState(false);
+  const [openChapter,setOpenChapter]=useState('');
+  const initializedChapterScope=useRef('');
   const [help,setHelp]=useState('none');
   const [tutorOpen,setTutorOpen]=useState(false);
   const [tutorQuestionId,setTutorQuestionId]=useState<number|undefined>(undefined);
@@ -340,15 +342,18 @@ export default function LearnClient() {
     const subjectCode=trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
     if(!subjectCode||!['maths','science'].includes(subjectCode)){
       setStudentDocuments([]);
+      setDocumentsLoaded(false);
       return;
     }
     let cancelled=false;
     const language=locale==='english'?'en':'hi';
+    setDocumentsLoaded(false);
     setStudentDocuments([]);
     fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language,{cache:'no-store'})
       .then(async response=>response.ok?response.json():null)
-      .then(body=>{if(!cancelled&&Array.isArray(body))setStudentDocuments(body as StudentDocument[]);})
-      .catch(()=>undefined);
+      .then(body=>{if(!cancelled)setStudentDocuments(Array.isArray(body)?body as StudentDocument[]:[]);})
+      .catch(()=>undefined)
+      .finally(()=>{if(!cancelled)setDocumentsLoaded(true);});
     return()=>{cancelled=true;};
   },[locale,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
 
@@ -361,31 +366,106 @@ export default function LearnClient() {
     };
   },[sessionId,sessionStarted]);
 
+  const chapterStorageScope=trackBrowse?trackBrowse.classCode+':'+trackBrowse.subjectCode:'';
+  useEffect(()=>{
+    if(!trackBrowse||!documentsLoaded||!chapterStorageScope||initializedChapterScope.current===chapterStorageScope)return;
+    const key='qe:student:open-chapter:'+chapterStorageScope;
+    const remembered=localStorage.getItem(key);
+    const initial=trackGroups.find(group=>group.code===remembered)?.code||trackGroups[0]?.code||'';
+    setOpenChapter(initial);
+    if(initial)localStorage.setItem(key,initial);
+    initializedChapterScope.current=chapterStorageScope;
+  },[trackBrowse?.classCode,trackBrowse?.subjectCode,documentsLoaded,chapterStorageScope,trackGroups]);
+
+  useEffect(()=>{
+    if(!trackBrowse||!documentsLoaded||!chapterStorageScope||initializedChapterScope.current!==chapterStorageScope)return;
+    const key='qe:student:learn-scroll:'+chapterStorageScope;
+    const raw=localStorage.getItem(key);
+    if(raw===null)return;
+    const target=Math.max(0,Number(raw)||0);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      window.scrollTo({top:target,behavior:'auto'});
+      localStorage.removeItem(key);
+    }));
+  },[trackBrowse?.classCode,trackBrowse?.subjectCode,documentsLoaded,chapterStorageScope,openChapter,trackGroups.length]);
+
+  useEffect(()=>{
+    if(!lesson)return;
+    const key='qe:student:lesson-scroll:'+lesson.id;
+    const raw=localStorage.getItem(key);
+    if(raw===null)return;
+    const target=Math.max(0,Number(raw)||0);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      window.scrollTo({top:target,behavior:'auto'});
+      localStorage.removeItem(key);
+    }));
+  },[lesson?.id]);
+
+  function rememberTrackPosition(chapterCode?:string){
+    if(!trackBrowse)return;
+    if(chapterCode){
+      setOpenChapter(chapterCode);
+      localStorage.setItem('qe:student:open-chapter:'+chapterStorageScope,chapterCode);
+    }
+    localStorage.setItem('qe:student:learn-scroll:'+chapterStorageScope,String(window.scrollY));
+  }
+  function subjectDocumentHref(documentId:number){
+    return '/student/textbooks?documentId='+documentId+'&returnTo='+encodeURIComponent('/student/learn?subjectCode='+trackBrowse?.subjectCode);
+  }
+  function rememberLessonPosition(){
+    if(lesson)localStorage.setItem('qe:student:lesson-scroll:'+lesson.id,String(window.scrollY));
+  }
+
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
-  if(trackBrowse) return <main className="lesson-page">
+  if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
+      <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
       <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
-      <p className="lesson-intro"><LocaleText hinglish="यहाँ सिर्फ published lessons दिखते हैं। Review या writing में मौजूद content अभी students को नहीं दिखता।" english="Only published lessons appear here. Content still in review or being written is not visible to students." /></p>
-      {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('पूरी subject book','Complete subject book')}/>)}
+      <p className="lesson-intro"><LocaleText hinglish="किसी chapter को खोलकर उसके topics और PDF देखें। आपका आखिरी खुला chapter याद रखा जाएगा।" english="Open a chapter to see its topics and PDF. Your last open chapter is remembered." /></p>
+      {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
+        <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
+          <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
+          <span className="qe-student-pdf-copy"><span><LocaleText hinglish="पूरी subject book" english="Complete subject textbook" /></span><strong>{item.title}</strong><small>{item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
+          <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
+        </Link>
+      )}
+      {!documentsLoaded&&<div className="qe-chapter-loading"><span className="qe-reader-spinner"/><LocaleText hinglish="PDFs load हो रहे हैं…" english="Checking available PDFs…" /></div>}
       {trackGroups.length===0 ? <div className="concept-card">
         <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
-        <h2><LocaleText hinglish="अभी कोई published lesson available नहीं है" english="No published lessons are available yet" /></h2>
-        <p><LocaleText hinglish="इस विषय के chapters listed हैं, लेकिन उनके actual lessons अभी writing/review में हैं। Lessons तैयार और publish होते ही यहाँ दिखेंगे।" english="Chapters are listed for this subject, but their lessons are still being written or reviewed. They’ll appear here when ready and published." /></p>
+        <h2><LocaleText hinglish="अभी कोई published lesson या chapter PDF available नहीं है" english="No published lessons or chapter PDFs are available yet" /></h2>
+        <p><LocaleText hinglish="इस विषय की सामग्री तैयार और publish होने पर यहाँ दिखाई देगी।" english="Content will appear here when it has been prepared and published." /></p>
         <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
         <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
-      </div> : trackGroups.map(group=>{
+      </div> : trackGroups.map((group,index)=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
           (Boolean(item.chapter_code)&&item.chapter_code===group.code)||
           (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===group.name.trim().toLocaleLowerCase())));
-        return <section className="concept-card" key={group.code}>
-          <span className="concept-kicker"><LocaleText hinglish="Chapter" english="Chapter" /></span><h2>{group.name}</h2>
-          {chapterDocuments.map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','This chapter’s PDF')}/>)}
-          {group.lessons.length>0 ? <div className="task-list">{group.lessons.map(item=><Link key={item.id} className="app-task" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
-            <span className="task-icon">▣</span><div><strong>{item.title}</strong><small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित पाठ" english="min · published lesson" /></small></div><span className="task-action">→</span>
-          </Link>)}</div> : <p className="lesson-intro" style={{margin:'8px 0 0'}}><LocaleText hinglish="इस chapter का PDF उपलब्ध है; lesson content अभी publish नहीं हुआ है।" english="The chapter PDF is available above; lesson content has not been published yet." /></p>}
+        const expanded=openChapter===group.code;
+        return <section className={'qe-student-chapter '+(expanded?'expanded':'')} id={'qe-chapter-'+encodeURIComponent(group.code)} key={group.code}>
+          <button type="button" className="qe-student-chapter-toggle" aria-expanded={expanded} onClick={()=>{
+            const next=expanded?'':group.code;
+            setOpenChapter(next);
+            if(next)localStorage.setItem('qe:student:open-chapter:'+chapterStorageScope,next);
+            else localStorage.removeItem('qe:student:open-chapter:'+chapterStorageScope);
+          }}>
+            <span className="qe-student-chapter-number">{String(index+1).padStart(2,'0')}</span>
+            <span className="qe-student-chapter-title"><small><LocaleText hinglish="CHAPTER" english="CHAPTER" /> {group.code!==group.name?'· '+group.code:''}</small><strong>{group.name}</strong><span>{group.lessons.length} topics · {chapterDocuments.length} PDFs</span></span>
+            <span className="qe-student-chapter-indicator">{expanded?'−':'+'}</span>
+          </button>
+          {expanded&&<div className="qe-student-chapter-content">
+            {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
+              <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
+              <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||group.name}</small></span>
+              <span className="qe-student-pdf-action"><LocaleText hinglish="पढ़ें" english="Read" /> ↗</span>
+            </Link>)}
+            {group.lessons.length>0&&<div className="qe-student-topic-list">{group.lessons.map(item=><Link key={item.id} className="qe-student-topic-row" href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
+              <span className="qe-student-topic-icon" aria-hidden="true">▣</span><span><strong>{item.title}</strong><small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित पाठ" english="min · published lesson" /></small></span><span className="qe-student-topic-arrow">→</span>
+            </Link>)}</div>}
+            {chapterDocuments.length===0&&group.lessons.length===0&&<p className="qe-student-chapter-empty"><LocaleText hinglish="इस chapter में अभी PDF या published topic नहीं है।" english="No PDF or published topic is available in this chapter yet." /></p>}
+          </div>}
         </section>;
       })}
+      <div className="qe-subject-reading-footer"><Link href="/student"><LocaleText hinglish="← Student home" english="← Student home" /></Link><Link href="/student/textbooks"><LocaleText hinglish="सभी textbooks देखें →" english="View all textbooks →" /></Link></div>
     </section>
   </main>;
   if(!lesson) return <main className="lesson-page"><section className="lesson-wrap"><div className="eyebrow"><LocaleText hinglish="Lesson load हो रहा है…" english="Loading lesson…" /></div></section></main>;
@@ -401,7 +481,11 @@ export default function LearnClient() {
       {studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
         (Boolean(item.chapter_code)&&item.chapter_code===lesson.chapter_code)||
         (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
-      )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')} initiallyExpanded={true}/>)}
+      )).map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-lesson-pdf-link" href={'/student/textbooks?documentId='+item.document_id+'&returnTo='+encodeURIComponent('/student/learn?lessonId='+lesson.id)} onClick={rememberLessonPosition}>
+        <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
+        <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||lesson.chapter_name}</small></span>
+        <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
+      </Link>)}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
