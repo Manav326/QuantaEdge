@@ -241,7 +241,7 @@ try {
         } catch {
             $item.result = 'ERROR'
             $item.error = $_.Exception.Message
-            $failures.Add("Document #$id: $($_.Exception.Message)")
+            $failures.Add("Document #${id}: $($_.Exception.Message)")
             $report.result = 'PARTIAL_FAILURE'
             $report.failed_count = $failures.Count
             $report.failures = @($failures)
