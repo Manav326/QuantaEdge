@@ -965,7 +965,7 @@ public class ContentTranslationController {
     for (Map.Entry<String, String> word : numberWords.entrySet()) {
       int sourceCount = java.util.Collections.frequency(sourceNumbers, word.getValue());
       int targetCount = java.util.Collections.frequency(translatedNumbers, word.getValue());
-      Pattern wordPattern = Pattern.compile("(?i)\\\\b" + Pattern.quote(word.getKey()) + "\\\\b");
+      Pattern wordPattern = Pattern.compile("(?i)\\b" + Pattern.quote(word.getKey()) + "\\b");
       Matcher wordMatcher = wordPattern.matcher(remainingText);
       while (targetCount < sourceCount && wordMatcher.find()) {
         translatedNumbers.add(word.getValue());
