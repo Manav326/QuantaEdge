@@ -164,6 +164,10 @@ def build_sql(packages, chapters, lessons, questions, apply: bool) -> str:
 DO $preflight$
 DECLARE n integer;
 BEGIN
+  IF EXISTS (SELECT 1 FROM app_metadata WHERE key='one-time-ncert-hindi-bulk-release-v1') THEN
+    RAISE EXCEPTION 'The one-time Class 6-8 Hindi bulk release has already been applied. Do not run it again.';
+  END IF;
+
   SELECT count(*) INTO n
   FROM qe_release_target_chapter t
   WHERE (SELECT count(*) FROM curriculum_class c
@@ -322,6 +326,9 @@ SELECT q.id,q.lesson_id,'BULK_PUBLISH_OVERRIDE',b.previous_status,q.review_statu
 FROM qe_release_question_before b
 JOIN question q ON q.id=b.question_id;
 
+INSERT INTO app_metadata(key,value)
+VALUES ('one-time-ncert-hindi-bulk-release-v1', __MARKER_VALUE__);
+
 INSERT INTO staff_audit_log(
   actor_staff_id,actor_role,http_method,request_path,response_status,details
 )
@@ -366,7 +373,7 @@ SELECT jsonb_pretty(jsonb_build_object(
   'staff_audit_record_created',true
 ));
 COMMIT;
-""".replace("__STAMP__", run_stamp).replace("__REASON__", literal(reason))
+""".replace("__STAMP__", run_stamp).replace("__REASON__", literal(reason)).replace("__MARKER_VALUE__", literal(run_stamp + " | " + package_names))
 
 
 def execute_psql(sql: str) -> str:
