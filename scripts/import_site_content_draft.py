@@ -221,7 +221,8 @@ class AdminApi:
         data = None if body is None else json.dumps(body, ensure_ascii=False).encode("utf-8")
         req = urllib.request.Request(self.base_url + path, data=data, method=method)
         req.add_header("Accept", "application/json")
-        req.add_header("Cookie", "QE_SESSION=" + self.session_cookie)
+        req.add_header("Cookie", "QE_STAFF_SESSION=" + self.session_cookie)
+        req.add_header("X-QE-Workspace", "STAFF")
         if data is not None:
             req.add_header("Content-Type", "application/json; charset=utf-8")
         try:
