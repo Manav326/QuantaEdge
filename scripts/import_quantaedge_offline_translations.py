@@ -21,9 +21,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT / "scripts") not in sys.path:
+    sys.path.insert(0, str(ROOT / "scripts"))
 from import_site_content_draft import AdminApi
 
-ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_QUEUE = ROOT / "translation-queue.jsonl"
 DEFAULT_MAP = ROOT / "english-translation-map-complete.jsonl"
 REPORT_DIR = ROOT / "reports" / "offline-translation-imports"
