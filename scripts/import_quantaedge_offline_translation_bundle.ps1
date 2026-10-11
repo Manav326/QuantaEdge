@@ -17,6 +17,43 @@ $TranslationImporter = Join-Path $RepoRoot "scripts\import_quantaedge_offline_tr
 $OldAdminSession = $env:QUANTAEDGE_ADMIN_SESSION
 $OldQeSession = $env:QE_SESSION
 
+
+function Invoke-QeStaffAuthRequest {
+    param(
+        [Parameter(Mandatory = $true)][string]$CookieValue,
+        [Parameter(Mandatory = $true)][string]$Uri
+    )
+
+    # Invoke-RestMethod -Headers does not support manually setting Cookie in
+    # Windows PowerShell 5.1. Use HttpClient so the actual Cookie header is sent.
+    Add-Type -AssemblyName System.Net.Http -ErrorAction SilentlyContinue
+    $client = $null
+    $request = $null
+    $response = $null
+    try {
+        $client = [System.Net.Http.HttpClient]::new()
+        $request = [System.Net.Http.HttpRequestMessage]::new(
+            [System.Net.Http.HttpMethod]::Get,
+            [Uri]$Uri
+        )
+        [void]$request.Headers.TryAddWithoutValidation("Accept", "application/json")
+        [void]$request.Headers.TryAddWithoutValidation("Cookie", "QE_STAFF_SESSION=$CookieValue")
+        [void]$request.Headers.TryAddWithoutValidation("X-QE-Workspace", "STAFF")
+
+        $response = $client.SendAsync($request).GetAwaiter().GetResult()
+        $body = $response.Content.ReadAsStringAsync().GetAwaiter().GetResult()
+        return [pscustomobject]@{
+            StatusCode = [int]$response.StatusCode
+            Body = $body
+        }
+    }
+    finally {
+        if ($null -ne $response) { $response.Dispose() }
+        if ($null -ne $request) { $request.Dispose() }
+        if ($null -ne $client) { $client.Dispose() }
+    }
+}
+
 function Invoke-CheckedPython {
     param([string[]]$Arguments)
     & $PythonExe @Arguments
@@ -80,17 +117,15 @@ try {
         Write-Host ""
         Write-Host "[Auth] Validating the staff session against the running API..."
         $authUrl = $ApiBaseUrl.TrimEnd([char]47) + "/api/v1/auth/me"
-        $authHeaders = @{
-            Accept = "application/json"
-            Cookie = "QE_STAFF_SESSION=$session"
-            "X-QE-Workspace" = "STAFF"
-        }
-        try {
-            $authCheck = Invoke-RestMethod -Uri $authUrl -Method Get -Headers $authHeaders -TimeoutSec 15
-        }
-        catch {
-            # Access cookies expire after 15 minutes; a saved token may expire during a Docker rebuild.
-            Write-Warning "The saved staff session was rejected or expired. Sign in at http://localhost:3001 and copy the current QE_STAFF_SESSION value."
+        $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+        if ($authResponse.StatusCode -ne 200) {
+            if ($authResponse.StatusCode -ne 401 -and $authResponse.StatusCode -ne 403) {
+                throw "Staff-session validation failed with HTTP $($authResponse.StatusCode): $($authResponse.Body). No content was written."
+            }
+
+            # Ask for a fresh token only after the API is up. The HTTP client above
+            # explicitly sends Cookie; do not use Invoke-RestMethod -Headers for this.
+            Write-Warning "The API rejected the staff session (HTTP $($authResponse.StatusCode)). Sign in at http://localhost:3001 and copy the current QE_STAFF_SESSION value."
             $secureRetry = Read-Host "Fresh QE_STAFF_SESSION value (hidden)" -AsSecureString
             $retryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRetry)
             try { $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($retryPtr) }
@@ -98,21 +133,17 @@ try {
             if ([string]::IsNullOrWhiteSpace($session)) { throw "No staff session value was supplied; stopped before writing any content." }
             $env:QUANTAEDGE_ADMIN_SESSION = $session
             $env:QE_SESSION = $session
-            $authHeaders.Cookie = "QE_STAFF_SESSION=$session"
-            try {
-                $authCheck = Invoke-RestMethod -Uri $authUrl -Method Get -Headers $authHeaders -TimeoutSec 15
-            }
-            catch {
-                $httpStatus = "connection error"
-                $detail = $_.Exception.Message
-                if ($_.Exception.Response) {
-                    try { $httpStatus = [string][int]$_.Exception.Response.StatusCode } catch {}
-                    if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
-                }
-                throw "Staff-session validation failed (HTTP $httpStatus): $detail. No content was written."
+
+            $authResponse = Invoke-QeStaffAuthRequest -CookieValue $session -Uri $authUrl
+            if ($authResponse.StatusCode -ne 200) {
+                throw "Staff-session validation failed (HTTP $($authResponse.StatusCode)): $($authResponse.Body). No content was written."
             }
         }
-        if ($authCheck.authenticated -ne $true -or [int]$authCheck.staffId -le 0) { throw "The API did not confirm an authenticated staff account. No content was written." }
+        try { $authCheck = $authResponse.Body | ConvertFrom-Json -ErrorAction Stop }
+        catch { throw "The API returned an invalid JSON response during staff-session validation. No content was written." }
+        if ($authCheck.authenticated -ne $true -or [int]$authCheck.staffId -le 0) {
+            throw "The API did not confirm an authenticated staff account. No content was written."
+        }
         Write-Host "Staff authentication confirmed for role $($authCheck.role)." -ForegroundColor Green
 
         if (-not $SkipHindiSourceImport) {
