@@ -294,10 +294,10 @@ public class LearningDocumentController {
       jdbc.update("""
         update learning_document set status='ARCHIVED',updated_at=now()
         where scope=? and subject_id=? and language=?
-          and (chapter_id=? or (chapter_id is null and ? is null))
+          and chapter_id is not distinct from ?
           and status='PUBLISHED' and id<>?
         """, current.get("scope"), current.get("subject_id"), current.get("language"),
-        current.get("chapter_id"), current.get("chapter_id"), documentId);
+        current.get("chapter_id"), documentId);
       jdbc.update("""
         update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
         where id=?
