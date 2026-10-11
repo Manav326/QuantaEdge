@@ -515,17 +515,11 @@
 @media(max-width:900px){
  .qe-workspace-layout,.qe-workspace-layout.is-collapsed{display:block;min-height:100vh}
  .qe-workspace-sidebar{display:none}
- .qe-workspace-content{min-height:100vh;padding-bottom:82px}
- .qe-workspace-mobile-nav{position:fixed;left:0;right:0;bottom:0;z-index:70;display:flex;align-items:stretch;justify-content:space-around;gap:2px;padding:8px 6px max(9px,env(safe-area-inset-bottom));border-top:1px solid #e6e9f0;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);box-shadow:0 -8px 30px rgba(21,32,56,.07)}
- .qe-workspace-mobile-nav a{display:flex;flex:1;min-width:0;min-height:49px;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:11px;color:#80889a;font-size:17px}
- .qe-workspace-mobile-nav a.is-active{background:#fff0e5;color:#9a3412}
- .qe-workspace-mobile-nav small{max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:700}
+ .qe-workspace-content{min-height:100vh;padding-bottom:0}
  .qe-workspace-content .app-content{max-width:none;padding-left:clamp(15px,4vw,28px);padding-right:clamp(15px,4vw,28px)}
 }
 @media(max-width:420px){
  .qe-session-gate section{padding:24px 19px;border-radius:19px}
- .qe-workspace-mobile-nav{padding-left:3px;padding-right:3px}
- .qe-workspace-mobile-nav small{max-width:67px;font-size:8px}
  .qe-workspace-content .app-header,.qe-workspace-content .lesson-header,.qe-workspace-content .parent-header{padding-left:15px;padding-right:15px}
 }
 
@@ -566,7 +560,6 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-workspace-topbar__context>span{color:#8b93a4;font-size:8px;font-weight:800;letter-spacing:1.35px}
 .qe-workspace-topbar__context>strong{overflow:hidden;color:var(--ink,#152038);font-size:14px;font-weight:800;letter-spacing:-.2px;text-overflow:ellipsis;white-space:nowrap}
 .qe-workspace-topbar .qe-language-switcher{flex:0 0 auto}
-.qe-workspace-mobile-more{display:none}
 .qe-workspace-content>.app-shell,.qe-workspace-content>.parent-app{min-height:calc(100vh - 72px)}
 .qe-workspace-sidebar{overflow-x:hidden;overflow-y:auto}
 @media(max-width:900px){
@@ -575,15 +568,6 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
  .qe-workspace-topbar__context>span{font-size:7px;letter-spacing:.9px}
  .qe-workspace-topbar__context>strong{font-size:12px}
  .qe-workspace-topbar .qe-language-switcher{max-width:48%}
- .qe-workspace-mobile-nav{justify-content:stretch;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
- .qe-workspace-mobile-nav::-webkit-scrollbar{display:none}
- .qe-workspace-mobile-nav>a,.qe-workspace-mobile-nav>button{flex:1 0 61px;min-width:0;border:1px solid transparent;background:transparent}
- .qe-workspace-mobile-nav>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:11px;color:#80889a;font-size:17px;cursor:pointer}
- .qe-workspace-mobile-nav>button.is-active{background:#fff0e5;color:#9a3412}
- .qe-workspace-mobile-more{position:fixed;left:10px;right:10px;bottom:79px;z-index:80;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;max-height:min(45vh,360px);overflow:auto;padding:12px;border:1px solid #e6e9f0;border-radius:18px;background:rgba(255,255,255,.98);box-shadow:0 16px 45px rgba(21,32,56,.17);backdrop-filter:blur(18px)}
- .qe-workspace-mobile-more>a{display:flex;align-items:center;gap:9px;min-width:0;padding:12px;border:1px solid #eef0f5;border-radius:12px;color:#68738a;font-size:11px;font-weight:800}
- .qe-workspace-mobile-more>a>span{display:grid;flex:0 0 28px;width:28px;height:28px;place-items:center;border-radius:9px;background:#f5f6fa;color:#657087}
- .qe-workspace-mobile-more>a.is-active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
 }
 @media(max-width:420px){
  .qe-workspace-topbar{padding-left:10px;padding-right:10px}
@@ -791,3 +775,11 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
   .qe-workspace-topbar .qe-language-switcher{padding:5px 7px}
   .qe-workspace-topbar .qe-language-switcher select{max-width:106px;font-size:10px}
 }
+
+
+/* Header logout stays visible on desktop and mobile without a persistent bottom bar. */
+.qe-workspace-logout{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:8px 12px;border:1px solid #f2c9ad;border-radius:999px;background:#fff7f0;color:#9a3412;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer;transition:background .16s,border-color .16s}
+.qe-workspace-logout:hover:not(:disabled){border-color:#e7a36f;background:#ffeddc}
+.qe-workspace-logout:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+.qe-workspace-logout:disabled{opacity:.6;cursor:wait}
+@media(max-width:600px){.qe-workspace-logout{min-height:34px;padding:7px 9px;gap:4px;font-size:10px}}
