@@ -140,8 +140,8 @@ public class ContentTranslationController {
     requireTranslationView(context);
     String normalizedLanguage = normalizeLanguageFilter(language);
     String normalizedEntity = normalizeEntityFilter(entityType);
-    String normalizedClass = safeFilter(classCode, 30);
-    String normalizedSubject = safeFilter(subjectCode, 40);
+    String normalizedClass = classCode == null || "ALL".equalsIgnoreCase(classCode.trim()) ? "" : safeFilter(classCode, 30);
+    String normalizedSubject = subjectCode == null || "ALL".equalsIgnoreCase(subjectCode.trim()) ? "" : safeFilter(subjectCode, 40);
     int rowLimit = Math.max(1, Math.min(limit == null ? 100 : limit, 250));
     int rowOffset = Math.max(0, Math.min(offset == null ? 0 : offset, 10_000_000));
     String base = translationInventorySql();
