@@ -606,3 +606,19 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-logout-button:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
 .qe-admin-logout-button:disabled{opacity:.6;cursor:wait}
 @media(max-width:620px){.qe-admin-logout-button{min-height:33px;padding:7px 9px;font-size:10px}}
+
+
+/* Question governance: explicit status totals and responsive question review cards. */
+.admin-review-footnote{margin:11px 0 15px;color:#6e7a8e;font-size:9px;line-height:1.6}
+.admin-review-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qe-review-counts{grid-template-columns:repeat(5,minmax(0,1fr))}
+.qe-review-counts .admin-kpi{min-width:0}
+.qe-review-counts .admin-kpi>span:not(.admin-kpi-index){min-height:30px}
+.qe-review-counts .admin-kpi small{line-height:1.45}
+.qe-content-main .qe-stats-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.qe-content-main .qe-stats-grid>article{min-width:0}
+.qe-content-main .qe-stats-grid>article span:last-child{line-height:1.45}
+.qe-content-main .qe-question-review button.qe-question-submit-review{border-color:#acd8c2;background:#eaf8f0;color:#125f3b}
+@media(max-width:1180px){.qe-review-counts{grid-template-columns:repeat(3,minmax(0,1fr))}.qe-content-main .qe-stats-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:720px){.qe-review-counts{grid-template-columns:repeat(2,minmax(0,1fr))}.qe-content-main .qe-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.qe-content-main .qe-stats-grid{grid-template-columns:1fr}.qe-review-counts{grid-template-columns:1fr}}
