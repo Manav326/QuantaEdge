@@ -306,10 +306,14 @@ def main() -> int:
         cache: dict[tuple[str, str], list[dict[str, Any]]] = {}
         plans: list[dict[str, Any]] = []
         mapping_errors: list[str] = []
-        for bank in banks:
+        for bank_index, bank in enumerate(banks, start=1):
             track = (str(bank["class_code"]), str(bank["subject_code"]).lower())
             try:
                 if track not in cache:
+                    print(
+                        f"[Preflight] Loading CMS inventory for class {track[0]} / {track[1]}...",
+                        file=sys.stderr, flush=True,
+                    )
                     cache[track] = fetch_track_rows(api, *track)
                 lesson_ids = map_question_lessons(bank, cache[track])
                 per_lesson: dict[int, list[dict[str, Any]]] = collections.defaultdict(list)
@@ -326,23 +330,32 @@ def main() -> int:
                             f"has {len(questions)} questions, greater than the API limit {MAX_APPEND_BATCH}."
                         )
                         continue
-                    # Read the real question sequence before any writes so new items
-                    # follow existing questions rather than being sorted ahead of them.
-                    detail = api.request("GET", f"/api/v1/admin/content/lessons/{lesson_id}")
-                    if not isinstance(detail, dict):
-                        raise RuntimeError(f"Lesson detail #{lesson_id} returned an unexpected shape.")
-                    if (str(detail.get("class_code")) != track[0]
-                            or str(detail.get("subject_code", "")).lower() != track[1]
-                            or str(detail.get("chapter_code", "")) != str(bank["chapter"]["code"])):
-                        raise RuntimeError(f"Lesson #{lesson_id} failed class/subject/chapter integrity checks.")
-                    detail_questions = detail.get("questions") or []
-                    if not isinstance(detail_questions, list):
-                        raise RuntimeError(f"Lesson #{lesson_id} did not return a valid questions array.")
-                    max_sort_order = max(
-                        (int(q.get("sort_order") or q.get("sortOrder") or 0)
-                         for q in detail_questions if isinstance(q, dict)),
-                        default=0,
-                    )
+                    # The class/subject/chapter listing already contains the canonical
+                    # lesson identity. Use its max sort-order aggregate instead of making
+                    # one expensive full lesson-detail request per lesson during preflight.
+                    metadata_matches = [
+                        row for row in cache[track]
+                        if row.get("lesson_id") is not None
+                        and int(row["lesson_id"]) == lesson_id
+                        and str(row.get("class_code")) == track[0]
+                        and str(row.get("subject_code", "")).lower() == track[1]
+                        and str(row.get("chapter_code", "")) == str(bank["chapter"]["code"])
+                        and row.get("lesson_active") is not False
+                        and row.get("chapter_active") is not False
+                        and str(row.get("lesson_status", "")).upper() != "ARCHIVED"
+                        and str(row.get("chapter_status", "")).upper() != "ARCHIVED"
+                    ]
+                    if len(metadata_matches) != 1:
+                        raise RuntimeError(
+                            f"Lesson #{lesson_id} is not uniquely represented in the class/subject/chapter inventory "
+                            f"(found {len(metadata_matches)} rows)."
+                        )
+                    if "max_question_sort_order" not in metadata_matches[0]:
+                        raise RuntimeError(
+                            "The Admin API inventory is missing max_question_sort_order. "
+                            "Rebuild API services from latest main and rerun; no content was written."
+                        )
+                    max_sort_order = int(metadata_matches[0].get("max_question_sort_order") or 0)
                     plans.append({
                         "bank": bank,
                         "class_code": track[0],
@@ -354,6 +367,11 @@ def main() -> int:
                         "max_existing_sort_order": max_sort_order,
                         "questions": questions,
                     })
+                print(
+                    f"[Preflight {bank_index}/{len(banks)}] class {track[0]} / {track[1]} / "
+                    f"{bank['chapter']['code']}: mapped {len(per_lesson)} lesson batches.",
+                    file=sys.stderr, flush=True,
+                )
             except Exception as exc:
                 mapping_errors.append(
                     f"Class {track[0]} {track[1]} chapter {bank.get('chapter', {}).get('code')}: {exc}"
