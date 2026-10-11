@@ -15,3 +15,6 @@ target/
 /source-pdfs/
 /.cache/
 *.ai-generated-draft.json
+
+# Machine-generated bilingual translation drafts are private review artifacts.
+/QuantaEdge_Bilingual_Draft_Bundle/
