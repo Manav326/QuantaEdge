@@ -50,7 +50,7 @@ class LearningControllerTest {
     controller.questions(42L, student);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(42L));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq(42L));
     assertTrue(sql.getValue().contains("as attempted"));
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
@@ -78,7 +78,7 @@ class LearningControllerTest {
     assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
     assertEquals(80, rows.getFirst().get("practice_best_percent"));
     org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("7"), eq("maths"));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("hi"), eq("hi"), eq("hi"), eq("hi"), eq("7"), eq("maths"));
     assertTrue(sql.getValue().contains("student_question_attempt"));
     assertTrue(sql.getValue().contains("student_practice_session"));
     assertTrue(sql.getValue().contains("status='COMPLETED'"));
@@ -87,24 +87,24 @@ class LearningControllerTest {
 
   @Test
   void lessonBlocksStripAnswerKeysRecursively() {
-    when(jdbc.queryForList(contains("select l.id,l.code,l.title"), any(Object[].class)))
+    when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "class_code", "7", "subject_code", "maths",
             "chapter_code", "algebraic-expressions", "title", "Expressions")));
-    when(jdbc.queryForList(contains("strip_answer_keys(b.content)::text as content"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
     Map<String, Object> lesson = controller.lesson(42L, student);
 
-    verify(jdbc).queryForList(contains("strip_answer_keys(b.content)::text as content"), eq(42L));
-    verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq(42L));
+    verify(jdbc).queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L));
+    verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq("hi"), eq(42L));
     assertTrue(lesson.containsKey("blocks"));
     assertTrue(lesson.containsKey("questions"));
   }
 
   @Test
   void answerIsGradedServerSideAndPersistedWithoutExposingAnswerPayload() {
-    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq(42L)))
+    when(jdbc.queryForList(contains("select q.id,q.lesson_id,q.question_type"), eq("hi"), eq(42L)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "MCQ",
             "explanation", "Subtract four from both sides.", "answer_payload", "{\"kind\":\"OPTION\",\"value\":\"B\"}")));
