@@ -229,7 +229,7 @@ export default function PracticePage(){
         <button className="button button-dark" disabled={!selected.trim()||!!result||Boolean((q as any).answered)} onClick={()=>void answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
       </div>}
 
-      {result&&<div className="practice-feedback">
+      {result&&<div className={"practice-feedback "+(result.correct===false?"practice-feedback-incorrect":result.correct===true?"practice-feedback-correct":"practice-feedback-ungraded")} role={result.correct===false?"alert":"status"}>
         <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
         <span><MathText text={String(result.feedback ?? '')}/></span>{result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
       </div>}
