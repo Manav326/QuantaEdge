@@ -33,8 +33,11 @@ function installRefreshRecovery() {
     }
     const refreshed = await refreshInFlight;
     if (!refreshed) {
-      if (response.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
-      return response;
+      // Another tab may already have rotated the shared refresh cookie.
+      const crossTabRetry = await nativeFetch(retryInput, init);
+      if (crossTabRetry.ok) return crossTabRetry;
+      if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+      return crossTabRetry;
     }
     return nativeFetch(retryInput, init);
   };
