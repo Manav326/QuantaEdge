@@ -1,12 +1,93 @@
 import importlib.util
+import io
+import json
+import os
+import tempfile
 import unittest
+import urllib.error
+from email.message import Message
 from pathlib import Path
+from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "import_quantaedge_offline_translations.py"
 SPEC = importlib.util.spec_from_file_location("offline_translations", SCRIPT)
 module = importlib.util.module_from_spec(SPEC)
 assert SPEC and SPEC.loader
 SPEC.loader.exec_module(module)
+
+# The translation importer and the source importer share this client.
+import import_site_content_draft as site_content_importer
+
+
+class FakeHttpResponse:
+    def __init__(self, body: str, set_cookies: list[str] | None = None):
+        self._body = body.encode("utf-8")
+        self.headers = Message()
+        for cookie in set_cookies or []:
+            self.headers.add_header("Set-Cookie", cookie)
+
+    def read(self):
+        return self._body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
+
+
+class StaffSessionRefreshTests(unittest.TestCase):
+    def test_401_refreshes_rotated_cookie_pair_and_retries_request(self):
+        unauthorized = urllib.error.HTTPError(
+            "http://localhost:8080/api/v1/admin/translations/question/1/draft?language=en",
+            401,
+            "Unauthorized",
+            {},
+            io.BytesIO(b'{"error":"UNAUTHENTICATED"}'),
+        )
+        refresh_response = FakeHttpResponse(
+            '{"authenticated":true}',
+            [
+                "QE_STAFF_SESSION=rotated-access; Path=/; HttpOnly; SameSite=Strict",
+                "QE_STAFF_REFRESH=rotated-refresh; Path=/; HttpOnly; SameSite=Strict",
+            ],
+        )
+        draft_response = FakeHttpResponse('{"translationStatus":"DRAFT"}')
+
+        with tempfile.TemporaryDirectory() as temp:
+            state_path = Path(temp) / "session-state.json"
+            env = {
+                "QUANTAEDGE_ADMIN_REFRESH": "old-refresh",
+                "QE_STAFF_REFRESH": "old-refresh",
+                "QUANTAEDGE_SESSION_STATE_FILE": str(state_path),
+            }
+            with mock.patch.dict(os.environ, env, clear=False):
+                api = site_content_importer.AdminApi(
+                    "http://localhost:8080", "old-access", timeout=5
+                )
+                with mock.patch.object(
+                    site_content_importer.urllib.request,
+                    "urlopen",
+                    side_effect=[unauthorized, refresh_response, draft_response],
+                ) as urlopen:
+                    result = api.request(
+                        "POST",
+                        "/api/v1/admin/translations/question/1/draft?language=en",
+                        {"translatedContent": {"prompt": "Draft"}},
+                    )
+
+            self.assertEqual("DRAFT", result["translationStatus"])
+            self.assertEqual("rotated-access", api.session_cookie)
+            self.assertEqual("rotated-refresh", api.refresh_cookie)
+            self.assertEqual(3, urlopen.call_count)
+            refresh_request = urlopen.call_args_list[1].args[0]
+            retried_request = urlopen.call_args_list[2].args[0]
+            self.assertTrue(refresh_request.full_url.endswith("/api/v1/auth/refresh"))
+            self.assertEqual("QE_STAFF_REFRESH=old-refresh", refresh_request.get_header("Cookie"))
+            self.assertEqual("QE_STAFF_SESSION=rotated-access", retried_request.get_header("Cookie"))
+            saved = json.loads(state_path.read_text(encoding="utf-8"))
+            self.assertEqual("rotated-access", saved["access_cookie"])
+            self.assertEqual("rotated-refresh", saved["refresh_cookie"])
 
 
 class NumberFidelityTests(unittest.TestCase):
