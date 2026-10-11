@@ -19,7 +19,35 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
+  /** Shared legacy cookie names are read only for a workspace-matched migration fallback. */
   public static final String COOKIE = "QE_SESSION";
+  public static final String REFRESH_COOKIE = "QE_REFRESH";
+  public static final String STAFF_COOKIE = "QE_STAFF_SESSION";
+  public static final String STAFF_REFRESH_COOKIE = "QE_STAFF_REFRESH";
+  public static final String LEARNING_COOKIE = "QE_LEARN_SESSION";
+  public static final String LEARNING_REFRESH_COOKIE = "QE_LEARN_REFRESH";
+  public static final String WORKSPACE_HEADER = "X-QE-Workspace";
+
+  public static String normalizeWorkspace(String value) {
+    if (value == null) return null;
+    return switch (value.trim().toUpperCase(java.util.Locale.ROOT)) {
+      case "STAFF" -> "STAFF";
+      case "LEARNING" -> "LEARNING";
+      default -> null;
+    };
+  }
+
+  public static String sessionCookieForWorkspace(String workspace) {
+    return "STAFF".equals(normalizeWorkspace(workspace)) ? STAFF_COOKIE : LEARNING_COOKIE;
+  }
+
+  public static String refreshCookieForWorkspace(String workspace) {
+    return "STAFF".equals(normalizeWorkspace(workspace)) ? STAFF_REFRESH_COOKIE : LEARNING_REFRESH_COOKIE;
+  }
+
+  public static String workspaceForContext(AuthContext context) {
+    return context != null && context.isEmployee() ? "STAFF" : "LEARNING";
+  }
   private final JdbcTemplate jdbc;
   private final SecureRandom random = new SecureRandom();
   private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
@@ -452,7 +480,17 @@ public class AuthService {
   }
 
   public AuthContext current(String token) {
+    return current(token, null);
+  }
+
+  /** Resolves a session only when it belongs to the requested portal. */
+  public AuthContext currentForWorkspace(String token, String workspace) {
+    return current(token, normalizeWorkspace(workspace));
+  }
+
+  private AuthContext current(String token, String workspace) {
     if(token==null || token.isBlank()) return null;
+    String scope = workspacePredicate(workspace, "s");
     var rows=jdbc.queryForList("""
       select s.user_id,s.student_id,s.staff_id,
              u.role,u.display_name,st.display_name as student_name,
@@ -467,7 +505,7 @@ public class AuthService {
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
         and (s.staff_id is null or e.id is not null)
-      """,hash(token));
+      """ + scope,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
     Long userId=r.get("user_id")==null?null:((Number)r.get("user_id")).longValue();
@@ -479,6 +517,9 @@ public class AuthService {
       jdbc.update("update auth_session set revoked_at=now() where token_hash=? and revoked_at is null",hash(token));
       return null;
     }
+    // Keep this guard in Java as well as in SQL so tests and future query changes cannot
+    // accidentally let a staff cookie authenticate a learner request (or the reverse).
+    if (!workspaceMatches(userId, studentId, staffId, workspace)) return null;
     jdbc.update("""
       update auth_session set last_seen_at=now(),
         refresh_expires_at=case when refresh_token_hash is not null
@@ -522,8 +563,15 @@ public class AuthService {
   /** Rotate the refresh token and the access token under a row lock. */
   @Transactional
   public SessionTokens refreshSession(String refreshToken) {
+    return refreshSession(refreshToken, null);
+  }
+
+  /** Rotate credentials without allowing a refresh cookie from one portal into the other. */
+  @Transactional
+  public SessionTokens refreshSession(String refreshToken, String workspace) {
+    workspace = normalizeWorkspace(workspace);
     if(refreshToken==null || refreshToken.isBlank()) throw new SecurityException("Session expired. Please sign in again.");
-    var rows=jdbc.queryForList("""
+    String query = """
       select s.id
       from auth_session s
       left join user_account u on u.id=s.user_id and u.active=true
@@ -534,8 +582,10 @@ public class AuthService {
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
+      """ + workspacePredicate(workspace, "s") + """
       for update of s
-      """,hash(refreshToken));
+      """;
+    var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
     long sessionId=((Number)rows.getFirst().get("id")).longValue();
     String access=randomToken(), nextRefresh=randomToken();
@@ -547,7 +597,7 @@ public class AuthService {
       java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
       java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))),sessionId);
     if(changed!=1) throw new SecurityException("Session expired. Please sign in again.");
-    AuthContext context=current(access);
+    AuthContext context=current(access, workspace);
     if(context==null) throw new SecurityException("Session expired. Please sign in again.");
     return new SessionTokens(access,nextRefresh,context);
   }
@@ -560,6 +610,31 @@ public class AuthService {
     revoke(token);
     if(refreshToken!=null && !refreshToken.isBlank())
       jdbc.update("update auth_session set revoked_at=now() where refresh_token_hash=? and revoked_at is null",hash(refreshToken));
+  }
+
+  /**
+   * Revokes only the specified portal's sessions. The legacy shared cookies can still
+   * exist during migration, so token values alone are not enough to decide what to log out.
+   * Returns the number of active session rows revoked.
+   */
+  @Transactional
+  public int revokeForWorkspace(String token, String refreshToken, String workspace) {
+    String normalized = normalizeWorkspace(workspace);
+    if (normalized == null) {
+      revoke(token, refreshToken);
+      return 0;
+    }
+    String scope = workspacePredicate(normalized, null);
+    int changed = 0;
+    if (token != null && !token.isBlank()) {
+      changed += jdbc.update("update auth_session set revoked_at=now() where token_hash=? and revoked_at is null"
+          + scope, hash(token));
+    }
+    if (refreshToken != null && !refreshToken.isBlank()) {
+      changed += jdbc.update("update auth_session set revoked_at=now() where refresh_token_hash=? and revoked_at is null"
+          + scope, hash(refreshToken));
+    }
+    return changed;
   }
 
   public boolean hasGuardianAccess(long userId,long studentId) {
@@ -609,6 +684,26 @@ public class AuthService {
     List<String> roles=jdbc.queryForList("select role from user_account where id=? and active=true",String.class,userId);
     if(roles.isEmpty() || (!"PARENT".equals(roles.getFirst()) && !"ADMIN".equals(roles.getFirst())))
       throw new SecurityException("Active parent access required");
+  }
+
+  private String workspacePredicate(String workspace, String alias) {
+    String normalized = normalizeWorkspace(workspace);
+    String prefix = alias == null || alias.isBlank() ? "" : alias + ".";
+    if ("STAFF".equals(normalized)) {
+      return "\n        and " + prefix + "staff_id is not null"
+          + " and " + prefix + "user_id is null"
+          + " and " + prefix + "student_id is null";
+    }
+    if ("LEARNING".equals(normalized)) {
+      return "\n        and " + prefix + "staff_id is null";
+    }
+    return "";
+  }
+
+  private boolean workspaceMatches(Long userId, Long studentId, Long staffId, String workspace) {
+    if ("STAFF".equals(workspace)) return staffId != null && userId == null && studentId == null;
+    if ("LEARNING".equals(workspace)) return staffId == null && (userId != null || studentId != null);
+    return true;
   }
 
   private String hash(String value) {
