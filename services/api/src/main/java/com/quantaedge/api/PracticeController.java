@@ -143,7 +143,7 @@ public class PracticeController {
 
     int requestedCount=10;
     List<String> selectedTypes=List.of(
-        "INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
+        "TRUE_FALSE","INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
         "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
     List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
         scopeFilter,scopeArgs,lessonId,requestedCount,false);
@@ -151,7 +151,7 @@ public class PracticeController {
     // If this micro-topic has no non-MCQ assessment items, use unshown MCQs from another
     // lesson mapped to the same objective/concept. Never repeat the MCQs displayed on this lesson.
     if(selectedIds.isEmpty()) {
-      selectedTypes=List.of("MCQ","TRUE_FALSE");
+      selectedTypes=List.of("MCQ");
       selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
           scopeFilter,scopeArgs,lessonId,requestedCount,true);
     }
