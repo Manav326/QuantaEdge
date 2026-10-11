@@ -38,9 +38,8 @@ try {
         throw "-PilotLimit must be 0 (full import) or a positive number."
     }
     if (-not $ApiBaseUrl.StartsWith("http://localhost") -and
-        -not $ApiBaseUrl.StartsWith("http://127.0.0.1") -and
-        -not $ApiBaseUrl.StartsWith("https://")) {
-        throw "Use HTTPS for remote APIs; HTTP is allowed only for localhost."
+        -not $ApiBaseUrl.StartsWith("http://127.0.0.1")) {
+        throw "This script reads IDs from local Docker Postgres; ApiBaseUrl must point to localhost."
     }
 
     $session = $env:QUANTAEDGE_ADMIN_SESSION
