@@ -43,6 +43,7 @@ export default function PracticePage(){
   const [saving,setSaving]=useState(false);
   const [noPractice,setNoPractice]=useState(false);
   const [answerError,setAnswerError]=useState('');
+  const [attemptReset,setAttemptReset]=useState(0);
   const router=useRouter();
   const searchParams=useSearchParams();
   const {locale}=useLocale();
@@ -159,6 +160,7 @@ export default function PracticePage(){
       const body=await readBody(response);
       if(!response.ok)throw new Error(body.detail||body.message||tx('उत्तर save नहीं हुआ।','Could not save your answer.'));
       setResult(body);
+      setAttemptReset(old=>old+1);
       setScoreByQuestion(old=>({...old,[current.id]:body}));
       const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionId,{cache:'no-store'});
       if(sessionResponse.ok){
@@ -248,8 +250,8 @@ export default function PracticePage(){
 
       {options.length>0?<div className="option-grid">
         {options.map(option=><button key={option.key} disabled={saving||result?.correct===true} className={selected===option.key?(result?.correct===false?'incorrect':result?.correct===true?'correct':'selected'):''} onClick={()=>void answer(option.key)}>{option.key}. <MathText text={option.label}/></button>)}
-      </div>:current.question_type==='ORDER'?<OrderInput prompt={current.prompt} disabled={saving||result?.correct===true} onSubmit={answer}/>:
-      current.question_type==='MATCH'?<MatchInput disabled={saving||result?.correct===true} onSubmit={answer}/>:
+      </div>:current.question_type==='ORDER'?<OrderInput key={current.id+'-'+attemptReset} prompt={current.prompt} disabled={saving||result?.correct===true} onSubmit={answer}/>:
+      current.question_type==='MATCH'?<MatchInput key={current.id+'-'+attemptReset} disabled={saving||result?.correct===true} onSubmit={answer}/>:
       <div className="concept-card">
         {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('Number वाला answer यहाँ लिखें…','Enter a numeric answer…')}/>:
           <textarea value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
