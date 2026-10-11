@@ -481,7 +481,7 @@ public class AuthService {
     jdbc.update("""
       update auth_session set last_seen_at=now(),
         refresh_expires_at=case when refresh_token_hash is not null
-          then now()+(? * interval '1 hour') else refresh_expires_at end
+          then now()+make_interval(hours => ?) else refresh_expires_at end
       where token_hash=? and revoked_at is null
       """,sessionHours,hash(token));
     String name=studentId!=null?String.valueOf(r.get("student_name")):
