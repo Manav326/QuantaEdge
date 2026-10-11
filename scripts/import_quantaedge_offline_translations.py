@@ -261,14 +261,15 @@ def post_draft(base_url, cookie, entity_type, entity_id, payload, timeout):
         raise RuntimeError(f"API connection failed: {exc.reason}") from exc
 
 
-def process(entity_type, rows, index, translations, args, cookie):
+def process(entity_type, rows, index, translations, args, cookie, candidate_limit=None):
     report = []
     prepared = 0
+    if candidate_limit is None:
+        candidate_limit = args.limit
     for number, row in enumerate(rows, 1):
-        # --limit caps ready import candidates, not arbitrary database rows. This
-        # lets a pilot find translated catalog entries even when older CMS rows
-        # appear first in database order.
-        if args.limit is not None and prepared >= args.limit:
+        # Limit counts ready draft candidates, not incomplete or already-current
+        # rows, and is supplied by main as a shared budget across entity types.
+        if candidate_limit is not None and prepared >= candidate_limit:
             break
         entity_id = int(row["entity_id"])
         item = {k:row.get(k) for k in ("class_code","subject_code","chapter_code")}
@@ -286,8 +287,38 @@ def process(entity_type, rows, index, translations, args, cookie):
                 response = post_draft(args.api_base_url,cookie,entity_type,entity_id,payload,args.timeout)
                 item.update(status="created_draft" if response.get("translationStatus") == "DRAFT" else "api_response",api_response=response)
             except Exception as exc:
-                item.update(status="api_error",error=str(exc))
-            if args.delay: time.sleep(args.delay)
+                error = str(exc)
+                item.update(status="api_error", error=error)
+                report.append(item)
+                # Authentication/permission failures, rate limits, server errors,
+                # and connection failures won't heal by retrying every remaining row.
+                # Stop immediately and report what remains unattempted.
+                systemic = bool(
+                    re.search(r"HTTP\\s+(?:401|403|408|425|429|5\\d\\d)\\b", error, flags=re.IGNORECASE)
+                    or "API connection failed:" in error
+                    or "timed out" in error.lower()
+                    or "remote end closed connection" in error.lower()
+                )
+                if systemic:
+                    report.append({
+                        "entity_type": entity_type,
+                        "status": "stopped_early",
+                        "reason": error,
+                        "failed_entity_id": entity_id,
+                        "remaining_rows_not_scanned": max(0, len(rows) - number),
+                        "writes_stopped_to_avoid_repeated_api_failures": True,
+                    })
+                    print(
+                        f"{entity_type}: stopped after systemic API error at entity {entity_id}; "
+                        f"{max(0, len(rows) - number)} rows not scanned in this query.",
+                        file=sys.stderr, flush=True,
+                    )
+                    break
+                if args.delay:
+                    time.sleep(args.delay)
+                continue
+            if args.delay:
+                time.sleep(args.delay)
         report.append(item)
         if number % 100 == 0: print(f"{entity_type}: scanned {number}/{len(rows)}; ready {prepared}",flush=True)
     return report
@@ -325,17 +356,78 @@ def main() -> int:
             if not cookie: raise ValueError("A fresh QE_STAFF_SESSION cookie is required for --apply.")
             print("Apply mode only creates English DRAFTs; nothing is published.")
         report = []
-        if chapters: report.extend(process("curriculum_chapter",chapters,index,translations,args,cookie))
-        if questions: report.extend(process("question",questions,index,translations,args,cookie))
+        remaining_budget = args.limit
+        systemic_stop = False
+        if chapters:
+            chapter_results = process(
+                "curriculum_chapter", chapters, index, translations, args, cookie,
+                candidate_limit=remaining_budget,
+            )
+            report.extend(chapter_results)
+            consumed = sum(1 for row in chapter_results if row.get("status") in {
+                "ready_dry_run", "created_draft", "api_response", "api_error"
+            })
+            if remaining_budget is not None:
+                remaining_budget = max(0, remaining_budget - consumed)
+            systemic_stop = any(row.get("status") == "stopped_early" for row in chapter_results)
+        if questions and not systemic_stop and (remaining_budget is None or remaining_budget > 0):
+            question_results = process(
+                "question", questions, index, translations, args, cookie,
+                candidate_limit=remaining_budget,
+            )
+            report.extend(question_results)
+            systemic_stop = any(row.get("status") == "stopped_early" for row in question_results)
+
         args.report_dir.mkdir(parents=True,exist_ok=True)
         path = args.report_dir / ("offline-translation-import-"+datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")+".json")
         counts = Counter(str(r.get("status")) for r in report)
-        path.write_text(json.dumps({"mode":"APPLY_DRAFTS" if args.apply else "DRY_RUN",
-            "queue_entries":len(queue),"translation_entries":len(translations),
-            "summary":dict(counts),"results":report},ensure_ascii=False,indent=2),encoding="utf-8")
-        print("Summary: "+json.dumps(dict(counts),ensure_ascii=False))
+        api_errors = [r for r in report if r.get("status") == "api_error"]
+        incomplete = [r for r in report if r.get("status") == "skipped_incomplete"]
+        fatal_status = ("STOPPED_EARLY_SYSTEMIC_API_ERROR" if systemic_stop else
+                        "SUCCEEDED_WITH_ERRORS" if api_errors else "SUCCEEDED")
+        path.write_text(json.dumps({
+            "schema":"quantaedge.offline-translation-import-report.v2",
+            "mode":"APPLY_DRAFTS" if args.apply else "DRY_RUN",
+            "status":fatal_status,
+            "started_at":datetime.now(timezone.utc).isoformat(),
+            "queue_entries":len(queue),
+            "translation_entries":len(translations),
+            "limit_total_ready_candidates":args.limit,
+            "chapters_selected":len(chapters),
+            "questions_selected":len(questions),
+            "summary":dict(counts),
+            "created_drafts":counts.get("created_draft",0),
+            "api_error_count":len(api_errors),
+            "api_errors":[{
+                "entity_type":r.get("entity_type"),"entity_id":r.get("entity_id"),
+                "class_code":r.get("class_code"),"subject_code":r.get("subject_code"),
+                "chapter_code":r.get("chapter_code"),"error":r.get("error")
+            } for r in api_errors],
+            "skipped_incomplete_count":len(incomplete),
+            "skipped_incomplete":[{
+                "entity_type":r.get("entity_type"),"entity_id":r.get("entity_id"),
+                "class_code":r.get("class_code"),"subject_code":r.get("subject_code"),
+                "chapter_code":r.get("chapter_code"),"issues":r.get("issues",[])
+            } for r in incomplete],
+            "auto_publish":False,
+            "publication_attempted":False,
+            "cookie_value_recorded":False,
+            "results":report
+        },ensure_ascii=False,indent=2),encoding="utf-8")
+        print("Final status: "+fatal_status)
+        print("Summary: "+json.dumps(dict(counts),ensure_ascii=False,sort_keys=True))
+        print(f"API errors recorded: {len(api_errors)}")
+        for row in api_errors[:10]:
+            print(
+                f"API_ERROR {row.get('entity_type')}#{row.get('entity_id')} "
+                f"class={row.get('class_code')} subject={row.get('subject_code')} "
+                f"chapter={row.get('chapter_code')}: {row.get('error')}",
+                file=sys.stderr,
+            )
+        if len(api_errors) > 10:
+            print(f"... plus {len(api_errors)-10} API errors in the JSON report.",file=sys.stderr)
         print(f"Report: {path}")
-        return 2 if counts.get("api_error") else 0
+        return 2 if api_errors or systemic_stop else 0
     except (OSError,ValueError,RuntimeError,json.JSONDecodeError) as exc:
         print(f"ERROR: {exc}",file=sys.stderr); return 2
 
