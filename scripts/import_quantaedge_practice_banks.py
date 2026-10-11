@@ -65,6 +65,10 @@ def load_catalog(path: Path) -> dict[str, Any]:
         chapter = bank.get("chapter")
         if class_code not in ALLOWED_CLASSES or subject_code not in ALLOWED_SUBJECTS or language not in {"hi", "en"}:
             raise ValueError(f"{where}: unsupported class/subject/language metadata.")
+        if bank.get("publish_status") != "DRAFT" or bank.get("student_delivery_allowed") is not False:
+            raise ValueError(f"{where}: each chapter bank must remain DRAFT with student_delivery_allowed=false.")
+        if bank.get("editorial_state") != "PENDING_HUMAN_REVIEW":
+            raise ValueError(f"{where}: only banks awaiting human review may be imported.")
         if not isinstance(chapter, dict) or not str(chapter.get("code", "")).strip():
             raise ValueError(f"{where}: chapter.code is required.")
         key = (class_code, subject_code, str(chapter["code"]).strip())
@@ -321,7 +325,6 @@ def main() -> int:
             lesson_id = plan["lesson_id"]
             bank = plan["bank"]
             try:
-                base_index = 0
                 questions_payload = []
                 for index, question in enumerate(plan["questions"], start=1):
                     questions_payload.append(question_payload(
