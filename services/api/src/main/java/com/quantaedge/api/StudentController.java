@@ -202,7 +202,7 @@ public class StudentController {
 
   private Map<String,Object> statsFor(long studentId){
     Map<String,Object> student=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language,case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint else null end as profile_image_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
+      select id,public_id,display_name,class_code,board,language,case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,city,state,school_name,school_medium,favorite_subject,learning_goal from student where id=? and active=true
       """,studentId);
     Map<String,Object> result=new LinkedHashMap<>(student);
     result.put("lessonStats",jdbc.queryForMap("""
