@@ -88,7 +88,6 @@ function Get-QeChildReportSummaries {
                 skipped_duplicate = $doc.skipped_duplicate
                 skipped_incomplete_count = $doc.skipped_incomplete_count
                 skipped_incomplete = @($doc.skipped_incomplete)
-                api_error_count = $doc.api_error_count
                 api_errors = @($doc.api_errors)
                 results = @($doc.results)
                 fatal_error = $doc.fatal_error
