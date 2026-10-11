@@ -32,7 +32,10 @@ function installRefreshRecovery() {
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     const refreshed = await refreshInFlight;
-    if (!refreshed) return response;
+    if (!refreshed) {
+      if (response.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
+      return response;
+    }
     return nativeFetch(retryInput, init);
   };
   window.fetch = enhancedFetch;
@@ -155,6 +158,32 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       document.body.classList.remove('qe-session-bfcache-guard');
     };
   }, [pathname, router, isPublicEntry, protectedWorkspace, requiresCheck, isProtected]);
+
+
+  useEffect(() => {
+    if (!isProtected || !ready || blockedRole) return;
+    let lastActivity = Date.now();
+    const markActivity = () => { lastActivity = Date.now(); };
+    const activityEvents = ['pointerdown', 'keydown', 'scroll', 'wheel', 'touchstart'];
+    activityEvents.forEach(name => window.addEventListener(name, markActivity, { passive: true }));
+    const heartbeat = window.setInterval(() => {
+      if (document.visibilityState !== 'visible') return;
+      if (Date.now() - lastActivity > 5 * 60 * 1000) return;
+      void fetch('/api/v1/auth/me', { cache: 'no-store' }).catch(() => undefined);
+    }, 2 * 60 * 1000);
+    return () => {
+      window.clearInterval(heartbeat);
+      activityEvents.forEach(name => window.removeEventListener(name, markActivity));
+    };
+  }, [isProtected, ready, blockedRole]);
+
+  useEffect(() => {
+    const onSessionExpired = () => {
+      if (isProtected) window.location.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+    };
+    window.addEventListener('qe:session-expired', onSessionExpired);
+    return () => window.removeEventListener('qe:session-expired', onSessionExpired);
+  }, [isProtected, pathname]);
 
   if (blockedRole) return <main className="qe-session-gate"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow"><LocaleText hinglish="SECURE WORKSPACE" english="SECURE WORKSPACE" /></span><h1><LocaleText hinglish="यह account किसी दूसरे workspace का है।" english="This account belongs to another workspace." /></h1><p><LocaleText hinglish={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'आपका current sign-in staff console के लिए है। Account बदलने से पहले sign out करें।' : 'आपका current sign-in दूसरे account type के लिए है। Account बदलने से पहले sign out करें।'} english={blockedRole === 'ADMIN' || blockedRole === 'STAFF' ? 'Your current sign-in is for the staff console. Sign out before switching accounts.' : 'Your current sign-in is for a different account type. Sign out before switching accounts.'} /></p><button className="button button-dark" onClick={logoutAndSwitch}><LocaleText hinglish="Account बदलने के लिए sign out करें" english="Log out to switch accounts" /></button></section></main>;
   if (requiresCheck && !ready) return <main className="qe-session-gate" aria-live="polite"><section><div className="qe-session-language"><LanguageSwitcher /></div><QuantaEdgeBrand href={null} variant="compact" className="qe-session-brand" /><span className="eyebrow">QUANTAEDGE</span><h1><LocaleText hinglish="आपका workspace check हो रहा है…" english="Checking your workspace…" /></h1><p><LocaleText hinglish="आपका account और saved session verify किया जा रहा है।" english="Your account and saved session are being verified." /></p></section></main>;
