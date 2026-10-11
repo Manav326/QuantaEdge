@@ -279,15 +279,16 @@ public class PracticeController {
     if(types.isEmpty()) return List.of();
     String typePlaceholders=String.join(",",java.util.Collections.nCopies(types.size(),"?"));
     String sql="""
-      select distinct q.id
+      select q.id
       from question q
       join lesson l on l.id=q.lesson_id and l.active=true and l.status='PUBLISHED'
       join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true and ch.content_status='PUBLISHED'
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
-      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where ch.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+        and exists(select 1 from student_track_enrollment ste
+                   where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
         and q.question_type in (__TYPE_PLACEHOLDERS__)
         and (__SCOPE_FILTER__)
       """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders).replace("__SCOPE_FILTER__",scopeFilter);
