@@ -1,6 +1,6 @@
 'use client';
 
-import { LocaleText } from '../../components/LanguageProvider';
+import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -38,6 +38,8 @@ function clock(seconds:number){const safe=Math.max(0,seconds);return String(Math
 
 export default function TestsClient(){
   const router=useRouter();
+  const {locale}=useLocale();
+  const language=locale==='english'?'en':'hi';
   const [tests,setTests]=useState<AssessmentCard[]>([]);
   const [results,setResults]=useState<Result[]>([]);
   const [tab,setTab]=useState<'tests'|'results'>('tests');
@@ -63,14 +65,14 @@ export default function TestsClient(){
     setLoading(true);setError('');
     try{
       const [catalog,studentResults]=await Promise.all([
-        api('/api/v1/learning/assessments'),
-        api('/api/v1/learning/assessment-results')
+        api('/api/v1/learning/assessments?language='+language),
+        api('/api/v1/learning/assessment-results?language='+language)
       ]);
       setTests(Array.isArray(catalog)?catalog:[]);
       setResults(Array.isArray(studentResults)?studentResults:[]);
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
-  },[router]);
+  },[router,language]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -138,7 +140,7 @@ export default function TestsClient(){
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
-      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts',{method:'POST'});
+      const data=await api('/api/v1/learning/assessments/'+testId+'/attempts?language='+language,{method:'POST'});
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('tests');

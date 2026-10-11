@@ -2,17 +2,17 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
-export type Locale = 'hinglish' | 'english';
+export type Locale = 'hindi' | 'english';
 type LocaleContextValue = { locale: Locale; setLocale: (locale: Locale) => void };
 const STORAGE_KEY = 'qe-locale';
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>('hinglish');
+  const [locale, setLocaleState] = useState<Locale>('hindi');
 
   const applyLocale = useCallback((next: Locale, persist: boolean) => {
     setLocaleState(next);
-    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hinglish' ? 'hi' : 'en';
+    if (typeof document !== 'undefined') document.documentElement.lang = next === 'hindi' ? 'hi' : 'en';
     if (persist && typeof window !== 'undefined') {
       try { window.localStorage.setItem(STORAGE_KEY, next); } catch {}
     }
@@ -23,11 +23,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved === 'hinglish' || saved === 'english') applyLocale(saved, false);
+      if (saved === 'hinglish') applyLocale('hindi', true);
+      else if (saved === 'hindi' || saved === 'english') applyLocale(saved, false);
     } catch {}
     const onStorage = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY && (event.newValue === 'hinglish' || event.newValue === 'english')) {
-        applyLocale(event.newValue, false);
+      if (event.key === STORAGE_KEY) {
+        if (event.newValue === 'hinglish') applyLocale('hindi', true);
+        else if (event.newValue === 'hindi' || event.newValue === 'english') applyLocale(event.newValue, false);
       }
     };
     window.addEventListener('storage', onStorage);
@@ -60,7 +62,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
         onChange={event => setLocale(event.target.value as Locale)}
         aria-label="भाषा चुनें / Choose language"
       >
-        <option value="hinglish">Hinglish (हिन्दी + English)</option>
+        <option value="hindi">हिन्दी (Hindi)</option>
         <option value="english">English</option>
       </select>
     </label>

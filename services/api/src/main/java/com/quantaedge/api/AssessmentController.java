@@ -478,13 +478,16 @@ public class AssessmentController {
   @GetMapping("/learning/assessments")
   public List<Map<String, Object>> studentAssessmentCatalog(
       @RequestParam(required = false) String subjectCode,
+      @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
+    language = normalizeLanguage(language);
     String subjectFilter = safeText(subjectCode, 40);
     return jdbc.queryForList("""
-      select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,
-             a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
-             c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+      select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
+             coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
+             a.created_at,a.published_at,s.code as subject_code,coalesce(max(st.display_name),s.display_name) as subject_name,
+             c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
              (select count(*) from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.status<>'ABANDONED') as attempts_used,
@@ -500,26 +503,48 @@ public class AssessmentController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
+      left join lateral (
+        select t.id,t.title,t.description from assessment_translation t
+        where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) at on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_subject_translation t
+        where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) st on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_chapter_translation t
+        where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ct on true
       where a.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
-      """, context.studentId(), subjectFilter, subjectFilter);
+      """, language, language, language, context.studentId(), subjectFilter, subjectFilter);
   }
 
   @PostMapping("/learning/assessments/{assessmentId}/attempts")
   @Transactional
   public Map<String, Object> startOrResumeAttempt(
       @PathVariable long assessmentId,
+      @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
+    language = normalizeLanguage(language);
     List<Map<String, Object>> assessmentLock = jdbc.queryForList(
         "select id from assessment where id=? and status='PUBLISHED' for update", assessmentId);
     if (assessmentLock.isEmpty()) throw notFound("Published assessment", assessmentId);
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
-      select a.id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             s.id as subject_id,s.code as subject_code,s.display_name as subject_name,
-             c.code as class_code,ch.id as chapter_id,ch.display_name as chapter_name,
+      select a.id,coalesce(max(at.title),a.title) as title,
+             coalesce(max(at.description),a.description) as description,
+             a.duration_minutes,a.max_attempts,a.status,
+             s.id as subject_id,s.code as subject_code,coalesce(max(st.display_name),s.display_name) as subject_name,
+             c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
@@ -527,10 +552,28 @@ public class AssessmentController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
+      left join lateral (
+        select t.id,t.title,t.description from assessment_translation t
+        where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) at on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_subject_translation t
+        where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) st on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_chapter_translation t
+        where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ct on true
       where a.id=? and a.status='PUBLISHED'
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
-      """, context.studentId(), assessmentId);
+      """, context.studentId(), language, language, language, assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Published assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
 
@@ -554,6 +597,7 @@ public class AssessmentController {
     int attemptNumber = (used == null ? 0 : used) + 1;
     Map<String, Object> assessmentSnapshot = new LinkedHashMap<>();
     assessmentSnapshot.put("assessmentId", assessmentId);
+    assessmentSnapshot.put("language", language);
     assessmentSnapshot.put("title", assessment.get("title"));
     assessmentSnapshot.put("description", assessment.get("description"));
     assessmentSnapshot.put("durationMinutes", assessment.get("duration_minutes"));
@@ -575,9 +619,38 @@ public class AssessmentController {
       insert into student_assessment_attempt_question(
         attempt_id,source_assessment_question_id,source_question_id,sequence_no,max_marks,question_snapshot
       )
-      select ?,aq.id,aq.source_question_id,aq.sequence_no,aq.max_marks,aq.question_snapshot
-      from assessment_question aq where aq.assessment_id=? order by aq.sequence_no
-      """, attemptId, assessmentId);
+      select ?,aq.id,aq.source_question_id,aq.sequence_no,aq.max_marks,
+             case when aqt.id is null then aq.question_snapshot else
+               jsonb_set(
+                 jsonb_set(
+                   jsonb_set(aq.question_snapshot,'{prompt}',to_jsonb(aqt.prompt),true),
+                   '{explanation}',coalesce(to_jsonb(aqt.explanation),'null'::jsonb),true
+                 ),
+                 '{options}',aqt.options,true
+               )
+             end
+      from assessment_question aq
+      left join lateral (
+        select t.id,t.prompt,t.explanation,t.options
+        from assessment_question_translation t
+        where t.assessment_question_id=aq.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object(
+            'prompt',aq.question_snapshot->>'prompt',
+            'explanation',aq.question_snapshot->>'explanation',
+            'options',coalesce((
+              select jsonb_agg(jsonb_build_object(
+                'key',coalesce(opt.value->>'key',opt.value->>'option_key'),
+                'label',opt.value->>'label') order by opt.ordinality)
+              from jsonb_array_elements(case
+                when jsonb_typeof(aq.question_snapshot->'options')='array'
+                then aq.question_snapshot->'options' else '[]'::jsonb end)
+                with ordinality as opt(value,ordinality)
+            ),'[]'::jsonb)
+          )::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) aqt on true
+      where aq.assessment_id=? order by aq.sequence_no
+      """, attemptId, language, assessmentId);
     jdbc.update("""
       insert into student_assessment_answer(attempt_question_id,response_payload,answer_status)
       select id,'""'::jsonb,'NOT_ANSWERED'
@@ -763,13 +836,26 @@ public class AssessmentController {
 
   @GetMapping("/learning/assessment-results")
   public List<Map<String, Object>> studentResults(
+      @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
+    language = normalizeLanguage(language);
     return jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
              att.graded_at,att.released_at,att.final_score,att.max_score,
-             a.title as assessment_title,s.code as subject_code,s.display_name as subject_name,
-             ch.display_name as chapter_name,
+             coalesce((select t.title from assessment_translation t
+               where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
+                 and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
+               order by t.version_no desc,t.id desc limit 1),a.title) as assessment_title,
+             s.code as subject_code,
+             coalesce((select t.display_name from curriculum_subject_translation t
+               where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+                 and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+               order by t.version_no desc,t.id desc limit 1),s.display_name) as subject_name,
+             coalesce((select t.display_name from curriculum_chapter_translation t
+               where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+                 and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+               order by t.version_no desc,t.id desc limit 1),ch.display_name) as chapter_name,
              (select count(*) from student_assessment_attempt_question aq where aq.attempt_id=att.id) as question_count
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
@@ -778,7 +864,7 @@ public class AssessmentController {
       where att.student_id=? and att.status='RELEASED'
       order by att.released_at desc,att.id desc
       limit 200
-      """, context.studentId());
+      """, language, language, language, context.studentId());
   }
 
   // ---------- Shared private helpers ----------
@@ -799,6 +885,13 @@ public class AssessmentController {
       """, attemptId);
     if (attempts.isEmpty()) throw notFound("Assessment attempt", attemptId);
     Map<String, Object> attempt = new LinkedHashMap<>(attempts.getFirst());
+    Map<String,Object> assessmentSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
+    if(!assessmentSnapshot.isEmpty()){
+      attempt.put("assessment_title",assessmentSnapshot.getOrDefault("title",attempt.get("assessment_title")));
+      attempt.put("subject_name",assessmentSnapshot.getOrDefault("subjectName",attempt.get("subject_name")));
+      attempt.put("chapter_name",assessmentSnapshot.getOrDefault("chapterName",attempt.get("chapter_name")));
+      attempt.put("language",assessmentSnapshot.getOrDefault("language","hi"));
+    }
     if (!staffView && (context == null || context.studentId() == null
         || ((Number) attempt.get("student_id")).longValue() != context.studentId())) {
       throw notFound("Assessment attempt", attemptId);
@@ -914,6 +1007,12 @@ public class AssessmentController {
       result.add(value);
     }
     return result;
+  }
+
+  private String normalizeLanguage(String language) {
+    String normalized=language==null?"hi":language.trim().toLowerCase(Locale.ROOT);
+    if("hi".equals(normalized)||"en".equals(normalized))return normalized;
+    throw badRequest("Language must be 'hi' or 'en'.");
   }
 
   private void requireContentView(AuthContext context) {

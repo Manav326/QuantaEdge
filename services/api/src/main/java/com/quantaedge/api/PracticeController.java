@@ -73,6 +73,7 @@ public class PracticeController {
   public Map<String,Object> createSessionFromLesson(@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    String language=normalizeLanguage(body.get("language"));
     int lessonId=integer(body.get("lessonId"),"lessonId",1,Integer.MAX_VALUE);
 
     // Serialize concurrent starts for the same student. This also makes React's development
@@ -89,7 +90,7 @@ public class PracticeController {
       """,context.studentId(),marker);
     if(!existing.isEmpty()) {
       long existingId=((Number)existing.getFirst().get("id")).longValue();
-      return getSession(existingId,context);
+      return getSession(existingId,language,context);
     }
 
     List<Map<String,Object>> lessonRows=jdbc.queryForList("""
@@ -222,7 +223,8 @@ public class PracticeController {
         insert into student_practice_session_question(practice_session_id,question_id,sequence_no,question_snapshot)
         values(?,?,?,?::jsonb)
         """,sessionId,questionId,sequence++,json(snapshot));
-      questions.add(toPublicQuestion(snapshot));
+      Map<String,Object> localized=localizeQuestionSnapshot(snapshot,language);
+      questions.add(toPublicQuestion(localized));
     }
     if(questions.isEmpty()) throw badRequest("The selected questions are no longer available. Refresh the lesson and try again.");
     jdbc.update("update student_practice_session set selected_question_count=? where id=?",questions.size(),sessionId);
@@ -238,6 +240,8 @@ public class PracticeController {
     result.put("lessonId",lessonId);
     result.put("lessonTitle",lessonTitle);
     result.put("chapterName",chapterName);
+    result.put("language",language);
+    result.put("translationComplete",questions.stream().allMatch(q->Boolean.TRUE.equals(q.get("translated"))));
     result.put("questions",questions);
     return result;
   }
@@ -274,8 +278,10 @@ public class PracticeController {
 
   @GetMapping("/sessions/{sessionId}")
   public Map<String,Object> getSession(@PathVariable long sessionId,
+      @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
     List<Map<String,Object>> sessions=jdbc.queryForList("""
       select id,status,requested_question_count,selected_question_count,created_at,completed_at
       from student_practice_session where id=? and student_id=?
@@ -298,7 +304,8 @@ public class PracticeController {
       try {
         @SuppressWarnings("unchecked")
         Map<String,Object> snapshot=(Map<String,Object>)mapper.readValue(String.valueOf(row.get("question_snapshot")),Map.class);
-        Map<String,Object> question=toPublicQuestion(snapshot);
+        Map<String,Object> localized=localizeQuestionSnapshot(snapshot,language);
+        Map<String,Object> question=toPublicQuestion(localized);
         question.put("answered",row.get("answered_at")!=null);
         question.put("attemptCount",((Number)row.get("attempt_count")).intValue());
         question.put("lastCorrect",row.get("last_correct"));
@@ -309,6 +316,8 @@ public class PracticeController {
     }
     Map<String,Object> result=new LinkedHashMap<>(sessions.getFirst());
     result.put("sessionId",sessionId);
+    result.put("language",language);
+    result.put("translationComplete",questions.stream().allMatch(q->Boolean.TRUE.equals(q.get("translated"))));
     result.put("questions",questions);
     result.put("answeredCount",questions.stream().filter(q->Boolean.TRUE.equals(q.get("answered"))).count());
     return result;
@@ -332,10 +341,49 @@ public class PracticeController {
       }
     }
     result.put("options",json(options));
+    result.put("translated",Boolean.TRUE.equals(snapshot.get("_translation_applied")));
     String type=String.valueOf(snapshot.get("question_type"));
     result.put("response_mode",Set.of("INPUT","NUMERICAL","SHORT_ANSWER","LONG_ANSWER","MATCH","ORDER",
         "ASSERTION_REASON","CASE_BASED","DIAGRAM","MAP","SOURCE_BASED").contains(type)?"text":"choice");
     return result;
+  }
+
+  private Map<String,Object> localizeQuestionSnapshot(Map<String,Object> source,String language) {
+    Map<String,Object> localized=new LinkedHashMap<>(source);
+    localized.put("_translation_applied",false);
+    Object questionId=source.get("id");
+    Object sourceHash=source.get("translation_source_hash");
+    if(!(questionId instanceof Number) || sourceHash==null || String.valueOf(sourceHash).isBlank()) return localized;
+    List<Map<String,Object>> translations=jdbc.queryForList("""
+      select prompt,explanation,options::text as options,topic,subtopic,skill,tags::text as tags
+      from question_translation
+      where question_id=? and language=? and source_hash=? and translation_status='PUBLISHED'
+      order by version_no desc,id desc
+      limit 1
+      """,((Number)questionId).longValue(),language,String.valueOf(sourceHash).trim());
+    if(translations.isEmpty()) return localized;
+    Map<String,Object> translated=translations.getFirst();
+    for(String key:List.of("prompt","explanation","topic","subtopic","skill","tags")) {
+      if(translated.get(key)!=null) localized.put(key,translated.get(key));
+    }
+    Object rawOptions=translated.get("options");
+    if(rawOptions!=null) {
+      try {
+        @SuppressWarnings("unchecked")
+        List<Map<String,Object>> translatedOptions=(List<Map<String,Object>>)mapper.readValue(String.valueOf(rawOptions),List.class);
+        localized.put("options",translatedOptions);
+      } catch(JacksonException ex) {
+        throw new IllegalStateException("Published question translation options could not be read.",ex);
+      }
+    }
+    localized.put("_translation_applied",true);
+    return localized;
+  }
+
+  private String normalizeLanguage(Object value) {
+    String language=value==null?"hi":String.valueOf(value).trim().toLowerCase(java.util.Locale.ROOT);
+    if("hi".equals(language)||"en".equals(language)) return language;
+    throw badRequest("Language must be 'hi' or 'en'.");
   }
 
   private void copy(Map<String,Object> source,Map<String,Object> target,String... keys) {

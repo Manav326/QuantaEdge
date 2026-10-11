@@ -22,17 +22,24 @@ public class LearningController {
 
   @GetMapping("/lessons")
   public List<Map<String,Object>> lessons(@RequestParam String classCode,@RequestParam String subjectCode,
+      @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
     if (!"maths".equals(subjectCode) && !"science".equals(subjectCode)) throw new IllegalArgumentException("Unknown subject track");
     String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
     if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
     return jdbc.queryForList("""
       with learner as (select id from student where id=? and active=true)
-      select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,
-             c.code as class_code,s.code as subject_code,s.display_name as subject_name,
-             ch.code as chapter_code,ch.display_name as chapter_name,
-             o.code as objective_code,o.title as objective_title,
+      select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
+             l.estimated_minutes,l.status,
+             c.code as class_code,s.code as subject_code,coalesce(st.display_name,s.display_name) as subject_name,
+             ch.code as chapter_code,coalesce(ct.display_name,ch.display_name) as chapter_name,
+             o.code as objective_code,coalesce(ot.title,o.title) as objective_title,
+             (lt.id is not null) as lesson_translated,
+             (st.id is not null) as subject_translated,
+             (ct.id is not null) as chapter_translated,
+             (ot.id is not null) as objective_translated,
              coalesce(mcq.mcq_count,0) as mcq_count,
              coalesce(mcq.mcq_answered_count,0) as mcq_answered_count,
              coalesce(practice_count.completed_attempt_count,0) as practice_completed_attempts,
@@ -48,6 +55,30 @@ public class LearningController {
       join curriculum_class c on c.id=s.class_id
       join student_track_enrollment ste on ste.student_id=learner.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join learning_objective o on o.id=l.objective_id
+      left join lateral (
+        select t.id,t.title,t.summary from lesson_translation t
+        where t.lesson_id=l.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',l.title,'summary',l.summary)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) lt on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_subject_translation t
+        where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) st on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_chapter_translation t
+        where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ct on true
+      left join lateral (
+        select t.id,t.title from learning_objective_translation t
+        where o.id is not null and t.objective_id=o.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',o.title,'description',o.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ot on true
       left join lateral (
         select count(*) filter(where q.question_type='MCQ') as mcq_count,
                count(*) filter(where q.question_type='MCQ' and exists(
@@ -105,7 +136,7 @@ public class LearningController {
       where c.code=? and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,context.studentId(),classCode,subjectCode);
+      """,context.studentId(),language,language,language,language,classCode,subjectCode);
   }
 
   @PostMapping("/lessons/{lessonId}/start")
@@ -119,14 +150,22 @@ public class LearningController {
 
   @GetMapping("/lessons/{lessonId}")
   public Map<String,Object> lesson(@PathVariable long lessonId,
+      @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
     List<Map<String,Object>> lessons=jdbc.queryForList("""
-      select l.id,l.code,l.title,l.summary,l.estimated_minutes,l.status,
-             ch.code as chapter_code,ch.display_name as chapter_name,
-             c.code as class_code,c.display_name as class_name,
-             s.code as subject_code,s.display_name as subject_name,
-             o.code as objective_code,o.title as objective_title,
+      select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
+             l.estimated_minutes,l.status,
+             ch.code as chapter_code,coalesce(ct.display_name,ch.display_name) as chapter_name,
+             c.code as class_code,coalesce(cct.display_name,c.display_name) as class_name,
+             s.code as subject_code,coalesce(st.display_name,s.display_name) as subject_name,
+             o.code as objective_code,coalesce(ot.title,o.title) as objective_title,
+             (lt.id is not null) as lesson_translated,
+             (ct.id is not null) as chapter_translated,
+             (cct.id is not null) as class_translated,
+             (st.id is not null) as subject_translated,
+             (ot.id is not null) as objective_translated,
              coalesce(p.progress_percent,0) as progress_percent,
              coalesce(p.status,'NOT_STARTED') as progress_status
       from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
@@ -134,37 +173,88 @@ public class LearningController {
       join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       left join learning_objective o on o.id=l.objective_id
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
+      left join lateral (
+        select t.id,t.title,t.summary from lesson_translation t
+        where t.lesson_id=l.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',l.title,'summary',l.summary)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) lt on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_chapter_translation t
+        where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ct on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_class_translation t
+        where t.class_id=c.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',c.display_name)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) cct on true
+      left join lateral (
+        select t.id,t.display_name from curriculum_subject_translation t
+        where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) st on true
+      left join lateral (
+        select t.id,t.title from learning_objective_translation t
+        where o.id is not null and t.objective_id=o.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',o.title,'description',o.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ot on true
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
-      """,context.studentId(),context.studentId(),lessonId,context.studentId());
+      """,context.studentId(),context.studentId(),language,language,language,language,language,lessonId,context.studentId());
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
-    result.put("blocks",jdbc.queryForList("""
+    result.put("requested_language",language);
+    List<Map<String,Object>> blocks=jdbc.queryForList("""
       select b.id,b.sequence_no,b.block_type,b.asset_id,
-             strip_answer_keys(b.content)::text as content,
+             strip_answer_keys(coalesce(bt.content,b.content))::text as content,
+             (bt.id is not null) as translated,
              a.url as asset_url,a.alt_text as asset_alt
       from lesson_block b left join content_asset a on a.id=b.asset_id and a.status='PUBLISHED'
+      left join lateral (
+        select t.id,t.content from lesson_block_translation t
+        where t.block_id=b.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(b.content::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) bt on true
       where b.lesson_id=? and b.active=true order by b.sequence_no,b.id
-      """,lessonId));
-    result.put("questions",publicQuestions(lessonId,context.studentId()));
+      """,language,lessonId);
+    List<Map<String,Object>> questions=publicQuestions(lessonId,context.studentId(),language);
+    result.put("blocks",blocks);
+    result.put("questions",questions);
+    boolean translationComplete=Boolean.TRUE.equals(result.get("lesson_translated"))
+        && Boolean.TRUE.equals(result.get("chapter_translated"))
+        && Boolean.TRUE.equals(result.get("subject_translated"))
+        && Boolean.TRUE.equals(result.get("objective_translated"))
+        && blocks.stream().allMatch(block -> Boolean.TRUE.equals(block.get("translated")))
+        && questions.stream().allMatch(question -> Boolean.TRUE.equals(question.get("translated")));
+    result.put("translation_complete",translationComplete);
     return result;
   }
 
   @GetMapping("/lessons/{lessonId}/questions")
   public List<Map<String,Object>> questions(@PathVariable long lessonId,
+      @RequestParam(required=false,defaultValue="hi") String language,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
     ensureStudentLessonAccess(context.studentId(),lessonId);
-    return publicQuestions(lessonId,context.studentId());
+    return publicQuestions(lessonId,context.studentId(),language);
   }
 
   @PostMapping("/questions/{questionId}/answer")
   @Transactional
   public Map<String,Object> answer(@PathVariable long questionId,
+      @RequestParam(required=false,defaultValue="hi") String language,
       @RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
     Long practiceSessionId=null;
     Object sessionValue=body.get("practiceSessionId");
     if(sessionValue!=null) {
@@ -181,12 +271,24 @@ public class LearningController {
       if(membership.isEmpty())throw new SecurityException("Question is not part of this active practice session or was already answered.");
     }
     var rows=jdbc.queryForList("""
-      select q.id,q.lesson_id,q.question_type,q.explanation,q.answer_payload::text as answer_payload
+      select q.id,q.lesson_id,q.question_type,coalesce(qt.explanation,q.explanation) as explanation,
+             q.answer_payload::text as answer_payload
       from question q join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
+      left join lateral (
+        select t.id,t.explanation from question_translation t
+        where t.question_id=q.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object(
+            'prompt',q.prompt,'explanation',q.explanation,
+            'options',coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label) order by qo.sort_order)
+                                from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+            'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags
+          )::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) qt on true
       where q.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
-      """,questionId);
+      """,language,questionId);
     if(rows.isEmpty()) throw new IllegalArgumentException("Question not found or no longer eligible for student practice.");
     var q=rows.getFirst();
     long lessonId=((Number)q.get("lesson_id")).longValue();
@@ -206,28 +308,54 @@ public class LearningController {
     result.put("questionId",questionId); result.put("questionType",q.get("question_type"));
     result.put("correct",evaluation.correct()); result.put("autoGraded",evaluation.autoGraded()); result.put("gradingKind",evaluation.kind());
     result.put("explanation",q.get("explanation"));
-    result.put("feedback",evaluation.autoGraded()
-      ? (Boolean.TRUE.equals(evaluation.correct())?"सही। अब अपने उत्तर का कारण बताइए।":"अभी सही नहीं। समाधान दोबारा देखें और फिर प्रयास करें।")
-      : "उत्तर सेव हो गया। इस प्रश्न के लिए teacher/rubric आधारित जाँच आवश्यक है।");
+    result.put("feedback",language.equals("en")
+      ? (evaluation.autoGraded()
+          ? (Boolean.TRUE.equals(evaluation.correct()) ? "Correct. Now explain why your answer works." : "Not quite. Review the solution and try again.")
+          : "Your answer was saved. This response may need teacher or rubric-based review.")
+      : (evaluation.autoGraded()
+          ? (Boolean.TRUE.equals(evaluation.correct()) ? "सही। अब अपने उत्तर का कारण बताइए।" : "अभी सही नहीं है। समाधान दोबारा देखें और फिर प्रयास करें।")
+          : "आपका उत्तर सुरक्षित कर लिया गया है। इस प्रश्न की शिक्षक या मूल्यांकन-निर्देश के अनुसार जाँच आवश्यक है।"));
     return result;
   }
 
-  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId){
+  private List<Map<String,Object>> publicQuestions(long lessonId,long studentId,String language){
     return jdbc.queryForList("""
-      select q.id,q.question_type,q.prompt,q.difficulty,q.sort_order,q.concept_id,
+      select q.id,q.question_type,coalesce(qt.prompt,q.prompt) as prompt,q.difficulty,q.sort_order,q.concept_id,
              q.source_kind,q.source_title,q.source_ref,q.source_year,q.board,q.marks,q.exam_format,
-             q.topic,q.subtopic,q.skill,q.tags::text as tags,
+             coalesce(qt.topic,q.topic) as topic,coalesce(qt.subtopic,q.subtopic) as subtopic,
+             coalesce(qt.skill,q.skill) as skill,coalesce(qt.tags::text,q.tags::text) as tags,
+             (qt.id is not null) as translated,
              exists(select 1 from student_question_attempt a
                     where a.student_id=? and a.question_id=q.id) as attempted,
-             case when q.question_type in ('MCQ','TRUE_FALSE') then
-               coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
-                 order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)
+             case when qt.id is not null then coalesce(qt.options,'[]'::jsonb)
+                  when q.question_type in ('MCQ','TRUE_FALSE') then
+                    coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
+                      order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb)
                else '[]'::jsonb end::text as options,
              case when q.question_type in ('INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER','MATCH','ORDER',
                  'ASSERTION_REASON','CASE_BASED','DIAGRAM','MAP','SOURCE_BASED') then 'text'
                else 'choice' end as response_mode
-      from question q where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
-      """,studentId,lessonId);
+      from question q
+      left join lateral (
+        select t.id,t.prompt,t.explanation,t.options,t.topic,t.subtopic,t.skill,t.tags
+        from question_translation t
+        where t.question_id=q.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object(
+            'prompt',q.prompt,'explanation',q.explanation,
+            'options',coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label) order by qo.sort_order)
+                                from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+            'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags
+          )::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) qt on true
+      where q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED') order by q.sort_order
+      """,studentId,language,lessonId);
+  }
+
+  private String normalizeLanguage(String language) {
+    String normalized = language == null ? "hi" : language.trim().toLowerCase(Locale.ROOT);
+    if ("hi".equals(normalized) || "en".equals(normalized)) return normalized;
+    throw new IllegalArgumentException("Language must be 'hi' or 'en'.");
   }
 
   private void ensureStudentLessonAccess(long studentId,long lessonId){

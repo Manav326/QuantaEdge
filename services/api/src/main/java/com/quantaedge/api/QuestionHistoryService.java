@@ -26,6 +26,12 @@ public class QuestionHistoryService {
              q.active,q.review_status,q.review_notes,q.reviewed_at,q.reviewed_by_staff_id,
              q.marks,q.exam_format,q.source_kind,q.source_title,q.source_ref,q.source_year,
              q.source_id,q.board,q.topic,q.subtopic,q.skill,q.tags::text as tags,
+             md5(jsonb_build_object(
+               'prompt',q.prompt,'explanation',q.explanation,
+               'options',coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
+                  order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+               'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags
+             )::text) as translation_source_hash,
              q.answer_payload::text as answer_payload
       from question q where q.id=?
       """, questionId);

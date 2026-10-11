@@ -95,7 +95,8 @@ export default function PracticePage(){
 
         let lessonBody:LessonDetail|null=null;
         if(lessonId){
-          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId,{cache:'no-store'});
+          const language=locale==='english'?'en':'hi';
+          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId+'?language='+language,{cache:'no-store'});
           const body=await readBody(lessonResponse);
           if(!lessonResponse.ok)throw new Error(body.detail||body.message||tx('Lesson उपलब्ध नहीं है।','This lesson is unavailable.'));
           lessonBody=body as LessonDetail;
@@ -103,7 +104,7 @@ export default function PracticePage(){
         }
 
         if(requestedSessionId){
-          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId,{cache:'no-store'});
+          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+(locale==='english'?'en':'hi'),{cache:'no-store'});
           const body=await readBody(sessionResponse);
           if(!sessionResponse.ok)throw new Error(body.detail||body.message||tx('Practice session दोबारा नहीं खुल पाया।','Could not reopen this practice session.'));
           if(!active)return;
@@ -128,7 +129,7 @@ export default function PracticePage(){
         if(!lessonId)throw new Error(tx('Practice शुरू करने के लिए पहले lesson खोलें।','Open a lesson before starting practice.'));
         const startResponse=await fetch('/api/v1/learning/practice/sessions/from-lesson',{
           method:'POST',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({lessonId})
+          body:JSON.stringify({lessonId,language:locale==='english'?'en':'hi'})
         });
         const startBody:ApiBody=await readBody(startResponse);
         if(startResponse.status===409){
@@ -172,7 +173,7 @@ export default function PracticePage(){
     if(!serialized.trim())return;
     setSaving(true);setAnswerError('');setError('');setSelected(serialized);setResult(null);
     try{
-      const response=await fetch('/api/v1/learning/questions/'+current.id+'/answer',{
+      const response=await fetch('/api/v1/learning/questions/'+current.id+'/answer?language='+(locale==='english'?'en':'hi'),{
         method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({answer:value,practiceSessionId:sessionId})
       });
@@ -181,7 +182,7 @@ export default function PracticePage(){
       setResult(body);
       setAttemptReset(old=>old+1);
       setScoreByQuestion(old=>({...old,[current.id]:body}));
-      const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionId,{cache:'no-store'});
+      const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+sessionId+'?language='+(locale==='english'?'en':'hi'),{cache:'no-store'});
       if(sessionResponse.ok){
         const sessionBody=await readBody(sessionResponse);
         setSessionStatus(String(sessionBody.status||'IN_PROGRESS'));

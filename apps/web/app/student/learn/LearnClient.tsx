@@ -22,14 +22,18 @@ type TrackBrowse = {
 };
 type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null;language?:'hi'|'en'};
 type Question = {
-  id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string;
+  id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string; translated?:boolean;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
   topic?:string; subtopic?:string; skill?:string; response_mode?:string; attempted?:boolean;
 };
 type Detail = Lesson & {
   class_code:string; class_name:string;
-  blocks:{id:number;sequence_no:number;block_type:string;content:string}[];
+  blocks:{id:number;sequence_no:number;block_type:string;content:string;translated?:boolean}[];
   questions:Question[];
+  requested_language?:'hi'|'en';
+  translation_complete?:boolean;
+  lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
+  class_translated?:boolean; objective_translated?:boolean;
 };
 
 function parse<T=any>(value:string):T {
@@ -160,7 +164,8 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     if (!next.trim() || submitted || busy) return;
     setBusy(true);setAnswerError('');setResult(null);
     try {
-      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
+      const language=locale==='english'?'en':'hi';
+      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language,{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
@@ -281,7 +286,7 @@ export default function LearnClient() {
     try {
       const started=await fetch('/api/v1/learning/lessons/'+id+'/start',{method:'POST'});
       if(!started.ok) throw new Error('lesson progress');
-      const detail=await fetch('/api/v1/learning/lessons/'+id).then(r=>{
+      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+(locale==='english'?'en':'hi')).then(r=>{
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
@@ -307,13 +312,14 @@ export default function LearnClient() {
         const selectedSubject=searchParams.get('subjectCode');
         if(!requestedId && selectedSubject){
           if(selectedSubject!=='maths' && selectedSubject!=='science') throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
-          const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject));
+          const selectedLanguage=locale==='english'?'en':'hi';
+          const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage);
           const listBody=await listResponse.json();
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
           if(cancelled)return;
           const trackLessons=listBody as Lesson[];
           if(cancelled)return;
-          const subjectName=selectedSubject==='maths'?'गणित':'विज्ञान';
+          const subjectName=selectedSubject==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science');
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
           setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons});
@@ -328,10 +334,11 @@ export default function LearnClient() {
           if(rec.ok&&rb.available&&rb.lesson) targetId=Number(rb.lesson.id);
         }
         if(!targetId) throw new Error(tx('अभी कोई recommended lesson नहीं मिला।','No recommended lesson is available yet.'));
-        const detail=await fetch('/api/v1/learning/lessons/'+targetId);
+        const selectedLanguage=locale==='english'?'en':'hi';
+        const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
-        const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code).then(r=>r.json()) as Lesson[];
+        const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code+'&language='+selectedLanguage).then(r=>r.json()) as Lesson[];
         setLessons(list);
         await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
@@ -347,6 +354,50 @@ export default function LearnClient() {
     void load();
     return ()=>{cancelled=true;};
   },[router,searchParams]);
+
+  // Switching languages refreshes presentation only; it must not restart progress or a learning session.
+  const lastContentLocale=useRef(locale);
+  useEffect(()=>{
+    if(lastContentLocale.current===locale)return;
+    lastContentLocale.current=locale;
+    const language=locale==='english'?'en':'hi';
+    let cancelled=false;
+    async function refreshLanguage(){
+      try{
+        if(trackBrowse){
+          const response=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(trackBrowse.classCode)
+            +'&subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language,{cache:'no-store'});
+          const rows=await response.json();
+          if(!response.ok)throw new Error(rows?.message||'Could not refresh lesson language.');
+          if(!cancelled){
+            const newLessons=Array.isArray(rows)?rows as Lesson[]:[];
+            setLessons(newLessons);
+            setTrackBrowse(old=>old?{...old,subjectName:old.subjectCode==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science'),lessons:newLessons}:old);
+          }
+          return;
+        }
+        if(lesson){
+          const [detailResponse,listResponse]=await Promise.all([
+            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language,{cache:'no-store'}),
+            fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(lesson.class_code)
+              +'&subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language,{cache:'no-store'})
+          ]);
+          const [detailBody,listBody]=await Promise.all([detailResponse.json(),listResponse.json()]);
+          if(!detailResponse.ok)throw new Error(detailBody?.message||'Could not refresh lesson language.');
+          if(!listResponse.ok)throw new Error(listBody?.message||'Could not refresh lesson list language.');
+          if(!cancelled){
+            setLesson(detailBody as Detail);
+            setLessons(Array.isArray(listBody)?listBody as Lesson[]:[]);
+          }
+        }
+      }catch(e){
+        // Preserve the currently visible lesson if a language refresh fails.
+        console.error('QuantaEdge content language refresh failed',e);
+      }
+    }
+    void refreshLanguage();
+    return()=>{cancelled=true;};
+  },[locale,lesson?.id,lesson?.class_code,lesson?.subject_code,trackBrowse?.classCode,trackBrowse?.subjectCode]);
 
   // Fetch the selected language edition independently: changing locale must not restart
   // the lesson, reset the session, or issue a second progress-start request.
@@ -546,6 +597,13 @@ export default function LearnClient() {
       </div>
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
+      {!lesson.translation_complete&&<div className="feedback" role="status">
+        <span><LocaleText hinglish="भाषा समीक्षा" english="Language coverage" /></span>
+        <span><LocaleText
+          hinglish="इस पाठ के कुछ हिस्सों की चुनी हुई भाषा में समीक्षा-स्वीकृत सामग्री अभी उपलब्ध नहीं है। जहाँ अनुवाद नहीं है, वहाँ मूल सामग्री दिखाई दे सकती है।"
+          english="Some parts of this lesson do not yet have reviewed content in the selected language. Original-language text may appear where a translation is not available."
+        /></span>
+      </div>}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
       {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
