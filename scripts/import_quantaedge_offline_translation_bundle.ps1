@@ -71,9 +71,16 @@ function Get-QeChildReportSummaries {
                 created_drafts = $doc.created_drafts
                 api_error_count = $doc.api_error_count
                 failed_batches = $doc.failed_batches
+                not_attempted_batches = $doc.not_attempted_batches
                 mapping_preflight = $doc.mapping_preflight
+                mapping_errors = @($doc.mapping_errors)
                 added_as_draft = $doc.added_as_draft
                 skipped_duplicate = $doc.skipped_duplicate
+                skipped_incomplete_count = $doc.skipped_incomplete_count
+                skipped_incomplete = @($doc.skipped_incomplete)
+                api_error_count = $doc.api_error_count
+                api_errors = @($doc.api_errors)
+                results = @($doc.results)
                 fatal_error = $doc.fatal_error
             }
         } catch {
@@ -358,6 +365,12 @@ catch {
     throw
 }
 finally {
+    if ($script:RunStatus -eq 'RUNNING') {
+        $script:RunStatus = 'INTERRUPTED_OR_ABORTED'
+        if ($null -ne $script:CurrentStage -and $script:CurrentStage.status -eq 'RUNNING') {
+            Complete-QeRunStage -Stage $script:CurrentStage -Status 'INTERRUPTED' -Message 'Execution ended before this stage reported success.'
+        }
+    }
     $env:QUANTAEDGE_ADMIN_SESSION = $OldAdminSession
     $env:QE_SESSION = $OldQeSession
     $session = $null
