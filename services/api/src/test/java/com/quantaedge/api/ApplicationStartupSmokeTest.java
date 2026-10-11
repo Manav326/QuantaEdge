@@ -3,6 +3,9 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +15,27 @@ import org.springframework.jdbc.core.JdbcTemplate;
 class ApplicationStartupSmokeTest {
   @Autowired
   private JdbcTemplate jdbc;
+
+  @Autowired
+  private ContentTranslationController contentTranslationController;
+
+
+  @Test
+  void bilingualSchemaExistsAndTranslationInventoryQueryExecutes() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_program') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.lesson_translation') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.lesson_block_translation') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.question_translation') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version='51' and success=true
+      """, Integer.class));
+
+    AuthContext admin = new AuthContext(null, null, 999L, "ADMIN", "CI admin");
+    Map<String,Object> result = contentTranslationController.list(null, null, "ALL", "ALL", "ALL", 20, 0, admin);
+    assertTrue(result.get("items") instanceof List<?>);
+    assertTrue(result.get("total") instanceof Number);
+  }
 
   @Test
   void cleanDatabaseMigratesAndRetainsAllSixClassSubjectTracks() {
