@@ -783,3 +783,94 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-workspace-logout:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
 .qe-workspace-logout:disabled{opacity:.6;cursor:wait}
 @media(max-width:600px){.qe-workspace-logout{min-height:34px;padding:7px 9px;gap:4px;font-size:10px}}
+
+
+/* Premium, compact student textbook access */
+.subject-tracks .subject-track-card{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(235px,.72fr);gap:0;align-items:stretch;
+  padding:0;overflow:hidden;border:1px solid #e5e9f1;background:#fff;transition:border-color .18s,box-shadow .18s;
+}
+.subject-tracks .subject-track-card:hover{border-color:#f2c3a4;box-shadow:0 12px 28px #24334a0b}
+.subject-track-main{display:grid;grid-template-columns:44px minmax(0,1fr) 18px;align-items:center;gap:13px;min-width:0;padding:17px 18px}
+.subject-track-copy{display:grid;gap:5px;min-width:0}
+.subject-track-copy strong{font-size:14px;line-height:1.35;color:#25324a}
+.subject-track-copy small{font-size:10px;line-height:1.55;color:#7d889b;overflow-wrap:anywhere}
+.subject-track-main .task-action{justify-self:end}
+.subject-book-link{display:flex;align-items:center;gap:11px;min-width:0;margin:8px;padding:11px 12px;border:1px solid #f2dfd1;border-radius:13px;background:linear-gradient(135deg,#fffaf6,#fff);transition:border-color .18s,background .18s}
+.subject-book-link:hover{border-color:#e99a68;background:#fff7f0}
+.subject-pdf-mark,.qe-student-pdf-mark,.qe-library-pdf-mark{position:relative;display:grid;place-items:center;flex:0 0 auto;width:38px;height:43px;border:1px solid #f2cbb5;border-radius:9px;background:#fff0e5;color:#b9381a}
+.subject-pdf-mark svg,.qe-student-pdf-mark svg,.qe-library-pdf-mark svg{width:19px;height:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.subject-pdf-mark small,.qe-student-pdf-mark small,.qe-library-pdf-mark small{margin-top:-2px;font-size:7px;line-height:1;font-weight:950;letter-spacing:.45px}
+.subject-book-copy{display:grid;gap:4px;flex:1;min-width:0}
+.subject-book-copy strong{font-size:11px;line-height:1.4;color:#343e52;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.subject-book-copy small{font-size:9px;line-height:1.5;color:#9099a9}
+.subject-book-open{flex:0 0 auto;padding:7px 8px;border-radius:8px;background:#c2410c;color:#fff;font-size:9px;font-weight:800}
+.subject-pdf-status{align-self:center;margin:8px 12px;padding:10px 12px;border-left:1px solid #edf0f5;color:#858fa1;font-size:10px;line-height:1.5}
+a.subject-pdf-status{color:#a64117;font-weight:750}
+.subject-pdf-status:hover{color:#7c2d12}
+.qe-subject-reading-page .lesson-wrap{max-width:1040px}
+.qe-subject-reading-page .lesson-intro{margin-bottom:18px}
+.qe-student-pdf-link{display:flex;align-items:center;gap:12px;min-width:0;padding:12px 14px;border:1px solid #e6eaf1;border-radius:13px;background:#fff;color:#233149;box-shadow:0 4px 16px #1d2b4305;transition:border-color .16s,box-shadow .16s,transform .16s}
+.qe-student-pdf-link:hover{border-color:#edb18e;box-shadow:0 8px 21px #1d2b430b;transform:translateY(-1px)}
+.qe-student-pdf-copy{display:grid;gap:4px;flex:1;min-width:0}
+.qe-student-pdf-copy>span{font-size:9px;font-weight:800;letter-spacing:.045em;color:#a7461d}
+.qe-student-pdf-copy strong{font-size:12px;line-height:1.5;color:#25324a;overflow-wrap:anywhere}
+.qe-student-pdf-copy small{font-size:10px;line-height:1.5;color:#8a95a7;overflow-wrap:anywhere}
+.qe-student-pdf-action{flex:0 0 auto;color:#a74117;font-size:10px;font-weight:850;white-space:nowrap}
+.qe-subject-book-link{margin:18px 0 20px;padding:14px 16px;border-color:#f1d9c8;background:linear-gradient(110deg,#fffaf6,#fff 66%)}
+.qe-subject-book-link .qe-student-pdf-mark{width:45px;height:50px}
+.qe-subject-book-link .qe-student-pdf-copy strong{font-size:13px}
+.qe-student-chapter{margin:10px 0;border:1px solid #e3e8f0;border-radius:15px;background:#fff;box-shadow:0 4px 18px #1d2b4305;overflow:hidden;scroll-margin-top:96px}
+.qe-student-chapter.expanded{border-color:#edc6ad;box-shadow:0 9px 25px #1d2b4309}
+.qe-student-chapter-toggle{display:grid;grid-template-columns:43px minmax(0,1fr) 35px;align-items:center;gap:13px;width:100%;padding:15px 16px;border:0;background:#fff;text-align:left;cursor:pointer}
+.qe-student-chapter-toggle:hover{background:#fffaf6}
+.qe-student-chapter-number{display:grid;place-items:center;width:41px;height:42px;border:1px solid #f3e0d2;border-radius:12px;background:#fff4eb;color:#b64a1b;font-size:11px;font-weight:900;letter-spacing:.04em}
+.qe-student-chapter-title{display:grid;gap:4px;min-width:0}
+.qe-student-chapter-title small{font-size:8px;font-weight:850;letter-spacing:1px;color:#a44a23}
+.qe-student-chapter-title strong{font-size:13px;line-height:1.45;color:#27344b;overflow-wrap:anywhere}
+.qe-student-chapter-title>span{font-size:9px;color:#8d97a8}
+.qe-student-chapter-indicator{display:grid;place-items:center;width:31px;height:31px;border:1px solid #e8ecf2;border-radius:10px;background:#f9fafc;color:#8e461f;font-size:19px;line-height:1}
+.qe-student-chapter.expanded .qe-student-chapter-indicator{border-color:#efc7ac;background:#fff2e8;color:#a53e13}
+.qe-student-chapter-content{padding:0 16px 15px 72px;border-top:1px solid #f0f2f6}
+.qe-chapter-pdf-row{margin:13px 0 11px;padding:10px 12px;border-color:#f0e4dd;background:#fffdfb;box-shadow:none}
+.qe-chapter-pdf-row .qe-student-pdf-mark{width:34px;height:39px}
+.qe-chapter-pdf-row .qe-student-pdf-copy strong{font-size:11px}
+.qe-chapter-pdf-row .qe-student-pdf-action{font-size:9px}
+.qe-student-topic-list{display:grid;gap:0;border-top:1px solid #edf0f5}
+.qe-student-topic-row{display:grid;grid-template-columns:30px minmax(0,1fr) 18px;align-items:center;gap:10px;padding:11px 5px;border-bottom:1px solid #f0f2f6;color:#27354c}
+.qe-student-topic-row:last-child{border-bottom:0}
+.qe-student-topic-row:hover strong{color:#a64117}
+.qe-student-topic-icon{display:grid;place-items:center;width:28px;height:28px;border:1px solid #e8edf3;border-radius:9px;background:#f8fafc;color:#737f93;font-size:12px}
+.qe-student-topic-row>span:nth-child(2){display:grid;gap:3px;min-width:0}
+.qe-student-topic-row strong{font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+.qe-student-topic-row small{font-size:9px;color:#8a95a7}
+.qe-student-topic-arrow{color:#a9b1bf;font-size:15px;text-align:right}
+.qe-student-chapter-empty{margin:12px 0 0;color:#8a95a7;font-size:10px;line-height:1.6}
+.qe-chapter-loading{display:flex;align-items:center;gap:8px;margin:12px 0;padding:10px 12px;border:1px solid #e6eaf1;border-radius:10px;background:#fff;color:#8b95a6;font-size:10px}
+.qe-subject-reading-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 8px;padding-top:15px;border-top:1px solid #e7ebf2}
+.qe-subject-reading-footer a{font-size:10px;font-weight:750;color:#a74218}
+.qe-subject-reading-footer a:hover{color:#7c2d12}
+.qe-lesson-pdf-link{margin:14px 0 18px}
+@media(max-width:760px){
+  .subject-tracks .subject-track-card{grid-template-columns:minmax(0,1fr)}
+  .subject-track-main{padding:15px 15px 10px}
+  .subject-book-link{margin:0 10px 10px;border-left:1px solid #f2dfd1}
+  .subject-pdf-status{margin:0 12px 10px;padding:9px 10px;border-left:0}
+  .qe-student-chapter-toggle{grid-template-columns:36px minmax(0,1fr) 30px;gap:10px;padding:12px}
+  .qe-student-chapter-number{width:35px;height:37px}
+  .qe-student-chapter-content{padding:0 11px 12px}
+  .qe-student-pdf-link{gap:9px;padding:10px}
+  .qe-student-pdf-action{font-size:9px}
+}
+@media(max-width:430px){
+  .subject-book-link{gap:8px;padding:9px}
+  .subject-book-open{padding:7px 6px;font-size:8px}
+  .subject-pdf-mark{width:32px;height:37px}
+  .qe-student-pdf-mark{width:33px;height:39px}
+  .qe-student-pdf-action{max-width:66px;white-space:normal;text-align:right}
+  .qe-student-chapter-title strong{font-size:12px}
+  .qe-student-chapter-content{padding:0 9px 10px}
+  .qe-student-topic-row{grid-template-columns:26px minmax(0,1fr) 14px;gap:8px}
+  .qe-student-topic-icon{width:25px;height:25px}
+  .qe-subject-reading-footer{align-items:flex-start}
+}
