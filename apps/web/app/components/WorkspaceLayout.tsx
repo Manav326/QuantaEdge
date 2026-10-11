@@ -88,7 +88,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const active = (item: Item) => item.href === '/student' || item.href === '/parent'
     ? pathname === item.href || pathname === item.href + '/diagnostic'
     : pathname === item.href || pathname.startsWith(item.href + '/');
-remove mobile nav item slicing  return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
+ return <div className={'qe-workspace-layout qe-' + role + '-workspace' + (collapsed ? ' is-collapsed' : '')}>
     <aside className="qe-workspace-sidebar">
       <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-sidebar-brand" />
       <button type="button" className="qe-workspace-collapse" onClick={toggleCollapsed} aria-label={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')} aria-expanded={!collapsed} title={collapsed ? (locale === 'english' ? 'Expand navigation' : 'Navigation खोलें') : (locale === 'english' ? 'Collapse navigation' : 'Navigation समेटें')}>{collapsed ? '»' : '«'}</button>
