@@ -296,7 +296,7 @@ class AuthServiceTest {
     parentRow.put("staff_role", null);
     parentRow.put("staff_name", null);
 
-    when(jdbc.queryForList(contains("select s.id"), anyString())).thenReturn(List.of(sessionRow));
+    when(jdbc.queryForList(contains("s.last_seen_at>now()-interval '4 hours'"), anyString())).thenReturn(List.of(sessionRow));
     when(jdbc.update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L))).thenReturn(1);
     when(jdbc.queryForList(contains("select s.user_id,s.student_id,s.staff_id"), anyString())).thenReturn(List.of(parentRow));
 
