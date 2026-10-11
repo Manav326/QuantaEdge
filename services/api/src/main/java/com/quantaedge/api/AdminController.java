@@ -191,7 +191,11 @@ public class AdminController {
         (select count(*) from question where active=true) as questions,
         (select count(*) from student where active=true and environment='PRODUCTION') as students
       """));
-    result.put("review",jdbc.queryForList("select review_status,count(*) as count from question group by review_status order by review_status"));
+    result.put("review",jdbc.queryForList("""
+      select coalesce(nullif(upper(review_status),''),'DRAFT') as review_status,active,count(*) as count
+      from question group by coalesce(nullif(upper(review_status),''),'DRAFT'),active
+      order by review_status,active desc
+      """));
     result.put("sources",jdbc.queryForList("select source_kind,count(*) as count from question group by source_kind order by source_kind"));
     result.put("assets",jdbc.queryForList("select asset_type,status,count(*) as count from content_asset group by asset_type,status order by asset_type,status"));
     return result;
