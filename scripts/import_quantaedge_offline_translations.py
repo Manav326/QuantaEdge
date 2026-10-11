@@ -317,8 +317,10 @@ def main() -> int:
         print(f"Current database: {len(chapters):,} chapters; {len(questions):,} questions.")
         cookie = ""
         if args.apply:
-            cookie = os.environ.get("QE_SESSION","").strip() or getpass.getpass("QE_SESSION cookie (input hidden): ").strip()
-            if not cookie: raise ValueError("QE_SESSION is required for --apply.")
+            cookie = (os.environ.get("QUANTAEDGE_ADMIN_SESSION","").strip()
+                     or os.environ.get("QE_SESSION","").strip()
+                     or getpass.getpass("Paste fresh QE_SESSION cookie value (input hidden): ").strip())
+            if not cookie: raise ValueError("A fresh QE_SESSION cookie is required for --apply.")
             print("Apply mode only creates English DRAFTs; nothing is published.")
         report = []
         if chapters: report.extend(process("curriculum_chapter",chapters,index,translations,args,cookie))
