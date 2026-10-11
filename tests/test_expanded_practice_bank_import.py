@@ -123,9 +123,9 @@ class ExpandedPracticeBankImportTests(unittest.TestCase):
             "prompt": "उत्तर लिखिए", "difficulty": "EASY", "explanation": "",
             "options": [], "answer_payload": {"kind": "TEXT", "value": "हाँ"},
         }]
-        patch, added, skipped = prepare_patch(current, incoming)
+        additions, added, skipped = prepare_patch(current, incoming)
         self.assertEqual((added, skipped), (0, 1))
-        self.assertEqual([q["id"] for q in patch["questions"]], [1])
+        self.assertEqual(additions, [])
 
     def test_published_lesson_accepts_append_only_drafts(self) -> None:
         current = {
