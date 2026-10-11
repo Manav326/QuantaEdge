@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -118,6 +119,106 @@ public class ContentTranslationController {
     response.put("limit", rowLimit);
     response.put("offset", rowOffset);
     response.put("language", normalizedLanguage);
+    return response;
+  }
+
+
+  /**
+   * Returns current student-facing source records that do not yet have a translation
+   * for the selected target language/source revision. These are shown as NOT_STARTED,
+   * never as a translation or as student-ready content.
+   */
+  @GetMapping("/inventory")
+  public Map<String, Object> inventory(
+      @RequestParam(required = false, defaultValue = "ALL") String classCode,
+      @RequestParam(required = false, defaultValue = "ALL") String subjectCode,
+      @RequestParam(required = false, defaultValue = "ALL") String language,
+      @RequestParam(required = false, defaultValue = "ALL") String entityType,
+      @RequestParam(required = false, defaultValue = "100") Integer limit,
+      @RequestParam(required = false, defaultValue = "0") Integer offset,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireTranslationView(context);
+    String normalizedLanguage = normalizeLanguageFilter(language);
+    String normalizedEntity = normalizeEntityFilter(entityType);
+    String normalizedClass = safeFilter(classCode, 30);
+    String normalizedSubject = safeFilter(subjectCode, 40);
+    int rowLimit = Math.max(1, Math.min(limit == null ? 100 : limit, 250));
+    int rowOffset = Math.max(0, Math.min(offset == null ? 0 : offset, 10_000_000));
+    String base = translationInventorySql();
+    String where = """
+      where (? = 'ALL' or language = ?)
+        and (? = '' or class_code = ?)
+        and (? = '' or subject_code = ?)
+        and (? = 'ALL' or entity_type = ?)
+      """;
+    List<Object> filterArgs = new ArrayList<>();
+    filterArgs.add(normalizedLanguage); filterArgs.add(normalizedLanguage);
+    filterArgs.add(normalizedClass); filterArgs.add(normalizedClass);
+    filterArgs.add(normalizedSubject); filterArgs.add(normalizedSubject);
+    filterArgs.add(normalizedEntity); filterArgs.add(normalizedEntity);
+    List<Object> pageArgs = new ArrayList<>(filterArgs);
+    pageArgs.add(rowLimit); pageArgs.add(rowOffset);
+    List<Map<String, Object>> items = jdbc.queryForList(
+        base + " select tr.*,tr.source_content::text as source_content_text,"
+            + "tr.translated_content::text as translated_content_text from translation_inventory tr " + where
+            + " order by class_code,subject_code,chapter_code,lesson_title,entity_type,entity_id,language limit ? offset ?",
+        pageArgs.toArray());
+    Long total = jdbc.queryForObject(
+        base + " select count(*) from translation_inventory " + where,
+        Long.class, filterArgs.toArray());
+    Map<String, Object> response = new LinkedHashMap<>();
+    response.put("items", items);
+    response.put("total", total == null ? 0L : total);
+    response.put("limit", rowLimit);
+    response.put("offset", rowOffset);
+    response.put("language", normalizedLanguage);
+    return response;
+  }
+
+  @PostMapping("/{entityType}/{entityId}/draft")
+  @Transactional
+  public Map<String, Object> createDraft(
+      @PathVariable String entityType,
+      @PathVariable long entityId,
+      @RequestParam(defaultValue = "en") String language,
+      @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireAuth(context);
+    if (!authorization.hasPermission(context, "CONTENT_EDIT")
+        && !authorization.hasPermission(context, "CONTENT_REVIEW")) {
+      throw new SecurityException("Content translation editing access required.");
+    }
+    String type = normalizeEntityType(entityType);
+    TableSpec spec = tableSpec(type);
+    String targetLanguage = normalizeLanguage(language);
+    SourceDescriptor source = currentSource(type, entityId);
+    Object translatedRaw = body.get("translatedContent");
+    if (!(translatedRaw instanceof Map<?, ?> translatedMap)) {
+      throw badRequest("translatedContent must be a JSON object.");
+    }
+    @SuppressWarnings("unchecked")
+    Map<String, Object> translated = (Map<String, Object>) translatedMap;
+    validateContentShape(source.content(), translated, targetLanguage);
+    validateRequiredFields(type, translated);
+    String notes = optionalText(body.get("qualityNotes"), 2000);
+    Integer maxVersion = jdbc.queryForObject(
+        "select coalesce(max(version_no),0) from " + spec.table()
+            + " where " + spec.foreignKey() + "=? and language=? and source_hash=?",
+        Integer.class, entityId, targetLanguage, source.hash());
+    int version = (maxVersion == null ? 0 : maxVersion) + 1;
+    long translationId = insertDraft(spec, entityId, targetLanguage, "mixed", source.hash(),
+        version, translated, notes, context.staffId());
+    staffAudit.recordAction(context, "/api/v1/admin/translations/" + type + "/" + entityId + "/draft",
+        "Created a " + targetLanguage + " translation draft for " + type + " #" + entityId + ".");
+    Map<String, Object> response = new LinkedHashMap<>();
+    response.put("translationId", translationId);
+    response.put("entityType", type);
+    response.put("entityId", entityId);
+    response.put("language", targetLanguage);
+    response.put("sourceHash", source.hash());
+    response.put("versionNo", version);
+    response.put("translationStatus", "DRAFT");
+    response.put("createdNewVersion", true);
     return response;
   }
 
@@ -297,6 +398,164 @@ public class ContentTranslationController {
     response.put("previousStatus", previous);
     response.put("status", next);
     return response;
+  }
+
+
+  private String translationInventorySql() {
+    return """
+      with sources as (
+        select 'curriculum_class'::text entity_type,c.id::bigint entity_id,
+          md5(jsonb_build_object('display_name',c.display_name)::text) source_hash,
+          jsonb_build_object('display_name',c.display_name) source_content,
+          c.code::text class_code,null::text subject_code,null::text chapter_code,null::text chapter_name,null::text lesson_title
+        from curriculum_class c where c.active=true
+
+        union all
+        select 'curriculum_program',p.id,md5(jsonb_build_object('display_name',p.display_name)::text),
+          jsonb_build_object('display_name',p.display_name),c.code::text,null::text,null::text,p.display_name::text,null::text
+        from curriculum_program p join curriculum_class c on c.id=p.class_id
+        where c.active=true and p.status<>'ARCHIVED'
+
+        union all
+        select 'curriculum_subject',s.id,md5(jsonb_build_object('display_name',s.display_name)::text),
+          jsonb_build_object('display_name',s.display_name),c.code::text,s.code::text,null::text,null::text,null::text
+        from curriculum_subject s join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science')
+
+        union all
+        select 'curriculum_chapter',ch.id,md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text),
+          jsonb_build_object('display_name',ch.display_name,'description',ch.description),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,null::text
+        from curriculum_chapter ch join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science')
+          and ch.active=true and ch.content_status<>'ARCHIVED'
+
+        union all
+        select 'learning_objective',o.id,md5(jsonb_build_object('title',o.title,'description',o.description)::text),
+          jsonb_build_object('title',o.title,'description',o.description),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,o.title::text
+        from learning_objective o join curriculum_chapter ch on ch.id=o.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+          and ch.content_status<>'ARCHIVED' and o.active=true
+
+        union all
+        select 'lesson',l.id,md5(jsonb_build_object('title',l.title,'summary',l.summary)::text),
+          jsonb_build_object('title',l.title,'summary',l.summary),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,l.title::text
+        from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+          and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED'
+
+        union all
+        select 'lesson_block',b.id,md5(b.content::text),jsonb_build_object('content',b.content),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,l.title::text
+        from lesson_block b join lesson l on l.id=b.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id
+        join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+          and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED' and b.active=true
+
+        union all
+        select 'question',q.id,
+          md5(jsonb_build_object('prompt',q.prompt,'explanation',q.explanation,'options',coalesce((
+            select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label) order by qo.sort_order)
+            from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+            'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags)::text),
+          jsonb_build_object('prompt',q.prompt,'explanation',q.explanation,'options',coalesce((
+            select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label) order by qo.sort_order)
+            from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+            'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,l.title::text
+        from question q join lesson l on l.id=q.lesson_id
+        join curriculum_chapter ch on ch.id=l.chapter_id join curriculum_subject s on s.id=ch.subject_id
+        join curriculum_class c on c.id=s.class_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and ch.active=true
+          and ch.content_status<>'ARCHIVED' and l.active=true and l.status<>'ARCHIVED'
+          and q.active=true and q.review_status not in ('REJECTED','ARCHIVED')
+
+        union all
+        select 'assessment',a.id,md5(jsonb_build_object('title',a.title,'description',a.description)::text),
+          jsonb_build_object('title',a.title,'description',a.description),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,a.title::text
+        from assessment a join curriculum_subject s on s.id=a.subject_id
+        join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=a.chapter_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
+          and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
+
+        union all
+        select 'assessment_question',aq.id,
+          md5(jsonb_build_object('prompt',aq.question_snapshot->>'prompt','explanation',aq.question_snapshot->>'explanation',
+            'options',coalesce((select jsonb_agg(jsonb_build_object(
+              'key',coalesce(opt.value->>'key',opt.value->>'option_key'),'label',opt.value->>'label')
+              order by opt.ordinality)
+              from jsonb_array_elements(case when jsonb_typeof(aq.question_snapshot->'options')='array'
+                then aq.question_snapshot->'options' else '[]'::jsonb end) with ordinality as opt(value,ordinality)
+            ),'[]'::jsonb))::text,
+          jsonb_build_object('prompt',aq.question_snapshot->>'prompt','explanation',aq.question_snapshot->>'explanation',
+            'options',coalesce((select jsonb_agg(jsonb_build_object(
+              'key',coalesce(opt.value->>'key',opt.value->>'option_key'),'label',opt.value->>'label')
+              order by opt.ordinality)
+              from jsonb_array_elements(case when jsonb_typeof(aq.question_snapshot->'options')='array'
+                then aq.question_snapshot->'options' else '[]'::jsonb end) with ordinality as opt(value,ordinality)
+            ),'[]'::jsonb)),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,a.title::text
+        from assessment_question aq join assessment a on a.id=aq.assessment_id
+        join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
+        left join curriculum_chapter ch on ch.id=a.chapter_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and a.status<>'ARCHIVED'
+          and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
+
+        union all
+        select 'learning_class_session',cs.id,md5(jsonb_build_object('title',cs.title,'description',cs.description)::text),
+          jsonb_build_object('title',cs.title,'description',cs.description),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,cs.title::text
+        from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
+        join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=cs.chapter_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and cs.status<>'CANCELLED'
+          and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
+
+        union all
+        select 'recorded_class',rc.id,md5(jsonb_build_object('title',rc.title,'description',rc.description)::text),
+          jsonb_build_object('title',rc.title,'description',rc.description),
+          c.code::text,s.code::text,ch.code::text,ch.display_name::text,rc.title::text
+        from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
+        join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=rc.chapter_id
+        where c.active=true and s.active=true and s.code in ('maths','science') and rc.status<>'ARCHIVED'
+          and (ch.id is null or (ch.active=true and ch.content_status<>'ARCHIVED'))
+      ), existing as (
+        select 'curriculum_class'::text entity_type,class_id entity_id,language,source_hash::text source_hash,translation_status from curriculum_class_translation
+        union all select 'curriculum_program',program_id,language,source_hash::text,translation_status from curriculum_program_translation
+        union all select 'curriculum_subject',subject_id,language,source_hash::text,translation_status from curriculum_subject_translation
+        union all select 'curriculum_chapter',chapter_id,language,source_hash::text,translation_status from curriculum_chapter_translation
+        union all select 'learning_objective',objective_id,language,source_hash::text,translation_status from learning_objective_translation
+        union all select 'lesson',lesson_id,language,source_hash::text,translation_status from lesson_translation
+        union all select 'lesson_block',block_id,language,source_hash::text,translation_status from lesson_block_translation
+        union all select 'question',question_id,language,source_hash::text,translation_status from question_translation
+        union all select 'assessment',assessment_id,language,source_hash::text,translation_status from assessment_translation
+        union all select 'assessment_question',assessment_question_id,language,source_hash::text,translation_status from assessment_question_translation
+        union all select 'learning_class_session',session_id,language,source_hash::text,translation_status from learning_class_session_translation
+        union all select 'recorded_class',recorded_class_id,language,source_hash::text,translation_status from recorded_class_translation
+      ), targets as (
+        select 'hi'::text language union all select 'en'::text
+      ), translation_inventory as (
+        select s.entity_type, null::bigint translation_id,s.entity_id,t.language,
+          'mixed'::text source_language,s.source_hash,0::integer version_no,
+          'NOT_STARTED'::text translation_status,'NONE'::text translation_method,
+          null::text model_name,null::text quality_notes,null::timestamptz created_at,null::timestamptz updated_at,
+          null::bigint reviewed_by_staff_id,null::timestamptz reviewed_at,
+          null::bigint published_by_staff_id,null::timestamptz published_at,
+          s.class_code,s.subject_code,s.chapter_code,s.chapter_name,s.lesson_title,
+          s.source_content,null::jsonb translated_content,s.source_hash current_source_hash,true is_current_revision
+        from sources s cross join targets t
+        where not exists (
+          select 1 from existing e where e.entity_type=s.entity_type and e.entity_id=s.entity_id
+            and e.language=t.language and e.source_hash=s.source_hash and e.translation_status<>'SUPERSEDED'
+        )
+      )
+      """;
   }
 
   private String translationRowsSql() {
