@@ -91,16 +91,14 @@ class ExpandedPracticeBankImportTests(unittest.TestCase):
             "marks": 1,
             "exam_format": "Topic practice",
         }]
-        patch, added, skipped = prepare_patch(current, incoming)
+        additions, added, skipped = prepare_patch(current, incoming)
         self.assertEqual((added, skipped), (1, 0))
-        self.assertNotIn("blocks", patch)
-        self.assertEqual(patch["status"], "DRAFT")
-        self.assertEqual(patch["questions"][0]["id"], 27)
-        self.assertEqual(len(patch["questions"]), 2)
-        new_item = patch["questions"][1]
+        self.assertEqual(len(additions), 1)
+        new_item = additions[0]
         self.assertNotIn("id", new_item)
         self.assertIn("qe-practice-id:fractions-micro-01-topic-2-mcq", new_item["tags"])
         self.assertEqual(new_item["review_status"], "DRAFT")
+        self.assertEqual(new_item["sort_order"], 2)
 
     def test_exact_prompt_duplicate_is_skipped(self) -> None:
         current = {
@@ -129,7 +127,7 @@ class ExpandedPracticeBankImportTests(unittest.TestCase):
         self.assertEqual((added, skipped), (0, 1))
         self.assertEqual([q["id"] for q in patch["questions"]], [1])
 
-    def test_non_draft_lesson_is_refused(self) -> None:
+    def test_published_lesson_accepts_append_only_drafts(self) -> None:
         current = {
             "lesson_status": "PUBLISHED",
             "lesson_code": "live-topic",
@@ -140,8 +138,18 @@ class ExpandedPracticeBankImportTests(unittest.TestCase):
             "alignment_source_verified": False,
             "questions": [],
         }
-        with self.assertRaisesRegex(ValueError, "not DRAFT"):
-            prepare_patch(current, [])
+        additions, added, skipped = prepare_patch(current, [{
+            "id": "live-add",
+            "prompt": "नया प्रश्न",
+            "question_type": "INPUT",
+            "difficulty": "EASY",
+            "lesson_code": "live-topic",
+            "answer_payload": {"kind": "TEXT", "value": "उत्तर"},
+            "options": [],
+        }])
+        self.assertEqual((added, skipped), (1, 0))
+        self.assertEqual(len(additions), 1)
+        self.assertEqual(additions[0]["review_status"], "DRAFT")
 
 
 if __name__ == "__main__":
