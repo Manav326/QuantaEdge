@@ -30,7 +30,8 @@ export default function AuthenticatedProfileImage({
     setObjectUrl(null);
     setFailed(false);
 
-    if (!src) {
+    const imageUrl = src;
+    if (!imageUrl) {
       return () => {
         active = false;
         controller.abort();
@@ -39,7 +40,7 @@ export default function AuthenticatedProfileImage({
 
     async function loadPhoto() {
       try {
-        const response = await fetch(src, {
+        const response = await fetch(imageUrl, {
           method: 'GET',
           credentials: 'same-origin',
           cache: 'no-store',
