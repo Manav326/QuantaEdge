@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 type Question={
   id:number;lesson_id?:number;question_type:string;prompt:string;explanation:string;options:string;
   source_kind?:string;source_year?:number;board?:string;marks?:number;exam_format?:string;
-  topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean
+  topic?:string;subtopic?:string;skill?:string;response_mode?:string;answered?:boolean;attemptCount?:number;lastCorrect?:boolean|null
 };
 type LessonBlock={id:number;sequence_no:number;block_type:string;content:string};
 type LessonDetail={
@@ -93,8 +93,14 @@ export default function PracticePage(){
           setQuestions(resumed);
           const firstUnanswered=resumed.findIndex(q=>!q.answered);
           setIndex(firstUnanswered<0?resumed.length:firstUnanswered);
+          const restoredScores:Record<number,any>={};
+          resumed.forEach(q=>{if(typeof q.lastCorrect==='boolean')restoredScores[q.id]={correct:q.lastCorrect,autoGraded:true};});
+          setScoreByQuestion(restoredScores);
           setSelected('');setResult(null);
           if(firstUnanswered<0&&resumed.length)setSessionStatus('COMPLETED');
+          else if(firstUnanswered>=0&&resumed[firstUnanswered].attemptCount&&resumed[firstUnanswered].lastCorrect===false){
+            setResult({correct:false,autoGraded:true,explanation:resumed[firstUnanswered].explanation});
+          }
           setNotice(tx('आपका saved practice session फिर से खुल गया।','Your saved practice session has been reopened.'));
           return;
         }
@@ -108,9 +114,9 @@ export default function PracticePage(){
         if(startResponse.status===409){
           if(active){
             setNoPractice(true);
-            setNotice(startBody.detail||startBody.message||tx(
-              'इस micro-topic के लिए अतिरिक्त approved practice questions अभी publish नहीं हुए हैं।',
-              'Additional approved practice questions have not been published for this micro-topic yet.'
+            setNotice(tx(
+              'इस micro-topic के लिए अतिरिक्त approved practice questions अभी publish नहीं हुए हैं। आपके दिए हुए MCQ answers save हैं।',
+              'Additional approved practice questions have not been published for this micro-topic yet. Your submitted MCQ answers are saved.'
             ));
           }
           return;
@@ -217,7 +223,7 @@ export default function PracticePage(){
       <div className="eyebrow"><LocaleText hinglish="Micro-topic पूरा हुआ" english="Micro-topic complete" /></div>
       <h1><LocaleText hinglish="बहुत अच्छा! अभ्यास पूरा हुआ।" english="Well done! Practice complete." /></h1>
       <p>{lesson?.title||tx('आपका practice session','Your practice session')} · {questions.length} <LocaleText hinglish="questions" english="questions" /></p>
-      <div className="concept-card"><h2><LocaleText hinglish="इस session का परिणाम" english="Session result" /></h2><p>{correctCount} / {gradedCount} <LocaleText hinglish="graded answers सही" english="graded answers correct" /></p><small><LocaleText hinglish="Progress आपके answers से save हुआ है। Mastery केवल जाँचे गए सही/गलत उत्तरों से update होती है।" english="Your answers have been saved. Mastery is updated from graded answers, not from simply opening a question." /></small></div>
+      <div className="concept-card"><h2><LocaleText hinglish="इस session का परिणाम" english="Session result" /></h2>{gradedCount>0?<p>{correctCount} / {gradedCount} <LocaleText hinglish="questions का latest graded answer सही है" english="questions have a correct latest graded answer" /></p>:<p><LocaleText hinglish="आपके दिए गए answers save हैं।" english="Your submitted answers have been saved." /></p>}<small><LocaleText hinglish="Progress आपके answers से save हुआ है। Mastery केवल जाँचे गए सही/गलत उत्तरों से update होती है।" english="Your answers have been saved. Mastery is updated from graded answers, not from simply opening a question." /></small></div>
       {recap.map(block=>{
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="अब दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
@@ -253,7 +259,7 @@ export default function PracticePage(){
       {answerError&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="उत्तर save नहीं हुआ" english="Answer was not saved" /></strong><span>{answerError}</span></div>}
       {result&&<div className={'practice-feedback '+(result.correct===false?'practice-feedback-incorrect':result.correct===true?'practice-feedback-correct':'practice-feedback-ungraded')} role={result.correct===false?'alert':'status'}>
         <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not correct yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
-        <span><MathText text={String(result.feedback??'')}/></span>
+        <span>{result.correct===true?<LocaleText hinglish="सही। Explanation पढ़ें और समझें कि उत्तर सही क्यों है।" english="Correct. Review the explanation to understand why this answer works." />:result.correct===false?<LocaleText hinglish="अभी सही नहीं। Explanation पढ़ें और इसी question को फिर से प्रयास करें।" english="Not quite. Review the explanation and try this same question again." />:<LocaleText hinglish="उत्तर save हो गया। इस प्रश्न के लिए teacher की जाँच आवश्यक हो सकती है।" english="Your answer was saved. This question may require teacher or rubric review." />}</span>
         {result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
       </div>}
 
