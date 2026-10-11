@@ -125,7 +125,7 @@ class LearningDocumentControllerTest {
     assertEquals(88L, result.get("document_id"));
     verify(jdbc).update(
         contains("where scope=? and subject_id=? and language=?"),
-        eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(9L), eq(88L));
+        eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
   }
 
   @Test
