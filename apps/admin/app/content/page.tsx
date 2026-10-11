@@ -235,6 +235,7 @@ function LearnerBlock({block}:{block:ContentBlock}){
 export default function ContentStudio(){
  const [rows,setRows]=useState<Row[]>([]);
  const [identity,setIdentity]=useState<any>(null);
+ const [questionSummary,setQuestionSummary]=useState<any>(null);
  const [baselineSnapshot,setBaselineSnapshot]=useState('');
  const [classFilter,setClassFilter]=useState('ALL'),[subjectFilter,setSubjectFilter]=useState('ALL'),[statusFilter,setStatusFilter]=useState('ALL'),[search,setSearch]=useState('');
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
@@ -245,7 +246,14 @@ export default function ContentStudio(){
  const [activeBlock,setActiveBlock]=useState(0),[showPreview,setShowPreview]=useState(true),[previewMode,setPreviewMode]=useState<'desktop'|'phone'>('desktop'),[showAdvancedQuestions,setShowAdvancedQuestions]=useState(false),[questionJson,setQuestionJson]=useState('[]');
  const workspaceRef=useRef<HTMLElement|null>(null);
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
- async function load(){setLoading(true);setError('');try{const data=await api('/api/v1/admin/content');setRows(Array.isArray(data)?data:[])}catch(e){setError(e instanceof Error?e.message:'Content library could not be loaded. Sign in as an administrator and retry.')}finally{setLoading(false)}}
+ async function load(){setLoading(true);setError('');try{
+  const [data,questionCounts]=await Promise.all([
+   api('/api/v1/admin/content'),
+   api('/api/v1/admin/content/questions/review-summary')
+  ]);
+  setRows(Array.isArray(data)?data:[]);
+  setQuestionSummary(questionCounts);
+ }catch(e){setError(e instanceof Error?e.message:'Content library or question counts could not be loaded. Sign in as an administrator and retry.')}finally{setLoading(false)}}
  useEffect(()=>{
   let mounted=true;
   void (async()=>{
@@ -270,6 +278,12 @@ export default function ContentStudio(){
  const publishedLessons=new Set(rows.filter(r=>r.lesson_id!==null&&r.lesson_status==='PUBLISHED'&&r.lesson_active&&r.chapter_status==='PUBLISHED'&&r.chapter_active===true).map(r=>r.lesson_id)).size;
  const publishedChapters=new Set(rows.filter(r=>r.chapter_id!==null&&r.chapter_status==='PUBLISHED'&&r.chapter_active===true).map(r=>r.chapter_id)).size;
  const draftLessons=new Set(rows.filter(r=>r.lesson_id!==null&&(r.lesson_status==='DRAFT'||r.lesson_status==='REVIEW')).map(r=>r.lesson_id)).size;
+ const activeQuestionCount=(statuses:string[]) => (Array.isArray(questionSummary?.byStatus)?questionSummary.byStatus:[])
+  .filter((row:any)=>row.active===true&&statuses.includes(String(row.review_status||'DRAFT').toUpperCase()))
+  .reduce((n:number,row:any)=>n+Number(row.count||0),0);
+ const activeQuestionsAwaitingReview=activeQuestionCount(['REVIEW']);
+ const activeQuestionDrafts=activeQuestionCount(['DRAFT']);
+ const activeRejectedQuestions=activeQuestionCount(['REJECTED']);
  const active=activeBlock>=0&&activeBlock<blocks.length?blocks[activeBlock]:null;
  const permissions=Array.isArray(identity?.permissions)?identity.permissions:[];
  const isAdmin=identity?.role==='ADMIN';
@@ -542,7 +556,13 @@ export default function ContentStudio(){
    <nav className="admin-mobile-nav" aria-label="Admin navigation"><Link href="/">Overview</Link><Link className="active" href="/content">Content studio</Link><Link href="/students">Students</Link><Link href="/parents">Families</Link></nav>
    
    {error&&<div className="admin-alert qe-feedback" role="alert"><strong>Needs attention</strong><span>{error}</span><button type="button" onClick={()=>setError('')}>Dismiss</button></div>}{notice&&<div className="admin-notice qe-feedback" role="status"><strong>Workspace update</strong><span>{notice}</span><button type="button" onClick={()=>setNotice('')}>Dismiss</button></div>}
-   <section className="qe-stats-grid"><article><span className="qe-stat-icon purple">▦</span><div><small>Curriculum classes</small><strong>{classOptions.length||'—'}</strong><span>Connected to database records</span></div></article><article><span className="qe-stat-icon blue">◇</span><div><small>Chapters / topics</small><strong>{uniqueChapters}</strong><span>Published and unpublished</span></div></article><article><span className="qe-stat-icon green">▤</span><div><small>Published lessons</small><strong>{publishedLessons}</strong><span>Available to enrolled learners</span></div></article><article><span className="qe-stat-icon amber">✎</span><div><small>Needs authoring / review</small><strong>{draftLessons}</strong><span>Not currently published</span></div></article></section>
+   <section className="qe-stats-grid">
+    <article><span className="qe-stat-icon purple">▦</span><div><small>Curriculum classes</small><strong>{classOptions.length||'—'}</strong><span>Connected to database records</span></div></article>
+    <article><span className="qe-stat-icon blue">◇</span><div><small>Chapters / topics</small><strong>{uniqueChapters}</strong><span>Published and unpublished</span></div></article>
+    <article><span className="qe-stat-icon green">▤</span><div><small>Published lessons</small><strong>{publishedLessons}</strong><span>Available to enrolled learners</span></div></article>
+    <article><span className="qe-stat-icon amber">✎</span><div><small>Lessons needing authoring</small><strong>{draftLessons}</strong><span>Draft or in-review micro-topics</span></div></article>
+    <article><span className="qe-stat-icon amber">✓</span><div><small>Questions awaiting review</small><strong>{activeQuestionsAwaitingReview}</strong><span>{activeQuestionDrafts} active drafts · {activeRejectedQuestions} active rejected</span></div></article>
+   </section>
    <section className="qe-library-panel" id="content-library">
     <div className="qe-section-head"><div><span className="admin-kicker">CURRICULUM MAP</span><h2>Find a chapter or micro-topic</h2><p>Choose an item to open its editor. Every count reflects current content records.</p></div><div className="qe-create-actions"><button type="button" className="qe-secondary-button" disabled={loading||!canCreate} title={!canCreate?'You do not have permission to create content.':undefined} onClick={()=>beginCreate('chapter')}>＋ New chapter</button><button type="button" className="qe-primary-button" disabled={loading||!canCreate||!rows.some(r=>r.chapter_id!==null)} title={!canCreate?'You do not have permission to create content.':undefined} onClick={()=>beginCreate('lesson')}>＋ New micro-topic</button></div></div>
     <div className="qe-filters"><label>Class<select value={classFilter} onChange={e=>{setClassFilter(e.target.value);setSubjectFilter('ALL')}}><option value="ALL">All classes</option>{classOptions.map(([code,name])=><option key={code} value={code}>Class {code} · {name}</option>)}</select></label><label>Subject<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{subjectOptions.map(([code,name])=><option key={code} value={code}>{name}</option>)}</select></label><label>Status<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="PUBLISHED">Published</option><option value="DRAFT">Draft</option><option value="REVIEW">In review</option><option value="ARCHIVED">Archived</option></select></label><label className="qe-search-field"><span>Search</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Find a chapter, concept or lesson…"/></label></div>
