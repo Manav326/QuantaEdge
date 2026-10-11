@@ -362,6 +362,7 @@ try {
     Write-Host "Audit report: $PublishReport"
     Write-Host 'Verify with a student account enrolled in the relevant class and language.'
 } catch {
+    $caughtMessage = $_.Exception.Message
     if ($report.result -eq 'PREFLIGHT_RUNNING') { $report.result = 'PREFLIGHT_FAILED' }
     if ($null -eq $report.finished_at) { $report.finished_at = (Get-Date).ToString('o') }
     if ($report.result -in @('PARTIAL_FAILURE','PREFLIGHT_FAILED')) {
@@ -370,11 +371,12 @@ try {
         $report.result = 'FAILED'
         $report.failed_count = [Math]::Max([int]$report.failed_count, 1)
     }
-    if ($failures.Count -eq 0) { $failures.Add($_.Exception.Message) }
+    if ($failures.Count -eq 0) { $failures.Add($caughtMessage) }
     if (-not $report.failures -or $report.failures.Count -eq 0) { $report.failures = $failures.ToArray() }
-    $report.actions = $actions.ToArray()
-    $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
-    # Final reconciliation always runs, including preflight failures and HTTP 5xx responses.
+    Write-Host "PUBLISH SCRIPT STOPPED SAFELY: $caughtMessage" -ForegroundColor Red
+}
+finally {
+    # Always reconcile and print the end-state, for successful, dry-run, and failed executions.
     $actionById = @{}
     foreach ($item in @($actions.ToArray())) {
         $actionById[[string]$item.document_id] = $item
@@ -397,9 +399,14 @@ try {
             if ($targetResult -ne 'ERROR') { $notAttemptedIds.Add($targetId) }
         }
     }
+
     $report.published_count = $publishedInRun
     $report.already_published_count = $alreadyPublishedNow
-    $report.failed_count = $failedIds.Count
+    if ($report.result -eq 'PREFLIGHT_FAILED') {
+        $report.failed_count = @($failures.ToArray()).Count
+    } else {
+        $report.failed_count = $failedIds.Count
+    }
     $report.publish_actions_taken = $publishedInRun
     $report.remaining_document_ids = $remainingIds.ToArray()
     $report.summary = [ordered]@{
@@ -407,6 +414,7 @@ try {
         already_published_count = $alreadyPublishedNow
         published_this_run_count = $publishedInRun
         failed_item_count = $failedIds.Count
+        validation_or_api_issue_count = @($failures.ToArray()).Count
         not_attempted_count = $notAttemptedIds.Count
         remaining_to_publish_count = $remainingIds.Count
         failed_document_ids = $failedIds
@@ -414,30 +422,42 @@ try {
         remaining_document_ids = $remainingIds.ToArray()
         result = [string]$report.result
     }
-    try { Save-PublishReport $report } catch {
+    $report.actions = $actions.ToArray()
+    $report.failures = $failures.ToArray()
+    $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
+    if ($null -eq $report.finished_at) { $report.finished_at = (Get-Date).ToString('o') }
+    try {
+        Save-PublishReport $report
+    } catch {
         Write-Host "WARNING: Could not save the final audit report: $($_.Exception.Message)" -ForegroundColor Red
     }
 
     Write-Host ''
     Write-Host '========== PUBLISH RUN SUMMARY ==========' -ForegroundColor Cyan
-    Write-Host "Intended batch:              $($report.target_count) resource(s)"
-    Write-Host "Already published (verified): $alreadyPublishedNow"
-    Write-Host "Published during this run:    $publishedInRun"
-    Write-Host "Failed item(s):               $($failedIds.Count)"
-    Write-Host "Not attempted:                $($notAttemptedIds.Count)"
-    Write-Host "Still remaining to publish:   $($remainingIds.Count)"
+    Write-Host "Intended batch:                 $($report.target_count) resource(s)"
+    Write-Host "Already published (verified):   $alreadyPublishedNow"
+    Write-Host "Published during this run:      $publishedInRun"
+    Write-Host "Failed item(s):                 $($failedIds.Count)"
+    Write-Host "Validation/API issue record(s): $(@($failures.ToArray()).Count)"
+    Write-Host "Not attempted:                  $($notAttemptedIds.Count)"
+    Write-Host "Still remaining to publish:     $($remainingIds.Count)"
     if ($failedIds.Count -gt 0) {
-        Write-Host "Failed document ID(s):        $($failedIds -join ', ')" -ForegroundColor Red
+        Write-Host "Failed document ID(s):          $($failedIds -join ', ')" -ForegroundColor Red
     }
     if ($remainingIds.Count -gt 0) {
-        Write-Host "Remaining document ID(s):     $($remainingIds -join ', ')" -ForegroundColor Yellow
+        Write-Host "Remaining document ID(s):       $($remainingIds -join ', ')" -ForegroundColor Yellow
     }
-    Write-Host "Final result:                 $($report.result)" -ForegroundColor $(if ($report.result -eq 'COMPLETED') { 'Green' } else { 'Red' })
-    Write-Host "Audit report:                 $PublishReport"
-    if ($report.result -ne 'COMPLETED') {
-        Write-Host 'SAFE STOP: no further publish requests were sent after the first failure. Review the API error/report before resuming.' -ForegroundColor Yellow
-        $global:LASTEXITCODE = 1
-    } else {
+    Write-Host "Final result:                   $($report.result)" -ForegroundColor $(if ($report.result -eq 'COMPLETED') { 'Green' } else { 'Red' })
+    Write-Host "Audit report:                   $PublishReport"
+
+    if ($report.result -eq 'PREFLIGHT_OK_NO_WRITES') {
+        Write-Host 'DRY RUN: this was a preflight only; no publish requests were sent.' -ForegroundColor Yellow
         $global:LASTEXITCODE = 0
+    } elseif ($report.result -eq 'COMPLETED') {
+        Write-Host 'DONE: all intended resources are published or were already published.' -ForegroundColor Green
+        $global:LASTEXITCODE = 0
+    } else {
+        Write-Host 'SAFE STOP: no further publish requests were sent after the first failure. Review the API error and report before resuming.' -ForegroundColor Yellow
+        $global:LASTEXITCODE = 1
     }
 }
