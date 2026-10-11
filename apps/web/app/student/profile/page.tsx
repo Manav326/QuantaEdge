@@ -14,7 +14,6 @@ type ProfileDraft = {
   schoolMedium: string;
   favoriteSubject: string;
   learningGoal: string;
-  profileImageDataUrl: string;
 };
 
 const emptyProfile: ProfileDraft = {
@@ -25,7 +24,6 @@ const emptyProfile: ProfileDraft = {
   schoolMedium: '',
   favoriteSubject: '',
   learningGoal: '',
-  profileImageDataUrl: '',
 };
 
 async function readJson(response: Response): Promise<any> {
@@ -96,6 +94,7 @@ export default function StudentProfilePage() {
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ProfileDraft>(emptyProfile);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [student, setStudent] = useState<{class_code: string; board: string} | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -117,6 +116,7 @@ export default function StudentProfilePage() {
         if (!response.ok) throw new Error(body.message || 'Unable to load your profile.');
         if (!active) return;
         setStudent({ class_code: String(body.class_code || ''), board: String(body.board || '') });
+        setProfileImageUrl(body.profile_image_url || null);
         setDraft({
           displayName: body.display_name || '',
           city: body.city || '',
@@ -125,7 +125,6 @@ export default function StudentProfilePage() {
           schoolMedium: body.school_medium || '',
           favoriteSubject: body.favorite_subject || '',
           learningGoal: body.learning_goal || '',
-          profileImageDataUrl: body.profile_image_data_url || '',
         });
       } catch (loadError) {
         if (active) setError(loadError instanceof Error ? loadError.message : 'Unable to load your profile.');
@@ -152,7 +151,7 @@ export default function StudentProfilePage() {
       });
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your photo could not be saved.');
-      setDraft(current => ({ ...current, profileImageDataUrl }));
+      setProfileImageUrl(body.profile_image_url || null);
       setPhotoName(file.name);
       setNotice(tx('आपकी photo profile में save हो गई है।','Your photo has been saved to your profile.'));
       window.dispatchEvent(new Event('qe:profile-updated'));
@@ -178,6 +177,7 @@ export default function StudentProfilePage() {
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
       setStudent({ class_code: String(body.class_code || ''), board: String(body.board || '') });
+      setProfileImageUrl(body.profile_image_url || null);
       setDraft({
         displayName: body.display_name || '',
         city: body.city || '',
@@ -186,7 +186,6 @@ export default function StudentProfilePage() {
         schoolMedium: body.school_medium || '',
         favoriteSubject: body.favorite_subject || '',
         learningGoal: body.learning_goal || '',
-        profileImageDataUrl: body.profile_image_data_url || '',
       });
       setNotice(tx('आपकी profile save हो गई है।','Your profile has been saved.'));
       window.dispatchEvent(new Event('qe:profile-updated'));
@@ -209,7 +208,7 @@ export default function StudentProfilePage() {
       });
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your photo could not be removed.');
-      setDraft(current => ({ ...current, profileImageDataUrl: '' }));
+      setProfileImageUrl(body.profile_image_url || null);
       setPhotoName('');
       setNotice(tx('आपकी photo profile से हटा दी गई है।','Your photo has been removed from your profile.'));
       window.dispatchEvent(new Event('qe:profile-updated'));
@@ -245,17 +244,17 @@ export default function StudentProfilePage() {
               <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><LocaleText hinglish="आपकी profile photo" english="Your profile photo" /></h2><p><LocaleText hinglish="आपकी learning space के लिए एक friendly photo।" english="A friendly photo for your learning space." /></p></div></div>
               <div className="student-profile-photo-editor">
                 <div className="student-profile-photo-editor__preview">
-                  <img src={draft.profileImageDataUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
+                  <img src={profileImageUrl || '/branding/student-avatar.svg'} alt="Student profile preview" />
                   <span className="student-profile-photo-editor__camera" aria-hidden="true">↗</span>
                 </div>
                 <div className="student-profile-photo-editor__copy">
-                  <strong>{draft.profileImageDataUrl ? <LocaleText hinglish="अच्छा लग रहा है!" english="Looking good!" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
+                  <strong>{profileImageUrl ? <LocaleText hinglish="अच्छा लग रहा है!" english="Looking good!" /> : <LocaleText hinglish="अपनी photo जोड़ें" english="Add your photo" />}</strong>
                   <p><LocaleText hinglish="अपनी clear photo चुनें। Save करने से पहले इसे automatically resize किया जाएगा।" english="Choose a clear photo. We’ll resize it automatically before saving." /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
                     <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
-                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : draft.profileImageDataUrl ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
-                    {draft.profileImageDataUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
+                    <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : profileImageUrl ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
+                    {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
                 </div>
               </div>

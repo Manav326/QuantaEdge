@@ -134,7 +134,8 @@ public class StudentController {
   private Map<String,Object> profileFor(long studentId) {
     return jdbc.queryForMap("""
       select id,public_id,display_name,class_code,board,language,
-             profile_image_data_url,city,state,school_name,school_medium,
+             case when profile_image_data_url is not null then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,
+             city,state,school_name,school_medium,
              favorite_subject,learning_goal,profile_updated_at
       from student where id=? and active=true
       """,studentId);
