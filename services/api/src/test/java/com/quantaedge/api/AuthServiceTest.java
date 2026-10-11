@@ -312,10 +312,12 @@ class AuthServiceTest {
 
 
   @Test
-  void authSessionIdleTimeoutNeverExceedsFourHoursEvenWithLegacyConfiguration() {
-    AuthService auth = new AuthService(jdbc, false, 168, false, 60, "");
+  void authSessionIdleTimeoutIsFourHoursEvenWithLegacyConfiguration() {
+    AuthService legacyLongConfig = new AuthService(jdbc, false, 168, false, 60, "");
+    AuthService shortConfig = new AuthService(jdbc, false, 1, false, 60, "");
 
-    assertEquals(4, auth.getSessionHours());
+    assertEquals(4, legacyLongConfig.getSessionHours());
+    assertEquals(4, shortConfig.getSessionHours());
   }
 
   @Test
