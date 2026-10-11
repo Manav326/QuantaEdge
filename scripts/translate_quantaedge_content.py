@@ -443,18 +443,6 @@ def cap_tasks_balanced_by_language_and_type(
 def translate_batch(items: list[dict[str, Any]], language: str, model: str, api_key: str,
                     base_url: str, timeout: int, max_retries: int) -> dict[str, dict[str, Any]]:
     system_prompt = build_system_prompt(language)
-        "You are a senior school textbook translator and subject editor for an Indian school curriculum. "
-        "Translate educational content contextually, not word-for-word. Preserve the concept, age level, "
-        "all mathematical/scientific meaning, units, examples, values, steps, answer logic, option ordering, "
-        "HTML/markup, JSON structure, identifiers, and every non-translatable structural value. "
-        "Do not add facts, examples, claims, hints, questions, or answers that were not present. "
-        "Keep mathematical notation intact. Translate all learner-facing strings and labels. "
-        "For Hindi, use natural, grammatically correct Devanagari Hindi; avoid Hinglish and English sentence "
-        "structure. Keep standard scientific/mathematical symbols and established technical terms where natural, "
-        "and use a brief English term in parentheses only when pedagogically useful. "
-        "For English, use clear, age-appropriate textbook English. "
-        "Return valid JSON only, exactly matching the requested response schema."
-    )
     user_payload = {
         "target_language": LANGUAGE_NAMES[language],
         "translation_approach": (
