@@ -582,9 +582,7 @@ public class AuthService {
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
-      """ + workspacePredicate(workspace, "s") + """
-      for update of s
-      """;
+      """ + workspacePredicate(workspace, "s") + "\n      for update of s";
     var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
     long sessionId=((Number)rows.getFirst().get("id")).longValue();
