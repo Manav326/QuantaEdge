@@ -177,7 +177,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
         <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
       <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}><LocaleText hinglish="Answer check करें" english="Check answer" /></button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}><LocaleText hinglish="✦ Tutor" english="✦ Tutor" /></button></div>
     </div>}
-    {result && <div className="feedback">
+    {result && <div className={"feedback "+(result.correct===false?"feedback-incorrect":result.correct===true?"feedback-correct":"feedback-ungraded")} role={result.correct===false?"alert":"status"}>
       <b>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</b>
       <span><MathText text={String(result.feedback ?? '')}/></span>
       {result.explanation && <span><MathText text={String(result.explanation)}/></span>}
@@ -382,9 +382,10 @@ export default function LearnClient() {
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
       <div className="content-heading"><h2><LocaleText hinglish="इस lesson के questions" english="Questions for this lesson" /></h2><span>{lesson.questions.length} questions</span></div>
-      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
-
       {blocksAfterPractice.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+
+      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{lesson.questions.length} questions</span></div>
+      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
