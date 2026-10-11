@@ -49,7 +49,7 @@ try {
     $session = $env:QUANTAEDGE_ADMIN_SESSION
     if ([string]::IsNullOrWhiteSpace($session)) { $session = $env:QE_SESSION }
     if ([string]::IsNullOrWhiteSpace($session)) {
-        $secure = Read-Host "Paste the fresh QE_SESSION cookie value (value only; input is hidden)" -AsSecureString
+        $secure = Read-Host "Paste the fresh QE_STAFF_SESSION cookie value (value only; input is hidden)" -AsSecureString
         $ptr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
         try {
             $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr)
@@ -59,7 +59,7 @@ try {
         }
     }
     if ([string]::IsNullOrWhiteSpace($session)) {
-        throw "A fresh QE_SESSION cookie is required to call the protected Admin API."
+        throw "A fresh QE_STAFF_SESSION cookie is required to call the protected Admin API."
     }
     $env:QUANTAEDGE_ADMIN_SESSION = $session
     $env:QE_SESSION = $session
@@ -76,6 +76,44 @@ try {
         $health = & curl.exe -fsS "$ApiBaseUrl/actuator/health"
         if ($LASTEXITCODE -ne 0) { throw "API health check failed at $ApiBaseUrl/actuator/health." }
         Write-Host $health
+
+        Write-Host ""
+        Write-Host "[Auth] Validating the staff session against the running API..."
+        $authUrl = $ApiBaseUrl.TrimEnd([char]47) + "/api/v1/auth/me"
+        $authHeaders = @{
+            Accept = "application/json"
+            Cookie = "QE_STAFF_SESSION=$session"
+            "X-QE-Workspace" = "STAFF"
+        }
+        try {
+            $authCheck = Invoke-RestMethod -Uri $authUrl -Method Get -Headers $authHeaders -TimeoutSec 15
+        }
+        catch {
+            # Access cookies expire after 15 minutes; a saved token may expire during a Docker rebuild.
+            Write-Warning "The saved staff session was rejected or expired. Sign in at http://localhost:3001 and copy the current QE_STAFF_SESSION value."
+            $secureRetry = Read-Host "Fresh QE_STAFF_SESSION value (hidden)" -AsSecureString
+            $retryPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRetry)
+            try { $session = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($retryPtr) }
+            finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($retryPtr) }
+            if ([string]::IsNullOrWhiteSpace($session)) { throw "No staff session value was supplied; stopped before writing any content." }
+            $env:QUANTAEDGE_ADMIN_SESSION = $session
+            $env:QE_SESSION = $session
+            $authHeaders.Cookie = "QE_STAFF_SESSION=$session"
+            try {
+                $authCheck = Invoke-RestMethod -Uri $authUrl -Method Get -Headers $authHeaders -TimeoutSec 15
+            }
+            catch {
+                $httpStatus = "connection error"
+                $detail = $_.Exception.Message
+                if ($_.Exception.Response) {
+                    try { $httpStatus = [string][int]$_.Exception.Response.StatusCode } catch {}
+                    if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $detail = $_.ErrorDetails.Message }
+                }
+                throw "Staff-session validation failed (HTTP $httpStatus): $detail. No content was written."
+            }
+        }
+        if ($authCheck.authenticated -ne $true -or [int]$authCheck.staffId -le 0) { throw "The API did not confirm an authenticated staff account. No content was written." }
+        Write-Host "Staff authentication confirmed for role $($authCheck.role)." -ForegroundColor Green
 
         if (-not $SkipHindiSourceImport) {
             Write-Host ""
