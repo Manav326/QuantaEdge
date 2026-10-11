@@ -151,7 +151,7 @@ export default function PracticePage(){
     if(!current||!sessionId||saving||result?.correct===true)return;
     const serialized=typeof value==='string'?value:JSON.stringify(value);
     if(!serialized.trim())return;
-    setSaving(true);setAnswerError('');setError('');setSelected(serialized);
+    setSaving(true);setAnswerError('');setError('');setSelected(serialized);setResult(null);
     try{
       const response=await fetch('/api/v1/learning/questions/'+current.id+'/answer',{
         method:'POST',headers:{'Content-Type':'application/json'},
