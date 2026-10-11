@@ -320,7 +320,12 @@ public class PracticeController {
       """,sessionId,context.studentId());
     if(sessions.isEmpty())throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Practice session not found.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select psq.question_id,psq.sequence_no,psq.answered_at,psq.question_snapshot::text as question_snapshot
+      select psq.question_id,psq.sequence_no,psq.answered_at,psq.question_snapshot::text as question_snapshot,
+             (select count(*) from student_question_attempt a
+              where a.practice_session_id=ps.id and a.question_id=psq.question_id) as attempt_count,
+             (select a.correct from student_question_attempt a
+              where a.practice_session_id=ps.id and a.question_id=psq.question_id
+              order by a.answered_at desc,a.id desc limit 1) as last_correct
       from student_practice_session_question psq
       join student_practice_session ps on ps.id=psq.practice_session_id
       where ps.id=? and ps.student_id=?
@@ -333,6 +338,8 @@ public class PracticeController {
         Map<String,Object> snapshot=(Map<String,Object>)mapper.readValue(String.valueOf(row.get("question_snapshot")),Map.class);
         Map<String,Object> question=toPublicQuestion(snapshot);
         question.put("answered",row.get("answered_at")!=null);
+        question.put("attemptCount",((Number)row.get("attempt_count")).intValue());
+        question.put("lastCorrect",row.get("last_correct"));
         questions.add(question);
       } catch(JacksonException ex) {
         throw new IllegalStateException("Stored practice question could not be read.",ex);
