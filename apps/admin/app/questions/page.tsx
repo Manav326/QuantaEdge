@@ -36,9 +36,18 @@ function parse(value:unknown,fallback:any=null){
 }
 
 const statuses=['ALL','REVIEW','REJECTED','DRAFT','APPROVED','PUBLISHED'];
+const PAGE_SIZE=100;
+function countGlobal(summary:any,statusList:string[],active?:boolean){
+  return (Array.isArray(summary?.byStatus)?summary.byStatus:[])
+    .filter((row:any)=>statusList.includes(String(row.review_status||'DRAFT').toUpperCase())&&(active===undefined||row.active===active))
+    .reduce((total:number,row:any)=>total+Number(row.count||0),0);
+}
 
 export default function QuestionReviewPage(){
   const [rows,setRows]=useState<QuestionRow[]>([]);
+  const [reviewSummary,setReviewSummary]=useState<any>(null);
+  const [totalMatching,setTotalMatching]=useState(0);
+  const [page,setPage]=useState(0);
   const [status,setStatus]=useState('ALL');
   const [query,setQuery]=useState('');
   const [loading,setLoading]=useState(true);
@@ -54,13 +63,18 @@ export default function QuestionReviewPage(){
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status,limit:'200'});
+      const params=new URLSearchParams({status,limit:String(PAGE_SIZE),offset:String(page*PAGE_SIZE)});
       if(query.trim())params.set('query',query.trim());
-      const data=await api('/api/v1/admin/content/questions/review-queue?'+params.toString());
-      setRows(Array.isArray(data)?data:[]);
+      const [data,summary]=await Promise.all([
+        api('/api/v1/admin/content/questions/review-queue?'+params.toString()),
+        api('/api/v1/admin/content/questions/review-summary')
+      ]);
+      setRows(Array.isArray(data.items)?data.items:[]);
+      setTotalMatching(Number(data.total||0));
+      setReviewSummary(summary);
     }catch(e:any){setError(e.message||'Question queue could not be loaded.');}
     finally{setLoading(false);}
-  },[status,query]);
+  },[status,query,page]);
 
   useEffect(()=>{void load();},[load]);
 
@@ -83,8 +97,8 @@ export default function QuestionReviewPage(){
       setError('Your account can view questions but does not have permission to approve or reject them. Ask an administrator for CONTENT_REVIEW access.');
       return;
     }
-    if(row.lesson_status!=='REVIEW'){
-      setError('Submit this micro-topic for review in Content Studio before changing question review status.');
+    if(!['REVIEW','PUBLISHED'].includes(String(row.lesson_status||'').toUpperCase())){
+      setError('Submit draft micro-topics for review first. Questions on published topics can be reviewed without unpublishing the lesson.');
       return;
     }
     let notes:string|undefined;
@@ -121,11 +135,14 @@ export default function QuestionReviewPage(){
     finally{setHistoryLoading(false);}
   }
 
+  const totalQuestions=Number(reviewSummary?.totalQuestions||0);
+  const activeQuestions=Number(reviewSummary?.activeQuestions||0);
+  const inactiveQuestions=Number(reviewSummary?.inactiveQuestions||0);
   const summary={
-    review:rows.filter(r=>r.review_status==='REVIEW').length,
-    rejected:rows.filter(r=>r.review_status==='REJECTED').length,
-    draft:rows.filter(r=>r.review_status==='DRAFT').length,
-    approved:rows.filter(r=>['APPROVED','PUBLISHED'].includes(r.review_status)).length
+    review:countGlobal(reviewSummary,['REVIEW'],true),
+    rejected:countGlobal(reviewSummary,['REJECTED'],true),
+    draft:countGlobal(reviewSummary,['DRAFT'],true),
+    approved:countGlobal(reviewSummary,['APPROVED','PUBLISHED'],true)
   };
 
   return <main className="admin-shell">
@@ -136,25 +153,33 @@ export default function QuestionReviewPage(){
         <button type="button" className="admin-refresh" onClick={()=>void load()} title="Refresh questions">↻</button>
       </header>
 
-      <div className="admin-grid stats admin-primary-stats">
-        <article className="admin-kpi"><span>Needs review</span><strong>{summary.review}</strong><small>Submitted for a decision</small></article>
-        <article className="admin-kpi"><span>Rejected / returned</span><strong>{summary.rejected}</strong><small>Keep the feedback visible</small></article>
-        <article className="admin-kpi"><span>Draft</span><strong>{summary.draft}</strong><small>Not ready for student use</small></article>
-        <article className="admin-kpi"><span>Approved / published</span><strong>{summary.approved}</strong><small>Only approved content is eligible for practice</small></article>
+      <div className="admin-grid stats admin-primary-stats qe-review-counts">
+        <article className="admin-kpi"><span>Active · awaiting review</span><strong>{summary.review}</strong><small>Explicitly submitted for a decision</small></article>
+        <article className="admin-kpi"><span>Active drafts</span><strong>{summary.draft}</strong><small>Not yet submitted for review</small></article>
+        <article className="admin-kpi"><span>Active rejected</span><strong>{summary.rejected}</strong><small>Returned with feedback</small></article>
+        <article className="admin-kpi"><span>Active approved / published</span><strong>{summary.approved}</strong><small>Approved content is eligible for practice</small></article>
+        <article className="admin-kpi"><span>Inactive questions</span><strong>{inactiveQuestions}</strong><small>Across all review statuses</small></article>
       </div>
 
-      <section className="admin-panel" style={{marginTop:20}}>
-        <div className="admin-section-title"><div><span className="admin-kicker">REVIEW QUEUE</span><h2>All questions</h2></div><span className="admin-live-label">{rows.length} shown</span></div>
+      <section className="admin-panel"" style={{marginTop:20}}>
+        <div className="admin-section-title"><div><span className="admin-kicker">REVIEW QUEUE</span><h2>All questions</h2><p style={{fontSize:12,color:"#6f7b90",marginTop:5}}>{totalQuestions.toLocaleString()} total records · {activeQuestions.toLocaleString()} active · {inactiveQuestions.toLocaleString()} inactive</p></div><span className="admin-live-label">{totalMatching.toLocaleString()} matching</span></div>
         <div style={{display:'flex',gap:12,flexWrap:'wrap',alignItems:'center',margin:'16px 0'}}>
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600}}>Status
-            <select value={status} onChange={e=>setStatus(e.target.value)} style={{minWidth:180,padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff'}}>
+            <select value={status} onChange={e=>{setPage(0);setStatus(e.target.value)}} style={{minWidth:180,padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff'}}>
               {statuses.map(x=><option key={x} value={x}>{x==='ALL'?'All statuses':x}</option>)}
             </select>
           </label>
           <label style={{display:'flex',flexDirection:'column',gap:5,fontSize:13,fontWeight:600,flex:'1 1 260px'}}>Search question, topic, chapter or micro-topic
-            <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search question text…" style={{padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',minWidth:220}}/>
+            <input value={query} onChange={e=>{setPage(0);setQuery(e.target.value)}} placeholder="Search question text…" style={{padding:'10px 12px',borderRadius:10,border:'1px solid #d8dce5',minWidth:220}}/>
           </label>
           <button type="button" className="button button-dark" onClick={()=>void load()} disabled={loading}>{loading?'Loading…':'Apply filters'}</button>
+        </div>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,flexWrap:'wrap',margin:'8px 0 14px',fontSize:12,color:'#69758a'}}>
+          <span>{totalMatching===0?'No matching records':`Showing ${(page*PAGE_SIZE)+1}–${(page*PAGE_SIZE)+rows.length} of ${totalMatching.toLocaleString()} matching questions`}</span>
+          <div style={{display:'flex',gap:7}}>
+            <button type="button" className="button" disabled={loading||page===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>Previous</button>
+            <button type="button" className="button" disabled={loading||(page+1)*PAGE_SIZE>=totalMatching} onClick={()=>setPage(value=>value+1)}>Next</button>
+          </div>
         </div>
         {error&&<div className="admin-empty-state" role="alert" style={{marginBottom:12}}><p>{error}</p></div>}
         {notice&&<p role="status" style={{padding:'12px 14px',background:'#eef8f2',borderRadius:10,color:'#22543d'}}>{notice}</p>}
@@ -184,8 +209,8 @@ export default function QuestionReviewPage(){
                 {!canManage&&!permissionLoading&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>View-only access: an administrator must grant CONTENT_REVIEW permission before status changes can be made.</p>}
                 {canManage&&row.lesson_status!=='REVIEW'&&<p style={{fontSize:13,color:'#7a4b10',margin:'12px 0 0'}}>Review actions are locked until this micro-topic is submitted for review. The question remains parked here and is not shown to students unless approved and published. Open <a href="/content" style={{textDecoration:'underline',fontWeight:600}}>Content Studio</a> to revise or submit its micro-topic.</p>}
                 <div style={{display:'flex',gap:8,flexWrap:'wrap',marginTop:14}}>
-                  <button type="button" className="button button-dark" disabled={!canReview||busyId===row.question_id||row.review_status==='APPROVED'||row.review_status==='PUBLISHED'} onClick={()=>void act(row,'APPROVED')}>{busyId===row.question_id?'Saving…':'Approve'}</button>
-                  <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status==='REJECTED'} onClick={()=>void act(row,'REJECTED')}>Reject / return with reason</button>
+                  <button type="button" className="button button-dark" disabled={!canReview||busyId===row.question_id||row.review_status!=='REVIEW'} onClick={()=>void act(row,'APPROVED')}>{busyId===row.question_id?'Saving…':'Approve'}</button>
+                  <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status!=='REVIEW'} onClick={()=>void act(row,'REJECTED')}>Reject / return with reason</button>
                   <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status==='DRAFT'} onClick={()=>void act(row,'DRAFT')}>Return to draft</button>
                   <button type="button" className="button" disabled={!canReview||busyId===row.question_id||row.review_status==='REVIEW'} onClick={()=>void act(row,'REVIEW')}>Needs another review</button>
                 </div>
