@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Merge expanded QuantaEdge practice questions into existing draft lessons.
+"""Merge expanded practice questions into existing QuantaEdge lessons without unpublishing them.
 
 Safe defaults:
 - no writes unless --apply is supplied;
-- never publishes or approves chapters, lessons, or questions;
-- preserves all existing question IDs and content;
-- appends only questions not already present (stable package tag or exact prompt match);
-- refuses lessons outside DRAFT status so live/review content is not silently changed.
+- the dedicated API appends questions only and leaves lesson status/blocks untouched;
+- all added questions stay DRAFT and require separate review/approval;
+- stable package tags and exact prompt matching prevent duplicate imports.
 
 The separate complete_book_extended_practice list is intentionally not imported by this script.
 It stays in the authoring ZIP for the reviewed complete-book/written-practice pipeline.
@@ -232,12 +231,12 @@ def question_tags(question: dict[str, Any]) -> list[str]:
     return [str(tag) for tag in parse_json_field(question.get("tags"), [])]
 
 
-def prepare_patch(current: dict[str, Any], incoming: list[dict[str, Any]]) -> tuple[dict[str, Any], int, int]:
+def prepare_patch(current: dict[str, Any], incoming: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int, int]:
     status = str(current.get("lesson_status", "")).upper()
-    if status != "DRAFT":
+    if status not in {"DRAFT", "REVIEW", "PUBLISHED"}:
         raise ValueError(
-            f"Lesson {current.get('lesson_code')} is {status or 'UNKNOWN'}, not DRAFT. "
-            "No automatic change was made; review this lesson in Content Studio first."
+            f"Lesson {current.get('lesson_code')} is {status or 'UNKNOWN'}. "
+            "Only active DRAFT, REVIEW, or PUBLISHED lessons can receive draft practice questions."
         )
 
     existing = [api_question_to_patch(q) for q in current.get("questions", [])]
@@ -248,7 +247,7 @@ def prepare_patch(current: dict[str, Any], incoming: list[dict[str, Any]]) -> tu
     all_prompts = {norm_text(q["prompt"]) for q in existing}
     existing_tags = {tag for q in existing for tag in question_tags(q)}
     max_order = max((int(q.get("sort_order") or 0) for q in existing), default=0)
-    added = 0
+    additions: list[dict[str, Any]] = []
     skipped = 0
     for source in incoming:
         stable_tag = "qe-practice-id:" + str(source["id"])
@@ -258,26 +257,12 @@ def prepare_patch(current: dict[str, Any], incoming: list[dict[str, Any]]) -> tu
             continue
         max_order += 1
         question = build_incoming_question(source, max_order)
-        existing.append(question)
+        # The append-only API accepts only new questions. Do not send existing IDs or teaching blocks.
+        additions.append(question)
         all_prompts.add(prompt_key)
         existing_tags.add(stable_tag)
-        added += 1
 
-    patch = {
-        "title": str(current.get("lesson_title") or ""),
-        "summary": str(current.get("lesson_summary") or ""),
-        "estimatedMinutes": int(current.get("estimated_minutes") or 10),
-        "sortOrder": int(current.get("lesson_sort_order") or 1),
-        "alignmentSourceTitle": current.get("alignment_source_title") or "",
-        "alignmentSourceUrl": current.get("alignment_source_url") or "",
-        "alignmentSourceEdition": current.get("alignment_source_edition") or "",
-        "alignmentPageRange": current.get("alignment_page_range") or "",
-        "alignmentSourceVerified": bool(current.get("alignment_source_verified", False)),
-        "status": "DRAFT",
-        # Intentionally omit blocks: adding questions must not overwrite teaching content.
-        "questions": existing,
-    }
-    return patch, added, skipped
+    return additions, len(additions), skipped
 
 
 def preflight(packages: list[Path], api: AdminApi) -> list[dict[str, Any]]:
@@ -331,7 +316,7 @@ def preflight(packages: list[Path], api: AdminApi) -> list[dict[str, Any]]:
                     raise ValueError(
                         f"Lesson {lesson_code} resolved outside chapter {chapter_code}. No writes have been made."
                     )
-                patch, added, skipped = prepare_patch(current, question_groups[lesson_code])
+                additions, added, skipped = prepare_patch(current, question_groups[lesson_code])
                 plans.append({
                     "package": package.name,
                     "source_file": Path(member).name,
@@ -344,7 +329,7 @@ def preflight(packages: list[Path], api: AdminApi) -> list[dict[str, Any]]:
                     "current_question_count": len(current.get("questions", [])),
                     "new_questions": added,
                     "already_present": skipped,
-                    "patch": patch,
+                    "questions": additions,
                 })
     lesson_ids = [x["lesson_id"] for x in plans]
     if len(lesson_ids) != len(set(lesson_ids)):
@@ -401,16 +386,29 @@ def main() -> int:
         }
         # All catalogue and lesson mappings are preflighted before the first write.
         for plan in to_write:
-            response = api.request("PATCH", f"/api/v1/admin/content/lessons/{plan['lesson_id']}", plan["patch"])
-            actual_count = len(response.get("questions", [])) if isinstance(response, dict) else None
+            response = api.request(
+                "POST",
+                f"/api/v1/admin/content/lessons/{plan['lesson_id']}/questions/append-drafts",
+                {"questions": plan["questions"]},
+            )
+            if not isinstance(response, dict):
+                raise ValueError(f"Append endpoint returned an unexpected response for lesson {plan['lesson_id']}.")
+            actual_added = int(response.get("added", -1))
+            if actual_added < 0 or actual_added > plan["new_questions"]:
+                raise ValueError(f"Append endpoint returned an invalid added count for lesson {plan['lesson_id']}.")
             report["results"].append({
                 "class_code": plan["class_code"],
                 "subject_code": plan["subject_code"],
                 "chapter_code": plan["chapter_code"],
                 "lesson_code": plan["lesson_code"],
                 "lesson_id": plan["lesson_id"],
-                "added": plan["new_questions"],
-                "question_count_returned": actual_count,
+                "planned_new_questions": plan["new_questions"],
+                "added": actual_added,
+                "skipped_duplicate": int(response.get("skippedDuplicate", 0)),
+                "lesson_status": response.get("lessonStatus"),
+                "lesson_status_changed": response.get("lessonStatusChanged"),
+                "teaching_blocks_changed": response.get("teachingBlocksChanged"),
+                "question_status": response.get("newQuestionStatus"),
             })
         report["writes_performed"] = True
         report["note"] = (
@@ -423,7 +421,7 @@ def main() -> int:
         print(json.dumps({
             "mode": "STOPPED_SAFELY",
             "error": str(exc),
-            "note": "Preflight failures occur before writes. If an API failure happened mid-apply, rerun safely; inserted questions carry stable qe-practice-id tags and exact-prompt deduplication.",
+            "note": "Preflight failures occur before writes. The append-only endpoint uses stable qe-practice-id tags and exact-prompt deduplication for safe retries; it never changes lesson status or teaching blocks.",
         }, ensure_ascii=False, indent=2), file=sys.stderr)
         return 1
     return 0
