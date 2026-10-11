@@ -190,29 +190,35 @@ public class PracticeController {
     Map<String,Object> lesson=lessonRows.getFirst();
     long chapterId=((Number)lesson.get("chapter_id")).longValue();
     Object objective=lesson.get("objective_id");
+    List<Long> concepts=jdbc.queryForList("""
+      select distinct concept_id from question
+      where lesson_id=? and concept_id is not null and active=true
+        and review_status in ('APPROVED','PUBLISHED')
+      """,Long.class,lessonId);
     String scopeFilter;
     List<Object> scopeArgs=new ArrayList<>();
     if(objective instanceof Number objectiveNumber) {
-      scopeFilter="(q.objective_id=? or q.lesson_id=?)";
-      scopeArgs.add(objectiveNumber.longValue());
-      scopeArgs.add((long)lessonId);
-    } else {
-      List<Long> concepts=jdbc.queryForList("""
-        select distinct concept_id from question
-        where lesson_id=? and concept_id is not null and active=true
-          and review_status in ('APPROVED','PUBLISHED')
-        """,Long.class,lessonId);
-      if(!concepts.isEmpty()) {
-        String placeholders=String.join(",",java.util.Collections.nCopies(concepts.size(),"?"));
-        scopeFilter="(q.concept_id in ("+placeholders+") or q.lesson_id=?)";
-        scopeArgs.addAll(concepts);
+      if(concepts.isEmpty()) {
+        scopeFilter="(q.objective_id=? or q.lesson_id=?)";
+        scopeArgs.add(objectiveNumber.longValue());
         scopeArgs.add((long)lessonId);
       } else {
-        // No trustworthy objective/concept mapping: stay inside this lesson rather than
-        // widening the set to unrelated questions from the same chapter.
-        scopeFilter="q.lesson_id=?";
+        String placeholders=String.join(",",java.util.Collections.nCopies(concepts.size(),"?"));
+        scopeFilter="(q.objective_id=? or q.concept_id in ("+placeholders+") or q.lesson_id=?)";
+        scopeArgs.add(objectiveNumber.longValue());
+        scopeArgs.addAll(concepts);
         scopeArgs.add((long)lessonId);
       }
+    } else if(!concepts.isEmpty()) {
+      String placeholders=String.join(",",java.util.Collections.nCopies(concepts.size(),"?"));
+      scopeFilter="(q.concept_id in ("+placeholders+") or q.lesson_id=?)";
+      scopeArgs.addAll(concepts);
+      scopeArgs.add((long)lessonId);
+    } else {
+      // No trustworthy objective/concept mapping: stay inside this lesson rather than
+      // widening the set to unrelated questions from the same chapter.
+      scopeFilter="q.lesson_id=?";
+      scopeArgs.add((long)lessonId);
     }
 
     int requestedCount=10;
