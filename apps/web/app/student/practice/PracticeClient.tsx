@@ -209,7 +209,6 @@ export default function PracticePage(){
   if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="आपके topic का practice तैयार हो रहा है…" english="Preparing practice for your topic…" /></div></section></main>;
 
   if(!lessonId&&!requestedSessionId)return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow"><LocaleText hinglish="सीखें → अभ्यास करें" english="Learn → Practise" /></div>
       <h1><LocaleText hinglish="पहले एक lesson चुनें" english="Start with a lesson" /></h1>
@@ -219,12 +218,10 @@ export default function PracticePage(){
   </main>;
 
   if(error)return <main className="practice-page">
-    <header className="lesson-header"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student'} className="back"><LocaleText hinglish="← वापस" english="← Back" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
     <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="Practice नहीं खुल पाई" english="Practice could not be opened" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student/learn'} className="button button-dark" style={{marginTop:20}}><LocaleText hinglish="Lesson पर लौटें" english="Return to lesson" /></Link></section>
   </main>;
 
   if(noPractice)return <main className="practice-page">
-    <header className="lesson-header"><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link><span>Topic practice</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow">{lesson?.subject_name||'QuantaEdge'} · {lesson?.chapter_name||tx('अध्याय','Chapter')}</div>
       <h1><LocaleText hinglish="Practice set अभी उपलब्ध नहीं है" english="Practice set is not available yet" /></h1>
@@ -241,7 +238,6 @@ export default function PracticePage(){
   // Keep the final answer's feedback visible until the learner advances to the summary.
   // A server-completed session alone must not unmount the current question immediately.
   if(index>=questions.length)return <main className="practice-page">
-    <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span>Practice complete</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
       <div className="eyebrow"><LocaleText hinglish="Micro-topic पूरा हुआ" english="Micro-topic complete" /></div>
       <h1><LocaleText hinglish="बहुत अच्छा! अभ्यास पूरा हुआ।" english="Well done! Practice complete." /></h1>
@@ -261,11 +257,6 @@ export default function PracticePage(){
   const selectedOptionIsRight=result?.correct===true;
 
   return <main className="practice-page qe-practice-page">
-    <header className="lesson-header qe-practice-header">
-      <Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link>
-      <div className="qe-practice-header__center"><span><LocaleText hinglish="MICRO-TOPIC PRACTICE" english="MICRO-TOPIC PRACTICE" /></span><strong>{lesson?.title||tx('आपका अभ्यास','Your practice')}</strong></div>
-      <span className="qe-practice-counter">{index+1}<i>/</i>{questions.length}</span>
-    </header>
     <section className="practice-wrap qe-practice-wrap">
       <div className="qe-practice-intro">
         <div className="qe-practice-intro__eyebrow"><span className="qe-practice-live-dot"/><LocaleText hinglish="आपकी सीख के अनुसार चुना गया" english="PERSONALISED TO YOUR LESSON" /></div>
