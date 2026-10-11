@@ -153,7 +153,7 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
   async function submit(next:string) {
     setValue(next);
     if (!next.trim() || result?.correct===true) return;
-    setBusy(true);setAnswerError('');
+    setBusy(true);setAnswerError('');setResult(null);
     try {
       const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
