@@ -201,7 +201,7 @@ try {
     Write-Host "Preflight passed: $($rows.Count) imported resources; $($todo.Count) to publish; $($actions.Count - $todo.Count) already published."
     if ($replacements.Count -gt 0) {
         Write-Host 'Existing published versions in the same slots will be archived by the Admin API:' -ForegroundColor Yellow
-        @($replacements | Select-Object -Unique) | ForEach-Object { Write-Host " - $_" -ForegroundColor Yellow }
+        $replacements.ToArray() | Select-Object -Unique | ForEach-Object { Write-Host " - $_" -ForegroundColor Yellow }
     }
     Write-Host 'CONTENT WARNING: 54 Class 7-8 chapter PDFs are below the content-depth thresholds. Publishing does not resolve this.' -ForegroundColor Yellow
 
