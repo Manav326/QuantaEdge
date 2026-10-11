@@ -27,7 +27,19 @@ function Save-PublishReport {
     $Data | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $PublishReport -Encoding UTF8
 }
 
-function Invoke-QEApi {
+function Sync-QEAuthEnvironment {
+    $cookies = $script:WebSession.Cookies.GetCookies($script:BaseUri)
+    $sessionCookie = $cookies['QE_SESSION']
+    $refreshCookie = $cookies['QE_REFRESH']
+    if ($null -ne $sessionCookie -and -not [string]::IsNullOrWhiteSpace($sessionCookie.Value)) {
+        $env:QUANTAEDGE_ADMIN_SESSION = $sessionCookie.Value
+    }
+    if ($null -ne $refreshCookie -and -not [string]::IsNullOrWhiteSpace($refreshCookie.Value)) {
+        $env:QUANTAEDGE_ADMIN_REFRESH = $refreshCookie.Value
+    }
+}
+
+function Invoke-QERaw {
     param(
         [Parameter(Mandatory = $true)][string]$Path,
         [string]$Method = 'GET',
@@ -36,26 +48,59 @@ function Invoke-QEApi {
     $uri = "$ApiUrl$Path"
     if ($null -ne $Body) {
         $json = $Body | ConvertTo-Json -Compress -Depth 12
-        return Invoke-RestMethod -Uri $uri -Method $Method -Headers $script:Headers -ContentType 'application/json' -Body $json -TimeoutSec 60
+        return Invoke-RestMethod -Uri $uri -Method $Method -WebSession $script:WebSession -Headers @{ Accept = 'application/json' } -ContentType 'application/json' -Body $json -TimeoutSec 60
     }
-    return Invoke-RestMethod -Uri $uri -Method $Method -Headers $script:Headers -TimeoutSec 60
+    return Invoke-RestMethod -Uri $uri -Method $Method -WebSession $script:WebSession -Headers @{ Accept = 'application/json' } -TimeoutSec 60
 }
 
-if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
-    throw 'QUANTAEDGE_ADMIN_SESSION is empty. Sign in to QuantaEdge Admin and set the current QE_SESSION cookie first.'
+function Invoke-QEApi {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [string]$Method = 'GET',
+        [object]$Body = $null
+    )
+    try {
+        return Invoke-QERaw -Path $Path -Method $Method -Body $Body
+    } catch {
+        $statusCode = 0
+        try { $statusCode = [int]$_.Exception.Response.StatusCode } catch { }
+        $hasRefresh = -not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)
+        if ($statusCode -in @(401, 403) -and $Path -ne '/api/v1/auth/refresh' -and $hasRefresh) {
+            try {
+                Invoke-QERaw -Path '/api/v1/auth/refresh' -Method 'POST' | Out-Null
+                Sync-QEAuthEnvironment
+                return Invoke-QERaw -Path $Path -Method $Method -Body $Body
+            } catch {
+                throw "QuantaEdge rejected the access session and automatic refresh failed. Sign into Admin again and update both QUANTAEDGE_ADMIN_SESSION and QUANTAEDGE_ADMIN_REFRESH from the QE_SESSION and QE_REFRESH cookies. Details: $($_.Exception.Message)"
+            }
+        }
+        if ($statusCode -in @(401, 403) -and $Path -eq '/api/v1/auth/me') {
+            throw 'QuantaEdge rejected QE_SESSION. Access tokens expire after 15 minutes. Sign in to Admin and set a fresh QE_SESSION cookie; for automatic refresh, also set QE_REFRESH in QUANTAEDGE_ADMIN_REFRESH.'
+        }
+        throw
+    }
+}
+
+if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION) -and [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+    throw 'Set a current QE_SESSION in QUANTAEDGE_ADMIN_SESSION or a QE_REFRESH in QUANTAEDGE_ADMIN_REFRESH after signing into QuantaEdge Admin.'
 }
 if (-not (Test-Path -LiteralPath $ImportReport -PathType Leaf)) {
     throw "Import report not found: $ImportReport. Run from the PDF bundle directory or pass -ImportReport explicitly."
 }
-$parsedApiUrl = [Uri]$ApiUrl
-$isLocal = $parsedApiUrl.Host -in @('localhost','127.0.0.1','::1')
-if ($parsedApiUrl.Scheme -ne 'https' -and -not ($parsedApiUrl.Scheme -eq 'http' -and $isLocal)) {
+$script:BaseUri = [Uri]$ApiUrl
+$isLocal = $script:BaseUri.Host -in @('localhost','127.0.0.1','::1')
+if ($script:BaseUri.Scheme -ne 'https' -and -not ($script:BaseUri.Scheme -eq 'http' -and $isLocal)) {
     throw 'Use HTTPS for a non-local API URL. HTTP is allowed only for localhost development.'
 }
 
-$script:Headers = @{
-    Accept = 'application/json'
-    Cookie = "QE_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
+# Let PowerShell's cookie container send, receive, and rotate HttpOnly-style auth cookies.
+# A raw Cookie header can be mishandled by Windows PowerShell; never print the cookie values.
+$script:WebSession = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
+    $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_SESSION', $env:QUANTAEDGE_ADMIN_SESSION, '/'))
+}
+if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
+    $script:WebSession.Cookies.Add($script:BaseUri, [System.Net.Cookie]::new('QE_REFRESH', $env:QUANTAEDGE_ADMIN_REFRESH, '/'))
 }
 $startedAt = (Get-Date).ToString('o')
 $actions = New-Object 'System.Collections.Generic.List[object]'
