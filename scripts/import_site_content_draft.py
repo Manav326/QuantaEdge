@@ -232,7 +232,7 @@ class AdminApi:
         except urllib.error.HTTPError as exc:
             message = exc.read().decode("utf-8", errors="replace")[:700]
             if exc.code in {401, 403}:
-                raise RuntimeError("Admin session rejected. Sign in as an authorised staff member and refresh QUANTAEDGE_ADMIN_SESSION.") from exc
+                raise RuntimeError(f"Admin session rejected (HTTP {exc.code}): {message}. Sign in as an authorised staff member and refresh QUANTAEDGE_ADMIN_SESSION.") from exc
             raise RuntimeError(f"{method} {path} failed with HTTP {exc.code}: {message}") from exc
         except urllib.error.URLError as exc:
             raise RuntimeError(f"Cannot reach QuantaEdge admin API at {self.base_url}: {exc.reason}") from exc
