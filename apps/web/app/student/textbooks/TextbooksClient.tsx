@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LocaleText } from '../../components/LanguageProvider';
+import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
 import './textbooks.css';
 
 type LearningDocument = {
@@ -55,6 +56,7 @@ export default function TextbooksClient() {
   const [imageLoading, setImageLoading] = useState(false);
   const [error, setError] = useState('');
   const [pageError, setPageError] = useState('');
+  const [pageRetry, setPageRetry] = useState(0);
   const [notice, setNotice] = useState('');
   const [fullscreen, setFullscreen] = useState(false);
 
@@ -104,7 +106,9 @@ export default function TextbooksClient() {
     const count = Math.min(20, pageCount);
     return Array.from({ length: count }, (_v, index) => firstThumb + index);
   }, [firstThumb, pageCount]);
-  const pageUrl = selected ? '/api/v1/learning/documents/' + selected.document_id + '/pages/' + currentPage : '';
+  const pageUrl = selected
+    ? '/api/v1/learning/documents/' + selected.document_id + '/pages/' + currentPage + (pageRetry ? '?retry=' + pageRetry : '')
+    : '';
   const availableSubjects = useMemo(() => {
     const subjects = new Map<string, string>();
     for (const item of documents) {
@@ -329,8 +333,15 @@ export default function TextbooksClient() {
             <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className="qe-reader-canvas-top"><span><i/> Secured page rendering</span><span>{currentPage} / {pageCount}</span></div>
               <div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '') + (fitPage ? ' fit-page' : '')} key={selected.document_id + '-' + currentPage}>
                 {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> Rendering page {currentPage}…</div>}
-                <img className="qe-reader-page-image" src={pageUrl} alt={'Page ' + currentPage + ' of ' + selected.title} draggable={false} onLoad={() => {setImageLoading(false);setPageError('');}} onError={() => {setImageLoading(false);setPageError('This page could not be rendered. Try again or return to the library.');}} style={{width: fitPage ? 'auto' : fitWidth ? '100%' : zoom + '%'}} />
-                {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => {setPageError('');setImageLoading(true);const image=document.querySelector('.qe-reader-page-image') as HTMLImageElement|null;if(image)image.src=pageUrl+'?retry='+(Date.now());}}>Retry page</button></div>}
+                <AuthenticatedPageImage
+                  className="qe-reader-page-image"
+                  src={pageUrl}
+                  alt={'Page ' + currentPage + ' of ' + selected.title}
+                  onLoad={() => { setImageLoading(false); setPageError(''); }}
+                  onError={message => { setImageLoading(false); setPageError(message); }}
+                  style={{ width: fitPage ? 'auto' : fitWidth ? '100%' : zoom + '%' }}
+                />
+                {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => { setPageError(''); setImageLoading(true); setPageRetry(value => value + 1); }}>Retry page</button></div>}
               </div>
               <div className="qe-reader-canvas-bottom"><span>Private textbook viewer · Page {currentPage}</span><span>Use ← → or Page Up / Page Down to navigate</span></div>
             </div>
