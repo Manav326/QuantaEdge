@@ -21,6 +21,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from http.cookies import SimpleCookie
 from pathlib import Path
 from typing import Any
 
@@ -212,12 +213,91 @@ def validate_site_bundle(bundle: Any, allow_noncanonical_chapter: bool = False) 
 
 
 class AdminApi:
+    """Authenticated STAFF API client with safe, automatic access-token refresh.
+
+    Access cookies expire after 15 minutes. The refresh cookie is rotated by the
+    API, so the current pair is optionally synchronized to the wrapper through a
+    private temporary state file; credentials are never printed in reports/logs.
+    """
     def __init__(self, base_url: str, session_cookie: str, timeout: int = 30):
         self.base_url = base_url.rstrip("/")
-        self.session_cookie = session_cookie
+        self.session_cookie = session_cookie.strip()
+        self.refresh_cookie = (
+            os.environ.get("QUANTAEDGE_ADMIN_REFRESH", "").strip()
+            or os.environ.get("QE_STAFF_REFRESH", "").strip()
+        )
         self.timeout = timeout
+        self.state_file = os.environ.get("QUANTAEDGE_SESSION_STATE_FILE", "").strip()
 
-    def request(self, method: str, path: str, body: dict[str, Any] | None = None) -> dict[str, Any] | list[Any]:
+    def _save_session_state(self) -> None:
+        if not self.state_file:
+            return
+        target = Path(self.state_file)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temporary = target.with_suffix(target.suffix + ".tmp")
+        temporary.write_text(json.dumps({
+            "access_cookie": self.session_cookie,
+            "refresh_cookie": self.refresh_cookie,
+        }), encoding="utf-8")
+        temporary.replace(target)
+
+    def _refresh_session(self) -> None:
+        if not self.refresh_cookie:
+            raise RuntimeError(
+                "QE_STAFF_REFRESH is not configured. The 15-minute staff access cookie expired; "
+                "provide the paired refresh cookie to enable automatic renewal."
+            )
+        req = urllib.request.Request(
+            self.base_url + "/api/v1/auth/refresh",
+            data=b"",
+            method="POST",
+            headers={
+                "Accept": "application/json",
+                "Cookie": "QE_STAFF_REFRESH=" + self.refresh_cookie,
+                "X-QE-Workspace": "STAFF",
+            },
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as response:
+                # The refresh endpoint rotates BOTH credentials in Set-Cookie headers.
+                response.read()
+                set_cookie_headers = response.headers.get_all("Set-Cookie") or []
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")[:500]
+            raise RuntimeError(
+                f"Staff-session refresh rejected (HTTP {exc.code}): {detail}"
+            ) from exc
+        except urllib.error.URLError as exc:
+            raise RuntimeError(f"Cannot reach QuantaEdge auth refresh endpoint: {exc.reason}") from exc
+
+        cookies: dict[str, str] = {}
+        for header in set_cookie_headers:
+            parsed = SimpleCookie()
+            try:
+                parsed.load(header)
+            except Exception:
+                continue
+            for name in ("QE_STAFF_SESSION", "QE_STAFF_REFRESH"):
+                if name in parsed:
+                    cookies[name] = parsed[name].value
+        new_access = cookies.get("QE_STAFF_SESSION", "").strip()
+        new_refresh = cookies.get("QE_STAFF_REFRESH", "").strip()
+        if not new_access or not new_refresh:
+            raise RuntimeError(
+                "Staff-session refresh returned no complete rotated credential pair; "
+                "sign in again and provide both staff cookies."
+            )
+        self.session_cookie = new_access
+        self.refresh_cookie = new_refresh
+        self._save_session_state()
+
+    def request(
+        self,
+        method: str,
+        path: str,
+        body: dict[str, Any] | None = None,
+        _allow_auth_retry: bool = True,
+    ) -> dict[str, Any] | list[Any]:
         data = None if body is None else json.dumps(body, ensure_ascii=False).encode("utf-8")
         req = urllib.request.Request(self.base_url + path, data=data, method=method)
         req.add_header("Accept", "application/json")
@@ -231,8 +311,20 @@ class AdminApi:
                 return json.loads(raw) if raw.strip() else {}
         except urllib.error.HTTPError as exc:
             message = exc.read().decode("utf-8", errors="replace")[:700]
+            if exc.code == 401 and _allow_auth_retry:
+                try:
+                    self._refresh_session()
+                except Exception as refresh_exc:
+                    raise RuntimeError(
+                        "Admin API returned HTTP 401 and automatic staff-session refresh failed: "
+                        + str(refresh_exc)
+                    ) from refresh_exc
+                return self.request(method, path, body, _allow_auth_retry=False)
             if exc.code in {401, 403}:
-                raise RuntimeError(f"Admin session rejected (HTTP {exc.code}): {message}. Sign in as an authorised staff member and refresh QUANTAEDGE_ADMIN_SESSION.") from exc
+                raise RuntimeError(
+                    f"Admin session rejected (HTTP {exc.code}): {message}. "
+                    "Sign in as an authorised staff member and refresh QUANTAEDGE_ADMIN_SESSION."
+                ) from exc
             raise RuntimeError(f"{method} {path} failed with HTTP {exc.code}: {message}") from exc
         except urllib.error.URLError as exc:
             raise RuntimeError(f"Cannot reach QuantaEdge admin API at {self.base_url}: {exc.reason}") from exc
