@@ -62,7 +62,7 @@ function Read-QERefreshCookieSecurely {
     $env:QUANTAEDGE_ADMIN_REFRESH = $plainValue
     # Replace the cookie in this run's session so refresh uses exactly the newly entered value.
     $cookie = [System.Net.Cookie]::new('QE_REFRESH', $plainValue, '/')
-    $script:WebSession.Cookies.Set($cookie)
+    $script:WebSession.Cookies.Add($script:BaseUri, $cookie)
     $plainValue = $null
 }
 
