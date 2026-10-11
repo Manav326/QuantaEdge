@@ -56,7 +56,7 @@ def load_catalog(path: Path) -> dict[str, Any]:
     if not isinstance(banks, list):
         raise ValueError("chapter_banks must be a JSON array.")
     seen_banks: set[tuple[str, str, str]] = set()
-    seen_question_ids: set[str] = set()
+    seen_question_ids: set[tuple[str, str, str, str]] = set()
     for bank_index, bank in enumerate(banks):
         where = f"chapter_banks[{bank_index}]"
         if not isinstance(bank, dict) or bank.get("schema") != "quantaedge.practice-question-bank-draft.v1":
@@ -87,9 +87,10 @@ def load_catalog(path: Path) -> dict[str, Any]:
             if not isinstance(question, dict):
                 raise ValueError(f"{qwhere}: question must be an object.")
             stable_id = str(question.get("id", "")).strip()
-            if not stable_id or stable_id in seen_question_ids:
-                raise ValueError(f"{qwhere}: question ID is blank or duplicated: {stable_id!r}.")
-            seen_question_ids.add(stable_id)
+            question_identity = (class_code, subject_code, str(chapter["code"]).strip(), stable_id)
+            if not stable_id or question_identity in seen_question_ids:
+                raise ValueError(f"{qwhere}: question ID is blank or duplicated within this class/subject/chapter: {stable_id!r}.")
+            seen_question_ids.add(question_identity)
             question_type = str(question.get("question_type", "")).strip().upper()
             difficulty = str(question.get("difficulty", "")).strip().upper()
             if question_type not in ALLOWED_TYPES or difficulty not in DIFFICULTY_MAP:
@@ -163,10 +164,10 @@ def selected_banks(catalog: dict[str, Any], classes: list[str], subjects: list[s
 
 
 def question_payload(question: dict[str, Any], sort_order: int, class_code: str,
-                     subject_code: str, bank_language: str) -> dict[str, Any]:
+                     subject_code: str, bank_language: str, chapter_code: str) -> dict[str, Any]:
     question_type = str(question["question_type"]).upper()
     tags = [str(tag) for tag in question.get("tags", []) if str(tag).strip()]
-    stable_tag = "qe-practice-id:" + str(question["id"])
+    stable_tag = f"qe-practice-id:{class_code}:{subject_code}:{chapter_code}:{question['id']}"
     tags = [tag for tag in tags if tag != stable_tag]
     tags.append(stable_tag)
     # Mark every imported item for staff review; don't treat AI-authored answer keys as verified.
@@ -375,7 +376,8 @@ def main() -> int:
                 for index, question in enumerate(plan["questions"], start=1):
                     questions_payload.append(question_payload(
                         question, plan["max_existing_sort_order"] + index,
-                        plan["class_code"], plan["subject_code"], plan["bank_language"]
+                        plan["class_code"], plan["subject_code"], plan["bank_language"],
+                        plan["chapter_code"]
                     ))
                 result = api.request(
                     "POST",
