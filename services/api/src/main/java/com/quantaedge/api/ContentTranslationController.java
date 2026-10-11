@@ -38,7 +38,7 @@ public class ContentTranslationController {
       "learning_objective", "lesson", "lesson_block", "question", "assessment",
       "assessment_question", "learning_class_session", "recorded_class");
   private static final Set<String> PROTECTED_KEYS = Set.of(
-      "id", "key", "code", "url", "href", "src", "assetid", "asset_id", "storagekey,
+      "id", "key", "code", "url", "href", "src", "assetid", "asset_id", "storagekey",
       "correctoption", "correct_option", "correctanswer", "correct_answer",
       "answerpayload", "answer_payload", "answerkey", "answer_key", "expectedanswer",
       "expected_answer", "kind", "type", "questiontype", "question_type",
