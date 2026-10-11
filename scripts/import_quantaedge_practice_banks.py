@@ -380,7 +380,19 @@ def main() -> int:
             summary["mapping_preflight"] = "FAILED_NO_WRITES"
             summary["mapping_errors"] = mapping_errors
             summary["failed"] = len(mapping_errors)
+            summary["added_as_draft"] = 0
+            summary["skipped_duplicate"] = 0
+            summary["failed_batches"] = 0
+            summary["not_attempted_batches"] = len(plans)
+            summary["publication_attempted"] = False
+            summary["student_delivery_allowed_by_import"] = False
+            args.output_dir.mkdir(parents=True, exist_ok=True)
+            timestamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+            report_path = args.output_dir / f"practice-bank-import-report-{timestamp}.json"
+            summary["report_file"] = str(report_path)
+            report_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             print(json.dumps(summary, ensure_ascii=False, indent=2))
+            print(f"Report: {report_path}")
             return 2
 
         summary["mapping_preflight"] = "PASSED_ALL_SELECTED_BANKS"
