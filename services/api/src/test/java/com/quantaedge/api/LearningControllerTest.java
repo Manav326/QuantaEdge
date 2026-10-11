@@ -50,11 +50,39 @@ class LearningControllerTest {
     controller.questions(42L, student);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
-    verify(jdbc).queryForList(sql.capture(), eq(42L));
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq(42L));
+    assertTrue(sql.getValue().contains("as attempted"));
     assertTrue(sql.getValue().contains("'label',qo.label"));
     assertFalse(sql.getValue().contains("'correct'"));
     assertFalse(sql.getValue().contains("qo.is_correct"));
     assertFalse(sql.getValue().contains("answer_payload"));
+  }
+
+
+  @Test
+  void lessonCatalogueIncludesDurableMcqAndPracticeHistoryForEachTopic() {
+    when(jdbc.queryForObject("select class_code from student where id=? and active=true", String.class, 7L))
+        .thenReturn("7");
+    when(jdbc.queryForList(contains("practice_best_correct_count"), any(Object[].class))).thenReturn(List.of(Map.of(
+        "id", 99L, "title", "Fractions", "mcq_count", 3L, "mcq_answered_count", 3L,
+        "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
+        "practice_best_graded_count", 10L, "practice_best_percent", 80)));
+
+    List<Map<String,Object>> rows = controller.lessons("7", "maths", student);
+
+    assertEquals(1, rows.size());
+    assertEquals(3L, rows.getFirst().get("mcq_count"));
+    assertEquals(3L, rows.getFirst().get("mcq_answered_count"));
+    assertEquals(2L, rows.getFirst().get("practice_completed_attempts"));
+    assertEquals(8L, rows.getFirst().get("practice_best_correct_count"));
+    assertEquals(10L, rows.getFirst().get("practice_best_graded_count"));
+    assertEquals(80, rows.getFirst().get("practice_best_percent"));
+    org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(), eq(7L), eq("7"), eq("maths"));
+    assertTrue(sql.getValue().contains("student_question_attempt"));
+    assertTrue(sql.getValue().contains("student_practice_session"));
+    assertTrue(sql.getValue().contains("status='COMPLETED'"));
+    assertTrue(sql.getValue().contains("status='IN_PROGRESS'"));
   }
 
   @Test
@@ -64,7 +92,7 @@ class LearningControllerTest {
             "id", 42L, "class_code", "7", "subject_code", "maths",
             "chapter_code", "algebraic-expressions", "title", "Expressions")));
     when(jdbc.queryForList(contains("strip_answer_keys(b.content)::text as content"), eq(42L))).thenReturn(List.of());
-    when(jdbc.queryForList(contains("select q.id,q.question_type"), eq(42L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
     Map<String, Object> lesson = controller.lesson(42L, student);
 
