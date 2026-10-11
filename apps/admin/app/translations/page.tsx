@@ -239,7 +239,7 @@ export default function TranslationsPage() {
       const draftUrl = isNewSource
         ? '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.entity_id + '/draft?language=' + encodeURIComponent(selected.language)
         : '/api/v1/admin/translations/' + selected.entity_type + '/' + selected.translation_id + '/draft';
-      const result = await api<{ translationId: number; translationStatus: string; createdNewVersion: boolean }>(
+      const result = await api<{ translationId: number; translationStatus: string; createdNewVersion: boolean; versionNo?: number }>(
         draftUrl,
         { method: isNewSource ? 'POST' : 'PATCH', body: JSON.stringify({ translatedContent, qualityNotes }) }
       );
@@ -250,7 +250,18 @@ export default function TranslationsPage() {
           : 'Draft saved. Student delivery is unchanged until review and publication are complete.');
       const nextItems = await load(selected.translation_id == null ? 0 : offset, false);
       const saved = nextItems.find(row => row.entity_type === selected.entity_type && row.translation_id === result.translationId);
-      if (saved) { setSelectedKey(rowKey(saved)); setEditor(pretty(saved.translated_content_text)); }
+      const savedRow: Row = saved || {
+        ...selected,
+        translation_id: result.translationId,
+        version_no: Number(result.versionNo || 1),
+        translation_status: 'DRAFT',
+        translation_method: 'HUMAN',
+        translated_content_text: JSON.stringify(translatedContent),
+        is_current_revision: true
+      };
+      if (!saved) setItems(current => [savedRow, ...current.filter(row => rowKey(row) !== rowKey(savedRow))].slice(0, pageSize));
+      setSelectedKey(rowKey(savedRow));
+      setEditor(pretty(savedRow.translated_content_text));
     } catch (e) {
       setError(e instanceof Error ? e.message : 'The draft could not be saved.');
     } finally { setSaving(false); }
