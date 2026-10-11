@@ -12,12 +12,8 @@ type StudentAccountMenuProps = {
   profileImageUrl?: string | null;
 };
 
-function MenuIcon({ kind }: { kind: 'book' | 'practice' | 'progress' | 'assessment' | 'settings' | 'logout' }) {
+function MenuIcon({ kind }: { kind: 'settings' | 'logout' }) {
   const common = { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true as const };
-  if (kind === 'book') return <svg {...common}><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 5.5V21M8 7h8M8 11h7"/></svg>;
-  if (kind === 'practice') return <svg {...common}><path d="m12 3 2.4 5.1 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3Z"/></svg>;
-  if (kind === 'progress') return <svg {...common}><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 5-6"/><path d="M15.5 7H19v3.5"/></svg>;
-  if (kind === 'assessment') return <svg {...common}><path d="M7 3.5h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20V5A1.5 1.5 0 0 1 7.5 3.5Z"/><path d="M14.5 3.5V8H19M9 12h6M9 16h3"/><path d="m9 8.5 1.4 1.4L13 7.3"/></svg>;
   if (kind === 'settings') return <svg {...common}><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 0 1 2.5 2.5l-.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"/></svg>;
   return <svg {...common}><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>;
 }
@@ -88,42 +84,15 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
 
       {open && (
         <div className="student-account-menu" id="student-account-menu" aria-label="Student account options">
-          <div className="student-account-menu__identity">
-            <img src={avatarSrc} alt="" width="48" height="48" />
-            <div>
-              <strong>{displayName}</strong>
-              <span>Student account</span>
-              <small>Class {classCode}</small>
-            </div>
-          </div>
-          <div className="student-account-menu__section-label"><LocaleText hinglish="आपकी पढ़ाई" english="YOUR LEARNING" /></div>
-          <Link href="/student/learn" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="पढ़ाई जारी रखें" english="Continue learning" /></strong><small><LocaleText hinglish="जहाँ छोड़ा था, वहीं से शुरू करें" english="Pick up where you left off" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <Link href="/student/textbooks" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="Textbook library" english="Textbook library" /></strong><small><LocaleText hinglish="अपनी किताबें online पढ़ें" english="Read your books online" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <Link href="/student/classes" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="book" /></span><span><strong><LocaleText hinglish="Live और recorded classes" english="Live and recorded classes" /></strong><small><LocaleText hinglish="Live class join करें या recording जारी रखें" english="Join a live class or resume a recording" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <Link href="/student/tests" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="assessment" /></span><span><strong><LocaleText hinglish="Tests और results" english="Tests and results" /></strong><small><LocaleText hinglish="अपनी कोशिशें और checked scores देखें" english="Take tests and review saved scores" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <Link href="/student/practice" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="practice" /></span><span><strong><LocaleText hinglish="Practice questions" english="Practice questions" /></strong><small><LocaleText hinglish="Practice से confidence बढ़ाएँ" english="Build confidence with practice" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <Link href="/student/progress" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="progress" /></span><span><strong><LocaleText hinglish="मेरी progress" english="My progress" /></strong><small><LocaleText hinglish="अपनी learning journey देखें" english="View your learning journey" /></small></span><span className="student-account-menu__arrow">→</span>
-          </Link>
-          <div className="student-account-menu__divider" />
           <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
-            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span><span><strong><LocaleText hinglish="Profile और settings" english="Profile and settings" /></strong><small><LocaleText hinglish="Photo, school और personal details" english="Photo, school, and personal details" /></small></span><span className="student-account-menu__arrow">→</span>
+            <span className="student-account-menu__icon"><MenuIcon kind="settings" /></span>
+            <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>
+            <span className="student-account-menu__arrow">→</span>
           </Link>
           <div className="student-account-menu__divider" />
           <button type="button" className="student-account-menu__logout" onClick={() => void logout()} disabled={busy}>
-            <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : 'Sign out'}</span>
+            <MenuIcon kind="logout" /><span>{busy ? 'Please wait…' : <LocaleText hinglish="लॉग आउट" english="Logout" />}</span>
           </button>
-          <p className="student-account-menu__footnote"><LocaleText hinglish="आपकी learning progress अपने-आप save होती है।" english="Your learning progress saves automatically." /></p>
         </div>
       )}
     </div>
