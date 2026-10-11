@@ -80,7 +80,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
       active = false;
       window.removeEventListener('qe:profile-updated', loadProfile);
     };
-  }, [role]);  }, [role]);
+  }, [role]);
 
 
   function toggleCollapsed() {
