@@ -187,9 +187,9 @@ try {
     if ($failures.Count -gt 0) {
         $report.result = 'PREFLIGHT_FAILED'
         $report.failed_count = $failures.Count
-        $report.failures = @($failures)
-        $report.actions = @($actions)
-        $report.replacements = @($replacements | Select-Object -Unique)
+        $report.failures = $failures.ToArray()
+        $report.actions = $actions.ToArray()
+        $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
         $report.finished_at = (Get-Date).ToString('o')
         Save-PublishReport $report
         Write-Host "Preflight found $($failures.Count) issue(s). Nothing was published. Report: $PublishReport" -ForegroundColor Red
@@ -208,8 +208,8 @@ try {
     if (-not $Apply) {
         $report.result = 'PREFLIGHT_OK_NO_WRITES'
         $report.already_published_count = $actions.Count - $todo.Count
-        $report.actions = @($actions)
-        $report.replacements = @($replacements | Select-Object -Unique)
+        $report.actions = $actions.ToArray()
+        $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
         $report.finished_at = (Get-Date).ToString('o')
         Save-PublishReport $report
         Write-Host "Dry run only. No status was changed. Report: $PublishReport"
@@ -233,8 +233,8 @@ try {
             $report.published_count = $published
             $report.already_published_count = $already
             $report.publish_actions_taken = $published
-            $report.actions = @($actions)
-            $report.replacements = @($replacements | Select-Object -Unique)
+            $report.actions = $actions.ToArray()
+            $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
             $report.result = 'IN_PROGRESS'
             Save-PublishReport $report
             Write-Host "[$($published + $already)/82] PUBLISHED #$id - Class $($item.class_code) $($item.subject_code) | $($item.scope) | $($item.chapter_title)"
@@ -244,12 +244,12 @@ try {
             $failures.Add("Document #${id}: $($_.Exception.Message)")
             $report.result = 'PARTIAL_FAILURE'
             $report.failed_count = $failures.Count
-            $report.failures = @($failures)
+            $report.failures = $failures.ToArray()
             $report.published_count = $published
             $report.already_published_count = $already
             $report.publish_actions_taken = $published
-            $report.actions = @($actions)
-            $report.replacements = @($replacements | Select-Object -Unique)
+            $report.actions = $actions.ToArray()
+            $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
             $report.finished_at = (Get-Date).ToString('o')
             Save-PublishReport $report
             Write-Host "Stopped at document #$id. $published item(s) were published before this error." -ForegroundColor Red
@@ -263,8 +263,8 @@ try {
     $report.already_published_count = $already
     $report.failed_count = 0
     $report.publish_actions_taken = $published
-    $report.actions = @($actions)
-    $report.replacements = @($replacements | Select-Object -Unique)
+    $report.actions = $actions.ToArray()
+    $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
     $report.finished_at = (Get-Date).ToString('o')
     Save-PublishReport $report
     Write-Host ''
@@ -281,9 +281,9 @@ try {
         $report.failed_count = [Math]::Max([int]$report.failed_count, 1)
     }
     if ($failures.Count -eq 0) { $failures.Add($_.Exception.Message) }
-    if (-not $report.failures -or @($report.failures).Count -eq 0) { $report.failures = @($failures) }
-    $report.actions = @($actions)
-    $report.replacements = @($replacements | Select-Object -Unique)
+    if (-not $report.failures -or $report.failures.Count -eq 0) { $report.failures = $failures.ToArray() }
+    $report.actions = $actions.ToArray()
+    $report.replacements = @($replacements.ToArray() | Select-Object -Unique)
     try { Save-PublishReport $report } catch { }
     Write-Host "PUBLISH SCRIPT STOPPED SAFELY: $($_.Exception.Message)" -ForegroundColor Red
     Write-Host "Inspect $PublishReport. If result is PARTIAL_FAILURE, rerun only after reviewing recorded statuses." -ForegroundColor Yellow
