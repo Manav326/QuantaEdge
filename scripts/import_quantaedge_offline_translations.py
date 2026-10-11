@@ -250,7 +250,7 @@ def post_draft(base_url, cookie, entity_type, entity_id, payload, timeout):
     req = urllib.request.Request(
         f"{base_url.rstrip('/')}/api/v1/admin/translations/{entity_type}/{entity_id}/draft?language=en",
         data=body, method="POST",
-        headers={"Content-Type":"application/json; charset=utf-8","Accept":"application/json","Cookie":f"QE_SESSION={cookie}"})
+        headers={"Content-Type":"application/json; charset=utf-8","Accept":"application/json","Cookie":f"QE_STAFF_SESSION={cookie}","X-QE-Workspace":"STAFF"})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return json.loads(resp.read().decode("utf-8"))
@@ -321,8 +321,8 @@ def main() -> int:
         if args.apply:
             cookie = (os.environ.get("QUANTAEDGE_ADMIN_SESSION","").strip()
                      or os.environ.get("QE_SESSION","").strip()
-                     or getpass.getpass("Paste fresh QE_SESSION cookie value (input hidden): ").strip())
-            if not cookie: raise ValueError("A fresh QE_SESSION cookie is required for --apply.")
+                     or getpass.getpass("Paste fresh QE_STAFF_SESSION cookie value (input hidden): ").strip())
+            if not cookie: raise ValueError("A fresh QE_STAFF_SESSION cookie is required for --apply.")
             print("Apply mode only creates English DRAFTs; nothing is published.")
         report = []
         if chapters: report.extend(process("curriculum_chapter",chapters,index,translations,args,cookie))
