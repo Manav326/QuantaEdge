@@ -147,19 +147,23 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
   const [value,setValue]=useState('');
   const [busy,setBusy]=useState(false);
   const [result,setResult]=useState<any>(null);
+  const [answerError,setAnswerError]=useState('');
   const options=parse<{key:string;label:string}[]>(q.options||'[]');
 
   async function submit(next:string) {
     setValue(next);
-    if (!next.trim()) return;
-    setBusy(true);
+    if (!next.trim() || result?.correct===true) return;
+    setBusy(true);setAnswerError('');
     try {
       const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
+      if(!response.ok) throw new Error(body.detail||body.message||'Answer could not be checked.');
       setResult(body);
       onResult(q.id,body);
+    } catch(e:any) {
+      setAnswerError(e.message||tx('उत्तर जाँच नहीं पाया। फिर प्रयास करें।','Answer could not be checked. Please try again.'));
     } finally { setBusy(false); }
   }
 
@@ -170,13 +174,14 @@ function QuestionCard({q,onResult,onTutorOpen}:{q:Question;onResult:(id:number,r
     </div>
     <p><strong><MathText text={q.prompt}/></strong></p>
     {options.length>0 ? <div className="answer-row">
-      {options.map(o=><button key={o.key} disabled={busy} className={value===o.key?'selected':''} onClick={()=>submit(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
+      {options.map(o=><button key={o.key} disabled={busy||result?.correct===true} className={value===o.key?(result?.correct===false?'incorrect':result?.correct===true?'correct':'selected'):''} onClick={()=>submit(o.key)}>{o.key}. <MathText text={o.label}/></button>)}
     </div> : <div>
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
         <textarea value={value} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
         <input value={value} onChange={e=>setValue(e.target.value)} placeholder="उत्तर लिखें…"/>}
-      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim()} onClick={()=>submit(value)}><LocaleText hinglish="Answer check करें" english="Check answer" /></button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}><LocaleText hinglish="✦ Tutor" english="✦ Tutor" /></button></div>
+      <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" className="button button-dark button-small" disabled={busy || !value.trim() || result?.correct===true} onClick={()=>submit(value)}><LocaleText hinglish="Answer check करें" english="Check answer" /></button><button type="button" className="text-link" onClick={()=>onTutorOpen(q.id)}><LocaleText hinglish="✦ Tutor" english="✦ Tutor" /></button></div>
     </div>}
+    {answerError && <div className="feedback feedback-incorrect" role="alert"><span><MathText text={answerError}/></span></div>}
     {result && <div className={"feedback "+(result.correct===false?"feedback-incorrect":result.correct===true?"feedback-correct":"feedback-ungraded")} role={result.correct===false?"alert":"status"}>
       <b>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not quite yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</b>
       <span><MathText text={String(result.feedback ?? '')}/></span>
@@ -203,17 +208,14 @@ export default function LearnClient() {
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
   const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
-  // Keep every authored block in sequence. The assessment is inserted immediately before
-  // the first recap block, while blocks on either side retain their authored relative order.
-  const firstRecapIndex=useMemo(
-    ()=>orderedBlocks.findIndex(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),
-    [orderedBlocks]);
+  // The lesson screen teaches the concept first. Recap is rendered after the student's
+  // automatically selected micro-topic practice, not between the MCQ check and practice.
   const learningBlocks=useMemo(
-    ()=>firstRecapIndex<0?orderedBlocks:orderedBlocks.slice(0,firstRecapIndex),
-    [orderedBlocks,firstRecapIndex]);
-  const blocksAfterPractice=useMemo(
-    ()=>firstRecapIndex<0?[]:orderedBlocks.slice(firstRecapIndex),
-    [orderedBlocks,firstRecapIndex]);
+    ()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),
+    [orderedBlocks]);
+  const lessonMcqs=useMemo(
+    ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
+    [lesson]);
   const trackGroups=useMemo(()=>{
     if(!trackBrowse)return [];
     const grouped=new Map<string,{code:string;name:string;lessons:Lesson[]}>();
@@ -376,16 +378,20 @@ export default function LearnClient() {
         (Boolean(item.chapter_code)&&item.chapter_code===lesson.chapter_code)||
         (Boolean(item.chapter_name)&&item.chapter_name!.trim().toLocaleLowerCase()===lesson.chapter_name.trim().toLocaleLowerCase())
       )).map(item=><InlineTextbookReader key={item.document_id} item={item} heading={tx('इस chapter की PDF','Chapter PDF for this lesson')} initiallyExpanded={true}/>)}
-      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lesson.questions.length).hinglish} english={learnerPathLabel(orderedBlocks,lesson.questions.length).english} /></span></div>
+      <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
-      {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>) }
+      {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
-      <div className="content-heading"><h2><LocaleText hinglish="इस lesson के questions" english="Questions for this lesson" /></h2><span>{lesson.questions.length} questions</span></div>
-      {blocksAfterPractice.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{lessonMcqs.length} questions</span></div>
+      {lessonMcqs.length ? lessonMcqs.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>) : <div className="concept-card"><p><LocaleText hinglish="इस lesson के लिए MCQ अभी publish नहीं हुए हैं। आप फिर भी इस topic का उपलब्ध practice set खोल सकते हैं।" english="MCQs have not been published for this lesson yet. You can still open any approved practice set for this topic." /></p></div>}
 
-      <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{lesson.questions.length} questions</span></div>
-      {lesson.questions.map(q=><QuestionCard key={q.id} q={q} onResult={()=>{}} onTutorOpen={id=>{setTutorQuestionId(id);setTutorOpen(true)}}/>)}
+      <section className="concept-card practice-launch-card">
+        <span className="concept-kicker"><LocaleText hinglish="अगला चरण" english="Next step" /></span>
+        <h2><LocaleText hinglish="अब इसी micro-topic का अभ्यास करें" english="Now practise this micro-topic" /></h2>
+        <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective. You do not need to choose topics or question types." /></p>
+        <Link href={'/student/practice?lessonId='+lesson.id} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
+      </section>
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
@@ -394,7 +400,7 @@ export default function LearnClient() {
         {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><LocaleText hinglish="← पिछला" english="← Previous" /></button> : <span/>}
         {currentIndex>=0 && currentIndex<lessons.length-1
           ? <button className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><LocaleText hinglish="अगला lesson →" english="Next lesson →" /></button>
-          : <Link href="/student/practice" className="button button-dark button-small"><LocaleText hinglish="Practice खोलें →" english="Open practice →" /></Link>}
+          : <Link href="/student" className="button button-dark button-small"><LocaleText hinglish="Student home →" english="Student home →" /></Link>}
       </div>
     </section>
   </main>;
