@@ -28,7 +28,7 @@ The pack contains 5,595 translation entries matched to 5,595 queue IDs. The sour
     # After reviewing the English drafts in http://localhost:3001/translations:
     & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_offline_translations.py --apply --delay 0.03
 
-On --apply, the script reads QE_SESSION from the environment or asks for it with hidden input. It talks only to the configured local API by default. Each execution writes a JSON report under reports/offline-translation-imports. It skips translations already present for the current source hash, so successful rows can be resumed after an interrupted run.
+On --apply, the script reads QUANTAEDGE_ADMIN_SESSION (or QE_SESSION as a fallback) from the environment, or asks for the fresh QE_SESSION cookie with hidden input. It talks only to the configured local API by default. Each execution writes a JSON report under reports/offline-translation-imports. It skips translations already present for the current source hash, so successful rows can be resumed after an interrupted run.
 
 ## Review and later AI-generated questions
 
