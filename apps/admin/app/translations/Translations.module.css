@@ -57,3 +57,5 @@ button:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:1300px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.workspace{grid-template-columns:minmax(250px,320px) minmax(0,1fr)}}
 @media(max-width:950px){.page{display:block}.main{padding:24px 14px 36px}.workspace{grid-template-columns:1fr}.rows{max-height:380px}.jsonGrid{grid-template-columns:1fr}.jsonGrid textarea{min-height:250px}}
 @media(max-width:560px){.header{flex-direction:column}.statGrid{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.filters label:first-child{grid-column:span 2}.editorPanel{padding:15px}.revisionMeta{grid-template-columns:1fr}.editorHeader{flex-direction:column}}
+
+.statusNOTSTARTED{background:#f5f0e8;color:#7a5d32;border:1px dashed #d7c6a5}
