@@ -39,6 +39,33 @@ function Sync-QEAuthEnvironment {
     }
 }
 
+function Read-QERefreshCookieSecurely {
+    param([string]$PromptText = 'Paste the CURRENT QE_REFRESH cookie value (input is hidden)')
+
+    $secureValue = Read-Host -Prompt $PromptText -AsSecureString
+    if ($null -eq $secureValue -or $secureValue.Length -eq 0) {
+        throw 'No refresh cookie was entered. No publish requests were sent.'
+    }
+    $pointer = [IntPtr]::Zero
+    try {
+        $pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureValue)
+        $plainValue = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+    } finally {
+        if ($pointer -ne [IntPtr]::Zero) {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
+        }
+    }
+    if ([string]::IsNullOrWhiteSpace($plainValue)) {
+        throw 'The refresh cookie was blank. No publish requests were sent.'
+    }
+
+    $env:QUANTAEDGE_ADMIN_REFRESH = $plainValue
+    # Replace the cookie in this run's session so refresh uses exactly the newly entered value.
+    $cookie = [System.Net.Cookie]::new('QE_REFRESH', $plainValue, '/')
+    $script:WebSession.Cookies.Set($cookie)
+    $plainValue = $null
+}
+
 function Invoke-QERaw {
     param(
         [Parameter(Mandatory = $true)][string]$Path,
@@ -148,9 +175,6 @@ $report = @{
 
 $rows = @()
 try {
-    if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION) -and [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
-        throw 'A QE_REFRESH cookie is required. Sign in to QuantaEdge Admin and set the current QE_REFRESH cookie in QUANTAEDGE_ADMIN_REFRESH. No publish requests were sent.'
-    }
     if (-not (Test-Path -LiteralPath $ImportReport -PathType Leaf)) {
         throw "Import report not found: $ImportReport. Run from the PDF bundle directory or pass -ImportReport explicitly."
     }
@@ -184,16 +208,27 @@ try {
     $report.target_count = $rows.Count
     $report.targets = $rows
 
-    # Always refresh first. Never make Admin list/publish calls using a possibly stale access cookie.
+    # Always refresh first. If no refresh cookie is available, request it securely in this terminal.
     if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_REFRESH)) {
-        throw 'A refresh cookie is required before publishing. Sign in to QuantaEdge Admin, copy the current QE_REFRESH cookie, set it in the QUANTAEDGE_ADMIN_REFRESH environment variable, then rerun. No publish requests were sent.'
+        Write-Host 'A current QE_REFRESH cookie is required. Paste it at the secure prompt; the value will not be echoed.' -ForegroundColor Yellow
+        Read-QERefreshCookieSecurely
     }
+
     Write-Host 'Refreshing the Admin session before preflight...'
     try {
         Invoke-QERaw -Path '/api/v1/auth/refresh' -Method 'POST' | Out-Null
         Sync-QEAuthEnvironment
     } catch {
-        throw "The supplied QE_REFRESH cookie was rejected or could not refresh the session. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, set it in the QUANTAEDGE_ADMIN_REFRESH environment variable, then rerun. Details: $($_.Exception.Message)"
+        $firstRefreshError = Get-QEHttpErrorDetails -ErrorRecord $_ -Path '/api/v1/auth/refresh'
+        Write-Host 'The refresh cookie was rejected. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie, and enter it at the next secure prompt.' -ForegroundColor Yellow
+        Read-QERefreshCookieSecurely -PromptText 'Enter the CURRENT QE_REFRESH cookie (input is hidden)'
+        try {
+            Invoke-QERaw -Path '/api/v1/auth/refresh' -Method 'POST' | Out-Null
+            Sync-QEAuthEnvironment
+        } catch {
+            $secondRefreshError = Get-QEHttpErrorDetails -ErrorRecord $_ -Path '/api/v1/auth/refresh'
+            throw "The newly supplied QE_REFRESH cookie was also rejected. No publish requests were sent. Sign in to Admin again, then rerun and enter the latest QE_REFRESH cookie. First attempt: $firstRefreshError Second attempt: $secondRefreshError"
+        }
     }
     if ([string]::IsNullOrWhiteSpace($env:QUANTAEDGE_ADMIN_SESSION)) {
         throw 'Refresh returned without a QE_SESSION cookie. No publish requests were sent. Sign in to QuantaEdge Admin, copy the CURRENT QE_REFRESH cookie (and QE_SESSION if shown), update the environment variables, then rerun.'
