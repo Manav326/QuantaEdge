@@ -76,7 +76,7 @@ public class LearningController {
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
     result.put("blocks",jdbc.queryForList("""
       select b.id,b.sequence_no,b.block_type,b.asset_id,
-             strip_answer_keys(b.content) as content,
+             strip_answer_keys(b.content)::text as content,
              a.url as asset_url,a.alt_text as asset_alt
       from lesson_block b left join content_asset a on a.id=b.asset_id and a.status='PUBLISHED'
       where b.lesson_id=? and b.active=true order by b.sequence_no,b.id
