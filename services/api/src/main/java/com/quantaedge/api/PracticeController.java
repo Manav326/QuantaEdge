@@ -142,6 +142,167 @@ public class PracticeController {
     return result;
   }
 
+
+  /**
+   * Creates or resumes a practice session from the lesson the student just completed.
+   * Students do not choose topics, question types, or question count; the server scopes
+   * the pool to the lesson's objective/concept and prefers non-MCQ practice questions.
+   */
+  @PostMapping("/sessions/from-lesson")
+  @Transactional
+  public Map<String,Object> createSessionFromLesson(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    int lessonId=integer(body.get("lessonId"),"lessonId",1,Integer.MAX_VALUE);
+
+    // Serialize concurrent starts for the same student. This also makes React's development
+    // Strict Mode / a double click idempotent when the first request is still in flight.
+    List<Map<String,Object>> lockedStudent=jdbc.queryForList(
+        "select id from student where id=? and active=true for update",context.studentId());
+    if(lockedStudent.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Student profile not found.");
+
+    String marker=json(List.of(Map.of("sourceLessonId",lessonId)));
+    List<Map<String,Object>> existing=jdbc.queryForList("""
+      select id from student_practice_session
+      where student_id=? and status='IN_PROGRESS' and topic_selections @> ?::jsonb
+      order by created_at desc,id desc limit 1
+      """,context.studentId(),marker);
+    if(!existing.isEmpty()) {
+      long existingId=((Number)existing.getFirst().get("id")).longValue();
+      return getSession(existingId,context);
+    }
+
+    List<Map<String,Object>> lessonRows=jdbc.queryForList("""
+      select l.id,l.chapter_id,l.objective_id,l.title,
+             ch.display_name as chapter_name,ch.code as chapter_code,
+             s.code as subject_code,c.code as class_code
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      where l.id=? and l.active=true and l.status='PUBLISHED'
+        and ch.active=true and ch.content_status='PUBLISHED' and s.active=true and c.active=true
+      """,context.studentId(),lessonId);
+    if(lessonRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson not found or unavailable.");
+
+    Map<String,Object> lesson=lessonRows.getFirst();
+    long chapterId=((Number)lesson.get("chapter_id")).longValue();
+    Object objective=lesson.get("objective_id");
+    String scopeFilter;
+    List<Object> scopeArgs=new ArrayList<>();
+    if(objective instanceof Number objectiveNumber) {
+      scopeFilter="(q.objective_id=? or q.lesson_id=?)";
+      scopeArgs.add(objectiveNumber.longValue());
+      scopeArgs.add((long)lessonId);
+    } else {
+      List<Long> concepts=jdbc.queryForList("""
+        select distinct concept_id from question
+        where lesson_id=? and concept_id is not null and active=true
+          and review_status in ('APPROVED','PUBLISHED')
+        """,Long.class,lessonId);
+      if(!concepts.isEmpty()) {
+        String placeholders=String.join(",",java.util.Collections.nCopies(concepts.size(),"?"));
+        scopeFilter="(q.concept_id in ("+placeholders+") or q.lesson_id=?)";
+        scopeArgs.addAll(concepts);
+        scopeArgs.add((long)lessonId);
+      } else {
+        // No trustworthy objective/concept mapping: stay inside this lesson rather than
+        // widening the set to unrelated questions from the same chapter.
+        scopeFilter="q.lesson_id=?";
+        scopeArgs.add((long)lessonId);
+      }
+    }
+
+    int requestedCount=10;
+    List<String> selectedTypes=List.of(
+        "INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
+        "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
+    List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+        scopeFilter,scopeArgs,lessonId,requestedCount,false);
+
+    // If this micro-topic has no non-MCQ assessment items, use unshown MCQs from another
+    // lesson mapped to the same objective/concept. Never repeat the MCQs displayed on this lesson.
+    if(selectedIds.isEmpty()) {
+      selectedTypes=List.of("MCQ","TRUE_FALSE");
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+          scopeFilter,scopeArgs,lessonId,requestedCount,true);
+    }
+    if(selectedIds.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "More approved practice questions are not published for this micro-topic yet. Your lesson answers are saved.");
+    }
+
+    String chapterName=String.valueOf(lesson.get("chapter_name"));
+    String lessonTitle=String.valueOf(lesson.get("title"));
+    List<Map<String,Object>> topicSelections=List.of(Map.of(
+        "sourceLessonId",lessonId,"chapterId",chapterId,
+        "chapterName",chapterName,"topic",lessonTitle));
+    Long sessionId=jdbc.queryForObject("""
+      insert into student_practice_session(
+        student_id,status,requested_question_count,selected_question_count,question_types,topic_selections
+      ) values(?,'IN_PROGRESS',?,?,?::jsonb,?::jsonb) returning id
+      """,Long.class,context.studentId(),requestedCount,selectedIds.size(),json(selectedTypes),json(topicSelections));
+
+    List<Map<String,Object>> questions=new ArrayList<>();
+    int sequence=1;
+    for(Long questionId:selectedIds) {
+      Map<String,Object> snapshot=questionHistory.snapshot(questionId);
+      if(snapshot.isEmpty()) continue;
+      jdbc.update("""
+        insert into student_practice_session_question(practice_session_id,question_id,sequence_no,question_snapshot)
+        values(?,?,?,?::jsonb)
+        """,sessionId,questionId,sequence++,json(snapshot));
+      questions.add(toPublicQuestion(snapshot));
+    }
+    if(questions.isEmpty()) throw badRequest("The selected questions are no longer available. Refresh the lesson and try again.");
+    jdbc.update("update student_practice_session set selected_question_count=? where id=?",questions.size(),sessionId);
+
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("sessionId",sessionId);
+    result.put("status","IN_PROGRESS");
+    result.put("requestedCount",requestedCount);
+    result.put("selectedCount",questions.size());
+    result.put("message",questions.size()<requestedCount
+        ?"Only "+questions.size()+" approved practice question(s) are available for this micro-topic."
+        :"Practice for "+lessonTitle+" is ready.");
+    result.put("lessonId",lessonId);
+    result.put("lessonTitle",lessonTitle);
+    result.put("chapterName",chapterName);
+    result.put("questions",questions);
+    return result;
+  }
+
+  private List<Long> selectAutoPracticeQuestions(long studentId,long chapterId,List<String> types,
+      String scopeFilter,List<Object> scopeArgs,long currentLessonId,int requestedCount,boolean excludeCurrentLesson) {
+    if(types.isEmpty()) return List.of();
+    String typePlaceholders=String.join(",",java.util.Collections.nCopies(types.size(),"?"));
+    String sql="""
+      select distinct q.id
+      from question q
+      join lesson l on l.id=q.lesson_id and l.active=true and l.status='PUBLISHED'
+      join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true and ch.content_status='PUBLISHED'
+      join curriculum_subject s on s.id=ch.subject_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      where ch.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+        and q.question_type in (__TYPE_PLACEHOLDERS__)
+        and (__SCOPE_FILTER__)
+      """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders).replace("__SCOPE_FILTER__",scopeFilter);
+    if(excludeCurrentLesson) sql+=" and q.lesson_id<>?";
+    sql+=" order by random() limit ?";
+    List<Object> args=new ArrayList<>();
+    args.add(studentId);
+    args.add(chapterId);
+    args.addAll(types);
+    args.addAll(scopeArgs);
+    if(excludeCurrentLesson) args.add(currentLessonId);
+    args.add(requestedCount);
+    return jdbc.queryForList(sql,Long.class,args.toArray());
+  }
+
   @GetMapping("/sessions/{sessionId}")
   public Map<String,Object> getSession(@PathVariable long sessionId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
