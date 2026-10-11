@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
+import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
 
 type InlineDocument = {
   document_id: number;
@@ -126,13 +127,12 @@ export default function InlineTextbookReader({
             fontSize: 11,
             boxShadow: '0 2px 8px rgba(0,0,0,.08)',
           }}>Loading page {page}…</div>}
-          <img
+          <AuthenticatedPageImage
             key={item.document_id + '-' + page + '-' + retryKey}
             src={imageUrl}
             alt={item.title + ', page ' + page}
-            draggable={false}
             onLoad={() => { setLoading(false); setPageError(''); }}
-            onError={() => { setLoading(false); setPageError('This page could not be displayed. Please retry.'); }}
+            onError={message => { setLoading(false); setPageError(message); }}
             style={{
               display: pageError ? 'none' : 'block',
               width: '100%',
