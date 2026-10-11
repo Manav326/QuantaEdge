@@ -2,15 +2,12 @@
 
 import { LocaleText } from '../components/LanguageProvider';
 
-import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
-import ParentAccountMenu from '../components/ParentAccountMenu';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 type ChildRow={id:number;display_name:string;class_code?:string;board?:string};
 type ParentReport=Record<string,any>;
-type ParentProfile=Record<string,any>;
 
 async function readApi(response:Response):Promise<any>{
   const raw=await response.text();
@@ -25,7 +22,6 @@ export default function ParentPage(){
   const router=useRouter();
   const [children,setChildren]=useState<ChildRow[]>([]);
   const [selected,setSelected]=useState<ParentReport|null>(null);
-  const [parentProfile,setParentProfile]=useState<ParentProfile|null>(null);
   const [error,setError]=useState('');
   const [loading,setLoading]=useState(true);
   const [switchingChild,setSwitchingChild]=useState(false);
@@ -45,10 +41,6 @@ export default function ParentPage(){
       if(!cr.ok)throw new Error(cb.message||`Unable to load child profiles (HTTP ${cr.status}).`);
       if(!Array.isArray(cb))throw new Error('The API returned an invalid child-profile list.');
       setChildren(cb);
-      const profileResponse=await fetch('/api/v1/guardians/profile',{cache:'no-store'});
-      const profileBody=await readApi(profileResponse);
-      if(!profileResponse.ok)throw new Error(profileBody.message||'Unable to load parent account.');
-      setParentProfile(profileBody);
       const child=cb.find((x:ChildRow)=>x.id===id)||cb[0];
       if(!child){setSelected(null);return;}
 
@@ -67,11 +59,11 @@ export default function ParentPage(){
 
   useEffect(()=>{void load();},[]);
 
-  if(loading)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><span><LocaleText hinglish="Parent view" english="Parent dashboard" /></span><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="PARENT REPORT" english="PARENT REPORT" /></span><h1><LocaleText hinglish="आपकी report load हो रही है…" english="Loading your report…" /></h1><p><LocaleText hinglish="बच्चे के latest learning records जोड़े जा रहे हैं।" english="Connecting your child's latest learning records." /></p></section></main>;
+  if(loading)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="PARENT REPORT" english="PARENT REPORT" /></span><h1><LocaleText hinglish="आपकी report load हो रही है…" english="Loading your report…" /></h1><p><LocaleText hinglish="बच्चे के latest learning records जोड़े जा रहे हैं।" english="Connecting your child's latest learning records." /></p></section></main>;
 
-  if(error)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="PARENT REPORT" english="PARENT REPORT" /></span><h1><LocaleText hinglish="Report load नहीं हो पाई" english="Unable to load the report" /></h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}><LocaleText hinglish="दोबारा try करें →" english="Try again →" /></button><Link href="/parent/children" className="button button-light"><LocaleText hinglish="बच्चों के Profiles manage करें" english="Manage children’s profiles" /></Link><Link href="/login" className="text-link"><LocaleText hinglish="दोबारा sign in करें" english="Sign in again" /></Link></div></section></main>;
+  if(error)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="PARENT REPORT" english="PARENT REPORT" /></span><h1><LocaleText hinglish="Report load नहीं हो पाई" english="Unable to load the report" /></h1><p>{error}</p><div className="parent-recovery-actions"><button type="button" className="button button-dark" onClick={()=>void load()}><LocaleText hinglish="दोबारा try करें →" english="Try again →" /></button><Link href="/parent/children" className="button button-light"><LocaleText hinglish="बच्चों के Profiles manage करें" english="Manage children’s profiles" /></Link><Link href="/login" className="text-link"><LocaleText hinglish="दोबारा sign in करें" english="Sign in again" /></Link></div></section></main>;
 
-  if(!children.length)return <main className="parent-app"><header className="parent-header"><QuantaEdgeBrand variant="compact" /><ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} /></header><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="FAMILY LEARNING" english="FAMILY LEARNING" /></span><h1><LocaleText hinglish="अभी कोई active child profile नहीं है" english="No active child profile yet" /></h1><p><LocaleText hinglish="आप नया student profile बना सकते हैं और हर बच्चे के लिए अलग subjects चुन सकते हैं।" english="You can create a student profile and choose subjects for each child." /></p><Link href="/parent/children" className="button button-dark">Bachchon ke profiles manage karein →</Link></section></main>;
+  if(!children.length)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="FAMILY LEARNING" english="FAMILY LEARNING" /></span><h1><LocaleText hinglish="अभी कोई active child profile नहीं है" english="No active child profile yet" /></h1><p><LocaleText hinglish="आप नया student profile बना सकते हैं और हर बच्चे के लिए अलग subjects चुन सकते हैं।" english="You can create a student profile and choose subjects for each child." /></p><Link href="/parent/children" className="button button-dark">Bachchon ke profiles manage karein →</Link></section></main>;
 
   if(!selected)return <main className="parent-app"><section className="parent-dashboard"><span className="eyebrow"><LocaleText hinglish="PARENT REPORT" english="PARENT REPORT" /></span><h1><LocaleText hinglish="कोई report select नहीं है" english="No report selected" /></h1><button className="button button-dark" onClick={()=>void load()}><LocaleText hinglish="Report दोबारा load करें →" english="Reload report →" /></button></section></main>;
 
@@ -84,11 +76,6 @@ export default function ParentPage(){
   const recentAttempts=Array.isArray(selected.recentAttempts)?selected.recentAttempts:[];
 
   return <main className="parent-app">
-    <header className="parent-header">
-      <QuantaEdgeBrand variant="compact" />
-      <span>Parent view · {selected.display_name||'Student'}</span>
-      <ParentAccountMenu displayName={parentProfile?.display_name || 'Parent account'} mobile={parentProfile?.mobile_e164 || ''} profileImageUrl={parentProfile?.profile_image_url} />
-    </header>
     <section className="parent-dashboard">
       <div><span className="eyebrow"><LocaleText hinglish="Learning summary" english="Learning summary" /></span><h1>{selected.display_name||'Student'} <LocaleText hinglish="ने क्या सीखा?" english="— learning summary" /></h1><p><LocaleText hinglish="यह report आपके linked child के actual learning records से बनती है।" english="This report is based on your linked child’s actual learning records." /></p><Link href="/parent/children" className="text-link"><LocaleText hinglish="बच्चों के Profiles manage करें और login details देखें →" english="Manage children’s profiles and login details →" /></Link></div>
       {children.length>1&&<section className="parent-report-switcher" aria-label="Choose a child’s learning report">
