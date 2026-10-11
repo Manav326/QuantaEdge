@@ -176,7 +176,7 @@ public class AdminContentController {
     List<Object> pageArgs=new ArrayList<>(filterArgs);
     pageArgs.add(rowLimit);
     pageArgs.add(rowOffset);
-    List<Map<String,Object>> items=jdbc.queryForList(select+fromWhere+"""
+    List<Map<String,Object>> items=jdbc.queryForList(select+fromWhere+" "+"""
       order by case upper(coalesce(q.review_status,'DRAFT')) when 'REJECTED' then 0 when 'REVIEW' then 1
         when 'DRAFT' then 2 when 'APPROVED' then 3 when 'PUBLISHED' then 4 else 5 end,
         l.id,q.sort_order,q.id
