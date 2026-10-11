@@ -608,6 +608,7 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .practice-feedback.practice-feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;color:#b42318;}
 .practice-feedback.practice-feedback-correct{background:#ecfdf3;border:1px solid #abefc6;color:#067647;}
 .practice-feedback.practice-feedback-ungraded{background:#f2f4f7;border:1px solid #d0d5dd;color:#475467;}
+.practice-feedback{flex-direction:column;align-items:flex-start;max-width:100%;text-align:left;line-height:1.55;}
 .practice-launch-card{text-align:left;}
 .practice-launch-card h2{margin:10px 0;font-size:24px;letter-spacing:-.5px;}
 .practice-launch-card>p{text-align:left;max-width:610px;margin:8px 0 18px;}
