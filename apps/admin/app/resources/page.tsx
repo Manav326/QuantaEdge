@@ -83,6 +83,8 @@ function formatBytes(value: number) {
 export default function TextbookLibraryPage() {
   const [classCode, setClassCode] = useState('6');
   const [subjectCode, setSubjectCode] = useState('maths');
+  const [viewClassCode, setViewClassCode] = useState('ALL');
+  const [viewSubjectCode, setViewSubjectCode] = useState('ALL');
   const [tracks, setTracks] = useState<Track[]>([]);
   const [role, setRole] = useState('');
   const [permissions, setPermissions] = useState<string[]>([]);
@@ -133,6 +135,14 @@ export default function TextbookLibraryPage() {
   const subjectOptions = useMemo(
     () => tracks.filter(track => track.class_code === classCode),
     [tracks, classCode],
+  );
+  const viewSubjectOptions = useMemo(() => {
+    const available = tracks.filter(track => viewClassCode === 'ALL' || track.class_code === viewClassCode);
+    return [...new Map(available.map(track => [track.subject_code, track])).values()];
+  }, [tracks, viewClassCode]);
+  const visibleAssignments = useMemo(
+    () => statusFilter === 'ALL' ? assignments : assignments.filter(row => row.status === statusFilter),
+    [assignments, statusFilter],
   );
   const selectedPdf = useMemo(
     () => library.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
@@ -326,9 +336,10 @@ export default function TextbookLibraryPage() {
       if (nextClassCode !== classCode) setClassCode(nextClassCode);
       if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
 
-      const params = new URLSearchParams({ status: statusFilter });
-      if (nextClassCode) params.set('classCode', nextClassCode);
-      if (nextSubjectCode) params.set('subjectCode', nextSubjectCode);
+      // Governance filters are independent from the target class/subject in the attach form.
+      const params = new URLSearchParams({ status: 'ALL' });
+      if (viewClassCode !== 'ALL') params.set('classCode', viewClassCode);
+      if (viewSubjectCode !== 'ALL') params.set('subjectCode', viewSubjectCode);
       const chapterPromise = canEdit && nextClassCode && nextSubjectCode
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
@@ -372,7 +383,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, statusFilter, selectedPdfId, chapterId, canEdit, previewDocumentId]);
+  }, [classCode, subjectCode, viewClassCode, viewSubjectCode, selectedPdfId, chapterId, canEdit, previewDocumentId]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -479,7 +490,7 @@ export default function TextbookLibraryPage() {
         <div><span>PRIVATE SOURCE LIBRARY</span><h2>One PDF. Multiple learning placements.</h2>
           <p>PDFs are stored privately in the database. Students receive rendered page images after access checks, not the original PDF download.</p>
         </div>
-        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{assignments.filter(a => a.status === 'PUBLISHED').length}</strong><small>Published in this track</small></div>
+        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{assignments.filter(a => a.status === 'PUBLISHED').length}</strong><small>Published in selected view</small></div>
       </section>
 
       {error && <div className={styles.alertError} role="alert">{error}</div>}
@@ -642,12 +653,37 @@ export default function TextbookLibraryPage() {
       </section>}
 
       <section className={styles.panel}>
-        <div className={styles.sectionHeading}><div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Drafts remain invisible to students until a permitted publisher publishes them.</p></div>
-          <select className={styles.filter} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select>
+        <div className={styles.sectionHeading}>
+          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Browse the full library across classes and subjects, or narrow the list. These filters do not change the attachment target above.</p></div>
+          <div className={styles.filterBar}>
+            <label className={styles.filterLabel}>Class
+              <select className={styles.filter} value={viewClassCode} onChange={e => {
+                const nextClass = e.target.value;
+                setViewClassCode(nextClass);
+                if (viewSubjectCode !== 'ALL' && nextClass !== 'ALL' && !tracks.some(track => track.class_code === nextClass && track.subject_code === viewSubjectCode)) {
+                  setViewSubjectCode('ALL');
+                }
+              }}>
+                <option value="ALL">All classes</option>
+                {classOptions.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name}</option>)}
+              </select>
+            </label>
+            <label className={styles.filterLabel}>Subject
+              <select className={styles.filter} value={viewSubjectCode} onChange={e => setViewSubjectCode(e.target.value)}>
+                <option value="ALL">All subjects</option>
+                {viewSubjectOptions.map(track => <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
+              </select>
+            </label>
+            <label className={styles.filterLabel}>Status
+              <select className={styles.filter} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                <option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option>
+              </select>
+            </label>
+          </div>
         </div>
-        {loading ? <p className={styles.empty}>Loading resource assignments…</p> : assignments.length === 0 ? <div className={styles.empty}><b>No assignments in this view</b><span>Choose a PDF above and attach it to this class/subject.</span></div> :
+        {loading ? <p className={styles.empty}>Loading resource assignments…</p> : visibleAssignments.length === 0 ? <div className={styles.empty}><b>No assignments match these filters</b><span>Try All classes, All subjects, and All statuses to inspect the full inventory.</span></div> :
           <div className={styles.assignmentList}>
-            {assignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
+            {visibleAssignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
               <div className={styles.assignmentIcon}>{row.scope === 'SUBJECT_BOOK' ? '▤' : '▧'}</div>
               <div className={styles.assignmentBody}>
                 <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{row.status}</span></div>
