@@ -30,15 +30,21 @@ Live sessions and recorded classes have an optional primary language. `recorded_
 
 After the V51 migration and student delivery/CMS changes are deployed, use Python 3.12 and the local Docker Compose services.
 
-1. **Import the standalone practice-bank JSON into existing CMS lessons first.** The importer validates answer keys and class/subject/chapter/lesson mappings, then appends only missing questions as DRAFT. It never publishes. Run a no-write file validation first:
+1. **Place the existing practice-bank JSON in the repository root** and import it into existing CMS lessons first. This catalog contains 76 banks (Class 6: Maths 10 + Science 12; Class 7: Maths 15 + Science 12; Class 8: Maths 14 + Science 13) and 3,572 questions. The importer checks the full JSON and each answer key, then verifies every class/subject/chapter/lesson mapping before the first write. Run a no-write file validation first:
 
        & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json"
 
-   For database mapping preflight and safe import, sign in to local Admin, set QUANTAEDGE_ADMIN_SESSION from the QE_SESSION cookie in the current PowerShell session (never paste it into chat or put it on the command line), then run:
+   For database mapping preflight and safe import, sign in to local Admin and set the session cookie in this PowerShell session without putting it on the command line:
+
+       $secure = Read-Host "Paste fresh QE_SESSION value" -AsSecureString
+       $env:QUANTAEDGE_ADMIN_SESSION = [System.Net.NetworkCredential]::new("", $secure).Password
+       Remove-Variable secure
+
+   Then run the draft-only import:
 
        & "D:\Tools\Python312\python.exe" .\scripts\import_quantaedge_practice_banks.py --package ".\QuantaEdge_Classes6-8_Hindi_Practice_Banks_ALL.json" --apply --api-url "http://localhost:8080"
 
-   The report lists newly added questions and exact duplicates skipped. If mapping preflight fails, it writes nothing. If a later network error interrupts the run, rerunning is safe because each question has a stable qe-practice-id tag and content-aware duplicate checking.
+   The importer writes only new DRAFT questions. It skips an existing stable identity or an exact content-and-answer duplicate, but does not collapse two questions merely because their prompts happen to match. Reused source IDs are namespaced by class, subject and chapter. The report lists new questions and duplicates skipped. Mapping-preflight failure means no writes; after a later network error, rerunning is safe.
 
 2. **Run a read-only inventory of structured records in the local database:**
 
