@@ -19,6 +19,9 @@ class ApplicationStartupSmokeTest {
   @Autowired
   private ContentTranslationController contentTranslationController;
 
+  @Autowired
+  private AdminContentController adminContentController;
+
 
   @Test
   void bilingualSchemaExistsAndTranslationInventoryQueryExecutes() {
@@ -47,6 +50,42 @@ class ApplicationStartupSmokeTest {
         && "maths".equals(String.valueOf(row.get("subject_code")))
         && "en".equals(String.valueOf(row.get("language")))),
         "Source inventory results must match class, subject and target-language filters.");
+  }
+
+  @Test
+  void practiceBankDeduplicationUsesFullQuestionContentNotPromptAlone() {
+    Map<String,Object> incoming = new java.util.LinkedHashMap<>();
+    incoming.put("question_type", "MCQ");
+    incoming.put("prompt", "कौन-सा कथन सही है?");
+    incoming.put("difficulty", "CORE");
+    incoming.put("marks", 1);
+    incoming.put("exam_format", "Topic practice");
+    incoming.put("explanation", "पहला कथन सही है।");
+    incoming.put("answer_payload", Map.of("kind", "OPTION", "value", "A"));
+    incoming.put("options", List.of(
+        Map.of("key", "A", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+
+    Map<String,Object> stored = new java.util.LinkedHashMap<>();
+    stored.put("question_type", "MCQ");
+    stored.put("prompt", "  कौन-सा   कथन सही है? ");
+    stored.put("difficulty", "CORE");
+    stored.put("marks", 1);
+    stored.put("exam_format", "Topic practice");
+    stored.put("explanation", "पहला कथन सही है।");
+    stored.put("answer_payload", "{\"value\":\"A\",\"kind\":\"OPTION\"}");
+    stored.put("options", "[{\"key\":\"A\",\"label\":\"रेखाखंड के दो अंत-बिंदु होते हैं\",\"correct\":true,\"sort_order\":1},"
+        + "{\"key\":\"B\",\"label\":\"रेखा के दो अंत-बिंदु होते हैं\",\"correct\":false,\"sort_order\":2}]");
+
+    String incomingFingerprint = adminContentController.questionContentFingerprint(incoming);
+    assertEquals(incomingFingerprint, adminContentController.questionContentFingerprint(stored));
+
+    Map<String,Object> differentChoices = new java.util.LinkedHashMap<>(incoming);
+    differentChoices.put("options", List.of(
+        Map.of("key", "A", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+    assertTrue(!incomingFingerprint.equals(adminContentController.questionContentFingerprint(differentChoices)),
+        "Same prompt with different answer options must not be treated as the same question.");
   }
 
   @Test
