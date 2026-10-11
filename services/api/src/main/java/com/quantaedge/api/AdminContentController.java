@@ -110,24 +110,54 @@ public class AdminContentController {
   }
 
   @GetMapping("/questions/review-queue")
-  public List<Map<String,Object>> questionReviewQueue(
+  public Map<String,Object> questionReviewQueue(
       @RequestParam(required=false, defaultValue="ALL") String status,
       @RequestParam(required=false) String classCode,
       @RequestParam(required=false) String subjectCode,
       @RequestParam(required=false) String query,
-      @RequestParam(required=false, defaultValue="150") Integer limit,
+      @RequestParam(required=false, defaultValue="100") Integer limit,
+      @RequestParam(required=false, defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     context=authorization.requireAuth(context);
     if (!authorization.hasPermission(context,"CONTENT_VIEW")
         && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
       throw new SecurityException("Content review access required");
     }
-    String normalizedStatus=status==null?"ALL":status.trim().toUpperCase();
+    String normalizedStatus=status==null?"ALL":status.trim().toUpperCase(Locale.ROOT);
     if (!Set.of("ALL","DRAFT","REVIEW","APPROVED","PUBLISHED","REJECTED").contains(normalizedStatus)) {
       throw badRequest("Choose a valid question status filter.");
     }
-    int rowLimit=Math.max(1,Math.min(limit==null?150:limit,250));
-    StringBuilder sql=new StringBuilder("""
+    int rowLimit=Math.max(1,Math.min(limit==null?100:limit,250));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+
+    StringBuilder fromWhere=new StringBuilder("""
+      from question q
+      join lesson l on l.id=q.lesson_id
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where 1=1
+      """);
+    List<Object> filterArgs=new ArrayList<>();
+    if (!"ALL".equals(normalizedStatus)) {
+      fromWhere.append(" and upper(coalesce(q.review_status,'DRAFT'))=?");
+      filterArgs.add(normalizedStatus);
+    }
+    if (classCode!=null&&!classCode.isBlank()) {
+      fromWhere.append(" and c.code=?");
+      filterArgs.add(classCode.trim());
+    }
+    if (subjectCode!=null&&!subjectCode.isBlank()) {
+      fromWhere.append(" and s.code=?");
+      filterArgs.add(subjectCode.trim());
+    }
+    if (query!=null&&!query.isBlank()) {
+      fromWhere.append(" and (q.prompt ilike ? or coalesce(q.topic,'') ilike ? or ch.display_name ilike ? or l.title ilike ?)");
+      String pattern="%"+query.trim().substring(0,Math.min(query.trim().length(),160))+"%";
+      filterArgs.add(pattern);filterArgs.add(pattern);filterArgs.add(pattern);filterArgs.add(pattern);
+    }
+
+    String select="""
       select q.id as question_id,q.lesson_id,q.question_type,q.prompt,q.explanation,q.difficulty,
              q.sort_order,q.active,q.review_status,q.review_notes,q.reviewed_at,
              q.marks,q.exam_format,q.source_kind,q.source_title,q.source_ref,q.source_year,
@@ -142,30 +172,53 @@ public class AdminContentController {
              (select count(*) from question_review_history h where h.question_id=q.id) as history_count,
              (select h.change_reason from question_review_history h
                where h.question_id=q.id order by h.occurred_at desc,h.id desc limit 1) as latest_history_reason
-      from question q
-      join lesson l on l.id=q.lesson_id
-      join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id
-      join curriculum_class c on c.id=s.class_id
-      where 1=1
-      """);
-    List<Object> args=new ArrayList<>();
-    if (!"ALL".equals(normalizedStatus)) { sql.append(" and upper(q.review_status)=?"); args.add(normalizedStatus); }
-    if (classCode!=null&&!classCode.isBlank()) { sql.append(" and c.code=?"); args.add(classCode.trim()); }
-    if (subjectCode!=null&&!subjectCode.isBlank()) { sql.append(" and s.code=?"); args.add(subjectCode.trim()); }
-    if (query!=null&&!query.isBlank()) {
-      sql.append(" and (q.prompt ilike ? or coalesce(q.topic,'') ilike ? or ch.display_name ilike ? or l.title ilike ?)");
-      String pattern="%"+query.trim().substring(0,Math.min(query.trim().length(),160))+"%";
-      args.add(pattern);args.add(pattern);args.add(pattern);args.add(pattern);
-    }
-    sql.append("""
-      order by case upper(q.review_status) when 'REJECTED' then 0 when 'REVIEW' then 1
+      """;
+    List<Object> pageArgs=new ArrayList<>(filterArgs);
+    pageArgs.add(rowLimit);
+    pageArgs.add(rowOffset);
+    List<Map<String,Object>> items=jdbc.queryForList(select+fromWhere+"""
+      order by case upper(coalesce(q.review_status,'DRAFT')) when 'REJECTED' then 0 when 'REVIEW' then 1
         when 'DRAFT' then 2 when 'APPROVED' then 3 when 'PUBLISHED' then 4 else 5 end,
         l.id,q.sort_order,q.id
-      limit ?
+      limit ? offset ?
+      """,pageArgs.toArray());
+    Long total=jdbc.queryForObject("select count(*) "+fromWhere,Long.class,filterArgs.toArray());
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("items",items);
+    result.put("total",total==null?0L:total);
+    result.put("limit",rowLimit);
+    result.put("offset",rowOffset);
+    return result;
+  }
+
+  @GetMapping("/questions/review-summary")
+  public Map<String,Object> questionReviewSummary(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    if (!authorization.hasPermission(context,"CONTENT_VIEW")
+        && !authorization.hasPermission(context,"CONTENT_REVIEW")) {
+      throw new SecurityException("Question review access required");
+    }
+    List<Map<String,Object>> byStatus=jdbc.queryForList("""
+      select coalesce(nullif(upper(review_status),''),'DRAFT') as review_status,
+             active,count(*) as count
+      from question
+      group by coalesce(nullif(upper(review_status),''),'DRAFT'),active
+      order by review_status,active desc
       """);
-    args.add(rowLimit);
-    return jdbc.queryForList(sql.toString(),args.toArray());
+    long total=0,activeCount=0,inactiveCount=0;
+    for(Map<String,Object> row:byStatus) {
+      long count=row.get("count") instanceof Number n?n.longValue():0L;
+      total+=count;
+      if(Boolean.TRUE.equals(row.get("active"))) activeCount+=count;
+      else inactiveCount+=count;
+    }
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("totalQuestions",total);
+    result.put("activeQuestions",activeCount);
+    result.put("inactiveQuestions",inactiveCount);
+    result.put("byStatus",byStatus);
+    return result;
   }
 
   @GetMapping("/questions/{questionId}/history")
@@ -564,12 +617,20 @@ public class AdminContentController {
       throw badRequest("Review status must be Draft, Needs review, Approved or Rejected.");
     }
     Map<String,Object> lessonForReview=lessonById(lessonId);
-    if (!"REVIEW".equals(String.valueOf(lessonForReview.get("lesson_status")))) {
-      throw badRequest("Submit the micro-topic for review before approving or returning its questions.");
+    String lessonStatus=String.valueOf(lessonForReview.get("lesson_status")).toUpperCase(Locale.ROOT);
+    if (!Set.of("REVIEW","PUBLISHED").contains(lessonStatus)) {
+      throw badRequest("Submit a draft micro-topic for review first. Questions on already-published micro-topics can be reviewed without unpublishing the lesson.");
     }
     String notes=optionalText(body.get("reviewNotes"),1200);
     if ("REJECTED".equals(status) && (notes==null || notes.isBlank())) {
       throw badRequest("Add clear feedback so the author knows what must be corrected.");
+    }
+    List<Map<String,Object>> currentQuestionRows=jdbc.queryForList(
+        "select review_status from question where id=? and lesson_id=?",questionId,lessonId);
+    if(currentQuestionRows.isEmpty()) throw notFound("Question",questionId);
+    String currentQuestionStatus=String.valueOf(currentQuestionRows.getFirst().getOrDefault("review_status","DRAFT")).toUpperCase(Locale.ROOT);
+    if (Set.of("APPROVED","REJECTED").contains(status) && !"REVIEW".equals(currentQuestionStatus)) {
+      throw badRequest("Move this question to REVIEW first. Approval and rejection are only allowed for questions explicitly submitted for review.");
     }
     if ("APPROVED".equals(status)) validateQuestionForReview(lessonId,questionId);
     Map<String,Object> beforeSnapshot=questionHistory.snapshot(questionId);
