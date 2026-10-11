@@ -334,9 +334,115 @@ def parse_json_response(raw: str) -> dict[str, Any]:
         raise ValueError("The model response must be a JSON object.")
     return data
 
+def build_system_prompt(language: str) -> str:
+    """Create a curriculum-aware editorial brief instead of a literal word-swap prompt."""
+    shared = (
+        "You are a senior curriculum translator and school-subject editor working on Bihar Board-aligned "
+        "Mathematics and Science learning for Classes 6, 7, and 8. This assignment is pedagogical "
+        "localization, not word-for-word substitution. Before translating each item, infer its purpose "
+        "from the supplied class, subject, chapter, lesson, block type, question type, and neighboring "
+        "fields. Translate the concept and teaching intent, then express it naturally in the target "
+        "language. A student should feel that a knowledgeable teacher wrote the content directly in that "
+        "language. Use age-appropriate, precise, encouraging textbook language. Keep terminology consistent "
+        "within a lesson and across related items. Prefer the established school-subject term that matches "
+        "the actual concept; never choose a dictionary equivalent that changes the scientific or mathematical "
+        "meaning. Explain only what the source already explains: do not add new facts, examples, analogies, "
+        "steps, hints, questions, claims, or answers, and do not omit meaningful ideas. Rephrase awkward "
+        "source grammar when needed, but preserve every instructional distinction and condition. Treat a "
+        "question stem, each option, its explanation, and its tags as one semantic unit: keep every option "
+        "aligned with the same question, preserve option order and stable keys, and never infer, calculate, "
+        "correct, reveal, or change any answer. Treat the supplied metadata as context only; return only the "
+        "translated content in the exact JSON schema requested. Keep JSON keys, nesting, array lengths and "
+        "order, identifiers, URLs, asset references, markup and attributes, formulas, mathematical notation, "
+        "scientific symbols, units, numerical values, and all non-text structural values unchanged. "
+        "For fractions written as words (for example, '1 over 4'), preserve that representation; do not "
+        "rewrite it as '1/4', LaTeX, or another notation. Keep HTML tags and attributes unchanged while "
+        "translating the visible text inside them. Return valid JSON only."
+    )
+    if language == "hi":
+        locale_rules = (
+            "TARGET LANGUAGE: Hindi in Devanagari script. Write genuinely natural, grammatically correct "
+            "school Hindi—not Hinglish, transliterated English, or English sentence structure with Hindi "
+            "words. Prefer familiar Hindi used by Indian middle-school teachers. Use short, clear sentences "
+            "and explain concepts in a learner-friendly way without becoming informal or imprecise. Use a "
+            "technical English term in parentheses only when it is standard in school teaching and materially "
+            "helps the learner; do not append English glosses mechanically. Adapt idioms and examples' wording "
+            "to natural Hindi while preserving their original facts and meaning."
+        )
+        glossary = (
+            "Contextual terminology guide (use only when the concept matches): fraction=भिन्न; "
+            "numerator=अंश; denominator=हर; integer=पूर्णांक; decimal=दशमलव; ratio=अनुपात; "
+            "equation=समीकरण; factor=गुणनखंड; multiple=गुणज; perimeter=परिमाप; area=क्षेत्रफल; "
+            "angle=कोण; symmetry=सममिति; matter=पदार्थ; force=बल; motion=गति; friction=घर्षण; "
+            "evaporation=वाष्पीकरण; condensation=संघनन; photosynthesis=प्रकाश संश्लेषण; organism=जीव; "
+            "habitat=आवास; adaptation=अनुकूलन; cell=कोशिका; nutrition=पोषण; respiration=श्वसन; "
+            "transparent=पारदर्शी; translucent=पारभासी; opaque=अपारदर्शी; electric circuit=विद्युत परिपथ. "
+            "These are contextual guides, not a literal substitution dictionary."
+        )
+    elif language == "en":
+        locale_rules = (
+            "TARGET LANGUAGE: clear, idiomatic, age-appropriate Indian school textbook English. Do not "
+            "copy Hindi syntax into English. Translate the intended concept, not the source sentence's "
+            "word order. Use precise terms taught in Indian school curricula and explain them clearly when "
+            "the source does. Expand a terse or awkward phrase only enough to express its existing meaning; "
+            "do not add teaching material. Keep the voice consistent with a helpful, qualified teacher."
+        )
+        glossary = (
+            "Contextual terminology guide (use only when the concept matches): भिन्न=fraction; "
+            "अंश=numerator; हर=denominator; पूर्णांक=integer; दशमलव=decimal; अनुपात=ratio; "
+            "समीकरण=equation; गुणनखंड=factor; गुणज=multiple; परिमाप=perimeter; क्षेत्रफल=area; कोण=angle; "
+            "सममिति=symmetry; पदार्थ=matter; बल=force; गति=motion; घर्षण=friction; "
+            "वाष्पीकरण=evaporation; संघनन=condensation; प्रकाश संश्लेषण=photosynthesis; जीव=organism; "
+            "आवास=habitat; अनुकूलन=adaptation; कोशिका=cell; पोषण=nutrition; श्वसन=respiration; "
+            "पारदर्शी=transparent; पारभासी=translucent; अपारदर्शी=opaque; विद्युत परिपथ=electric circuit. "
+            "These are contextual guides, not a literal substitution dictionary."
+        )
+    else:
+        raise ValueError(f"Unsupported target language: {language}")
+    return shared + " " + locale_rules + " Terminology guide: " + glossary
+
+
+def cap_tasks_balanced_by_language_and_type(
+    todo: list[tuple[dict[str, Any], str, int]], max_items: int
+) -> list[tuple[dict[str, Any], str, int]]:
+    """Make a small pilot representative across languages and entity types."""
+    if max_items <= 0 or len(todo) <= max_items:
+        return list(todo)
+    languages: list[str] = []
+    entity_types: list[str] = []
+    queues: dict[tuple[str, str], list[tuple[dict[str, Any], str, int]]] = {}
+    for task in todo:
+        row, language, _version = task
+        entity_type = str(row["entity_type"])
+        if language not in languages:
+            languages.append(language)
+        if entity_type not in entity_types:
+            entity_types.append(entity_type)
+        queues.setdefault((language, entity_type), []).append(task)
+    selected: list[tuple[dict[str, Any], str, int]] = []
+    cursor = {key: 0 for key in queues}
+    while len(selected) < max_items:
+        added = False
+        for entity_type in entity_types:
+            for language in languages:
+                key = (language, entity_type)
+                rows = queues.get(key, [])
+                index = cursor[key]
+                if index >= len(rows):
+                    continue
+                selected.append(rows[index])
+                cursor[key] = index + 1
+                added = True
+                if len(selected) >= max_items:
+                    return selected
+        if not added:
+            break
+    return selected
+
+
 def translate_batch(items: list[dict[str, Any]], language: str, model: str, api_key: str,
                     base_url: str, timeout: int, max_retries: int) -> dict[str, dict[str, Any]]:
-    system_prompt = (
+    system_prompt = build_system_prompt(language)
         "You are a senior school textbook translator and subject editor for an Indian school curriculum. "
         "Translate educational content contextually, not word-for-word. Preserve the concept, age level, "
         "all mathematical/scientific meaning, units, examples, values, steps, answer logic, option ordering, "
@@ -351,6 +457,11 @@ def translate_batch(items: list[dict[str, Any]], language: str, model: str, api_
     )
     user_payload = {
         "target_language": LANGUAGE_NAMES[language],
+        "translation_approach": (
+            "Translate by concept and teaching intent, with natural grade-appropriate phrasing. Use class, "
+            "subject, chapter, lesson and content-type context to disambiguate terms. Maintain terminology "
+            "consistency across this batch; do not perform literal word replacement."
+        ),
         "output_schema": {
             "translations": [
                 {"id": "exact input id", "content": "same JSON shape as source_content"}
@@ -585,8 +696,16 @@ def main() -> int:
             return 0
 
         if args.max_items:
-            todo = todo[:args.max_items]
+            todo = cap_tasks_balanced_by_language_and_type(todo, args.max_items)
             audit["translation_tasks_selected_after_cap"] = len(todo)
+        audit["translation_tasks_selected_by_language"] = dict(sorted(
+            collections.Counter(language for _row, language, _version in todo).items()
+        ))
+        audit["translation_tasks_selected_by_type_and_language"] = dict(sorted(
+            collections.Counter(
+                f"{row['entity_type']}:{language}" for row, language, _version in todo
+            ).items()
+        ))
 
         report_errors: list[dict[str, Any]] = []
         generated = 0
