@@ -736,3 +736,13 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
  .qe-answer-option,.qe-practice-progress__track span{transition:none}
  .qe-answer-option:hover:not(:disabled){transform:none}
 }
+
+
+.qe-mcq-progress{display:flex;flex-direction:column;gap:9px;margin:-3px 0 16px;padding:13px 15px;border:1px solid #e8ebf2;border-radius:14px;background:#fff}
+.qe-mcq-progress>div{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#758095;font-size:11px;font-weight:700}
+.qe-mcq-progress strong{color:#344054;font-size:12px}
+.qe-mcq-progress>i{display:block;height:5px;overflow:hidden;border-radius:99px;background:#edf0f5}
+.qe-mcq-progress>i>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#f97316,#fb923c);transition:width .2s ease}
+.qe-practice-gate{display:flex;align-items:flex-start;flex-direction:column;gap:8px}
+.qe-practice-gate .button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none;transform:none}
+.qe-practice-gate>p{margin:0;text-align:left;color:#858da0;font-size:11px;line-height:1.6}
