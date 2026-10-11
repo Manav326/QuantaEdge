@@ -84,7 +84,8 @@ public class AdminContentController {
              l.alignment_source_url, l.alignment_source_edition,
              l.alignment_page_range, l.alignment_source_verified,
              (select count(*) from lesson_block b where b.lesson_id=l.id) as block_count,
-             (select count(*) from question q where q.lesson_id=l.id) as question_count
+             (select count(*) from question q where q.lesson_id=l.id) as question_count,
+             coalesce((select max(q.sort_order) from question q where q.lesson_id=l.id),0) as max_question_sort_order
       from curriculum_class c
       join curriculum_subject s on s.class_id=c.id
       left join curriculum_chapter ch on ch.subject_id=s.id
