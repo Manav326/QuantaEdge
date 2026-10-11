@@ -234,43 +234,82 @@ export default function PracticePage(){
     </section>
   </main>;
 
-  return <main className="practice-page">
-    <header className="lesson-header"><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link><span>Practice · {index+1} / {questions.length}</span><span className="avatar">अ</span></header>
-    <section className="practice-wrap">
-      <div className="eyebrow">Class {lesson?.class_code??'—'} · {lesson?.chapter_name||tx('Topic practice','Topic practice')} · Session #{sessionId}</div>
-      {notice&&<div className="feedback" role="status"><span>{notice}</span></div>}
-      {error&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong>Practice error</strong><span>{error}</span></div>}
-      <div className="feedback">
-        <span>{current.exam_format??tx('Topic practice','Topic practice')}{current.marks?' · '+current.marks+' marks':''}</span>
-        <span>{current.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="SCERT से aligned question" english="Question aligned with SCERT" />:current.source_kind??<LocaleText hinglish="Content team का question" english="Content team question" />}</span>
-        {current.source_year?<span>{current.source_year}</span>:null}
+  const questionTypeLabel=current.question_type==='MCQ'?tx('बहुविकल्पीय प्रश्न','Multiple choice'):current.question_type==='TRUE_FALSE'?tx('सही या गलत','True or false'):current.question_type==='NUMERICAL'?tx('संख्यात्मक प्रश्न','Numerical question'):current.question_type.replaceAll('_',' ').toLowerCase();
+  const progressPercent=Math.round(((index+1)/Math.max(questions.length,1))*100);
+  const selectedOptionIsWrong=result?.correct===false;
+  const selectedOptionIsRight=result?.correct===true;
+
+  return <main className="practice-page qe-practice-page">
+    <header className="lesson-header qe-practice-header">
+      <Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student'} className="back"><LocaleText hinglish="← Lesson" english="← Lesson" /></Link>
+      <div className="qe-practice-header__center"><span><LocaleText hinglish="MICRO-TOPIC PRACTICE" english="MICRO-TOPIC PRACTICE" /></span><strong>{lesson?.title||tx('आपका अभ्यास','Your practice')}</strong></div>
+      <span className="qe-practice-counter">{index+1}<i>/</i>{questions.length}</span>
+    </header>
+    <section className="practice-wrap qe-practice-wrap">
+      <div className="qe-practice-intro">
+        <div className="qe-practice-intro__eyebrow"><span className="qe-practice-live-dot"/><LocaleText hinglish="आपकी सीख के अनुसार चुना गया" english="PERSONALISED TO YOUR LESSON" /></div>
+        <h1><LocaleText hinglish="अब खुद करके देखें" english="Now, put it into practice" /></h1>
+        <p><LocaleText hinglish="हर सवाल आपको concept को और अच्छी तरह समझने में मदद करता है। गलत उत्तर भी सीखने का हिस्सा है।" english="Each question helps deepen your understanding. An incorrect answer is part of learning." /></p>
       </div>
-      <h1><MathText text={current.prompt}/></h1>
-      <p><LocaleText hinglish="पहले सोचें, answer दें, फिर feedback पढ़ें। गलत होने पर इसी question को दोबारा try कर सकते हैं।" english="Think first, answer, then review the feedback. If it is incorrect, you can retry this same question." /></p>
 
-      {options.length>0?<div className="option-grid">
-        {options.map(option=><button key={option.key} disabled={saving||result?.correct===true} className={selected===option.key?(result?.correct===false?'incorrect':result?.correct===true?'correct':'selected'):''} onClick={()=>void answer(option.key)}>{option.key}. <MathText text={option.label}/></button>)}
-      </div>:current.question_type==='ORDER'?<OrderInput key={current.id+'-'+attemptReset} prompt={current.prompt} disabled={saving||result?.correct===true} onSubmit={answer}/>:
-      current.question_type==='MATCH'?<MatchInput key={current.id+'-'+attemptReset} disabled={saving||result?.correct===true} onSubmit={answer}/>:
-      <div className="concept-card">
-        {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('Number वाला answer यहाँ लिखें…','Enter a numeric answer…')}/>:
-          <textarea value={selected} disabled={saving||result?.correct===true} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना answer या reasoning यहाँ लिखें…','Enter your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
-        <button className="button button-dark" disabled={saving||!selected.trim()||result?.correct===true} onClick={()=>void answer(selected)}><LocaleText hinglish="Answer submit करें" english="Submit answer" /></button>
-      </div>}
-
-      {answerError&&<div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="उत्तर save नहीं हुआ" english="Answer was not saved" /></strong><span>{answerError}</span></div>}
-      {result&&<div className={'practice-feedback '+(result.correct===false?'practice-feedback-incorrect':result.correct===true?'practice-feedback-correct':'practice-feedback-ungraded')} role={result.correct===false?'alert':'status'}>
-        <strong>{result.correct===true?<LocaleText hinglish="✓ सही जवाब" english="✓ Correct answer" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं" english="Not correct yet" />:<LocaleText hinglish="Answer save हो गया" english="Answer saved" />}</strong>
-        <span>{result.correct===true?<LocaleText hinglish="सही। Explanation पढ़ें और समझें कि उत्तर सही क्यों है।" english="Correct. Review the explanation to understand why this answer works." />:result.correct===false?<LocaleText hinglish="अभी सही नहीं। Explanation पढ़ें और इसी question को फिर से प्रयास करें।" english="Not quite. Review the explanation and try this same question again." />:<LocaleText hinglish="उत्तर save हो गया। इस प्रश्न के लिए teacher की जाँच आवश्यक हो सकती है।" english="Your answer was saved. This question may require teacher or rubric review." />}</span>
-        {result.explanation&&<span><MathText text={String(result.explanation)}/></span>}
-      </div>}
-
-      <div className="practice-footer">
-        <span>Question {index+1} of {questions.length} · {sessionStatus.toLowerCase().replace('_',' ')}</span>
-        {result?.correct===false?<button className="button button-dark" onClick={tryAgain}><LocaleText hinglish="फिर से प्रयास करें ↻" english="Try again ↻" /></button>:
-          result?<button className="button button-dark" onClick={next}>{index+1<questions.length?<LocaleText hinglish="अगला question →" english="Next question →" />:<LocaleText hinglish="Practice complete →" english="Finish practice →" />}</button>:
-          <span><LocaleText hinglish="उत्तर दें" english="Answer" /></span>}
+      <div className="qe-practice-progress" aria-label={tx('अभ्यास की प्रगति','Practice progress')}>
+        <div className="qe-practice-progress__meta"><span><LocaleText hinglish="प्रश्न की प्रगति" english="QUESTION PROGRESS" /></span><strong>{Math.min(index+1,questions.length)} <i>/</i> {questions.length}</strong></div>
+        <div className="qe-practice-progress__track"><span style={{width:progressPercent+'%'}}/></div>
       </div>
+
+      {notice&&<div className="qe-practice-notice" role="status"><span>✦</span><p>{notice}</p></div>}
+      {error&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="कुछ ठीक नहीं हुआ" english="Something went wrong" /></strong><p>{error}</p></div></div>}
+
+      <article className="qe-question-card qe-question-card--practice">
+        <div className="qe-question-card__top">
+          <span className="qe-question-index"><span>{String(index+1).padStart(2,'0')}</span></span>
+          <div className="qe-question-card__labels">
+            <span className="qe-question-type">{questionTypeLabel}</span>
+            <span className="qe-question-context">{current.exam_format||tx('Topic practice','Topic practice')}{current.marks?' · '+current.marks+' '+tx('अंक','marks'):''}</span>
+          </div>
+          <span className="qe-question-source">{current.source_kind==='TEXTBOOK_ALIGNED'?<LocaleText hinglish="पाठ्यपुस्तक आधारित" english="Textbook-aligned" />:current.source_kind?<MathText text={current.source_kind.replaceAll('_',' ').toLowerCase()}/>:<LocaleText hinglish="QuantaEdge प्रश्न" english="QuantaEdge question" />}</span>
+        </div>
+
+        <div className="qe-question-card__prompt"><MathText text={current.prompt}/></div>
+        <div className="qe-practice-hint"><span>✦</span><p><LocaleText hinglish="पहले खुद सोचें। फिर उत्तर दें और feedback से समझें कि आपकी reasoning सही है या नहीं।" english="Think it through first. Then answer and use the feedback to check your reasoning." /></p></div>
+
+        {options.length>0?<div className="qe-answer-options" role="group" aria-label={tx('उत्तर के विकल्प','Answer choices')}>
+          {options.map((option,i)=>{
+            const chosen=selected===option.key;
+            const stateClass=chosen&&selectedOptionIsWrong?'is-incorrect':chosen&&selectedOptionIsRight?'is-correct':chosen?'is-selected':'';
+            return <button type="button" key={option.key} disabled={saving||selectedOptionIsRight} aria-pressed={chosen} className={'qe-answer-option '+stateClass} onClick={()=>void answer(option.key)}>
+              <span className="qe-answer-option__key">{option.key||String.fromCharCode(65+i)}</span>
+              <span className="qe-answer-option__text"><MathText text={option.label}/></span>
+              {chosen&&selectedOptionIsRight&&<span className="qe-answer-option__status" aria-label={tx('सही','Correct')}>✓</span>}
+              {chosen&&selectedOptionIsWrong&&<span className="qe-answer-option__status" aria-label={tx('गलत','Incorrect')}>!</span>}
+            </button>;
+          })}
+        </div>:current.question_type==='ORDER'?<OrderInput key={current.id+'-'+attemptReset} prompt={current.prompt} disabled={saving||selectedOptionIsRight} onSubmit={answer}/>:
+        current.question_type==='MATCH'?<MatchInput key={current.id+'-'+attemptReset} disabled={saving||selectedOptionIsRight} onSubmit={answer}/>:
+        <div className="qe-answer-entry">
+          {current.question_type==='NUMERICAL'?<input inputMode="decimal" value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना संख्यात्मक उत्तर लिखें…','Enter your numerical answer…')}/>:
+            <textarea value={selected} disabled={saving||selectedOptionIsRight} onChange={e=>setSelected(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={current.question_type==='LONG_ANSWER'?7:5}/>}
+          <button className="button button-dark" disabled={saving||!selected.trim()||selectedOptionIsRight} onClick={()=>void answer(selected)}>{saving?<LocaleText hinglish="उत्तर जाँचा जा रहा है…" english="Checking answer…" />:<LocaleText hinglish="उत्तर जमा करें" english="Submit answer" />}</button>
+        </div>}
+
+        {answerError&&<div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="उत्तर सेव नहीं हुआ" english="Answer was not saved" /></strong><p>{answerError}</p></div></div>}
+        {result&&<div className={'qe-answer-feedback '+(result.correct===false?'is-incorrect':result.correct===true?'is-correct':'is-ungraded')} role={result.correct===false?'alert':'status'}>
+          <span className="qe-answer-feedback__icon">{result.correct===true?'✓':result.correct===false?'!':'i'}</span>
+          <div className="qe-answer-feedback__body">
+            <strong>{result.correct===true?<LocaleText hinglish="बहुत बढ़िया — सही उत्तर!" english="Well done — correct!" />:result.correct===false?<LocaleText hinglish="कोई बात नहीं, फिर प्रयास करें" english="That's okay — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}</strong>
+            <p>{result.correct===true?<LocaleText hinglish="Explanation पढ़ें और समझें कि यह तरीका क्यों काम करता है।" english="Read the explanation to understand why this method works." />:result.correct===false?<LocaleText hinglish="नीचे दिया explanation पढ़ें। आप इसी सवाल को दोबारा हल कर सकते हैं।" english="Read the explanation below. You can retry this same question." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}</p>
+            {result.explanation&&<div className="qe-answer-feedback__explanation"><span><LocaleText hinglish="समझें क्यों" english="WHY THIS ANSWER" /></span><MathText text={String(result.explanation)}/></div>}
+          </div>
+        </div>}
+        <div className="qe-practice-question-footer">
+          <div className="qe-practice-session-state"><span>{saving?<i className="qe-practice-live-dot"/>:sessionStatus==='COMPLETED'?'✓':'•'}</span><span>{saving?<LocaleText hinglish="उत्तर जाँचा जा रहा है" english="Checking your answer" />:<LocaleText hinglish="आपकी प्रगति सेव है" english="Progress is saved" />}</span></div>
+          {result?.correct===false?<button type="button" className="button button-dark" onClick={tryAgain}><LocaleText hinglish="फिर से कोशिश करें ↻" english="Try again ↻" /></button>:
+            result?<button type="button" className="button button-dark" onClick={next}>{index+1<questions.length?<LocaleText hinglish="अगला सवाल →" english="Next question →" />:<LocaleText hinglish="नतीजे देखें →" english="See results →" />}</button>:
+            <span className="qe-practice-awaiting"><LocaleText hinglish="अपना उत्तर चुनें" english="Choose your answer" /></span>}
+        </div>
+      </article>
+
+      <div className="qe-practice-trust"><span>✓</span><p><LocaleText hinglish="सिर्फ approved questions · आपके उत्तर सुरक्षित रूप से save होते हैं" english="Approved questions only · Your answers are saved securely" /></p></div>
     </section>
   </main>;
 }
