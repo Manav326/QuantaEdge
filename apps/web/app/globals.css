@@ -605,3 +605,19 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .practice-feedback.practice-feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;color:#b42318;}
 .practice-feedback.practice-feedback-correct{background:#ecfdf3;border:1px solid #abefc6;color:#067647;}
 .practice-feedback.practice-feedback-ungraded{background:#f2f4f7;border:1px solid #d0d5dd;color:#475467;}
+
+
+/* Student assessment states: an incorrect choice must never look successful. */
+.answer-row button.incorrect,.option-grid button.incorrect{background:#fff0f0;border-color:#fda29b;color:#b42318;}
+.answer-row button.correct,.option-grid button.correct{background:#ecfdf3;border-color:#abefc6;color:#067647;}
+.feedback.feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;border-radius:10px;padding:12px 15px;color:#b42318;}
+.feedback.feedback-incorrect b{color:#b42318;}
+.feedback.feedback-correct{background:#ecfdf3;border:1px solid #abefc6;border-radius:10px;padding:12px 15px;color:#067647;}
+.feedback.feedback-correct b{color:#067647;}
+.feedback.feedback-ungraded{background:#f2f4f7;border:1px solid #d0d5dd;border-radius:10px;padding:12px 15px;color:#475467;}
+.practice-feedback.practice-feedback-incorrect{background:#fff0f0;border:1px solid #fecaca;color:#b42318;}
+.practice-feedback.practice-feedback-correct{background:#ecfdf3;border:1px solid #abefc6;color:#067647;}
+.practice-feedback.practice-feedback-ungraded{background:#f2f4f7;border:1px solid #d0d5dd;color:#475467;}
+.practice-launch-card{text-align:left;}
+.practice-launch-card h2{margin:10px 0;font-size:24px;letter-spacing:-.5px;}
+.practice-launch-card>p{text-align:left;max-width:610px;margin:8px 0 18px;}
