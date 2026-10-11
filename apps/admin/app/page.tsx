@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import AdminSidebar from './components/AdminSidebar';
-import {useEffect,useMemo,useState} from 'react';
+import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
 type AnyRow=Record<string,any>;
@@ -56,18 +56,23 @@ export default function AdminHome(){
   const reviewRows:AnyRow[]=overview?.review||[];
   const sourceRows:AnyRow[]=overview?.sources||[];
   const assetRows:AnyRow[]=overview?.assets||[];
-  const totalReview=useMemo(()=>reviewRows.reduce((n,row)=>n+Number(row.count||0),0),[reviewRows]);
-  const activeReview=useMemo(()=>reviewRows.filter(row=>['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0),[reviewRows]);
+  const countQuestionStatus=(statuses:string[],activeOnly=true)=>reviewRows
+    .filter(row=>statuses.includes(String(row.review_status||'DRAFT').toUpperCase())&&(!activeOnly||row.active===true))
+    .reduce((n,row)=>n+Number(row.count||0),0);
+  const totalReview=reviewRows.reduce((n,row)=>n+Number(row.count||0),0);
+  const activeReview=countQuestionStatus(['APPROVED','PUBLISHED']);
+  const activeQuestions=countQuestionStatus(['DRAFT','REVIEW','REJECTED','APPROVED','PUBLISHED']);
+  const inactiveQuestions=reviewRows.filter(row=>row.active===false).reduce((n,row)=>n+Number(row.count||0),0);
 
   if(error)return <main className="admin-shell"><section className="admin-main"><div className="admin-empty-state"><div className="admin-empty-mark">!</div><span className="admin-kicker">QUANTAEDGE OPERATIONS</span><h1>Dashboard unavailable</h1><p>{error}</p><button className="button button-dark" onClick={()=>window.location.reload()}>Try again</button></div></section></main>;
   if(loading||!me||!overview)return <main className="admin-shell"><AdminSidebar active="overview" variant="overview" /><section className="admin-main"><div className="admin-loading"><img className="admin-loading-mark" src="/branding/quantaedge-icon.png" alt="" aria-hidden="true" /><span className="admin-kicker">QUANTAEDGE LEARNING</span><h1>Preparing your workspace</h1><p>Connecting to current content and learning records…</p></div></section></main>;
 
-  const pendingReview=reviewRows.filter(row=>!['APPROVED','PUBLISHED'].includes(String(row.review_status))).reduce((n,row)=>n+Number(row.count||0),0);
+  const pendingReview=countQuestionStatus(['REVIEW']);
   const primaryStats=[
     {label:'Active classes',value:summary.classes??'—',helper:'curriculum tracks enabled',tone:'violet',icon:'▦'},
     {label:'Published chapters',value:summary.chapters??'—',helper:'ready to learn',tone:'mint',icon:'◈'},
     {label:'Published lessons',value:summary.published_lessons??'—',helper:'available in the curriculum',tone:'blue',icon:'▤'},
-    {label:'Questions needing review',value:pendingReview,helper:'not yet approved or published',tone:'amber',icon:'✳'}
+    {label:'Questions awaiting review',value:pendingReview,helper:'active questions explicitly submitted for review',tone:'amber',icon:'✳'}
   ];
   const learningStats=[
     {label:'Active students · 30 days',value:analytics?.summary?.active_students_30d??'—'},
@@ -110,8 +115,15 @@ export default function AdminHome(){
       <div className="admin-section-title admin-governance-title" id="governance"><div><span className="admin-kicker">QUALITY CONTROL</span><h2>Content governance</h2></div><Link href="/content" className="admin-inline-link">Open authoring tools <span>→</span></Link></div>
       <div className="admin-grid admin-governance-grid">
         <article className="admin-panel admin-review-panel"><div className="panel-head"><div><span className="admin-kicker">QUESTION WORKFLOW</span><h2>Review pipeline</h2><p>Track what is ready and what needs editorial attention.</p></div><span className="admin-panel-icon">✓</span></div>
-          <div className="admin-review-summary"><div><strong>{activeReview}</strong><span>approved / published</span></div><div><strong>{Math.max(0,totalReview-activeReview)}</strong><span>other statuses</span></div></div>
-          <div className="admin-review-list">{reviewRows.map((row,i)=>{const count=Number(row.count||0);const pct=totalReview?Math.round(count*100/totalReview):0;const status=String(row.review_status||'unknown');return <div className="admin-review-row" key={status}><div className="admin-review-label"><span className={`review-status-mark status-${status.toLowerCase().replace(/[^a-z]+/g,'-')}`}/><strong>{status.replaceAll('_',' ')}</strong><b>{count}</b></div><div className="admin-review-bar"><span style={{width:`${pct}%`}}/></div></div>})}{!reviewRows.length&&<p className="admin-no-data">No review records available.</p>}</div>
+          <div className="admin-review-summary">
+            <div><strong>{countQuestionStatus(['DRAFT'])}</strong><span>active drafts</span></div>
+            <div><strong>{countQuestionStatus(['REVIEW'])}</strong><span>active awaiting review</span></div>
+            <div><strong>{countQuestionStatus(['REJECTED'])}</strong><span>active rejected</span></div>
+            <div><strong>{activeReview}</strong><span>active approved / published</span></div>
+          </div>
+          <p className="admin-review-footnote">{totalReview} total question records · {activeQuestions} active · {inactiveQuestions} inactive. The breakdown below separates active and inactive records.</p>
+          <div className="admin-review-list">{reviewRows.map((row)=>{const count=Number(row.count||0);const pct=totalReview?Math.round(count*100/totalReview):0;const status=String(row.review_status||'DRAFT');const active=row.active===true;return <div className="admin-review-row" key={status+'-'+String(active)}><div className="admin-review-label"><span className={`review-status-mark status-${status.toLowerCase().replace(/[^a-z]+/g,'-')}`}/><strong>{status.replaceAll('_',' ')} · {active?'Active':'Inactive'}</strong><b>{count}</b></div><div className="admin-review-bar"><span style={{width:`${pct}%`}}/></div></div>})}{!reviewRows.length&&<p className="admin-no-data">No question records available.</p>}</div>
+        </div>
         </article>
         <article className="admin-panel admin-breakdown-panel"><div className="panel-head"><div><span className="admin-kicker">PROVENANCE</span><h2>Question sources</h2><p>Origin of recorded question content.</p></div><span className="admin-panel-icon">⌁</span></div>
           <div className="admin-breakdown-list">{sourceRows.map((row:any)=><div className="admin-breakdown-row" key={row.source_kind}><span className="admin-breakdown-dot"/><strong>{String(row.source_kind||'Unknown').replaceAll('_',' ')}</strong><span>{row.count}</span></div>)}{!sourceRows.length&&<p className="admin-no-data">No question-source records available.</p>}</div>
