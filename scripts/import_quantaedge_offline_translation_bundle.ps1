@@ -16,6 +16,13 @@ $TranslationImporter = Join-Path $RepoRoot "scripts\import_quantaedge_offline_tr
 
 $OldAdminSession = $env:QUANTAEDGE_ADMIN_SESSION
 $OldQeSession = $env:QE_SESSION
+$OldAdminRefresh = $env:QUANTAEDGE_ADMIN_REFRESH
+$OldQeRefresh = $env:QE_STAFF_REFRESH
+$OldSessionStateFile = $env:QUANTAEDGE_SESSION_STATE_FILE
+
+$script:SessionStatePath = Join-Path $env:TEMP ("quantaedge-session-" + [guid]::NewGuid().ToString('N') + ".json")
+$script:SessionCookie = ''
+$script:RefreshCookie = ''
 
 $script:RunId = Get-Date -Format 'yyyyMMdd-HHmmss-fff'
 $script:RunStartedAt = Get-Date
@@ -119,6 +126,41 @@ function Save-QeRunReport {
 }
 
 
+function Save-QeSessionState {
+    # This short-lived file is shared only between the PowerShell wrapper and its
+    # child Python importers. Never include its contents in logs or run reports.
+    if ([string]::IsNullOrWhiteSpace($script:SessionCookie) -or [string]::IsNullOrWhiteSpace($script:RefreshCookie)) {
+        throw "Both staff cookies must be present before the import can start."
+    }
+    $state = @{ access_cookie=$script:SessionCookie; refresh_cookie=$script:RefreshCookie }
+    $temporary = "$($script:SessionStatePath).tmp"
+    [IO.File]::WriteAllText(
+        $temporary,
+        (ConvertTo-Json -InputObject $state -Compress),
+        [Text.UTF8Encoding]::new($false)
+    )
+    Move-Item -LiteralPath $temporary -Destination $script:SessionStatePath -Force
+}
+
+function Sync-QeSessionFromState {
+    if (-not (Test-Path -LiteralPath $script:SessionStatePath -PathType Leaf)) { return }
+    try {
+        $state = Get-Content -LiteralPath $script:SessionStatePath -Raw -Encoding UTF8 | ConvertFrom-Json -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace([string]$state.access_cookie) -or
+            [string]::IsNullOrWhiteSpace([string]$state.refresh_cookie)) {
+            throw "Session-state file did not contain a complete credential pair."
+        }
+        $script:SessionCookie = [string]$state.access_cookie
+        $script:RefreshCookie = [string]$state.refresh_cookie
+        $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+        $env:QE_SESSION = $script:SessionCookie
+        $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+        $env:QE_STAFF_REFRESH = $script:RefreshCookie
+    } catch {
+        throw "Could not synchronize refreshed staff credentials between import stages: $($_.Exception.Message)"
+    }
+}
+
 function Invoke-QeStaffAuthRequest {
     param(
         [Parameter(Mandatory = $true)][string]$CookieValue,
@@ -221,6 +263,9 @@ function Invoke-CheckedPython {
         # Merge native stdout/stderr so a traceback cannot bypass the final-report finally block.
         $pythonOutput = @(& $PythonExe @Arguments 2>&1)
         $exitCode = $LASTEXITCODE
+        # A child may rotate the refresh token when the 15-minute access token expires.
+        # Synchronize the rotated pair before a subsequent stage starts.
+        Sync-QeSessionFromState
         foreach ($entry in $pythonOutput) {
             $line = [string]$entry
             Write-Host $line
@@ -263,11 +308,34 @@ try {
             [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
         }
     }
+    $refresh = $env:QUANTAEDGE_ADMIN_REFRESH
+    if ([string]::IsNullOrWhiteSpace($refresh)) { $refresh = $env:QE_STAFF_REFRESH }
+    if ([string]::IsNullOrWhiteSpace($refresh)) {
+        Write-Host "Chrome/Edge: F12 > Application > Storage > Cookies > http://localhost:3001; copy the QE_STAFF_REFRESH Value." -ForegroundColor Yellow
+        Write-Host "HttpOnly cookies appear in DevTools even when document.cookie is empty. Paste the value only." -ForegroundColor Yellow
+        $secureRefresh = Read-Host "Paste the paired QE_STAFF_REFRESH cookie value (input is hidden)" -AsSecureString
+        $refreshPtr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureRefresh)
+        try {
+            $refresh = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($refreshPtr)
+        }
+        finally {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($refreshPtr)
+        }
+    }
     if ([string]::IsNullOrWhiteSpace($session)) {
         throw "A fresh QE_STAFF_SESSION cookie is required to call the protected Admin API."
     }
-    $env:QUANTAEDGE_ADMIN_SESSION = $session
-    $env:QE_SESSION = $session
+    if ([string]::IsNullOrWhiteSpace($refresh)) {
+        throw "The paired QE_STAFF_REFRESH cookie is required for a long import because staff access cookies expire after 15 minutes."
+    }
+    $script:SessionCookie = $session.Trim()
+    $script:RefreshCookie = $refresh.Trim()
+    $env:QUANTAEDGE_ADMIN_SESSION = $script:SessionCookie
+    $env:QE_SESSION = $script:SessionCookie
+    $env:QUANTAEDGE_ADMIN_REFRESH = $script:RefreshCookie
+    $env:QE_STAFF_REFRESH = $script:RefreshCookie
+    $env:QUANTAEDGE_SESSION_STATE_FILE = $script:SessionStatePath
+    Save-QeSessionState
 
     New-Item -ItemType Directory -Path $script:ReportDirectory -Force | Out-Null
     try {
@@ -375,8 +443,20 @@ finally {
     }
     $env:QUANTAEDGE_ADMIN_SESSION = $OldAdminSession
     $env:QE_SESSION = $OldQeSession
+    $env:QUANTAEDGE_ADMIN_REFRESH = $OldAdminRefresh
+    $env:QE_STAFF_REFRESH = $OldQeRefresh
+    $env:QUANTAEDGE_SESSION_STATE_FILE = $OldSessionStateFile
     $session = $null
+    $refresh = $null
     $secure = $null
+    $secureRefresh = $null
+    $script:SessionCookie = $null
+    $script:RefreshCookie = $null
+    foreach ($statePath in @($script:SessionStatePath, "$($script:SessionStatePath).tmp")) {
+        if (Test-Path -LiteralPath $statePath -PathType Leaf) {
+            try { Remove-Item -LiteralPath $statePath -Force } catch { Write-Warning "Could not remove temporary credential state file." }
+        }
+    }
     if ($script:TranscriptStarted) { try { Stop-Transcript | Out-Null } catch {} }
     Save-QeRunReport
     Write-Host ''
