@@ -1,5 +1,6 @@
 package com.quantaedge.api;
 
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -13,6 +14,17 @@ public class QuestionAnswerService {
   private final ObjectMapper mapper;
 
   public QuestionAnswerService(ObjectMapper mapper) { this.mapper=mapper; }
+
+  /** Keeps text answers readable and persists structured MATCH/ORDER answers as valid JSON. */
+  public String serializeForPersistence(Object submitted) {
+    if (submitted == null) return "";
+    if (submitted instanceof String value) return value.trim();
+    try {
+      return mapper.writeValueAsString(submitted);
+    } catch (JacksonException ex) {
+      throw new IllegalArgumentException("The answer could not be saved.", ex);
+    }
+  }
 
   public Evaluation evaluate(String payload, Object submitted) {
     try {
