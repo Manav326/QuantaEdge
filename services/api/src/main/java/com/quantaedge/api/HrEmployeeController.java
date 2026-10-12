@@ -176,10 +176,8 @@ public class HrEmployeeController {
     employeeById(id);
     return jdbc.queryForList("""
       select h.id,h.employee_id,h.changed_by_staff_id,h.change_type,h.effective_date,
-             h.before_state,h.after_state,h.reason,h.created_at,
-             s.display_name as changed_by_name
+             h.before_state,h.after_state,h.reason,h.created_at
       from hr_employee_history h
-      left join staff_account s on s.id=h.changed_by_staff_id
       where h.employee_id=?
       order by h.effective_date desc,h.created_at desc,h.id desc
       """,id);
