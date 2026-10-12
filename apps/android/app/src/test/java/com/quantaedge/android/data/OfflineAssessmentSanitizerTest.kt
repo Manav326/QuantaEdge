@@ -48,25 +48,76 @@ class OfflineAssessmentSanitizerTest {
     }
 
     @Test
+    fun removesAdditionalGradingMetadataRecursivelyButKeepsLearningContent() {
+        val input = JSONObject(
+            """
+            {
+              "status": "IN_PROGRESS",
+              "score": 10,
+              "questions": [{
+                "answer": "student response",
+                "expected_answer": "teacher key",
+                "acceptedAnswers": ["secret one", "secret two"],
+                "grading_notes": "private examiner notes",
+                "gradingFeedback": "feedback not released yet",
+                "marks_awarded": 3,
+                "pointsAwarded": 2,
+                "earned_marks": 1,
+                "solution_steps": ["private solution"],
+                "evaluation": {"grade": "A"},
+                "explanation": "published learning explanation",
+                "prompt": "Explain your reasoning."
+              }]
+            }
+            """.trimIndent()
+        )
+
+        val safe = OfflineAssessmentSanitizer.sanitize(input)
+        val question = safe.getJSONArray("questions").getJSONObject(0)
+
+        assertFalse(safe.has("score"))
+        assertFalse(question.has("expected_answer"))
+        assertFalse(question.has("acceptedAnswers"))
+        assertFalse(question.has("grading_notes"))
+        assertFalse(question.has("gradingFeedback"))
+        assertFalse(question.has("marks_awarded"))
+        assertFalse(question.has("pointsAwarded"))
+        assertFalse(question.has("earned_marks"))
+        assertFalse(question.has("solution_steps"))
+        assertFalse(question.has("evaluation"))
+        assertEquals("student response", question.getString("answer"))
+        assertEquals("published learning explanation", question.getString("explanation"))
+        assertEquals("Explain your reasoning.", question.getString("prompt"))
+        assertFalse(safe.toString().contains("private examiner notes"))
+        assertFalse(safe.toString().contains("teacher key"))
+    }
+
+    @Test
     fun unreleasedServerResponseRemainsRedactedButReleasedReviewKeepsCorrectAnswer() {
         val unreleased = JSONObject()
             .put("status", "AWAITING_REVIEW")
             .put("resultReleased", false)
             .put("questions", org.json.JSONArray().put(
                 JSONObject().put("correctAnswer", "A").put("answer", "B")
+                    .put("grading_notes", "secret")
             ))
         val safeUnreleased = OfflineAssessmentSanitizer.sanitizeServerResult(unreleased)
-        assertFalse(safeUnreleased.getJSONArray("questions").getJSONObject(0).has("correctAnswer"))
+        val unreleasedQuestion = safeUnreleased.getJSONArray("questions").getJSONObject(0)
+        assertFalse(unreleasedQuestion.has("correctAnswer"))
+        assertFalse(unreleasedQuestion.has("grading_notes"))
 
         val released = JSONObject()
             .put("status", "RELEASED")
             .put("resultReleased", true)
             .put("questions", org.json.JSONArray().put(
                 JSONObject().put("correctAnswer", "A").put("answer", "B")
+                    .put("grading_notes", "released review metadata")
             ))
         val safeReleased = OfflineAssessmentSanitizer.sanitizeServerResult(released)
-        assertEquals("A", safeReleased.getJSONArray("questions").getJSONObject(0).getString("correctAnswer"))
-        assertEquals("B", safeReleased.getJSONArray("questions").getJSONObject(0).getString("answer"))
+        val releasedQuestion = safeReleased.getJSONArray("questions").getJSONObject(0)
+        assertEquals("A", releasedQuestion.getString("correctAnswer"))
+        assertEquals("B", releasedQuestion.getString("answer"))
+        assertEquals("released review metadata", releasedQuestion.getString("grading_notes"))
     }
 
     @Test
