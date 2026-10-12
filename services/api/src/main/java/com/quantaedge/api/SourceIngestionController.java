@@ -179,10 +179,10 @@ public class SourceIngestionController {
         || "true".equalsIgnoreCase(String.valueOf(rawAcknowledged));
     Object rawReport = rows.getFirst().get("reconciliation");
     String report = rawReport == null ? "{}" : String.valueOf(rawReport);
-    boolean hasDiscrepancies = report.contains("\"missing_from_book\":[{")
-        || report.contains("\"extra_in_book\":[{")
-        || report.contains("\"ambiguous\":[{")
-        || report.contains("\"page_boundary_warnings\":[{");
+    boolean hasDiscrepancies = hasNonEmptyJsonArray(report, "missing_from_book")
+        || hasNonEmptyJsonArray(report, "extra_in_book")
+        || hasNonEmptyJsonArray(report, "ambiguous")
+        || hasNonEmptyJsonArray(report, "page_boundary_warnings");
     if (hasDiscrepancies && !acknowledged) {
       throw badRequest("This report has warnings. Tick the acknowledgement after reviewing them before marking the review complete.");
     }
@@ -302,6 +302,16 @@ public class SourceIngestionController {
       select pdf_asset_id,status,inventory,reconciliation,analysis_version,analyzed_at
       from learning_book_intake where pdf_asset_id=?
       """,assetId);
+  }
+
+  private boolean hasNonEmptyJsonArray(String json, String key) {
+    int keyAt = json.indexOf("\"" + key + "\"");
+    if (keyAt < 0) return false;
+    int arrayStart = json.indexOf('[', keyAt);
+    if (arrayStart < 0) return false;
+    int next = arrayStart + 1;
+    while (next < json.length() && Character.isWhitespace(json.charAt(next))) next++;
+    return next < json.length() && json.charAt(next) != ']';
   }
 
   private String normalizeBookText(String value) {
