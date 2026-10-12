@@ -197,7 +197,7 @@ public class HrEmployeeController {
     LocalDate joining=parseDate(body.get("joiningDate"),"Joining date");
     LocalDate probation=parseOptionalDate(body.get("probationEndDate"),"Probation end date");
     LocalDate exit=parseOptionalDate(body.get("exitDate"),"Exit date");
-    if(exit!=null && exit.isBefore(joining)) throw badRequest("Exit date cannot be before the joining date.");
+    validateEmploymentDates(joining,probation,exit);
     Long department=optionalLong(body.get("departmentId"));
     Long designation=optionalLong(body.get("designationId"));
     Long manager=optionalLong(body.get("managerEmployeeId"));
@@ -250,11 +250,10 @@ public class HrEmployeeController {
     LocalDate exit=body.containsKey("exitDate")
         ? parseOptionalDate(body.get("exitDate"),"Exit date")
         : (before.get("exit_date") instanceof Date existingExit ? existingExit.toLocalDate() : null);
-    if(exit!=null && exit.isBefore(joining)) throw badRequest("Exit date cannot be before the joining date.");
-    String status=body.get("employmentStatus")==null?String.valueOf(before.get("employment_status")):required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
-    if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status))
-      throw badRequest("Choose a supported employment status.");
-    if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
+    validateEmploymentDates(joining,probation,exit);
+    String previousStatus=String.valueOf(before.get("employment_status"));
+    String status=body.get("employmentStatus")==null?previousStatus:required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
+    validateEmploymentStatusTransition(previousStatus,status,exit);
     String notes=optionalText(body.get("notes"),1000);
     jdbc.update("""
       update hr_employee set display_name=?,email=?,phone_e164=?,department_id=?,designation_id=?,
@@ -282,14 +281,32 @@ public class HrEmployeeController {
         ? parseOptionalDate(body.get("exitDate"),"Exit date")
         : (before.get("exit_date") instanceof java.sql.Date existingExit ? existingExit.toLocalDate() : null);
     LocalDate joining=((java.sql.Date)before.get("joining_date")).toLocalDate();
-    if(exit!=null&&exit.isBefore(joining)) throw badRequest("Exit date cannot be before the joining date.");
-    if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
+    LocalDate probation=before.get("probation_end_date") instanceof java.sql.Date existingProbation ? existingProbation.toLocalDate() : null;
+    validateEmploymentDates(joining,probation,exit);
+    validateEmploymentStatusTransition(String.valueOf(before.get("employment_status")),status,exit);
     jdbc.update("update hr_employee set employment_status=?,exit_date=?,updated_by_staff_id=?,updated_at=now() where id=?",
       status,exit==null?null:Date.valueOf(exit),context.staffId(),id);
     Map<String,Object> after=employeeById(id);
     writeHistory(id,context,"EMPLOYMENT_STATUS_CHANGED",LocalDate.now(),before,after,optionalText(body.get("reason"),500));
     record(context,"/api/v1/hr/employees/"+id+"/status","Changed employee status to "+status);
     return after;
+  }
+
+  private void validateEmploymentDates(LocalDate joining,LocalDate probation,LocalDate exit) {
+    if(probation!=null && probation.isBefore(joining))
+      throw badRequest("Probation end date cannot be before the joining date.");
+    if(exit!=null && exit.isBefore(joining))
+      throw badRequest("Exit date cannot be before the joining date.");
+  }
+
+  private void validateEmploymentStatusTransition(String previousStatus,String nextStatus,LocalDate exit) {
+    if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(nextStatus))
+      throw badRequest("Choose a supported employment status.");
+    if("SEPARATED".equals(nextStatus) && exit==null)
+      throw badRequest("A separated employee must have an exit date.");
+    if("SEPARATED".equals(previousStatus) && !"SEPARATED".equals(nextStatus))
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "A separated employment record cannot be reactivated. Create a new employment record for a rehire.");
   }
 
   private void validateContactFields(String email,String phone) {
@@ -306,7 +323,7 @@ public class HrEmployeeController {
     Boolean valid=jdbc.queryForObject("""
       with recursive manager_chain(id,manager_employee_id) as (
         select id,manager_employee_id from hr_employee
-        where id=? and organization_id=? and employment_status not in ('SEPARATED','INACTIVE')
+        where id=? and organization_id=? and employment_status not in ('SEPARATED','INACTIVE','DRAFT')
         union
         select parent.id,parent.manager_employee_id
         from hr_employee parent
