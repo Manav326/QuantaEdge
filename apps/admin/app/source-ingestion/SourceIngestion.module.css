@@ -156,3 +156,8 @@
 .gapCard .gapError { color:#a43125; }
 .gapCard a { display:inline-block; margin-top:10px; color:#aa4828; font-size:11px; font-weight:800; text-decoration:underline; overflow-wrap:anywhere; }
 @media (max-width:760px) { .gapTop { flex-direction:column; } }
+
+.sourceRecordField{display:flex;flex-direction:column;gap:7px;min-width:0;font-size:12px;color:#697386;font-weight:750}
+.sourceRecordField>label{display:block;color:#697386;font-size:12px;font-weight:750}
+.sourceRecordField>input,.sourceRecordField>select{width:100%;min-width:0;border:1px solid #dce1e8;border-radius:9px;background:#fff;color:#1d2737;padding:10px 11px;font-size:13px;outline:none}
+.sourceRecordField>input:focus,.sourceRecordField>select:focus{border-color:#ec875d;box-shadow:0 0 0 3px #fce9df}
