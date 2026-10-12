@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 try:
-    import fitz
+    import pymupdf as fitz
 except ImportError:
     fitz = None
 
@@ -168,6 +168,116 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         self.assertEqual({"english"}, {record["language"] for record in records})
         self.assertTrue(all(Path(record["path"]).parent == books_dir for record in books))
         self.assertTrue(all("private-review" in Path(record["path"]).parts for record in splits))
+
+    def test_input_presence_accepts_six_english_books_and_rejects_incomplete_language_set(self):
+        books_dir = self.root / "books"
+        books_dir.mkdir()
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                path = books_dir / importer.book_filename(grade, subject, "english")
+                with fitz.open() as doc:
+                    doc.new_page()
+                    doc.save(path)
+        importer.validate_input_book_presence(books_dir, ("english",))
+        with self.assertRaisesRegex(FileNotFoundError, "Missing NCERT_Class_6_Maths_Hindi_BOOK.pdf"):
+            importer.validate_input_book_presence(books_dir, ("english", "hindi"))
+        missing = books_dir / importer.book_filename("8", "science", "english")
+        missing.unlink()
+        with self.assertRaisesRegex(FileNotFoundError, "NCERT_Class_8_Science_English_BOOK.pdf"):
+            importer.validate_input_book_presence(books_dir, ("english",))
+
+    def test_no_chapter_extracts_written_until_all_book_mappings_validate(self):
+        books_dir = self.root / "books"
+        books_dir.mkdir()
+        chapters_by_track = {}
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                chapters_by_track[(grade, subject)] = [{
+                    "chapter_id": int(grade) * 1000 + (1 if subject == "maths" else 2),
+                    "chapter_code": f"test-{grade}-{subject}",
+                    "chapter_name": f"Test chapter {grade} {subject}",
+                }]
+                path = books_dir / importer.book_filename(grade, subject, "english")
+                with fitz.open() as doc:
+                    doc.new_page()
+                    doc.save(path)
+
+        def fail_on_last_book(path, grade, subject, language, chapters):
+            if grade == "8" and subject == "science":
+                raise ValueError("test-only unknown chapter title")
+            chapter = chapters[0]
+            return [{
+                **chapter, "start_page": 1, "end_page": 1, "page_count": 1,
+                "chapter_order": 1, "mapping_note": "Test-only mapping",
+            }]
+
+        with patch.object(importer, "detect_chapter_ranges", side_effect=fail_on_last_book):
+            with self.assertRaisesRegex(ValueError, "test-only unknown chapter title"):
+                importer.create_import_plan(
+                    self.root, chapters_by_track, 50 * 1024 * 1024,
+                    books_dir=books_dir, languages=("english",),
+                )
+        output_dir = self.root / "private-review" / "ncert-book-splits"
+        self.assertFalse((output_dir / "class-6").exists())
+        self.assertFalse((output_dir / "class-7").exists())
+        self.assertFalse((output_dir / "class-8").exists())
+
+    def test_existing_chapter_extract_is_never_silently_overwritten(self):
+        books_dir = self.root / "books"
+        books_dir.mkdir()
+        chapters_by_track = {}
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                code = f"test-{grade}-{subject}"
+                chapters_by_track[(grade, subject)] = [{
+                    "chapter_id": int(grade) * 1000 + (1 if subject == "maths" else 2),
+                    "chapter_code": code, "chapter_name": f"Test chapter {grade} {subject}",
+                }]
+                path = books_dir / importer.book_filename(grade, subject, "english")
+                with fitz.open() as doc:
+                    page = doc.new_page()
+                    page.insert_text((50, 50), f"Book {grade} {subject}")
+                    doc.save(path)
+
+        output_dir = self.root / "private-review" / "ncert-book-splits"
+        target = output_dir / "class-6" / "maths" / "english" / importer.chapter_output_filename(
+            "6", "maths", "english", "test-6-maths"
+        )
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"preserve existing local output")
+        original = target.read_bytes()
+
+        def fake_detect(path, grade, subject, language, chapters):
+            chapter = chapters[0]
+            return [{
+                **chapter, "start_page": 1, "end_page": 1, "page_count": 1,
+                "chapter_order": 1, "mapping_note": "Test-only mapping",
+            }]
+
+        with patch.object(importer, "detect_chapter_ranges", side_effect=fake_detect):
+            with self.assertRaisesRegex(FileExistsError, "Nothing was overwritten"):
+                importer.create_import_plan(
+                    self.root, chapters_by_track, 50 * 1024 * 1024,
+                    books_dir=books_dir, languages=("english",),
+                )
+        self.assertEqual(original, target.read_bytes())
+        self.assertFalse((output_dir / "class-7").exists())
+        self.assertFalse((output_dir / "class-8").exists())
+
+    def test_report_record_sync_keeps_draft_ids_and_status(self):
+        row = {
+            "class_code": "6", "subject_code": "maths", "language": "english",
+            "scope": "CHAPTER_PDF", "chapter_code": "test", "chapter_id": 6001,
+            "sha256": "abc", "action": "PENDING", "path": "private/file.pdf",
+        }
+        report = {"files": [importer.make_report_record(row)]}
+        row.update({"asset_id": 123, "document_id": 456, "status": "DRAFT", "action": "CREATED_DRAFT"})
+        importer.sync_report_record(report, row)
+        self.assertEqual(1, len(report["files"]))
+        self.assertEqual(123, report["files"][0]["asset_id"])
+        self.assertEqual(456, report["files"][0]["document_id"])
+        self.assertEqual("DRAFT", report["files"][0]["status"])
+        self.assertNotIn("path", report["files"][0])
 
     def test_detects_chapter_openers_and_exact_ranges(self):
         path = self.make_book()
