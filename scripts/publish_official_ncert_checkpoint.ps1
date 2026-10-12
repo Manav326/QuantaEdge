@@ -10,6 +10,10 @@ param(
     # First run: create a 84-row review CSV and exit without calling the API.
     [switch]$PrepareReviewManifest,
 
+    # Publish all DRAFT assignments in this exact import checkpoint, without a separate CSV decision file.
+    # This is intentionally limited to the checkpoint's document IDs and does not approve unrelated drafts.
+    [switch]$PublishAllDrafts,
+
     # Required to make status changes. Without this switch, the script only preflights.
     [switch]$Apply
 )
@@ -237,45 +241,340 @@ if ($PrepareReviewManifest) {
     return
 }
 
-if (-not (Test-Path -LiteralPath $ReviewManifest -PathType Leaf)) {
-    throw "Review manifest not found: $ReviewManifest. First run with -PrepareReviewManifest."
-}
-$manifest = @(Import-Csv -LiteralPath $ReviewManifest)
-if ($manifest.Count -ne 84) {
-    throw "Review manifest must contain all 84 rows; found $($manifest.Count)."
-}
 $manifestById = @{}
-foreach ($item in $manifest) {
-    $id = [string]$item.document_id
-    if ($id -notmatch '^\d+$' -or $manifestById.ContainsKey($id)) {
-        throw "Review manifest has an invalid or duplicate document_id '$id'."
-    }
-    $manifestById[$id] = $item
+$manifest = @()
+if ($PrepareReviewManifest -and $PublishAllDrafts) {
+    throw 'Use either -PrepareReviewManifest or -PublishAllDrafts, not both.'
 }
+if ($PublishAllDrafts) {
+    # This mode implements the explicit request to publish every DRAFT in this import checkpoint.
+    # It does not assert the PDFs went through the dedicated source-ingestion review queue.
+    foreach ($target in $targets) {
+        $manifestById[[string]$target.document_id] = [PSCustomObject]@{
+            document_id = [string]$target.document_id
+            asset_id = [string]$target.asset_id
+            language = [string]$target.language
+            decision = 'APPROVED'
+            review_notes = 'Not individually marked reviewed. Publishing authorized in bulk by operator for this NCERT import checkpoint.'
+        }
+    }
+    $approved = @($targets)
+    $pending = @()
+    $rejected = @()
+} else {
+    if (-not (Test-Path -LiteralPath $ReviewManifest -PathType Leaf)) {
+        throw "Review manifest not found: $ReviewManifest. First run with -PrepareReviewManifest or explicitly use -PublishAllDrafts."
+    }
+    $manifest = @(Import-Csv -LiteralPath $ReviewManifest)
+    if ($manifest.Count -ne 84) {
+        throw "Review manifest must contain all 84 rows; found $($manifest.Count)."
+    }
+    foreach ($item in $manifest) {
+        $id = [string]$item.document_id
+        if ($id -notmatch '^\d+$baseUri = [Uri]$ApiUrl
+$isLocal = $baseUri.Host -in @('localhost','127.0.0.1','::1')
+if ($baseUri.Scheme -ne 'https' -and -not ($baseUri.Scheme -eq 'http' -and $isLocal)) {
+    throw 'Use HTTPS for a non-local API URL. HTTP is allowed only for localhost development.'
+}
+if (-not $Apply) {
+    Write-Host "Checkpoint verified: 84 NCERT resources."
+    Write-Host "Explicitly marked APPROVED: $($approved.Count)"
+    Write-Host "Still PENDING: $($pending.Count)"
+    Write-Host "Marked REJECTED: $($rejected.Count)"
+    Write-Host 'Dry run only. Read-only authentication and preflight requests will run; no publish/status-change requests will be sent.'
+}
+
+# ---------- Authenticate and verify the live API state ----------
+$initialMe = Invoke-QEApi -Path '/api/v1/auth/me'
+if ($null -eq $initialMe -or $initialMe.authenticated -ne $true) {
+    throw 'The staff session is not authenticated. No publish requests were sent.'
+}
+$permissions = @($initialMe.permissions | ForEach-Object { [string]$_ })
+if ([string]$initialMe.role -ne 'ADMIN' -and $permissions -notcontains 'CONTENT_PUBLISH') {
+    throw "Authenticated staff lacks CONTENT_PUBLISH (role=$($initialMe.role)). No documents were changed."
+}
+$staffId = [string]$initialMe.staffId
+Write-Host "Authenticated staff; CONTENT_PUBLISH verified. Staff ID: $staffId"
+Write-Host 'Publishing requires an explicit APPROVED decision in the review CSV. Asset status alone is not treated as proof of human review.' -ForegroundColor Yellow
+
+# Query one class/subject track at a time. The API caps results per query,
+# so a global list could otherwise omit an older target if the library is large.
+$liveById = @{}
+$trackKeys = @($targets | ForEach-Object {
+    "$($_.class_code)|$($_.subject_code)"
+} | Select-Object -Unique)
+$totalListed = 0
+foreach ($trackKey in $trackKeys) {
+    $separatorIndex = $trackKey.IndexOf('|')
+    if ($separatorIndex -lt 1) { throw "Invalid class/subject track key '$trackKey'." }
+    $classCode = [Uri]::EscapeDataString($trackKey.Substring(0, $separatorIndex))
+    $subjectCode = [Uri]::EscapeDataString($trackKey.Substring($separatorIndex + 1))
+    $queryPath = "/api/v1/admin/learning-documents?status=ALL&classCode=$classCode&subjectCode=$subjectCode"
+    $rawDocuments = Invoke-QEApi -Path $queryPath
+    $documentList = @($rawDocuments)
+    if ($documentList.Count -eq 1 -and $null -ne $documentList[0].items) {
+        $documentList = @($documentList[0].items)
+    } elseif ($documentList.Count -eq 1 -and $null -ne $documentList[0].documents) {
+        $documentList = @($documentList[0].documents)
+    }
+    $totalListed += $documentList.Count
+    foreach ($doc in $documentList) {
+        $docId = Get-QEField -Object $doc -Names @('document_id','documentId','id')
+        if ($null -ne $docId) { $liveById[[string]$docId] = $doc }
+    }
+}
+Write-Host "Admin API returned $totalListed track records; indexed $($liveById.Count) unique document IDs."
+
+$failures = New-Object 'System.Collections.Generic.List[string]'
+$actions = New-Object 'System.Collections.Generic.List[object]'
+$replacements = New-Object 'System.Collections.Generic.List[string]'
 foreach ($target in $targets) {
     $id = [string]$target.document_id
-    if (-not $manifestById.ContainsKey($id)) {
-        throw "Review manifest is missing checkpoint document #$id."
+    $manifestRow = $manifestById[$id]
+    $decision = ([string]$manifestRow.decision).Trim().ToUpperInvariant()
+    if (-not $PublishAllDrafts -and $decision -ne 'APPROVED') {
+        $actions.Add([ordered]@{
+            document_id = [long]$id
+            title = [string]$target.title
+            decision = $(if ($PublishAllDrafts) { 'OWNER_AUTHORIZED_BULK_PUBLISH' } else { $decision })
+            result = $(if ($decision -eq 'REJECTED') { 'NOT_PUBLISHED_REJECTED' } else { 'NOT_PUBLISHED_PENDING_REVIEW' })
+            error = $null
+        })
+        continue
     }
-    $item = $manifestById[$id]
-    foreach ($field in @('asset_id','class_code','subject_code','scope','title','sha256')) {
-        Assert-SameText -Actual ([string]$item.$field) -Expected ([string]$target.$field) -Label "Manifest $field for document #$id"
+    if (-not $liveById.ContainsKey($id)) {
+        $failures.Add("Document #$id was not returned by the live Admin API.")
+        continue
     }
-    if ((Convert-ToLanguageCode $item.language) -ne (Convert-ToLanguageCode $target.language)) {
-        throw "Manifest language does not match checkpoint for document #$id."
+    $doc = $liveById[$id]
+    $checks = @(
+        @{ actual=[string]$doc.pdf_asset_id; expected=[string]$target.asset_id; name='PDF asset ID' },
+        @{ actual=[string]$doc.class_code; expected=[string]$target.class_code; name='class code' },
+        @{ actual=[string]$doc.subject_code; expected=[string]$target.subject_code; name='subject code' },
+        @{ actual=[string]$doc.scope; expected=[string]$target.scope; name='scope' },
+        @{ actual=[string]$doc.title; expected=[string]$target.title; name='title' },
+        @{ actual=[string]$doc.sha256; expected=[string]$target.sha256; name='PDF SHA-256' }
+    )
+    foreach ($check in $checks) {
+        if (-not [string]::Equals($check.actual, $check.expected, [StringComparison]::OrdinalIgnoreCase)) {
+            $failures.Add("Document #$id $($check.name) mismatch: checkpoint='$($check.expected)', API='$($check.actual)'.")
+        }
     }
-    $decision = ([string]$item.decision).Trim().ToUpperInvariant()
-    if ($decision -notin @('PENDING','APPROVED','REJECTED')) {
-        throw "Document #$id has invalid decision '$($item.decision)'. Choose PENDING, APPROVED, or REJECTED."
+    if ((Convert-ToLanguageCode $doc.language) -ne (Convert-ToLanguageCode $target.language)) {
+        $failures.Add("Document #$id language does not match the checkpoint.")
+    }
+    if ([string]$doc.chapter_id -ne [string]$target.chapter_id -and
+        -not ([string]::IsNullOrWhiteSpace([string]$doc.chapter_id) -and [string]::IsNullOrWhiteSpace([string]$target.chapter_id))) {
+        $failures.Add("Document #$id chapter ID does not match the checkpoint.")
+    }
+    if ([string]$doc.book_part -ne [string]$target.book_part -and
+        -not ([string]::IsNullOrWhiteSpace([string]$doc.book_part) -and [string]::IsNullOrWhiteSpace([string]$target.book_part))) {
+        $failures.Add("Document #$id book part does not match the checkpoint.")
+    }
+    $status = ([string]$doc.status).ToUpperInvariant()
+    if ($status -notin @('DRAFT','PUBLISHED')) {
+        $failures.Add("Document #$id has unexpected live status '$status'.")
+        continue
+    }
+    if ($status -eq 'DRAFT') {
+        if ([string]$doc.asset_review_status -ne 'APPROVED') {
+            $failures.Add("Document #$id asset status is '$($doc.asset_review_status)', not APPROVED.")
+        }
+        if ([string]::IsNullOrWhiteSpace([string]$doc.source_title) -or
+            [string]::IsNullOrWhiteSpace([string]$doc.edition) -or
+            [string]::IsNullOrWhiteSpace([string]$doc.source_url) -or
+            -not ([string]$doc.source_url).StartsWith('https://', [StringComparison]::OrdinalIgnoreCase)) {
+            $failures.Add("Document #$id is missing source title, edition, or official HTTPS source URL.")
+        }
+        $start = 0; $end = 0; $pages = 0
+        [void][int]::TryParse([string]$doc.page_start, [ref]$start)
+        [void][int]::TryParse([string]$doc.page_end, [ref]$end)
+        [void][int]::TryParse([string]$doc.page_count, [ref]$pages)
+        if ($start -lt 1 -or $end -lt $start -or $end -gt $pages) {
+            $failures.Add("Document #$id has invalid page range $start-$end of $pages.")
+        }
+        if ([string]$doc.scope -eq 'CHAPTER_PDF' -and $doc.chapter_active -ne $true) {
+            $failures.Add("Document #$id chapter is inactive or missing.")
+        }
+        # List current versions that the API will archive when publishing this slot.
+        $oldVersions = @($liveById.Values | Where-Object {
+            [string]$_.status -eq 'PUBLISHED' -and
+            [string]$_.class_code -eq [string]$doc.class_code -and
+            [string]$_.subject_code -eq [string]$doc.subject_code -and
+            [string]$_.scope -eq [string]$doc.scope -and
+            (Convert-ToLanguageCode $_.language) -eq (Convert-ToLanguageCode $doc.language) -and
+            [string]$_.chapter_id -eq [string]$doc.chapter_id -and
+            (
+                $null -eq $doc.book_part -or [string]$_.book_part -eq [string]$doc.book_part -or
+                [string]::IsNullOrWhiteSpace([string]$_.book_part)
+            )
+        })
+        foreach ($old in $oldVersions) {
+            $replacements.Add("Publishing #$id will archive current document #$($old.document_id): $($old.title)")
+        }
+    }
+    $actions.Add([ordered]@{
+        document_id = [long]$id
+        asset_id = [long]$target.asset_id
+        class_code = [string]$target.class_code
+        subject_code = [string]$target.subject_code
+        language = [string]$target.language
+        scope = [string]$target.scope
+        chapter_code = [string]$target.chapter_code
+        title = [string]$target.title
+        decision = $decision
+        previous_status = $status
+        result = $(if ($status -eq 'PUBLISHED') { 'ALREADY_PUBLISHED' } else { 'READY_TO_PUBLISH' })
+        review_notes = [string]$manifestRow.review_notes
+        error = $null
+    })
+}
+
+$publishReportData = @{
+    started_at = (Get-Date).ToString('o')
+    finished_at = $null
+    import_checkpoint = $ImportReport
+    review_manifest = $(if ($PublishAllDrafts) { $null } else { (Resolve-Path -LiteralPath $ReviewManifest).Path })
+    publication_mode = $(if ($PublishAllDrafts) { 'OWNER_AUTHORIZED_ALL_DRAFTS' } else { 'REVIEW_MANIFEST' })
+    not_individually_reviewed_count = $(if ($PublishAllDrafts) { $targets.Count } else { 0 })
+    mode = $(if ($Apply) { 'apply' } else { 'dry_run' })
+    result = 'PREFLIGHT_RUNNING'
+    authenticated_staff_id = $staffId
+    checkpoint_resource_count = 84
+    approved_count = $(if ($PublishAllDrafts) { 0 } else { $approved.Count })
+    all_drafts_authorized_count = $(if ($PublishAllDrafts) { $approved.Count } else { 0 })
+    pending_count = $pending.Count
+    rejected_count = $rejected.Count
+    published_count = 0
+    already_published_count = 0
+    publish_actions_taken = 0
+    replacements = @()
+    actions = @()
+    failures = @()
+}
+if ($failures.Count -gt 0) {
+    $publishReportData.result = 'PREFLIGHT_FAILED'
+    $publishReportData.failures = $failures.ToArray()
+    $publishReportData.actions = $actions.ToArray()
+    $publishReportData.replacements = @($replacements.ToArray() | Select-Object -Unique)
+    $publishReportData.finished_at = (Get-Date).ToString('o')
+    Save-PublishReport $publishReportData
+    $failures | ForEach-Object { Write-Host " - $_" -ForegroundColor Red }
+    throw "Preflight failed with $($failures.Count) issue(s); nothing was published. Report: $PublishReport"
+}
+
+$todo = @($actions | Where-Object { $_.result -eq 'READY_TO_PUBLISH' })
+Write-Host "Preflight passed. $($approved.Count) approved; $($todo.Count) will be published; $($actions.Count - $todo.Count) are already published or withheld."
+if ($PublishAllDrafts) {
+    Write-Host 'BULK MODE: the operator has requested publication of every DRAFT in this checkpoint; the individual PDFs have not been marked human-reviewed by this script.' -ForegroundColor Yellow
+} else {
+    if ($pending.Count -gt 0) { Write-Host "$($pending.Count) resources remain PENDING and will not be published." -ForegroundColor Yellow }
+    if ($rejected.Count -gt 0) { Write-Host "$($rejected.Count) resources are REJECTED and will not be published." -ForegroundColor Yellow }
+}
+if ($replacements.Count -gt 0) {
+    Write-Host 'WARNING: Existing student-visible PDFs in matching slots will be archived by the API:' -ForegroundColor Yellow
+    @($replacements.ToArray() | Select-Object -Unique) | ForEach-Object { Write-Host " - $_" -ForegroundColor Yellow }
+}
+if (-not $Apply) {
+    $publishReportData.result = 'PREFLIGHT_OK_NO_WRITES'
+    $publishReportData.actions = $actions.ToArray()
+    $publishReportData.replacements = @($replacements.ToArray() | Select-Object -Unique)
+    $publishReportData.finished_at = (Get-Date).ToString('o')
+    Save-PublishReport $publishReportData
+    Write-Host "Dry run only. Nothing was published. Report: $PublishReport"
+    if ($PublishAllDrafts) {
+        Write-Host 'After reviewing the preflight report, rerun with -PublishAllDrafts -Apply to publish every DRAFT in this import checkpoint.'
+    } else {
+        Write-Host 'After reviewing the preflight report, rerun with -Apply to publish the manifest rows marked APPROVED.'
+    }
+    return
+}
+
+if ($todo.Count -eq 0) {
+    $publishReportData.result = 'COMPLETED'
+    $publishReportData.actions = $actions.ToArray()
+    $publishReportData.already_published_count = @($actions | Where-Object { $_.result -eq 'ALREADY_PUBLISHED' }).Count
+    $publishReportData.finished_at = (Get-Date).ToString('o')
+    Save-PublishReport $publishReportData
+    Write-Host "Nothing new to publish. Report: $PublishReport"
+    return
+}
+$confirmText = if ($PublishAllDrafts) { "PUBLISH $($todo.Count) NCERT DRAFT PDFs" } else { "PUBLISH $($todo.Count) REVIEWED NCERT PDFs" }
+$confirmation = Read-Host "Type exactly '$confirmText' to continue"
+if ($confirmation -cne $confirmText) {
+    throw 'Confirmation did not match. No publish requests were sent.'
+}
+
+Save-PublishReport $publishReportData
+foreach ($item in $actions) {
+    if ($item.result -eq 'ALREADY_PUBLISHED' -or $item.result -like 'NOT_PUBLISHED_*') {
+        if ($item.result -eq 'ALREADY_PUBLISHED') { $publishReportData.already_published_count++ }
+        continue
+    }
+    $id = [long]$item.document_id
+    try {
+        $response = Invoke-QEApi -Path "/api/v1/admin/learning-documents/$id/status" -Method 'PATCH' -Body @{ status = 'PUBLISHED' }
+        if ([string]$response.status -ne 'PUBLISHED') {
+            throw "API response status was '$($response.status)' instead of PUBLISHED."
+        }
+        $item.result = 'PUBLISHED'
+        $item.published_at_local = (Get-Date).ToString('o')
+        $publishReportData.published_count++
+        $publishReportData.publish_actions_taken++
+        $publishReportData.result = 'IN_PROGRESS'
+        $publishReportData.actions = $actions.ToArray()
+        $publishReportData.replacements = @($replacements.ToArray() | Select-Object -Unique)
+        Save-PublishReport $publishReportData
+        Write-Host "Published #$id — $($item.title)" -ForegroundColor Green
+    } catch {
+        $item.result = 'FAILED'
+        $item.error = $_.Exception.Message
+        $publishReportData.failures = @($publishReportData.failures) + @("Document #$id ($($item.title)): $($_.Exception.Message)")
+        $publishReportData.actions = $actions.ToArray()
+        $publishReportData.replacements = @($replacements.ToArray() | Select-Object -Unique)
+        $publishReportData.result = 'INCOMPLETE'
+        $publishReportData.finished_at = (Get-Date).ToString('o')
+        Save-PublishReport $publishReportData
+        throw "Stopped after a publish error on document #$id. Already completed results are saved; rerun after resolving the issue. Report: $PublishReport. Error: $($_.Exception.Message)"
     }
 }
-$approved = @($targets | Where-Object {
-    ([string]$manifestById[[string]$_.document_id].decision).Trim().ToUpperInvariant() -eq 'APPROVED'
-})
-$pending = @($manifest | Where-Object { ([string]$_.decision).Trim().ToUpperInvariant() -eq 'PENDING' })
-$rejected = @($manifest | Where-Object { ([string]$_.decision).Trim().ToUpperInvariant() -eq 'REJECTED' })
-if ($approved.Count -eq 0) {
-    throw 'No rows are marked APPROVED in the review manifest. Nothing to publish.'
+$publishReportData.result = 'COMPLETED'
+$publishReportData.already_published_count = @($actions | Where-Object { $_.result -eq 'ALREADY_PUBLISHED' }).Count
+$publishReportData.actions = $actions.ToArray()
+$publishReportData.finished_at = (Get-Date).ToString('o')
+Save-PublishReport $publishReportData
+Write-Host "Publishing complete: $($publishReportData.published_count) newly published, $($publishReportData.already_published_count) already published." -ForegroundColor Green
+Write-Host "Pending and rejected rows were left unpublished. Report: $PublishReport"
+ -or $manifestById.ContainsKey($id)) {
+            throw "Review manifest has an invalid or duplicate document_id '$id'."
+        }
+        $manifestById[$id] = $item
+    }
+    foreach ($target in $targets) {
+        $id = [string]$target.document_id
+        if (-not $manifestById.ContainsKey($id)) {
+            throw "Review manifest is missing checkpoint document #$id."
+        }
+        $item = $manifestById[$id]
+        foreach ($field in @('asset_id','class_code','subject_code','scope','title','sha256')) {
+            Assert-SameText -Actual ([string]$item.$field) -Expected ([string]$target.$field) -Label "Manifest $field for document #$id"
+        }
+        if ((Convert-ToLanguageCode $item.language) -ne (Convert-ToLanguageCode $target.language)) {
+            throw "Manifest language does not match checkpoint for document #$id."
+        }
+        $decision = ([string]$item.decision).Trim().ToUpperInvariant()
+        if ($decision -notin @('PENDING','APPROVED','REJECTED')) {
+            throw "Document #$id has invalid decision '$($item.decision)'. Choose PENDING, APPROVED, or REJECTED."
+        }
+    }
+    $approved = @($targets | Where-Object {
+        ([string]$manifestById[[string]$_.document_id].decision).Trim().ToUpperInvariant() -eq 'APPROVED'
+    })
+    $pending = @($manifest | Where-Object { ([string]$_.decision).Trim().ToUpperInvariant() -eq 'PENDING' })
+    $rejected = @($manifest | Where-Object { ([string]$_.decision).Trim().ToUpperInvariant() -eq 'REJECTED' })
+    if ($approved.Count -eq 0) {
+        throw 'No rows are marked APPROVED in the review manifest. Nothing to publish.'
+    }
 }
 
 $baseUri = [Uri]$ApiUrl
