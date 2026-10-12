@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Import complete official NCERT books, split their chapters locally, and stage both as DRAFTs.
 
-Put one complete PDF per Class 6-8 / Mathematics-Science / English-Hindi slot directly in the
-repository root. If Class 7 or Class 8 Mathematics is supplied as separate NCERT parts, put both
-part PDFs in the root using the PART_1 / PART_2 names listed by --help; the script creates a local
-combined reading copy for QuantaEdge's single complete-book slot and keeps both original PDFs
-unchanged. No chapter PDFs, CSV manifest, edition spreadsheet, or manually entered chapter map
-is needed.
+Put one complete PDF per Class 6-8 / Mathematics-Science / English-Hindi slot in the repository's
+books/ folder. If Class 7 or Class 8 Mathematics is supplied as separate NCERT parts, put both part
+PDFs in that same folder using the PART_1 / PART_2 names listed by --help; the script creates a
+local combined reading copy for QuantaEdge's single complete-book slot and keeps both original PDFs
+unchanged. No chapter PDFs, CSV manifest, edition spreadsheet, or manually entered chapter map is
+needed.
 
 The importer:
 - uses the live QuantaEdge curriculum to obtain canonical chapter IDs/codes;
@@ -720,8 +720,12 @@ def create_import_plan(
     root: Path,
     chapters_by_track: dict[tuple[str, str], list[dict[str, Any]]],
     max_bytes: int,
+    books_dir: Path | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Validate all 12 source books and prepare every chapter split before API writes."""
+    """Validate all 12 source books from books_dir and prepare splits under the work root."""
+    books_dir = (books_dir or root).expanduser().resolve()
+    if not books_dir.is_dir():
+        raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
     output_dir = root / "private-review" / "ncert-book-splits"
     records: list[dict[str, Any]] = []
     warnings: list[str] = []
@@ -732,7 +736,7 @@ def create_import_plan(
             for language in LANGUAGES:
                 name = book_filename(grade, subject, language)
                 try:
-                    source = prepare_source_book(root, grade, subject, language, output_dir)
+                    source = prepare_source_book(books_dir, grade, subject, language, output_dir)
                     path = Path(source["path"])
                     book = source.get("combined_meta") or inspect_book(path)
                 except FileNotFoundError as exc:
@@ -939,7 +943,18 @@ def upload_or_reuse_asset(
 def run(args: argparse.Namespace) -> int:
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
-        raise ValueError(f"Input root directory does not exist: {root}")
+        raise ValueError(f"Work/repository directory does not exist: {root}")
+    if args.books_dir:
+        books_dir = Path(args.books_dir).expanduser()
+        if not books_dir.is_absolute():
+            books_dir = root / books_dir
+        books_dir = books_dir.resolve()
+    else:
+        books_dir = (root / "books").resolve()
+    if not books_dir.is_dir():
+        raise FileNotFoundError(
+            f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
+        )
     base = args.api_url.rstrip("/")
     api_url_valid(base)
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
@@ -950,7 +965,7 @@ def run(args: argparse.Namespace) -> int:
     print(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
 
     chapters_by_track = read_chapters(base, cookie)
-    records, warnings = create_import_plan(root, chapters_by_track, max_bytes)
+    records, warnings = create_import_plan(root, chapters_by_track, max_bytes, books_dir=books_dir)
     tracks = {(row["class_code"], row["subject_code"]) for row in records}
     approved_assets = query_library_assets(base, cookie)
     hashes_by_slot, _assignment_by_slot_hash = query_assignments(base, cookie, tracks)
@@ -976,6 +991,7 @@ def run(args: argparse.Namespace) -> int:
         "result": "PREFLIGHT_OK" if not args.apply else "APPLY_IN_PROGRESS",
         "mode": "apply" if args.apply else "dry_run",
         "root": str(root),
+        "input_books_directory": str(books_dir),
         "api_url": base,
         "authenticated_role": role,
         "permissions_required": ["CONTENT_EDIT"],
@@ -1080,7 +1096,8 @@ def run(args: argparse.Namespace) -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--root", default=str(ROOT), help="Folder containing the 12 complete-book PDFs (default: repo root).")
+    parser.add_argument("--root", default=str(ROOT), help="Repository/work folder for generated splits and reports (default: repo root).")
+    parser.add_argument("--books-dir", default="", help="Folder containing the 12 source books (default: <root>/books). Relative paths are resolved from --root.")
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
