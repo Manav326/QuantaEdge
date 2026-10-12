@@ -233,6 +233,7 @@ if ($PrepareReviewManifest) {
     Write-Host "Review manifest created: $ReviewManifest" -ForegroundColor Green
     Write-Host 'Review every PDF, then set decision=APPROVED or REJECTED for each reviewed row. Leave unreviewed rows as PENDING.'
     Write-Host 'This step makes no API calls and publishes nothing.'
+    Write-Host 'Note: these imports used the general PDF upload path, not the Source Ingestion review queue; the CSV records the explicit reviewer decision for this publishing batch.' -ForegroundColor Yellow
     return
 }
 
@@ -301,6 +302,7 @@ if ([string]$initialMe.role -ne 'ADMIN' -and $permissions -notcontains 'CONTENT_
 }
 $staffId = [string]$initialMe.staffId
 Write-Host "Authenticated staff; CONTENT_PUBLISH verified. Staff ID: $staffId"
+Write-Host 'Publishing requires an explicit APPROVED decision in the review CSV. Asset status alone is not treated as proof of human review.' -ForegroundColor Yellow
 
 # Query one class/subject track at a time. The API caps results per query,
 # so a global list could otherwise omit an older target if the library is large.
@@ -310,9 +312,10 @@ $trackKeys = @($targets | ForEach-Object {
 } | Select-Object -Unique)
 $totalListed = 0
 foreach ($trackKey in $trackKeys) {
-    $parts = $trackKey.Split('|', 2)
-    $classCode = [Uri]::EscapeDataString($parts[0])
-    $subjectCode = [Uri]::EscapeDataString($parts[1])
+    $separatorIndex = $trackKey.IndexOf('|')
+    if ($separatorIndex -lt 1) { throw "Invalid class/subject track key '$trackKey'." }
+    $classCode = [Uri]::EscapeDataString($trackKey.Substring(0, $separatorIndex))
+    $subjectCode = [Uri]::EscapeDataString($trackKey.Substring($separatorIndex + 1))
     $queryPath = "/api/v1/admin/learning-documents?status=ALL&classCode=$classCode&subjectCode=$subjectCode"
     $rawDocuments = Invoke-QEApi -Path $queryPath
     $documentList = @($rawDocuments)
