@@ -21,6 +21,7 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 - Parent child management: http://localhost:3000/parent/children
 - Login entry: http://localhost:3000/login
 - Admin workspace: http://localhost:3001
+- People Operations (HRMS): http://localhost:3002
 - Curriculum API: http://localhost:8080/api/v1/curriculum
 - API health: http://localhost:8080/actuator/health
 
@@ -139,3 +140,9 @@ The app is not yet launch-ready. Remaining blockers include verified source/page
 ## CI
 
 GitHub Actions runs Spring Boot API verification and the reviewed-content import safety tests when relevant paths change. It builds the affected Next.js and API images. Main publishes immutable SHA-tagged images to GHCR; the deploy workflow is separate and manual.
+
+## People Operations (HRMS)
+
+The separate People portal is available locally at http://localhost:3002. It manages organisational employee records, departments and designations; it does not replace the technical staff-account manager inside Admin. HR endpoints use the dedicated `HR_EMPLOYEE_VIEW` and `HR_EMPLOYEE_MANAGE` permissions. An administrator can grant these permissions to a non-admin staff identity from the existing staff-permissions screen. The employee record does not automatically create a login or grant CMS permissions. See [docs/product/people-operations-architecture.md](docs/product/people-operations-architecture.md).
+
+The first HRMS migration introduces an organisation anchor, departments, designations, employment categories, employee records and employee history. Attendance, leave, teaching assignments and payroll are deliberately separate later phases.

@@ -84,6 +84,16 @@ services:
     depends_on:
       - api
 
+  people:
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER}/quantaedge-people:${QUANTAEDGE_IMAGE_TAG}
+    environment:
+      BACKEND_INTERNAL_URL: http://api:8080
+    ports:
+      - "${PEOPLE_PORT:-3002}:3000"
+    restart: unless-stopped
+    depends_on:
+      - api
+
 volumes:
   quantaedge_postgres:
   quantaedge_redis:
