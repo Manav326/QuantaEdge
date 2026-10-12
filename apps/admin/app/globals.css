@@ -876,3 +876,16 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button>span{display:grid;place-items:center;font-size:15px;line-height:1}
 .qe-admin-workspace-layout .qe-admin-mobile-menu-header>button:hover{border-color:#ffdfc4;background:#fff7f0;color:#9a3412}
 .qe-admin-workspace-layout .qe-admin-mobile-menu-header>button:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+
+
+/* Product-wide keyboard focus baseline for staff and content-management workflows. */
+:where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid #f97316 !important;
+  outline-offset: 3px;
+}
+@media (forced-colors: active) {
+  :where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 3px;
+  }
+}
