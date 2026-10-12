@@ -218,6 +218,9 @@ export default function TextbookLibraryPage() {
   const [intakeRows, setIntakeRows] = useState<any[]>([]);
   const [intakeRanges, setIntakeRanges] = useState<any[]>([]);
   const [rangeReviewNotes, setRangeReviewNotes] = useState('');
+  const [rangeDraftSourceTitle, setRangeDraftSourceTitle] = useState('');
+  const [rangeDraftSourceUrl, setRangeDraftSourceUrl] = useState('');
+  const [rangeDraftEdition, setRangeDraftEdition] = useState('');
   const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
   const [reviewNotes, setReviewNotes] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -807,6 +810,9 @@ export default function TextbookLibraryPage() {
                     setSelectedPdfId(String(item.pdf_asset_id));
                     setScope('CHAPTER_PDF');
                     setRangeReviewNotes(String(item.ranges_review_notes || ''));
+                    setRangeDraftSourceTitle('');
+                    setRangeDraftSourceUrl('');
+                    setRangeDraftEdition('');
                     setReviewAcknowledged(false);
                     setReviewNotes(String(item.review_notes || ''));
                     setError('');
@@ -832,6 +838,22 @@ export default function TextbookLibraryPage() {
                   setError(e instanceof Error ? e.message : 'Inventory scan failed.');
                 } finally { setBusy(false); }
               }}>Re-run analysis</button>
+              <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
+                setBusy(true); setError(''); setNotice('');
+                try {
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze-ocr', { method: 'POST' });
+                  const normalized = normalizeIntakeReport(result);
+                  setIntakeReport(normalized);
+                  await load();
+                  const warnings = result.reconciliation?.page_boundary_warnings || [];
+                  const partial = warnings.some((warning: any) => warning.type === 'OCR_PARTIAL' || warning.type === 'OCR_UNAVAILABLE');
+                  setNotice((partial ? 'OCR-assisted analysis was partial; check the page warnings and review remaining pages manually. '
+                    : 'OCR-assisted analysis completed or was not needed. ') +
+                    'Recognized text is only a candidate for inventory matching. Nothing was approved or published.');
+                } catch (e) {
+                  setError(e instanceof Error ? e.message : 'OCR-assisted analysis failed.');
+                } finally { setBusy(false); }
+              }}>Run OCR-assisted analysis</button>
             </div>
             <p>To correct the selected book's tags, edit the category, class, subject, language or part label in the form above, then save them here.</p>
             <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
@@ -971,6 +993,46 @@ export default function TextbookLibraryPage() {
                     } finally { setBusy(false); }
                   }}>Save reviewed page ranges</button>
                 {intakeReport.ranges_reviewed_at && <small>Ranges last saved for review: {String(intakeReport.ranges_reviewed_at)}. Saving ranges does not publish or approve student visibility.</small>}
+                {canEdit && <div className={styles.uploadBox}>
+                  <b>Create private draft resources from these saved ranges</b>
+                  <p>This uses only saved ranges. Confirm the printed source title, official HTTPS URL, and edition/session. Existing identical drafts are reused; conflicts with different page bounds are rejected.</p>
+                  <div className={styles.assignmentFields}>
+                    <label className={styles.field}>Printed source title
+                      <input value={rangeDraftSourceTitle} onChange={e => setRangeDraftSourceTitle(e.target.value)}
+                        placeholder="Title printed on the textbook" maxLength={300} />
+                    </label>
+                    <label className={styles.field}>Official HTTPS source URL
+                      <input type="url" value={rangeDraftSourceUrl} onChange={e => setRangeDraftSourceUrl(e.target.value)}
+                        placeholder="https://..." maxLength={2000} />
+                    </label>
+                    <label className={styles.field}>Edition / academic session
+                      <input value={rangeDraftEdition} onChange={e => setRangeDraftEdition(e.target.value)}
+                        placeholder="Verified edition or session" maxLength={160} />
+                    </label>
+                  </div>
+                  <button type="button" className={styles.primaryButton}
+                    disabled={busy || !intakeReport.ranges_reviewed_at
+                      || !Array.isArray(intakeReport.chapter_ranges) || intakeReport.chapter_ranges.length === 0
+                      || !rangeDraftSourceTitle.trim() || !rangeDraftSourceUrl.trim() || !rangeDraftEdition.trim()}
+                    onClick={async () => {
+                      setBusy(true); setError(''); setNotice('');
+                      try {
+                        const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/draft-resources', {
+                          method: 'POST',
+                          body: JSON.stringify({
+                            sourceTitle: rangeDraftSourceTitle.trim(),
+                            sourceUrl: rangeDraftSourceUrl.trim(),
+                            edition: rangeDraftEdition.trim(),
+                          }),
+                        });
+                        await load();
+                        setNotice('Draft creation complete: ' + Number(result.created_count || 0) + ' new chapter resource draft(s); '
+                          + Number(result.existing_count || 0) + ' identical active resource(s) reused. Nothing was published.');
+                      } catch (e) {
+                        setError(e instanceof Error ? e.message : 'Draft resources could not be created.');
+                      } finally { setBusy(false); }
+                    }}>Create drafts for all saved ranges</button>
+                </div>}
               </div>
               {intakeReport.status === 'REVIEWED' && <p><b>Human review recorded.</b> The source remains private and unpublished.</p>}
               <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>

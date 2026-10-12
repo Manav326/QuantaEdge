@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -50,15 +51,17 @@ public class SourceIngestionController {
   private final StaffAuditService staffAudit;
   private final SourceIngestionWorker worker;
   private final TextbookCacheService textbookCache;
+  private final PdfOcrService pdfOcrService;
 
   public SourceIngestionController(
       JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService staffAudit,
-      SourceIngestionWorker worker, TextbookCacheService textbookCache) {
+      SourceIngestionWorker worker, TextbookCacheService textbookCache, PdfOcrService pdfOcrService) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.worker = worker;
     this.textbookCache = textbookCache;
+    this.pdfOcrService = pdfOcrService;
   }
 
   /**
@@ -309,10 +312,162 @@ public class SourceIngestionController {
       """, assetId);
   }
 
+  /**
+   * Create one private learning_document draft per explicitly saved page range.
+   * Repeated requests reuse existing non-archived assignments for the same source/pages.
+   */
+  @PostMapping("/intake/{assetId}/draft-resources")
+  @Transactional
+  public Map<String, Object> createDraftResourcesFromReviewedRanges(
+      @PathVariable long assetId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    context = authorization.requirePermission(context, "CONTENT_EDIT");
+
+    String sourceTitle = requiredText(body.get("sourceTitle"), "sourceTitle", 300);
+    String sourceUrl = requiredText(body.get("sourceUrl"), "sourceUrl", 2000);
+    String edition = requiredText(body.get("edition"), "edition", 160);
+    URI sourceUri;
+    try {
+      sourceUri = URI.create(sourceUrl);
+    } catch (IllegalArgumentException ex) {
+      throw badRequest("Enter a valid official HTTPS source URL.");
+    }
+    if (!"https".equalsIgnoreCase(sourceUri.getScheme()) || sourceUri.getHost() == null
+        || sourceUri.getUserInfo() != null) {
+      throw badRequest("The official source URL must be a valid HTTPS URL without embedded credentials.");
+    }
+    if (isUnverifiedEdition(edition)) {
+      throw badRequest("Enter and verify the textbook edition or academic session before creating drafts.");
+    }
+
+    List<Map<String,Object>> intakeRows = jdbc.queryForList("""
+      select i.class_id,i.subject_id,i.language,i.ranges_reviewed_at,
+             jsonb_array_length(i.chapter_ranges) as range_count,
+             a.title as asset_title,a.page_count,a.review_status as asset_review_status,
+             c.code as class_code,s.code as subject_code
+      from learning_book_intake i
+      join learning_pdf_asset a on a.id=i.pdf_asset_id
+      join curriculum_class c on c.id=i.class_id
+      join curriculum_subject s on s.id=i.subject_id
+      where i.pdf_asset_id=?
+      """, assetId);
+    if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
+    Map<String,Object> intake = intakeRows.getFirst();
+    if (intake.get("ranges_reviewed_at") == null
+        || ((Number) intake.get("range_count")).intValue() < 1) {
+      throw badRequest("Save and review at least one chapter page range before creating draft resources.");
+    }
+    if (!"APPROVED".equals(String.valueOf(intake.get("asset_review_status")))) {
+      throw badRequest("The source PDF must be approved in the private PDF library before it can be attached to draft learning resources.");
+    }
+    List<Map<String,Object>> ranges = jdbc.queryForList("""
+      select r.chapter_id,coalesce(nullif(btrim(r.title),''),ch.display_name) as chapter_title,
+             r.page_start,r.page_end,ch.code as chapter_code,ch.display_name as curriculum_title
+      from learning_book_intake i
+      cross join lateral jsonb_to_recordset(i.chapter_ranges)
+        as r(chapter_id bigint,title text,page_start integer,page_end integer)
+      join curriculum_chapter ch on ch.id=r.chapter_id and ch.subject_id=i.subject_id and ch.active=true
+      where i.pdf_asset_id=?
+      order by r.page_start,r.chapter_id
+      """, assetId);
+    if (ranges.size() != ((Number) intake.get("range_count")).intValue()) {
+      throw badRequest("One or more saved chapter ranges no longer match active curriculum chapters. Reopen the book, correct the ranges, and save them again.");
+    }
+
+    int pageCount = ((Number) intake.get("page_count")).intValue();
+    long subjectId = ((Number) intake.get("subject_id")).longValue();
+    String language = String.valueOf(intake.get("language"));
+    String assetTitle = String.valueOf(intake.get("asset_title"));
+    List<Map<String,Object>> drafts = new ArrayList<>();
+    int createdCount = 0;
+    int existingCount = 0;
+    int previousEnd = 0;
+    java.util.Set<Long> seenChapters = new java.util.HashSet<>();
+    for (Map<String,Object> range : ranges) {
+      long chapterId = ((Number) range.get("chapter_id")).longValue();
+      int start = ((Number) range.get("page_start")).intValue();
+      int end = ((Number) range.get("page_end")).intValue();
+      if (!seenChapters.add(chapterId) || start < 1 || end < start || end > pageCount || start <= previousEnd) {
+        throw badRequest("Saved page ranges contain duplicate chapters, invalid page bounds, or overlaps. Correct the ranges before creating drafts.");
+      }
+      previousEnd = end;
+
+      List<Map<String,Object>> existingRows = jdbc.queryForList("""
+        select id as document_id,title,status,page_start,page_end
+        from learning_document
+        where pdf_asset_id=? and scope='CHAPTER_PDF' and chapter_id=? and language=?
+          and status<>'ARCHIVED'
+        order by id desc
+        """, assetId, chapterId, language);
+      if (!existingRows.isEmpty()) {
+        Map<String,Object> existing = existingRows.getFirst();
+        boolean sameRange = ((Number) existing.get("page_start")).intValue() == start
+            && ((Number) existing.get("page_end")).intValue() == end;
+        if (!sameRange) {
+          throw badRequest("An active resource already exists for chapter " + range.get("chapter_title")
+              + " from this PDF with different page bounds. Review or archive that resource before creating another.");
+        }
+        Map<String,Object> output = new LinkedHashMap<>(existing);
+        output.put("created", false);
+        drafts.add(output);
+        existingCount++;
+        continue;
+      }
+
+      String draftTitle = truncate(assetTitle + " — " + String.valueOf(range.get("chapter_title")), 240);
+      Long documentId = jdbc.queryForObject("""
+        insert into learning_document(
+          pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
+          page_start,page_end,status,version_no,created_by_staff_id
+        ) values(?,'CHAPTER_PDF',?,?,?,?,?,?,?,?,?,'DRAFT',1,?)
+        returning id
+        """, Long.class, assetId, subjectId, chapterId, draftTitle, sourceTitle,
+          sourceUrl, edition, language, start, end, context.staffId());
+      Map<String,Object> output = new LinkedHashMap<>();
+      output.put("document_id", documentId);
+      output.put("chapter_id", chapterId);
+      output.put("chapter_title", range.get("chapter_title"));
+      output.put("title", draftTitle);
+      output.put("status", "DRAFT");
+      output.put("page_start", start);
+      output.put("page_end", end);
+      output.put("created", true);
+      drafts.add(output);
+      createdCount++;
+    }
+
+    if (createdCount > 0) {
+      staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/draft-resources",
+          "Created " + createdCount + " private chapter resource draft(s) from explicitly reviewed page ranges; nothing was published.");
+    }
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("pdf_asset_id", assetId);
+    result.put("created_count", createdCount);
+    result.put("existing_count", existingCount);
+    result.put("drafts", drafts);
+    result.put("status", "DRAFT");
+    result.put("published", false);
+    return result;
+  }
+
   @PostMapping("/intake/{assetId}/analyze")
   public Map<String, Object> analyzeBookIntake(
       @PathVariable long assetId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return runBookIntakeAnalysis(assetId, context, false);
+  }
+
+  /** OCR-assisted analysis is an explicit admin action; extracted text remains a review candidate. */
+  @PostMapping("/intake/{assetId}/analyze-ocr")
+  public Map<String, Object> analyzeBookIntakeWithOcr(
+      @PathVariable long assetId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return runBookIntakeAnalysis(assetId, context, true);
+  }
+
+  private Map<String, Object> runBookIntakeAnalysis(
+      long assetId, AuthContext context, boolean useOcr) {
     context = requireReviewer(context);
     List<Map<String,Object>> intakeRows = jdbc.queryForList("""
       select i.*,a.pdf_bytes,a.page_count,a.sha256 from learning_book_intake i
@@ -355,14 +510,80 @@ public class SourceIngestionController {
       // book. Do not silently interpret missing curriculum titles as genuine omissions.
       int totalPages = pageTexts.size();
       int ocrThreshold = Math.max(3, (int) Math.ceil(totalPages * 0.60));
-      if (lowTextPageCount >= ocrThreshold) {
+      boolean dominantLowText = lowTextPageCount >= ocrThreshold;
+      if (dominantLowText && !useOcr) {
         warnings.add(Map.of(
             "type", "OCR_REQUIRED",
-            "message", "Most pages have little or no extractable text. This book likely needs OCR before automated inventory can be trusted; use the page preview and manually review chapter ranges.",
+            "message", "Most pages have little or no extractable text. Run OCR-assisted analysis or manually review chapter ranges before relying on missing-title results.",
             "low_text_page_count", lowTextPageCount,
             "total_pages", totalPages,
             "low_text_pages", lowTextPages,
             "page_list_truncated", lowTextPageCount > lowTextPages.size()));
+      }
+      if (useOcr && lowTextPageCount > 0) {
+        String bookLanguage = String.valueOf(intake.getOrDefault("language", "en"));
+        if (!pdfOcrService.supportsLanguage(bookLanguage)) {
+          warnings.add(Map.of(
+              "type", "OCR_UNAVAILABLE",
+              "message", "OCR is unavailable or its required language data is not installed. Use the manual page-range reviewer; no chapter boundaries were inferred.",
+              "language", bookLanguage));
+          if (dominantLowText) {
+            warnings.add(Map.of(
+                "type", "OCR_REQUIRED",
+                "message", "The book still needs OCR before text-based inventory results can be trusted.",
+                "low_text_page_count", lowTextPageCount,
+                "total_pages", totalPages,
+                "low_text_pages", lowTextPages,
+                "page_list_truncated", lowTextPageCount > lowTextPages.size()));
+          }
+        } else {
+          int attempted = 0;
+          int succeeded = 0;
+          int emptyResults = 0;
+          int failed = 0;
+          int pageLimit = PdfOcrService.MAX_PAGES_PER_ANALYSIS;
+          List<Integer> failedPageNumbers = new ArrayList<>();
+          for (int p = 0; p < pageTexts.size(); p++) {
+            long chars = pageTexts.get(p).codePoints().filter(Character::isLetterOrDigit).count();
+            if (chars >= 30 || attempted >= pageLimit) continue;
+            attempted++;
+            try {
+              String recognized = pdfOcrService.extractPageText(pdf, p, bookLanguage);
+              long recognizedChars = recognized.codePoints().filter(Character::isLetterOrDigit).count();
+              if (recognizedChars == 0) {
+                emptyResults++;
+                if (failedPageNumbers.size() < 50) failedPageNumbers.add(p + 1);
+              } else {
+                pageTexts.set(p, (pageTexts.get(p) + "\n" + recognized).strip());
+                succeeded++;
+              }
+            } catch (IOException ocrError) {
+              failed++;
+              if (failedPageNumbers.size() < 50) failedPageNumbers.add(p + 1);
+            }
+          }
+          int remaining = Math.max(0, lowTextPageCount - attempted);
+          if (failed == 0 && emptyResults == 0 && remaining == 0) {
+            warnings.add(Map.of(
+                "type", "OCR_COMPLETED",
+                "message", "OCR text was added to inventory analysis candidates. Verify chapter titles and page boundaries against the original PDF before saving ranges.",
+                "attempted_pages", attempted,
+                "recognized_pages", succeeded,
+                "language", bookLanguage));
+          } else {
+            warnings.add(Map.of(
+                "type", "OCR_PARTIAL",
+                "message", "OCR did not return usable text for every low-text page. Review the listed pages manually; extracted text is never an approval.",
+                "attempted_pages", attempted,
+                "recognized_pages", succeeded,
+                "empty_pages", emptyResults,
+                "failed_pages", failed,
+                "remaining_unprocessed_pages", remaining,
+                "sample_problem_pages", failedPageNumbers,
+                "page_limit", pageLimit,
+                "language", bookLanguage));
+          }
+        }
       }
       for (Map<String,Object> chapter : curriculum) {
         String title = String.valueOf(chapter.get("display_name"));

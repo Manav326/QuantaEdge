@@ -25,13 +25,26 @@ class SourceIngestionControllerTest {
   @Mock private StaffAuditService staffAudit;
   @Mock private SourceIngestionWorker worker;
   @Mock private TextbookCacheService textbookCache;
+  @Mock private PdfOcrService pdfOcrService;
 
   private SourceIngestionController controller;
   private final AuthContext reviewer = new AuthContext(1L, null, 9L, "CONTENT_REVIEWER", "Reviewer");
 
   @BeforeEach
   void setUp() {
-    controller = new SourceIngestionController(jdbc, authorization, staffAudit, worker, textbookCache);
+    controller = new SourceIngestionController(jdbc, authorization, staffAudit, worker, textbookCache, pdfOcrService);
+  }
+
+  @Test
+  void creatingDraftResourcesRequiresBothReviewAndEditPermissions() {
+    when(authorization.requirePermission(reviewer, "CONTENT_REVIEW")).thenReturn(reviewer);
+    when(authorization.requirePermission(reviewer, "CONTENT_EDIT"))
+        .thenThrow(new SecurityException("Permission required: CONTENT_EDIT"));
+
+    assertThrows(SecurityException.class, () -> controller.createDraftResourcesFromReviewedRanges(
+        44L, Map.of("sourceTitle", "Textbook", "sourceUrl", "https://scert.bihar.gov.in/textbooks",
+            "edition", "2026 edition"), reviewer));
+    verifyNoInteractions(jdbc, staffAudit, pdfOcrService);
   }
 
   @Test
