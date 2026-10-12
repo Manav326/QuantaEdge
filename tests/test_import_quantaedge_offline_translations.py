@@ -142,6 +142,45 @@ class PayloadTests(unittest.TestCase):
         self.assertIsNone(payload)
         self.assertTrue(any("prompt" in issue for issue in issues))
 
+    def test_optional_unmapped_fields_can_be_staged_for_review(self):
+        queue = [item for item in self.queue if item["field"] != "skill"]
+        payload, issues = module.question_payload(
+            self.row, self._index(queue), self.translations, allow_incomplete=True
+        )
+        self.assertIsNotNone(payload)
+        self.assertIn("missing skill translation", issues)
+        self.assertEqual(self.row["skill"], payload["skill"])
+
+    def test_missing_prompt_remains_blocked_in_review_draft_mode(self):
+        queue = [item for item in self.queue if item["field"] != "prompt"]
+        payload, issues = module.question_payload(
+            self.row, self._index(queue), self.translations, allow_incomplete=True
+        )
+        self.assertIsNone(payload)
+        self.assertIn("missing prompt translation", issues)
+
+    def test_numeric_mismatch_remains_blocked_in_review_draft_mode(self):
+        bad_translations = dict(
+            self.translations,
+            p6="Three identical items cost ₹28. What is the cost of one item?"
+        )
+        payload, issues = module.question_payload(
+            self.row, self._index(self.queue), bad_translations, allow_incomplete=True
+        )
+        self.assertIsNone(payload)
+        self.assertTrue(any(issue.startswith("numeric check failed") for issue in issues))
+
+    def test_mixed_script_translation_is_flagged_for_review(self):
+        mixed = dict(
+            self.translations,
+            p6="Three identical items की cost ₹27 है। What is the cost of one item?"
+        )
+        payload, issues = module.question_payload(
+            self.row, self._index(self.queue), mixed, allow_incomplete=True
+        )
+        self.assertIsNotNone(payload)
+        self.assertTrue(any("residual Devanagari in prompt" in issue for issue in issues))
+
     def test_repeated_source_prefers_matching_chapter(self):
         queue = self.queue + [{"tid":"other","field":"topic","source":"अनुपात",
             "context":{"class":"8","subject":"maths","chapter_code":"different"}}]
