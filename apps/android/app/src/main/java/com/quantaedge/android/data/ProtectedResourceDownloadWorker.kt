@@ -35,6 +35,10 @@ class ProtectedResourceDownloadWorker(appContext: Context, parameters: WorkerPar
             for (page in 1..count) {
                 if (isStopped) return Result.retry()
                 if (store.hasPage(documentId, page)) continue
+                // Re-check identity during long downloads: another account may sign in
+                // while this WorkManager process is still active.
+                val activeAccount = ApiClient.getObject("/api/v1/auth/me")
+                if (ResourceOwnerKey.fromAuth(activeAccount) != ownerKey) return Result.failure()
                 val bytes = ApiClient.getBytes("/api/v1/learning/documents/" + documentId + "/pages/" + page)
                 if (bytes.isEmpty() || bytes.size > MAX_PAGE_BYTES) return Result.failure()
                 store.savePage(documentId, page, bytes)

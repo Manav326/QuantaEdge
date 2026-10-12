@@ -441,19 +441,40 @@ fun QuantaEdgeApp() {
 
     fun toggleLanguage() {
         runTask {
-            language = if (language == "hi") "en" else "hi"
-            preferences.edit().putString("language", language).apply()
+            val nextLanguage = if (language == "hi") "en" else "hi"
+            language = nextLanguage
+            preferences.edit().putString("language", nextLanguage).apply()
             when (route) {
-                AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject)
+                AppRoute.SUBJECT_LESSONS -> {
+                    var classCode = studentProfile.textAny("class_code", "classCode")
+                    if (classCode.isBlank()) {
+                        val profile = ApiClient.getObject("/api/v1/students/me/profile")
+                        classCode = profile.textAny("class_code", "classCode")
+                    }
+                    if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली।")
+                    val path = "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
+                        "&subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
+                    lessons = ApiClient.getArray(path).objectItems()
+                }
                 AppRoute.LESSON -> {
-                    lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + language)
+                    lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + nextLanguage)
                 }
                 AppRoute.PRACTICE -> {
                     practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" +
-                        practice.longAny("sessionId", "session_id") + "?language=" + language)
+                        practice.longAny("sessionId", "session_id") + "?language=" + nextLanguage)
                 }
-                AppRoute.ASSESSMENTS -> openAssessments(currentSubject)
-                AppRoute.RESOURCES -> openResources(currentSubject)
+                AppRoute.ASSESSMENTS -> {
+                    val path = "/api/v1/learning/assessments?subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
+                    assessments = ApiClient.getObject(path).optJSONArray("items").objectItems()
+                }
+                AppRoute.RESOURCES -> {
+                    val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
+                    val online = ApiClient.getArray(path).objectItems()
+                    documents = (online + resourceStore.downloadedDocuments())
+                        .distinctBy { it.optLongAny("document_id", "id") }
+                        .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
+                            it.textAny("subject_code", "subjectCode") == currentSubject }
+                }
                 else -> Unit
             }
         }
