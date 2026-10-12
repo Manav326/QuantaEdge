@@ -104,7 +104,9 @@ public class LearningClassController {
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
-             cs.host_staff_id,host.display_name as host_staff_name,cs.created_at,cs.updated_at,
+             cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
+             assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
+             cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from learning_class_attendance ca where ca.session_id=cs.id) as attendee_count,
@@ -112,6 +114,9 @@ public class LearningClassController {
       from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
       join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=cs.chapter_id
       left join staff_account host on host.id=cs.host_staff_id
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee assigned on assigned.id=ta.employee_id
+      left join hr_academic_period ap on ap.id=ta.academic_period_id
       where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or cs.status=?)
       order by cs.starts_at desc,cs.id desc limit ? offset ?
       """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
@@ -149,6 +154,25 @@ public class LearningClassController {
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     if (chapterId != null) validateChapter(chapterId, subjectId, false);
     Long hostStaffId = optionalLong(body.get("hostStaffId"), "hostStaffId");
+    Long teachingAssignmentId = optionalLong(body.get("teachingAssignmentId"), "teachingAssignmentId");
+    if (teachingAssignmentId != null) {
+      List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
+        select a.id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
+        from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id where a.id=?
+        """, teachingAssignmentId);
+      if (assignmentRows.isEmpty()) throw badRequest("Choose a valid approved teaching assignment.");
+      Map<String,Object> assignment = assignmentRows.getFirst();
+      if (!"APPROVED".equals(assignment.get("status"))) throw badRequest("Live classes can only use approved teaching assignments.");
+      if (((Number)assignment.get("subject_id")).longValue() != subjectId) throw badRequest("The teaching assignment must match the selected class and subject.");
+      java.time.LocalDate sessionDate = startsAt.toLocalDate();
+      if (sessionDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
+          || sessionDate.isAfter(((java.sql.Date)assignment.get("effective_end")).toLocalDate()))
+        throw badRequest("The teaching assignment must be effective on the live class date.");
+      Long linkedStaffId = assignment.get("linked_staff_account_id") instanceof Number n ? n.longValue() : null;
+      if (hostStaffId != null && (linkedStaffId == null || !linkedStaffId.equals(hostStaffId)))
+        throw badRequest("The selected host must be the staff account explicitly linked to the assigned employee.");
+      if (hostStaffId == null && linkedStaffId != null) hostStaffId = linkedStaffId;
+    }
     if (hostStaffId != null) {
       Long hostCount = jdbc.queryForObject(
           "select count(*) from staff_account where id=? and active=true", Long.class, hostStaffId);
@@ -157,10 +181,10 @@ public class LearningClassController {
 
     Long id = jdbc.queryForObject("""
       insert into learning_class_session(
-        title,description,subject_id,chapter_id,provider,private_join_url,starts_at,ends_at,
+        title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,starts_at,ends_at,
         status,host_staff_id,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,?, 'SCHEDULED',?,?) returning id
-      """, Long.class, title, nullable(description), subjectId, chapterId, provider, joinUrl,
+      ) values(?,?,?,?,?,?,?,?,?, 'SCHEDULED',?,?) returning id
+      """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl,
         startsAt, endsAt, hostStaffId, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + id + "/created",
         "Scheduled live class #" + id + " for class " + classCode + " / subject " + subjectCode + ".");
@@ -618,7 +642,9 @@ public class LearningClassController {
   private Map<String, Object> adminSessionById(long sessionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
-             cs.host_staff_id,host.display_name as host_staff_name,cs.created_at,cs.updated_at,
+             cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
+             assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
+             cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
@@ -627,6 +653,9 @@ public class LearningClassController {
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       left join staff_account host on host.id=cs.host_staff_id
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee assigned on assigned.id=ta.employee_id
+      left join hr_academic_period ap on ap.id=ta.academic_period_id
       where cs.id=?
       """, sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
