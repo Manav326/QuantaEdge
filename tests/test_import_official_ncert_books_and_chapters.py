@@ -48,6 +48,27 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             doc.save(path)
         return path
 
+    def test_dedupes_chapters_repeated_for_each_lesson(self):
+        rows = [
+            {"class_code": "6", "subject_code": "maths", "chapter_id": 601,
+             "chapter_code": "patterns-in-mathematics", "chapter_name": "गणित में पैटर्न",
+             "chapter_sort_order": 1, "chapter_active": True, "lesson_id": 1},
+            {"class_code": "6", "subject_code": "maths", "chapter_id": 601,
+             "chapter_code": "patterns-in-mathematics", "chapter_name": "गणित में पैटर्न",
+             "chapter_sort_order": 1, "chapter_active": True, "lesson_id": 2},
+            {"class_code": "6", "subject_code": "maths", "chapter_id": 602,
+             "chapter_code": "lines-and-angles", "chapter_name": "रेखाएँ और कोण",
+             "chapter_sort_order": 2, "chapter_active": True, "lesson_id": 3},
+            {"class_code": "6", "subject_code": "science", "chapter_id": 603,
+             "chapter_code": "not-maths", "chapter_name": "Wrong track",
+             "chapter_sort_order": 1, "chapter_active": True},
+            {"class_code": "6", "subject_code": "maths", "chapter_id": 604,
+             "chapter_code": "inactive", "chapter_name": "Inactive chapter",
+             "chapter_sort_order": 3, "chapter_active": False},
+        ]
+        result = importer.dedupe_live_chapters(rows, "6", "maths")
+        self.assertEqual([601, 602], [row["chapter_id"] for row in result])
+
     def test_filename_slots_are_stable(self):
         self.assertEqual(
             "NCERT_Class_6_Maths_English_BOOK.pdf",
