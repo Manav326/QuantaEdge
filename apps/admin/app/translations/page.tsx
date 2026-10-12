@@ -83,6 +83,10 @@ async function api<T = any>(url: string, init: RequestInit = {}): Promise<T> {
   return body as T;
 }
 function rowKey(row: Row) { return row.entity_type + ':' + (row.translation_id == null ? 'source:' + row.entity_id + ':' + row.language : row.translation_id); }
+
+function hasQualityWarnings(row: Row) {
+  return /HUMAN REVIEW REQUIRED|PUBLISHED WITH QUALITY WARNINGS/i.test(row.quality_notes || '');
+}
 function contextLabel(row: Row) {
   return [
     row.class_code ? 'Class ' + row.class_code : '',
@@ -331,6 +335,7 @@ export default function TranslationsPage() {
               <span className={styles.rowMeta}>{row.translation_id == null
                 ? '#' + row.entity_id + ' · Source · no translation yet'
                 : '#' + row.entity_id + ' · v' + row.version_no + ' · ' + (row.translation_method === 'AI' ? 'AI draft' : 'Human edited')}</span>
+              {hasQualityWarnings(row) && <span className={styles.qualityFlag}>QUALITY WARNINGS</span>}
               {row.is_current_revision === false && <span className={styles.staleFlag}>Source has changed</span>}
             </button>)}
           </div>
@@ -348,6 +353,7 @@ export default function TranslationsPage() {
               <span className={badgeClass(selected.translation_status)}>{selected.translation_status.replaceAll('_', ' ')}</span>
             </div>
             {selected.is_current_revision === false && <div className={styles.error}>This translation targets an older source revision. It cannot be approved or published; regenerate it for the current source.</div>}
+            {hasQualityWarnings(selected) && <div className={styles.qualityWarning}><strong>Quality warning flag</strong> This translation has known quality issues and is published or queued for publication with warnings. Keep the reviewer notes and schedule a correction before treating it as fully verified.</div>}
             <div className={styles.revisionMeta}><span><b>Source revision</b><code>{selected.source_hash}</code></span><span><b>Model / method</b><code>{selected.model_name || selected.translation_method || 'Imported'}</code></span></div>
             <div className={styles.jsonGrid}>
               <label><span>Original source (read-only)</span><textarea readOnly value={pretty(selected.source_content_text)} spellCheck={false} /></label>
