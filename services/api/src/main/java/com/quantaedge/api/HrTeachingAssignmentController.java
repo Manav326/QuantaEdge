@@ -143,6 +143,14 @@ public class HrTeachingAssignmentController {
     if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("Decision must be APPROVED or REJECTED.");
     String reason=required(body.get("reason"),1000,"Decision reason");
     long orgId=((Number)assignment.get("organization_id")).longValue(),subjectId=((Number)assignment.get("subject_id")).longValue(),periodId=((Number)assignment.get("academic_period_id")).longValue();
+    if("APPROVED".equals(decision)){
+      Map<String,Object> employee=employee(((Number)assignment.get("employee_id")).longValue());
+      if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(employee.get("employment_status"))))
+        throw conflict("The assigned employee is no longer eligible for teaching assignments.");
+      Map<String,Object> period=periodById(periodId);
+      if(List.of("CLOSED","CANCELLED").contains(String.valueOf(period.get("status"))))
+        throw conflict("This academic period is closed or cancelled.");
+    }
     // Serialize approvals for a subject so two reviewers cannot approve overlapping assignments concurrently.
     jdbc.queryForObject("select id from curriculum_subject where id=? for update",Long.class,subjectId);
     String before=snapshot(id);
