@@ -3,6 +3,7 @@
 import AdminSidebar from '../components/AdminSidebar';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Resources.module.css';
+import PremiumPagination from '../components/PremiumPagination';
 
 type PdfAsset = {
   pdf_asset_id: number;
@@ -136,14 +137,36 @@ function MultiSelectFilter({
   selected: string[];
   onChange: (values: string[]) => void;
 }) {
+  const [open, setOpen] = useState(false);
+  const filterRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeWhenOutside = (event: MouseEvent | TouchEvent) => {
+      if (event.target instanceof Node && !filterRef.current?.contains(event.target)) setOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('mousedown', closeWhenOutside);
+    document.addEventListener('touchstart', closeWhenOutside);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeWhenOutside);
+      document.removeEventListener('touchstart', closeWhenOutside);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [open]);
+
   return (
-    <details className={styles.multiFilter}>
-      <summary className={styles.filterTrigger}>
+    <div ref={filterRef} className={styles.multiFilter + (open ? ' ' + styles.multiFilterOpen : '')}>
+      <button type="button" className={styles.filterTrigger} aria-haspopup="true" aria-expanded={open}
+        onClick={() => setOpen(value => !value)}>
         <span>{label}</span>
         <strong>{selected.length === 0 ? 'All' : selected.length + ' selected'}</strong>
-        <span className={styles.filterChevron} aria-hidden="true">▾</span>
-      </summary>
-      <div className={styles.filterMenu}>
+        <span className={styles.filterChevron} aria-hidden="true">{open ? '▴' : '▾'}</span>
+      </button>
+      {open && <div className={styles.filterMenu} role="group" aria-label={label + ' filter options'}>
         <div className={styles.filterMenuActions}>
           <button type="button" onClick={() => onChange(options.map(option => option.value))}>Select all</button>
           <button type="button" onClick={() => onChange([])}>Clear filter</button>
@@ -165,8 +188,8 @@ function MultiSelectFilter({
               <small>{option.count}</small>
             </label>
           ))}
-      </div>
-    </details>
+      </div>}
+    </div>
   );
 }
 
@@ -201,12 +224,12 @@ export default function TextbookLibraryPage() {
   const [libraryQuery, setLibraryQuery] = useState('');
   const [libraryPage, setLibraryPage] = useState(0);
   const [libraryTotal, setLibraryTotal] = useState(0);
-  const libraryPageSize = 25;
+  const [libraryPageSize, setLibraryPageSize] = useState(10);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [assignmentPage, setAssignmentPage] = useState(0);
   const [assignmentTotal, setAssignmentTotal] = useState(0);
-  const assignmentPageSize = 25;
+  const [assignmentPageSize, setAssignmentPageSize] = useState(10);
   const [assignmentFacets, setAssignmentFacets] = useState<Record<string, Record<string, number>>>({});
   const [selectedPdfId, setSelectedPdfId] = useState('');
   const [pdfTitle, setPdfTitle] = useState('');
@@ -221,7 +244,7 @@ export default function TextbookLibraryPage() {
   const [intakeRows, setIntakeRows] = useState<any[]>([]);
   const [intakePage, setIntakePage] = useState(0);
   const [intakeTotal, setIntakeTotal] = useState(0);
-  const intakePageSize = 10;
+  const [intakePageSize, setIntakePageSize] = useState(10);
   const [intakeSummary, setIntakeSummary] = useState<Record<string, number>>({});
   const [intakeRanges, setIntakeRanges] = useState<any[]>([]);
   const [rangeReviewNotes, setRangeReviewNotes] = useState('');
@@ -564,7 +587,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, intakePage,
+  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, assignmentPageSize, intakePage, intakePageSize,
       viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
@@ -590,7 +613,7 @@ export default function TextbookLibraryPage() {
       if (active) setError(e instanceof Error ? e.message : 'The stored PDF library could not be loaded.');
     });
     return () => { active = false; };
-  }, [canEdit, libraryPage, libraryQuery]);
+  }, [canEdit, libraryPage, libraryPageSize, libraryQuery]);
 
   useEffect(() => {
     if (!tracks.length) return;
@@ -748,6 +771,67 @@ export default function TextbookLibraryPage() {
       {error && <div className={styles.alertError} role="alert">{error}</div>}
       {notice && <div className={styles.alertSuccess} role="status">{notice}</div>}
 
+      <section className={styles.panel + " " + styles.governancePanel}>
+        <div className={styles.governanceHeader}>
+          <div className={styles.sectionHeading}>
+            <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Find, filter, and manage the textbook placements available to students. Counts stay accurate across the full matching inventory.</p></div>
+          </div>
+          <div className={styles.governanceFilterArea}>
+            <div className={styles.governanceFilterIntro}><span>REFINE INVENTORY</span><small>Combine filters to narrow the assignment list.</small></div>
+            <div className={styles.filterBar}>
+              <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
+              <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
+            </div>
+          </div>
+        </div>
+        <div className={styles.resultSummary}>
+          <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
+          <div className={styles.resultBreakdown}>
+            <span><b>{Number(assignmentFacets.status?.PUBLISHED || 0)}</b> Published</span>
+            <span><b>{Number(assignmentFacets.status?.DRAFT || 0)}</b> Drafts</span>
+            <span><b>{Number(assignmentFacets.status?.ARCHIVED || 0)}</b> Archived</span>
+          </div>
+          <button type="button" className={styles.resetFilters} disabled={activeFilterCount === 0} onClick={() => {
+            setAssignmentPage(0);
+            setViewClassCodes([]);
+            setViewSubjectCodes([]);
+            setViewStatuses([]);
+            setViewLanguages([]);
+            setViewScopes([]);
+          }}>Reset filters</button>
+        </div>
+        {loading ? <p className={styles.empty}>Loading resource assignments…</p> : visibleAssignments.length === 0 ? <div className={styles.empty}><b>No assignments match these filters</b><span>Clear or adjust the filters to inspect the matching resources.</span></div> :
+          <div className={styles.assignmentList}>
+            {visibleAssignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
+              <div className={styles.assignmentIcon}>{row.scope === 'SUBJECT_BOOK' ? '▤' : '▧'}</div>
+              <div className={styles.assignmentBody}>
+                <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{row.status}</span></div>
+                <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · {row.language === 'en' ? 'English' : 'Hindi'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
+                <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
+                <small>{row.source_url || 'Official source URL not set'}</small>
+                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
+              </div>
+              <div className={styles.rowActions}>
+                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>Preview</button>
+                {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
+                  <button type="button" className={styles.publishButton}
+                    disabled={busy || (row.scope === 'CHAPTER_PDF' && row.chapter_active !== true)}
+                    title={row.scope === 'CHAPTER_PDF' && row.chapter_active !== true ? 'Reactivate this curriculum chapter first.' : 'Publish this resource for eligible students.'}
+                    onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
+                {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
+                {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}
+                {row.status === 'DRAFT' && !canPublish && <small className={styles.roleHint}>Awaiting a publisher</small>}
+              </div>
+            </article>)}
+          </div>}
+        <PremiumPagination page={assignmentPage} total={assignmentTotal} pageSize={assignmentPageSize}
+          onPageChange={setAssignmentPage} onPageSizeChange={size => { setAssignmentPageSize(size); setAssignmentPage(0); }}
+          itemLabel="assignments" loading={loading} />
+      </section>
+
       {previewAssignment && <div className={styles.previewBackdrop} role="presentation" onMouseDown={event => {
         if (event.target === event.currentTarget) closePdfPreview();
       }}>
@@ -799,7 +883,7 @@ export default function TextbookLibraryPage() {
         </section>
       </div>}
 
-      {canEdit && <section className={styles.panel}>
+      {canEdit && <section className={styles.panel + " " + styles.workflowStep}>
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
           <label className={styles.field}>Existing PDF library
@@ -817,11 +901,9 @@ export default function TextbookLibraryPage() {
               </option>)}
             </select>
             <small>{libraryTotal ? 'Showing ' + (libraryTotal===0?0:libraryPage*libraryPageSize+1) + '–' + Math.min(libraryTotal,(libraryPage+1)*libraryPageSize) + ' of ' + libraryTotal + ' matching stored PDFs.' : 'No PDFs match this search. Upload a source PDF or change the search text.'}</small>
-            <div style={{display:'flex',gap:8,alignItems:'center',marginTop:8}}>
-              <button type="button" className={styles.secondaryButton} disabled={libraryPage===0} onClick={()=>setLibraryPage(value=>Math.max(0,value-1))}>← Previous</button>
-              <span style={{fontSize:12}}>Page {libraryTotal===0?0:libraryPage+1} of {Math.max(1,Math.ceil(libraryTotal/libraryPageSize))}</span>
-              <button type="button" className={styles.secondaryButton} disabled={(libraryPage+1)*libraryPageSize>=libraryTotal} onClick={()=>setLibraryPage(value=>value+1)}>Next →</button>
-            </div>
+            <PremiumPagination page={libraryPage} total={libraryTotal} pageSize={libraryPageSize}
+              onPageChange={setLibraryPage} onPageSizeChange={size => { setLibraryPageSize(size); setLibraryPage(0); }}
+              itemLabel="stored PDFs" loading={loading} />
           </label>
           {canReview && <section className={styles.uploadBox}>
             <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>
@@ -857,14 +939,9 @@ export default function TextbookLibraryPage() {
                   }}>Open review</button>
                 </div>)}
               </div>}
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,marginTop:12,flexWrap:'wrap'}}>
-              <small>Showing {intakeTotal===0?0:intakePage*intakePageSize+1}–{Math.min(intakeTotal,(intakePage+1)*intakePageSize)} of {intakeTotal}</small>
-              <div style={{display:'flex',gap:8,alignItems:'center'}}>
-                <button type="button" className={styles.secondaryButton} disabled={intakePage===0||loading} onClick={()=>setIntakePage(value=>Math.max(0,value-1))}>← Previous</button>
-                <span>Page {intakeTotal===0?0:intakePage+1} of {Math.max(1,Math.ceil(intakeTotal/intakePageSize))}</span>
-                <button type="button" className={styles.secondaryButton} disabled={(intakePage+1)*intakePageSize>=intakeTotal||loading} onClick={()=>setIntakePage(value=>value+1)}>Next →</button>
-              </div>
-            </div>
+            <PremiumPagination page={intakePage} total={intakeTotal} pageSize={intakePageSize}
+              onPageChange={setIntakePage} onPageSizeChange={size => { setIntakePageSize(size); setIntakePage(0); }}
+              itemLabel="intake records" loading={loading} />
           </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>
@@ -1170,7 +1247,7 @@ export default function TextbookLibraryPage() {
         </div>}
       </section>}
 
-      {canEdit && <section className={styles.panel}>
+      {canEdit && <section className={styles.panel + " " + styles.workflowStep}>
         <div className={styles.sectionHeading}><div><span>STEP 02</span><h2>Attach PDF to a book or chapter</h2><p>Subject books appear at subject level. Chapter PDFs appear with the matching chapter in the student library.</p></div><span className={styles.stepIcon}>02</span></div>
         <div className={styles.assignmentFields}>
           <label className={styles.field}>Class
@@ -1229,66 +1306,7 @@ export default function TextbookLibraryPage() {
         </div>
       </section>}
 
-      <section className={styles.panel}>
-        <div className={styles.sectionHeading}>
-          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Filter by class, subject, status, language, and resource type. Counts reflect matching records while the list loads one page at a time.</p></div>
-          <div className={styles.filterBar}>
-            <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
-            <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
-            <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
-            <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
-            <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
-          </div>
-        </div>
-        <div className={styles.resultSummary}>
-          <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
-          <div className={styles.resultBreakdown}>
-            <span><b>{Number(assignmentFacets.status?.PUBLISHED || 0)}</b> Published</span>
-            <span><b>{Number(assignmentFacets.status?.DRAFT || 0)}</b> Drafts</span>
-            <span><b>{Number(assignmentFacets.status?.ARCHIVED || 0)}</b> Archived</span>
-          </div>
-          <button type="button" className={styles.resetFilters} disabled={activeFilterCount === 0} onClick={() => {
-            setAssignmentPage(0);
-            setViewClassCodes([]);
-            setViewSubjectCodes([]);
-            setViewStatuses([]);
-            setViewLanguages([]);
-            setViewScopes([]);
-          }}>Reset filters</button>
-        </div>
-        {loading ? <p className={styles.empty}>Loading resource assignments…</p> : visibleAssignments.length === 0 ? <div className={styles.empty}><b>No assignments match these filters</b><span>Clear or adjust the filters to inspect the matching resources.</span></div> :
-          <div className={styles.assignmentList}>
-            {visibleAssignments.map(row => <article key={row.document_id} className={styles.assignmentCard}>
-              <div className={styles.assignmentIcon}>{row.scope === 'SUBJECT_BOOK' ? '▤' : '▧'}</div>
-              <div className={styles.assignmentBody}>
-                <div className={styles.assignmentTitle}><h3>{row.title}</h3><span className={styles['status' + row.status]}>{row.status}</span></div>
-                <p>{row.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : 'Chapter PDF'} · {row.language === 'en' ? 'English' : 'Hindi'} · Class {row.class_code} · {row.subject_code} {row.chapter_name ? '· ' + row.chapter_name : ''}</p>
-                <small>{row.original_filename} · pages {row.page_start}–{row.page_end} · {row.source_title || 'Source title not set'} · {row.edition || 'Edition not set'}</small>
-                <small>{row.source_url || 'Official source URL not set'}</small>
-                {row.scope === 'CHAPTER_PDF' && row.chapter_active !== true && <small className={styles.publishHint}>This curriculum chapter is inactive. Reactivate it before publishing its PDF.</small>}
-              </div>
-              <div className={styles.rowActions}>
-                <button type="button" className={styles.secondaryButton} disabled={row.asset_review_status != null && row.asset_review_status !== 'APPROVED'} onClick={() => openPdfPreview(row.document_id)}>Preview</button>
-                {row.status !== 'PUBLISHED' && row.status !== 'ARCHIVED' && canPublish &&
-                  <button type="button" className={styles.publishButton}
-                    disabled={busy || (row.scope === 'CHAPTER_PDF' && row.chapter_active !== true)}
-                    title={row.scope === 'CHAPTER_PDF' && row.chapter_active !== true ? 'Reactivate this curriculum chapter first.' : 'Publish this resource for eligible students.'}
-                    onClick={() => void setStatus(row, 'PUBLISHED')}>Publish</button>}
-                {row.status === 'PUBLISHED' && canPublish && <button type="button" className={styles.archiveButton} disabled={busy} onClick={() => void setStatus(row, 'ARCHIVED')}>Archive</button>}
-                {row.status === 'ARCHIVED' && canEdit && <button type="button" className={styles.publishButton} disabled={busy} onClick={() => void setStatus(row, 'DRAFT')}>Restore to draft</button>}
-                {row.status === 'DRAFT' && !canPublish && <small className={styles.roleHint}>Awaiting a publisher</small>}
-              </div>
-            </article>)}
-          </div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:18,flexWrap:'wrap'}}>
-          <small>Showing {assignmentTotal===0?0:assignmentPage*assignmentPageSize+1}–{Math.min(assignmentTotal,(assignmentPage+1)*assignmentPageSize)} of {assignmentTotal} assignments</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className={styles.secondaryButton} disabled={assignmentPage===0||loading} onClick={()=>setAssignmentPage(p=>Math.max(0,p-1))}>← Previous</button>
-            <span>Page {assignmentTotal===0?0:assignmentPage+1} of {Math.max(1,Math.ceil(assignmentTotal/assignmentPageSize))}</span>
-            <button type="button" className={styles.secondaryButton} disabled={(assignmentPage+1)*assignmentPageSize>=assignmentTotal||loading} onClick={()=>setAssignmentPage(p=>p+1)}>Next →</button>
-          </div>
-        </div>
-      </section>
+
     </section>
   </main>;
 }
