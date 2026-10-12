@@ -372,33 +372,33 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             )
         )
 
-    def test_detects_baudhayana_chapter_heading_with_macron(self):
-        path = self.root / "class8-maths-baudhayana.pdf"
-        with fitz.open() as doc:
-            page = doc.new_page()
-            page.insert_text((50, 50), "Contents")
-            page.insert_text((50, 90), "Chapter 1 Fractions in Disguise 1")
-            page.insert_text((50, 110), "Chapter 2 The Baudhāyana-Pythagoras Theorem 20")
-
-            page = doc.new_page()
-            page.insert_text((50, 60), "Chapter 1")
-            page.insert_text((50, 100), "Fractions in Disguise")
-            page.insert_text((50, 150), "Fractions content.")
-
-            page = doc.new_page()
-            page.insert_text((50, 60), "Chapter 2")
-            page.insert_text((50, 100), "THE BAUDHĀYANA-PYTHAGORAS THEOREM")
-            page.insert_text((50, 150), "The theorem chapter content.")
-            doc.save(path)
-
-        chapters = [
-            {"chapter_id": 808, "chapter_code": "fractions-in-disguise", "chapter_name": "भिन्नों के छिपे रूप"},
-            {"chapter_id": 809, "chapter_code": "baudhayana-pythagoras-theorem", "chapter_name": "बौधायन-पाइथागोरस प्रमेय"},
-        ]
-        ranges = importer.detect_chapter_ranges(path, "8", "maths", "english", chapters)
+    def test_baudhayana_chapter_heading_with_real_extracted_header_is_matched(self):
+        chapter = {
+            "chapter_id": 809,
+            "chapter_code": "baudhayana-pythagoras-theorem",
+            "chapter_name": "बौधायन-पाइथागोरस प्रमेय",
+        }
+        alias = "The Baudhāyana-Pythagoras Theorem"
+        # This reproduces NCERT's extracted heading line, including the non-printing
+        # hyphen glyph and the running book header concatenated after the title.
+        extracted_line = (
+            "THE BAUDHĀYANA\\x02PYTHAGORAS THEOREM "
+            "2Ganita Prakash | Grade 8 | Part-II"
+        )
         self.assertEqual(
-            [(2, 2), (3, 3)],
-            [(row["start_page"], row["end_page"]) for row in ranges],
+            {"baudhayana-pythagoras-theorem"},
+            importer.page_title_hits(
+                extracted_line,
+                [chapter],
+                {"baudhayana-pythagoras-theorem": [alias]},
+                top_lines=18,
+            ),
+        )
+        self.assertFalse(
+            importer.line_matches_title(
+                "The Baudhāyana-Pythagoras Theorem introduces a theorem about triangles.",
+                alias,
+            )
         )
 
     def test_short_official_titles_down_to_four_characters_are_supported(self):

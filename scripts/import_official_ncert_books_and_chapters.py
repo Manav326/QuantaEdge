@@ -389,8 +389,19 @@ def line_matches_title(line: str, alias: str) -> bool:
         return False
     if core == target:
         return True
+    if not core.startswith(target):
+        return False
+
+    suffix = core[len(target):]
     # Table-of-contents lines commonly append a printed page number after the title.
-    if core.startswith(target) and core[len(target):].isdigit() and len(core[len(target):]) <= 3:
+    if suffix.isdigit() and len(suffix) <= 3:
+        return True
+
+    # In NCERT's Ganita Prakash PDFs, text extraction can concatenate the chapter
+    # heading with its running header, e.g.:
+    # "THE BAUDHĀYANA-PYTHAGORAS THEOREM 2Ganita Prakash | Grade 8 | Part-II".
+    # Accept only this known, bounded book-header suffix, not arbitrary trailing prose.
+    if re.fullmatch(r"\\d{0,3}ganitaprakashgrade[678]part(?:i|ii)", suffix):
         return True
     return False
 
