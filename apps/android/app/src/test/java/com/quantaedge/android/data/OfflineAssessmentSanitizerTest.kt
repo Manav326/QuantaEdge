@@ -8,7 +8,7 @@ import org.junit.Test
 
 class OfflineAssessmentSanitizerTest {
     @Test
-    fun removesAnswerKeysRecursivelyButKeepsLearnerResponse() {
+    fun removesAnswerFieldsAndAnswerKeysRecursivelyFromQuestionSnapshots() {
         val input = JSONObject(
             """
             {
@@ -35,8 +35,8 @@ class OfflineAssessmentSanitizerTest {
         val options = question.getJSONArray("options")
         val nested = question.getJSONArray("nested").getJSONObject(0)
 
-        assertEquals("B", safe.getString("answer"))
-        assertEquals("B", question.getString("answer"))
+        assertFalse(safe.has("answer"))
+        assertFalse(question.has("answer"))
         assertFalse(question.has("correctAnswer"))
         assertFalse(question.has("answer_payload"))
         assertFalse(question.has("markingScheme"))
@@ -85,7 +85,7 @@ class OfflineAssessmentSanitizerTest {
         assertFalse(question.has("earned_marks"))
         assertFalse(question.has("solution_steps"))
         assertFalse(question.has("evaluation"))
-        assertEquals("student response", question.getString("answer"))
+        assertFalse(question.has("answer"))
         assertEquals("published learning explanation", question.getString("explanation"))
         assertEquals("Explain your reasoning.", question.getString("prompt"))
         assertFalse(safe.toString().contains("private examiner notes"))
@@ -104,6 +104,7 @@ class OfflineAssessmentSanitizerTest {
         val safeUnreleased = OfflineAssessmentSanitizer.sanitizeServerResult(unreleased)
         val unreleasedQuestion = safeUnreleased.getJSONArray("questions").getJSONObject(0)
         assertFalse(unreleasedQuestion.has("correctAnswer"))
+        assertFalse(unreleasedQuestion.has("answer"))
         assertFalse(unreleasedQuestion.has("grading_notes"))
 
         val released = JSONObject()
