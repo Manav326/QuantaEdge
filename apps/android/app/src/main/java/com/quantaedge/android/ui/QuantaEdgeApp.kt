@@ -368,9 +368,10 @@ fun QuantaEdgeApp() {
     }
 
     fun restoreOfflineAssessment(record: JSONObject) {
+        val syncedResult = record.optJSONObject("syncResult")
         val storedAttempt = record.optJSONObject("attempt")
             ?: throw IOException("इस offline test का saved snapshot पढ़ा नहीं जा सका।")
-        assessmentAttempt = JSONObject(storedAttempt.toString())
+        assessmentAttempt = JSONObject((syncedResult ?: storedAttempt).toString())
         assessmentAttempt.put("offlinePendingSync", record.optString("state") == "QUEUED" ||
             record.optString("state") == "SYNC_ERROR")
         answers.clear()
@@ -384,6 +385,13 @@ fun QuantaEdgeApp() {
         status = when (record.optString("state")) {
             "QUEUED" -> "उत्तर इस device पर encrypted हैं और internet पर sync होने की प्रतीक्षा में हैं।"
             "SYNC_ERROR" -> "Offline answer sync में समस्या: " + syncError + " — internet आने पर ‘Sync की कोशिश करें’ दबाएँ।"
+            "SYNCED" -> if (assessmentAttempt.optBoolean("resultReleased")) {
+                "Server पर परिणाम जारी हो गया है। नीचे final marks और प्रश्न-समीक्षा देखें।"
+            } else if (assessmentAttempt.textAny("status") == "AWAITING_REVIEW") {
+                "Answers server पर submit हो चुके हैं। Teacher review के बाद final result दिखाई देगा।"
+            } else {
+                "Offline answers server पर sync हो गए हैं।"
+            }
             else -> "यह test इस device पर encrypted है। उत्तर server पर sync होने से पहले result नहीं दिया जाएगा।"
         }
     }
@@ -1763,6 +1771,11 @@ private fun AssessmentListScreen(
                                 when (item.textAny("offline_state")) {
                                     "QUEUED" -> "Offline answers saved · sync pending"
                                     "SYNC_ERROR" -> "Offline answers saved · sync needs attention"
+                                    "SYNCED" -> when (item.textAny("offline_result_status")) {
+                                        "RELEASED" -> "Synced · result released"
+                                        "AWAITING_REVIEW" -> "Synced · awaiting teacher review"
+                                        else -> "Synced to server"
+                                    }
                                     else -> "Encrypted offline attempt ready"
                                 },
                                 style = MaterialTheme.typography.bodySmall,

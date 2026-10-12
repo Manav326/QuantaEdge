@@ -40,8 +40,8 @@ class OfflineAssessmentSyncWorker(appContext: Context, parameters: WorkerParamet
                 try {
                     val serverAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/$attemptId")
                     if (serverAttempt.optString("status") != "IN_PROGRESS") {
-                        // Handles a worker interruption after the server already accepted submission.
-                        store.remove(attemptId)
+                        // Handles worker interruption after server accepted submission; preserve its real result state locally.
+                        store.markSynced(attemptId, serverAttempt)
                         continue
                     }
                     val localAnswers = record.optJSONObject("answers") ?: JSONObject()
@@ -66,11 +66,11 @@ class OfflineAssessmentSyncWorker(appContext: Context, parameters: WorkerParamet
                             JSONObject().put("answer", answer).put("offlinePackageToken", token)
                         )
                     }
-                    ApiClient.postObject(
+                    val submitted = ApiClient.postObject(
                         "/api/v1/learning/assessment-attempts/$attemptId/submit",
                         JSONObject().put("offlinePackageToken", token)
                     )
-                    store.remove(attemptId)
+                    store.markSynced(attemptId, submitted)
                 } catch (failure: ApiFailure) {
                     if (failure.statusCode == 429 || failure.statusCode >= 500 || failure.statusCode == 401) {
                         return Result.retry()

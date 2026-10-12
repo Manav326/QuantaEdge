@@ -90,6 +90,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
                 .put("offline_local", true)
                 .put("offline_enabled", true)
                 .put("offline_state", state)
+                .put("offline_result_status", record.optJSONObject("syncResult")?.optString("status").orEmpty())
                 .put("in_progress_attempt_id", attempt.optLongAny("attempt_id", "attemptId", "id"))
                 .put("in_progress_offline_mode", true)
                 .put("attempts_used", maxOf(item.optInt("attempts_used", 0), attempt.optInt("attempt_number", 1)))
@@ -105,6 +106,20 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
             val record = readRecordInternal(attemptId) ?: return
             record.put("state", state).put("updatedAtMillis", System.currentTimeMillis())
             if (!error.isNullOrBlank()) record.put("lastError", error.take(500)) else record.remove("lastError")
+            writeRecord(attemptId, record)
+        }
+    }
+
+    /** Retains a non-secret result snapshot so the app can show actual server status after sync. */
+    fun markSynced(attemptId: Long, serverResult: JSONObject) {
+        require(attemptId > 0L)
+        synchronized(lock) {
+            val record = readRecordInternal(attemptId) ?: return
+            record.optJSONObject("attempt")?.remove("offlinePackageToken")
+            record.put("syncResult", sanitize(serverResult))
+                .put("state", "SYNCED")
+                .put("updatedAtMillis", System.currentTimeMillis())
+            record.remove("lastError")
             writeRecord(attemptId, record)
         }
     }
