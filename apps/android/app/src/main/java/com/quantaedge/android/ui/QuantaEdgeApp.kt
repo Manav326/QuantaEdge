@@ -52,10 +52,19 @@ import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
 import androidx.work.WorkManager
 import com.quantaedge.android.data.optLongAny
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+
+private data class ResourceDownloadUiState(
+    val label: String,
+    val progress: Float? = null,
+    val active: Boolean = false
+)
 
 private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
@@ -108,6 +117,51 @@ fun QuantaEdgeApp() {
     var status by remember { mutableStateOf("") }
     val answers = remember { mutableStateMapOf<String, String>() }
     val feedbacks = remember { mutableStateMapOf<String, String>() }
+    val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
+
+    LaunchedEffect(route, resourceOwner) {
+        if (route == AppRoute.RESOURCES) {
+            while (true) {
+                val workInfos = withContext(Dispatchers.IO) {
+                    runCatching {
+                        WorkManager.getInstance(context.applicationContext)
+                            .getWorkInfosByTag("quantaedge-resource-download").get()
+                    }.getOrDefault(emptyList())
+                }
+                val nextStates = linkedMapOf<Long, ResourceDownloadUiState>()
+                workInfos.filter {
+                    it.inputData.getString("owner_namespace") == resourceOwner
+                }.forEach { work ->
+                    val documentId = work.inputData.getLong("document_id", 0L)
+                    if (documentId <= 0L) return@forEach
+                    val done = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+                        work.outputData.getInt("pagesDone", work.progress.getInt("pagesDone", 0))
+                    } else work.progress.getInt("pagesDone", 0)
+                    val total = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+                        work.outputData.getInt("pageCount", work.progress.getInt("pageCount", 0))
+                    } else work.progress.getInt("pageCount", 0)
+                    val fraction = if (total > 0) (done.toFloat() / total).coerceIn(0f, 1f) else null
+                    val value = when (work.state) {
+                        androidx.work.WorkInfo.State.ENQUEUED,
+                        androidx.work.WorkInfo.State.BLOCKED -> ResourceDownloadUiState("डाउनलोड कतार में है", fraction, true)
+                        androidx.work.WorkInfo.State.RUNNING -> ResourceDownloadUiState(
+                            if (total > 0) "डाउनलोड: $done / $total पृष्ठ" else "डाउनलोड चल रहा है",
+                            fraction, true
+                        )
+                        androidx.work.WorkInfo.State.SUCCEEDED -> ResourceDownloadUiState("डाउनलोड पूरा", 1f, false)
+                        androidx.work.WorkInfo.State.FAILED -> ResourceDownloadUiState("डाउनलोड विफल — फिर प्रयास करें", null, false)
+                        androidx.work.WorkInfo.State.CANCELLED -> ResourceDownloadUiState("डाउनलोड रद्द", null, false)
+                    }
+                    nextStates[documentId] = value
+                }
+                resourceDownloadStates.clear()
+                resourceDownloadStates.putAll(nextStates)
+                delay(1200)
+            }
+        } else {
+            resourceDownloadStates.clear()
+        }
+    }
 
     fun reportError(exception: Exception) {
         error = when (exception) {
@@ -975,6 +1029,7 @@ fun QuantaEdgeApp() {
                         store = resourceStore,
                         busy = busy,
                         downloadStatus = status,
+                        downloadStates = resourceDownloadStates.toMap(),
                         onSubject = ::openResources,
                         onOpen = ::openDocument,
                         onDownload = ::downloadDocument,
@@ -1669,6 +1724,7 @@ private fun ResourcesScreen(
     store: ProtectedResourceStore,
     busy: Boolean,
     downloadStatus: String,
+    downloadStates: Map<Long, ResourceDownloadUiState>,
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
     onDownload: (JSONObject) -> Unit,
@@ -1692,15 +1748,27 @@ private fun ResourcesScreen(
                 val count = doc.optInt("page_count",
                     (doc.optInt("page_end", 1) - doc.optInt("page_start", 1) + 1).coerceAtLeast(1))
                 val cached = store.cachedPageCount(id, count)
+                val downloadState = downloadStates[id]
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(doc.textAny("title").ifBlank { "पुस्तक संसाधन" }, style = MaterialTheme.typography.titleMedium)
                         Text(doc.textAny("chapter_name", "book_part", "scope"), style = MaterialTheme.typography.bodySmall)
                         Text(count.toString() + " पृष्ठ • ऑफ़लाइन: " + cached + " / " + count, style = MaterialTheme.typography.bodySmall)
+                        if (downloadState != null) {
+                            Text(downloadState.label, style = MaterialTheme.typography.bodySmall,
+                                color = if (downloadState.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                            if (downloadState.progress != null && downloadState.active) {
+                                LinearProgressIndicator(progress = { downloadState.progress }, modifier = Modifier.fillMaxWidth())
+                            }
+                        }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("पढ़ें") }
                             TextButton(onClick = { onDownload(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड")
+                                Text(when {
+                                    downloadState?.active == true -> "डाउनलोड चल रहा है"
+                                    cached == count -> "फिर डाउनलोड"
+                                    else -> "ऑफ़लाइन डाउनलोड"
+                                })
                             }
                         }
                     }
