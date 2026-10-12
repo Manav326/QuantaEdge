@@ -183,7 +183,7 @@ export default function TestsClient(){
       const data=await api('/api/v1/learning/assessment-attempts/'+currentAttempt.attempt_id+'/submit',{method:'POST'});
       setAttempt(data);attemptRef.current=data;setShowSubmit(false);
       setTab(data.status==='RELEASED'?'results':'tests');
-      setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Written answers are waiting for teacher review; your result will appear here after release.');
+      setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Fill-in, short-answer and long-answer responses are waiting for an assigned staff reviewer. Your final score and feedback will appear after all required answers are checked.');
       await loadOverview();
     }catch(e:any){
       autoSubmitted.current=false;
