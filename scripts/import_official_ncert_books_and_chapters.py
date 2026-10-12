@@ -320,7 +320,7 @@ def strip_heading_prefix(line: str) -> str:
         r"(?i)^\s*(?:chapter|अध्याय|पाठ)\s*[#.:–—-]?\s*\d{1,2}\s*[).:–—-]?\s*",
         "", line,
     )
-    line = re.sub(r"^\s*\d{1,2}\s*[).:–—-]\s*", "", line)
+    line = re.sub(r"^\s*\d{1,2}(?:\s*[).:–—-]\s*|\s+)", "", line)
     return line.strip()
 
 
