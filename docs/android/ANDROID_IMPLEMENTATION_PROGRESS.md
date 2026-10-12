@@ -38,6 +38,15 @@ Last updated: 2026-10-12
 - Added student live/recorded class catalogue by subject, meeting hand-off with server attendance join/leave, and authenticated in-app recorded video playback.
 - Recorded playback reuses the session cookie jar, handles an expired access cookie through refresh, and periodically saves playback position/watched time to the existing progress endpoint.
 
+## Milestone 5 — Parent self-service
+
+**Status:** Added to source; CI verification pending.
+
+- Parent dashboard can create a child profile with explicit consent, class 6–8 selection, Maths/Science access and login credentials.
+- Added account-safe credential updates and subject-track management per child.
+- Added parent profile editing against the current guardian-profile endpoint.
+- Child provisioning follows backend support: Hindi is the supported profile language at present; the Android UI does not offer an unsupported English child-account option.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

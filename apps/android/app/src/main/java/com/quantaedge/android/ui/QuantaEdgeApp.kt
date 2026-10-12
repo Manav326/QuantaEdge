@@ -58,7 +58,8 @@ import org.json.JSONObject
 import java.io.IOException
 
 private enum class AppRoute {
-    LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, SUBJECT_LESSONS, LESSON, PRACTICE,
+    LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
+    PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, RESOURCES,
     DOCUMENT_READER, PROFILE, TUTOR, CLASSES, RECORDING_PLAYER
 }
@@ -79,6 +80,8 @@ fun QuantaEdgeApp() {
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
+    var parentProfile by remember { mutableStateOf(JSONObject()) }
+    var selectedChild by remember { mutableStateOf(JSONObject()) }
 
     var currentSubject by remember { mutableStateOf("maths") }
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -539,6 +542,83 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun refreshParentData() {
+        runTask {
+            parentAccount = ApiClient.getObject("/api/v1/guardians/account")
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+        }
+    }
+
+    fun openParentProfile() {
+        runTask {
+            parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
+            route = AppRoute.PARENT_PROFILE
+        }
+    }
+
+    fun saveParentProfile(body: JSONObject) {
+        runTask {
+            parentProfile = ApiClient.putObject("/api/v1/guardians/profile", body)
+            parentAccount = ApiClient.getObject("/api/v1/guardians/account")
+            status = "अभिभावक प्रोफ़ाइल सुरक्षित हो गई।"
+            route = AppRoute.PARENT_HOME
+        }
+    }
+
+    fun openCreateChild() {
+        route = AppRoute.PARENT_CHILD_CREATE
+        error = ""
+    }
+
+    fun createChild(name: String, classCode: String, username: String, password: String, tracks: List<String>, consent: Boolean) {
+        runTask {
+            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
+            ApiClient.postObject("/api/v1/guardians/children",
+                JSONObject()
+                    .put("displayName", name.trim())
+                    .put("classCode", classCode)
+                    .put("language", "hi")
+                    .put("username", username.trim())
+                    .put("password", password)
+                    .put("trackCodes", JSONArray(tracks))
+                    .put("consentAccepted", consent))
+            parentAccount = ApiClient.getObject("/api/v1/guardians/account")
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            status = "छात्र प्रोफ़ाइल बन गई। उसके login credentials सुरक्षित रखें।"
+            route = AppRoute.PARENT_HOME
+        }
+    }
+
+    fun openManageChild(child: JSONObject) {
+        selectedChild = JSONObject(child.toString())
+        route = AppRoute.PARENT_CHILD_MANAGE
+        error = ""
+    }
+
+    fun saveChildCredentials(username: String, password: String) {
+        runTask {
+            val id = selectedChild.longAny("id")
+            if (username.trim().isBlank() || password.length < 8) throw IOException("यूज़रनेम और कम-से-कम 8 अक्षरों का नया पासवर्ड भरें।")
+            ApiClient.putObject("/api/v1/guardians/children/" + id + "/credentials",
+                JSONObject().put("username", username.trim()).put("password", password))
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
+            status = "छात्र के login credentials अपडेट हो गए।"
+        }
+    }
+
+    fun saveChildTracks(tracks: List<String>) {
+        runTask {
+            val id = selectedChild.longAny("id")
+            if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
+            ApiClient.putObject("/api/v1/guardians/children/" + id + "/tracks",
+                JSONObject().put("trackCodes", JSONArray(tracks)))
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
+            status = "छात्र के विषय access अपडेट हो गए।"
+        }
+    }
+
     fun openParentReport(child: JSONObject) {
         runTask {
             val id = child.longAny("id")
@@ -613,7 +693,8 @@ fun QuantaEdgeApp() {
             AppRoute.CLASSES -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.RECORDING_PLAYER -> AppRoute.CLASSES
             AppRoute.ASSESSMENT_ATTEMPT -> AppRoute.ASSESSMENTS
-            AppRoute.PARENT_REPORT -> AppRoute.PARENT_HOME
+            AppRoute.PARENT_REPORT, AppRoute.PARENT_PROFILE, AppRoute.PARENT_CHILD_CREATE,
+            AppRoute.PARENT_CHILD_MANAGE -> AppRoute.PARENT_HOME
             AppRoute.DOCUMENT_READER -> AppRoute.RESOURCES
         }
         error = ""
@@ -710,10 +791,29 @@ fun QuantaEdgeApp() {
                             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
                         } },
                         onReport = ::openParentReport,
-                        onProfile = { route = AppRoute.PROFILE },
-                        onLogout = ::logout
+                        onManageChild = ::openManageChild,
+                        onAddChild = ::openCreateChild,
+                        onProfile = ::openParentProfile,
+                        onLogout = ::logout,
+                        maxChildren = parentAccount.optInt("maxChildren", 3)
                     )
                     AppRoute.PARENT_REPORT -> ParentReportScreen(parentReport)
+                    AppRoute.PARENT_PROFILE -> ParentProfileScreen(
+                        profile = parentProfile,
+                        busy = busy,
+                        onSave = ::saveParentProfile
+                    )
+                    AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
+                        busy = busy,
+                        remainingSlots = parentAccount.optInt("remainingSlots", 1),
+                        onCreate = ::createChild
+                    )
+                    AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
+                        child = selectedChild,
+                        busy = busy,
+                        onSaveCredentials = ::saveChildCredentials,
+                        onSaveTracks = ::saveChildTracks
+                    )
                     AppRoute.SUBJECT_LESSONS -> LessonListScreen(
                         subject = currentSubject,
                         lessons = lessons,
@@ -1490,19 +1590,24 @@ private fun ParentHomeScreen(
     busy: Boolean,
     onRefresh: () -> Unit,
     onReport: (JSONObject) -> Unit,
+    onManageChild: (JSONObject) -> Unit,
+    onAddChild: () -> Unit,
     onProfile: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    maxChildren: Int
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("अभिभावक डैशबोर्ड", style = MaterialTheme.typography.headlineSmall)
         Text(parent.textAny("parentName").ifBlank { "अभिभावक" }, style = MaterialTheme.typography.titleMedium)
-        Text("सक्रिय छात्र: " + parent.optInt("activeChildren", children.size) + " / " + parent.optInt("maxChildren", 3),
+        Text("सक्रिय छात्र: " + parent.optInt("activeChildren", children.size) + " / " + maxChildren,
             style = MaterialTheme.typography.bodySmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
-            TextButton(onClick = onProfile) { Text("प्रोफ़ाइल") }
+            TextButton(onClick = onProfile, enabled = !busy) { Text("प्रोफ़ाइल") }
             TextButton(onClick = onLogout, enabled = !busy) { Text("साइन आउट") }
         }
+        Button(onClick = onAddChild, enabled = !busy && children.size < maxChildren,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) { Text("नया छात्र प्रोफ़ाइल बनाएँ") }
         if (children.isEmpty()) EmptyState("कोई सक्रिय छात्र प्रोफ़ाइल नहीं", "अभिभावक खाते से जुड़े सक्रिय छात्र यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
             items(children) { child ->
@@ -1511,8 +1616,15 @@ private fun ParentHomeScreen(
                         Text(child.textAny("display_name", "displayName").ifBlank { "छात्र" }, style = MaterialTheme.typography.titleMedium)
                         Text("कक्षा " + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
                             style = MaterialTheme.typography.bodySmall)
-                        Button(onClick = { onReport(child) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                            Text("सीखने की रिपोर्ट देखें")
+                        Text("यूज़रनेम: " + child.textAny("login_username").ifBlank { "सेट नहीं" },
+                            style = MaterialTheme.typography.bodySmall)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Button(onClick = { onReport(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                                Text("सीखने की रिपोर्ट")
+                            }
+                            TextButton(onClick = { onManageChild(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                                Text("Login / विषय")
+                            }
                         }
                     }
                 }
