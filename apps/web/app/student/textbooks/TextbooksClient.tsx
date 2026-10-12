@@ -331,24 +331,6 @@ export default function TextbooksClient() {
     {!documentId ? <section className="qe-textbook-library">
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
       {notice && <div className="qe-textbook-notice" role="status">{notice}</div>}
-      <section className="qe-textbook-library-hero" aria-labelledby="qe-textbook-hero-title">
-        <div className="qe-textbook-hero-copy">
-          <span className="qe-textbook-eyebrow"><i/> QUANTAEDGE RESOURCE LIBRARY</span>
-          <h1 id="qe-textbook-hero-title">Your textbooks, organised for learning.</h1>
-          <p>Find the subject books and chapter PDFs assigned to your class. Open a book, choose a chapter, and continue reading in the secure page-by-page viewer.</p>
-          <div className="qe-textbook-hero-chips">
-            <span>{documents.length} published resource{documents.length === 1 ? '' : 's'}</span>
-            <span>Class {documents[0]?.class_code || '—'}</span>
-            <span>Secure online reader</span>
-          </div>
-        </div>
-        <div className="qe-textbook-book-art" aria-hidden="true">
-          <span className="qe-book-orbit orbit-one"/>
-          <span className="qe-book-orbit orbit-two"/>
-          <div className="qe-textbook-book-cover"><span>Q</span><b>TEXTBOOK<br/>LIBRARY</b><small>LEARN · READ · GROW</small></div>
-        </div>
-      </section>
-
       <section className="qe-textbook-governance" aria-labelledby="qe-textbook-governance-title">
         <div className="qe-textbook-library-toolbar">
           <div className="qe-textbook-governance-copy">
@@ -440,7 +422,7 @@ export default function TextbooksClient() {
             </section>;
           })}
         </div>}
-      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page. Screenshots or capturing displayed pages cannot be fully prevented by a website.</p></div>
+      <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page.</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
       <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' && selected.book_part ? (locale === 'english' ? 'Part ' + ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[Number(selected.book_part)] : 'भाग ' + selected.book_part) : selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected ? displayChapterTitle(selected, locale === 'english') : 'Chapter PDF'}</span></div>
         <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? 'SUBJECT TEXTBOOK' : 'CHAPTER READING'} · {subjectLabel.toUpperCase()}</span><h1>{selected ? (selected.scope === 'CHAPTER_PDF' ? displayChapterTitle(selected, locale === 'english') : selected.title) : 'Loading textbook…'}</h1><p>{selected?.scope === 'CHAPTER_PDF' && selected ? displayChapterTitle(selected, locale === 'english') + ' · ' : ''}{selected?.edition || 'View-only online reader'}</p></div>
