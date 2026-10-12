@@ -57,16 +57,16 @@ export default function PremiumPagination({
   const safePage = Math.min(Math.max(0, page), pageCount - 1);
   const first = safeTotal === 0 ? 0 : safePage * safeSize + 1;
   const last = Math.min(safeTotal, (safePage + 1) * safeSize);
+  const visiblePages = new Set<number>([0, pageCount - 1]);
+  for (let index = Math.max(0, safePage - 1); index <= Math.min(pageCount - 1, safePage + 1); index += 1) visiblePages.add(index);
+  const sortedPages = [...visiblePages].sort((a, b) => a - b);
   const pages: Array<number | 'ellipsis-left' | 'ellipsis-right'> = [];
-  for (let index = 0; index < pageCount; index += 1) {
-    if (pageCount <= 5 || index === 0 || index === pageCount - 1 || Math.abs(index - safePage) <= 1) {
-      pages.push(index);
-    } else if (index === 1 && safePage > 2) {
-      pages.push('ellipsis-left');
-    } else if (index === pageCount - 2 && safePage < pageCount - 3) {
-      pages.push('ellipsis-right');
+  sortedPages.forEach((index, position) => {
+    if (position > 0 && index - sortedPages[position - 1] > 1) {
+      pages.push(position === 1 ? 'ellipsis-left' : 'ellipsis-right');
     }
-  }
+    pages.push(index);
+  });
 
   const shell: CSSProperties = {
     display: 'flex',
@@ -120,7 +120,7 @@ export default function PremiumPagination({
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginLeft: 'auto' }}>
-        <label style={tinyLabel}>
+        <div style={tinyLabel}>
           ROWS PER PAGE
           <select
             aria-label="Rows per page"
@@ -131,7 +131,7 @@ export default function PremiumPagination({
           >
             {pageSizeOptions.map(size => <option value={size} key={size}>{size}</option>)}
           </select>
-        </label>
+        </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <button
