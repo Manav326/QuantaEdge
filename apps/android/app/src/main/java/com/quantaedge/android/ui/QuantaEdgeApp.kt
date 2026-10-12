@@ -195,6 +195,11 @@ fun QuantaEdgeApp() {
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
+            val accountLanguage = studentProfile.textAny("language").trim().lowercase()
+            if (accountLanguage == "hi" || accountLanguage == "en") {
+                language = accountLanguage
+                preferences.edit().putString("language", accountLanguage).apply()
+            }
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
             route = AppRoute.STUDENT_HOME
         } else {
@@ -477,6 +482,7 @@ fun QuantaEdgeApp() {
             }
             val combined = (online + local).distinctBy { it.optLongAny("document_id", "id") }
                 .filter { it.textAny("subject_code", "subjectCode").isBlank() || it.textAny("subject_code", "subjectCode") == subjectCode }
+                .filter { it.textAny("language").isBlank() || it.textAny("language") == language }
             documents = combined
             route = AppRoute.RESOURCES
         }
@@ -802,6 +808,7 @@ fun QuantaEdgeApp() {
                         .distinctBy { it.optLongAny("document_id", "id") }
                         .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
                             it.textAny("subject_code", "subjectCode") == currentSubject }
+                        .filter { it.textAny("language").isBlank() || it.textAny("language") == nextLanguage }
                 }
                 else -> Unit
             }
