@@ -6,7 +6,7 @@
 - **MODERN** — navy header/footer with QuantaEdge orange accents.
 - **ACADEMIC** — green academic frame with gold detailing.
 
-Each issued certificate includes a scannable QR code that opens the public verification page for its exact certificate ID. The URL is built from `APP_PUBLIC_BASE_URL`, never from an untrusted request Host header. Production deployments must set `APP_PUBLIC_BASE_URL` to the canonical public HTTPS origin; the production compose default is `https://quantaedge.in` and must be overridden if the deployed domain differs. Sample previews deliberately omit verification QR codes and remain visibly marked as samples.
+Each issued certificate includes a scannable QR code that opens the public verification page for its exact certificate ID. The URL is built from `APP_PUBLIC_BASE_URL`, never from an untrusted request Host header. Production deployments must set `APP_PUBLIC_BASE_URL` to the canonical public HTTPS origin; production compose intentionally leaves this unset unless the operator supplies it; set it in the production environment before issuing certificates. If it is missing, certificate issuance fails closed rather than embedding a broken localhost or guessed-domain QR. Sample previews deliberately omit verification QR codes and remain visibly marked as samples.
 
 Each template is rendered on one high-resolution A4 landscape canvas. The same canvas becomes the PNG and is embedded losslessly into the PDF; the files share the same text, issue date, recipient and certificate ID. The API container installs Noto core fonts so Hindi can be shaped by Java2D instead of depending on whatever fonts happen to be installed on a host.
 
