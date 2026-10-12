@@ -28,9 +28,9 @@ export default function EmployeeSelfServicePage(){
   const [attendance,setAttendance]=useState<any[]>([]);
   const [requests,setRequests]=useState<any[]>([]);
   const [types,setTypes]=useState<LeaveType[]>([]);
-  const [balances,setBalances]=useState<any[]>([]);
+  const [balances,setBalances]=useState<any[]>([]);\n  const [payslips,setPayslips]=useState<any[]>([]);\n  const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
-  const [tab,setTab]=useState<'attendance'|'leave'|'balances'>('attendance');
+  const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'>('attendance');
   const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});
   const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const daySpan=Math.floor((Date.parse(range.to+'T00:00:00Z')-Date.parse(range.from+'T00:00:00Z'))/86400000);
@@ -42,7 +42,7 @@ export default function EmployeeSelfServicePage(){
       setSession(me);
       const ownProfile=await api('/api/v1/hr/self-service/profile');
       setProfile(ownProfile);
-      const [a,l,t,b]=await Promise.all([
+      const [a,l,t,b,ps]=await Promise.all([
         api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
         api('/api/v1/hr/self-service/leave/types'),
@@ -97,6 +97,7 @@ export default function EmployeeSelfServicePage(){
           <button type="button" aria-pressed={tab==='attendance'} className={tab==='attendance'?'active':''} onClick={()=>setTab('attendance')}>My attendance</button>
           <button type="button" aria-pressed={tab==='leave'} className={tab==='leave'?'active':''} onClick={()=>setTab('leave')}>My leave</button>
           <button type="button" aria-pressed={tab==='balances'} className={tab==='balances'?'active':''} onClick={()=>setTab('balances')}>Leave balances</button>
+          <button type="button" aria-pressed={tab==='payslips'} className={tab==='payslips'?'active':''} onClick={()=>{setTab('payslips');setSelectedPayslip(null)}}>My payslips</button>
           <button type="button" className="secondary" onClick={()=>void load()} disabled={loading}>Refresh</button>
         </div>
         {tab==='attendance'&&<>
@@ -132,9 +133,44 @@ export default function EmployeeSelfServicePage(){
             {balances.map((item:any)=><tr key={item.leave_type_code}><td>{item.display_name}</td><td>{item.paid?'Yes':'No'}</td><td><b>{Number(item.balance_days).toFixed(2)}</b></td></tr>)}
           </tbody></table>{!loading&&!balances.length&&<div className="empty">No active leave types or balances are available.</div>}</div>
         </>}
+        {tab==='payslips'&&<>
+          <h2>Issued payslips</h2>
+          <p className="small">Payslips are generated from approved payroll runs and stored as immutable, SHA-256-checksummed snapshots.</p>
+          <div className="cards no-print">{payslips.map((item:any)=><article className="card" key={item.id}>
+            <div className="small">{item.snapshot?.employeeNumber||profile?.employee_number}</div>
+            <h2 style={{marginTop:6}}>{item.snapshot?.period?.name||'Payroll statement'}</h2>
+            <div className="label">{String(item.snapshot?.period?.startDate||'').slice(0,10)} – {String(item.snapshot?.period?.endDate||'').slice(0,10)}</div>
+            <div className="metric">{new Intl.NumberFormat(undefined,{style:'currency',currency:String(item.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(item.snapshot?.net||0))}</div>
+            <div className="small">Issued {new Date(item.issued_at).toLocaleDateString()}</div>
+            <button type="button" className="primary" style={{marginTop:12}} onClick={()=>setSelectedPayslip(item)}>View payslip</button>
+          </article>)}</div>
+          {!loading&&!payslips.length&&<div className="empty">No payslips have been issued to your employee record yet.</div>}
+          {selectedPayslip&&<section className="panel payslip-print" aria-label="Selected payslip">
+            <div className="no-print actions" style={{justifyContent:'space-between',marginTop:0,marginBottom:18}}>
+              <button type="button" className="secondary" onClick={()=>setSelectedPayslip(null)}>Back to list</button>
+              <button type="button" className="primary" onClick={()=>{const cleanup=()=>document.body.classList.remove('printing-payslip');document.body.classList.add('printing-payslip');window.addEventListener('afterprint',cleanup,{once:true});window.print()}}>Print / Save as PDF</button>
+            </div>
+            <div className="eyebrow">QUANTAEDGE · PAYSLIP</div>
+            <h2 style={{fontSize:26,marginTop:8}}>{selectedPayslip.snapshot?.period?.name||'Payroll statement'}</h2>
+            <p className="small">{String(selectedPayslip.snapshot?.period?.startDate||'').slice(0,10)} – {String(selectedPayslip.snapshot?.period?.endDate||'').slice(0,10)}</p>
+            <div className="cards">
+              <section className="card"><div className="label">Employee</div><strong>{selectedPayslip.snapshot?.employeeName}</strong><div className="small">{selectedPayslip.snapshot?.employeeNumber}</div></section>
+              <section className="card"><div className="label">Gross earnings</div><div className="metric">{new Intl.NumberFormat(undefined,{style:'currency',currency:String(selectedPayslip.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(selectedPayslip.snapshot?.gross||0))}</div></section>
+              <section className="card"><div className="label">Deductions</div><div className="metric">{new Intl.NumberFormat(undefined,{style:'currency',currency:String(selectedPayslip.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(selectedPayslip.snapshot?.deductions||0))}</div></section>
+            </div>
+            <h2>Salary components</h2>
+            <div className="table-wrap"><table><thead><tr><th>Component</th><th>Type</th><th>Amount</th></tr></thead><tbody>
+              {(Array.isArray(selectedPayslip.snapshot?.components)?selectedPayslip.snapshot.components:[]).map((component:any,index:number)=><tr key={component.componentCode||index}><td>{component.componentName||component.componentCode}</td><td>{pretty(component.componentType)}</td><td>{new Intl.NumberFormat(undefined,{style:'currency',currency:String(component.currency||selectedPayslip.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(component.monthlyAmount||0))}</td></tr>)}
+            </tbody></table></div>
+            <div className="card" style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:18}}><strong>Net pay</strong><div className="metric">{new Intl.NumberFormat(undefined,{style:'currency',currency:String(selectedPayslip.snapshot?.currency||'INR').trim(),maximumFractionDigits:2}).format(Number(selectedPayslip.snapshot?.net||0))}</div></div>
+            <p className="small">Issued {new Date(selectedPayslip.issued_at).toLocaleString()}</p>
+            <p className="small">Snapshot SHA-256: {selectedPayslip.checksum}</p>
+            <p className="small">This is an immutable snapshot from an approved payroll run. Contact People Operations for corrections.</p>
+          </section>}
+        </>}
         {loading&&<p className="small" role="status" aria-live="polite">Loading your employee records…</p>}
       </section>
-      <p className="small" style={{marginTop:18}}>This workspace is scoped to the employee linked to your authenticated account. Profile changes, attendance corrections, private documents and payslips require separate controlled workflows; use People Operations support for corrections until those workflows are available.</p>
+      <p className="small" style={{marginTop:18}}>This workspace is scoped to the employee linked to your authenticated account. Payslips are available only after an authorized reviewer approves the payroll run. Profile changes, attendance corrections and private documents still require separate controlled workflows.</p>
       {session&&!profile&&!loading&&<p className="small">If you believe your employment record should be linked, contact your People Operations administrator.</p>}
     </main>
   </div>;
