@@ -38,4 +38,4 @@ The initial thresholds are three eligible questions to offer a topic-end test an
 
 ## Important rollout note
 
-Flyway migration V53 adds fields and tables without deleting the existing attempt history. Legacy question attempts cannot always be classified accurately as diagnostic versus lesson-inline because older diagnostic records did not persist a diagnostic-attempt ID on each answer; the new flow records this distinction explicitly.
+Flyway migrations V53 and V54 add the book-intake registry and learning/assessment fields and tables without deleting the existing attempt history. Legacy question attempts cannot always be classified accurately as diagnostic versus lesson-inline because older diagnostic records did not persist a diagnostic-attempt ID on each answer; the new flow records this distinction explicitly.

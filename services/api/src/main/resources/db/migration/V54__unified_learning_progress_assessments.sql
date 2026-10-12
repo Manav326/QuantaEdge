@@ -1,4 +1,4 @@
--- V53: durable generated tests, source-tagged activity attempts, and resumable diagnostics.
+-- V54: durable generated tests, source-tagged activity attempts, and resumable diagnostics.
 ALTER TABLE assessment
   ADD COLUMN assessment_type varchar(24) NOT NULL DEFAULT 'ADMIN_CREATED',
   ADD COLUMN lesson_id bigint REFERENCES lesson(id) ON DELETE RESTRICT,
@@ -73,5 +73,5 @@ CREATE INDEX idx_diagnostic_attempt_question_question
   ON student_diagnostic_attempt_question(question_id);
 
 INSERT INTO app_metadata(key,value)
-VALUES ('schema','unified-learning-progress-assessments-v53')
+VALUES ('schema','unified-learning-progress-assessments-v54')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;
