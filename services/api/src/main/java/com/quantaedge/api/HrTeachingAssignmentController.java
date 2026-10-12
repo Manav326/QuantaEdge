@@ -149,10 +149,10 @@ public class HrTeachingAssignmentController {
     authorization.requirePermission(context,"HR_ACADEMIC_ASSIGNMENT_APPROVE");
     Map<String,Object> assignment=assignmentById(id);
     if(!"PENDING_APPROVAL".equals(assignment.get("status")))throw conflict("Only pending teaching assignments can be reviewed.");
-    if(context.staffId()!=null&&context.staffId().equals(assignment.get("created_by_staff_id")))
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The assignment creator cannot approve their own teaching assignment.");
     String decision=required(body.get("status"),16,"Decision").toUpperCase();
     if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("Decision must be APPROVED or REJECTED.");
+    if("APPROVED".equals(decision)&&context.staffId()!=null&&context.staffId().equals(assignment.get("created_by_staff_id")))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The assignment creator cannot approve their own teaching assignment.");
     String reason=required(body.get("reason"),1000,"Decision reason");
     long orgId=((Number)assignment.get("organization_id")).longValue(),subjectId=((Number)assignment.get("subject_id")).longValue(),periodId=((Number)assignment.get("academic_period_id")).longValue();
     if("APPROVED".equals(decision)){
@@ -165,6 +165,9 @@ public class HrTeachingAssignmentController {
     }
     // Serialize approvals for a subject so two reviewers cannot approve overlapping assignments concurrently.
     jdbc.queryForObject("select id from curriculum_subject where id=? for update",Long.class,subjectId);
+    // Re-read after the lock to prevent two reviewers from deciding the same pending record.
+    assignment=assignmentById(id);
+    if(!"PENDING_APPROVAL".equals(assignment.get("status")))throw conflict("This teaching assignment was already reviewed.");
     String before=snapshot(id);
     if("APPROVED".equals(decision)){
       Long replaces=assignment.get("replaces_assignment_id") instanceof Number n?n.longValue():null;
