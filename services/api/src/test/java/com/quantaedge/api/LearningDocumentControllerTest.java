@@ -194,6 +194,7 @@ class LearningDocumentControllerTest {
         "document_id", 88L,
         "pdf_asset_id", 12L,
         "asset_sha256", "ab".repeat(32),
+        "asset_file_size_bytes", 1024L,
         "page_start", 1,
         "page_end", 2,
         "page_count", 2);
