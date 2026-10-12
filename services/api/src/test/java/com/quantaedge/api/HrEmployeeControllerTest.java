@@ -101,6 +101,42 @@ class HrEmployeeControllerTest {
   }
 
   @Test
+  void probationEndBeforeJoiningDateIsRejectedBeforeDatabaseAccess() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.createEmployee(Map.of(
+            "organizationId", 1,
+            "displayName", "A Teacher",
+            "employmentTypeCode", "FULL_TIME",
+            "joiningDate", "2026-04-10",
+            "probationEndDate", "2026-04-09"), hrManager));
+
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
+  void separatedEmploymentCannotBeReactivated() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+    when(jdbc.queryForList(anyString(), eq(9L))).thenReturn(List.of(Map.of(
+        "id", 9L,
+        "organization_id", 1L,
+        "joining_date", Date.valueOf("2025-01-01"),
+        "employment_status", "SEPARATED",
+        "exit_date", Date.valueOf("2026-01-01"),
+        "display_name", "A Teacher",
+        "employee_number", "QE-EMP-000009")));
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.updateStatus(9L, Map.of("employmentStatus", "ACTIVE"), hrManager));
+
+    assertEquals(409, error.getStatusCode().value());
+    verify(jdbc, never()).update(anyString(), any(Object[].class));
+    verify(audit, never()).recordAction(any(), anyString(), anyString());
+  }
+
+  @Test
   void separatedEmployeeCannotBeCreatedWithoutExitDate() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
     when(jdbc.queryForObject("select id from hr_organization where active=true order by id limit 1", Long.class))
