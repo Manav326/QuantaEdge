@@ -216,7 +216,7 @@ export default function TestsClient(){
     <section className={styles.wrap}>
       {!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
-        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{tests.length}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{results.length}</span></button></div>
+        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{tests.length}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>YOUR ASSESSMENTS</span><h2>Tests available to you</h2><p>Tests are shown only for your enrolled class and subjects.</p></div><label>Subject<select value={subjectFilter} onChange={e=>setSubjectFilter(e.target.value)}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
           {loading?<div className={styles.empty}>Loading your tests…</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>No published tests yet</b><small>Your teacher’s published tests will appear here.</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
@@ -229,6 +229,14 @@ export default function TestsClient(){
         </>:<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>SAVED RESULTS</span><h2>Your test history</h2><p>Only released results appear here. Pending teacher checks are not shown as final scores.</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>Refresh</button></div>
           {loading?<div className={styles.empty}>Loading saved results…</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>No released results yet</b><small>When you finish a test, your score and teacher feedback will be saved here after any required review.</small></div>:<div className={styles.resultList}>{results.map(result=><article key={result.attempt_id} className={styles.resultCard}><span className={styles.resultIcon}>✓</span><div><h3>{result.assessment_title}</h3><p>{result.assessment_type==='TOPIC_END'?'Topic-end test':result.assessment_type==='CHAPTER_END'?'Chapter-end test':'Admin-created test'} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''} · Attempt {result.attempt_number}</p><small>Released {fmtDate(result.released_at)} · {result.question_count} questions</small></div><div className={styles.score}><b>{result.final_score} <small>/ {result.max_score}</small></b><span>{Number(result.max_score)>0?Math.round(Number(result.final_score)/Number(result.max_score)*100):0}%</span></div><button type="button" className={styles.resultOpen} disabled={busy} onClick={()=>void openResult(result.attempt_id)}>View feedback →</button></article>)}</div>}
+          <div className={styles.resultPagination} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+            <small>Showing {resultsTotal===0?0:resultsPage*resultsPageSize+1}–{Math.min(resultsTotal,(resultsPage+1)*resultsPageSize)} of {resultsTotal} results</small>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <button type="button" disabled={resultsPage===0||loading} onClick={()=>setResultsPage(value=>Math.max(0,value-1))}>← Previous</button>
+              <span>Page {resultsTotal===0?0:resultsPage+1} of {Math.max(1,Math.ceil(resultsTotal/resultsPageSize))}</span>
+              <button type="button" disabled={(resultsPage+1)*resultsPageSize>=resultsTotal||loading} onClick={()=>setResultsPage(value=>value+1)}>Next →</button>
+            </div>
+          </div>
         </>}
       </>:<>
         <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← Tests & results</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
@@ -271,15 +279,7 @@ export default function TestsClient(){
                 </article>;
               })}
             </div>
-          <div className={styles.resultPagination} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-        <small>Showing {resultsTotal===0?0:resultsPage*resultsPageSize+1}–{Math.min(resultsTotal,(resultsPage+1)*resultsPageSize)} of {resultsTotal} results</small>
-        <div style={{display:'flex',alignItems:'center',gap:8}}>
-          <button type="button" disabled={resultsPage===0||loading} onClick={()=>setResultsPage(value=>Math.max(0,value-1))}>← Previous</button>
-          <span>Page {resultsTotal===0?0:resultsPage+1} of {Math.max(1,Math.ceil(resultsTotal/resultsPageSize))}</span>
-          <button type="button" disabled={(resultsPage+1)*resultsPageSize>=resultsTotal||loading} onClick={()=>setResultsPage(value=>value+1)}>Next →</button>
-        </div>
-      </div>
-      </section>
+          </section>
           <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to results</button></div>
         </section>
         :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>Test submitted successfully</h2><p>Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
