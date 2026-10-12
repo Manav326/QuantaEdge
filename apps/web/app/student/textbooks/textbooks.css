@@ -221,3 +221,172 @@
 }
 
 .qe-textbook-notice{margin:0 0 14px;padding:11px 14px;border:1px solid #f0d3a8;border-radius:10px;background:#fff8ed;color:#80501b;font-size:11px;line-height:1.55}
+
+
+/* Premium textbook library governance, filtering and two-sided chapter pagination */
+.qe-textbook-library-hero{
+  isolation:isolate;
+  margin-bottom:24px;
+}
+.qe-textbook-library-hero:focus-within{outline:2px solid #fb923c;outline-offset:3px}
+.qe-textbook-hero-copy h1{max-width:550px}
+.qe-textbook-book-cover{transition:transform .25s ease,box-shadow .25s ease}
+.qe-textbook-library-hero:hover .qe-textbook-book-cover{transform:rotate(-5deg) translateY(-3px);box-shadow:-8px 1px 0 #7c2d12,-13px 13px 0 #111a2b3b,0 26px 40px #090f1e5c}
+
+.qe-textbook-governance{
+  margin:0 0 16px;
+  padding:19px 21px;
+  border:1px solid #e1e7f0;
+  border-radius:18px;
+  background:linear-gradient(135deg,#fff 0%,#fcfdff 100%);
+  box-shadow:0 8px 24px #18243a07,inset 0 1px 0 #fff;
+}
+.qe-textbook-governance .qe-textbook-library-toolbar{
+  align-items:center;
+  margin:0;
+}
+.qe-textbook-governance-copy{min-width:0}
+.qe-textbook-governance-copy .qe-textbook-eyebrow{color:#b54716}
+.qe-textbook-governance-copy h2{
+  margin:7px 0 6px;
+  color:#1c2942;
+  font-size:clamp(19px,2vw,24px);
+  line-height:1.2;
+  letter-spacing:-.7px;
+}
+.qe-textbook-governance-copy p{max-width:570px;font-size:11px;line-height:1.7;color:#768399;margin:0}
+.qe-textbook-filter-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:8px;
+  min-width:220px;
+}
+.qe-textbook-filter-wrap label{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:7px;
+  color:#59677d;
+  font-size:10px;
+  font-weight:800;
+  width:100%;
+}
+.qe-textbook-filter-wrap select{
+  width:100%;
+  min-height:42px;
+  padding:10px 38px 10px 12px;
+  border:1px solid #dfe5ef;
+  border-radius:10px;
+  appearance:none;
+  background:#fff linear-gradient(45deg,transparent 50%,#8490a4 50%),linear-gradient(135deg,#8490a4 50%,transparent 50%);
+  background-repeat:no-repeat;
+  background-size:5px 5px,5px 5px;
+  background-position:calc(100% - 17px) 17px,calc(100% - 12px) 17px;
+  color:#25324a;
+  font:inherit;
+  font-weight:700;
+  font-size:11px;
+  box-shadow:0 2px 5px #18243a04;
+  cursor:pointer;
+  transition:border-color .15s,box-shadow .15s;
+}
+.qe-textbook-filter-wrap select:hover{border-color:#e7a579}
+.qe-textbook-filter-wrap select:focus-visible{outline:0;border-color:#d96b2b;box-shadow:0 0 0 3px #fb923c25}
+.qe-textbook-filter-summary{color:#8994a7;font-size:9px;font-weight:700;font-variant-numeric:tabular-nums}
+
+.qe-textbook-resource-groups{gap:12px}
+.qe-textbook-book-group{
+  border-color:#e2e7f0;
+  box-shadow:0 5px 18px #19284005;
+}
+.qe-textbook-book-group:hover{border-color:#d9e0eb}
+.qe-textbook-book-group.expanded{
+  border-color:#efc4a5;
+  box-shadow:0 10px 27px #9a34120b;
+}
+.qe-textbook-book-toggle{min-height:74px}
+.qe-textbook-book-toggle:focus-visible{outline:2px solid #e77e3c;outline-offset:-2px}
+.qe-textbook-chapter-count{font-variant-numeric:tabular-nums}
+.qe-textbook-book-contents{padding-top:4px}
+.qe-textbook-edition-list{margin-top:5px}
+.qe-textbook-edition-list>button{transition:background .14s}
+.qe-textbook-edition-list>button:hover{background:#fff9f4}
+.qe-textbook-chapter-row{
+  min-height:59px;
+  transition:background .14s ease,border-color .14s ease;
+}
+.qe-textbook-chapter-row:focus-visible{outline-offset:-2px}
+.qe-textbook-chapter-row:hover .qe-textbook-chapter-open{transform:translate(2px,-1px)}
+.qe-textbook-chapter-open{transition:transform .14s ease}
+.qe-textbook-pagination{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 0;
+}
+.qe-textbook-pagination--top{
+  margin:0 0 2px;
+  border-bottom:1px solid #edf0f5;
+}
+.qe-textbook-pagination--bottom{
+  margin-top:2px;
+  border-top:1px solid #edf0f5;
+}
+.qe-textbook-pagination>span{
+  display:grid;
+  justify-items:center;
+  gap:3px;
+  min-width:0;
+  text-align:center;
+}
+.qe-textbook-pagination>span strong{
+  color:#48566d;
+  font-size:10px;
+  font-weight:850;
+  font-variant-numeric:tabular-nums;
+}
+.qe-textbook-pagination>span small{color:#929bad;font-size:8px}
+.qe-textbook-pagination>button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:112px;
+  min-height:34px;
+  padding:8px 11px;
+  border:1px solid #e0e6ef;
+  border-radius:9px;
+  background:#fff;
+  color:#46536a;
+  font-size:9px;
+  font-weight:800;
+  cursor:pointer;
+  transition:border-color .15s,background .15s,color .15s,box-shadow .15s;
+}
+.qe-textbook-pagination>button:not(:disabled):hover{
+  border-color:#e8b28f;
+  background:#fff6ee;
+  color:#a53c12;
+  box-shadow:0 3px 8px #c2410c0b;
+}
+.qe-textbook-pagination>button:disabled{opacity:.4;cursor:not-allowed;background:#f8f9fb}
+.qe-textbook-pagination>button:focus-visible{outline:2px solid #e77e3c;outline-offset:2px}
+.qe-textbook-privacy-note{box-shadow:0 3px 10px #18243a03}
+
+@media(max-width:700px){
+  .qe-textbook-library-hero{margin-bottom:17px}
+  .qe-textbook-governance{padding:15px 14px;border-radius:14px}
+  .qe-textbook-governance .qe-textbook-library-toolbar{gap:15px}
+  .qe-textbook-filter-wrap{align-items:stretch;width:100%;min-width:0}
+  .qe-textbook-filter-wrap label{max-width:none}
+  .qe-textbook-filter-summary{align-self:flex-start}
+  .qe-textbook-book-toggle{min-height:68px}
+  .qe-textbook-pagination{gap:6px}
+  .qe-textbook-pagination>button{min-width:88px;padding:8px 8px;font-size:8px}
+  .qe-textbook-pagination>span strong{font-size:9px}
+}
+@media(max-width:380px){
+  .qe-textbook-pagination>button{min-width:75px}
+  .qe-textbook-pagination>span small{max-width:95px;line-height:1.35}
+}

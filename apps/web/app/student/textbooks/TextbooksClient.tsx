@@ -44,6 +44,8 @@ export default function TextbooksClient() {
   const searchParams = useSearchParams();
   const { locale } = useLocale();
   const requestedLanguage = locale === 'english' ? 'en' : 'hi';
+  const requestedSubjectCode = searchParams.get('subjectCode') || '';
+  const CHAPTERS_PER_PAGE = 8;
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
   const [documents, setDocuments] = useState<LearningDocument[]>([]);
@@ -51,6 +53,7 @@ export default function TextbooksClient() {
   const [selected, setSelected] = useState<LearningDocument | null>(null);
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [expandedSubject, setExpandedSubject] = useState('');
+  const [chapterPageBySubject, setChapterPageBySubject] = useState<Record<string, number>>({});
   const initializedLibraryScope = useRef('');
   const [currentPage, setCurrentPage] = useState(1);
   const [zoom, setZoom] = useState(100);
@@ -191,7 +194,7 @@ export default function TextbooksClient() {
     const classCode = String(subjectGroups[0]?.rows[0]?.class_code || 'default');
     if (initializedLibraryScope.current === classCode) return;
     const key = 'qe:student:textbooks:open:' + classCode;
-    const requested = searchParams.get('subjectCode');
+    const requested = requestedSubjectCode;
     const remembered = localStorage.getItem(key);
     const initial = subjectGroups.find(group => group.code === requested)?.code
       || subjectGroups.find(group => group.code === remembered)?.code
@@ -200,17 +203,17 @@ export default function TextbooksClient() {
     setExpandedSubject(initial);
     if (initial) localStorage.setItem(key, initial);
     initializedLibraryScope.current = classCode;
-  }, [loading, subjectGroups, searchParams]);
+  }, [loading, subjectGroups, requestedSubjectCode]);
 
   useEffect(() => {
     if (documentId) return;
-    const requested = searchParams.get('subjectCode');
+    const requested = requestedSubjectCode;
     if (!requested || !availableSubjects.some(subject => subject.code === requested)) return;
     setSubjectFilter(requested);
     setExpandedSubject(requested);
     const classCode = String(documents.find(item => item.subject_code === requested)?.class_code || 'default');
     localStorage.setItem('qe:student:textbooks:open:' + classCode, requested);
-  }, [documentId, searchParams, availableSubjects, documents]);
+  }, [documentId, requestedSubjectCode, availableSubjects, documents]);
 
   useEffect(() => {
     if (documentId || loading) return;
@@ -294,11 +297,25 @@ export default function TextbooksClient() {
 
   function changeSubjectFilter(value: string) {
     setSubjectFilter(value);
-    const group = value === 'ALL' ? subjectGroups[0] : subjectGroups.find(item => item.code === value);
+    setChapterPageBySubject({});
+    const group = value === 'ALL' ? null : subjectGroups.find(item => item.code === value);
     const code = group?.code || '';
+    // Selecting one subject opens its assignments; returning to All subjects
+    // deliberately collapses every book so the user can choose what to open.
     setExpandedSubject(code);
-    const classCode = String(group?.rows[0]?.class_code || 'default');
-    if (code) localStorage.setItem('qe:student:textbooks:open:' + classCode, code);
+    const classCode = String(group?.rows[0]?.class_code || documents[0]?.class_code || 'default');
+    const storageKey = 'qe:student:textbooks:open:' + classCode;
+    if (code) localStorage.setItem(storageKey, code);
+    else localStorage.removeItem(storageKey);
+
+    // Keep the URL filter in sync. Removing subjectCode for "All subjects"
+    // prevents an old deep-link filter from silently reopening a card.
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('documentId');
+    if (value === 'ALL') params.delete('subjectCode');
+    else params.set('subjectCode', value);
+    const query = params.toString();
+    router.replace('/student/textbooks' + (query ? '?' + query : ''), { scroll: false });
   }
 
   const progressPercent = pageCount ? Math.round((currentPage / pageCount) * 100) : 0;
@@ -314,9 +331,41 @@ export default function TextbooksClient() {
     {!documentId ? <section className="qe-textbook-library">
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
       {notice && <div className="qe-textbook-notice" role="status">{notice}</div>}
-      <div className="qe-textbook-library-toolbar"><div><span className="qe-textbook-eyebrow">RESOURCE LIBRARY</span><h2>Available textbooks</h2><p>Only the books and chapters available to your enrolled subjects are shown.</p></div>
-        <label>Subject <select value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}</select></label>
-      </div>
+      <section className="qe-textbook-library-hero" aria-labelledby="qe-textbook-hero-title">
+        <div className="qe-textbook-hero-copy">
+          <span className="qe-textbook-eyebrow"><i/> QUANTAEDGE RESOURCE LIBRARY</span>
+          <h1 id="qe-textbook-hero-title">Your textbooks, organised for learning.</h1>
+          <p>Find the subject books and chapter PDFs assigned to your class. Open a book, choose a chapter, and continue reading in the secure page-by-page viewer.</p>
+          <div className="qe-textbook-hero-chips">
+            <span>{documents.length} published resource{documents.length === 1 ? '' : 's'}</span>
+            <span>Class {documents[0]?.class_code || '—'}</span>
+            <span>Secure online reader</span>
+          </div>
+        </div>
+        <div className="qe-textbook-book-art" aria-hidden="true">
+          <span className="qe-book-orbit orbit-one"/>
+          <span className="qe-book-orbit orbit-two"/>
+          <div className="qe-textbook-book-cover"><span>Q</span><b>TEXTBOOK<br/>LIBRARY</b><small>LEARN · READ · GROW</small></div>
+        </div>
+      </section>
+
+      <section className="qe-textbook-governance" aria-labelledby="qe-textbook-governance-title">
+        <div className="qe-textbook-library-toolbar">
+          <div className="qe-textbook-governance-copy">
+            <span className="qe-textbook-eyebrow">RESOURCE GOVERNANCE</span>
+            <h2 id="qe-textbook-governance-title">Book and chapter assignments</h2>
+            <p>Browse only the published resources available for your enrolled class and subjects.</p>
+          </div>
+          <div className="qe-textbook-filter-wrap">
+            <label>Subject scope
+              <select aria-label="Filter textbook assignments by subject" value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}>
+                <option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}
+              </select>
+            </label>
+            <span className="qe-textbook-filter-summary" aria-live="polite">{visibleDocuments.length} resource{visibleDocuments.length === 1 ? '' : 's'} · {subjectGroups.length} subject{subjectGroups.length === 1 ? '' : 's'}</span>
+          </div>
+        </div>
+      </section>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> Loading your textbook library…</div>
         : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>No published PDFs available yet</h3><p>When your teacher publishes a subject book or chapter PDF for your class, it will appear here.</p><Link href="/student/learn">Continue with lessons →</Link></div>
@@ -330,6 +379,17 @@ export default function TextbooksClient() {
               String(a.chapter_code||a.chapter_name||a.title).localeCompare(String(b.chapter_code||b.chapter_name||b.title),undefined,{numeric:true,sensitivity:'base'}));
             const book = subjectBooks[0];
             const expanded = expandedSubject === code;
+            const chapterPageCount = Math.max(1, Math.ceil(chapterBooks.length / CHAPTERS_PER_PAGE));
+            const chapterPage = Math.max(1, Math.min(chapterPageBySubject[code] || 1, chapterPageCount));
+            const visibleChapterBooks = chapterBooks.slice((chapterPage - 1) * CHAPTERS_PER_PAGE, chapterPage * CHAPTERS_PER_PAGE);
+            const showChapterPagination = chapterPageCount > 1;
+            const renderChapterPagination = (position: 'top' | 'bottom') => (
+              <nav className={'qe-textbook-pagination qe-textbook-pagination--' + position} aria-label={name + ' chapter pagination ' + position}>
+                <button type="button" disabled={chapterPage <= 1} onClick={() => setChapterPageBySubject(old => ({ ...old, [code]: Math.max(1, chapterPage - 1) }))}>← Previous</button>
+                <span><strong>Page {chapterPage} of {chapterPageCount}</strong><small>{chapterBooks.length} chapters in this book</small></span>
+                <button type="button" disabled={chapterPage >= chapterPageCount} onClick={() => setChapterPageBySubject(old => ({ ...old, [code]: Math.min(chapterPageCount, chapterPage + 1) }))}>Next →</button>
+              </nav>
+            );
             const bookTitle = hasBookParts
               ? (locale === 'english' ? name + ' · NCERT textbook parts' : name + ' · पाठ्यपुस्तक के भाग')
               : (book?.title || (name + ' · Chapter PDFs'));
@@ -341,9 +401,11 @@ export default function TextbooksClient() {
             const toggle = () => {
               const next = expanded ? '' : code;
               setExpandedSubject(next);
+              if (next) setChapterPageBySubject(old => ({ ...old, [code]: 1 }));
               const classCode = String(rows[0]?.class_code || 'default');
-              if (next) localStorage.setItem('qe:student:textbooks:open:' + classCode, next);
-              else localStorage.removeItem('qe:student:textbooks:open:' + classCode);
+              const storageKey = 'qe:student:textbooks:open:' + classCode;
+              if (next) localStorage.setItem(storageKey, next);
+              else localStorage.removeItem(storageKey);
             };
             return <section className={'qe-textbook-book-group' + (expanded ? ' expanded' : '')} key={code}>
               <div className="qe-textbook-book-row">
@@ -363,13 +425,17 @@ export default function TextbooksClient() {
                     <span>Open ↗</span>
                   </button>)}
                 </div>}
-                {chapterBooks.length>0 ? <div className="qe-textbook-chapter-list">{chapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
-                  <span className="qe-textbook-chapter-index">{String(index+1).padStart(2,'0')}</span>
-                  <span className="qe-library-mini-pdf">PDF</span>
-                  <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, locale === 'english')}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
-                  <span className="qe-textbook-chapter-pages">{item.page_count} pages</span>
-                  <span className="qe-textbook-chapter-open">↗</span>
-                </button>)}</div> : <div className="qe-textbook-no-chapters"><span>▤</span><div><strong>No chapter PDFs published yet</strong><small>Published chapter files will appear under this book.</small></div></div>}
+                {chapterBooks.length>0 ? <>
+                  {showChapterPagination && renderChapterPagination('top')}
+                  <div className="qe-textbook-chapter-list">{visibleChapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
+                    <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * CHAPTERS_PER_PAGE + index + 1).padStart(2,'0')}</span>
+                    <span className="qe-library-mini-pdf">PDF</span>
+                    <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, locale === 'english')}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
+                    <span className="qe-textbook-chapter-pages">{item.page_count} pages</span>
+                    <span className="qe-textbook-chapter-open">↗</span>
+                  </button>)}</div>
+                  {showChapterPagination && renderChapterPagination('bottom')}
+                </> : <div className="qe-textbook-no-chapters"><span>▤</span><div><strong>No chapter PDFs published yet</strong><small>Published chapter files will appear under this book.</small></div></div>}
               </div>}
             </section>;
           })}
