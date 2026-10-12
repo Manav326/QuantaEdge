@@ -10,6 +10,7 @@ import './textbooks.css';
 type LearningDocument = {
   document_id: number;
   scope: 'SUBJECT_BOOK' | 'CHAPTER_PDF';
+  book_part?: number | null;
   language?: 'hi' | 'en';
   title: string;
   edition?: string | null;
@@ -322,12 +323,21 @@ export default function TextbooksClient() {
         : <div className="qe-textbook-resource-groups">
           {subjectGroups.map(({ code, name: rawName, rows }) => {
             const name = displaySubjectName(code, rawName);
-            const subjectBooks = rows.filter(item => item.scope === 'SUBJECT_BOOK');
+            const subjectBooks = rows.filter(item => item.scope === 'SUBJECT_BOOK').slice().sort((a,b) =>
+              Number(a.book_part || 0) - Number(b.book_part || 0));
+            const hasBookParts = subjectBooks.some(item => Number(item.book_part || 0) > 0);
             const chapterBooks = rows.filter(item => item.scope === 'CHAPTER_PDF').slice().sort((a,b)=>
               String(a.chapter_code||a.chapter_name||a.title).localeCompare(String(b.chapter_code||b.chapter_name||b.title),undefined,{numeric:true,sensitivity:'base'}));
             const book = subjectBooks[0];
             const expanded = expandedSubject === code;
-            const bookTitle = book?.title || (name + ' · Chapter PDFs');
+            const bookTitle = hasBookParts
+              ? (locale === 'english' ? name + ' · NCERT textbook parts' : name + ' · पाठ्यपुस्तक के भाग')
+              : (book?.title || (name + ' · Chapter PDFs'));
+            const partLabel = (part: number) => {
+              if (locale !== 'english') return 'भाग ' + part;
+              const roman = ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[part];
+              return roman ? 'Part ' + roman : 'Part ' + part;
+            };
             const toggle = () => {
               const next = expanded ? '' : code;
               setExpandedSubject(next);
@@ -339,14 +349,20 @@ export default function TextbooksClient() {
               <div className="qe-textbook-book-row">
                 <button type="button" className="qe-textbook-book-toggle" aria-expanded={expanded} onClick={toggle} aria-controls={'qe-textbook-chapters-' + code}>
                   <span className="qe-library-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-                  <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong><small>Class {rows[0]?.class_code} · {name} · {book ? book.page_count + ' pages' : 'Chapter reading collection'}</small></span>
+                  <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong><small>Class {rows[0]?.class_code} · {name} · {hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' available' : book ? book.page_count + ' pages' : 'Chapter reading collection'}</small></span>
                   <span className="qe-textbook-chapter-count">{chapterBooks.length} chapter PDF{chapterBooks.length===1?'':'s'}</span>
                   <span className="qe-textbook-book-chevron">{expanded?'−':'+'}</span>
                 </button>
-                {book&&<button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={'Open complete textbook '+book.title}>Open book ↗</button>}
+                {book && !hasBookParts && <button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={'Open complete textbook '+book.title}>Open book ↗</button>}
               </div>
               {expanded&&<div className="qe-textbook-book-contents" id={'qe-textbook-chapters-' + code}>
-                {subjectBooks.length>1&&<div className="qe-textbook-edition-list">{subjectBooks.slice(1).map(item=><button type="button" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}><span className="qe-library-mini-pdf">PDF</span><span><strong>{item.title}</strong><small>{item.edition||'Complete subject book'} · {item.page_count} pages</small></span><span>Open ↗</span></button>)}</div>}
+                {subjectBooks.length>1 && <div className="qe-textbook-edition-list" aria-label={hasBookParts ? 'Textbook parts' : 'Textbook editions'}>
+                  {(hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0) : subjectBooks.slice(1)).map(item => <button type="button" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
+                    <span className="qe-library-mini-pdf">PDF</span>
+                    <span><strong>{hasBookParts && item.book_part ? partLabel(Number(item.book_part)) : item.title}</strong><small>{item.edition || (hasBookParts ? 'NCERT textbook part' : 'Complete subject book')} · {item.page_count} pages</small></span>
+                    <span>Open ↗</span>
+                  </button>)}
+                </div>}
                 {chapterBooks.length>0 ? <div className="qe-textbook-chapter-list">{chapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                   <span className="qe-textbook-chapter-index">{String(index+1).padStart(2,'0')}</span>
                   <span className="qe-library-mini-pdf">PDF</span>
@@ -360,7 +376,7 @@ export default function TextbooksClient() {
         </div>}
       <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page. Screenshots or capturing displayed pages cannot be fully prevented by a website.</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
-      <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected ? displayChapterTitle(selected, locale === 'english') : 'Chapter PDF'}</span></div>
+      <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' && selected.book_part ? (locale === 'english' ? 'Part ' + ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[Number(selected.book_part)] : 'भाग ' + selected.book_part) : selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected ? displayChapterTitle(selected, locale === 'english') : 'Chapter PDF'}</span></div>
         <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? 'SUBJECT TEXTBOOK' : 'CHAPTER READING'} · {subjectLabel.toUpperCase()}</span><h1>{selected ? (selected.scope === 'CHAPTER_PDF' ? displayChapterTitle(selected, locale === 'english') : selected.title) : 'Loading textbook…'}</h1><p>{selected?.scope === 'CHAPTER_PDF' && selected ? displayChapterTitle(selected, locale === 'english') + ' · ' : ''}{selected?.edition || 'View-only online reader'}</p></div>
           {selected && <div className="qe-reader-progress"><strong>{progressPercent}%</strong><span>read</span><div><i style={{width: progressPercent + '%'}}/></div></div>}
         </div>

@@ -530,6 +530,93 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
                 self.root / "private-review" / "ncert-book-splits",
             )
 
+
+    def test_class_7_and_8_math_parts_are_separate_book_assignments(self):
+        books_dir = self.root / "Books"
+        books_dir.mkdir()
+        chapters_by_track = {}
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                chapters_by_track[(grade, subject)] = [{
+                    "chapter_id": int(grade) * 1000 + (1 if subject == "maths" else 2),
+                    "chapter_code": f"test-{grade}-{subject}",
+                    "chapter_name": f"Test chapter {grade} {subject}",
+                }]
+                if grade in {"7", "8"} and subject == "maths":
+                    canonical = books_dir / importer.book_filename(grade, subject, "english")
+                    with fitz.open() as doc:
+                        doc.new_page()
+                        doc.save(canonical)
+                    source_paths = [
+                        books_dir / importer.part_book_filename(grade, subject, "english", 1),
+                        books_dir / importer.part_book_filename(grade, subject, "english", 2),
+                    ]
+                    for path, title in zip(source_paths, ("Part I content", "Part II content")):
+                        with fitz.open() as doc:
+                            page = doc.new_page()
+                            page.insert_text((50, 50), title)
+                            doc.save(path)
+                else:
+                    path = books_dir / importer.book_filename(grade, subject, "english")
+                    with fitz.open() as doc:
+                        page = doc.new_page()
+                        page.insert_text((50, 50), f"Book {grade} {subject}")
+                        doc.save(path)
+
+        def fake_detect(path, grade, subject, language, chapters):
+            chapter = chapters[0]
+            return [{
+                **chapter, "start_page": 1, "end_page": 1, "page_count": 1,
+                "chapter_order": 1, "mapping_note": "Test-only mapping",
+            }]
+
+        with patch.object(importer, "detect_chapter_ranges", side_effect=fake_detect):
+            records, _warnings = importer.create_import_plan(
+                self.root, chapters_by_track, 500 * 1024 * 1024,
+                books_dir=books_dir, languages=("english",),
+            )
+
+        books = [row for row in records if row["scope"] == "SUBJECT_BOOK"]
+        chapters = [row for row in records if row["scope"] == "CHAPTER_PDF"]
+        self.assertEqual(8, len(books))
+        self.assertEqual(6, len(chapters))
+        for grade in ("7", "8"):
+            with self.subTest(grade=grade):
+                parts = sorted(
+                    [row for row in books if row["class_code"] == grade and row["subject_code"] == "maths"],
+                    key=lambda row: row["book_part"],
+                )
+                self.assertEqual([1, 2], [row["book_part"] for row in parts])
+                self.assertIn("Part I", parts[0]["title"])
+                self.assertIn("Part II", parts[1]["title"])
+                self.assertTrue(all(Path(row["path"]).parent == books_dir for row in parts))
+                self.assertNotIn(
+                    importer.book_filename(grade, "maths", "english"),
+                    [row["filename"] for row in parts],
+                )
+                combined_path = (
+                    self.root / "private-review" / "ncert-book-splits" / "combined-books"
+                    / importer.book_filename(grade, "maths", "english")
+                )
+                self.assertTrue(combined_path.is_file())
+                chapter = next(
+                    row for row in chapters
+                    if row["class_code"] == grade and row["subject_code"] == "maths"
+                )
+                self.assertEqual(importer.sha256_file(combined_path), chapter["parent_book_sha256"])
+
+    def test_assignment_slot_key_distinguishes_book_parts(self):
+        common = {
+            "class_code": "7", "subject_code": "maths", "language": "english",
+            "scope": "SUBJECT_BOOK", "chapter_id": None,
+        }
+        one = importer.slot_key({**common, "book_part": 1})
+        two = importer.slot_key({**common, "book_part": 2})
+        whole = importer.slot_key({**common, "book_part": None})
+        self.assertNotEqual(one, two)
+        self.assertNotEqual(one, whole)
+        self.assertNotEqual(two, whole)
+
     def test_complete_book_original_is_not_rewritten_by_split(self):
         source = self.make_book()
         original_hash = importer.sha256_file(source)

@@ -45,6 +45,10 @@ The source-ingestion worker verifies the entire cached book when the job starts.
 
 Every selected range must belong to an active chapter in the selected class/subject, ranges cannot overlap, and every resulting chapter PDF must be explicitly approved or rejected. Approved chapter PDFs are inserted into the existing library as DRAFT documents. A separate authorized publisher must verify metadata and publish individual learning documents before students can see them. The whole source stays in GHCR if it is too large for PostgreSQL; no chapter-by-chapter upstream downloader fallback is used.
 
+## Part-wise student textbooks for Class 7/8 Mathematics
+
+For NCERT Class 7 and Class 8 Mathematics, keep official Part I and Part II source PDFs separate in the private PDF library and publish them as two SUBJECT_BOOK resources, tagged with book_part=1 and book_part=2. The student textbook library displays Part I and Part II as distinct openable entries. A local combined PDF may be used as an internal chapter-boundary working copy only; it is never uploaded or shown as the complete book. Single-volume books continue to use a null book_part.
+
 ## Class-wise GHCR textbook storage
 
 Whole books are stored in fourteen stable GHCR images, from `quantaedge-textbooks-class-6-hindi` through `quantaedge-textbooks-class-12-english`. At runtime each class/medium index and complete-book PDF is mounted read-only under `/var/lib/quantaedge/textbook-cache/class-N/{hindi|english}`. The Admin picker filters the selected curriculum class first, then subject. Each ingestion job saves the class number and whole-book SHA-256 so a later preview/split cannot accidentally resolve a same-named entry from another class image.

@@ -162,7 +162,7 @@ public class LearningDocumentController {
     String normalizedClass = classCode == null ? "" : classCode.trim();
     String normalizedSubject = subjectCode == null ? "" : subjectCode.trim();
     return jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.source_title,d.source_url,d.edition,
+      select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
              d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
              c.code as class_code,c.display_name as class_name,
@@ -205,7 +205,10 @@ public class LearningDocumentController {
       """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
     if (subjectId == null) throw badRequest("The selected active class and subject do not exist.");
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
+    Integer bookPart = body.get("bookPart") == null
+        ? null : integerValue(body.get("bookPart"), "bookPart", 1, 9);
     if ("CHAPTER_PDF".equals(scope)) {
+      if (bookPart != null) throw badRequest("A chapter PDF cannot have a textbook part number.");
       if (chapterId == null) throw badRequest("Choose a chapter for a chapter PDF.");
       Long chapterCount = jdbc.queryForObject("""
         select count(*) from curriculum_chapter
@@ -235,15 +238,16 @@ public class LearningDocumentController {
 
     Long documentId = jdbc.queryForObject("""
       insert into learning_document(
-        pdf_asset_id,scope,subject_id,chapter_id,title,source_title,source_url,edition,language,
+        pdf_asset_id,scope,subject_id,chapter_id,book_part,title,source_title,source_url,edition,language,
         page_start,page_end,status,version_no,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?)
+      ) values(?,?,?,?,?,?,?,?,?,?,?,?,'DRAFT',1,?)
       returning id
-      """, Long.class, assetId, scope, subjectId, chapterId, title, sourceTitle, sourceUrl,
+      """, Long.class, assetId, scope, subjectId, chapterId, bookPart, title, sourceTitle, sourceUrl,
       edition, language, start, end, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/learning-documents/" + documentId + "/created",
         "Attached a private PDF to " + scope + " for class " + classCode + ", subject " + subjectCode
-            + (chapterId == null ? "" : ", chapter " + chapterId) + ".");
+            + (chapterId == null ? "" : ", chapter " + chapterId)
+            + (bookPart == null ? "" : ", textbook part " + bookPart) + ".");
     return assignmentById(documentId);
   }
 
@@ -264,7 +268,7 @@ public class LearningDocumentController {
       authorization.requirePermission(context, "CONTENT_EDIT");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id,d.scope,d.subject_id,d.chapter_id,d.language,d.status,d.source_title,d.source_url,d.edition,
+      select d.id,d.scope,d.subject_id,d.chapter_id,d.book_part,d.language,d.status,d.source_title,d.source_url,d.edition,
              d.title,d.page_start,d.page_end,a.page_count,a.id as asset_id,a.review_status as asset_review_status,
              ch.active as chapter_active,ch.content_status as chapter_content_status
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
@@ -296,8 +300,9 @@ public class LearningDocumentController {
         where scope=? and subject_id=? and language=?
           and chapter_id is not distinct from ?
           and status='PUBLISHED' and id<>?
+          and (? is null or book_part is null or book_part=?)
         """, current.get("scope"), current.get("subject_id"), current.get("language"),
-        current.get("chapter_id"), documentId);
+        current.get("chapter_id"), documentId, current.get("book_part"), current.get("book_part"));
       jdbc.update("""
         update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
         where id=?
@@ -371,7 +376,7 @@ public class LearningDocumentController {
     String subjectFilter = subjectCode == null ? "" : subjectCode.trim();
     String languageFilter = normalizeDocumentLanguage(language);
     return jdbc.queryForList("""
-      select d.id as document_id,d.scope,d.title,d.edition,d.language,d.page_start,d.page_end,
+      select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
              d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
@@ -477,7 +482,7 @@ public class LearningDocumentController {
 
   private Map<String, Object> readableDocument(long documentId, long studentId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.edition,d.language,
+      select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.edition,d.language,
              d.page_start,d.page_end,d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name

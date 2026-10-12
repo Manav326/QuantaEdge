@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """Import complete official NCERT books, split their chapters locally, and stage both as DRAFTs.
 
-Put one complete PDF per Class 6-8 / Mathematics-Science / English-Hindi slot in the repository's
-books/ folder. If Class 7 or Class 8 Mathematics is supplied as separate NCERT parts, put both part
-PDFs in that same folder using the PART_1 / PART_2 names listed by --help; the script creates a
-local combined reading copy for QuantaEdge's single complete-book slot and keeps both original PDFs
-unchanged. No chapter PDFs, CSV manifest, edition spreadsheet, or manually entered chapter map is
-needed.
+Put the original PDFs in the repository's Books/ folder. Class 6 Maths/Science and Class 7-8 Science
+use one complete-book PDF per class/subject/language. Class 7 and Class 8 Mathematics use two
+official source PDFs (PART_1 and PART_2); those original PDFs are uploaded and assigned as separate
+student textbook resources. A local combined reading copy is used only to map chapter page ranges
+and is never uploaded or assigned. No chapter PDFs, CSV manifest, edition spreadsheet, or manually
+entered chapter map is needed.
 
 The importer:
 - uses the live QuantaEdge curriculum to obtain canonical chapter IDs/codes;
 - finds chapter-opening pages using official title aliases in the PDF's extracted text;
 - fails closed unless every active chapter has a unique, sequentially verified start page;
-- uploads a single supplied whole-book PDF byte-for-byte; when official Maths Part I/II files are
-  provided separately, it combines their pages locally while keeping the original source parts unchanged;
+- uploads single-volume PDFs byte-for-byte; uploads official Class 7/8 Mathematics Part I and Part II
+  as separate textbook resources and never uploads their local combined chapter-mapping copy;
 - extracts chapter ranges into private-review/ncert-book-splits without editing the source PDFs;
 - validates all selected books and chapter mappings before writing chapter extracts or making the first API write;
 - uploads each distinct PDF once and creates DRAFT assignments only;
@@ -690,10 +690,15 @@ def chapter_output_filename(grade: str, subject: str, language: str, code: str) 
 
 
 def student_title(grade: str, subject: str, language: str, scope: str,
-                  chapter: dict[str, Any] | None = None) -> str:
+                  chapter: dict[str, Any] | None = None,
+                  book_part: int | None = None) -> str:
     base = f"NCERT | Class {grade} | {label_subject(subject)} | {label_language(language)}"
     if scope == "SUBJECT_BOOK":
-        return base + " | Complete Book"
+        if book_part is None:
+            return base + " | Complete Book"
+        roman_part = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")[book_part - 1] if 1 <= book_part <= 9 else str(book_part)
+        part_label = f"Part {roman_part}" if language == "english" else f"भाग {book_part}"
+        return base + " | " + part_label
     assert chapter is not None
     visible_title = (
         chapter["chapter_name"] if language == "hindi"
@@ -742,8 +747,8 @@ def query_assignments(
     cookie: str,
     tracks: set[tuple[str, str]],
     progress: Callable[[str], None] | None = None,
-) -> tuple[dict[tuple[str, str, str, str, int | None], set[str]], dict[str, dict[str, Any]]]:
-    hashes_by_slot: dict[tuple[str, str, str, str, int | None], set[str]] = {}
+) -> tuple[dict[tuple[str, str, str, str, int | None, int | None], set[str]], dict[str, dict[str, Any]]]:
+    hashes_by_slot: dict[tuple[str, str, str, str, int | None, int | None], set[str]] = {}
     assignment_by_slot_hash: dict[str, dict[str, Any]] = {}
     ordered_tracks = sorted(tracks)
     for track_index, (grade, subject) in enumerate(ordered_tracks, 1):
@@ -763,6 +768,7 @@ def query_assignments(
                 str(row.get("class_code")), str(row.get("subject_code")),
                 str(row.get("language")), str(row.get("scope")),
                 int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
+                int(row["book_part"]) if row.get("book_part") is not None else None,
             )
             digest = str(row.get("sha256") or "").lower()
             if digest:
@@ -952,6 +958,7 @@ def create_import_plan(
         raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
     output_dir = root / "private-review" / "ncert-book-splits"
     records: list[dict[str, Any]] = []
+    chapter_source_records: list[dict[str, Any]] = []
     warnings: list[str] = []
     missing: list[str] = []
     total_input_slots = len(CLASSES) * len(SUBJECTS) * len(languages)
@@ -974,7 +981,7 @@ def create_import_plan(
                 except FileNotFoundError as exc:
                     missing.append(str(exc))
                     continue
-                if book["size_bytes"] > max_bytes:
+                if not source["merged_from_parts"] and book["size_bytes"] > max_bytes:
                     raise ValueError(
                         f"{name}: {book['size_bytes']:,} bytes exceeds the verified staff-role upload "
                         f"limit of {max_bytes // (1024 * 1024)} MiB."
@@ -983,8 +990,9 @@ def create_import_plan(
                     if source["merged_from_parts"]:
                         parts = " + ".join(item["filename"] for item in source["source_files"])
                         progress(
-                            f"Combined reading copy prepared from {parts}; {book['page_count']} pages, "
-                            f"{format_bytes(book['size_bytes'])}. Original part PDFs remain unchanged."
+                            f"Local chapter-mapping copy prepared from {parts}; {book['page_count']} pages, "
+                            f"{format_bytes(book['size_bytes'])}. The combined copy will NOT be uploaded; "
+                            "the two original part PDFs will be student resources."
                         )
                     else:
                         progress(
@@ -1003,6 +1011,10 @@ def create_import_plan(
                         f"Validated all {len(chapter_ranges)} chapter openings for {name}; "
                         "page mapping is sequential and unambiguous."
                     )
+                source_title = (
+                    f"National Council of Educational Research and Training (NCERT) — "
+                    f"Class {grade} {label_subject(subject)} textbook"
+                )
                 book_record = {
                     **book,
                     "path": str(path.resolve()),
@@ -1016,26 +1028,77 @@ def create_import_plan(
                     "scope": "SUBJECT_BOOK",
                     "chapter_code": None,
                     "chapter_id": None,
+                    "book_part": None,
                     "title": student_title(grade, subject, language, "SUBJECT_BOOK"),
-                    "source_title": (
-                        f"National Council of Educational Research and Training (NCERT) — "
-                        f"Class {grade} {label_subject(subject)} textbook"
-                    ),
+                    "source_title": source_title,
                     "source_url": OFFICIAL_NCERT_CATALOG,
                     "chapter_ranges": chapter_ranges,
                     "edition_warning": not bool(book["edition_detected"]),
                     "action": "PENDING",
                 }
+                # This record points to the actual chapter-mapping source. For two-part NCERT
+                # Maths books, that is a local combined copy and is not a student-facing resource.
+                chapter_source_records.append(book_record)
+
                 if source.get("metadata_warning"):
                     warnings.append(str(source["metadata_warning"]))
-                records.append(book_record)
 
-                # Delay extraction until every source book and chapter mapping has passed preflight.
-                if not book["edition_detected"]:
-                    warnings.append(
-                        f"{name}: no clear printed reprint/session was detected in the first 15 pages; "
-                        "edition metadata is marked for Admin verification before publication."
-                    )
+                if source["merged_from_parts"]:
+                    for part_number, source_part in enumerate(source["source_files"], start=1):
+                        part_filename = str(source_part["filename"])
+                        part_path = books_dir / part_filename
+                        part_book = inspect_book(part_path)
+                        if part_book["size_bytes"] > max_bytes:
+                            raise ValueError(
+                                f"{part_filename}: {part_book['size_bytes']:,} bytes exceeds the verified "
+                                f"staff-role upload limit of {max_bytes // (1024 * 1024)} MiB."
+                            )
+                        roman_part = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")[part_number - 1] if 1 <= part_number <= 9 else str(part_number)
+                        part_record = {
+                            **part_book,
+                            "path": str(part_path.resolve()),
+                            "filename": part_filename,
+                            "input_source_files": [{
+                                "filename": part_filename,
+                                "sha256": part_book["sha256"],
+                                "size_bytes": part_book["size_bytes"],
+                            }],
+                            "merged_from_parts": False,
+                            "source_bytes_preserved": True,
+                            "class_code": grade,
+                            "subject_code": subject,
+                            "language": language,
+                            "scope": "SUBJECT_BOOK",
+                            "chapter_code": None,
+                            "chapter_id": None,
+                            "book_part": part_number,
+                            "title": student_title(
+                                grade, subject, language, "SUBJECT_BOOK", book_part=part_number
+                            ),
+                            "source_title": f"{source_title} — Part {roman_part}",
+                            "source_url": OFFICIAL_NCERT_CATALOG,
+                            "edition_warning": not bool(part_book["edition_detected"]),
+                            "action": "PENDING",
+                        }
+                        records.append(part_record)
+                        if progress:
+                            progress(
+                                f"Part-wise assignment planned: Class {grade} {label_subject(subject)} "
+                                f"Part {roman_part} — {part_book['page_count']} pages, "
+                                f"{format_bytes(part_book['size_bytes'])}; original PDF unchanged."
+                            )
+                        if not part_book["edition_detected"]:
+                            warnings.append(
+                                f"{part_filename}: no clear printed reprint/session was detected in the "
+                                "first 15 pages; edition metadata is marked for Admin verification before publication."
+                            )
+                else:
+                    records.append(book_record)
+                    if not book["edition_detected"]:
+                        warnings.append(
+                            f"{name}: no clear printed reprint/session was detected in the first 15 pages; "
+                            "edition metadata is marked for Admin verification before publication."
+                        )
 
     if missing:
         raise FileNotFoundError(
@@ -1046,7 +1109,7 @@ def create_import_plan(
     # Build all extracts in a temporary staging folder first. No previous local extract is
     # touched unless every requested chapter can be generated and all overwrite conflicts pass.
     output_dir.parent.mkdir(parents=True, exist_ok=True)
-    book_plans = [row for row in records if row["scope"] == "SUBJECT_BOOK"]
+    book_plans = chapter_source_records
     chapter_records: list[dict[str, Any]] = []
     with tempfile.TemporaryDirectory(prefix=".ncert-book-splits-stage-", dir=output_dir.parent) as stage_name:
         stage_root = Path(stage_name)
@@ -1136,7 +1199,10 @@ def create_import_plan(
     records.extend(chapter_records)
 
     keys = [
-        (r["class_code"], r["subject_code"], r["language"], r["scope"], r.get("chapter_id"))
+        (
+            r["class_code"], r["subject_code"], r["language"], r["scope"],
+            r.get("chapter_id"), r.get("book_part"),
+        )
         for r in records
     ]
     # One asset can be assigned to one chapter and one complete book slot; detect duplicate
@@ -1149,20 +1215,15 @@ def create_import_plan(
     return records, warnings
 
 
-def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None]:
+def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None, int | None]:
     return (
         str(row["class_code"]), str(row["subject_code"]),
         "en" if row["language"] == "english" else "hi",
         str(row["scope"]), int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
+        int(row["book_part"]) if row.get("book_part") is not None else None,
     )
 
-
-def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
-    hidden = {"path", "chapter_ranges"}
-    return {k: v for k, v in row.items() if k not in hidden}
-
-
-def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str]:
+def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str, str]:
     return (
         str(row.get("class_code") or ""),
         str(row.get("subject_code") or ""),
@@ -1170,9 +1231,9 @@ def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str
         str(row.get("scope") or ""),
         str(row.get("chapter_code") or ""),
         str(row.get("chapter_id") if row.get("chapter_id") is not None else ""),
+        str(row.get("book_part") if row.get("book_part") is not None else ""),
         str(row.get("sha256") or "").lower(),
     )
-
 
 def sync_report_record(report: dict[str, Any], row: dict[str, Any]) -> None:
     """Persist the latest state for one planned PDF in the audit report."""
@@ -1373,9 +1434,14 @@ def run(args: argparse.Namespace) -> int:
         books_dir=books_dir, languages=tuple(args.languages),
         progress=report_progress,
     )
+    source_slot_count = len({
+        (row["class_code"], row["subject_code"], row["language"])
+        for row in records
+    })
     report_progress(
-        f"Source analysis complete: {sum(1 for row in records if row['scope'] == 'SUBJECT_BOOK')} "
-        f"whole books and {sum(1 for row in records if row['scope'] == 'CHAPTER_PDF')} chapter extracts planned."
+        f"Source analysis complete: {source_slot_count} source-book slots validated, "
+        f"{sum(1 for row in records if row['scope'] == 'SUBJECT_BOOK')} separate subject-book PDF resources "
+        f"and {sum(1 for row in records if row['scope'] == 'CHAPTER_PDF')} chapter extracts planned."
     )
     tracks = {(row["class_code"], row["subject_code"]) for row in records}
     report_progress("Phase 5/6: checking PDF-library checksums and existing assignments.")
@@ -1416,7 +1482,7 @@ def run(args: argparse.Namespace) -> int:
         "publish_permission_required_later": "CONTENT_PUBLISH",
         "input_books_expected": len(CLASSES) * len(SUBJECTS) * len(args.languages),
         "languages_requested": list(args.languages),
-        "input_books_validated": sum(1 for row in records if row["scope"] == "SUBJECT_BOOK"),
+        "input_books_validated": source_slot_count,
         "chapter_splits_created_locally": sum(1 for row in records if row["scope"] == "CHAPTER_PDF"),
         "planned_draft_assignments": len(records),
         "created_assets": 0,
@@ -1431,8 +1497,8 @@ def run(args: argparse.Namespace) -> int:
         "files": [make_report_record(row) for row in records],
         "errors": [],
         "notes": [
-            "A single supplied complete-book PDF is uploaded byte-for-byte unchanged.",
-            "For separate official Mathematics Part I/II inputs, original parts remain unchanged and a combined reading PDF is created for the one complete-book assignment slot.",
+            "Single-volume source books are uploaded byte-for-byte unchanged.",
+            "Class 7/8 Mathematics Part I and Part II are uploaded as separate SUBJECT_BOOK resources. The local combined copy is used only for chapter mapping and is never uploaded or assigned."
             "Chapter PDF files are exact page-range extracts from the source pages; original source files remain untouched.",
             "All new learning-document assignments remain DRAFT.",
             "Existing published assignments remain live throughout import and review.",
@@ -1443,8 +1509,9 @@ def run(args: argparse.Namespace) -> int:
     if not args.apply:
         report_progress("Phase 6/6: writing the dry-run audit report; no PDF uploads or assignment writes.")
         write_report(report_path, report)
-        print(f"Whole books validated: {report['input_books_validated']}/{report['input_books_expected']}")
-        print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}")
+        print(f"Source-book slots validated: {report['input_books_validated']}/{report['input_books_expected']}")
+        print(f"Separate student subject-book resources planned: {sum(1 for row in records if row['scope'] == 'SUBJECT_BOOK')}")
+        print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}
         print(f"Total complete-book + chapter assignments planned: {report['planned_draft_assignments']}")
         print(f"Existing identical assignments to skip: {report['skipped_identical_assignments']}")
         print(f"Edition warnings: {len(warnings)}")
@@ -1485,6 +1552,7 @@ def run(args: argparse.Namespace) -> int:
             "subjectCode": row["subject_code"],
             "language": "en" if row["language"] == "english" else "hi",
             "chapterId": row.get("chapter_id"),
+            "bookPart": row.get("book_part"),
             "title": row["title"],
             "sourceTitle": row["source_title"],
             "sourceUrl": row["source_url"],
