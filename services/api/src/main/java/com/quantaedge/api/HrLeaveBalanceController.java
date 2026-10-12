@@ -74,12 +74,14 @@ public class HrLeaveBalanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     authorization.requirePermission(context,"HR_LEAVE_BALANCE_MANAGE");
     long employeeId=positive(body.get("employeeId"),"Employee");
-    Map<String,Object> employee=ensureEmployee(employeeId);
     String type=required(body.get("leaveTypeCode"),32,"Leave type").toUpperCase();
-    Boolean activeType=jdbc.queryForObject("select exists(select 1 from hr_leave_type where code=? and active=true)",Boolean.class,type);
-    if(!Boolean.TRUE.equals(activeType))throw bad("Choose an active leave type.");
     String transactionType=required(body.get("transactionType"),16,"Transaction type").toUpperCase();
     if(!List.of("GRANT","ACCRUAL","ADJUSTMENT").contains(transactionType))throw bad("Only GRANT, ACCRUAL and ADJUSTMENT may be entered manually.");
+    // Reject unsupported/manual consumption before any database lookup. Consumption must be
+    // created only by the approved-leave workflow, never by a caller-supplied transaction.
+    Map<String,Object> employee=ensureEmployee(employeeId);
+    Boolean activeType=jdbc.queryForObject("select exists(select 1 from hr_leave_type where code=? and active=true)",Boolean.class,type);
+    if(!Boolean.TRUE.equals(activeType))throw bad("Choose an active leave type.");
     BigDecimal quantity;
     try{quantity=new BigDecimal(String.valueOf(body.get("quantityDays")));}catch(RuntimeException ex){throw bad("Quantity must be a decimal number of days.");}
     if(quantity.scale()>2||quantity.signum()==0||quantity.abs().compareTo(new BigDecimal("999999.99"))>0)throw bad("Quantity must be non-zero, no more than two decimal places, and within the supported range.");
