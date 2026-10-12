@@ -61,3 +61,21 @@ Commits:
 - `393c47e26f3aa4ff9f708797c113cc9e4f17aab7`
 
 These are source-level accessibility corrections. They still require browser/keyboard verification; no manual assistive-technology test is claimed.
+
+
+## Second remediation pass — student and admin interaction accessibility
+
+Additional source-level fixes were committed to `main`:
+
+- `apps/web/app/globals.css` — added a consistent visible keyboard-focus ring for links, buttons, form fields, and other keyboard-focusable elements, with a forced-colors fallback. Commit: `5417c482d4e09c17f2427554df1dadc5e8657439`.
+- `apps/admin/app/globals.css` — added the corresponding high-visibility focus ring for admin and Content Studio workflows, including forced-colors support. Commit: `3cebce21acf81a8869d1dbc600dd466cbadc21bc`.
+- `apps/web/app/student/page.tsx` — student profile loading is now announced as a polite status and the blocking student-load error is announced as an alert. This changes accessibility semantics only; it does not alter the API flow or error recovery. Commit: `3f5bac9bfe9e7f709937db5140fa3f4bb5d2515d`.
+
+### Current verification status
+
+- A preceding GitHub Actions run for commit `f03e99ff8937bd629060ace7faec907c37ab92cd` completed API verification, web/admin/People image builds, and content-import safeguards successfully; its API image build was still in progress at the time checked.
+- Earlier UI-remediation run `38297929776` completed successfully for all its listed jobs, including API verification and web/admin/People image builds.
+- The newest student accessibility commit triggered run `38299084573`; it was queued when last checked. Several runs triggered by rapid consecutive direct commits were cancelled by GitHub Actions concurrency, so the newest commit still needs a final CI result.
+- Browser screenshots, viewport-by-viewport inspection, and manual keyboard/screen-reader verification remain outstanding. These commits must be treated as code-level remediation, not proof of complete WCAG conformance.
+
+Next, inspect the live Content Studio and student workflows in a browser-capable environment, and only then make additional targeted visual changes. Avoid rapid unrelated commits that cancel the latest validation run.
