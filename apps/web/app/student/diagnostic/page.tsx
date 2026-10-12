@@ -4,6 +4,7 @@ import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
+import AnswerFeedback from '../../components/AnswerFeedback';
 
 type Q={id:number;question_type:string;prompt:string;explanation?:string;options:string;answered?:boolean;lastCorrect?:boolean|null;selectedAnswer?:any};
 type DiagnosticPayload={completed?:boolean;available?:boolean;attemptId?:number;status?:string;questionCount?:number;questions?:Q[];message?:string;detail?:string};
@@ -61,6 +62,7 @@ export default function DiagnosticPage(){
   },[router,locale]);
 
   const q=qs[idx];
+  const shownResult=result || (q?.answered&&typeof q.lastCorrect==='boolean'?{correct:q.lastCorrect,feedback:tx('यह उत्तर पहले जाँचा गया था।','This answer was checked earlier.')}:null);
   let options:any[]=[];
   try{options=JSON.parse(q?.options||'[]')}catch{}
 
@@ -106,10 +108,20 @@ export default function DiagnosticPage(){
       <div className="eyebrow"><LocaleText hinglish="आपका saved diagnostic" english="Your saved diagnostic" /></div>
       <h1>{q.prompt}</h1>
       <p><LocaleText hinglish="यह छोटा assessment आपकी शुरुआती learning recommendation बनाने में मदद करता है। आप बाद में लौटेंगे तो उत्तर सुरक्षित रहेंगे।" english="This short assessment helps create your starting learning recommendation. Your saved answers will remain available if you return later." /></p>
-      {q.answered&&!result&&<div className="practice-feedback"><span><LocaleText hinglish="यह उत्तर पहले save किया गया था।" english="This answer was saved earlier." /></span></div>}
-      <div className="option-grid">{options.map(o=><button type="button" key={o.key} className={value===o.key?'selected':''} disabled={!!result||Boolean(q.answered)||saving||submitting} onClick={()=>void answer(o.key)}>{o.key}. {o.label}</button>)}</div>
-      {error&&<p role="alert" className="feedback">{error}</p>}
-      {result&&<div className="practice-feedback"><strong>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अगली बार और बेहतर होगा" english="You can improve with practice" />:<LocaleText hinglish="उत्तर save हो गया" english="Answer saved" />}</strong><span>{result.feedback}</span>{q.explanation&&<p>{q.explanation}</p>}</div>}
+      <div className="option-grid">{options.map(o=>{
+        const chosen=value===o.key;
+        const outcome=chosen?shownResult?.correct:null;
+        const outcomeClass=outcome===true?'correct':outcome===false?'incorrect':chosen?'selected':'';
+        return <button type="button" key={o.key} className={outcomeClass} disabled={!!result||Boolean(q.answered)||saving||submitting} onClick={()=>void answer(o.key)}>{o.key}. {o.label}{outcome===true?' ✓':outcome===false?' !':''}</button>;
+      })}</div>
+      {error&&<p role="alert" className="feedback feedback-incorrect">{error}</p>}
+      {shownResult&&<AnswerFeedback
+        outcome={shownResult.correct===true?'correct':shownResult.correct===false?'incorrect':'ungraded'}
+        title={shownResult.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:shownResult.correct===false?<LocaleText hinglish="उत्तर गलत है" english="Incorrect answer" />:<LocaleText hinglish="उत्तर save हो गया" english="Answer saved" />}
+        message={shownResult.feedback||tx('यह उत्तर पहले save किया गया था।','This answer was saved earlier.')}
+        explanation={q.explanation||undefined}
+        explanationLabel={<LocaleText hinglish="समझें क्यों" english="Explanation" />}
+      />}
       {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button type="button" className="button button-dark" disabled={submitting} onClick={()=>void next()}>{submitting?<LocaleText hinglish="Submit कर रहे हैं…" english="Submitting…" />:idx+1<qs.length?<LocaleText hinglish="अगला →" english="Next →" />:<LocaleText hinglish="Diagnostic पूरा करें →" english="Finish diagnostic →" />}</button></div>}
     </section>
   </main>;
