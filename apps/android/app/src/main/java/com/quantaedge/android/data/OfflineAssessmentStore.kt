@@ -41,7 +41,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
         require(attemptId > 0L) { "Offline attempt identifier is invalid." }
         synchronized(lock) {
             val previous = readRecordInternal(attemptId)
-            val clean = sanitize(attempt)
+            val clean = OfflineAssessmentSanitizer.sanitize(attempt)
             val record = JSONObject()
                 .put("attemptId", attemptId)
                 .put("assessmentId", attempt.optLongAny("assessment_id", "assessmentId"))
@@ -50,7 +50,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
                 .put("state", state)
                 .put("updatedAtMillis", System.currentTimeMillis())
             val retainedCatalogue = catalogueItem ?: previous?.optJSONObject("catalogueItem")
-            if (retainedCatalogue != null) record.put("catalogueItem", sanitize(retainedCatalogue))
+            if (retainedCatalogue != null) record.put("catalogueItem", OfflineAssessmentSanitizer.sanitize(retainedCatalogue))
             if (!error.isNullOrBlank()) record.put("lastError", error.take(500)) else record.remove("lastError")
             writeRecord(attemptId, record)
         }
@@ -116,7 +116,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
         synchronized(lock) {
             val record = readRecordInternal(attemptId) ?: return
             record.optJSONObject("attempt")?.remove("offlinePackageToken")
-            record.put("syncResult", sanitize(serverResult))
+            record.put("syncResult", OfflineAssessmentSanitizer.sanitize(serverResult))
                 .put("state", "SYNCED")
                 .put("updatedAtMillis", System.currentTimeMillis())
             record.remove("lastError")
@@ -163,35 +163,6 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
 
     private fun fileName(attemptId: Long) = "attempt_$attemptId.enc"
 
-    private fun sanitize(source: JSONObject): JSONObject {
-        val result = JSONObject()
-        val keys = source.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            if (key.lowercase() in forbiddenFields) continue
-            val value = source.opt(key)
-            when (value) {
-                is JSONObject -> result.put(key, sanitize(value))
-                is JSONArray -> result.put(key, sanitize(value))
-                else -> result.put(key, value ?: JSONObject.NULL)
-            }
-        }
-        return result
-    }
-
-    private fun sanitize(source: JSONArray): JSONArray {
-        val result = JSONArray()
-        for (i in 0 until source.length()) {
-            val value = source.opt(i)
-            result.put(when (value) {
-                is JSONObject -> sanitize(value)
-                is JSONArray -> sanitize(value)
-                else -> value ?: JSONObject.NULL
-            })
-        }
-        return result
-    }
-
     private fun encrypt(clear: ByteArray): ByteArray {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, key())
@@ -218,11 +189,4 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
         return generator.generateKey()
     }
 
-    companion object {
-        private val forbiddenFields = setOf(
-            "answerkey", "answer_key", "answer_payload", "answerpayload",
-            "correctanswer", "correct_answer", "correctoption", "correct_option",
-            "iscorrect", "is_correct", "correct", "solution", "markingscheme", "marking_scheme"
-        )
-    }
 }

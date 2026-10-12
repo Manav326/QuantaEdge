@@ -89,6 +89,14 @@ Last updated: 2026-10-12
 - Offline sync is accepted for up to 72 hours after the server timer deadline, only for an explicitly authorized offline attempt. If a sync error indicates an invalid token, explicit retry rotates the token; ordinary resume does not invalidate an active background upload. This is intended for low-stakes tests, not high-stakes exam integrity.
 - Offline package state is surfaced in the test list, and local attempts are available if the test catalogue cannot be reached.
 
+## Milestone 11 — Offline redaction tests
+
+**Status:** Added to source; CI verification pending.
+
+- Extracted the recursive answer-key redactor into a pure testable component and normalize field names before filtering, including camelCase, snake_case and hyphenated forms.
+- Added JVM tests confirming grading keys and rubrics are absent from local snapshots while preserving the learner's own answers.
+- Added the small JSON runtime only to the unit-test classpath; production still uses Android's standard JSON implementation.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.
