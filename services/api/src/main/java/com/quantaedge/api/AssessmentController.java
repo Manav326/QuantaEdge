@@ -30,7 +30,13 @@ import tools.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping("/api/v1")
 public class AssessmentController {
-  private static final Set<String> AUTO_GRADED_TYPES = Set.of("MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL");
+  // Fill-in and written responses in formal tests always require a human check.
+  // Keep objective choices and numeric questions eligible for automatic scoring.
+  private static final Set<String> AUTO_GRADED_TYPES = Set.of("MCQ", "TRUE_FALSE", "NUMERICAL");
+
+  static boolean isAutoGradedType(String questionType) {
+    return questionType != null && AUTO_GRADED_TYPES.contains(questionType.trim().toUpperCase(Locale.ROOT));
+  }
 
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -819,7 +825,7 @@ public class AssessmentController {
       String answerStatus;
       Boolean correct = null;
       BigDecimal awarded;
-      if (AUTO_GRADED_TYPES.contains(questionType)) {
+      if (isAutoGradedType(questionType)) {
         String answerPayload = String.valueOf(snapshot.getOrDefault("answer_payload", "{}"));
         QuestionAnswerService.Evaluation evaluation = answerService.evaluate(answerPayload, response);
         correct = evaluation.correct();
