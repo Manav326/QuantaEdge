@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 
 type StaffRow = {
   id:number; public_id:string; mobile_e164:string; display_name:string; role:string; active:boolean;
@@ -57,7 +58,7 @@ export default function AdminStaffPage() {
   const [audit,setAudit]=useState<AuditRow[]>([]);
   const [auditPage,setAuditPage]=useState(0);
   const [auditTotal,setAuditTotal]=useState(0);
-  const auditPageSize=25;
+  const [auditPageSize,setAuditPageSize]=useState(10);
   const [tab,setTab]=useState<'staff'|'audit'>('staff');
   const [search,setSearch]=useState('');
   const [selected,setSelected]=useState<StaffRow|null>(null);
@@ -93,7 +94,7 @@ export default function AdminStaffPage() {
       setAuditTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
     })().catch((e:any)=>{if(active)setError(e.message||'Audit history could not be loaded.');});
     return()=>{active=false};
-  },[canAudit,auditPage]);
+  },[canAudit,auditPage,auditPageSize]);
 
   const editDirty=Boolean(selected&&(draftRole!==initialRole||JSON.stringify([...draftPermissions].sort())!==JSON.stringify([...initialPermissions].sort())));
   const newReady=newName.trim().length>=2&&newMobile.replace(/\D/g,'').length===10;
@@ -311,14 +312,8 @@ export default function AdminStaffPage() {
           </article>)}
           {!audit.length&&<div className="qe-library-empty"><strong>No staff activity is recorded yet</strong><p>New staff API actions will appear here. Existing pre-audit events are not synthesized.</p></div>}
         </div>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {auditTotal===0?0:auditPage*auditPageSize+1}–{Math.min(auditTotal,(auditPage+1)*auditPageSize)} of {auditTotal} events</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className="qe-secondary-button" disabled={auditPage===0} onClick={()=>setAuditPage(p=>Math.max(0,p-1))}>← Previous</button>
-            <span>Page {auditTotal===0?0:auditPage+1} of {Math.max(1,Math.ceil(auditTotal/auditPageSize))}</span>
-            <button type="button" className="qe-secondary-button" disabled={(auditPage+1)*auditPageSize>=auditTotal} onClick={()=>setAuditPage(p=>p+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={auditPage} total={auditTotal} pageSize={auditPageSize} onPageChange={setAuditPage}
+          onPageSizeChange={size=>{setAuditPageSize(size);setAuditPage(0);}} itemLabel="audit events" />
       </section>}
 
       <p className="admin-footer qe-admin-footer">QuantaEdge · Staff governance <span>Identities, permissions and audit history are separate from learner accounts.</span></p>
