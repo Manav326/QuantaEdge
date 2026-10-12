@@ -22,6 +22,8 @@ class ProtectedResourceDownloadWorker(appContext: Context, parameters: WorkerPar
         if (ownerKey == "guest" || documentId <= 0L) return Result.failure()
         return try {
             ApiClient.initialize(applicationContext)
+            val activeAccount = ApiClient.getObject("/api/v1/auth/me")
+            if (ResourceOwnerKey.fromAuth(activeAccount) != ownerKey) return Result.failure()
             val store = ProtectedResourceStore(applicationContext, ownerKey)
             val document = store.downloadedDocuments().firstOrNull { it.optLongAny("document_id", "id") == documentId }
                 ?: return Result.failure()

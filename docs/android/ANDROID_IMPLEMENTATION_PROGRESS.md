@@ -21,6 +21,15 @@ Last updated: 2026-10-12
 - Parent dashboard, child list and server-generated child reports.
 - App language toggle, sign-out, loading/error states, no fake course or question data.
 
+## Milestone 3 — Parent onboarding and account-safe background downloads
+
+**Status:** Added to source; build confirmation pending.
+
+- Added parent signup and password-reset OTP flows through the existing backend.
+- WorkManager downloads authorized rendered page images with network constraints, retry and per-page progress.
+- Offline resource store/manifest/key is account-scoped; worker checks the active server session before downloading.
+- Inline lesson answers respect the backend's saved state, and the home recommendation can open the actual recommended lesson.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.
