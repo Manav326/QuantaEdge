@@ -8,6 +8,9 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="${allowCleartextTraffic}"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <meta-data
+            android:name="com.google.android.gms.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
