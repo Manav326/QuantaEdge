@@ -999,6 +999,12 @@ public class AssessmentController {
         item.put("awardedMarks", row.get("awarded_marks"));
         item.put("teacherFeedback", row.get("teacher_feedback"));
       }
+      // Correct answers are disclosed to students only after the result is released.
+      // This lets the student review identify the right option without leaking answer
+      // keys while an attempt is still in progress or awaiting manual grading.
+      if (resultReleased && !staffView) {
+        item.put("correctAnswer", snapshot.get("answer_payload"));
+      }
       if (staffView) {
         item.put("manualReviewRequired", "PENDING_REVIEW".equals(String.valueOf(row.get("answer_status"))));
         item.put("answerKey", snapshot.get("answer_payload"));
