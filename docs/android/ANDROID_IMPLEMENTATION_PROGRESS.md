@@ -4,23 +4,33 @@ Last updated: 2026-10-12
 
 ## Milestone 1 — Native project and secure foundations
 
-**Status:** Source committed; Android workflow will provide build/test confirmation.
-
-- Added an independent Gradle Android application under apps/android with Kotlin, Jetpack Compose, Material 3 and Java 17.
-- Added an emulator-configurable API endpoint, debug-only cleartext allowance and a release HTTPS endpoint validation task.
-- Added an OkHttp client for the existing QuantaEdge backend.
-- Added Android Keystore AES-GCM persistence for backend HttpOnly auth cookies and app-private protected resource pages.
+- Added the Android Gradle project, backend API client, encrypted HTTP-only cookie persistence and protected resource cache.
 - Added unit tests for practice retry and saved-ungraded-answer behaviour.
-- Added a GitHub Actions workflow to compile, run unit tests and upload an installable debug APK.
-- Reuses the canonical web wordmark by build-time copy; Android does not carry a duplicate logo binary.
-- Protected windows use FLAG_SECURE and Android backup is disabled.
+- Added a GitHub Actions workflow to compile, test and publish a debug APK artifact.
+- Canonical web wordmark is copied at build time; Android backup is disabled and app windows use FLAG_SECURE.
+
+## Milestone 2 — API-backed student and parent journeys
+
+**Status:** Committed to main; awaiting CI build and unit-test result.
+
+- Student and parent password sign-in through the existing auth endpoints.
+- Student home, separate Maths/Science tracks, published lessons, inline question submissions and lesson-based practice with session refresh/resume.
+- Diagnostic attempt load, saved answers and submit.
+- Published assessment catalogue, attempt start/resume, server-saved answers, submit, and released results list.
+- Protected textbook/resource catalogue, in-app page reader, encrypted page downloads that resume by skipping pages already stored, and server progress update.
+- Parent dashboard, child list and server-generated child reports.
+- App language toggle, sign-out, loading/error states, no fake course or question data.
 
 ## Verification record
 
-- Local emulator/device verification has not yet been performed.
-- CI result must be checked on the latest main commit before calling the build green.
-- A successful compile cannot validate the deployed API, available content inventory, device-specific offline behaviour or release signing.
+- GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.
+- No local Android emulator or physical-device session has been run from this environment.
+- Server-side access control and grading remain authoritative. Offline formal assessments are not simulated as locally graded.
+- Protected offline reader pages are encrypted in app-private storage and have no public export/share route. FLAG_SECURE and disabled backup are safeguards, not a guarantee against an external camera or compromised device.
 
-## Next milestone
+## Next
 
-Implement real Compose flows for sign-in, student/parent home, Maths and Science tracks, lesson detail, practice persistence, diagnostic, formal assessment attempts/results, and the protected learning-resource reader/download manager. Run the workflow and address every build/test failure before reporting the app as installable.
+- Review CI logs; fix any Kotlin/Gradle issues exposed by the build.
+- Verify login, lesson-answer persistence, practice retries and restart/resume on the real test backend.
+- Verify partial/full resource download, offline page rendering and storage handling on a real Android device.
+- Expand automated UI/API contract coverage before preparing a signed release bundle.
