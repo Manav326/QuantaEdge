@@ -169,3 +169,6 @@
 
 
 .languageNotice{display:flex;flex-direction:column;gap:4px;margin:12px 0;padding:12px 15px;border:1px solid #e7dcb4;background:#fffaf0;border-radius:11px;color:#735a21;font-size:12px;line-height:1.6}.languageNotice b{font-size:11px;color:#6d5212}
+
+@media(max-width:680px){.resultReviewItem .option{grid-template-columns:14px 26px minmax(0,1fr) 22px;cursor:default}}
+.resultReviewItem .option{cursor:default}
