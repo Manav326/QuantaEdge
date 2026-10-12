@@ -63,6 +63,14 @@ Last updated: 2026-10-12
 - Each released attempt opens the existing server-owned attempt detail endpoint.
 - The read-only review includes the learner response, released correct answer, earned marks, teacher feedback and explanation when present. Answer keys remain hidden until the server reports a released result.
 
+## Milestone 8 — Profile photos and child archiving
+
+**Status:** Added to source; CI verification pending.
+
+- Student and parent profile screens can select a photo with Android's system Photo Picker—no broad file-storage permission.
+- Image data is resized/re-encoded as JPEG under the existing API's 350 KB limit before it is sent to the authenticated profile-photo endpoint.
+- Parent can archive a child profile after a confirmation dialog; the backend remains responsible for consent validation, session revocation and access checks.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

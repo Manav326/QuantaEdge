@@ -25,7 +25,8 @@ import org.json.JSONObject
 fun ParentProfileScreen(
     profile: JSONObject,
     busy: Boolean,
-    onSave: (JSONObject) -> Unit
+    onSave: (JSONObject) -> Unit,
+    onUploadPhoto: (String) -> Unit
 ) {
     var displayName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -48,6 +49,11 @@ fun ParentProfileScreen(
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("अभिभावक प्रोफ़ाइल", style = MaterialTheme.typography.headlineSmall)
+        ProfilePhotoPickerInput(
+            profilePhotoUrl = profile.textAny("profile_image_url", "profileImageUrl"),
+            busy = busy,
+            onPhotoSelected = onUploadPhoto
+        )
         Text("मोबाइल: " + profile.textAny("mobile_e164"), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
         OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },

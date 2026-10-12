@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +29,8 @@ fun ParentChildManageScreen(
     child: JSONObject,
     busy: Boolean,
     onSaveCredentials: (String, String) -> Unit,
-    onSaveTracks: (List<String>) -> Unit
+    onSaveTracks: (List<String>) -> Unit,
+    onArchive: () -> Unit
 ) {
     val childId = child.longAny("id")
     var username by remember(childId) { mutableStateOf(child.textAny("login_username")) }
@@ -35,7 +38,22 @@ fun ParentChildManageScreen(
     val oldTracks = child.textAny("track_codes").split(',').map { it.trim() }.filter { it.isNotBlank() }
     var maths by remember(childId) { mutableStateOf("maths" in oldTracks) }
     var science by remember(childId) { mutableStateOf("science" in oldTracks) }
+    var confirmArchive by remember(childId) { mutableStateOf(false) }
     val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
+
+    if (confirmArchive) {
+        AlertDialog(
+            onDismissRequest = { confirmArchive = false },
+            title = { Text("छात्र प्रोफ़ाइल archive करें?") },
+            text = { Text("यह छात्र खाते की access बंद कर देगा। यदि किसी दूसरे अभिभावक की active consent है, तो उनकी access backend के नियमों के अनुसार बनी रह सकती है।") },
+            confirmButton = {
+                Button(onClick = { confirmArchive = false; onArchive() }, enabled = !busy) { Text("Archive करें") }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmArchive = false }, enabled = !busy) { Text("रद्द करें") }
+            }
+        )
+    }
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -65,5 +83,8 @@ fun ParentChildManageScreen(
             modifier = Modifier.fillMaxWidth()) { Text("विषय परिवर्तन सुरक्षित करें") }
         Text("पासवर्ड सुरक्षा के लिए वर्तमान पासवर्ड ऐप में वापस नहीं दिखाया जाता।",
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+        TextButton(onClick = { confirmArchive = true }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text("छात्र प्रोफ़ाइल archive करें", color = MaterialTheme.colorScheme.error)
+        }
     }
 }

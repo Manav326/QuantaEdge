@@ -570,11 +570,19 @@ fun QuantaEdgeApp() {
     fun saveStudentProfile(body: JSONObject) {
         runTask {
             val profile = ApiClient.putObject("/api/v1/students/me/profile", body)
-            studentProfile = ApiClient.getObject("/api/v1/students/me")
-            studentProfile.put("display_name", profile.textAny("display_name", "displayName"))
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             auth = JSONObject(auth.toString()).put("displayName", profile.textAny("display_name", "displayName"))
             status = "छात्र प्रोफ़ाइल सुरक्षित हो गई।"
             route = AppRoute.PROFILE
+        }
+    }
+
+    fun saveStudentPhoto(dataUrl: String) {
+        runTask {
+            ApiClient.putObject("/api/v1/students/me/profile-photo",
+                JSONObject().put("profileImageDataUrl", dataUrl))
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+            status = "प्रोफ़ाइल फोटो सुरक्षित हो गई।"
         }
     }
 
@@ -598,6 +606,15 @@ fun QuantaEdgeApp() {
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             status = "अभिभावक प्रोफ़ाइल सुरक्षित हो गई।"
             route = AppRoute.PARENT_HOME
+        }
+    }
+
+    fun saveParentPhoto(dataUrl: String) {
+        runTask {
+            ApiClient.putObject("/api/v1/guardians/profile-photo",
+                JSONObject().put("profileImageDataUrl", dataUrl))
+            parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
+            status = "अभिभावक की प्रोफ़ाइल फोटो सुरक्षित हो गई।"
         }
     }
 
@@ -652,6 +669,19 @@ fun QuantaEdgeApp() {
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
             status = "छात्र के विषय access अपडेट हो गए।"
+        }
+    }
+
+    fun archiveSelectedChild() {
+        runTask {
+            val id = selectedChild.longAny("id")
+            if (id <= 0L) throw IOException("छात्र प्रोफ़ाइल की पहचान नहीं मिली।")
+            ApiClient.deleteObject("/api/v1/guardians/children/" + id)
+            parentAccount = ApiClient.getObject("/api/v1/guardians/account")
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            selectedChild = JSONObject()
+            status = "छात्र प्रोफ़ाइल archive हो गई।"
+            route = AppRoute.PARENT_HOME
         }
     }
 
@@ -844,7 +874,8 @@ fun QuantaEdgeApp() {
                     AppRoute.PARENT_PROFILE -> ParentProfileScreen(
                         profile = parentProfile,
                         busy = busy,
-                        onSave = ::saveParentProfile
+                        onSave = ::saveParentProfile,
+                        onUploadPhoto = ::saveParentPhoto
                     )
                     AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
                         busy = busy,
@@ -855,7 +886,8 @@ fun QuantaEdgeApp() {
                         child = selectedChild,
                         busy = busy,
                         onSaveCredentials = ::saveChildCredentials,
-                        onSaveTracks = ::saveChildTracks
+                        onSaveTracks = ::saveChildTracks,
+                        onArchive = ::archiveSelectedChild
                     )
                     AppRoute.SUBJECT_LESSONS -> LessonListScreen(
                         subject = currentSubject,
@@ -967,6 +999,7 @@ fun QuantaEdgeApp() {
                         language = language,
                         busy = busy,
                         onSave = ::saveStudentProfile,
+                        onUploadPhoto = ::saveStudentPhoto,
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )

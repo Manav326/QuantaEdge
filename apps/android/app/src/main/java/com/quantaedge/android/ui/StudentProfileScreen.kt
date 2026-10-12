@@ -32,6 +32,7 @@ fun StudentProfileScreen(
     language: String,
     busy: Boolean,
     onSave: (JSONObject) -> Unit,
+    onUploadPhoto: (String) -> Unit,
     onToggleLanguage: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -56,6 +57,11 @@ fun StudentProfileScreen(
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("प्रोफ़ाइल और सीखने की पसंद", style = MaterialTheme.typography.headlineSmall)
+        ProfilePhotoPickerInput(
+            profilePhotoUrl = profile.textAny("profile_image_url", "profileImageUrl"),
+            busy = busy,
+            onPhotoSelected = onUploadPhoto
+        )
         Text("कक्षा " + profile.textAny("class_code", "classCode") + " • " + profile.textAny("board"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },

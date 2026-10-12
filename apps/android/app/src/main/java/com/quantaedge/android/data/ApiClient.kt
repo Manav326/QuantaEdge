@@ -45,6 +45,8 @@ object ApiClient {
         JSONObject(request(path, "PUT", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun patchObject(path: String, body: JSONObject): JSONObject =
         JSONObject(request(path, "PATCH", body.toString()).toString(StandardCharsets.UTF_8))
+    suspend fun deleteObject(path: String): JSONObject =
+        JSONObject(request(path, "DELETE", null).toString(StandardCharsets.UTF_8))
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
     fun absoluteUrl(path: String): String = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
@@ -95,6 +97,7 @@ object ApiClient {
                 "POST" -> builder.post(requestBody ?: "{}".toRequestBody(jsonType))
                 "PUT" -> builder.put(requestBody ?: "{}".toRequestBody(jsonType))
                 "PATCH" -> builder.patch(requestBody ?: "{}".toRequestBody(jsonType))
+                "DELETE" -> builder.delete()
                 else -> throw IllegalArgumentException("Unsupported HTTP method.")
             }
             var response = currentClient.newCall(builder.build()).execute()
