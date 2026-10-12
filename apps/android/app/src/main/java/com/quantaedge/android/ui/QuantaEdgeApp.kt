@@ -1783,6 +1783,17 @@ private fun AssessmentListScreen(
             TextButton(onClick = onResults, enabled = !busy) { Text("मेरे परिणाम") }
             TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
         }
+        if (assessmentItems.any { it.optBoolean("offline_enabled") }) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("संरक्षित offline test", style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        "Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचता है। यह सुविधा केवल staff-approved low-stakes tests के लिए है।",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        }
         if (assessmentItems.isEmpty() && !busy) EmptyState("कोई प्रकाशित टेस्ट नहीं", "सिर्फ उपलब्ध और आपके खाते के लिए अनुमत मूल्यांकन यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
             items(assessmentItems) { item ->
@@ -1832,7 +1843,7 @@ private fun AssessmentListScreen(
                             item.optLong("in_progress_attempt_id", 0L) <= 0L && used < max) {
                             TextButton(onClick = { onPrepareOffline(item) }, enabled = !busy,
                                 modifier = Modifier.fillMaxWidth()) {
-                                Text("इस test को offline तैयार करें")
+                                Text("Offline test शुरू करें (timer अभी शुरू होगा)")
                             }
                         }
                     }
