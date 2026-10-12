@@ -21,7 +21,6 @@ target/
 
 
 # Local source textbooks are imported into the private QuantaEdge PDF library; do not commit them.
-# Place Class_6_Science_English.pdf and Class_6_Mathematics_English.pdf in the repository root locally.
 /Class_*.pdf
 /class_*.pdf
 /NCERT_*.pdf
@@ -33,3 +32,6 @@ target/
 /NCERT-*.pdf
 /ncert-*.pdf
 /ncert_*.pdf
+
+# Copied from the canonical web brand asset by the Android Gradle task.
+/apps/android/app/src/main/res/drawable-nodpi/quantaedge_wordmark.png
