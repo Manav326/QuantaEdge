@@ -46,7 +46,7 @@ export default function EmployeeSelfServicePage(){
       setSession(me);
       const ownProfile=await api('/api/v1/hr/self-service/profile');
       setProfile(ownProfile);
-      const [a,l,t,b,ps]=await Promise.all([
+      const [a,l,t,b,ps,pr]=await Promise.all([
         api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
         api('/api/v1/hr/self-service/leave/types'),
