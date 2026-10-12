@@ -1,7 +1,6 @@
 package com.quantaedge.android.ui
 
 import android.app.Activity
-import android.net.Uri
 import com.google.android.gms.codescanner.GmsBarcodeScanning
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.quantaedge.android.BuildConfig
@@ -41,6 +40,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.IOException
+import java.net.URI
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
@@ -372,7 +374,7 @@ private fun JSONObject.optLongValue(vararg keys: String): Long {
  * Never trust a certificate number from an arbitrary QR payload.
  */
 internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): String? {
-    val uri = runCatching { Uri.parse(raw.trim()) }.getOrNull() ?: return null
+    val uri = runCatching { URI(raw.trim()) }.getOrNull() ?: return null
     val host = uri.host?.lowercase() ?: return null
     val production = uri.scheme.equals("https", ignoreCase = true) &&
         host == "qe.thinkwithsujeet.in" && (uri.port == -1 || uri.port == 443)
@@ -380,8 +382,17 @@ internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): Str
         uri.scheme.equals("http", ignoreCase = true) &&
         host in setOf("localhost", "127.0.0.1") &&
         (uri.port == -1 || uri.port in 1..65535)
-    if ((!production && !localDevelopment) || uri.userInfo != null ||
-        uri.path != "/certificate/verify" || !uri.fragment.isNullOrEmpty()) return null
-    val code = uri.getQueryParameter("code")?.trim()?.uppercase()
-    return code?.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
+    if ((!production && !localDevelopment) || uri.rawUserInfo != null ||
+        uri.path != "/certificate/verify" || !uri.rawFragment.isNullOrEmpty()) return null
+
+    val query = uri.rawQuery ?: return null
+    val codes = query.split("&").mapNotNull { pair ->
+        val parts = pair.split("=", limit = 2)
+        val key = runCatching { URLDecoder.decode(parts[0], StandardCharsets.UTF_8.name()) }.getOrNull()
+        if (key != "code" || parts.size != 2) null
+        else runCatching { URLDecoder.decode(parts[1], StandardCharsets.UTF_8.name()) }.getOrNull()
+    }
+    if (codes.size != 1) return null
+    val code = codes.single().trim().uppercase()
+    return code.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
 }
