@@ -138,7 +138,7 @@ public class CertificateRenderer {
         + URLEncoder.encode(certificateNumber, StandardCharsets.UTF_8);
     try {
       BitMatrix matrix = new MultiFormatWriter().encode(verificationUrl, BarcodeFormat.QR_CODE,
-          300, 300, Map.of(EncodeHintType.MARGIN, 4, EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M));
+          250, 250, Map.of(EncodeHintType.MARGIN, 4, EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M));
       BufferedImage qr = MatrixToImageWriter.toBufferedImage(matrix);
       int size = 250;
       int x = WIDTH - 390;
@@ -245,20 +245,20 @@ public class CertificateRenderer {
     if ("MODERN".equals(template)) {
       g.setColor(Color.WHITE);
       drawCentered(g, font(hindi, Font.BOLD, 25), (hindi ? "जारी करने की तिथि: " : "Issued: ") + date,
-          WIDTH / 2, footerY + 34, WIDTH - 340);
+          WIDTH / 2 - 210, footerY + 34, WIDTH - 760);
       drawCentered(g, font(hindi, Font.PLAIN, 22), (hindi ? "प्रमाणपत्र आईडी: " : "Certificate ID: ") + number,
-          WIDTH / 2, footerY + 75, WIDTH - 340);
+          WIDTH / 2 - 210, footerY + 75, WIDTH - 760);
     } else {
       g.setColor(MUTED);
       drawCentered(g, font(hindi, Font.BOLD, 24), (hindi ? "जारी करने की तिथि: " : "Issued: ") + date,
-          WIDTH / 2, footerY + 18, WIDTH - 340);
+          WIDTH / 2 - 210, footerY + 18, WIDTH - 760);
       g.setColor(NAVY);
       drawCentered(g, font(hindi, Font.BOLD, 23), (hindi ? "प्रमाणपत्र आईडी: " : "Certificate ID: ") + number,
-          WIDTH / 2, footerY + 62, WIDTH - 340);
+          WIDTH / 2 - 210, footerY + 62, WIDTH - 760);
       g.setColor(ORANGE);
       drawCentered(g, font(hindi, Font.PLAIN, 20),
           hindi ? "प्रामाणिकता की जाँच प्रमाणपत्र आईडी से करें" : "Verify authenticity using the certificate ID",
-          WIDTH / 2, footerY + 104, WIDTH - 340);
+          WIDTH / 2 - 210, footerY + 104, WIDTH - 760);
     }
   }
 
