@@ -23,6 +23,7 @@ app:
   media:
     storage-dir: ${APP_MEDIA_STORAGE_DIR:/var/lib/quantaedge/media}
   certificates:
+    public-base-url: ${APP_PUBLIC_BASE_URL:http://localhost:3000}
     storage-dir: ${APP_CERTIFICATE_STORAGE_DIR:/var/lib/quantaedge/media/certificates}
     assessment-pass-percent: ${APP_CERTIFICATES_ASSESSMENT_PASS_PERCENT:80}
   cors:
