@@ -1498,7 +1498,7 @@ def run(args: argparse.Namespace) -> int:
         "errors": [],
         "notes": [
             "Single-volume source books are uploaded byte-for-byte unchanged.",
-            "Class 7/8 Mathematics Part I and Part II are uploaded as separate SUBJECT_BOOK resources. The local combined copy is used only for chapter mapping and is never uploaded or assigned."
+            "Class 7/8 Mathematics Part I and Part II are uploaded as separate SUBJECT_BOOK resources. The local combined copy is used only for chapter mapping and is never uploaded or assigned.",
             "Chapter PDF files are exact page-range extracts from the source pages; original source files remain untouched.",
             "All new learning-document assignments remain DRAFT.",
             "Existing published assignments remain live throughout import and review.",
@@ -1511,7 +1511,7 @@ def run(args: argparse.Namespace) -> int:
         write_report(report_path, report)
         print(f"Source-book slots validated: {report['input_books_validated']}/{report['input_books_expected']}")
         print(f"Separate student subject-book resources planned: {sum(1 for row in records if row['scope'] == 'SUBJECT_BOOK')}")
-        print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}
+        print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}")
         print(f"Total complete-book + chapter assignments planned: {report['planned_draft_assignments']}")
         print(f"Existing identical assignments to skip: {report['skipped_identical_assignments']}")
         print(f"Edition warnings: {len(warnings)}")
