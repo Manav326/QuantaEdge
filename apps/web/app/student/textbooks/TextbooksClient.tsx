@@ -46,6 +46,7 @@ export default function TextbooksClient() {
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
   const [documents, setDocuments] = useState<LearningDocument[]>([]);
+  const [documentsLanguage, setDocumentsLanguage] = useState<'hi' | 'en' | null>(null);
   const [selected, setSelected] = useState<LearningDocument | null>(null);
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [expandedSubject, setExpandedSubject] = useState('');
@@ -66,11 +67,14 @@ export default function TextbooksClient() {
   const loadDocuments = useCallback(async () => {
     setLoading(true);
     setError('');
+    setDocumentsLanguage(null);
     try {
       const data = await api('/api/v1/learning/documents?language=' + requestedLanguage);
       setDocuments(Array.isArray(data) ? data : []);
+      setDocumentsLanguage(requestedLanguage);
     } catch (e: any) {
       if (e?.auth) { router.replace('/login/student'); return; }
+      setDocuments([]);
       setError(e instanceof Error ? e.message : 'Your textbook library could not be loaded.');
     } finally {
       setLoading(false);
@@ -104,7 +108,7 @@ export default function TextbooksClient() {
   }, [documentId, router]);
 
   useEffect(() => {
-    if (!documentId || !selected || Number(selected.document_id) !== documentId || loading || !selected.language) return;
+    if (!documentId || !selected || Number(selected.document_id) !== documentId || loading || documentsLanguage !== requestedLanguage || !selected.language) return;
     if (selected.language === requestedLanguage) return;
 
     const sameSlot = documents.find(item =>
@@ -130,7 +134,7 @@ export default function TextbooksClient() {
     setPageError('');
     setCurrentPage(1);
     router.replace('/student/textbooks?subjectCode=' + encodeURIComponent(selected.subject_code));
-  }, [documentId, selected, loading, documents, requestedLanguage, locale, router, searchParams]);
+  }, [documentId, selected, loading, documentsLanguage, documents, requestedLanguage, locale, router, searchParams]);
 
   const pageCount = Number(selected?.page_count || 0);
   const firstThumb = Math.max(1, Math.min(currentPage - 6, pageCount - 19));
