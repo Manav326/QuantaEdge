@@ -654,24 +654,41 @@ def prepare_source_book(
     target_dir.mkdir(parents=True, exist_ok=True)
     target = target_dir / canonical_name
     temporary = target.with_suffix(target.suffix + ".tmp")
-    try:
-        with fitz.open(part1) as first, fitz.open(part2) as second, fitz.open() as combined:
-            combined.insert_pdf(first, links=True, annots=True)
-            combined.insert_pdf(second, links=True, annots=True)
-            source_meta = dict(first.metadata or {})
-            source_meta.update({
-                "title": f"NCERT Class {grade} Mathematics ({label_language(language)}) — Parts I and II",
-                "subject": "Combined reading copy assembled from the two supplied NCERT part PDFs",
-                "keywords": "NCERT; Mathematics; Parts I and II; QuantaEdge",
-            })
-            combined.set_metadata(source_meta)
-            combined.save(temporary, garbage=3, deflate=True)
-        temporary.replace(target)
-    except Exception as exc:
-        temporary.unlink(missing_ok=True)
-        raise ValueError(
-            f"Could not prepare the local combined reading copy from {part1.name} and {part2.name}: {exc}"
-        ) from exc
+    sidecar = target.with_suffix(target.suffix + ".source.json")
+    input_fingerprint = {
+        "part_1_filename": part1.name,
+        "part_1_sha256": first_meta["sha256"],
+        "part_2_filename": part2.name,
+        "part_2_sha256": second_meta["sha256"],
+    }
+    reusable = False
+    if target.is_file() and sidecar.is_file():
+        try:
+            reusable = json.loads(sidecar.read_text(encoding="utf-8")) == input_fingerprint
+        except (OSError, json.JSONDecodeError):
+            reusable = False
+    if not reusable:
+        try:
+            with fitz.open(part1) as first, fitz.open(part2) as second, fitz.open() as combined:
+                combined.insert_pdf(first, links=True, annots=True)
+                combined.insert_pdf(second, links=True, annots=True)
+                source_meta = dict(first.metadata or {})
+                source_meta.update({
+                    "title": f"NCERT Class {grade} Mathematics ({label_language(language)}) — Parts I and II",
+                    "subject": "Combined reading copy assembled from the two supplied NCERT part PDFs",
+                    "keywords": "NCERT; Mathematics; Parts I and II; QuantaEdge",
+                })
+                combined.set_metadata(source_meta)
+                combined.save(temporary, garbage=3, deflate=True)
+            temporary.replace(target)
+            sidecar_tmp = sidecar.with_suffix(sidecar.suffix + ".tmp")
+            sidecar_tmp.write_text(json.dumps(input_fingerprint, indent=2), encoding="utf-8")
+            sidecar_tmp.replace(sidecar)
+        except Exception as exc:
+            temporary.unlink(missing_ok=True)
+            raise ValueError(
+                f"Could not prepare the local combined reading copy from {part1.name} and {part2.name}: {exc}"
+            ) from exc
 
     combined_meta = inspect_book(target)
     same_edition = (
