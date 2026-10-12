@@ -312,7 +312,7 @@ def aliases_for(grade: str, subject: str, language: str, chapter: dict[str, Any]
         # import selected an English PDF. Never leak that Hindi title into English
         # matching or its console diagnostics; use the known English NCERT title first.
         candidates = list(english_titles)
-        if live_name and not re.search(r"[\\u0900-\\u097F]", live_name):
+        if live_name and not re.search(r"[\u0900-\u097F]", live_name):
             candidates.append(live_name)
     else:
         candidates = [live_name]
