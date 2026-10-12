@@ -51,7 +51,7 @@ export default function EmployeeSelfServicePage(){
         api('/api/v1/hr/self-service/leave/balances'),
         api('/api/v1/hr/self-service/payslips')
       ]);
-      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips(ps.items||[]);
+      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));
       if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
     }catch(e){
       setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
