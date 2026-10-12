@@ -140,7 +140,7 @@ fun QuestionCard(
                         val option = options.firstOrNull {
                             it.textAny("key", "option_key", "value").ifBlank { it.textAny("label", "text") } == key
                         }
-                        val label = option?.textAny("label", "text").ifBlank { key }
+                        val label = option?.textAny("label", "text").orEmpty().ifBlank { key }
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 4.dp),
