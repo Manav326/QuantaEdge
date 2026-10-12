@@ -1,13 +1,9 @@
 package com.quantaedge.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,8 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/api/v1/hr/self-service")
 public class HrEmployeeSelfServiceController {
-  private static final ObjectMapper JSON = new ObjectMapper();
-  private static final TypeReference<Map<String,Object>> SNAPSHOT_TYPE = new TypeReference<>() {};
   private final JdbcTemplate jdbc;
   private final StaffAuditService audit;
 
@@ -95,18 +89,10 @@ public class HrEmployeeSelfServiceController {
   @GetMapping("/payslips")
   public Map<String,Object> payslips(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     long employeeId=linkedEmployeeId(context);
-    List<Map<String,Object>> rows=jdbc.queryForList("""
-      select id,public_id,run_id,version_no,snapshot::text snapshot_json,checksum,issued_at
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select id,public_id,run_id,version_no,snapshot::text snapshot,checksum,issued_at
       from hr_payslip where employee_id=? order by issued_at desc,id desc
       """,employeeId);
-    List<Map<String,Object>> items=new ArrayList<>();
-    for(Map<String,Object> row:rows) {
-      Map<String,Object> item=new LinkedHashMap<>(row);
-      String snapshot=String.valueOf(item.remove("snapshot_json"));
-      try { item.put("snapshot",JSON.readValue(snapshot,SNAPSHOT_TYPE)); }
-      catch(Exception ex) { throw new IllegalStateException("An issued payslip snapshot could not be read.",ex); }
-      items.add(item);
-    }
     return Map.of("items",items);
   }
 
