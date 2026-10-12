@@ -264,6 +264,23 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         self.assertFalse((output_dir / "class-7").exists())
         self.assertFalse((output_dir / "class-8").exists())
 
+    def test_failure_report_never_overwrites_existing_apply_checkpoint(self):
+        checkpoint = self.root / "checkpoint.json"
+        checkpoint.write_text('{"result":"APPLY_IN_PROGRESS"}', encoding="utf-8")
+        before = checkpoint.read_text(encoding="utf-8")
+        args = importer.argparse.Namespace(
+            root=str(self.root), books_dir="", languages=["english"],
+            api_url="http://localhost:8080", apply=True, report=str(checkpoint),
+        )
+        failure_path = importer.write_failure_report(args, RuntimeError("simulated failure"))
+        self.assertNotEqual(checkpoint, failure_path)
+        self.assertTrue(failure_path.is_file())
+        self.assertEqual(before, checkpoint.read_text(encoding="utf-8"))
+        payload = __import__("json").loads(failure_path.read_text(encoding="utf-8"))
+        self.assertEqual("STOPPED_SAFELY", payload["result"])
+        self.assertTrue(payload["application_writes_may_have_started"])
+        self.assertFalse(payload["credentials_recorded"])
+
     def test_report_record_sync_keeps_draft_ids_and_status(self):
         row = {
             "class_code": "6", "subject_code": "maths", "language": "english",
