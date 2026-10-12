@@ -886,9 +886,10 @@ export default function TextbookLibraryPage() {
       {canEdit && <section className={styles.panel + " " + styles.workflowStep}>
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
-          <label className={styles.field}>Existing PDF library
-            <input value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder="Search PDF title, filename or source…" aria-label="Search stored PDF library" />
-            <select value={selectedPdfId} onChange={e => {
+          <div className={styles.field}>
+            <label htmlFor="qe-existing-pdf-search">Existing PDF library</label>
+            <input id="qe-existing-pdf-search" value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder="Search PDF title, filename or source…" aria-label="Search stored PDF library" />
+            <select aria-label="Select stored PDF to attach" value={selectedPdfId} onChange={e => {
               setSelectedPdfId(e.target.value);
               const asset = library.find(item => Number(item.pdf_asset_id || item.id) === Number(e.target.value));
               if (asset) { setTitle(asset.title); setPageStart('1'); setPageEnd(String(asset.page_count)); }
@@ -904,7 +905,7 @@ export default function TextbookLibraryPage() {
             <PremiumPagination page={libraryPage} total={libraryTotal} pageSize={libraryPageSize}
               onPageChange={setLibraryPage} onPageSizeChange={size => { setLibraryPageSize(size); setLibraryPage(0); }}
               itemLabel="stored PDFs" loading={loading} />
-          </label>
+          </div>
           {canReview && <section className={styles.uploadBox}>
             <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>
             {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
