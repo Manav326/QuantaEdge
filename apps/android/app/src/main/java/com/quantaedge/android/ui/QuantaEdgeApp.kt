@@ -51,6 +51,8 @@ import com.quantaedge.android.R
 import com.quantaedge.android.data.ApiClient
 import com.quantaedge.android.data.ApiFailure
 import com.quantaedge.android.data.ProtectedResourceStore
+import com.quantaedge.android.data.OfflineAssessmentStore
+import com.quantaedge.android.data.OfflineAssessmentSyncWorker
 import androidx.work.WorkManager
 import com.quantaedge.android.data.optLongAny
 import kotlinx.coroutines.Dispatchers
@@ -82,6 +84,7 @@ fun QuantaEdgeApp() {
     var auth by remember { mutableStateOf(JSONObject()) }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
+    val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
 
     var route by remember { mutableStateOf(AppRoute.LOGIN) }
     var language by remember { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
@@ -120,6 +123,29 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
+
+    LaunchedEffect(resourceOwner, auth.toString()) {
+        if (resourceOwner.isNotBlank() && resourceOwner != "guest") {
+            val queued = withContext(Dispatchers.IO) { offlineAssessmentStore.pendingRecords().isNotEmpty() }
+            if (queued) OfflineAssessmentSyncWorker.enqueue(context.applicationContext, resourceOwner)
+        }
+    }
+
+    LaunchedEffect(route, assessmentAttempt.toString(), answers.toMap()) {
+        if (route == AppRoute.ASSESSMENT_ATTEMPT &&
+            assessmentAttempt.optBoolean("offlineMode") &&
+            !assessmentAttempt.optBoolean("offlinePendingSync") &&
+            assessmentAttempt.textAny("status") == "IN_PROGRESS") {
+            delay(300)
+            withContext(Dispatchers.IO) {
+                offlineAssessmentStore.saveAttempt(
+                    assessmentAttempt,
+                    answers.toMap(),
+                    "DRAFT"
+                )
+            }
+        }
+    }
 
     LaunchedEffect(route, resourceOwner, documents) {
         if (route == AppRoute.RESOURCES) {
@@ -317,21 +343,100 @@ fun QuantaEdgeApp() {
     fun openAssessments(subjectCode: String = currentSubject) {
         currentSubject = subjectCode
         runTask {
-            val path = "/api/v1/learning/assessments?subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + language
-            assessments = ApiClient.getObject(path).optJSONArray("items").objectItems()
+            val local = withContext(Dispatchers.IO) { offlineAssessmentStore.catalogueItems() }
+                .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
+                    it.textAny("subject_code", "subjectCode") == subjectCode }
+            val localIds = local.map { it.optLongAny("assessment_id", "assessmentId", "id") }.toSet()
+            val online = runCatching {
+                val path = "/api/v1/learning/assessments?subjectCode=" +
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + language
+                ApiClient.getObject(path).optJSONArray("items").objectItems()
+            }.getOrElse {
+                status = if (local.isEmpty()) {
+                    "ऑफ़लाइन: पहले से तैयार offline tests उपलब्ध नहीं हैं। नया test डाउनलोड करने के लिए internet चाहिए।"
+                } else {
+                    "ऑफ़लाइन: पहले से तैयार encrypted test यहीं जारी रखें। उत्तर reconnect होने पर server पर जाँचे जाएँगे।"
+                }
+                emptyList()
+            }
+            assessments = local + online.filterNot { it.optLongAny("assessment_id", "assessmentId", "id") in localIds }
+            if (local.isNotEmpty() && online.isNotEmpty()) {
+                status = "Prepared offline attempts इस device पर उपलब्ध हैं; नए tests के लिए server catalogue sync है।"
+            }
             route = AppRoute.ASSESSMENTS
         }
     }
 
     fun openAssessment(item: JSONObject) {
         runTask {
-            val id = item.longAny("assessment_id", "assessmentId", "id")
-            if (id <= 0L) throw IOException("इस टेस्ट की पहचान नहीं मिली।")
+            val assessmentId = item.longAny("assessment_id", "assessmentId", "id")
+            if (assessmentId <= 0L) throw IOException("इस टेस्ट की पहचान नहीं मिली।")
+            val localRecord = withContext(Dispatchers.IO) {
+                val localId = item.optLongAny("in_progress_attempt_id", "attempt_id")
+                if (item.optBoolean("offline_local") && localId > 0L) offlineAssessmentStore.loadRecord(localId)
+                else offlineAssessmentStore.recordForAssessment(assessmentId)
+            }
+            if (localRecord != null) {
+                restoreOfflineAssessment(localRecord)
+                route = AppRoute.ASSESSMENT_ATTEMPT
+                return@runTask
+            }
             assessmentAttempt = ApiClient.postObject(
-                "/api/v1/learning/assessments/" + id + "/attempts?language=" + language
+                "/api/v1/learning/assessments/" + assessmentId + "/attempts?language=" + language
             )
             answers.clear()
+            val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
+            if (assessmentAttempt.optBoolean("offlineMode")) {
+                withContext(Dispatchers.IO) {
+                    offlineAssessmentStore.saveAttempt(assessmentAttempt, emptyMap(), "DRAFT", item)
+                }
+                OfflineAssessmentSyncWorker.enqueueIfPending(context.applicationContext, resourceOwner, offlineAssessmentStore)
+            }
             route = AppRoute.ASSESSMENT_ATTEMPT
+        }
+    }
+
+    fun prepareOfflineAssessment(item: JSONObject) {
+        runTask {
+            val assessmentId = item.longAny("assessment_id", "assessmentId", "id")
+            if (assessmentId <= 0L) throw IOException("इस टेस्ट की पहचान नहीं मिली।")
+            if (!item.optBoolean("offline_enabled")) throw IOException("यह test offline उपयोग के लिए अनुमत नहीं है।")
+            val attempt = ApiClient.postObject(
+                "/api/v1/learning/assessments/" + assessmentId +
+                    "/attempts?language=" + language + "&offlineMode=true"
+            )
+            if (!attempt.optBoolean("offlineMode") ||
+                attempt.textAny("offlinePackageToken").isBlank()) {
+                throw IOException("सुरक्षित offline package server से नहीं मिला।")
+            }
+            assessmentAttempt = attempt
+            answers.clear()
+            val restored = withContext(Dispatchers.IO) {
+                offlineAssessmentStore.saveAttempt(attempt, emptyMap(), "DRAFT", item)
+            }
+            route = AppRoute.ASSESSMENT_ATTEMPT
+            status = "टेस्ट encrypted storage में तैयार है। Timer server पर शुरू हो चुका है; timer के बाद 72 घंटे के भीतर internet मिलने पर answers sync करें।"
+        }
+    }
+
+    private fun restoreOfflineAssessment(record: JSONObject) {
+        val storedAttempt = record.optJSONObject("attempt")
+            ?: throw IOException("इस offline test का saved snapshot पढ़ा नहीं जा सका।")
+        assessmentAttempt = JSONObject(storedAttempt.toString())
+        assessmentAttempt.put("offlinePendingSync", record.optString("state") == "QUEUED" ||
+            record.optString("state") == "SYNC_ERROR")
+        answers.clear()
+        val storedAnswers = record.optJSONObject("answers") ?: JSONObject()
+        val keys = storedAnswers.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            if (!storedAnswers.isNull(key)) answers[key] = storedAnswers.optString(key)
+        }
+        val syncError = record.optString("lastError")
+        status = when (record.optString("state")) {
+            "QUEUED" -> "उत्तर इस device पर encrypted हैं और internet पर sync होने की प्रतीक्षा में हैं।"
+            "SYNC_ERROR" -> "Offline answer sync में समस्या: " + syncError + " — internet आने पर ‘Sync की कोशिश करें’ दबाएँ।"
+            else -> "यह test इस device पर encrypted है। उत्तर server पर sync होने से पहले result नहीं दिया जाएगा।"
         }
     }
 
@@ -624,6 +729,14 @@ fun QuantaEdgeApp() {
         runTask {
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
             val questionId = question.longAny("attemptQuestionId", "attempt_question_id")
+            if (assessmentAttempt.optBoolean("offlineMode")) {
+                val copy = answers.toMutableMap().apply { put(questionId.toString(), answer) }
+                withContext(Dispatchers.IO) {
+                    offlineAssessmentStore.saveAttempt(assessmentAttempt, copy, "DRAFT")
+                }
+                feedbacks[questionId.toString()] = "उत्तर इस device पर encrypted सुरक्षित है।"
+                return@runTask
+            }
             ApiClient.putObject(
                 "/api/v1/learning/assessment-attempts/" + attemptId + "/answers/" + questionId,
                 JSONObject().put("answer", answer)
@@ -635,7 +748,40 @@ fun QuantaEdgeApp() {
     fun submitAssessment() {
         runTask {
             val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
-            assessmentAttempt = ApiClient.postObject("/api/v1/learning/assessment-attempts/" + id + "/submit")
+            if (assessmentAttempt.optBoolean("offlinePendingSync")) {
+                val catalog = offlineAssessmentStore.recordForAttempt(id)
+                    ?.optJSONObject("catalogueItem") ?: JSONObject()
+                val refreshed = runCatching {
+                    ApiClient.postObject("/api/v1/learning/assessments/" +
+                        assessmentAttempt.longAny("assessment_id", "assessmentId") +
+                        "/attempts?language=" + language + "&offlineMode=true")
+                }.getOrNull()
+                if (refreshed != null) assessmentAttempt = refreshed
+                withContext(Dispatchers.IO) {
+                    offlineAssessmentStore.saveAttempt(
+                        assessmentAttempt,
+                        answers.toMap(),
+                        "QUEUED",
+                        catalog
+                    )
+                }
+                OfflineAssessmentSyncWorker.enqueue(context.applicationContext, resourceOwner)
+                status = "Offline answers sync queue में हैं। Result server grading के बाद मिलेगा।"
+                return@runTask
+            }
+            if (assessmentAttempt.optBoolean("offlineMode")) {
+                val queued = JSONObject(assessmentAttempt.toString()).put("offlinePendingSync", true)
+                withContext(Dispatchers.IO) {
+                    offlineAssessmentStore.saveAttempt(queued, answers.toMap(), "QUEUED")
+                }
+                assessmentAttempt = queued
+                OfflineAssessmentSyncWorker.enqueue(context.applicationContext, resourceOwner)
+                status = "उत्तर इस device पर encrypted सुरक्षित हैं। Internet उपलब्ध होने पर server पर sync होंगे; अभी कोई स्थानीय score नहीं दिखाया जाएगा।"
+                return@runTask
+            }
+            assessmentAttempt = ApiClient.postObject(
+                "/api/v1/learning/assessment-attempts/" + id + "/submit"
+            )
             route = AppRoute.ASSESSMENT_ATTEMPT
             status = if (assessmentAttempt.optBoolean("resultReleased")) {
                 "टेस्ट जमा हुआ और परिणाम जारी है।"
@@ -1029,6 +1175,7 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         onSubject = ::openAssessments,
                         onOpen = ::openAssessment,
+                        onPrepareOffline = ::prepareOfflineAssessment,
                         onResults = ::loadAssessmentResults,
                         onRefresh = { openAssessments(currentSubject) }
                     )
@@ -1576,6 +1723,7 @@ private fun AssessmentListScreen(
     busy: Boolean,
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
+    onPrepareOffline: (JSONObject) -> Unit,
     onResults: () -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -1605,9 +1753,36 @@ private fun AssessmentListScreen(
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text("प्रयास: " + used + " / " + max, style = MaterialTheme.typography.bodySmall)
-                        Button(onClick = { onOpen(item) }, enabled = !busy && (item.optLong("in_progress_attempt_id", 0L) > 0L || used < max),
+                        val offlineLocal = item.optBoolean("offline_local")
+                        val pendingSync = item.textAny("offline_state") == "QUEUED" ||
+                            item.textAny("offline_state") == "SYNC_ERROR"
+                        if (offlineLocal) {
+                            Text(
+                                when (item.textAny("offline_state")) {
+                                    "QUEUED" -> "Offline answers saved · sync pending"
+                                    "SYNC_ERROR" -> "Offline answers saved · sync needs attention"
+                                    else -> "Encrypted offline attempt ready"
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Button(onClick = { onOpen(item) }, enabled = !busy &&
+                            (offlineLocal || item.optLong("in_progress_attempt_id", 0L) > 0L || used < max),
                             modifier = Modifier.fillMaxWidth()) {
-                            Text(if (item.optLong("in_progress_attempt_id", 0L) > 0L) "टेस्ट जारी रखें" else "टेस्ट शुरू करें")
+                            Text(when {
+                                pendingSync -> "Offline attempt / sync status"
+                                offlineLocal -> "Offline test जारी रखें"
+                                item.optLong("in_progress_attempt_id", 0L) > 0L -> "टेस्ट जारी रखें"
+                                else -> "टेस्ट शुरू करें"
+                            })
+                        }
+                        if (!offlineLocal && item.optBoolean("offline_enabled") &&
+                            item.optLong("in_progress_attempt_id", 0L) <= 0L && used < max) {
+                            TextButton(onClick = { onPrepareOffline(item) }, enabled = !busy,
+                                modifier = Modifier.fillMaxWidth()) {
+                                Text("इस test को offline तैयार करें")
+                            }
                         }
                     }
                 }
@@ -1631,10 +1806,21 @@ private fun AssessmentAttemptScreen(
     val attemptId = attempt.longAny("attempt_id", "attemptId", "id")
     val phase = attempt.textAny("status")
     val released = attempt.optBoolean("resultReleased")
-    val inProgress = phase == "IN_PROGRESS"
+    val offlinePendingSync = attempt.optBoolean("offlinePendingSync")
+    val inProgress = phase == "IN_PROGRESS" && !offlinePendingSync
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(attempt.textAny("assessment_title", "title").ifBlank { "टेस्ट" }, style = MaterialTheme.typography.headlineSmall)
-        Text("प्रयास " + attempt.optInt("attempt_number", 1) + " • स्थिति: " + phase, style = MaterialTheme.typography.bodySmall)
+        Text("प्रयास " + attempt.optInt("attempt_number", 1) + " • स्थिति: " +
+            if (offlinePendingSync) "OFFLINE_PENDING_SYNC" else phase, style = MaterialTheme.typography.bodySmall)
+        if (offlinePendingSync) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("उत्तर इस device पर encrypted सुरक्षित हैं", style = MaterialTheme.typography.titleSmall)
+                    Text("इन answers को यहाँ grade नहीं किया जा रहा। Internet मिलने पर authenticated server उन्हें sync करके जाँचेगा। Offline package की sync सीमा timer खत्म होने के 72 घंटे बाद तक है.",
+                        style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        }
         if (released) {
             Text("अंक: " + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
@@ -1691,6 +1877,11 @@ private fun AssessmentAttemptScreen(
         if (inProgress) {
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Text("टेस्ट जमा करें")
+            }
+        } else if (offlinePendingSync) {
+            Button(onClick = onSubmit, enabled = !busy && attemptId > 0,
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Text(if (busy) "Sync शुरू हो रहा है…" else "Sync की कोशिश करें")
             }
         } else if (!released) {
             Button(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {

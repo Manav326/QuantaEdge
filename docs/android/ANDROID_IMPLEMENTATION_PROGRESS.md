@@ -79,6 +79,16 @@ Last updated: 2026-10-12
 - Removal asks for confirmation, cancels the document's unique WorkManager job, deletes only the signed-in account's local copy and clears its manifest entry.
 - The downloader now checks account identity once per worker, not once per page, and rechecks cancellation after each network response before writing the page.
 
+## Milestone 10 — Protected offline assessments
+
+**Status:** Android implementation added; CI verification pending.
+
+- Only tests explicitly enabled by content staff expose a “prepare offline” action; generated topic/chapter tests and all other tests stay online-only.
+- The student starts the attempt while online so the server freezes the paper and starts its timer. The app stores the sanitized question snapshot and responses in account-scoped AES-GCM encrypted app-private storage.
+- No answer key is packaged. Answers are not graded locally; a network-constrained worker syncs the stored responses with the opaque per-attempt token and the server performs final grading/release.
+- Offline sync is accepted for up to 72 hours after the server timer deadline, only for an explicitly authorized offline attempt. This is intended for low-stakes tests, not high-stakes exam integrity.
+- Offline package state is surfaced in the test list, and local attempts are available if the test catalogue cannot be reached.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.
