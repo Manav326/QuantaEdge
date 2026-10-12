@@ -80,4 +80,6 @@ tasks.register("verifyReleaseApiConfiguration") {
         }
     }
 }
-tasks.named("preReleaseBuild").configure { dependsOn("verifyReleaseApiConfiguration") }
+tasks.configureEach {
+    if (name == "assembleRelease") dependsOn("verifyReleaseApiConfiguration")
+}
