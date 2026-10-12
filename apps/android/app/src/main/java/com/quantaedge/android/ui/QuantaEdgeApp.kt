@@ -73,7 +73,7 @@ private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, ASSESSMENT_REVIEW, RESOURCES,
-    DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER
+    DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER, CERTIFICATES, LEADERBOARD
 }
 
 @Composable
@@ -1041,6 +1041,7 @@ fun QuantaEdgeApp() {
     fun goBack() {
         route = when (route) {
             AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
+            AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.LESSON -> AppRoute.SUBJECT_LESSONS
@@ -1079,6 +1080,19 @@ fun QuantaEdgeApp() {
                     }
                 }
                 HorizontalDivider()
+                if (route == AppRoute.STUDENT_HOME && auth.textAny("role").contains("STUDENT", true)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        TextButton(onClick = { route = AppRoute.CERTIFICATES }) {
+                            Text(if (language == "hi") "🏅 प्रमाणपत्र" else "🏅 Certificates")
+                        }
+                        TextButton(onClick = { route = AppRoute.LEADERBOARD }) {
+                            Text(if (language == "hi") "🏆 टॉप 20 टेस्ट" else "🏆 Top 20 tests")
+                        }
+                    }
+                }
             }
 
             if (busy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -1296,6 +1310,14 @@ fun QuantaEdgeApp() {
                         onLogout = ::logout
                     )
                     AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, ::openProgress)
+                    AppRoute.CERTIFICATES -> StudentCertificatesScreen(
+                        language = language,
+                        onBack = { route = AppRoute.STUDENT_HOME }
+                    )
+                    AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
+                        language = language,
+                        onBack = { route = AppRoute.STUDENT_HOME }
+                    )
                     AppRoute.TUTOR -> TutorScreen(
                         lessonTitle = lesson.textAny("title"),
                         available = tutorAvailable,
