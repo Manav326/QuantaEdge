@@ -975,10 +975,13 @@ def create_import_plan(
                             f"Source opened: {name}; {book['page_count']} pages, "
                             f"{format_bytes(book['size_bytes'])}."
                         )
-                chapter_ranges = detect_chapter_ranges(
-                    path, grade, subject, language, chapters_by_track[(grade, subject)],
-                    progress=progress,
-                )
+                chapter_args = (path, grade, subject, language, chapters_by_track[(grade, subject)])
+                if progress:
+                    chapter_ranges = detect_chapter_ranges(*chapter_args, progress=progress)
+                else:
+                    # Keep the original callable contract for tests/tools that intentionally
+                    # replace the detector but do not request progress reporting.
+                    chapter_ranges = detect_chapter_ranges(*chapter_args)
                 if progress:
                     progress(
                         f"Validated all {len(chapter_ranges)} chapter openings for {name}; "
