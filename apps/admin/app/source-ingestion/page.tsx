@@ -72,6 +72,11 @@ function normalized(value: string) {
 
 export default function SourceIngestionPage() {
   const [sources, setSources] = useState<Source[]>([]);
+  const [sourceSearchDraft, setSourceSearchDraft] = useState('');
+  const [sourceQuery, setSourceQuery] = useState('');
+  const [sourcePage, setSourcePage] = useState(0);
+  const [sourcesTotal, setSourcesTotal] = useState(0);
+  const sourcePageSize = 25;
   const [registryBooks, setRegistryBooks] = useState<RegistryBook[]>([]);
   const [registryBookGaps, setRegistryBookGaps] = useState<RegistryBookGap[]>([]);
   const [registryMedium, setRegistryMedium] = useState<'hindi' | 'english'>('hindi');
@@ -81,6 +86,10 @@ export default function SourceIngestionPage() {
   const [mappingError, setMappingError] = useState('');
   const [tracks, setTracks] = useState<Track[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobPage, setJobPage] = useState(0);
+  const [jobsTotal, setJobsTotal] = useState(0);
+  const [jobSummary, setJobSummary] = useState<Record<string, number>>({});
+  const jobPageSize = 20;
   const [selectedSource, setSelectedSource] = useState('');
   const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
@@ -117,14 +126,21 @@ export default function SourceIngestionPage() {
     setLoading(true); setError('');
     try {
       const [sourceRows, jobRows, curriculumRows, registryRows, registryGapRows] = await Promise.all([
-        api('/api/v1/admin/source-ingestion/sources'),
-        api('/api/v1/admin/source-ingestion/jobs'),
+        api('/api/v1/admin/source-ingestion/sources?' + new URLSearchParams({
+          query: sourceQuery,
+          limit: String(sourcePageSize),
+          offset: String(sourcePage * sourcePageSize),
+        }).toString()),
+        api('/api/v1/admin/source-ingestion/jobs?limit=' + jobPageSize + '&offset=' + (jobPage * jobPageSize)),
         api('/api/v1/curriculum'),
         api('/api/v1/admin/source-ingestion/registry-books?medium=both').catch(() => []),
         api('/api/v1/admin/source-ingestion/registry-book-gaps?medium=both').catch(() => []),
       ]);
-      const sourceData = Array.isArray(sourceRows) ? sourceRows : [];
-      const jobData = Array.isArray(jobRows) ? jobRows : [];
+      const sourceData = Array.isArray(sourceRows?.items) ? sourceRows.items : (Array.isArray(sourceRows) ? sourceRows : []);
+      setSourcesTotal(Number(sourceRows?.total ?? sourceData.length));
+      const jobData = Array.isArray(jobRows?.items) ? jobRows.items : (Array.isArray(jobRows) ? jobRows : []);
+      setJobsTotal(Number(jobRows?.total ?? jobData.length));
+      setJobSummary(jobRows?.summary && typeof jobRows.summary === 'object' ? jobRows.summary : {});
       const curriculum = Array.isArray(curriculumRows) ? curriculumRows : [];
       const nextTracks = [...new Map(curriculum.map((r: any) => [String(r.class_code) + ':' + String(r.subject_code), {
         class_code: String(r.class_code), class_name: String(r.class_name),
@@ -158,7 +174,7 @@ export default function SourceIngestionPage() {
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Source ingestion data could not be loaded.');
     } finally { setLoading(false); }
-  }, [classCode, subjectCode, selectedSource]);
+  }, [classCode, subjectCode, selectedSource, jobPage, sourceQuery, sourcePage]);
 
   const loadJob = useCallback(async (id: number) => {
     const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
@@ -426,15 +442,21 @@ export default function SourceIngestionPage() {
       {notice && <div className={styles.notice} role="status">{notice}</div>}
 
       <section className={styles.summary}>
-        <div><small>REGISTERED SOURCES</small><strong>{sources.length}</strong><span>Existing database records checked</span></div>
-        <div><small>IN REVIEW</small><strong>{jobs.filter(j => j.status === 'REVIEW').length}</strong><span>Books waiting for chapter review</span></div>
-        <div><small>APPROVED JOBS</small><strong>{jobs.filter(j => j.status === 'APPROVED').length}</strong><span>Added to library as drafts</span></div>
+        <div><small>REGISTERED SOURCES</small><strong>{sourcesTotal}</strong><span>Matching records in source register</span></div>
+        <div><small>IN REVIEW</small><strong>{Number(jobSummary.in_review ?? jobs.filter(j => j.status === 'REVIEW').length)}</strong><span>Books waiting for chapter review</span></div>
+        <div><small>APPROVED JOBS</small><strong>{Number(jobSummary.approved ?? jobs.filter(j => j.status === 'APPROVED').length)}</strong><span>Added to library as drafts</span></div>
       </section>
 
       <section className={styles.panel}>
         <div className={styles.heading}><div><span>STEP 01</span><h2>Choose or register a source</h2><p>The tool checks linked PDFs, stored checksums and source references before downloading again.</p></div></div>
         <div className={styles.fields}>
           <label>Source record
+            <input value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder="Search title, provider, URL or edition…" aria-label="Search registered sources" />
+            <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',margin:'8px 0'}}>
+              <button type="button" className={styles.secondary} onClick={()=>{setSourceQuery(sourceSearchDraft.trim());setSourcePage(0)}}>Search sources</button>
+              <button type="button" className={styles.secondary} disabled={!sourceQuery&&!sourceSearchDraft} onClick={()=>{setSourceSearchDraft('');setSourceQuery('');setSourcePage(0)}}>Clear search</button>
+              <small>{sourcesTotal===0?'No matching sources':('Showing '+(sourcePage*sourcePageSize+1)+'–'+Math.min(sourcesTotal,(sourcePage+1)*sourcePageSize)+' of '+sourcesTotal)}</small>
+            </div>
             <select value={selectedSource || 'new'} onChange={e => {
               const value = e.target.value; setSelectedSource(value);
               if (value !== 'new') {
@@ -450,10 +472,17 @@ export default function SourceIngestionPage() {
               }
             }}>
               <option value="new">Register a new subject/source</option>
+              {selectedSource && selectedSource!=='new' && !sources.some(source=>String(source.source_id)===selectedSource) &&
+                <option value={selectedSource}>Selected registered source #{selectedSource}</option>}
               {sources.map(source => <option key={source.source_id} value={source.source_id}>
                 {source.title} · {source.source_kind} {source.matching_pdf_asset_id ? '· PDF stored' : '· PDF not linked'}
               </option>)}
             </select>
+            <div style={{display:'flex',gap:8,alignItems:'center',marginTop:8}}>
+              <button type="button" className={styles.secondary} disabled={sourcePage===0} onClick={()=>setSourcePage(value=>Math.max(0,value-1))}>← Previous</button>
+              <span style={{fontSize:12}}>Page {sourcesTotal===0?0:sourcePage+1} of {Math.max(1,Math.ceil(sourcesTotal/sourcePageSize))}</span>
+              <button type="button" className={styles.secondary} disabled={(sourcePage+1)*sourcePageSize>=sourcesTotal} onClick={()=>setSourcePage(value=>value+1)}>Next →</button>
+            </div>
           </label>
           <label>Class
             <select value={classCode} onChange={e => {
@@ -617,6 +646,14 @@ export default function SourceIngestionPage() {
             <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved · {row.rejected_chapter_count || 0} rejected</small>
             {row.error_message && <small className={styles.jobError}>{row.error_message}</small>}
           </button>)}</div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {jobsTotal===0?0:jobPage*jobPageSize+1}–{Math.min(jobsTotal,(jobPage+1)*jobPageSize)} of {jobsTotal} ingestion jobs</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className={styles.secondary} disabled={jobPage===0||loading} onClick={()=>setJobPage(value=>Math.max(0,value-1))}>← Previous</button>
+            <span>Page {jobsTotal===0?0:jobPage+1} of {Math.max(1,Math.ceil(jobsTotal/jobPageSize))}</span>
+            <button type="button" className={styles.secondary} disabled={(jobPage+1)*jobPageSize>=jobsTotal||loading} onClick={()=>setJobPage(value=>value+1)}>Next →</button>
+          </div>
+        </div>
         {latestReviewJobs.length > 0 && <p className={styles.help}>Jobs still marked DOWNLOADING may need a minute for the PDF to be fetched and inspected. Select the job and refresh its status.</p>}
       </section>
 

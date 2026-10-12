@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -61,22 +62,20 @@ public class AssessmentController {
   // ---------- Admin: assessment authoring and publication ----------
 
   @GetMapping("/admin/assessment-question-bank")
-  public List<Map<String, Object>> questionBank(
+  public Map<String,Object> questionBank(
       @RequestParam String classCode,
       @RequestParam String subjectCode,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
+      @RequestParam(defaultValue="40") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireContentView(context);
-    String term = safeText(query, 160);
-    String chapterFilter = chapterId == null ? "" : " and ch.id=?";
-    List<Object> args = new ArrayList<>(List.of(classCode.trim(), subjectCode.trim()));
-    if (chapterId != null) args.add(chapterId);
-    String sql = """
-      select q.id as question_id,q.question_type,q.prompt,q.difficulty,q.marks,q.sort_order,
-             l.id as lesson_id,l.title as lesson_title,ch.id as chapter_id,
-             ch.code as chapter_code,ch.display_name as chapter_name,
-             s.code as subject_code,s.display_name as subject_name,c.code as class_code
+    int rowLimit=Math.max(1,Math.min(limit==null?40:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String term=safeText(query,160);
+    String chapterFilter=chapterId==null?"":" and ch.id=?";
+    String fromWhere="""
       from question q join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
@@ -87,32 +86,41 @@ public class AssessmentController {
         and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
         __CHAPTER_FILTER__
         and (?='' or q.prompt ilike ? or l.title ilike ? or ch.display_name ilike ?)
-      order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id
-      limit 500
-      """.replace("__CHAPTER_FILTER__", chapterFilter);
-    args.add(term);
-    args.add("%" + term + "%");
-    args.add("%" + term + "%");
-    args.add("%" + term + "%");
-    return jdbc.queryForList(sql, args.toArray());
+      """.replace("__CHAPTER_FILTER__",chapterFilter);
+    List<Object> filterArgs=new ArrayList<>(List.of(classCode.trim(),subjectCode.trim()));
+    if(chapterId!=null)filterArgs.add(chapterId);
+    filterArgs.add(term);filterArgs.add("%"+term+"%");filterArgs.add("%"+term+"%");filterArgs.add("%"+term+"%");
+    List<Object> pageArgs=new ArrayList<>(filterArgs);pageArgs.add(rowLimit);pageArgs.add(rowOffset);
+    String selectSql="""
+      select q.id as question_id,q.question_type,q.prompt,q.difficulty,q.marks,q.sort_order,
+             l.id as lesson_id,l.title as lesson_title,ch.id as chapter_id,
+             ch.code as chapter_code,ch.display_name as chapter_name,
+             s.code as subject_code,s.display_name as subject_name,c.code as class_code
+      """;
+    List<Map<String,Object>> items=jdbc.queryForList(selectSql+fromWhere+
+      " order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id limit ? offset ?",pageArgs.toArray());
+    Long total=jdbc.queryForObject("select count(*) "+fromWhere,Long.class,filterArgs.toArray());
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/admin/assessments")
-  public List<Map<String, Object>> adminAssessments(
+  public Map<String,Object> adminAssessments(
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireContentView(context);
-    String classFilter = safeText(classCode, 30);
-    String subjectFilter = safeText(subjectCode, 40);
-    if(!classFilter.isBlank()) assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
-    String statusFilter = safeText(status, 20).toUpperCase(Locale.ROOT);
-    if (statusFilter.isEmpty()) statusFilter = "ALL";
-    if (!Set.of("ALL", "DRAFT", "PUBLISHED", "ARCHIVED").contains(statusFilter)) {
-      throw badRequest("Choose a valid assessment status.");
-    }
-    return jdbc.queryForList("""
+    String classFilter=safeText(classCode,30);
+    String subjectFilter=safeText(subjectCode,40);
+    if(!classFilter.isBlank())assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
+    String statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(statusFilter.isEmpty())statusFilter="ALL";
+    if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid assessment status.");
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
@@ -135,9 +143,19 @@ public class AssessmentController {
           where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
       group by a.id,c.code,c.display_name,s.code,s.display_name,ch.id,ch.code,ch.display_name
       order by a.created_at desc,a.id desc
-      limit 300
-      """, classFilter, classFilter, subjectFilter, subjectFilter,
-        statusFilter, statusFilter, context.isAdmin(), context.staffId());
+      limit ? offset ?
+      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,
+        context.isAdmin(),context.staffId(),rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(distinct a.id) from assessment a
+      join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
+      left join curriculum_chapter ch on ch.id=a.chapter_id
+      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or a.status=?)
+        and (?=true or exists(select 1 from assessment_staff_assignment asa
+          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
+      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,
+        context.isAdmin(),context.staffId());
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/admin/assessments")
@@ -322,18 +340,36 @@ public class AssessmentController {
   // ---------- Admin: review queue, grading and test-level audit ----------
 
   @GetMapping("/admin/assessment-reviews")
-  public List<Map<String, Object>> assessmentReviews(
+  public Map<String,Object> assessmentReviews(
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String query,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = requireGrader(context);
-    String statusFilter = safeText(status, 24).toUpperCase(Locale.ROOT);
-    if (statusFilter.isEmpty()) statusFilter = "AWAITING_REVIEW";
-    if (!Set.of("ALL", "AWAITING_REVIEW", "GRADED", "RELEASED").contains(statusFilter)) {
-      throw badRequest("Choose a valid test review status.");
-    }
-    String term = safeText(query, 160);
-    return jdbc.queryForList("""
+    context=requireGrader(context);
+    String statusFilter=safeText(status,24).toUpperCase(Locale.ROOT);
+    if(statusFilter.isEmpty())statusFilter="AWAITING_REVIEW";
+    if(!Set.of("ALL","AWAITING_REVIEW","GRADED","RELEASED").contains(statusFilter))throw badRequest("Choose a valid test review status.");
+    String term=safeText(query,160);
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String filterSql="""
+      where (?='ALL' or att.status=?)
+        and (?='' or a.title ilike ? or st.display_name ilike ? or ch.display_name ilike ?)
+        and (?=true or exists(select 1 from assessment_staff_assignment asa
+          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
+      """;
+    Object[] filterArgs={statusFilter,statusFilter,term,"%"+term+"%","%"+term+"%","%"+term+"%",context.isAdmin(),context.staffId()};
+    List<Object> pageArgs=new ArrayList<>();pageArgs.add(context.isAdmin());pageArgs.addAll(Arrays.asList(filterArgs));pageArgs.add(rowLimit);pageArgs.add(rowOffset);
+    String fromJoins="""
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join curriculum_subject s on s.id=a.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=att.student_id
+      left join curriculum_chapter ch on ch.id=a.chapter_id
+      """;
+    String selectSql="""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.started_at,
              att.submitted_at,att.graded_at,att.released_at,att.auto_score,att.final_score,att.max_score,
              a.title as assessment_title,a.duration_minutes,
@@ -343,24 +379,15 @@ public class AssessmentController {
              count(distinct aq.id) as question_count,
              count(distinct ans.id) filter (where ans.answer_status='PENDING_REVIEW') as pending_answers,
              case when ? then true else false end as can_review
-      from student_assessment_attempt att
-      join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
-      join student st on st.id=att.student_id
-      left join curriculum_chapter ch on ch.id=a.chapter_id
-      left join student_assessment_attempt_question aq on aq.attempt_id=att.id
-      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      where (?='ALL' or att.status=?)
-        and (?='' or a.title ilike ? or st.display_name ilike ? or ch.display_name ilike ?)
-        and (?=true or exists(select 1 from assessment_staff_assignment asa
-          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
-      group by att.id,a.title,a.duration_minutes,st.display_name,st.id,st.class_code,
-               s.code,s.display_name,ch.display_name
-      order by case when att.status='AWAITING_REVIEW' then 0 else 1 end,att.submitted_at asc,att.id
-      limit 500
-      """, context.isAdmin(), statusFilter, statusFilter, term, "%" + term + "%", "%" + term + "%",
-        "%" + term + "%", context.isAdmin(), context.staffId());
+      """;
+    String reviewJoins=" left join student_assessment_attempt_question aq on aq.attempt_id=att.id "+
+      "left join student_assessment_answer ans on ans.attempt_question_id=aq.id ";
+    String reviewTail=" group by att.id,a.title,a.duration_minutes,st.display_name,st.id,st.class_code,"+
+      "s.code,s.display_name,ch.display_name order by case when att.status='AWAITING_REVIEW' then 0 else 1 end,"+
+      "att.submitted_at asc,att.id limit ? offset ?";
+    List<Map<String,Object>> items=jdbc.queryForList(selectSql+fromJoins+reviewJoins+filterSql+reviewTail,pageArgs.toArray());
+    Long total=jdbc.queryForObject("select count(*) "+fromJoins+filterSql,Long.class,filterArgs);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/admin/assessment-attempts/{attemptId}")
@@ -486,16 +513,20 @@ public class AssessmentController {
   // ---------- Student: catalogue, durable attempts, persisted results ----------
 
   @GetMapping("/learning/assessments")
-  public List<Map<String, Object>> studentAssessmentCatalog(
+  public Map<String,Object> studentAssessmentCatalog(
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(defaultValue="24") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
     // Generated assessments are refreshed by content-publication and question-review events;
     // this catalogue read only lists the durable definitions and never regenerates question banks.
     String subjectFilter = safeText(subjectCode, 40);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,
@@ -553,7 +584,11 @@ public class AssessmentController {
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
-      """, context.studentId(), language, language, language, subjectFilter, subjectFilter);
+      limit ? offset ?
+      """, context.studentId(), language, language, language, subjectFilter, subjectFilter, rowLimit+1, rowOffset);
+    boolean hasMore=items.size()>rowLimit;
+    if(hasMore)items.remove(items.size()-1);
+    return Map.of("items",items,"hasMore",hasMore,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/learning/assessments/{assessmentId}/attempts")
@@ -868,12 +903,16 @@ public class AssessmentController {
   }
 
   @GetMapping("/learning/assessment-results")
-  public List<Map<String, Object>> studentResults(
+  public Map<String,Object> studentResults(
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = authorization.requireStudent(context);
-    language = normalizeLanguage(language);
-    return jdbc.queryForList("""
+    context=authorization.requireStudent(context);
+    language=normalizeLanguage(language);
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
              att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
              coalesce((select t.title from assessment_translation t
@@ -895,9 +934,10 @@ public class AssessmentController {
       join curriculum_subject s on s.id=a.subject_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where att.student_id=? and att.status='RELEASED'
-      order by att.released_at desc,att.id desc
-      limit 200
-      """, language, language, language, context.studentId());
+      order by att.released_at desc,att.id desc limit ? offset ?
+      """,language,language,language,context.studentId(),rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from student_assessment_attempt where student_id=? and status='RELEASED'",Long.class,context.studentId());
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   // ---------- Shared private helpers ----------

@@ -118,17 +118,11 @@ function matchesGovernanceFilters(
 }
 
 function addFacetCounts(
-  rows: Assignment[],
+  facets: Record<string, Record<string, number>>,
   options: Array<{ value: string; label: string }>,
   facet: GovernanceFacet,
-  selected: GovernanceSelections,
 ): FilterOption[] {
-  return options.map(option => ({
-    ...option,
-    count: rows.filter(row =>
-      matchesGovernanceFilters(row, selected, facet) && valueForFacet(row, facet) === option.value,
-    ).length,
-  }));
+  return options.map(option => ({ ...option, count: Number(facets[facet]?.[option.value] || 0) }));
 }
 
 function MultiSelectFilter({
@@ -203,8 +197,17 @@ export default function TextbookLibraryPage() {
   const [resourceLanguage, setResourceLanguage] = useState<'hi' | 'en'>('hi');
   const [chapterId, setChapterId] = useState('');
   const [library, setLibrary] = useState<PdfAsset[]>([]);
+  const [libraryCache, setLibraryCache] = useState<PdfAsset[]>([]);
+  const [libraryQuery, setLibraryQuery] = useState('');
+  const [libraryPage, setLibraryPage] = useState(0);
+  const [libraryTotal, setLibraryTotal] = useState(0);
+  const libraryPageSize = 25;
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentPage, setAssignmentPage] = useState(0);
+  const [assignmentTotal, setAssignmentTotal] = useState(0);
+  const assignmentPageSize = 25;
+  const [assignmentFacets, setAssignmentFacets] = useState<Record<string, Record<string, number>>>({});
   const [selectedPdfId, setSelectedPdfId] = useState('');
   const [pdfTitle, setPdfTitle] = useState('');
   const [sourceReference, setSourceReference] = useState('');
@@ -216,6 +219,10 @@ export default function TextbookLibraryPage() {
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
   const [intakeRows, setIntakeRows] = useState<any[]>([]);
+  const [intakePage, setIntakePage] = useState(0);
+  const [intakeTotal, setIntakeTotal] = useState(0);
+  const intakePageSize = 10;
+  const [intakeSummary, setIntakeSummary] = useState<Record<string, number>>({});
   const [intakeRanges, setIntakeRanges] = useState<any[]>([]);
   const [rangeReviewNotes, setRangeReviewNotes] = useState('');
   const [rangeDraftSourceTitle, setRangeDraftSourceTitle] = useState('');
@@ -277,48 +284,45 @@ export default function TextbookLibraryPage() {
     scope: viewScopes,
   }), [viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
   const classFilterOptions = useMemo(
-    () => addFacetCounts(assignments, classOptions.map(track => ({
+    () => addFacetCounts(assignmentFacets, classOptions.map(track => ({
       value: track.class_code,
       label: 'Class ' + track.class_code,
-    })), 'class', filterSelections),
-    [assignments, classOptions, filterSelections],
+    })), 'class'),
+    [assignmentFacets, classOptions],
   );
   const subjectFilterOptions = useMemo(
-    () => addFacetCounts(assignments, subjectFilterBaseOptions, 'subject', filterSelections),
-    [assignments, subjectFilterBaseOptions, filterSelections],
+    () => addFacetCounts(assignmentFacets, subjectFilterBaseOptions, 'subject'),
+    [assignmentFacets, subjectFilterBaseOptions],
   );
   const statusFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'PUBLISHED', label: 'Published' },
       { value: 'DRAFT', label: 'Draft' },
       { value: 'ARCHIVED', label: 'Archived' },
-    ], 'status', filterSelections),
-    [assignments, filterSelections],
+    ], 'status'),
+    [assignmentFacets],
   );
   const languageFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'hi', label: 'Hindi' },
       { value: 'en', label: 'English' },
-    ], 'language', filterSelections),
-    [assignments, filterSelections],
+    ], 'language'),
+    [assignmentFacets],
   );
   const scopeFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'CHAPTER_PDF', label: 'Chapter PDFs' },
       { value: 'SUBJECT_BOOK', label: 'Complete books' },
-    ], 'scope', filterSelections),
-    [assignments, filterSelections],
+    ], 'scope'),
+    [assignmentFacets],
   );
-  const visibleAssignments = useMemo(
-    () => assignments.filter(row => matchesGovernanceFilters(row, filterSelections)),
-    [assignments, filterSelections],
-  );
+  const visibleAssignments = assignments;
   const activeFilterCount = [
     viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes,
   ].filter(values => values.length > 0).length;
   const selectedPdf = useMemo(
-    () => library.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
-    [library, selectedPdfId],
+    () => libraryCache.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
+    [libraryCache, selectedPdfId],
   );
   const previewAssignment = useMemo(
     () => assignments.find(item => item.document_id === previewDocumentId) || null,
@@ -508,26 +512,32 @@ export default function TextbookLibraryPage() {
       if (nextClassCode !== classCode) setClassCode(nextClassCode);
       if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
 
-      // Fetch the whole inventory once; multi-select governance filters are applied locally,
-      // so option counts and intersections remain accurate without repeated API queries.
-      const params = new URLSearchParams({ status: 'ALL' });
+      // Fetch only the requested server-side page. Filter facets are computed by the API
+      // across the matching inventory, not inferred from the currently visible page.
+      const params = new URLSearchParams({ status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
+      if (viewClassCodes.length) params.set('classCodes', viewClassCodes.join(','));
+      if (viewSubjectCodes.length) params.set('subjectCodes', viewSubjectCodes.join(','));
+      if (viewStatuses.length) params.set('statuses', viewStatuses.join(','));
+      if (viewLanguages.length) params.set('languages', viewLanguages.join(','));
+      if (viewScopes.length) params.set('scopes', viewScopes.join(','));
       const chapterPromise = canEdit && nextClassCode && nextSubjectCode
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
       const intakePromise = canReview
-        ? api('/api/v1/admin/source-ingestion/intake').catch(() => [])
-        : Promise.resolve([]);
-      const [pdfRows, contentRows, resourceRows, intakeData] = await Promise.all([
-        api('/api/v1/admin/learning-pdfs'),
+        ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
+        : Promise.resolve({ items: [], total: 0, summary: {} });
+      const [contentRows, resourceRows, intakeData] = await Promise.all([
         chapterPromise,
         api('/api/v1/admin/learning-documents?' + params.toString()),
         intakePromise,
       ]);
-      const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
-      const resources = Array.isArray(resourceRows) ? resourceRows : [];
-      setIntakeRows(Array.isArray(intakeData) ? intakeData : []);
-      setLibrary(pdfs);
+      const resources: Assignment[] = (Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : [])) as Assignment[];
+      setAssignmentTotal(Number(resourceRows?.total ?? resources.length));
+      setAssignmentFacets(resourceRows?.facets && typeof resourceRows.facets === 'object' ? resourceRows.facets : {});
+      setIntakeRows(Array.isArray(intakeData?.items) ? intakeData.items : (Array.isArray(intakeData) ? intakeData : []));
+      setIntakeTotal(Number(intakeData?.total ?? (Array.isArray(intakeData) ? intakeData.length : 0)));
+      setIntakeSummary(intakeData?.summary && typeof intakeData.summary === 'object' ? intakeData.summary : {});
       const distinct = new Map<number, Chapter>();
       content.forEach((row: any) => {
         const id = Number(row.chapter_id);
@@ -543,11 +553,6 @@ export default function TextbookLibraryPage() {
       const nextChapters = [...distinct.values()];
       setChapters(nextChapters);
       setAssignments(resources);
-      if (selectedPdfId && !pdfs.some(pdf => String(pdf.pdf_asset_id || pdf.id) === selectedPdfId)) {
-        setSelectedPdfId('');
-      } else if (!selectedPdfId && pdfs.length > 0) {
-        setSelectedPdfId(String(pdfs[0].pdf_asset_id || pdfs[0].id));
-      }
       if (!chapterId || !nextChapters.some(chapter => String(chapter.chapter_id) === chapterId)) {
         setChapterId(nextChapters.length ? String(nextChapters[0].chapter_id) : '');
       }
@@ -559,9 +564,33 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId]);
+  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, intakePage,
+      viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
+
+  useEffect(() => {
+    if (!canEdit) return;
+    let active = true;
+    (async () => {
+      const params = new URLSearchParams({ limit: String(libraryPageSize), offset: String(libraryPage * libraryPageSize) });
+      if (libraryQuery.trim()) params.set('query', libraryQuery.trim());
+      const response = await api('/api/v1/admin/learning-pdfs?' + params.toString());
+      if (!active) return;
+      const items: PdfAsset[] = Array.isArray(response?.items) ? response.items : (Array.isArray(response) ? response : []);
+      setLibrary(items);
+      setLibraryTotal(Number(response?.total ?? items.length));
+      setLibraryCache(current => {
+        const byId = new Map<number, PdfAsset>(current.map(item => [Number(item.pdf_asset_id || item.id), item]));
+        items.forEach(item => byId.set(Number(item.pdf_asset_id || item.id), item));
+        return [...byId.values()];
+      });
+      if (!selectedPdfId && items.length) setSelectedPdfId(String(items[0].pdf_asset_id || items[0].id));
+    })().catch((e:any) => {
+      if (active) setError(e instanceof Error ? e.message : 'The stored PDF library could not be loaded.');
+    });
+    return () => { active = false; };
+  }, [canEdit, libraryPage, libraryQuery]);
 
   useEffect(() => {
     if (!tracks.length) return;
@@ -713,7 +742,7 @@ export default function TextbookLibraryPage() {
         <div><span>PRIVATE SOURCE LIBRARY</span><h2>One PDF. Multiple learning placements.</h2>
           <p>PDFs are stored privately in the database. Students receive rendered page images after access checks, not the original PDF download.</p>
         </div>
-        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{visibleAssignments.filter(a => a.status === 'PUBLISHED').length}</strong><small>Published in filtered view</small></div>
+        <div className={styles.heroStats}><strong>{libraryTotal}</strong><small>PDF files in library</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>Published in filtered view</small></div>
       </section>
 
       {error && <div className={styles.alertError} role="alert">{error}</div>}
@@ -774,20 +803,28 @@ export default function TextbookLibraryPage() {
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
           <label className={styles.field}>Existing PDF library
+            <input value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder="Search PDF title, filename or source…" aria-label="Search stored PDF library" />
             <select value={selectedPdfId} onChange={e => {
               setSelectedPdfId(e.target.value);
               const asset = library.find(item => Number(item.pdf_asset_id || item.id) === Number(e.target.value));
               if (asset) { setTitle(asset.title); setPageStart('1'); setPageEnd(String(asset.page_count)); }
             }}>
               <option value="">Select a stored PDF…</option>
+              {selectedPdfId && selectedPdf && !library.some(pdf => Number(pdf.pdf_asset_id || pdf.id) === Number(selectedPdfId)) &&
+                <option value={selectedPdfId}>Selected: {selectedPdf.title} · {selectedPdf.page_count} pages</option>}
               {library.map(pdf => <option key={pdf.pdf_asset_id || pdf.id} value={pdf.pdf_asset_id || pdf.id}>
                 {pdf.title} · {pdf.page_count} pages · {formatBytes(pdf.file_size_bytes)}{contentCoverageWarning(pdf.source_reference) ? ' · ⚠ PARTIAL' : ''}
               </option>)}
             </select>
-            <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
+            <small>{libraryTotal ? 'Showing ' + (libraryTotal===0?0:libraryPage*libraryPageSize+1) + '–' + Math.min(libraryTotal,(libraryPage+1)*libraryPageSize) + ' of ' + libraryTotal + ' matching stored PDFs.' : 'No PDFs match this search. Upload a source PDF or change the search text.'}</small>
+            <div style={{display:'flex',gap:8,alignItems:'center',marginTop:8}}>
+              <button type="button" className={styles.secondaryButton} disabled={libraryPage===0} onClick={()=>setLibraryPage(value=>Math.max(0,value-1))}>← Previous</button>
+              <span style={{fontSize:12}}>Page {libraryTotal===0?0:libraryPage+1} of {Math.max(1,Math.ceil(libraryTotal/libraryPageSize))}</span>
+              <button type="button" className={styles.secondaryButton} disabled={(libraryPage+1)*libraryPageSize>=libraryTotal} onClick={()=>setLibraryPage(value=>value+1)}>Next →</button>
+            </div>
           </label>
           {canReview && <section className={styles.uploadBox}>
-            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeRows.length} classified PDF(s)</small></div>
+            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>
             {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
               <div className={styles.assignmentList}>
                 {intakeRows.map((item: any) => <div className={styles.assignmentQueueRow} key={item.pdf_asset_id}>
@@ -820,6 +857,14 @@ export default function TextbookLibraryPage() {
                   }}>Open review</button>
                 </div>)}
               </div>}
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,marginTop:12,flexWrap:'wrap'}}>
+              <small>Showing {intakeTotal===0?0:intakePage*intakePageSize+1}–{Math.min(intakeTotal,(intakePage+1)*intakePageSize)} of {intakeTotal}</small>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <button type="button" className={styles.secondaryButton} disabled={intakePage===0||loading} onClick={()=>setIntakePage(value=>Math.max(0,value-1))}>← Previous</button>
+                <span>Page {intakeTotal===0?0:intakePage+1} of {Math.max(1,Math.ceil(intakeTotal/intakePageSize))}</span>
+                <button type="button" className={styles.secondaryButton} disabled={(intakePage+1)*intakePageSize>=intakeTotal||loading} onClick={()=>setIntakePage(value=>value+1)}>Next →</button>
+              </div>
+            </div>
           </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>
@@ -1186,23 +1231,24 @@ export default function TextbookLibraryPage() {
 
       <section className={styles.panel}>
         <div className={styles.sectionHeading}>
-          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Combine class, subject, status, language, and resource type filters. Counts beside each option reflect the other active filters.</p></div>
+          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Filter by class, subject, status, language, and resource type. Counts reflect matching records while the list loads one page at a time.</p></div>
           <div className={styles.filterBar}>
-            <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={setViewClassCodes} />
-            <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={setViewSubjectCodes} />
-            <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={setViewStatuses} />
-            <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={setViewLanguages} />
-            <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={setViewScopes} />
+            <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
           </div>
         </div>
         <div className={styles.resultSummary}>
-          <div><strong>{visibleAssignments.length}</strong><span>matching assignment{visibleAssignments.length === 1 ? '' : 's'}</span><small>of {assignments.length} total</small></div>
+          <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
           <div className={styles.resultBreakdown}>
-            <span><b>{visibleAssignments.filter(row => row.status === 'PUBLISHED').length}</b> Published</span>
-            <span><b>{visibleAssignments.filter(row => row.status === 'DRAFT').length}</b> Drafts</span>
-            <span><b>{visibleAssignments.filter(row => row.status === 'ARCHIVED').length}</b> Archived</span>
+            <span><b>{Number(assignmentFacets.status?.PUBLISHED || 0)}</b> Published</span>
+            <span><b>{Number(assignmentFacets.status?.DRAFT || 0)}</b> Drafts</span>
+            <span><b>{Number(assignmentFacets.status?.ARCHIVED || 0)}</b> Archived</span>
           </div>
           <button type="button" className={styles.resetFilters} disabled={activeFilterCount === 0} onClick={() => {
+            setAssignmentPage(0);
             setViewClassCodes([]);
             setViewSubjectCodes([]);
             setViewStatuses([]);
@@ -1234,6 +1280,14 @@ export default function TextbookLibraryPage() {
               </div>
             </article>)}
           </div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:18,flexWrap:'wrap'}}>
+          <small>Showing {assignmentTotal===0?0:assignmentPage*assignmentPageSize+1}–{Math.min(assignmentTotal,(assignmentPage+1)*assignmentPageSize)} of {assignmentTotal} assignments</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className={styles.secondaryButton} disabled={assignmentPage===0||loading} onClick={()=>setAssignmentPage(p=>Math.max(0,p-1))}>← Previous</button>
+            <span>Page {assignmentTotal===0?0:assignmentPage+1} of {Math.max(1,Math.ceil(assignmentTotal/assignmentPageSize))}</span>
+            <button type="button" className={styles.secondaryButton} disabled={(assignmentPage+1)*assignmentPageSize>=assignmentTotal||loading} onClick={()=>setAssignmentPage(p=>p+1)}>Next →</button>
+          </div>
+        </div>
       </section>
     </section>
   </main>;

@@ -34,9 +34,22 @@ public class TutorService {
     return Map.of("available",provider.isConfigured(),"sessionId",id);
   }
 
-  public List<Map<String,Object>> messages(AuthContext context,long sessionId){
+  public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId){
     context=authorization.requireStudent(context);ensureSessionOwner(context.studentId(),sessionId);
-    return jdbc.queryForList("select id,role,mode,message,created_at from tutor_message where session_id=? order by created_at,id",sessionId);
+    int rowLimit=Math.max(1,Math.min(limit==null?30:limit,100));
+    String beforeFilter=beforeId==null?"":" and id < ?";
+    List<Object> args=new ArrayList<>();args.add(sessionId);if(beforeId!=null)args.add(beforeId);args.add(rowLimit+1);
+    List<Map<String,Object>> rows=jdbc.queryForList(
+      "select id,role,mode,message,created_at from tutor_message where session_id=?"+beforeFilter+
+      " order by id desc limit ?",args.toArray());
+    boolean hasMore=rows.size()>rowLimit;
+    if(hasMore)rows.remove(rows.size()-1);
+    Collections.reverse(rows);
+    Long nextBeforeId=rows.isEmpty()?null:((Number)rows.getFirst().get("id")).longValue();
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("items",rows);result.put("hasMore",hasMore);result.put("nextBeforeId",nextBeforeId);
+    result.put("limit",rowLimit);
+    return result;
   }
 
   public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId){

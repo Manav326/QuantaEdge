@@ -55,6 +55,9 @@ export default function AdminStaffPage() {
   const [staff,setStaff]=useState<StaffRow[]>([]);
   const [availablePermissions,setAvailablePermissions]=useState<Permission[]>([]);
   const [audit,setAudit]=useState<AuditRow[]>([]);
+  const [auditPage,setAuditPage]=useState(0);
+  const [auditTotal,setAuditTotal]=useState(0);
+  const auditPageSize=25;
   const [tab,setTab]=useState<'staff'|'audit'>('staff');
   const [search,setSearch]=useState('');
   const [selected,setSelected]=useState<StaffRow|null>(null);
@@ -78,6 +81,20 @@ export default function AdminStaffPage() {
   const filteredStaff=useMemo(()=>staff.filter(row=>
     [row.display_name,row.mobile_e164,row.role].some(value=>String(value||'').toLowerCase().includes(search.toLowerCase()))
   ),[staff,search]);
+  useEffect(()=>{
+    if(!canAudit)return;
+    let active=true;
+    (async()=>{
+      const params=new URLSearchParams({limit:String(auditPageSize),offset:String(auditPage*auditPageSize)});
+      const response=await fetch('/api/v1/admin/staff/audit?'+params.toString(),{cache:'no-store'});
+      const data=await readJson(response);
+      if(!active)return;
+      setAudit(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
+      setAuditTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
+    })().catch((e:any)=>{if(active)setError(e.message||'Audit history could not be loaded.');});
+    return()=>{active=false};
+  },[canAudit,auditPage]);
+
   const editDirty=Boolean(selected&&(draftRole!==initialRole||JSON.stringify([...draftPermissions].sort())!==JSON.stringify([...initialPermissions].sort())));
   const newReady=newName.trim().length>=2&&newMobile.replace(/\D/g,'').length===10;
   const adminPermissionsComplete=newRole!=='ADMIN'||newPermissions.length===availablePermissions.length;
@@ -87,12 +104,7 @@ export default function AdminStaffPage() {
     const data=await readJson(r);
     setStaff(Array.isArray(data)?data:[]);
   }
-  async function loadAudit() {
-    const r=await fetch('/api/v1/admin/staff/audit?limit=300',{cache:'no-store'});
-    const data=await readJson(r);
-    setAudit(Array.isArray(data)?data:[]);
-  }
-  async function loadAdminData(admin:boolean,hasAudit:boolean) {
+   async function loadAdminData(admin:boolean) {
     const tasks:Promise<any>[]=[];
     if(admin) {
       tasks.push(fetch('/api/v1/admin/staff',{cache:'no-store'}).then(readJson).then(data=>setStaff(Array.isArray(data)?data:[])));
@@ -102,8 +114,7 @@ export default function AdminStaffPage() {
         setNewPermissions(defaultsForRole('CONTENT_AUTHOR',rows));
       }));
     }
-    if(hasAudit) tasks.push(fetch('/api/v1/admin/staff/audit?limit=300',{cache:'no-store'}).then(readJson).then(data=>setAudit(Array.isArray(data)?data:[])));
-    await Promise.all(tasks);
+     await Promise.all(tasks);
   }
 
   useEffect(()=>{
@@ -120,7 +131,7 @@ export default function AdminStaffPage() {
         const searchParams=new URLSearchParams(window.location.search);
         setTab(searchParams.get('view')==='audit'||!admin?'audit':'staff');
         if(!admin&&!hasAudit) { router.replace('/content'); return; }
-        await loadAdminData(admin,hasAudit);
+        await loadAdminData(admin);
       } catch(e:any) {
         if(mounted)setError(e.message||'Staff workspace could not be loaded.');
       } finally {
@@ -242,7 +253,7 @@ export default function AdminStaffPage() {
 
       <div className="qe-staff-tabs">
         {isAdmin&&<button type="button" className={tab==='staff'?'active':''} onClick={()=>setTab('staff')}>Staff directory <b>{staff.length}</b></button>}
-        {canAudit&&<button type="button" className={tab==='audit'?'active':''} onClick={()=>setTab('audit')}>Audit trail <b>{audit.length}</b></button>}
+        {canAudit&&<button type="button" className={tab==='audit'?'active':''} onClick={()=>setTab('audit')}>Audit trail <b>{auditTotal}</b></button>}
       </div>
 
       {tab==='staff'&&isAdmin&&<div className="qe-staff-layout">
@@ -291,7 +302,7 @@ export default function AdminStaffPage() {
       </div>}
 
       {tab==='audit'&&canAudit&&<section className="admin-panel qe-audit-panel">
-        <div className="panel-head"><div><span className="admin-kicker">RECORDED STAFF ACTIVITY</span><h2>Audit trail</h2><p>Requests to the admin API are captured with actor, endpoint, result and timestamp. Request bodies and OTP values are not stored here.</p></div><span className="count">{audit.length} events</span></div>
+        <div className="panel-head"><div><span className="admin-kicker">RECORDED STAFF ACTIVITY</span><h2>Audit trail</h2><p>Requests to the admin API are captured with actor, endpoint, result and timestamp. Request bodies and OTP values are not stored here.</p></div><span className="count">{auditTotal} events</span></div>
         <div className="qe-audit-list">
           {audit.map(row=><article key={row.id} className="qe-audit-row">
             <span className={'qe-audit-status '+(row.response_status>=200&&row.response_status<400?'success':'failure')}>{row.response_status}</span>
@@ -299,6 +310,14 @@ export default function AdminStaffPage() {
             <button type="button" className="qe-audit-info" title={row.user_agent||'No user-agent recorded'} onClick={()=>window.alert((row.user_agent||'No user-agent recorded')+'\n'+(row.remote_address||'IP unavailable'))}>Details</button>
           </article>)}
           {!audit.length&&<div className="qe-library-empty"><strong>No staff activity is recorded yet</strong><p>New staff API actions will appear here. Existing pre-audit events are not synthesized.</p></div>}
+        </div>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {auditTotal===0?0:auditPage*auditPageSize+1}–{Math.min(auditTotal,(auditPage+1)*auditPageSize)} of {auditTotal} events</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className="qe-secondary-button" disabled={auditPage===0} onClick={()=>setAuditPage(p=>Math.max(0,p-1))}>← Previous</button>
+            <span>Page {auditTotal===0?0:auditPage+1} of {Math.max(1,Math.ceil(auditTotal/auditPageSize))}</span>
+            <button type="button" className="qe-secondary-button" disabled={(auditPage+1)*auditPageSize>=auditTotal} onClick={()=>setAuditPage(p=>p+1)}>Next →</button>
+          </div>
         </div>
       </section>}
 

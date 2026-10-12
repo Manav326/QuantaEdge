@@ -42,7 +42,9 @@ export default function ClassesPage(){
   const [subjectCode,setSubjectCode]=useState('maths');
   const [statusFilter,setStatusFilter]=useState('ALL');
   const [sessions,setSessions]=useState<LiveSession[]>([]);
+  const [sessionPage,setSessionPage]=useState(0); const [sessionsTotal,setSessionsTotal]=useState(0); const sessionPageSize=25;
   const [recordings,setRecordings]=useState<Recording[]>([]);
+  const [recordingPage,setRecordingPage]=useState(0); const [recordingsTotal,setRecordingsTotal]=useState(0); const recordingPageSize=25;
   const [revealedUrls,setRevealedUrls]=useState<Record<number,string>>({});
   const [chapters,setChapters]=useState<Chapter[]>([]);
   const [staff,setStaff]=useState<Staff[]>([]);
@@ -70,8 +72,8 @@ export default function ClassesPage(){
     try{
       const sessionStatus=['SCHEDULED','LIVE','COMPLETED','CANCELLED'].includes(statusFilter)?statusFilter:'ALL';
       const recordingStatus=['DRAFT','PUBLISHED','ARCHIVED'].includes(statusFilter)?statusFilter:'ALL';
-      const sessionParams=new URLSearchParams({classCode,subjectCode,status:sessionStatus});
-      const recordingParams=new URLSearchParams({classCode,subjectCode,status:recordingStatus});
+      const sessionParams=new URLSearchParams({classCode,subjectCode,status:sessionStatus,limit:String(sessionPageSize),offset:String(sessionPage*sessionPageSize)});
+      const recordingParams=new URLSearchParams({classCode,subjectCode,status:recordingStatus,limit:String(recordingPageSize),offset:String(recordingPage*recordingPageSize)});
       const chapterParams=new URLSearchParams({classCode,subjectCode});
       const [sessionRows,recordingRows,contentRows,staffRows]=await Promise.all([
         api('/api/v1/admin/live-classes?'+sessionParams.toString()),
@@ -79,8 +81,10 @@ export default function ClassesPage(){
         api('/api/v1/admin/class-chapters?'+chapterParams.toString()),
         api('/api/v1/admin/class-staff')
       ]);
-      setSessions(Array.isArray(sessionRows)?sessionRows:[]);
-      setRecordings(Array.isArray(recordingRows)?recordingRows:[]);
+      setSessions(Array.isArray(sessionRows?.items)?sessionRows.items:(Array.isArray(sessionRows)?sessionRows:[]));
+      setSessionsTotal(Number(sessionRows?.total??(Array.isArray(sessionRows)?sessionRows.length:0)));
+      setRecordings(Array.isArray(recordingRows?.items)?recordingRows.items:(Array.isArray(recordingRows)?recordingRows:[]));
+      setRecordingsTotal(Number(recordingRows?.total??(Array.isArray(recordingRows)?recordingRows.length:0)));
       const chapterMap=new Map<number,Chapter>();
       (Array.isArray(contentRows)?contentRows:[]).forEach((row:any)=>{
         const id=Number(row.chapter_id);
@@ -92,7 +96,7 @@ export default function ClassesPage(){
       setRecordingChapterId(value=>value&&chapterMap.has(Number(value))?value:'');
     }catch(e){setError(e instanceof Error?e.message:'Live classes and recordings could not be loaded.');}
     finally{setLoading(false);}
-  },[classCode,subjectCode,statusFilter]);
+  },[classCode,subjectCode,statusFilter,sessionPage,recordingPage]);
   useEffect(()=>{void load();},[load]);
 
   async function createSession(){
@@ -180,11 +184,11 @@ export default function ClassesPage(){
       <section className={styles.hero}><div className={styles.heroIcon}>◷</div><div><span>CLASSROOM CONTROL CENTRE</span><h2>One schedule. Protected access. Saved attendance.</h2><p>Meeting links stay private until a student is eligible to join. Uploaded recordings are stored outside public assets and streamed only after checking enrollment.</p></div><div className={styles.heroStats}><strong>{liveCount}</strong><small>Live now</small><strong>{upcomingCount}</strong><small>Upcoming</small><strong>{reviewCount}</strong><small>Draft recordings</small></div></section>
       {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.success} role="status">{notice}</div>}
       <div className={styles.trackFilters}>
-        <label>Class<select value={classCode} onChange={e=>setClassCode(e.target.value)}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
-        <label>Subject<select value={subjectCode} onChange={e=>setSubjectCode(e.target.value)}><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
-        <label>Status view<select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="SCHEDULED">Scheduled</option><option value="LIVE">Live now</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option><option value="DRAFT">Draft recordings</option><option value="PUBLISHED">Published recordings</option><option value="ARCHIVED">Archived recordings</option></select></label>
+        <label>Class<select value={classCode} onChange={e=>{setClassCode(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
+        <label>Subject<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
+        <label>Status view<select value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="ALL">All statuses</option><option value="SCHEDULED">Scheduled</option><option value="LIVE">Live now</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option><option value="DRAFT">Draft recordings</option><option value="PUBLISHED">Published recordings</option><option value="ARCHIVED">Archived recordings</option></select></label>
       </div>
-      <div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>Live sessions <span>{sessions.length}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>Recordings <span>{recordings.length}</span></button></div>
+      <div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>Live sessions <span>{sessionsTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>Recordings <span>{recordingsTotal}</span></button></div>
 
       {tab==='live'?<>
         <section className={styles.panel}>
@@ -204,6 +208,10 @@ export default function ClassesPage(){
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>SESSION MANAGEMENT</span><h2>Scheduled and completed classes</h2><p>Change a session to Live when the meeting opens, then mark it completed when finished. Attendance records are retained.</p></div></div>
           {loading?<p className={styles.empty}>Loading classes…</p>:sessions.length===0?<div className={styles.empty}><b>No live class records in this view</b><span>Schedule a session above to make it available to enrolled students.</span></div>:<div className={styles.list}>{sessions.map(session=><article className={styles.card} key={session.session_id}><span className={styles.sessionIcon}>◷</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{session.title}</h3><span className={styles['status'+session.status]}>{session.status}</span></div><p>{session.class_code} · {session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><small>{dateText(session.starts_at)} – {dateText(session.ends_at)}</small><small>Provider: {session.provider.replaceAll('_',' ')} · Host: {session.host_staff_name||'Not assigned'}</small><small>{session.attendee_count||0} attendees · {session.published_recording_count||0} published recording(s)</small>{session.description&&<small>{session.description}</small>}{revealedUrls[session.session_id]&&<div className={styles.privateLink}><small>PRIVATE MEETING URL · STAFF ONLY</small><input aria-label="Private meeting URL" readOnly value={revealedUrls[session.session_id]}/><button type="button" className={styles.secondaryButton} onClick={()=>void copyMeetingLink(session.session_id)}>Copy link</button><a href={revealedUrls[session.session_id]} target="_blank" rel="noreferrer">Open meeting ↗</a></div>}</div><div className={styles.actions}><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void revealMeetingLink(session)}>{revealedUrls[session.session_id]?'Hide link':'Reveal link'}</button>{session.status==='SCHEDULED'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'LIVE')}>Mark live</button>}{session.status==='LIVE'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'COMPLETED')}>Complete</button>}{['SCHEDULED','LIVE'].includes(session.status)&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'CANCELLED')}>Cancel</button>}{session.status==='CANCELLED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'SCHEDULED')}>Restore</button>}</div></article>)}</div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {sessionsTotal===0?0:sessionPage*sessionPageSize+1}–{Math.min(sessionsTotal,(sessionPage+1)*sessionPageSize)} of {sessionsTotal} live classes</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" disabled={sessionPage===0||loading} onClick={()=>setSessionPage(p=>Math.max(0,p-1))}>← Previous</button><span>Page {sessionsTotal===0?0:sessionPage+1} of {Math.max(1,Math.ceil(sessionsTotal/sessionPageSize))}</span><button type="button" disabled={(sessionPage+1)*sessionPageSize>=sessionsTotal||loading} onClick={()=>setSessionPage(p=>p+1)}>Next →</button></div>
+        </div>
         </section>
       </>:<>
         <section className={styles.panel}>
@@ -221,6 +229,10 @@ export default function ClassesPage(){
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>RECORDING GOVERNANCE</span><h2>Recorded class library</h2><p>Publish only after verifying the title, chapter mapping, and playback in the student experience.</p></div></div>
           {loading?<p className={styles.empty}>Loading recordings…</p>:recordings.length===0?<div className={styles.empty}><b>No recorded classes in this view</b><span>Upload a recording above, then publish it for enrolled students.</span></div>:<div className={styles.list}>{recordings.map(recording=><article className={styles.card} key={recording.recorded_class_id}><span className={styles.recordingIcon}>▶</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{recording.title}</h3><span className={styles['status'+recording.status]}>{recording.status}</span></div><p>{recording.class_code} · {recording.subject_name}{recording.chapter_name?' · '+recording.chapter_name:''}</p><small>{recording.original_filename} · {formatSize(recording.file_size_bytes)} · {durationText(recording.duration_seconds)}</small><small>{recording.media_type} · SHA-256 {recording.sha256.slice(0,12)}…</small>{recording.session_title&&<small>Linked live class: {recording.session_title}</small>}{recording.description&&<small>{recording.description}</small>}</div><div className={styles.actions}>{recording.status==='DRAFT'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeRecordingStatus(recording,'PUBLISHED')}>Publish</button>}{recording.status==='PUBLISHED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeRecordingStatus(recording,'ARCHIVED')}>Archive</button>}{recording.status==='ARCHIVED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeRecordingStatus(recording,'DRAFT')}>Restore draft</button>}</div></article>)}</div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {recordingsTotal===0?0:recordingPage*recordingPageSize+1}–{Math.min(recordingsTotal,(recordingPage+1)*recordingPageSize)} of {recordingsTotal} recordings</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" disabled={recordingPage===0||loading} onClick={()=>setRecordingPage(p=>Math.max(0,p-1))}>← Previous</button><span>Page {recordingsTotal===0?0:recordingPage+1} of {Math.max(1,Math.ceil(recordingsTotal/recordingPageSize))}</span><button type="button" disabled={(recordingPage+1)*recordingPageSize>=recordingsTotal||loading} onClick={()=>setRecordingPage(p=>p+1)}>Next →</button></div>
+        </div>
         </section>
       </>}
     </section>
