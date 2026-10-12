@@ -4,7 +4,7 @@ This file is the shared handoff board for the Core HR, Attendance & Leave, Acade
 
 ## Current baseline
 
-Last audited main commit at document creation: `c610d34bf8b3ed120627a4e6921727b306df185d` — `fix(hrms): reject manual leave consumption before database access`.
+Last main commit audited before this status update: `0f6e3c78d0fa8950ad77b613a67fffd7bb0241e4` — `docs(hrms): define verified shared identity and API contracts`.
 
 Observed recent main history also includes:
 - `37023a8ca469b776f0ac3ed65a6c111255e61f3a` — test empty leave ledger migration
@@ -24,7 +24,12 @@ Observed recent main history also includes:
 - Manager references are checked for same-organization active status and recursive reporting-cycle prevention.
 - Employee history is exposed at `GET /api/v1/hr/employees/{id}/history`.
 - Latest Core HR commit observed before this document: `d44b28fd8472f9414bcb79ded342941dbb560f78`.
-- Next checks: lifecycle transition consistency, input validation, department hierarchy integrity, and full build/test verification.
+- Additional commits in this coordination pass:
+  - `ac6f22d92c0a091dd7a52efd2e9c975904b0993f` — validate email syntax and E.164 phone format on create/update.
+  - `a1e3ecc9b2af684393728d49b289f5fad8eb1aed` — add invalid email/phone regression tests.
+- Current input validation rejects invalid email and non-E.164 phone values before database access during employee creation.
+- CI run for the contact-validation test commit: [QuantaEdge Build and Publish #1631](https://github.com/Manav326/QuantaEdge/actions/runs/38294894090) was observed as **pending** at last check; no pass/fail result yet.
+- Next checks: lifecycle transition consistency, department hierarchy integrity, full build/test verification, and inspect latest CI result.
 
 ### Agent 2 — Attendance & Leave
 - Recent observed work includes an auditable leave-balance ledger, permission-checked ledger endpoint, serialized balance reductions, ledger migration test, and rejection of manual leave consumption before database access.
@@ -41,6 +46,8 @@ Observed recent main history also includes:
 
 ## Integration blockers / unverified items
 
+- Shared coordination protocol: [agent-coordination.md](agent-coordination.md).
+- Verified shared identity/API contract: [shared-contracts.md](shared-contracts.md).
 - The latest observed commit history does not establish that the full API build or all HRMS tests passed.
 - CI status and workflow results must be checked for the current main SHA; if no result is returned, report it as unobserved rather than green.
 - Exact attendance, academic assignment, and payroll/ESS contracts must be copied from source after auditing their current files, not inferred from commit titles.
