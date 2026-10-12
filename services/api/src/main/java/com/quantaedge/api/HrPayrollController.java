@@ -43,6 +43,7 @@ public class HrPayrollController {
     requireManage(context);
     long orgId=positive(body.get("organizationId"),"Organisation"); ensureOrganization(orgId);
     String code=required(body.get("code"),32,"Component code").toUpperCase();
+    if(!code.matches("^[A-Z0-9_-]+$")) throw bad("Component code may contain only letters, numbers, underscore and hyphen.");
     String name=required(body.get("name"),120,"Component name");
     String type=required(body.get("componentType"),16,"Component type").toUpperCase();
     if(!List.of("EARNING","DEDUCTION").contains(type)) throw bad("Component type must be EARNING or DEDUCTION.");
@@ -78,6 +79,8 @@ public class HrPayrollController {
     requireManage(context);
     long employeeId=positive(body.get("employeeId"),"Employee");
     Map<String,Object> employee=employee(employeeId);
+    // Serialize effective-date overlap checks for this employee so concurrent assignments cannot overlap.
+    jdbc.queryForObject("select id from hr_employee where id=? for update",Long.class,employeeId);
     long orgId=((Number)employee.get("organization_id")).longValue();
     long componentId=positive(body.get("componentId"),"Salary component");
     Map<String,Object> component=componentById(componentId);
@@ -353,5 +356,19 @@ public class HrPayrollController {
   private LocalDate parseOptionalDate(Object value,String label){if(value==null||String.valueOf(value).isBlank())return null;try{return LocalDate.parse(String.valueOf(value));}catch(RuntimeException ex){throw bad(label+" must use YYYY-MM-DD format.");}}
   private ResponseStatusException bad(String message){return new ResponseStatusException(HttpStatus.BAD_REQUEST,message);}
   private ResponseStatusException conflict(String message){return new ResponseStatusException(HttpStatus.CONFLICT,message);}
-  private String jsonEscape(String value){return value.replace("\\","\\\\").replace("\"","\\\"");}
+  private String jsonEscape(String value){
+    StringBuilder out=new StringBuilder();
+    for(int i=0;i<value.length();i++){
+      char ch=value.charAt(i);
+      switch(ch){
+        case '\\' -> out.append("\\\\");
+        case '"' -> out.append("\\\"");
+        case '\n' -> out.append("\\n");
+        case '\r' -> out.append("\\r");
+        case '\t' -> out.append("\\t");
+        default -> { if(ch<0x20) out.append(String.format("\\u%04x",(int)ch)); else out.append(ch); }
+      }
+    }
+    return out.toString();
+  }
 }
