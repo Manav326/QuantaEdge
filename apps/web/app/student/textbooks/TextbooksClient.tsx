@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
+import PremiumPagination from '../../components/PremiumPagination';
 import './textbooks.css';
 
 type LearningDocument = {
@@ -45,7 +46,6 @@ export default function TextbooksClient() {
   const { locale } = useLocale();
   const requestedLanguage = locale === 'english' ? 'en' : 'hi';
   const requestedSubjectCode = searchParams.get('subjectCode') || '';
-  const CHAPTERS_PER_PAGE = 8;
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
   const [documents, setDocuments] = useState<LearningDocument[]>([]);
@@ -54,6 +54,7 @@ export default function TextbooksClient() {
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [expandedSubject, setExpandedSubject] = useState('');
   const [chapterPageBySubject, setChapterPageBySubject] = useState<Record<string, number>>({});
+  const [chapterPageSize, setChapterPageSize] = useState(10);
   const initializedLibraryScope = useRef('');
   const [currentPage, setCurrentPage] = useState(1);
   const [zoom, setZoom] = useState(100);
@@ -361,16 +362,21 @@ export default function TextbooksClient() {
               String(a.chapter_code||a.chapter_name||a.title).localeCompare(String(b.chapter_code||b.chapter_name||b.title),undefined,{numeric:true,sensitivity:'base'}));
             const book = subjectBooks[0];
             const expanded = expandedSubject === code;
-            const chapterPageCount = Math.max(1, Math.ceil(chapterBooks.length / CHAPTERS_PER_PAGE));
+            const chapterPageCount = Math.max(1, Math.ceil(chapterBooks.length / chapterPageSize));
             const chapterPage = Math.max(1, Math.min(chapterPageBySubject[code] || 1, chapterPageCount));
-            const visibleChapterBooks = chapterBooks.slice((chapterPage - 1) * CHAPTERS_PER_PAGE, chapterPage * CHAPTERS_PER_PAGE);
+            const visibleChapterBooks = chapterBooks.slice((chapterPage - 1) * chapterPageSize, chapterPage * chapterPageSize);
             const showChapterPagination = chapterPageCount > 1;
             const renderChapterPagination = (position: 'top' | 'bottom') => (
-              <nav className={'qe-textbook-pagination qe-textbook-pagination--' + position} aria-label={name + ' chapter pagination ' + position}>
-                <button type="button" disabled={chapterPage <= 1} onClick={() => setChapterPageBySubject(old => ({ ...old, [code]: Math.max(1, chapterPage - 1) }))}>← Previous</button>
-                <span><strong>Page {chapterPage} of {chapterPageCount}</strong><small>{chapterBooks.length} chapters in this book</small></span>
-                <button type="button" disabled={chapterPage >= chapterPageCount} onClick={() => setChapterPageBySubject(old => ({ ...old, [code]: Math.min(chapterPageCount, chapterPage + 1) }))}>Next →</button>
-              </nav>
+              <div className={'qe-textbook-pagination qe-textbook-pagination--' + position}>
+                <PremiumPagination
+                  page={chapterPage - 1}
+                  total={chapterBooks.length}
+                  pageSize={chapterPageSize}
+                  onPageChange={nextPage => setChapterPageBySubject(old => ({ ...old, [code]: nextPage + 1 }))}
+                  onPageSizeChange={size => { setChapterPageSize(size); setChapterPageBySubject(old => ({ ...old, [code]: 1 })); }}
+                  itemLabel={name + ' chapters'}
+                />
+              </div>
             );
             const bookTitle = hasBookParts
               ? (locale === 'english' ? name + ' · NCERT textbook parts' : name + ' · पाठ्यपुस्तक के भाग')
@@ -410,7 +416,7 @@ export default function TextbooksClient() {
                 {chapterBooks.length>0 ? <>
                   {showChapterPagination && renderChapterPagination('top')}
                   <div className="qe-textbook-chapter-list">{visibleChapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
-                    <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * CHAPTERS_PER_PAGE + index + 1).padStart(2,'0')}</span>
+                    <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * chapterPageSize + index + 1).padStart(2,'0')}</span>
                     <span className="qe-library-mini-pdf">PDF</span>
                     <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, locale === 'english')}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
                     <span className="qe-textbook-chapter-pages">{item.page_count} pages</span>
