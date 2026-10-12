@@ -18,3 +18,18 @@ target/
 
 # Machine-generated bilingual translation drafts are private review artifacts.
 /QuantaEdge_Bilingual_Draft_Bundle/
+
+
+# Local source textbooks are imported into the private QuantaEdge PDF library; do not commit them.
+# Place Class_6_Science_English.pdf and Class_6_Mathematics_English.pdf in the repository root locally.
+/Class_*.pdf
+/class_*.pdf
+/NCERT_*.pdf
+/root-textbook-pdf-import-report.json
+/Class-*.pdf
+/class-*.pdf
+/Grade-*.pdf
+/grade-*.pdf
+/NCERT-*.pdf
+/ncert-*.pdf
+/ncert_*.pdf

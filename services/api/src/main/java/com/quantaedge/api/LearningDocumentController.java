@@ -477,7 +477,7 @@ public class LearningDocumentController {
 
   private Map<String, Object> readableDocument(long documentId, long studentId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.edition,
+      select d.id as document_id,d.pdf_asset_id,d.scope,d.title,d.edition,d.language,
              d.page_start,d.page_end,d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name

@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { LocaleText } from '../../components/LanguageProvider';
+import { useLocale } from '../../components/LanguageProvider';
 import AuthenticatedPageImage from '../components/AuthenticatedPageImage';
 import './textbooks.css';
 
 type LearningDocument = {
   document_id: number;
   scope: 'SUBJECT_BOOK' | 'CHAPTER_PDF';
+  language?: 'hi' | 'en';
   title: string;
   edition?: string | null;
   page_count: number;
@@ -40,9 +41,12 @@ async function api(url: string, init: RequestInit = {}) {
 export default function TextbooksClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { locale } = useLocale();
+  const requestedLanguage = locale === 'english' ? 'en' : 'hi';
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
   const [documents, setDocuments] = useState<LearningDocument[]>([]);
+  const [documentsLanguage, setDocumentsLanguage] = useState<'hi' | 'en' | null>(null);
   const [selected, setSelected] = useState<LearningDocument | null>(null);
   const [subjectFilter, setSubjectFilter] = useState(() => searchParams.get('subjectCode') || 'ALL');
   const [expandedSubject, setExpandedSubject] = useState('');
@@ -63,16 +67,19 @@ export default function TextbooksClient() {
   const loadDocuments = useCallback(async () => {
     setLoading(true);
     setError('');
+    setDocumentsLanguage(null);
     try {
-      const data = await api('/api/v1/learning/documents');
+      const data = await api('/api/v1/learning/documents?language=' + requestedLanguage);
       setDocuments(Array.isArray(data) ? data : []);
+      setDocumentsLanguage(requestedLanguage);
     } catch (e: any) {
       if (e?.auth) { router.replace('/login/student'); return; }
+      setDocuments([]);
       setError(e instanceof Error ? e.message : 'Your textbook library could not be loaded.');
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, requestedLanguage]);
 
   useEffect(() => { void loadDocuments(); }, [loadDocuments]);
 
@@ -99,6 +106,35 @@ export default function TextbooksClient() {
       });
     return () => { active = false; };
   }, [documentId, router]);
+
+  useEffect(() => {
+    if (!documentId || !selected || Number(selected.document_id) !== documentId || loading || documentsLanguage !== requestedLanguage || !selected.language) return;
+    if (selected.language === requestedLanguage) return;
+
+    const sameSlot = documents.find(item =>
+      item.language === requestedLanguage &&
+      item.class_code === selected.class_code &&
+      item.subject_code === selected.subject_code &&
+      item.scope === selected.scope &&
+      (item.scope === 'SUBJECT_BOOK' ||
+        (selected.chapter_id != null && item.chapter_id === selected.chapter_id) ||
+        (Boolean(selected.chapter_code) && item.chapter_code === selected.chapter_code))
+    );
+    if (sameSlot) {
+      const nextParams = new URLSearchParams(searchParams.toString());
+      nextParams.set('documentId', String(sameSlot.document_id));
+      router.replace('/student/textbooks?' + nextParams.toString());
+      return;
+    }
+
+    setNotice(locale === 'english'
+      ? 'The English PDF for this book or chapter has not been published yet. Showing the English textbook library.'
+      : 'इस पुस्तक या अध्याय की हिन्दी PDF अभी प्रकाशित नहीं है। हिन्दी पुस्तकालय दिखाया जा रहा है।');
+    setSelected(null);
+    setPageError('');
+    setCurrentPage(1);
+    router.replace('/student/textbooks?subjectCode=' + encodeURIComponent(selected.subject_code));
+  }, [documentId, selected, loading, documentsLanguage, documents, requestedLanguage, locale, router, searchParams]);
 
   const pageCount = Number(selected?.page_count || 0);
   const firstThumb = Math.max(1, Math.min(currentPage - 6, pageCount - 19));
@@ -131,7 +167,20 @@ export default function TextbooksClient() {
       code, name: rows[0]?.subject_name || code, rows,
     }));
   }, [visibleDocuments]);
-  const subjectLabel = selected?.subject_name || 'TEXTBOOK';
+  const subjectLabel = selected
+    ? (locale === 'english'
+        ? (selected.subject_code === 'maths' ? 'Mathematics' : selected.subject_code === 'science' ? 'Science' : selected.subject_name)
+        : selected.subject_name)
+    : 'TEXTBOOK';
+  const displaySubjectName = (code: string, fallback: string) =>
+    locale === 'english' ? (code === 'maths' ? 'Mathematics' : code === 'science' ? 'Science' : fallback) : fallback;
+  const displayChapterTitle = (item: LearningDocument, english: boolean) => {
+    if (english && item.scope === 'CHAPTER_PDF') {
+      const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
+      if (match?.[1]) return match[1].trim();
+    }
+    return item.chapter_name || item.title;
+  };
   const rawReturnTo = searchParams.get('returnTo') || '';
   const returnTarget = rawReturnTo.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : '/student/textbooks';
   const returnLabel = returnTarget.startsWith('/student/learn') ? 'Back to subject' : returnTarget === '/student' ? 'Back to today' : 'Textbook library';
@@ -263,14 +312,16 @@ export default function TextbooksClient() {
 
     {!documentId ? <section className="qe-textbook-library">
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
+      {notice && <div className="qe-textbook-notice" role="status">{notice}</div>}
       <div className="qe-textbook-library-toolbar"><div><span className="qe-textbook-eyebrow">RESOURCE LIBRARY</span><h2>Available textbooks</h2><p>Only the books and chapters available to your enrolled subjects are shown.</p></div>
-        <label>Subject <select value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{subject.name}</option>)}</select></label>
+        <label>Subject <select value={subjectFilter} onChange={e => changeSubjectFilter(e.target.value)}><option value="ALL">All subjects</option>{availableSubjects.map(subject => <option key={subject.code} value={subject.code}>{displaySubjectName(subject.code, subject.name)}</option>)}</select></label>
       </div>
 
       {loading ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> Loading your textbook library…</div>
         : visibleDocuments.length === 0 ? <div className="qe-textbook-empty"><span>▤</span><h3>No published PDFs available yet</h3><p>When your teacher publishes a subject book or chapter PDF for your class, it will appear here.</p><Link href="/student/learn">Continue with lessons →</Link></div>
         : <div className="qe-textbook-resource-groups">
-          {subjectGroups.map(({ code, name, rows }) => {
+          {subjectGroups.map(({ code, name: rawName, rows }) => {
+            const name = displaySubjectName(code, rawName);
             const subjectBooks = rows.filter(item => item.scope === 'SUBJECT_BOOK');
             const chapterBooks = rows.filter(item => item.scope === 'CHAPTER_PDF').slice().sort((a,b)=>
               String(a.chapter_code||a.chapter_name||a.title).localeCompare(String(b.chapter_code||b.chapter_name||b.title),undefined,{numeric:true,sensitivity:'base'}));
@@ -299,7 +350,7 @@ export default function TextbooksClient() {
                 {chapterBooks.length>0 ? <div className="qe-textbook-chapter-list">{chapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                   <span className="qe-textbook-chapter-index">{String(index+1).padStart(2,'0')}</span>
                   <span className="qe-library-mini-pdf">PDF</span>
-                  <span className="qe-textbook-chapter-copy"><strong>{item.chapter_name||item.title}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
+                  <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, locale === 'english')}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
                   <span className="qe-textbook-chapter-pages">{item.page_count} pages</span>
                   <span className="qe-textbook-chapter-open">↗</span>
                 </button>)}</div> : <div className="qe-textbook-no-chapters"><span>▤</span><div><strong>No chapter PDFs published yet</strong><small>Published chapter files will appear under this book.</small></div></div>}
@@ -309,8 +360,8 @@ export default function TextbooksClient() {
         </div>}
       <div className="qe-textbook-privacy-note"><span>▣</span><p><b>Private reading mode.</b> The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page. Screenshots or capturing displayed pages cannot be fully prevented by a website.</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
-      <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected?.chapter_name || 'Chapter PDF'}</span></div>
-        <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? 'SUBJECT TEXTBOOK' : 'CHAPTER READING'} · {subjectLabel.toUpperCase()}</span><h1>{selected?.title || 'Loading textbook…'}</h1><p>{selected?.chapter_name ? selected.chapter_name + ' · ' : ''}{selected?.edition || 'View-only online reader'}</p></div>
+      <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' ? 'Complete subject book' : selected ? displayChapterTitle(selected, locale === 'english') : 'Chapter PDF'}</span></div>
+        <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? 'SUBJECT TEXTBOOK' : 'CHAPTER READING'} · {subjectLabel.toUpperCase()}</span><h1>{selected ? (selected.scope === 'CHAPTER_PDF' ? displayChapterTitle(selected, locale === 'english') : selected.title) : 'Loading textbook…'}</h1><p>{selected?.scope === 'CHAPTER_PDF' && selected ? displayChapterTitle(selected, locale === 'english') + ' · ' : ''}{selected?.edition || 'View-only online reader'}</p></div>
           {selected && <div className="qe-reader-progress"><strong>{progressPercent}%</strong><span>read</span><div><i style={{width: progressPercent + '%'}}/></div></div>}
         </div>
       </div>

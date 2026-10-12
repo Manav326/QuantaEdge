@@ -21,6 +21,15 @@ type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
 };
 type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null;language?:'hi'|'en'};
+
+function textbookChapterTitle(item: StudentDocument, language: 'hi' | 'en') {
+  if (language === 'en') {
+    const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
+    if (match?.[1]) return match[1].trim();
+  }
+  return item.chapter_name || item.title;
+}
+
 type Question = {
   id:number; sort_order?:number; question_type:string; prompt:string; explanation:string; options:string; translated?:boolean;
   source_kind?:string; source_year?:number; board?:string; marks?:number; exam_format?:string;
@@ -273,14 +282,15 @@ export default function LearnClient() {
         );
         if(existing){
           if(document.chapter_code&&existing.code===existing.name)existing.code=document.chapter_code;
+          if(locale==='english')existing.name=textbookChapterTitle(document,'en');
           return;
         }
-        const name=document.chapter_name||document.title;
+        const name=locale==='english'?textbookChapterTitle(document,'en'):(document.chapter_name||document.title);
         const key=document.chapter_code||name||('chapter-'+document.document_id);
         grouped.set(key,{code:key,name,lessons:[]});
       });
     return Array.from(grouped.values());
-  },[trackBrowse,studentDocuments]);
+  },[trackBrowse,studentDocuments,locale]);
 
   async function loadLesson(id:number) {
     try {
@@ -544,7 +554,7 @@ export default function LearnClient() {
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
             <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {item.chapter_name||group.name}</small></span>
+            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {textbookChapterTitle(item, locale==='english'?'en':'hi')}</small></span>
             <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
           </Link>)}
           {expanded&&<div className="qe-student-chapter-content">

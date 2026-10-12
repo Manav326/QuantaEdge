@@ -219,3 +219,5 @@
   .qe-reader-page-viewport.fit-page{min-height:calc(100vh - 380px)}
   .qe-reader-page-viewport.fit-page .qe-reader-page-image{max-height:calc(100vh - 420px)}
 }
+
+.qe-textbook-notice{margin:0 0 14px;padding:11px 14px;border:1px solid #f0d3a8;border-radius:10px;background:#fff8ed;color:#80501b;font-size:11px;line-height:1.55}
