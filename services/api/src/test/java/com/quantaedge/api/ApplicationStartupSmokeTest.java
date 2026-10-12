@@ -91,6 +91,9 @@ class ApplicationStartupSmokeTest {
   @Test
   void cleanDatabaseMigratesPeopleOperationsFoundationWithoutCreatingFakeEmployees() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_organization') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='hr_organization' and column_name='working_days_per_week')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select working_days_per_week=5 from hr_organization where name='QuantaEdge'", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='62' and success=true", Integer.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_department') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_designation') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee') is not null", Boolean.class));

@@ -32,6 +32,31 @@ public class HrEmployeeController {
     return jdbc.queryForMap("select id,public_id,name,legal_name,timezone,active from hr_organization order by id limit 1");
   }
 
+  @GetMapping("/organization/{id}/work-schedule")
+  public Map<String,Object> workSchedule(@PathVariable long id,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireView(context);
+    List<Map<String,Object>> rows=jdbc.queryForList("select id,name,working_days_per_week from hr_organization where id=? and active=true",id);
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Organisation not found.");
+    return rows.getFirst();
+  }
+
+  @PutMapping("/organization/{id}/work-schedule")
+  @Transactional
+  public Map<String,Object> updateWorkSchedule(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    int days;
+    try { days=Integer.parseInt(String.valueOf(body.get("workingDaysPerWeek"))); }
+    catch(RuntimeException ex) { throw badRequest("Working days per week must be 5 or 6."); }
+    if(days!=5 && days!=6) throw badRequest("Working days per week must be 5 or 6.");
+    int changed=jdbc.update("update hr_organization set working_days_per_week=?,updated_at=now() where id=? and active=true",days,id);
+    if(changed!=1) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Organisation not found.");
+    Map<String,Object> row=jdbc.queryForMap("select id,name,working_days_per_week from hr_organization where id=?",id);
+    record(context,"/api/v1/hr/organization/"+id+"/work-schedule","Set working week to "+days+" days for "+row.get("name"));
+    return row;
+  }
+
   @GetMapping("/employment-types")
   public List<Map<String,Object>> employmentTypes(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
