@@ -100,6 +100,49 @@ public class HrEmployeeController {
     }
   }
 
+  @PutMapping("/departments/{id}")
+  @Transactional
+  public Map<String,Object> updateDepartment(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> before;
+    try { before=jdbc.queryForMap("select id,organization_id,code,name,parent_department_id,active from hr_department where id=?",id); }
+    catch(org.springframework.dao.EmptyResultDataAccessException ex) { throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Department not found."); }
+    long orgId=((Number)before.get("organization_id")).longValue();
+    String code=required(body.get("code"),32,"Department code").toUpperCase();
+    if(!code.matches("^[A-Z0-9_-]+$")) throw badRequest("Department code may contain only letters, numbers, underscore and hyphen.");
+    String name=required(body.get("name"),120,"Department name");
+    Long parent=body.containsKey("parentDepartmentId")?optionalLong(body.get("parentDepartmentId")):
+      (before.get("parent_department_id") instanceof Number n?n.longValue():null);
+    if(parent!=null) {
+      Boolean valid=jdbc.queryForObject("select exists(select 1 from hr_department where id=? and organization_id=? and active=true)",Boolean.class,parent,orgId);
+      if(!Boolean.TRUE.equals(valid)) throw badRequest("Choose an active parent department in the same organisation.");
+      if(parent==id) throw badRequest("A department cannot be its own parent.");
+      Boolean cycle=jdbc.queryForObject("""
+        with recursive ancestors(id,parent_department_id) as (
+          select id,parent_department_id from hr_department where id=? and organization_id=?
+          union all
+          select p.id,p.parent_department_id from hr_department p
+          join ancestors a on p.id=a.parent_department_id where p.organization_id=?
+        )
+        select exists(select 1 from ancestors where id=?)
+        """,Boolean.class,parent,orgId,orgId,id);
+      if(Boolean.TRUE.equals(cycle)) throw badRequest("A department cannot be moved beneath one of its own descendants.");
+    }
+    boolean active=body.containsKey("active")?Boolean.parseBoolean(String.valueOf(body.get("active"))):Boolean.TRUE.equals(before.get("active"));
+    if(!active) {
+      Boolean hasEmployees=jdbc.queryForObject("select exists(select 1 from hr_employee where department_id=? and employment_status not in ('SEPARATED','INACTIVE'))",Boolean.class,id);
+      Boolean hasChildren=jdbc.queryForObject("select exists(select 1 from hr_department where parent_department_id=? and active=true)",Boolean.class,id);
+      if(Boolean.TRUE.equals(hasEmployees)||Boolean.TRUE.equals(hasChildren)) throw new ResponseStatusException(HttpStatus.CONFLICT,"Reassign active employees and deactivate child departments before deactivating this department.");
+    }
+    try {
+      jdbc.update("update hr_department set code=?,name=?,parent_department_id=?,active=?,updated_at=now() where id=?",code,name,parent,active,id);
+    } catch(DuplicateKeyException ex) { throw new ResponseStatusException(HttpStatus.CONFLICT,"Department code or name already exists in this organisation."); }
+    Map<String,Object> after=jdbc.queryForMap("select id,code,name,parent_department_id,active,organization_id from hr_department where id=?",id);
+    record(context,"/api/v1/hr/departments/"+id,"Updated department "+code+" — "+name);
+    return after;
+  }
+
   @GetMapping("/designations")
   public List<Map<String,Object>> designations(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
@@ -125,6 +168,31 @@ public class HrEmployeeController {
     } catch(DuplicateKeyException ex) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"Designation code or name already exists in this organisation.");
     }
+  }
+
+  @PutMapping("/designations/{id}")
+  @Transactional
+  public Map<String,Object> updateDesignation(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> before;
+    try { before=jdbc.queryForMap("select id,organization_id,code,name,category,active from hr_designation where id=?",id); }
+    catch(org.springframework.dao.EmptyResultDataAccessException ex) { throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Designation not found."); }
+    String code=required(body.get("code"),32,"Designation code").toUpperCase();
+    if(!code.matches("^[A-Z0-9_-]+$")) throw badRequest("Designation code may contain only letters, numbers, underscore and hyphen.");
+    String name=required(body.get("name"),120,"Designation name");
+    String category=body.containsKey("category")?required(body.get("category"),24,"Designation category").toUpperCase():String.valueOf(before.get("category"));
+    if(!List.of("ACADEMIC","ADMINISTRATIVE","OPERATIONS","LEADERSHIP","OTHER").contains(category)) throw badRequest("Choose a supported designation category.");
+    boolean active=body.containsKey("active")?Boolean.parseBoolean(String.valueOf(body.get("active"))):Boolean.TRUE.equals(before.get("active"));
+    if(!active) {
+      Boolean assigned=jdbc.queryForObject("select exists(select 1 from hr_employee where designation_id=? and employment_status not in ('SEPARATED','INACTIVE'))",Boolean.class,id);
+      if(Boolean.TRUE.equals(assigned)) throw new ResponseStatusException(HttpStatus.CONFLICT,"Reassign active employees before deactivating this designation.");
+    }
+    try { jdbc.update("update hr_designation set code=?,name=?,category=?,active=?,updated_at=now() where id=?",code,name,category,active,id); }
+    catch(DuplicateKeyException ex) { throw new ResponseStatusException(HttpStatus.CONFLICT,"Designation code or name already exists in this organisation."); }
+    Map<String,Object> after=jdbc.queryForMap("select id,code,name,category,active,organization_id from hr_designation where id=?",id);
+    record(context,"/api/v1/hr/designations/"+id,"Updated designation "+code+" — "+name);
+    return after;
   }
 
   @GetMapping("/employees")
