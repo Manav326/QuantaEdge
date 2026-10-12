@@ -5,11 +5,12 @@ import org.json.JSONObject
 
 /**
  * Redacts grading-only fields recursively before protected assessment JSON is written locally.
- * The learner's own "answer" value is intentionally retained.
+ * Learner responses are stored separately in the encrypted answers map; generic answer fields
+ * in question snapshots are not trusted because their meaning can vary by API response.
  */
 internal object OfflineAssessmentSanitizer {
     private val forbiddenFields = setOf(
-        "answerkey", "answerpayload", "correctanswer", "correctoption", "correctoptions",
+        "answer", "answerkey", "answerpayload", "correctanswer", "correctoption", "correctoptions",
         "expectedanswer", "acceptedanswers", "iscorrect", "correct", "solution", "solutionsteps",
         "markingscheme", "rubric", "gradingnotes", "gradingfeedback", "graderationale",
         "marksawarded", "pointsawarded", "earnedmarks", "score", "evaluation"
