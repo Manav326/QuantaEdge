@@ -133,6 +133,9 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         source = importer.prepare_source_book(self.root, "7", "maths", "english", output_dir)
         self.assertTrue(source["merged_from_parts"])
         self.assertEqual(2, importer.inspect_book(Path(source["path"]))["page_count"])
+        combined_hash = importer.sha256_file(Path(source["path"]))
+        resumed = importer.prepare_source_book(self.root, "7", "maths", "english", output_dir)
+        self.assertEqual(combined_hash, importer.sha256_file(Path(resumed["path"])))
         self.assertEqual(hash1, importer.sha256_file(part1))
         self.assertEqual(hash2, importer.sha256_file(part2))
         self.assertEqual(
