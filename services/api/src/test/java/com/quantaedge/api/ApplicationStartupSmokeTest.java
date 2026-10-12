@@ -91,6 +91,10 @@ class ApplicationStartupSmokeTest {
   @Test
   void cleanDatabaseMigratesPeopleOperationsFoundationWithoutCreatingFakeEmployees() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_organization') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_holiday_calendar') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='63' and success=true", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_holiday_calendar", Integer.class));
+    assertEquals(2, jdbc.queryForObject("select count(*) from staff_permission_catalog where permission_key in ('HR_HOLIDAY_VIEW','HR_HOLIDAY_MANAGE')", Integer.class));
     assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='hr_organization' and column_name='working_days_per_week')", Boolean.class));
     assertTrue(jdbc.queryForObject("select working_days_per_week=5 from hr_organization where name='QuantaEdge'", Boolean.class));
     assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='62' and success=true", Integer.class));
