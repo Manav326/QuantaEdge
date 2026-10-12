@@ -669,6 +669,142 @@ public class AssessmentController {
     return Map.of("items",items,"hasMore",hasMore,"limit",rowLimit,"offset",rowOffset);
   }
 
+  @GetMapping("/learning/assessments/{assessmentId}/leaderboard")
+  public Map<String, Object> assessmentLeaderboard(
+      @PathVariable long assessmentId,
+      @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    language = normalizeLanguage(language);
+
+    // Keep the leaderboard behind the same class/subject enrollment and lesson-completion gate
+    // as the student test catalogue. Students with a saved attempt may still inspect its standings
+    // after the assessment is archived, consistent with the durable released-results history.
+    Long eligible = jdbc.queryForObject("""
+      select count(*)
+      from assessment a
+      join curriculum_subject s on s.id=a.subject_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id
+        and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join curriculum_chapter ch on ch.id=a.chapter_id
+      where a.id=?
+        and (a.status='PUBLISHED' or exists(
+          select 1 from student_assessment_attempt resumable
+          where resumable.assessment_id=a.id and resumable.student_id=st.id
+            and resumable.status in ('IN_PROGRESS','AWAITING_REVIEW','GRADED','RELEASED')
+        ))
+        and (
+          exists(select 1 from student_assessment_attempt resumable
+                 where resumable.assessment_id=a.id and resumable.student_id=st.id
+                   and resumable.status in ('IN_PROGRESS','AWAITING_REVIEW','GRADED','RELEASED'))
+          or (
+      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
+          )
+        )
+      """, Long.class, context.studentId(), assessmentId);
+    if (eligible == null || eligible == 0) {
+      // Do not reveal whether another class's assessment exists.
+      throw notFound("Assessment", assessmentId);
+    }
+
+    List<Map<String, Object>> metadata = jdbc.queryForList("""
+      select a.id as assessment_id,
+             coalesce(max(translated.title), a.title) as assessment_title,
+             coalesce(sum(aq.max_marks), 0) as max_score
+      from assessment a
+      left join assessment_question aq on aq.assessment_id=a.id
+      left join lateral (
+        select t.title
+        from assessment_translation t
+        where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) translated on true
+      where a.id=?
+      group by a.id
+      """, language, assessmentId);
+    if (metadata.isEmpty()) throw notFound("Assessment", assessmentId);
+
+    List<Map<String, Object>> rankedRows = jdbc.queryForList("""
+      with released_attempts as (
+        select att.id as attempt_id, att.student_id,
+               coalesce(nullif(btrim(st.display_name), ''), 'Student') as student_name,
+               att.final_score as score, att.max_score,
+               greatest(0, floor(extract(epoch from (att.submitted_at - att.started_at))))::bigint
+                 as time_taken_seconds,
+               att.submitted_at
+        from student_assessment_attempt att
+        join student st on st.id=att.student_id and st.active=true
+        where att.assessment_id=?
+          and att.status='RELEASED'
+          and att.final_score is not null
+          and att.submitted_at is not null
+          and att.started_at is not null
+      ),
+      personal_attempts as (
+        select released_attempts.*,
+               row_number() over (
+                 partition by student_id
+                 order by score desc,time_taken_seconds asc,submitted_at asc,attempt_id asc
+               ) as personal_rank
+        from released_attempts
+      ),
+      best_attempts as (
+        select attempt_id,student_id,student_name,score,max_score,time_taken_seconds,submitted_at
+        from personal_attempts
+        where personal_rank=1
+      ),
+      ranked as (
+        select row_number() over (
+                 order by score desc,time_taken_seconds asc,submitted_at asc,
+                          lower(student_name) asc,student_id asc
+               ) as leaderboard_rank,
+               count(*) over() as participant_count,
+               student_id,student_name,score,max_score,time_taken_seconds,submitted_at
+        from best_attempts
+      )
+      select leaderboard_rank,participant_count,student_id,student_name,
+             score,max_score,time_taken_seconds,submitted_at
+      from ranked
+      where leaderboard_rank<=20 or student_id=?
+      order by leaderboard_rank
+      """, assessmentId, context.studentId());
+
+    List<Map<String, Object>> items = new ArrayList<>();
+    Map<String, Object> currentStudent = null;
+    long participantCount = 0;
+    for (Map<String, Object> row : rankedRows) {
+      Object rawCount = row.get("participant_count");
+      if (rawCount instanceof Number number) participantCount = number.longValue();
+      int rank = ((Number) row.get("leaderboard_rank")).intValue();
+      long studentId = ((Number) row.get("student_id")).longValue();
+      boolean isCurrentStudent = studentId == context.studentId();
+
+      Map<String, Object> entry = new LinkedHashMap<>();
+      entry.put("rank", rank);
+      entry.put("student_name", row.get("student_name"));
+      entry.put("score", row.get("score"));
+      entry.put("max_score", row.get("max_score"));
+      entry.put("time_taken_seconds", row.get("time_taken_seconds"));
+      entry.put("is_current_student", isCurrentStudent);
+      if (isCurrentStudent) currentStudent = entry;
+      if (rank <= 20) items.add(entry);
+    }
+
+    Map<String, Object> result = new LinkedHashMap<>();
+    Map<String, Object> test = metadata.getFirst();
+    result.put("assessment_id", assessmentId);
+    result.put("assessment_title", test.get("assessment_title"));
+    result.put("max_score", test.get("max_score"));
+    result.put("participant_count", participantCount);
+    result.put("items", items);
+    result.put("current_student", currentStudent);
+    result.put("ranking_criteria", List.of("Marks: highest first", "Time taken: shortest first"));
+    return result;
+  }
+
   @PostMapping("/learning/assessments/{assessmentId}/attempts")
   @Transactional
   public Map<String, Object> startOrResumeAttempt(

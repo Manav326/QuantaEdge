@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -378,6 +379,72 @@ class AssessmentControllerTest {
     assertEquals(103, ((Number) attempts.getFirst().get("attempt_id")).intValue());
     assertEquals(102, ((Number) attempts.get(1).get("attempt_id")).intValue());
     assertEquals(101, ((Number) attempts.get(2).get("attempt_id")).intValue());
+  }
+
+
+  @Test
+  void leaderboardReturnsTopTwentyAndTheCurrentStudentsRankUsingReleasedBestAttempts() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class),
+        eq(7L), eq(20L))).thenReturn(1L);
+    when(jdbc.queryForList(contains("select a.id as assessment_id"), eq("en"), eq(20L)))
+        .thenReturn(List.of(Map.of(
+            "assessment_id", 20L,
+            "assessment_title", "Fractions test",
+            "max_score", new BigDecimal("20.00"))));
+
+    List<Map<String, Object>> rankingRows = new ArrayList<>();
+    for (int rank = 1; rank <= 20; rank++) {
+      rankingRows.add(Map.of(
+          "leaderboard_rank", rank,
+          "participant_count", 21L,
+          "student_id", 100L + rank,
+          "student_name", "Student " + rank,
+          "score", new BigDecimal(21 - rank),
+          "max_score", new BigDecimal("20.00"),
+          "time_taken_seconds", 240L + rank,
+          "submitted_at", OffsetDateTime.now()));
+    }
+    rankingRows.add(Map.of(
+        "leaderboard_rank", 21L,
+        "participant_count", 21L,
+        "student_id", 7L,
+        "student_name", "Preview Student",
+        "score", new BigDecimal("0.50"),
+        "max_score", new BigDecimal("20.00"),
+        "time_taken_seconds", 1600L,
+        "submitted_at", OffsetDateTime.now()));
+    when(jdbc.queryForList(contains("with released_attempts as"), eq(20L), eq(7L)))
+        .thenReturn(rankingRows);
+
+    Map<String, Object> result = controller.assessmentLeaderboard(20L, "en", student);
+
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> items = (List<Map<String, Object>>) result.get("items");
+    @SuppressWarnings("unchecked")
+    Map<String, Object> currentStudent = (Map<String, Object>) result.get("current_student");
+
+    assertEquals(20, items.size());
+    assertEquals(1, ((Number) items.getFirst().get("rank")).intValue());
+    assertEquals(20, ((Number) items.getLast().get("rank")).intValue());
+    assertFalse(items.getFirst().containsKey("student_id"));
+    assertEquals(21L, result.get("participant_count"));
+    assertEquals(21, ((Number) currentStudent.get("rank")).intValue());
+    assertEquals(true, currentStudent.get("is_current_student"));
+    assertFalse(currentStudent.containsKey("student_id"));
+  }
+
+  @Test
+  void leaderboardDoesNotRevealAssessmentsOutsideTheStudentsEnrolledCatalogue() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForObject(contains("join student_track_enrollment ste"), eq(Long.class),
+        eq(7L), eq(999L))).thenReturn(0L);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.assessmentLeaderboard(999L, "en", student));
+
+    assertEquals(404, error.getStatusCode().value());
+    verify(jdbc, never()).queryForList(contains("with released_attempts as"), any(Object[].class));
   }
 
 }
