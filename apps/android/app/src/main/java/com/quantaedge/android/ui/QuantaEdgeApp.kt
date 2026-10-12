@@ -1390,25 +1390,20 @@ private fun LessonScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(lesson.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.secondary)
+            Text(lesson.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.secondary)
             Text(lesson.textAny("title").ifBlank { "पाठ" }, style = MaterialTheme.typography.headlineSmall)
             Text(lesson.textAny("summary"), style = MaterialTheme.typography.bodyLarge)
-            if (blocks.isEmpty()) EmptyState("पाठ की सामग्री उपलब्ध नहीं", "इस प्रकाशित पाठ में अभी कोई पढ़ने योग्य ब्लॉक नहीं मिला।")
-            blocks.forEach { block ->
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(block.textAny("block_type").replace('_', ' ').ifBlank { "सीखें" },
-                            style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                        Text(block.safeContentText().ifBlank { "इस भाग के लिए अभी पाठ्य सामग्री नहीं है।" },
-                            style = MaterialTheme.typography.bodyLarge)
-                        if (block.textAny("asset_url").isNotBlank()) {
-                            Text("इस पाठ के साथ मीडिया सामग्री भी उपलब्ध है।", style = MaterialTheme.typography.bodySmall)
-                        }
-                    }
+            if (blocks.isEmpty()) {
+                EmptyState("पाठ की सामग्री उपलब्ध नहीं", "इस प्रकाशित पाठ में अभी कोई पढ़ने योग्य ब्लॉक नहीं मिला।")
+            } else {
+                blocks.forEach { block ->
+                    LessonContentBlock(block = block, language = language, onTutorOpen = onTutor)
                 }
             }
             if (questions.isNotEmpty()) {
-                Text(if (language == "hi") "अब खुद करें" else "Try it yourself", style = MaterialTheme.typography.headlineSmall)
+                Text(if (language == "hi") "अब खुद करें" else "Try it yourself",
+                    style = MaterialTheme.typography.headlineSmall)
                 questions.forEach { question ->
                     val id = question.longAny("id", "questionId", "question_id").toString()
                     val answer = answers[id] ?: ""
@@ -1424,16 +1419,18 @@ private fun LessonScreen(
                     )
                 }
             }
-            Text("Recap", style = MaterialTheme.typography.headlineSmall)
-            Text(lesson.textAny("summary").ifBlank { "इस पाठ के मुख्य विचारों को दोहराएँ और अभ्यास करके अपनी समझ जाँचें।" },
-                style = MaterialTheme.typography.bodyLarge)
+            Text(if (language == "hi") "Recap" else "Recap", style = MaterialTheme.typography.headlineSmall)
+            Text(lesson.textAny("summary").ifBlank {
+                if (language == "hi") "मुख्य विचारों को दोहराएँ और अभ्यास से अपनी समझ जाँचें।"
+                else "Review the key ideas and check your understanding with practice."
+            }, style = MaterialTheme.typography.bodyLarge)
         }
         Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Button(onClick = onPractice, enabled = !busy && lessonId > 0, modifier = Modifier.weight(1f)) {
-                Text("अभ्यास शुरू करें")
+                Text(if (language == "hi") "अभ्यास शुरू करें" else "Start practice")
             }
             TextButton(onClick = onTutor, enabled = !busy && lessonId > 0) {
-                Text("Tutor से पूछें")
+                Text(if (language == "hi") "Tutor से पूछें" else "Ask tutor")
             }
         }
     }

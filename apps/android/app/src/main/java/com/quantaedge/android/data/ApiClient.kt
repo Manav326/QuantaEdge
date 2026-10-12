@@ -50,6 +50,11 @@ object ApiClient {
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
     fun absoluteUrl(path: String): String = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
+    fun mediaUrl(url: String): String =
+        if (url.startsWith("https://", true) || url.startsWith("http://", true)) url else absoluteUrl(url)
+
+    suspend fun getMediaBytes(url: String): ByteArray = request(url, "GET", null)
+
     fun authenticatedHttpClient(): OkHttpClient =
         (client ?: throw IOException("API client is not initialized.")).newBuilder()
             .authenticator(okhttp3.Authenticator { _, response ->
@@ -89,7 +94,8 @@ object ApiClient {
     private suspend fun request(path: String, method: String, body: String?): ByteArray =
         withContext(Dispatchers.IO) {
             val currentClient = client ?: throw IOException("API client is not initialized.")
-            val url = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
+            val absoluteRequestUrl = path.startsWith("https://", true) || path.startsWith("http://", true)
+            val url = if (absoluteRequestUrl) path else BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
             val builder = Request.Builder().url(url).header("Accept", "application/json, image/png")
             val requestBody = body?.toRequestBody(jsonType)
             when (method) {
@@ -101,7 +107,7 @@ object ApiClient {
                 else -> throw IllegalArgumentException("Unsupported HTTP method.")
             }
             var response = currentClient.newCall(builder.build()).execute()
-            if (response.code == 401 && shouldAttemptRefresh(path)) {
+            if (response.code == 401 && !absoluteRequestUrl && shouldAttemptRefresh(path)) {
                 response.close()
                 synchronized(refreshLock) {
                     val refreshRequest = Request.Builder()
