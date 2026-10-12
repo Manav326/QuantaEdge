@@ -273,7 +273,7 @@ public class HrPayrollController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     authorization.requirePermission(context,"HR_PAYROLL_PAY");
     Map<String,Object> run=runById(runId);
-    if(!List.of("APPROVED","PAID").contains(String.valueOf(run.get("status")))) throw conflict("Payments can only be reconciled for an approved payroll run.");
+    if(!"APPROVED".equals(String.valueOf(run.get("status")))) throw conflict("Payments can only be reconciled for an approved, not-yet-paid payroll run.");
     long employeeId=positive(body.get("employeeId"),"Employee");
     List<Map<String,Object>> matches=jdbc.queryForList("select * from hr_payroll_line where run_id=? and employee_id=?",runId,employeeId);
     if(matches.isEmpty()) throw bad("The employee is not included in this payroll run.");
