@@ -56,6 +56,9 @@ public class LearningDocumentController {
   private static final long MAX_RENDER_CACHE_BYTES = 32L * 1024 * 1024;
   private static final int MAX_RENDER_CACHE_ENTRIES = 128;
   private static final int MAX_CACHED_PAGE_BYTES = 4 * 1024 * 1024;
+  private static final long MAX_CACHED_SOURCE_PDF_BYTES = 32L * 1024 * 1024;
+  private static final long MAX_SOURCE_PDF_CACHE_BYTES = 64L * 1024 * 1024;
+  private static final int MAX_SOURCE_PDF_CACHE_ENTRIES = 4;
   private static final long RENDER_CACHE_TTL_MILLIS = 15 * 60 * 1000L;
   private static final long MAX_RENDERED_PAGE_PIXELS = 25_000_000L;
   private static final double MAX_RENDERED_PAGE_DIMENSION = 14_000d;
@@ -65,6 +68,9 @@ public class LearningDocumentController {
   private final LinkedHashMap<PdfPageCacheKey, CachedPdfPage> renderedPageCache =
       new LinkedHashMap<>(16, 0.75f, true);
   private long renderedPageCacheBytes;
+  private final LinkedHashMap<String, CachedSourcePdf> sourcePdfCache =
+      new LinkedHashMap<>(8, 0.75f, true);
+  private long sourcePdfCacheBytes;
   // Bound concurrent PDFBox work so a burst cannot create unbounded image/PDF allocations.
   private final Semaphore renderPermits = new Semaphore(2);
 
@@ -671,8 +677,7 @@ public class LearningDocumentController {
       cached = cachedPdfPage(key);
       if (cached != null) return cached;
 
-      byte[] pdfBytes = jdbc.queryForObject(
-          "select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
+      byte[] pdfBytes = sourcePdfBytes(assetId, contentKey);
       if (pdfBytes == null || pdfBytes.length == 0) throw notFound("PDF content", assetId);
       try (PDDocument pdf = Loader.loadPDF(pdfBytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
         if (sourceIndex < 0 || sourceIndex >= pdf.getNumberOfPages()) throw notFound("PDF page", sourceIndex + 1);
@@ -713,6 +718,39 @@ public class LearningDocumentController {
     }
   }
 
+  private byte[] sourcePdfBytes(long assetId, String contentKey) {
+    synchronized (renderCacheMonitor) {
+      CachedSourcePdf entry = sourcePdfCache.get(contentKey);
+      if (entry != null && System.currentTimeMillis() - entry.cachedAtMillis() <= RENDER_CACHE_TTL_MILLIS) {
+        return entry.bytes();
+      }
+      if (entry != null) {
+        sourcePdfCache.remove(contentKey);
+        sourcePdfCacheBytes -= entry.bytes().length;
+      }
+    }
+
+    byte[] bytes = jdbc.queryForObject(
+        "select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
+    if (bytes == null || bytes.length == 0 || bytes.length > MAX_CACHED_SOURCE_PDF_BYTES) return bytes;
+
+    synchronized (renderCacheMonitor) {
+      CachedSourcePdf previous = sourcePdfCache.remove(contentKey);
+      if (previous != null) sourcePdfCacheBytes -= previous.bytes().length;
+      while (sourcePdfCache.size() >= MAX_SOURCE_PDF_CACHE_ENTRIES
+          || sourcePdfCacheBytes + bytes.length > MAX_SOURCE_PDF_CACHE_BYTES) {
+        Iterator<Map.Entry<String, CachedSourcePdf>> iterator = sourcePdfCache.entrySet().iterator();
+        if (!iterator.hasNext()) break;
+        Map.Entry<String, CachedSourcePdf> oldest = iterator.next();
+        sourcePdfCacheBytes -= oldest.getValue().bytes().length;
+        iterator.remove();
+      }
+      sourcePdfCache.put(contentKey, new CachedSourcePdf(bytes, System.currentTimeMillis()));
+      sourcePdfCacheBytes += bytes.length;
+    }
+    return bytes;
+  }
+
   private byte[] cachedPdfPage(PdfPageCacheKey key) {
     synchronized (renderCacheMonitor) {
       CachedPdfPage entry = renderedPageCache.get(key);
@@ -747,6 +785,7 @@ public class LearningDocumentController {
 
   private record PdfPageCacheKey(String sha256, int sourcePageIndex, int dpiTenths) {}
   private record CachedPdfPage(byte[] bytes, long cachedAtMillis) {}
+  private record CachedSourcePdf(byte[] bytes, long cachedAtMillis) {}
 
   private String sha256(byte[] value) {
     try {
