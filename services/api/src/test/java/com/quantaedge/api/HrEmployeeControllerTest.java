@@ -71,6 +71,36 @@ class HrEmployeeControllerTest {
   }
 
   @Test
+  void invalidEmailIsRejectedBeforeDatabaseAccess() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.createEmployee(Map.of(
+            "displayName", "A Teacher",
+            "email", "not-an-email",
+            "employmentTypeCode", "FULL_TIME",
+            "joiningDate", "2026-01-01"), hrManager));
+
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
+  void phoneMustUseE164FormatBeforeDatabaseAccess() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.createEmployee(Map.of(
+            "displayName", "A Teacher",
+            "phoneE164", "9876543210",
+            "employmentTypeCode", "FULL_TIME",
+            "joiningDate", "2026-01-01"), hrManager));
+
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
   void separatedEmployeeCannotBeCreatedWithoutExitDate() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
     when(jdbc.queryForObject("select id from hr_organization where active=true order by id limit 1", Long.class))
