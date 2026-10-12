@@ -43,6 +43,19 @@ type Assignment = {
   asset_review_status?: string | null;
 };
 
+function normalizeIntakeReport(value: any): any {
+  const parseJson = (item: any) => {
+    if (typeof item === 'string') {
+      try { return JSON.parse(item); } catch { return {}; }
+    }
+    if (item && typeof item.value === 'string') {
+      try { return JSON.parse(item.value); } catch { return {}; }
+    }
+    return item && typeof item === 'object' ? item : {};
+  };
+  return { ...(value || {}), inventory: parseJson(value?.inventory), reconciliation: parseJson(value?.reconciliation) };
+}
+
 async function api(url: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers || {});
   if (init.body && !(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
@@ -560,7 +573,7 @@ export default function TextbookLibraryPage() {
       let analysis: any = null;
       try {
         analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze', { method: 'POST' });
-        setIntakeReport(analysis);
+        setIntakeReport(normalizeIntakeReport(analysis));
       } catch (analysisError) {
         setIntakeReport(null);
         setNotice('PDF saved and classified, but automatic inventory analysis needs attention: ' +
@@ -741,7 +754,7 @@ export default function TextbookLibraryPage() {
                 setBusy(true); setError(''); setNotice('');
                 try {
                   const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
-                  setIntakeReport(result);
+                  setIntakeReport(normalizeIntakeReport(result));
                   const report = result.reconciliation || {};
                   setNotice('Inventory scan complete. ' +
                     (report.missing_from_book?.length || 0) + ' curriculum title(s) not found; ' +
@@ -797,7 +810,7 @@ export default function TextbookLibraryPage() {
                         method: 'PATCH',
                         body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
                       });
-                      setIntakeReport({ ...(intakeReport || {}), ...result });
+                      setIntakeReport(normalizeIntakeReport({ ...(intakeReport || {}), ...result }));
                       setNotice('Human review recorded. The source PDF remains private; no chapter was published.');
                     } catch (e) {
                       setError(e instanceof Error ? e.message : 'Review could not be recorded.');
