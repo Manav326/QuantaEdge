@@ -70,8 +70,14 @@ class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
         }
     }
 
-    /** True only when the encrypted file can be authenticated and decrypted successfully. */
+    /** Fast cache-presence check for UI rendering; does not decrypt large page images. */
     fun hasPage(documentId: Long, page: Int): Boolean {
+        val file = File(root, pageName(documentId, page))
+        return file.isFile && file.length() > 28L
+    }
+
+    /** Verifies AES-GCM integrity before a worker skips a page during an offline download. */
+    fun hasValidPage(documentId: Long, page: Int): Boolean {
         val file = File(root, pageName(documentId, page))
         if (!file.isFile) return false
         return try {
