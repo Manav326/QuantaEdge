@@ -195,6 +195,11 @@ export default function TextbookLibraryPage() {
   const [selectedPdfId, setSelectedPdfId] = useState('');
   const [pdfTitle, setPdfTitle] = useState('');
   const [sourceReference, setSourceReference] = useState('');
+  const [uploadCategory, setUploadCategory] = useState('MAIN_TEXTBOOK');
+  const [uploadClassCode, setUploadClassCode] = useState('6');
+  const [uploadSubjectCode, setUploadSubjectCode] = useState('maths');
+  const [uploadLanguage, setUploadLanguage] = useState<'hi' | 'en'>('hi');
+  const [uploadPartLabel, setUploadPartLabel] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [sourceTitle, setSourceTitle] = useState('');
@@ -529,7 +534,21 @@ export default function TextbookLibraryPage() {
       const form = new FormData();
       form.append('file', file);
       form.append('title', pdfTitle.trim());
-      if (sourceReference.trim()) form.append('sourceReference', sourceReference.trim());
+      // Store admin-selected intake tags with the asset so a PDF is never an unclassified blob.
+      // Keep the existing API contract: tags live in the searchable source-reference field.
+      const intakeTags = [
+        'qe_intake_v1',
+        'category=' + uploadCategory,
+        'class=' + uploadClassCode,
+        'subject=' + uploadSubjectCode,
+        'language=' + uploadLanguage,
+        ...(uploadPartLabel.trim() ? ['part=' + uploadPartLabel.trim().replace(/[;|\\s]+/g, '_').slice(0, 40)] : []),
+      ].join(';');
+      const combinedReference = [intakeTags, sourceReference.trim()].filter(Boolean).join(';');
+      if (combinedReference.length > 480) {
+        throw new Error('Source reference is too long. Shorten it to keep the book tags safely searchable.');
+      }
+      form.append('sourceReference', combinedReference);
       const created = await api('/api/v1/admin/learning-pdfs', { method: 'POST', body: form });
       const id = Number(created.pdf_asset_id || created.id);
       await load();
@@ -543,6 +562,7 @@ export default function TextbookLibraryPage() {
       setFile(null);
       setPdfTitle('');
       setSourceReference('');
+      setUploadPartLabel('');
       const input = document.getElementById('qe-pdf-file') as HTMLInputElement | null;
       if (input) input.value = '';
     } catch (e) {
@@ -694,10 +714,50 @@ export default function TextbookLibraryPage() {
           <div className={styles.uploadBox}>
             <div className={styles.uploadTitle}><b>Add a PDF to the library</b><small>PDF only · maximum {isAdmin ? '500 MB for Admin' : '50 MB'} · up to 2,000 pages</small></div>
             <label className={styles.field}>Library title
-              <input value={pdfTitle} onChange={e => setPdfTitle(e.target.value)} placeholder="e.g. Bihar Board Class 6 Mathematics" />
+              <input value={pdfTitle} onChange={e => setPdfTitle(e.target.value)} placeholder="e.g. Bihar Board Class 7 Mathematics — Part II" />
             </label>
-            <label className={styles.field}>Extraction source reference (optional)
-              <input value={sourceReference} onChange={e => setSourceReference(e.target.value)} placeholder="Source filename, SHA-256, extraction bundle ID…" />
+            <div className={styles.assignmentFields}>
+              <label className={styles.field}>Book category
+                <select value={uploadCategory} onChange={e => setUploadCategory(e.target.value)}>
+                  <option value="MAIN_TEXTBOOK">Main textbook</option>
+                  <option value="PART">Part / volume of a textbook</option>
+                  <option value="SUPPLEMENTARY">Supplementary book</option>
+                  <option value="WORKBOOK">Workbook / practice book</option>
+                  <option value="TEACHER_GUIDE">Teacher guide / handbook</option>
+                  <option value="REFERENCE">Reference book</option>
+                  <option value="OTHER">Other learning resource</option>
+                </select>
+                <small>This describes the uploaded source PDF; it does not publish or assign it to students.</small>
+              </label>
+              <label className={styles.field}>Class
+                <select value={uploadClassCode} onChange={e => {
+                  setUploadClassCode(e.target.value);
+                  const first = tracks.find(track => track.class_code === e.target.value);
+                  if (first) setUploadSubjectCode(first.subject_code);
+                }}>
+                  {classOptions.map(track => <option key={track.class_code} value={track.class_code}>{track.class_name}</option>)}
+                </select>
+              </label>
+              <label className={styles.field}>Subject
+                <select value={uploadSubjectCode} onChange={e => setUploadSubjectCode(e.target.value)}>
+                  {tracks.filter(track => track.class_code === uploadClassCode).map(track =>
+                    <option key={track.subject_code} value={track.subject_code}>{track.subject_name}</option>)}
+                </select>
+              </label>
+              <label className={styles.field}>Book language
+                <select value={uploadLanguage} onChange={e => setUploadLanguage(e.target.value as 'hi' | 'en')}>
+                  <option value="hi">Hindi</option>
+                  <option value="en">English</option>
+                </select>
+              </label>
+              <label className={styles.field}>Part / volume label (optional)
+                <input value={uploadPartLabel} onChange={e => setUploadPartLabel(e.target.value)}
+                  placeholder="e.g. Part II, Volume 2, Supplement A" maxLength={40} />
+                <small>Use the label printed on the book. Leave blank for a standalone book.</small>
+              </label>
+            </div>
+            <label className={styles.field}>Extra source reference (optional)
+              <input value={sourceReference} onChange={e => setSourceReference(e.target.value)} placeholder="Publisher catalogue ID, extraction bundle ID…" maxLength={220} />
             </label>
             <label className={styles.fileInput} htmlFor="qe-pdf-file"><span>Choose PDF file</span><input id="qe-pdf-file" type="file" accept="application/pdf,.pdf" onChange={e => {
               const nextFile = e.target.files?.[0] || null;

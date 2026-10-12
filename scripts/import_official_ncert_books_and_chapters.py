@@ -304,12 +304,21 @@ def read_chapters(base: str, cookie: str) -> dict[tuple[str, str], list[dict[str
 
 def aliases_for(grade: str, subject: str, language: str, chapter: dict[str, Any]) -> list[str]:
     code = str(chapter.get("chapter_code") or "")
-    candidates = [str(chapter.get("chapter_name") or "").strip()]
+    live_name = normalize_space(str(chapter.get("chapter_name") or ""))
+    english_titles = ENGLISH_TITLES.get((grade, subject), {}).get(code, [])
+
     if language == "english":
-        candidates.extend(ENGLISH_TITLES.get((grade, subject), {}).get(code, []))
+        # The live Admin curriculum can return the Hindi display name even when this
+        # import selected an English PDF. Never leak that Hindi title into English
+        # matching or its console diagnostics; use the known English NCERT title first.
+        candidates = list(english_titles)
+        if live_name and not re.search(r"[\u0900-\u097F]", live_name):
+            candidates.append(live_name)
     else:
+        candidates = [live_name]
         candidates.extend(HINDI_TITLE_ALIASES.get((grade, subject, code), []))
-        candidates.extend(ENGLISH_TITLES.get((grade, subject), {}).get(code, []))
+        candidates.extend(english_titles)
+
     clean: list[str] = []
     seen: set[str] = set()
     for item in candidates:
@@ -470,8 +479,9 @@ def detect_chapter_ranges(
         # Page candidates are derived from title text, not from chapter number assumptions.
         available = [page for page in candidate_pages[code] if page > previous_page]
         if not available:
-            title = str(chapter.get("chapter_name") or code)
             aliases = alias_by_code[code]
+            # Report the selected book's language, not a possibly Hindi live-curriculum label.
+            title = aliases[0] if aliases else code
             raise ValueError(
                 f"{pdf_path.name}: cannot identify the opening page for chapter {title!r} "
                 f"(code={code}, expected active order {len(starts) + 1}). "
