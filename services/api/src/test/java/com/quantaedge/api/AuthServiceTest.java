@@ -154,7 +154,7 @@ class AuthServiceTest {
         eq(Boolean.class), eq(mobile))).thenReturn(true);
 
     assertThrows(SecurityException.class, () -> auth.verifyOtp("7070107483", "123456", "LOGIN", null));
-    verify(jdbc, never()).update(contains("update otp_challenge set consumed_at=now()"), any());
+    verify(jdbc, never()).update(contains("update otp_challenge set consumed_at=now()"), any(Object[].class));
     verify(jdbc, never()).update(contains("active=true,updated_at=now(),role=?"), any(), any(), any(), any());
   }
 
