@@ -1,6 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './SourceIngestion.module.css';
 
@@ -76,7 +77,7 @@ export default function SourceIngestionPage() {
   const [sourceQuery, setSourceQuery] = useState('');
   const [sourcePage, setSourcePage] = useState(0);
   const [sourcesTotal, setSourcesTotal] = useState(0);
-  const sourcePageSize = 25;
+  const [sourcePageSize, setSourcePageSize] = useState(10);
   const [registryBooks, setRegistryBooks] = useState<RegistryBook[]>([]);
   const [registryBookGaps, setRegistryBookGaps] = useState<RegistryBookGap[]>([]);
   const [registryMedium, setRegistryMedium] = useState<'hindi' | 'english'>('hindi');
@@ -89,7 +90,7 @@ export default function SourceIngestionPage() {
   const [jobPage, setJobPage] = useState(0);
   const [jobsTotal, setJobsTotal] = useState(0);
   const [jobSummary, setJobSummary] = useState<Record<string, number>>({});
-  const jobPageSize = 20;
+  const [jobPageSize, setJobPageSize] = useState(10);
   const [selectedSource, setSelectedSource] = useState('');
   const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
@@ -174,7 +175,7 @@ export default function SourceIngestionPage() {
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Source ingestion data could not be loaded.');
     } finally { setLoading(false); }
-  }, [classCode, subjectCode, selectedSource, jobPage, sourceQuery, sourcePage]);
+  }, [classCode, subjectCode, selectedSource, jobPage, jobPageSize, sourceQuery, sourcePage, sourcePageSize]);
 
   const loadJob = useCallback(async (id: number) => {
     const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
@@ -450,14 +451,13 @@ export default function SourceIngestionPage() {
       <section className={styles.panel}>
         <div className={styles.heading}><div><span>STEP 01</span><h2>Choose or register a source</h2><p>The tool checks linked PDFs, stored checksums and source references before downloading again.</p></div></div>
         <div className={styles.fields}>
-          <label>Source record
+          <div className={styles.field}>Source record
             <input value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder="Search title, provider, URL or edition…" aria-label="Search registered sources" />
             <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',margin:'8px 0'}}>
               <button type="button" className={styles.secondary} onClick={()=>{setSourceQuery(sourceSearchDraft.trim());setSourcePage(0)}}>Search sources</button>
               <button type="button" className={styles.secondary} disabled={!sourceQuery&&!sourceSearchDraft} onClick={()=>{setSourceSearchDraft('');setSourceQuery('');setSourcePage(0)}}>Clear search</button>
-              <small>{sourcesTotal===0?'No matching sources':('Showing '+(sourcePage*sourcePageSize+1)+'–'+Math.min(sourcesTotal,(sourcePage+1)*sourcePageSize)+' of '+sourcesTotal)}</small>
             </div>
-            <select value={selectedSource || 'new'} onChange={e => {
+            <select aria-label="Choose registered source" value={selectedSource || 'new'} onChange={e => {
               const value = e.target.value; setSelectedSource(value);
               if (value !== 'new') {
                 const source = sources.find(row => String(row.source_id) === value);
@@ -478,12 +478,10 @@ export default function SourceIngestionPage() {
                 {source.title} · {source.source_kind} {source.matching_pdf_asset_id ? '· PDF stored' : '· PDF not linked'}
               </option>)}
             </select>
-            <div style={{display:'flex',gap:8,alignItems:'center',marginTop:8}}>
-              <button type="button" className={styles.secondary} disabled={sourcePage===0} onClick={()=>setSourcePage(value=>Math.max(0,value-1))}>← Previous</button>
-              <span style={{fontSize:12}}>Page {sourcesTotal===0?0:sourcePage+1} of {Math.max(1,Math.ceil(sourcesTotal/sourcePageSize))}</span>
-              <button type="button" className={styles.secondary} disabled={(sourcePage+1)*sourcePageSize>=sourcesTotal} onClick={()=>setSourcePage(value=>value+1)}>Next →</button>
-            </div>
-          </label>
+            <PremiumPagination page={sourcePage} total={sourcesTotal} pageSize={sourcePageSize}
+              onPageChange={setSourcePage} onPageSizeChange={size=>{setSourcePageSize(size);setSourcePage(0);}}
+              itemLabel="registered sources" loading={loading} />
+          </div>
           <label>Class
             <select value={classCode} onChange={e => {
               const value = e.target.value; setClassCode(value);
@@ -646,14 +644,9 @@ export default function SourceIngestionPage() {
             <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved · {row.rejected_chapter_count || 0} rejected</small>
             {row.error_message && <small className={styles.jobError}>{row.error_message}</small>}
           </button>)}</div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {jobsTotal===0?0:jobPage*jobPageSize+1}–{Math.min(jobsTotal,(jobPage+1)*jobPageSize)} of {jobsTotal} ingestion jobs</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className={styles.secondary} disabled={jobPage===0||loading} onClick={()=>setJobPage(value=>Math.max(0,value-1))}>← Previous</button>
-            <span>Page {jobsTotal===0?0:jobPage+1} of {Math.max(1,Math.ceil(jobsTotal/jobPageSize))}</span>
-            <button type="button" className={styles.secondary} disabled={(jobPage+1)*jobPageSize>=jobsTotal||loading} onClick={()=>setJobPage(value=>value+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={jobPage} total={jobsTotal} pageSize={jobPageSize}
+          onPageChange={setJobPage} onPageSizeChange={size=>{setJobPageSize(size);setJobPage(0);}}
+          itemLabel="ingestion jobs" loading={loading} />
         {latestReviewJobs.length > 0 && <p className={styles.help}>Jobs still marked DOWNLOADING may need a minute for the PDF to be fetched and inspected. Select the job and refresh its status.</p>}
       </section>
 
