@@ -147,7 +147,7 @@ public class CertificateRenderer {
       g.fillRect(x - 14, y - 38, size + 28, size + 52);
       g.drawImage(qr, x, y, size, size, null);
       g.setColor(MUTED);
-      drawCentered(g, font(false, Font.BOLD, 18), (hindi ? "स्कैन करके सत्यापित करें" : "SCAN TO VERIFY"), x + size / 2, y - 15, size + 30);
+      drawCentered(g, font(hindi, Font.BOLD, 18), (hindi ? "स्कैन करके सत्यापित करें" : "SCAN TO VERIFY"), x + size / 2, y - 15, size + 30);
     } catch (WriterException ex) {
       throw new IllegalStateException("Certificate verification QR code could not be generated.", ex);
     }
