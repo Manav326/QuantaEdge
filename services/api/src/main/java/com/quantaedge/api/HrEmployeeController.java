@@ -168,6 +168,23 @@ public class HrEmployeeController {
     return employeeById(id);
   }
 
+  @GetMapping("/employees/{id}/history")
+  public List<Map<String,Object>> employeeHistory(@PathVariable long id,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireView(context);
+    // Resolve the employee first so callers get a consistent 404 for unknown records.
+    employeeById(id);
+    return jdbc.queryForList("""
+      select h.id,h.employee_id,h.changed_by_staff_id,h.change_type,h.effective_date,
+             h.before_state,h.after_state,h.reason,h.created_at,
+             s.display_name as changed_by_name
+      from hr_employee_history h
+      left join staff_account s on s.id=h.changed_by_staff_id
+      where h.employee_id=?
+      order by h.effective_date desc,h.created_at desc,h.id desc
+      """,id);
+  }
+
   @PostMapping("/employees")
   @Transactional
   public Map<String,Object> createEmployee(@RequestBody Map<String,Object> body,
