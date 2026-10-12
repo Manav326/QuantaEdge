@@ -110,7 +110,7 @@ class HrPayrollControllerTest {
         .thenReturn(1);
     when(jdbc.queryForList(contains("jsonb_build_object"),(Object)any()))
         .thenReturn(List.of(Map.of("employee_id",31L,"snapshot_json","{\"employeeName\":\"A Teacher\",\"gross\":100.00}")));
-    when(jdbc.update(contains("insert into hr_payslip"),any(Object[].class))).thenReturn(1);
+    org.mockito.Mockito.doReturn(1).when(jdbc).update(contains("insert into hr_payslip"),any(Object[].class));
 
     Map<String,Object> result=controller.approve(12L,Map.of("reason","Payroll reviewed"),payrollManager);
 
