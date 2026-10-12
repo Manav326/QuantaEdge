@@ -67,7 +67,7 @@ class HrEmployeeSelfServiceControllerTest {
         employee));
 
     assertEquals(HttpStatus.BAD_REQUEST.value(),error.getStatusCode().value());
-    verify(jdbc,never()).queryForObject(contains("insert into hr_leave_request"),(Object)any());
+    verify(jdbc,never()).queryForObject(contains("insert into hr_leave_request"),Long.class,(Object)any());
     verifyNoInteractions(audit);
   }
 
