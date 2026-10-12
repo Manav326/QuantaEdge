@@ -54,7 +54,7 @@ public class LearningStateService {
       if(membership.isEmpty())throw new SecurityException("Question is not assigned to this active practice session or was already answered.");
       if(!"PRACTICE".equals(source)) throw new IllegalArgumentException("Practice-session answers must use the PRACTICE source");
     }
-    String selected=answer!=null&&answer.length()<=20?answer:null;
+    String selected=answer!=null&&answer.length()<=20&&!answer.startsWith("[")&&!answer.startsWith("{")?answer:null;
     jdbc.update("""
       insert into student_question_attempt(
         student_id,question_id,selected_option,answer_text,correct,answered_at,practice_session_id,activity_kind
