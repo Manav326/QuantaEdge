@@ -9,15 +9,19 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -174,4 +178,48 @@ class LearningDocumentControllerTest {
     assertThrows(SecurityException.class, () -> controller.listPdfLibrary(null, null, null, null));
     verifyNoInteractions(jdbc);
   }
+
+  @Test
+  void studentPageDeliveryReusesSourcePdfBytesAndKeepsThumbnailQualitySeparate() throws Exception {
+    byte[] sourcePdf;
+    try (PDDocument pdf = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+      pdf.addPage(new PDPage());
+      pdf.addPage(new PDPage());
+      pdf.save(output);
+      sourcePdf = output.toByteArray();
+    }
+
+    when(authorization.requireStudent(student)).thenReturn(student);
+    Map<String, Object> metadata = Map.of(
+        "document_id", 88L,
+        "pdf_asset_id", 12L,
+        "asset_sha256", "ab".repeat(32),
+        "page_start", 1,
+        "page_end", 2,
+        "page_count", 2);
+    when(jdbc.queryForList(
+        contains("where d.id=? and d.status='PUBLISHED'"), eq(7L), eq(88L)))
+        .thenReturn(List.of(metadata));
+    when(jdbc.queryForObject(
+        contains("select pdf_bytes from learning_pdf_asset where id=?"),
+        eq(byte[].class), eq(12L))).thenReturn(sourcePdf);
+
+    var pageOne = controller.studentDocumentPage(88L, 1, "full", student);
+    var pageTwo = controller.studentDocumentPage(88L, 2, "full", student);
+    var thumbnail = controller.studentDocumentPage(88L, 2, "thumbnail", student);
+
+    assertEquals(200, pageOne.getStatusCode().value());
+    assertEquals(200, pageTwo.getStatusCode().value());
+    assertEquals(200, thumbnail.getStatusCode().value());
+    assertEquals("image/png", pageOne.getHeaders().getContentType().toString());
+    assertEquals("no-store", pageOne.getHeaders().getCacheControl());
+    assertTrue(pageOne.getBody().length > 8);
+    assertTrue(thumbnail.getBody().length > 8);
+    // Navigating to the next page (and generating a low-resolution thumbnail) should not
+    // repeatedly pull the same small source PDF from PostgreSQL.
+    verify(jdbc, times(1)).queryForObject(
+        contains("select pdf_bytes from learning_pdf_asset where id=?"),
+        eq(byte[].class), eq(12L));
+  }
+
 }
