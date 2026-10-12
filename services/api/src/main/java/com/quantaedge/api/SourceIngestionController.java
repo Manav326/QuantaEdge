@@ -73,7 +73,8 @@ public class SourceIngestionController {
       select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
              a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
              c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
-             i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.analysis_error,
+             i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.chapter_ranges,
+             i.ranges_reviewed_at,i.ranges_review_notes,i.analysis_error,
              i.analyzed_at,i.reviewed_at,i.review_notes,i.created_at,i.updated_at
       from learning_book_intake i
       join learning_pdf_asset a on a.id=i.pdf_asset_id
