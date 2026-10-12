@@ -23,7 +23,8 @@ type Attempt = {
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
   questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
-type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
+type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
+type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
 
 async function api(url:string,init:RequestInit={}) {
   const headers=new Headers(init.headers||{});
@@ -322,7 +323,33 @@ export default function TestsClient(){
           {!loading&&hasMoreTests&&<div style={{display:'flex',justifyContent:'center',marginTop:18}}><button type="button" className={styles.secondaryButton} disabled={loadingMoreTests} onClick={()=>void loadMoreTests()}>{loadingMoreTests?'Loading more tests…':'Load more tests ↓'}</button></div>}
         </>:<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>SAVED RESULTS</span><h2>Your test history</h2><p>Only released results appear here. Pending teacher checks are not shown as final scores.</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>Refresh</button></div>
-          {loading?<div className={styles.empty}>Loading saved results…</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>No released results yet</b><small>When you finish a test, your score and teacher feedback will be saved here after any required review.</small></div>:<div className={styles.resultList}>{results.map(result=><article key={result.attempt_id} className={styles.resultCard}><span className={styles.resultIcon}>✓</span><div><h3>{result.assessment_title}</h3><p>{result.assessment_type==='TOPIC_END'?'Topic-end test':result.assessment_type==='CHAPTER_END'?'Chapter-end test':'Admin-created test'} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''} · Attempt {result.attempt_number}</p><small>Released {fmtDate(result.released_at)} · {result.question_count} questions</small></div><div className={styles.score}><b>{result.final_score} <small>/ {result.max_score}</small></b><span>{Number(result.max_score)>0?Math.round(Number(result.final_score)/Number(result.max_score)*100):0}%</span></div><button type="button" className={styles.resultOpen} disabled={busy} onClick={()=>void openResult(result.attempt_id)}>View feedback →</button></article>)}</div>}
+          {loading?<div className={styles.empty}>Loading saved results…</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>No released results yet</b><small>When you finish a test, your score and teacher feedback will be saved here after any required review.</small></div>:<div className={styles.resultList}>{results.map(result=>{
+             const latestAttempts=Array.isArray(result.attempts)&&result.attempts.length?result.attempts.slice(0,3):[{attempt_id:result.attempt_id,attempt_number:result.attempt_number,status:result.status,submitted_at:result.submitted_at,released_at:result.released_at,final_score:result.final_score,max_score:result.max_score}];
+             const bestScore=Number(result.best_score??Math.max(...latestAttempts.map(item=>Number(item.final_score??0))));
+             const bestPercent=Number(result.max_score)>0?Math.round(bestScore/Number(result.max_score)*100):0;
+             const attemptsInHistory=Number(result.attempt_count??latestAttempts.length);
+             return <article key={result.assessment_id} className={styles.resultCard}>
+               <span className={styles.resultIcon}>✓</span>
+               <div className={styles.resultSummary}>
+                 <h3>{result.assessment_title}</h3>
+                 <p>{result.assessment_type==='TOPIC_END'?'Topic-end test':result.assessment_type==='CHAPTER_END'?'Chapter-end test':'Admin-created test'} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
+                 <small>{attemptsInHistory} released attempt{attemptsInHistory===1?'':'s'} · {result.question_count} questions · Latest: {fmtDate(result.released_at)}</small>
+               </div>
+               <div className={styles.score} aria-label={'Best score among latest attempts: '+bestScore+' out of '+result.max_score}>
+                 <b>{bestScore} <small>/ {result.max_score}</small></b><span>{bestPercent}%</span><small>Best of last {Math.min(3,latestAttempts.length)}</small>
+               </div>
+               <div className={styles.resultAttemptPicker}>
+                 <span>Open attempt feedback <small>· newest first</small></span>
+                 <div>{latestAttempts.map((item,attemptIndex)=>{
+                   const positionLabel=attemptIndex===0?'Latest':attemptIndex===1?'Previous':'Earlier';
+                   const scoreLabel=Number(item.final_score??0)+' / '+Number(item.max_score??result.max_score);
+                   return <button key={item.attempt_id} type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(Number(item.attempt_id))} aria-label={'Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel} title={positionLabel+' · Attempt #'+item.attempt_number+' · '+scoreLabel}>
+                     <b>{attemptIndex+1}</b><span>{positionLabel}</span>
+                   </button>;
+                 })}</div>
+               </div>
+             </article>;
+           })}</div>}
           <div className={styles.resultPagination} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
             <small>Showing {resultsTotal===0?0:resultsPage*resultsPageSize+1}–{Math.min(resultsTotal,(resultsPage+1)*resultsPageSize)} of {resultsTotal} results</small>
             <div style={{display:'flex',alignItems:'center',gap:8}}>
