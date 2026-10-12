@@ -80,3 +80,32 @@ button:disabled,
     outline: 2px solid CanvasText;
   }
 }
+
+@media print {
+  body.printing-payslip {
+    background: #fff !important;
+  }
+  body.printing-payslip * {
+    visibility: hidden !important;
+  }
+  body.printing-payslip .payslip-print,
+  body.printing-payslip .payslip-print * {
+    visibility: visible !important;
+  }
+  body.printing-payslip .payslip-print {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body.printing-payslip .no-print {
+    display: none !important;
+  }
+  body.printing-payslip table {
+    min-width: 0 !important;
+  }
+}
