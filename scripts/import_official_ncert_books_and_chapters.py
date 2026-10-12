@@ -969,6 +969,50 @@ def write_report(path: Path, payload: dict[str, Any]) -> None:
     tmp.replace(path)
 
 
+def write_failure_report(args: argparse.Namespace, error: Exception) -> Path:
+    """Write a supplemental failure report without overwriting an apply checkpoint."""
+    root = Path(args.root).expanduser().resolve()
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    if args.report:
+        preferred = Path(args.report).expanduser()
+        if not preferred.is_absolute():
+            preferred = root / preferred
+    else:
+        preferred = root / "reports" / "ncert-pdf-imports" / f"ncert-book-chapter-import-failure-{stamp}.json"
+
+    report_path = preferred
+    if report_path.exists():
+        suffix = report_path.suffix or ".json"
+        report_path = report_path.with_name(f"{report_path.stem}.failure-{stamp}{suffix}")
+
+    books_dir = Path(args.books_dir).expanduser() if args.books_dir else (root / "books")
+    if not books_dir.is_absolute():
+        books_dir = root / books_dir
+    write_report(report_path, {
+        "schema": "quantaedge.official-ncert-book-chapter-import-report.v1",
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "finished_at": datetime.now(timezone.utc).isoformat(),
+        "result": "STOPPED_SAFELY",
+        "mode": "apply" if args.apply else "dry_run",
+        "root": str(root),
+        "input_books_directory": str(books_dir.resolve()),
+        "languages_requested": list(args.languages),
+        "api_url": str(args.api_url).rstrip("/"),
+        "application_writes_may_have_started": bool(args.apply),
+        "publish_actions_taken": 0,
+        "credentials_recorded": False,
+        "errors": [{"type": type(error).__name__, "message": str(error)}],
+        "files": [],
+        "notes": [
+            "This failure report never overwrites an existing progress/checkpoint report.",
+            "Original source PDFs are never edited by the importer.",
+            "When --apply was supplied, inspect the checkpoint report before retrying; this supplemental report cannot prove whether a draft write began.",
+            "The script never publishes or archives learning-document assignments.",
+        ],
+    })
+    return report_path
+
+
 def upload_or_reuse_asset(
     base: str,
     cookie: str,
@@ -1240,6 +1284,11 @@ def main() -> int:
     except Exception as exc:
         print(f"STOPPED SAFELY: {exc}", file=sys.stderr)
         print("No publication/archive action was started; source PDFs were not modified.", file=sys.stderr)
+        try:
+            failure_path = write_failure_report(args, exc)
+            print(f"Failure report: {failure_path}", file=sys.stderr)
+        except Exception as report_exc:
+            print(f"Could not write supplemental failure report: {report_exc}", file=sys.stderr)
         return 2
 
 
