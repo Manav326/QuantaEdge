@@ -912,31 +912,77 @@ public class AssessmentController {
     language=normalizeLanguage(language);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    List<Map<String,Object>> items=jdbc.queryForList("""
-      select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
-             att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
-             coalesce((select t.title from assessment_translation t
-               where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
-                 and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
-               order by t.version_no desc,t.id desc limit 1),a.title) as assessment_title,
-             s.code as subject_code,
-             coalesce((select t.display_name from curriculum_subject_translation t
-               where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
-                 and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
-               order by t.version_no desc,t.id desc limit 1),s.display_name) as subject_name,
-             coalesce((select t.display_name from curriculum_chapter_translation t
-               where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
-                 and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
-               order by t.version_no desc,t.id desc limit 1),ch.display_name) as chapter_name,
-             (select count(*) from student_assessment_attempt_question aq where aq.attempt_id=att.id) as question_count
-      from student_assessment_attempt att
-      join assessment a on a.id=att.assessment_id
-      join curriculum_subject s on s.id=a.subject_id
-      left join curriculum_chapter ch on ch.id=a.chapter_id
-      where att.student_id=? and att.status='RELEASED'
-      order by att.released_at desc,att.id desc limit ? offset ?
+
+    // One list row represents one assessment. Include only its three most recent
+    // released attempts, ordered newest first, and calculate the best score within
+    // that same three-attempt window.
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      with ranked as (
+        select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
+               att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
+               coalesce((select t.title from assessment_translation t
+                 where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
+                   and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
+                 order by t.version_no desc,t.id desc limit 1),a.title) as assessment_title,
+               s.code as subject_code,
+               coalesce((select t.display_name from curriculum_subject_translation t
+                 where t.subject_id=s.id and t.language=? and t.translation_status='PUBLISHED'
+                   and t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+                 order by t.version_no desc,t.id desc limit 1),s.display_name) as subject_name,
+               coalesce((select t.display_name from curriculum_chapter_translation t
+                 where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+                   and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+                 order by t.version_no desc,t.id desc limit 1),ch.display_name) as chapter_name,
+               (select count(*) from student_assessment_attempt_question aq where aq.attempt_id=att.id) as question_count,
+               row_number() over(partition by att.assessment_id order by att.released_at desc,att.id desc) as recency_rank,
+               count(*) over(partition by att.assessment_id) as attempt_count
+        from student_assessment_attempt att
+        join assessment a on a.id=att.assessment_id
+        join curriculum_subject s on s.id=a.subject_id
+        left join curriculum_chapter ch on ch.id=a.chapter_id
+        where att.student_id=? and att.status='RELEASED'
+      ),
+      grouped_attempts as (
+        select assessment_id,
+               coalesce(max(final_score) filter(where recency_rank<=3),0) as best_score,
+               max(attempt_count) as attempt_count,
+               jsonb_agg(jsonb_build_object(
+                 'attempt_id',attempt_id,
+                 'attempt_number',attempt_number,
+                 'status',status,
+                 'submitted_at',submitted_at,
+                 'released_at',released_at,
+                 'final_score',final_score,
+                 'max_score',max_score
+               ) order by released_at desc,attempt_id desc)
+                 filter(where recency_rank<=3)::text as attempts_json
+        from ranked
+        group by assessment_id
+      )
+      select latest.attempt_id,latest.assessment_id,latest.attempt_number,latest.status,
+             latest.submitted_at,latest.released_at,latest.final_score,latest.max_score,
+             latest.assessment_type,latest.assessment_title,latest.subject_code,latest.subject_name,
+             latest.chapter_name,latest.question_count,
+             grouped.best_score,grouped.attempt_count,grouped.attempts_json
+      from ranked latest
+      join grouped_attempts grouped on grouped.assessment_id=latest.assessment_id
+      where latest.recency_rank=1
+      order by latest.released_at desc,latest.attempt_id desc
+      limit ? offset ?
       """,language,language,language,context.studentId(),rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("select count(*) from student_assessment_attempt where student_id=? and status='RELEASED'",Long.class,context.studentId());
+
+    List<Map<String,Object>> items=new ArrayList<>();
+    for(Map<String,Object> row:rows){
+      Map<String,Object> item=new LinkedHashMap<>(row);
+      Object attemptsJson=item.remove("attempts_json");
+      item.put("attempts",attemptsJson==null?List.of():parseValue(String.valueOf(attemptsJson)));
+      items.add(item);
+    }
+    Long total=jdbc.queryForObject("""
+      select count(distinct assessment_id)
+      from student_assessment_attempt
+      where student_id=? and status='RELEASED'
+      """,Long.class,context.studentId());
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
