@@ -222,3 +222,120 @@
 .rangeReviewChapter b{font-size:11px;color:#29364a;overflow-wrap:anywhere}
 .rangeReviewChapter small{font-size:9px;color:#8993a4}
 @media(max-width:760px){.rangeReviewRow{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rangeReviewChapter{grid-column:1/-1}.rangeReviewRow button{grid-column:1/-1}}
+
+/* Premium resource governance and workflow hierarchy */
+.governancePanel{
+  position:relative;
+  overflow:visible;
+  margin:18px 0 22px;
+  padding:24px;
+  border:1px solid #dfe6f0;
+  border-radius:20px;
+  background:linear-gradient(150deg,#fff 0%,#fbfcff 58%,#fffaf6 100%);
+  box-shadow:0 12px 34px rgba(25,39,63,.055),inset 0 1px 0 #fff;
+}
+.governancePanel:before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:24px;
+  right:24px;
+  height:3px;
+  border-radius:0 0 5px 5px;
+  background:linear-gradient(90deg,#c6531d 0%,#f4a16f 48%,#f7d8bd 100%);
+}
+.governanceHeader{display:grid;gap:18px;margin-bottom:18px}
+.governanceHeader .sectionHeading{margin:0}
+.governanceHeader .sectionHeading h2{font-size:clamp(21px,2.1vw,27px);letter-spacing:-.85px}
+.governanceHeader .sectionHeading p{max-width:760px;font-size:12px}
+.governanceFilterArea{
+  display:grid;
+  grid-template-columns:minmax(135px,.28fr) minmax(0,1fr);
+  align-items:center;
+  gap:16px;
+  padding:15px;
+  border:1px solid #e7ebf2;
+  border-radius:15px;
+  background:linear-gradient(130deg,#f8fafc,#fff);
+}
+.governanceFilterIntro{display:grid;gap:5px}
+.governanceFilterIntro>span{font-size:9px;font-weight:900;letter-spacing:1.3px;color:#a74617}
+.governanceFilterIntro small{font-size:10px;line-height:1.55;color:#808ba0}
+.governancePanel .filterBar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-content:stretch;gap:9px}
+.governancePanel .multiFilter{min-width:0;max-width:none;width:100%;flex:none}
+.governancePanel .filterTrigger{
+  min-height:46px;
+  padding:9px 11px;
+  border-color:#dce3ed;
+  border-radius:12px;
+  box-shadow:0 2px 5px rgba(31,45,68,.025);
+  transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.governancePanel .filterTrigger:hover{border-color:#efb28f;background:#fffdfb}
+.governancePanel .filterTrigger>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.governancePanel .filterTrigger>strong{background:#eef2f7;color:#5e6a7f;font-size:9px}
+.governancePanel .multiFilterOpen{z-index:80}
+.governancePanel .multiFilterOpen .filterTrigger{border-color:#db7e4c;background:#fff9f4;box-shadow:0 0 0 3px rgba(220,116,62,.12)}
+.governancePanel .filterMenu{
+  top:calc(100% + 8px);
+  width:min(300px,calc(100vw - 40px));
+  max-width:calc(100vw - 40px);
+  max-height:360px;
+  border-color:#e1e6ef;
+  border-radius:14px;
+  padding:10px;
+  box-shadow:0 20px 50px rgba(20,33,54,.19);
+}
+.governancePanel .filterMenuActions{padding-bottom:9px}
+.governancePanel .filterMenuActions button{border-radius:7px;padding:7px 9px}
+.governancePanel .filterMenuActions button:hover{background:#fff1e7}
+.governancePanel .filterOption{min-height:36px;padding:8px;border-radius:9px;font-size:11px}
+.governancePanel .filterOption input{width:15px;height:15px}
+.governancePanel .resultSummary{margin-top:0;border-radius:13px;background:#f7f9fc;padding:14px 15px}
+.workflowStep{
+  position:relative;
+  overflow:hidden;
+  margin-top:22px;
+  padding:24px;
+  border-color:#dfe6f0;
+  border-radius:19px;
+  box-shadow:0 10px 28px rgba(24,39,63,.045);
+}
+.workflowStep:before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,#24354f,#e87937 72%,#f4c7a5);
+}
+.workflowStep .sectionHeading{align-items:center;margin-bottom:22px}
+.workflowStep .sectionHeading>div>span{display:inline-flex;align-items:center;gap:7px;color:#b64d19;font-size:9px;letter-spacing:1.5px}
+.workflowStep .sectionHeading h2{font-size:clamp(19px,1.9vw,24px);letter-spacing:-.75px;margin:8px 0 7px}
+.workflowStep .sectionHeading p{max-width:760px;font-size:12px;line-height:1.7}
+.workflowStep .stepIcon{
+  width:48px;height:48px;flex-basis:48px;border:1px solid #f1d4c3;border-radius:15px;
+  background:linear-gradient(145deg,#fff7f1,#ffe4d2);color:#a94316;font-size:15px;
+  box-shadow:0 5px 12px rgba(190,79,24,.08);
+}
+.workflowStep .libraryGrid,.workflowStep .assignmentFields{gap:18px}
+.workflowStep .field input,.workflowStep .field select,.workflowStep .field textarea{
+  border-color:#dce3ed;border-radius:11px;background:#fbfcfe;transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.workflowStep .field input:focus,.workflowStep .field select:focus,.workflowStep .field textarea:focus{
+  background:#fff;border-color:#e87937;box-shadow:0 0 0 3px rgba(232,121,55,.1);outline:none;
+}
+.workflowStep .uploadBox{border-radius:15px;border-color:#e2e8f1;background:linear-gradient(145deg,#fbfcfe,#fff)}
+.workflowStep .attachFooter{align-items:center}
+@media(max-width:1000px){
+  .governanceFilterArea{grid-template-columns:1fr;gap:12px}
+  .governancePanel .filterBar{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .governancePanel{padding:17px 13px;border-radius:15px}
+  .governancePanel:before{left:14px;right:14px}
+  .governanceFilterArea{padding:11px;border-radius:12px}
+  .governancePanel .filterBar{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .governancePanel .filterTrigger{min-height:42px;padding:8px}
+  .workflowStep{padding:17px 14px;border-radius:15px}
+  .workflowStep .stepIcon{width:39px;height:39px;flex-basis:39px}
+}
