@@ -93,7 +93,7 @@ class AssessmentControllerTest {
     when(jdbc.queryForList(contains("coalesce(max(at.title),a.title)"),
         eq(7L), eq("hi"), eq("hi"), eq("hi"), eq(19L)))
         .thenReturn(List.of(Map.of("id", 19L)));
-    when(jdbc.queryForList(contains("select id from student_assessment_attempt"),
+    when(jdbc.queryForList(contains("select id,offline_mode from student_assessment_attempt"),
         eq(19L), eq(7L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("where a.id=? and a.status='PUBLISHED' and"),
         eq(7L), eq(19L))).thenReturn(List.of());

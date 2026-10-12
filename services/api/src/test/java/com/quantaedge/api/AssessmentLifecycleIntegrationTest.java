@@ -105,7 +105,7 @@ class AssessmentLifecycleIntegrationTest {
   @SuppressWarnings("unchecked")
   void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
     Fixture fixture=fixture("COMPLETED");
-    jdbc.update("update assessment set is_generated=false,offline_enabled=true where id=?",fixture.assessmentId());
+    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",fixture.assessmentId());
     Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student());
     long attemptId=((Number)started.get("attempt_id")).longValue();
     String packageToken=String.valueOf(started.get("offlinePackageToken"));
