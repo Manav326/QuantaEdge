@@ -94,7 +94,8 @@ public class HrLeaveBalanceController {
     String sourceReference=optional(body.get("sourceReference"),160);
     long organizationId=((Number)employee.get("organization_id")).longValue();
     if(quantity.signum()<0){
-      BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=? for update",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(effectiveDate));
+      jdbc.queryForObject("select pg_advisory_xact_lock(hashtext(?))",Object.class,organizationId+":"+employeeId+":"+type);
+      BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(effectiveDate));
       if(balance==null||balance.add(quantity).signum()<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"This adjustment would make the leave balance negative.");
     }
     Long id;
