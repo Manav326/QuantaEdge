@@ -752,14 +752,8 @@ public class AssessmentController {
         throw conflict("This attempt was started online and cannot be converted to an offline attempt. Finish it online.");
       }
       if(existingOffline) {
-        String token=newOfflinePackageToken();
-        jdbc.update("""
-          update student_assessment_attempt set offline_package_token_hash=?,updated_at=now()
-          where id=? and student_id=? and offline_mode=true and status='IN_PROGRESS'
-          """,offlinePackageTokenHash(token),existingId,context.studentId());
-        Map<String,Object> resumed=new LinkedHashMap<>(attemptDetails(existingId,context,false));
-        resumed.put("offlinePackageToken",token);
-        return resumed;
+        // Normal resume does not rotate the package token; an active worker may be uploading answers.
+        return attemptDetails(existingId,context,false);
       }
       return attemptDetails(existingId, context, false);
     }
@@ -969,6 +963,41 @@ public class AssessmentController {
       saved++;
     }
     return Map.of("saved", true, "savedCount", saved, "attemptId", attemptId);
+  }
+
+  @PostMapping("/learning/assessment-attempts/{attemptId}/offline-package-token")
+  @Transactional
+  public Map<String,Object> refreshOfflinePackageToken(
+      @PathVariable long attemptId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,student_id,status,offline_mode,offline_sync_expires_at
+      from student_assessment_attempt where id=? for update
+      """,attemptId);
+    if(rows.isEmpty() || ((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
+      throw notFound("Assessment attempt",attemptId);
+    }
+    Map<String,Object> attempt=rows.getFirst();
+    if(!Boolean.TRUE.equals(attempt.get("offline_mode"))) {
+      throw conflict("This attempt is not an offline assessment.");
+    }
+    if(!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
+      throw conflict("Only an active offline attempt can refresh its package token.");
+    }
+    OffsetDateTime expiry=offsetDateTime(attempt.get("offline_sync_expires_at"));
+    if(expiry==null || expiry.isBefore(OffsetDateTime.now())) {
+      throw conflict("Offline sync has expired. Contact QuantaEdge support for this attempt.");
+    }
+    String token=newOfflinePackageToken();
+    jdbc.update("""
+      update student_assessment_attempt set offline_package_token_hash=?,updated_at=now()
+      where id=? and student_id=? and offline_mode=true and status='IN_PROGRESS'
+      """,offlinePackageTokenHash(token),attemptId,context.studentId());
+    audit(((Number)attempt.get("id")).longValue(),attemptId,null,context.studentId(),"STUDENT",
+        "OFFLINE_PACKAGE_TOKEN_REFRESHED","ACTIVE","ACTIVE",
+        "Student explicitly refreshed a protected offline package token after a sync error.");
+    return Map.of("attemptId",attemptId,"offlinePackageToken",token);
   }
 
   @PostMapping("/learning/assessment-attempts/{attemptId}/submit")

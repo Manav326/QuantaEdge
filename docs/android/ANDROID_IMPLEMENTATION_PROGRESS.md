@@ -86,7 +86,7 @@ Last updated: 2026-10-12
 - Only tests explicitly enabled by content staff expose a “prepare offline” action; generated topic/chapter tests and all other tests stay online-only.
 - The student starts the attempt while online so the server freezes the paper and starts its timer. The app stores the sanitized question snapshot and responses in account-scoped AES-GCM encrypted app-private storage.
 - No answer key is packaged. Answers are not graded locally; a network-constrained worker syncs the stored responses with the opaque per-attempt token and the server performs final grading/release.
-- Offline sync is accepted for up to 72 hours after the server timer deadline, only for an explicitly authorized offline attempt. This is intended for low-stakes tests, not high-stakes exam integrity.
+- Offline sync is accepted for up to 72 hours after the server timer deadline, only for an explicitly authorized offline attempt. If a sync error indicates an invalid token, explicit retry rotates the token; ordinary resume does not invalidate an active background upload. This is intended for low-stakes tests, not high-stakes exam integrity.
 - Offline package state is surfaced in the test list, and local attempts are available if the test catalogue cannot be reached.
 
 ## Verification record

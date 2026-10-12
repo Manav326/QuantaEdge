@@ -136,6 +136,45 @@ class AssessmentLifecycleIntegrationTest {
         Long.class,fixture.assessmentId(),fixture.studentId()));
   }
 
+  @Test
+  @SuppressWarnings("unchecked")
+  void resumingOfflineAttemptDoesNotRotateTokenButExplicitRecoveryDoes() {
+    Fixture fixture=fixture("COMPLETED");
+    jdbc.update("update assessment set assessment_type='ADMIN_CREATED',is_generated=false,lesson_id=null,offline_enabled=true where id=?",
+        fixture.assessmentId());
+
+    Map<String,Object> started=controller.startOrResumeAttempt(
+        fixture.assessmentId(),"hi",true,fixture.student());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    String originalToken=String.valueOf(started.get("offlinePackageToken"));
+    String originalHash=jdbc.queryForObject(
+        "select offline_package_token_hash from student_assessment_attempt where id=?",
+        String.class,attemptId);
+
+    Map<String,Object> resumed=controller.startOrResumeAttempt(
+        fixture.assessmentId(),"hi",true,fixture.student());
+    assertEquals(attemptId,((Number)resumed.get("attempt_id")).longValue());
+    assertEquals(originalHash,jdbc.queryForObject(
+        "select offline_package_token_hash from student_assessment_attempt where id=?",
+        String.class,attemptId));
+
+    String refreshedToken=String.valueOf(
+        controller.refreshOfflinePackageToken(attemptId,fixture.student()).get("offlinePackageToken"));
+    assertFalse(refreshedToken.isBlank());
+    assertFalse(originalToken.equals(refreshedToken));
+    long attemptQuestionId=((Number)((List<Map<String,Object>>)started.get("questions")).getFirst()
+        .get("attemptQuestionId")).longValue();
+
+    ResponseStatusException rejected=assertThrows(ResponseStatusException.class,
+        ()->controller.saveAnswer(attemptId,attemptQuestionId,
+            Map.of("answer","B","offlinePackageToken",originalToken),fixture.student()));
+    assertEquals(403,rejected.getStatusCode().value());
+
+    Map<String,Object> saved=controller.saveAnswer(attemptId,attemptQuestionId,
+        Map.of("answer","B","offlinePackageToken",refreshedToken),fixture.student());
+    assertEquals(true,saved.get("saved"));
+  }
+
   private Fixture fixture(String progressStatus) {
     String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     String classCode = "E2E" + suffix;

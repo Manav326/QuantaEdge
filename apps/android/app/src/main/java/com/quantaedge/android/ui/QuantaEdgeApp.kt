@@ -759,14 +759,17 @@ fun QuantaEdgeApp() {
         runTask {
             val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
             if (assessmentAttempt.optBoolean("offlinePendingSync")) {
-                val catalog = offlineAssessmentStore.recordForAttempt(id)
-                    ?.optJSONObject("catalogueItem") ?: JSONObject()
-                val refreshed = runCatching {
-                    ApiClient.postObject("/api/v1/learning/assessments/" +
-                        assessmentAttempt.longAny("assessment_id", "assessmentId") +
-                        "/attempts?language=" + language + "&offlineMode=true")
-                }.getOrNull()
-                if (refreshed != null) assessmentAttempt = refreshed
+                val localRecord = withContext(Dispatchers.IO) { offlineAssessmentStore.recordForAttempt(id) }
+                val state = localRecord?.optString("state")
+                val catalog = localRecord?.optJSONObject("catalogueItem") ?: JSONObject()
+                if (state == "SYNC_ERROR") {
+                    val refreshed = ApiClient.postObject(
+                        "/api/v1/learning/assessment-attempts/" + id + "/offline-package-token"
+                    )
+                    val token = refreshed.textAny("offlinePackageToken")
+                    if (token.isBlank()) throw IOException("Server ने protected offline token refresh नहीं किया।")
+                    assessmentAttempt.put("offlinePackageToken", token)
+                }
                 withContext(Dispatchers.IO) {
                     offlineAssessmentStore.saveAttempt(
                         assessmentAttempt,
