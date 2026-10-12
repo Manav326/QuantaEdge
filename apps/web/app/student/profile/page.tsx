@@ -252,7 +252,7 @@ export default function StudentProfilePage() {
                   <p><LocaleText hinglish="अपनी clear photo चुनें। Save करने से पहले इसे automatically resize किया जाएगा।" english="Choose a clear photo. We’ll resize it automatically before saving." /></p>
                   {photoName && <small className="student-profile-photo-editor__filename">{photoName}</small>}
                   <div className="student-profile-photo-editor__actions">
-                    <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" onChange={handlePhotoChange} />
+                    <input ref={fileInputRef} className="student-profile-photo-editor__file" type="file" accept="image/*" aria-label="Choose profile photo" onChange={handlePhotoChange} />
                     <button className="button button-dark button-small" type="button" disabled={photoBusy} onClick={() => fileInputRef.current?.click()}>{photoBusy ? <LocaleText hinglish="Photo तैयार हो रही है…" english="Preparing photo…" /> : profileImageUrl ? <LocaleText hinglish="Photo बदलें" english="Change photo" /> : <LocaleText hinglish="Photo चुनें" english="Choose photo" />}</button>
                     {profileImageUrl && <button className="student-profile-quiet-button" type="button" disabled={photoBusy} onClick={resetPhoto}><LocaleText hinglish="Photo हटाएँ" english="Remove photo" /></button>}
                   </div>
