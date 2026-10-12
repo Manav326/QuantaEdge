@@ -1,5 +1,11 @@
 package com.quantaedge.android.ui
 
+import android.app.Activity
+import android.net.Uri
+import com.google.android.gms.codescanner.GmsBarcodeScanning
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.quantaedge.android.BuildConfig
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.data.ApiClient
+import com.quantaedge.android.data.ApiFailure
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,6 +58,8 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
     var notice by remember { mutableStateOf("") }
     var pendingBytes by remember { mutableStateOf<ByteArray?>(null) }
     var pendingName by remember { mutableStateOf("quantaedge-certificate") }
+    var verification by remember { mutableStateOf<JSONObject?>(null) }
+    var verifyingQr by remember { mutableStateOf(false) }
 
     fun writeDownloadedFile(uri: android.net.Uri?) {
         val bytes = pendingBytes
@@ -95,6 +104,62 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
     }
 
     LaunchedEffect(language) { reload() }
+
+    fun verifyScannedCertificate(code: String) {
+        scope.launch {
+            verifyingQr = true
+            error = ""
+            notice = ""
+            verification = null
+            try {
+                verification = withContext(Dispatchers.IO) {
+                    ApiClient.getObject("/api/v1/certificates/verify/" + ApiClient.encodeQuery(code))
+                }
+            } catch (e: Exception) {
+                verification = null
+                error = if (e is ApiFailure && e.statusCode == 404) {
+                    if (language == "hi") "यह प्रमाणपत्र नहीं मिला। QR या प्रमाणपत्र नंबर जाँचें।"
+                    else "Certificate not found. Check the QR code or certificate number."
+                } else {
+                    e.message ?: if (language == "hi") "प्रमाणपत्र सत्यापित नहीं हो सका।" else "Certificate verification failed."
+                }
+            } finally {
+                verifyingQr = false
+            }
+        }
+    }
+
+    fun scanCertificateQr() {
+        val activity = context as? Activity
+        if (activity == null) {
+            error = if (language == "hi") "कैमरा स्कैनर शुरू नहीं हो सका।" else "Could not start the QR scanner."
+            return
+        }
+        error = ""
+        notice = ""
+        verification = null
+        verifyingQr = true
+        GmsBarcodeScanning.getClient(activity).startScan()
+            .addOnSuccessListener { barcode ->
+                val code = barcode.rawValue?.let { parseQuantaEdgeCertificateQr(it, BuildConfig.DEBUG) }
+                if (code == null) {
+                    verifyingQr = false
+                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR नहीं है।"
+                    else "This is not a valid QuantaEdge certificate QR code."
+                } else {
+                    verifyScannedCertificate(code)
+                }
+            }
+            .addOnCanceledListener { verifyingQr = false }
+            .addOnFailureListener { failure ->
+                verifyingQr = false
+                error = if (failure is com.google.android.gms.common.api.ApiException &&
+                    failure.statusCode == CommonStatusCodes.CANCELED) "" else {
+                    if (language == "hi") "QR स्कैन नहीं हो सका। कृपया दोबारा कोशिश करें।"
+                    else "QR scanning failed. Please try again."
+                }
+            }
+    }
 
     fun issueCertificate() {
         scope.launch {
@@ -158,6 +223,55 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(if (language == "hi") "मेरे प्रमाणपत्र" else "My certificates", style = MaterialTheme.typography.headlineSmall)
             TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+        }
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(if (language == "hi") "प्रमाणपत्र QR स्कैन करें" else "Scan a certificate QR",
+                    style = MaterialTheme.typography.titleMedium)
+                Text(if (language == "hi")
+                    "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
+                    else "Scan a QR code from any QuantaEdge certificate. Its current status is checked with the server.",
+                    style = MaterialTheme.typography.bodyMedium)
+                Button(onClick = { scanCertificateQr() }, enabled = !verifyingQr && !busy) {
+                    Text(if (verifyingQr) {
+                        if (language == "hi") "जाँच हो रही है…" else "Checking…"
+                    } else {
+                        if (language == "hi") "QR स्कैनर खोलें" else "Scan certificate QR"
+                    })
+                }
+            }
+        }
+        if (verifyingQr) CircularProgressIndicator()
+        verification?.let { result ->
+            val valid = result.optBoolean("verified", false) && result.optString("status") == "VALID"
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text(
+                        if (valid) {
+                            if (language == "hi") "✓ वैध प्रमाणपत्र" else "✓ Valid certificate"
+                        } else {
+                            if (language == "hi") "⚠ प्रमाणपत्र निरस्त" else "⚠ Certificate revoked"
+                        },
+                        style = MaterialTheme.typography.titleLarge,
+                        color = if (valid) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                    )
+                    Text((if (language == "hi") "प्रमाणपत्र नंबर: " else "Certificate ID: ") +
+                        result.optString("certificateNumber"))
+                    Text((if (language == "hi") "प्राप्तकर्ता: " else "Recipient: ") +
+                        result.optString("recipientName"))
+                    Text((if (language == "hi") "उपलब्धि: " else "Achievement: ") +
+                        result.optString("achievementTitle"))
+                    val classCode = result.optString("classCode")
+                    Text((if (language == "hi") "कक्षा: " else "Class: ") +
+                        if (classCode.isNotBlank()) "Class $classCode" else "—")
+                    val issuedAt = result.optString("issuedAt").substringBefore("T")
+                    Text((if (language == "hi") "जारी करने की तारीख: " else "Issue date: ") +
+                        if (issuedAt.isNotBlank()) issuedAt else "—")
+                    Text(if (language == "hi") "यह स्थिति सर्वर के वर्तमान रिकॉर्ड से सत्यापित है।"
+                        else "This status was checked against the server's current record.",
+                        style = MaterialTheme.typography.bodySmall)
+                }
+            }
         }
         Text(
             if (language == "hi") "केवल सत्यापित उपलब्धि पर प्रमाणपत्र जारी होगा। नाम, अंक और पात्रता server से सत्यापित होते हैं।"
@@ -250,4 +364,24 @@ private fun JSONObject.optLongValue(vararg keys: String): Long {
         if (value > 0L) return value
     }
     return 0L
+}
+
+
+/**
+ * Accept only the public QuantaEdge verification URL, plus local HTTP URLs in debug builds.
+ * Never trust a certificate number from an arbitrary QR payload.
+ */
+internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): String? {
+    val uri = runCatching { Uri.parse(raw.trim()) }.getOrNull() ?: return null
+    val host = uri.host?.lowercase() ?: return null
+    val production = uri.scheme.equals("https", ignoreCase = true) &&
+        host == "qe.thinkwithsujeet.in" && (uri.port == -1 || uri.port == 443)
+    val localDevelopment = debugBuild &&
+        uri.scheme.equals("http", ignoreCase = true) &&
+        host in setOf("localhost", "127.0.0.1") &&
+        (uri.port == -1 || uri.port in 1..65535)
+    if ((!production && !localDevelopment) || uri.userInfo != null ||
+        uri.path != "/certificate/verify" || !uri.fragment.isNullOrEmpty()) return null
+    val code = uri.getQueryParameter("code")?.trim()?.uppercase()
+    return code?.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
 }
