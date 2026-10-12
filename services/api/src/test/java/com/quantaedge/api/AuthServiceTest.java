@@ -110,10 +110,9 @@ class AuthServiceTest {
 
     when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
         .thenReturn(List.of(otpRow));
-    when(jdbc.queryForObject(contains("select exists(select 1 from user_account"),
-        eq(Boolean.class), eq(mobile))).thenReturn(true);
-    when(jdbc.queryForObject("select id from user_account where mobile_e164=?", Long.class, mobile))
-        .thenReturn(userId);
+    when(jdbc.queryForList(
+        "select id from user_account where mobile_e164=? and role='PARENT' and active=true", mobile))
+        .thenReturn(List.of(Map.of("id", userId)));
     when(jdbc.queryForMap("select role,display_name from user_account where id=? and active=true", userId))
         .thenReturn(Map.of("role", "PARENT", "display_name", "Existing customer"));
 
@@ -122,6 +121,41 @@ class AuthServiceTest {
     assertEquals(userId, context.userId());
     assertEquals(null, context.staffId());
     assertEquals("PARENT", context.role());
+    verify(jdbc, never()).update(contains("active=true,updated_at=now(),role=?"), any(), any(), any(), any());
+  }
+
+  @Test
+  void suspendedParentCannotRequestOtpForLogin() {
+    String mobile = "+917070107483";
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    when(jdbc.queryForObject(contains("role='PARENT' and active=true"),
+        eq(Boolean.class), eq(mobile))).thenReturn(false);
+
+    assertThrows(IllegalArgumentException.class, () -> auth.requestOtp("7070107483", "LOGIN"));
+    verify(jdbc, never()).update(contains("insert into otp_challenge"), any(), any(), any());
+  }
+
+  @Test
+  void validOtpCannotReactivateSuspendedParent() throws Exception {
+    String mobile = "+917070107483";
+    Map<String,Object> otpRow = Map.of(
+        "id", 72L,
+        "code_hash", hash("123456"),
+        "attempts", 0,
+        "expires_at", Timestamp.from(Instant.now().plusSeconds(120)),
+        "purpose", "LOGIN");
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    when(jdbc.queryForList(contains("from otp_challenge"), eq(mobile), eq("LOGIN")))
+        .thenReturn(List.of(otpRow));
+    when(jdbc.queryForList(
+        "select id from user_account where mobile_e164=? and role='PARENT' and active=true", mobile))
+        .thenReturn(List.of());
+    when(jdbc.queryForObject(contains("select exists(select 1 from user_account where mobile_e164=? and role='PARENT')"),
+        eq(Boolean.class), eq(mobile))).thenReturn(true);
+
+    assertThrows(SecurityException.class, () -> auth.verifyOtp("7070107483", "123456", "LOGIN", null));
+    verify(jdbc, never()).update(contains("update otp_challenge set consumed_at=now()"), any());
+    verify(jdbc, never()).update(contains("active=true,updated_at=now(),role=?"), any(), any(), any(), any());
   }
 
   @Test

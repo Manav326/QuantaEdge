@@ -11,9 +11,9 @@ export default function AdminStudents(){
   return <main className="admin-shell"><AdminSidebar active="students" />
     <section className="admin-main"><header className="admin-top"><div><span className="admin-kicker">LEARNER OPERATIONS</span><h1>Students</h1><p>Real production student profiles and learning activity.</p></div><Link href="/" className="button button-dark">← Dashboard</Link></header>
       {error&&<div className="feedback">{error}</div>}
-      <section className="admin-panel"><div className="panel-head"><div><span>STUDENT ACCOUNTS</span><h2>Active profiles</h2></div><span className="count">{rows.length}</span></div>
-        <div className="table"><div className="tr th"><span>Name</span><span>Class</span><span>Board / language</span><span>Environment</span><span>Completed</span></div>
-        {rows.map(s=><div className="tr" key={s.id}><strong>{s.display_name}</strong><span>Class {s.class_code}</span><span>{s.board} · {s.language}</span><span className={s.active?'published':'draft'}>{s.environment}</span><span>{s.completed_lessons}</span></div>)}</div>
+      <section className="admin-panel"><div className="panel-head"><div><span>STUDENT ACCOUNTS</span><h2>Production student profiles</h2></div><span className="count">{rows.length}</span></div>
+        <div className="table"><div className="tr th"><span>Name</span><span>Class</span><span>Board / language</span><span>Status</span><span>Completed</span></div>
+        {rows.map(s=><div className="tr" key={s.id}><strong>{s.display_name}</strong><span>Class {s.class_code}</span><span>{s.board} · {s.language}</span><span className={s.active?'published':'draft'}>{s.active?'Active':'Suspended'}</span><span>{s.completed_lessons}</span></div>)}</div>
       </section>
     </section></main>;
 }

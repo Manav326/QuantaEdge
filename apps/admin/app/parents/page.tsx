@@ -110,7 +110,7 @@ export default function AdminParents(){
       <section className="admin-grid stats parent-admin-kpis">
         <article><span>Parent accounts</span><strong>{parents.length}</strong><small>registered accounts</small></article>
         <article><span>Active parents</span><strong>{activeCount}</strong><small>eligible to sign in</small></article>
-        <article><span>Active child profiles</span><strong>{childCount}</strong><small>production students</small></article>
+        <article><span>Active parent-child links</span><strong>{childCount}</strong><small>active, consented relationships</small></article>
         <article><span>Default child limit</span><strong>3</strong><small>environment configurable</small></article>
       </section>
       <section className="admin-panel parent-admin-panel">

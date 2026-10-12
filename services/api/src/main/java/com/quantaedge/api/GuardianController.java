@@ -180,7 +180,7 @@ public class GuardianController {
                join curriculum_subject s on s.id=ste.subject_id
                where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
-      join curriculum_class cc on cc.code=st.class_code
+      left join curriculum_class cc on cc.code=st.class_code
       left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id and slc.student_id=st.id and slc.active=true
       where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
         and st.active=true and st.environment='PRODUCTION' order by st.created_at

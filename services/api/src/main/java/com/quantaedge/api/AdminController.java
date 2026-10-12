@@ -37,7 +37,6 @@ public class AdminController {
       left join guardian_student gs on gs.guardian_user_id=u.id
       left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
       where u.role='PARENT'
-        and not exists(select 1 from staff_account staff where staff.mobile_e164=u.mobile_e164)
       group by u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at
       order by u.created_at desc
       """);
@@ -54,10 +53,6 @@ public class AdminController {
           join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from guardian_student gs join student st on st.id=gs.student_id
       where gs.guardian_user_id=? and st.environment='PRODUCTION'
-        and not exists(
-          select 1 from user_account u join staff_account staff on staff.mobile_e164=u.mobile_e164
-          where u.id=gs.guardian_user_id
-        )
       order by st.created_at desc
       """,parentId);
   }
@@ -71,7 +66,6 @@ public class AdminController {
     int changed=jdbc.update("""
       update user_account u set active=?,updated_at=now()
       where u.id=? and u.role='PARENT'
-        and not exists(select 1 from staff_account staff where staff.mobile_e164=u.mobile_e164)
       """,active,parentId);
     if(changed==0) throw new IllegalArgumentException("Parent account not found");
     if(!active) jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null",parentId);

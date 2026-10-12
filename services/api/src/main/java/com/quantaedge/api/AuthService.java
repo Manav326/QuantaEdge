@@ -121,15 +121,19 @@ public class AuthService {
           "select exists(select 1 from user_account where mobile_e164=? and role='PARENT' and active=true)",
           Boolean.class, normalized));
       if(!parentExists) throw new IllegalArgumentException("No parent account found for this mobile number.");
-    } else {
-      // Staff and customer access are independent identities even if the mobile number matches.
-      // The OTP purpose selects which identity is being authenticated.
+    } else if ("SIGNUP".equals(purpose)) {
+      // Prevent duplicate customer identities independently of a matching staff identity.
       boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
           "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
-      if("SIGNUP".equals(purpose) && accountExists)
+      if(accountExists)
         throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
-      if("LOGIN".equals(purpose) && !accountExists)
-        throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
+    } else {
+      // A login OTP must only be available to an active parent identity.
+      boolean activeParentExists=Boolean.TRUE.equals(jdbc.queryForObject(
+          "select exists(select 1 from user_account where mobile_e164=? and role='PARENT' and active=true)",
+          Boolean.class, normalized));
+      if(!activeParentExists)
+        throw new IllegalArgumentException("No active parent account found for this mobile number. If the account is suspended, contact support.");
     }
 
     // Keep real OTP delivery rate-limited. Local QA can opt out only when the fixed demo OTP
@@ -271,29 +275,35 @@ public class AuthService {
       return contextForUser(parentId);
     }
 
-    // LOGIN/SIGNUP authenticate the customer identity, independently of a matching staff identity.
+    // Login must not change a parent's activation or role. Only explicit admin
+    // reactivation can restore a suspended account.
+    if("LOGIN".equals(purpose)) {
+      List<Map<String,Object>> activeParents=jdbc.queryForList(
+          "select id from user_account where mobile_e164=? and role='PARENT' and active=true", normalized);
+      if(activeParents.isEmpty()) {
+        Boolean parentExists=jdbc.queryForObject(
+            "select exists(select 1 from user_account where mobile_e164=? and role='PARENT')",
+            Boolean.class, normalized);
+        if(Boolean.TRUE.equals(parentExists))
+          throw new SecurityException("This parent account is inactive. Contact support.");
+        throw new IllegalArgumentException("No active parent account found for this mobile number. Please register first.");
+      }
+      long userId=((Number)activeParents.getFirst().get("id")).longValue();
+      jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
+      return contextForUser(userId);
+    }
+
+    // Signup is the only path that creates a parent identity.
     boolean accountExists=Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from user_account where mobile_e164=?)", Boolean.class, normalized));
-    if("SIGNUP".equals(purpose) && accountExists)
+    if(accountExists)
       throw new IllegalStateException("An account already exists for this mobile number. Please log in.");
-    if("LOGIN".equals(purpose) && !accountExists)
-      throw new IllegalArgumentException("No account found for this mobile number. Please register first.");
-
+    String registrationPasswordHash=passwordEncoder.encode(newPassword);
+    Long userId=jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
+      values (?,?,?,?,?) returning id
+      """,Long.class,UUID.randomUUID(),normalized,displayName,"PARENT",registrationPasswordHash);
     jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
-
-    String role="PARENT";
-    String registrationPasswordHash="SIGNUP".equals(purpose)?passwordEncoder.encode(newPassword):null;
-    Long userId;
-    try {
-      userId=jdbc.queryForObject("select id from user_account where mobile_e164=?",Long.class,normalized);
-      jdbc.update("update user_account set display_name=coalesce(?,display_name),active=true,updated_at=now(),role=?,password_hash=coalesce(?,password_hash) where id=?",
-          displayName,role,registrationPasswordHash,userId);
-    } catch(EmptyResultDataAccessException ex) {
-      userId=jdbc.queryForObject("""
-        insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
-        values (?,?,?,?,?) returning id
-        """,Long.class,UUID.randomUUID(),normalized,displayName,role,registrationPasswordHash);
-    }
     return contextForUser(userId);
   }
 

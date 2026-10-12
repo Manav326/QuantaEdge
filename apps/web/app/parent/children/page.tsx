@@ -87,8 +87,14 @@ export default function ParentChildrenPage(){
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
       setDraft(emptyDraft);setConsent(false);
-      await load();
-      setNotice(tx('Student profile बन गया है और login details save हो गई हैं। अब बच्चा आपके बनाए username और password से sign in कर सकता है।','Student profile and login details are saved. Your child can now sign in with the username and password you created.'));
+      const successMessage=tx('Student profile बन गया है और login details save हो गई हैं। अब बच्चा आपके बनाए username और password से sign in कर सकता है।','Student profile and login details are saved. Your child can now sign in with the username and password you created.');
+      setNotice(successMessage);
+      try{
+        await load();
+        setNotice(successMessage);
+      }catch{
+        setError(tx('Profile बन गया है, लेकिन list refresh नहीं हो पाई। दोबारा profile न बनाएँ; page reload करके जाँचें।','The profile was created successfully, but the list could not refresh. Do not create it again; reload the page to verify.'));
+      }
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
   }
