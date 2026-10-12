@@ -119,6 +119,38 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             importer.HINDI_TITLE_ALIASES[("6", "science", "wonderful-world-science")],
         )
 
+    def test_part_one_and_part_two_are_combined_without_modifying_originals(self):
+        part1 = self.root / importer.part_book_filename("7", "maths", "english", 1)
+        part2 = self.root / importer.part_book_filename("7", "maths", "english", 2)
+        for path, title in ((part1, "Large Numbers Around Us"), (part2, "Geometric Twins")):
+            with fitz.open() as doc:
+                page = doc.new_page()
+                page.insert_text((50, 50), title)
+                page.insert_text((50, 100), "Source part content remains on this page.")
+                doc.save(path)
+        hash1, hash2 = importer.sha256_file(part1), importer.sha256_file(part2)
+        output_dir = self.root / "private-review" / "ncert-book-splits"
+        source = importer.prepare_source_book(self.root, "7", "maths", "english", output_dir)
+        self.assertTrue(source["merged_from_parts"])
+        self.assertEqual(2, importer.inspect_book(Path(source["path"]))["page_count"])
+        self.assertEqual(hash1, importer.sha256_file(part1))
+        self.assertEqual(hash2, importer.sha256_file(part2))
+        self.assertEqual(
+            "NCERT_Class_7_Maths_English_BOOK.pdf",
+            source["slot_filename"],
+        )
+
+    def test_missing_maths_part_fails_with_both_filenames(self):
+        part1 = self.root / importer.part_book_filename("8", "maths", "hindi", 1)
+        with fitz.open() as doc:
+            doc.new_page()
+            doc.save(part1)
+        with self.assertRaisesRegex(FileNotFoundError, "Both official Mathematics parts are required"):
+            importer.prepare_source_book(
+                self.root, "8", "maths", "hindi",
+                self.root / "private-review" / "ncert-book-splits",
+            )
+
     def test_complete_book_original_is_not_rewritten_by_split(self):
         source = self.make_book()
         original_hash = importer.sha256_file(source)
