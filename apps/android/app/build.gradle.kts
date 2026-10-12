@@ -55,7 +55,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-val brandWordmark = layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
+val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandWordmark)
     into(layout.projectDirectory.dir("app/src/main/res/drawable-nodpi"))

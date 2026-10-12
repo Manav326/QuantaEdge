@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -960,7 +961,7 @@ private fun DiagnosticScreen(
 @Composable
 private fun AssessmentListScreen(
     subject: String,
-    items: List<JSONObject>,
+    assessmentItems: List<JSONObject>,
     busy: Boolean,
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
@@ -977,9 +978,9 @@ private fun AssessmentListScreen(
             TextButton(onClick = onResults, enabled = !busy) { Text("मेरे परिणाम") }
             TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
         }
-        if (items.isEmpty() && !busy) EmptyState("कोई प्रकाशित टेस्ट नहीं", "सिर्फ उपलब्ध और आपके खाते के लिए अनुमत मूल्यांकन यहाँ दिखेंगे।")
+        if (assessmentItems.isEmpty() && !busy) EmptyState("कोई प्रकाशित टेस्ट नहीं", "सिर्फ उपलब्ध और आपके खाते के लिए अनुमत मूल्यांकन यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
-            items(items) { item ->
+            items(assessmentItems) { item ->
                 val used = item.optInt("attempts_used", 0)
                 val max = item.optInt("max_attempts", 1)
                 Card(modifier = Modifier.fillMaxWidth()) {
@@ -1062,12 +1063,12 @@ private fun AssessmentAttemptScreen(
 }
 
 @Composable
-private fun ResultsScreen(items: List<JSONObject>) {
+private fun ResultsScreen(resultItems: List<JSONObject>) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
-        if (items.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
+        if (resultItems.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
-            items(items) { item ->
+            items(resultItems) { item ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(item.textAny("title", "assessment_title").ifBlank { "मूल्यांकन" }, style = MaterialTheme.typography.titleMedium)
