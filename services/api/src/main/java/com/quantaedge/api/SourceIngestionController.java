@@ -271,6 +271,37 @@ public class SourceIngestionController {
       }
       java.util.regex.Pattern heading = java.util.regex.Pattern.compile(
         "(?im)^\\s*((?:chapter|unit|appendix|annexure)\\s+[0-9ivxlcdm]+[.:： -]?.{0,180}|(?:अध्याय|पाठ|इकाई|परिशिष्ट)\\s*[०-९0-9ivxlcdm]*[.:： -]?.{0,180})\\s*$");
+      // Detect title-only table-of-contents entries used by newer textbooks (for example "1. Patterns").
+      // We only treat a page as a TOC candidate page when it contains several numbered title-like lines;
+      // the result remains a review signal, never an automatic chapter assignment.
+      java.util.regex.Pattern tocLine = java.util.regex.Pattern.compile(
+        "(?im)^\\s*(?:chapter\\s*)?([0-9०-९]{1,2})[.)\\-:]\\s+(.{5,160})\\s*$");
+      for (int p=0; p<Math.min(pageTexts.size(),40); p++) {
+        List<String> tocTitles = new ArrayList<>();
+        java.util.regex.Matcher tocMatcher = tocLine.matcher(pageTexts.get(p));
+        while (tocMatcher.find() && tocTitles.size()<30) {
+          String candidate = tocMatcher.group(2).trim();
+          if (candidate.split("\\s+").length >= 2) tocTitles.add(candidate);
+        }
+        if (tocTitles.size() < 3) continue;
+        for (String candidate : tocTitles) {
+          String normalized = normalizeBookText(candidate);
+          boolean matched = false;
+          for (Map<String,Object> chapter : curriculum) {
+            String title = normalizeBookText(String.valueOf(chapter.get("display_name")));
+            if (title.length() >= 4 && (normalized.contains(title) || title.contains(normalized))) {
+              matched = true;
+              break;
+            }
+          }
+          if (!matched && extras.size() < 250) {
+            boolean duplicate = extras.stream().anyMatch(item ->
+                normalizeBookText(String.valueOf(item.get("title"))).equals(normalized));
+            if (!duplicate) extras.add(Map.of("title",candidate,"page",p+1,
+                "reason","Numbered table-of-contents entry not matched to the selected curriculum; verify whether this is an additional chapter or section."));
+          }
+        }
+      }
       for (int p=0;p<pageTexts.size();p++) {
         java.util.regex.Matcher matcher=heading.matcher(pageTexts.get(p));
         int count=0;
