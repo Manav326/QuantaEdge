@@ -59,7 +59,11 @@ class CertificateRendererTest {
         "QE-2026-000000000000", issuedAt, true);
     assertTrue(sample.pdf().length > 1_000);
     assertTrue(sample.png().length > 1_000);
-    var sampleImage = ImageIO.read(new ByteArrayInputStream(sample.png()));
+    byte[] previewPng = renderer.renderSamplePng(
+        "MODERN", "en", "Sample Student", "Class 6 · Mathematics",
+        "Design preview only. No achievement has been verified.",
+        "QE-2026-000000000000", issuedAt);
+    var sampleImage = ImageIO.read(new ByteArrayInputStream(previewPng));
     assertEquals(1240, sampleImage.getWidth());
     assertEquals(877, sampleImage.getHeight());
   }
