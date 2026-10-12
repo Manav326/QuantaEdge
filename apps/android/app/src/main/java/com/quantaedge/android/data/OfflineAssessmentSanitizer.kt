@@ -9,8 +9,10 @@ import org.json.JSONObject
  */
 internal object OfflineAssessmentSanitizer {
     private val forbiddenFields = setOf(
-        "answerkey", "answerpayload", "correctanswer", "correctoption",
-        "iscorrect", "correct", "solution", "markingscheme", "rubric"
+        "answerkey", "answerpayload", "correctanswer", "correctoption", "correctoptions",
+        "expectedanswer", "acceptedanswers", "iscorrect", "correct", "solution", "solutionsteps",
+        "markingscheme", "rubric", "gradingnotes", "gradingfeedback", "graderationale",
+        "marksawarded", "pointsawarded", "earnedmarks", "score", "evaluation"
     )
 
     fun sanitize(source: JSONObject): JSONObject {
