@@ -1859,10 +1859,60 @@ private fun AssessmentAttemptScreen(
     val released = attempt.optBoolean("resultReleased")
     val offlinePendingSync = attempt.optBoolean("offlinePendingSync")
     val inProgress = phase == "IN_PROGRESS" && !offlinePendingSync
+    val deadlineText = attempt.textAny("deadline_at", "deadlineAt")
+    val deadlineEpochMillis = remember(deadlineText) {
+        runCatching { java.time.OffsetDateTime.parse(deadlineText).toInstant().toEpochMilli() }.getOrNull()
+    }
+    var nowEpochMillis by remember(attemptId, deadlineEpochMillis) { mutableStateOf(System.currentTimeMillis()) }
+    var autoSubmittedAttemptId by remember { mutableStateOf(0L) }
+    val remainingSeconds = deadlineEpochMillis?.let { ((it - nowEpochMillis) / 1000L).coerceAtLeast(0L) }
+    val deadlineReached = inProgress && remainingSeconds != null && remainingSeconds <= 0L
+
+    LaunchedEffect(attemptId, deadlineEpochMillis, inProgress) {
+        if (inProgress && deadlineEpochMillis != null) {
+            while (true) {
+                nowEpochMillis = System.currentTimeMillis()
+                if (nowEpochMillis >= deadlineEpochMillis) break
+                delay(1000)
+            }
+        }
+    }
+
+    LaunchedEffect(attemptId, deadlineReached, inProgress, offlinePendingSync, busy) {
+        if (deadlineReached && inProgress && !offlinePendingSync && !busy &&
+            attemptId > 0L && autoSubmittedAttemptId != attemptId) {
+            autoSubmittedAttemptId = attemptId
+            onSubmit()
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(attempt.textAny("assessment_title", "title").ifBlank { "टेस्ट" }, style = MaterialTheme.typography.headlineSmall)
         Text("प्रयास " + attempt.optInt("attempt_number", 1) + " • स्थिति: " +
             if (offlinePendingSync) "OFFLINE_PENDING_SYNC" else phase, style = MaterialTheme.typography.bodySmall)
+        if (inProgress && remainingSeconds != null) {
+            val minutes = (remainingSeconds / 60L).toString().padStart(2, '0')
+            val seconds = (remainingSeconds % 60L).toString().padStart(2, '0')
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(if (deadlineReached) "समय पूरा" else "समय शेष", style = MaterialTheme.typography.titleSmall)
+                    Text("$minutes:$seconds", style = MaterialTheme.typography.titleLarge,
+                        color = if (remainingSeconds <= 60L) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
+                }
+            }
+        }
+        if (deadlineReached) {
+            Text(
+                if (attempt.optBoolean("offlineMode")) "समय पूरा हो गया है। आपके सुरक्षित उत्तर स्वतः sync queue में भेजे जा रहे हैं।"
+                else "समय पूरा हो गया है। आपका टेस्ट स्वतः जमा किया जा रहा है।",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
         if (offlinePendingSync) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -1888,7 +1938,7 @@ private fun AssessmentAttemptScreen(
                     answer = value,
                     onAnswerChange = { onAnswerChange(id, it) },
                     onSubmit = { onSave(question, value) },
-                    locked = !inProgress,
+                    locked = !inProgress || deadlineReached,
                     saving = busy,
                     feedback = feedbacks[id],
                     status = if (released) {
@@ -1927,7 +1977,13 @@ private fun AssessmentAttemptScreen(
         }
         if (inProgress) {
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                Text("टेस्ट जमा करें")
+                Text(
+                    when {
+                        deadlineReached && attempt.optBoolean("offlineMode") -> "समय पूरा — answers sync करें"
+                        deadlineReached -> "समय पूरा — टेस्ट जमा करें"
+                        else -> "टेस्ट जमा करें"
+                    }
+                )
             }
         } else if (offlinePendingSync) {
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0,
