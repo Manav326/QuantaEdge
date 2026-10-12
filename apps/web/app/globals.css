@@ -991,3 +991,16 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .qe-answer-entry.is-correct input,.qe-answer-entry.is-correct textarea,.qe-question-card.has-answer-correct .structured-answer{border-color:var(--qe-answer-correct-option-border);background:var(--qe-answer-correct-bg);color:var(--qe-answer-correct-text)}
 .qe-model-answer{display:flex;align-items:flex-start;gap:10px;margin:14px 0 0;padding:12px 14px;border:1px solid var(--qe-answer-correct-border);border-radius:12px;background:var(--qe-answer-correct-bg);color:var(--qe-answer-correct-text)!important;text-align:left!important;line-height:1.65}
 .qe-model-answer strong{color:var(--qe-answer-correct-text)}
+
+
+/* Product-wide keyboard focus baseline: keep interactive controls discoverable. */
+:where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid #c2410c !important;
+  outline-offset: 3px;
+}
+@media (forced-colors: active) {
+  :where(a,button,input,select,textarea,[tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid Highlight !important;
+    outline-offset: 3px;
+  }
+}
