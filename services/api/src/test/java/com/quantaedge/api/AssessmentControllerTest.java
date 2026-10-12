@@ -178,4 +178,68 @@ class AssessmentControllerTest {
     assertFalse(question.containsKey("isCorrect"));
     assertTrue(Boolean.FALSE.equals(result.get("resultReleased")) || result.containsKey("resultReleased"));
   }
+
+  @Test
+  void releasedStudentResultExposesNormalizedCorrectAnswerForFeedbackOnlyAfterRelease() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    Map<String, Object> attemptRow = new LinkedHashMap<>();
+    attemptRow.put("attempt_id", 6L);
+    attemptRow.put("assessment_id", 20L);
+    attemptRow.put("student_id", 7L);
+    attemptRow.put("attempt_number", 1);
+    attemptRow.put("status", "RELEASED");
+    attemptRow.put("started_at", OffsetDateTime.now().minusMinutes(5));
+    attemptRow.put("deadline_at", OffsetDateTime.now().minusMinutes(1));
+    attemptRow.put("submitted_at", OffsetDateTime.now().minusMinutes(1));
+    attemptRow.put("graded_at", OffsetDateTime.now().minusMinutes(1));
+    attemptRow.put("released_at", OffsetDateTime.now().minusMinutes(1));
+    attemptRow.put("auto_score", "0.00");
+    attemptRow.put("final_score", "0.00");
+    attemptRow.put("max_score", "2.00");
+    attemptRow.put("assessment_snapshot", "{}");
+    attemptRow.put("student_name", "Preview Student");
+    attemptRow.put("class_code", "7");
+    attemptRow.put("assessment_title", "Fractions test");
+    attemptRow.put("subject_code", "maths");
+    attemptRow.put("subject_name", "Mathematics");
+    attemptRow.put("chapter_name", "Fractions");
+    when(jdbc.queryForList(contains("select att.id as attempt_id"), eq(6L)))
+        .thenReturn(List.of(attemptRow));
+
+    Map<String, Object> questionRow = new LinkedHashMap<>();
+    questionRow.put("attempt_question_id", 601L);
+    questionRow.put("sequence_no", 1);
+    questionRow.put("max_marks", "2.00");
+    questionRow.put("question_snapshot", """
+        {"id":44,"question_type":"MCQ","prompt":"Which answer is correct?",
+         "answer_payload":"{\\"kind\\":\\"OPTION\\",\\"value\\":\\"B\\"}",
+         "explanation":"Option B is correct.",
+         "options":[{"option_key":"A","label":"Option A","is_correct":false},
+                    {"option_key":"B","label":"Option B","is_correct":true}]}
+        """);
+    questionRow.put("answer_id", 6010L);
+    questionRow.put("response_payload", "\\"A\\"");
+    questionRow.put("answer_status", "AUTO_GRADED");
+    questionRow.put("is_correct", false);
+    questionRow.put("awarded_marks", "0.00");
+    questionRow.put("teacher_feedback", null);
+    when(jdbc.queryForList(contains("select aq.id as attempt_question_id"), eq(6L)))
+        .thenReturn(List.of(questionRow));
+
+    Map<String, Object> result = controller.studentAttempt(6L, student);
+    @SuppressWarnings("unchecked")
+    Map<String, Object> question = ((List<Map<String, Object>>) result.get("questions")).getFirst();
+    @SuppressWarnings("unchecked")
+    Map<String, Object> correctAnswer = (Map<String, Object>) question.get("correctAnswer");
+
+    assertTrue(Boolean.TRUE.equals(result.get("resultReleased")));
+    assertEquals("OPTION", correctAnswer.get("kind"));
+    assertEquals("B", correctAnswer.get("value"));
+    assertEquals(false, question.get("isCorrect"));
+    assertFalse(question.containsKey("answer_payload"));
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> options = (List<Map<String, Object>>) question.get("options");
+    assertFalse(options.get(1).containsKey("is_correct"));
+  }
+
 }
