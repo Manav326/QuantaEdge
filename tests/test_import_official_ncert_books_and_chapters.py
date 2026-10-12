@@ -362,6 +362,27 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         self.assertEqual(1, ranges[0]["end_page"])
         self.assertEqual(original_bytes, path.read_bytes())
 
+    def test_detects_exact_heading_within_upper_90_percent_of_page(self):
+        path = self.root / "class7-maths-geometric-twins-lower-heading.pdf"
+        with fitz.open() as doc:
+            page = doc.new_page()
+            # Keep the heading outside the old 72% limit, while the extraction stream
+            # puts 20 body lines before it. The exact title is still inside the 90% zone.
+            for index in range(20):
+                page.insert_text((50, 180 + index * 20), f"Section text {index}")
+            page.insert_text((50, 740), "Geometric Twins")
+            doc.save(path)
+
+        chapters = [{
+            "chapter_id": 709,
+            "chapter_code": "geometric-twins",
+            "chapter_name": "ज्यामितीय जुड़वाँ आकृतियाँ",
+        }]
+        ranges = importer.detect_chapter_ranges(path, "7", "maths", "english", chapters)
+        self.assertEqual(1, ranges[0]["start_page"])
+        self.assertEqual(1, ranges[0]["end_page"])
+        self.assertEqual("geometric-twins", ranges[0]["chapter_code"])
+
     def test_fails_closed_when_a_chapter_title_cannot_be_found(self):
         path = self.make_book(unknown_title=True)
         chapters = [
