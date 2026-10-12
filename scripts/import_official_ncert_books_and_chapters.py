@@ -158,12 +158,10 @@ ENGLISH_TITLES: dict[tuple[str, str], dict[str, list[str]]] = {
     },
 }
 
-# A deliberately small allowlist for official chapter titles too short for the general
-# eight-character alias guard. These aliases receive stricter, standalone-heading matching
-# in positioned_page_title_hits so common words in body text cannot define chapter boundaries.
-SHORT_EXACT_TITLE_ALIASES: dict[tuple[str, str, str], frozenset[str]] = {
-    ("8", "maths", "area"): frozenset({"Area"}),
-}
+# Short official chapter titles are valid (e.g. Circle, Square, or Area). Any title with
+# fewer than eight normalized characters is matched only as a standalone, positioned heading
+# near the top of a page; it is never matched loosely inside body text.
+MIN_CHAPTER_TITLE_LENGTH = 4
 
 HINDI_TITLE_ALIASES: dict[tuple[str, str, str], list[str]] = {
     ("6", "science", "wonderful-world-science"): ["विज्ञान का अद्भुत संसार", "विज्ञान का अनूठा संसार"],
@@ -331,11 +329,10 @@ def aliases_for(grade: str, subject: str, language: str, chapter: dict[str, Any]
 
     clean: list[str] = []
     seen: set[str] = set()
-    short_exact_aliases = SHORT_EXACT_TITLE_ALIASES.get((grade, subject, code), frozenset())
     for item in candidates:
         item = normalize_space(item)
         norm = normalize_text(item)
-        if (len(norm) >= 8 or item in short_exact_aliases) and norm not in seen:
+        if len(norm) >= MIN_CHAPTER_TITLE_LENGTH and norm not in seen:
             seen.add(norm)
             clean.append(item)
     return clean
@@ -374,10 +371,9 @@ def page_title_hits(text: str, chapters: list[dict[str, Any]], aliases_by_code: 
         code = str(chapter["chapter_code"])
         aliases = aliases_by_code[code]
         for alias in aliases:
-            # Short whitelisted titles (currently only the official Class 8 Maths
-            # chapter "Area") are handled via positioned standalone-heading checks below.
-            # Matching them against arbitrary top-line text can mistake body subheadings
-            # for chapter boundaries.
+            # Titles shorter than eight normalized characters are handled only through
+            # positioned standalone-heading checks below; arbitrary top-line/body matches
+            # can mistake short mathematical terms for a chapter boundary.
             if len(normalize_text(alias)) < 8:
                 continue
             # Match one line or title wrapped across up to three consecutive lines.
@@ -425,9 +421,9 @@ def positioned_page_title_hits(
         code = str(chapter["chapter_code"])
         for alias in aliases_by_code[code]:
             if len(normalize_text(alias)) < 8:
-                # Common short words are risky search terms. For an explicitly whitelisted
-                # short title, require an entire extracted text line to equal the title
-                # (optionally with a chapter-number prefix) and place it in the upper 55%
+                # Common short words are risky search terms. For any short official title,
+                # require an entire extracted text line to equal the title (optionally with a
+                # chapter-number prefix) and place it in the upper 55%
                 # of the page. Do not accept an incidental word inside a sentence or a
                 # lower-page section heading as a chapter opener.
                 short_heading_found = False

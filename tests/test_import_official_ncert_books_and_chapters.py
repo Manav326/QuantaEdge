@@ -352,25 +352,27 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             self.assertEqual(2, pdf.page_count)
             self.assertIn("Patterns in Mathematics", pdf[0].get_text("text"))
 
-    def test_allows_only_the_explicit_short_area_chapter_alias(self):
-        known = {
-            "chapter_id": 814,
-            "chapter_code": "area",
-            "chapter_name": "क्षेत्रफल",
-        }
-        self.assertEqual(
-            ["Area"],
-            importer.aliases_for("8", "maths", "english", known),
-        )
+    def test_short_official_titles_down_to_four_characters_are_supported(self):
+        for code, title in (("area", "Area"), ("circle", "Circle"), ("square", "Square")):
+            with self.subTest(title=title):
+                chapter = {
+                    "chapter_id": 814,
+                    "chapter_code": code,
+                    "chapter_name": title,
+                }
+                self.assertEqual(
+                    [title],
+                    importer.aliases_for("8", "maths", "english", chapter),
+                )
 
-        unknown_short_title = {
+        too_short = {
             "chapter_id": 899,
-            "chapter_code": "unlisted-short-title",
-            "chapter_name": "Area",
+            "chapter_code": "one-letter-title",
+            "chapter_name": "Ab",
         }
         self.assertEqual(
             [],
-            importer.aliases_for("8", "maths", "english", unknown_short_title),
+            importer.aliases_for("8", "maths", "english", too_short),
         )
 
     def test_short_area_heading_requires_standalone_text_near_page_top(self):
