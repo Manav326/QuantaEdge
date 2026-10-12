@@ -51,6 +51,10 @@ class AssessmentLifecycleIntegrationTest {
     long attemptQuestionId = jdbc.queryForObject("""
       select id from student_assessment_attempt_question where attempt_id=?
       """, Long.class, attemptId);
+    Map<String,Object> firstQuestion=((List<Map<String,Object>>)started.get("questions")).getFirst();
+    List<Map<String,Object>> safeOptions=(List<Map<String,Object>>)firstQuestion.get("options");
+    assertEquals("Option A",safeOptions.getFirst().get("label"),
+        "Public question options must accept legacy text labels without exposing correctness flags.");
 
     Map<String,Object> saved = controller.saveAnswer(
         attemptId, attemptQuestionId, Map.of("answer", "B"), fixture.student());
@@ -226,7 +230,7 @@ class AssessmentLifecycleIntegrationTest {
         "explanation": "Option B is correct.",
         "answer_payload": "{\\"kind\\":\\"OPTION\\",\\"value\\":\\"B\\"}",
         "options": [
-          {"option_key":"A","label":"Option A","is_correct":false},
+          {"option_key":"A","text":"Option A","is_correct":false},
           {"option_key":"B","label":"Option B","is_correct":true}
         ]
       }

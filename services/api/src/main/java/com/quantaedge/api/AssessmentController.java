@@ -1347,7 +1347,7 @@ public class AssessmentController {
         Object key = option.get("option_key");
         if (key == null) key = option.get("key");
         Object label = option.get("label");
-        if (label == null) label = option.get("label");
+        if (label == null) label = option.get("text");
         safe.put("key", key);
         safe.put("label", label);
         options.add(safe);

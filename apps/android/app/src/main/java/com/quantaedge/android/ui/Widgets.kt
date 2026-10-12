@@ -124,6 +124,7 @@ fun QuestionCard(
     val orderedKeys = displayedOrder(answer, optionKeys)
     val isMultiSelect = type in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE") ||
         responseMode in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE")
+    val isNumericInput = type in setOf("NUMERICAL", "NUMERIC", "INPUT") || responseMode == "NUMERIC"
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -217,6 +218,20 @@ fun QuestionCard(
                         maxLines = 6
                     )
                 }
+                isNumericInput -> {
+                    OutlinedTextField(
+                        value = answer,
+                        onValueChange = onAnswerChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("अपना संख्यात्मक उत्तर लिखें") },
+                        enabled = !locked && !saving,
+                        minLines = 1,
+                        maxLines = 2,
+                        keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                            keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal
+                        )
+                    )
+                }
                 options.isNotEmpty() -> {
                     options.forEach { option ->
                         val key = option.textAny("key", "option_key", "value")
@@ -244,11 +259,10 @@ fun QuestionCard(
                         Text("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"].",
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     }
-                    val inputLabel = when (type) {
-                        "NUMERICAL", "INPUT" -> "अपना उत्तर लिखें"
-                        "ORDER" -> "क्रम का उत्तर"
-                        "MATCH" -> "मिलान के उत्तर"
-                        else -> if (responseMode == "NUMERIC") "संख्यात्मक उत्तर" else "अपना उत्तर या reasoning लिखें"
+                    val inputLabel = when {
+                        isOrder -> "क्रम का उत्तर"
+                        isMatch -> "मिलान के उत्तर"
+                        else -> "अपना उत्तर या reasoning लिखें"
                     }
                     val longAnswer = type in setOf(
                         "LONG_ANSWER", "SHORT_ANSWER", "CASE_BASED", "SOURCE_BASED",
