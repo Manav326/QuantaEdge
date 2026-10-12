@@ -712,9 +712,10 @@ def create_import_plan(
         for subject in SUBJECTS:
             for language in LANGUAGES:
                 name = book_filename(grade, subject, language)
-                path = root / name
                 try:
-                    book = inspect_book(path)
+                    source = prepare_source_book(root, grade, subject, language, output_dir)
+                    path = Path(source["path"])
+                    book = source.get("combined_meta") or inspect_book(path)
                 except FileNotFoundError as exc:
                     missing.append(str(exc))
                     continue
@@ -728,6 +729,11 @@ def create_import_plan(
                 )
                 book_record = {
                     **book,
+                    "path": str(path.resolve()),
+                    "filename": source["slot_filename"],
+                    "input_source_files": source["source_files"],
+                    "merged_from_parts": bool(source["merged_from_parts"]),
+                    "source_bytes_preserved": not bool(source["merged_from_parts"]),
                     "class_code": grade,
                     "subject_code": subject,
                     "language": language,
@@ -744,6 +750,8 @@ def create_import_plan(
                     "edition_warning": not bool(book["edition_detected"]),
                     "action": "PENDING",
                 }
+                if source.get("metadata_warning"):
+                    warnings.append(str(source["metadata_warning"]))
                 records.append(book_record)
 
                 chapter_dir = output_dir / f"class-{grade}" / subject / language
@@ -773,6 +781,8 @@ def create_import_plan(
                         "edition_detected": book_record["edition_detected"],
                         "parent_book_filename": name,
                         "parent_book_sha256": book["sha256"],
+                        "parent_book_source_files": source["source_files"],
+                        "merged_from_parts": bool(source["merged_from_parts"]),
                         "chapter_order": chapter["chapter_order"],
                         "source_page_start": chapter["start_page"],
                         "source_page_end": chapter["end_page"],
