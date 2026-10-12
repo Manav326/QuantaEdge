@@ -38,6 +38,34 @@ class QuestionAnswerServiceTest {
     assertTrue(e.autoGraded()); assertTrue(e.correct());
   }
 
+  @Test void multiSelectIsGradedWithoutDependingOnSelectionOrder(){
+    var correct=service.evaluate(
+        "{\\"kind\\":\\"MULTI_OPTION\\",\\"value\\":[\\"A\\",\\"C\\"]}",
+        "[\\"C\\",\\"A\\"]");
+    assertTrue(correct.autoGraded());
+    assertTrue(correct.correct());
+
+    var missingChoice=service.evaluate(
+        "{\\"kind\\":\\"MULTI_OPTION\\",\\"value\\":[\\"A\\",\\"C\\"]}",
+        "[\\"A\\"]");
+    assertTrue(missingChoice.autoGraded());
+    assertFalse(missingChoice.correct());
+
+    var extraChoice=service.evaluate(
+        "{\\"kind\\":\\"MULTI_OPTION\\",\\"value\\":[\\"A\\",\\"C\\"]}",
+        "[\\"A\\",\\"B\\",\\"C\\"]");
+    assertTrue(extraChoice.autoGraded());
+    assertFalse(extraChoice.correct());
+  }
+
+  @Test void orderQuestionRemainsSequenceSensitive(){
+    var e=service.evaluate(
+        "{\\"kind\\":\\"ORDER\\",\\"value\\":[\\"A\\",\\"B\\",\\"C\\"]}",
+        "[\\"C\\",\\"B\\",\\"A\\"]");
+    assertTrue(e.autoGraded());
+    assertFalse(e.correct());
+  }
+
   @Test void subjectiveQuestionRemainsUnGraded(){
     var e=service.evaluate("{}", "anything");
     assertFalse(e.autoGraded()); assertNull(e.correct());

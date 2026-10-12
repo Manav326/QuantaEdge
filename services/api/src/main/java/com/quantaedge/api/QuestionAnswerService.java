@@ -38,7 +38,7 @@ public class QuestionAnswerService {
         case "NUMERIC" -> compareNumeric(root,submitted);
         case "ORDER" -> compareJsonArray(expected,submitted);
         case "MATCH" -> compareJsonValue(expected,submitted);
-        case "MULTI_OPTION" -> compareJsonArray(expected,submitted);
+        case "MULTI_OPTION" -> compareJsonArrayUnordered(expected,submitted);
         default -> new Evaluation(false,null,kind);
       };
     } catch(Exception ex) {
@@ -80,6 +80,23 @@ public class QuestionAnswerService {
     JsonNode actual=toJson(submitted);
     if(!actual.isArray()) return new Evaluation(true,false,"JSON_ARRAY");
     return new Evaluation(true,actual.isArray() && actual.equals(expected),"JSON_ARRAY");
+  }
+
+  /** Multi-select grading is set-based; selection order must not change the result. */
+  private Evaluation compareJsonArrayUnordered(JsonNode expected,Object submitted) throws Exception {
+    if(expected==null || !expected.isArray()) {
+      // A malformed authored key must not auto-grade every response as incorrect.
+      return new Evaluation(false,null,"MULTI_OPTION");
+    }
+    JsonNode actual=toJson(submitted);
+    if(!actual.isArray()) return new Evaluation(true,false,"MULTI_OPTION");
+    List<String> expectedValues=new ArrayList<>();
+    List<String> actualValues=new ArrayList<>();
+    expected.forEach(value -> expectedValues.add(value.toString()));
+    actual.forEach(value -> actualValues.add(value.toString()));
+    Collections.sort(expectedValues);
+    Collections.sort(actualValues);
+    return new Evaluation(true,expectedValues.equals(actualValues),"MULTI_OPTION");
   }
 
   private Evaluation compareJsonValue(JsonNode expected,Object submitted) throws Exception {
