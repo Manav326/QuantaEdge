@@ -122,7 +122,7 @@ class HrPayrollControllerTest {
     assertEquals(12L,args[0]);
     assertEquals(31L,args[1]);
     assertEquals(64,String.valueOf(args[3]).length());
-    verify(audit).recordAction(payrollManager,"/api/v1/hr/payroll/runs/12","Approved payroll run and issued 0 payslip(s)");
+    verify(audit).recordAction(payrollManager,"/api/v1/hr/payroll/runs/12","Approved payroll run and issued 1 payslip(s)");
   }
 
   @Test
