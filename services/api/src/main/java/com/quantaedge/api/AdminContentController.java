@@ -3,6 +3,7 @@ package com.quantaedge.api;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -428,6 +429,7 @@ public class AdminContentController {
       """, name, description, sortOrder, sortOrder, status, !"ARCHIVED".equals(status),
       curriculumSource, sourceUrl, sourceEdition, sourcePages, sourceVerified, chapterId);
     if (changed == 0) throw notFound("Chapter", chapterId);
+    assessmentCatalog.refreshGeneratedAssessmentsForChapter(chapterId);
     String chapterAction = "PUBLISHED".equals(status) ? "publish"
         : ("PUBLISHED".equals(oldStatus) && "DRAFT".equals(status) ? "unpublish" : "updated");
     String chapterActionText = "PUBLISHED".equals(status) ? "Published chapter"
@@ -914,6 +916,30 @@ public class AdminContentController {
     return result;
   }
 
+  static String numericAnswerKeyValidationError(Map<String,Object> answer) {
+    if (!"NUMERIC".equals(answer.get("kind"))) {
+      return "Add a numeric answer key before approval.";
+    }
+    BigDecimal expected = numericDecimal(answer.get("value"));
+    if (expected == null) return "The numeric answer key must contain a valid number.";
+    Object rawTolerance = answer.get("tolerance");
+    BigDecimal tolerance = numericDecimal(rawTolerance == null ? "0" : rawTolerance);
+    if (tolerance == null) return "Numeric tolerance must be a valid number.";
+    if (tolerance.signum() < 0) return "Numeric tolerance cannot be negative.";
+    return null;
+  }
+
+  private static BigDecimal numericDecimal(Object raw) {
+    if (!(raw instanceof Number) && !(raw instanceof String)) return null;
+    String value = String.valueOf(raw).trim();
+    if (value.isEmpty()) return null;
+    try {
+      return new BigDecimal(value);
+    } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
+
   private void validateQuestionForReview(long lessonId,long questionId) {
     Map<String,Object> q;
     try {
@@ -961,8 +987,9 @@ public class AdminContentController {
       if (!"TEXT".equals(answer.get("kind"))||String.valueOf(answer.getOrDefault("value","")).isBlank()) {
         throw badRequest("Add a staff-only reference answer or marking rubric before approval.");
       }
-    } else if (!"NUMERIC".equals(answer.get("kind"))||answer.get("value")==null) {
-      throw badRequest("Add a numeric answer key before approval.");
+    } else {
+      String numericKeyError = numericAnswerKeyValidationError(answer);
+      if (numericKeyError != null) throw badRequest(numericKeyError);
     }
     String sourceKind=String.valueOf(q.get("source_kind")).toUpperCase();
     if (!"AUTHOR_CREATED".equals(sourceKind)) {

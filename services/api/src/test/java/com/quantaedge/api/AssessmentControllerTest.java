@@ -48,6 +48,82 @@ class AssessmentControllerTest {
   }
 
   @Test
+  void studentCatalogueRequiresCompletedLessonsAndHidesSupersededGeneratedTestsExceptForResumes() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    controller.studentAssessmentCatalog(null, "hi", 24, 0, student);
+
+    verify(jdbc).queryForList(contains("tp.status='COMPLETED'"), any(Object[].class));
+    verify(jdbc).queryForList(contains("required_lesson.chapter_id=ch.id"), any(Object[].class));
+  }
+
+  @Test
+  void studentCatalogueEligibilityAllowsOnlyAnOwnedInProgressAttemptToBypassContentRefresh() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    controller.studentAssessmentCatalog(null, "hi", 24, 0, student);
+
+    verify(jdbc).queryForList(contains("resumable.student_id=st.id"), any(Object[].class));
+    verify(jdbc).queryForList(contains("resumable.status='IN_PROGRESS'"), any(Object[].class));
+    verify(jdbc).queryForList(contains("a.is_current=true"), any(Object[].class));
+  }
+
+  @Test
+  void directAttemptStartCannotBypassLessonCompletionGate() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("select a.id from assessment a"), eq(19L), eq(7L)))
+        .thenReturn(List.of(Map.of("id", 19L)));
+    when(jdbc.queryForList(contains("coalesce(max(at.title),a.title)"),
+        eq(7L), eq("hi"), eq("hi"), eq("hi"), eq(19L)))
+        .thenReturn(List.of(Map.of("id", 19L)));
+    when(jdbc.queryForList(contains("select id from student_assessment_attempt"),
+        eq(19L), eq(7L))).thenReturn(List.of());
+    when(jdbc.queryForList(contains("where a.id=? and a.status='PUBLISHED' and"),
+        eq(7L), eq(19L))).thenReturn(List.of());
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.startOrResumeAttempt(19L, "hi", student));
+
+    assertEquals(409, error.getStatusCode().value());
+  }
+
+  @Test
+  void publishedAssessmentCannotSkipTheArchiveAndRestoreDraftLifecycle() {
+    when(authorization.requireAuth(admin)).thenReturn(admin);
+    when(authorization.requirePermission(admin, "CONTENT_EDIT")).thenReturn(admin);
+    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), eq(42L)))
+        .thenReturn(List.of(Map.of("id", 42L, "title", "Fractions test", "status", "PUBLISHED",
+            "is_generated", false, "subject_id", 3L, "chapter_id", 9L,
+            "subject_code", "maths", "class_code", "7", "question_count", 5L)));
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.changeAssessmentStatus(42L, Map.of("status", "DRAFT"), admin));
+
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(staffAudit);
+  }
+
+  @Test
+  void generatedAssessmentCannotBeManuallyArchived() {
+    when(authorization.requireAuth(admin)).thenReturn(admin);
+    when(authorization.requirePermission(admin, "CONTENT_PUBLISH")).thenReturn(admin);
+    when(jdbc.queryForList(contains("select a.id,a.title,a.status"), eq(43L)))
+        .thenReturn(List.of(Map.of("id", 43L, "title", "Topic end", "status", "PUBLISHED",
+            "is_generated", true, "subject_id", 3L, "chapter_id", 9L,
+            "subject_code", "maths", "class_code", "7", "question_count", 5L)));
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.changeAssessmentStatus(43L, Map.of("status", "ARCHIVED"), admin));
+
+    assertEquals(400, error.getStatusCode().value());
+    verify(jdbc, never()).update(contains("update assessment set status=?"), any(), any(), any(), any(), any());
+  }
+
+  @Test
   void formalTestFillInAndWrittenAnswersAreNotAutoGraded() {
     assertFalse(AssessmentController.isAutoGradedType("INPUT"));
     assertFalse(AssessmentController.isAutoGradedType("SHORT_ANSWER"));

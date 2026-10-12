@@ -52,13 +52,26 @@ public class QuestionAnswerService {
   }
 
   private Evaluation compareNumeric(JsonNode root,Object submitted) {
+    final BigDecimal expected;
+    final BigDecimal tolerance;
     try {
-      BigDecimal expected=new BigDecimal(root.path("value").asText());
+      JsonNode expectedNode=root.get("value");
+      if(expectedNode==null||expectedNode.isNull()) return new Evaluation(false,null,"NUMERIC");
+      expected=new BigDecimal(expectedNode.asText());
+      JsonNode toleranceNode=root.get("tolerance");
+      tolerance=toleranceNode==null||toleranceNode.isNull()
+          ?BigDecimal.ZERO:new BigDecimal(toleranceNode.asText());
+      if(tolerance.signum()<0) return new Evaluation(false,null,"NUMERIC");
+    } catch(Exception ex) {
+      // Invalid persisted answer keys must not turn every student's answer into an incorrect mark.
+      return new Evaluation(false,null,"NUMERIC");
+    }
+    try {
       BigDecimal actual=new BigDecimal(String.valueOf(submitted).trim().replace(",",""));
-      BigDecimal tolerance=new BigDecimal(root.path("tolerance").asText("0"));
       boolean ok=actual.subtract(expected).abs().compareTo(tolerance)<=0;
       return new Evaluation(true,ok,"NUMERIC");
     } catch(Exception ex) {
+      // A student's non-numeric response is still a valid, incorrect objective response.
       return new Evaluation(true,false,"NUMERIC");
     }
   }

@@ -35,6 +35,34 @@ public class AssessmentController {
   // Keep objective choices and numeric questions eligible for automatic scoring.
   private static final Set<String> AUTO_GRADED_TYPES = Set.of("MCQ", "TRUE_FALSE", "NUMERICAL");
 
+  /**
+   * Shared gate for a new student attempt and catalogue visibility. An in-progress attempt is
+   * deliberately handled separately so a student can resume a frozen paper after its source
+   * lesson/chapter is revised or the old generated version is archived.
+   */
+  private static final String STUDENT_ASSESSMENT_ELIGIBILITY_SQL = """
+      (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+      and (a.assessment_type<>'TOPIC_END' or (
+        a.lesson_id is not null
+        and exists(select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')
+        and exists(select 1 from student_lesson_progress tp
+                   where tp.student_id=st.id and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
+      ))
+      and (a.assessment_type<>'CHAPTER_END' or (
+        ch.id is not null
+        and exists(select 1 from lesson required_lesson
+                   where required_lesson.chapter_id=ch.id
+                     and required_lesson.active=true and required_lesson.status='PUBLISHED')
+        and not exists(select 1 from lesson required_lesson
+                       where required_lesson.chapter_id=ch.id
+                         and required_lesson.active=true and required_lesson.status='PUBLISHED'
+                         and not exists(select 1 from student_lesson_progress cp
+                                        where cp.student_id=st.id and cp.lesson_id=required_lesson.id
+                                          and cp.status='COMPLETED'))
+      ))
+      and (not a.is_generated or a.is_current=true)
+      """;
+
   static boolean isAutoGradedType(String questionType) {
     return questionType != null && AUTO_GRADED_TYPES.contains(questionType.trim().toUpperCase(Locale.ROOT));
   }
@@ -266,7 +294,7 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) || "ARCHIVED".equals(next)) authorization.requirePermission(context, "CONTENT_PUBLISH");
     else authorization.requirePermission(context, "CONTENT_EDIT");
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select a.id,a.title,a.status,a.subject_id,a.chapter_id,
+      select a.id,a.title,a.status,a.is_generated,a.subject_id,a.chapter_id,
              s.code as subject_code,c.code as class_code,
              count(aq.id) as question_count
       from assessment a join curriculum_subject s on s.id=a.subject_id
@@ -280,8 +308,18 @@ public class AssessmentController {
     if ("PUBLISHED".equals(next) && ((Number) row.get("question_count")).intValue() < 1) {
       throw badRequest("Add at least one question before publishing this test.");
     }
-    if (!"DRAFT".equals(before) && !"DRAFT".equals(next) && !"PUBLISHED".equals(next) && !"ARCHIVED".equals(next)) {
-      throw badRequest("This assessment status transition is not supported.");
+    if (Boolean.TRUE.equals(row.get("is_generated"))) {
+      throw badRequest("System-generated tests are governed by published lesson content and cannot be changed manually.");
+    }
+    if (before.equals(next)) return assessmentDetails(assessmentId, true);
+    boolean allowedTransition = switch (before) {
+      case "DRAFT" -> "PUBLISHED".equals(next);
+      case "PUBLISHED" -> "ARCHIVED".equals(next);
+      case "ARCHIVED" -> "DRAFT".equals(next);
+      default -> false;
+    };
+    if (!allowedTransition) {
+      throw badRequest("Use the supported test lifecycle: Draft → Published → Archived → Draft. Restore an archived test to Draft before republishing it.");
     }
     jdbc.update("""
       update assessment set status=?,updated_at=now(),
@@ -565,22 +603,20 @@ public class AssessmentController {
           and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
-      where a.status='PUBLISHED' and (?='' or s.code=?)
-        and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-        and (a.assessment_type<>'TOPIC_END' or (
-          a.lesson_id is not null
-          and exists(select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')
-          and exists(select 1 from student_lesson_progress tp
-                     where tp.student_id=st.id and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
-        ))
-        and (a.assessment_type<>'CHAPTER_END' or not exists(
-          select 1 from lesson required_lesson
-          where required_lesson.chapter_id=ch.id
-            and required_lesson.active=true and required_lesson.status='PUBLISHED'
-            and not exists(select 1 from student_lesson_progress cp
-                           where cp.student_id=st.id and cp.lesson_id=required_lesson.id and cp.status='COMPLETED')
-        ))
-        and (not a.is_generated or a.is_current=true)
+      where (a.status='PUBLISHED' or exists(
+               select 1 from student_assessment_attempt resumable
+               where resumable.assessment_id=a.id and resumable.student_id=st.id
+                 and resumable.status='IN_PROGRESS'
+             ))
+        and (?='' or s.code=?)
+        and (
+          exists(select 1 from student_assessment_attempt resumable
+                 where resumable.assessment_id=a.id and resumable.student_id=st.id
+                   and resumable.status='IN_PROGRESS')
+          or (
+            """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
+          )
+        )
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
@@ -599,9 +635,17 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
-    List<Map<String, Object>> assessmentLock = jdbc.queryForList(
-        "select id from assessment where id=? and status='PUBLISHED' for update", assessmentId);
-    if (assessmentLock.isEmpty()) throw notFound("Published assessment", assessmentId);
+    List<Map<String, Object>> assessmentLock = jdbc.queryForList("""
+      select a.id from assessment a
+      where a.id=? and (
+        a.status='PUBLISHED'
+        or exists(select 1 from student_assessment_attempt resumable
+                  where resumable.assessment_id=a.id and resumable.student_id=?
+                    and resumable.status='IN_PROGRESS')
+      )
+      for update
+      """, assessmentId, context.studentId());
+    if (assessmentLock.isEmpty()) throw notFound("Available assessment", assessmentId);
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
@@ -633,11 +677,15 @@ public class AssessmentController {
           and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
-      where a.id=? and a.status='PUBLISHED'
-        and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+      where a.id=? and (
+        a.status='PUBLISHED'
+        or exists(select 1 from student_assessment_attempt resumable
+                  where resumable.assessment_id=a.id and resumable.student_id=st.id
+                    and resumable.status='IN_PROGRESS')
+      )
       group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
       """, context.studentId(), language, language, language, assessmentId);
-    if (assessmentRows.isEmpty()) throw notFound("Published assessment", assessmentId);
+    if (assessmentRows.isEmpty()) throw notFound("Available assessment", assessmentId);
     Map<String, Object> assessment = assessmentRows.getFirst();
 
     List<Map<String, Object>> existing = jdbc.queryForList("""
@@ -646,8 +694,26 @@ public class AssessmentController {
       order by started_at desc limit 1 for update
       """, assessmentId, context.studentId());
     if (!existing.isEmpty()) {
+      // Resume the immutable paper even when content governance archived its source assessment.
       return attemptDetails(((Number) existing.getFirst().get("id")).longValue(), context, false);
     }
+
+    // Enforce the same completion, publication and generated-version policy as the catalogue.
+    // This runs only after resume has been handled, so saved attempts remain finishable.
+    List<Map<String, Object>> eligibleForNewAttempt = jdbc.queryForList("""
+      select a.id
+      from assessment a
+      join curriculum_subject s on s.id=a.subject_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join curriculum_chapter ch on ch.id=a.chapter_id
+      where a.id=? and a.status='PUBLISHED' and
+      """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, context.studentId(), assessmentId);
+    if (eligibleForNewAttempt.isEmpty()) {
+      throw conflict("Complete the required published lesson content before starting this test.");
+    }
+
     Integer used = jdbc.queryForObject("""
       select count(*) from student_assessment_attempt
       where assessment_id=? and student_id=? and status<>'ABANDONED'
@@ -863,10 +929,17 @@ public class AssessmentController {
       if (isAutoGradedType(questionType)) {
         String answerPayload = String.valueOf(snapshot.getOrDefault("answer_payload", "{}"));
         QuestionAnswerService.Evaluation evaluation = answerService.evaluate(answerPayload, response);
-        correct = evaluation.correct();
-        awarded = Boolean.TRUE.equals(correct) ? maxMarks : BigDecimal.ZERO;
-        answerStatus = "AUTO_GRADED";
-        autoScore = autoScore.add(awarded);
+        if (!evaluation.autoGraded()) {
+          correct = null;
+          awarded = null;
+          answerStatus = "PENDING_REVIEW";
+          needsReview = true;
+        } else {
+          correct = evaluation.correct();
+          awarded = Boolean.TRUE.equals(correct) ? maxMarks : BigDecimal.ZERO;
+          answerStatus = "AUTO_GRADED";
+          autoScore = autoScore.add(awarded);
+        }
       } else if (isEmptyAnswer(response)) {
         correct = null;
         awarded = BigDecimal.ZERO;

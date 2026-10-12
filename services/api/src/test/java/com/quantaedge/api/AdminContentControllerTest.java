@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -18,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
@@ -127,6 +129,20 @@ class AdminContentControllerTest {
     assertEquals(22L, summary.get("activeQuestions"));
     assertEquals(6L, summary.get("inactiveQuestions"));
     assertEquals(6, ((java.util.List<?>)summary.get("byStatus")).size());
+  }
+
+  @Test
+  void numericAnswerKeyRequiresValidExpectedNumberAndNonNegativeTolerance() {
+    assertNull(AdminContentController.numericAnswerKeyValidationError(
+        Map.of("kind", "NUMERIC", "value", "10.5", "tolerance", "0.25")));
+    assertNull(AdminContentController.numericAnswerKeyValidationError(
+        Map.of("kind", "NUMERIC", "value", new BigDecimal("10.5"))));
+    assertTrue(AdminContentController.numericAnswerKeyValidationError(
+        Map.of("kind", "NUMERIC", "value", "ten")).contains("valid number"));
+    assertTrue(AdminContentController.numericAnswerKeyValidationError(
+        Map.of("kind", "NUMERIC", "value", "10", "tolerance", "-0.1")).contains("cannot be negative"));
+    assertTrue(AdminContentController.numericAnswerKeyValidationError(
+        Map.of("kind", "OPTION", "value", "A")).contains("numeric answer key"));
   }
 
   @Test

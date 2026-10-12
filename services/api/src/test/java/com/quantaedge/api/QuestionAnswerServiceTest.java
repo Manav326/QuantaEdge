@@ -19,6 +19,20 @@ class QuestionAnswerServiceTest {
     assertTrue(e.autoGraded()); assertTrue(e.correct());
   }
 
+  @Test void malformedNumericAnswerKeyRequiresReviewInsteadOfMarkingEveryResponseIncorrect(){
+    var invalidExpected=service.evaluate("{\"kind\":\"NUMERIC\",\"value\":\"ten\"}","10");
+    assertFalse(invalidExpected.autoGraded());
+    assertNull(invalidExpected.correct());
+
+    var negativeTolerance=service.evaluate("{\"kind\":\"NUMERIC\",\"value\":\"10\",\"tolerance\":\"-1\"}","10");
+    assertFalse(negativeTolerance.autoGraded());
+    assertNull(negativeTolerance.correct());
+
+    var studentEnteredText=service.evaluate("{\"kind\":\"NUMERIC\",\"value\":\"10\"}","ten");
+    assertTrue(studentEnteredText.autoGraded());
+    assertFalse(studentEnteredText.correct());
+  }
+
   @Test void orderRequiresExactSequence(){
     var e=service.evaluate("{\"kind\":\"ORDER\",\"value\":[\"B\",\"C\",\"A\"]}", "[\"B\",\"C\",\"A\"]");
     assertTrue(e.autoGraded()); assertTrue(e.correct());

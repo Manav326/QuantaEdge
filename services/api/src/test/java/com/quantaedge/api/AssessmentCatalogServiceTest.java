@@ -30,6 +30,30 @@ class AssessmentCatalogServiceTest {
   }
 
   @Test
+  void chapterRefreshReconcilesCurrentTestsAfterChapterGovernanceChanges() {
+    when(jdbc.queryForList(contains("select id from lesson where chapter_id=?"), eq(Long.class), eq(9L)))
+        .thenReturn(List.of(41L));
+    when(jdbc.queryForList(contains("select l.id as lesson_id"), eq(41L)))
+        .thenReturn(List.of(Map.of(
+            "lesson_id", 41L, "lesson_title", "Fractions", "lesson_status", "PUBLISHED",
+            "lesson_active", true, "chapter_id", 9L, "chapter_name", "Fractions",
+            "chapter_status", "DRAFT", "chapter_active", true, "subject_id", 3L,
+            "subject_name", "Mathematics", "subject_active", true, "class_active", true)));
+    when(jdbc.queryForList(contains("select q.id from question q"), eq(Long.class), eq(41L), eq(10)))
+        .thenReturn(List.of(101L, 102L));
+    when(jdbc.queryForList(contains("select eligible.id from"), eq(Long.class), eq(9L), eq(20)))
+        .thenReturn(List.of(101L, 102L, 103L, 104L));
+
+    service.refreshGeneratedAssessmentsForChapter(9L);
+
+    verify(jdbc).queryForList(contains("select l.id as lesson_id"), eq(41L));
+    verify(jdbc).queryForList(contains("select id from assessment where assessment_type=? and is_generated=true and is_current=true and lesson_id=?"),
+        eq("TOPIC_END"), eq(41L));
+    verify(jdbc).queryForList(contains("select id from assessment where assessment_type=? and is_generated=true and is_current=true and chapter_id=?"),
+        eq("CHAPTER_END"), eq(9L));
+  }
+
+  @Test
   void doesNotMaterializeTopicOrChapterTestsBelowTheirQuestionMinimums() {
     Map<String,Object> lesson = Map.of(
         "lesson_id", 41L,

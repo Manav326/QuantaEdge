@@ -90,6 +90,22 @@ public class AssessmentCatalogService {
     }
   }
 
+  /**
+   * Chapter publication, unpublication and title edits can change whether a chapter-end test is
+   * eligible or what it is called. Refresh every lesson under the chapter to update both topic-end
+   * and chapter-end tests, including archiving tests when the chapter is no longer published.
+   */
+  @Transactional
+  public void refreshGeneratedAssessmentsForChapter(long chapterId) {
+    List<Long> lessonIds=jdbc.queryForList(
+        "select id from lesson where chapter_id=? order by sort_order,id",Long.class,chapterId);
+    if(lessonIds.isEmpty()) {
+      archiveCurrent("CHAPTER_END","chapter_id",chapterId);
+      return;
+    }
+    for(Long lessonId:lessonIds) refreshGeneratedAssessmentsForLesson(lessonId);
+  }
+
   @Transactional
   public void ensureGeneratedAssessmentsForClass(String classCode) {
     String normalized=classCode==null?"":classCode.trim();
