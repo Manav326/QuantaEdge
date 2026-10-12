@@ -357,7 +357,7 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             self.assertEqual(2, pdf.page_count)
             self.assertIn("Patterns in Mathematics", pdf[0].get_text("text"))
 
-    def test_baudhayana_aliases_accept_the_nc ert_diacritic_spelling(self):
+    def test_baudhayana_aliases_accept_the_ncert_diacritic_spelling(self):
         chapter = {
             "chapter_id": 809,
             "chapter_code": "baudhayana-pythagoras-theorem",
