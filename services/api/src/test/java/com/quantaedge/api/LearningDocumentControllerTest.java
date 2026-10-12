@@ -102,7 +102,7 @@ class LearningDocumentControllerTest {
         .thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
-        () -> controller.studentDocumentPage(55L, 1, student));
+        () -> controller.studentDocumentPage(55L, 1, "full", student));
 
     assertEquals(404, error.getStatusCode().value());
     verify(jdbc, never()).queryForObject(
