@@ -258,8 +258,9 @@ public class HrPayrollController {
     authorization.requirePermission(context,"HR_PAYROLL_APPROVE");
     Map<String,Object> run=runById(runId);
     if(!"SUBMITTED".equals(run.get("status"))) throw conflict("Only a submitted payroll run can be approved.");
-    if(context.staffId()!=null&&context.staffId().equals(run.get("created_by_staff_id")))
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The payroll run creator cannot approve their own run.");
+    if(context.staffId()!=null&&(context.staffId().equals(run.get("created_by_staff_id"))
+        ||context.staffId().equals(run.get("submitted_by_staff_id"))))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The payroll run creator or submitter cannot approve their own run.");
     String reason=required(body.get("reason"),1000,"Approval reason");
     if(jdbc.update("update hr_payroll_run set status='APPROVED',approved_by_staff_id=?,approved_at=now() where id=? and status='SUBMITTED'",context.staffId(),runId)!=1)
       throw conflict("Payroll run state changed; refresh and retry.");
