@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Import complete official NCERT books, split their chapters locally, and stage both as DRAFTs.
 
-Put one complete combined PDF per Class 6-8 / Mathematics-Science / English-Hindi slot directly
-in the repository root, using the exact names printed by --help. No chapter PDFs, CSV manifest,
-edition spreadsheet, or manually entered chapter map is needed.
+Put one complete PDF per Class 6-8 / Mathematics-Science / English-Hindi slot directly in the
+repository root. If Class 7 or Class 8 Mathematics is supplied as separate NCERT parts, put both
+part PDFs in the root using the PART_1 / PART_2 names listed by --help; the script joins their pages
+for the single complete-book slot and keeps both original part PDFs unchanged. No chapter PDFs,
+CSV manifest, edition spreadsheet, or manually entered chapter map is needed.
 
 The importer:
 - uses the live QuantaEdge curriculum to obtain canonical chapter IDs/codes;
@@ -592,6 +594,107 @@ def query_assignments(
                 hashes_by_slot.setdefault(key, set()).add(digest)
                 assignment_by_slot_hash[repr((key, digest))] = row
     return hashes_by_slot, assignment_by_slot_hash
+
+
+def part_book_filename(grade: str, subject: str, language: str, part: int) -> str:
+    return (
+        f"NCERT_Class_{grade}_{'Maths' if subject == 'maths' else 'Science'}_"
+        f"{label_language(language)}_BOOK_PART_{part}.pdf"
+    )
+
+
+def prepare_source_book(
+    root: Path,
+    grade: str,
+    subject: str,
+    language: str,
+    output_dir: Path,
+) -> dict[str, Any]:
+    """Accept a canonical whole book or merge a class 7/8 Maths part pair locally."""
+    canonical_name = book_filename(grade, subject, language)
+    canonical = root / canonical_name
+    if canonical.is_file():
+        return {
+            "path": canonical,
+            "slot_filename": canonical_name,
+            "merged_from_parts": False,
+            "source_files": [{
+                "filename": canonical.name,
+                "sha256": sha256_file(canonical),
+                "size_bytes": canonical.stat().st_size,
+            }],
+            "metadata_warning": None,
+        }
+
+    if grade not in {"7", "8"} or subject != "maths":
+        raise FileNotFoundError(f"Required complete-book PDF is missing: {canonical_name}")
+
+    part1 = root / part_book_filename(grade, subject, language, 1)
+    part2 = root / part_book_filename(grade, subject, language, 2)
+    have1, have2 = part1.is_file(), part2.is_file()
+    if not have1 and not have2:
+        raise FileNotFoundError(
+            f"Missing {canonical_name}; alternatively provide BOTH "
+            f"{part1.name} and {part2.name}."
+        )
+    if have1 != have2:
+        present = part1.name if have1 else part2.name
+        missing = part2.name if have1 else part1.name
+        raise FileNotFoundError(
+            f"Only {present} was found. Both official Mathematics parts are required; "
+            f"also add {missing}. No application writes have been made."
+        )
+
+    # Validate both original parts before producing the local combined reading copy.
+    first_meta = inspect_book(part1)
+    second_meta = inspect_book(part2)
+    target_dir = output_dir / "combined-books"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / canonical_name
+    temporary = target.with_suffix(target.suffix + ".tmp")
+    try:
+        with fitz.open(part1) as first, fitz.open(part2) as second, fitz.open() as combined:
+            combined.insert_pdf(first, links=True, annots=True)
+            combined.insert_pdf(second, links=True, annots=True)
+            source_meta = dict(first.metadata or {})
+            source_meta.update({
+                "title": f"NCERT Class {grade} Mathematics ({label_language(language)}) — Parts I and II",
+                "subject": "Combined reading copy assembled from the two supplied NCERT part PDFs",
+                "keywords": "NCERT; Mathematics; Parts I and II; QuantaEdge",
+            })
+            combined.set_metadata(source_meta)
+            combined.save(temporary, garbage=3, deflate=True)
+        temporary.replace(target)
+    except Exception as exc:
+        temporary.unlink(missing_ok=True)
+        raise ValueError(
+            f"Could not prepare the local combined reading copy from {part1.name} and {part2.name}: {exc}"
+        ) from exc
+
+    combined_meta = inspect_book(target)
+    same_edition = (
+        first_meta["edition_detected"] and second_meta["edition_detected"]
+        and first_meta["edition"].casefold() == second_meta["edition"].casefold()
+    )
+    metadata_warning = None
+    if not same_edition:
+        combined_meta["edition"] = "NCERT Parts I and II — verify both printed editions before publication"
+        combined_meta["edition_detected"] = False
+        metadata_warning = (
+            f"{part1.name} and {part2.name}: printed edition/reprint could not be confirmed "
+            "as identical in both files; verify before publication."
+        )
+    return {
+        "path": target,
+        "slot_filename": canonical_name,
+        "merged_from_parts": True,
+        "source_files": [
+            {"filename": part1.name, "sha256": first_meta["sha256"], "size_bytes": first_meta["size_bytes"]},
+            {"filename": part2.name, "sha256": second_meta["sha256"], "size_bytes": second_meta["size_bytes"]},
+        ],
+        "metadata_warning": metadata_warning,
+        "combined_meta": combined_meta,
+    }
 
 
 def create_import_plan(
