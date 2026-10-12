@@ -677,7 +677,8 @@ public class SourceIngestionController {
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/analyze",
         "Ran independent PDF inventory scan and curriculum reconciliation; no chapter boundaries were auto-approved.");
     return jdbc.queryForMap("""
-      select pdf_asset_id,status,inventory,reconciliation,analysis_version,analyzed_at
+      select pdf_asset_id,status,inventory,reconciliation,analysis_version,analyzed_at,
+             chapter_ranges,ranges_reviewed_at,ranges_review_notes
       from learning_book_intake where pdf_asset_id=?
       """,assetId);
   }
