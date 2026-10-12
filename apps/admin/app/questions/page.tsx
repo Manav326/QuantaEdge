@@ -1,6 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useEffect, useState } from 'react';
 
 type QuestionRow = {
@@ -36,7 +37,6 @@ function parse(value:unknown,fallback:any=null){
 }
 
 const statuses=['ALL','REVIEW','REJECTED','DRAFT','APPROVED','PUBLISHED'];
-const PAGE_SIZE=100;
 function countGlobal(summary:any,statusList:string[],active?:boolean){
   return (Array.isArray(summary?.byStatus)?summary.byStatus:[])
     .filter((row:any)=>statusList.includes(String(row.review_status||'DRAFT').toUpperCase())&&(active===undefined||row.active===active))
@@ -48,6 +48,7 @@ export default function QuestionReviewPage(){
   const [reviewSummary,setReviewSummary]=useState<any>(null);
   const [totalMatching,setTotalMatching]=useState(0);
   const [page,setPage]=useState(0);
+  const [pageSize,setPageSize]=useState(10);
   const [status,setStatus]=useState('ALL');
   const [query,setQuery]=useState('');
   const [loading,setLoading]=useState(true);
@@ -58,7 +59,7 @@ export default function QuestionReviewPage(){
   const [history,setHistory]=useState<HistoryEntry[]>([]);
   const [historyPage,setHistoryPage]=useState(0);
   const [historyTotal,setHistoryTotal]=useState(0);
-  const historyPageSize=10;
+  const [historyPageSize,setHistoryPageSize]=useState(10);
   const [historyLoading,setHistoryLoading]=useState(false);
   const [canManage,setCanManage]=useState(false);
   const [permissionLoading,setPermissionLoading]=useState(true);
@@ -66,7 +67,7 @@ export default function QuestionReviewPage(){
   const load=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status,limit:String(PAGE_SIZE),offset:String(page*PAGE_SIZE)});
+      const params=new URLSearchParams({status,limit:String(pageSize),offset:String(page*pageSize)});
       if(query.trim())params.set('query',query.trim());
       const [data,summary]=await Promise.all([
         api('/api/v1/admin/content/questions/review-queue?'+params.toString()),
@@ -77,7 +78,7 @@ export default function QuestionReviewPage(){
       setReviewSummary(summary);
     }catch(e:any){setError(e.message||'Question queue could not be loaded.');}
     finally{setLoading(false);}
-  },[status,query,page]);
+  },[status,query,page,pageSize]);
 
   useEffect(()=>{void load();},[load]);
 
@@ -129,10 +130,10 @@ export default function QuestionReviewPage(){
     finally{setBusyId(null);}
   }
 
-  async function showHistory(questionId:number,nextPage=0){
+  async function showHistory(questionId:number,nextPage=0,nextPageSize=historyPageSize){
     setHistoryFor(questionId);setHistoryPage(nextPage);setHistoryLoading(true);setError('');
     try{
-      const params=new URLSearchParams({limit:String(historyPageSize),offset:String(nextPage*historyPageSize)});
+      const params=new URLSearchParams({limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       const data=await api('/api/v1/admin/content/questions/'+questionId+'/history?'+params.toString());
       setHistory(Array.isArray(data.history)?data.history:[]);
       setHistoryTotal(Number(data.total??(Array.isArray(data.history)?data.history.length:0)));
@@ -179,13 +180,8 @@ export default function QuestionReviewPage(){
           </label>
           <button type="button" className="button button-dark" onClick={()=>void load()} disabled={loading}>{loading?'Loading…':'Apply filters'}</button>
         </div>
-        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,flexWrap:'wrap',margin:'8px 0 14px',fontSize:12,color:'#69758a'}}>
-          <span>{totalMatching===0?'No matching records':`Showing ${(page*PAGE_SIZE)+1}–${(page*PAGE_SIZE)+rows.length} of ${totalMatching.toLocaleString()} matching questions`}</span>
-          <div style={{display:'flex',gap:7}}>
-            <button type="button" className="button" disabled={loading||page===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>Previous</button>
-            <button type="button" className="button" disabled={loading||(page+1)*PAGE_SIZE>=totalMatching} onClick={()=>setPage(value=>value+1)}>Next</button>
-          </div>
-        </div>
+        <PremiumPagination page={page} total={totalMatching} pageSize={pageSize} onPageChange={setPage}
+          onPageSizeChange={size=>{setPageSize(size);setPage(0);}} itemLabel="questions" loading={loading} />
         {error&&<div className="admin-empty-state" role="alert" style={{marginBottom:12}}><p>{error}</p></div>}
         {notice&&<p role="status" style={{padding:'12px 14px',background:'#eef8f2',borderRadius:10,color:'#22543d'}}>{notice}</p>}
         {loading?<p className="admin-loading">Loading question history and current statuses…</p>:rows.length===0?<div className="admin-empty-state"><h3>No questions match this filter</h3><p>Try another status or search term. New questions appear after saving them in Content Studio.</p></div>:
@@ -242,14 +238,10 @@ export default function QuestionReviewPage(){
               </details>
             </article>)}
           </div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:14,flexWrap:'wrap'}}>
-          <small>Showing {historyTotal===0?0:historyPage*historyPageSize+1}–{Math.min(historyTotal,(historyPage+1)*historyPageSize)} of {historyTotal} history events</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className="button" disabled={historyPage===0||historyLoading} onClick={()=>historyFor!==null&&void showHistory(historyFor,historyPage-1)}>← Previous</button>
-            <span>Page {historyTotal===0?0:historyPage+1} of {Math.max(1,Math.ceil(historyTotal/historyPageSize))}</span>
-            <button type="button" className="button" disabled={(historyPage+1)*historyPageSize>=historyTotal||historyLoading} onClick={()=>historyFor!==null&&void showHistory(historyFor,historyPage+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={historyPage} total={historyTotal} pageSize={historyPageSize}
+          onPageChange={nextPage=>{if(historyFor!==null)void showHistory(historyFor,nextPage);}}
+          onPageSizeChange={size=>{setHistoryPageSize(size);if(historyFor!==null)void showHistory(historyFor,0,size);}}
+          itemLabel="history events" loading={historyLoading} />
       </section>}
     </section>
   </main>;
