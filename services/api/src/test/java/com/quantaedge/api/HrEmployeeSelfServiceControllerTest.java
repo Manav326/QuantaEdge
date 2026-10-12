@@ -58,6 +58,25 @@ class HrEmployeeSelfServiceControllerTest {
   }
 
   @Test
+  void payslipsAreLoadedOnlyForTheAuthenticatedEmployee() {
+    when(jdbc.queryForList(contains("linked_staff_account_id=?"),(Object)any()))
+        .thenReturn(List.of(Map.of("id",31L)));
+    when(jdbc.queryForList(contains("from hr_payslip where employee_id=?"),(Object)any()))
+        .thenReturn(List.of(Map.of("id",6L,"public_id","payslip-public-id","run_id",12L,"version_no",1,
+            "snapshot_json","{\"employeeName\":\"Employee\",\"net\":100.00}","checksum","a".repeat(64))));
+
+    Map<String,Object> result=controller.payslips(employee);
+    @SuppressWarnings("unchecked")
+    List<Map<String,Object>> items=(List<Map<String,Object>>)result.get("items");
+    @SuppressWarnings("unchecked")
+    Map<String,Object> snapshot=(Map<String,Object>)items.getFirst().get("snapshot");
+
+    assertEquals("Employee",snapshot.get("employeeName"));
+    assertEquals(100.0,((Number)snapshot.get("net")).doubleValue());
+    verify(jdbc).queryForList(contains("from hr_payslip where employee_id=?"),(Object)any());
+  }
+
+  @Test
   void leaveRequestRejectsInvalidDateRangeBeforeInserting() {
     when(jdbc.queryForList(contains("linked_staff_account_id=?"),(Object)any()))
         .thenReturn(List.of(Map.of("id",31L)));
