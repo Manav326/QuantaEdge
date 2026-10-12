@@ -200,10 +200,7 @@ public class HrEmployeeController {
     Long manager=optionalLong(body.get("managerEmployeeId"));
     validateReference("hr_department",department,orgId,"Department");
     validateReference("hr_designation",designation,orgId,"Designation");
-    if(manager!=null) {
-      Boolean valid=jdbc.queryForObject("select exists(select 1 from hr_employee where id=? and organization_id=? and employment_status not in ('SEPARATED','INACTIVE'))",Boolean.class,manager,orgId);
-      if(!Boolean.TRUE.equals(valid)) throw badRequest("Choose an active manager in the same organisation.");
-    }
+    validateManager(manager,null,orgId);
     Boolean typeExists=jdbc.queryForObject("select exists(select 1 from hr_employment_type where code=? and active=true)",Boolean.class,type);
     if(!Boolean.TRUE.equals(typeExists)) throw badRequest("Choose a supported employment type.");
     String email=optionalText(body.get("email"),254);
@@ -245,11 +242,7 @@ public class HrEmployeeController {
     long orgId=((Number)before.get("organization_id")).longValue();
     validateReference("hr_department",department,orgId,"Department");
     validateReference("hr_designation",designation,orgId,"Designation");
-    if(manager!=null) {
-      if(manager==id) throw badRequest("An employee cannot report to themselves.");
-      Boolean valid=jdbc.queryForObject("select exists(select 1 from hr_employee where id=? and organization_id=? and employment_status not in ('SEPARATED','INACTIVE'))",Boolean.class,manager,orgId);
-      if(!Boolean.TRUE.equals(valid)) throw badRequest("Choose an active manager in the same organisation.");
-    }
+    validateManager(manager,id,orgId);
     LocalDate probation=parseOptionalDate(body.get("probationEndDate"),"Probation end date");
     LocalDate joining=((Date)before.get("joining_date")).toLocalDate();
     LocalDate exit=body.containsKey("exitDate")
@@ -295,6 +288,26 @@ public class HrEmployeeController {
     writeHistory(id,context,"EMPLOYMENT_STATUS_CHANGED",LocalDate.now(),before,after,optionalText(body.get("reason"),500));
     record(context,"/api/v1/hr/employees/"+id+"/status","Changed employee status to "+status);
     return after;
+  }
+
+  private void validateManager(Long managerId,Long employeeId,long orgId) {
+    if(managerId==null) return;
+    Boolean valid=jdbc.queryForObject("""
+      with recursive manager_chain(id,manager_employee_id) as (
+        select id,manager_employee_id from hr_employee
+        where id=? and organization_id=? and employment_status not in ('SEPARATED','INACTIVE')
+        union
+        select parent.id,parent.manager_employee_id
+        from hr_employee parent
+        join manager_chain child on parent.id=child.manager_employee_id
+        where parent.organization_id=?
+      )
+      select exists(select 1 from manager_chain)
+         and not exists(select 1 from manager_chain where id=coalesce(?, -1))
+      """,Boolean.class,managerId,orgId,orgId,employeeId);
+    if(!Boolean.TRUE.equals(valid)) {
+      throw badRequest("Choose an active manager in the same organisation without creating a reporting cycle.");
+    }
   }
 
   private void validateReference(String table,Long id,long orgId,String label) {
