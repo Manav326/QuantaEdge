@@ -9,7 +9,7 @@
         android:usesCleartextTraffic="${allowCleartextTraffic}"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <meta-data
-            android:name="com.google.android.gms.mlkit.vision.DEPENDENCIES"
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode" />
         <activity
             android:name=".MainActivity"
