@@ -24,17 +24,25 @@ public class AssessmentCatalogService {
 
   @Transactional
   public void ensureGeneratedAssessments(long studentId) {
+    String classCode=jdbc.queryForObject(
+        "select class_code from student where id=? and active=true",String.class,studentId);
+    ensureGeneratedAssessmentsForClass(classCode);
+  }
+
+  @Transactional
+  public void ensureGeneratedAssessmentsForClass(String classCode) {
+    String normalized=classCode==null?"":classCode.trim();
+    if(normalized.isEmpty()) return;
     List<Map<String,Object>> topics=jdbc.queryForList("""
       select l.id as lesson_id,l.title as lesson_title,l.chapter_id,ch.display_name as chapter_name,
              s.id as subject_id,s.display_name as subject_name
-      from student st
-      join student_track_enrollment ste on ste.student_id=st.id and ste.status='ACTIVE'
-      join curriculum_subject s on s.id=ste.subject_id and s.active=true
+      from curriculum_class c
+      join curriculum_subject s on s.class_id=c.id and s.active=true
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-      where st.id=? and st.active=true and st.environment='PRODUCTION'
+      where c.code=? and c.active=true
       order by s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,studentId);
+      """,normalized);
     for(Map<String,Object> topic:topics) {
       long lessonId=n(topic.get("lesson_id")),chapterId=n(topic.get("chapter_id")),subjectId=n(topic.get("subject_id"));
       String title=t(topic.get("lesson_title")),chapter=t(topic.get("chapter_name")),subject=t(topic.get("subject_name"));

@@ -100,6 +100,7 @@ public class AssessmentController {
     requireContentView(context);
     String classFilter = safeText(classCode, 30);
     String subjectFilter = safeText(subjectCode, 40);
+    if(!classFilter.isBlank()) assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
     String statusFilter = safeText(status, 20).toUpperCase(Locale.ROOT);
     if (statusFilter.isEmpty()) statusFilter = "ALL";
     if (!Set.of("ALL", "DRAFT", "PUBLISHED", "ARCHIVED").contains(statusFilter)) {
