@@ -9,7 +9,8 @@ export type AdminSection =
   | 'students'
   | 'parents'
   | 'staff'
-  | 'translations';
+  | 'translations'
+  | 'certificates';
 
 export type AdminLocale = 'english' | 'hinglish';
 
@@ -77,6 +78,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     hinglish: 'प्रशासन और ऑडिट',
     items: [
       { key: 'staff', href: '/employees', icon: '♙', english: 'Staff & audit', hinglish: 'Staff & audit', shortEnglish: 'Staff', shortHinglish: 'Staff' },
+      { key: 'certificates', href: '/certificates', icon: '▧', english: 'Certificates', hinglish: 'प्रमाणपत्र', shortEnglish: 'Certificates', shortHinglish: 'प्रमाणपत्र' },
     ],
   },
 ];
@@ -85,6 +87,7 @@ export function canSeeAdminItem(item: AdminNavItem, role: string, permissions: s
   // Preserve the current loading behavior while the staff session is being resolved.
   if (!role) return true;
   if (item.key === 'overview') return role === 'ADMIN';
+  if (item.key === 'certificates') return role === 'ADMIN';
   if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
   if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
   if (item.key === 'translations') {
