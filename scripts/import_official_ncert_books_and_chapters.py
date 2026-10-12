@@ -237,25 +237,55 @@ def normalize_space(value: str) -> str:
     return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", str(value or ""))).strip()
 
 
+def chapter_is_active(row: dict[str, Any]) -> bool:
+    value = row.get("chapter_active", row.get("active", True))
+    return value is not False and str(value).strip().casefold() not in {"false", "0", "no"}
+
+
+def dedupe_live_chapters(rows: list[Any], grade: str, subject: str) -> list[dict[str, Any]]:
+    """The Admin content endpoint has one row per chapter lesson; dedupe by chapter ID."""
+    by_id: dict[int, dict[str, Any]] = {}
+    for raw in rows:
+        if not isinstance(raw, dict) or raw.get("chapter_id") is None:
+            continue
+        if str(raw.get("class_code")) != grade or str(raw.get("subject_code")) != subject:
+            continue
+        if not raw.get("chapter_code") or not chapter_is_active(raw):
+            continue
+        chapter_id = int(raw["chapter_id"])
+        candidate = dict(raw)
+        existing = by_id.get(chapter_id)
+        if existing is not None:
+            if str(existing.get("chapter_code")) != str(candidate.get("chapter_code")):
+                raise RuntimeError(
+                    f"Chapter ID {chapter_id} has inconsistent chapter codes in the Admin content response."
+                )
+            if str(existing.get("chapter_name")) != str(candidate.get("chapter_name")):
+                raise RuntimeError(
+                    f"Chapter ID {chapter_id} has inconsistent chapter names in the Admin content response."
+                )
+            continue
+        by_id[chapter_id] = candidate
+    return sorted(
+        by_id.values(),
+        key=lambda row: (
+            int(row.get("chapter_sort_order") or row.get("sort_order") or 0),
+            str(row.get("chapter_code") or ""),
+        ),
+    )
+
+
 def read_chapters(base: str, cookie: str) -> dict[tuple[str, str], list[dict[str, Any]]]:
     result: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for grade in CLASSES:
         for subject in SUBJECTS:
             query = urlencode({"classCode": grade, "subjectCode": subject})
-            rows = api_call(base, cookie, "/api/v1/admin/class-chapters?" + query)
+            # Use the real, permission-protected Admin content route. It includes current
+            # canonical chapter IDs/codes and may repeat chapters once for each lesson.
+            rows = api_call(base, cookie, "/api/v1/admin/content?" + query)
             if not isinstance(rows, list):
-                raise RuntimeError(f"Unexpected chapter API response for Class {grade} / {subject}.")
-            active = [
-                dict(row) for row in rows
-                if isinstance(row, dict)
-                and row.get("chapter_id") is not None
-                and row.get("chapter_code")
-                and row.get("chapter_active", row.get("active", True)) is not False
-            ]
-            active.sort(key=lambda row: (
-                int(row.get("chapter_sort_order") or row.get("sort_order") or 0),
-                str(row.get("chapter_code") or ""),
-            ))
+                raise RuntimeError(f"Unexpected Admin content response for Class {grade} / {subject}.")
+            active = dedupe_live_chapters(rows, grade, subject)
             if not active:
                 raise RuntimeError(f"No active curriculum chapter returned for Class {grade} / {subject}.")
             codes = [str(row["chapter_code"]) for row in active]
