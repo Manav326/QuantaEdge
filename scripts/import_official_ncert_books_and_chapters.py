@@ -44,7 +44,7 @@ import unicodedata
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urlencode
 
 try:
@@ -231,6 +231,21 @@ END_MATTER_TITLES = (
 )
 
 
+def report_progress(message: str) -> None:
+    """Emit a timestamped, immediately flushed progress line for interactive terminals."""
+    stamp = datetime.now().astimezone().strftime("%H:%M:%S")
+    print(f"[{stamp}] {message}", flush=True)
+
+
+def format_bytes(byte_count: int) -> str:
+    value = float(byte_count)
+    for unit in ("B", "KiB", "MiB", "GiB"):
+        if value < 1024 or unit == "GiB":
+            return f"{value:.1f} {unit}" if unit != "B" else f"{int(value)} B"
+        value /= 1024
+    return f"{value:.1f} GiB"
+
+
 def label_subject(code: str) -> str:
     return "Mathematics" if code == "maths" else "Science"
 
@@ -290,11 +305,20 @@ def dedupe_live_chapters(rows: list[Any], grade: str, subject: str) -> list[dict
     )
 
 
-def read_chapters(base: str, cookie: str) -> dict[tuple[str, str], list[dict[str, Any]]]:
+def read_chapters(
+    base: str,
+    cookie: str,
+    progress: Callable[[str], None] | None = None,
+) -> dict[tuple[str, str], list[dict[str, Any]]]:
     result: dict[tuple[str, str], list[dict[str, Any]]] = {}
-    for grade in CLASSES:
-        for subject in SUBJECTS:
-            query = urlencode({"classCode": grade, "subjectCode": subject})
+    tracks = [(grade, subject) for grade in CLASSES for subject in SUBJECTS]
+    for track_index, (grade, subject) in enumerate(tracks, 1):
+        if progress:
+            progress(
+                f"[Curriculum {track_index}/{len(tracks)}] Fetching active Class {grade} "
+                f"{label_subject(subject)} chapters from the Admin API."
+            )
+        query = urlencode({"classCode": grade, "subjectCode": subject})
             # Use the real, permission-protected Admin content route. It includes current
             # canonical chapter IDs/codes and may repeat chapters once for each lesson.
             rows = api_call(base, cookie, "/api/v1/admin/content?" + query)
@@ -307,6 +331,11 @@ def read_chapters(base: str, cookie: str) -> dict[tuple[str, str], list[dict[str
             if len(codes) != len(set(codes)):
                 raise RuntimeError(f"Duplicate chapter codes returned for Class {grade} / {subject}.")
             result[(grade, subject)] = active
+            if progress:
+                progress(
+                    f"[Curriculum {track_index}/{len(tracks)}] Class {grade} "
+                    f"{label_subject(subject)}: {len(active)} active chapters loaded."
+                )
     return result
 
 
@@ -459,6 +488,7 @@ def detect_chapter_ranges(
     subject: str,
     language: str,
     chapters: list[dict[str, Any]],
+    progress: Callable[[str], None] | None = None,
 ) -> list[dict[str, Any]]:
     """Find chapter boundaries by the actual printed title; fail closed on any ambiguity."""
     alias_by_code = {
@@ -473,9 +503,15 @@ def detect_chapter_ranges(
             page_count = pdf.page_count
             if not 1 <= page_count <= MAX_PDF_PAGES:
                 raise ValueError(f"{pdf_path.name}: page count {page_count} is outside 1–{MAX_PDF_PAGES}.")
+            if progress:
+                progress(
+                    f"Scanning {page_count} pages of {pdf_path.name} for exact chapter-title headings "
+                    f"({len(chapters)} active chapters)."
+                )
             page_texts: list[str] = []
             positioned_hits_by_page: list[set[str]] = []
-            for page in pdf:
+            progress_interval = max(1, page_count // 10)
+            for page_index, page in enumerate(pdf):
                 text = page.get_text("text") or ""
                 page_texts.append(text)
                 if text.strip() and not page_has_contents_marker(text):
@@ -484,6 +520,14 @@ def detect_chapter_ranges(
                     )
                 else:
                     positioned_hits_by_page.append(set())
+                scanned = page_index + 1
+                if progress and (
+                    scanned == 1 or scanned % progress_interval == 0 or scanned == page_count
+                ):
+                    progress(
+                        f"PDF text scan: {scanned}/{page_count} pages "
+                        f"({round(scanned * 100 / page_count)}%) — {pdf_path.name}"
+                    )
     except Exception as exc:
         if isinstance(exc, ValueError):
             raise
@@ -564,6 +608,11 @@ def detect_chapter_ranges(
         # The live QuantaEdge curriculum is the authoritative chapter ID/code. A visible title
         # disagreement is reported for Admin preview rather than used to guess another ID.
         row["mapping_note"] = "Mapped by printed NCERT title to exact live curriculum chapter code."
+        if progress:
+            progress(
+                f"Matched chapter {idx + 1}/{len(starts)}: {row['chapter_name']} "
+                f"(printed PDF pages {row['start_page']}–{row['end_page']})."
+            )
     return starts
 
 
@@ -673,11 +722,20 @@ def query_library_assets(base: str, cookie: str) -> dict[str, dict[str, Any]]:
 
 
 def query_assignments(
-    base: str, cookie: str, tracks: set[tuple[str, str]]
+    base: str,
+    cookie: str,
+    tracks: set[tuple[str, str]],
+    progress: Callable[[str], None] | None = None,
 ) -> tuple[dict[tuple[str, str, str, str, int | None], set[str]], dict[str, dict[str, Any]]]:
     hashes_by_slot: dict[tuple[str, str, str, str, int | None], set[str]] = {}
     assignment_by_slot_hash: dict[str, dict[str, Any]] = {}
-    for grade, subject in sorted(tracks):
+    ordered_tracks = sorted(tracks)
+    for track_index, (grade, subject) in enumerate(ordered_tracks, 1):
+        if progress:
+            progress(
+                f"[Existing assignments {track_index}/{len(ordered_tracks)}] Checking Class {grade} "
+                f"{label_subject(subject)} for already-assigned PDFs."
+            )
         query = urlencode({"classCode": grade, "subjectCode": subject, "status": "ALL"})
         rows = api_call(base, cookie, "/api/v1/admin/learning-documents?" + query)
         if not isinstance(rows, list):
@@ -866,6 +924,7 @@ def create_import_plan(
     max_bytes: int,
     books_dir: Path | None = None,
     languages: tuple[str, ...] = LANGUAGES,
+    progress: Callable[[str], None] | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """Validate requested source-book languages and prepare splits under the work root."""
     if not languages or any(language not in LANGUAGES for language in languages):
@@ -879,11 +938,19 @@ def create_import_plan(
     records: list[dict[str, Any]] = []
     warnings: list[str] = []
     missing: list[str] = []
+    total_input_slots = len(CLASSES) * len(SUBJECTS) * len(languages)
+    slot_index = 0
 
     for grade in CLASSES:
         for subject in SUBJECTS:
             for language in languages:
+                slot_index += 1
                 name = book_filename(grade, subject, language)
+                if progress:
+                    progress(
+                        f"[Textbook {slot_index}/{total_input_slots}] Preparing {name}; "
+                        "checking source files and printed edition."
+                    )
                 try:
                     source = prepare_source_book(books_dir, grade, subject, language, output_dir)
                     path = Path(source["path"])
@@ -896,9 +963,27 @@ def create_import_plan(
                         f"{name}: {book['size_bytes']:,} bytes exceeds the verified staff-role upload "
                         f"limit of {max_bytes // (1024 * 1024)} MiB."
                     )
+                if progress:
+                    if source["merged_from_parts"]:
+                        parts = " + ".join(item["filename"] for item in source["source_files"])
+                        progress(
+                            f"Combined reading copy prepared from {parts}; {book['page_count']} pages, "
+                            f"{format_bytes(book['size_bytes'])}. Original part PDFs remain unchanged."
+                        )
+                    else:
+                        progress(
+                            f"Source opened: {name}; {book['page_count']} pages, "
+                            f"{format_bytes(book['size_bytes'])}."
+                        )
                 chapter_ranges = detect_chapter_ranges(
-                    path, grade, subject, language, chapters_by_track[(grade, subject)]
+                    path, grade, subject, language, chapters_by_track[(grade, subject)],
+                    progress=progress,
                 )
+                if progress:
+                    progress(
+                        f"Validated all {len(chapter_ranges)} chapter openings for {name}; "
+                        "page mapping is sequential and unambiguous."
+                    )
                 book_record = {
                     **book,
                     "path": str(path.resolve()),
@@ -947,15 +1032,31 @@ def create_import_plan(
     with tempfile.TemporaryDirectory(prefix=".ncert-book-splits-stage-", dir=output_dir.parent) as stage_name:
         stage_root = Path(stage_name)
         staged_outputs: list[tuple[Path, Path, dict[str, Any]]] = []
+        total_chapters_to_split = sum(len(item["chapter_ranges"]) for item in book_plans)
+        split_index = 0
+        if progress:
+            progress(
+                f"All source books passed chapter-boundary validation. Preparing "
+                f"{total_chapters_to_split} chapter PDF extracts in a temporary staging folder."
+            )
         for book_record in book_plans:
             grade = str(book_record["class_code"])
             subject = str(book_record["subject_code"])
             language = str(book_record["language"])
             source_path = Path(book_record["path"])
             for chapter in book_record["chapter_ranges"]:
+                split_index += 1
                 filename = chapter_output_filename(grade, subject, language, chapter["chapter_code"])
                 final_target = output_dir / f"class-{grade}" / subject / language / filename
                 stage_target = stage_root / f"class-{grade}" / subject / language / filename
+                if progress:
+                    progress(
+                        f"[Local extract {split_index}/{total_chapters_to_split}] "
+                        f"Class {grade} {label_subject(subject)}, chapter "
+                        f"{chapter['chapter_order']}: "
+                        f"{chapter.get('chapter_name') or chapter['chapter_code']} "
+                        f"(source pages {chapter['start_page']}–{chapter['end_page']})."
+                    )
                 split = split_chapter_pdf(
                     source_path, stage_target, int(chapter["start_page"]), int(chapter["end_page"])
                 )
@@ -1124,12 +1225,18 @@ def upload_or_reuse_asset(
     assets_created: dict[str, dict[str, Any]],
     report: dict[str, Any],
     report_path: Path,
+    progress: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
     digest = str(record["sha256"]).lower()
     existing = approved_assets.get(digest) or assets_created.get(digest)
     if existing:
         report["reused_assets"] += 1
         record["asset_id"] = int(existing.get("pdf_asset_id", existing.get("id")))
+        if progress:
+            progress(
+                f"Reusing checksum-matched PDF library asset {record['asset_id']} for "
+                f"{record['title']} (no upload needed)."
+            )
         sync_report_record(report, record)
         write_report(report_path, report)
         return existing
@@ -1157,6 +1264,11 @@ def upload_or_reuse_asset(
             reference_parts.append(f"source_part_{index}_sha256={source_hash}")
     if record.get("merged_from_parts"):
         reference_parts.append("combined_reading_copy=true")
+    if progress:
+        progress(
+            f"Uploading {record['filename']} ({format_bytes(int(record['size_bytes']))}) "
+            "to the Admin PDF library."
+        )
     data = Path(record["path"]).read_bytes()
     asset = api_call(
         base, cookie, "/api/v1/admin/learning-pdfs", method="POST",
@@ -1195,6 +1307,8 @@ def upload_or_reuse_asset(
     asset["pdf_asset_id"] = int(asset_id)
     assets_created[digest] = asset
     record["asset_id"] = int(asset_id)
+    if progress:
+        progress(f"PDF library asset ready: id={int(asset_id)} for {record['filename']}.")
     sync_report_record(report, record)
     write_report(report_path, report)
     return asset
@@ -1215,34 +1329,53 @@ def run(args: argparse.Namespace) -> int:
         raise FileNotFoundError(
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
+    report_progress(
+        f"Starting NCERT import in {'APPLY' if args.apply else 'DRY-RUN'} mode; "
+        "progress will be printed as each phase completes."
+    )
+    report_progress("Phase 1/6: checking required source filenames and selected languages.")
     validate_input_book_presence(books_dir, tuple(args.languages))
-    print(f"Source books folder: {books_dir}")
-    print(f"Selected languages: {', '.join(args.languages)}")
+    report_progress(f"Source folder verified: {books_dir}")
+    report_progress(f"Languages selected: {', '.join(args.languages)}")
     base = args.api_url.rstrip("/")
+    report_progress("Phase 2/6: validating the API URL and current staff session.")
     api_url_valid(base)
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
     me = verify_session(base, cookie)
     role = str(me.get("role") or "")
     max_bytes = ADMIN_MAX_BYTES if role.casefold() == "admin" else STANDARD_MAX_BYTES
-    print(f"Authenticated staff: role={role or 'unknown'}; CONTENT_EDIT confirmed.")
-    print(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
-
-    chapters_by_track = read_chapters(base, cookie)
+    report_progress(f"Staff session verified: role={role or 'unknown'}; CONTENT_EDIT confirmed.")
+    report_progress(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
+    report_progress("Phase 3/6: loading the active Class 6–8 Maths/Science curriculum.")
+    chapters_by_track = read_chapters(base, cookie, progress=report_progress)
+    report_progress("Phase 4/6: inspecting PDFs, validating chapter starts, and preparing local chapter extracts.")
     records, warnings = create_import_plan(
         root, chapters_by_track, max_bytes,
         books_dir=books_dir, languages=tuple(args.languages),
+        progress=report_progress,
+    )
+    report_progress(
+        f"Source analysis complete: {sum(1 for row in records if row['scope'] == 'SUBJECT_BOOK')} "
+        f"whole books and {sum(1 for row in records if row['scope'] == 'CHAPTER_PDF')} chapter extracts planned."
     )
     tracks = {(row["class_code"], row["subject_code"]) for row in records}
+    report_progress("Phase 5/6: checking PDF-library checksums and existing assignments.")
     approved_assets = query_library_assets(base, cookie)
-    hashes_by_slot, _assignment_by_slot_hash = query_assignments(base, cookie, tracks)
+    report_progress(f"PDF library read complete: {len(approved_assets)} checksum-indexed assets found.")
+    hashes_by_slot, _assignment_by_slot_hash = query_assignments(
+        base, cookie, tracks, progress=report_progress
+    )
 
-    for row in records:
+    report_progress(f"Checking duplicate assignments for {len(records)} planned PDF resources.")
+    for row_index, row in enumerate(records, 1):
         key = slot_key(row)
         hashes = hashes_by_slot.get(key, set())
         if str(row["sha256"]).lower() in hashes:
             row["action"] = "SKIP_IDENTICAL_ASSIGNMENT"
         else:
             row["action"] = "WOULD_CREATE_DRAFT"
+        if row_index % 10 == 0 or row_index == len(records):
+            report_progress(f"Duplicate check complete: {row_index}/{len(records)} planned resources.")
 
     # The entire local split and chapter mapping plan is available before any API write.
     report_stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -1289,6 +1422,7 @@ def run(args: argparse.Namespace) -> int:
         "credentials_recorded": False,
     }
     if not args.apply:
+        report_progress("Phase 6/6: writing the dry-run audit report; no PDF uploads or assignment writes.")
         write_report(report_path, report)
         print(f"Whole books validated: {report['input_books_validated']}/{report['input_books_expected']}")
         print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}")
@@ -1301,22 +1435,26 @@ def run(args: argparse.Namespace) -> int:
         return 0
 
     # Apply only after complete preflight. Reports are persisted before each API write for resume.
+    report_progress("Phase 6/6: applying the validated plan. New assignments will remain DRAFT.")
     write_report(report_path, report)
     assets_created: dict[str, dict[str, Any]] = {}
-    tracks_with_current: dict[tuple[str, str], list[dict[str, Any]]] = {}
-    for row in records:
+    for row_index, row in enumerate(records, 1):
+        report_progress(f"[Apply {row_index}/{len(records)}] {row['title']}: {row['action']}.")
         if row["action"] == "SKIP_IDENTICAL_ASSIGNMENT":
             row["status"] = "SKIPPED"
             report["skipped_identical_assignments"] += 1
+            report_progress(f"Skipped identical existing assignment: {row['title']}.")
             sync_report_record(report, row)
             write_report(report_path, report)
             continue
 
         asset = upload_or_reuse_asset(
-            base, cookie, row, approved_assets, assets_created, report, report_path
+            base, cookie, row, approved_assets, assets_created, report, report_path,
+            progress=report_progress,
         )
         asset_id = int(asset.get("pdf_asset_id", asset.get("id")))
         row["action"] = "ASSIGNMENT_WRITE_PENDING"
+        report_progress(f"Creating DRAFT assignment for {row['title']} using PDF asset {asset_id}.")
         sync_report_record(report, row)
         write_report(report_path, report)
         source_page_start = int(row.get("source_page_start", 1))
@@ -1353,11 +1491,16 @@ def run(args: argparse.Namespace) -> int:
         row["status"] = "DRAFT"
         row["action"] = "CREATED_DRAFT"
         report["created_draft_assignments"] += 1
+        report_progress(
+            f"DRAFT assignment created: document_id={int(document_id)}, "
+            f"asset_id={asset_id}, title={row['title']}."
+        )
         sync_report_record(report, row)
         write_report(report_path, report)
 
     report["result"] = "COMPLETED"
     report["finished_at"] = datetime.now(timezone.utc).isoformat()
+    report_progress("All planned resources processed. Finalizing the audit report.")
     write_report(report_path, report)
     print(f"Import result: {report['result']}")
     print(f"Created new PDF assets: {report['created_assets']}")

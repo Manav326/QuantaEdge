@@ -302,7 +302,12 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             {"chapter_id": 601, "chapter_code": "patterns-in-mathematics", "chapter_name": "गणित में पैटर्न"},
             {"chapter_id": 602, "chapter_code": "lines-and-angles", "chapter_name": "रेखाएँ और कोण"},
         ]
-        ranges = importer.detect_chapter_ranges(path, "6", "maths", "english", chapters)
+        progress_messages = []
+        ranges = importer.detect_chapter_ranges(
+            path, "6", "maths", "english", chapters, progress=progress_messages.append
+        )
+        self.assertTrue(any("PDF text scan:" in item for item in progress_messages))
+        self.assertTrue(any("Matched chapter 1/2:" in item for item in progress_messages))
         self.assertEqual(
             [(2, 3), (4, 5)],
             [(item["start_page"], item["end_page"]) for item in ranges],
