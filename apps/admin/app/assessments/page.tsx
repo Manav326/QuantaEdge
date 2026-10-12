@@ -22,6 +22,17 @@ async function api(url:string,init:RequestInit={}) {
 
 function fmtDate(value?:string|null){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString();}
 function answerText(value:any){if(value===null||value===undefined||value==='')return 'No answer submitted';if(typeof value==='string'){try{return JSON.stringify(JSON.parse(value),null,2)}catch{return value}}try{return JSON.stringify(value,null,2)}catch{return String(value)}}
+function referenceAnswerText(value:any){
+  let parsed=value;
+  if(typeof value==='string'){try{parsed=JSON.parse(value)}catch{return value}}
+  if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){
+    if(parsed.kind==='TEXT')return String(parsed.value??'');
+    if(parsed.kind==='NUMERIC')return 'Expected numeric answer: '+String(parsed.value??'')+(parsed.tolerance!==undefined?' (tolerance ±'+parsed.tolerance+')':'');
+    if(parsed.kind==='OPTION')return 'Correct option: '+String(parsed.value??'');
+  }
+  if(typeof parsed==='string')return parsed;
+  try{return JSON.stringify(parsed,null,2)}catch{return String(parsed)}
+}
 
 export default function AssessmentsPage(){
   const [classCode,setClassCode]=useState('6');
@@ -229,7 +240,7 @@ export default function AssessmentsPage(){
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">
           <div className={styles.modalHeader}><div><span>TEST-LEVEL REVIEW</span><h2 id="review-title">{review.assessment_title}</h2><p>{review.student_name} · Class {review.class_code} · {review.status}</p></div><button type="button" aria-label="Close review" onClick={()=>setReview(null)}>×</button></div>
           <div className={styles.resultStats}><div><small>Test status</small><b>{review.status}</b></div><div><small>Maximum marks</small><b>{review.max_score}</b></div><div><small>Current result</small><b>{review.status==='RELEASED'?String(review.final_score):'Not released'}</b></div></div>
-          <div className={styles.reviewQuestions}>{review.questions.map((q,index)=><article key={q.attemptQuestionId} className={styles.reviewQuestion}><div className={styles.questionHeading}><span>QUESTION {index+1} · {q.question_type}</span><b>{q.maxMarks} marks</b></div><h3>{q.prompt}</h3>{(q.teacherOptions?.length?q.teacherOptions:q.options)?.length>0&&<ul>{(q.teacherOptions?.length?q.teacherOptions:q.options).map(o=><li key={o.key}>{o.label}{'isCorrect' in o&&o.isCorrect?' · Correct answer':''}</li>)}</ul>}{q.answerKey!==undefined&&q.answerKey!==null&&q.answerKey!==''&&<div className={styles.teacherReference}><small>REFERENCE ANSWER / RUBRIC · STAFF ONLY</small><pre>{answerText(q.answerKey)}</pre></div>}<div className={styles.studentAnswer}><small>STUDENT'S SAVED ANSWER</small><p>{answerText(q.answer)}</p></div>
+          <div className={styles.reviewQuestions}>{review.questions.map((q,index)=><article key={q.attemptQuestionId} className={styles.reviewQuestion}><div className={styles.questionHeading}><span>QUESTION {index+1} · {q.question_type}</span><b>{q.maxMarks} marks</b></div><h3>{q.prompt}</h3>{(q.teacherOptions?.length?q.teacherOptions:q.options)?.length>0&&<ul>{(q.teacherOptions?.length?q.teacherOptions:q.options).map(o=><li key={o.key}>{o.label}{'isCorrect' in o&&o.isCorrect?' · Correct answer':''}</li>)}</ul>}{q.answerKey!==undefined&&q.answerKey!==null&&q.answerKey!==''&&<div className={styles.teacherReference}><small>REFERENCE ANSWER / RUBRIC · STAFF ONLY</small><pre>{referenceAnswerText(q.answerKey)}</pre></div>}<div className={styles.studentAnswer}><small>STUDENT'S SAVED ANSWER</small><p>{answerText(q.answer)}</p></div>
             {q.manualReviewRequired&&<div className={styles.gradeFields}><label>Marks awarded (0–{q.maxMarks})<input type="number" min="0" max={Number(q.maxMarks)} step="0.25" value={marks[q.answerId]??''} onChange={e=>setMarks(m=>({...m,[q.answerId]:e.target.value}))}/></label><label>Feedback visible to student<textarea rows={2} maxLength={2000} value={feedback[q.answerId]??''} onChange={e=>setFeedback(m=>({...m,[q.answerId]:e.target.value}))} placeholder="Explain how the student can improve."/></label></div>}
             {q.answerStatus==='AUTO_GRADED'&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Auto-graded · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}{q.answerStatus==='GRADED'&&!q.manualReviewRequired&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Teacher checked · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}
             {q.teacherFeedback&&!q.manualReviewRequired&&<p className={styles.feedbackText}>{q.teacherFeedback}</p>}
