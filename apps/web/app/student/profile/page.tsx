@@ -238,7 +238,7 @@ export default function StudentProfilePage() {
         {error && <div className="student-profile-page__alert is-error" role="alert">{error}</div>}
         {notice && <div className="student-profile-page__alert is-success" role="status">{notice}</div>}
 
-        {loading ? <div className="student-profile-page__loading"><span className="student-profile-page__spinner" /> <LocaleText hinglish="आपकी profile load हो रही है…" english="Loading your profile…" /></div> : (
+        {loading ? <div className="student-profile-page__loading" role="status" aria-live="polite"><span className="student-profile-page__spinner" aria-hidden="true" /> <LocaleText hinglish="आपकी profile load हो रही है…" english="Loading your profile…" /></div> : (
           <form className="student-profile-form" onSubmit={saveProfile}>
             <section className="student-profile-card student-profile-photo-card">
               <div className="student-profile-card__intro"><span className="student-profile-card__number">01</span><div><h2><LocaleText hinglish="आपकी profile photo" english="Your profile photo" /></h2><p><LocaleText hinglish="आपकी learning space के लिए एक friendly photo।" english="A friendly photo for your learning space." /></p></div></div>

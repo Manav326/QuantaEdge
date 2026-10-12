@@ -436,7 +436,7 @@ export default function SourceIngestionPage() {
           <h1>Source ingestion & chapter review</h1>
           <p>Reuse database source records, download official books, split chapter PDFs, review them, then add approved material to the library.</p>
         </div>
-        <button className="admin-refresh" type="button" disabled={busy} onClick={() => void refreshJob()} title="Refresh source status">↻</button>
+        <button className="admin-refresh" type="button" aria-label="Refresh source ingestion status" disabled={busy} onClick={() => void refreshJob()} title="Refresh source status">↻</button>
       </header>
 
       {error && <div className={styles.error} role="alert">{error}</div>}
@@ -635,7 +635,7 @@ export default function SourceIngestionPage() {
         <div className={styles.heading}><div><span>STEP 02</span><h2>Ingestion jobs</h2><p>Open a job to review the book, detected chapter headings, page ranges and chapter-wise PDFs.</p></div>
           <button className={styles.secondary} type="button" disabled={busy} onClick={() => void refreshJob()}>Refresh status</button>
         </div>
-        {loading ? <p className={styles.empty}>Loading source records…</p> : jobs.length === 0 ? <p className={styles.empty}>No ingestion jobs yet. Start with a source above.</p> :
+        {loading ? <p className={styles.empty} role="status" aria-live="polite">Loading source records…</p> : jobs.length === 0 ? <p className={styles.empty}>No ingestion jobs yet. Start with a source above.</p> :
           <div className={styles.jobList}>{jobs.map(row => <button type="button" key={row.job_id}
             className={styles.jobButton + (job?.job_id === row.job_id ? ' ' + styles.selected : '')}
             onClick={() => void loadJob(row.job_id)}>
@@ -655,7 +655,7 @@ export default function SourceIngestionPage() {
         <div className={styles.heading}><div><span>STEP 03</span><h2>Review job #{job.job_id}: {job.source_title}</h2>
           <p>{job.class_name} · {job.subject_name} · {job.edition} · {job.page_count || '—'} pages · <b>{job.status}</b></p></div>
           <span className={styles.bigStatus}>{job.status}</span></div>
-        {job.error_message && <div className={styles.error}>{job.error_message}</div>}
+        {job.error_message && <div className={styles.error} role="alert">{job.error_message}</div>}
         {job.status === 'REVIEW' && <div className={styles.metadataReview}>
           <div><b>Source provenance</b><p>Before approving this book, verify the printed edition/reprint year or academic session in the PDF. Edit the source title, official HTTPS URL and edition in Step 01 above, then save them here.</p></div>
           <button className={styles.secondary} type="button" disabled={busy}

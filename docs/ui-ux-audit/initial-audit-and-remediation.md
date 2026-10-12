@@ -103,3 +103,12 @@ This is a source-level correction. Keyboard navigation and assistive-technology 
 - Added a programmatic accessible name to the teacher-review search field instead of relying on placeholder text alone.
 - Assessment permissions, question selection, test authoring, and teacher-review actions are unchanged.
 - Browser-based keyboard and screen-reader verification remains outstanding.
+
+
+## Sixth remediation pass — translation workflow clarity and loading/error announcements
+
+- `apps/admin/app/translations/page.tsx`: fixed a visible copy defect where the new-translation helper displayed interpolation syntax literally instead of showing “Hindi (Devanagari)” or “English”. The translation queue range/loading indicator is now a polite live status. Commit: `24fb250d66295d8abe52dbdc5b9687841be781fa`.
+- `apps/admin/app/source-ingestion/page.tsx`: gave the icon-only refresh control an explicit accessible name, announced job-list loading politely, and exposed ingestion-job errors as alerts.
+- `apps/web/app/student/profile/page.tsx`: profile loading is now announced politely and its decorative spinner is hidden from assistive technology.
+- No API contracts, content workflow states, permissions, or student-visible publication rules were changed.
+- These are source-level fixes. Browser/keyboard/screen-reader verification remains outstanding.
