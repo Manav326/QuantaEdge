@@ -1,35 +1,141 @@
 'use client';
+
 import {useCallback,useEffect,useState} from 'react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
-type Session={staffId?:number;role?:string;displayName?:string;permissions?:string[]};
-type Profile={id:number;employee_number:string;display_name:string;email:string|null;phone_e164:string|null;joining_date:string;probation_end_date:string|null;employment_status:string;employment_type:string;department_name:string|null;designation_name:string|null;manager_name:string|null;organization_name:string;timezone:string};
+type Session={staffId?:number;displayName?:string};
 type LeaveType={code:string;display_name:string;paid:boolean};
-type Leave={id:number;leave_type:string;start_date:string;end_date:string;requested_days:number;reason:string;request_status:string;review_note:string|null;created_at:string};
-type Attendance={work_date:string;attendance_status:string;check_in_at:string|null;check_out_at:string|null;minutes_worked:number|null;notes:string|null};
-async function api(path:string,init:RequestInit={}){const h=new Headers(init.headers);h.set('X-QE-Workspace','STAFF');if(init.body&&!h.has('Content-Type'))h.set('Content-Type','application/json');const r=await fetch(path,{...init,headers:h,credentials:'same-origin',cache:'no-store'});const raw=await r.text();let data:any={};try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}if(!r.ok)throw new Error(data.message||data.detail||data.error||`Request failed (${r.status})`);return data}
-const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-const pretty=(s:string)=>String(s||'').replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
-const dateLabel=(s:string|null|undefined)=>s?new Date(s.length===10?s+'T00:00:00':s).toLocaleDateString(): '—';
-export default function SelfServicePage(){
- const router=useRouter();
- const [session,setSession]=useState<Session|null>(null),[profile,setProfile]=useState<Profile|null>(null);
- const [attendance,setAttendance]=useState<Attendance[]>([]),[leaves,setLeaves]=useState<Leave[]>([]),[balances,setBalances]=useState<any[]>([]),[types,setTypes]=useState<LeaveType[]>([]);
- const [tab,setTab]=useState<'overview'|'attendance'|'leave'>('overview');
- const [draft,setDraft]=useState({leaveTypeCode:'CASUAL',startDate:today(),endDate:today(),reason:''});
- const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
- const load=useCallback(async()=>{setLoading(true);setError('');try{const me=await api('/api/v1/auth/me');if(!me.staffId){router.replace('/login');return}setSession(me);const p=await api('/api/v1/hr/self-service/profile');setProfile(p);const [a,l,b,t]=await Promise.all([api('/api/v1/hr/self-service/attendance'),api('/api/v1/hr/self-service/leave/requests'),api('/api/v1/hr/self-service/leave/balances'),api('/api/v1/hr/self-service/leave/types')]);setAttendance(a.items||[]);setLeaves(l.items||[]);setBalances(b.items||[]);setTypes(t);if(t.length&&!t.some((x:LeaveType)=>x.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));}catch(e){const message=e instanceof Error?e.message:'Employee self-service could not be loaded.';setError(message);if(message.includes('Authentication required')||message.includes('UNAUTHENTICATED'))router.replace('/login')}finally{setLoading(false)}},[router]);
- useEffect(()=>{void load()},[load]);
- async function submitLeave(e:React.FormEvent){e.preventDefault();setSaving(true);setError('');setNotice('');try{await api('/api/v1/hr/self-service/leave/requests',{method:'POST',body:JSON.stringify(draft)});setNotice('Your leave request has been submitted for review.');setDraft(v=>({...v,reason:''}));setTab('leave');await load()}catch(e){setError(e instanceof Error?e.message:'Could not submit your leave request.')}finally{setSaving(false)}}
- const updateDraft=(key:keyof typeof draft,value:string)=>setDraft(v=>({...v,[key]:value}));
- return <div className="shell"><header className="topbar"><div className="brand">QuantaEdge <span>EMPLOYEE SELF-SERVICE</span></div><nav style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}><Link href="/" className="secondary" style={{textDecoration:'none'}}>People Operations</Link><button type="button" onClick={()=>void load()}>Refresh</button></nav></header>
- <main className="main"><div className="eyebrow">YOUR WORKSPACE</div><h1>My employee space</h1><p className="sub">View your employment details, attendance and leave records, and submit leave requests securely.</p>
- {error&&<div className="error" role="alert">{error}</div>}{notice&&<div className="notice" role="status">{notice}</div>}
- {loading?<section className="panel" aria-live="polite">Loading your employee information…</section>:profile&&<><section className="panel"><div style={{display:'flex',justifyContent:'space-between',gap:16,alignItems:'flex-start',flexWrap:'wrap'}}><div><div className="small">EMPLOYEE PROFILE</div><h2 style={{fontSize:26,marginTop:6}}>{profile.display_name}</h2><div className="small">{profile.employee_number} · {profile.designation_name||'Designation not assigned'}</div></div><span className="pill">{pretty(profile.employment_status)}</span></div><div className="cards"><div><div className="label">Department</div><strong>{profile.department_name||'Not assigned'}</strong></div><div><div className="label">Reporting manager</div><strong>{profile.manager_name||'Not assigned'}</strong></div><div><div className="label">Joining date</div><strong>{dateLabel(profile.joining_date)}</strong></div></div><div className="form-grid"><div><div className="label">Work email</div><div>{profile.email||'Not provided'}</div></div><div><div className="label">Phone</div><div>{profile.phone_e164||'Not provided'}</div></div><div><div className="label">Employment type</div><div>{profile.employment_type}</div></div><div><div className="label">Organization</div><div>{profile.organization_name}</div></div></div></section>
- <div className="tabs" style={{marginTop:24}}><button className={tab==='overview'?'active':''} onClick={()=>setTab('overview')}>Overview</button><button className={tab==='attendance'?'active':''} onClick={()=>setTab('attendance')}>My attendance</button><button className={tab==='leave'?'active':''} onClick={()=>setTab('leave')}>My leave</button></div>
- {tab==='overview'&&<><div className="cards"><div className="card"><div className="label">Attendance records loaded</div><div className="metric">{attendance.length}</div><div className="small">Current month to date</div></div><div className="card"><div className="label">Pending leave requests</div><div className="metric">{leaves.filter(x=>x.request_status==='PENDING').length}</div><div className="small">Awaiting a reviewer</div></div><div className="card"><div className="label">Leave types</div><div className="metric">{balances.length}</div><div className="small">Balance as of today</div></div></div><section className="panel"><h2>Leave balances</h2>{balances.length===0?<div className="empty">No leave balance categories are configured yet.</div>:<div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Paid</th><th>Balance</th></tr></thead><tbody>{balances.map((x:any)=><tr key={x.leave_type_code}><td>{x.display_name}</td><td>{x.paid?'Yes':'No'}</td><td>{Number(x.balance_days).toFixed(2)} days</td></tr>)}</tbody></table></div>}</section></>}
- {tab==='attendance'&&<section className="panel"><h2>Attendance history</h2><p className="small">Showing the current month to date. For corrections, contact your manager or People Operations.</p>{attendance.length===0?<div className="empty">No attendance records have been published for this period.</div>:<div className="table-wrap"><table><thead><tr><th>Work date</th><th>Status</th><th>Check in</th><th>Check out</th><th>Hours</th></tr></thead><tbody>{attendance.map(x=><tr key={x.work_date}><td>{dateLabel(x.work_date)}</td><td><span className="pill">{pretty(x.attendance_status)}</span></td><td>{x.check_in_at?new Date(x.check_in_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'}</td><td>{x.check_out_at?new Date(x.check_out_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'}</td><td>{x.minutes_worked==null?'—':(Number(x.minutes_worked)/60).toFixed(1)}</td></tr>)}</tbody></table></div>}</section>}
- {tab==='leave'&&<div className="form-grid" style={{alignItems:'start'}}><section className="panel"><h2>Request leave</h2><p className="small">Your request will be sent to an authorized reviewer. Submitting a request does not mean it has been approved.</p><form onSubmit={submitLeave} style={{display:'grid',gap:13}}><label className="field">Leave type<select value={draft.leaveTypeCode} onChange={e=>updateDraft('leaveTypeCode',e.target.value)} required>{types.map(t=><option key={t.code} value={t.code}>{t.display_name}{t.paid?' · Paid':' · Unpaid'}</option>)}</select></label><label className="field">Start date<input type="date" value={draft.startDate} onChange={e=>updateDraft('startDate',e.target.value)} required/></label><label className="field">End date<input type="date" min={draft.startDate} value={draft.endDate} onChange={e=>updateDraft('endDate',e.target.value)} required/></label><label className="field">Reason<textarea rows={4} maxLength={1000} value={draft.reason} onChange={e=>updateDraft('reason',e.target.value)} placeholder="Briefly explain your request" required/></label><button className="primary" type="submit" disabled={saving||types.length===0}>{saving?'Submitting…':'Submit leave request'}</button></form></section><section className="panel"><h2>My requests</h2>{leaves.length===0?<div className="empty">You have not submitted any leave requests yet.</div>:<div className="table-wrap"><table><thead><tr><th>Leave</th><th>Dates</th><th>Days</th><th>Status</th></tr></thead><tbody>{leaves.map(x=><tr key={x.id}><td><strong>{x.leave_type}</strong><div className="small">{x.reason}</div>{x.review_note&&<div className="small">Review: {x.review_note}</div>}</td><td>{dateLabel(x.start_date)} – {dateLabel(x.end_date)}</td><td>{Number(x.requested_days).toFixed(2)}</td><td><span className="pill">{pretty(x.request_status)}</span></td></tr>)}</tbody></table></div>}</section></div>}
- </>}</main></div>
+type Range={from:string;to:string};
+async function api(path:string,init:RequestInit={}) {
+  const headers=new Headers(init.headers);
+  headers.set('X-QE-Workspace','STAFF');
+  if(init.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
+  const response=await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
+  const raw=await response.text();
+  let data:any={};
+  try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}
+  if(!response.ok)throw new Error(data.message||data.detail||data.error||`Request failed (${response.status})`);
+  return data;
+}
+const localDate=(date:Date)=>date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0')+'-'+String(date.getDate()).padStart(2,'0');
+const initialRange=():Range=>{const now=new Date();return {from:localDate(new Date(now.getFullYear(),now.getMonth(),1)),to:localDate(now)}};
+const pretty=(value:string)=>String(value||'').replaceAll('_',' ').toLowerCase().replace(/\\b\\w/g,c=>c.toUpperCase());
+export default function EmployeeSelfServicePage(){
+  const router=useRouter();
+  const [session,setSession]=useState<Session|null>(null);
+  const [profile,setProfile]=useState<any|null>(null);
+  const [attendance,setAttendance]=useState<any[]>([]);
+  const [requests,setRequests]=useState<any[]>([]);
+  const [types,setTypes]=useState<LeaveType[]>([]);
+  const [balances,setBalances]=useState<any[]>([]);
+  const [range,setRange]=useState<Range>(initialRange);
+  const [tab,setTab]=useState<'attendance'|'leave'|'balances'>('attendance');
+  const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});
+  const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+  const daySpan=Math.floor((Date.parse(range.to+'T00:00:00Z')-Date.parse(range.from+'T00:00:00Z'))/86400000);
+  const load=useCallback(async()=>{
+    setLoading(true);setError('');
+    try{
+      const me=await api('/api/v1/auth/me');
+      if(!me.staffId){router.replace('/login');return}
+      setSession(me);
+      const ownProfile=await api('/api/v1/hr/self-service/profile');
+      setProfile(ownProfile);
+      const [a,l,t,b]=await Promise.all([
+        api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
+        api('/api/v1/hr/self-service/leave/requests?limit=100'),
+        api('/api/v1/hr/self-service/leave/types'),
+        api('/api/v1/hr/self-service/leave/balances')
+      ]);
+      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);
+      if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
+    }catch(e){
+      setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
+      if(String(e).includes('Authentication required')||String(e).includes('UNAUTHENTICATED'))router.replace('/login');
+    }finally{setLoading(false)}
+  },[router,range.from,range.to]);
+  useEffect(()=>{void load()},[load]);
+  async function submitLeave(event:React.FormEvent){
+    event.preventDefault();setSaving(true);setError('');setNotice('');
+    try{
+      const result=await api('/api/v1/hr/self-service/leave/requests',{method:'POST',body:JSON.stringify(draft)});
+      setNotice('Leave request #'+result.id+' submitted for review.');
+      setDraft(v=>({...v,reason:''}));
+      await load();
+      setTab('leave');
+    }catch(e){setError(e instanceof Error?e.message:'Leave request could not be submitted.')}finally{setSaving(false)}
+  }
+  async function logout(){try{await api('/api/v1/auth/logout',{method:'POST'})}finally{router.replace('/login')}}
+  return <div className="shell">
+    <header className="topbar">
+      <div className="brand">QuantaEdge <span>EMPLOYEE SELF-SERVICE</span></div>
+      <nav aria-label="Workspace navigation" style={{display:'flex',flexWrap:'wrap',gap:8,alignItems:'center'}}>
+        <Link href="/self-service" className="secondary" style={{textDecoration:'none'}}>My workspace</Link>
+        <button type="button" className="secondary" onClick={()=>void logout()}>Sign out</button>
+      </nav>
+    </header>
+    <main className="main">
+      <div className="eyebrow">YOUR EMPLOYMENT · PRIVATE WORKSPACE</div>
+      <h1>My workspace</h1>
+      <p className="sub">Review your own employment details, attendance, leave requests and available leave balances. HR-only records and other employees remain outside this view.</p>
+      {error&&<div className="error" role="alert">{error}</div>}
+      {notice&&<div className="notice" role="status">{notice}</div>}
+      {profile&&<section className="panel" aria-labelledby="profile-heading">
+        <div style={{display:'flex',justifyContent:'space-between',gap:16,alignItems:'start',flexWrap:'wrap'}}>
+          <div><div className="eyebrow">EMPLOYEE PROFILE</div><h2 id="profile-heading">{profile.display_name}</h2><p className="small">{profile.employee_number} · {profile.organization_name}</p></div>
+          <span className="pill">{pretty(profile.employment_status)}</span>
+        </div>
+        <div className="cards">
+          <section className="card"><div className="label">Department</div><div style={{fontWeight:700}}>{profile.department_name||'Not assigned'}</div><div className="small">{profile.designation_name||'Designation not set'}</div></section>
+          <section className="card"><div className="label">Employment type</div><div style={{fontWeight:700}}>{profile.employment_type||pretty(profile.employment_type_code)}</div><div className="small">Joined {String(profile.joining_date).slice(0,10)}</div></section>
+          <section className="card"><div className="label">Reporting manager</div><div style={{fontWeight:700}}>{profile.manager_name||'Not assigned'}</div><div className="small">{profile.email||profile.phone_e164||'No contact details on file'}</div></section>
+        </div>
+      </section>}
+      <section className="panel" style={{marginTop:20}}>
+        <div className="tabs" role="group" aria-label="My employment information">
+          <button type="button" aria-pressed={tab==='attendance'} className={tab==='attendance'?'active':''} onClick={()=>setTab('attendance')}>My attendance</button>
+          <button type="button" aria-pressed={tab==='leave'} className={tab==='leave'?'active':''} onClick={()=>setTab('leave')}>My leave</button>
+          <button type="button" aria-pressed={tab==='balances'} className={tab==='balances'?'active':''} onClick={()=>setTab('balances')}>Leave balances</button>
+          <button type="button" className="secondary" onClick={()=>void load()} disabled={loading}>Refresh</button>
+        </div>
+        {tab==='attendance'&&<>
+          <div className="toolbar">
+            <label className="field">From<input className="input" type="date" value={range.from} max={range.to} onChange={e=>setRange(v=>({...v,from:e.target.value}))}/></label>
+            <label className="field">To<input className="input" type="date" value={range.to} min={range.from} onChange={e=>setRange(v=>({...v,to:e.target.value}))}/></label>
+          </div>
+          {daySpan>92&&<div className="error" role="alert">Choose a date range of 93 days or fewer.</div>}
+          <div className="table-wrap"><table><thead><tr><th>Work date</th><th>Status</th><th>Check in</th><th>Check out</th><th>Worked</th><th>Note</th></tr></thead><tbody>
+            {attendance.map((item:any)=><tr key={item.work_date}><td>{String(item.work_date).slice(0,10)}</td><td><span className="pill">{pretty(item.attendance_status)}</span></td><td>{item.check_in_at?new Date(item.check_in_at).toLocaleString():'—'}</td><td>{item.check_out_at?new Date(item.check_out_at).toLocaleString():'—'}</td><td>{item.minutes_worked==null?'—':Math.floor(item.minutes_worked/60)+'h '+item.minutes_worked%60+'m'}</td><td>{item.notes||'—'}</td></tr>)}
+          </tbody></table>{!loading&&!attendance.length&&<div className="empty">No attendance records were returned for this date range.</div>}</div>
+        </>}
+        {tab==='leave'&&<>
+          <form className="panel" onSubmit={submitLeave} style={{marginBottom:20}}>
+            <h2>Request leave</h2>
+            <p className="small">Your request is submitted for review. Overlapping pending or approved requests and ranges without working days are rejected by the server.</p>
+            <div className="form-grid">
+              <label className="field">Leave type<select required value={draft.leaveTypeCode} onChange={e=>setDraft(v=>({...v,leaveTypeCode:e.target.value}))}><option value="">Choose leave type…</option>{types.map(t=><option key={t.code} value={t.code}>{t.display_name}{t.paid?' · Paid':' · Unpaid'}</option>)}</select></label>
+              <label className="field">Start date<input className="input" type="date" required value={draft.startDate} onChange={e=>setDraft(v=>({...v,startDate:e.target.value,endDate:v.endDate<e.target.value?e.target.value:v.endDate}))}/></label>
+              <label className="field">End date<input className="input" type="date" required min={draft.startDate} value={draft.endDate} onChange={e=>setDraft(v=>({...v,endDate:e.target.value}))}/></label>
+              <label className="field full">Reason<textarea rows={3} required maxLength={1000} value={draft.reason} onChange={e=>setDraft(v=>({...v,reason:e.target.value}))}/></label>
+            </div>
+            <div className="actions"><button className="primary" disabled={saving||loading||!types.length||!draft.reason.trim()}>{saving?'Submitting…':'Submit leave request'}</button></div>
+          </form>
+          <h2>My requests</h2>
+          <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Dates / days</th><th>Reason</th><th>Status</th><th>Review note</th></tr></thead><tbody>
+            {requests.map((item:any)=><tr key={item.id}><td>{item.leave_type}<div className="small">{item.paid?'Paid':'Unpaid'}</div></td><td>{String(item.start_date).slice(0,10)} → {String(item.end_date).slice(0,10)}<div className="small">{Number(item.requested_days)} working day(s)</div></td><td>{item.reason}</td><td><span className="pill">{pretty(item.request_status)}</span></td><td>{item.review_note||'—'}</td></tr>)}
+          </tbody></table>{!loading&&!requests.length&&<div className="empty">You have not submitted any leave requests.</div>}</div>
+        </>}
+        {tab==='balances'&&<>
+          <p className="small">Balances are calculated from the official leave-balance ledger as of today. No balance is invented when no grant/accrual has been recorded.</p>
+          <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Paid</th><th>Balance (days)</th></tr></thead><tbody>
+            {balances.map((item:any)=><tr key={item.leave_type_code}><td>{item.display_name}</td><td>{item.paid?'Yes':'No'}</td><td><b>{Number(item.balance_days).toFixed(2)}</b></td></tr>)}
+          </tbody></table>{!loading&&!balances.length&&<div className="empty">No active leave types or balances are available.</div>}</div>
+        </>}
+        {loading&&<p className="small" role="status" aria-live="polite">Loading your employee records…</p>}
+      </section>
+      <p className="small" style={{marginTop:18}}>This workspace is scoped to the employee linked to your authenticated account. Profile changes, attendance corrections, private documents and payslips require separate controlled workflows; use People Operations support for corrections until those workflows are available.</p>
+      {session&&!profile&&!loading&&<p className="small">If you believe your employment record should be linked, contact your People Operations administrator.</p>}
+    </main>
+  </div>;
 }
