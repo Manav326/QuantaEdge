@@ -431,7 +431,7 @@ public class LearningDocumentController {
       throw new SecurityException("Learning document preview permission required.");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256
+      select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256,a.file_size_bytes
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
       where d.id=?
       """, documentId);
@@ -446,8 +446,9 @@ public class LearningDocumentController {
     if (pageNumber < 1 || pageNumber > visiblePages) throw notFound("Document preview page", pageNumber);
     long assetId = ((Number) row.get("pdf_asset_id")).longValue();
     String assetSha = String.valueOf(row.get("sha256"));
+    long assetBytes = ((Number) row.get("file_size_bytes")).longValue();
     int sourceIndex = start + pageNumber - 2;
-    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, 90f);
+    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, 90f, assetBytes);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.IMAGE_PNG);
     headers.setCacheControl(CacheControl.noStore());
@@ -505,6 +506,7 @@ public class LearningDocumentController {
     if (!progress.isEmpty()) lastPage = ((Number) progress.getFirst().get("last_page")).intValue();
     document.remove("pdf_asset_id");
     document.remove("asset_sha256");
+    document.remove("asset_file_size_bytes");
     document.put("last_page", lastPage);
     return document;
   }
@@ -531,8 +533,9 @@ public class LearningDocumentController {
     };
     long assetId = ((Number) metadata.get("pdf_asset_id")).longValue();
     String assetSha = String.valueOf(metadata.get("asset_sha256"));
+    long assetBytes = ((Number) metadata.get("asset_file_size_bytes")).longValue();
     int sourceIndex = start + pageNumber - 2;
-    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, renderDpi);
+    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, renderDpi, assetBytes);
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.IMAGE_PNG);
@@ -570,7 +573,8 @@ public class LearningDocumentController {
 
   private Map<String, Object> readableDocument(long documentId, long studentId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,a.sha256 as asset_sha256,d.scope,d.book_part,d.title,d.edition,d.language,
+      select d.id as document_id,d.pdf_asset_id,a.sha256 as asset_sha256,
+             a.file_size_bytes as asset_file_size_bytes,d.scope,d.book_part,d.title,d.edition,d.language,
              d.page_start,d.page_end,d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
@@ -653,15 +657,17 @@ public class LearningDocumentController {
    * authorization/publication checks before calling this method; browser responses remain no-store.
    * Cache identity is based on immutable PDF content, source page and render DPI, never a user ID.
    */
-  private byte[] renderPdfPage(long assetId, String sha256, int sourceIndex, float dpi) {
+  private byte[] renderPdfPage(long assetId, String sha256, int sourceIndex, float dpi, long sourceSizeBytes) {
     String contentKey = sha256 == null || sha256.isBlank() ? "asset-" + assetId : sha256;
     PdfPageCacheKey key = new PdfPageCacheKey(contentKey, sourceIndex, Math.round(dpi * 10f));
     byte[] cached = cachedPdfPage(key);
     if (cached != null) return cached;
 
+    // Large originals occupy both slots, preventing two 500 MiB PDFs from rendering together.
+    int permitsRequired = sourceSizeBytes > MAX_CACHED_SOURCE_PDF_BYTES ? 2 : 1;
     boolean acquired;
     try {
-      acquired = renderPermits.tryAcquire(RENDER_PERMIT_WAIT_SECONDS, TimeUnit.SECONDS);
+      acquired = renderPermits.tryAcquire(permitsRequired, RENDER_PERMIT_WAIT_SECONDS, TimeUnit.SECONDS);
     } catch (InterruptedException ex) {
       Thread.currentThread().interrupt();
       throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
@@ -698,7 +704,7 @@ public class LearningDocumentController {
             "This PDF page could not be rendered.", ex);
       }
     } finally {
-      renderPermits.release();
+      renderPermits.release(permitsRequired);
     }
   }
 
