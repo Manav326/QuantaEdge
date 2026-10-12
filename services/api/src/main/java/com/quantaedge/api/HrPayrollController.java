@@ -1,6 +1,10 @@
 package com.quantaedge.api;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -267,8 +271,53 @@ public class HrPayrollController {
     long periodId=((Number)run.get("period_id")).longValue(),orgId=((Number)run.get("organization_id")).longValue();
     jdbc.update("update hr_payroll_period set status='APPROVED',updated_at=now() where id=? and status='SUBMITTED'",periodId);
     event(orgId,periodId,runId,"RUN_APPROVED",context,reason,"{}");
-    audit.recordAction(context,"/api/v1/hr/payroll/runs/"+runId,"Approved payroll run");
+    int issued=issuePayslips(runId,context);
+    event(orgId,periodId,runId,"PAYSLIPS_ISSUED",context,reason,"{\\"count\\":"+issued+"}");
+    audit.recordAction(context,"/api/v1/hr/payroll/runs/"+runId,"Approved payroll run and issued "+issued+" payslip(s)");
     return runById(runId);
+  }
+
+  private int issuePayslips(long runId,AuthContext context) {
+    List<Map<String,Object>> snapshots=jdbc.queryForList("""
+      select l.employee_id,
+        jsonb_build_object(
+          'employeeNumber',l.employee_number_snapshot,
+          'employeeName',l.employee_name_snapshot,
+          'period',jsonb_build_object('name',p.period_name,'startDate',p.start_date::text,'endDate',p.end_date::text),
+          'components',l.component_snapshot,
+          'gross',l.gross_amount,
+          'deductions',l.deduction_amount,
+          'net',l.net_amount,
+          'currency',l.currency,
+          'approvedAt',r.approved_at
+        )::text snapshot_json
+      from hr_payroll_line l
+      join hr_payroll_run r on r.id=l.run_id and r.status='APPROVED'
+      join hr_payroll_period p on p.id=r.period_id
+      where l.run_id=?
+      order by l.employee_id
+      """,runId);
+    int issued=0;
+    for(Map<String,Object> row:snapshots) {
+      long employeeId=((Number)row.get("employee_id")).longValue();
+      String snapshot=String.valueOf(row.get("snapshot_json"));
+      String checksum=sha256(snapshot);
+      int changed=jdbc.update("""
+        insert into hr_payslip(run_id,employee_id,version_no,snapshot,checksum,issued_by_staff_id)
+        values (?,?,1,?::jsonb,?,?,?)
+        on conflict(run_id,employee_id,version_no) do nothing
+        """,runId,employeeId,snapshot,checksum,context.staffId());
+      issued+=changed;
+    }
+    return issued;
+  }
+
+  private String sha256(String value) {
+    try {
+      return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8)));
+    } catch(NoSuchAlgorithmException ex) {
+      throw new IllegalStateException("SHA-256 is not available in this runtime.",ex);
+    }
   }
 
   @PostMapping("/runs/{runId}/payments")
