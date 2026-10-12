@@ -114,12 +114,16 @@ fun QuestionCard(
     val options = jsonArrayValue(question.opt("options")).objectItems()
     val prompt = question.textAny("prompt", "question", "title").ifBlank { "प्रश्न" }
     val type = question.textAny("question_type", "questionType").uppercase()
+    val responseMode = question.textAny("response_mode", "responseMode").uppercase()
+    val isOrder = type == "ORDER" || responseMode == "ORDER"
+    val isMatch = type == "MATCH" || responseMode == "MATCH"
     val optionKeys = options.map { option ->
         option.textAny("key", "option_key", "value").ifBlank { option.textAny("label", "text") }
     }.filter { it.isNotBlank() }
     val selectedMulti = parseAnswerKeyArray(answer).toSet()
     val orderedKeys = displayedOrder(answer, optionKeys)
-    val isMultiSelect = type in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE")
+    val isMultiSelect = type in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE") ||
+        responseMode in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE")
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -132,7 +136,7 @@ fun QuestionCard(
             Text(prompt, style = MaterialTheme.typography.titleMedium)
 
             when {
-                type == "ORDER" && options.isNotEmpty() -> {
+                isOrder && options.isNotEmpty() -> {
                     Text("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary)
@@ -192,7 +196,7 @@ fun QuestionCard(
                         }
                     }
                 }
-                type == "MATCH" -> {
+                isMatch -> {
                     if (options.isNotEmpty()) {
                         options.forEach { option ->
                             Text(
@@ -236,7 +240,7 @@ fun QuestionCard(
                     }
                 }
                 else -> {
-                    if (type == "ORDER") {
+                    if (isOrder) {
                         Text("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"].",
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     }
@@ -244,6 +248,7 @@ fun QuestionCard(
                         "NUMERICAL", "INPUT" -> "अपना उत्तर लिखें"
                         "ORDER" -> "क्रम का उत्तर"
                         "MATCH" -> "मिलान के उत्तर"
+                        else -> if (responseMode == "NUMERIC") "संख्यात्मक उत्तर" else "अपना उत्तर या reasoning लिखें"
                         else -> "अपना उत्तर या reasoning लिखें"
                     }
                     val longAnswer = type in setOf(

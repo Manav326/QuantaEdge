@@ -114,6 +114,7 @@ class AssessmentLifecycleIntegrationTest {
     Map<String,Object> firstQuestion=((List<Map<String,Object>>)started.get("questions")).getFirst();
     assertFalse(firstQuestion.containsKey("answerKey"));
     assertFalse(firstQuestion.containsKey("correctAnswer"));
+    assertEquals("OPTION",firstQuestion.get("response_mode"));
     jdbc.update("update student_assessment_attempt set deadline_at=now()-interval '1 hour' where id=?",attemptId);
     long attemptQuestionId=((Number)firstQuestion.get("attemptQuestionId")).longValue();
     Map<String,Object> saved=controller.saveAnswer(attemptId,attemptQuestionId,

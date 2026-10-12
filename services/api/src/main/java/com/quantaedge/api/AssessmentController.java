@@ -1354,6 +1354,15 @@ public class AssessmentController {
       }
     }
     result.put("options", options);
+    Object rawPayload=snapshot.get("answer_payload");
+    String responseMode="";
+    if(rawPayload instanceof Map<?,?> payload) {
+      responseMode=String.valueOf(payload.getOrDefault("kind",""));
+    } else if(rawPayload instanceof String encoded && !encoded.isBlank()) {
+      responseMode=String.valueOf(parseObject(encoded).getOrDefault("kind",""));
+    }
+    responseMode=responseMode.trim().toUpperCase(Locale.ROOT);
+    if(!responseMode.isBlank()) result.put("response_mode",responseMode);
     result.put("translated", Boolean.TRUE.equals(snapshot.get("_translation_applied")));
     return result;
   }
