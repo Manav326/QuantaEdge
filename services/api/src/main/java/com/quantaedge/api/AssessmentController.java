@@ -1007,7 +1007,7 @@ public class AssessmentController {
         // Stored question snapshots encode answer_payload as a JSON string, while
         // some legacy snapshots may already contain an object. Return a consistent
         // object shape to the review UI in either case.
-        if (correctAnswer instanceof String serialized) {
+        if (correctAnswer instanceof String serialized && !serialized.isBlank()) {
           correctAnswer = parseObject(serialized);
         }
         item.put("correctAnswer", correctAnswer);
