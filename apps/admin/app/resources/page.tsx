@@ -202,6 +202,8 @@ export default function TextbookLibraryPage() {
   const [uploadPartLabel, setUploadPartLabel] = useState('');
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
+  const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
+  const [reviewNotes, setReviewNotes] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [sourceTitle, setSourceTitle] = useState('');
@@ -774,6 +776,35 @@ export default function TextbookLibraryPage() {
                 <ul>{intakeReport.reconciliation.ambiguous.slice(0, 20).map((item: any, index: number) =>
                   <li key={'ambiguous-' + index}>{item.title} — pages {(item.candidate_pages || []).join(', ')}</li>)}</ul>
               </div>}
+              {intakeReport.status !== 'REVIEWED' && <div className={styles.uploadBox}>
+                <b>Finish the human review</b>
+                <p>Check the flagged items above against the original book. This records your review only; it does not publish the book or approve chapter page ranges.</p>
+                <label className={styles.field}>Review note
+                  <textarea value={reviewNotes} onChange={e => setReviewNotes(e.target.value)}
+                    placeholder="What did you verify? Explain any accepted differences or why a title may not match."
+                    maxLength={2000} rows={3} />
+                </label>
+                <label className={styles.field}>
+                  <input type="checkbox" checked={reviewAcknowledged}
+                    onChange={e => setReviewAcknowledged(e.target.checked)} />
+                  I reviewed the original PDF and the flagged differences. I understand these are candidates, not automatic chapter mappings.
+                </label>
+                <button type="button" className={styles.primaryButton} disabled={busy || !reviewAcknowledged}
+                  onClick={async () => {
+                    setBusy(true); setError(''); setNotice('');
+                    try {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review', {
+                        method: 'PATCH',
+                        body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
+                      });
+                      setIntakeReport({ ...(intakeReport || {}), ...result });
+                      setNotice('Human review recorded. The source PDF remains private; no chapter was published.');
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : 'Review could not be recorded.');
+                    } finally { setBusy(false); }
+                  }}>Record review (does not publish)</button>
+              </div>}
+              {intakeReport.status === 'REVIEWED' && <p><b>Human review recorded.</b> The source remains private and unpublished.</p>}
               <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>
             </> : <p>Classification has been saved. Run the inventory scan to compare the PDF against the selected curriculum.</p>}
           </section>}
