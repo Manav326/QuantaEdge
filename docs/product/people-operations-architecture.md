@@ -38,6 +38,14 @@ Employee designation, department membership and academic teaching assignments mu
 6. Recruitment, performance, assets, exits and reporting.
 7. Security, compliance, recovery and production readiness.
 
+## Phase 2 scope: attendance and leave
+
+- Daily attendance keyed by employee and work date; repeat writes update the existing record.
+- Present, absent, half-day, remote, approved leave and holiday statuses, optional timezone-aware check-in/out, notes and date summaries.
+- Configurable leave types and dated requests with weekday counting, overlap prevention and pending/approved/rejected states.
+- Separate view/manage permissions; decisions are attributed and an employee cannot approve their own linked request.
+- No sample employees, attendance or leave requests are seeded. Official holiday calendars, leave balances/accrual, self-service and payroll impact remain future work.
+
 ## Cross-site class assignment contract
 
 Teaching assignment is not part of the employee CRUD API. In the academic-workforce phase, create explicit assignment records linking an active employee to a class/subject/academic period, with effective dates, assignment status, approval metadata and an audit trail. The learning platform may consume only active, approved assignments via an authenticated API. The assignment must not confer technical CMS permissions. Staff access to teaching features will be granted independently and narrowly.

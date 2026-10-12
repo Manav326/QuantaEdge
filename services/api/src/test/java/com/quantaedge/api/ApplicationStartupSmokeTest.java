@@ -95,6 +95,16 @@ class ApplicationStartupSmokeTest {
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_designation') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee_history') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_attendance_record') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_type') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_request') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='61' and success=true", Integer.class));
+    assertEquals(5, jdbc.queryForObject("select count(*) from hr_leave_type where active=true", Integer.class));
+    for (String permission : List.of("HR_ATTENDANCE_VIEW", "HR_ATTENDANCE_MANAGE", "HR_LEAVE_VIEW", "HR_LEAVE_MANAGE")) {
+      assertTrue(jdbc.queryForObject("select exists(select 1 from staff_permission_catalog where permission_key=?)", Boolean.class, permission));
+    }
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_attendance_record", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_leave_request", Integer.class));
     assertEquals(1, jdbc.queryForObject("""
       select count(*) from flyway_schema_history where version='60' and success=true
       """, Integer.class));
