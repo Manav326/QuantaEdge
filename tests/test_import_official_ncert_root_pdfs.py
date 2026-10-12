@@ -100,7 +100,7 @@ class OfficialNcertManifestTests(unittest.TestCase):
         )
         self.assertEqual("Reprint 2025-26", chapter["edition"])
         self.assertEqual(importer.OFFICIAL_CATALOG_URL, chapter["source_url"])
-        self.assertEqual(1, chapter["chapter_id"])
+        self.assertEqual(fake_curriculum()[(book["class_code"], book["subject_code"])][0]["chapter_id"], chapter["chapter_id"])
 
     def test_manifest_missing_a_live_chapter_fails_closed(self):
         rows = importer.make_manifest_rows(fake_curriculum())
