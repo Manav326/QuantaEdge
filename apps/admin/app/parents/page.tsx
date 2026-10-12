@@ -21,6 +21,9 @@ export default function AdminParents(){
   const [children,setChildren]=useState<Record<number,ChildRow[]>>({});
   const [trackDraft,setTrackDraft]=useState<Record<number,string[]>>({});
   const [search,setSearch]=useState('');
+  const [page,setPage]=useState(0);
+  const [total,setTotal]=useState(0);
+  const pageSize=25;
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [busy,setBusy]=useState<string|null>(null);
@@ -30,13 +33,16 @@ export default function AdminParents(){
     if(!mr.ok){router.replace('/login');return;}
     const me=await json(mr);
     if(me.role!=='ADMIN'){router.replace('/login');return;}
-    const r=await fetch('/api/v1/admin/parents');
+    const params=new URLSearchParams({limit:String(pageSize),offset:String(page*pageSize)});
+    if(search.trim())params.set('query',search.trim());
+    const r=await fetch('/api/v1/admin/parents?'+params.toString(),{cache:'no-store'});
     const body=await json(r);
     if(!r.ok)throw new Error(body.message||'Unable to load parent accounts.');
-    setParents(body);
+    setParents(Array.isArray(body.items)?body.items:(Array.isArray(body)?body:[]));
+    setTotal(Number(body.total ?? (Array.isArray(body)?body.length:0)));
   }
 
-  useEffect(()=>{loadParents().catch((e:any)=>setError(e.message||'Unable to load parent accounts.'));},[router]);
+  useEffect(()=>{loadParents().catch((e:any)=>setError(e.message||'Unable to load parent accounts.'));},[router,search,page]);
 
   async function toggleParent(row:ParentRow){
     const active=!row.active;
@@ -94,7 +100,7 @@ export default function AdminParents(){
     finally{setBusy(null);}
   }
 
-  const visible=parents.filter(p=>[p.display_name,p.mobile_e164].some(x=>(x||'').toLowerCase().includes(search.toLowerCase())));
+  const visible=parents;
   const activeCount=parents.filter(p=>p.active).length;
   const childCount=parents.reduce((sum,p)=>sum+Number(p.active_children||0),0);
 
@@ -108,17 +114,17 @@ export default function AdminParents(){
       {error&&<div className="feedback" role="alert">{error}</div>}
       {notice&&<div className="parent-notice" role="status">{notice}</div>}
       <section className="admin-grid stats parent-admin-kpis">
-        <article><span>Parent accounts</span><strong>{parents.length}</strong><small>registered accounts</small></article>
-        <article><span>Active parents</span><strong>{activeCount}</strong><small>eligible to sign in</small></article>
-        <article><span>Active parent-child links</span><strong>{childCount}</strong><small>active, consented relationships</small></article>
+        <article><span>Parent accounts</span><strong>{total}</strong><small>matching accounts</small></article>
+        <article><span>Active parents</span><strong>{activeCount}</strong><small>on this page</small></article>
+        <article><span>Active parent-child links</span><strong>{childCount}</strong><small>on this page</small></article>
         <article><span>Default child limit</span><strong>3</strong><small>environment configurable</small></article>
       </section>
       <section className="admin-panel parent-admin-panel">
         <div className="panel-head">
           <div><span>ACCOUNT DIRECTORY</span><h2>Registered parents</h2></div>
-          <span className="count">{visible.length} accounts</span>
+          <span className="count">{total} matching accounts</span>
         </div>
-        <label className="parent-search"><span>Search parent</span><input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Name or mobile number"/></label>
+        <label className="parent-search"><span>Search parent</span><input value={search} onChange={e=>{setSearch(e.target.value);setPage(0)}} placeholder="Name or mobile number"/></label>
         {!visible.length?<div className="empty-state"><span>⌕</span><h2>No matching parent accounts</h2><p>Try a different mobile number or name.</p></div>:
           <div className="parent-admin-list">
             {visible.map(parent=><article className="parent-admin-row" key={parent.id}>
@@ -143,6 +149,14 @@ export default function AdminParents(){
               </div>}
             </article>)}
           </div>}
+        <div className="qe-pagination-controls" style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,marginTop:18,flexWrap:'wrap'}}>
+          <span className="admin-muted">Showing {total===0?0:page*pageSize+1}–{Math.min(total,(page+1)*pageSize)} of {total}</span>
+          <div style={{display:'flex',gap:8}}>
+            <button type="button" className="parent-secondary-button" disabled={page===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>← Previous</button>
+            <span style={{alignSelf:'center',fontSize:13}}>Page {total===0?0:page+1} of {Math.max(1,Math.ceil(total/pageSize))}</span>
+            <button type="button" className="parent-secondary-button" disabled={(page+1)*pageSize>=total} onClick={()=>setPage(value=>value+1)}>Next →</button>
+          </div>
+        </div>
       </section>
       <p className="admin-footer">Suspensions revoke active sessions. Archiving a parent-child link and suspending a student are separate actions; neither deletes historical learning data.</p>
     </section>

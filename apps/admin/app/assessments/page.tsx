@@ -40,7 +40,13 @@ export default function AssessmentsPage(){
   const [chapterId,setChapterId]=useState('');
   const [statusFilter,setStatusFilter]=useState('ALL');
   const [assessments,setAssessments]=useState<Assessment[]>([]);
+  const [assessmentPage,setAssessmentPage]=useState(0);
+  const [assessmentTotal,setAssessmentTotal]=useState(0);
+  const assessmentPageSize=25;
   const [bank,setBank]=useState<BankQuestion[]>([]);
+  const [bankPage,setBankPage]=useState(0);
+  const [bankTotal,setBankTotal]=useState(0);
+  const bankPageSize=40;
   const [staff,setStaff]=useState<Staff[]>([]);
   const [chapters,setChapters]=useState<Array<{id:number;code:string;name:string}>>([]);
   const [selectedQuestionIds,setSelectedQuestionIds]=useState<number[]>([]);
@@ -51,6 +57,9 @@ export default function AssessmentsPage(){
   const [maxAttempts,setMaxAttempts]=useState('1');
   const [activeTab,setActiveTab]=useState<'author'|'review'>('author');
   const [queue,setQueue]=useState<any[]>([]);
+  const [queuePage,setQueuePage]=useState(0);
+  const [queueTotal,setQueueTotal]=useState(0);
+  const queuePageSize=25;
   const [queueStatus,setQueueStatus]=useState('AWAITING_REVIEW');
   const [query,setQuery]=useState('');
   const [review,setReview]=useState<ReviewAttempt|null>(null);
@@ -65,18 +74,19 @@ export default function AssessmentsPage(){
   const [notice,setNotice]=useState('');
 
   const eligibleStaff=staff.filter(s=>s.can_grade);
-  const filteredBank=bank.filter(q=>!search.trim()||q.prompt.toLowerCase().includes(search.toLowerCase())||q.lesson_title.toLowerCase().includes(search.toLowerCase())||q.chapter_name.toLowerCase().includes(search.toLowerCase()));
+  const filteredBank=bank;
 
   const loadAssessments=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,status:statusFilter});
+      const params=new URLSearchParams({classCode,subjectCode,status:statusFilter,limit:String(assessmentPageSize),offset:String(assessmentPage*assessmentPageSize)});
       const [assessmentRows,staffRows,contentRows]=await Promise.all([
         api('/api/v1/admin/assessments?'+params.toString()),
         api('/api/v1/admin/assessment-staff'),
         api('/api/v1/admin/content?classCode='+encodeURIComponent(classCode)+'&subjectCode='+encodeURIComponent(subjectCode))
       ]);
-      setAssessments(Array.isArray(assessmentRows)?assessmentRows:[]);
+      setAssessments(Array.isArray(assessmentRows?.items)?assessmentRows.items:(Array.isArray(assessmentRows)?assessmentRows:[]));
+      setAssessmentTotal(Number(assessmentRows?.total??(Array.isArray(assessmentRows)?assessmentRows.length:0)));
       setStaff(Array.isArray(staffRows)?staffRows:[]);
       const chapterMap=new Map<number,{id:number;code:string;name:string}>();
       (Array.isArray(contentRows)?contentRows:[]).forEach((row:any)=>{
@@ -87,30 +97,34 @@ export default function AssessmentsPage(){
       setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
     }catch(e){setError(e instanceof Error?e.message:'Could not load tests and staff permissions.');}
     finally{setLoading(false);}
-  },[classCode,subjectCode,statusFilter]);
+  },[classCode,subjectCode,statusFilter,assessmentPage]);
 
-  const loadBank=useCallback(async()=>{
+  const loadBank=useCallback(async(nextPage=bankPage)=>{
     setBankLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode});
+      const params=new URLSearchParams({classCode,subjectCode,limit:String(bankPageSize),offset:String(nextPage*bankPageSize)});
       if(chapterId)params.set('chapterId',chapterId);
-      const rows=await api('/api/v1/admin/assessment-question-bank?'+params.toString());
-      setBank(Array.isArray(rows)?rows:[]);
-      setSelectedQuestionIds([]);
+      if(search.trim())params.set('query',search.trim());
+      const data=await api('/api/v1/admin/assessment-question-bank?'+params.toString());
+      setBank(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
+      setBankTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
+      setBankPage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:'Question bank could not be loaded.');}
     finally{setBankLoading(false);}
-  },[classCode,subjectCode,chapterId]);
+  },[classCode,subjectCode,chapterId,search,bankPage]);
 
-  const loadQueue=useCallback(async()=>{
+  const loadQueue=useCallback(async(nextPage=queuePage)=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status:queueStatus});
+      const params=new URLSearchParams({status:queueStatus,limit:String(queuePageSize),offset:String(nextPage*queuePageSize)});
       if(query.trim())params.set('query',query.trim());
-      const rows=await api('/api/v1/admin/assessment-reviews?'+params.toString());
-      setQueue(Array.isArray(rows)?rows:[]);
+      const data=await api('/api/v1/admin/assessment-reviews?'+params.toString());
+      setQueue(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
+      setQueueTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
+      setQueuePage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:'Assessment review queue could not be loaded.');}
     finally{setLoading(false);}
-  },[queueStatus,query]);
+  },[queueStatus,query,queuePage]);
 
   useEffect(()=>{void loadAssessments();},[loadAssessments]);
   useEffect(()=>{if(activeTab==='review')void loadQueue();},[activeTab,loadQueue]);
@@ -189,7 +203,7 @@ export default function AssessmentsPage(){
       <header className="admin-top"><div><span className="admin-kicker">QUANTAEDGE LEARNING / ASSESSMENT OPERATIONS</span><h1>Tests & grading</h1><p>Create published tests from approved questions, preserve every attempt, and release checked results.</p></div><button type="button" className="admin-refresh" onClick={()=>activeTab==='author'?void loadAssessments():void loadQueue()}>↻</button></header>
       <section className={styles.hero}>
         <div className={styles.heroIcon}>✓</div><div><span>RESULTS THAT LAST</span><h2>One test attempt, one preserved record.</h2><p>Student answers and question snapshots are saved against the attempt. Manual answers stay private until an authorized grader checks and releases the result. Audit entries are test-level, never per-question.</p></div>
-        <div className={styles.heroStats}><strong>{assessments.length}</strong><small>Tests in current filter</small><strong>{assessments.reduce((sum,a)=>sum+Number(a.review_count||0),0)}</strong><small>Attempts awaiting review</small></div>
+        <div className={styles.heroStats}><strong>{assessmentTotal}</strong><small>Tests in current filter</small><strong>{assessments.reduce((sum,a)=>sum+Number(a.review_count||0),0)}</strong><small>Attempts awaiting review</small></div>
       </section>
       {error&&<div className={styles.error} role="alert">{error}</div>}
       {notice&&<div className={styles.success} role="status">{notice}</div>}
@@ -199,14 +213,22 @@ export default function AssessmentsPage(){
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>STEP 01</span><h2>Choose the curriculum</h2><p>Only approved questions from published lessons can be added. A question snapshot is frozen when the test is created.</p></div><b>01</b></div>
           <div className={styles.fields}>
-            <label>Class<select value={classCode} onChange={e=>{setClassCode(e.target.value);setChapterId('');setBank([]);setSelectedQuestionIds([]);}}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
-            <label>Subject<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setBank([]);setSelectedQuestionIds([]);}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
-            <label>Chapter filter (optional)<select value={chapterId} onChange={e=>{setChapterId(e.target.value);setBank([]);setSelectedQuestionIds([]);}}><option value="">Any published chapter</option>{chapters.map(ch=><option key={ch.id} value={ch.id}>{ch.code} — {ch.name}</option>)}</select></label>
-            <button type="button" className={styles.secondaryButton} onClick={()=>void loadBank()} disabled={bankLoading}>{bankLoading?'Loading…':'Load approved question bank'}</button>
+            <label>Class<select value={classCode} onChange={e=>{setClassCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label>
+            <label>Subject<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setChapterId('');setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);setAssessmentPage(0);}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
+            <label>Chapter filter (optional)<select value={chapterId} onChange={e=>{setChapterId(e.target.value);setBank([]);setBankTotal(0);setBankPage(0);setSelectedQuestionIds([]);}}><option value="">Any published chapter</option>{chapters.map(ch=><option key={ch.id} value={ch.id}>{ch.code} — {ch.name}</option>)}</select></label>
+            <button type="button" className={styles.secondaryButton} onClick={()=>void loadBank()} disabled={bankLoading}>{bankLoading?'Loading…':'Load / search approved question bank'}</button>
           </div>
           {bank.length>0&&<div className={styles.bank}>
-            <div className={styles.bankHeader}><div><b>Approved question bank</b><small>{filteredBank.length} question(s) · {selectedQuestionIds.length} selected</small></div><input aria-label="Search approved questions" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search question or chapter…"/></div>
+            <div className={styles.bankHeader}><div><b>Approved question bank</b><small>{bankTotal} matching question(s) · {selectedQuestionIds.length} selected</small></div><input aria-label="Search approved questions" value={search} onChange={e=>{setSearch(e.target.value);setBankPage(0)}} placeholder="Search question or chapter…"/></div>
             <div className={styles.bankList}>{filteredBank.map(q=><label className={styles.bankRow} key={q.question_id}><input type="checkbox" checked={selectedQuestionIds.includes(q.question_id)} onChange={e=>toggleQuestion(q.question_id,e.target.checked)}/><span><b>{q.prompt}</b><small>{q.chapter_name} · {q.lesson_title} · {q.question_type} · {q.marks||1} mark(s)</small></span><code>#{q.question_id}</code></label>)}</div>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:12,flexWrap:'wrap'}}>
+              <small>Showing {bankTotal===0?0:bankPage*bankPageSize+1}–{Math.min(bankTotal,(bankPage+1)*bankPageSize)} of {bankTotal}</small>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <button type="button" className={styles.secondaryButton} disabled={bankPage===0||bankLoading} onClick={()=>void loadBank(bankPage-1)}>← Previous</button>
+                <span>Page {bankTotal===0?0:bankPage+1} of {Math.max(1,Math.ceil(bankTotal/bankPageSize))}</span>
+                <button type="button" className={styles.secondaryButton} disabled={(bankPage+1)*bankPageSize>=bankTotal||bankLoading} onClick={()=>void loadBank(bankPage+1)}>Next →</button>
+              </div>
+            </div>
             <p className={styles.helpNote}>Correct answers remain server-side and are not sent to the student before the result is released.</p>
           </div>}
         </section>
@@ -221,19 +243,35 @@ export default function AssessmentsPage(){
           <div className={styles.submitBar}><p>{selectedQuestionIds.length} question(s) selected. Fill-in, short-answer and long-answer responses go to the review queue. Assign an active staff member with assessment-grading permission; the student receives a final result after all required answers are checked.</p><button className={styles.primaryButton} type="button" onClick={()=>void createAssessment()} disabled={busy||!title.trim()||selectedQuestionIds.length===0}>{busy?'Saving…':'Create draft test'}</button></div>
         </section>
         <section className={styles.panel}>
-          <div className={styles.panelHeading}><div><span>ASSESSMENT GOVERNANCE</span><h2>Test catalogue</h2><p>Publish a draft to make it available only to students enrolled in the matching class and subject.</p></div><select className={styles.filter} value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select></div>
-          <div className={styles.fields+' '+styles.compactFields}><label>Class<select value={classCode} onChange={e=>setClassCode(e.target.value)}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label><label>Subject<select value={subjectCode} onChange={e=>setSubjectCode(e.target.value)}><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
+          <div className={styles.panelHeading}><div><span>ASSESSMENT GOVERNANCE</span><h2>Test catalogue</h2><p>Publish a draft to make it available only to students enrolled in the matching class and subject.</p></div><select className={styles.filter} value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setAssessmentPage(0)}}><option value="ALL">All statuses</option><option value="DRAFT">Drafts</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select></div>
+          <div className={styles.fields+' '+styles.compactFields}><label>Class<select value={classCode} onChange={e=>{setClassCode(e.target.value);setAssessmentPage(0)}}><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option></select></label><label>Subject<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setAssessmentPage(0)}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
           {loading?<p className={styles.empty}>Loading tests…</p>:assessments.length===0?<div className={styles.empty}><b>No assessments in this filter</b><span>Create a draft from approved questions above.</span></div>:<div className={styles.testList}>{assessments.map(row=><article className={styles.testCard} key={row.assessment_id}>
             <div className={styles.testIcon}>✓</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.title}</h3><span className={styles['status'+row.status]}>{row.status}</span></div><p>Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>{row.is_generated?(row.assessment_type==='TOPIC_END'?'System-generated · topic-end test':'System-generated · chapter-end test'):'Admin-created test'}{row.is_generated?' · version '+(row.generation_version||1):''}</small><small>{row.question_count} questions · {row.max_score} marks · {row.duration_minutes} min · {row.max_attempts} attempt(s)</small><small>{row.attempt_count} submitted/started · {row.review_count} awaiting review</small>
               <div className={styles.inlineAssign}><select aria-label={'Assign grader for '+row.title} value={graderByAssessment[row.assessment_id]||''} onChange={e=>setGraderByAssessment(m=>({...m,[row.assessment_id]:e.target.value}))}><option value="">Assign permitted staff checker…</option>{eligibleStaff.map(s=><option key={s.staff_id} value={s.staff_id}>{s.display_name} · {s.role}</option>)}</select><button type="button" disabled={busy||!eligibleStaff.length||!graderByAssessment[row.assessment_id]} onClick={()=>void assignGrader(row)}>Assign checker</button></div>
               {row.assigned_grader_names? <small>Assigned: {row.assigned_grader_names}</small>:null}
             </div><div className={styles.testActions}>{row.status==='DRAFT'&&<button className={styles.primaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'PUBLISHED')}>Publish</button>}{row.status==='PUBLISHED'&&!row.is_generated&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'ARCHIVED')}>Archive</button>}{row.status==='ARCHIVED'&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'DRAFT')}>Restore draft</button>}</div>
           </article>)}</div>}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+            <small>Showing {assessmentTotal===0?0:assessmentPage*assessmentPageSize+1}–{Math.min(assessmentTotal,(assessmentPage+1)*assessmentPageSize)} of {assessmentTotal}</small>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
+              <button type="button" className={styles.secondaryButton} disabled={assessmentPage===0||loading} onClick={()=>setAssessmentPage(value=>Math.max(0,value-1))}>← Previous</button>
+              <span>Page {assessmentTotal===0?0:assessmentPage+1} of {Math.max(1,Math.ceil(assessmentTotal/assessmentPageSize))}</span>
+              <button type="button" className={styles.secondaryButton} disabled={(assessmentPage+1)*assessmentPageSize>=assessmentTotal||loading} onClick={()=>setAssessmentPage(value=>value+1)}>Next →</button>
+            </div>
+          </div>
         </section>
       </>:<section className={styles.panel}>
-        <div className={styles.panelHeading}><div><span>TEACHER REVIEW QUEUE</span><h2>Submitted tests awaiting a decision</h2><p>Reviewers see tests assigned to them. Administrators can review any test and assign any active staff member with assessment-grading permission. This audit is test-level only.</p></div><select className={styles.filter} value={queueStatus} onChange={e=>setQueueStatus(e.target.value)}><option value="AWAITING_REVIEW">Awaiting review</option><option value="GRADED">Graded · not released</option><option value="RELEASED">Released results</option><option value="ALL">All states</option></select></div>
-        <div className={styles.queueSearch}><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search test, student or chapter…"/><button type="button" className={styles.secondaryButton} onClick={()=>void loadQueue()}>Search</button></div>
+        <div className={styles.panelHeading}><div><span>TEACHER REVIEW QUEUE</span><h2>Submitted tests awaiting a decision</h2><p>Reviewers see tests assigned to them. Administrators can review any test and assign any active staff member with assessment-grading permission. This audit is test-level only.</p></div><select className={styles.filter} value={queueStatus} onChange={e=>{setQueueStatus(e.target.value);setQueuePage(0)}}><option value="AWAITING_REVIEW">Awaiting review</option><option value="GRADED">Graded · not released</option><option value="RELEASED">Released results</option><option value="ALL">All states</option></select></div>
+        <div className={styles.queueSearch}><input value={query} onChange={e=>{setQuery(e.target.value);setQueuePage(0)}} placeholder="Search test, student or chapter…"/><button type="button" className={styles.secondaryButton} onClick={()=>void loadQueue()}>Search</button></div>
         {loading?<p className={styles.empty}>Loading the grading queue…</p>:queue.length===0?<div className={styles.empty}><b>No submitted tests to show</b><span>New attempts requiring teacher review appear here automatically.</span></div>:<div className={styles.testList}>{queue.map(row=><article className={styles.testCard} key={row.attempt_id}><div className={styles.testIcon}>✎</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.assessment_title}</h3><span className={styles['status'+row.status]}>{row.status}</span></div><p>{row.student_name} · Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>Submitted {fmtDate(row.submitted_at)} · Attempt {row.attempt_number} · {row.question_count} questions · {row.pending_answers} awaiting manual check</small><small>Result {row.status==='RELEASED'?row.final_score+' / '+row.max_score:'not yet released'}</small></div><div className={styles.testActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openReview(row.attempt_id)}>{row.status==='AWAITING_REVIEW'?'Review test':'Open record'}</button></div></article>)}</div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {queueTotal===0?0:queuePage*queuePageSize+1}–{Math.min(queueTotal,(queuePage+1)*queuePageSize)} of {queueTotal} submitted tests</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className={styles.secondaryButton} disabled={queuePage===0||loading} onClick={()=>void loadQueue(queuePage-1)}>← Previous</button>
+            <span>Page {queueTotal===0?0:queuePage+1} of {Math.max(1,Math.ceil(queueTotal/queuePageSize))}</span>
+            <button type="button" className={styles.secondaryButton} disabled={(queuePage+1)*queuePageSize>=queueTotal||loading} onClick={()=>void loadQueue(queuePage+1)}>Next →</button>
+          </div>
+        </div>
       </section>}
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>

@@ -27,9 +27,18 @@ public class AdminController {
   }
 
   @GetMapping("/parents")
-  public List<Map<String,Object>> parents(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> parents(
+      @RequestParam(required=false) String query,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
     authorization.requireAdmin(context);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String term=query==null?"":query.trim();
+    if(term.length()>120)term=term.substring(0,120);
+    String pattern="%"+term+"%";
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at,
         count(distinct case when gs.active=true and gs.consent_status='CONSENTED' and st.active=true then st.id end) as active_children,
         count(distinct case when gs.active=true and gs.consent_status='CONSENTED' then st.id end) as linked_children
@@ -37,9 +46,15 @@ public class AdminController {
       left join guardian_student gs on gs.guardian_user_id=u.id
       left join student st on st.id=gs.student_id and st.environment='PRODUCTION'
       where u.role='PARENT'
+        and (?='' or coalesce(u.display_name,'') ilike ? or coalesce(u.mobile_e164,'') ilike ?)
       group by u.id,u.display_name,u.mobile_e164,u.active,u.created_at,u.updated_at
-      order by u.created_at desc
-      """);
+      order by u.created_at desc,u.id desc limit ? offset ?
+      """,term,pattern,pattern,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from user_account
+      where role='PARENT' and (?='' or coalesce(display_name,'') ilike ? or coalesce(mobile_e164,'') ilike ?)
+      """,Long.class,term,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/parents/{parentId}/children")
@@ -120,14 +135,30 @@ public class AdminController {
   }
 
   @GetMapping("/students")
-  public List<Map<String,Object>> students(@RequestAttribute(value="authContext",required=false) AuthContext context){
+  public Map<String,Object> students(
+      @RequestParam(required=false) String query,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
     authorization.requireAdmin(context);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String term=query==null?"":query.trim();
+    if(term.length()>120)term=term.substring(0,120);
+    String pattern="%"+term+"%";
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,st.environment,
              st.active,st.created_at,count(distinct p.id) as completed_lessons
       from student st left join student_lesson_progress p on p.student_id=st.id and p.status='COMPLETED'
-      where st.environment='PRODUCTION' group by st.id order by st.created_at desc
-      """);
+      where st.environment='PRODUCTION'
+        and (?='' or coalesce(st.display_name,'') ilike ? or st.class_code ilike ? or st.public_id::text ilike ?)
+      group by st.id order by st.created_at desc,st.id desc limit ? offset ?
+      """,term,pattern,pattern,pattern,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from student st where st.environment='PRODUCTION'
+        and (?='' or coalesce(st.display_name,'') ilike ? or st.class_code ilike ? or st.public_id::text ilike ?)
+      """,Long.class,term,pattern,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/action-log")

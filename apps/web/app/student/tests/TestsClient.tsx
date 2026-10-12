@@ -43,6 +43,9 @@ export default function TestsClient(){
   const language=locale==='english'?'en':'hi';
   const [tests,setTests]=useState<AssessmentCard[]>([]);
   const [results,setResults]=useState<Result[]>([]);
+  const [resultsPage,setResultsPage]=useState(0);
+  const [resultsTotal,setResultsTotal]=useState(0);
+  const resultsPageSize=25;
   const [tab,setTab]=useState<'tests'|'results'>('tests');
   const [attempt,setAttempt]=useState<Attempt|null>(null);
   const [responses,setResponses]=useState<Record<number,any>>({});
@@ -67,13 +70,14 @@ export default function TestsClient(){
     try{
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?language='+language),
-        api('/api/v1/learning/assessment-results?language='+language)
+        api('/api/v1/learning/assessment-results?language='+language+'&limit='+resultsPageSize+'&offset='+(resultsPage*resultsPageSize))
       ]);
       setTests(Array.isArray(catalog)?catalog:[]);
-      setResults(Array.isArray(studentResults)?studentResults:[]);
+      setResults(Array.isArray(studentResults?.items)?studentResults.items:(Array.isArray(studentResults)?studentResults:[]));
+      setResultsTotal(Number(studentResults?.total??(Array.isArray(studentResults)?studentResults.length:0)));
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
-  },[router,language]);
+  },[router,language,resultsPage]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -267,7 +271,15 @@ export default function TestsClient(){
                 </article>;
               })}
             </div>
-          </section>
+          <div className={styles.resultPagination} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+        <small>Showing {resultsTotal===0?0:resultsPage*resultsPageSize+1}–{Math.min(resultsTotal,(resultsPage+1)*resultsPageSize)} of {resultsTotal} results</small>
+        <div style={{display:'flex',alignItems:'center',gap:8}}>
+          <button type="button" disabled={resultsPage===0||loading} onClick={()=>setResultsPage(value=>Math.max(0,value-1))}>← Previous</button>
+          <span>Page {resultsTotal===0?0:resultsPage+1} of {Math.max(1,Math.ceil(resultsTotal/resultsPageSize))}</span>
+          <button type="button" disabled={(resultsPage+1)*resultsPageSize>=resultsTotal||loading} onClick={()=>setResultsPage(value=>value+1)}>Next →</button>
+        </div>
+      </div>
+      </section>
           <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to results</button></div>
         </section>
         :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>Test submitted successfully</h2><p>Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
