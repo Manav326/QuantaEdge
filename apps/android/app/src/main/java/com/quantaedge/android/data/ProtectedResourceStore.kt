@@ -3,10 +3,10 @@ package com.quantaedge.android.data
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import android.util.Base64
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.io.IOException
 import java.security.MessageDigest
 import java.security.KeyStore
 import javax.crypto.Cipher
@@ -44,17 +44,55 @@ class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
         }.getOrDefault(emptyList())
     }
 
+    /**
+     * Encrypt to a temporary file and rename only after the authenticated ciphertext is complete.
+     * A process kill or full disk during a download must not leave a partial file that looks cached.
+     */
     fun savePage(documentId: Long, page: Int, bytes: ByteArray) {
         require(documentId > 0L && page > 0)
-        File(root, pageName(documentId, page)).writeBytes(encrypt(bytes))
+        val target = File(root, pageName(documentId, page))
+        val temporary = File(root, target.name + ".tmp")
+        try {
+            temporary.writeBytes(encrypt(bytes))
+            if (!temporary.renameTo(target)) {
+                // Some filesystems cannot rename over an existing target; replace only after the
+                // complete temporary ciphertext has been written successfully.
+                if (target.exists() && !target.delete()) {
+                    throw IOException("Unable to replace the cached textbook page.")
+                }
+                if (!temporary.renameTo(target)) {
+                    throw IOException("Unable to safely persist the encrypted textbook page.")
+                }
+            }
+        } catch (failure: Exception) {
+            temporary.delete()
+            throw failure
+        }
     }
 
-    fun hasPage(documentId: Long, page: Int): Boolean = File(root, pageName(documentId, page)).isFile
+    /** True only when the encrypted file can be authenticated and decrypted successfully. */
+    fun hasPage(documentId: Long, page: Int): Boolean {
+        val file = File(root, pageName(documentId, page))
+        if (!file.isFile) return false
+        return try {
+            decrypt(file.readBytes())
+            true
+        } catch (_: Exception) {
+            // Remove a damaged or legacy partial cache entry so WorkManager can download it again.
+            file.delete()
+            false
+        }
+    }
 
     fun readPage(documentId: Long, page: Int): ByteArray? {
         val file = File(root, pageName(documentId, page))
         if (!file.isFile) return null
-        return runCatching { decrypt(file.readBytes()) }.getOrNull()
+        return try {
+            decrypt(file.readBytes())
+        } catch (_: Exception) {
+            file.delete()
+            null
+        }
     }
 
     fun cachedPageCount(documentId: Long, pageCount: Int): Int =
