@@ -188,8 +188,11 @@ public class HrEmployeeController {
   public Map<String,Object> createEmployee(@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
-    long orgId=organizationId(body.get("organizationId"));
     String name=required(body.get("displayName"),120,"Employee name");
+    String email=optionalText(body.get("email"),254);
+    String phone=optionalText(body.get("phoneE164"),24);
+    validateContactFields(email,phone);
+    long orgId=organizationId(body.get("organizationId"));
     String type=required(body.get("employmentTypeCode"),32,"Employment type").toUpperCase();
     LocalDate joining=parseDate(body.get("joiningDate"),"Joining date");
     LocalDate probation=parseOptionalDate(body.get("probationEndDate"),"Probation end date");
@@ -203,8 +206,6 @@ public class HrEmployeeController {
     validateManager(manager,null,orgId);
     Boolean typeExists=jdbc.queryForObject("select exists(select 1 from hr_employment_type where code=? and active=true)",Boolean.class,type);
     if(!Boolean.TRUE.equals(typeExists)) throw badRequest("Choose a supported employment type.");
-    String email=optionalText(body.get("email"),254);
-    String phone=optionalText(body.get("phoneE164"),24);
     String status=String.valueOf(body.getOrDefault("employmentStatus","ACTIVE")).toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status)) throw badRequest("Choose a supported employment status.");
     if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
@@ -236,6 +237,7 @@ public class HrEmployeeController {
     String name=required(body.get("displayName"),120,"Employee name");
     String email=optionalText(body.get("email"),254);
     String phone=optionalText(body.get("phoneE164"),24);
+    validateContactFields(email,phone);
     Long department=optionalLong(body.get("departmentId"));
     Long designation=optionalLong(body.get("designationId"));
     Long manager=optionalLong(body.get("managerEmployeeId"));
@@ -288,6 +290,15 @@ public class HrEmployeeController {
     writeHistory(id,context,"EMPLOYMENT_STATUS_CHANGED",LocalDate.now(),before,after,optionalText(body.get("reason"),500));
     record(context,"/api/v1/hr/employees/"+id+"/status","Changed employee status to "+status);
     return after;
+  }
+
+  private void validateContactFields(String email,String phone) {
+    if(email!=null && !email.matches("(?i)^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$")) {
+      throw badRequest("Email address is not valid.");
+    }
+    if(phone!=null && !phone.matches("^\\+[1-9][0-9]{6,14}$")) {
+      throw badRequest("Phone number must use E.164 format, such as +14155552671.");
+    }
   }
 
   private void validateManager(Long managerId,Long employeeId,long orgId) {
