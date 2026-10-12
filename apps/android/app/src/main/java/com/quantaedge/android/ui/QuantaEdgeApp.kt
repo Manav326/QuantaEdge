@@ -738,7 +738,7 @@ fun QuantaEdgeApp() {
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) {
+                    if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.RECORDING_PLAYER)) {
                         TextButton(onClick = { goBack() }) { Text("←") }
                     }
                     Image(
