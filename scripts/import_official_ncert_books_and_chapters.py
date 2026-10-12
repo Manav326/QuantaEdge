@@ -336,8 +336,10 @@ def page_title_hits(text: str, chapters: list[dict[str, Any]], aliases_by_code: 
 
 
 def page_has_contents_marker(text: str) -> bool:
-    norm = normalize_text(text)
-    return any(term in norm for term in CONTENT_TERMS)
+    # Restrict this check to page headers; the word "contents" can legitimately appear
+    # inside a lesson paragraph and must not suppress a genuine chapter-opening page.
+    header = normalize_text("\\n".join((text or "").splitlines()[:12]))
+    return any(term in header for term in CONTENT_TERMS)
 
 
 def detect_chapter_ranges(
