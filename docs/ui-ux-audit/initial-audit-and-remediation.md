@@ -79,3 +79,11 @@ Additional source-level fixes were committed to `main`:
 - Browser screenshots, viewport-by-viewport inspection, and manual keyboard/screen-reader verification remain outstanding. These commits must be treated as code-level remediation, not proof of complete WCAG conformance.
 
 Next, inspect the live Content Studio and student workflows in a browser-capable environment, and only then make additional targeted visual changes. Avoid rapid unrelated commits that cancel the latest validation run.
+
+
+## Third remediation pass — payroll navigation semantics
+
+- `apps/people/app/payroll/page.tsx` — the Payroll periods / Compensation / Salary components selector now has a programmatic group label, exposes its selected state through `aria-pressed`, and explicitly marks the Refresh action and selectors as non-submit buttons. Existing permission checks and business actions are unchanged.
+- Commit: `d4c313497fbad07c3af8b39f8041fbb4c509572e`.
+
+This is a source-level correction. Keyboard navigation and assistive-technology behavior still need browser verification.
