@@ -69,10 +69,13 @@ public class SourceIngestionController {
    * attach chapters to students or publish anything.
    */
   @GetMapping("/intake")
-  public List<Map<String, Object>> listBookIntake(
+  public Map<String,Object> listBookIntake(
+      @RequestParam(defaultValue="10") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireReviewer(context);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?10:limit,50));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
              a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
              c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
@@ -83,9 +86,18 @@ public class SourceIngestionController {
       join learning_pdf_asset a on a.id=i.pdf_asset_id
       join curriculum_class c on c.id=i.class_id
       join curriculum_subject s on s.id=i.subject_id
-      order by i.updated_at desc,i.pdf_asset_id desc
-      limit 500
+      order by i.updated_at desc,i.pdf_asset_id desc limit ? offset ?
+      """,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from learning_book_intake",Long.class);
+    Map<String,Object> summary=jdbc.queryForMap("""
+      select count(*) as total,
+             count(*) filter(where upper(coalesce(status,''))='PENDING') as pending,
+             count(*) filter(where upper(coalesce(status,''))='REVIEW') as in_review,
+             count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
+             count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
+      from learning_book_intake
       """);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
   /** Create or update the dedicated, validated classification for an already uploaded PDF. */
@@ -923,23 +935,34 @@ public class SourceIngestionController {
   }
 
   @GetMapping("/jobs")
-  public List<Map<String, Object>> listJobs(
+  public Map<String,Object> listJobs(
+      @RequestParam(defaultValue="20") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireReviewer(context);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?20:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select j.id as job_id,j.source_id,j.source_title,j.source_url,j.final_pdf_url,j.edition,j.language,
              j.status,j.error_message,j.book_asset_id,j.page_count,j.created_at,j.updated_at,j.reviewed_at,
-             c.code as class_code,c.display_name as class_name,
-             s.code as subject_code,s.display_name as subject_name,
+             c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id) as chapter_count,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='APPROVED') as approved_chapter_count,
              (select count(*) from source_ingestion_chapter ch where ch.job_id=j.id and ch.status='REJECTED') as rejected_chapter_count
-      from source_ingestion_job j
-      join curriculum_subject s on s.id=j.subject_id
+      from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
       join curriculum_class c on c.id=s.class_id
-      order by j.created_at desc,j.id desc
-      limit 200
+      order by j.created_at desc,j.id desc limit ? offset ?
+      """,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("select count(*) from source_ingestion_job",Long.class);
+    Map<String,Object> summary=jdbc.queryForMap("""
+      select count(*) as total,
+             count(*) filter(where upper(coalesce(status,''))='DOWNLOADING') as downloading,
+             count(*) filter(where upper(coalesce(status,''))='REVIEW') as in_review,
+             count(*) filter(where upper(coalesce(status,''))='APPROVED') as approved,
+             count(*) filter(where upper(coalesce(status,''))='FAILED') as failed,
+             count(*) filter(where upper(coalesce(status,''))='REJECTED') as rejected
+      from source_ingestion_job
       """);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset,"summary",summary);
   }
 
   @GetMapping("/jobs/{jobId}")

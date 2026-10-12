@@ -214,6 +214,10 @@ export default function TextbookLibraryPage() {
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
   const [intakeRows, setIntakeRows] = useState<any[]>([]);
+  const [intakePage, setIntakePage] = useState(0);
+  const [intakeTotal, setIntakeTotal] = useState(0);
+  const intakePageSize = 10;
+  const [intakeSummary, setIntakeSummary] = useState<Record<string, number>>({});
   const [intakeRanges, setIntakeRanges] = useState<any[]>([]);
   const [rangeReviewNotes, setRangeReviewNotes] = useState('');
   const [rangeDraftSourceTitle, setRangeDraftSourceTitle] = useState('');
@@ -515,8 +519,8 @@ export default function TextbookLibraryPage() {
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
       const intakePromise = canReview
-        ? api('/api/v1/admin/source-ingestion/intake').catch(() => [])
-        : Promise.resolve([]);
+        ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
+        : Promise.resolve({ items: [], total: 0, summary: {} });
       const [pdfRows, contentRows, resourceRows, intakeData] = await Promise.all([
         api('/api/v1/admin/learning-pdfs'),
         chapterPromise,
@@ -528,7 +532,9 @@ export default function TextbookLibraryPage() {
       const resources = Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : []);
       setAssignmentTotal(Number(resourceRows?.total ?? resources.length));
       setAssignmentFacets(resourceRows?.facets && typeof resourceRows.facets === 'object' ? resourceRows.facets : {});
-      setIntakeRows(Array.isArray(intakeData) ? intakeData : []);
+      setIntakeRows(Array.isArray(intakeData?.items) ? intakeData.items : (Array.isArray(intakeData) ? intakeData : []));
+      setIntakeTotal(Number(intakeData?.total ?? (Array.isArray(intakeData) ? intakeData.length : 0)));
+      setIntakeSummary(intakeData?.summary && typeof intakeData.summary === 'object' ? intakeData.summary : {});
       setLibrary(pdfs);
       const distinct = new Map<number, Chapter>();
       content.forEach((row: any) => {
@@ -561,7 +567,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId, assignmentPage,
+  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, intakePage,
       viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
@@ -790,7 +796,7 @@ export default function TextbookLibraryPage() {
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
           </label>
           {canReview && <section className={styles.uploadBox}>
-            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeRows.length} classified PDF(s)</small></div>
+            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>
             {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
               <div className={styles.assignmentList}>
                 {intakeRows.map((item: any) => <div className={styles.assignmentQueueRow} key={item.pdf_asset_id}>
@@ -823,6 +829,14 @@ export default function TextbookLibraryPage() {
                   }}>Open review</button>
                 </div>)}
               </div>}
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:10,marginTop:12,flexWrap:'wrap'}}>
+              <small>Showing {intakeTotal===0?0:intakePage*intakePageSize+1}–{Math.min(intakeTotal,(intakePage+1)*intakePageSize)} of {intakeTotal}</small>
+              <div style={{display:'flex',gap:8,alignItems:'center'}}>
+                <button type="button" className={styles.secondaryButton} disabled={intakePage===0||loading} onClick={()=>setIntakePage(value=>Math.max(0,value-1))}>← Previous</button>
+                <span>Page {intakeTotal===0?0:intakePage+1} of {Math.max(1,Math.ceil(intakeTotal/intakePageSize))}</span>
+                <button type="button" className={styles.secondaryButton} disabled={(intakePage+1)*intakePageSize>=intakeTotal||loading} onClick={()=>setIntakePage(value=>value+1)}>Next →</button>
+              </div>
+            </div>
           </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>

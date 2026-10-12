@@ -81,6 +81,10 @@ export default function SourceIngestionPage() {
   const [mappingError, setMappingError] = useState('');
   const [tracks, setTracks] = useState<Track[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobPage, setJobPage] = useState(0);
+  const [jobsTotal, setJobsTotal] = useState(0);
+  const [jobSummary, setJobSummary] = useState<Record<string, number>>({});
+  const jobPageSize = 20;
   const [selectedSource, setSelectedSource] = useState('');
   const [classCode, setClassCode] = useState('');
   const [subjectCode, setSubjectCode] = useState('');
@@ -118,13 +122,15 @@ export default function SourceIngestionPage() {
     try {
       const [sourceRows, jobRows, curriculumRows, registryRows, registryGapRows] = await Promise.all([
         api('/api/v1/admin/source-ingestion/sources'),
-        api('/api/v1/admin/source-ingestion/jobs'),
+        api('/api/v1/admin/source-ingestion/jobs?limit=' + jobPageSize + '&offset=' + (jobPage * jobPageSize)),
         api('/api/v1/curriculum'),
         api('/api/v1/admin/source-ingestion/registry-books?medium=both').catch(() => []),
         api('/api/v1/admin/source-ingestion/registry-book-gaps?medium=both').catch(() => []),
       ]);
       const sourceData = Array.isArray(sourceRows) ? sourceRows : [];
-      const jobData = Array.isArray(jobRows) ? jobRows : [];
+      const jobData = Array.isArray(jobRows?.items) ? jobRows.items : (Array.isArray(jobRows) ? jobRows : []);
+      setJobsTotal(Number(jobRows?.total ?? jobData.length));
+      setJobSummary(jobRows?.summary && typeof jobRows.summary === 'object' ? jobRows.summary : {});
       const curriculum = Array.isArray(curriculumRows) ? curriculumRows : [];
       const nextTracks = [...new Map(curriculum.map((r: any) => [String(r.class_code) + ':' + String(r.subject_code), {
         class_code: String(r.class_code), class_name: String(r.class_name),
@@ -158,7 +164,7 @@ export default function SourceIngestionPage() {
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Source ingestion data could not be loaded.');
     } finally { setLoading(false); }
-  }, [classCode, subjectCode, selectedSource]);
+  }, [classCode, subjectCode, selectedSource, jobPage]);
 
   const loadJob = useCallback(async (id: number) => {
     const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
@@ -427,8 +433,8 @@ export default function SourceIngestionPage() {
 
       <section className={styles.summary}>
         <div><small>REGISTERED SOURCES</small><strong>{sources.length}</strong><span>Existing database records checked</span></div>
-        <div><small>IN REVIEW</small><strong>{jobs.filter(j => j.status === 'REVIEW').length}</strong><span>Books waiting for chapter review</span></div>
-        <div><small>APPROVED JOBS</small><strong>{jobs.filter(j => j.status === 'APPROVED').length}</strong><span>Added to library as drafts</span></div>
+        <div><small>IN REVIEW</small><strong>{Number(jobSummary.in_review ?? jobs.filter(j => j.status === 'REVIEW').length)}</strong><span>Books waiting for chapter review</span></div>
+        <div><small>APPROVED JOBS</small><strong>{Number(jobSummary.approved ?? jobs.filter(j => j.status === 'APPROVED').length)}</strong><span>Added to library as drafts</span></div>
       </section>
 
       <section className={styles.panel}>
@@ -617,6 +623,14 @@ export default function SourceIngestionPage() {
             <small>{row.chapter_count} chapter candidates · {row.approved_chapter_count} approved · {row.rejected_chapter_count || 0} rejected</small>
             {row.error_message && <small className={styles.jobError}>{row.error_message}</small>}
           </button>)}</div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
+          <small>Showing {jobsTotal===0?0:jobPage*jobPageSize+1}–{Math.min(jobsTotal,(jobPage+1)*jobPageSize)} of {jobsTotal} ingestion jobs</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className={styles.secondary} disabled={jobPage===0||loading} onClick={()=>setJobPage(value=>Math.max(0,value-1))}>← Previous</button>
+            <span>Page {jobsTotal===0?0:jobPage+1} of {Math.max(1,Math.ceil(jobsTotal/jobPageSize))}</span>
+            <button type="button" className={styles.secondary} disabled={(jobPage+1)*jobPageSize>=jobsTotal||loading} onClick={()=>setJobPage(value=>value+1)}>Next →</button>
+          </div>
+        </div>
         {latestReviewJobs.length > 0 && <p className={styles.help}>Jobs still marked DOWNLOADING may need a minute for the PDF to be fetched and inspected. Select the job and refresh its status.</p>}
       </section>
 

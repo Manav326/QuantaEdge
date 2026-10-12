@@ -228,6 +228,8 @@ public class AdminContentController {
   @GetMapping("/questions/{questionId}/history")
   public Map<String,Object> questionHistory(
       @PathVariable long questionId,
+      @RequestParam(defaultValue="10") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     context=authorization.requireAuth(context);
     if (!authorization.hasPermission(context,"CONTENT_VIEW")
@@ -236,9 +238,15 @@ public class AdminContentController {
     }
     Map<String,Object> current=questionHistory.snapshot(questionId);
     if (current.isEmpty()) throw notFound("Question",questionId);
+    int rowLimit=Math.max(1,Math.min(limit==null?10:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    Long total=jdbc.queryForObject("select count(*) from question_review_history where question_id=?",Long.class,questionId);
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("question",current);
-    result.put("history",questionHistory.history(questionId));
+    result.put("history",questionHistory.history(questionId,rowLimit,rowOffset));
+    result.put("total",total==null?0L:total);
+    result.put("limit",rowLimit);
+    result.put("offset",rowOffset);
     return result;
   }
 

@@ -56,6 +56,9 @@ export default function QuestionReviewPage(){
   const [notice,setNotice]=useState('');
   const [historyFor,setHistoryFor]=useState<number|null>(null);
   const [history,setHistory]=useState<HistoryEntry[]>([]);
+  const [historyPage,setHistoryPage]=useState(0);
+  const [historyTotal,setHistoryTotal]=useState(0);
+  const historyPageSize=10;
   const [historyLoading,setHistoryLoading]=useState(false);
   const [canManage,setCanManage]=useState(false);
   const [permissionLoading,setPermissionLoading]=useState(true);
@@ -126,12 +129,14 @@ export default function QuestionReviewPage(){
     finally{setBusyId(null);}
   }
 
-  async function showHistory(questionId:number){
-    setHistoryFor(questionId);setHistoryLoading(true);setError('');
+  async function showHistory(questionId:number,nextPage=0){
+    setHistoryFor(questionId);setHistoryPage(nextPage);setHistoryLoading(true);setError('');
     try{
-      const data=await api('/api/v1/admin/content/questions/'+questionId+'/history');
+      const params=new URLSearchParams({limit:String(historyPageSize),offset:String(nextPage*historyPageSize)});
+      const data=await api('/api/v1/admin/content/questions/'+questionId+'/history?'+params.toString());
       setHistory(Array.isArray(data.history)?data.history:[]);
-    }catch(e:any){setError(e.message||'Question history could not be loaded.');setHistory([]);}
+      setHistoryTotal(Number(data.total??(Array.isArray(data.history)?data.history.length:0)));
+    }catch(e:any){setError(e.message||'Question history could not be loaded.');setHistory([]);setHistoryTotal(0);}
     finally{setHistoryLoading(false);}
   }
 
@@ -221,7 +226,7 @@ export default function QuestionReviewPage(){
       </section>
 
       {historyFor!==null&&<section className="admin-panel" style={{marginTop:20}}>
-        <div className="admin-section-title"><div><span className="admin-kicker">QUESTION CHANGE LOG</span><h2>Question #{historyFor} — full history</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([])}}>Close</button></div>
+        <div className="admin-section-title"><div><span className="admin-kicker">QUESTION CHANGE LOG</span><h2>Question #{historyFor} — full history</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([]);setHistoryPage(0);setHistoryTotal(0)}}>Close</button></div>
         {historyLoading?<p>Loading history…</p>:history.length===0?<p>No history rows were found.</p>:
           <div style={{display:'grid',gap:12,marginTop:14}}>
             {history.map(entry=><article key={entry.id} style={{border:'1px solid #e1e5ed',borderRadius:12,padding:14}}>
@@ -237,6 +242,14 @@ export default function QuestionReviewPage(){
               </details>
             </article>)}
           </div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:14,flexWrap:'wrap'}}>
+          <small>Showing {historyTotal===0?0:historyPage*historyPageSize+1}–{Math.min(historyTotal,(historyPage+1)*historyPageSize)} of {historyTotal} history events</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className="button" disabled={historyPage===0||historyLoading} onClick={()=>historyFor!==null&&void showHistory(historyFor,historyPage-1)}>← Previous</button>
+            <span>Page {historyTotal===0?0:historyPage+1} of {Math.max(1,Math.ceil(historyTotal/historyPageSize))}</span>
+            <button type="button" className="button" disabled={(historyPage+1)*historyPageSize>=historyTotal||historyLoading} onClick={()=>historyFor!==null&&void showHistory(historyFor,historyPage+1)}>Next →</button>
+          </div>
+        </div>
       </section>}
     </section>
   </main>;

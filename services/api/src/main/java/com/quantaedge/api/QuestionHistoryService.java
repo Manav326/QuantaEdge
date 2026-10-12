@@ -70,15 +70,17 @@ public class QuestionHistoryService {
       json(after));
   }
 
-  public List<Map<String,Object>> history(long questionId) {
+  public List<Map<String,Object>> history(long questionId,int limit,int offset) {
+    int rowLimit=Math.max(1,Math.min(limit,100));
+    int rowOffset=Math.max(0,Math.min(offset,10_000_000));
     return jdbc.queryForList("""
       select id,question_id,lesson_id,event_type,previous_status,new_status,
              actor_staff_id,actor_role,change_reason,before_snapshot::text as before_snapshot,
              after_snapshot::text as after_snapshot,occurred_at
       from question_review_history
       where question_id=?
-      order by occurred_at desc,id desc
-      """, questionId);
+      order by occurred_at desc,id desc limit ? offset ?
+      """,questionId,rowLimit,rowOffset);
   }
 
   public String json(Map<String,Object> value) {
