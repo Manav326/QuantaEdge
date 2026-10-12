@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -160,6 +161,72 @@ public class HrEmployeeSelfServiceController {
         r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.created_at
       from hr_leave_request r join hr_leave_type t on t.code=r.leave_type_code where r.id=?
       """,id);
+  }
+
+  @GetMapping("/profile-change-requests")
+  public Map<String,Object> profileChangeRequests(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    return Map.of("items",jdbc.queryForList("""
+      select id,public_id,requested_values::text requested_values,reason,request_status,
+        review_note,reviewed_at,created_at,updated_at
+      from hr_employee_change_request where employee_id=?
+      order by created_at desc,id desc limit 100
+      """,employeeId));
+  }
+
+  @PostMapping("/profile-change-requests")
+  @Transactional
+  public Map<String,Object> requestProfileChange(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    Map<String,Object> current=jdbc.queryForMap("select email,phone_e164 from hr_employee where id=?",employeeId);
+    boolean includeEmail=body.containsKey("email"),includePhone=body.containsKey("phoneE164");
+    if(!includeEmail&&!includePhone) throw bad("Provide an email address, phone number, or both to change.");
+    String email=null,phone=null;
+    if(includeEmail) {
+      email=required(body.get("email"),254,"Email");
+      if(!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) throw bad("Enter a valid email address.");
+      if(Objects.equals(current.get("email"),email)) includeEmail=false;
+    }
+    if(includePhone) {
+      phone=required(body.get("phoneE164"),24,"Phone number");
+      if(!phone.matches("^\\+[1-9]\\d{7,14}$")) throw bad("Phone number must use E.164 format, for example +919876543210.");
+      if(Objects.equals(current.get("phone_e164"),phone)) includePhone=false;
+    }
+    if(!includeEmail&&!includePhone) throw bad("The requested contact details are already on your profile.");
+    String reason=required(body.get("reason"),1000,"Reason");
+    Long id;
+    try {
+      id=jdbc.queryForObject("""
+        insert into hr_employee_change_request(employee_id,requested_by_staff_id,requested_values,reason)
+        values (?,?,jsonb_strip_nulls(jsonb_build_object('email',?::varchar,'phoneE164',?::varchar)),?)
+        returning id
+        """,Long.class,employeeId,context.staffId(),includeEmail?email:null,includePhone?phone:null,reason);
+    } catch(DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"You already have a pending profile change request. Wait for it to be reviewed before submitting another.");
+    }
+    audit.recordAction(context,"/api/v1/hr/self-service/profile-change-requests","Submitted employee contact-detail change request "+id);
+    return jdbc.queryForMap("""
+      select id,public_id,requested_values::text requested_values,reason,request_status,
+        review_note,reviewed_at,created_at,updated_at
+      from hr_employee_change_request where id=? and employee_id=?
+      """,id,employeeId);
+  }
+
+  @PatchMapping("/profile-change-requests/{requestId}/cancel")
+  @Transactional
+  public Map<String,Object> cancelProfileChange(@PathVariable long requestId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    List<Map<String,Object>> rows=jdbc.queryForList(
+      "select id,request_status from hr_employee_change_request where id=? and employee_id=?",requestId,employeeId);
+    if(rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Profile change request not found.");
+    if(!"PENDING".equals(rows.getFirst().get("request_status")))
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"Only pending profile change requests can be cancelled.");
+    if(jdbc.update("update hr_employee_change_request set request_status='CANCELLED',updated_at=now() where id=? and employee_id=? and request_status='PENDING'",requestId,employeeId)!=1)
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"The profile change request was already reviewed.");
+    audit.recordAction(context,"/api/v1/hr/self-service/profile-change-requests/"+requestId+"/cancel","Cancelled profile change request "+requestId);
+    return jdbc.queryForMap("select id,public_id,requested_values::text requested_values,reason,request_status,review_note,reviewed_at,created_at,updated_at from hr_employee_change_request where id=?",requestId);
   }
 
   private long linkedEmployeeId(AuthContext context) {
