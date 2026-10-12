@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/guardians")
 public class GuardianController {
   private final JdbcTemplate jdbc; private final AuthorizationService authorization; private final AuthService auth;
+  private final LearningMetricsService learningMetrics;
   @Value("${app.auth.max-children-per-parent:3}") private int maxChildrenPerParent=3;
-  public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth){this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;}
+  public GuardianController(JdbcTemplate jdbc,AuthorizationService authorization,AuthService auth,
+      LearningMetricsService learningMetrics){
+    this.jdbc=jdbc;this.authorization=authorization;this.auth=auth;this.learningMetrics=learningMetrics;
+  }
 
   @GetMapping("/account")
   public Map<String,Object> account(@RequestAttribute(value="authContext",required=false) AuthContext context){
@@ -212,65 +216,11 @@ public class GuardianController {
       """,Boolean.class,context.userId(),studentId);
     if(!allowed) throw new SecurityException("Child access denied");
     Map<String,Object> child=jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language from student where id=? and active=true
+      select id,public_id,display_name,class_code,board,language
+      from student where id=? and active=true
       """,studentId);
-    Map<String,Object> result=new java.util.LinkedHashMap<>(child);
-    result.put("lessonStats",jdbc.queryForMap("""
-      select count(*) filter(where l.active=true and l.status='PUBLISHED') as total_lessons,
-             count(*) filter(where p.status='COMPLETED') as completed_lessons,
-             coalesce(round(100.0*count(*) filter(where p.status='COMPLETED')/
-               nullif(count(*) filter(where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'),0),1),0) as completion_percent
-      from lesson l join curriculum_chapter ch on ch.id=l.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id
-      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
-      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      """,studentId,studentId));
-    result.put("questionStats",jdbc.queryForMap("""
-      select count(*) as attempts,count(*) filter(where correct=true) as correct,
-             count(*) filter(where correct is not null) as graded_attempts,
-             coalesce(round(100.0*count(*) filter(where correct=true)/
-               nullif(count(*) filter(where correct is not null),0),1),0) as accuracy_percent
-      from student_question_attempt where student_id=?
-      """,studentId));
-    result.put("curriculum",jdbc.queryForList("""
-      select c.code as class_code,s.code as subject_code,s.display_name as subject_name,
-             count(distinct ch.id) as chapters,
-             count(distinct l.id) filter(where l.active=true and l.status='PUBLISHED') as lessons,
-             count(distinct p.id) filter(where p.status='COMPLETED') as completed
-      from curriculum_class c join curriculum_subject s on s.class_id=c.id
-      join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
-      join curriculum_chapter ch on ch.subject_id=s.id
-      left join lesson l on l.chapter_id=ch.id
-      left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      where c.code=(select class_code from student where id=?)
-      group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
-      """,studentId,studentId,studentId));
-    result.put("sessionStats",jdbc.queryForMap("""
-      select count(*) as sessions_30d,
-             coalesce(sum(minutes) filter(where started_at>=now()-interval '30 days'),0) as minutes_30d,
-             coalesce(round(avg(minutes) filter(where ended_at is not null and started_at>=now()-interval '30 days'),1),0) as avg_minutes
-      from learning_session where student_id=?
-      """,studentId));
-    result.put("recentAttempts",jdbc.queryForList("""
-      select qa.answered_at,qa.correct,q.question_type,ch.display_name as chapter_name,
-             cc.title as concept_title
-      from student_question_attempt qa
-      join question q on q.id=qa.question_id
-      left join chapter_concept cc on cc.id=q.concept_id
-      join lesson l on l.id=q.lesson_id
-      join curriculum_chapter ch on ch.id=l.chapter_id
-      where qa.student_id=?
-      order by qa.answered_at desc limit 20
-      """,studentId));
-    result.put("masteryDetails",jdbc.queryForList("""
-      select cc.title as concept_title,ch.display_name as chapter_name,s.display_name as subject_name,
-             m.mastery_percent,m.attempts
-      from student_concept_mastery m
-      join chapter_concept cc on cc.id=m.concept_id
-      join curriculum_chapter ch on ch.id=cc.chapter_id
-      join curriculum_subject s on s.id=ch.subject_id
-      where m.student_id=? order by m.mastery_percent asc,coalesce(ch.teaching_order,ch.sort_order),cc.concept_order limit 20
-      """,studentId));
+    Map<String,Object> result=new java.util.LinkedHashMap<>(learningMetrics.statsFor(studentId));
+    result.putAll(child);
     return result;
   }
 

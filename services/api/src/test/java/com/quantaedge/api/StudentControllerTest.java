@@ -23,6 +23,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 class StudentControllerTest {
   @Mock private JdbcTemplate jdbc;
   @Mock private AuthorizationService authorization;
+  @Mock private LearningMetricsService learningMetrics;
 
   private final AuthContext student = new AuthContext(70L, 7L, "STUDENT", "Preview Student");
   private StudentController controller;
@@ -30,7 +31,7 @@ class StudentControllerTest {
   @BeforeEach
   void setUp() {
     when(authorization.requireStudent(student)).thenReturn(student);
-    controller = new StudentController(jdbc, authorization);
+    controller = new StudentController(jdbc, authorization, learningMetrics);
   }
 
   @Test
