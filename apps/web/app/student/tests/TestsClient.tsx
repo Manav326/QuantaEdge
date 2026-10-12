@@ -1,6 +1,7 @@
 'use client';
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
+import PremiumPagination from '../../components/PremiumPagination';
 import AnswerFeedback from '../../components/AnswerFeedback';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -112,14 +113,13 @@ export default function TestsClient(){
   const {locale}=useLocale();
   const language=locale==='english'?'en':'hi';
   const [tests,setTests]=useState<AssessmentCard[]>([]);
-  const [catalogOffset,setCatalogOffset]=useState(0);
-  const [hasMoreTests,setHasMoreTests]=useState(false);
-  const [loadingMoreTests,setLoadingMoreTests]=useState(false);
-  const testCatalogPageSize=24;
+  const [testsPage,setTestsPage]=useState(0);
+  const [testsTotal,setTestsTotal]=useState(0);
+  const [testsPageSize,setTestsPageSize]=useState(10);
   const [results,setResults]=useState<Result[]>([]);
   const [resultsPage,setResultsPage]=useState(0);
   const [resultsTotal,setResultsTotal]=useState(0);
-  const resultsPageSize=25;
+  const [resultsPageSize,setResultsPageSize]=useState(10);
   const [tab,setTab]=useState<'tests'|'results'>('tests');
   const [attempt,setAttempt]=useState<Attempt|null>(null);
   const [responses,setResponses]=useState<Record<number,any>>({});
@@ -142,7 +142,7 @@ export default function TestsClient(){
   const loadOverview=useCallback(async()=>{
     setLoading(true);setError('');
     try{
-      const catalogParams=new URLSearchParams({language,limit:String(testCatalogPageSize),offset:'0'});
+      const catalogParams=new URLSearchParams({language,limit:String(testsPageSize),offset:String(testsPage*testsPageSize)});
       if(subjectFilter!=='ALL')catalogParams.set('subjectCode',subjectFilter);
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?'+catalogParams.toString()),
@@ -150,32 +150,17 @@ export default function TestsClient(){
       ]);
       const catalogItems=Array.isArray(catalog?.items)?catalog.items:(Array.isArray(catalog)?catalog:[]);
       setTests(catalogItems);
-      setCatalogOffset(catalogItems.length);
-      setHasMoreTests(Boolean(catalog?.hasMore));
+      setTestsTotal(Number(catalog?.total ?? catalogItems.length));
       setResults(Array.isArray(studentResults?.items)?studentResults.items:(Array.isArray(studentResults)?studentResults:[]));
       setResultsTotal(Number(studentResults?.total??(Array.isArray(studentResults)?studentResults.length:0)));
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
-  },[router,language,resultsPage,subjectFilter]);
+  },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
   const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?'Topic-end test':kind==='CHAPTER_END'?'Chapter-end test':'Admin-created test';
 
-  async function loadMoreTests(){
-    if(!hasMoreTests||loadingMoreTests)return;
-    setLoadingMoreTests(true);setError('');
-    try{
-      const params=new URLSearchParams({language,limit:String(testCatalogPageSize),offset:String(catalogOffset)});
-      if(subjectFilter!=='ALL')params.set('subjectCode',subjectFilter);
-      const data=await api('/api/v1/learning/assessments?'+params.toString());
-      const next=Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]);
-      setTests(current=>[...current,...next.filter((item:AssessmentCard)=>!current.some(existing=>existing.assessment_id===item.assessment_id))]);
-      setCatalogOffset(current=>current+next.length);
-      setHasMoreTests(Boolean(data?.hasMore));
-    }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'More tests could not be loaded.');}
-    finally{setLoadingMoreTests(false);}
-  }
   const filteredTests=tests.filter(t=>subjectFilter==='ALL'||t.subject_code===subjectFilter);
   const current=attempt?.questions?.[index];
   const currentResponse=current?responses[current.attemptQuestionId]??'':'';
@@ -310,9 +295,9 @@ export default function TestsClient(){
     <section className={styles.wrap}>
       {!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
-        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{tests.length}{hasMoreTests?'+':''}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{resultsTotal}</span></button></div>
+        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>YOUR ASSESSMENTS</span><h2>Tests available to you</h2><p>Tests are shown only for your enrolled class and subjects.</p></div><label>Subject<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTests([]);setCatalogOffset(0);setHasMoreTests(false)}}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>YOUR ASSESSMENTS</span><h2>Tests available to you</h2><p>Tests are shown only for your enrolled class and subjects.</p></div><label>Subject<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
           {loading?<div className={styles.empty}>Loading your tests…</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>No published tests yet</b><small>Your teacher’s published tests will appear here.</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
@@ -320,7 +305,9 @@ export default function TestsClient(){
             const exhausted=!started&&used>=Number(test.max_attempts);
             return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?'Mathematics':'Science'}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} questions</span><span>◷ {test.duration_minutes} min</span><span>★ {test.max_score} marks</span></div><div className={styles.attemptTrack}><span>Attempts used</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?'Opening…':started?'Resume attempt':exhausted?'Attempts used':'Start test'}</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>Latest result ↗</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>You have used all allowed attempts.</small>}</article>;
           })}</div>}
-          {!loading&&hasMoreTests&&<div style={{display:'flex',justifyContent:'center',marginTop:18}}><button type="button" className={styles.secondaryButton} disabled={loadingMoreTests} onClick={()=>void loadMoreTests()}>{loadingMoreTests?'Loading more tests…':'Load more tests ↓'}</button></div>}
+          <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
+            onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
+            itemLabel="available tests" loading={loading} />
         </>:<>
           <div className={styles.toolbar}><div><span className={styles.eyebrow}>SAVED RESULTS</span><h2>Your test history</h2><p>Only released results appear here. Pending teacher checks are not shown as final scores.</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>Refresh</button></div>
           {loading?<div className={styles.empty}>Loading saved results…</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>No released results yet</b><small>When you finish a test, your score and teacher feedback will be saved here after any required review.</small></div>:<div className={styles.resultList}>{results.map(result=>{
@@ -350,14 +337,9 @@ export default function TestsClient(){
                </div>
              </article>;
            })}</div>}
-          <div className={styles.resultPagination} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-            <small>Showing {resultsTotal===0?0:resultsPage*resultsPageSize+1}–{Math.min(resultsTotal,(resultsPage+1)*resultsPageSize)} of {resultsTotal} results</small>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <button type="button" disabled={resultsPage===0||loading} onClick={()=>setResultsPage(value=>Math.max(0,value-1))}>← Previous</button>
-              <span>Page {resultsTotal===0?0:resultsPage+1} of {Math.max(1,Math.ceil(resultsTotal/resultsPageSize))}</span>
-              <button type="button" disabled={(resultsPage+1)*resultsPageSize>=resultsTotal||loading} onClick={()=>setResultsPage(value=>value+1)}>Next →</button>
-            </div>
-          </div>
+          <PremiumPagination page={resultsPage} total={resultsTotal} pageSize={resultsPageSize}
+            onPageChange={setResultsPage} onPageSizeChange={size=>{setResultsPageSize(size);setResultsPage(0);}}
+            itemLabel="released results" loading={loading} />
         </>}
       </>:<>
         <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← Tests & results</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>

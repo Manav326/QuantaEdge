@@ -1,6 +1,7 @@
 'use client';
 
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 import { useCallback, useEffect, useState } from 'react';
 import styles from './Assessments.module.css';
 
@@ -42,11 +43,11 @@ export default function AssessmentsPage(){
   const [assessments,setAssessments]=useState<Assessment[]>([]);
   const [assessmentPage,setAssessmentPage]=useState(0);
   const [assessmentTotal,setAssessmentTotal]=useState(0);
-  const assessmentPageSize=25;
+  const [assessmentPageSize,setAssessmentPageSize]=useState(10);
   const [bank,setBank]=useState<BankQuestion[]>([]);
   const [bankPage,setBankPage]=useState(0);
   const [bankTotal,setBankTotal]=useState(0);
-  const bankPageSize=40;
+  const [bankPageSize,setBankPageSize]=useState(10);
   const [staff,setStaff]=useState<Staff[]>([]);
   const [chapters,setChapters]=useState<Array<{id:number;code:string;name:string}>>([]);
   const [selectedQuestionIds,setSelectedQuestionIds]=useState<number[]>([]);
@@ -59,7 +60,7 @@ export default function AssessmentsPage(){
   const [queue,setQueue]=useState<any[]>([]);
   const [queuePage,setQueuePage]=useState(0);
   const [queueTotal,setQueueTotal]=useState(0);
-  const queuePageSize=25;
+  const [queuePageSize,setQueuePageSize]=useState(10);
   const [queueStatus,setQueueStatus]=useState('AWAITING_REVIEW');
   const [query,setQuery]=useState('');
   const [review,setReview]=useState<ReviewAttempt|null>(null);
@@ -97,12 +98,12 @@ export default function AssessmentsPage(){
       setChapterId(current=>current&&chapterMap.has(Number(current))?current:'');
     }catch(e){setError(e instanceof Error?e.message:'Could not load tests and staff permissions.');}
     finally{setLoading(false);}
-  },[classCode,subjectCode,statusFilter,assessmentPage]);
+  },[classCode,subjectCode,statusFilter,assessmentPage,assessmentPageSize]);
 
-  const loadBank=useCallback(async(nextPage=bankPage)=>{
+  const loadBank=useCallback(async(nextPage=bankPage,nextPageSize=bankPageSize)=>{
     setBankLoading(true);setError('');
     try{
-      const params=new URLSearchParams({classCode,subjectCode,limit:String(bankPageSize),offset:String(nextPage*bankPageSize)});
+      const params=new URLSearchParams({classCode,subjectCode,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       if(chapterId)params.set('chapterId',chapterId);
       if(search.trim())params.set('query',search.trim());
       const data=await api('/api/v1/admin/assessment-question-bank?'+params.toString());
@@ -111,12 +112,12 @@ export default function AssessmentsPage(){
       setBankPage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:'Question bank could not be loaded.');}
     finally{setBankLoading(false);}
-  },[classCode,subjectCode,chapterId,search,bankPage]);
+  },[classCode,subjectCode,chapterId,search,bankPage,bankPageSize]);
 
-  const loadQueue=useCallback(async(nextPage=queuePage)=>{
+  const loadQueue=useCallback(async(nextPage=queuePage,nextPageSize=queuePageSize)=>{
     setLoading(true);setError('');
     try{
-      const params=new URLSearchParams({status:queueStatus,limit:String(queuePageSize),offset:String(nextPage*queuePageSize)});
+      const params=new URLSearchParams({status:queueStatus,limit:String(nextPageSize),offset:String(nextPage*nextPageSize)});
       if(query.trim())params.set('query',query.trim());
       const data=await api('/api/v1/admin/assessment-reviews?'+params.toString());
       setQueue(Array.isArray(data?.items)?data.items:(Array.isArray(data)?data:[]));
@@ -124,7 +125,7 @@ export default function AssessmentsPage(){
       setQueuePage(nextPage);
     }catch(e){setError(e instanceof Error?e.message:'Assessment review queue could not be loaded.');}
     finally{setLoading(false);}
-  },[queueStatus,query,queuePage]);
+  },[queueStatus,query,queuePage,queuePageSize]);
 
   useEffect(()=>{void loadAssessments();},[loadAssessments]);
   useEffect(()=>{if(activeTab==='review')void loadQueue();},[activeTab,loadQueue]);
@@ -221,14 +222,9 @@ export default function AssessmentsPage(){
           {bank.length>0&&<div className={styles.bank}>
             <div className={styles.bankHeader}><div><b>Approved question bank</b><small>{bankTotal} matching question(s) · {selectedQuestionIds.length} selected</small></div><input aria-label="Search approved questions" value={search} onChange={e=>{setSearch(e.target.value);setBankPage(0)}} placeholder="Search question or chapter…"/></div>
             <div className={styles.bankList}>{filteredBank.map(q=><label className={styles.bankRow} key={q.question_id}><input type="checkbox" checked={selectedQuestionIds.includes(q.question_id)} onChange={e=>toggleQuestion(q.question_id,e.target.checked)}/><span><b>{q.prompt}</b><small>{q.chapter_name} · {q.lesson_title} · {q.question_type} · {q.marks||1} mark(s)</small></span><code>#{q.question_id}</code></label>)}</div>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:12,flexWrap:'wrap'}}>
-              <small>Showing {bankTotal===0?0:bankPage*bankPageSize+1}–{Math.min(bankTotal,(bankPage+1)*bankPageSize)} of {bankTotal}</small>
-              <div style={{display:'flex',gap:8,alignItems:'center'}}>
-                <button type="button" className={styles.secondaryButton} disabled={bankPage===0||bankLoading} onClick={()=>void loadBank(bankPage-1)}>← Previous</button>
-                <span>Page {bankTotal===0?0:bankPage+1} of {Math.max(1,Math.ceil(bankTotal/bankPageSize))}</span>
-                <button type="button" className={styles.secondaryButton} disabled={(bankPage+1)*bankPageSize>=bankTotal||bankLoading} onClick={()=>void loadBank(bankPage+1)}>Next →</button>
-              </div>
-            </div>
+            <PremiumPagination page={bankPage} total={bankTotal} pageSize={bankPageSize}
+              onPageChange={nextPage=>void loadBank(nextPage)} onPageSizeChange={size=>{setBankPageSize(size);void loadBank(0,size);}}
+              itemLabel="approved questions" loading={bankLoading} />
             <p className={styles.helpNote}>Correct answers remain server-side and are not sent to the student before the result is released.</p>
           </div>}
         </section>
@@ -251,27 +247,17 @@ export default function AssessmentsPage(){
               {row.assigned_grader_names? <small>Assigned: {row.assigned_grader_names}</small>:null}
             </div><div className={styles.testActions}>{row.status==='DRAFT'&&<button className={styles.primaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'PUBLISHED')}>Publish</button>}{row.status==='PUBLISHED'&&!row.is_generated&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'ARCHIVED')}>Archive</button>}{row.status==='ARCHIVED'&&<button className={styles.secondaryButton} type="button" disabled={busy} onClick={()=>void changeStatus(row,'DRAFT')}>Restore draft</button>}</div>
           </article>)}</div>}
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-            <small>Showing {assessmentTotal===0?0:assessmentPage*assessmentPageSize+1}–{Math.min(assessmentTotal,(assessmentPage+1)*assessmentPageSize)} of {assessmentTotal}</small>
-            <div style={{display:'flex',gap:8,alignItems:'center'}}>
-              <button type="button" className={styles.secondaryButton} disabled={assessmentPage===0||loading} onClick={()=>setAssessmentPage(value=>Math.max(0,value-1))}>← Previous</button>
-              <span>Page {assessmentTotal===0?0:assessmentPage+1} of {Math.max(1,Math.ceil(assessmentTotal/assessmentPageSize))}</span>
-              <button type="button" className={styles.secondaryButton} disabled={(assessmentPage+1)*assessmentPageSize>=assessmentTotal||loading} onClick={()=>setAssessmentPage(value=>value+1)}>Next →</button>
-            </div>
-          </div>
+          <PremiumPagination page={assessmentPage} total={assessmentTotal} pageSize={assessmentPageSize}
+            onPageChange={setAssessmentPage} onPageSizeChange={size=>{setAssessmentPageSize(size);setAssessmentPage(0);}}
+            itemLabel="assessments" loading={loading} />
         </section>
       </>:<section className={styles.panel}>
         <div className={styles.panelHeading}><div><span>TEACHER REVIEW QUEUE</span><h2>Submitted tests awaiting a decision</h2><p>Reviewers see tests assigned to them. Administrators can review any test and assign any active staff member with assessment-grading permission. This audit is test-level only.</p></div><select className={styles.filter} value={queueStatus} onChange={e=>{setQueueStatus(e.target.value);setQueuePage(0)}}><option value="AWAITING_REVIEW">Awaiting review</option><option value="GRADED">Graded · not released</option><option value="RELEASED">Released results</option><option value="ALL">All states</option></select></div>
         <div className={styles.queueSearch}><input value={query} onChange={e=>{setQuery(e.target.value);setQueuePage(0)}} placeholder="Search test, student or chapter…"/><button type="button" className={styles.secondaryButton} onClick={()=>void loadQueue()}>Search</button></div>
         {loading?<p className={styles.empty}>Loading the grading queue…</p>:queue.length===0?<div className={styles.empty}><b>No submitted tests to show</b><span>New attempts requiring teacher review appear here automatically.</span></div>:<div className={styles.testList}>{queue.map(row=><article className={styles.testCard} key={row.attempt_id}><div className={styles.testIcon}>✎</div><div className={styles.testBody}><div className={styles.testTitle}><h3>{row.assessment_title}</h3><span className={styles['status'+row.status]}>{row.status}</span></div><p>{row.student_name} · Class {row.class_code} · {row.subject_name}{row.chapter_name?' · '+row.chapter_name:''}</p><small>Submitted {fmtDate(row.submitted_at)} · Attempt {row.attempt_number} · {row.question_count} questions · {row.pending_answers} awaiting manual check</small><small>Result {row.status==='RELEASED'?row.final_score+' / '+row.max_score:'not yet released'}</small></div><div className={styles.testActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openReview(row.attempt_id)}>{row.status==='AWAITING_REVIEW'?'Review test':'Open record'}</button></div></article>)}</div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {queueTotal===0?0:queuePage*queuePageSize+1}–{Math.min(queueTotal,(queuePage+1)*queuePageSize)} of {queueTotal} submitted tests</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className={styles.secondaryButton} disabled={queuePage===0||loading} onClick={()=>void loadQueue(queuePage-1)}>← Previous</button>
-            <span>Page {queueTotal===0?0:queuePage+1} of {Math.max(1,Math.ceil(queueTotal/queuePageSize))}</span>
-            <button type="button" className={styles.secondaryButton} disabled={(queuePage+1)*queuePageSize>=queueTotal||loading} onClick={()=>void loadQueue(queuePage+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={queuePage} total={queueTotal} pageSize={queuePageSize}
+          onPageChange={setQueuePage} onPageSizeChange={size=>{setQueuePageSize(size);setQueuePage(0);}}
+          itemLabel="submitted tests" loading={loading} />
       </section>}
 
       {review&&<div className={styles.modalBackdrop} role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setReview(null);}}>

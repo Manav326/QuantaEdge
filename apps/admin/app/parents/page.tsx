@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
@@ -23,7 +24,7 @@ export default function AdminParents(){
   const [search,setSearch]=useState('');
   const [page,setPage]=useState(0);
   const [total,setTotal]=useState(0);
-  const pageSize=25;
+  const [pageSize,setPageSize]=useState(10);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
   const [busy,setBusy]=useState<string|null>(null);
@@ -42,7 +43,7 @@ export default function AdminParents(){
     setTotal(Number(body.total ?? (Array.isArray(body)?body.length:0)));
   }
 
-  useEffect(()=>{loadParents().catch((e:any)=>setError(e.message||'Unable to load parent accounts.'));},[router,search,page]);
+  useEffect(()=>{loadParents().catch((e:any)=>setError(e.message||'Unable to load parent accounts.'));},[router,search,page,pageSize]);
 
   async function toggleParent(row:ParentRow){
     const active=!row.active;
@@ -149,14 +150,8 @@ export default function AdminParents(){
               </div>}
             </article>)}
           </div>}
-        <div className="qe-pagination-controls" style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,marginTop:18,flexWrap:'wrap'}}>
-          <span className="admin-muted">Showing {total===0?0:page*pageSize+1}–{Math.min(total,(page+1)*pageSize)} of {total}</span>
-          <div style={{display:'flex',gap:8}}>
-            <button type="button" className="parent-secondary-button" disabled={page===0} onClick={()=>setPage(value=>Math.max(0,value-1))}>← Previous</button>
-            <span style={{alignSelf:'center',fontSize:13}}>Page {total===0?0:page+1} of {Math.max(1,Math.ceil(total/pageSize))}</span>
-            <button type="button" className="parent-secondary-button" disabled={(page+1)*pageSize>=total} onClick={()=>setPage(value=>value+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={page} total={total} pageSize={pageSize} onPageChange={setPage}
+          onPageSizeChange={size=>{setPageSize(size);setPage(0);}} itemLabel="parent accounts" />
       </section>
       <p className="admin-footer">Suspensions revoke active sessions. Archiving a parent-child link and suspending a student are separate actions; neither deletes historical learning data.</p>
     </section>

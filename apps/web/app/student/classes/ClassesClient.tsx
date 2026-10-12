@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import PremiumPagination from '../../components/PremiumPagination';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LocaleText } from '../../components/LanguageProvider';
@@ -48,8 +49,8 @@ export default function StudentClassesClient(){
   const [activeJoinUrl,setActiveJoinUrl]=useState<string|null>(null);
   const joinedSessionRef=useRef<number|null>(null);
   const [selectedRecording,setSelectedRecording]=useState<Recording|null>(null);
-  const [livePage,setLivePage]=useState(0); const [liveTotal,setLiveTotal]=useState(0); const livePageSize=25;
-  const [recordingPage,setRecordingPage]=useState(0); const [recordingsTotal,setRecordingsTotal]=useState(0); const recordingPageSize=25;
+  const [livePage,setLivePage]=useState(0); const [liveTotal,setLiveTotal]=useState(0); const [livePageSize,setLivePageSize]=useState(10);
+  const [recordingPage,setRecordingPage]=useState(0); const [recordingsTotal,setRecordingsTotal]=useState(0); const [recordingPageSize,setRecordingPageSize]=useState(10);
   const videoRef=useRef<HTMLVideoElement|null>(null);
   const watchRef=useRef<{recordingId:number;lastMediaTime:number;watchedSeconds:number;lastSavedPosition:number}>({
     recordingId:0,lastMediaTime:0,watchedSeconds:0,lastSavedPosition:0
@@ -81,7 +82,7 @@ export default function StudentClassesClient(){
       if(e?.auth){router.replace('/login/student');return;}
       setError(e instanceof Error?e.message:'Your class library could not be loaded.');
     }finally{setLoading(false);}
-  },[subjectFilter,livePage,recordingPage,router]);
+  },[subjectFilter,livePage,recordingPage,livePageSize,recordingPageSize,router]);
   useEffect(()=>{void load();},[load]);
 
   useEffect(()=>()=>{
@@ -221,17 +222,13 @@ export default function StudentClassesClient(){
           const joined=joinedSessionId===session.session_id||session.currently_joined;
           return <article key={session.session_id} className={styles.sessionCard}><div className={styles.sessionTop}><span className={styles.liveSymbol}>◷</span><span className={styles['status'+session.status]}>{session.status==='LIVE'?'● LIVE':session.status}</span></div><h3>{session.title}</h3><p>{session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><div className={styles.sessionTime}><span>START</span><b>{formatDate(session.starts_at)}</b><span>END</span><b>{formatDate(session.ends_at)}</b></div>{session.description&&<p className={styles.description}>{session.description}</p>}<div className={styles.sessionMeta}><span>Host: {session.host_staff_name||'Teacher'}</span><span>{session.provider.replaceAll('_',' ')}</span>{session.has_recording&&<span>Recording available</span>}</div>{joined?<div className={styles.joinedActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openMeetingAgain(session.session_id)}>Open meeting ↗</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(session.session_id)}>Leave class</button></div>:canJoin?<button type="button" className={styles.primaryButton+' '+styles.fullButton} disabled={busy} onClick={()=>void joinClass(session)}>{busy?'Checking access…':session.status==='LIVE'?'Join live class ↗':'Join class ↗'}</button>:<button type="button" className={styles.disabledButton} disabled>{ended?'Session ended':start>now+15*60*1000?'Join opens '+formatDate(session.starts_at):'Not available to join'}</button>}{session.has_recording&&<button type="button" className={styles.textButton} onClick={()=>{setTab('recorded');}}>View class recordings →</button>}</article>;
         })}</div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {liveTotal===0?0:livePage*livePageSize+1}–{Math.min(liveTotal,(livePage+1)*livePageSize)} of {liveTotal} live classes</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" disabled={livePage===0||loading} onClick={()=>setLivePage(p=>Math.max(0,p-1))}>← Previous</button><span>Page {liveTotal===0?0:livePage+1} of {Math.max(1,Math.ceil(liveTotal/livePageSize))}</span><button type="button" disabled={(livePage+1)*livePageSize>=liveTotal||loading} onClick={()=>setLivePage(p=>p+1)}>Next →</button></div>
-        </div>
+        <PremiumPagination page={livePage} total={liveTotal} pageSize={livePageSize} onPageChange={setLivePage}
+          onPageSizeChange={size=>{setLivePageSize(size);setLivePage(0);}} itemLabel="live classes" loading={loading} />
       </>:<>
         <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>WATCH AT YOUR PACE</span><h2>Recorded classes</h2><p>Videos stream from private storage after each access check. Your place is saved as you watch.</p></div><button type="button" className={styles.refreshButton} onClick={()=>void load()}>↻ Refresh</button></div>
         {loading?<div className={styles.empty}>Loading your recorded classes…</div>:filteredRecordings.length===0?<div className={styles.empty}><span>▶</span><b>No recorded classes available yet</b><small>Published class recordings for your enrolled subjects will appear here.</small></div>:<div className={styles.recordingGrid}>{filteredRecordings.map(recording=><article key={recording.recorded_class_id} className={styles.recordingCard}><div className={styles.videoPoster}><span>▶</span><small>{durationText(recording.duration_seconds)}</small>{recording.completed&&<b>✓ COMPLETED</b>}</div><div className={styles.recordingBody}><span className={styles.subjectTag}>{recording.subject_name}</span><h3>{recording.title}</h3><p>{recording.chapter_name||recording.session_title||'Recorded lesson'}{recording.session_starts_at?' · '+formatDate(recording.session_starts_at):''}</p>{recording.description&&<p className={styles.description}>{recording.description}</p>}<div className={styles.recordingProgress}><div><span>{recording.completed?'Completed':recording.last_position_seconds>0?'Continue watching':'Not started'}</span><b>{percent(recording)}%</b></div><i><b style={{width:percent(recording)+'%'}}/></i></div><div className={styles.recordingMeta}><span>{formatSize(recording.file_size_bytes)}</span><span>{formatDate(recording.created_at)}</span></div><button type="button" className={styles.primaryButton+' '+styles.fullButton} onClick={()=>openRecording(recording)}>{recording.last_position_seconds>0&&!recording.completed?'Resume watching':'Watch online'} ↗</button></div></article>)}</div>}
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {recordingsTotal===0?0:recordingPage*recordingPageSize+1}–{Math.min(recordingsTotal,(recordingPage+1)*recordingPageSize)} of {recordingsTotal} recordings</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}><button type="button" disabled={recordingPage===0||loading} onClick={()=>setRecordingPage(p=>Math.max(0,p-1))}>← Previous</button><span>Page {recordingsTotal===0?0:recordingPage+1} of {Math.max(1,Math.ceil(recordingsTotal/recordingPageSize))}</span><button type="button" disabled={(recordingPage+1)*recordingPageSize>=recordingsTotal||loading} onClick={()=>setRecordingPage(p=>p+1)}>Next →</button></div>
-        </div>
+        <PremiumPagination page={recordingPage} total={recordingsTotal} pageSize={recordingPageSize} onPageChange={setRecordingPage}
+          onPageSizeChange={size=>{setRecordingPageSize(size);setRecordingPage(0);}} itemLabel="recordings" loading={loading} />
       </>}
       <div className={styles.privacyNote}><span>🔒</span><p><b>Protected class access.</b> Meeting links and video file paths are never listed publicly. QuantaEdge verifies your account and active subject enrollment for every join and playback request. A browser cannot fully prevent screen recording or capture of content already displayed.</p></div>
     </section>

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from '../components/AdminSidebar';
+import PremiumPagination from '../components/PremiumPagination';
 
 type StaffRow = {
   id:number; public_id:string; mobile_e164:string; display_name:string; role:string; active:boolean;
@@ -53,11 +54,13 @@ export default function AdminStaffPage() {
   const router=useRouter();
   const [me,setMe]=useState<any>(null);
   const [staff,setStaff]=useState<StaffRow[]>([]);
+  const [staffPage,setStaffPage]=useState(0);
+  const [staffPageSize,setStaffPageSize]=useState(10);
   const [availablePermissions,setAvailablePermissions]=useState<Permission[]>([]);
   const [audit,setAudit]=useState<AuditRow[]>([]);
   const [auditPage,setAuditPage]=useState(0);
   const [auditTotal,setAuditTotal]=useState(0);
-  const auditPageSize=25;
+  const [auditPageSize,setAuditPageSize]=useState(10);
   const [tab,setTab]=useState<'staff'|'audit'>('staff');
   const [search,setSearch]=useState('');
   const [selected,setSelected]=useState<StaffRow|null>(null);
@@ -81,6 +84,7 @@ export default function AdminStaffPage() {
   const filteredStaff=useMemo(()=>staff.filter(row=>
     [row.display_name,row.mobile_e164,row.role].some(value=>String(value||'').toLowerCase().includes(search.toLowerCase()))
   ),[staff,search]);
+  const visibleStaff=useMemo(()=>filteredStaff.slice(staffPage*staffPageSize,(staffPage+1)*staffPageSize),[filteredStaff,staffPage,staffPageSize]);
   useEffect(()=>{
     if(!canAudit)return;
     let active=true;
@@ -93,7 +97,7 @@ export default function AdminStaffPage() {
       setAuditTotal(Number(data?.total??(Array.isArray(data)?data.length:0)));
     })().catch((e:any)=>{if(active)setError(e.message||'Audit history could not be loaded.');});
     return()=>{active=false};
-  },[canAudit,auditPage]);
+  },[canAudit,auditPage,auditPageSize]);
 
   const editDirty=Boolean(selected&&(draftRole!==initialRole||JSON.stringify([...draftPermissions].sort())!==JSON.stringify([...initialPermissions].sort())));
   const newReady=newName.trim().length>=2&&newMobile.replace(/\D/g,'').length===10;
@@ -259,9 +263,9 @@ export default function AdminStaffPage() {
       {tab==='staff'&&isAdmin&&<div className="qe-staff-layout">
         <section className="admin-panel qe-staff-directory">
           <div className="panel-head"><div><span className="admin-kicker">STAFF IDENTITIES</span><h2>Staff directory</h2><p>These are not parent or student user accounts.</p></div><span className="count">{staff.filter(row=>row.active).length} active</span></div>
-          <label className="qe-staff-search">Search staff<input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Name, mobile or role"/></label>
+          <label className="qe-staff-search">Search staff<input value={search} onChange={e=>{setSearch(e.target.value);setStaffPage(0);}} placeholder="Name, mobile or role"/></label>
           <div className="qe-staff-list">
-            {filteredStaff.map(row=><article className={'qe-staff-row '+(selected?.id===row.id?'selected':'')} key={row.id}>
+            {visibleStaff.map(row=><article className={'qe-staff-row '+(selected?.id===row.id?'selected':'')} key={row.id}>
               <button type="button" className="qe-staff-person" onClick={()=>startEdit(row)}>
                 <span className="qe-staff-avatar">{row.display_name.trim().slice(0,1).toUpperCase()}</span>
                 <span className="qe-staff-person-copy"><strong>{row.display_name}</strong><small>{row.mobile_e164} · {row.role.replaceAll('_',' ')}</small><small>{row.permissions.length} task permissions</small></span>
@@ -271,6 +275,9 @@ export default function AdminStaffPage() {
             </article>)}
             {!filteredStaff.length&&<div className="qe-library-empty"><strong>No matching staff accounts</strong><p>Create a staff identity or change the search text.</p></div>}
           </div>
+          <PremiumPagination page={staffPage} total={filteredStaff.length} pageSize={staffPageSize}
+            onPageChange={setStaffPage} onPageSizeChange={size=>{setStaffPageSize(size);setStaffPage(0);}}
+            itemLabel="staff accounts" />
         </section>
 
         <section className="admin-panel qe-staff-editor">
@@ -311,14 +318,8 @@ export default function AdminStaffPage() {
           </article>)}
           {!audit.length&&<div className="qe-library-empty"><strong>No staff activity is recorded yet</strong><p>New staff API actions will appear here. Existing pre-audit events are not synthesized.</p></div>}
         </div>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:16,flexWrap:'wrap'}}>
-          <small>Showing {auditTotal===0?0:auditPage*auditPageSize+1}–{Math.min(auditTotal,(auditPage+1)*auditPageSize)} of {auditTotal} events</small>
-          <div style={{display:'flex',gap:8,alignItems:'center'}}>
-            <button type="button" className="qe-secondary-button" disabled={auditPage===0} onClick={()=>setAuditPage(p=>Math.max(0,p-1))}>← Previous</button>
-            <span>Page {auditTotal===0?0:auditPage+1} of {Math.max(1,Math.ceil(auditTotal/auditPageSize))}</span>
-            <button type="button" className="qe-secondary-button" disabled={(auditPage+1)*auditPageSize>=auditTotal} onClick={()=>setAuditPage(p=>p+1)}>Next →</button>
-          </div>
-        </div>
+        <PremiumPagination page={auditPage} total={auditTotal} pageSize={auditPageSize} onPageChange={setAuditPage}
+          onPageSizeChange={size=>{setAuditPageSize(size);setAuditPage(0);}} itemLabel="audit events" />
       </section>}
 
       <p className="admin-footer qe-admin-footer">QuantaEdge · Staff governance <span>Identities, permissions and audit history are separate from learner accounts.</span></p>
