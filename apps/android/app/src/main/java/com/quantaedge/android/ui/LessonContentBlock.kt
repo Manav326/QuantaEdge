@@ -169,7 +169,7 @@ private fun LessonImage(url: String, alt: String) {
     var loadFailed by remember(url) { mutableStateOf(false) }
     LaunchedEffect(url) {
         loadFailed = false
-        bitmap = withContext(Dispatchers.IO) {
+        val result = withContext(Dispatchers.IO) {
             runCatching {
                 val bytes = ApiClient.getMediaBytes(url)
                 if (bytes.isEmpty() || bytes.size > MAX_MEDIA_BYTES) throw IllegalStateException("Image size is invalid")
@@ -181,8 +181,10 @@ private fun LessonImage(url: String, alt: String) {
                     BitmapFactory.Options().apply { inSampleSize = sample })
                     ?: throw IllegalStateException("Image could not be decoded")
                 decoded.asImageBitmap()
-            }.onFailure { loadFailed = true }.getOrNull()
+            }
         }
+        bitmap = result.getOrNull()
+        loadFailed = result.isFailure
     }
     if (bitmap != null) {
         Image(bitmap = bitmap!!, contentDescription = alt,

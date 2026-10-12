@@ -58,6 +58,8 @@ object ApiClient {
     fun authenticatedHttpClient(): OkHttpClient =
         (client ?: throw IOException("API client is not initialized.")).newBuilder()
             .authenticator(okhttp3.Authenticator { _, response ->
+                val apiHost = runCatching { java.net.URI(BuildConfig.API_BASE_URL).host }.getOrNull()
+                if (apiHost.isNullOrBlank() || response.request.url.host != apiHost) return@Authenticator null
                 if (responseCount(response) >= 2) return@Authenticator null
                 synchronized(refreshLock) {
                     val currentClient = client ?: return@synchronized null

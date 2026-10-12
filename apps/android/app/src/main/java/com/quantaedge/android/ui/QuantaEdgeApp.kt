@@ -301,7 +301,6 @@ fun QuantaEdgeApp() {
                 JSONObject().put("lessonId", lessonId).put("language", language))
             answers.clear()
             feedbacks.clear()
-            lessonAnswerLocks.clear()
             route = AppRoute.PRACTICE
         }
     }
@@ -548,7 +547,9 @@ fun QuantaEdgeApp() {
             }
             val answerKey = id.toString()
             val hasGrade = result.has("correct") && !result.isNull("correct")
-            lessonAnswerLocks[answerKey] = !hasGrade || result.optBoolean("correct")
+            lessonAnswerLocks[answerKey] = com.quantaedge.android.domain.LessonAnswerPolicy.shouldLock(
+                if (hasGrade) result.optBoolean("correct") else null
+            )
             feedbacks[answerKey] = feedback
             lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + language)
         }
