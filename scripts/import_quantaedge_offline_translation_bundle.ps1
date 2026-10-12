@@ -2,6 +2,7 @@
 param(
     [int]$PilotLimit = 0,
     [switch]$SkipHindiSourceImport,
+    [switch]$IncludeIncompleteDrafts,
     [string]$ApiBaseUrl = "http://localhost:8080",
     [string]$PythonExe = "D:\Tools\Python312\python.exe"
 )
@@ -109,7 +110,7 @@ function Save-QeRunReport {
             started_at = $script:RunStartedAt.ToString('o')
             finished_at = (Get-Date).ToString('o')
             duration_seconds = [math]::Round(((Get-Date) - $script:RunStartedAt).TotalSeconds, 2)
-            configuration = @{ pilot_limit=$PilotLimit; skip_hindi_source_import=[bool]$SkipHindiSourceImport; api_base_url=$ApiBaseUrl; source_catalog=[IO.Path]::GetFileName($CatalogPath); translation_queue=[IO.Path]::GetFileName($QueuePath); translation_map=[IO.Path]::GetFileName($TranslationPath) }
+            configuration = @{ pilot_limit=$PilotLimit; skip_hindi_source_import=[bool]$SkipHindiSourceImport; include_incomplete_drafts=[bool]$IncludeIncompleteDrafts; api_base_url=$ApiBaseUrl; source_catalog=[IO.Path]::GetFileName($CatalogPath); translation_queue=[IO.Path]::GetFileName($QueuePath); translation_map=[IO.Path]::GetFileName($TranslationPath) }
             stages = @($script:StageRecords | ForEach-Object { @{ name=$_.name; status=$_.status; started_at=$_.started_at; ended_at=$_.ended_at; duration_seconds=$_.duration_seconds; exit_code=$_.exit_code; message=$_.message } })
             child_report_summaries = @(Get-QeChildReportSummaries)
             safety = @{ staff_authentication_confirmed=[bool]$script:AuthConfirmed; source_apply_started=[bool]$script:SourceApplyStarted; translation_apply_started=[bool]$script:TranslationApplyStarted; publication_attempted=$false; draft_only_workflow=$true; cookie_value_recorded=$false }
@@ -509,6 +510,7 @@ try {
         $translateArgs = @($TranslationImporter, "--queue", $QueuePath, "--translations", $TranslationPath,
                            "--api-base-url", $ApiBaseUrl, "--apply", "--delay", "0.03")
         if ($PilotLimit -gt 0) { $translateArgs += @("--limit", "$PilotLimit") }
+        if ($IncludeIncompleteDrafts) { $translateArgs += "--include-incomplete-drafts" }
         Invoke-CheckedPython $translateArgs
 
         Write-Host ""
