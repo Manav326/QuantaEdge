@@ -197,7 +197,7 @@ public class HrPayrollController {
       throw conflict("Configure effective-dated compensation before calculating payroll. Missing: "+names+(missing.size()>5?" and "+(missing.size()-5)+" more":"")+".");
     }
     List<Map<String,Object>> lines=jdbc.queryForList("""
-      select e.id employee_id,e.employee_number,e.display_name,c.currency,
+      select e.id employee_id,e.employee_number,e.display_name,x.currency,
         coalesce(sum(x.monthly_amount) filter(where c.component_type='EARNING'),0)::numeric(12,2) gross_amount,
         coalesce(sum(x.monthly_amount) filter(where c.component_type='DEDUCTION'),0)::numeric(12,2) deduction_amount,
         jsonb_agg(jsonb_build_object('componentCode',c.code,'componentName',c.name,
@@ -209,7 +209,7 @@ public class HrPayrollController {
       join hr_salary_component c on c.id=x.component_id and c.organization_id=e.organization_id
       where e.organization_id=? and e.employment_status='ACTIVE' and e.joining_date<=?
         and (e.exit_date is null or e.exit_date>=?)
-      group by e.id,e.employee_number,e.display_name,c.currency order by e.employee_number,e.id
+      group by e.id,e.employee_number,e.display_name,x.currency order by e.employee_number,e.id
       """,Date.valueOf(end),Date.valueOf(start),orgId,Date.valueOf(end),Date.valueOf(start));
     if(lines.isEmpty()) throw conflict("No active employees with effective compensation are eligible for this payroll period.");
     String currency=String.valueOf(lines.getFirst().get("currency"));
