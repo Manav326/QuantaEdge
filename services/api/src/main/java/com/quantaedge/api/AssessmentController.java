@@ -972,7 +972,7 @@ public class AssessmentController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select id,student_id,status,offline_mode,offline_sync_expires_at
+      select id,assessment_id,student_id,status,offline_mode,offline_sync_expires_at
       from student_assessment_attempt where id=? for update
       """,attemptId);
     if(rows.isEmpty() || ((Number)rows.getFirst().get("student_id")).longValue()!=context.studentId()) {
@@ -994,8 +994,8 @@ public class AssessmentController {
       update student_assessment_attempt set offline_package_token_hash=?,updated_at=now()
       where id=? and student_id=? and offline_mode=true and status='IN_PROGRESS'
       """,offlinePackageTokenHash(token),attemptId,context.studentId());
-    audit(((Number)attempt.get("id")).longValue(),attemptId,null,context.studentId(),"STUDENT",
-        "OFFLINE_PACKAGE_TOKEN_REFRESHED","ACTIVE","ACTIVE",
+    audit(((Number)attempt.get("assessment_id")).longValue(),attemptId,null,context.studentId(),"STUDENT",
+        "OFFLINE_PACKAGE_TOKEN_REFRESHED","IN_PROGRESS","IN_PROGRESS",
         "Student explicitly refreshed a protected offline package token after a sync error.");
     return Map.of("attemptId",attemptId,"offlinePackageToken",token);
   }
