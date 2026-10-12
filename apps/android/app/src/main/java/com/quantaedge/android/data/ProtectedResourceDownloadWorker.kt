@@ -30,9 +30,6 @@ class ProtectedResourceDownloadWorker(appContext: Context, parameters: WorkerPar
             val count = document.optInt("page_count",
                 (document.optInt("page_end", 1) - document.optInt("page_start", 1) + 1).coerceAtLeast(1))
             if (count !in 1..1500) return Result.failure()
-            val activeAccount = ApiClient.getObject("/api/v1/auth/me")
-            if (ResourceOwnerKey.fromAuth(activeAccount) != ownerKey) return Result.failure()
-
             var completed = store.cachedPageCount(documentId, count)
             setProgress(Data.Builder().putInt("pagesDone", completed).putInt("pageCount", count).build())
             for (page in 1..count) {
