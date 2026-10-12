@@ -31,12 +31,12 @@ class RootTextbookPdfImporterTests(unittest.TestCase):
         path = self.root / "synthetic.pdf"
         with fitz.open() as doc:
             page = doc.new_page()
-            page.insert_text((50, 50), "Contents\\nChapter 1 First Topic\\nChapter 2 Second Topic")
+            page.insert_text((50, 50), "Contents\nChapter 1 First Topic\nChapter 2 Second Topic")
             page = doc.new_page()
-            page.insert_text((50, 50), "First Topic\\n1\\nChapter")
+            page.insert_text((50, 50), "First Topic\n1\nChapter")
             doc.new_page()
             page = doc.new_page()
-            page.insert_text((50, 50), "Second Topic\\n2\\nChapter")
+            page.insert_text((50, 50), "Second Topic\n2\nChapter")
             doc.new_page()
             if outline:
                 doc.set_toc([[1, "Chapter 1", 2], [1, "Chapter 2", 4]])

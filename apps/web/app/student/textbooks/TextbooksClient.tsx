@@ -172,7 +172,7 @@ export default function TextbooksClient() {
     locale === 'english' ? (code === 'maths' ? 'Mathematics' : code === 'science' ? 'Science' : fallback) : fallback;
   const displayChapterTitle = (item: LearningDocument, english: boolean) => {
     if (english && item.scope === 'CHAPTER_PDF') {
-      const match = item.title.match(/Chapter\\s+\\d+\\s*:\\s*(.+)$/i);
+      const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
       if (match?.[1]) return match[1].trim();
     }
     return item.chapter_name || item.title;

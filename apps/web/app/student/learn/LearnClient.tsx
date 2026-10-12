@@ -24,7 +24,7 @@ type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';ti
 
 function textbookChapterTitle(item: StudentDocument, language: 'hi' | 'en') {
   if (language === 'en') {
-    const match = item.title.match(/Chapter\\s+\\d+\\s*:\\s*(.+)$/i);
+    const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
     if (match?.[1]) return match[1].trim();
   }
   return item.chapter_name || item.title;
