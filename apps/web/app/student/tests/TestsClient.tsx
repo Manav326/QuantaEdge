@@ -16,6 +16,7 @@ type AttemptQuestion = {
   attemptQuestionId:number;answerId:number;question_type:string;prompt:string;explanation?:string;
   options:Array<{key:string;label:string}>;answer:any;answerStatus:string;maxMarks:number|string;
   isCorrect?:boolean|null;awardedMarks?:number|string|null;teacherFeedback?:string|null;translated?:boolean;
+  correctAnswer?:{kind?:string;value?:any}|null;
 };
 type Attempt = {
   attempt_id:number;assessment_id:number;attempt_number:number;status:string;started_at:string;deadline_at:string;
@@ -36,6 +37,74 @@ async function api(url:string,init:RequestInit={}) {
 function answerText(value:any){if(value===null||value===undefined)return '';if(typeof value==='string')return value;try{return JSON.stringify(value)}catch{return String(value)}}
 function fmtDate(value?:string|null){if(!value)return '—';const date=new Date(value);return Number.isNaN(date.getTime())?'—':date.toLocaleString()}
 function clock(seconds:number){const safe=Math.max(0,seconds);return String(Math.floor(safe/60)).padStart(2,'0')+':'+String(safe%60).padStart(2,'0')}
+
+function answerValues(value:any):string[]{
+  if(value===null||value===undefined||value==='')return [];
+  if(Array.isArray(value))return value.flatMap(answerValues);
+  if(typeof value==='object'){
+    if(Object.prototype.hasOwnProperty.call(value,'kind')&&Object.prototype.hasOwnProperty.call(value,'value'))return answerValues(value.value);
+    return Object.values(value).flatMap(answerValues);
+  }
+  const text=String(value).trim();
+  if(!text)return [];
+  if((text.startsWith('[')&&text.endsWith(']'))||(text.startsWith('{')&&text.endsWith('}'))){
+    try{const parsed=JSON.parse(text);if(parsed!==value)return answerValues(parsed);}catch{}
+  }
+  return [text];
+}
+function correctOptionKeys(question:AttemptQuestion):string[]{
+  if(!question.correctAnswer?.value||!question.options?.length)return [];
+  const values=new Set(answerValues(question.correctAnswer.value));
+  return question.options.filter(option=>values.has(String(option.key))).map(option=>String(option.key));
+}
+function correctAnswerText(question:AttemptQuestion):string{
+  const payload=question.correctAnswer;
+  if(!payload||payload.value===null||payload.value===undefined)return '';
+  const kind=String(payload.kind||'').toUpperCase();
+  if(kind==='OPTION'||kind==='MULTI_OPTION'){
+    const values=answerValues(payload.value);
+    return values.map(value=>{
+      const option=question.options?.find(item=>String(item.key)===value);
+      return option?String(option.key)+'. '+option.label:value;
+    }).join(', ');
+  }
+  return answerText(payload.value);
+}
+type QuestionContentProps={
+  question:AttemptQuestion;response:any;review?:boolean;disabled?:boolean;onAnswer?:(value:any)=>void;
+};
+function QuestionContent({question,response,review=false,disabled=false,onAnswer}:QuestionContentProps){
+  const selectedKeys=new Set(answerValues(response));
+  const rightKeys=new Set(correctOptionKeys(question));
+  const hasOptions=Array.isArray(question.options)&&question.options.length>0;
+  const answerTone=review?(question.isCorrect===true?styles.answerFieldCorrect:question.isCorrect===false?styles.answerFieldIncorrect:styles.answerFieldNeutral):'';
+  const correctText=review?correctAnswerText(question):'';
+  return <>
+    <h2>{question.prompt}</h2>
+    {hasOptions&&<div className={styles.options}>{question.options.map(option=>{
+      const key=String(option.key);
+      const chosen=selectedKeys.has(key);
+      const correct=rightKeys.has(key);
+      const wrongChosen=review&&chosen&&question.isCorrect===false;
+      const tone=wrongChosen?styles.optionIncorrect:review&&(correct||(chosen&&question.isCorrect===true))?styles.optionCorrect:review&&chosen?styles.optionNeutral:'';
+      const hint=review&&chosen&&correct?'Your answer · Correct answer':review&&chosen&&question.isCorrect===false?'Your recorded answer · Incorrect':review&&chosen&&question.isCorrect===true?'Your recorded answer · Correct':review&&chosen?'Your recorded answer':review&&correct?'Correct answer':'';
+      return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
+        <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
+        <span className={styles.optionKey}>{option.key}</span>
+        <span className={styles.optionText}>{option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</span>
+        {review&&(chosen||correct)&&<span className={styles.optionOutcome} aria-label={wrongChosen?'Incorrect answer':correct?'Correct answer':question.isCorrect===true?'Correct':'Recorded answer'}>{wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}</span>}
+      </label>;
+    })}</div>}
+    {!hasOptions&&<label className={[styles.answerField,review?answerTone:''].filter(Boolean).join(' ')}>
+      <span>{question.question_type==='NUMERICAL'?'Your numerical answer':'Your answer'}</span>
+      {question.question_type==='INPUT'||question.question_type==='NUMERICAL'
+        ?<input value={answerText(response)} disabled={disabled||review} type={question.question_type==='NUMERICAL'?'number':'text'} onChange={event=>onAnswer?.(event.target.value)} placeholder="Type your answer here…"/>
+        :<textarea value={answerText(response)} disabled={disabled||review} rows={6} onChange={event=>onAnswer?.(event.target.value)} placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(question.question_type)?'Write your answer or reasoning clearly…':'Enter your answer here…'}/>}
+      {!review&&<small>{['INPUT','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(question.question_type)?'This response is sent for staff checking. Your final result is released after all required answers are reviewed.':''}</small>}
+    </label>}
+    {review&&correctText&&(!hasOptions||rightKeys.size===0)&&<div className={styles.correctAnswerBox}><strong>Correct answer</strong><span>{correctText}</span></div>}
+  </>;
+}
 
 export default function TestsClient(){
   const router=useRouter();
@@ -292,15 +361,26 @@ export default function TestsClient(){
           </div>
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
-            <div className={styles.resultQuestionList}>
+            <div className={styles.resultReviewList}>
               {attempt.questions.map((question,questionIndex)=>{
                 const outcome=question.isCorrect===true?'Correct':question.isCorrect===false?'Incorrect':isEmpty(question.answer)?'Not answered':'Reviewed';
                 const outcomeClass=question.isCorrect===true?styles.reviewCorrect:question.isCorrect===false?styles.reviewIncorrect:styles.reviewNeutral;
-                const rowOutcomeClass=question.isCorrect===true?styles.resultQuestionRowCorrect:question.isCorrect===false?styles.resultQuestionRowIncorrect:styles.resultQuestionRowNeutral;
-                return <article className={[styles.resultQuestionRow,rowOutcomeClass].join(' ')} key={question.attemptQuestionId}>
-                  <span className={styles.resultQuestionNumber}>{questionIndex+1}</span>
-                  <div className={styles.resultQuestionInfo}><b>Question {questionIndex+1}</b><small className={outcomeClass}>{outcome}</small></div>
-                  <strong>{Number(question.awardedMarks??0)} <small>/ {Number(question.maxMarks??0)}</small></strong>
+                return <article className={styles.resultReviewItem} key={question.attemptQuestionId}>
+                  <section className={styles.questionPanel}>
+                    <div className={styles.questionPanelTop}>
+                      <span>QUESTION {questionIndex+1} OF {attempt.questions.length}</span>
+                      <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} marks</b>
+                    </div>
+                    <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
+                    <QuestionContent question={question} response={question.answer} review disabled/>
+                    <AnswerFeedback
+                      outcome={question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded'}
+                      title={question.isCorrect===true?'✓ Correct':question.isCorrect===false?'✕ Incorrect':isEmpty(question.answer)?'Not answered':'Answer reviewed'}
+                      message={<>Marks: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
+                      explanation={question.explanation||undefined}
+                      explanationLabel="Explanation"
+                    />
+                  </section>
                 </article>;
               })}
             </div>
@@ -312,12 +392,7 @@ export default function TestsClient(){
         :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>This attempt is closed.</h2><p>You cannot return to the question navigator after submission.</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
         :<div className={styles.examLayout}>
           <aside className={styles.questionRail}><div><b>Questions</b><small>{answeredCount}/{attempt.questions.length} answered</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={'Question '+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>Current</span><span><i className={styles.legendAnswered}/>Answered</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>QUESTION {index+1} OF {attempt.questions.length}</span><b>{current.maxMarks} mark(s)</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><h2>{current.prompt}</h2>{current.options?.length>0&&<div className={styles.options}>{current.options.map(o=>{
-              const chosen=answerText(currentResponse)===o.key;
-              const outcomeClass=released&&chosen?(current.isCorrect===true?styles.optionCorrect:current.isCorrect===false?styles.optionIncorrect:styles.optionNeutral):'';
-              return <label key={o.key} className={[styles.option,chosen?styles.optionSelected:'',outcomeClass].filter(Boolean).join(' ')}><input type="radio" name={'question-'+current.attemptQuestionId} value={o.key} checked={chosen} disabled={submitted} onChange={()=>updateResponse(current,o.key)}/><span className={styles.optionKey}>{o.key}</span><span>{o.label}</span>{released&&chosen&&<span className={styles.optionOutcome} aria-label={current.isCorrect===true?'Correct':current.isCorrect===false?'Incorrect':'Reviewed'}>{current.isCorrect===true?'✓':current.isCorrect===false?'!':'i'}</span>}</label>;
-            })}</div>}
-            {(!current.options||current.options.length===0)&&<label className={[styles.answerField,released&&!isEmpty(current.answer)?(current.isCorrect===true?styles.answerFieldCorrect:current.isCorrect===false?styles.answerFieldIncorrect:styles.answerFieldNeutral):''].filter(Boolean).join(' ')}><span>{current.question_type==='NUMERICAL'?'Your numerical answer':'Your answer'}</span>{current.question_type==='INPUT'||current.question_type==='NUMERICAL'?<input value={answerText(currentResponse)} disabled={submitted} type={current.question_type==='NUMERICAL'?'number':'text'} onChange={e=>updateResponse(current,e.target.value)} placeholder="Type your answer here…"/>:<textarea value={answerText(currentResponse)} disabled={submitted} rows={6} onChange={e=>updateResponse(current,e.target.value)} placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(current.question_type)?'Write your answer or reasoning clearly…':'Enter your answer here…'}/>}<small>{['INPUT','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(current.question_type)?'This response is sent for staff checking. Your final result is released after all required answers are reviewed.':''}</small></label>}
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>QUESTION {index+1} OF {attempt.questions.length}</span><b>{current.maxMarks} mark(s)</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
             {released&&<AnswerFeedback
               outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
               title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
