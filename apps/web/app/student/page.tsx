@@ -68,8 +68,8 @@ export default function StudentHome(){
     });
   },[data,textbooksLoading]);
 
-  if(error)return <main className="app-shell"><section className="app-content"><div className="auth-card"><h1><LocaleText hinglish="Student उपलब्ध नहीं है" english="Student unavailable" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><LocaleText hinglish="Login करें" english="Log in" /></Link></div></section></main>;
-  if(!data)return <main className="app-shell"><section className="app-content"><div className="eyebrow"><LocaleText hinglish="Learning profile load हो रही है…" english="Loading learning profile…" /></div></section></main>;
+  if(error)return <main className="app-shell"><section className="app-content"><div role="alert" aria-live="assertive" className="auth-card"><h1><LocaleText hinglish="Student उपलब्ध नहीं है" english="Student unavailable" /></h1><p>{error}</p><Link href="/login/student" className="button button-dark"><LocaleText hinglish="Login करें" english="Log in" /></Link></div></section></main>;
+  if(!data)return <main className="app-shell"><section className="app-content"><div role="status" aria-live="polite" className="eyebrow"><LocaleText hinglish="Learning profile load हो रही है…" english="Loading learning profile…" /></div></section></main>;
   const stats=data.lessonStats || {},q=data.questionStats || {};
   const lessons = lessonProgress(stats);
   const completionLabel = displayPercent(lessons.percent);
