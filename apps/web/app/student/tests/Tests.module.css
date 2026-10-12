@@ -185,3 +185,119 @@
 
 @media(max-width:680px){.resultReviewItem .option{grid-template-columns:14px 26px minmax(0,1fr) 22px;cursor:default}}
 .resultReviewItem .option{cursor:default}
+
+
+/* Premium per-test Top 20 leaderboard */
+.leaderboardButton{display:flex;align-items:center;justify-content:center;gap:8px;min-height:37px;padding:10px 13px;border:1px solid #e9c49e;border-radius:10px;background:linear-gradient(110deg,#fff9f0,#fff);color:#8e421c;font:inherit;font-size:10px;font-weight:850;cursor:pointer;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.leaderboardButton>span{font-size:16px;color:#b78028}
+.leaderboardButton:hover{transform:translateY(-1px);border-color:#d9a367;box-shadow:0 7px 18px #b7652515}
+.leaderboardButton:disabled{opacity:.55;cursor:wait}
+.leaderboardBackdrop{position:fixed;z-index:1100;inset:0;display:grid;place-items:center;padding:18px;background:rgba(10,17,31,.76);backdrop-filter:blur(8px);animation:leaderboardFadeIn .16s ease-out}
+.leaderboardModal{width:min(900px,100%);max-height:min(92dvh,920px);overflow-y:auto;border:1px solid #dfe5ed;border-radius:23px;background:#f8fafc;color:#1e2b42;box-shadow:0 32px 100px #050b1666;overscroll-behavior:contain;animation:leaderboardRise .2s ease-out}
+.leaderboardHeader{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:clamp(22px,4vw,34px);background:radial-gradient(circle at 88% 5%,#b86c3c55 0,transparent 34%),linear-gradient(120deg,#121c31 0%,#1e2b47 66%,#53331f 100%);color:#fff;overflow:hidden}
+.leaderboardHeader:after{position:absolute;right:78px;bottom:-58px;width:180px;height:180px;border:1px solid #ffffff16;border-radius:50%;content:"";pointer-events:none}
+.leaderboardHeading{position:relative;z-index:1;min-width:0}
+.leaderboardEyebrow{display:inline-flex;align-items:center;gap:8px;color:#f6c69e;font-size:8px;font-weight:950;letter-spacing:1.65px}
+.leaderboardEyebrow:before{display:block;width:17px;height:2px;background:#e4ad65;content:""}
+.leaderboardHeading h2{max-width:720px;margin:12px 0 8px;overflow-wrap:anywhere;color:#fff;font-size:clamp(21px,3vw,31px);font-weight:850;letter-spacing:-.9px;line-height:1.2}
+.leaderboardHeading p{max-width:620px;margin:0;color:#d1d7e2;font-size:10px;line-height:1.75}
+.leaderboardClose{position:relative;z-index:2;display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid #ffffff2b;border-radius:11px;background:#ffffff12;color:#fff;font:inherit;font-size:26px;font-weight:350;cursor:pointer;transition:background .16s ease,transform .16s ease}
+.leaderboardClose:hover{transform:rotate(4deg);background:#ffffff26}
+.leaderboardMetrics{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:10px;padding:17px clamp(14px,3vw,30px) 2px}
+.leaderboardMetrics>div{display:grid;align-content:center;gap:6px;min-width:0;padding:13px 15px;border:1px solid #e5eaf1;border-radius:13px;background:#fff}
+.leaderboardMetrics>div>span{color:#8792a4;font-size:8px;font-weight:900;letter-spacing:1.05px}
+.leaderboardMetrics>div>b{overflow-wrap:anywhere;color:#28364e;font-size:13px;font-weight:850;letter-spacing:-.15px}
+.leaderboardMetrics>div>b i{padding:0 2px;color:#d18a53;font-style:normal}
+.leaderboardPodium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;gap:12px;padding:35px clamp(14px,3vw,30px) 25px}
+.leaderboardPodiumCard{position:relative;display:flex;min-width:0;min-height:205px;flex-direction:column;align-items:center;justify-content:flex-end;gap:9px;padding:19px 10px 16px;border:1px solid #e1e7ef;border-radius:17px;background:linear-gradient(145deg,#fff,#f7f9fc);text-align:center;box-shadow:0 10px 25px #19284408}
+.leaderboardSecond{min-height:191px;border-color:#d9e0e8;background:linear-gradient(155deg,#fff,#f0f3f8)}
+.leaderboardFirst{min-height:229px;transform:translateY(-8px);border-color:#ecd39a;background:radial-gradient(circle at 50% 0%,#fff1bd80,transparent 43%),linear-gradient(155deg,#fffdf7,#fff9e9);box-shadow:0 15px 36px #b27c2014}
+.leaderboardThird{min-height:180px;border-color:#ebd0bc;background:linear-gradient(155deg,#fffaf6,#fff)}
+.leaderboardMine{outline:2px solid #c2410c;outline-offset:2px}
+.leaderboardMedal{display:grid;place-items:center;position:absolute;top:-17px;left:50%;width:35px;height:35px;transform:translateX(-50%);border:3px solid #fff;border-radius:50%;background:linear-gradient(140deg,#f9d981,#b98525);color:#fff;font-size:17px;font-weight:950;box-shadow:0 4px 12px #9b6b2e38}
+.leaderboardSecond .leaderboardMedal{background:linear-gradient(140deg,#e4e9ef,#8796a9)}
+.leaderboardThird .leaderboardMedal{background:linear-gradient(140deg,#e6b18b,#a65c31)}
+.leaderboardAvatar,.leaderboardTableAvatar{display:grid;place-items:center;flex:0 0 auto;border:1px solid #ffffffd9;border-radius:50%;background:linear-gradient(145deg,#293b5e,#17243b);color:#fff;font-size:12px;font-weight:900;letter-spacing:.2px;box-shadow:0 5px 12px #17243b22}
+.leaderboardAvatar{width:45px;height:45px}
+.leaderboardSecond .leaderboardAvatar{background:linear-gradient(145deg,#64758d,#35465f)}
+.leaderboardThird .leaderboardAvatar{background:linear-gradient(145deg,#b77850,#75402a)}
+.leaderboardStudentName{display:block;max-width:100%;overflow:hidden;color:#293750;font-size:11px;font-weight:850;text-overflow:ellipsis;white-space:nowrap}
+.leaderboardPodiumScore{color:#22324a;font-size:21px;font-weight:950;letter-spacing:-.7px;line-height:1.15}
+.leaderboardPodiumScore small{color:#8a95a7;font-size:10px;font-weight:700;letter-spacing:0}
+.leaderboardTime{display:inline-flex;align-items:center;gap:5px;color:#78859a;font-size:10px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.leaderboardTime i{color:#bf773f;font-size:12px;font-style:normal}
+.leaderboardYou{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:99px;background:#fff0e5;color:#9a3412;font-size:7px;font-weight:950;letter-spacing:.75px}
+.leaderboardTableWrap{overflow-x:auto;margin:0 clamp(14px,3vw,30px) 20px;border:1px solid #e3e8ef;border-radius:15px;background:#fff}
+.leaderboardTable{width:100%;border-collapse:separate;border-spacing:0;text-align:left}
+.leaderboardTable thead{background:#f3f6fa}
+.leaderboardTable th{padding:12px 15px;border-bottom:1px solid #e6ebf2;color:#7b879a;font-size:8px;font-weight:950;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.leaderboardTable td{padding:11px 15px;border-bottom:1px solid #edf0f5;color:#35435a;font-size:10px}
+.leaderboardTable tbody tr:last-child td{border-bottom:0}
+.leaderboardTable tbody tr:hover{background:#fffaf5}
+.leaderboardTableMine{background:#fff5ed!important}
+.leaderboardRankNumber{display:grid;place-items:center;width:31px;height:31px;border:1px solid #e5eaf1;border-radius:9px;background:#f7f8fa;color:#66738a;font-size:10px;font-weight:900;font-variant-numeric:tabular-nums}
+.leaderboardStudentCell{display:flex;align-items:center;gap:9px;min-width:165px}
+.leaderboardTableAvatar{width:30px;height:30px;font-size:9px}
+.leaderboardStudentCell>b{max-width:280px;overflow:hidden;color:#2e3b51;font-size:10px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.leaderboardTableScore{color:#26354c;font-size:11px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.leaderboardTableScore small{color:#909aac;font-size:9px;font-weight:650}
+.leaderboardMyStanding{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:0 clamp(14px,3vw,30px) 20px;padding:15px 17px;border:1px solid #edc7a8;border-radius:14px;background:linear-gradient(110deg,#fff4ea,#fffaf5)}
+.leaderboardMyStanding>div{display:grid;gap:5px}
+.leaderboardMyStanding>div>span{color:#a15e37;font-size:8px;font-weight:950;letter-spacing:1px}
+.leaderboardMyStanding>div>b{color:#833b1a;font-size:18px;font-weight:950}
+.leaderboardMyStanding>div>b small{color:#9c7967;font-size:9px;font-weight:650}
+.leaderboardMyStanding>strong{color:#293750;font-size:15px;font-weight:900}
+.leaderboardMyStanding>strong small{color:#8792a4;font-size:9px;font-weight:650}
+.leaderboardFooter{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px clamp(14px,3vw,30px);border-top:1px solid #e7ebf2;background:#fff}
+.leaderboardFooter>span{color:#8792a4;font-size:9px;line-height:1.6}
+.leaderboardFooter button{min-height:33px;padding:8px 11px}
+.leaderboardEmpty,.leaderboardLoading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;margin:18px clamp(14px,3vw,30px) 25px;padding:37px 20px;border:1px dashed #d7dee8;border-radius:15px;background:#fff;text-align:center}
+.leaderboardEmpty>span{display:grid;place-items:center;width:47px;height:47px;border:1px solid #ecd49b;border-radius:15px;background:#fff7dc;color:#a56f1c;font-size:24px}
+.leaderboardEmpty h3{margin:3px 0 0;color:#293750;font-size:16px;letter-spacing:-.3px}
+.leaderboardEmpty p,.leaderboardLoading small{max-width:450px;margin:0;color:#7b879a;font-size:10px;line-height:1.8}
+.leaderboardLoading{min-height:180px;border-style:solid}
+.leaderboardLoading>b{color:#293750;font-size:13px}
+.leaderboardSpinner{width:29px;height:29px;border:3px solid #f3d7bf;border-top-color:#c2410c;border-radius:50%;animation:leaderboardSpin .7s linear infinite}
+.leaderboardInlineError{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 20px;padding:12px 14px;border:1px solid #f0c2b8;border-radius:12px;background:#fff3f0;color:#963629;font-size:10px;line-height:1.7}
+.leaderboardInlineError button{flex:0 0 auto;min-height:32px}
+@keyframes leaderboardSpin{to{transform:rotate(360deg)}}
+@keyframes leaderboardFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes leaderboardRise{from{opacity:0;transform:translateY(9px) scale(.995)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.leaderboardBackdrop,.leaderboardModal,.leaderboardSpinner{animation:none!important}.leaderboardButton,.leaderboardClose{transition:none}}
+@media(max-width:680px){
+  .leaderboardBackdrop{place-items:end center;padding:8px}
+  .leaderboardModal{max-height:95dvh;border-radius:19px}
+  .leaderboardHeader{padding:21px 17px 19px;gap:11px}
+  .leaderboardHeading h2{font-size:21px}
+  .leaderboardHeading p{font-size:9px}
+  .leaderboardClose{flex-basis:32px;width:32px;height:32px}
+  .leaderboardMetrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:11px 10px 0}
+  .leaderboardMetrics>div{padding:10px}
+  .leaderboardMetrics>div:nth-child(2){grid-column:1/-1;grid-row:2}
+  .leaderboardMetrics>div>b{font-size:11px}
+  .leaderboardPodium{gap:7px;padding:29px 10px 20px}
+  .leaderboardPodiumCard{min-height:158px;padding:17px 5px 12px;gap:7px;border-radius:13px}
+  .leaderboardFirst{min-height:181px;transform:translateY(-5px)}
+  .leaderboardSecond{min-height:151px}
+  .leaderboardThird{min-height:143px}
+  .leaderboardMedal{width:30px;height:30px;top:-15px;font-size:14px}
+  .leaderboardAvatar{width:35px;height:35px;font-size:10px}
+  .leaderboardStudentName{font-size:9px}
+  .leaderboardPodiumScore{font-size:16px;letter-spacing:-.4px}
+  .leaderboardPodiumScore small{font-size:8px}
+  .leaderboardTime{gap:3px;font-size:8px}
+  .leaderboardTime i{font-size:10px}
+  .leaderboardTableWrap{margin:0 10px 14px}
+  .leaderboardTable th,.leaderboardTable td{padding:9px 8px}
+  .leaderboardTable th{font-size:7px;letter-spacing:.6px}
+  .leaderboardStudentCell{min-width:105px;gap:6px}
+  .leaderboardTableAvatar{width:25px;height:25px;font-size:8px}
+  .leaderboardStudentCell>b{max-width:120px;font-size:9px}
+  .leaderboardRankNumber{width:27px;height:27px;font-size:9px}
+  .leaderboardTableScore{font-size:10px}
+  .leaderboardTableScore small{font-size:8px}
+  .leaderboardMyStanding{gap:10px;margin:0 10px 14px;padding:12px}
+  .leaderboardFooter{align-items:flex-start;padding:12px 10px}
+  .leaderboardInlineError{align-items:flex-start;flex-direction:column;margin:12px 10px}
+}
+

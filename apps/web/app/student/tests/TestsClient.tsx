@@ -27,6 +27,24 @@ type Attempt = {
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
 type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
 
+type LeaderboardEntry = {
+  rank:number;
+  student_name:string;
+  score:number|string;
+  max_score:number|string;
+  time_taken_seconds:number;
+  is_current_student:boolean;
+};
+type LeaderboardData = {
+  assessment_id:number;
+  assessment_title:string;
+  max_score:number|string;
+  participant_count:number;
+  items:LeaderboardEntry[];
+  current_student:LeaderboardEntry|null;
+  ranking_criteria?:string[];
+};
+
 async function api(url:string,init:RequestInit={}) {
   const headers=new Headers(init.headers||{});
   if(init.body)headers.set('Content-Type','application/json');
@@ -120,6 +138,10 @@ export default function TestsClient(){
   const [resultsPage,setResultsPage]=useState(0);
   const [resultsTotal,setResultsTotal]=useState(0);
   const [resultsPageSize,setResultsPageSize]=useState(10);
+  const [leaderboardTest,setLeaderboardTest]=useState<{assessment_id:number;title:string}|null>(null);
+  const [leaderboardData,setLeaderboardData]=useState<LeaderboardData|null>(null);
+  const [leaderboardLoading,setLeaderboardLoading]=useState(false);
+  const [leaderboardError,setLeaderboardError]=useState('');
   const [tab,setTab]=useState<'tests'|'results'>('tests');
   const [attempt,setAttempt]=useState<Attempt|null>(null);
   const [responses,setResponses]=useState<Record<number,any>>({});
@@ -133,6 +155,7 @@ export default function TestsClient(){
   const [subjectFilter,setSubjectFilter]=useState('ALL');
   const [dirtyAnswers,setDirtyAnswers]=useState<Record<number,any>>({});
   const [showSubmit,setShowSubmit]=useState(false);
+  const leaderboardRequestRef=useRef(0);
   const attemptRef=useRef<Attempt|null>(null);
   const dirtyRef=useRef<Record<number,any>>({});
   const saveQueueRef=useRef<Promise<void>>(Promise.resolve());
@@ -245,6 +268,50 @@ export default function TestsClient(){
     finally{setBusy(false);}
   }
 
+  async function openLeaderboard(test:{assessment_id:number;title:string}){
+    const requestId=++leaderboardRequestRef.current;
+    setLeaderboardTest(test);setLeaderboardData(null);setLeaderboardError('');setLeaderboardLoading(true);
+    try{
+      const data=await api('/api/v1/learning/assessments/'+test.assessment_id+'/leaderboard?language='+encodeURIComponent(language));
+      if(leaderboardRequestRef.current===requestId)setLeaderboardData(data as LeaderboardData);
+    }catch(e:any){
+      if(leaderboardRequestRef.current!==requestId)return;
+      if(e?.auth){setLeaderboardTest(null);router.replace('/login/student');return;}
+      setLeaderboardError(e instanceof Error?e.message:'Could not load this test leaderboard.');
+    }finally{if(leaderboardRequestRef.current===requestId)setLeaderboardLoading(false);}
+  }
+
+  function closeLeaderboard(){
+    leaderboardRequestRef.current++;
+    setLeaderboardTest(null);setLeaderboardData(null);setLeaderboardError('');setLeaderboardLoading(false);
+  }
+
+  useEffect(()=>{
+    if(!leaderboardTest)return;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    const onKeyDown=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){
+        leaderboardRequestRef.current++;
+        setLeaderboardTest(null);setLeaderboardData(null);setLeaderboardError('');setLeaderboardLoading(false);
+      }
+    };
+    window.addEventListener('keydown',onKeyDown);
+    return ()=>{
+      window.removeEventListener('keydown',onKeyDown);
+      document.body.style.overflow=previousOverflow;
+    };
+  },[leaderboardTest]);
+
+  function formatMarks(value:number|string){
+    const number=Number(value);
+    return Number.isFinite(number)?number.toLocaleString(undefined,{maximumFractionDigits:2}):String(value);
+  }
+
+  function studentInitials(name:string){
+    return name.trim().split(/\s+/).filter(Boolean).slice(0,2).map(part=>part.charAt(0)).join('').toUpperCase()||'S';
+  }
+
   const flushSavedAnswers=useCallback(async()=>{
     const currentAttempt=attemptRef.current;
     if(!currentAttempt||currentAttempt.status!=='IN_PROGRESS')return;
@@ -303,7 +370,7 @@ export default function TestsClient(){
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?'Mathematics':'Science'}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} questions</span><span>◷ {test.duration_minutes} min</span><span>★ {test.max_score} marks</span></div><div className={styles.attemptTrack}><span>Attempts used</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?'Opening…':started?'Resume attempt':exhausted?'Attempts used':'Start test'}</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>Latest result ↗</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>You have used all allowed attempts.</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?'Mathematics':'Science'}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} questions</span><span>◷ {test.duration_minutes} min</span><span>★ {test.max_score} marks</span></div><div className={styles.attemptTrack}><span>Attempts used</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?'Opening…':started?'Resume attempt':exhausted?'Attempts used':'Start test'}</button><button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> Top 20 leaderboard</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>Latest result ↗</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>You have used all allowed attempts.</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
@@ -333,7 +400,12 @@ export default function TestsClient(){
                    return <button key={item.attempt_id} type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(Number(item.attempt_id))} aria-label={'Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel} title={positionLabel+' · Attempt #'+item.attempt_number+' · '+scoreLabel}>
                      <b>{attemptIndex+1}</b><span>{positionLabel}</span>
                    </button>;
-                 })}</div>
+                 })}
+                   <button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading}
+                     onClick={()=>void openLeaderboard({assessment_id:result.assessment_id,title:result.assessment_title})}>
+                     <span aria-hidden="true">♛</span> Leaderboard
+                   </button>
+                 </div>
                </div>
              </article>;
            })}</div>}
@@ -415,5 +487,63 @@ export default function TestsClient(){
         {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>FINAL CHECK</span><h2>Submit this test?</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>Keep working</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?'Submitting…':'Submit test'}</button></div></section></div>}
       </>}
     </section>
+
+    {leaderboardTest&&<div className={styles.leaderboardBackdrop} onClick={closeLeaderboard}>
+      <section className={styles.leaderboardModal} role="dialog" aria-modal="true" aria-labelledby="qe-leaderboard-title" onClick={event=>event.stopPropagation()}>
+        <header className={styles.leaderboardHeader}>
+          <div className={styles.leaderboardHeading}>
+            <span className={styles.leaderboardEyebrow}>QUANTAEDGE · STUDENT RANKINGS</span>
+            <h2 id="qe-leaderboard-title">{leaderboardData?.assessment_title||leaderboardTest.title}</h2>
+            <p>Top 20 performers · Higher marks rank first; faster completion breaks a marks tie.</p>
+          </div>
+          <button type="button" className={styles.leaderboardClose} onClick={closeLeaderboard} aria-label="Close leaderboard">×</button>
+        </header>
+        {leaderboardError&&<div className={styles.leaderboardInlineError} role="alert"><span>{leaderboardError}</span><button type="button" className={styles.secondaryButton} onClick={()=>void openLeaderboard(leaderboardTest)}>Try again</button></div>}
+        {leaderboardLoading?<div className={styles.leaderboardLoading}><span className={styles.leaderboardSpinner}/><b>Preparing the leaderboard</b><small>Only completed tests with released scores are ranked.</small></div>
+        :leaderboardData&&<>
+          <div className={styles.leaderboardMetrics}>
+            <div><span>PARTICIPANTS</span><b>{leaderboardData.participant_count}</b></div>
+            <div><span>RANKING RULE</span><b>Marks first <i>·</i> time second</b></div>
+            <div><span>DISPLAYING</span><b>{Math.min(20,leaderboardData.items.length)} of {leaderboardData.participant_count}</b></div>
+          </div>
+          {leaderboardData.items.length===0?<div className={styles.leaderboardEmpty}><span>♛</span><h3>The race starts here</h3><p>No released scores are available for this test yet. The leaderboard will appear as results are finalised.</p></div>
+          :<>
+            {leaderboardData.items.length>=3&&<div className={styles.leaderboardPodium} aria-label="Top three students">
+              {[2,1,3].map(rank=>{
+                const entry=leaderboardData.items.find(item=>item.rank===rank);
+                if(!entry)return null;
+                const podiumClass=rank===1?styles.leaderboardFirst:rank===2?styles.leaderboardSecond:styles.leaderboardThird;
+                return <article key={entry.rank} className={[styles.leaderboardPodiumCard,podiumClass,entry.is_current_student?styles.leaderboardMine:''].filter(Boolean).join(' ')}>
+                  <span className={styles.leaderboardMedal}>{rank===1?'♛':rank===2?'Ⅱ':'Ⅲ'}</span>
+                  <span className={styles.leaderboardAvatar}>{studentInitials(entry.student_name)}</span>
+                  <b className={styles.leaderboardStudentName}>{entry.student_name}</b>
+                  <strong className={styles.leaderboardPodiumScore}>{formatMarks(entry.score)}<small> / {formatMarks(entry.max_score)}</small></strong>
+                  <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span>
+                  {entry.is_current_student&&<span className={styles.leaderboardYou}>YOU</span>}
+                </article>;
+              })}
+            </div>}
+            {(leaderboardData.items.length<3||leaderboardData.items.some(item=>item.rank>3))&&<div className={styles.leaderboardTableWrap}>
+              <table className={styles.leaderboardTable}>
+                <thead><tr><th scope="col">Rank</th><th scope="col">Student</th><th scope="col">Marks</th><th scope="col">Time taken</th></tr></thead>
+                <tbody>{leaderboardData.items.filter(item=>leaderboardData.items.length<3||item.rank>3).map(entry=><tr key={entry.rank} className={entry.is_current_student?styles.leaderboardTableMine:''}>
+                  <td><span className={styles.leaderboardRankNumber}>{String(entry.rank).padStart(2,'0')}</span></td>
+                  <td><div className={styles.leaderboardStudentCell}><span className={styles.leaderboardTableAvatar}>{studentInitials(entry.student_name)}</span><b>{entry.student_name}</b>{entry.is_current_student&&<span className={styles.leaderboardYou}>YOU</span>}</div></td>
+                  <td><strong className={styles.leaderboardTableScore}>{formatMarks(entry.score)} <small>/ {formatMarks(entry.max_score)}</small></strong></td>
+                  <td><span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span></td>
+                </tr>)}</tbody>
+              </table>
+            </div>}
+            {leaderboardData.current_student&&leaderboardData.current_student.rank>20&&<div className={styles.leaderboardMyStanding}>
+              <div><span>YOUR CURRENT POSITION</span><b>#{leaderboardData.current_student.rank} <small>outside the Top 20</small></b></div>
+              <strong>{formatMarks(leaderboardData.current_student.score)} <small>/ {formatMarks(leaderboardData.current_student.max_score)} marks</small></strong>
+              <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(leaderboardData.current_student.time_taken_seconds)||0))}</span>
+            </div>}
+          </>}
+          <footer className={styles.leaderboardFooter}><span>Rankings use the best released attempt per student.</span><button type="button" className={styles.secondaryButton} onClick={closeLeaderboard}>Close leaderboard</button></footer>
+        </>}
+      </section>
+    </div>}
+
   </main>;
 }
