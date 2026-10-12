@@ -4,7 +4,7 @@ This file is the shared handoff board for the Core HR, Attendance & Leave, Acade
 
 ## Current baseline
 
-Last main commit audited before this status update: `0f6e3c78d0fa8950ad77b613a67fffd7bb0241e4` — `docs(hrms): define verified shared identity and API contracts`.
+Last main commit audited before this status update: `59b9a704a268ab7d22d1b68a71920410f928902d` — `docs: require shared contracts and handoffs for all agents`.
 
 Observed recent main history also includes:
 - `37023a8ca469b776f0ac3ed65a6c111255e61f3a` — test empty leave ledger migration
@@ -28,7 +28,8 @@ Observed recent main history also includes:
   - `ac6f22d92c0a091dd7a52efd2e9c975904b0993f` — validate email syntax and E.164 phone format on create/update.
   - `a1e3ecc9b2af684393728d49b289f5fad8eb1aed` — add invalid email/phone regression tests.
 - Current input validation rejects invalid email and non-E.164 phone values before database access during employee creation.
-- CI run for the contact-validation test commit: [QuantaEdge Build and Publish #1631](https://github.com/Manav326/QuantaEdge/actions/runs/38294894090) was observed as **pending** at last check; no pass/fail result yet.
+- CI run for the contact-validation test commit `a1e3ecc9b2af684393728d49b289f5fad8eb1aed`: [QuantaEdge Build and Publish #1631](https://github.com/Manav326/QuantaEdge/actions/runs/38294894090) completed successfully. Observed successful jobs included API verification, API image, admin image, web image, People Operations image, and content import safeguards.
+- The later docs-only run for the current main status commit was queued/in progress at the last check; it is not being represented as passed.
 - Next checks: lifecycle transition consistency, department hierarchy integrity, full build/test verification, and inspect latest CI result.
 
 ### Agent 2 — Attendance & Leave
@@ -46,6 +47,7 @@ Observed recent main history also includes:
 
 ## Integration blockers / unverified items
 
+- Repository-wide contributor/agent instructions: [AGENTS.md](../../AGENTS.md).
 - Shared coordination protocol: [agent-coordination.md](agent-coordination.md).
 - Verified shared identity/API contract: [shared-contracts.md](shared-contracts.md).
 - The latest observed commit history does not establish that the full API build or all HRMS tests passed.
