@@ -35,16 +35,18 @@ object ApiClient {
     }
 
     suspend fun getObject(path: String): JSONObject =
-        JSONObject(request(path, "GET", null).toString(StandardCharsets.UTF_8.name()))
+        JSONObject(request(path, "GET", null).toString(StandardCharsets.UTF_8))
     suspend fun getArray(path: String): JSONArray =
-        JSONArray(request(path, "GET", null).toString(StandardCharsets.UTF_8.name()))
+        JSONArray(request(path, "GET", null).toString(StandardCharsets.UTF_8))
     suspend fun postObject(path: String, body: JSONObject = JSONObject()): JSONObject =
-        JSONObject(request(path, "POST", body.toString()).toString(StandardCharsets.UTF_8.name()))
+        JSONObject(request(path, "POST", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun putObject(path: String, body: JSONObject): JSONObject =
-        JSONObject(request(path, "PUT", body.toString()).toString(StandardCharsets.UTF_8.name()))
+        JSONObject(request(path, "PUT", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun patchObject(path: String, body: JSONObject): JSONObject =
-        JSONObject(request(path, "PATCH", body.toString()).toString(StandardCharsets.UTF_8.name()))
+        JSONObject(request(path, "PATCH", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
+    fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
+
     fun clearSession() { cookies?.clear() }
 
     private suspend fun request(path: String, method: String, body: String?): ByteArray =
@@ -64,12 +66,12 @@ object ApiClient {
                 val bytes = response.body?.bytes() ?: ByteArray(0)
                 if (!response.isSuccessful) {
                     val message = try {
-                        val parsed = JSONObject(bytes.toString(StandardCharsets.UTF_8.name()))
+                        val parsed = JSONObject(bytes.toString(StandardCharsets.UTF_8))
                         parsed.optString("message").ifBlank {
                             parsed.optString("error").ifBlank { "Request failed (" + response.code + ")." }
                         }
                     } catch (_: JSONException) {
-                        bytes.toString(StandardCharsets.UTF_8.name()).take(500)
+                        bytes.toString(StandardCharsets.UTF_8).take(500)
                             .ifBlank { "Request failed (" + response.code + ")." }
                     }
                     throw ApiFailure(response.code, message)

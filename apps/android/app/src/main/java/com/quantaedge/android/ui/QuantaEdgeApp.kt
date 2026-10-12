@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -305,7 +304,7 @@ fun QuantaEdgeApp() {
                 (doc.optInt("page_end", 1) - doc.optInt("page_start", 1) + 1).coerceAtLeast(1))
             if (id <= 0L || count <= 0) throw IOException("डाउनलोड की जानकारी उपलब्ध नहीं है।")
             resourceStore.saveDocument(doc)
-            com.quantaedge.android.data.ResourceDownloadScheduler.enqueue(context, resourceOwner, id)
+            com.quantaedge.android.data.ProtectedResourceDownloadWorker.enqueue(context, resourceOwner, id)
             status = "सुरक्षित डाउनलोड बैकग्राउंड में शुरू हुआ। प्रगति देखने के लिए लाइब्रेरी रिफ्रेश करें।"
             documents = documents.map { if (it.optLongAny("document_id", "id") == id) doc else it }
         }
@@ -566,7 +565,7 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.ASSESSMENTS -> AssessmentListScreen(
                         subject = currentSubject,
-                        items = assessments,
+                        assessmentItems = assessments,
                         busy = busy,
                         onSubject = ::openAssessments,
                         onOpen = ::openAssessment,
