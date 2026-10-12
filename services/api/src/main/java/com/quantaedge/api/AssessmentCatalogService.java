@@ -86,28 +86,41 @@ public class AssessmentCatalogService {
       String description,int duration,int maxAttempts,List<Long> ids,String fingerprint,String note) {
     String column="TOPIC_END".equals(type)?"lesson_id":"chapter_id";
     long scope=lessonId==null?chapterId:lessonId;
+    // Lock the scope row even when no assessment currently exists, avoiding concurrent
+    // requests creating duplicate current versions for the same topic or chapter.
+    String scopeTable="TOPIC_END".equals(type)?"lesson":"curriculum_chapter";
+    List<Map<String,Object>> lockedScope=jdbc.queryForList(
+        "select id from "+scopeTable+" where id=? for update",scope);
+    if(lockedScope.isEmpty()) return;
     List<Map<String,Object>> current=jdbc.queryForList(
         "select id,generation_version,content_fingerprint from assessment where assessment_type=? and is_generated=true and is_current=true and "+column+"=? for update",
         type,scope);
     if(!current.isEmpty()) {
       Map<String,Object> active=current.getFirst();long id=n(active.get("id"));
-      if(fingerprint.equals(t(active.get("content_fingerprint")))) return;
-      Integer attempts=jdbc.queryForObject("select count(*) from student_assessment_attempt where assessment_id=?",Integer.class,id);
-      int version=((Number)active.get("generation_version")).intValue();
-      if(attempts!=null&&attempts>0) {
-        jdbc.update("update assessment set is_current=false,status='ARCHIVED',updated_at=now() where id=?",id);
-        audit(id,"PUBLISHED","ARCHIVED","Superseded content; historical attempts remain unchanged.");
-        insert(type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,version+1,fingerprint,ids,note);
+      boolean sameFingerprint=fingerprint.equals(t(active.get("content_fingerprint")));
+      String currentStatus=t(active.get("status"));
+      if(sameFingerprint&&"PUBLISHED".equals(currentStatus)) return;
+      if("ARCHIVED".equals(currentStatus)) {
+        // Respect an explicit archive. A later regeneration will create a new version.
+        jdbc.update("update assessment set is_current=false where id=?",id);
       } else {
-        jdbc.update("delete from assessment_question where assessment_id=?",id);
-        jdbc.update("""
-          update assessment set title=?,description=?,duration_minutes=?,max_attempts=?,generation_version=?,
-            content_fingerprint=?,status='PUBLISHED',is_current=true,published_at=now(),updated_at=now()
-          where id=?
-          """,title,description,duration,maxAttempts,version+1,fingerprint,id);
-        insertSnapshots(id,ids);audit(id,"PUBLISHED","PUBLISHED","Refreshed before the first attempt.");
+        Integer attempts=jdbc.queryForObject("select count(*) from student_assessment_attempt where assessment_id=?",Integer.class,id);
+        int version=((Number)active.get("generation_version")).intValue();
+        if(attempts!=null&&attempts>0) {
+          jdbc.update("update assessment set is_current=false,status='ARCHIVED',updated_at=now() where id=?",id);
+          audit(id,"PUBLISHED","ARCHIVED","Superseded content; historical attempts remain unchanged.");
+          insert(type,subjectId,chapterId,lessonId,title,description,duration,maxAttempts,version+1,fingerprint,ids,note);
+        } else {
+          jdbc.update("delete from assessment_question where assessment_id=?",id);
+          jdbc.update("""
+            update assessment set title=?,description=?,duration_minutes=?,max_attempts=?,generation_version=?,
+              content_fingerprint=?,status='PUBLISHED',is_current=true,published_at=now(),updated_at=now()
+            where id=?
+            """,title,description,duration,maxAttempts,version+1,fingerprint,id);
+          insertSnapshots(id,ids);audit(id,"PUBLISHED","PUBLISHED","Refreshed before the first attempt.");
+        }
+        return;
       }
-      return;
     }
     Integer latest=jdbc.queryForObject(
         "select coalesce(max(generation_version),0) from assessment where assessment_type=? and is_generated=true and "+column+"=?",

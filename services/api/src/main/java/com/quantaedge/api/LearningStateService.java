@@ -138,7 +138,7 @@ public class LearningStateService {
         and q.lesson_id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
         and q.question_type='MCQ'
     """,Long.class,studentId,lessonId);
-    String marker="[{\\"sourceLessonId\\":"+lessonId+"}]";
+    String marker="[{\"sourceLessonId\":"+lessonId+"}]";
     Long completedPractice=jdbc.queryForObject("""
       select count(*) from student_practice_session
       where student_id=? and status='COMPLETED' and topic_selections @> ?::jsonb
@@ -203,18 +203,6 @@ public class LearningStateService {
              count(*) filter(where mastery_percent<50) as needs_support
       from student_concept_mastery where student_id=?
       """,studentId);
-  }
-
-  private void updateMastery(long studentId,long conceptId,boolean correct){
-    jdbc.update("""
-      insert into student_concept_mastery(student_id,concept_id,mastery_percent,attempts,graded_attempts,correct_attempts,last_attempt_at,updated_at)
-      values(?,?,case when ? then 100 else 0 end,1,1,case when ? then 1 else 0 end,now(),now())
-      on conflict(student_id,concept_id) do update set
-        attempts=student_concept_mastery.attempts+1,graded_attempts=student_concept_mastery.graded_attempts+1,
-        correct_attempts=student_concept_mastery.correct_attempts+excluded.correct_attempts,
-        mastery_percent=least(100,greatest(0,round(100.0*(student_concept_mastery.correct_attempts+excluded.correct_attempts) /
-          nullif(student_concept_mastery.graded_attempts+1,0)))),last_attempt_at=now(),updated_at=now()
-      """,studentId,conceptId,correct,correct);
   }
 
   private void ensureStudentLessonAccess(long studentId,long lessonId){
