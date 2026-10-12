@@ -721,8 +721,13 @@ def create_import_plan(
     chapters_by_track: dict[tuple[str, str], list[dict[str, Any]]],
     max_bytes: int,
     books_dir: Path | None = None,
+    languages: tuple[str, ...] = LANGUAGES,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Validate all 12 source books from books_dir and prepare splits under the work root."""
+    """Validate requested source-book languages and prepare splits under the work root."""
+    if not languages or any(language not in LANGUAGES for language in languages):
+        raise ValueError(f"Unsupported language selection: {languages!r}. Choose from {LANGUAGES}.")
+    if len(set(languages)) != len(languages):
+        raise ValueError(f"Duplicate language selection: {languages!r}.")
     books_dir = (books_dir or root).expanduser().resolve()
     if not books_dir.is_dir():
         raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
@@ -733,7 +738,7 @@ def create_import_plan(
 
     for grade in CLASSES:
         for subject in SUBJECTS:
-            for language in LANGUAGES:
+            for language in languages:
                 name = book_filename(grade, subject, language)
                 try:
                     source = prepare_source_book(books_dir, grade, subject, language, output_dir)
@@ -965,7 +970,10 @@ def run(args: argparse.Namespace) -> int:
     print(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
 
     chapters_by_track = read_chapters(base, cookie)
-    records, warnings = create_import_plan(root, chapters_by_track, max_bytes, books_dir=books_dir)
+    records, warnings = create_import_plan(
+        root, chapters_by_track, max_bytes,
+        books_dir=books_dir, languages=tuple(args.languages),
+    )
     tracks = {(row["class_code"], row["subject_code"]) for row in records}
     approved_assets = query_library_assets(base, cookie)
     hashes_by_slot, _assignment_by_slot_hash = query_assignments(base, cookie, tracks)
@@ -996,7 +1004,8 @@ def run(args: argparse.Namespace) -> int:
         "authenticated_role": role,
         "permissions_required": ["CONTENT_EDIT"],
         "publish_permission_required_later": "CONTENT_PUBLISH",
-        "input_books_expected": 12,
+        "input_books_expected": len(CLASSES) * len(SUBJECTS) * len(args.languages),
+        "languages_requested": list(args.languages),
         "input_books_validated": sum(1 for row in records if row["scope"] == "SUBJECT_BOOK"),
         "chapter_splits_created_locally": sum(1 for row in records if row["scope"] == "CHAPTER_PDF"),
         "planned_draft_assignments": len(records),
@@ -1020,7 +1029,7 @@ def run(args: argparse.Namespace) -> int:
     }
     if not args.apply:
         write_report(report_path, report)
-        print(f"Whole books validated: {report['input_books_validated']}/12")
+        print(f"Whole books validated: {report['input_books_validated']}/{report['input_books_expected']}")
         print(f"Chapter PDFs extracted locally: {report['chapter_splits_created_locally']}")
         print(f"Total complete-book + chapter assignments planned: {report['planned_draft_assignments']}")
         print(f"Existing identical assignments to skip: {report['skipped_identical_assignments']}")
@@ -1097,7 +1106,11 @@ def run(args: argparse.Namespace) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--root", default=str(ROOT), help="Repository/work folder for generated splits and reports (default: repo root).")
-    parser.add_argument("--books-dir", default="", help="Folder containing the 12 source books (default: <root>/books). Relative paths are resolved from --root.")
+    parser.add_argument("--books-dir", default="", help="Folder containing source books (default: <root>/books). Relative paths are resolved from --root.")
+    parser.add_argument(
+        "--languages", nargs="+", choices=LANGUAGES, default=list(LANGUAGES),
+        help="Languages to import (default: english hindi). Use --languages english to process six English books first.",
+    )
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
