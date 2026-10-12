@@ -256,7 +256,7 @@ public class SourceIngestionController {
         String needle = normalizeBookText(title);
         if (needle.length() >= 4) {
           for (int p=0;p<pageTexts.size();p++) {
-            if (normalizeBookText(pageTexts.get(p)).contains(needle)) foundPages.add(p+1);
+            if (normalizeBookText(pageTexts.get(p)).contains(needle) && foundPages.size() < 100) foundPages.add(p+1);
           }
         }
         if (foundPages.isEmpty()) {
@@ -305,7 +305,7 @@ public class SourceIngestionController {
       for (int p=0;p<pageTexts.size();p++) {
         java.util.regex.Matcher matcher=heading.matcher(pageTexts.get(p));
         int count=0;
-        while(matcher.find() && count++<8) {
+        while(matcher.find() && count++<8 && extras.size() < 250) {
           String candidate=matcher.group(1).trim();
           if (candidate.length()<4) continue;
           boolean sameAsCurriculum=false;
