@@ -648,8 +648,14 @@ body.qe-session-bfcache-guard::after{content:'Aapka session verify ho raha haiâ€
 .qe-answer-feedback.is-correct{border-color:#abefc6;background:#ecfdf3;color:#067647}
 .qe-answer-feedback.is-correct .qe-answer-feedback__icon{background:#d1fadf}
 .qe-answer-feedback.is-ungraded{border-color:#d0d5dd;background:#f8fafc;color:#475467}
-.qe-answer-feedback__explanation{display:flex;flex-direction:column;gap:5px;margin-top:11px;padding-top:11px;border-top:1px solid currentColor;border-color:rgba(152,162,179,.35);font-size:13px;line-height:1.65}
-.qe-answer-feedback__explanation>span{font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;opacity:.78}
+.qe-answer-feedback__explanation{display:block;margin-top:11px;padding-top:11px;border-top:1px solid currentColor;border-color:rgba(152,162,179,.35);font-size:13px;line-height:1.65}
+.qe-answer-feedback__explanation>summary{display:flex;align-items:center;gap:8px;width:max-content;max-width:100%;color:inherit;font-size:11px;font-weight:850;cursor:pointer;list-style:none}
+.qe-answer-feedback__explanation>summary::-webkit-details-marker{display:none}
+.qe-answer-feedback__explanation>summary::before{content:'+';display:grid;place-items:center;width:20px;height:20px;border:1px solid currentColor;border-radius:6px;font-size:14px;line-height:1}
+.qe-answer-feedback__explanation[open]>summary::before{content:'âˆ’'}
+.qe-answer-feedback__explanation[open]>summary{margin-bottom:9px}
+.qe-answer-feedback__explanation-content{display:flex;flex-direction:column;gap:5px}
+.qe-answer-feedback__explanation-content>span{font-size:9px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;opacity:.78}
 .qe-question-card--practice{gap:23px;margin:20px 0 0;padding:clamp(22px,4vw,36px);border-radius:26px;box-shadow:0 18px 50px rgba(26,37,61,.075),0 2px 5px rgba(26,37,61,.035)}
 .qe-question-card--practice .qe-question-index{flex-basis:48px;width:48px;height:48px;border-radius:16px;font-size:14px}
 .qe-question-card--practice .qe-question-card__prompt{font-size:clamp(22px,3vw,29px);line-height:1.6;letter-spacing:-.45px}
