@@ -219,7 +219,7 @@ class AssessmentControllerTest {
                     {"option_key":"B","label":"Option B","is_correct":true}]}
         """);
     questionRow.put("answer_id", 6010L);
-    questionRow.put("response_payload", "\\"A\\"");
+    questionRow.put("response_payload", "\"A\"");
     questionRow.put("answer_status", "AUTO_GRADED");
     questionRow.put("is_correct", false);
     questionRow.put("awarded_marks", "0.00");
