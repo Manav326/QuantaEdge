@@ -210,12 +210,23 @@ public class HrEmployeeController {
       if(!Boolean.TRUE.equals(valid)) throw badRequest("Choose an active manager in the same organisation.");
     }
     LocalDate probation=parseOptionalDate(body.get("probationEndDate"),"Probation end date");
+    LocalDate joining=((Date)before.get("joining_date")).toLocalDate();
+    LocalDate exit=body.containsKey("exitDate")
+        ? parseOptionalDate(body.get("exitDate"),"Exit date")
+        : (before.get("exit_date") instanceof Date existingExit ? existingExit.toLocalDate() : null);
+    if(exit!=null && exit.isBefore(joining)) throw badRequest("Exit date cannot be before the joining date.");
+    String status=body.get("employmentStatus")==null?String.valueOf(before.get("employment_status")):required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
+    if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status))
+      throw badRequest("Choose a supported employment status.");
+    if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
     String notes=optionalText(body.get("notes"),1000);
     jdbc.update("""
       update hr_employee set display_name=?,email=?,phone_e164=?,department_id=?,designation_id=?,
-        manager_employee_id=?,probation_end_date=?,notes=?,updated_by_staff_id=?,updated_at=now()
+        manager_employee_id=?,probation_end_date=?,employment_status=?,exit_date=?,notes=?,
+        updated_by_staff_id=?,updated_at=now()
       where id=?
-      """,name,email,phone,department,designation,manager,probation==null?null:Date.valueOf(probation),notes,context.staffId(),id);
+      """,name,email,phone,department,designation,manager,probation==null?null:Date.valueOf(probation),
+        status,exit==null?null:Date.valueOf(exit),notes,context.staffId(),id);
     Map<String,Object> after=employeeById(id);
     writeHistory(id,context,"EMPLOYEE_UPDATED",LocalDate.now(),before,after,optionalText(body.get("reason"),500));
     record(context,"/api/v1/hr/employees/"+id,"Updated employee record "+before.get("employee_number"));
