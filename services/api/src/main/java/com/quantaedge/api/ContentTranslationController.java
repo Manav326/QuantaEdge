@@ -375,12 +375,12 @@ public class ContentTranslationController {
     }
 
     if ("APPROVED".equals(next) || "REJECTED".equals(next)) {
-      jdbc.update("update " + spec.table() + """
+      jdbc.update("update " + spec.table() + " " + """
           set translation_status=?,reviewed_by_staff_id=?,reviewed_at=now(),quality_notes=coalesce(?,quality_notes),updated_at=now()
           where id=?
           """, next, context.staffId(), optionalText(body.get("qualityNotes"), 2000), translationId);
     } else if ("PUBLISHED".equals(next)) {
-      jdbc.update("update " + spec.table() + """
+      jdbc.update("update " + spec.table() + " " + """
           set translation_status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
           where id=?
           """, context.staffId(), translationId);
