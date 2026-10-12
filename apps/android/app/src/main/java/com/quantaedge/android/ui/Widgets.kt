@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -113,43 +114,158 @@ fun QuestionCard(
     val options = jsonArrayValue(question.opt("options")).objectItems()
     val prompt = question.textAny("prompt", "question", "title").ifBlank { "प्रश्न" }
     val type = question.textAny("question_type", "questionType").uppercase()
+    val optionKeys = options.map { option ->
+        option.textAny("key", "option_key", "value").ifBlank { option.textAny("label", "text") }
+    }.filter { it.isNotBlank() }
+    val selectedMulti = parseAnswerKeyArray(answer).toSet()
+    val orderedKeys = displayedOrder(answer, optionKeys)
+    val isMultiSelect = type in setOf("MULTI_OPTION", "MULTI_SELECT", "MULTIPLE_SELECT", "MULTI_CHOICE")
+
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("प्रश्न " + question.textAny("sequence_no", "sort_order").ifBlank { "" }, style = MaterialTheme.typography.labelMedium)
-                Text(type.replace('_', ' '), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.secondary)
+                Text("प्रश्न " + question.textAny("sequence_no", "sort_order").ifBlank { "" },
+                    style = MaterialTheme.typography.labelMedium)
+                Text(type.replace('_', ' '), style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondary)
             }
             Text(prompt, style = MaterialTheme.typography.titleMedium)
-            if (options.isNotEmpty()) {
-                options.forEach { option ->
-                    val key = option.textAny("key", "option_key", "value")
-                    val label = option.textAny("label", "text").ifBlank { key }
-                    Row(
-                        modifier = Modifier.fillMaxWidth().selectable(
-                            selected = answer == key,
-                            enabled = !locked && !saving,
-                            role = Role.RadioButton,
-                            onClick = { onAnswerChange(key) }
-                        ),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(selected = answer == key, onClick = { onAnswerChange(key) }, enabled = !locked && !saving)
-                        Text(label, modifier = Modifier.weight(1f).padding(start = 8.dp))
+
+            when {
+                type == "ORDER" && options.isNotEmpty() -> {
+                    Text("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary)
+                    orderedKeys.forEachIndexed { index, key ->
+                        val option = options.firstOrNull {
+                            it.textAny("key", "option_key", "value").ifBlank { it.textAny("label", "text") } == key
+                        }
+                        val label = option?.textAny("label", "text").ifBlank { key }
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 4.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text((index + 1).toString() + ".", style = MaterialTheme.typography.titleSmall)
+                                Text(label, modifier = Modifier.weight(1f))
+                                TextButton(
+                                    onClick = {
+                                        val next = orderedKeys.toMutableList()
+                                        val value = next.removeAt(index)
+                                        next.add(index - 1, value)
+                                        onAnswerChange(JSONArray(next).toString())
+                                    },
+                                    enabled = !locked && !saving && index > 0
+                                ) { Text("↑") }
+                                TextButton(
+                                    onClick = {
+                                        val next = orderedKeys.toMutableList()
+                                        val value = next.removeAt(index)
+                                        next.add(index + 1, value)
+                                        onAnswerChange(JSONArray(next).toString())
+                                    },
+                                    enabled = !locked && !saving && index < orderedKeys.lastIndex
+                                ) { Text("↓") }
+                            }
+                        }
                     }
                 }
-            } else {
-                OutlinedTextField(
-                    value = answer,
-                    onValueChange = onAnswerChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text(if (type.contains("NUMERICAL") || type == "INPUT") "अपना उत्तर लिखें" else "अपना उत्तर लिखें") },
-                    enabled = !locked && !saving,
-                    minLines = if (type.contains("LONG")) 3 else 1,
-                    maxLines = 6
-                )
+                isMultiSelect && options.isNotEmpty() -> {
+                    Text("सभी लागू विकल्प चुनें।", style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary)
+                    options.forEach { option ->
+                        val key = option.textAny("key", "option_key", "value")
+                        val label = option.textAny("label", "text").ifBlank { key }
+                        Row(verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Checkbox(
+                                checked = key in selectedMulti,
+                                onCheckedChange = { checked ->
+                                    val next = selectedMulti.toMutableSet()
+                                    if (checked) next.add(key) else next.remove(key)
+                                    onAnswerChange(JSONArray(optionKeys.filter { it in next }).toString())
+                                },
+                                enabled = !locked && !saving
+                            )
+                            Text(label, modifier = Modifier.weight(1f))
+                        }
+                    }
+                }
+                type == "MATCH" -> {
+                    if (options.isNotEmpty()) {
+                        options.forEach { option ->
+                            Text(
+                                option.textAny("key", "option_key") + " — " + option.textAny("label", "text"),
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
+                    }
+                    Text("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    OutlinedTextField(
+                        value = answer,
+                        onValueChange = onAnswerChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("मिलान के उत्तर") },
+                        enabled = !locked && !saving,
+                        minLines = 3,
+                        maxLines = 6
+                    )
+                }
+                options.isNotEmpty() -> {
+                    options.forEach { option ->
+                        val key = option.textAny("key", "option_key", "value")
+                        val label = option.textAny("label", "text").ifBlank { key }
+                        Row(
+                            modifier = Modifier.fillMaxWidth().selectable(
+                                selected = answer == key,
+                                enabled = !locked && !saving,
+                                role = Role.RadioButton,
+                                onClick = { onAnswerChange(key) }
+                            ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = answer == key,
+                                onClick = { onAnswerChange(key) },
+                                enabled = !locked && !saving
+                            )
+                            Text(label, modifier = Modifier.weight(1f).padding(start = 8.dp))
+                        }
+                    }
+                }
+                else -> {
+                    if (type == "ORDER") {
+                        Text("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"].",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    }
+                    val inputLabel = when (type) {
+                        "NUMERICAL", "INPUT" -> "अपना उत्तर लिखें"
+                        "ORDER" -> "क्रम का उत्तर"
+                        "MATCH" -> "मिलान के उत्तर"
+                        else -> "अपना उत्तर या reasoning लिखें"
+                    }
+                    val longAnswer = type in setOf(
+                        "LONG_ANSWER", "SHORT_ANSWER", "CASE_BASED", "SOURCE_BASED",
+                        "ASSERTION_REASON", "DIAGRAM", "MAP", "MATCH", "ORDER"
+                    )
+                    OutlinedTextField(
+                        value = answer,
+                        onValueChange = onAnswerChange,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(inputLabel) },
+                        enabled = !locked && !saving,
+                        minLines = if (longAnswer) 3 else 1,
+                        maxLines = 6
+                    )
+                }
             }
+
             if (!status.isNullOrBlank()) Text(status, style = MaterialTheme.typography.bodyMedium)
-            if (!feedback.isNullOrBlank()) Text(feedback, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+            if (!feedback.isNullOrBlank()) {
+                Text(feedback, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+            }
             if (!locked) {
                 Button(
                     onClick = onSubmit,
@@ -161,6 +277,22 @@ fun QuestionCard(
             }
         }
     }
+}
+
+private fun parseAnswerKeyArray(answer: String): List<String> {
+    if (answer.isBlank()) return emptyList()
+    val array = runCatching { JSONArray(answer) }.getOrNull() ?: return emptyList()
+    return buildList {
+        for (index in 0 until array.length()) {
+            val value = array.opt(index)?.toString().orEmpty()
+            if (value.isNotBlank()) add(value)
+        }
+    }
+}
+
+private fun displayedOrder(answer: String, optionKeys: List<String>): List<String> {
+    val parsed = parseAnswerKeyArray(answer).filter { it in optionKeys }
+    return (parsed + optionKeys.filterNot { it in parsed }).distinct()
 }
 
 @Composable
