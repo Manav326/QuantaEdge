@@ -29,11 +29,11 @@ export default function EmployeeSelfServicePage(){
   const [requests,setRequests]=useState<any[]>([]);
   const [types,setTypes]=useState<LeaveType[]>([]);
   const [balances,setBalances]=useState<any[]>([]);
-  const [payslips,setPayslips]=useState<any[]>([]);
+  const [payslips,setPayslips]=useState<any[]>([]);\n  const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
   const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
-  const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'>('attendance');
-  const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});
+  const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'|'profile'>('attendance');
+  const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});\n  const [profileDraft,setProfileDraft]=useState({email:'',phoneE164:'',reason:''});
   const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const daySpan=Math.floor((Date.parse(range.to+'T00:00:00Z')-Date.parse(range.from+'T00:00:00Z'))/86400000);
   const load=useCallback(async()=>{
@@ -49,9 +49,10 @@ export default function EmployeeSelfServicePage(){
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
         api('/api/v1/hr/self-service/leave/types'),
         api('/api/v1/hr/self-service/leave/balances'),
-        api('/api/v1/hr/self-service/payslips')
+        api('/api/v1/hr/self-service/payslips'),
+        api('/api/v1/hr/self-service/profile-change-requests')
       ]);
-      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));
+      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));setProfileChangeRequests((pr.items||[]).map((item:any)=>({...item,requested_values:typeof item.requested_values==='string'?JSON.parse(item.requested_values):item.requested_values})));
       if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
     }catch(e){
       setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
@@ -68,6 +69,24 @@ export default function EmployeeSelfServicePage(){
       await load();
       setTab('leave');
     }catch(e){setError(e instanceof Error?e.message:'Leave request could not be submitted.')}finally{setSaving(false)}
+  }
+  async function submitProfileChange(event:React.FormEvent){
+    event.preventDefault();setSaving(true);setError('');setNotice('');
+    const body:any={reason:profileDraft.reason};
+    if(profileDraft.email.trim())body.email=profileDraft.email.trim();
+    if(profileDraft.phoneE164.trim())body.phoneE164=profileDraft.phoneE164.trim();
+    if(!body.email&&!body.phoneE164){setError('Enter a new email address, phone number, or both.');setSaving(false);return}
+    try{
+      const result=await api('/api/v1/hr/self-service/profile-change-requests',{method:'POST',body:JSON.stringify(body)});
+      setNotice('Profile change request #'+result.id+' submitted for People Operations review.');
+      setProfileDraft({email:'',phoneE164:'',reason:''});
+      await load();setTab('profile');
+    }catch(e){setError(e instanceof Error?e.message:'Profile change request could not be submitted.')}finally{setSaving(false)}
+  }
+  async function cancelProfileChange(id:number){
+    setSaving(true);setError('');setNotice('');
+    try{await api('/api/v1/hr/self-service/profile-change-requests/'+id+'/cancel',{method:'PATCH'});setNotice('Profile change request cancelled.');await load();setTab('profile')}
+    catch(e){setError(e instanceof Error?e.message:'Profile change request could not be cancelled.')}finally{setSaving(false)}
   }
   async function logout(){try{await api('/api/v1/auth/logout',{method:'POST'})}finally{router.replace('/login')}}
   return <div className="shell">
@@ -101,8 +120,31 @@ export default function EmployeeSelfServicePage(){
           <button type="button" aria-pressed={tab==='leave'} className={tab==='leave'?'active':''} onClick={()=>setTab('leave')}>My leave</button>
           <button type="button" aria-pressed={tab==='balances'} className={tab==='balances'?'active':''} onClick={()=>setTab('balances')}>Leave balances</button>
           <button type="button" aria-pressed={tab==='payslips'} className={tab==='payslips'?'active':''} onClick={()=>{setTab('payslips');setSelectedPayslip(null)}}>My payslips</button>
+          <button type="button" aria-pressed={tab==='profile'} className={tab==='profile'?'active':''} onClick={()=>setTab('profile')}>Profile changes</button>
           <button type="button" className="secondary" onClick={()=>void load()} disabled={loading}>Refresh</button>
         </div>
+        {tab==='profile'&&<>
+          <section className="panel">
+            <h2>Request a profile change</h2>
+            <p className="small">Your current contact details remain unchanged until People Operations approves your request. Leave a field blank if you do not want to change it.</p>
+            <div className="cards">
+              <div className="card"><div className="label">Current email</div><strong>{profile?.email||'Not provided'}</strong></div>
+              <div className="card"><div className="label">Current phone</div><strong>{profile?.phone_e164||'Not provided'}</strong></div>
+            </div>
+            <form className="form-grid" onSubmit={submitProfileChange} style={{marginTop:18}}>
+              <label className="field">New email address<input className="input" type="email" maxLength={254} value={profileDraft.email} onChange={e=>setProfileDraft(v=>({...v,email:e.target.value}))} placeholder="name@example.com"/></label>
+              <label className="field">New phone number (E.164)<input className="input" type="tel" maxLength={24} value={profileDraft.phoneE164} onChange={e=>setProfileDraft(v=>({...v,phoneE164:e.target.value}))} placeholder="+919876543210" pattern="^\+[1-9][0-9]{7,14}$"/></label>
+              <label className="field full">Reason for change<textarea className="input" rows={3} maxLength={1000} required value={profileDraft.reason} onChange={e=>setProfileDraft(v=>({...v,reason:e.target.value}))} placeholder="Explain why your contact details need updating."/></label>
+              <div className="actions"><button type="submit" className="primary" disabled={saving}>{saving?'Submitting…':'Submit for review'}</button></div>
+            </form>
+          </section>
+          <section className="panel">
+            <h2>Your profile change requests</h2>
+            {profileChangeRequests.length===0?<div className="empty">You have not submitted any profile change requests.</div>:<div className="table-wrap"><table><thead><tr><th>Submitted</th><th>Requested changes</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
+              {profileChangeRequests.map((item:any)=><tr key={item.id}><td>{new Date(item.created_at).toLocaleString()}</td><td>{item.requested_values?.email&&<div>Email: {item.requested_values.email}</div>}{item.requested_values?.phoneE164&&<div>Phone: {item.requested_values.phoneE164}</div>}</td><td>{item.reason}</td><td><span className="pill">{pretty(item.request_status)}</span></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelProfileChange(item.id)}>Cancel</button>:'—'}</td></tr>)}
+            </tbody></table></div>}
+          </section>
+        </>}
         {tab==='attendance'&&<>
           <div className="toolbar">
             <label className="field">From<input className="input" type="date" value={range.from} max={range.to} onChange={e=>setRange(v=>({...v,from:e.target.value}))}/></label>
