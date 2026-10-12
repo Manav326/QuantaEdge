@@ -272,7 +272,7 @@ public class HrPayrollController {
     jdbc.update("update hr_payroll_period set status='APPROVED',updated_at=now() where id=? and status='SUBMITTED'",periodId);
     event(orgId,periodId,runId,"RUN_APPROVED",context,reason,"{}");
     int issued=issuePayslips(runId,context);
-    event(orgId,periodId,runId,"PAYSLIPS_ISSUED",context,reason,"{\\"count\\":"+issued+"}");
+    event(orgId,periodId,runId,"PAYSLIPS_ISSUED",context,reason,"{\"count\":"+issued+"}");
     audit.recordAction(context,"/api/v1/hr/payroll/runs/"+runId,"Approved payroll run and issued "+issued+" payslip(s)");
     return runById(runId);
   }
