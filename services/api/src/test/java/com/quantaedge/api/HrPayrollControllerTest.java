@@ -2,11 +2,15 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,4 +81,19 @@ class HrPayrollControllerTest {
     verify(jdbc,never()).update(org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.any(Object[].class));
     verify(audit,never()).recordAction(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.anyString());
   }
+  @Test
+  void payrollCalculationReadsCurrencyFromEffectiveCompensationRows() {
+    when(authorization.requirePermission(payrollManager,"HR_PAYROLL_MANAGE")).thenReturn(payrollManager);
+    when(jdbc.queryForList("select * from hr_payroll_period where id=? for update",1L))
+        .thenReturn(List.of(Map.of(
+            "id",1L,"organization_id",1L,"start_date",Date.valueOf("2027-01-01"),
+            "end_date",Date.valueOf("2027-01-31"),"status","OPEN")));
+
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.calculate(1L,Map.of(),payrollManager));
+
+    assertEquals(409,error.getStatusCode().value());
+    verify(jdbc).queryForList(contains("select e.id employee_id,e.employee_number,e.display_name,x.currency"),any(Object[].class));
+  }
+
 }
