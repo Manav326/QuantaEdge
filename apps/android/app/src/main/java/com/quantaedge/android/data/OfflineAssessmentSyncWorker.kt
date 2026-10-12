@@ -59,7 +59,10 @@ class OfflineAssessmentSyncWorker(appContext: Context, parameters: WorkerParamet
                         val answer: Any = if (localAnswers.has(key) && !localAnswers.isNull(key)) {
                             localAnswers.opt(key) ?: ""
                         } else {
-                            question.opt("answer") ?: ""
+                            // Never infer a learner response from a server question snapshot.
+                            // Missing local answers must be submitted as blank, not a potentially
+                            // grading-sensitive or stale "answer" field supplied with the question.
+                            ""
                         }
                         ApiClient.putObject(
                             "/api/v1/learning/assessment-attempts/$attemptId/answers/$questionId",
