@@ -856,7 +856,7 @@ public class AssessmentController {
     language = normalizeLanguage(language);
     return jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
-             att.graded_at,att.released_at,att.final_score,att.max_score,
+             att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
              coalesce((select t.title from assessment_translation t
                where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
                  and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)

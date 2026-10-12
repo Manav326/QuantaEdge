@@ -74,6 +74,11 @@ export default function ParentPage(){
   const curriculum=Array.isArray(selected.curriculum)?selected.curriculum:[];
   const masteryDetails=Array.isArray(selected.masteryDetails)?selected.masteryDetails:[];
   const recentAttempts=Array.isArray(selected.recentAttempts)?selected.recentAttempts:[];
+  const assessmentStats=selected.assessmentStats||{};
+  const recentAssessments=Array.isArray(selected.recentAssessments)?selected.recentAssessments:[];
+  const assessmentByType=Array.isArray(selected.assessmentByType)?selected.assessmentByType:[];
+  const assessmentTypeLabel=(kind:string)=>kind==='TOPIC_END'?'Topic-end test':kind==='CHAPTER_END'?'Chapter-end test':'Admin-created test';
+  const assessmentStatusLabel=(status:string)=>status==='RELEASED'?'Result released':status==='AWAITING_REVIEW'?'Awaiting teacher review':status==='GRADED'?'Graded · awaiting release':status==='IN_PROGRESS'?'In progress':String(status||'—').replaceAll('_',' ').toLowerCase();
 
   return <main className="parent-app">
     <section className="parent-dashboard">
@@ -89,14 +94,16 @@ export default function ParentPage(){
       </section>}
       <div className="parent-stats">
         <article><span><LocaleText hinglish="पूरे हुए lessons" english="Lessons completed" /></span><strong>{stats.completed_lessons??0}</strong><small>of {stats.total_lessons??0} published lessons</small></article>
-        <article><span><LocaleText hinglish="Accuracy" english="Accuracy" /></span><strong>{q.accuracy_percent??0}%</strong><small>{q.attempts??0} <LocaleText hinglish="answered questions" english="answered questions" /></small></article>
+        <article><span><LocaleText hinglish="Practice accuracy" english="Practice accuracy" /></span><strong>{q.accuracy_percent??0}%</strong><small>{q.attempts??0} <LocaleText hinglish="graded or saved attempts" english="saved attempts" /></small></article>
         <article><span><LocaleText hinglish="Curriculum" english="Curriculum" /></span><strong>{stats.completion_percent??0}%</strong><small><LocaleText hinglish="पूरा" english="completion" /></small></article>
+        <article><span><LocaleText hinglish="Result release" english="Tests released" /></span><strong>{assessmentStats.released??0}</strong><small>{assessmentStats.awaiting_review??0} awaiting review · {assessmentStats.average_released_percent??0}% avg</small></article>
       </div>
       <div className="parent-grid">
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="पूरा किया गया curriculum" english="Curriculum covered" /></strong><span>✓</span></div>{curriculum.length?curriculum.map((item:any)=><div className="topic-line" key={item.subject_code}><b>{item.subject_name||item.subject_code}</b><span className="good">{item.completed??0}/{item.lessons??0} <LocaleText hinglish="lessons" english="lessons" /></span></div>):<p><LocaleText hinglish="अभी किसी subscribed subject की summary available नहीं है।" english="There is no summary available for subscribed subjects yet." /></p>}</article>
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="Learning signals" english="Learning signals" /></strong><span>→</span></div><div className="topic-line"><b><LocaleText hinglish="Average mastery" english="Average mastery" /></b><span className="good">{mastery.average_mastery??0}%</span></div><div className="topic-line"><b><LocaleText hinglish="Mastered concepts" english="Mastered concepts" /></b><span className="good">{mastery.mastered??0}</span></div><div className="topic-line"><b><LocaleText hinglish="जिन्हें मदद चाहिए" english="Needs support" /></b><span>{mastery.needs_support??0}</span></div><div className="topic-line"><b><LocaleText hinglish="Learning time · 30d" english="Learning time · 30d" /></b><span>{sessionStats.minutes_30d??0} min</span></div></article>
       </div>
       <div className="parent-grid">
+        <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="Test history" english="Test history" /></strong><span>✓</span></div>{recentAssessments.length?recentAssessments.map((m:any)=><div className="topic-line" key={m.attempt_id}><div><b>{m.assessment_title||assessmentTypeLabel(m.assessment_type)}</b><small>{assessmentTypeLabel(m.assessment_type)} · {m.subject_name||'—'}{m.chapter_name?' · '+m.chapter_name:''}</small></div><span className={m.status==='RELEASED'?'good':''}>{m.status==='RELEASED'?String(m.final_score??'—')+' / '+String(m.max_score??'—'):assessmentStatusLabel(m.status)}</span></div>):<p><LocaleText hinglish="Student के test attempts यहाँ दिखाई देंगे।" english="The student's test attempts will appear here." /></p>}</article>
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="जिन concepts में मदद चाहिए" english="Concepts needing support" /></strong><span>↗</span></div>{masteryDetails.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={m.concept_title||i}><div><b>{m.concept_title||'Concept'}</b><small>{m.subject_name} · {m.chapter_name}</small></div><span>{m.mastery_percent??0}%</span></div>)}</article>
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="हाल की Practice" english="Recent practice" /></strong><span>✓</span></div>{recentAttempts.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={i}><div><b>{m.concept_title||m.chapter_name||'Practice'}</b><small>{m.question_type||'Question'}</small></div><span className={m.correct===true?'good':''}>{m.correct===true?<LocaleText hinglish="सही" english="Correct" />:m.correct===false?<LocaleText hinglish="गलत" english="Incorrect" />:<LocaleText hinglish="Review" english="Review" />}</span></div>)}</article>
       </div>
