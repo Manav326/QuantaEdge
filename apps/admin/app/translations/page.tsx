@@ -325,7 +325,7 @@ export default function TranslationsPage() {
 
       <div className={styles.workspace}>
         <section className={styles.listPanel}>
-          <div className={styles.panelHeader}><div><h2>Translation queue</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span>{loading ? 'Loading…' : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
+          <div className={styles.panelHeader}><div><h2>Translation queue</h2><p>{total.toLocaleString('en-IN')} matching items</p></div><span role="status" aria-live="polite">{loading ? 'Loading…' : (total ? Math.min(offset + 1, total) + '–' + Math.min(offset + items.length, total) : '0–0')}</span></div>
           <div className={styles.rows}>
             {!loading && items.length === 0 && <div className={styles.empty}><strong>No content matches these filters</strong><p>Try another class, subject, language, or reset the filters. Source content is included when no current translation exists.</p></div>}
             {items.map(row => <button type="button" key={rowKey(row)} className={styles.row + (selectedKey === rowKey(row) ? ' ' + styles.rowSelected : '')} onClick={() => selectRow(row)}>
@@ -360,7 +360,7 @@ export default function TranslationsPage() {
               <label><span>Translated version (editable JSON)</span><textarea value={editor} onChange={e => setEditor(e.target.value)} disabled={saving || (!canEdit && !canReview)} spellCheck={false} /></label>
             </div>
             <label className={styles.notes}><span>Reviewer notes / quality observations</span><textarea value={qualityNotes} maxLength={2000} onChange={e => setQualityNotes(e.target.value)} placeholder="Terminology, mathematics, grammar, missing labels, source alignment…" disabled={saving || (!canEdit && !canReview)} rows={3}/></label>
-            {selected.translation_id == null && <div className={styles.notice}><strong>Translation not started</strong> This is the original source content. Edit the right-hand JSON in ${selected.language === 'hi' ? 'Hindi (Devanagari)' : 'English'} and save it as a draft. It will not be shown to students until approved and published.</div>}
+            {selected.translation_id == null && <div className={styles.notice}><strong>Translation not started</strong> This is the original source content. Edit the right-hand JSON in {selected.language === 'hi' ? 'Hindi (Devanagari)' : 'English'} and save it as a draft. It will not be shown to students until approved and published.</div>}
             <div className={styles.workflowHint}><strong>Safe publication path</strong><span>Save draft → Submit for review → Approve → Publish. Publishing is blocked for stale source revisions, invalid structure or missing reviewer/publisher metadata.</span></div>
             <div className={styles.actions}>
               <button type="button" onClick={() => void saveDraft()} disabled={saving || (!canEdit && !canReview) || selected.is_current_revision === false}>{saving ? 'Saving…' : 'Save draft'}</button>
