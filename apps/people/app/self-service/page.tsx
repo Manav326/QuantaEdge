@@ -29,11 +29,13 @@ export default function EmployeeSelfServicePage(){
   const [requests,setRequests]=useState<any[]>([]);
   const [types,setTypes]=useState<LeaveType[]>([]);
   const [balances,setBalances]=useState<any[]>([]);
-  const [payslips,setPayslips]=useState<any[]>([]);\n  const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
+  const [payslips,setPayslips]=useState<any[]>([]);
+  const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
   const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
   const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'|'profile'>('attendance');
-  const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});\n  const [profileDraft,setProfileDraft]=useState({email:'',phoneE164:'',reason:''});
+  const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});
+  const [profileDraft,setProfileDraft]=useState({email:'',phoneE164:'',reason:''});
   const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const daySpan=Math.floor((Date.parse(range.to+'T00:00:00Z')-Date.parse(range.from+'T00:00:00Z'))/86400000);
   const load=useCallback(async()=>{
