@@ -352,6 +352,61 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             self.assertEqual(2, pdf.page_count)
             self.assertIn("Patterns in Mathematics", pdf[0].get_text("text"))
 
+    def test_allows_only_the_explicit_short_area_chapter_alias(self):
+        known = {
+            "chapter_id": 814,
+            "chapter_code": "area",
+            "chapter_name": "क्षेत्रफल",
+        }
+        self.assertEqual(
+            ["Area"],
+            importer.aliases_for("8", "maths", "english", known),
+        )
+
+        unknown_short_title = {
+            "chapter_id": 899,
+            "chapter_code": "unlisted-short-title",
+            "chapter_name": "Area",
+        }
+        self.assertEqual(
+            [],
+            importer.aliases_for("8", "maths", "english", unknown_short_title),
+        )
+
+    def test_short_area_heading_requires_standalone_text_near_page_top(self):
+        path = self.root / "class8-maths-area.pdf"
+        with fitz.open() as doc:
+            page = doc.new_page()
+            page.insert_text((50, 50), "Contents")
+            page.insert_text((50, 90), "13 Algebra Play 80")
+            page.insert_text((50, 110), "14 Area 90")
+
+            page = doc.new_page()
+            page.insert_text((50, 70), "Chapter 13")
+            page.insert_text((50, 110), "Algebra Play")
+            page.insert_text((50, 200), "This chapter mentions the area of a shape.")
+
+            page = doc.new_page()
+            # A standalone lower-page "Area" section heading is not a chapter opener.
+            page.insert_text((50, 500), "Area")
+            page.insert_text((50, 540), "An explanation of area in a worked example.")
+
+            page = doc.new_page()
+            page.insert_text((50, 60), "Chapter 14")
+            page.insert_text((50, 100), "Area")
+            page.insert_text((50, 150), "The Class 8 Maths chapter begins here.")
+            doc.save(path)
+
+        chapters = [
+            {"chapter_id": 813, "chapter_code": "algebra-play", "chapter_name": "बीजगणित का खेल"},
+            {"chapter_id": 814, "chapter_code": "area", "chapter_name": "क्षेत्रफल"},
+        ]
+        ranges = importer.detect_chapter_ranges(path, "8", "maths", "english", chapters)
+        self.assertEqual(
+            [(2, 3), (4, 4)],
+            [(row["start_page"], row["end_page"]) for row in ranges],
+        )
+
     def test_uses_hindi_curriculum_title_alias_for_hindi_book(self):
         self.assertIn(
             "विज्ञान का अद्भुत संसार",

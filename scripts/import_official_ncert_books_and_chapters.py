@@ -158,6 +158,13 @@ ENGLISH_TITLES: dict[tuple[str, str], dict[str, list[str]]] = {
     },
 }
 
+# A deliberately small allowlist for official chapter titles too short for the general
+# eight-character alias guard. These aliases receive stricter, standalone-heading matching
+# in positioned_page_title_hits so common words in body text cannot define chapter boundaries.
+SHORT_EXACT_TITLE_ALIASES: dict[tuple[str, str, str], frozenset[str]] = {
+    ("8", "maths", "area"): frozenset({"Area"}),
+}
+
 HINDI_TITLE_ALIASES: dict[tuple[str, str, str], list[str]] = {
     ("6", "science", "wonderful-world-science"): ["विज्ञान का अद्भुत संसार", "विज्ञान का अनूठा संसार"],
     ("6", "science", "mindful-eating"): ["उचित आहार: स्वस्थ शरीर का आधार", "उचित आहार—स्वस्थ शरीर का आधार"],
@@ -324,10 +331,11 @@ def aliases_for(grade: str, subject: str, language: str, chapter: dict[str, Any]
 
     clean: list[str] = []
     seen: set[str] = set()
+    short_exact_aliases = SHORT_EXACT_TITLE_ALIASES.get((grade, subject, code), frozenset())
     for item in candidates:
         item = normalize_space(item)
         norm = normalize_text(item)
-        if len(norm) >= 8 and norm not in seen:
+        if (len(norm) >= 8 or item in short_exact_aliases) and norm not in seen:
             seen.add(norm)
             clean.append(item)
     return clean
@@ -366,6 +374,12 @@ def page_title_hits(text: str, chapters: list[dict[str, Any]], aliases_by_code: 
         code = str(chapter["chapter_code"])
         aliases = aliases_by_code[code]
         for alias in aliases:
+            # Short whitelisted titles (currently only the official Class 8 Maths
+            # chapter "Area") are handled via positioned standalone-heading checks below.
+            # Matching them against arbitrary top-line text can mistake body subheadings
+            # for chapter boundaries.
+            if len(normalize_text(alias)) < 8:
+                continue
             # Match one line or title wrapped across up to three consecutive lines.
             for idx, line in enumerate(lines):
                 if line_matches_title(line, alias):
@@ -410,6 +424,32 @@ def positioned_page_title_hits(
     for chapter in chapters:
         code = str(chapter["chapter_code"])
         for alias in aliases_by_code[code]:
+            if len(normalize_text(alias)) < 8:
+                # Common short words are risky search terms. For an explicitly whitelisted
+                # short title, require an entire extracted text line to equal the title
+                # (optionally with a chapter-number prefix) and place it in the upper 55%
+                # of the page. Do not accept an incidental word inside a sentence or a
+                # lower-page section heading as a chapter opener.
+                short_heading_found = False
+                for block in page.get_text("dict").get("blocks", []):
+                    for line in block.get("lines", []):
+                        line_text = " ".join(
+                            str(span.get("text", "")) for span in line.get("spans", [])
+                        ).strip()
+                        bbox = line.get("bbox", (0, page_height, 0, page_height))
+                        if (
+                            line_matches_title(line_text, alias)
+                            and float(bbox[1]) <= page_height * 0.55
+                        ):
+                            short_heading_found = True
+                            break
+                    if short_heading_found:
+                        break
+                if short_heading_found:
+                    hits.add(code)
+                    break
+                continue
+
             matches = page.search_for(alias)
             if any(float(rect.y0) <= top_limit for rect in matches):
                 hits.add(code)
