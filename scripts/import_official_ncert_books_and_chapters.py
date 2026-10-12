@@ -3,15 +3,17 @@
 
 Put one complete PDF per Class 6-8 / Mathematics-Science / English-Hindi slot directly in the
 repository root. If Class 7 or Class 8 Mathematics is supplied as separate NCERT parts, put both
-part PDFs in the root using the PART_1 / PART_2 names listed by --help; the script joins their pages
-for the single complete-book slot and keeps both original part PDFs unchanged. No chapter PDFs,
-CSV manifest, edition spreadsheet, or manually entered chapter map is needed.
+part PDFs in the root using the PART_1 / PART_2 names listed by --help; the script creates a local
+combined reading copy for QuantaEdge's single complete-book slot and keeps both original PDFs
+unchanged. No chapter PDFs, CSV manifest, edition spreadsheet, or manually entered chapter map
+is needed.
 
 The importer:
 - uses the live QuantaEdge curriculum to obtain canonical chapter IDs/codes;
 - finds chapter-opening pages using official title aliases in the PDF's extracted text;
 - fails closed unless every active chapter has a unique, sequentially verified start page;
-- retains each whole-book source PDF byte-for-byte (SHA-256 remains the source-file checksum);
+- uploads a single supplied whole-book PDF byte-for-byte; when official Maths Part I/II files are
+  provided separately, it combines their pages locally while keeping the original source parts unchanged;
 - extracts chapter ranges into private-review/ncert-book-splits without editing the source PDFs;
 - validates all 12 books and chapter mappings before the first API write;
 - uploads each distinct PDF once and creates DRAFT assignments only;
@@ -868,6 +870,13 @@ def upload_or_reuse_asset(
         reference_parts.append(
             f"source_pages={record['source_page_start']}-{record['source_page_end']}"
         )
+    input_sources = record.get("input_source_files") or record.get("parent_book_source_files") or []
+    for index, source in enumerate(input_sources[:2], 1):
+        source_hash = str(source.get("sha256") or "")
+        if source_hash:
+            reference_parts.append(f"source_part_{index}_sha256={source_hash}")
+    if record.get("merged_from_parts"):
+        reference_parts.append("combined_reading_copy=true")
     data = Path(record["path"]).read_bytes()
     asset = api_call(
         base, cookie, "/api/v1/admin/learning-pdfs", method="POST",
@@ -967,8 +976,9 @@ def run(args: argparse.Namespace) -> int:
         "files": [make_report_record(row) for row in records],
         "errors": [],
         "notes": [
-            "Whole-book PDFs are uploaded byte-for-byte unchanged.",
-            "Chapter PDF files are exact page-range extracts from the original; the source book remains untouched.",
+            "A single supplied complete-book PDF is uploaded byte-for-byte unchanged.",
+            "For separate official Mathematics Part I/II inputs, original parts remain unchanged and a combined reading PDF is created for the one complete-book assignment slot.",
+            "Chapter PDF files are exact page-range extracts from the source pages; original source files remain untouched.",
             "All new learning-document assignments remain DRAFT.",
             "Existing published assignments remain live throughout import and review.",
             "Publishing a replacement later requires CONTENT_PUBLISH and archives the old assignment without deleting its PDF asset.",
