@@ -1003,7 +1003,14 @@ public class AssessmentController {
       // This lets the student review identify the right option without leaking answer
       // keys while an attempt is still in progress or awaiting manual grading.
       if (resultReleased && !staffView) {
-        item.put("correctAnswer", snapshot.get("answer_payload"));
+        Object correctAnswer = snapshot.get("answer_payload");
+        // Stored question snapshots encode answer_payload as a JSON string, while
+        // some legacy snapshots may already contain an object. Return a consistent
+        // object shape to the review UI in either case.
+        if (correctAnswer instanceof String serialized) {
+          correctAnswer = parseObject(serialized);
+        }
+        item.put("correctAnswer", correctAnswer);
       }
       if (staffView) {
         item.put("manualReviewRequired", "PENDING_REVIEW".equals(String.valueOf(row.get("answer_status"))));
