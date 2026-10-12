@@ -8,12 +8,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HexFormat;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.http.CacheControl;
@@ -48,6 +52,27 @@ public class LearningDocumentController {
   private static final long ADMIN_MAX_PDF_BYTES = 500L * 1024 * 1024;
   private static final int MAX_PDF_PAGES = 2000;
   private static final float PAGE_RENDER_DPI = 120f;
+  private static final float THUMBNAIL_RENDER_DPI = 42f;
+  private static final long MAX_RENDER_CACHE_BYTES = 32L * 1024 * 1024;
+  private static final int MAX_RENDER_CACHE_ENTRIES = 128;
+  private static final int MAX_CACHED_PAGE_BYTES = 4 * 1024 * 1024;
+  private static final long MAX_CACHED_SOURCE_PDF_BYTES = 32L * 1024 * 1024;
+  private static final long MAX_SOURCE_PDF_CACHE_BYTES = 64L * 1024 * 1024;
+  private static final int MAX_SOURCE_PDF_CACHE_ENTRIES = 4;
+  private static final long RENDER_CACHE_TTL_MILLIS = 15 * 60 * 1000L;
+  private static final long MAX_RENDERED_PAGE_PIXELS = 25_000_000L;
+  private static final double MAX_RENDERED_PAGE_DIMENSION = 14_000d;
+  private static final long RENDER_PERMIT_WAIT_SECONDS = 2L;
+
+  private final Object renderCacheMonitor = new Object();
+  private final LinkedHashMap<PdfPageCacheKey, CachedPdfPage> renderedPageCache =
+      new LinkedHashMap<>(16, 0.75f, true);
+  private long renderedPageCacheBytes;
+  private final LinkedHashMap<String, CachedSourcePdf> sourcePdfCache =
+      new LinkedHashMap<>(8, 0.75f, true);
+  private long sourcePdfCacheBytes;
+  // Bound concurrent PDFBox work so a burst cannot create unbounded image/PDF allocations.
+  private final Semaphore renderPermits = new Semaphore(2);
 
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
@@ -124,7 +149,7 @@ public class LearningDocumentController {
     } catch (IOException ex) {
       throw badRequest("The uploaded PDF could not be read. Please try again.");
     }
-    validatePdf(bytes);
+    int pageCount = validatePdf(bytes);
     String sha = sha256(bytes);
     List<Map<String, Object>> existing = jdbc.queryForList("""
       select id,title,original_filename,sha256,file_size_bytes,page_count,source_kind
@@ -143,7 +168,7 @@ public class LearningDocumentController {
         source_kind,source_reference,created_by_staff_id
       ) values(?,?,?,?,?,?,?,?,?)
       returning id
-      """, Long.class, title, filename, sha, bytes.length, pdfPageCount(bytes), bytes,
+      """, Long.class, title, filename, sha, bytes.length, pageCount, bytes,
       sourceKind, normalizedReference, context.staffId());
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("pdf_asset_id", assetId);
@@ -151,7 +176,7 @@ public class LearningDocumentController {
     result.put("original_filename", filename);
     result.put("sha256", sha);
     result.put("file_size_bytes", bytes.length);
-    result.put("page_count", pdfPageCount(bytes));
+    result.put("page_count", pageCount);
     result.put("source_kind", sourceKind);
     result.put("duplicate", false);
     staffAudit.recordAction(context, "/api/v1/admin/learning-pdfs/" + assetId + "/uploaded",
@@ -406,7 +431,7 @@ public class LearningDocumentController {
       throw new SecurityException("Learning document preview permission required.");
     }
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.pdf_asset_id,d.page_start,d.page_end,a.review_status
+      select d.pdf_asset_id,d.page_start,d.page_end,a.review_status,a.sha256,a.file_size_bytes
       from learning_document d join learning_pdf_asset a on a.id=d.pdf_asset_id
       where d.id=?
       """, documentId);
@@ -420,24 +445,16 @@ public class LearningDocumentController {
     int visiblePages = end - start + 1;
     if (pageNumber < 1 || pageNumber > visiblePages) throw notFound("Document preview page", pageNumber);
     long assetId = ((Number) row.get("pdf_asset_id")).longValue();
-    byte[] bytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
-    try (PDDocument pdf = Loader.loadPDF(bytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-      int sourceIndex = start + pageNumber - 2;
-      if (sourceIndex < 0 || sourceIndex >= pdf.getNumberOfPages()) throw notFound("PDF page", pageNumber);
-      BufferedImage image = new PDFRenderer(pdf).renderImageWithDPI(sourceIndex, 90f, ImageType.RGB);
-      if (!javax.imageio.ImageIO.write(image, "png", output)) {
-        throw new IllegalStateException("PNG rendering is not available.");
-      }
-      image.flush();
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(MediaType.IMAGE_PNG);
-      headers.setCacheControl(CacheControl.noStore());
-      headers.set("X-Content-Type-Options", "nosniff");
-      headers.set("X-Robots-Tag", "noindex, noarchive");
-      return new ResponseEntity<>(output.toByteArray(), headers, HttpStatus.OK);
-    } catch (IOException ex) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This PDF page could not be rendered.", ex);
-    }
+    String assetSha = String.valueOf(row.get("sha256"));
+    long assetBytes = ((Number) row.get("file_size_bytes")).longValue();
+    int sourceIndex = start + pageNumber - 2;
+    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, 90f, assetBytes);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.IMAGE_PNG);
+    headers.setCacheControl(CacheControl.noStore());
+    headers.set("X-Content-Type-Options", "nosniff");
+    headers.set("X-Robots-Tag", "noindex, noarchive");
+    return new ResponseEntity<>(rendered, headers, HttpStatus.OK);
   }
 
   @GetMapping("/learning/documents")
@@ -488,6 +505,8 @@ public class LearningDocumentController {
       """, context.studentId(), documentId);
     if (!progress.isEmpty()) lastPage = ((Number) progress.getFirst().get("last_page")).intValue();
     document.remove("pdf_asset_id");
+    document.remove("asset_sha256");
+    document.remove("asset_file_size_bytes");
     document.put("last_page", lastPage);
     return document;
   }
@@ -497,32 +516,31 @@ public class LearningDocumentController {
   public ResponseEntity<byte[]> studentDocumentPage(
       @PathVariable long documentId,
       @PathVariable int pageNumber,
+      @RequestParam(value = "rendition", defaultValue = "full") String rendition,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    // Authenticate and re-check active enrollment/publication before even looking in the cache.
     context = authorization.requireStudent(context);
     Map<String, Object> metadata = readableDocument(documentId, context.studentId());
     int start = ((Number) metadata.get("page_start")).intValue();
     int end = ((Number) metadata.get("page_end")).intValue();
     int visibleCount = end - start + 1;
     if (pageNumber < 1 || pageNumber > visibleCount) throw notFound("Document page", pageNumber);
+
+    float renderDpi = switch (rendition == null ? "full" : rendition.trim().toLowerCase(Locale.ROOT)) {
+      case "full" -> PAGE_RENDER_DPI;
+      case "thumbnail" -> THUMBNAIL_RENDER_DPI;
+      default -> throw badRequest("PDF rendition must be full or thumbnail.");
+    };
     long assetId = ((Number) metadata.get("pdf_asset_id")).longValue();
-    byte[] pdfBytes = jdbc.queryForObject("select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
-    if (pdfBytes == null || pdfBytes.length == 0) throw notFound("PDF content", assetId);
-    byte[] rendered;
-    try (PDDocument pdf = Loader.loadPDF(pdfBytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-      int sourceIndex = start + pageNumber - 2;
-      if (sourceIndex < 0 || sourceIndex >= pdf.getNumberOfPages()) throw notFound("PDF page", pageNumber);
-      BufferedImage image = new PDFRenderer(pdf).renderImageWithDPI(sourceIndex, PAGE_RENDER_DPI, ImageType.RGB);
-      if (!javax.imageio.ImageIO.write(image, "png", output)) {
-        throw new IllegalStateException("PNG rendering is not available.");
-      }
-      image.flush();
-      rendered = output.toByteArray();
-    } catch (IOException ex) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "This PDF page could not be rendered.", ex);
-    }
+    String assetSha = String.valueOf(metadata.get("asset_sha256"));
+    long assetBytes = ((Number) metadata.get("asset_file_size_bytes")).longValue();
+    int sourceIndex = start + pageNumber - 2;
+    byte[] rendered = renderPdfPage(assetId, assetSha, sourceIndex, renderDpi, assetBytes);
+
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.IMAGE_PNG);
-    headers.setContentDisposition(ContentDisposition.inline().filename("page-" + pageNumber + ".png", StandardCharsets.UTF_8).build());
+    headers.setContentDisposition(ContentDisposition.inline()
+        .filename("page-" + pageNumber + ".png", StandardCharsets.UTF_8).build());
     headers.setCacheControl(CacheControl.noStore());
     headers.setPragma("no-cache");
     headers.set("X-Content-Type-Options", "nosniff");
@@ -555,7 +573,8 @@ public class LearningDocumentController {
 
   private Map<String, Object> readableDocument(long documentId, long studentId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.edition,d.language,
+      select d.id as document_id,d.pdf_asset_id,a.sha256 as asset_sha256,
+             a.file_size_bytes as asset_file_size_bytes,d.scope,d.book_part,d.title,d.edition,d.language,
              d.page_start,d.page_end,d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
@@ -612,7 +631,7 @@ public class LearningDocumentController {
     return name.length() > 255 ? name.substring(name.length() - 255) : name;
   }
 
-  private void validatePdf(byte[] bytes) {
+  private int validatePdf(byte[] bytes) {
     if (bytes.length < 5 || !new String(bytes, 0, 5, StandardCharsets.US_ASCII).equals("%PDF-")) {
       throw badRequest("The uploaded file is not a valid PDF.");
     }
@@ -622,19 +641,157 @@ public class LearningDocumentController {
       if (pages < 1 || pages > MAX_PDF_PAGES) {
         throw badRequest("PDFs must contain between 1 and " + MAX_PDF_PAGES + " pages.");
       }
+      for (int pageIndex = 0; pageIndex < pages; pageIndex++) {
+        assertPageWithinRenderLimits(document.getPage(pageIndex).getCropBox(), PAGE_RENDER_DPI,
+            HttpStatus.BAD_REQUEST, "Every PDF page must fit within the secure viewer's rendering limits.");
+      }
       new PDFRenderer(document).renderImageWithDPI(0, 36f, ImageType.RGB).flush();
+      return pages;
     } catch (IOException ex) {
       throw badRequest("The uploaded file could not be opened as a PDF.");
     }
   }
 
-  private int pdfPageCount(byte[] bytes) {
-    try (PDDocument document = Loader.loadPDF(bytes)) {
-      return document.getNumberOfPages();
-    } catch (IOException ex) {
-      throw badRequest("The uploaded file could not be opened as a PDF.");
+  /**
+   * Caches rendered pages in bounded, private server memory. The caller must run its current
+   * authorization/publication checks before calling this method; browser responses remain no-store.
+   * Cache identity is based on immutable PDF content, source page and render DPI, never a user ID.
+   */
+  private byte[] renderPdfPage(long assetId, String sha256, int sourceIndex, float dpi, long sourceSizeBytes) {
+    String contentKey = sha256 == null || sha256.isBlank() ? "asset-" + assetId : sha256;
+    PdfPageCacheKey key = new PdfPageCacheKey(contentKey, sourceIndex, Math.round(dpi * 10f));
+    byte[] cached = cachedPdfPage(key);
+    if (cached != null) return cached;
+
+    // Large originals occupy both slots, preventing two 500 MiB PDFs from rendering together.
+    int permitsRequired = sourceSizeBytes > MAX_CACHED_SOURCE_PDF_BYTES ? 2 : 1;
+    boolean acquired;
+    try {
+      acquired = renderPermits.tryAcquire(permitsRequired, RENDER_PERMIT_WAIT_SECONDS, TimeUnit.SECONDS);
+    } catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+          "The PDF renderer is busy. Please retry shortly.", ex);
+    }
+    if (!acquired) {
+      throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
+          "The PDF renderer is busy. Please retry shortly.");
+    }
+
+    try {
+      // Another request may have filled the cache while this request waited for a render slot.
+      cached = cachedPdfPage(key);
+      if (cached != null) return cached;
+
+      byte[] pdfBytes = sourcePdfBytes(assetId, contentKey);
+      if (pdfBytes == null || pdfBytes.length == 0) throw notFound("PDF content", assetId);
+      try (PDDocument pdf = Loader.loadPDF(pdfBytes); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+        if (sourceIndex < 0 || sourceIndex >= pdf.getNumberOfPages()) throw notFound("PDF page", sourceIndex + 1);
+        assertPageWithinRenderLimits(pdf.getPage(sourceIndex).getCropBox(), dpi,
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            "This PDF page exceeds the safe rendering dimensions and cannot be displayed.");
+        BufferedImage image = new PDFRenderer(pdf).renderImageWithDPI(sourceIndex, dpi, ImageType.RGB);
+        if (!javax.imageio.ImageIO.write(image, "png", output)) {
+          image.flush();
+          throw new IllegalStateException("PNG rendering is not available.");
+        }
+        image.flush();
+        byte[] rendered = output.toByteArray();
+        cachePdfPage(key, rendered);
+        return rendered;
+      } catch (IOException ex) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+            "This PDF page could not be rendered.", ex);
+      }
+    } finally {
+      renderPermits.release(permitsRequired);
     }
   }
+
+  private void assertPageWithinRenderLimits(
+      PDRectangle cropBox, float dpi, HttpStatus status, String message) {
+    double widthPoints = cropBox == null ? 0d : cropBox.getWidth();
+    double heightPoints = cropBox == null ? 0d : cropBox.getHeight();
+    double widthPixels = Math.ceil(widthPoints * dpi / 72d);
+    double heightPixels = Math.ceil(heightPoints * dpi / 72d);
+    double pixelCount = widthPixels * heightPixels;
+    if (!Double.isFinite(widthPixels) || !Double.isFinite(heightPixels)
+        || widthPixels < 1d || heightPixels < 1d
+        || widthPixels > MAX_RENDERED_PAGE_DIMENSION
+        || heightPixels > MAX_RENDERED_PAGE_DIMENSION
+        || !Double.isFinite(pixelCount) || pixelCount > MAX_RENDERED_PAGE_PIXELS) {
+      throw new ResponseStatusException(status, message);
+    }
+  }
+
+  private byte[] sourcePdfBytes(long assetId, String contentKey) {
+    synchronized (renderCacheMonitor) {
+      CachedSourcePdf entry = sourcePdfCache.get(contentKey);
+      if (entry != null && System.currentTimeMillis() - entry.cachedAtMillis() <= RENDER_CACHE_TTL_MILLIS) {
+        return entry.bytes();
+      }
+      if (entry != null) {
+        sourcePdfCache.remove(contentKey);
+        sourcePdfCacheBytes -= entry.bytes().length;
+      }
+    }
+
+    byte[] bytes = jdbc.queryForObject(
+        "select pdf_bytes from learning_pdf_asset where id=?", byte[].class, assetId);
+    if (bytes == null || bytes.length == 0 || bytes.length > MAX_CACHED_SOURCE_PDF_BYTES) return bytes;
+
+    synchronized (renderCacheMonitor) {
+      CachedSourcePdf previous = sourcePdfCache.remove(contentKey);
+      if (previous != null) sourcePdfCacheBytes -= previous.bytes().length;
+      while (sourcePdfCache.size() >= MAX_SOURCE_PDF_CACHE_ENTRIES
+          || sourcePdfCacheBytes + bytes.length > MAX_SOURCE_PDF_CACHE_BYTES) {
+        Iterator<Map.Entry<String, CachedSourcePdf>> iterator = sourcePdfCache.entrySet().iterator();
+        if (!iterator.hasNext()) break;
+        Map.Entry<String, CachedSourcePdf> oldest = iterator.next();
+        sourcePdfCacheBytes -= oldest.getValue().bytes().length;
+        iterator.remove();
+      }
+      sourcePdfCache.put(contentKey, new CachedSourcePdf(bytes, System.currentTimeMillis()));
+      sourcePdfCacheBytes += bytes.length;
+    }
+    return bytes;
+  }
+
+  private byte[] cachedPdfPage(PdfPageCacheKey key) {
+    synchronized (renderCacheMonitor) {
+      CachedPdfPage entry = renderedPageCache.get(key);
+      if (entry == null) return null;
+      if (System.currentTimeMillis() - entry.cachedAtMillis() > RENDER_CACHE_TTL_MILLIS) {
+        renderedPageCache.remove(key);
+        renderedPageCacheBytes -= entry.bytes().length;
+        return null;
+      }
+      return entry.bytes();
+    }
+  }
+
+  private void cachePdfPage(PdfPageCacheKey key, byte[] bytes) {
+    if (bytes == null || bytes.length == 0 || bytes.length > MAX_CACHED_PAGE_BYTES) return;
+    synchronized (renderCacheMonitor) {
+      CachedPdfPage previous = renderedPageCache.remove(key);
+      if (previous != null) renderedPageCacheBytes -= previous.bytes().length;
+      while (renderedPageCache.size() >= MAX_RENDER_CACHE_ENTRIES
+          || renderedPageCacheBytes + bytes.length > MAX_RENDER_CACHE_BYTES) {
+        Iterator<Map.Entry<PdfPageCacheKey, CachedPdfPage>> iterator =
+            renderedPageCache.entrySet().iterator();
+        if (!iterator.hasNext()) break;
+        Map.Entry<PdfPageCacheKey, CachedPdfPage> oldest = iterator.next();
+        renderedPageCacheBytes -= oldest.getValue().bytes().length;
+        iterator.remove();
+      }
+      renderedPageCache.put(key, new CachedPdfPage(bytes, System.currentTimeMillis()));
+      renderedPageCacheBytes += bytes.length;
+    }
+  }
+
+  private record PdfPageCacheKey(String sha256, int sourcePageIndex, int dpiTenths) {}
+  private record CachedPdfPage(byte[] bytes, long cachedAtMillis) {}
+  private record CachedSourcePdf(byte[] bytes, long cachedAtMillis) {}
 
   private String sha256(byte[] value) {
     try {
