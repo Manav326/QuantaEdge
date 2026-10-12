@@ -243,4 +243,52 @@ class AssessmentControllerTest {
     assertFalse(options.get(1).containsKey("is_correct"));
   }
 
+
+  @Test
+  void studentResultsGroupAttemptsAndReturnLatestThreeWithBestScore() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("attempt_id", 103L);
+    row.put("assessment_id", 20L);
+    row.put("attempt_number", 3);
+    row.put("status", "RELEASED");
+    row.put("submitted_at", OffsetDateTime.now().minusMinutes(5));
+    row.put("released_at", OffsetDateTime.now().minusMinutes(4));
+    row.put("final_score", "7.00");
+    row.put("max_score", "10.00");
+    row.put("assessment_type", "CHAPTER_END");
+    row.put("assessment_title", "Fractions test");
+    row.put("subject_code", "maths");
+    row.put("subject_name", "Mathematics");
+    row.put("chapter_name", "Fractions");
+    row.put("question_count", 5);
+    row.put("best_score", "9.00");
+    row.put("attempt_count", 3L);
+    row.put("attempts_json", """
+        [
+          {"attempt_id":103,"attempt_number":3,"status":"RELEASED","final_score":7.0,"max_score":10.0},
+          {"attempt_id":102,"attempt_number":2,"status":"RELEASED","final_score":9.0,"max_score":10.0},
+          {"attempt_id":101,"attempt_number":1,"status":"RELEASED","final_score":6.0,"max_score":10.0}
+        ]
+        """);
+    when(jdbc.queryForList(contains("with ranked as"), eq("hi"), eq("hi"), eq("hi"),
+        eq(7L), eq(25), eq(0))).thenReturn(List.of(row));
+    when(jdbc.queryForObject(contains("count(distinct assessment_id)"), eq(Long.class), eq(7L)))
+        .thenReturn(1L);
+
+    Map<String, Object> result = controller.studentResults("hi", 25, 0, student);
+
+    assertEquals(1L, result.get("total"));
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> items = (List<Map<String, Object>>) result.get("items");
+    assertEquals(1, items.size(), "the assessment should occupy exactly one result row");
+    assertEquals("9.00", items.getFirst().get("best_score"));
+    @SuppressWarnings("unchecked")
+    List<Map<String, Object>> attempts = (List<Map<String, Object>>) items.getFirst().get("attempts");
+    assertEquals(3, attempts.size());
+    assertEquals(103, ((Number) attempts.getFirst().get("attempt_id")).intValue());
+    assertEquals(102, ((Number) attempts.get(1).get("attempt_id")).intValue());
+    assertEquals(101, ((Number) attempts.get(2).get("attempt_id")).intValue());
+  }
+
 }
