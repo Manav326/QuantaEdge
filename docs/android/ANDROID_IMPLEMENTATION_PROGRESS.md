@@ -55,6 +55,14 @@ Last updated: 2026-10-12
 - Language changes persist to the server-side student record as well as the app preference.
 - Added a server-backed dashboard for curriculum completion, question accuracy, concept mastery, study time, and released assessment performance.
 
+## Milestone 7 — Assessment result review
+
+**Status:** Added to source; CI verification pending.
+
+- Assessment result history displays each test’s latest three released attempts and best score within that same window.
+- Each released attempt opens the existing server-owned attempt detail endpoint.
+- The read-only review includes the learner response, released correct answer, earned marks, teacher feedback and explanation when present. Answer keys remain hidden until the server reports a released result.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

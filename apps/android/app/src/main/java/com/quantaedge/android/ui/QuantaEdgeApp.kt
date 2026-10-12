@@ -60,7 +60,7 @@ import java.io.IOException
 private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, SUBJECT_LESSONS, LESSON, PRACTICE,
-    DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, RESOURCES,
+    DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, ASSESSMENT_REVIEW, RESOURCES,
     DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER
 }
 
@@ -277,6 +277,16 @@ fun QuantaEdgeApp() {
             assessmentResults = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
                 .optJSONArray("items").objectItems()
             route = AppRoute.ASSESSMENT_RESULTS
+        }
+    }
+
+    fun openAssessmentReview(attemptId: Long) {
+        runTask {
+            if (attemptId <= 0L) throw IOException("Result attempt की पहचान नहीं मिली।")
+            assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + attemptId)
+            answers.clear()
+            feedbacks.clear()
+            route = AppRoute.ASSESSMENT_REVIEW
         }
     }
 
@@ -906,7 +916,25 @@ fun QuantaEdgeApp() {
                             }
                         }
                     )
-                    AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(assessmentResults)
+                    AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
+                        resultItems = assessmentResults,
+                        onReview = ::openAssessmentReview
+                    )
+                    AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
+                        attempt = assessmentAttempt,
+                        answers = answers,
+                        feedbacks = feedbacks,
+                        busy = busy,
+                        onAnswerChange = { id, value -> answers[id] = value },
+                        onSave = ::saveAssessmentAnswer,
+                        onSubmit = ::submitAssessment,
+                        onRefresh = {
+                            runTask {
+                                val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
+                                assessmentAttempt = ApiClient.getObject("/api/v1/learning/assessment-attempts/" + id)
+                            }
+                        }
+                    )
                     AppRoute.RESOURCES -> ResourcesScreen(
                         documents = documents,
                         subject = currentSubject,
@@ -1494,10 +1522,37 @@ private fun AssessmentAttemptScreen(
                     saving = busy,
                     feedback = feedbacks[id],
                     status = if (released) {
-                        "जाँचा गया उत्तर: " + question.textAny("isCorrect", "awardedMarks")
+                        val correctness = when {
+                            question.has("isCorrect") && !question.isNull("isCorrect") ->
+                                if (question.optBoolean("isCorrect")) "सही" else "गलत"
+                            else -> "जाँच पूरी"
+                        }
+                        "परिणाम: " + correctness + " • अंक: " + question.textAny("awardedMarks", "maxMarks")
                     } else null,
                     submitLabel = "उत्तर सहेजें"
                 )
+                if (released) {
+                    val correctAnswer = question.optJSONObject("correctAnswer")
+                    val options = question.optJSONArray("options")?.objectItems() ?: emptyList()
+                    val key = correctAnswer?.textAny("correctOption", "correct_option", "option_key", "key", "answer", "value").orEmpty()
+                    val optionLabel = options.firstOrNull { it.textAny("key", "option_key") == key }?.textAny("label", "text").orEmpty()
+                    val displayAnswer = optionLabel.ifBlank { key.ifBlank { correctAnswer?.toString().orEmpty() } }
+                    if (displayAnswer.isNotBlank() && displayAnswer != "{}") {
+                        Text("सही उत्तर: " + displayAnswer, style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary)
+                    }
+                    if (question.textAny("teacherFeedback").isNotBlank()) {
+                        Text("शिक्षक की टिप्पणी: " + question.textAny("teacherFeedback"), style = MaterialTheme.typography.bodyMedium)
+                    }
+                    if (question.textAny("explanation").isNotBlank()) {
+                        Card(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text("व्याख्या", style = MaterialTheme.typography.titleSmall)
+                                Text(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
+                            }
+                        }
+                    }
+                }
             }
         }
         if (inProgress) {
@@ -1513,19 +1568,58 @@ private fun AssessmentAttemptScreen(
 }
 
 @Composable
-private fun ResultsScreen(resultItems: List<JSONObject>) {
+private fun ResultsScreen(
+    resultItems: List<JSONObject>,
+    onReview: (Long) -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
+        Text("हर टेस्ट के नवीनतम तीन जारी attempts और उनमें सर्वश्रेष्ठ अंक देखें।",
+            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
         if (resultItems.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
             items(resultItems) { item ->
+                val attempts = item.optJSONArray("attempts")?.objectItems() ?: emptyList()
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(item.textAny("title", "assessment_title").ifBlank { "मूल्यांकन" }, style = MaterialTheme.typography.titleMedium)
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                        Text(item.textAny("assessment_title", "title").ifBlank { "मूल्यांकन" },
+                            style = MaterialTheme.typography.titleMedium)
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
-                        Text("अंतिम अंक: " + item.textAny("final_score", "score") + " / " + item.textAny("max_score"),
+                        Text("नवीनतम अंक: " + item.textAny("final_score", "score") + " / " + item.textAny("max_score"),
                             style = MaterialTheme.typography.bodyLarge)
-                        Text("परिणाम जारी: " + item.textAny("released_at", "releasedAt"), style = MaterialTheme.typography.bodySmall)
+                        Text("पिछले तीन में सर्वश्रेष्ठ: " + item.textAny("best_score") + " / " + item.textAny("max_score"),
+                            style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
+                        Text("कुल जारी attempts: " + item.optInt("attempt_count", attempts.size) +
+                            " • प्रश्न: " + item.optInt("question_count", 0),
+                            style = MaterialTheme.typography.bodySmall)
+                        if (attempts.isNotEmpty()) {
+                            Text("Attempt history", style = MaterialTheme.typography.titleSmall)
+                            attempts.forEachIndexed { index, attempt ->
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                                ) {
+                                    Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                        Text("Attempt " + attempt.optInt("attempt_number", index + 1),
+                                            style = MaterialTheme.typography.bodyMedium)
+                                        Text(
+                                            attempt.textAny("released_at", "submitted_at") + " • " +
+                                                attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                    TextButton(
+                                        onClick = { onReview(attempt.longAny("attempt_id", "attemptId")) }
+                                    ) { Text("उत्तर समीक्षा") }
+                                }
+                            }
+                        } else {
+                            TextButton(onClick = { onReview(item.longAny("attempt_id", "attemptId")) }) {
+                                Text("उत्तर समीक्षा खोलें")
+                            }
+                        }
                     }
                 }
             }
