@@ -249,7 +249,6 @@ fun QuestionCard(
                         "ORDER" -> "क्रम का उत्तर"
                         "MATCH" -> "मिलान के उत्तर"
                         else -> if (responseMode == "NUMERIC") "संख्यात्मक उत्तर" else "अपना उत्तर या reasoning लिखें"
-                        else -> "अपना उत्तर या reasoning लिखें"
                     }
                     val longAnswer = type in setOf(
                         "LONG_ANSWER", "SHORT_ANSWER", "CASE_BASED", "SOURCE_BASED",

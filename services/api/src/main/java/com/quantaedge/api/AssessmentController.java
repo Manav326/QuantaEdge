@@ -1357,7 +1357,8 @@ public class AssessmentController {
     Object rawPayload=snapshot.get("answer_payload");
     String responseMode="";
     if(rawPayload instanceof Map<?,?> payload) {
-      responseMode=String.valueOf(payload.getOrDefault("kind",""));
+      Object kind=payload.get("kind");
+      responseMode=kind==null?"":String.valueOf(kind);
     } else if(rawPayload instanceof String encoded && !encoded.isBlank()) {
       responseMode=String.valueOf(parseObject(encoded).getOrDefault("kind",""));
     }
