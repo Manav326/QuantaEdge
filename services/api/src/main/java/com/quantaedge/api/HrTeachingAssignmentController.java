@@ -137,6 +137,8 @@ public class HrTeachingAssignmentController {
     authorization.requirePermission(context,"HR_ACADEMIC_ASSIGNMENT_APPROVE");
     Map<String,Object> assignment=assignmentById(id);
     if(!"PENDING_APPROVAL".equals(assignment.get("status")))throw conflict("Only pending teaching assignments can be reviewed.");
+    if(context.staffId()!=null&&context.staffId().equals(assignment.get("created_by_staff_id")))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"The assignment creator cannot approve their own teaching assignment.");
     String decision=required(body.get("status"),16,"Decision").toUpperCase();
     if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("Decision must be APPROVED or REJECTED.");
     String reason=required(body.get("reason"),1000,"Decision reason");
@@ -155,7 +157,7 @@ public class HrTeachingAssignmentController {
         String priorBefore=snapshot(replaces);
         LocalDate priorEnd=start.minusDays(1);
         if(priorEnd.isBefore(priorStart))throw bad("Replacement would create an invalid prior assignment period.");
-        jdbc.update("update hr_teaching_assignment set effective_end=?,status='ENDED',updated_at=now(),decision_reason=? where id=? and status='APPROVED'",
+        jdbc.update("update hr_teaching_assignment set effective_end=?,updated_at=now(),decision_reason=? where id=? and status='APPROVED'",
           Date.valueOf(priorEnd),"Replaced by assignment "+id+": "+reason,replaces);
         history(replaces,"ASSIGNMENT_REPLACED",context,priorEnd,reason,priorBefore,snapshot(replaces));
       }
