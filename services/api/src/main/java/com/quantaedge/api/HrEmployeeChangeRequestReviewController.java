@@ -65,6 +65,9 @@ public class HrEmployeeChangeRequestReviewController {
       throw bad("A profile change decision must be APPROVED or REJECTED.");
     String reviewNote=required(body.get("reviewNote"),1000,"Review note");
     long employeeId=((Number)request.get("employee_id")).longValue();
+    if(context.staffId()!=null&&Boolean.TRUE.equals(jdbc.queryForObject(
+        "select exists(select 1 from hr_employee where id=? and linked_staff_account_id=?)",Boolean.class,employeeId,context.staffId())))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An employee cannot review their own profile change request.");
 
     if("APPROVED".equals(decision)) {
       boolean hasEmail=Boolean.TRUE.equals(request.get("has_email"));
