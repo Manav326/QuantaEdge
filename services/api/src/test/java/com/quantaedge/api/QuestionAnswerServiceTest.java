@@ -3,6 +3,8 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Map;
 
 class QuestionAnswerServiceTest {
   private final QuestionAnswerService service=new QuestionAnswerService(new ObjectMapper());
@@ -25,6 +27,19 @@ class QuestionAnswerServiceTest {
   @Test void subjectiveQuestionRemainsUnGraded(){
     var e=service.evaluate("{}", "anything");
     assertFalse(e.autoGraded()); assertNull(e.correct());
+  }
+
+  @Test void orderAnswersAreSerializedAsValidJsonForPersistence(){
+    assertEquals("[\"A\",\"B\",\"C\"]", service.serializeForPersistence(List.of("A","B","C")));
+  }
+
+  @Test void matchAnswersAreSerializedAsJsonInsteadOfJavaMapSyntax(){
+    String persisted=service.serializeForPersistence(Map.of("1","A"));
+    assertEquals("{\"1\":\"A\"}",persisted);
+  }
+
+  @Test void plainTextAnswersRemainReadableWhenPersisted(){
+    assertEquals("7.5",service.serializeForPersistence(" 7.5 "));
   }
 
   @Test void incorrectAnswerDoesNotBecomeCorrect(){
