@@ -52,7 +52,7 @@ class SourceIngestionControllerTest {
     when(authorization.requirePermission(null, "CONTENT_REVIEW"))
         .thenThrow(new SecurityException("Permission required: CONTENT_REVIEW"));
 
-    assertThrows(SecurityException.class, () -> controller.listSources(null));
+    assertThrows(SecurityException.class, () -> controller.listSources(null, null, null, null));
     verifyNoInteractions(jdbc);
   }
 
