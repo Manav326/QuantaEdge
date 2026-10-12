@@ -529,8 +529,19 @@ public class AssessmentController {
       ) ct on true
       where a.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-        and (a.assessment_type<>'TOPIC_END' or (a.lesson_id is not null and exists(
-          select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')))
+        and (a.assessment_type<>'TOPIC_END' or (
+          a.lesson_id is not null
+          and exists(select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')
+          and exists(select 1 from student_lesson_progress tp
+                     where tp.student_id=st.id and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
+        ))
+        and (a.assessment_type<>'CHAPTER_END' or not exists(
+          select 1 from lesson required_lesson
+          where required_lesson.chapter_id=ch.id
+            and required_lesson.active=true and required_lesson.status='PUBLISHED'
+            and not exists(select 1 from student_lesson_progress cp
+                           where cp.student_id=st.id and cp.lesson_id=required_lesson.id and cp.status='COMPLETED')
+        ))
         and (not a.is_generated or a.is_current=true)
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,

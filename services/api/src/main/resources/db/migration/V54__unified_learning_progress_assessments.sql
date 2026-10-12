@@ -46,7 +46,7 @@ CREATE INDEX idx_student_question_mastery_latest
 -- Accuracy remains separate and is not used to decide completion.
 WITH lesson_activity AS (
   SELECT p.id,
-         count(q.id) FILTER (
+         count(DISTINCT q.id) FILTER (
            WHERE q.active=true AND q.review_status IN ('APPROVED','PUBLISHED')
              AND q.question_type='MCQ'
          ) AS inline_question_count,
