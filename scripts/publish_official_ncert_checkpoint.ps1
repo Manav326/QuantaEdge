@@ -287,7 +287,7 @@ if (-not $Apply) {
     Write-Host "Explicitly marked APPROVED: $($approved.Count)"
     Write-Host "Still PENDING: $($pending.Count)"
     Write-Host "Marked REJECTED: $($rejected.Count)"
-    Write-Host 'Dry run only. No API requests or publishing were performed.'
+    Write-Host 'Dry run only. Read-only authentication and preflight requests will run; no publish/status-change requests will be sent.'
 }
 
 # ---------- Authenticate and verify the live API state ----------
@@ -302,19 +302,32 @@ if ([string]$initialMe.role -ne 'ADMIN' -and $permissions -notcontains 'CONTENT_
 $staffId = [string]$initialMe.staffId
 Write-Host "Authenticated staff; CONTENT_PUBLISH verified. Staff ID: $staffId"
 
-$rawDocuments = Invoke-QEApi -Path '/api/v1/admin/learning-documents?status=ALL'
-$documentList = @($rawDocuments)
-if ($documentList.Count -eq 1 -and $null -ne $documentList[0].items) {
-    $documentList = @($documentList[0].items)
-} elseif ($documentList.Count -eq 1 -and $null -ne $documentList[0].documents) {
-    $documentList = @($documentList[0].documents)
-}
+# Query one class/subject track at a time. The API caps results per query,
+# so a global list could otherwise omit an older target if the library is large.
 $liveById = @{}
-foreach ($doc in $documentList) {
-    $docId = Get-QEField -Object $doc -Names @('document_id','documentId','id')
-    if ($null -ne $docId) { $liveById[[string]$docId] = $doc }
+$trackKeys = @($targets | ForEach-Object {
+    "$($_.class_code)|$($_.subject_code)"
+} | Select-Object -Unique)
+$totalListed = 0
+foreach ($trackKey in $trackKeys) {
+    $parts = $trackKey.Split('|', 2)
+    $classCode = [Uri]::EscapeDataString($parts[0])
+    $subjectCode = [Uri]::EscapeDataString($parts[1])
+    $queryPath = "/api/v1/admin/learning-documents?status=ALL&classCode=$classCode&subjectCode=$subjectCode"
+    $rawDocuments = Invoke-QEApi -Path $queryPath
+    $documentList = @($rawDocuments)
+    if ($documentList.Count -eq 1 -and $null -ne $documentList[0].items) {
+        $documentList = @($documentList[0].items)
+    } elseif ($documentList.Count -eq 1 -and $null -ne $documentList[0].documents) {
+        $documentList = @($documentList[0].documents)
+    }
+    $totalListed += $documentList.Count
+    foreach ($doc in $documentList) {
+        $docId = Get-QEField -Object $doc -Names @('document_id','documentId','id')
+        if ($null -ne $docId) { $liveById[[string]$docId] = $doc }
+    }
 }
-Write-Host "Admin API returned $($documentList.Count) records; indexed $($liveById.Count) IDs."
+Write-Host "Admin API returned $totalListed track records; indexed $($liveById.Count) unique document IDs."
 
 $failures = New-Object 'System.Collections.Generic.List[string]'
 $actions = New-Object 'System.Collections.Generic.List[object]'
