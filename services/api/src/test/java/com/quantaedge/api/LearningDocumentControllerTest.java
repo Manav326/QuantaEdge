@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -126,6 +127,32 @@ class LearningDocumentControllerTest {
     verify(jdbc).update(
         contains("where scope=? and subject_id=? and language=?"),
         eq("CHAPTER_PDF"), eq(3L), eq("en"), eq(9L), eq(88L));
+  }
+
+  @Test
+  void publishingOneMathsPartDoesNotArchiveTheOtherPart() {
+    when(authorization.requireAuth(author)).thenReturn(author);
+    when(authorization.requirePermission(author, "CONTENT_PUBLISH")).thenReturn(author);
+    when(jdbc.queryForList(contains("from learning_document d"), eq(88L))).thenReturn(List.of(
+        Map.ofEntries(
+            Map.entry("id", 88L), Map.entry("document_id", 88L),
+            Map.entry("scope", "SUBJECT_BOOK"), Map.entry("subject_id", 3L),
+            Map.entry("book_part", 1), Map.entry("status", "DRAFT"),
+            Map.entry("source_title", "Class 7 Mathematics — Part I"),
+            Map.entry("source_url", "https://ncert.nic.in/textbook.php"),
+            Map.entry("edition", "Reprint 2026-27"), Map.entry("language", "en"),
+            Map.entry("title", "NCERT | Class 7 | Mathematics | English | Part I"),
+            Map.entry("page_start", 1), Map.entry("page_end", 10), Map.entry("page_count", 10),
+            Map.entry("asset_id", 10L), Map.entry("asset_review_status", "APPROVED")
+        )
+    ));
+
+    Map<String, Object> result = controller.setAssignmentStatus(88L, Map.of("status", "PUBLISHED"), author);
+
+    assertEquals(88L, result.get("document_id"));
+    verify(jdbc).update(
+        contains("and (book_part is null or book_part=?)"),
+        eq("SUBJECT_BOOK"), eq(3L), eq("en"), isNull(), eq(88L), eq(1));
   }
 
   @Test
