@@ -215,6 +215,7 @@ export default function TextbookLibraryPage() {
   const [uploadPartLabel, setUploadPartLabel] = useState('');
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
+  const [intakeRows, setIntakeRows] = useState<any[]>([]);
   const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
   const [reviewNotes, setReviewNotes] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -234,6 +235,7 @@ export default function TextbookLibraryPage() {
   const isAdmin = role === 'ADMIN';
   const maxPdfBytes = isAdmin ? 500 * 1024 * 1024 : 50 * 1024 * 1024;
   const canEdit = isAdmin || permissions.includes('CONTENT_EDIT');
+  const canReview = isAdmin || permissions.includes('CONTENT_REVIEW');
   const canPublish = isAdmin || permissions.includes('CONTENT_PUBLISH');
   const classOptions = useMemo(
     () => [...new Map(tracks.map(track => [track.class_code, track])).values()],
@@ -493,14 +495,19 @@ export default function TextbookLibraryPage() {
       const chapterPromise = canEdit && nextClassCode && nextSubjectCode
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
-      const [pdfRows, contentRows, resourceRows] = await Promise.all([
+      const intakePromise = canReview
+        ? api('/api/v1/admin/source-ingestion/intake').catch(() => [])
+        : Promise.resolve([]);
+      const [pdfRows, contentRows, resourceRows, intakeData] = await Promise.all([
         api('/api/v1/admin/learning-pdfs'),
         chapterPromise,
         api('/api/v1/admin/learning-documents?' + params.toString()),
+        intakePromise,
       ]);
       const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
       const resources = Array.isArray(resourceRows) ? resourceRows : [];
+      setIntakeRows(Array.isArray(intakeData) ? intakeData : []);
       setLibrary(pdfs);
       const distinct = new Map<number, Chapter>();
       content.forEach((row: any) => {
@@ -533,7 +540,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, previewDocumentId]);
+  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -747,6 +754,27 @@ export default function TextbookLibraryPage() {
             </select>
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
           </label>
+          {canReview && <section className={styles.uploadBox}>
+            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeRows.length} classified PDF(s)</small></div>
+            {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
+              <div className={styles.assignmentList}>
+                {intakeRows.map((item: any) => <div className={styles.assignmentRow} key={item.pdf_asset_id}>
+                  <div>
+                    <b>{item.title || ('PDF #' + item.pdf_asset_id)}</b>
+                    <small>Class {item.class_code} · {item.subject_name || item.subject_code} · {item.language === 'hi' ? 'Hindi' : 'English'} · {String(item.category || '').replaceAll('_', ' ')}{item.part_label ? ' · ' + item.part_label : ''}</small>
+                    <small>{item.page_count} pages · {String(item.status || 'PENDING').replaceAll('_', ' ')} · {item.asset_review_status || 'private library'}</small>
+                  </div>
+                  <button type="button" className={styles.secondaryButton} disabled={busy} onClick={() => {
+                    setIntakeAssetId(Number(item.pdf_asset_id));
+                    setIntakeReport(normalizeIntakeReport(item));
+                    setReviewAcknowledged(false);
+                    setReviewNotes(String(item.review_notes || ''));
+                    setError('');
+                    setNotice('Loaded the saved intake record. Run or re-run analysis to refresh the inventory report.');
+                  }}>Open review</button>
+                </div>)}
+              </div>}
+          </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>
               <b>Book inventory review · PDF #{intakeAssetId}</b>
