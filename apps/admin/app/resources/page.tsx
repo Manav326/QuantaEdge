@@ -118,17 +118,11 @@ function matchesGovernanceFilters(
 }
 
 function addFacetCounts(
-  rows: Assignment[],
+  facets: Record<string, Record<string, number>>,
   options: Array<{ value: string; label: string }>,
   facet: GovernanceFacet,
-  selected: GovernanceSelections,
 ): FilterOption[] {
-  return options.map(option => ({
-    ...option,
-    count: rows.filter(row =>
-      matchesGovernanceFilters(row, selected, facet) && valueForFacet(row, facet) === option.value,
-    ).length,
-  }));
+  return options.map(option => ({ ...option, count: Number(facets[facet]?.[option.value] || 0) }));
 }
 
 function MultiSelectFilter({
@@ -205,6 +199,10 @@ export default function TextbookLibraryPage() {
   const [library, setLibrary] = useState<PdfAsset[]>([]);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignmentPage, setAssignmentPage] = useState(0);
+  const [assignmentTotal, setAssignmentTotal] = useState(0);
+  const assignmentPageSize = 25;
+  const [assignmentFacets, setAssignmentFacets] = useState<Record<string, Record<string, number>>>({});
   const [selectedPdfId, setSelectedPdfId] = useState('');
   const [pdfTitle, setPdfTitle] = useState('');
   const [sourceReference, setSourceReference] = useState('');
@@ -277,42 +275,39 @@ export default function TextbookLibraryPage() {
     scope: viewScopes,
   }), [viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
   const classFilterOptions = useMemo(
-    () => addFacetCounts(assignments, classOptions.map(track => ({
+    () => addFacetCounts(assignmentFacets, classOptions.map(track => ({
       value: track.class_code,
       label: 'Class ' + track.class_code,
-    })), 'class', filterSelections),
-    [assignments, classOptions, filterSelections],
+    })), 'class'),
+    [assignmentFacets, classOptions],
   );
   const subjectFilterOptions = useMemo(
-    () => addFacetCounts(assignments, subjectFilterBaseOptions, 'subject', filterSelections),
-    [assignments, subjectFilterBaseOptions, filterSelections],
+    () => addFacetCounts(assignmentFacets, subjectFilterBaseOptions, 'subject'),
+    [assignmentFacets, subjectFilterBaseOptions],
   );
   const statusFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'PUBLISHED', label: 'Published' },
       { value: 'DRAFT', label: 'Draft' },
       { value: 'ARCHIVED', label: 'Archived' },
-    ], 'status', filterSelections),
-    [assignments, filterSelections],
+    ], 'status'),
+    [assignmentFacets],
   );
   const languageFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'hi', label: 'Hindi' },
       { value: 'en', label: 'English' },
-    ], 'language', filterSelections),
-    [assignments, filterSelections],
+    ], 'language'),
+    [assignmentFacets],
   );
   const scopeFilterOptions = useMemo(
-    () => addFacetCounts(assignments, [
+    () => addFacetCounts(assignmentFacets, [
       { value: 'CHAPTER_PDF', label: 'Chapter PDFs' },
       { value: 'SUBJECT_BOOK', label: 'Complete books' },
-    ], 'scope', filterSelections),
-    [assignments, filterSelections],
+    ], 'scope'),
+    [assignmentFacets],
   );
-  const visibleAssignments = useMemo(
-    () => assignments.filter(row => matchesGovernanceFilters(row, filterSelections)),
-    [assignments, filterSelections],
-  );
+  const visibleAssignments = assignments;
   const activeFilterCount = [
     viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes,
   ].filter(values => values.length > 0).length;
@@ -508,9 +503,14 @@ export default function TextbookLibraryPage() {
       if (nextClassCode !== classCode) setClassCode(nextClassCode);
       if (nextSubjectCode !== subjectCode) setSubjectCode(nextSubjectCode);
 
-      // Fetch the whole inventory once; multi-select governance filters are applied locally,
-      // so option counts and intersections remain accurate without repeated API queries.
-      const params = new URLSearchParams({ status: 'ALL' });
+      // Fetch only the requested server-side page. Filter facets are computed by the API
+      // across the matching inventory, not inferred from the currently visible page.
+      const params = new URLSearchParams({ status: 'ALL', limit: String(assignmentPageSize), offset: String(assignmentPage * assignmentPageSize) });
+      if (viewClassCodes.length) params.set('classCodes', viewClassCodes.join(','));
+      if (viewSubjectCodes.length) params.set('subjectCodes', viewSubjectCodes.join(','));
+      if (viewStatuses.length) params.set('statuses', viewStatuses.join(','));
+      if (viewLanguages.length) params.set('languages', viewLanguages.join(','));
+      if (viewScopes.length) params.set('scopes', viewScopes.join(','));
       const chapterPromise = canEdit && nextClassCode && nextSubjectCode
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
@@ -525,7 +525,9 @@ export default function TextbookLibraryPage() {
       ]);
       const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
-      const resources = Array.isArray(resourceRows) ? resourceRows : [];
+      const resources = Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : []);
+      setAssignmentTotal(Number(resourceRows?.total ?? resources.length));
+      setAssignmentFacets(resourceRows?.facets && typeof resourceRows.facets === 'object' ? resourceRows.facets : {});
       setIntakeRows(Array.isArray(intakeData) ? intakeData : []);
       setLibrary(pdfs);
       const distinct = new Map<number, Chapter>();
@@ -559,7 +561,8 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId]);
+  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId, assignmentPage,
+      viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -713,7 +716,7 @@ export default function TextbookLibraryPage() {
         <div><span>PRIVATE SOURCE LIBRARY</span><h2>One PDF. Multiple learning placements.</h2>
           <p>PDFs are stored privately in the database. Students receive rendered page images after access checks, not the original PDF download.</p>
         </div>
-        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{visibleAssignments.filter(a => a.status === 'PUBLISHED').length}</strong><small>Published in filtered view</small></div>
+        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>Published in filtered view</small></div>
       </section>
 
       {error && <div className={styles.alertError} role="alert">{error}</div>}
@@ -1186,23 +1189,24 @@ export default function TextbookLibraryPage() {
 
       <section className={styles.panel}>
         <div className={styles.sectionHeading}>
-          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Combine class, subject, status, language, and resource type filters. Counts beside each option reflect the other active filters.</p></div>
+          <div><span>RESOURCE GOVERNANCE</span><h2>Book and chapter assignments</h2><p>Filter by class, subject, status, language, and resource type. Counts reflect matching records while the list loads one page at a time.</p></div>
           <div className={styles.filterBar}>
-            <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={setViewClassCodes} />
-            <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={setViewSubjectCodes} />
-            <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={setViewStatuses} />
-            <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={setViewLanguages} />
-            <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={setViewScopes} />
+            <MultiSelectFilter label="Class" options={classFilterOptions} selected={viewClassCodes} onChange={values=>{setViewClassCodes(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Subject" options={subjectFilterOptions} selected={viewSubjectCodes} onChange={values=>{setViewSubjectCodes(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Status" options={statusFilterOptions} selected={viewStatuses} onChange={values=>{setViewStatuses(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Language" options={languageFilterOptions} selected={viewLanguages} onChange={values=>{setViewLanguages(values);setAssignmentPage(0)}} />
+            <MultiSelectFilter label="Resource type" options={scopeFilterOptions} selected={viewScopes} onChange={values=>{setViewScopes(values);setAssignmentPage(0)}} />
           </div>
         </div>
         <div className={styles.resultSummary}>
-          <div><strong>{visibleAssignments.length}</strong><span>matching assignment{visibleAssignments.length === 1 ? '' : 's'}</span><small>of {assignments.length} total</small></div>
+          <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
           <div className={styles.resultBreakdown}>
             <span><b>{visibleAssignments.filter(row => row.status === 'PUBLISHED').length}</b> Published</span>
             <span><b>{visibleAssignments.filter(row => row.status === 'DRAFT').length}</b> Drafts</span>
             <span><b>{visibleAssignments.filter(row => row.status === 'ARCHIVED').length}</b> Archived</span>
           </div>
           <button type="button" className={styles.resetFilters} disabled={activeFilterCount === 0} onClick={() => {
+            setAssignmentPage(0);
             setViewClassCodes([]);
             setViewSubjectCodes([]);
             setViewStatuses([]);
@@ -1234,6 +1238,14 @@ export default function TextbookLibraryPage() {
               </div>
             </article>)}
           </div>}
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginTop:18,flexWrap:'wrap'}}>
+          <small>Showing {assignmentTotal===0?0:assignmentPage*assignmentPageSize+1}–{Math.min(assignmentTotal,(assignmentPage+1)*assignmentPageSize)} of {assignmentTotal} assignments</small>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <button type="button" className={styles.secondaryButton} disabled={assignmentPage===0||loading} onClick={()=>setAssignmentPage(p=>Math.max(0,p-1))}>← Previous</button>
+            <span>Page {assignmentTotal===0?0:assignmentPage+1} of {Math.max(1,Math.ceil(assignmentTotal/assignmentPageSize))}</span>
+            <button type="button" className={styles.secondaryButton} disabled={(assignmentPage+1)*assignmentPageSize>=assignmentTotal||loading} onClick={()=>setAssignmentPage(p=>p+1)}>Next →</button>
+          </div>
+        </div>
       </section>
     </section>
   </main>;

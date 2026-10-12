@@ -149,39 +149,88 @@ public class LearningDocumentController {
   }
 
   @GetMapping("/admin/learning-documents")
-  public List<Map<String, Object>> listAssignments(
-      @RequestParam(required = false) String classCode,
-      @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) String status,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+  public Map<String,Object> listAssignments(
+      @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
+      @RequestParam(required=false) String status,@RequestParam(required=false) String classCodes,
+      @RequestParam(required=false) String subjectCodes,@RequestParam(required=false) String statuses,
+      @RequestParam(required=false) String languages,@RequestParam(required=false) String scopes,
+      @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireContentView(context);
-    String normalizedStatus = status == null || status.isBlank() ? "ALL" : status.trim().toUpperCase(Locale.ROOT);
-    if (!List.of("ALL", "DRAFT", "PUBLISHED", "ARCHIVED").contains(normalizedStatus)) {
-      throw badRequest("Choose a valid document status filter.");
-    }
-    String normalizedClass = classCode == null ? "" : classCode.trim();
-    String normalizedSubject = subjectCode == null ? "" : subjectCode.trim();
-    return jdbc.queryForList("""
-      select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
-             d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
-             a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
-             c.code as class_code,c.display_name as class_name,
-             s.code as subject_code,s.display_name as subject_name,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
-             ch.active as chapter_active,ch.content_status as chapter_content_status,
-             a.review_status as asset_review_status
+    String classQuery=classCodes!=null&&!classCodes.isBlank()?classCodes:classCode;
+    String subjectQuery=subjectCodes!=null&&!subjectCodes.isBlank()?subjectCodes:subjectCode;
+    String statusQuery=statuses!=null&&!statuses.isBlank()?statuses:status;
+    List<String> classFilter=csvFilters(classQuery,false),subjectFilter=csvFilters(subjectQuery,false);
+    List<String> statusFilter=csvFilters(statusQuery,true);
+    if(statusFilter.contains("ALL"))statusFilter=List.of();
+    validateFilterValues(statusFilter,List.of("DRAFT","PUBLISHED","ARCHIVED"),"document status");
+    List<String> languageFilter=csvFilters(languages,false);validateFilterValues(languageFilter,List.of("hi","en"),"document language");
+    List<String> scopeFilter=csvFilters(scopes,true);validateFilterValues(scopeFilter,List.of("SUBJECT_BOOK","CHAPTER_PDF"),"resource type");
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String from="""
       from learning_document d
       join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
-      where (?='' or c.code=?)
-        and (?='' or s.code=?)
-        and (?='ALL' or d.status=?)
-      order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),d.scope,d.created_at desc,d.id desc
-      limit 500
-      """, normalizedClass, normalizedClass, normalizedSubject, normalizedSubject,
-      normalizedStatus, normalizedStatus);
+      """;
+    StringBuilder where=new StringBuilder(" where 1=1");List<Object> filterArgs=new ArrayList<>();
+    appendDocumentFilter(where,filterArgs,"c.code",classFilter);
+    appendDocumentFilter(where,filterArgs,"s.code",subjectFilter);
+    appendDocumentFilter(where,filterArgs,"d.status",statusFilter);
+    appendDocumentFilter(where,filterArgs,"d.language",languageFilter);
+    appendDocumentFilter(where,filterArgs,"d.scope",scopeFilter);
+    List<Object> pageArgs=new ArrayList<>(filterArgs);pageArgs.add(rowLimit);pageArgs.add(rowOffset);
+    String selectSql="""
+      select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
+             d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
+             a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
+             c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
+             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+             ch.active as chapter_active,ch.content_status as chapter_content_status,a.review_status as asset_review_status
+      """;
+    String orderLimit=" order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),d.scope,d.created_at desc,d.id desc limit ? offset ?";
+    List<Map<String,Object>> items=jdbc.queryForList(selectSql+from+where+orderLimit,pageArgs.toArray());
+    Long total=jdbc.queryForObject("select count(*) "+from+where,Long.class,filterArgs.toArray());
+    Map<String,Object> facets=new LinkedHashMap<>();
+    facets.put("class",documentFacetCounts(from,"c.code","class",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("subject",documentFacetCounts(from,"s.code","subject",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("status",documentFacetCounts(from,"d.status","status",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("language",documentFacetCounts(from,"d.language","language",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    facets.put("scope",documentFacetCounts(from,"d.scope","scope",classFilter,subjectFilter,statusFilter,languageFilter,scopeFilter));
+    Map<String,Object> result=new LinkedHashMap<>();result.put("items",items);result.put("total",total==null?0L:total);
+    result.put("limit",rowLimit);result.put("offset",rowOffset);result.put("facets",facets);return result;
+  }
+
+  private List<String> csvFilters(String raw,boolean upper) {
+    if(raw==null||raw.isBlank()||"ALL".equalsIgnoreCase(raw.trim()))return List.of();
+    return java.util.Arrays.stream(raw.split(",")).map(String::trim).filter(v->!v.isEmpty())
+        .map(v->upper?v.toUpperCase(Locale.ROOT):v).distinct().limit(100).toList();
+  }
+
+  private void validateFilterValues(List<String> values,List<String> allowed,String label) {
+    for(String value:values)if(!allowed.contains(value))throw badRequest("Choose a valid "+label+" filter.");
+  }
+
+  private void appendDocumentFilter(StringBuilder where,List<Object> args,String column,List<String> values) {
+    if(values.isEmpty())return;
+    where.append(" and ").append(column).append(" in (");
+    for(int i=0;i<values.size();i++){if(i>0)where.append(',');where.append('?');}
+    where.append(')');args.addAll(values);
+  }
+
+  private Map<String,Long> documentFacetCounts(String from,String column,String excluded,
+      List<String> classes,List<String> subjects,List<String> statuses,List<String> languages,List<String> scopes) {
+    StringBuilder where=new StringBuilder(" where 1=1");List<Object> args=new ArrayList<>();
+    if(!"class".equals(excluded))appendDocumentFilter(where,args,"c.code",classes);
+    if(!"subject".equals(excluded))appendDocumentFilter(where,args,"s.code",subjects);
+    if(!"status".equals(excluded))appendDocumentFilter(where,args,"d.status",statuses);
+    if(!"language".equals(excluded))appendDocumentFilter(where,args,"d.language",languages);
+    if(!"scope".equals(excluded))appendDocumentFilter(where,args,"d.scope",scopes);
+    List<Map<String,Object>> rows=jdbc.queryForList("select "+column+" as facet_value,count(*) as facet_count "+from+where+" group by "+column,args.toArray());
+    Map<String,Long> result=new LinkedHashMap<>();
+    for(Map<String,Object> row:rows)result.put(String.valueOf(row.get("facet_value")),((Number)row.get("facet_count")).longValue());
+    return result;
   }
 
   /** Assigns a library PDF to a complete subject book or one chapter; it does not copy the PDF bytes. */
