@@ -203,7 +203,7 @@ def numbers_preserved(source: str, translated: str) -> bool:
     return sorted(src) == sorted(dst)
 
 
-def chapter_payload(row, index, translations, allow_incomplete=False):
+def chapter_payload(row, index, translations):
     title = resolve(index, translations, "chapter_title", row.get("display_name"), row)
     description = resolve(index, translations, "chapter_description", row.get("description"), row)
     issues = []
@@ -214,27 +214,16 @@ def chapter_payload(row, index, translations, allow_incomplete=False):
     for field in ("display_name", "description"):
         source, target = str(row.get(field) or ""), str(payload.get(field) or "")
         if source and not numbers_preserved(source, target): issues.append("numeric check failed for "+field)
-    # A chapter needs a translated title to be useful. An untranslated description
-    # may be staged only as a clearly flagged DRAFT for editorial completion.
-    blocking = [issue for issue in issues
-                if issue == "missing chapter title" or issue.startswith("numeric check failed")]
-    if blocking or (issues and not allow_incomplete):
-        return None, issues
-    return payload, issues
+    return (None, issues) if issues else (payload, [])
 
 
-def question_payload(row, index, translations, allow_incomplete=False):
+def question_payload(row, index, translations):
     payload, issues = {}, []
     for field in ("prompt","explanation","topic","subtopic","skill"):
         source = row.get(field)
         target = resolve(index, translations, field, source, row)
-        if target is None and DEVANAGARI.search(str(source or "")):
-            issues.append("missing "+field+" translation")
-        if target is None:
-            # Preserve the original source value for shape validation. Such content
-            # stays DRAFT and is explicitly marked for human completion; it is not
-            # silently treated as an English translation.
-            target = source
+        if target is None and DEVANAGARI.search(str(source or "")): issues.append("missing "+field+" translation")
+        elif target is None: target = source
         if source is not None and target is not None and not numbers_preserved(str(source), str(target)):
             issues.append("numeric check failed for "+field)
         payload[field] = target
@@ -249,36 +238,20 @@ def question_payload(row, index, translations, allow_incomplete=False):
             target = "True" if label == "सही" else "False"
         if target is None and DEVANAGARI.search(str(label or "")):
             issues.append("missing option "+str(option.get("key",i))+" translation")
-        if target is None:
-            target = label
+        elif target is None: target = label
         if label is not None and target is not None and not numbers_preserved(str(label), str(target)):
             issues.append("numeric check failed for option "+str(option.get("key",i)))
         translated_options.append({"key":option.get("key"),"label":target})
     payload["options"] = translated_options
     payload["tags"] = row.get("tags")
-    # Prompt translation and all numeric-fidelity checks remain hard gates. Other
-    # missing fields may be imported only when the caller explicitly opts in; the
-    # resulting draft carries the unresolved-field list and must not be published.
-    blocking = [issue for issue in issues
-                if issue == "missing prompt translation" or issue.startswith("numeric check failed")]
-    if blocking or (issues and not allow_incomplete):
-        return None, issues
-    return payload, issues
-
-
-def post_draft(api: AdminApi, entity_type, entity_id, payload, quality_issues=None):
-    quality_notes = (
-        "Offline English translation draft; verify subject meaning, mathematical fidelity, "
-        "terminology, and options before approval. DRAFT only; not published."
-    )
-    if quality_issues:
-        quality_notes += (
-            " HUMAN COMPLETION REQUIRED before review/publication: unmapped fields retain their "
-            "original source text. Unresolved fields: " + "; ".join(quality_issues) + "."
-        )
+    return (None, issues) if issues else (payload, [])
+def post_draft(api: AdminApi, entity_type, entity_id, payload):
     body = {
         "translatedContent": payload,
-        "qualityNotes": quality_notes[:2000],
+        "qualityNotes": (
+            "Offline English translation draft; verify subject meaning, mathematical fidelity, "
+            "terminology, and options before approval. DRAFT only; not published."
+        ),
     }
     return api.request(
         "POST",
@@ -302,27 +275,16 @@ def process(entity_type, rows, index, translations, args, api: AdminApi | None, 
         item.update(entity_type=entity_type, entity_id=entity_id)
         if row.get("has_current_translation"):
             item["status"] = "skipped_current_translation"; report.append(item); continue
-        allow_incomplete = bool(getattr(args, "include_incomplete_drafts", False))
-        payload, issues = (
-            chapter_payload(row,index,translations,allow_incomplete=allow_incomplete)
-            if entity_type == "curriculum_chapter"
-            else question_payload(row,index,translations,allow_incomplete=allow_incomplete)
-        )
-        if payload is None or (issues and not allow_incomplete):
+        payload, issues = chapter_payload(row,index,translations) if entity_type == "curriculum_chapter" else question_payload(row,index,translations)
+        if issues or payload is None:
             item.update(status="skipped_incomplete", issues=issues); report.append(item); continue
-        if issues:
-            item["quality_issues"] = issues
         prepared += 1
         if not args.apply:
-            item["status"] = "ready_dry_run_needs_review" if issues else "ready_dry_run"
+            item["status"] = "ready_dry_run"
         else:
             try:
-                response = post_draft(api,entity_type,entity_id,payload,quality_issues=issues)
-                if response.get("translationStatus") == "DRAFT":
-                    item["status"] = "created_draft_needs_review" if issues else "created_draft"
-                else:
-                    item["status"] = "api_response"
-                item["api_response"] = response
+                response = post_draft(api,entity_type,entity_id,payload)
+                item.update(status="created_draft" if response.get("translationStatus") == "DRAFT" else "api_response",api_response=response)
             except Exception as exc:
                 error = str(exc)
                 item.update(status="api_error", error=error)
@@ -373,12 +335,6 @@ def main() -> int:
     parser.add_argument("--delay",type=float,default=0.03)
     parser.add_argument("--report-dir",type=Path,default=REPORT_DIR)
     parser.add_argument("--apply",action="store_true",help="Create DRAFT translation records; without it, preview only")
-    parser.add_argument(
-        "--include-incomplete-drafts", action="store_true",
-        help=("Stage known English prompts as DRAFTs even when optional fields/options have no safe map. "
-              "Unmapped source text is preserved and listed in quality notes. Questions with an untranslated "
-              "prompt or any numeric-fidelity failure remain blocked; nothing is published.")
-    )
     args=parser.parse_args()
     if args.chapters_only and args.questions_only: parser.error("Choose at most one of --chapters-only/--questions-only")
     if args.limit is not None and args.limit < 1: parser.error("--limit must be >= 1")
@@ -415,8 +371,6 @@ def main() -> int:
             os.environ["QE_STAFF_REFRESH"] = refresh_cookie
             api = AdminApi(args.api_base_url, cookie, args.timeout)
             print("Apply mode only creates English DRAFTs; nothing is published.")
-            if args.include_incomplete_drafts:
-                print("Incomplete-draft mode is enabled: unresolved fields stay in source text and drafts are flagged for human completion.")
             print("Automatic staff-session refresh is enabled; cookie values are never printed or reported.")
         report = []
         remaining_budget = args.limit
@@ -428,8 +382,7 @@ def main() -> int:
             )
             report.extend(chapter_results)
             consumed = sum(1 for row in chapter_results if row.get("status") in {
-                "ready_dry_run", "ready_dry_run_needs_review",
-                "created_draft", "created_draft_needs_review", "api_response", "api_error"
+                "ready_dry_run", "created_draft", "api_response", "api_error"
             })
             if remaining_budget is not None:
                 remaining_budget = max(0, remaining_budget - consumed)
@@ -462,9 +415,7 @@ def main() -> int:
             "chapters_selected":len(chapters),
             "questions_selected":len(questions),
             "summary":dict(counts),
-            "created_drafts":counts.get("created_draft",0) + counts.get("created_draft_needs_review",0),
-            "created_drafts_needing_review":counts.get("created_draft_needs_review",0),
-            "incomplete_draft_mode":bool(args.include_incomplete_drafts),
+            "created_drafts":counts.get("created_draft",0),
             "api_error_count":len(api_errors),
             "api_errors":[{
                 "entity_type":r.get("entity_type"),"entity_id":r.get("entity_id"),
@@ -484,7 +435,6 @@ def main() -> int:
         },ensure_ascii=False,indent=2),encoding="utf-8")
         print("Final status: "+fatal_status)
         print("Summary: "+json.dumps(dict(counts),ensure_ascii=False,sort_keys=True))
-        print(f"Created drafts requiring human completion: {counts.get('created_draft_needs_review',0)}")
         print(f"API errors recorded: {len(api_errors)}")
         for row in api_errors[:10]:
             print(
