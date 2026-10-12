@@ -97,14 +97,16 @@ public class SourceIngestionController {
     }
     String language = requiredText(body.get("language"), "language", 2).toLowerCase(Locale.ROOT);
     if (!List.of("hi","en").contains(language)) throw badRequest("Book language must be Hindi or English.");
-    long classId = longValue(body.get("classId"), "classId");
-    long subjectId = longValue(body.get("subjectId"), "subjectId");
+    String classCode = requiredText(body.get("classCode"), "classCode", 30);
+    String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
     List<Map<String,Object>> tracks = jdbc.queryForList("""
       select c.id as class_id,s.id as subject_id from curriculum_class c
       join curriculum_subject s on s.class_id=c.id
-      where c.id=? and s.id=? and c.active=true and s.active=true
-      """, classId, subjectId);
+      where c.code=? and s.code=? and c.active=true and s.active=true
+      """, classCode, subjectCode);
     if (tracks.isEmpty()) throw badRequest("Choose a valid active class and subject combination.");
+    long classId = ((Number) tracks.getFirst().get("class_id")).longValue();
+    long subjectId = ((Number) tracks.getFirst().get("subject_id")).longValue();
     List<Map<String,Object>> assets = jdbc.queryForList(
         "select id,sha256 from learning_pdf_asset where id=?", assetId);
     if (assets.isEmpty()) throw notFound("PDF asset", assetId);
