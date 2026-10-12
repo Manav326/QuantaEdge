@@ -28,7 +28,9 @@ export default function EmployeeSelfServicePage(){
   const [attendance,setAttendance]=useState<any[]>([]);
   const [requests,setRequests]=useState<any[]>([]);
   const [types,setTypes]=useState<LeaveType[]>([]);
-  const [balances,setBalances]=useState<any[]>([]);\n  const [payslips,setPayslips]=useState<any[]>([]);\n  const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
+  const [balances,setBalances]=useState<any[]>([]);
+  const [payslips,setPayslips]=useState<any[]>([]);
+  const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
   const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'>('attendance');
   const [draft,setDraft]=useState({leaveTypeCode:'',startDate:localDate(new Date()),endDate:localDate(new Date()),reason:''});
@@ -46,9 +48,10 @@ export default function EmployeeSelfServicePage(){
         api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
         api('/api/v1/hr/self-service/leave/types'),
-        api('/api/v1/hr/self-service/leave/balances')
+        api('/api/v1/hr/self-service/leave/balances'),
+        api('/api/v1/hr/self-service/payslips')
       ]);
-      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);
+      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips(ps.items||[]);
       if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
     }catch(e){
       setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
