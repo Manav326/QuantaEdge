@@ -75,7 +75,7 @@ export default function StudentClassesClient(){
       setLiveTotal(Number(live?.total??(Array.isArray(live)?live.length:0)));
       setRecordings(Array.isArray(videoRows?.items)?videoRows.items:(Array.isArray(videoRows)?videoRows:[]));
       setRecordingsTotal(Number(videoRows?.total??(Array.isArray(videoRows)?videoRows.length:0)));
-      const active=(Array.isArray(live)?live:[]).find((s:LiveClass)=>s.currently_joined);
+      const active=(Array.isArray(live?.items)?live.items:(Array.isArray(live)?live:[])).find((s:LiveClass)=>s.currently_joined);
       if(active&&!joinedSessionRef.current){joinedSessionRef.current=active.session_id;setJoinedSessionId(active.session_id);}
     }catch(e:any){
       if(e?.auth){router.replace('/login/student');return;}

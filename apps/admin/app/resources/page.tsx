@@ -529,7 +529,7 @@ export default function TextbookLibraryPage() {
       ]);
       const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
-      const resources = Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : []);
+      const resources: Assignment[] = (Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : [])) as Assignment[];
       setAssignmentTotal(Number(resourceRows?.total ?? resources.length));
       setAssignmentFacets(resourceRows?.facets && typeof resourceRows.facets === 'object' ? resourceRows.facets : {});
       setIntakeRows(Array.isArray(intakeData?.items) ? intakeData.items : (Array.isArray(intakeData) ? intakeData : []));
@@ -1215,9 +1215,9 @@ export default function TextbookLibraryPage() {
         <div className={styles.resultSummary}>
           <div><strong>{assignmentTotal}</strong><span>matching assignment{assignmentTotal === 1 ? '' : 's'}</span><small>{visibleAssignments.length} shown on this page</small></div>
           <div className={styles.resultBreakdown}>
-            <span><b>{visibleAssignments.filter(row => row.status === 'PUBLISHED').length}</b> Published</span>
-            <span><b>{visibleAssignments.filter(row => row.status === 'DRAFT').length}</b> Drafts</span>
-            <span><b>{visibleAssignments.filter(row => row.status === 'ARCHIVED').length}</b> Archived</span>
+            <span><b>{Number(assignmentFacets.status?.PUBLISHED || 0)}</b> Published</span>
+            <span><b>{Number(assignmentFacets.status?.DRAFT || 0)}</b> Drafts</span>
+            <span><b>{Number(assignmentFacets.status?.ARCHIVED || 0)}</b> Archived</span>
           </div>
           <button type="button" className={styles.resetFilters} disabled={activeFilterCount === 0} onClick={() => {
             setAssignmentPage(0);

@@ -188,7 +188,7 @@ export default function ClassesPage(){
         <label>Subject<select value={subjectCode} onChange={e=>{setSubjectCode(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="maths">Mathematics</option><option value="science">Science</option></select></label>
         <label>Status view<select value={statusFilter} onChange={e=>{setStatusFilter(e.target.value);setSessionPage(0);setRecordingPage(0)}}><option value="ALL">All statuses</option><option value="SCHEDULED">Scheduled</option><option value="LIVE">Live now</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option><option value="DRAFT">Draft recordings</option><option value="PUBLISHED">Published recordings</option><option value="ARCHIVED">Archived recordings</option></select></label>
       </div>
-      <div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>Live sessions <span>{sessions.length}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>Recordings <span>{recordings.length}</span></button></div>
+      <div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>Live sessions <span>{sessionsTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>Recordings <span>{recordingsTotal}</span></button></div>
 
       {tab==='live'?<>
         <section className={styles.panel}>
