@@ -1,1 +1,79 @@
-{"name":"feat/unified-learning-progress-assessments","commit":{"sha":"16c574d693f5cffb5d3c803d0d9a48d14c745f80","node_id":"C_kwDOVA7g4NoAKDE2YzU3NGQ2OTNmNWNmZmI1ZDNjODAzZDBkOWE0OGQxNGM3NDVmODA","commit":{"author":{"name":"Manavjeet Gupta","email":"manaviitp123@gmail.com","date":"2026-10-12T04:36:41Z"},"committer":{"name":"Manavjeet Gupta","email":"manaviitp123@gmail.com","date":"2026-10-12T04:36:41Z"},"message":"fix: resolve duplicate Flyway V28 and preserve book intake migration","tree":{"sha":"ca80e66806c8efccea6ebb170e6789c6f95bdfb8","url":"https://api.github.com/repos/Manav326/QuantaEdge/git/trees/ca80e66806c8efccea6ebb170e6789c6f95bdfb8"},"url":"https://api.github.com/repos/Manav326/QuantaEdge/git/commits/16c574d693f5cffb5d3c803d0d9a48d14c745f80","comment_count":0,"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null,"verified_at":null}},"url":"https://api.github.com/repos/Manav326/QuantaEdge/commits/16c574d693f5cffb5d3c803d0d9a48d14c745f80","html_url":"https://github.com/Manav326/QuantaEdge/commit/16c574d693f5cffb5d3c803d0d9a48d14c745f80","comments_url":"https://api.github.com/repos/Manav326/QuantaEdge/commits/16c574d693f5cffb5d3c803d0d9a48d14c745f80/comments","author":{"login":"Manav326","id":41622585,"node_id":"MDQ6VXNlcjQxNjIyNTg1","avatar_url":"https://avatars.githubusercontent.com/u/41622585?v=4","gravatar_id":"","url":"https://api.github.com/users/Manav326","html_url":"https://github.com/Manav326","followers_url":"https://api.github.com/users/Manav326/followers","following_url":"https://api.github.com/users/Manav326/following{/other_user}","gists_url":"https://api.github.com/users/Manav326/gists{/gist_id}","starred_url":"https://api.github.com/users/Manav326/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/Manav326/subscriptions","organizations_url":"https://api.github.com/users/Manav326/orgs","repos_url":"https://api.github.com/users/Manav326/repos","events_url":"https://api.github.com/users/Manav326/events{/privacy}","received_events_url":"https://api.github.com/users/Manav326/received_events","type":"User","user_view_type":"public","site_admin":false},"committer":{"login":"Manav326","id":41622585,"node_id":"MDQ6VXNlcjQxNjIyNTg1","avatar_url":"https://avatars.githubusercontent.com/u/41622585?v=4","gravatar_id":"","url":"https://api.github.com/users/Manav326","html_url":"https://github.com/Manav326","followers_url":"https://api.github.com/users/Manav326/followers","following_url":"https://api.github.com/users/Manav326/following{/other_user}","gists_url":"https://api.github.com/users/Manav326/gists{/gist_id}","starred_url":"https://api.github.com/users/Manav326/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/Manav326/subscriptions","organizations_url":"https://api.github.com/users/Manav326/orgs","repos_url":"https://api.github.com/users/Manav326/repos","events_url":"https://api.github.com/users/Manav326/events{/privacy}","received_events_url":"https://api.github.com/users/Manav326/received_events","type":"User","user_view_type":"public","site_admin":false},"parents":[{"sha":"f395a11183cd37f7efe44a571301c3257403ada1","url":"https://api.github.com/repos/Manav326/QuantaEdge/commits/f395a11183cd37f7efe44a571301c3257403ada1","html_url":"https://github.com/Manav326/QuantaEdge/commit/f395a11183cd37f7efe44a571301c3257403ada1"}]},"_links":{"self":"https://api.github.com/repos/Manav326/QuantaEdge/branches/feat/unified-learning-progress-assessments","html":"https://github.com/Manav326/QuantaEdge/tree/feat/unified-learning-progress-assessments"},"protected":false,"protection":{"enabled":false,"required_status_checks":{"enforcement_level":"off","contexts":[],"checks":[]}},"protection_url":"https://api.github.com/repos/Manav326/QuantaEdge/branches/feat/unified-learning-progress-assessments/protection"}
+-- V54: durable generated tests, source-tagged activity attempts, and resumable diagnostics.
+ALTER TABLE assessment
+  ADD COLUMN assessment_type varchar(24) NOT NULL DEFAULT 'ADMIN_CREATED',
+  ADD COLUMN lesson_id bigint REFERENCES lesson(id) ON DELETE RESTRICT,
+  ADD COLUMN is_generated boolean NOT NULL DEFAULT false,
+  ADD COLUMN is_current boolean NOT NULL DEFAULT true,
+  ADD COLUMN generation_version integer NOT NULL DEFAULT 1,
+  ADD COLUMN content_fingerprint varchar(64);
+
+ALTER TABLE assessment
+  ADD CONSTRAINT ck_assessment_type
+    CHECK (assessment_type IN ('ADMIN_CREATED','TOPIC_END','CHAPTER_END')),
+  ADD CONSTRAINT ck_assessment_generated_scope
+    CHECK (
+      (assessment_type='ADMIN_CREATED' AND is_generated=false)
+      OR (assessment_type='TOPIC_END' AND is_generated=true AND lesson_id IS NOT NULL AND chapter_id IS NOT NULL)
+      OR (assessment_type='CHAPTER_END' AND is_generated=true AND lesson_id IS NULL AND chapter_id IS NOT NULL)
+    ),
+  ADD CONSTRAINT ck_assessment_generation_version CHECK (generation_version > 0);
+
+CREATE UNIQUE INDEX uq_assessment_current_topic_end
+  ON assessment(lesson_id)
+  WHERE assessment_type='TOPIC_END' AND is_current=true;
+CREATE UNIQUE INDEX uq_assessment_current_chapter_end
+  ON assessment(chapter_id)
+  WHERE assessment_type='CHAPTER_END' AND is_current=true;
+CREATE INDEX idx_assessment_student_catalog
+  ON assessment(subject_id,assessment_type,status,is_current,published_at DESC);
+
+ALTER TABLE student_question_attempt
+  ADD COLUMN activity_kind varchar(24) NOT NULL DEFAULT 'LESSON_INLINE';
+UPDATE student_question_attempt
+SET activity_kind='PRACTICE'
+WHERE practice_session_id IS NOT NULL;
+ALTER TABLE student_question_attempt
+  ADD CONSTRAINT ck_student_question_attempt_activity_kind
+    CHECK (activity_kind IN ('LESSON_INLINE','PRACTICE','DIAGNOSTIC'));
+CREATE INDEX idx_student_question_activity
+  ON student_question_attempt(student_id,activity_kind,answered_at DESC);
+CREATE INDEX idx_student_question_mastery_latest
+  ON student_question_attempt(student_id,question_id,answered_at DESC,id DESC)
+  WHERE correct IS NOT NULL;
+
+CREATE TABLE student_diagnostic_attempt (
+  id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  student_id bigint NOT NULL REFERENCES student(id) ON DELETE RESTRICT,
+  status varchar(20) NOT NULL DEFAULT 'IN_PROGRESS'
+    CHECK (status IN ('IN_PROGRESS','SUBMITTED','ABANDONED')),
+  question_count integer NOT NULL CHECK (question_count BETWEEN 1 AND 50),
+  started_at timestamptz NOT NULL DEFAULT now(),
+  submitted_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  CHECK ((status='SUBMITTED' AND submitted_at IS NOT NULL) OR status<>'SUBMITTED')
+);
+CREATE INDEX idx_student_diagnostic_attempt_history
+  ON student_diagnostic_attempt(student_id,started_at DESC,id DESC);
+CREATE UNIQUE INDEX uq_student_diagnostic_active
+  ON student_diagnostic_attempt(student_id)
+  WHERE status='IN_PROGRESS';
+
+CREATE TABLE student_diagnostic_attempt_question (
+  diagnostic_attempt_id bigint NOT NULL REFERENCES student_diagnostic_attempt(id) ON DELETE RESTRICT,
+  question_id bigint NOT NULL REFERENCES question(id) ON DELETE RESTRICT,
+  sequence_no integer NOT NULL CHECK (sequence_no > 0),
+  lesson_id bigint NOT NULL REFERENCES lesson(id) ON DELETE RESTRICT,
+  question_snapshot jsonb NOT NULL,
+  submitted_answer jsonb,
+  is_correct boolean,
+  answered_at timestamptz,
+  PRIMARY KEY(diagnostic_attempt_id,question_id),
+  UNIQUE(diagnostic_attempt_id,sequence_no)
+);
+CREATE INDEX idx_diagnostic_attempt_question_question
+  ON student_diagnostic_attempt_question(question_id);
+
+INSERT INTO app_metadata(key,value)
+VALUES ('schema','unified-learning-progress-assessments-v54')
+ON CONFLICT(key) DO UPDATE SET value=excluded.value;
