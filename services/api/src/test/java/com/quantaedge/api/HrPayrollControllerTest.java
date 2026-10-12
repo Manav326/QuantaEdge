@@ -99,7 +99,7 @@ class HrPayrollControllerTest {
   @Test
   void payrollSubmitterCannotApproveTheirOwnSubmittedRun() {
     when(authorization.requirePermission(payrollManager,"HR_PAYROLL_APPROVE")).thenReturn(payrollManager);
-    when(jdbc.queryForList(any(String.class),any(Object[].class)))
+    when(jdbc.queryForList(contains("from hr_payroll_run r join hr_payroll_period p"),any()))
         .thenReturn(List.of(Map.of("id",12L,"period_id",4L,"organization_id",1L,"status","SUBMITTED","created_by_staff_id",99L,"submitted_by_staff_id",100L)));
     ResponseStatusException error=assertThrows(ResponseStatusException.class,
         ()->controller.approve(12L,Map.of("reason","Reviewed"),payrollManager));
