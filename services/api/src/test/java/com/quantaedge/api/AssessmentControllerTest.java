@@ -176,6 +176,7 @@ class AssessmentControllerTest {
     assertFalse(options.getFirst().containsKey("is_correct"));
     assertFalse(options.get(1).containsKey("is_correct"));
     assertFalse(question.containsKey("isCorrect"));
+    assertFalse(question.containsKey("correctAnswer"));
     assertTrue(Boolean.FALSE.equals(result.get("resultReleased")) || result.containsKey("resultReleased"));
   }
 
