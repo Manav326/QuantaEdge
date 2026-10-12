@@ -891,6 +891,23 @@ export default function TextbookLibraryPage() {
                   return <p>{warning.message} Low-text pages: {warning.low_text_page_count} of {warning.total_pages}. Sample page numbers: {(warning.low_text_pages || []).join(', ')}{warning.page_list_truncated ? ' … (list truncated)' : ''}</p>;
                 })()}
               </div>}
+              {(intakeReport.reconciliation?.page_boundary_warnings || [])
+                .filter((item: any) => ['OCR_COMPLETED', 'OCR_PARTIAL', 'OCR_UNAVAILABLE'].includes(item.type))
+                .map((warning: any, index: number) => (
+                  <div className={styles.publishHint} key={'ocr-result-' + index}>
+                    <b>{warning.type === 'OCR_COMPLETED' ? 'OCR text extracted — manual verification required'
+                      : warning.type === 'OCR_PARTIAL' ? 'OCR was partial — additional review required'
+                      : 'OCR unavailable — use manual page-range review'}</b>
+                    <p>{warning.message}</p>
+                    {warning.attempted_pages != null && <p>
+                      Pages attempted: {warning.attempted_pages}; pages with recognized text: {warning.recognized_pages || 0}
+                      {warning.remaining_unprocessed_pages > 0 ? '; low-text pages not processed: ' + warning.remaining_unprocessed_pages : ''}
+                    </p>}
+                    {(warning.sample_problem_pages || []).length > 0 && <p>
+                      Sample pages requiring manual inspection: {warning.sample_problem_pages.join(', ')}
+                    </p>}
+                  </div>
+                ))}
               {((intakeReport.reconciliation?.missing_from_book || []).length > 0) && <div>
                 <b>Titles to verify</b>
                 <ul>{intakeReport.reconciliation.missing_from_book.slice(0, 30).map((item: any, index: number) =>
