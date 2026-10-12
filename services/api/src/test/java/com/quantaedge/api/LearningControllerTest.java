@@ -188,10 +188,10 @@ class LearningControllerTest {
         .thenReturn(List.of(Map.of(
             "id", 42L, "lesson_id", 9L, "question_type", "ORDER",
             "explanation", "Put the steps in order.",
-            "answer_payload", "{\\"kind\\":\\"ORDER\\",\\"value\\":[\\"A\\",\\"B\\"]}")));
+            "answer_payload", "{\"kind\":\"ORDER\",\"value\":[\"A\",\"B\"]}")));
     when(jdbc.queryForObject(contains("select count(*) from lesson l"), eq(Long.class), eq(7L), eq(9L)))
         .thenReturn(1L);
-    when(answerService.serializeForPersistence(eq(submitted))).thenReturn("[\\"A\\",\\"B\\"]");
+    when(answerService.serializeForPersistence(eq(submitted))).thenReturn("[\"A\",\"B\"]");
     when(answerService.evaluate(anyString(), eq(submitted))).thenReturn(
         new QuestionAnswerService.Evaluation(true, true, "ORDER"));
 
@@ -200,7 +200,7 @@ class LearningControllerTest {
 
     assertEquals(true, result.get("correct"));
     verify(answerService).serializeForPersistence(eq(submitted));
-    verify(state).recordAttempt(7L, 42L, 9L, "[\\"A\\",\\"B\\"]", true, true, 5L);
+    verify(state).recordAttempt(7L, 42L, 9L, "[\"A\",\"B\"]", true, true, 5L);
   }
 
   @Test
