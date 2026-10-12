@@ -231,4 +231,47 @@ class HrEmployeeControllerTest {
     assertEquals(0, result.get("offset"));
     assertEquals(0L, result.get("total"));
   }
+  @Test
+  void departmentUpdateRequiresManagePermissionBeforeDatabaseAccess() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE"))
+        .thenThrow(new SecurityException("Permission required"));
+
+    assertThrows(SecurityException.class, () -> controller.updateDepartment(7L, Map.of(
+        "code", "ACADEMIC", "name", "Academic"), hrManager));
+
+    verify(authorization).requirePermission(hrManager, "HR_EMPLOYEE_MANAGE");
+    verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
+  void departmentCannotBeMovedBeneathItsOwnDescendant() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+    when(jdbc.queryForMap(anyString(), eq(7L))).thenReturn(Map.of(
+        "id", 7L, "organization_id", 1L, "code", "ACADEMIC", "name", "Academic",
+        "active", true, "parent_department_id", 6L));
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(8L), eq(1L))).thenReturn(true);
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(8L), eq(1L), eq(1L), eq(7L)))
+        .thenReturn(true);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.updateDepartment(7L, Map.of(
+            "code", "ACADEMIC", "name", "Academic", "parentDepartmentId", 8L), hrManager));
+
+    assertEquals(400, error.getStatusCode().value());
+    verify(jdbc, never()).update(anyString(), any(Object[].class));
+    verify(audit, never()).recordAction(any(), anyString(), anyString());
+  }
+
+  @Test
+  void designationUpdateRequiresManagePermissionBeforeDatabaseAccess() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE"))
+        .thenThrow(new SecurityException("Permission required"));
+
+    assertThrows(SecurityException.class, () -> controller.updateDesignation(4L, Map.of(
+        "code", "TEACHER", "name", "Teacher", "category", "ACADEMIC"), hrManager));
+
+    verify(authorization).requirePermission(hrManager, "HR_EMPLOYEE_MANAGE");
+    verifyNoInteractions(jdbc, audit);
+  }
+
 }
