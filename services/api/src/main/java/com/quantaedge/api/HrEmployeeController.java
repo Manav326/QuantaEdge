@@ -170,6 +170,7 @@ public class HrEmployeeController {
     String phone=optionalText(body.get("phoneE164"),24);
     String status=String.valueOf(body.getOrDefault("employmentStatus","ACTIVE")).toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status)) throw badRequest("Choose a supported employment status.");
+    if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
     String number="QE-EMP-"+String.format("%06d",jdbc.queryForObject("select nextval('hr_employee_number_seq')",Long.class));
     try {
       Long id=jdbc.queryForObject("""
@@ -242,9 +243,12 @@ public class HrEmployeeController {
     String status=required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status))
       throw badRequest("Choose a supported employment status.");
-    LocalDate exit=parseOptionalDate(body.get("exitDate"),"Exit date");
+    LocalDate exit=body.containsKey("exitDate")
+        ? parseOptionalDate(body.get("exitDate"),"Exit date")
+        : (before.get("exit_date") instanceof java.sql.Date existingExit ? existingExit.toLocalDate() : null);
     LocalDate joining=((java.sql.Date)before.get("joining_date")).toLocalDate();
     if(exit!=null&&exit.isBefore(joining)) throw badRequest("Exit date cannot be before the joining date.");
+    if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
     jdbc.update("update hr_employee set employment_status=?,exit_date=?,updated_by_staff_id=?,updated_at=now() where id=?",
       status,exit==null?null:Date.valueOf(exit),context.staffId(),id);
     Map<String,Object> after=employeeById(id);

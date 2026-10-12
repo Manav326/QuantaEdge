@@ -89,6 +89,28 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
+  void cleanDatabaseMigratesPeopleOperationsFoundationWithoutCreatingFakeEmployees() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_organization') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_department') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_designation') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee_history') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history where version='60' and success=true
+      """, Integer.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from hr_organization where name='QuantaEdge'", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_employee", Integer.class),
+        "A clean installation must not invent employee records.");
+    assertEquals(7, jdbc.queryForObject("select count(*) from hr_employment_type where active=true", Integer.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_VIEW')
+      """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_MANAGE')
+      """, Boolean.class));
+  }
+
+  @Test
   void cleanDatabaseMigratesAndRetainsAllSixClassSubjectTracks() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_class') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.question') is not null", Boolean.class));
