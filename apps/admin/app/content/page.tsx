@@ -151,7 +151,7 @@ function questionReadinessIssues(question:any):string[]{
  if(question.active===false)issues.push('This question is inactive and is not counted toward publication.');
  if(!meaningfulContent(question.prompt))issues.push('Add a meaningful question prompt.');
  if(!['APPROVED','PUBLISHED'].includes(status))issues.push(status==='REJECTED'?'This question was returned; correct it and resubmit for review.':'A reviewer must approve this question before the micro-topic can be published.');
- if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL'].includes(type))issues.push('This question type is not currently supported for automatic scoring.');
+ if(!['MCQ','TRUE_FALSE','INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER'].includes(type))issues.push('This question type is not supported in the current assessment flow.');
  const answer=question.answer_payload&&typeof question.answer_payload==='object'?question.answer_payload:parsed(question.answer_payload,{});
  if(type==='MCQ'||type==='TRUE_FALSE'){
   const options=Array.isArray(question.options)?question.options:parsed(question.options,[]);
@@ -160,8 +160,8 @@ function questionReadinessIssues(question:any):string[]{
   if(options.some((option:any)=>!meaningfulContent(option.label)))issues.push('Fill in every answer option.');
   if(correctOptions.length!==1)issues.push('Mark exactly one answer as correct.');
   if(correctOptions.length===1&&(answer.kind!=='OPTION'||String(answer.value)!==String(correctOptions[0]?.key)))issues.push('The answer key must match the option marked correct.');
- }else if(type==='INPUT'){
-  if(answer.kind!=='TEXT'||!meaningfulContent(answer.value))issues.push('Add the expected text answer.');
+ }else if(['INPUT','SHORT_ANSWER','LONG_ANSWER'].includes(type)){
+  if(answer.kind!=='TEXT'||!meaningfulContent(answer.value))issues.push('Add a staff-only reference answer or marking rubric.');
  }else if(type==='NUMERICAL'){
   if(answer.kind!=='NUMERIC'||answer.value===undefined||answer.value===null||String(answer.value).trim()==='')issues.push('Add the numeric answer key.');
  }

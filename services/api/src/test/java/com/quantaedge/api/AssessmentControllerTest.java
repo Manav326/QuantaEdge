@@ -48,6 +48,16 @@ class AssessmentControllerTest {
   }
 
   @Test
+  void formalTestFillInAndWrittenAnswersAreNotAutoGraded() {
+    assertFalse(AssessmentController.isAutoGradedType("INPUT"));
+    assertFalse(AssessmentController.isAutoGradedType("SHORT_ANSWER"));
+    assertFalse(AssessmentController.isAutoGradedType("LONG_ANSWER"));
+    assertTrue(AssessmentController.isAutoGradedType("MCQ"));
+    assertTrue(AssessmentController.isAutoGradedType("TRUE_FALSE"));
+    assertTrue(AssessmentController.isAutoGradedType("NUMERICAL"));
+  }
+
+  @Test
   void savingAResponseRequiresTheOwningStudentsInProgressAttempt() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("select att.id,att.status,att.deadline_at"), eq(5L), eq(25L)))

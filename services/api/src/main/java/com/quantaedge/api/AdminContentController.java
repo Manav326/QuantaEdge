@@ -918,8 +918,8 @@ public class AdminContentController {
       throw notFound("Question",questionId);
     }
     String type=String.valueOf(q.get("question_type")).toUpperCase();
-    if (!Set.of("MCQ","TRUE_FALSE","INPUT","NUMERICAL").contains(type)) {
-      throw badRequest("This question type is not supported for automatic scoring and cannot be approved yet.");
+    if (!Set.of("MCQ","TRUE_FALSE","INPUT","NUMERICAL","SHORT_ANSWER","LONG_ANSWER").contains(type)) {
+      throw badRequest("Use MCQ, TRUE_FALSE, INPUT, NUMERICAL, SHORT_ANSWER, or LONG_ANSWER for assessed questions.");
     }
     if (q.get("prompt")==null||String.valueOf(q.get("prompt")).isBlank()) {
       throw badRequest("Add a question prompt before approval.");
@@ -949,9 +949,9 @@ public class AdminContentController {
       if (!"OPTION".equals(answer.get("kind"))||!correctKey.equals(String.valueOf(answer.get("value")))) {
         throw badRequest("The answer key does not match the marked correct option.");
       }
-    } else if ("INPUT".equals(type)) {
+    } else if (Set.of("INPUT","SHORT_ANSWER","LONG_ANSWER").contains(type)) {
       if (!"TEXT".equals(answer.get("kind"))||String.valueOf(answer.getOrDefault("value","")).isBlank()) {
-        throw badRequest("Add the expected text answer before approval.");
+        throw badRequest("Add a staff-only reference answer or marking rubric before approval.");
       }
     } else if (!"NUMERIC".equals(answer.get("kind"))||answer.get("value")==null) {
       throw badRequest("Add a numeric answer key before approval.");
@@ -1217,7 +1217,7 @@ public class AdminContentController {
       select count(*) from question q
       where q.lesson_id=? and q.active=true
         and (
-          q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL')
+          q.question_type not in ('MCQ','TRUE_FALSE','INPUT','NUMERICAL','SHORT_ANSWER','LONG_ANSWER')
           or q.review_status not in ('APPROVED','PUBLISHED')
           or nullif(btrim(q.prompt),'') is null
           or (q.question_type in ('MCQ','TRUE_FALSE') and (
@@ -1229,7 +1229,7 @@ public class AdminContentController {
               select qo.option_key from question_option qo where qo.question_id=q.id and qo.is_correct limit 1
             )
           ))
-          or (q.question_type='INPUT' and (coalesce(q.answer_payload->>'kind','')<>'TEXT' or nullif(btrim(q.answer_payload->>'value'),'') is null))
+          or (q.question_type in ('INPUT','SHORT_ANSWER','LONG_ANSWER') and (coalesce(q.answer_payload->>'kind','')<>'TEXT' or nullif(btrim(q.answer_payload->>'value'),'') is null))
           or (q.question_type='NUMERICAL' and (coalesce(q.answer_payload->>'kind','')<>'NUMERIC' or q.answer_payload->'value' is null or q.answer_payload->'value'='null'::jsonb))
           or (q.source_kind<>'AUTHOR_CREATED' and (
             q.source_id is null or nullif(btrim(q.source_ref),'') is null or q.source_year is null
@@ -1239,7 +1239,7 @@ public class AdminContentController {
         )
       """, Long.class, lessonId);
     if (invalidQuestions != null && invalidQuestions > 0) {
-      throw badRequest("Every published question must use a supported grading type and valid answer key: MCQ/true-false need exactly one correct option, input needs a TEXT key, numerical needs a NUMERIC key, and source-backed questions need verified provenance.");
+      throw badRequest("Every published question must have a valid grading setup: MCQ/true-false need exactly one correct option; input, short-answer and long-answer questions need a staff-only TEXT reference answer or rubric; numerical questions need a NUMERIC answer; and source-backed questions need verified provenance.");
     }
   }
 
