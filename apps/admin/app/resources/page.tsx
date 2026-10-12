@@ -197,6 +197,11 @@ export default function TextbookLibraryPage() {
   const [resourceLanguage, setResourceLanguage] = useState<'hi' | 'en'>('hi');
   const [chapterId, setChapterId] = useState('');
   const [library, setLibrary] = useState<PdfAsset[]>([]);
+  const [libraryCache, setLibraryCache] = useState<PdfAsset[]>([]);
+  const [libraryQuery, setLibraryQuery] = useState('');
+  const [libraryPage, setLibraryPage] = useState(0);
+  const [libraryTotal, setLibraryTotal] = useState(0);
+  const libraryPageSize = 25;
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [assignmentPage, setAssignmentPage] = useState(0);
@@ -316,8 +321,8 @@ export default function TextbookLibraryPage() {
     viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes,
   ].filter(values => values.length > 0).length;
   const selectedPdf = useMemo(
-    () => library.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
-    [library, selectedPdfId],
+    () => libraryCache.find(item => Number(item.pdf_asset_id || item.id) === Number(selectedPdfId)),
+    [libraryCache, selectedPdfId],
   );
   const previewAssignment = useMemo(
     () => assignments.find(item => item.document_id === previewDocumentId) || null,
@@ -521,13 +526,11 @@ export default function TextbookLibraryPage() {
       const intakePromise = canReview
         ? api('/api/v1/admin/source-ingestion/intake?limit=' + intakePageSize + '&offset=' + (intakePage * intakePageSize)).catch(() => ({ items: [], total: 0, summary: {} }))
         : Promise.resolve({ items: [], total: 0, summary: {} });
-      const [pdfRows, contentRows, resourceRows, intakeData] = await Promise.all([
-        api('/api/v1/admin/learning-pdfs'),
+      const [contentRows, resourceRows, intakeData] = await Promise.all([
         chapterPromise,
         api('/api/v1/admin/learning-documents?' + params.toString()),
         intakePromise,
       ]);
-      const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
       const resources: Assignment[] = (Array.isArray(resourceRows?.items) ? resourceRows.items : (Array.isArray(resourceRows) ? resourceRows : [])) as Assignment[];
       setAssignmentTotal(Number(resourceRows?.total ?? resources.length));
@@ -535,7 +538,6 @@ export default function TextbookLibraryPage() {
       setIntakeRows(Array.isArray(intakeData?.items) ? intakeData.items : (Array.isArray(intakeData) ? intakeData : []));
       setIntakeTotal(Number(intakeData?.total ?? (Array.isArray(intakeData) ? intakeData.length : 0)));
       setIntakeSummary(intakeData?.summary && typeof intakeData.summary === 'object' ? intakeData.summary : {});
-      setLibrary(pdfs);
       const distinct = new Map<number, Chapter>();
       content.forEach((row: any) => {
         const id = Number(row.chapter_id);
@@ -551,11 +553,6 @@ export default function TextbookLibraryPage() {
       const nextChapters = [...distinct.values()];
       setChapters(nextChapters);
       setAssignments(resources);
-      if (selectedPdfId && !pdfs.some(pdf => String(pdf.pdf_asset_id || pdf.id) === selectedPdfId)) {
-        setSelectedPdfId('');
-      } else if (!selectedPdfId && pdfs.length > 0) {
-        setSelectedPdfId(String(pdfs[0].pdf_asset_id || pdfs[0].id));
-      }
       if (!chapterId || !nextChapters.some(chapter => String(chapter.chapter_id) === chapterId)) {
         setChapterId(nextChapters.length ? String(nextChapters[0].chapter_id) : '');
       }
@@ -567,10 +564,33 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, intakePage,
+  }, [classCode, subjectCode, chapterId, canEdit, canReview, previewDocumentId, assignmentPage, intakePage,
       viewClassCodes, viewSubjectCodes, viewStatuses, viewLanguages, viewScopes]);
 
   useEffect(() => { void load(); }, [load]);
+
+  useEffect(() => {
+    if (!canEdit) return;
+    let active = true;
+    (async () => {
+      const params = new URLSearchParams({ limit: String(libraryPageSize), offset: String(libraryPage * libraryPageSize) });
+      if (libraryQuery.trim()) params.set('query', libraryQuery.trim());
+      const response = await api('/api/v1/admin/learning-pdfs?' + params.toString());
+      if (!active) return;
+      const items: PdfAsset[] = Array.isArray(response?.items) ? response.items : (Array.isArray(response) ? response : []);
+      setLibrary(items);
+      setLibraryTotal(Number(response?.total ?? items.length));
+      setLibraryCache(current => {
+        const byId = new Map<number, PdfAsset>(current.map(item => [Number(item.pdf_asset_id || item.id), item]));
+        items.forEach(item => byId.set(Number(item.pdf_asset_id || item.id), item));
+        return [...byId.values()];
+      });
+      if (!selectedPdfId && items.length) setSelectedPdfId(String(items[0].pdf_asset_id || items[0].id));
+    })().catch((e:any) => {
+      if (active) setError(e instanceof Error ? e.message : 'The stored PDF library could not be loaded.');
+    });
+    return () => { active = false; };
+  }, [canEdit, libraryPage, libraryQuery]);
 
   useEffect(() => {
     if (!tracks.length) return;
@@ -722,7 +742,7 @@ export default function TextbookLibraryPage() {
         <div><span>PRIVATE SOURCE LIBRARY</span><h2>One PDF. Multiple learning placements.</h2>
           <p>PDFs are stored privately in the database. Students receive rendered page images after access checks, not the original PDF download.</p>
         </div>
-        <div className={styles.heroStats}><strong>{library.length}</strong><small>PDF files in library</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>Published in filtered view</small></div>
+        <div className={styles.heroStats}><strong>{libraryTotal}</strong><small>PDF files in library</small><strong>{Number(assignmentFacets.status?.PUBLISHED || 0)}</strong><small>Published in filtered view</small></div>
       </section>
 
       {error && <div className={styles.alertError} role="alert">{error}</div>}
@@ -783,17 +803,25 @@ export default function TextbookLibraryPage() {
         <div className={styles.sectionHeading}><div><span>STEP 01</span><h2>Choose an existing PDF or upload it once</h2><p>Duplicates are detected by file checksum. Selecting a library item does not copy its PDF bytes.</p></div><span className={styles.stepIcon}>01</span></div>
         <div className={styles.libraryGrid}>
           <label className={styles.field}>Existing PDF library
+            <input value={libraryQuery} onChange={e => {setLibraryQuery(e.target.value);setLibraryPage(0)}} placeholder="Search PDF title, filename or source…" aria-label="Search stored PDF library" />
             <select value={selectedPdfId} onChange={e => {
               setSelectedPdfId(e.target.value);
               const asset = library.find(item => Number(item.pdf_asset_id || item.id) === Number(e.target.value));
               if (asset) { setTitle(asset.title); setPageStart('1'); setPageEnd(String(asset.page_count)); }
             }}>
               <option value="">Select a stored PDF…</option>
+              {selectedPdfId && selectedPdf && !library.some(pdf => Number(pdf.pdf_asset_id || pdf.id) === Number(selectedPdfId)) &&
+                <option value={selectedPdfId}>Selected: {selectedPdf.title} · {selectedPdf.page_count} pages</option>}
               {library.map(pdf => <option key={pdf.pdf_asset_id || pdf.id} value={pdf.pdf_asset_id || pdf.id}>
                 {pdf.title} · {pdf.page_count} pages · {formatBytes(pdf.file_size_bytes)}{contentCoverageWarning(pdf.source_reference) ? ' · ⚠ PARTIAL' : ''}
               </option>)}
             </select>
-            <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
+            <small>{libraryTotal ? 'Showing ' + (libraryTotal===0?0:libraryPage*libraryPageSize+1) + '–' + Math.min(libraryTotal,(libraryPage+1)*libraryPageSize) + ' of ' + libraryTotal + ' matching stored PDFs.' : 'No PDFs match this search. Upload a source PDF or change the search text.'}</small>
+            <div style={{display:'flex',gap:8,alignItems:'center',marginTop:8}}>
+              <button type="button" className={styles.secondaryButton} disabled={libraryPage===0} onClick={()=>setLibraryPage(value=>Math.max(0,value-1))}>← Previous</button>
+              <span style={{fontSize:12}}>Page {libraryTotal===0?0:libraryPage+1} of {Math.max(1,Math.ceil(libraryTotal/libraryPageSize))}</span>
+              <button type="button" className={styles.secondaryButton} disabled={(libraryPage+1)*libraryPageSize>=libraryTotal} onClick={()=>setLibraryPage(value=>value+1)}>Next →</button>
+            </div>
           </label>
           {canReview && <section className={styles.uploadBox}>
             <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeTotal} classified PDF(s)</small></div>

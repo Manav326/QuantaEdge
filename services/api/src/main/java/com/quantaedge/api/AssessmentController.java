@@ -513,16 +513,20 @@ public class AssessmentController {
   // ---------- Student: catalogue, durable attempts, persisted results ----------
 
   @GetMapping("/learning/assessments")
-  public List<Map<String, Object>> studentAssessmentCatalog(
+  public Map<String,Object> studentAssessmentCatalog(
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(defaultValue="24") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
     // Generated assessments are refreshed by content-publication and question-review events;
     // this catalogue read only lists the durable definitions and never regenerates question banks.
     String subjectFilter = safeText(subjectCode, 40);
-    return jdbc.queryForList("""
+    int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,
@@ -580,7 +584,11 @@ public class AssessmentController {
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
-      """, context.studentId(), language, language, language, subjectFilter, subjectFilter);
+      limit ? offset ?
+      """, context.studentId(), language, language, language, subjectFilter, subjectFilter, rowLimit+1, rowOffset);
+    boolean hasMore=items.size()>rowLimit;
+    if(hasMore)items.remove(items.size()-1);
+    return Map.of("items",items,"hasMore",hasMore,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/learning/assessments/{assessmentId}/attempts")

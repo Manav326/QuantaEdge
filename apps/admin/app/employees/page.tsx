@@ -92,7 +92,7 @@ export default function AdminStaffPage() {
     const data=await readJson(r);
     setAudit(Array.isArray(data)?data:[]);
   }
-  async function loadAdminData(admin:boolean,hasAudit:boolean) {
+  async function loadAdminData(admin:boolean) {
     const tasks:Promise<any>[]=[];
     if(admin) {
       tasks.push(fetch('/api/v1/admin/staff',{cache:'no-store'}).then(readJson).then(data=>setStaff(Array.isArray(data)?data:[])));
@@ -120,7 +120,7 @@ export default function AdminStaffPage() {
         const searchParams=new URLSearchParams(window.location.search);
         setTab(searchParams.get('view')==='audit'||!admin?'audit':'staff');
         if(!admin&&!hasAudit) { router.replace('/content'); return; }
-        await loadAdminData(admin,hasAudit);
+        await loadAdminData(admin);
       } catch(e:any) {
         if(mounted)setError(e.message||'Staff workspace could not be loaded.');
       } finally {

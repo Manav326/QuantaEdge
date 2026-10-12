@@ -62,13 +62,18 @@ public class LearningDocumentController {
 
   /** Existing PDFs appear here so admins can attach one without uploading it again. */
   @GetMapping("/admin/learning-pdfs")
-  public List<Map<String, Object>> listPdfLibrary(
+  public Map<String,Object> listPdfLibrary(
       @RequestParam(required = false) String query,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = requireContentView(context);
-    String term = query == null ? "" : query.trim();
-    if (term.length() > 160) term = term.substring(0, 160);
-    return jdbc.queryForList("""
+    context=requireContentView(context);
+    String term=query==null?"":query.trim();
+    if(term.length()>160)term=term.substring(0,160);
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String pattern="%"+term+"%";
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as pdf_asset_id,a.title,a.original_filename,a.sha256,
              a.file_size_bytes,a.page_count,a.source_kind,a.source_reference,a.created_at,
              a.created_by_staff_id,
@@ -78,9 +83,15 @@ public class LearningDocumentController {
       where a.review_status='APPROVED'
         and (?='' or a.title ilike ? or a.original_filename ilike ?
              or coalesce(a.source_reference,'') ilike ?)
-      order by a.created_at desc,a.id desc
-      limit 300
-      """, term, "%" + term + "%", "%" + term + "%", "%" + term + "%");
+      order by a.created_at desc,a.id desc limit ? offset ?
+      """,term,pattern,pattern,pattern,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from learning_pdf_asset a
+      where a.review_status='APPROVED'
+        and (?='' or a.title ilike ? or a.original_filename ilike ?
+             or coalesce(a.source_reference,'') ilike ?)
+      """,Long.class,term,pattern,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   /** Stores a PDF in the private database library, de-duplicating by SHA-256. */

@@ -747,10 +747,18 @@ public class SourceIngestionController {
   }
 
   @GetMapping("/sources")
-  public List<Map<String, Object>> listSources(
+  public Map<String,Object> listSources(
+      @RequestParam(required=false) String query,
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireReviewer(context);
-    return jdbc.queryForList("""
+    String term=query==null?"":query.trim();
+    if(term.length()>160)term=term.substring(0,160);
+    String pattern="%"+term+"%";
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select cs.id as source_id,cs.source_kind,cs.title,cs.provider,cs.source_url,cs.edition,
              cs.language,cs.source_year,cs.checksum,cs.status,cs.accessed_at,cs.learning_pdf_asset_id,
              a.id as matching_pdf_asset_id,a.title as pdf_asset_title,a.page_count as pdf_page_count,
@@ -767,9 +775,19 @@ public class SourceIngestionController {
         order by case when x.id=cs.learning_pdf_asset_id then 0 when x.source_content_id=cs.id then 1 else 2 end,x.id desc
         limit 1
       ) a on true
+      where (?='' or cs.title ilike ? or coalesce(cs.provider,'') ilike ?
+        or coalesce(cs.source_url,'') ilike ? or coalesce(cs.edition,'') ilike ?
+        or coalesce(cs.checksum,'') ilike ?)
       order by case when a.id is null then 0 else 1 end,cs.updated_at desc,cs.id
-      limit 500
-      """);
+      limit ? offset ?
+      """,term,pattern,pattern,pattern,pattern,pattern,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from content_source cs
+      where (?='' or cs.title ilike ? or coalesce(cs.provider,'') ilike ?
+        or coalesce(cs.source_url,'') ilike ? or coalesce(cs.edition,'') ilike ?
+        or coalesce(cs.checksum,'') ilike ?)
+      """,Long.class,term,pattern,pattern,pattern,pattern,pattern);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/registry-books")

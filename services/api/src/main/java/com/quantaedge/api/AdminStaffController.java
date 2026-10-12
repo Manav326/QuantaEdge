@@ -180,20 +180,24 @@ public class AdminStaffController {
   }
 
   @GetMapping("/audit")
-  public List<Map<String,Object>> auditTrail(
+  public Map<String,Object> auditTrail(
       @RequestAttribute(value="authContext", required=false) AuthContext context,
-      @RequestParam(defaultValue="200") int limit) {
+      @RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset) {
     authorization.requirePermission(context,"AUDIT_VIEW");
-    int safeLimit=Math.max(1,Math.min(limit,500));
-    return jdbc.queryForList("""
+    int safeLimit=Math.max(1,Math.min(limit==null?25:limit,100));
+    int safeOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
         select a.id,a.actor_staff_id,a.actor_role,a.http_method,a.request_path,
                a.response_status,a.remote_address,a.user_agent,a.details,a.created_at,
                coalesce(s.display_name,'Removed staff account') as actor_name
         from staff_audit_log a
         left join staff_account s on s.id=a.actor_staff_id
         order by a.created_at desc,a.id desc
-        limit ?
-        """,safeLimit);
+        limit ? offset ?
+        """,safeLimit,safeOffset);
+    Long total=jdbc.queryForObject("select count(*) from staff_audit_log",Long.class);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
   private void requireStaffManager(AuthContext context) {
