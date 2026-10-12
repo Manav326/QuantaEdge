@@ -156,6 +156,7 @@ public class LearningClassController {
     Long hostStaffId = optionalLong(body.get("hostStaffId"), "hostStaffId");
     Long teachingAssignmentId = optionalLong(body.get("teachingAssignmentId"), "teachingAssignmentId");
     if (teachingAssignmentId != null) {
+      authorization.requirePermission(context,"TEACHING_ASSIGNMENT_VIEW");
       List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
         select a.id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
         from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id where a.id=?
