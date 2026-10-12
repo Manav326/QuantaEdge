@@ -1861,7 +1861,7 @@ private fun AssessmentAttemptScreen(
     val inProgress = phase == "IN_PROGRESS" && !offlinePendingSync
     val deadlineText = attempt.textAny("deadline_at", "deadlineAt")
     val deadlineEpochMillis = remember(deadlineText) {
-        runCatching { java.time.OffsetDateTime.parse(deadlineText).toInstant().toEpochMilli() }.getOrNull()
+        AssessmentTimer.deadlineEpochMillis(deadlineText)
     }
     var nowEpochMillis by remember(attemptId, deadlineEpochMillis) { mutableStateOf(System.currentTimeMillis()) }
     var autoSubmittedAttemptId by remember { mutableStateOf(0L) }
