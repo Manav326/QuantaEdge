@@ -15,16 +15,17 @@ The importer:
 - uploads a single supplied whole-book PDF byte-for-byte; when official Maths Part I/II files are
   provided separately, it combines their pages locally while keeping the original source parts unchanged;
 - extracts chapter ranges into private-review/ncert-book-splits without editing the source PDFs;
-- validates all 12 books and chapter mappings before the first API write;
+- validates all selected books and chapter mappings before writing chapter extracts or making the first API write;
 - uploads each distinct PDF once and creates DRAFT assignments only;
 - never publishes, archives, or alters an existing published assignment.
 
 If the chapter titles in an official PDF cannot be read/identified, the script writes an error report
 and performs no application-data writes. Do not use OCR or infer a page range by chapter number.
 
-Example:
-  python scripts/import_official_ncert_books_and_chapters.py --api-url http://localhost:8080
-  python scripts/import_official_ncert_books_and_chapters.py --api-url http://localhost:8080 --apply
+Examples (always select the source languages explicitly):
+  python scripts/import_official_ncert_books_and_chapters.py --languages english --api-url http://localhost:8080
+  python scripts/import_official_ncert_books_and_chapters.py --languages english --api-url http://localhost:8080 --apply
+  python scripts/import_official_ncert_books_and_chapters.py --languages english hindi --api-url http://localhost:8080
 """
 from __future__ import annotations
 
@@ -33,7 +34,9 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
+import tempfile
 import unicodedata
 from collections import Counter
 from datetime import datetime, timezone
@@ -42,7 +45,7 @@ from typing import Any
 from urllib.parse import urlencode
 
 try:
-    import fitz
+    import pymupdf as fitz
 except ImportError as exc:
     raise SystemExit(
         'PyMuPDF is required. Install with: python -m pip install "PyMuPDF>=1.24,<2"'
@@ -605,6 +608,44 @@ def part_book_filename(grade: str, subject: str, language: str, part: int) -> st
     )
 
 
+def validate_input_book_presence(books_dir: Path, languages: tuple[str, ...]) -> None:
+    """Fail early unless every selected class/subject/language slot has complete source input."""
+    if not books_dir.is_dir():
+        raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
+    if not languages or any(language not in LANGUAGES for language in languages):
+        raise ValueError(f"Unsupported or empty language selection: {languages!r}. Choose from {LANGUAGES}.")
+    if len(set(languages)) != len(languages):
+        raise ValueError(f"Duplicate language selection: {languages!r}.")
+
+    missing: list[str] = []
+    for grade in CLASSES:
+        for subject in SUBJECTS:
+            for language in languages:
+                canonical = books_dir / book_filename(grade, subject, language)
+                if canonical.is_file():
+                    continue
+                if grade in {"7", "8"} and subject == "maths":
+                    part1 = books_dir / part_book_filename(grade, subject, language, 1)
+                    part2 = books_dir / part_book_filename(grade, subject, language, 2)
+                    if part1.is_file() and part2.is_file():
+                        continue
+                    if part1.is_file() != part2.is_file():
+                        present = part1.name if part1.is_file() else part2.name
+                        missing_name = part2.name if part1.is_file() else part1.name
+                        missing.append(f"Found {present} but its matching part is missing: {missing_name}")
+                    else:
+                        missing.append(
+                            f"Missing {canonical.name}; alternatively provide both {part1.name} and {part2.name}"
+                        )
+                else:
+                    missing.append(f"Missing {canonical.name}")
+    if missing:
+        raise FileNotFoundError(
+            f"Input precheck failed for {len(missing)} required source-book slot(s) in {books_dir}. "
+            "No PDF was uploaded or rewritten.\n - " + "\n - ".join(missing)
+        )
+
+
 def prepare_source_book(
     root: Path,
     grade: str,
@@ -782,42 +823,7 @@ def create_import_plan(
                     warnings.append(str(source["metadata_warning"]))
                 records.append(book_record)
 
-                chapter_dir = output_dir / f"class-{grade}" / subject / language
-                for chapter in chapter_ranges:
-                    target = chapter_dir / chapter_output_filename(grade, subject, language, chapter["chapter_code"])
-                    split = split_chapter_pdf(
-                        path, target, int(chapter["start_page"]), int(chapter["end_page"])
-                    )
-                    if split["size_bytes"] > max_bytes:
-                        raise ValueError(
-                            f"{split['filename']}: generated chapter extract exceeds the staff-role "
-                            f"upload limit of {max_bytes // (1024 * 1024)} MiB."
-                        )
-                    chapter_record = {
-                        **split,
-                        "class_code": grade,
-                        "subject_code": subject,
-                        "language": language,
-                        "scope": "CHAPTER_PDF",
-                        "chapter_code": chapter["chapter_code"],
-                        "chapter_id": chapter["chapter_id"],
-                        "chapter_name": chapter["chapter_name"],
-                        "title": student_title(grade, subject, language, "CHAPTER_PDF", chapter),
-                        "source_title": book_record["source_title"],
-                        "source_url": book_record["source_url"],
-                        "edition": book_record["edition"],
-                        "edition_detected": book_record["edition_detected"],
-                        "parent_book_filename": name,
-                        "parent_book_sha256": book["sha256"],
-                        "parent_book_source_files": source["source_files"],
-                        "merged_from_parts": bool(source["merged_from_parts"]),
-                        "chapter_order": chapter["chapter_order"],
-                        "source_page_start": chapter["start_page"],
-                        "source_page_end": chapter["end_page"],
-                        "mapping_note": chapter["mapping_note"],
-                        "action": "PENDING",
-                    }
-                    records.append(chapter_record)
+                # Delay extraction until every source book and chapter mapping has passed preflight.
                 if not book["edition_detected"]:
                     warnings.append(
                         f"{name}: no clear printed reprint/session was detected in the first 15 pages; "
@@ -829,6 +835,82 @@ def create_import_plan(
             f"{len(missing)} required complete-book PDFs are missing. No API writes occurred.\n - "
             + "\n - ".join(missing)
         )
+
+    # Build all extracts in a temporary staging folder first. No previous local extract is
+    # touched unless every requested chapter can be generated and all overwrite conflicts pass.
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    book_plans = [row for row in records if row["scope"] == "SUBJECT_BOOK"]
+    chapter_records: list[dict[str, Any]] = []
+    with tempfile.TemporaryDirectory(prefix=".ncert-book-splits-stage-", dir=output_dir.parent) as stage_name:
+        stage_root = Path(stage_name)
+        staged_outputs: list[tuple[Path, Path, dict[str, Any]]] = []
+        for book_record in book_plans:
+            grade = str(book_record["class_code"])
+            subject = str(book_record["subject_code"])
+            language = str(book_record["language"])
+            source_path = Path(book_record["path"])
+            for chapter in book_record["chapter_ranges"]:
+                filename = chapter_output_filename(grade, subject, language, chapter["chapter_code"])
+                final_target = output_dir / f"class-{grade}" / subject / language / filename
+                stage_target = stage_root / f"class-{grade}" / subject / language / filename
+                split = split_chapter_pdf(
+                    source_path, stage_target, int(chapter["start_page"]), int(chapter["end_page"])
+                )
+                if split["size_bytes"] > max_bytes:
+                    raise ValueError(
+                        f"{split['filename']}: generated chapter extract exceeds the staff-role "
+                        f"upload limit of {max_bytes // (1024 * 1024)} MiB."
+                    )
+                record = {
+                    **split,
+                    "path": str(final_target.resolve()),
+                    "class_code": grade,
+                    "subject_code": subject,
+                    "language": language,
+                    "scope": "CHAPTER_PDF",
+                    "chapter_code": chapter["chapter_code"],
+                    "chapter_id": chapter["chapter_id"],
+                    "chapter_name": chapter["chapter_name"],
+                    "title": student_title(grade, subject, language, "CHAPTER_PDF", chapter),
+                    "source_title": book_record["source_title"],
+                    "source_url": book_record["source_url"],
+                    "edition": book_record["edition"],
+                    "edition_detected": book_record["edition_detected"],
+                    "parent_book_filename": book_record["filename"],
+                    "parent_book_sha256": book_record["sha256"],
+                    "parent_book_source_files": book_record["input_source_files"],
+                    "merged_from_parts": book_record["merged_from_parts"],
+                    "chapter_order": chapter["chapter_order"],
+                    "source_page_start": chapter["start_page"],
+                    "source_page_end": chapter["end_page"],
+                    "mapping_note": chapter["mapping_note"],
+                    "action": "PENDING",
+                }
+                staged_outputs.append((stage_target, final_target, record))
+
+        conflicts: list[str] = []
+        for stage_path, final_path, record in staged_outputs:
+            if final_path.exists():
+                if not final_path.is_file() or sha256_file(final_path) != record["sha256"]:
+                    conflicts.append(str(final_path))
+        if conflicts:
+            raise FileExistsError(
+                "Existing generated chapter file(s) differ from the newly validated extracts. "
+                "Nothing was overwritten. Back up/move these local files before retrying:\n - "
+                + "\n - ".join(conflicts[:20])
+            )
+
+        # All files are generated and all conflicts are checked before the first promotion.
+        for stage_path, final_path, record in staged_outputs:
+            if final_path.is_file():
+                stage_path.unlink(missing_ok=True)  # identical prior output: retain it unchanged
+            else:
+                final_path.parent.mkdir(parents=True, exist_ok=True)
+                stage_path.replace(final_path)
+            record["path"] = str(final_path.resolve())
+            chapter_records.append(record)
+
+    records.extend(chapter_records)
 
     keys = [
         (r["class_code"], r["subject_code"], r["language"], r["scope"], r.get("chapter_id"))
@@ -857,6 +939,29 @@ def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
     return {k: v for k, v in row.items() if k not in hidden}
 
 
+def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str]:
+    return (
+        str(row.get("class_code") or ""),
+        str(row.get("subject_code") or ""),
+        str(row.get("language") or ""),
+        str(row.get("scope") or ""),
+        str(row.get("chapter_code") or ""),
+        str(row.get("chapter_id") if row.get("chapter_id") is not None else ""),
+        str(row.get("sha256") or "").lower(),
+    )
+
+
+def sync_report_record(report: dict[str, Any], row: dict[str, Any]) -> None:
+    """Persist the latest state for one planned PDF in the audit report."""
+    files = report.setdefault("files", [])
+    identity = report_record_identity(row)
+    for index, existing in enumerate(files):
+        if isinstance(existing, dict) and report_record_identity(existing) == identity:
+            files[index] = make_report_record(row)
+            return
+    files.append(make_report_record(row))
+
+
 def write_report(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -878,6 +983,8 @@ def upload_or_reuse_asset(
     if existing:
         report["reused_assets"] += 1
         record["asset_id"] = int(existing.get("pdf_asset_id", existing.get("id")))
+        sync_report_record(report, record)
+        write_report(report_path, report)
         return existing
 
     reference_parts = [
@@ -941,6 +1048,7 @@ def upload_or_reuse_asset(
     asset["pdf_asset_id"] = int(asset_id)
     assets_created[digest] = asset
     record["asset_id"] = int(asset_id)
+    sync_report_record(report, record)
     write_report(report_path, report)
     return asset
 
@@ -960,6 +1068,9 @@ def run(args: argparse.Namespace) -> int:
         raise FileNotFoundError(
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
+    validate_input_book_presence(books_dir, tuple(args.languages))
+    print(f"Source books folder: {books_dir}")
+    print(f"Selected languages: {', '.join(args.languages)}")
     base = args.api_url.rstrip("/")
     api_url_valid(base)
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
@@ -1012,7 +1123,10 @@ def run(args: argparse.Namespace) -> int:
         "created_assets": 0,
         "created_draft_assignments": 0,
         "reused_assets": 0,
-        "skipped_identical_assignments": sum(1 for row in records if row["action"] == "SKIP_IDENTICAL_ASSIGNMENT"),
+        "skipped_identical_assignments": (
+            sum(1 for row in records if row["action"] == "SKIP_IDENTICAL_ASSIGNMENT")
+            if not args.apply else 0
+        ),
         "publish_actions_taken": 0,
         "warnings": warnings,
         "files": [make_report_record(row) for row in records],
@@ -1047,12 +1161,17 @@ def run(args: argparse.Namespace) -> int:
         if row["action"] == "SKIP_IDENTICAL_ASSIGNMENT":
             row["status"] = "SKIPPED"
             report["skipped_identical_assignments"] += 1
+            sync_report_record(report, row)
+            write_report(report_path, report)
             continue
 
         asset = upload_or_reuse_asset(
             base, cookie, row, approved_assets, assets_created, report, report_path
         )
         asset_id = int(asset.get("pdf_asset_id", asset.get("id")))
+        row["action"] = "ASSIGNMENT_WRITE_PENDING"
+        sync_report_record(report, row)
+        write_report(report_path, report)
         source_page_start = int(row.get("source_page_start", 1))
         source_page_end = int(row.get("source_page_end", row["page_count"]))
         body = {
@@ -1087,6 +1206,7 @@ def run(args: argparse.Namespace) -> int:
         row["status"] = "DRAFT"
         row["action"] = "CREATED_DRAFT"
         report["created_draft_assignments"] += 1
+        sync_report_record(report, row)
         write_report(report_path, report)
 
     report["result"] = "COMPLETED"
@@ -1108,8 +1228,8 @@ def main() -> int:
     parser.add_argument("--root", default=str(ROOT), help="Repository/work folder for generated splits and reports (default: repo root).")
     parser.add_argument("--books-dir", default="", help="Folder containing source books (default: <root>/books). Relative paths are resolved from --root.")
     parser.add_argument(
-        "--languages", nargs="+", choices=LANGUAGES, default=list(LANGUAGES),
-        help="Languages to import (default: english hindi). Use --languages english to process six English books first.",
+        "--languages", nargs="+", choices=LANGUAGES, required=True,
+        help="Required explicit source-language selection, e.g. --languages english or --languages english hindi.",
     )
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
