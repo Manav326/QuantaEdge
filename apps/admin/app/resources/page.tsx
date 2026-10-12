@@ -43,6 +43,19 @@ type Assignment = {
   asset_review_status?: string | null;
 };
 
+function normalizeIntakeReport(value: any): any {
+  const parseJson = (item: any) => {
+    if (typeof item === 'string') {
+      try { return JSON.parse(item); } catch { return {}; }
+    }
+    if (item && typeof item.value === 'string') {
+      try { return JSON.parse(item.value); } catch { return {}; }
+    }
+    return item && typeof item === 'object' ? item : {};
+  };
+  return { ...(value || {}), inventory: parseJson(value?.inventory), reconciliation: parseJson(value?.reconciliation) };
+}
+
 async function api(url: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers || {});
   if (init.body && !(init.body instanceof FormData)) headers.set('Content-Type', 'application/json');
@@ -202,6 +215,9 @@ export default function TextbookLibraryPage() {
   const [uploadPartLabel, setUploadPartLabel] = useState('');
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
+  const [intakeRows, setIntakeRows] = useState<any[]>([]);
+  const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
+  const [reviewNotes, setReviewNotes] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [sourceTitle, setSourceTitle] = useState('');
@@ -219,6 +235,7 @@ export default function TextbookLibraryPage() {
   const isAdmin = role === 'ADMIN';
   const maxPdfBytes = isAdmin ? 500 * 1024 * 1024 : 50 * 1024 * 1024;
   const canEdit = isAdmin || permissions.includes('CONTENT_EDIT');
+  const canReview = isAdmin || permissions.includes('CONTENT_REVIEW');
   const canPublish = isAdmin || permissions.includes('CONTENT_PUBLISH');
   const classOptions = useMemo(
     () => [...new Map(tracks.map(track => [track.class_code, track])).values()],
@@ -478,14 +495,19 @@ export default function TextbookLibraryPage() {
       const chapterPromise = canEdit && nextClassCode && nextSubjectCode
         ? api('/api/v1/admin/content?classCode=' + encodeURIComponent(nextClassCode) + '&subjectCode=' + encodeURIComponent(nextSubjectCode))
         : Promise.resolve([]);
-      const [pdfRows, contentRows, resourceRows] = await Promise.all([
+      const intakePromise = canReview
+        ? api('/api/v1/admin/source-ingestion/intake').catch(() => [])
+        : Promise.resolve([]);
+      const [pdfRows, contentRows, resourceRows, intakeData] = await Promise.all([
         api('/api/v1/admin/learning-pdfs'),
         chapterPromise,
         api('/api/v1/admin/learning-documents?' + params.toString()),
+        intakePromise,
       ]);
       const pdfs = Array.isArray(pdfRows) ? pdfRows : [];
       const content = Array.isArray(contentRows) ? contentRows : [];
       const resources = Array.isArray(resourceRows) ? resourceRows : [];
+      setIntakeRows(Array.isArray(intakeData) ? intakeData : []);
       setLibrary(pdfs);
       const distinct = new Map<number, Chapter>();
       content.forEach((row: any) => {
@@ -518,7 +540,7 @@ export default function TextbookLibraryPage() {
     } finally {
       setLoading(false);
     }
-  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, previewDocumentId]);
+  }, [classCode, subjectCode, selectedPdfId, chapterId, canEdit, canReview, previewDocumentId]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -558,7 +580,7 @@ export default function TextbookLibraryPage() {
       let analysis: any = null;
       try {
         analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze', { method: 'POST' });
-        setIntakeReport(analysis);
+        setIntakeReport(normalizeIntakeReport(analysis));
       } catch (analysisError) {
         setIntakeReport(null);
         setNotice('PDF saved and classified, but automatic inventory analysis needs attention: ' +
@@ -732,6 +754,27 @@ export default function TextbookLibraryPage() {
             </select>
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
           </label>
+          {canReview && <section className={styles.uploadBox}>
+            <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeRows.length} classified PDF(s)</small></div>
+            {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
+              <div className={styles.assignmentList}>
+                {intakeRows.map((item: any) => <div className={styles.assignmentQueueRow} key={item.pdf_asset_id}>
+                  <div>
+                    <b>{item.title || ('PDF #' + item.pdf_asset_id)}</b>
+                    <small>Class {item.class_code} · {item.subject_name || item.subject_code} · {item.language === 'hi' ? 'Hindi' : 'English'} · {String(item.category || '').replaceAll('_', ' ')}{item.part_label ? ' · ' + item.part_label : ''}</small>
+                    <small>{item.page_count} pages · {String(item.status || 'PENDING').replaceAll('_', ' ')} · {item.asset_review_status || 'private library'}</small>
+                  </div>
+                  <button type="button" className={styles.secondaryButton} disabled={busy} onClick={() => {
+                    setIntakeAssetId(Number(item.pdf_asset_id));
+                    setIntakeReport(normalizeIntakeReport(item));
+                    setReviewAcknowledged(false);
+                    setReviewNotes(String(item.review_notes || ''));
+                    setError('');
+                    setNotice('Loaded the saved intake record. Run or re-run analysis to refresh the inventory report.');
+                  }}>Open review</button>
+                </div>)}
+              </div>}
+          </section>}
           {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
             <div className={styles.uploadTitle}>
               <b>Book inventory review · PDF #{intakeAssetId}</b>
@@ -739,7 +782,7 @@ export default function TextbookLibraryPage() {
                 setBusy(true); setError(''); setNotice('');
                 try {
                   const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
-                  setIntakeReport(result);
+                  setIntakeReport(normalizeIntakeReport(result));
                   const report = result.reconciliation || {};
                   setNotice('Inventory scan complete. ' +
                     (report.missing_from_book?.length || 0) + ' curriculum title(s) not found; ' +
@@ -774,6 +817,35 @@ export default function TextbookLibraryPage() {
                 <ul>{intakeReport.reconciliation.ambiguous.slice(0, 20).map((item: any, index: number) =>
                   <li key={'ambiguous-' + index}>{item.title} — pages {(item.candidate_pages || []).join(', ')}</li>)}</ul>
               </div>}
+              {intakeReport.status !== 'REVIEWED' && <div className={styles.uploadBox}>
+                <b>Finish the human review</b>
+                <p>Check the flagged items above against the original book. This records your review only; it does not publish the book or approve chapter page ranges.</p>
+                <label className={styles.field}>Review note
+                  <textarea value={reviewNotes} onChange={e => setReviewNotes(e.target.value)}
+                    placeholder="What did you verify? Explain any accepted differences or why a title may not match."
+                    maxLength={2000} rows={3} />
+                </label>
+                <label className={styles.field}>
+                  <input type="checkbox" checked={reviewAcknowledged}
+                    onChange={e => setReviewAcknowledged(e.target.checked)} />
+                  I reviewed the original PDF and the flagged differences. I understand these are candidates, not automatic chapter mappings.
+                </label>
+                <button type="button" className={styles.primaryButton} disabled={busy || !reviewAcknowledged}
+                  onClick={async () => {
+                    setBusy(true); setError(''); setNotice('');
+                    try {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/review', {
+                        method: 'PATCH',
+                        body: JSON.stringify({ acknowledgeDiscrepancies: reviewAcknowledged, reviewNotes: reviewNotes.trim() || null }),
+                      });
+                      setIntakeReport(normalizeIntakeReport({ ...(intakeReport || {}), ...result }));
+                      setNotice('Human review recorded. The source PDF remains private; no chapter was published.');
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : 'Review could not be recorded.');
+                    } finally { setBusy(false); }
+                  }}>Record review (does not publish)</button>
+              </div>}
+              {intakeReport.status === 'REVIEWED' && <p><b>Human review recorded.</b> The source remains private and unpublished.</p>}
               <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>
             </> : <p>Classification has been saved. Run the inventory scan to compare the PDF against the selected curriculum.</p>}
           </section>}

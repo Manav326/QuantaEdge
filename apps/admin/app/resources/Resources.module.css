@@ -204,3 +204,12 @@
  .previewDialogFooter{font-size:9px}
  .previewDialog:fullscreen .previewPageViewport.fitPage .previewPageImage{max-height:calc(100dvh - 250px)}
 }
+
+/* Admin book-intake queue: readable classification and review state on narrow screens. */
+.assignmentQueueRow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:13px;border:1px solid #e8ebf1;border-radius:12px;background:#fff}
+.assignmentQueueRow>div{display:grid;gap:5px;min-width:0}
+.assignmentQueueRow b{font-size:12px;color:#283448;overflow-wrap:anywhere}
+.assignmentQueueRow small{font-size:10px;line-height:1.5;color:#7b8799;overflow-wrap:anywhere}
+.field textarea{width:100%;min-width:0;box-sizing:border-box;border:1px solid #dbe0e9;border-radius:10px;padding:11px 12px;background:#fff;color:#202d42;font:inherit;font-size:12px;resize:vertical}
+.field textarea:focus{border-color:#f97316;outline:2px solid rgba(249,115,22,.1)}
+@media(max-width:640px){.assignmentQueueRow{grid-template-columns:minmax(0,1fr)}}
