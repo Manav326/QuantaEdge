@@ -67,7 +67,7 @@ class HrEmployeeSelfServiceControllerTest {
         employee));
 
     assertEquals(HttpStatus.BAD_REQUEST.value(),error.getStatusCode().value());
-    verify(jdbc,never()).queryForObject(contains("insert into hr_leave_request"),Long.class,(Object)any());
+    verify(jdbc,never()).queryForObject(contains("insert into hr_leave_request"),org.mockito.ArgumentMatchers.eq(Long.class),(Object)any());
     verifyNoInteractions(audit);
   }
 
@@ -77,7 +77,7 @@ class HrEmployeeSelfServiceControllerTest {
         .thenReturn(List.of(Map.of("id",31L)));
     when(jdbc.queryForMap(contains("select id,organization_id,employee_number from hr_employee where id=?"),(Object)any()))
         .thenReturn(Map.of("id",31L,"organization_id",1L,"employee_number","QE-00031"));
-    when(jdbc.queryForObject(contains("select exists(select 1 from hr_leave_type"),org.mockito.ArgumentMatchers.eq(Boolean.class),"CASUAL"))
+    when(jdbc.queryForObject(contains("select exists(select 1 from hr_leave_type"),org.mockito.ArgumentMatchers.eq(Boolean.class),org.mockito.ArgumentMatchers.eq("CASUAL")))
         .thenReturn(true);
     when(jdbc.queryForObject(contains("select exists(select 1 from hr_leave_request"),org.mockito.ArgumentMatchers.eq(Boolean.class),
         org.mockito.ArgumentMatchers.eq(31L),any(Date.class),any(Date.class))).thenReturn(false);
