@@ -716,37 +716,44 @@ def prepare_source_book(
     """Accept a canonical whole book or merge a class 7/8 Maths part pair locally."""
     canonical_name = book_filename(grade, subject, language)
     canonical = root / canonical_name
-    if canonical.is_file():
-        return {
-            "path": canonical,
-            "slot_filename": canonical_name,
-            "merged_from_parts": False,
-            "source_files": [{
-                "filename": canonical.name,
-                "sha256": sha256_file(canonical),
-                "size_bytes": canonical.stat().st_size,
-            }],
-            "metadata_warning": None,
-        }
-
-    if grade not in {"7", "8"} or subject != "maths":
-        raise FileNotFoundError(f"Required complete-book PDF is missing: {canonical_name}")
-
+    part_track = grade in {"7", "8"} and subject == "maths"
     part1 = root / part_book_filename(grade, subject, language, 1)
     part2 = root / part_book_filename(grade, subject, language, 2)
     have1, have2 = part1.is_file(), part2.is_file()
-    if not have1 and not have2:
-        raise FileNotFoundError(
-            f"Missing {canonical_name}; alternatively provide BOTH "
-            f"{part1.name} and {part2.name}."
-        )
-    if have1 != have2:
-        present = part1.name if have1 else part2.name
-        missing = part2.name if have1 else part1.name
-        raise FileNotFoundError(
-            f"Only {present} was found. Both official Mathematics parts are required; "
-            f"also add {missing}. No application writes have been made."
-        )
+
+    # For Classes 7-8 Mathematics, the NCERT source is published as two volumes.
+    # If both explicitly named source parts exist, prefer those over a same-named
+    # canonical convenience PDF: it may be a stale/partial Part-I-only copy that
+    # would otherwise fail at the first chapter of Part II (e.g. Geometric Twins).
+    # A part pair is an explicit source selection, not a guessed page mapping.
+    if not (part_track and have1 and have2):
+        if canonical.is_file():
+            return {
+                "path": canonical,
+                "slot_filename": canonical_name,
+                "merged_from_parts": False,
+                "source_files": [{
+                    "filename": canonical.name,
+                    "sha256": sha256_file(canonical),
+                    "size_bytes": canonical.stat().st_size,
+                }],
+                "metadata_warning": None,
+            }
+
+        if not part_track:
+            raise FileNotFoundError(f"Required complete-book PDF is missing: {canonical_name}")
+        if not have1 and not have2:
+            raise FileNotFoundError(
+                f"Missing {canonical_name}; alternatively provide BOTH "
+                f"{part1.name} and {part2.name}."
+            )
+        if have1 != have2:
+            present = part1.name if have1 else part2.name
+            missing = part2.name if have1 else part1.name
+            raise FileNotFoundError(
+                f"Only {present} was found. Both official Mathematics parts are required; "
+                f"also add {missing}. No application writes have been made."
+            )
 
     # Validate both original parts before producing the local combined reading copy.
     first_meta = inspect_book(part1)

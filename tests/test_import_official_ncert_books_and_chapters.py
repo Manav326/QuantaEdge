@@ -382,6 +382,37 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             source["slot_filename"],
         )
 
+    def test_part_pair_takes_precedence_over_existing_canonical_copy(self):
+        # Regression: a stale canonical filename may contain only Part I. When both
+        # official part files are present, the merged source must include Part II.
+        canonical = self.root / importer.book_filename("7", "maths", "english")
+        with fitz.open() as doc:
+            page = doc.new_page()
+            page.insert_text((50, 50), "Stale Part I only")
+            doc.save(canonical)
+
+        part1 = self.root / importer.part_book_filename("7", "maths", "english", 1)
+        part2 = self.root / importer.part_book_filename("7", "maths", "english", 2)
+        for path, title in ((part1, "Large Numbers Around Us"), (part2, "Geometric Twins")):
+            with fitz.open() as doc:
+                page = doc.new_page()
+                page.insert_text((50, 50), title)
+                doc.save(path)
+
+        canonical_before = canonical.read_bytes()
+        part1_before = part1.read_bytes()
+        part2_before = part2.read_bytes()
+        output_dir = self.root / "private-review" / "ncert-book-splits"
+        source = importer.prepare_source_book(self.root, "7", "maths", "english", output_dir)
+
+        self.assertTrue(source["merged_from_parts"])
+        with fitz.open(source["path"]) as merged:
+            self.assertEqual(2, merged.page_count)
+            self.assertIn("Geometric Twins", merged[1].get_text("text"))
+        self.assertEqual(canonical_before, canonical.read_bytes())
+        self.assertEqual(part1_before, part1.read_bytes())
+        self.assertEqual(part2_before, part2.read_bytes())
+
     def test_missing_maths_part_fails_with_both_filenames(self):
         part1 = self.root / importer.part_book_filename("8", "maths", "hindi", 1)
         with fitz.open() as doc:
