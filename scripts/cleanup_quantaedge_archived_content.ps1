@@ -205,12 +205,24 @@ SELECT 'question',
        (SELECT COUNT(*) FROM question q
         LEFT JOIN lesson l ON l.id = q.lesson_id
         LEFT JOIN curriculum_chapter ch ON ch.id = l.chapter_id
-        WHERE q.review_status = 'ARCHIVED' OR l.status = 'ARCHIVED' OR ch.content_status = 'ARCHIVED'),
+        LEFT JOIN learning_objective o ON o.id = q.objective_id
+        LEFT JOIN chapter_concept cc ON cc.id = q.concept_id
+        WHERE q.review_status = 'ARCHIVED' OR l.status = 'ARCHIVED' OR ch.content_status = 'ARCHIVED'
+           OR (q.lesson_id IS NULL AND (
+             o.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED')
+             OR cc.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED')
+           ))),
        (SELECT COUNT(*) FROM qe_purge_questions),
        (SELECT COUNT(*) FROM question q
         LEFT JOIN lesson l ON l.id = q.lesson_id
         LEFT JOIN curriculum_chapter ch ON ch.id = l.chapter_id
-        WHERE q.review_status = 'ARCHIVED' OR l.status = 'ARCHIVED' OR ch.content_status = 'ARCHIVED')
+        LEFT JOIN learning_objective o ON o.id = q.objective_id
+        LEFT JOIN chapter_concept cc ON cc.id = q.concept_id
+        WHERE q.review_status = 'ARCHIVED' OR l.status = 'ARCHIVED' OR ch.content_status = 'ARCHIVED'
+           OR (q.lesson_id IS NULL AND (
+             o.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED')
+             OR cc.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED')
+           )))
          - (SELECT COUNT(*) FROM qe_purge_questions)
 UNION ALL
 SELECT 'assessment', (SELECT COUNT(*) FROM assessment WHERE status = 'ARCHIVED'),
@@ -229,9 +241,15 @@ SELECT 'curriculum_program', (SELECT COUNT(*) FROM curriculum_program WHERE stat
        (SELECT COUNT(*) FROM qe_purge_programs),
        (SELECT COUNT(*) FROM curriculum_program WHERE status = 'ARCHIVED') - (SELECT COUNT(*) FROM qe_purge_programs)
 UNION ALL
-SELECT 'chapter_concept', (SELECT COUNT(*) FROM chapter_concept WHERE status = 'ARCHIVED'),
+SELECT 'chapter_concept',
+       (SELECT COUNT(*) FROM chapter_concept cc
+        WHERE cc.status = 'ARCHIVED'
+           OR cc.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED')),
        (SELECT COUNT(*) FROM qe_purge_concepts),
-       (SELECT COUNT(*) FROM chapter_concept WHERE status = 'ARCHIVED') - (SELECT COUNT(*) FROM qe_purge_concepts)
+       (SELECT COUNT(*) FROM chapter_concept cc
+        WHERE cc.status = 'ARCHIVED'
+           OR cc.chapter_id IN (SELECT id FROM curriculum_chapter WHERE content_status = 'ARCHIVED'))
+         - (SELECT COUNT(*) FROM qe_purge_concepts)
 UNION ALL
 SELECT 'content_asset', (SELECT COUNT(*) FROM content_asset WHERE status = 'ARCHIVED'),
        (SELECT COUNT(*) FROM qe_purge_assets),
@@ -362,7 +380,8 @@ if ($LASTEXITCODE -ne 0) {
 
 $containerBackupSpec = $containerId + ':' + $containerDumpPath
 & docker cp $containerBackupSpec $backupPath
-if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $backupPath -PathType Leaf)) {
+if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $backupPath -PathType Leaf) -or
+    (Get-Item -LiteralPath $backupPath -ErrorAction SilentlyContinue).Length -le 0) {
     throw 'Could not copy the database backup to the host. Cleanup was not started; the temporary dump remains in the postgres container.'
 }
 
