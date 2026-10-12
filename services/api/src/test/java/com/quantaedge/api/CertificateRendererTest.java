@@ -8,6 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.time.OffsetDateTime;
 import java.util.List;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import javax.imageio.ImageIO;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -32,6 +36,11 @@ class CertificateRendererTest {
       var image = ImageIO.read(new ByteArrayInputStream(rendered.png()));
       assertEquals(2480, image.getWidth());
       assertEquals(1754, image.getHeight());
+      var qrCrop = image.getSubimage(2480 - 390, 1754 - 455, 250, 250);
+      String decodedUrl = new MultiFormatReader().decode(
+          new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(qrCrop)))).getText();
+      assertEquals("http://localhost:3000/certificate/verify?code=QE-2026-ABCDEF123456", decodedUrl,
+          "QR must open the official verification page for the exact certificate");
 
       try (PDDocument document = Loader.loadPDF(rendered.pdf())) {
         assertEquals(1, document.getNumberOfPages());
@@ -50,6 +59,9 @@ class CertificateRendererTest {
         "QE-2026-000000000000", issuedAt, true);
     assertTrue(sample.pdf().length > 1_000);
     assertTrue(sample.png().length > 1_000);
+    var sampleImage = ImageIO.read(new ByteArrayInputStream(sample.png()));
+    assertEquals(1240, sampleImage.getWidth());
+    assertEquals(877, sampleImage.getHeight());
   }
 
   @Test
