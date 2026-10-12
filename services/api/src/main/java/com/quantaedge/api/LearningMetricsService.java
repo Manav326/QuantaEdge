@@ -120,15 +120,19 @@ public class LearningMetricsService {
     result.put("sessionStats",jdbc.queryForMap("""
       select
         ((select count(*) from learning_session ls where ls.student_id=? and ls.started_at>=now()-interval '30 days')
+         +(select count(*) from student_practice_session ps where ps.student_id=? and ps.status='COMPLETED' and ps.created_at>=now()-interval '30 days')
          +(select count(*) from student_diagnostic_attempt da where da.student_id=? and da.status='SUBMITTED' and da.started_at>=now()-interval '30 days')
          +(select count(*) from student_assessment_attempt att where att.student_id=? and att.status in ('AWAITING_REVIEW','GRADED','RELEASED') and att.started_at>=now()-interval '30 days')) as sessions_30d,
         ((select coalesce(sum(ls.minutes),0) from learning_session ls where ls.student_id=? and ls.started_at>=now()-interval '30 days')
+         +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (ps.completed_at-ps.created_at))/60)::int))),0)
+           from student_practice_session ps where ps.student_id=? and ps.status='COMPLETED' and ps.completed_at is not null
+             and ps.created_at>=now()-interval '30 days')
          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (da.submitted_at-da.started_at))/60)::int))),0)
            from student_diagnostic_attempt da where da.student_id=? and da.status='SUBMITTED' and da.started_at>=now()-interval '30 days')
          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
            from student_assessment_attempt att where att.student_id=? and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')) as minutes_30d
-      """,studentId,studentId,studentId,studentId,studentId,studentId));
+      """,studentId,studentId,studentId,studentId,studentId,studentId,studentId,studentId));
     return result;
   }
 }

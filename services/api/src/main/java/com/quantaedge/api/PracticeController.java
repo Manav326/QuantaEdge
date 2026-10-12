@@ -189,19 +189,36 @@ public class PracticeController {
     List<String> selectedTypes=List.of(
         "TRUE_FALSE","INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
         "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
+    // Prefer unseen approved questions. Previously missed questions are a deliberate revision
+    // fallback, not mixed into a fresh set, and prior diagnostic answers do not consume practice.
     List<Long> selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
-        scopeFilter,scopeArgs,lessonId,requestedCount,false);
+        scopeFilter,scopeArgs,lessonId,requestedCount,false,false);
 
-    // If this micro-topic has no non-MCQ assessment items, use unshown MCQs from another
-    // lesson mapped to the same objective/concept. Never repeat the MCQs displayed on this lesson.
+    // If no fresh non-MCQ questions remain, use fresh MCQs from another lesson in the same
+    // objective/concept scope; do not simply repeat the MCQs shown inline on this lesson.
     if(selectedIds.isEmpty()) {
       selectedTypes=List.of("MCQ");
       selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
-          scopeFilter,scopeArgs,lessonId,requestedCount,true);
+          scopeFilter,scopeArgs,lessonId,requestedCount,true,false);
+    }
+
+    // When no fresh eligible questions remain, offer targeted revision using each question's
+    // latest graded outcome, so an earlier wrong answer is not resurfaced after later success.
+    if(selectedIds.isEmpty()) {
+      selectedTypes=List.of(
+          "TRUE_FALSE","INPUT","NUMERICAL","MATCH","ORDER","ASSERTION_REASON","CASE_BASED",
+          "SHORT_ANSWER","LONG_ANSWER","DIAGRAM","MAP","SOURCE_BASED");
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+          scopeFilter,scopeArgs,lessonId,requestedCount,false,true);
+    }
+    if(selectedIds.isEmpty()) {
+      selectedTypes=List.of("MCQ");
+      selectedIds=selectAutoPracticeQuestions(context.studentId(),chapterId,selectedTypes,
+          scopeFilter,scopeArgs,lessonId,requestedCount,true,true);
     }
     if(selectedIds.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "More approved practice questions are not published for this micro-topic yet. Your lesson answers are saved.");
+          "All fresh and missed questions in this micro-topic have been used. More approved questions are needed to extend practice. Your earlier answers remain saved.");
     }
 
     String chapterName=String.valueOf(lesson.get("chapter_name"));
@@ -248,7 +265,8 @@ public class PracticeController {
   }
 
   private List<Long> selectAutoPracticeQuestions(long studentId,long chapterId,List<String> types,
-      String scopeFilter,List<Object> scopeArgs,long currentLessonId,int requestedCount,boolean excludeCurrentLesson) {
+      String scopeFilter,List<Object> scopeArgs,long currentLessonId,int requestedCount,
+      boolean excludeCurrentLesson,boolean missedOnly) {
     if(types.isEmpty()) return List.of();
     String typePlaceholders=String.join(",",java.util.Collections.nCopies(types.size(),"?"));
     String sql="""
@@ -265,6 +283,30 @@ public class PracticeController {
         and q.question_type in (__TYPE_PLACEHOLDERS__)
         and (__SCOPE_FILTER__)
       """.replace("__TYPE_PLACEHOLDERS__",typePlaceholders).replace("__SCOPE_FILTER__",scopeFilter);
+    if(missedOnly) {
+      sql+="""
+        and exists(
+          select 1 from student_question_attempt prior
+          where prior.student_id=st.id and prior.question_id=q.id
+            and prior.activity_kind in ('LESSON_INLINE','PRACTICE') and prior.correct=false
+            and not exists(
+              select 1 from student_question_attempt newer
+              where newer.student_id=prior.student_id and newer.question_id=prior.question_id
+                and newer.activity_kind in ('LESSON_INLINE','PRACTICE')
+                and (newer.answered_at>prior.answered_at
+                  or (newer.answered_at=prior.answered_at and newer.id>prior.id))
+            )
+        )
+        """;
+    } else {
+      sql+="""
+        and not exists(
+          select 1 from student_question_attempt tried
+          where tried.student_id=st.id and tried.question_id=q.id
+            and tried.activity_kind in ('LESSON_INLINE','PRACTICE')
+        )
+        """;
+    }
     if(excludeCurrentLesson) sql+=" and q.lesson_id<>?";
     sql+=" order by random() limit ?";
     List<Object> args=new ArrayList<>();
