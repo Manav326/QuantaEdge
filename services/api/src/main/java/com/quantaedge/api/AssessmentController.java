@@ -38,16 +38,18 @@ public class AssessmentController {
   private final QuestionAnswerService answerService;
   private final StaffAuditService staffAudit;
   private final ObjectMapper mapper;
+  private final AssessmentCatalogService assessmentCatalog;
 
   public AssessmentController(JdbcTemplate jdbc, AuthorizationService authorization,
       QuestionHistoryService questionHistory, QuestionAnswerService answerService,
-      StaffAuditService staffAudit, ObjectMapper mapper) {
+      StaffAuditService staffAudit, ObjectMapper mapper,AssessmentCatalogService assessmentCatalog) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.questionHistory = questionHistory;
     this.answerService = answerService;
     this.staffAudit = staffAudit;
     this.mapper = mapper;
+    this.assessmentCatalog=assessmentCatalog;
   }
 
   // ---------- Admin: assessment authoring and publication ----------
@@ -105,6 +107,7 @@ public class AssessmentController {
     }
     return jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
+             a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -482,10 +485,12 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
+    assessmentCatalog.ensureGeneratedAssessments(context.studentId());
     String subjectFilter = safeText(subjectCode, 40);
     return jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
+             a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
@@ -523,8 +528,12 @@ public class AssessmentController {
       ) ct on true
       where a.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+        and (a.assessment_type<>'TOPIC_END' or (a.lesson_id is not null and exists(
+          select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')))
+        and (not a.is_generated or a.is_current=true)
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
-      order by coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
+      order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
+               coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
       """, context.studentId(), language, language, language, subjectFilter, subjectFilter);
   }
 
