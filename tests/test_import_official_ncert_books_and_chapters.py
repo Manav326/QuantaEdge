@@ -3,6 +3,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 try:
     import fitz
@@ -78,6 +79,50 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             "NCERT_Class_8_Science_Hindi_BOOK.pdf",
             importer.book_filename("8", "science", "hindi"),
         )
+
+    def test_create_import_plan_reads_books_from_books_directory(self):
+        books_dir = self.root / "books"
+        books_dir.mkdir()
+        chapters_by_track = {}
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                chapters_by_track[(grade, subject)] = [{
+                    "chapter_id": int(grade) * 1000 + (1 if subject == "maths" else 2),
+                    "chapter_code": f"test-{grade}-{subject}",
+                    "chapter_name": f"Test chapter {grade} {subject}",
+                }]
+                for language in importer.LANGUAGES:
+                    path = books_dir / importer.book_filename(grade, subject, language)
+                    with fitz.open() as doc:
+                        page = doc.new_page()
+                        page.insert_text((50, 50), f"Test book Class {grade} {subject} {language}")
+                        doc.save(path)
+
+        def fake_detect(path, grade, subject, language, chapters):
+            chapter = chapters[0]
+            return [{
+                **chapter,
+                "start_page": 1,
+                "end_page": 1,
+                "page_count": 1,
+                "chapter_order": 1,
+                "mapping_note": "Test-only mapping",
+            }]
+
+        with patch.object(importer, "detect_chapter_ranges", side_effect=fake_detect):
+            records, _warnings = importer.create_import_plan(
+                self.root,
+                chapters_by_track,
+                50 * 1024 * 1024,
+                books_dir=books_dir,
+            )
+
+        books = [record for record in records if record["scope"] == "SUBJECT_BOOK"]
+        splits = [record for record in records if record["scope"] == "CHAPTER_PDF"]
+        self.assertEqual(12, len(books))
+        self.assertEqual(12, len(splits))
+        self.assertTrue(all(Path(record["path"]).parent == books_dir for record in books))
+        self.assertTrue(all("private-review" in Path(record["path"]).parts for record in splits))
 
     def test_detects_chapter_openers_and_exact_ranges(self):
         path = self.make_book()
