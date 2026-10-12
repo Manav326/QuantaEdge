@@ -304,7 +304,7 @@ public class HrPayrollController {
       String checksum=sha256(snapshot);
       int changed=jdbc.update("""
         insert into hr_payslip(run_id,employee_id,version_no,snapshot,checksum,issued_by_staff_id)
-        values (?,?,1,?::jsonb,?,?,?)
+        values (?,?,1,?::jsonb,?,?)
         on conflict(run_id,employee_id,version_no) do nothing
         """,runId,employeeId,snapshot,checksum,context.staffId());
       issued+=changed;
