@@ -862,6 +862,13 @@ export default function TextbookLibraryPage() {
                 <div><b>Ambiguous matches</b><p>{(intakeReport.reconciliation?.ambiguous || []).length}</p></div>
                 <div><b>Page / extraction warnings</b><p>{(intakeReport.reconciliation?.page_boundary_warnings || []).length}</p></div>
               </div>
+              {((intakeReport.reconciliation?.page_boundary_warnings || []).some((item: any) => item.type === 'OCR_REQUIRED')) && <div className={styles.publishHint}>
+                <b>OCR required before trusting automated inventory</b>
+                {(() => {
+                  const warning = intakeReport.reconciliation.page_boundary_warnings.find((item: any) => item.type === 'OCR_REQUIRED');
+                  return <p>{warning.message} Low-text pages: {warning.low_text_page_count} of {warning.total_pages}. Sample page numbers: {(warning.low_text_pages || []).join(', ')}{warning.page_list_truncated ? ' … (list truncated)' : ''}</p>;
+                })()}
+              </div>}
               {((intakeReport.reconciliation?.missing_from_book || []).length > 0) && <div>
                 <b>Titles to verify</b>
                 <ul>{intakeReport.reconciliation.missing_from_book.slice(0, 30).map((item: any, index: number) =>

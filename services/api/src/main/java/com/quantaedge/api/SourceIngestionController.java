@@ -338,9 +338,31 @@ public class SourceIngestionController {
       }
       PDFTextStripper stripper = new PDFTextStripper();
       List<String> pageTexts = new ArrayList<>();
+      List<Integer> lowTextPages = new ArrayList<>();
+      int lowTextPageCount = 0;
       for (int page=1; page<=pdf.getNumberOfPages(); page++) {
         stripper.setStartPage(page); stripper.setEndPage(page);
-        pageTexts.add(stripper.getText(pdf));
+        String extracted = stripper.getText(pdf);
+        pageTexts.add(extracted);
+        long meaningfulCharacters = extracted.codePoints()
+            .filter(Character::isLetterOrDigit).count();
+        if (meaningfulCharacters < 30) {
+          lowTextPageCount++;
+          if (lowTextPages.size() < 100) lowTextPages.add(page);
+        }
+      }
+      // A dominant share of near-empty text pages usually means this is a scan/image-only
+      // book. Do not silently interpret missing curriculum titles as genuine omissions.
+      int totalPages = pageTexts.size();
+      int ocrThreshold = Math.max(3, (int) Math.ceil(totalPages * 0.60));
+      if (lowTextPageCount >= ocrThreshold) {
+        warnings.add(Map.of(
+            "type", "OCR_REQUIRED",
+            "message", "Most pages have little or no extractable text. This book likely needs OCR before automated inventory can be trusted; use the page preview and manually review chapter ranges.",
+            "low_text_page_count", lowTextPageCount,
+            "total_pages", totalPages,
+            "low_text_pages", lowTextPages,
+            "page_list_truncated", lowTextPageCount > lowTextPages.size()));
       }
       for (Map<String,Object> chapter : curriculum) {
         String title = String.valueOf(chapter.get("display_name"));
