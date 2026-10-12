@@ -734,6 +734,7 @@ fun QuantaEdgeApp() {
             AppRoute.CLASSES -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.RECORDING_PLAYER -> AppRoute.CLASSES
             AppRoute.ASSESSMENT_ATTEMPT -> AppRoute.ASSESSMENTS
+            AppRoute.ASSESSMENT_REVIEW -> AppRoute.ASSESSMENT_RESULTS
             AppRoute.PARENT_REPORT, AppRoute.PARENT_PROFILE, AppRoute.PARENT_CHILD_CREATE,
             AppRoute.PARENT_CHILD_MANAGE -> AppRoute.PARENT_HOME
             AppRoute.DOCUMENT_READER -> AppRoute.RESOURCES
@@ -815,7 +816,8 @@ fun QuantaEdgeApp() {
                         onTests = ::openAssessments,
                         onResources = ::openResources,
                         onResults = ::loadAssessmentResults,
-                        onProfile = { route = AppRoute.PROFILE },
+                        onProfile = ::openStudentProfile,
+                        onProgress = ::openProgress,
                         onRefresh = { runTask {
                             studentProfile = ApiClient.getObject("/api/v1/students/me")
                             recommendation = ApiClient.getObject("/api/v1/recommendations/next")

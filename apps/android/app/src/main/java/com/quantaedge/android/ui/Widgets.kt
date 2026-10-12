@@ -54,6 +54,16 @@ fun jsonArrayValue(value: Any?): JSONArray = when (value) {
 
 fun JSONObject.safeContentText(): String {
     val raw = opt("content") ?: return ""
+    if (raw is String) {
+        val trimmed = raw.trim()
+        if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+            runCatching { JSONObject(trimmed) }.getOrNull()?.let { return contentValueText(it) }
+        }
+        if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+            runCatching { JSONArray(trimmed) }.getOrNull()?.let { return contentValueText(it) }
+        }
+        return raw
+    }
     return contentValueText(raw)
 }
 
