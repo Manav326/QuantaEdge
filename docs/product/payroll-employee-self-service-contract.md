@@ -63,7 +63,7 @@ The People portal remains separate. Self-service is a least-privilege employee e
 2. **Payroll schema + domain tests**: additive migration; uniqueness, effective-date and state-transition constraints; calculation unit tests using deterministic fixtures (tests only, no production/demo payroll seeds).
 3. **Permission-checked API**: component and compensation management, period/run calculation, immutable snapshots, approval controls, and audit events.
 4. **Payslip and reconciliation**: private artifact delivery, idempotent payment state handling, reversals, access controls and tests.
-5. **Self-service APIs/UI**: identity-scoped profile, attendance, leave requests and balances are implemented; next work includes controlled identity linking, own-profile change requests, attendance-correction requests, private documents and own payslips.
+5. **Self-service APIs/UI**: identity-scoped profile, attendance, leave requests, leave balances and issued payslips are implemented. Payslips are created transactionally on payroll approval, stored as immutable JSONB snapshots with SHA-256 checksums, and exposed only to the linked employee. Next work includes controlled identity linking, own-profile change requests, attendance-correction requests and private documents.
 6. **Production readiness**: security review, migration-from-clean and upgrade tests, authorization matrix, two-employee isolation tests, rounding/property tests, rule-set review, privacy/retention policy, backup/restore and operational runbook.
 
 Do not mark payroll production-ready until legal rules are reviewed for the deployment jurisdiction, a payment provider/bank reconciliation contract is defined, and security/accessibility/operational checks pass.
