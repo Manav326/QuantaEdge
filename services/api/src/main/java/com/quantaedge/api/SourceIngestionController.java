@@ -159,6 +159,48 @@ public class SourceIngestionController {
       """, assetId);
   }
 
+  /** Record a human review decision without publishing or approving any chapter boundaries. */
+  @PatchMapping("/intake/{assetId}/review")
+  @Transactional
+  public Map<String, Object> reviewBookIntake(
+      @PathVariable long assetId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    List<Map<String,Object>> rows = jdbc.queryForList(
+        "select status,reconciliation from learning_book_intake where pdf_asset_id=?", assetId);
+    if (rows.isEmpty()) throw notFound("Classified book intake", assetId);
+    String current = String.valueOf(rows.getFirst().get("status"));
+    if ("PENDING".equals(current) || "BLOCKED".equals(current)) {
+      throw badRequest("Run a successful inventory analysis before completing the review.");
+    }
+    String notes = optionalText(body.get("reviewNotes"), 2000);
+    Object rawAcknowledged = body.get("acknowledgeDiscrepancies");
+    boolean acknowledged = Boolean.TRUE.equals(rawAcknowledged)
+        || "true".equalsIgnoreCase(String.valueOf(rawAcknowledged));
+    Object rawReport = rows.getFirst().get("reconciliation");
+    String report = rawReport == null ? "{}" : String.valueOf(rawReport);
+    boolean hasDiscrepancies = report.contains("\"missing_from_book\":[{")
+        || report.contains("\"extra_in_book\":[{")
+        || report.contains("\"ambiguous\":[{")
+        || report.contains("\"page_boundary_warnings\":[{");
+    if (hasDiscrepancies && !acknowledged) {
+      throw badRequest("This report has warnings. Tick the acknowledgement after reviewing them before marking the review complete.");
+    }
+    if (hasDiscrepancies && (notes == null || notes.isBlank())) {
+      throw badRequest("Add a short note describing what you checked or why the flagged differences are acceptable.");
+    }
+    jdbc.update("""
+      update learning_book_intake set status='REVIEWED',reviewed_by_staff_id=?,
+        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=?
+      """, context.staffId(), notes, assetId);
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/review",
+        "Recorded human review of book inventory; no chapter ranges were auto-approved and no content was published.");
+    return jdbc.queryForMap("""
+      select pdf_asset_id,status,reviewed_by_staff_id,reviewed_at,review_notes,reconciliation
+      from learning_book_intake where pdf_asset_id=?
+      """, assetId);
+  }
+
   /**
    * Independently inspect every PDF page, discover numbered chapter/appendix headings and locate
    * curriculum chapter titles. This is a reconciliation aid only; all boundaries remain unapproved.
