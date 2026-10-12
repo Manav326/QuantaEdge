@@ -35,7 +35,7 @@ services:
       SPRING_DATA_REDIS_PORT: 6379
       APP_MEDIA_STORAGE_DIR: /var/lib/quantaedge/media
       APP_CERTIFICATE_STORAGE_DIR: /var/lib/quantaedge/media/certificates
-      APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-https://quantaedge.in}
+      APP_PUBLIC_BASE_URL: ${APP_PUBLIC_BASE_URL:-}
       APP_CERTIFICATES_ASSESSMENT_PASS_PERCENT: ${APP_CERTIFICATES_ASSESSMENT_PASS_PERCENT:-80}
       APP_TEXTBOOK_CACHE_DIR: /var/lib/quantaedge/textbook-cache
       APP_TEXTBOOK_CACHE_ONLY: ${APP_TEXTBOOK_CACHE_ONLY:-true}
