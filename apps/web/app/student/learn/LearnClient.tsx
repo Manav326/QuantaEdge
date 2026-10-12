@@ -2,6 +2,7 @@
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
 import MathText from '../../components/MathText';
+import AnswerFeedback from '../../components/AnswerFeedback';
 
 
 import Link from 'next/link';
@@ -129,7 +130,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
   if (block.block_type==='WORKED_EXAMPLE') return <div className="concept-card">
     <span className="concept-kicker"><LocaleText hinglish="Worked example" english="Worked example" /></span><h3>{data.title ?? <LocaleText hinglish="उदाहरण" english="Example" />}</h3><p><MathText text={String(data.problem || data.prompt || '')}/></p>
     {data.steps?.map((x:string,i:number)=><div className="feedback" key={i}><span>{i+1}. <MathText text={x}/></span></div>)}
-    {data.answer && <p><strong><LocaleText hinglish="उत्तर:" english="Answer:" /></strong> <MathText text={String(data.answer)}/></p>}
+    {data.answer && <p className="qe-model-answer"><strong><LocaleText hinglish="Model answer:" english="Model answer:" /></strong> <MathText text={String(data.answer)}/></p>}
   </div>;
   if (['GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type)) return <div className="concept-card">
     <span className="concept-kicker">{data.title ?? (block.block_type==='GUIDED_PRACTICE'?<LocaleText hinglish="साथ में करें" english="Try together" />:block.block_type==='HINT'?<LocaleText hinglish="Helpful hint" english="Helpful hint" />:<LocaleText hinglish="अब खुद करें" english="Try it yourself" />)}</span><p><MathText text={String(data.prompt || data.body || '')}/></p>{data.hint && <div className="feedback"><span><LocaleText hinglish="Hint:" english="Hint:" /> <MathText text={String(data.hint)}/></span></div>}
@@ -186,7 +187,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     } finally { setBusy(false); }
   }
 
-  return <article className="qe-question-card">
+  return <article className={'qe-question-card '+(result?.correct===false?'has-answer-incorrect':result?.correct===true?'has-answer-correct':'')}>
     <div className="qe-question-card__top">
       <span className="qe-question-index"><span>{String(index).padStart(2,'0')}</span></span>
       <div className="qe-question-card__labels">
@@ -208,7 +209,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
           {chosen&&result?.correct===false&&<span className="qe-answer-option__status" aria-label={tx('गलत','Incorrect')}>!</span>}
         </button>;
       })}
-    </div> : <div className="qe-answer-entry">
+    </div> : <div className={'qe-answer-entry '+(result?.correct===false?'is-incorrect':result?.correct===true?'is-correct':'')}>
       {q.response_mode==='structured-text' || q.question_type==='LONG_ANSWER' || q.question_type==='SHORT_ANSWER' ?
         <textarea value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर या reasoning यहाँ लिखें…','Write your answer or reasoning here…')} rows={q.question_type==='LONG_ANSWER'?6:4}/> :
         <input value={value} disabled={busy||submitted} onChange={e=>setValue(e.target.value)} placeholder={tx('अपना उत्तर लिखें…','Type your answer…')}/>}
@@ -219,14 +220,13 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     </div>}
 
     {answerError && <div className="qe-answer-feedback is-incorrect" role="alert"><span className="qe-answer-feedback__icon">!</span><div><strong><LocaleText hinglish="उत्तर जाँच नहीं पाया" english="Could not check answer" /></strong><p><MathText text={answerError}/></p></div></div>}
-    {result && <div className={'qe-answer-feedback '+(result.correct===false?'is-incorrect':result.correct===true?'is-correct':'is-ungraded')} role={result.correct===false?'alert':'status'}>
-      <span className="qe-answer-feedback__icon">{result.correct===true?'✓':result.correct===false?'!':'i'}</span>
-      <div className="qe-answer-feedback__body">
-        <strong>{result.correct===true?<LocaleText hinglish="बिल्कुल सही!" english="That's correct!" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं — फिर प्रयास करें" english="Not quite — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}</strong>
-        <p>{result.correct===true?<LocaleText hinglish="बहुत बढ़िया। Explanation पढ़कर अपनी समझ पक्की करें।" english="Great work. Review the explanation to strengthen your understanding." />:result.correct===false?<LocaleText hinglish="घबराएँ नहीं। Explanation पढ़ें, फिर विकल्प दोबारा चुनें।" english="No worries. Read the explanation, then choose again." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}</p>
-        {result.explanation && <div className="qe-answer-feedback__explanation"><span><LocaleText hinglish="समझें क्यों" english="Why this works" /></span><MathText text={String(result.explanation)}/></div>}
-      </div>
-    </div>}
+    {result && <AnswerFeedback
+      outcome={result.correct===true?'correct':result.correct===false?'incorrect':'ungraded'}
+      title={result.correct===true?<LocaleText hinglish="बिल्कुल सही!" english="That's correct!" />:result.correct===false?<LocaleText hinglish="अभी सही नहीं — फिर प्रयास करें" english="Not quite — try again" />:<LocaleText hinglish="उत्तर सेव हो गया" english="Answer saved" />}
+      message={result.correct===true?<LocaleText hinglish="बहुत बढ़िया। Explanation पढ़कर अपनी समझ पक्की करें।" english="Great work. Review the explanation to strengthen your understanding." />:result.correct===false?<LocaleText hinglish="घबराएँ नहीं। Explanation पढ़ें, फिर विकल्प दोबारा चुनें।" english="No worries. Read the explanation, then choose again." />:<LocaleText hinglish="इस उत्तर की शिक्षक या rubric से जाँच आवश्यक हो सकती है।" english="This answer may need teacher or rubric review." />}
+      explanation={result.explanation?<MathText text={String(result.explanation)}/>:undefined}
+      explanationLabel={<LocaleText hinglish="समझें क्यों" english="Why this works" />}
+    />}
   </article>;
 }
 
