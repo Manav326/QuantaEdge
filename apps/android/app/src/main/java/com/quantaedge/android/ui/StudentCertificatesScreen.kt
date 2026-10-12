@@ -1,7 +1,7 @@
 package com.quantaedge.android.ui
 
 import android.app.Activity
-import com.google.android.gms.codescanner.GmsBarcodeScanning
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.quantaedge.android.BuildConfig
 
