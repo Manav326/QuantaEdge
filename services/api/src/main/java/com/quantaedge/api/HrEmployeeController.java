@@ -29,7 +29,7 @@ public class HrEmployeeController {
   @GetMapping("/organization")
   public Map<String,Object> organization(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
-    return jdbc.queryForMap("select id,public_id,name,legal_name,timezone,active from hr_organization order by id limit 1");
+    return jdbc.queryForMap("select id,public_id,name,legal_name,timezone,active,working_days_per_week from hr_organization order by id limit 1");
   }
 
   @GetMapping("/organization/{id}/work-schedule")
