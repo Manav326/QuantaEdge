@@ -117,6 +117,7 @@ fun QuantaEdgeApp() {
     var status by remember { mutableStateOf("") }
     val answers = remember { mutableStateMapOf<String, String>() }
     val feedbacks = remember { mutableStateMapOf<String, String>() }
+    val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
 
     LaunchedEffect(route, resourceOwner, documents) {
@@ -288,6 +289,7 @@ fun QuantaEdgeApp() {
             lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?language=" + language)
             answers.clear()
             feedbacks.clear()
+            lessonAnswerLocks.clear()
             route = AppRoute.LESSON
         }
     }
@@ -299,6 +301,7 @@ fun QuantaEdgeApp() {
                 JSONObject().put("lessonId", lessonId).put("language", language))
             answers.clear()
             feedbacks.clear()
+            lessonAnswerLocks.clear()
             route = AppRoute.PRACTICE
         }
     }
@@ -543,7 +546,10 @@ fun QuantaEdgeApp() {
                 else if (result.optBoolean("correct")) "सही उत्तर।"
                 else "उत्तर सुरक्षित हुआ। दोबारा समझकर प्रयास करें।"
             }
-            feedbacks[id.toString()] = feedback
+            val answerKey = id.toString()
+            val hasGrade = result.has("correct") && !result.isNull("correct")
+            lessonAnswerLocks[answerKey] = !hasGrade || result.optBoolean("correct")
+            feedbacks[answerKey] = feedback
             lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + language)
         }
     }
@@ -964,8 +970,12 @@ fun QuantaEdgeApp() {
                         language = language,
                         answers = answers,
                         feedbacks = feedbacks,
+                        answerLocks = lessonAnswerLocks,
                         busy = busy,
-                        onAnswerChange = { id, value -> answers[id] = value },
+                        onAnswerChange = { id, value ->
+                            answers[id] = value
+                            feedbacks.remove(id)
+                        },
                         onAnswer = ::saveLessonAnswer,
                         onPractice = ::startPractice,
                         onTutor = ::openTutor
@@ -1378,6 +1388,7 @@ private fun LessonScreen(
     language: String,
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
+    answerLocks: Map<String, Boolean>,
     busy: Boolean,
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
@@ -1412,10 +1423,11 @@ private fun LessonScreen(
                         answer = answer,
                         onAnswerChange = { onAnswerChange(id, it) },
                         onSubmit = { onAnswer(question, answer) },
-                        locked = question.optBoolean("answered") || !feedbacks[id].isNullOrBlank(),
+                        locked = question.optBoolean("answered") || answerLocks[id] == true,
                         saving = busy,
                         feedback = feedbacks[id],
-                        status = if (question.optBoolean("answered")) "उत्तर पहले से सुरक्षित है।" else null
+                        status = if (question.optBoolean("answered") || answerLocks[id] == true)
+                            "उत्तर सुरक्षित है।" else null
                     )
                 }
             }
