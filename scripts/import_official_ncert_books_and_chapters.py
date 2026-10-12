@@ -379,6 +379,32 @@ def page_has_contents_marker(text: str) -> bool:
     return any(term in header for term in CONTENT_TERMS)
 
 
+def positioned_page_title_hits(
+    page: Any,
+    chapters: list[dict[str, Any]],
+    aliases_by_code: dict[str, list[str]],
+    *,
+    max_top_fraction: float = 0.72,
+) -> set[str]:
+    """Fallback to PDF text geometry when extraction order pushes a heading past line 18.
+
+    Only exact alias searches whose text boxes are in the upper 72% of the page count.
+    A page must still identify exactly one known chapter title, and contents pages are
+    filtered separately. This does not guess page numbers or use fuzzy title matching.
+    """
+    page_height = float(page.rect.height)
+    top_limit = page_height * max_top_fraction
+    hits: set[str] = set()
+    for chapter in chapters:
+        code = str(chapter["chapter_code"])
+        for alias in aliases_by_code[code]:
+            matches = page.search_for(alias)
+            if any(float(rect.y0) <= top_limit for rect in matches):
+                hits.add(code)
+                break
+    return hits
+
+
 def detect_chapter_ranges(
     pdf_path: Path,
     grade: str,
@@ -399,7 +425,17 @@ def detect_chapter_ranges(
             page_count = pdf.page_count
             if not 1 <= page_count <= MAX_PDF_PAGES:
                 raise ValueError(f"{pdf_path.name}: page count {page_count} is outside 1–{MAX_PDF_PAGES}.")
-            page_texts = [page.get_text("text") or "" for page in pdf]
+            page_texts: list[str] = []
+            positioned_hits_by_page: list[set[str]] = []
+            for page in pdf:
+                text = page.get_text("text") or ""
+                page_texts.append(text)
+                if text.strip() and not page_has_contents_marker(text):
+                    positioned_hits_by_page.append(
+                        positioned_page_title_hits(page, chapters, alias_by_code)
+                    )
+                else:
+                    positioned_hits_by_page.append(set())
     except Exception as exc:
         if isinstance(exc, ValueError):
             raise
@@ -411,9 +447,20 @@ def detect_chapter_ranges(
             continue
         # Contents pages are excluded if multiple chapter names appear at the top.
         top_hits = page_title_hits(text, chapters, alias_by_code, top_lines=18)
-        if len(top_hits) != 1:
+        if len(top_hits) == 1:
+            code = next(iter(top_hits))
+        elif not top_hits:
+            # PDF text extraction order is not necessarily visual order. For example,
+            # a decorative chapter heading can appear after body text in the extracted
+            # stream even though it is visibly at the top of the page. Recover only an
+            # exact, positioned title hit; do not relax the unique-title requirement.
+            positioned_hits = positioned_hits_by_page[zero_index]
+            if len(positioned_hits) != 1:
+                continue
+            code = next(iter(positioned_hits))
+        else:
+            # Multiple heading hits remain ambiguous and are never guessed.
             continue
-        code = next(iter(top_hits))
         candidate_pages[code].append(zero_index + 1)
 
     starts: list[dict[str, Any]] = []
