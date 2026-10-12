@@ -122,14 +122,18 @@ def expected_filename(
 
 
 def default_document_title(
-    class_code: str, subject: str, language: str, scope: str, chapter_code: str = ""
+    class_code: str, subject: str, language: str, scope: str,
+    chapter_code: str = "", chapter_title: str = ""
 ) -> str:
     lang_label = filename_language(language)
     base = f"NCERT | Class {class_code} | {subject_label(subject)} | {lang_label}"
     if scope == "SUBJECT_BOOK":
         return base + " | Complete Book"
-    readable_code = chapter_code.replace("-", " ").title()
-    return base + " | Chapter: " + readable_code
+    if language == "hindi" and chapter_title.strip():
+        readable_title = chapter_title.strip()
+    else:
+        readable_title = chapter_code.replace("-", " ").title()
+    return base + " | Chapter: " + readable_title
 
 
 def is_active_chapter(row: dict[str, Any]) -> bool:
@@ -220,7 +224,7 @@ def make_manifest_rows(
                         "edition": "",
                         "source_url": "",
                         "document_title": default_document_title(
-                            grade, subject, language, "CHAPTER_PDF", code
+                            grade, subject, language, "CHAPTER_PDF", code, chapter_title
                         ),
                     })
     return rows
@@ -383,7 +387,8 @@ def validate_manifest_against_curriculum(
             row["chapter_title_live"] = str(chapter.get("chapter_name") or row["chapter_code"])
         row["path"] = ""
         row["title"] = row["document_title"] or default_document_title(
-            grade, subject, language, row["scope"], row["chapter_code"]
+            grade, subject, language, row["scope"], row["chapter_code"],
+            str(row.get("chapter_title_live") or row.get("chapter_title") or "")
         )
         if not row["title"].strip() or len(row["title"]) > 240:
             raise ValueError(f"{row['filename']}: document_title must contain 1–240 characters.")
