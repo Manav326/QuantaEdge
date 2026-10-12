@@ -101,8 +101,10 @@ class HrEmployeeControllerTest {
   }
 
   @Test
-  void probationEndBeforeJoiningDateIsRejectedBeforeDatabaseAccess() {
+  void probationEndBeforeJoiningDateIsRejectedBeforeAnyEmployeeWrite() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+    when(jdbc.queryForObject("select exists(select 1 from hr_organization where id=? and active=true)", Boolean.class, 1L))
+        .thenReturn(true);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.createEmployee(Map.of(
@@ -113,7 +115,8 @@ class HrEmployeeControllerTest {
             "probationEndDate", "2026-04-09"), hrManager));
 
     assertEquals(400, error.getStatusCode().value());
-    verifyNoInteractions(jdbc, audit);
+    verify(jdbc, never()).update(anyString(), any(Object[].class));
+    verify(audit, never()).recordAction(any(), anyString(), anyString());
   }
 
   @Test
