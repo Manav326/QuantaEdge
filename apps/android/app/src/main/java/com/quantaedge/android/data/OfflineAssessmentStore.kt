@@ -8,11 +8,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
-import java.security.KeyGenerator
 import java.security.KeyStore
 import java.security.MessageDigest
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator as JcaKeyGenerator
+import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
@@ -194,7 +193,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
     private fun key(): SecretKey {
         val ks = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
         (ks.getKey(keyAlias, null) as? SecretKey)?.let { return it }
-        val generator: JcaKeyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+        val generator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
         generator.init(KeyGenParameterSpec.Builder(
             keyAlias, KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         ).setBlockModes(KeyProperties.BLOCK_MODE_GCM)

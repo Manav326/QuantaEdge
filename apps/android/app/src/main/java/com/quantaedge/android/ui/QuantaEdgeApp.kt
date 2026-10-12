@@ -367,6 +367,28 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun restoreOfflineAssessment(record: JSONObject) {
+        val storedAttempt = record.optJSONObject("attempt")
+            ?: throw IOException("इस offline test का saved snapshot पढ़ा नहीं जा सका।")
+        assessmentAttempt = JSONObject(storedAttempt.toString())
+        assessmentAttempt.put("offlinePendingSync", record.optString("state") == "QUEUED" ||
+            record.optString("state") == "SYNC_ERROR")
+        answers.clear()
+        val storedAnswers = record.optJSONObject("answers") ?: JSONObject()
+        val keys = storedAnswers.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            if (!storedAnswers.isNull(key)) answers[key] = storedAnswers.optString(key)
+        }
+        val syncError = record.optString("lastError")
+        status = when (record.optString("state")) {
+            "QUEUED" -> "उत्तर इस device पर encrypted हैं और internet पर sync होने की प्रतीक्षा में हैं।"
+            "SYNC_ERROR" -> "Offline answer sync में समस्या: " + syncError + " — internet आने पर ‘Sync की कोशिश करें’ दबाएँ।"
+            else -> "यह test इस device पर encrypted है। उत्तर server पर sync होने से पहले result नहीं दिया जाएगा।"
+        }
+    }
+
+
     fun openAssessment(item: JSONObject) {
         runTask {
             val assessmentId = item.longAny("assessment_id", "assessmentId", "id")
@@ -419,26 +441,6 @@ fun QuantaEdgeApp() {
         }
     }
 
-    private fun restoreOfflineAssessment(record: JSONObject) {
-        val storedAttempt = record.optJSONObject("attempt")
-            ?: throw IOException("इस offline test का saved snapshot पढ़ा नहीं जा सका।")
-        assessmentAttempt = JSONObject(storedAttempt.toString())
-        assessmentAttempt.put("offlinePendingSync", record.optString("state") == "QUEUED" ||
-            record.optString("state") == "SYNC_ERROR")
-        answers.clear()
-        val storedAnswers = record.optJSONObject("answers") ?: JSONObject()
-        val keys = storedAnswers.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            if (!storedAnswers.isNull(key)) answers[key] = storedAnswers.optString(key)
-        }
-        val syncError = record.optString("lastError")
-        status = when (record.optString("state")) {
-            "QUEUED" -> "उत्तर इस device पर encrypted हैं और internet पर sync होने की प्रतीक्षा में हैं।"
-            "SYNC_ERROR" -> "Offline answer sync में समस्या: " + syncError + " — internet आने पर ‘Sync की कोशिश करें’ दबाएँ।"
-            else -> "यह test इस device पर encrypted है। उत्तर server पर sync होने से पहले result नहीं दिया जाएगा।"
-        }
-    }
 
     fun loadAssessmentResults() {
         runTask {
