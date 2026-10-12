@@ -52,7 +52,7 @@ class CertificateRendererTest {
   }
 
   @Test
-  void publicSamplesAreExplicitlyWatermarked() {
+  void publicSamplesAreExplicitlyWatermarked() throws Exception {
     CertificateRenderer.RenderedCertificate sample = renderer.render(
         "MODERN", "en", "Sample Student", "Class 6 · Mathematics",
         "Design preview only. No achievement has been verified.",
