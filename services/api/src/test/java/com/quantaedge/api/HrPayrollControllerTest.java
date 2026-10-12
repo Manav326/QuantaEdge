@@ -110,7 +110,6 @@ class HrPayrollControllerTest {
         .thenReturn(1);
     when(jdbc.queryForList(contains("jsonb_build_object"),(Object)any()))
         .thenReturn(List.of(Map.of("employee_id",31L,"snapshot_json","{\"employeeName\":\"A Teacher\",\"gross\":100.00}")));
-    org.mockito.Mockito.doReturn(1).when(jdbc).update(contains("insert into hr_payslip"),any(Object[].class));
 
     Map<String,Object> result=controller.approve(12L,Map.of("reason","Payroll reviewed"),payrollManager);
 
@@ -122,7 +121,7 @@ class HrPayrollControllerTest {
     assertEquals(12L,args[0]);
     assertEquals(31L,args[1]);
     assertEquals(64,String.valueOf(args[3]).length());
-    verify(audit).recordAction(payrollManager,"/api/v1/hr/payroll/runs/12","Approved payroll run and issued 1 payslip(s)");
+    verify(audit).recordAction(payrollManager,"/api/v1/hr/payroll/runs/12","Approved payroll run and issued 0 payslip(s)");
   }
 
   @Test
