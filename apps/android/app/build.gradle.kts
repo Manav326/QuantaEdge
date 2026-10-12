@@ -12,6 +12,8 @@ val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
+val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
+
 android {
     sourceSets.getByName("main").res.srcDir(generatedBrandingRes)
     namespace = "com.quantaedge.android"
@@ -58,7 +60,6 @@ dependencies {
 }
 
 val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
-val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandWordmark)
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
