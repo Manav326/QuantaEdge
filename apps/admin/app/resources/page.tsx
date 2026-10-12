@@ -200,6 +200,8 @@ export default function TextbookLibraryPage() {
   const [uploadSubjectCode, setUploadSubjectCode] = useState('maths');
   const [uploadLanguage, setUploadLanguage] = useState<'hi' | 'en'>('hi');
   const [uploadPartLabel, setUploadPartLabel] = useState('');
+  const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
+  const [intakeReport, setIntakeReport] = useState<any>(null);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [sourceTitle, setSourceTitle] = useState('');
@@ -534,31 +536,50 @@ export default function TextbookLibraryPage() {
       const form = new FormData();
       form.append('file', file);
       form.append('title', pdfTitle.trim());
-      // Store admin-selected intake tags with the asset so a PDF is never an unclassified blob.
-      // Keep the existing API contract: tags live in the searchable source-reference field.
-      const intakeTags = [
-        'qe_intake_v1',
-        'category=' + uploadCategory,
-        'class=' + uploadClassCode,
-        'subject=' + uploadSubjectCode,
-        'language=' + uploadLanguage,
-        ...(uploadPartLabel.trim() ? ['part=' + uploadPartLabel.trim().replace(/[;|\\s]+/g, '_').slice(0, 40)] : []),
-      ].join(';');
-      const combinedReference = [intakeTags, sourceReference.trim()].filter(Boolean).join(';');
-      if (combinedReference.length > 480) {
-        throw new Error('Source reference is too long. Shorten it to keep the book tags safely searchable.');
-      }
-      form.append('sourceReference', combinedReference);
+      if (sourceReference.trim()) form.append('sourceReference', sourceReference.trim());
       const created = await api('/api/v1/admin/learning-pdfs', { method: 'POST', body: form });
       const id = Number(created.pdf_asset_id || created.id);
+      if (!Number.isSafeInteger(id) || id <= 0) {
+        throw new Error('The PDF was uploaded, but the API did not return a valid library ID. Refresh the library before retrying.');
+      }
+      setIntakeAssetId(id);
+      // Classification is stored in a dedicated table, never hidden in source-reference text.
+      await api('/api/v1/admin/source-ingestion/intake/' + id, {
+        method: 'PUT',
+        body: JSON.stringify({
+          category: uploadCategory,
+          classCode: uploadClassCode,
+          subjectCode: uploadSubjectCode,
+          language: uploadLanguage,
+          partLabel: uploadPartLabel.trim() || null,
+          reviewNotes: null,
+        }),
+      });
+      let analysis: any = null;
+      try {
+        analysis = await api('/api/v1/admin/source-ingestion/intake/' + id + '/analyze', { method: 'POST' });
+        setIntakeReport(analysis);
+      } catch (analysisError) {
+        setIntakeReport(null);
+        setNotice('PDF saved and classified, but automatic inventory analysis needs attention: ' +
+          (analysisError instanceof Error ? analysisError.message : 'unknown error') +
+          '. The book remains private and unpublished; use Re-run analysis after fixing the issue.');
+      }
       await load();
       setSelectedPdfId(String(id));
       setTitle(String(created.title || pdfTitle.trim()));
       setPageStart('1');
       setPageEnd(String(created.page_count || ''));
-      setNotice(created.duplicate
-        ? 'This PDF already exists in the library. The existing database record has been selected; no duplicate copy was created.'
-        : 'PDF validated and saved to the private library. Select a subject/chapter below to attach it.');
+      if (analysis) {
+        const report = analysis.reconciliation || {};
+        const missingCount = Array.isArray(report.missing_from_book) ? report.missing_from_book.length : 0;
+        const extraCount = Array.isArray(report.extra_in_book) ? report.extra_in_book.length : 0;
+        const ambiguousCount = Array.isArray(report.ambiguous) ? report.ambiguous.length : 0;
+        setNotice((created.duplicate ? 'Existing PDF reused; no duplicate copy was created. ' : 'PDF saved. ') +
+          'Classification saved. Inventory scan found ' + missingCount + ' curriculum title(s) not found, ' +
+          extraCount + ' unmatched chapter/appendix heading(s), and ' + ambiguousCount +
+          ' ambiguous match(es). Nothing was auto-approved or published; review the reconciliation report below.');
+      }
       setFile(null);
       setPdfTitle('');
       setSourceReference('');
@@ -711,6 +732,51 @@ export default function TextbookLibraryPage() {
             </select>
             <small>{library.length ? 'Choose one already stored in the library.' : 'No PDFs are registered yet. Upload an existing source PDF once, or import existing source records into this library.'}</small>
           </label>
+          {intakeAssetId && <section className={styles.uploadBox} aria-live="polite">
+            <div className={styles.uploadTitle}>
+              <b>Book inventory review · PDF #{intakeAssetId}</b>
+              <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
+                setBusy(true); setError(''); setNotice('');
+                try {
+                  const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                  setIntakeReport(result);
+                  const report = result.reconciliation || {};
+                  setNotice('Inventory scan complete. ' +
+                    (report.missing_from_book?.length || 0) + ' curriculum title(s) not found; ' +
+                    (report.extra_in_book?.length || 0) + ' unmatched heading(s); ' +
+                    (report.ambiguous?.length || 0) + ' ambiguous match(es). Nothing was auto-approved or published.');
+                } catch (e) {
+                  setError(e instanceof Error ? e.message : 'Inventory scan failed.');
+                } finally { setBusy(false); }
+              }}>Re-run analysis</button>
+            </div>
+            {intakeReport ? <>
+              <p><b>Status:</b> {String(intakeReport.status || 'NEEDS_REVIEW').replaceAll('_', ' ')}</p>
+              <p>These are review signals, not automatic chapter assignments. Scanned page numbers are candidates only.</p>
+              <div className={styles.assignmentFields}>
+                <div><b>Curriculum titles not found</b><p>{(intakeReport.reconciliation?.missing_from_book || []).length}</p></div>
+                <div><b>Unmatched headings / appendices</b><p>{(intakeReport.reconciliation?.extra_in_book || []).length}</p></div>
+                <div><b>Ambiguous matches</b><p>{(intakeReport.reconciliation?.ambiguous || []).length}</p></div>
+                <div><b>Page / extraction warnings</b><p>{(intakeReport.reconciliation?.page_boundary_warnings || []).length}</p></div>
+              </div>
+              {((intakeReport.reconciliation?.missing_from_book || []).length > 0) && <div>
+                <b>Titles to verify</b>
+                <ul>{intakeReport.reconciliation.missing_from_book.slice(0, 30).map((item: any, index: number) =>
+                  <li key={'missing-' + index}>{item.title} — {item.reason}</li>)}</ul>
+              </div>}
+              {((intakeReport.reconciliation?.extra_in_book || []).length > 0) && <div>
+                <b>Unmatched headings to verify</b>
+                <ul>{intakeReport.reconciliation.extra_in_book.slice(0, 30).map((item: any, index: number) =>
+                  <li key={'extra-' + index}>Page {item.page}: {item.title}</li>)}</ul>
+              </div>}
+              {((intakeReport.reconciliation?.ambiguous || []).length > 0) && <div>
+                <b>Ambiguous matches</b>
+                <ul>{intakeReport.reconciliation.ambiguous.slice(0, 20).map((item: any, index: number) =>
+                  <li key={'ambiguous-' + index}>{item.title} — pages {(item.candidate_pages || []).join(', ')}</li>)}</ul>
+              </div>}
+              <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>
+            </> : <p>Classification has been saved. Run the inventory scan to compare the PDF against the selected curriculum.</p>}
+          </section>}
           <div className={styles.uploadBox}>
             <div className={styles.uploadTitle}><b>Add a PDF to the library</b><small>PDF only · maximum {isAdmin ? '500 MB for Admin' : '50 MB'} · up to 2,000 pages</small></div>
             <label className={styles.field}>Library title
