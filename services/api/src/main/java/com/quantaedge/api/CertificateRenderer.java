@@ -138,7 +138,7 @@ public class CertificateRenderer {
         + URLEncoder.encode(certificateNumber, StandardCharsets.UTF_8);
     try {
       BitMatrix matrix = new MultiFormatWriter().encode(verificationUrl, BarcodeFormat.QR_CODE,
-          300, 300, Map.of(EncodeHintType.MARGIN, 1, EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M));
+          300, 300, Map.of(EncodeHintType.MARGIN, 4, EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M));
       BufferedImage qr = MatrixToImageWriter.toBufferedImage(matrix);
       int size = 250;
       int x = WIDTH - 390;
