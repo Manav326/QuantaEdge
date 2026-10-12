@@ -75,7 +75,10 @@ class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
         remainingDocs.forEach(manifest::put)
         preferences.edit().putString("documents", manifest.toString()).apply()
 
-        if (root.listFiles()?.none { it.isFile && it.name.endsWith(".enc") } != false) {
+        val listedFiles = root.listFiles()
+        val noEncryptedFilesRemain = listedFiles != null &&
+            listedFiles.none { it.isFile && it.name.endsWith(".enc") }
+        if (noEncryptedFilesRemain) {
             runCatching {
                 val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
                 if (keyStore.containsAlias(alias)) keyStore.deleteEntry(alias)
