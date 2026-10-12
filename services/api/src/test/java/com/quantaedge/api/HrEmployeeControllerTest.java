@@ -128,6 +128,29 @@ class HrEmployeeControllerTest {
   }
 
   @Test
+  void reportingCycleIsRejectedBeforeEmployeeUpdate() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE")).thenReturn(hrManager);
+    when(jdbc.queryForList(anyString(), eq(9L))).thenReturn(List.of(Map.of(
+        "id", 9L,
+        "organization_id", 1L,
+        "joining_date", Date.valueOf("2025-01-01"),
+        "employment_status", "ACTIVE",
+        "display_name", "A Teacher",
+        "employee_number", "QE-EMP-000009")));
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(8L), eq(1L), eq(1L), eq(9L)))
+        .thenReturn(false);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.updateEmployee(9L, Map.of(
+            "displayName", "A Teacher",
+            "managerEmployeeId", 8L), hrManager));
+
+    assertEquals(400, error.getStatusCode().value());
+    verify(jdbc, never()).update(anyString(), any(Object[].class));
+    verify(audit, never()).recordAction(any(), anyString(), anyString());
+  }
+
+  @Test
   void employeeDirectoryClampsPageSizeAndOffsetToSafeBounds() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_VIEW")).thenReturn(hrManager);
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
