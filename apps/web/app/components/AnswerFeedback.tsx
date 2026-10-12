@@ -32,10 +32,13 @@ export default function AnswerFeedback({
         <strong>{title}</strong>
         {message && <p>{message}</p>}
         {explanation && (
-          <div className="qe-answer-feedback__explanation">
-            {explanationLabel && <span>{explanationLabel}</span>}
-            {explanation}
-          </div>
+          <details className="qe-answer-feedback__explanation">
+            <summary>Show explanation</summary>
+            <div className="qe-answer-feedback__explanation-content">
+              {explanationLabel && <span>{explanationLabel}</span>}
+              {explanation}
+            </div>
+          </details>
         )}
       </div>
     </div>
