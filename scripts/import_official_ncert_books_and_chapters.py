@@ -1223,6 +1223,11 @@ def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None, int |
         int(row["book_part"]) if row.get("book_part") is not None else None,
     )
 
+def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
+    hidden = {"path", "chapter_ranges"}
+    return {key: value for key, value in row.items() if key not in hidden}
+
+
 def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str, str]:
     return (
         str(row.get("class_code") or ""),
