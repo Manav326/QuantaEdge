@@ -18,6 +18,7 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,290 @@ public class SourceIngestionController {
     this.staffAudit = staffAudit;
     this.worker = worker;
     this.textbookCache = textbookCache;
+  }
+
+  /**
+   * Admin-owned inventory of uploaded book PDFs. Classification is metadata only: it does not
+   * attach chapters to students or publish anything.
+   */
+  @GetMapping("/intake")
+  public List<Map<String, Object>> listBookIntake(
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    requireReviewer(context);
+    return jdbc.queryForList("""
+      select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
+             a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
+             c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
+             i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.analysis_error,
+             i.analyzed_at,i.reviewed_at,i.review_notes,i.created_at,i.updated_at
+      from learning_book_intake i
+      join learning_pdf_asset a on a.id=i.pdf_asset_id
+      join curriculum_class c on c.id=i.class_id
+      join curriculum_subject s on s.id=i.subject_id
+      order by i.updated_at desc,i.pdf_asset_id desc
+      limit 500
+      """);
+  }
+
+  /** Create or update the dedicated, validated classification for an already uploaded PDF. */
+  @org.springframework.web.bind.annotation.PutMapping("/intake/{assetId}")
+  @Transactional
+  public Map<String, Object> classifyBookIntake(
+      @PathVariable long assetId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    String category = requiredText(body.get("category"), "category", 32).toUpperCase(Locale.ROOT);
+    if (!List.of("MAIN_TEXTBOOK","PART","SUPPLEMENTARY","WORKBOOK","TEACHER_GUIDE","REFERENCE","OTHER").contains(category)) {
+      throw badRequest("Choose a supported book category.");
+    }
+    String language = requiredText(body.get("language"), "language", 2).toLowerCase(Locale.ROOT);
+    if (!List.of("hi","en").contains(language)) throw badRequest("Book language must be Hindi or English.");
+    String classCode = requiredText(body.get("classCode"), "classCode", 30);
+    String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
+    List<Map<String,Object>> tracks = jdbc.queryForList("""
+      select c.id as class_id,s.id as subject_id from curriculum_class c
+      join curriculum_subject s on s.class_id=c.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+      """, classCode, subjectCode);
+    if (tracks.isEmpty()) throw badRequest("Choose a valid active class and subject combination.");
+    long classId = ((Number) tracks.getFirst().get("class_id")).longValue();
+    long subjectId = ((Number) tracks.getFirst().get("subject_id")).longValue();
+    List<Map<String,Object>> assets = jdbc.queryForList(
+        "select id,sha256 from learning_pdf_asset where id=?", assetId);
+    if (assets.isEmpty()) throw notFound("PDF asset", assetId);
+    String partLabel = optionalText(body.get("partLabel"), 80);
+    String notes = optionalText(body.get("reviewNotes"), 2000);
+    jdbc.update("""
+      insert into learning_book_intake(pdf_asset_id,category,class_id,subject_id,language,part_label,
+        status,inventory,reconciliation,analysis_error,review_notes,created_by_staff_id,created_at,updated_at)
+      values(?,?,?,?,?,?,'PENDING','{"chapters":[],"other_sections":[],"warnings":[]}'::jsonb,
+        '{"missing_from_book":[],"extra_in_book":[],"ambiguous":[],"page_boundary_warnings":[]}'::jsonb,
+        null,?,?,now(),now())
+      on conflict(pdf_asset_id) do update set category=excluded.category,class_id=excluded.class_id,
+        subject_id=excluded.subject_id,language=excluded.language,part_label=excluded.part_label,
+        status=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then 'PENDING' else learning_book_intake.status end,
+        inventory=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then '{"chapters":[],"other_sections":[],"warnings":["Classification changed; re-run inventory analysis."]}'::jsonb
+          else learning_book_intake.inventory end,
+        reconciliation=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then '{"missing_from_book":[],"extra_in_book":[],"ambiguous":[],"page_boundary_warnings":[]}'::jsonb
+          else learning_book_intake.reconciliation end,
+        analyzed_at=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.analyzed_at end,
+        review_notes=excluded.review_notes,updated_at=now()
+      """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
+        "Classified uploaded complete-book PDF for inventory reconciliation.");
+    return jdbc.queryForMap("""
+      select i.pdf_asset_id,a.title,i.category,i.class_id,c.code as class_code,
+        i.subject_id,s.code as subject_code,i.language,i.part_label,i.status,i.inventory,i.reconciliation
+      from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
+      join curriculum_class c on c.id=i.class_id join curriculum_subject s on s.id=i.subject_id
+      where i.pdf_asset_id=?
+      """, assetId);
+  }
+
+  /** Record a human review decision without publishing or approving any chapter boundaries. */
+  @PatchMapping("/intake/{assetId}/review")
+  @Transactional
+  public Map<String, Object> reviewBookIntake(
+      @PathVariable long assetId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    List<Map<String,Object>> rows = jdbc.queryForList(
+        "select status,reconciliation from learning_book_intake where pdf_asset_id=?", assetId);
+    if (rows.isEmpty()) throw notFound("Classified book intake", assetId);
+    String current = String.valueOf(rows.getFirst().get("status"));
+    if ("PENDING".equals(current) || "BLOCKED".equals(current)) {
+      throw badRequest("Run a successful inventory analysis before completing the review.");
+    }
+    String notes = optionalText(body.get("reviewNotes"), 2000);
+    Object rawAcknowledged = body.get("acknowledgeDiscrepancies");
+    boolean acknowledged = Boolean.TRUE.equals(rawAcknowledged)
+        || "true".equalsIgnoreCase(String.valueOf(rawAcknowledged));
+    Object rawReport = rows.getFirst().get("reconciliation");
+    String report = rawReport == null ? "{}" : String.valueOf(rawReport);
+    boolean hasDiscrepancies = report.contains("\"missing_from_book\":[{")
+        || report.contains("\"extra_in_book\":[{")
+        || report.contains("\"ambiguous\":[{")
+        || report.contains("\"page_boundary_warnings\":[{");
+    if (hasDiscrepancies && !acknowledged) {
+      throw badRequest("This report has warnings. Tick the acknowledgement after reviewing them before marking the review complete.");
+    }
+    if (hasDiscrepancies && (notes == null || notes.isBlank())) {
+      throw badRequest("Add a short note describing what you checked or why the flagged differences are acceptable.");
+    }
+    jdbc.update("""
+      update learning_book_intake set status='REVIEWED',reviewed_by_staff_id=?,
+        reviewed_at=now(),review_notes=?,updated_at=now() where pdf_asset_id=?
+      """, context.staffId(), notes, assetId);
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/review",
+        "Recorded human review of book inventory; no chapter ranges were auto-approved and no content was published.");
+    return jdbc.queryForMap("""
+      select pdf_asset_id,status,reviewed_by_staff_id,reviewed_at,review_notes,reconciliation
+      from learning_book_intake where pdf_asset_id=?
+      """, assetId);
+  }
+
+  /**
+   * Independently inspect every PDF page, discover numbered chapter/appendix headings and locate
+   * curriculum chapter titles. This is a reconciliation aid only; all boundaries remain unapproved.
+   */
+  @PostMapping("/intake/{assetId}/analyze")
+  @Transactional
+  public Map<String, Object> analyzeBookIntake(
+      @PathVariable long assetId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    List<Map<String,Object>> intakeRows = jdbc.queryForList("""
+      select i.*,a.pdf_bytes,a.page_count,a.sha256 from learning_book_intake i
+      join learning_pdf_asset a on a.id=i.pdf_asset_id where i.pdf_asset_id=?
+      """, assetId);
+    if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
+    Map<String,Object> intake = intakeRows.getFirst();
+    byte[] bytes = (byte[]) intake.get("pdf_bytes");
+    int pageCount = ((Number) intake.get("page_count")).intValue();
+    if (bytes == null || bytes.length < 5) throw badRequest("The original PDF bytes are unavailable; re-upload the complete PDF.");
+    List<Map<String,Object>> curriculum = jdbc.queryForList("""
+      select ch.id,ch.code,ch.display_name from curriculum_chapter ch
+      where ch.subject_id=? and ch.active=true order by ch.sort_order,ch.teaching_order,ch.id
+      """, intake.get("subject_id"));
+    List<Map<String,Object>> discovered = new ArrayList<>();
+    List<Map<String,Object>> missing = new ArrayList<>();
+    List<Map<String,Object>> extras = new ArrayList<>();
+    List<Map<String,Object>> ambiguous = new ArrayList<>();
+    List<Map<String,Object>> warnings = new ArrayList<>();
+    try (PDDocument pdf = Loader.loadPDF(bytes)) {
+      if (pdf.getNumberOfPages() != pageCount) {
+        warnings.add(Map.of("type","PAGE_COUNT_MISMATCH","stored",pageCount,"actual",pdf.getNumberOfPages()));
+      }
+      PDFTextStripper stripper = new PDFTextStripper();
+      List<String> pageTexts = new ArrayList<>();
+      for (int page=1; page<=pdf.getNumberOfPages(); page++) {
+        stripper.setStartPage(page); stripper.setEndPage(page);
+        pageTexts.add(stripper.getText(pdf));
+      }
+      for (Map<String,Object> chapter : curriculum) {
+        String title = String.valueOf(chapter.get("display_name"));
+        List<Integer> foundPages = new ArrayList<>();
+        String needle = normalizeBookText(title);
+        if (needle.length() >= 4) {
+          for (int p=0;p<pageTexts.size();p++) {
+            if (normalizeBookText(pageTexts.get(p)).contains(needle)) foundPages.add(p+1);
+          }
+        }
+        if (foundPages.isEmpty()) {
+          missing.add(Map.of("chapter_id",chapter.get("id"),"code",chapter.get("code"),"title",title,
+              "reason","Curriculum title was not found in extracted PDF text; OCR or alternate title may be needed."));
+        } else {
+          discovered.add(Map.of("kind","CURRICULUM_TITLE_MATCH","chapter_id",chapter.get("id"),
+              "code",chapter.get("code"),"title",title,"candidate_pages",foundPages));
+          if (foundPages.size()>3) ambiguous.add(Map.of("title",title,"candidate_pages",foundPages,
+              "reason","Title appears repeatedly; page boundaries need manual confirmation."));
+        }
+      }
+      java.util.regex.Pattern heading = java.util.regex.Pattern.compile(
+        "(?im)^\\s*((?:chapter|unit|appendix|annexure)\\s+[0-9ivxlcdm]+[.:： -]?.{0,180}|(?:अध्याय|पाठ|इकाई|परिशिष्ट)\\s*[०-९0-9ivxlcdm]*[.:： -]?.{0,180})\\s*$");
+      for (int p=0;p<pageTexts.size();p++) {
+        java.util.regex.Matcher matcher=heading.matcher(pageTexts.get(p));
+        int count=0;
+        while(matcher.find() && count++<8) {
+          String candidate=matcher.group(1).trim();
+          if (candidate.length()<4) continue;
+          boolean sameAsCurriculum=false;
+          String normalized=normalizeBookText(candidate);
+          for (Map<String,Object> chapter:curriculum) {
+            String chapterTitle=normalizeBookText(String.valueOf(chapter.get("display_name")));
+            if (chapterTitle.length()>=4 && (normalized.contains(chapterTitle)||chapterTitle.contains(normalized))) {
+              sameAsCurriculum=true; break;
+            }
+          }
+          if (!sameAsCurriculum) extras.add(Map.of("title",candidate,"page",p+1,
+              "reason","Numbered chapter/unit/appendix heading not matched to the current curriculum; verify whether it is a real extra section."));
+        }
+      }
+      if (pdf.getDocumentInformation()!=null) {
+        String metaTitle=pdf.getDocumentInformation().getTitle();
+        if (metaTitle!=null && !metaTitle.isBlank()) warnings.add(Map.of("type","PDF_METADATA_TITLE","value",metaTitle));
+      }
+    } catch (IOException ex) {
+      jdbc.update("update learning_book_intake set status='BLOCKED',analysis_error=?,updated_at=now() where pdf_asset_id=?",
+          "PDF text extraction failed: " + truncate(ex.getMessage()==null?"unknown error":ex.getMessage(),500), assetId);
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+          "This PDF could not be read safely. Keep it in the library and re-upload or inspect the original file.", ex);
+    }
+    String inventoryJson="{\"chapters\":"+jsonObjects(discovered)+",\"other_sections\":"+jsonObjects(extras)+",\"warnings\":"+jsonObjects(warnings)+"}";
+    String reconciliationJson="{\"missing_from_book\":"+jsonObjects(missing)+",\"extra_in_book\":"+jsonObjects(extras)+",\"ambiguous\":"+jsonObjects(ambiguous)+",\"page_boundary_warnings\":"+jsonObjects(warnings)+"}";
+    String status=(missing.isEmpty() && extras.isEmpty() && ambiguous.isEmpty() && warnings.isEmpty())?"ANALYZED":"NEEDS_REVIEW";
+    jdbc.update("""
+      update learning_book_intake set inventory=?::jsonb,reconciliation=?::jsonb,status=?,
+        analysis_version=analysis_version+1,analysis_error=null,analyzed_at=now(),updated_at=now()
+      where pdf_asset_id=?
+      """,inventoryJson,reconciliationJson,status,assetId);
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/analyze",
+        "Ran independent PDF inventory scan and curriculum reconciliation; no chapter boundaries were auto-approved.");
+    return jdbc.queryForMap("""
+      select pdf_asset_id,status,inventory,reconciliation,analysis_version,analyzed_at
+      from learning_book_intake where pdf_asset_id=?
+      """,assetId);
+  }
+
+  private String normalizeBookText(String value) {
+    return value == null ? "" : value.toLowerCase(Locale.ROOT)
+        .replaceAll("[\\p{Punct}\\s\\p{Z}]+","")
+        .replaceAll("[।॥ः]+","");
+  }
+
+  private String jsonObjects(List<Map<String,Object>> objects) {
+    List<String> values = new ArrayList<>();
+    for (Map<String,Object> object : objects) {
+      List<String> fields = new ArrayList<>();
+      for (Map.Entry<String,Object> entry : object.entrySet()) {
+        Object value = entry.getValue();
+        String key = jsonQuote(entry.getKey());
+        if (value instanceof Number || value instanceof Boolean) fields.add(key+":"+value);
+        else if (value instanceof List<?> list) {
+          List<String> nested = new ArrayList<>();
+          for (Object item:list) nested.add(item instanceof Number ? String.valueOf(item) : jsonQuote(String.valueOf(item)));
+          fields.add(key+":["+String.join(",",nested)+"]");
+        } else fields.add(key+":"+jsonQuote(value==null?"":String.valueOf(value)));
+      }
+      values.add("{"+String.join(",",fields)+"}");
+    }
+    return "["+String.join(",",values)+"]";
+  }
+
+  private String jsonQuote(String value) {
+    StringBuilder out = new StringBuilder("\"");
+    for (int i=0;i<value.length();i++) {
+      char ch=value.charAt(i);
+      switch(ch) {
+        case '\\' -> out.append("\\\\");
+        case '"' -> out.append("\\\"");
+        case '\n' -> out.append("\\n");
+        case '\r' -> out.append("\\r");
+        case '\t' -> out.append("\\t");
+        default -> { if (ch<0x20) out.append(String.format("\\u%04x",(int)ch)); else out.append(ch); }
+      }
+    }
+    return out.append('"').toString();
   }
 
   @GetMapping("/sources")
