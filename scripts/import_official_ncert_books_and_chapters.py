@@ -1407,6 +1407,259 @@ def upload_or_reuse_asset(
     return asset
 
 
+
+def resume_from_checkpoint(args: argparse.Namespace) -> int:
+    """Continue an apply checkpoint without rerunning book scans or chapter extraction."""
+    checkpoint_path = Path(args.resume_report).expanduser().resolve()
+    if not checkpoint_path.is_file():
+        raise FileNotFoundError(f"Resume checkpoint not found: {checkpoint_path}")
+    try:
+        report = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"Cannot read resume checkpoint {checkpoint_path}: {exc}") from exc
+
+    if report.get("schema") != "quantaedge.official-ncert-book-chapter-import-report.v1":
+        raise ValueError("The selected report is not an official NCERT book/chapter import checkpoint.")
+    if str(report.get("mode", "")).lower() != "apply":
+        raise ValueError("Resume requires an --apply checkpoint; a dry-run report cannot be resumed.")
+    if not isinstance(report.get("files"), list) or not report["files"]:
+        raise ValueError("The checkpoint has no planned resource rows to resume.")
+    if set(report.get("languages_requested") or []) != set(args.languages):
+        raise ValueError(
+            "The --languages selection does not match this checkpoint. "
+            f"Checkpoint languages: {report.get('languages_requested')}; command: {args.languages}."
+        )
+
+    root_value = report.get("root")
+    books_value = report.get("input_books_directory")
+    if not root_value or not books_value:
+        raise ValueError("The checkpoint does not contain its original work-root and Books directory.")
+    root = Path(str(root_value)).expanduser().resolve()
+    books_dir = Path(str(books_value)).expanduser().resolve()
+    if not root.is_dir():
+        raise FileNotFoundError(f"Original work-root from checkpoint no longer exists: {root}")
+    if not books_dir.is_dir():
+        raise FileNotFoundError(f"Original NCERT Books directory from checkpoint no longer exists: {books_dir}")
+    # Ensure any supplemental failure report is written beside the original checkpoint.
+    args.root = str(root)
+    args.books_dir = str(books_dir)
+
+    checkpoint_api = str(report.get("api_url") or "").rstrip("/")
+    base = str(args.api_url or checkpoint_api).rstrip("/")
+    if checkpoint_api and base != checkpoint_api:
+        raise ValueError(
+            f"API URL mismatch: checkpoint targets {checkpoint_api}, but this command targets {base}. "
+            "Use the same --api-url as the original run."
+        )
+    api_url_valid(base)
+    cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
+    me = verify_session(base, cookie)
+    role = str(me.get("role") or "unknown")
+
+    rows: list[dict[str, Any]] = report["files"]
+    if len({report_record_identity(row) for row in rows if isinstance(row, dict)}) != len(rows):
+        raise ValueError("The checkpoint contains duplicate resource identities; refusing to resume.")
+
+    def is_complete(row: dict[str, Any]) -> bool:
+        action = str(row.get("action") or "").upper()
+        if action in {"CREATED_DRAFT", "RECOVERED_DRAFT"}:
+            return bool(row.get("document_id") and row.get("asset_id"))
+        return action == "SKIP_IDENTICAL_ASSIGNMENT" and str(row.get("status") or "").upper() == "SKIPPED"
+
+    remaining = [row for row in rows if not is_complete(row)]
+    report_progress(f"Resume checkpoint: {checkpoint_path}")
+    report_progress(
+        f"Fresh staff session verified (role={role}); {len(rows) - len(remaining)} of "
+        f"{len(rows)} resource rows already complete. Book scans and chapter extraction will be skipped."
+    )
+    if not remaining:
+        report["result"] = "COMPLETED"
+        report["finished_at"] = datetime.now(timezone.utc).isoformat()
+        write_report(checkpoint_path, report)
+        print("Resume result: all checkpoint rows are already complete; no uploads were needed.")
+        print(f"Report: {checkpoint_path}")
+        return 0
+
+    tracks = {
+        (str(row.get("class_code") or ""), str(row.get("subject_code") or ""))
+        for row in rows
+        if row.get("class_code") and row.get("subject_code")
+    }
+    if not tracks:
+        raise ValueError("The checkpoint has no valid class/subject tracks.")
+
+    report_progress("Checking the existing asset library and assignment slots; no PDF text scanning is performed.")
+    assets_by_sha = query_library_assets(base, cookie)
+    hashes_by_slot, assignment_by_slot_hash = query_assignments(
+        base, cookie, tracks, progress=report_progress
+    )
+
+    # Reconstruct prepared PDF paths and verify every remaining file before the first resumed write.
+    output_dir = root / "private-review" / "ncert-book-splits"
+    for row in remaining:
+        title = str(row.get("title") or row.get("filename") or "resource")
+        required_fields = (
+            "filename", "class_code", "subject_code", "language", "scope", "sha256",
+            "title", "source_title", "source_url", "edition", "page_count", "size_bytes",
+        )
+        missing = [field for field in required_fields if field not in row or row.get(field) is None]
+        if missing:
+            raise ValueError(f"{title}: checkpoint is missing required fields {missing}; no guess was made.")
+        if str(row["scope"]) == "SUBJECT_BOOK":
+            local_pdf = books_dir / str(row["filename"])
+        elif str(row["scope"]) == "CHAPTER_PDF":
+            local_pdf = (
+                output_dir / f"class-{row['class_code']}" / str(row["subject_code"])
+                / str(row["language"]) / str(row["filename"])
+            )
+        else:
+            raise ValueError(f"{title}: unsupported saved scope {row['scope']!r}.")
+        if not local_pdf.is_file():
+            raise FileNotFoundError(
+                f"{title}: the prepared PDF is missing at {local_pdf}. "
+                "Resume will not recreate or guess missing source data."
+            )
+        actual_sha = sha256_file(local_pdf).lower()
+        expected_sha = str(row["sha256"]).lower()
+        if actual_sha != expected_sha:
+            raise ValueError(
+                f"{title}: prepared PDF SHA-256 does not match the checkpoint. "
+                "No upload was attempted; investigate the local file."
+            )
+        row["path"] = str(local_pdf.resolve())
+
+    report["result"] = "APPLY_IN_PROGRESS"
+    report["authenticated_role"] = role
+    report["resumed_at"] = datetime.now(timezone.utc).isoformat()
+    report["resume_attempts"] = int(report.get("resume_attempts") or 0) + 1
+    report.setdefault("notes", []).append(
+        "Resumed from the saved apply checkpoint. Source-book inspection, chapter boundary detection, "
+        "and PDF extraction were skipped; only unfinished checkpoint rows were processed."
+    )
+    write_report(checkpoint_path, report)
+
+    assets_created: dict[str, dict[str, Any]] = {}
+    for row_index, row in enumerate(rows, 1):
+        if is_complete(row):
+            continue
+        title = str(row.get("title") or row.get("filename") or f"resource {row_index}")
+        digest = str(row["sha256"]).lower()
+        key = slot_key(row)
+        matching_assignment = assignment_by_slot_hash.get(repr((key, digest)))
+
+        if matching_assignment is not None:
+            document_id = matching_assignment.get("document_id", matching_assignment.get("id"))
+            assignment_status = str(matching_assignment.get("status") or "").upper()
+            matched_asset = assets_by_sha.get(digest) or {}
+            matching_asset_id = (
+                matching_assignment.get("pdf_asset_id")
+                or matching_assignment.get("asset_id")
+                or matched_asset.get("pdf_asset_id")
+                or matched_asset.get("id")
+            )
+            if not document_id:
+                raise RuntimeError(
+                    f"{title}: a matching assignment exists in the API but has no document ID; "
+                    "checkpoint preserved and no duplicate created."
+                )
+            row["document_id"] = int(document_id)
+            if matching_asset_id:
+                row["asset_id"] = int(matching_asset_id)
+            row["existing_assignment_status"] = assignment_status
+            if str(row.get("action") or "").upper() == "ASSIGNMENT_WRITE_PENDING" and assignment_status == "DRAFT":
+                # The server committed the prior POST, but the client stopped before recording its response.
+                row["action"] = "RECOVERED_DRAFT"
+                row["status"] = "DRAFT"
+                report["created_draft_assignments"] = int(report.get("created_draft_assignments") or 0) + 1
+                report["recovered_assignment_writes"] = int(report.get("recovered_assignment_writes") or 0) + 1
+                report_progress(
+                    f"[Resume {row_index}/{len(rows)}] Reconciled an already-created DRAFT: "
+                    f"document_id={document_id}, title={title}."
+                )
+            else:
+                row["action"] = "SKIP_IDENTICAL_ASSIGNMENT"
+                row["status"] = "SKIPPED"
+                report["skipped_identical_assignments"] = int(
+                    report.get("skipped_identical_assignments") or 0
+                ) + 1
+                report_progress(
+                    f"[Resume {row_index}/{len(rows)}] Matching assignment already exists; "
+                    f"skipping duplicate: {title}."
+                )
+            sync_report_record(report, row)
+            write_report(checkpoint_path, report)
+            continue
+
+        report_progress(f"[Resume {row_index}/{len(rows)}] Continuing upload: {title}.")
+        row["action"] = "UPLOAD_PENDING"
+        sync_report_record(report, row)
+        write_report(checkpoint_path, report)
+
+        asset = upload_or_reuse_asset(
+            base, cookie, row, assets_by_sha, assets_created, report, checkpoint_path,
+            progress=report_progress,
+        )
+        asset_id_value = asset.get("pdf_asset_id") or asset.get("id") or row.get("asset_id")
+        if not asset_id_value:
+            raise RuntimeError(f"{title}: no valid PDF asset ID was returned; checkpoint preserved.")
+        asset_id = int(asset_id_value)
+        row["asset_id"] = asset_id
+        row["action"] = "ASSIGNMENT_WRITE_PENDING"
+        sync_report_record(report, row)
+        write_report(checkpoint_path, report)
+
+        body = {
+            "pdfAssetId": asset_id,
+            "scope": row["scope"],
+            "classCode": row["class_code"],
+            "subjectCode": row["subject_code"],
+            "language": "en" if row["language"] == "english" else "hi",
+            "chapterId": row.get("chapter_id"),
+            "bookPart": row.get("book_part"),
+            "title": row["title"],
+            "sourceTitle": row["source_title"],
+            "sourceUrl": row["source_url"],
+            "edition": row["edition"],
+            "pageStart": 1,
+            "pageEnd": int(row["page_count"]),
+        }
+        doc = api_call(
+            base, cookie, "/api/v1/admin/learning-documents",
+            method="POST", body=body, timeout=120,
+        )
+        if not isinstance(doc, dict) or str(doc.get("status", "")).upper() != "DRAFT":
+            raise RuntimeError(
+                f"{row['filename']}: API did not return a DRAFT assignment. "
+                "Checkpoint is preserved; rerun resume after inspecting the API state."
+            )
+        document_id = doc.get("document_id", doc.get("id"))
+        if not document_id:
+            raise RuntimeError(f"{row['filename']}: draft response has no document ID; checkpoint preserved.")
+        row["document_id"] = int(document_id)
+        row["asset_id"] = asset_id
+        row["status"] = "DRAFT"
+        row["action"] = "CREATED_DRAFT"
+        report["created_draft_assignments"] = int(report.get("created_draft_assignments") or 0) + 1
+        report_progress(
+            f"DRAFT assignment created: document_id={int(document_id)}, "
+            f"asset_id={asset_id}, title={title}."
+        )
+        sync_report_record(report, row)
+        write_report(checkpoint_path, report)
+
+    report["result"] = "COMPLETED"
+    report["finished_at"] = datetime.now(timezone.utc).isoformat()
+    write_report(checkpoint_path, report)
+    print(f"Resume result: {report['result']}")
+    print(f"Created new PDF assets total tracked: {int(report.get('created_assets') or 0)}")
+    print(f"Created DRAFT assignments total: {int(report.get('created_draft_assignments') or 0)}")
+    print(f"Reconciled prior assignment writes: {int(report.get('recovered_assignment_writes') or 0)}")
+    print(f"Skipped identical assignments total: {int(report.get('skipped_identical_assignments') or 0)}")
+    print("Published or archived assignments: 0")
+    print(f"Checkpoint report: {checkpoint_path}")
+    return 0
+
+
 def run(args: argparse.Namespace) -> int:
     root = Path(args.root).expanduser().resolve()
     if not root.is_dir():
@@ -1624,8 +1877,15 @@ def main() -> int:
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
+    parser.add_argument("--resume-report", default="", help="Resume an interrupted --apply run from its main checkpoint JSON; skips source scanning and chapter extraction.")
     args = parser.parse_args()
     try:
+        if args.resume_report:
+            if not args.apply:
+                raise ValueError("--resume-report requires --apply.")
+            if args.report:
+                raise ValueError("Do not combine --resume-report with --report; the checkpoint path is the report.")
+            return resume_from_checkpoint(args)
         return run(args)
     except Exception as exc:
         print(f"STOPPED SAFELY: {exc}", file=sys.stderr)
