@@ -163,14 +163,15 @@ class LearningDocumentControllerTest {
     when(authorization.hasPermission(author, "CONTENT_PUBLISH")).thenReturn(true);
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of());
 
-    assertTrue(controller.listAssignments(null, null, null, author).isEmpty());
+    Map<String,Object> response=controller.listAssignments(null,null,null,null,null,null,null,null,25,0,author);
+    assertTrue(((List<?>)response.get("items")).isEmpty());
   }
 
   @Test
   void pdfLibraryListRequiresContentViewOrEditPermission() {
     when(authorization.requireAuth(null)).thenThrow(new SecurityException("Authentication required"));
 
-    assertThrows(SecurityException.class, () -> controller.listPdfLibrary(null, null));
+    assertThrows(SecurityException.class, () -> controller.listPdfLibrary(null, null, null, null));
     verifyNoInteractions(jdbc);
   }
 }
