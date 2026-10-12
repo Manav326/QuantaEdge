@@ -407,7 +407,32 @@ fun QuantaEdgeApp() {
                 else offlineAssessmentStore.recordForAssessment(assessmentId)
             }
             if (localRecord != null) {
-                restoreOfflineAssessment(localRecord)
+                val localAttempt = localRecord.optJSONObject("attempt") ?: JSONObject()
+                val localAttemptId = localAttempt.longAny("attempt_id", "attemptId", "id")
+                val localState = localRecord.textAny("state")
+                val serverAttempt = if (localAttemptId > 0L &&
+                    localState in setOf("QUEUED", "SYNC_ERROR", "SYNCED")) {
+                    try {
+                        ApiClient.getObject("/api/v1/learning/assessment-attempts/" + localAttemptId)
+                    } catch (_: Exception) {
+                        null
+                    }
+                } else null
+                if (serverAttempt != null && serverAttempt.textAny("status") != "IN_PROGRESS") {
+                    withContext(Dispatchers.IO) {
+                        offlineAssessmentStore.markSynced(localAttemptId, serverAttempt)
+                    }
+                    assessmentAttempt = serverAttempt
+                    answers.clear()
+                    feedbacks.clear()
+                    status = if (serverAttempt.optBoolean("resultReleased")) {
+                        "Server पर offline test का result जारी हो गया है।"
+                    } else {
+                        "Answers server पर submit हो चुके हैं। Teacher review के बाद final result दिखाई देगा।"
+                    }
+                } else {
+                    restoreOfflineAssessment(localRecord)
+                }
                 route = AppRoute.ASSESSMENT_ATTEMPT
                 return@runTask
             }
@@ -417,6 +442,14 @@ fun QuantaEdgeApp() {
             answers.clear()
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
             if (assessmentAttempt.optBoolean("offlineMode")) {
+                if (assessmentAttempt.textAny("offlinePackageToken").isBlank()) {
+                    val refreshed = ApiClient.postObject(
+                        "/api/v1/learning/assessment-attempts/" + attemptId + "/offline-package-token"
+                    )
+                    val token = refreshed.textAny("offlinePackageToken")
+                    if (token.isBlank()) throw IOException("सुरक्षित offline package token server से नहीं मिला।")
+                    assessmentAttempt.put("offlinePackageToken", token)
+                }
                 withContext(Dispatchers.IO) {
                     offlineAssessmentStore.saveAttempt(assessmentAttempt, emptyMap(), "DRAFT", item)
                 }
