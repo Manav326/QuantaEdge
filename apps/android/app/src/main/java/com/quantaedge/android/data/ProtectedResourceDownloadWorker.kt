@@ -30,11 +30,14 @@ class ProtectedResourceDownloadWorker(appContext: Context, parameters: WorkerPar
             val count = document.optInt("page_count",
                 (document.optInt("page_end", 1) - document.optInt("page_start", 1) + 1).coerceAtLeast(1))
             if (count !in 1..1500) return Result.failure()
-            var completed = store.cachedPageCount(documentId, count)
+            // Verify cached ciphertext once per worker run, then reuse the set. The UI's frequent
+            // progress refreshes use a cheap file-presence check instead of decrypting whole pages.
+            val cachedPages = (1..count).filter { store.hasValidPage(documentId, it) }.toSet()
+            var completed = cachedPages.size
             setProgress(Data.Builder().putInt("pagesDone", completed).putInt("pageCount", count).build())
             for (page in 1..count) {
                 if (isStopped) return Result.retry()
-                if (store.hasPage(documentId, page)) continue
+                if (page in cachedPages) continue
                 val bytes = ApiClient.getBytes("/api/v1/learning/documents/" + documentId + "/pages/" + page)
                 if (isStopped) return Result.retry()
                 if (bytes.isEmpty() || bytes.size > MAX_PAGE_BYTES) return Result.failure()
