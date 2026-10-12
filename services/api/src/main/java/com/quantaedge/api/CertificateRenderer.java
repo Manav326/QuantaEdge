@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
@@ -120,8 +121,18 @@ public class CertificateRenderer {
 
   private void drawVerificationQr(Graphics2D g, String certificateNumber, boolean hindi) {
     String baseUrl = publicBaseUrl == null ? "" : publicBaseUrl.trim().replaceAll("/+$", "");
-    if (!baseUrl.matches("https://[^\\s]+|http://localhost(?::[0-9]+)?")) {
-      throw new IllegalStateException("APP_PUBLIC_BASE_URL must be the canonical HTTPS website URL (HTTP localhost is allowed only for development).");
+    URI baseUri;
+    try {
+      baseUri = URI.create(baseUrl);
+    } catch (IllegalArgumentException ex) {
+      throw new IllegalStateException("APP_PUBLIC_BASE_URL must be a valid canonical HTTPS website URL.", ex);
+    }
+    boolean localDevelopment = "http".equalsIgnoreCase(baseUri.getScheme())
+        && ("localhost".equalsIgnoreCase(baseUri.getHost()) || "127.0.0.1".equals(baseUri.getHost()));
+    boolean securePublicOrigin = "https".equalsIgnoreCase(baseUri.getScheme()) && baseUri.getHost() != null;
+    if ((!securePublicOrigin && !localDevelopment) || baseUri.getUserInfo() != null
+        || baseUri.getQuery() != null || baseUri.getFragment() != null) {
+      throw new IllegalStateException("APP_PUBLIC_BASE_URL must be a canonical HTTPS origin without credentials, query, or fragment (HTTP localhost is allowed only for development).");
     }
     String verificationUrl = baseUrl + "/certificate/verify?code="
         + URLEncoder.encode(certificateNumber, StandardCharsets.UTF_8);
