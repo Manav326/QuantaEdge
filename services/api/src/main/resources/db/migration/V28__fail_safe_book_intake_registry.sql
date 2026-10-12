@@ -5,8 +5,8 @@ create table if not exists learning_book_intake (
   category varchar(32) not null check (category in (
     'MAIN_TEXTBOOK','PART','SUPPLEMENTARY','WORKBOOK','TEACHER_GUIDE','REFERENCE','OTHER'
   )),
-  class_code varchar(30) not null references curriculum_class(code),
-  subject_code varchar(40) not null references curriculum_subject(code),
+  class_id bigint not null references curriculum_class(id) on delete restrict,
+  subject_id bigint not null references curriculum_subject(id) on delete restrict,
   language varchar(2) not null check (language in ('hi','en')),
   part_label varchar(80),
   status varchar(24) not null default 'PENDING'
@@ -25,7 +25,7 @@ create table if not exists learning_book_intake (
 );
 
 create index if not exists idx_learning_book_intake_track
-  on learning_book_intake(class_code, subject_code, language, category, status);
+  on learning_book_intake(class_id, subject_id, language, category, status);
 create index if not exists idx_learning_book_intake_status
   on learning_book_intake(status, updated_at desc);
 
