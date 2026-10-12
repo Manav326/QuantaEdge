@@ -758,7 +758,7 @@ export default function TextbookLibraryPage() {
             <div className={styles.uploadTitle}><b>Book intake queue</b><small>{intakeRows.length} classified PDF(s)</small></div>
             {intakeRows.length === 0 ? <p>No classified books yet. Upload a complete PDF above to start.</p> :
               <div className={styles.assignmentList}>
-                {intakeRows.map((item: any) => <div className={styles.assignmentRow} key={item.pdf_asset_id}>
+                {intakeRows.map((item: any) => <div className={styles.assignmentQueueRow} key={item.pdf_asset_id}>
                   <div>
                     <b>{item.title || ('PDF #' + item.pdf_asset_id)}</b>
                     <small>Class {item.class_code} · {item.subject_name || item.subject_code} · {item.language === 'hi' ? 'Hindi' : 'English'} · {String(item.category || '').replaceAll('_', ' ')}{item.part_label ? ' · ' + item.part_label : ''}</small>
