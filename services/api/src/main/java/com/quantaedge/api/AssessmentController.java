@@ -1268,7 +1268,9 @@ public class AssessmentController {
       item.put("maxMarks", row.get("max_marks"));
       item.put("answer", parseValue(String.valueOf(row.get("response_payload"))));
       item.put("answerStatus", row.get("answer_status"));
+      // Explanations are also grading feedback: do not expose them in active or awaiting-review attempts.
       if (resultReleased || staffView) {
+        if (snapshot.containsKey("explanation")) item.put("explanation", snapshot.get("explanation"));
         item.put("isCorrect", row.get("is_correct"));
         item.put("awardedMarks", row.get("awarded_marks"));
         item.put("teacherFeedback", row.get("teacher_feedback"));
@@ -1334,7 +1336,7 @@ public class AssessmentController {
 
   private Map<String, Object> publicSnapshot(Map<String, Object> snapshot) {
     Map<String, Object> result = new LinkedHashMap<>();
-    for (String key : List.of("id", "question_type", "prompt", "explanation", "difficulty",
+    for (String key : List.of("id", "question_type", "prompt", "difficulty",
         "sort_order", "marks", "exam_format", "topic", "subtopic", "skill")) {
       if (snapshot.containsKey(key)) result.put(key, snapshot.get(key));
     }

@@ -48,6 +48,9 @@ class AssessmentLifecycleIntegrationTest {
     Map<String,Object> started = controller.startOrResumeAttempt(
         fixture.assessmentId(), "hi", fixture.student());
     long attemptId = ((Number) started.get("attempt_id")).longValue();
+    List<Map<String,Object>> activeQuestions=(List<Map<String,Object>>)started.get("questions");
+    assertFalse(activeQuestions.getFirst().containsKey("explanation"),
+        "Question explanations must remain hidden before result release.");
     long attemptQuestionId = jdbc.queryForObject("""
       select id from student_assessment_attempt_question where attempt_id=?
       """, Long.class, attemptId);
@@ -79,6 +82,9 @@ class AssessmentLifecycleIntegrationTest {
     Map<String,Object> submitted = controller.submitAttempt(attemptId, fixture.student());
     assertEquals("RELEASED", submitted.get("status"));
     assertEquals(true, submitted.get("resultReleased"));
+    List<Map<String,Object>> releasedQuestions=(List<Map<String,Object>>)submitted.get("questions");
+    assertEquals("Option B is correct.", releasedQuestions.getFirst().get("explanation"),
+        "Question explanations should be returned for the released answer-review flow.");
 
     Map<String,Object> savedAnswer = jdbc.queryForMap("""
       select ans.answer_status,ans.is_correct,ans.awarded_marks
