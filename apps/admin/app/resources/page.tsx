@@ -544,6 +544,19 @@ export default function TextbookLibraryPage() {
 
   useEffect(() => { void load(); }, [load]);
 
+  useEffect(() => {
+    if (!tracks.length) return;
+    const selectedClass = tracks.find(track => track.class_code === uploadClassCode);
+    if (!selectedClass) {
+      setUploadClassCode(tracks[0].class_code);
+      setUploadSubjectCode(tracks[0].subject_code);
+      return;
+    }
+    if (!tracks.some(track => track.class_code === uploadClassCode && track.subject_code === uploadSubjectCode)) {
+      setUploadSubjectCode(selectedClass.subject_code);
+    }
+  }, [tracks, uploadClassCode, uploadSubjectCode]);
+
   async function uploadPdf() {
     if (!file) { setError('Choose the existing textbook PDF file first.'); return; }
     if (file.size > maxPdfBytes) {
