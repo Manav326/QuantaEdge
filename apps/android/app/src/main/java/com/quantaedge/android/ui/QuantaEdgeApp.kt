@@ -119,21 +119,22 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
 
-    LaunchedEffect(route, resourceOwner) {
+    LaunchedEffect(route, resourceOwner, documents) {
         if (route == AppRoute.RESOURCES) {
+            val documentIds = documents.map { it.optLongAny("document_id", "id") }.filter { it > 0L }.distinct()
             while (true) {
-                val workInfos = withContext(Dispatchers.IO) {
-                    runCatching {
-                        WorkManager.getInstance(context.applicationContext)
-                            .getWorkInfosByTag("quantaedge-resource-download").get()
-                    }.getOrDefault(emptyList())
+                val workByDocument = withContext(Dispatchers.IO) {
+                    documentIds.mapNotNull { documentId ->
+                        val uniqueName = "qe-resource-" + resourceOwner.take(16) + "-" + documentId
+                        val work = runCatching {
+                            WorkManager.getInstance(context.applicationContext)
+                                .getWorkInfosForUniqueWork(uniqueName).get().lastOrNull()
+                        }.getOrNull()
+                        if (work == null) null else documentId to work
+                    }.toMap()
                 }
                 val nextStates = linkedMapOf<Long, ResourceDownloadUiState>()
-                workInfos.filter {
-                    it.inputData.getString("owner_namespace") == resourceOwner
-                }.forEach { work ->
-                    val documentId = work.inputData.getLong("document_id", 0L)
-                    if (documentId <= 0L) return@forEach
+                workByDocument.forEach { (documentId, work) ->
                     val done = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
                         work.outputData.getInt("pagesDone", work.progress.getInt("pagesDone", 0))
                     } else work.progress.getInt("pagesDone", 0)
@@ -145,7 +146,7 @@ fun QuantaEdgeApp() {
                         androidx.work.WorkInfo.State.ENQUEUED,
                         androidx.work.WorkInfo.State.BLOCKED -> ResourceDownloadUiState("डाउनलोड कतार में है", fraction, true)
                         androidx.work.WorkInfo.State.RUNNING -> ResourceDownloadUiState(
-                            if (total > 0) "डाउनलोड: $done / $total पृष्ठ" else "डाउनलोड चल रहा है",
+                            if (total > 0) "डाउनलोड: " + done + " / " + total + " पृष्ठ" else "डाउनलोड चल रहा है",
                             fraction, true
                         )
                         androidx.work.WorkInfo.State.SUCCEEDED -> ResourceDownloadUiState("डाउनलोड पूरा", 1f, false)
