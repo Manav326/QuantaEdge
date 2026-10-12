@@ -30,6 +30,14 @@ Last updated: 2026-10-12
 - Offline resource store/manifest/key is account-scoped; worker checks the active server session before downloading.
 - Inline lesson answers respect the backend's saved state, and the home recommendation can open the actual recommended lesson.
 
+## Milestone 4 — Tutor and classes
+
+**Status:** Added to source; CI verification pending.
+
+- Lesson screen now opens the existing contextual tutor session; conversation history, tutor modes and configured/unconfigured status use the current tutor APIs.
+- Added student live/recorded class catalogue by subject, meeting hand-off with server attendance join/leave, and authenticated in-app recorded video playback.
+- Recorded playback reuses the session cookie jar, handles an expired access cookie through refresh, and periodically saves playback position/watched time to the existing progress endpoint.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

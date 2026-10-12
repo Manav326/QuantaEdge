@@ -47,6 +47,29 @@ object ApiClient {
         JSONObject(request(path, "PATCH", body.toString()).toString(StandardCharsets.UTF_8))
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
+    fun absoluteUrl(path: String): String = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
+    fun authenticatedHttpClient(): OkHttpClient =
+        (client ?: throw IOException("API client is not initialized.")).newBuilder()
+            .authenticator(okhttp3.Authenticator { _, response ->
+                if (responseCount(response) >= 2) return@Authenticator null
+                synchronized(refreshLock) {
+                    val currentClient = client ?: return@synchronized null
+                    val refreshRequest = Request.Builder()
+                        .url(absoluteUrl("/api/v1/auth/refresh"))
+                        .post("{}".toRequestBody(jsonType))
+                        .header("Accept", "application/json")
+                        .build()
+                    val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
+                    if (refreshed) response.request.newBuilder().removeHeader("Cookie").build() else null
+                }
+            }).build()
+
+    private fun responseCount(response: okhttp3.Response): Int {
+        var count = 1
+        var previous = response.priorResponse
+        while (previous != null) { count++; previous = previous.priorResponse }
+        return count
+    }
 
     private fun shouldAttemptRefresh(path: String): Boolean {
         val normalized = path.substringBefore('?').trimEnd('/')

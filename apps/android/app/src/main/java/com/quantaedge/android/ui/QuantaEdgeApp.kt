@@ -60,7 +60,7 @@ import java.io.IOException
 private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, RESOURCES,
-    DOCUMENT_READER, PROFILE
+    DOCUMENT_READER, PROFILE, TUTOR, CLASSES, RECORDING_PLAYER
 }
 
 @Composable
@@ -92,6 +92,12 @@ fun QuantaEdgeApp() {
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
     var documentPage by remember { mutableStateOf(1) }
     var documentImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+    var tutorSession by remember { mutableStateOf(JSONObject()) }
+    var tutorMessages by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var tutorAvailable by remember { mutableStateOf(false) }
+    var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var selectedRecording by remember { mutableStateOf(JSONObject()) }
 
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
@@ -267,6 +273,108 @@ fun QuantaEdgeApp() {
             assessmentResults = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
                 .optJSONArray("items").objectItems()
             route = AppRoute.ASSESSMENT_RESULTS
+        }
+    }
+
+    fun openClasses(subjectCode: String = currentSubject) {
+        currentSubject = subjectCode
+        runTask {
+            liveClasses = ApiClient.getObject(
+                "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
+            ).optJSONArray("items").objectItems()
+            recordedClasses = ApiClient.getObject(
+                "/api/v1/learning/recorded-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
+            ).optJSONArray("items").objectItems()
+            route = AppRoute.CLASSES
+        }
+    }
+
+    fun joinLiveClass(item: JSONObject) {
+        runTask {
+            val sessionId = item.longAny("session_id", "sessionId")
+            val joined = ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/join")
+            val joinUrl = joined.textAny("joinUrl", "join_url")
+            if (joinUrl.isNotBlank()) {
+                val uri = android.net.Uri.parse(joinUrl)
+                if (uri.scheme != "https" && uri.scheme != "http") {
+                    throw IOException("इस live class का सुरक्षित meeting link उपलब्ध नहीं है।")
+                }
+                context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, uri)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+            liveClasses = liveClasses.map { row ->
+                if (row.longAny("session_id", "sessionId") == sessionId)
+                    JSONObject(row.toString()).put("currently_joined", true)
+                else row
+            }
+            status = if (joinUrl.isBlank())
+                "Attendance दर्ज हो गई है, लेकिन इस session के लिए meeting link उपलब्ध नहीं है।"
+                else "Live class में शामिल होने की attendance दर्ज हो गई है।"
+        }
+    }
+
+    fun leaveLiveClass(item: JSONObject) {
+        runTask {
+            val sessionId = item.longAny("session_id", "sessionId")
+            ApiClient.postObject("/api/v1/learning/live-classes/" + sessionId + "/leave")
+            liveClasses = liveClasses.map { row ->
+                if (row.longAny("session_id", "sessionId") == sessionId)
+                    JSONObject(row.toString()).put("currently_joined", false)
+                else row
+            }
+            status = "आपकी live class leave और attendance update हो गई।"
+        }
+    }
+
+    fun openTutor() {
+        runTask {
+            val lessonId = lesson.longAny("id", "lesson_id")
+            if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
+            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions", JSONObject().put("lessonId", lessonId))
+            tutorAvailable = tutorSession.optBoolean("available")
+            tutorMessages = if (tutorAvailable) {
+                ApiClient.getObject("/api/v1/tutor/sessions/" + tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
+                    .optJSONArray("items").objectItems()
+            } else emptyList()
+            route = AppRoute.TUTOR
+            if (!tutorAvailable) status = "AI Tutor अभी configured नहीं है। यह setting backend पर enable होने पर उपलब्ध होगा।"
+        }
+    }
+
+    fun sendTutorMessage(message: String, mode: String) {
+        runTask {
+            val sessionId = tutorSession.longAny("sessionId", "session_id")
+            ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
+                JSONObject().put("message", message).put("mode", mode).put("questionId", 0))
+            tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                .optJSONArray("items").objectItems()
+        }
+    }
+
+    fun openRecording(item: JSONObject) {
+        runTask {
+            val id = item.longAny("recorded_class_id", "recordingId", "id")
+            if (id <= 0L) throw IOException("Recording की पहचान नहीं मिली।")
+            selectedRecording = ApiClient.getObject("/api/v1/learning/recorded-classes/" + id)
+            route = AppRoute.RECORDING_PLAYER
+        }
+    }
+
+    fun saveRecordingProgressAndBack(positionSeconds: Long, watchedSeconds: Long, completed: Boolean) {
+        runTask {
+            val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
+            ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
+                    .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
+            recordedClasses = recordedClasses.map { row ->
+                if (row.longAny("recorded_class_id", "recordingId", "id") == id) {
+                    JSONObject(row.toString())
+                        .put("last_position_seconds", positionSeconds)
+                        .put("watched_seconds", watchedSeconds)
+                        .put("completed", completed)
+                } else row
+            }
+            route = AppRoute.CLASSES
         }
     }
 
@@ -484,6 +592,9 @@ fun QuantaEdgeApp() {
             AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.LESSON -> AppRoute.SUBJECT_LESSONS
             AppRoute.PRACTICE -> AppRoute.LESSON
+            AppRoute.TUTOR -> AppRoute.LESSON
+            AppRoute.CLASSES -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
+            AppRoute.RECORDING_PLAYER -> AppRoute.CLASSES
             AppRoute.ASSESSMENT_ATTEMPT -> AppRoute.ASSESSMENTS
             AppRoute.PARENT_REPORT -> AppRoute.PARENT_HOME
             AppRoute.DOCUMENT_READER -> AppRoute.RESOURCES
@@ -570,7 +681,8 @@ fun QuantaEdgeApp() {
                             studentProfile = ApiClient.getObject("/api/v1/students/me")
                             recommendation = ApiClient.getObject("/api/v1/recommendations/next")
                         } },
-                        onOpenRecommendation = { recommended -> openLesson(recommended) }
+                        onOpenRecommendation = { recommended -> openLesson(recommended) },
+                        onClasses = ::openClasses
                     )
                     AppRoute.PARENT_HOME -> ParentHomeScreen(
                         parent = parentAccount,
@@ -601,7 +713,8 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onAnswer = ::saveLessonAnswer,
-                        onPractice = ::startPractice
+                        onPractice = ::startPractice,
+                        onTutor = ::openTutor
                     )
                     AppRoute.PRACTICE -> PracticeScreen(
                         practice = practice,
@@ -677,6 +790,30 @@ fun QuantaEdgeApp() {
                         language = language,
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
+                    )
+                    AppRoute.TUTOR -> TutorScreen(
+                        lessonTitle = lesson.textAny("title"),
+                        available = tutorAvailable,
+                        messages = tutorMessages,
+                        busy = busy,
+                        error = error,
+                        onSend = ::sendTutorMessage
+                    )
+                    AppRoute.CLASSES -> LearningClassesScreen(
+                        subject = currentSubject,
+                        liveItems = liveClasses,
+                        recordedItems = recordedClasses,
+                        busy = busy,
+                        onSubject = ::openClasses,
+                        onRefresh = { openClasses(currentSubject) },
+                        onJoin = ::joinLiveClass,
+                        onLeave = ::leaveLiveClass,
+                        onRecording = ::openRecording
+                    )
+                    AppRoute.RECORDING_PLAYER -> RecordedPlayerScreen(
+                        recording = selectedRecording,
+                        startPositionSeconds = selectedRecording.optLongAny("last_position_seconds", "lastPositionSeconds"),
+                        onSaveAndBack = ::saveRecordingProgressAndBack
                     )
                 }
             }
@@ -862,7 +999,8 @@ private fun StudentHomeScreen(
     onResults: () -> Unit,
     onProfile: () -> Unit,
     onRefresh: () -> Unit,
-    onOpenRecommendation: (JSONObject) -> Unit
+    onOpenRecommendation: (JSONObject) -> Unit,
+    onClasses: (String) -> Unit
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { "विद्यार्थी" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
@@ -880,6 +1018,7 @@ private fun StudentHomeScreen(
         ActionRow("प्रारंभिक जाँच", "आपके वर्तमान ज्ञान को समझने के लिए सर्वर पर उपलब्ध डायग्नोस्टिक।", "जाँच शुरू करें", onDiagnostic)
         ActionRow("टेस्ट", "प्रकाशित अध्याय और विषय मूल्यांकन।", "टेस्ट देखें") { onTests("maths") }
         ActionRow("Textbook Library", "पुस्तक और अध्याय संसाधन ऐप में पढ़ें; अनुमति होने पर ऑफ़लाइन डाउनलोड करें।", "लाइब्रेरी खोलें") { onResources("maths") }
+        ActionRow("Live classes और recordings", "Schedule की गई classes, recorded lessons और आपकी playback progress।", "Classes खोलें") { onClasses("maths") }
         ActionRow("मेरे परिणाम", "जारी किए गए टेस्ट परिणाम और उत्तर समीक्षा।", "परिणाम देखें", onResults)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextButton(onClick = onProfile) { Text("प्रोफ़ाइल और सेटिंग") }
@@ -963,7 +1102,8 @@ private fun LessonScreen(
     busy: Boolean,
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
-    onPractice: () -> Unit
+    onPractice: () -> Unit,
+    onTutor: () -> Unit
 ) {
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
@@ -1012,6 +1152,9 @@ private fun LessonScreen(
         Row(modifier = Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Button(onClick = onPractice, enabled = !busy && lessonId > 0, modifier = Modifier.weight(1f)) {
                 Text("अभ्यास शुरू करें")
+            }
+            TextButton(onClick = onTutor, enabled = !busy && lessonId > 0) {
+                Text("Tutor से पूछें")
             }
         }
     }

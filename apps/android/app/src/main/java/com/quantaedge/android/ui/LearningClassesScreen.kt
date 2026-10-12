@@ -1,0 +1,109 @@
+package com.quantaedge.android.ui
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import org.json.JSONObject
+
+@Composable
+fun LearningClassesScreen(
+    subject: String,
+    liveItems: List<JSONObject>,
+    recordedItems: List<JSONObject>,
+    busy: Boolean,
+    onSubject: (String) -> Unit,
+    onRefresh: () -> Unit,
+    onJoin: (JSONObject) -> Unit,
+    onLeave: (JSONObject) -> Unit,
+    onRecording: (JSONObject) -> Unit
+) {
+    var tab by remember { mutableStateOf("LIVE") }
+    Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
+        Text("Live classes और recordings", style = MaterialTheme.typography.headlineSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
+            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
+            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
+            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            if (tab == "LIVE") Button(onClick = { tab = "LIVE" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("Live schedule") }
+            else TextButton(onClick = { tab = "LIVE" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("Live schedule") }
+            if (tab == "RECORDED") Button(onClick = { tab = "RECORDED" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("Recordings") }
+            else TextButton(onClick = { tab = "RECORDED" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("Recordings") }
+        }
+
+        if (tab == "LIVE") {
+            if (liveItems.isEmpty() && !busy) EmptyState("कोई live class नहीं", "जब आपकी कक्षा/विषय के लिए session schedule होगा, वह यहाँ दिखेगा।")
+            LazyColumn(modifier = Modifier.weight(1f).padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(liveItems) { item ->
+                    val joined = item.optBoolean("currently_joined")
+                    Card(modifier = Modifier.fillMaxWidth()) {
+                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(item.textAny("title").ifBlank { "Live class" }, style = MaterialTheme.typography.titleMedium)
+                            Text(item.textAny("chapter_name", "subject_name", "description"),
+                                style = MaterialTheme.typography.bodyMedium)
+                            Text("शिक्षक: " + item.textAny("host_staff_name").ifBlank { "QuantaEdge शिक्षक" },
+                                style = MaterialTheme.typography.bodySmall)
+                            Text(item.textAny("starts_at") + if (item.textAny("ends_at").isNotBlank()) " – " + item.textAny("ends_at") else "",
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                            Text("Attendance: " + (item.optLongAny("attended_seconds") / 60) + " मिनट • जुड़ने की संख्या: " + item.optInt("join_count"),
+                                style = MaterialTheme.typography.bodySmall)
+                            if (joined) {
+                                Button(onClick = { onLeave(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text("Class leave करें") }
+                            } else {
+                                Button(onClick = { onJoin(item) }, enabled = !busy && item.textAny("status") in setOf("SCHEDULED", "LIVE"),
+                                    modifier = Modifier.fillMaxWidth()) { Text("Live class join करें") }
+                            }
+                            if (item.optBoolean("has_recording")) {
+                                Text("इस class की published recording भी उपलब्ध है।", style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if (recordedItems.isEmpty() && !busy) EmptyState("कोई published recording नहीं", "आपके विषय की recordings उपलब्ध होने पर वे यहाँ दिखेंगी।")
+            LazyColumn(modifier = Modifier.weight(1f).padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(recordedItems) { item ->
+                    val done = item.optBoolean("completed")
+                    val position = item.optLongAny("last_position_seconds")
+                    val duration = item.optLongAny("duration_seconds")
+                    Card(modifier = Modifier.fillMaxWidth().clickable { onRecording(item) }) {
+                        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(item.textAny("title").ifBlank { "Recorded class" }, style = MaterialTheme.typography.titleMedium)
+                            Text(item.textAny("chapter_name", "subject_name", "description"), style = MaterialTheme.typography.bodyMedium)
+                            Text(if (duration > 0) "अवधि: " + (duration / 60) + " मिनट" else "Recorded learning session",
+                                style = MaterialTheme.typography.bodySmall)
+                            Text(if (done) "पूरी देखी गई" else if (position > 0) "आगे जारी रखें: " + (position / 60) + " मिनट" else "अभी तक नहीं देखी",
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                            Button(onClick = { onRecording(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                                Text(if (position > 0 && !done) "जहाँ छोड़ा था वहीं से चलाएँ" else "Recording चलाएँ")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
