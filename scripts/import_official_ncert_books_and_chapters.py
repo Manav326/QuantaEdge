@@ -319,23 +319,23 @@ def read_chapters(
                 f"{label_subject(subject)} chapters from the Admin API."
             )
         query = urlencode({"classCode": grade, "subjectCode": subject})
-            # Use the real, permission-protected Admin content route. It includes current
-            # canonical chapter IDs/codes and may repeat chapters once for each lesson.
-            rows = api_call(base, cookie, "/api/v1/admin/content?" + query)
-            if not isinstance(rows, list):
-                raise RuntimeError(f"Unexpected Admin content response for Class {grade} / {subject}.")
-            active = dedupe_live_chapters(rows, grade, subject)
-            if not active:
-                raise RuntimeError(f"No active curriculum chapter returned for Class {grade} / {subject}.")
-            codes = [str(row["chapter_code"]) for row in active]
-            if len(codes) != len(set(codes)):
-                raise RuntimeError(f"Duplicate chapter codes returned for Class {grade} / {subject}.")
-            result[(grade, subject)] = active
-            if progress:
-                progress(
-                    f"[Curriculum {track_index}/{len(tracks)}] Class {grade} "
-                    f"{label_subject(subject)}: {len(active)} active chapters loaded."
-                )
+        # Use the real, permission-protected Admin content route. It includes current
+        # canonical chapter IDs/codes and may repeat chapters once for each lesson.
+        rows = api_call(base, cookie, "/api/v1/admin/content?" + query)
+        if not isinstance(rows, list):
+            raise RuntimeError(f"Unexpected Admin content response for Class {grade} / {subject}.")
+        active = dedupe_live_chapters(rows, grade, subject)
+        if not active:
+            raise RuntimeError(f"No active curriculum chapter returned for Class {grade} / {subject}.")
+        codes = [str(row["chapter_code"]) for row in active]
+        if len(codes) != len(set(codes)):
+            raise RuntimeError(f"Duplicate chapter codes returned for Class {grade} / {subject}.")
+        result[(grade, subject)] = active
+        if progress:
+            progress(
+                f"[Curriculum {track_index}/{len(tracks)}] Class {grade} "
+                f"{label_subject(subject)}: {len(active)} active chapters loaded."
+            )
     return result
 
 
