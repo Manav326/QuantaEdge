@@ -451,11 +451,11 @@ def positioned_page_title_hits(
     chapters: list[dict[str, Any]],
     aliases_by_code: dict[str, list[str]],
     *,
-    max_top_fraction: float = 0.72,
+    max_top_fraction: float = 0.90,
 ) -> set[str]:
     """Fallback to PDF text geometry when extraction order pushes a heading past line 18.
 
-    Only exact alias searches whose text boxes are in the upper 72% of the page count.
+    Only exact alias searches whose text boxes are in the upper 90% of the page count.
     A page must still identify exactly one known chapter title, and contents pages are
     filtered separately. This does not guess page numbers or use fuzzy title matching.
     """
