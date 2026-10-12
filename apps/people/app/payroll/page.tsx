@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 type Session={staffId?:number;role?:string;displayName?:string;permissions?:string[]};
 type Employee={id:number;employee_number:string;display_name:string;employment_status:string};
 type Component={id:number;code:string;name:string;component_type:string;active:boolean};
-type Period={id:number;organization_id:number;period_name:string;start_date:string;end_date:string;status:string;latest_run_id:number|null;latest_run_status:string|null;total_gross:number|null;total_deductions:number|null;total_net:number|null;currency:string|null};
+type Period={id:number;organization_id:number;period_name:string;start_date:string;end_date:string;status:string;latest_run_id:number|null;latest_run_version:number|null;latest_run_status:string|null;total_gross:number|null;total_deductions:number|null;total_net:number|null;currency:string|null};
 async function api(path:string,init:RequestInit={}){const h=new Headers(init.headers);h.set('X-QE-Workspace','STAFF');if(init.body&&!h.has('Content-Type'))h.set('Content-Type','application/json');const r=await fetch(path,{...init,headers:h,credentials:'same-origin',cache:'no-store'});const raw=await r.text();let d:any={};try{d=raw?JSON.parse(raw):{}}catch{d={message:raw}}if(!r.ok)throw new Error(d.message||d.detail||d.error||'Request failed ('+r.status+')');return d}
 const localDate=(d:Date)=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const now=new Date(),monthStart=localDate(new Date(now.getFullYear(),now.getMonth(),1)),monthEnd=localDate(new Date(now.getFullYear(),now.getMonth()+1,0));
