@@ -7,8 +7,8 @@ structure/size/page count, edition/source metadata, existing assets, and assignm
 any writes. With --apply, it uploads each distinct PDF once and creates only DRAFT assignments.
 
 Workflow:
-  1. Sign in to QuantaEdge Admin and set QUANTAEDGE_ADMIN_SESSION to the QE_SESSION cookie.
-  2. Run --write-template once; it queries the live Class 6-8 Maths/Science curriculum.
+  1. Sign in to QuantaEdge Admin and set QUANTAEDGE_ADMIN_SESSION to the QE_STAFF_SESSION cookie value.
+  2. Requests are sent with X-QE-Workspace: STAFF so the API validates the staff-scoped session. Run --write-template once; it queries the live Class 6-8 Maths/Science curriculum.
   3. Rename local PDFs to the filenames in ncert-pdf-manifest.csv and fill edition for the
      12 BOOK rows. Chapter rows inherit edition/source URL from their matching whole book.
   4. Run a dry run; fix every missing file or mapping error.

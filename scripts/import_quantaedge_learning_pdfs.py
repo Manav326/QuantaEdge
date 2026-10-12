@@ -9,7 +9,8 @@ All created assignments stay DRAFT. This script never calls a publish endpoint.
 Dry run (default):
   python scripts/import_quantaedge_learning_pdfs.py --package Class6.zip --package Class7.zip
 Apply:
-  set QUANTAEDGE_ADMIN_SESSION to a fresh QE_SESSION cookie first, then add --apply.
+  Sign in to the Admin portal, set QUANTAEDGE_ADMIN_SESSION to the QE_STAFF_SESSION cookie value,
+  then add --apply. API calls use X-QE-Workspace: STAFF.
 """
 from __future__ import annotations
 
@@ -289,7 +290,11 @@ def extract_records(package_path: Path) -> tuple[list[PdfRecord], list[str]]:
 def api_call(base_url: str, cookie: str, path: str, method: str = "GET", body: Any | None = None,
              multipart: tuple[str, str, str, bytes] | None = None, timeout: int = 90) -> Any:
     boundary = BOUNDARY_PREFIX + hashlib.sha256((str(time.time_ns()) + path).encode()).hexdigest()[:20]
-    headers = {"Accept": "application/json", "Cookie": "QE_SESSION=" + cookie}
+    headers = {
+        "Accept": "application/json",
+        "Cookie": "QE_STAFF_SESSION=" + cookie,
+        "X-QE-Workspace": "STAFF",
+    }
     data: bytes | None = None
     if multipart is not None:
         title, source_reference, filename, pdf_bytes = multipart
@@ -322,7 +327,7 @@ def api_call(base_url: str, cookie: str, path: str, method: str = "GET", body: A
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")[:1500]
         if exc.code in {401, 403}:
-            raise RuntimeError(f"Admin API rejected this session/permission for {path} (HTTP {exc.code}). Sign in again, refresh QUANTAEDGE_ADMIN_SESSION, and confirm CONTENT_EDIT. Response: {detail}") from exc
+            raise RuntimeError(f"Admin API rejected this session/permission for {path} (HTTP {exc.code}). Confirm QUANTAEDGE_ADMIN_SESSION contains the value of QE_STAFF_SESSION from a fresh Admin login; this client sends X-QE-Workspace: STAFF. Also confirm CONTENT_EDIT. Response: {detail}") from exc
         raise RuntimeError(f"Admin API request failed for {path} (HTTP {exc.code}): {detail}") from exc
     except urllib.error.URLError as exc:
         raise RuntimeError(f"Could not connect to {base_url}: {exc}") from exc
@@ -356,10 +361,10 @@ def resolve_chapter(record: PdfRecord, chapters: list[dict[str, Any]]) -> int:
 
 def verify_session(base: str, cookie: str) -> dict[str, Any]:
     if not cookie.strip():
-        raise RuntimeError("Set QUANTAEDGE_ADMIN_SESSION to a fresh QE_SESSION cookie value before import.")
+        raise RuntimeError("Set QUANTAEDGE_ADMIN_SESSION to a fresh QE_STAFF_SESSION cookie value before import.")
     me = api_call(base, cookie, "/api/v1/auth/me")
     if not isinstance(me, dict) or me.get("authenticated") is not True:
-        raise RuntimeError("Admin session is not authenticated. Sign in at the Admin portal and copy a fresh QE_SESSION cookie.")
+        raise RuntimeError("Admin session is not authenticated. Sign in at the Admin portal and copy the current QE_STAFF_SESSION cookie value.")
     permissions = set(me.get("permissions") or [])
     role = str(me.get("role") or "")
     if role != "ADMIN" and "CONTENT_EDIT" not in permissions:

@@ -5,6 +5,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest.mock import MagicMock, patch
 import zipfile
 from pathlib import Path
 
@@ -29,6 +30,19 @@ def minimal_pdf() -> bytes:
 
 
 class ImportQuantaEdgeLearningPdfTests(unittest.TestCase):
+    def test_api_call_uses_staff_scoped_session_cookie_and_workspace_header(self):
+        mock_response = MagicMock()
+        mock_response.__enter__.return_value.read.return_value = b'{"authenticated": true}'
+        with patch.object(importer.urllib.request, "urlopen", return_value=mock_response) as mocked_open:
+            result = importer.api_call(
+                "http://localhost:8080", "fresh-staff-token", "/api/v1/auth/me"
+            )
+        request = mocked_open.call_args.args[0]
+        headers = {key.lower(): value for key, value in request.header_items()}
+        self.assertEqual({"authenticated": True}, result)
+        self.assertEqual("QE_STAFF_SESSION=fresh-staff-token", headers["cookie"])
+        self.assertEqual("STAFF", headers["x-qe-workspace"])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)

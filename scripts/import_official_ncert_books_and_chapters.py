@@ -22,6 +22,9 @@ The importer:
 If the chapter titles in an official PDF cannot be read/identified, the script writes an error report
 and performs no application-data writes. Do not use OCR or infer a page range by chapter number.
 
+Authentication: set QUANTAEDGE_ADMIN_SESSION to the value of the QE_STAFF_SESSION cookie from a fresh Admin login.
+API calls use the staff workspace identity; do not substitute the legacy QE_SESSION cookie.
+
 Examples (always select the source languages explicitly):
   python scripts/import_official_ncert_books_and_chapters.py --languages english --api-url http://localhost:8080
   python scripts/import_official_ncert_books_and_chapters.py --languages english --api-url http://localhost:8080 --apply
