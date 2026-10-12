@@ -368,7 +368,7 @@ public class AssessmentController {
       join student st on st.id=att.student_id
       left join curriculum_chapter ch on ch.id=a.chapter_id
       """;
-    List<Map<String,Object>> items=jdbc.queryForList("""
+    String selectSql="""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.started_at,
              att.submitted_at,att.graded_at,att.released_at,att.auto_score,att.final_score,att.max_score,
              a.title as assessment_title,a.duration_minutes,
@@ -378,15 +378,13 @@ public class AssessmentController {
              count(distinct aq.id) as question_count,
              count(distinct ans.id) filter (where ans.answer_status='PENDING_REVIEW') as pending_answers,
              case when ? then true else false end as can_review
-      """+fromJoins+"""
-      left join student_assessment_attempt_question aq on aq.attempt_id=att.id
-      left join student_assessment_answer ans on ans.attempt_question_id=aq.id
-      """+filterSql+"""
-      group by att.id,a.title,a.duration_minutes,st.display_name,st.id,st.class_code,
-               s.code,s.display_name,ch.display_name
-      order by case when att.status='AWAITING_REVIEW' then 0 else 1 end,att.submitted_at asc,att.id
-      limit ? offset ?
-      """,pageArgs.toArray());
+      """;
+    String reviewJoins=" left join student_assessment_attempt_question aq on aq.attempt_id=att.id "+
+      "left join student_assessment_answer ans on ans.attempt_question_id=aq.id ";
+    String reviewTail=" group by att.id,a.title,a.duration_minutes,st.display_name,st.id,st.class_code,"+
+      "s.code,s.display_name,ch.display_name order by case when att.status='AWAITING_REVIEW' then 0 else 1 end,"+
+      "att.submitted_at asc,att.id limit ? offset ?";
+    List<Map<String,Object>> items=jdbc.queryForList(selectSql+fromJoins+reviewJoins+filterSql+reviewTail,pageArgs.toArray());
     Long total=jdbc.queryForObject("select count(*) "+fromJoins+filterSql,Long.class,filterArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
