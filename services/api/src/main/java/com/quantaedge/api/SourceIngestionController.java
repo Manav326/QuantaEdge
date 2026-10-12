@@ -159,6 +159,30 @@ public class SourceIngestionController {
           or learning_book_intake.category<>excluded.category
           or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
           then null else learning_book_intake.reviewed_at end,
+        chapter_ranges=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then '[]'::jsonb else learning_book_intake.chapter_ranges end,
+        ranges_reviewed_by_staff_id=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_reviewed_by_staff_id end,
+        ranges_reviewed_at=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_reviewed_at end,
+        ranges_review_notes=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_review_notes end,
         review_notes=excluded.review_notes,updated_at=now()
       """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
