@@ -26,3 +26,10 @@ target/
 /class_*.pdf
 /NCERT_*.pdf
 /root-textbook-pdf-import-report.json
+/Class-*.pdf
+/class-*.pdf
+/Grade-*.pdf
+/grade-*.pdf
+/NCERT-*.pdf
+/ncert-*.pdf
+/ncert_*.pdf
