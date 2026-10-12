@@ -96,7 +96,7 @@ public class LearningStateService {
           select (item->>'sourceLessonId')::bigint as lesson_id
           from student_practice_session ps
           cross join lateral jsonb_array_elements(ps.topic_selections) item
-          where ps.id=? and ps.student_id=? and item ? 'sourceLessonId'
+          where ps.id=? and ps.student_id=? and jsonb_exists(item, 'sourceLessonId')
           """,practiceSessionId,studentId);
         for(Map<String,Object> row:sourceLessons) {
           Object sourceLesson=row.get("lesson_id");
