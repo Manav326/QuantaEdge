@@ -401,7 +401,7 @@ def line_matches_title(line: str, alias: str) -> bool:
     # heading with its running header, e.g.:
     # "THE BAUDHĀYANA-PYTHAGORAS THEOREM 2Ganita Prakash | Grade 8 | Part-II".
     # Accept only this known, bounded book-header suffix, not arbitrary trailing prose.
-    if re.fullmatch(r"\\d{0,3}ganitaprakashgrade[678]part(?:i|ii)", suffix):
+    if re.fullmatch(r"\d{0,3}ganitaprakashgrade[678]part(?:i|ii)", suffix):
         return True
     return False
 

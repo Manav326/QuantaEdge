@@ -382,7 +382,7 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         # This reproduces NCERT's extracted heading line, including the non-printing
         # hyphen glyph and the running book header concatenated after the title.
         extracted_line = (
-            "THE BAUDHĀYANA\\x02PYTHAGORAS THEOREM "
+            "THE BAUDHĀYANA\x02PYTHAGORAS THEOREM "
             "2Ganita Prakash | Grade 8 | Part-II"
         )
         self.assertEqual(
