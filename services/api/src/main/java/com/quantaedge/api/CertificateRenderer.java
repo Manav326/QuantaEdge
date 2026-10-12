@@ -9,6 +9,8 @@ import java.awt.RenderingHints;
 import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -16,6 +18,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import javax.imageio.ImageIO;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -23,6 +33,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,6 +52,9 @@ public class CertificateRenderer {
   private static final Color MUTED = new Color(0x647084);
   private static final Color PAPER = new Color(0xFFFCF5);
   private static final Color PALE = new Color(0xF3F5F8);
+
+  @Value("${app.certificates.public-base-url:http://localhost:3000}")
+  private String publicBaseUrl = "http://localhost:3000";
 
   public record RenderedCertificate(byte[] pdf, byte[] png) {}
 
@@ -62,6 +76,7 @@ public class CertificateRenderer {
       drawContent(g, template, hindi, recipientName, achievementTitle, achievementSummary,
           certificateNumber, issuedAt);
       if (sample) drawSampleWatermark(g, hindi);
+      else drawVerificationQr(g, certificateNumber);
     } finally {
       g.dispose();
     }
@@ -100,6 +115,30 @@ public class CertificateRenderer {
       return png.toByteArray();
     } catch (IOException ex) {
       throw new IllegalStateException("Certificate preview could not be rendered.", ex);
+    }
+  }
+
+  private void drawVerificationQr(Graphics2D g, String certificateNumber) {
+    String baseUrl = publicBaseUrl == null ? "" : publicBaseUrl.trim().replaceAll("/+$", "");
+    if (!baseUrl.matches("https://[^\\s]+|http://localhost(?::[0-9]+)?")) {
+      throw new IllegalStateException("APP_PUBLIC_BASE_URL must be the canonical HTTPS website URL (HTTP localhost is allowed only for development).");
+    }
+    String verificationUrl = baseUrl + "/certificate/verify?code="
+        + URLEncoder.encode(certificateNumber, StandardCharsets.UTF_8);
+    try {
+      BitMatrix matrix = new MultiFormatWriter().encode(verificationUrl, BarcodeFormat.QR_CODE,
+          300, 300, Map.of(EncodeHintType.MARGIN, 1, EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M));
+      BufferedImage qr = MatrixToImageWriter.toBufferedImage(matrix);
+      int size = 250;
+      int x = WIDTH - 390;
+      int y = HEIGHT - 455;
+      g.setColor(Color.WHITE);
+      g.fillRect(x - 14, y - 38, size + 28, size + 52);
+      g.drawImage(qr, x, y, size, size, null);
+      g.setColor(MUTED);
+      drawCentered(g, font(false, Font.BOLD, 18), "SCAN TO VERIFY", x + size / 2, y - 15, size + 30);
+    } catch (WriterException ex) {
+      throw new IllegalStateException("Certificate verification QR code could not be generated.", ex);
     }
   }
 
