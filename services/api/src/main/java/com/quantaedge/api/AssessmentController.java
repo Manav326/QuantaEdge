@@ -2,9 +2,13 @@ package com.quantaedge.api;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +38,7 @@ public class AssessmentController {
   // Fill-in and written responses in formal tests always require a human check.
   // Keep objective choices and numeric questions eligible for automatic scoring.
   private static final Set<String> AUTO_GRADED_TYPES = Set.of("MCQ", "TRUE_FALSE", "NUMERICAL");
+  private static final SecureRandom OFFLINE_TOKEN_RANDOM = new SecureRandom();
 
   /**
    * Shared gate for a new student attempt and catalogue visibility. An in-progress attempt is
@@ -150,7 +155,7 @@ public class AssessmentController {
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
+             a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -332,6 +337,40 @@ public class AssessmentController {
     staffAudit.recordAction(context, "/api/v1/admin/assessments/" + assessmentId + "/status",
         "Changed assessment status from " + before + " to " + next + ".");
     return assessmentDetails(assessmentId, true);
+  }
+
+  /** Offline delivery is an explicit editorial choice for low-stakes tests; default remains online-only. */
+  @PatchMapping("/admin/assessments/{assessmentId}/offline-policy")
+  @Transactional
+  public Map<String,Object> updateOfflinePolicy(
+      @PathVariable long assessmentId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    authorization.requirePermission(context,"CONTENT_EDIT");
+    Object raw=body.get("offlineEnabled");
+    if(!(raw instanceof Boolean enabled)) throw badRequest("offlineEnabled must be true or false.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,title,status,is_generated,offline_enabled
+      from assessment where id=?
+      for update
+      """,assessmentId);
+    if(rows.isEmpty()) throw notFound("Assessment",assessmentId);
+    Map<String,Object> row=rows.getFirst();
+    boolean previous=Boolean.TRUE.equals(row.get("offline_enabled"));
+    if(Boolean.TRUE.equals(row.get("is_generated")) && enabled) {
+      throw badRequest("System-generated topic/chapter tests stay online-only. Only manually authored assessments can be approved for offline use.");
+    }
+    if(previous==enabled) return assessmentDetails(assessmentId,true);
+    jdbc.update("update assessment set offline_enabled=?,updated_at=now() where id=?",enabled,assessmentId);
+    String next=enabled?"ENABLED":"DISABLED";
+    audit(assessmentId,null,context,null,null,"OFFLINE_POLICY_CHANGED",
+        previous?"ENABLED":"DISABLED",next,
+        enabled?"Staff explicitly approved protected offline delivery for this manually authored assessment."
+            :"Staff disabled protected offline delivery for this assessment.");
+    staffAudit.recordAction(context,"/api/v1/admin/assessments/"+assessmentId+"/offline-policy",
+        "Changed protected offline assessment delivery from "+(previous?"enabled":"disabled")+" to "+next+".");
+    return assessmentDetails(assessmentId,true);
   }
 
   @PostMapping("/admin/assessments/{assessmentId}/graders")
@@ -567,7 +606,7 @@ public class AssessmentController {
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
-             a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,
+             a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
@@ -578,7 +617,10 @@ public class AssessmentController {
              (select max(att.id) from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.status='IN_PROGRESS') as in_progress_attempt_id,
              (select max(att.id) from student_assessment_attempt att
-              where att.assessment_id=a.id and att.student_id=st.id and att.status='RELEASED') as latest_result_attempt_id
+              where att.assessment_id=a.id and att.student_id=st.id and att.status='RELEASED') as latest_result_attempt_id,
+             (select att.offline_mode from student_assessment_attempt att
+              where att.assessment_id=a.id and att.student_id=st.id and att.status='IN_PROGRESS'
+              order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
       from assessment a join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
@@ -632,7 +674,17 @@ public class AssessmentController {
   public Map<String, Object> startOrResumeAttempt(
       @PathVariable long assessmentId,
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(defaultValue = "false") boolean offlineMode,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return startOrResumeAttemptInternal(assessmentId,language,offlineMode,context);
+  }
+
+  Map<String,Object> startOrResumeAttempt(long assessmentId,String language,AuthContext context) {
+    return startOrResumeAttemptInternal(assessmentId,language,false,context);
+  }
+
+  private Map<String,Object> startOrResumeAttemptInternal(
+      long assessmentId,String language,boolean offlineMode,AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
     List<Map<String, Object>> assessmentLock = jdbc.queryForList("""
@@ -649,7 +701,7 @@ public class AssessmentController {
     List<Map<String, Object>> assessmentRows = jdbc.queryForList("""
       select a.id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,
-             a.duration_minutes,a.max_attempts,a.status,
+             a.duration_minutes,a.max_attempts,a.status,a.offline_enabled,
              s.id as subject_id,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
@@ -689,13 +741,30 @@ public class AssessmentController {
     Map<String, Object> assessment = assessmentRows.getFirst();
 
     List<Map<String, Object>> existing = jdbc.queryForList("""
-      select id from student_assessment_attempt
+      select id,offline_mode from student_assessment_attempt
       where assessment_id=? and student_id=? and status='IN_PROGRESS'
       order by started_at desc limit 1 for update
       """, assessmentId, context.studentId());
     if (!existing.isEmpty()) {
-      // Resume the immutable paper even when content governance archived its source assessment.
-      return attemptDetails(((Number) existing.getFirst().get("id")).longValue(), context, false);
+      long existingId=((Number)existing.getFirst().get("id")).longValue();
+      boolean existingOffline=Boolean.TRUE.equals(existing.getFirst().get("offline_mode"));
+      if(offlineMode && !existingOffline) {
+        throw conflict("This attempt was started online and cannot be converted to an offline attempt. Finish it online.");
+      }
+      if(existingOffline) {
+        String token=newOfflinePackageToken();
+        jdbc.update("""
+          update student_assessment_attempt set offline_package_token_hash=?,updated_at=now()
+          where id=? and student_id=? and offline_mode=true and status='IN_PROGRESS'
+          """,offlinePackageTokenHash(token),existingId,context.studentId());
+        Map<String,Object> resumed=new LinkedHashMap<>(attemptDetails(existingId,context,false));
+        resumed.put("offlinePackageToken",token);
+        return resumed;
+      }
+      return attemptDetails(existingId, context, false);
+    }
+    if(offlineMode && !Boolean.TRUE.equals(assessment.get("offline_enabled"))) {
+      throw conflict("This test is online-only. Offline attempts must be explicitly enabled by QuantaEdge content staff.");
     }
 
     // Enforce the same completion, publication and generated-version policy as the catalogue.
@@ -736,13 +805,19 @@ public class AssessmentController {
     assessmentSnapshot.put("subjectCode", assessment.get("subject_code"));
     assessmentSnapshot.put("subjectName", assessment.get("subject_name"));
     assessmentSnapshot.put("chapterName", assessment.get("chapter_name"));
+    assessmentSnapshot.put("offlineMode",offlineMode);
+    String offlineToken=offlineMode?newOfflinePackageToken():null;
     Long attemptId = jdbc.queryForObject("""
       insert into student_assessment_attempt(
         assessment_id,student_id,attempt_number,status,assessment_snapshot,
-        started_at,deadline_at,max_score
-      ) values(?,?,?,'IN_PROGRESS',?::jsonb,now(),now()+(? * interval '1 minute'),?) returning id
+        started_at,deadline_at,max_score,offline_mode,offline_sync_expires_at,offline_package_token_hash
+      ) values(?,?,?,'IN_PROGRESS',?::jsonb,now(),now()+(? * interval '1 minute'),?,
+        ?,case when ? then now()+(? * interval '1 minute') + interval '72 hours' else null end,?)
+      returning id
       """, Long.class, assessmentId, context.studentId(), attemptNumber, json(assessmentSnapshot),
-        assessment.get("duration_minutes"), assessment.get("max_score"));
+        assessment.get("duration_minutes"), assessment.get("max_score"),
+        offlineMode,offlineMode,assessment.get("duration_minutes"),
+        offlineToken==null?null:offlinePackageTokenHash(offlineToken));
 
     jdbc.update("""
       insert into student_assessment_attempt_question(
@@ -792,7 +867,9 @@ public class AssessmentController {
       """, attemptId);
     audit(assessmentId, attemptId, null, context.studentId(), "STUDENT", "ATTEMPT_STARTED",
         null, "IN_PROGRESS", "Student started test attempt " + attemptNumber + ".");
-    return attemptDetails(attemptId, context, false);
+    Map<String,Object> started=new LinkedHashMap<>(attemptDetails(attemptId, context, false));
+    if(offlineToken!=null) started.put("offlinePackageToken",offlineToken);
+    return started;
   }
 
   @GetMapping("/learning/assessment-attempts/{attemptId}")
@@ -812,7 +889,8 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select att.id,att.status,att.deadline_at,att.student_id
+      select att.id,att.status,att.deadline_at,att.student_id,att.offline_mode,
+             att.offline_sync_expires_at,att.offline_package_token_hash
       from student_assessment_attempt att join student_assessment_attempt_question aq on aq.attempt_id=att.id
       where att.id=? and aq.id=? for update of att
       """, attemptId, attemptQuestionId);
@@ -823,8 +901,10 @@ public class AssessmentController {
     if (!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
       throw conflict("Submitted test answers are locked and can no longer be changed.");
     }
+    boolean offlineAttempt=Boolean.TRUE.equals(attempt.get("offline_mode"));
+    if(offlineAttempt) requireOfflineSyncAuthorization(attempt,body.get("offlinePackageToken"));
     OffsetDateTime deadline = offsetDateTime(attempt.get("deadline_at"));
-    if (deadline != null && deadline.isBefore(OffsetDateTime.now())) {
+    if (!offlineAttempt && deadline != null && deadline.isBefore(OffsetDateTime.now())) {
       throw conflict("The test time has expired. Submit the attempt to finalize your saved answers.");
     }
     Object value = body.get("answer");
@@ -848,8 +928,8 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attempts = jdbc.queryForList("""
-      select id,status,deadline_at,student_id from student_assessment_attempt
-      where id=? for update
+      select id,status,deadline_at,student_id,offline_mode,offline_sync_expires_at,offline_package_token_hash
+      from student_assessment_attempt where id=? for update
       """, attemptId);
     if (attempts.isEmpty()
         || ((Number) attempts.getFirst().get("student_id")).longValue() != context.studentId()) {
@@ -859,8 +939,10 @@ public class AssessmentController {
     if (!"IN_PROGRESS".equals(String.valueOf(attempt.get("status")))) {
       throw conflict("Submitted test answers are locked and can no longer be changed.");
     }
+    boolean offlineAttempt=Boolean.TRUE.equals(attempt.get("offline_mode"));
+    if(offlineAttempt) requireOfflineSyncAuthorization(attempt,body.get("offlinePackageToken"));
     OffsetDateTime deadline = offsetDateTime(attempt.get("deadline_at"));
-    if (deadline != null && deadline.isBefore(OffsetDateTime.now())) {
+    if (!offlineAttempt && deadline != null && deadline.isBefore(OffsetDateTime.now())) {
       throw conflict("The test time has expired. Submit the attempt to finalize your saved answers.");
     }
     Object rawAnswers = body.get("answers");
@@ -893,16 +975,28 @@ public class AssessmentController {
   @Transactional
   public Map<String, Object> submitAttempt(
       @PathVariable long attemptId,
+      @RequestBody(required=false) Map<String,Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return submitAttemptInternal(attemptId,body,context);
+  }
+
+  Map<String,Object> submitAttempt(long attemptId,AuthContext context) {
+    return submitAttemptInternal(attemptId,null,context);
+  }
+
+  private Map<String,Object> submitAttemptInternal(long attemptId,Map<String,Object> body,AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> attemptRows = jdbc.queryForList("""
-      select id,assessment_id,student_id,status,auto_score,max_score
+      select id,assessment_id,student_id,status,auto_score,max_score,offline_mode,
+             offline_sync_expires_at,offline_package_token_hash
       from student_assessment_attempt where id=? for update
       """, attemptId);
     if (attemptRows.isEmpty() || ((Number) attemptRows.getFirst().get("student_id")).longValue() != context.studentId()) {
       throw notFound("Assessment attempt", attemptId);
     }
     Map<String, Object> attempt = attemptRows.getFirst();
+    boolean offlineAttempt=Boolean.TRUE.equals(attempt.get("offline_mode"));
+    if(offlineAttempt) requireOfflineSyncAuthorization(attempt,body==null?null:body.get("offlinePackageToken"));
     String oldStatus = String.valueOf(attempt.get("status"));
     if ("RELEASED".equals(oldStatus)) return attemptDetails(attemptId, context, false);
     if (!"IN_PROGRESS".equals(oldStatus)) throw conflict("This test attempt has already been submitted.");
@@ -1061,11 +1155,41 @@ public class AssessmentController {
 
   // ---------- Shared private helpers ----------
 
+  private String newOfflinePackageToken() {
+    byte[] token=new byte[32];
+    OFFLINE_TOKEN_RANDOM.nextBytes(token);
+    return Base64.getUrlEncoder().withoutPadding().encodeToString(token);
+  }
+
+  private String offlinePackageTokenHash(String token) {
+    try {
+      byte[] hash=MessageDigest.getInstance("SHA-256").digest(token.getBytes(StandardCharsets.UTF_8));
+      return Base64.getEncoder().withoutPadding().encodeToString(hash);
+    } catch(Exception ex) {
+      throw new IllegalStateException("Offline package token hashing is unavailable.",ex);
+    }
+  }
+
+  private void requireOfflineSyncAuthorization(Map<String,Object> attempt,Object rawToken) {
+    String supplied=rawToken==null?"":String.valueOf(rawToken);
+    String expected=String.valueOf(attempt.getOrDefault("offline_package_token_hash",""));
+    if(supplied.isBlank() || expected.isBlank() ||
+       !MessageDigest.isEqual(offlinePackageTokenHash(supplied).getBytes(StandardCharsets.UTF_8),
+                             expected.getBytes(StandardCharsets.UTF_8))) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"This offline package is not valid for the active attempt.");
+    }
+    OffsetDateTime expiry=offsetDateTime(attempt.get("offline_sync_expires_at"));
+    if(expiry==null || expiry.isBefore(OffsetDateTime.now())) {
+      throw conflict("Offline sync has expired. The saved offline attempt cannot be submitted now; contact QuantaEdge support.");
+    }
+  }
+
   private Map<String, Object> attemptDetails(long attemptId, AuthContext context, boolean staffView) {
     List<Map<String, Object>> attempts = jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
-             att.auto_score,att.final_score,att.max_score,att.assessment_snapshot::text as assessment_snapshot,
+             att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
+             att.assessment_snapshot::text as assessment_snapshot,
              st.display_name as student_name,st.class_code,a.title as assessment_title,
              s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
       from student_assessment_attempt att
@@ -1077,6 +1201,8 @@ public class AssessmentController {
       """, attemptId);
     if (attempts.isEmpty()) throw notFound("Assessment attempt", attemptId);
     Map<String, Object> attempt = new LinkedHashMap<>(attempts.getFirst());
+    attempt.put("offlineMode",Boolean.TRUE.equals(attempt.get("offline_mode")));
+    attempt.put("offlineSyncExpiresAt",attempt.get("offline_sync_expires_at"));
     Map<String,Object> assessmentSnapshot=parseObject(String.valueOf(attempt.get("assessment_snapshot")));
     if(!assessmentSnapshot.isEmpty()){
       attempt.put("assessment_title",assessmentSnapshot.getOrDefault("title",attempt.get("assessment_title")));
@@ -1151,7 +1277,7 @@ public class AssessmentController {
   private Map<String, Object> assessmentDetails(long id, boolean includeQuestionBankDetails) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
-             a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
+             a.offline_enabled,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id

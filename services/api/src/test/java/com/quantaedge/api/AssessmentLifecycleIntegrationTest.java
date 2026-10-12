@@ -101,6 +101,41 @@ class AssessmentLifecycleIntegrationTest {
     assertEquals(new BigDecimal("1.00"), new BigDecimal(resultItems.getFirst().get("best_score").toString()));
   }
 
+  @Test
+  @SuppressWarnings("unchecked")
+  void explicitlyEnabledOfflineAttemptStoresNoAnswerKeyAndCanSyncAfterItsTimerWithinGrace() {
+    Fixture fixture=fixture("COMPLETED");
+    jdbc.update("update assessment set is_generated=false,offline_enabled=true where id=?",fixture.assessmentId());
+    Map<String,Object> started=controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student());
+    long attemptId=((Number)started.get("attempt_id")).longValue();
+    String packageToken=String.valueOf(started.get("offlinePackageToken"));
+    assertFalse(packageToken.isBlank());
+    assertEquals(true,started.get("offlineMode"));
+    Map<String,Object> firstQuestion=((List<Map<String,Object>>)started.get("questions")).getFirst();
+    assertFalse(firstQuestion.containsKey("answerKey"));
+    assertFalse(firstQuestion.containsKey("correctAnswer"));
+    jdbc.update("update student_assessment_attempt set deadline_at=now()-interval '1 hour' where id=?",attemptId);
+    long attemptQuestionId=((Number)firstQuestion.get("attemptQuestionId")).longValue();
+    Map<String,Object> saved=controller.saveAnswer(attemptId,attemptQuestionId,
+        Map.of("answer","B","offlinePackageToken",packageToken),fixture.student());
+    assertEquals(true,saved.get("saved"));
+    Map<String,Object> submitted=controller.submitAttempt(attemptId,
+        Map.of("offlinePackageToken",packageToken),fixture.student());
+    assertEquals("RELEASED",submitted.get("status"));
+    assertEquals(true,submitted.get("resultReleased"));
+  }
+
+  @Test
+  void offlineAttemptCannotStartUnlessEditorExplicitlyEnabledIt() {
+    Fixture fixture=fixture("COMPLETED");
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.startOrResumeAttempt(fixture.assessmentId(),"hi",true,fixture.student()));
+    assertEquals(409,error.getStatusCode().value());
+    assertEquals(0L,jdbc.queryForObject(
+        "select count(*) from student_assessment_attempt where assessment_id=? and student_id=?",
+        Long.class,fixture.assessmentId(),fixture.studentId()));
+  }
+
   private Fixture fixture(String progressStatus) {
     String suffix = UUID.randomUUID().toString().replace("-", "").substring(0, 12);
     String classCode = "E2E" + suffix;

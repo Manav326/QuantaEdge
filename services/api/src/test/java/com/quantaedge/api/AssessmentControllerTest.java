@@ -48,6 +48,19 @@ class AssessmentControllerTest {
   }
 
   @Test
+  void offlinePolicyRequiresContentEditAndRejectsGeneratedTests() {
+    when(authorization.requireAuth(author)).thenReturn(author);
+    when(authorization.requirePermission(author,"CONTENT_EDIT")).thenReturn(author);
+    when(jdbc.queryForList(contains("select id,title,status,is_generated,offline_enabled"),
+        eq(88L))).thenReturn(List.of(Map.of(
+          "id",88L,"title","Generated test","status","PUBLISHED","is_generated",true,"offline_enabled",false)));
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.updateOfflinePolicy(88L,Map.of("offlineEnabled",true),author));
+    assertEquals(400,error.getStatusCode().value());
+    verify(jdbc,never()).update(contains("update assessment set offline_enabled"),any(Object[].class));
+  }
+
+  @Test
   void studentCatalogueRequiresCompletedLessonsAndHidesSupersededGeneratedTestsExceptForResumes() {
     when(authorization.requireStudent(student)).thenReturn(student);
     when(jdbc.queryForList(contains("select a.id as assessment_id"), any(Object[].class)))
