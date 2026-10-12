@@ -134,9 +134,9 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
             if (loadingBoard) CircularProgressIndicator()
             else if (leaderboard.length() > 0) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SummaryCard(if (language == "hi") "प्रतिभागी" else "Participants", leaderboard.optString("participant_count", "0"))
-                    SummaryCard(if (language == "hi") "अधिकतम अंक" else "Max score", maxScore)
-                    SummaryCard(if (language == "hi") "मेरी रैंक" else "My rank", current?.optString("rank") ?: "—")
+                    SummaryCard(if (language == "hi") "प्रतिभागी" else "Participants", leaderboard.optString("participant_count", "0"), Modifier.weight(1f))
+                    SummaryCard(if (language == "hi") "अधिकतम अंक" else "Max score", maxScore, Modifier.weight(1f))
+                    SummaryCard(if (language == "hi") "मेरी रैंक" else "My rank", current?.optString("rank") ?: "—", Modifier.weight(1f))
                 }
                 if (current != null) {
                     Card(modifier = Modifier.fillMaxWidth()) {
@@ -178,8 +178,8 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
 }
 
 @Composable
-private fun SummaryCard(label: String, value: String) {
-    Card(modifier = Modifier.weight(1f)) {
+private fun SummaryCard(label: String, value: String, modifier: Modifier = Modifier) {
+    Card(modifier = modifier) {
         Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(label, style = MaterialTheme.typography.labelSmall)
             Text(value, style = MaterialTheme.typography.titleMedium)
