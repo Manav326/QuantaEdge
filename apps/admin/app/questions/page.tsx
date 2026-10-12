@@ -184,7 +184,7 @@ export default function QuestionReviewPage(){
           onPageSizeChange={size=>{setPageSize(size);setPage(0);}} itemLabel="questions" loading={loading} />
         {error&&<div className="admin-empty-state" role="alert" style={{marginBottom:12}}><p>{error}</p></div>}
         {notice&&<p role="status" style={{padding:'12px 14px',background:'#eef8f2',borderRadius:10,color:'#22543d'}}>{notice}</p>}
-        {loading?<p className="admin-loading">Loading question history and current statuses…</p>:rows.length===0?<div className="admin-empty-state"><h3>No questions match this filter</h3><p>Try another status or search term. New questions appear after saving them in Content Studio.</p></div>:
+        {loading?<p className="admin-loading" role="status" aria-live="polite">Loading question history and current statuses…</p>:rows.length===0?<div className="admin-empty-state"><h3>No questions match this filter</h3><p>Try another status or search term. New questions appear after saving them in Content Studio.</p></div>:
           <div style={{display:'grid',gap:14}}>
             {rows.map(row=>{
               const options=parse(row.options,[]) as {key:string;label:string;is_correct?:boolean}[];
@@ -223,7 +223,7 @@ export default function QuestionReviewPage(){
 
       {historyFor!==null&&<section className="admin-panel" style={{marginTop:20}}>
         <div className="admin-section-title"><div><span className="admin-kicker">QUESTION CHANGE LOG</span><h2>Question #{historyFor} — full history</h2></div><button type="button" className="text-link" onClick={()=>{setHistoryFor(null);setHistory([]);setHistoryPage(0);setHistoryTotal(0)}}>Close</button></div>
-        {historyLoading?<p>Loading history…</p>:history.length===0?<p>No history rows were found.</p>:
+        {historyLoading?<p role="status" aria-live="polite">Loading history…</p>:history.length===0?<p>No history rows were found.</p>:
           <div style={{display:'grid',gap:12,marginTop:14}}>
             {history.map(entry=><article key={entry.id} style={{border:'1px solid #e1e5ed',borderRadius:12,padding:14}}>
               <div style={{display:'flex',gap:10,justifyContent:'space-between',flexWrap:'wrap'}}><strong>{entry.event_type.replaceAll('_',' ')}</strong><span style={{fontSize:13,color:'#647084'}}>{entry.occurred_at?new Date(entry.occurred_at).toLocaleString():''}</span></div>
