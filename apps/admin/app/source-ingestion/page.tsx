@@ -451,8 +451,9 @@ export default function SourceIngestionPage() {
       <section className={styles.panel}>
         <div className={styles.heading}><div><span>STEP 01</span><h2>Choose or register a source</h2><p>The tool checks linked PDFs, stored checksums and source references before downloading again.</p></div></div>
         <div className={styles.fields}>
-          <div className={styles.field}>Source record
-            <input value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder="Search title, provider, URL or edition…" aria-label="Search registered sources" />
+          <div className={styles.field}>
+            <label htmlFor="qe-source-search">Source record</label>
+            <input id="qe-source-search" value={sourceSearchDraft} onChange={e=>setSourceSearchDraft(e.target.value)} placeholder="Search title, provider, URL or edition…" aria-label="Search registered sources" />
             <div style={{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',margin:'8px 0'}}>
               <button type="button" className={styles.secondary} onClick={()=>{setSourceQuery(sourceSearchDraft.trim());setSourcePage(0)}}>Search sources</button>
               <button type="button" className={styles.secondary} disabled={!sourceQuery&&!sourceSearchDraft} onClick={()=>{setSourceSearchDraft('');setSourceQuery('');setSourcePage(0)}}>Clear search</button>
