@@ -294,13 +294,10 @@ fun QuantaEdgeApp() {
             (selectedDocument.optInt("page_end", 1) - selectedDocument.optInt("page_start", 1) + 1).coerceAtLeast(1))
         if (documentId <= 0L || page < 1 || page > pageCount) throw IOException("यह पृष्ठ उपलब्ध नहीं है।")
         documentPage = page
-        val bytes = try {
-            ApiClient.getBytes("/api/v1/learning/documents/" + documentId + "/pages/" + page).also {
-                resourceStore.savePage(documentId, page, it)
-            }
-        } catch (exception: Exception) {
-            resourceStore.readPage(documentId, page) ?: throw exception
-        }
+        val cachedPage = resourceStore.readPage(documentId, page)
+        val bytes = cachedPage ?: ApiClient.getBytes(
+            "/api/v1/learning/documents/" + documentId + "/pages/" + page
+        ).also { resourceStore.savePage(documentId, page, it) }
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             ?: throw IOException("पृष्ठ की छवि पढ़ी नहीं जा सकी।")
         documentImage = bitmap.asImageBitmap()

@@ -21,6 +21,7 @@ object ApiClient {
     private val jsonType = "application/json; charset=utf-8".toMediaType()
     @Volatile private var client: OkHttpClient? = null
     @Volatile private var cookies: SecureCookieJar? = null
+    private val refreshLock = Any()
 
     fun initialize(context: Context) {
         if (client != null) return
@@ -47,6 +48,17 @@ object ApiClient {
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
 
+    private fun shouldAttemptRefresh(path: String): Boolean {
+        val normalized = path.substringBefore('?').trimEnd('/')
+        return normalized != "/api/v1/auth/refresh" &&
+            !normalized.endsWith("/auth/request-otp") &&
+            !normalized.endsWith("/auth/verify-otp") &&
+            !normalized.endsWith("/auth/parent-login") &&
+            !normalized.endsWith("/auth/student-login") &&
+            !normalized.endsWith("/auth/preview-login") &&
+            !normalized.endsWith("/auth/logout")
+    }
+
     fun clearSession() { cookies?.clear() }
 
     private suspend fun request(path: String, method: String, body: String?): ByteArray =
@@ -62,19 +74,35 @@ object ApiClient {
                 "PATCH" -> builder.patch(requestBody ?: "{}".toRequestBody(jsonType))
                 else -> throw IllegalArgumentException("Unsupported HTTP method.")
             }
-            currentClient.newCall(builder.build()).execute().use { response ->
-                val bytes = response.body?.bytes() ?: ByteArray(0)
-                if (!response.isSuccessful) {
+            var response = currentClient.newCall(builder.build()).execute()
+            if (response.code == 401 && shouldAttemptRefresh(path)) {
+                response.close()
+                synchronized(refreshLock) {
+                    val refreshRequest = Request.Builder()
+                        .url(BuildConfig.API_BASE_URL.trimEnd('/') + "/api/v1/auth/refresh")
+                        .post("{}".toRequestBody(jsonType))
+                        .header("Accept", "application/json")
+                        .build()
+                    val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
+                    if (!refreshed) {
+                        throw ApiFailure(401, "आपका सत्र समाप्त हो गया है। कृपया फिर से साइन इन करें।")
+                    }
+                }
+                response = currentClient.newCall(builder.build()).execute()
+            }
+            response.use { result ->
+                val bytes = result.body?.bytes() ?: ByteArray(0)
+                if (!result.isSuccessful) {
                     val message = try {
                         val parsed = JSONObject(bytes.toString(StandardCharsets.UTF_8))
                         parsed.optString("message").ifBlank {
-                            parsed.optString("error").ifBlank { "Request failed (" + response.code + ")." }
+                            parsed.optString("error").ifBlank { "Request failed (" + result.code + ")." }
                         }
                     } catch (_: JSONException) {
                         bytes.toString(StandardCharsets.UTF_8).take(500)
-                            .ifBlank { "Request failed (" + response.code + ")." }
+                            .ifBlank { "Request failed (" + result.code + ")." }
                     }
-                    throw ApiFailure(response.code, message)
+                    throw ApiFailure(result.code, message)
                 }
                 bytes
             }
