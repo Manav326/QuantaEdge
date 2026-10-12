@@ -146,6 +146,18 @@ public class SourceIngestionController {
           or learning_book_intake.category<>excluded.category
           or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
           then null else learning_book_intake.analyzed_at end,
+        reviewed_by_staff_id=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.reviewed_by_staff_id end,
+        reviewed_at=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.reviewed_at end,
         review_notes=excluded.review_notes,updated_at=now()
       """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
@@ -206,7 +218,6 @@ public class SourceIngestionController {
    * curriculum chapter titles. This is a reconciliation aid only; all boundaries remain unapproved.
    */
   @PostMapping("/intake/{assetId}/analyze")
-  @Transactional
   public Map<String, Object> analyzeBookIntake(
       @PathVariable long assetId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -293,7 +304,8 @@ public class SourceIngestionController {
     String status=(missing.isEmpty() && extras.isEmpty() && ambiguous.isEmpty() && warnings.isEmpty())?"ANALYZED":"NEEDS_REVIEW";
     jdbc.update("""
       update learning_book_intake set inventory=?::jsonb,reconciliation=?::jsonb,status=?,
-        analysis_version=analysis_version+1,analysis_error=null,analyzed_at=now(),updated_at=now()
+        analysis_version=analysis_version+1,analysis_error=null,analyzed_at=now(),
+        reviewed_by_staff_id=null,reviewed_at=null,updated_at=now()
       where pdf_asset_id=?
       """,inventoryJson,reconciliationJson,status,assetId);
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/analyze",
