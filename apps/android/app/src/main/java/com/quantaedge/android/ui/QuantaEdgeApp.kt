@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -529,6 +530,29 @@ fun QuantaEdgeApp() {
             com.quantaedge.android.data.ProtectedResourceDownloadWorker.enqueue(context, resourceOwner, id)
             status = "सुरक्षित डाउनलोड बैकग्राउंड में शुरू हुआ। प्रगति देखने के लिए लाइब्रेरी रिफ्रेश करें।"
             documents = documents.map { if (it.optLongAny("document_id", "id") == id) doc else it }
+        }
+    }
+
+    fun removeOfflineDownload(document: JSONObject) {
+        runTask {
+            val id = document.optLongAny("document_id", "id")
+            if (id <= 0L) throw IOException("पुस्तक की पहचान नहीं मिली।")
+            val uniqueWorkName = "qe-resource-" + resourceOwner.take(16) + "-" + id
+            WorkManager.getInstance(context.applicationContext).cancelUniqueWork(uniqueWorkName)
+            withContext(Dispatchers.IO) { resourceStore.removeOfflineCopy(id) }
+            val online = runCatching {
+                ApiClient.getArray(
+                    "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(currentSubject) +
+                        "&language=" + language
+                ).objectItems()
+            }.getOrDefault(emptyList())
+            documents = (online + resourceStore.downloadedDocuments())
+                .distinctBy { it.optLongAny("document_id", "id") }
+                .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
+                    it.textAny("subject_code", "subjectCode") == currentSubject }
+                .filter { it.textAny("language").isBlank() || it.textAny("language") == language }
+            resourceDownloadStates.remove(id)
+            status = "इस डिवाइस से offline copy हटाई गई। Server पर मूल पुस्तक नहीं बदली गई।"
         }
     }
 
@@ -1052,6 +1076,7 @@ fun QuantaEdgeApp() {
                         onSubject = ::openResources,
                         onOpen = ::openDocument,
                         onDownload = ::downloadDocument,
+                        onRemoveOffline = ::removeOfflineDownload,
                         onRefresh = { openResources(currentSubject) }
                     )
                     AppRoute.DOCUMENT_READER -> DocumentReaderScreen(
@@ -1746,8 +1771,27 @@ private fun ResourcesScreen(
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
     onDownload: (JSONObject) -> Unit,
+    onRemoveOffline: (JSONObject) -> Unit,
     onRefresh: () -> Unit
 ) {
+    var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
+    if (pendingRemoval != null) {
+        AlertDialog(
+            onDismissRequest = { pendingRemoval = null },
+            title = { Text("Offline copy हटाएँ?") },
+            text = { Text("यह केवल इस device पर रखे encrypted page copies हटाएगा। Published resource server पर बना रहेगा और बाद में दोबारा डाउनलोड किया जा सकता है।") },
+            confirmButton = {
+                Button(onClick = {
+                    val selected = pendingRemoval
+                    pendingRemoval = null
+                    if (selected != null) onRemoveOffline(selected)
+                }, enabled = !busy) { Text("Offline copy हटाएँ") }
+            },
+            dismissButton = {
+                TextButton(onClick = { pendingRemoval = null }, enabled = !busy) { Text("रद्द करें") }
+            }
+        )
+    }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Textbook Library", style = MaterialTheme.typography.headlineSmall)
         Text("सामग्री ऐप के अंदर पढ़ें। ऑफ़लाइन डाउनलोड पब्लिक Downloads या दूसरी ऐप में उपलब्ध नहीं होगा।",
@@ -1781,12 +1825,15 @@ private fun ResourcesScreen(
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("पढ़ें") }
-                            TextButton(onClick = { onDownload(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text(when {
-                                    downloadState?.active == true -> "डाउनलोड चल रहा है"
-                                    cached == count -> "फिर डाउनलोड"
-                                    else -> "ऑफ़लाइन डाउनलोड"
-                                })
+                            TextButton(onClick = { onDownload(doc) }, enabled = !busy && downloadState?.active != true,
+                                modifier = Modifier.weight(1f)) {
+                                Text(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड")
+                            }
+                        }
+                        if (cached > 0) {
+                            TextButton(onClick = { pendingRemoval = doc }, enabled = !busy,
+                                modifier = Modifier.fillMaxWidth()) {
+                                Text("Downloaded copy हटाएँ", color = MaterialTheme.colorScheme.error)
                             }
                         }
                     }

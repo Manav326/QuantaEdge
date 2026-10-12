@@ -71,6 +71,14 @@ Last updated: 2026-10-12
 - Image data is resized/re-encoded as JPEG under the existing API's 350 KB limit before it is sent to the authenticated profile-photo endpoint.
 - Parent can archive a child profile after a confirmation dialog; the backend remains responsible for consent validation, session revocation and access checks.
 
+## Milestone 9 — Offline storage management
+
+**Status:** Added to source; CI verification pending.
+
+- Students can remove a downloaded resource's encrypted local pages from inside the app without affecting the published source on the server.
+- Removal asks for confirmation, cancels the document's unique WorkManager job, deletes only the signed-in account's local copy and clears its manifest entry.
+- The downloader now checks account identity once per worker, not once per page, and rechecks cancellation after each network response before writing the page.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

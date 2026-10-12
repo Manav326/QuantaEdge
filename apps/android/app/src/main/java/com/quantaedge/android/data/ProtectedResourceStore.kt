@@ -60,6 +60,30 @@ class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
     fun cachedPageCount(documentId: Long, pageCount: Int): Int =
         (1..pageCount.coerceAtLeast(0)).count { hasPage(documentId, it) }
 
+    /** Deletes only this account's encrypted local copy; it never touches server content. */
+    fun removeOfflineCopy(documentId: Long): Int {
+        require(documentId > 0L)
+        val prefix = "doc_" + documentId + "_page_"
+        val cachedFiles = root.listFiles()
+            ?.filter { it.isFile && it.name.startsWith(prefix) && it.name.endsWith(".enc") }
+            .orEmpty()
+        var deleted = 0
+        cachedFiles.forEach { if (it.delete()) deleted++ }
+
+        val remainingDocs = downloadedDocuments().filter { it.optLongAny("document_id", "id") != documentId }
+        val manifest = JSONArray()
+        remainingDocs.forEach(manifest::put)
+        preferences.edit().putString("documents", manifest.toString()).apply()
+
+        if (root.listFiles()?.none { it.isFile && it.name.endsWith(".enc") } != false) {
+            runCatching {
+                val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+                if (keyStore.containsAlias(alias)) keyStore.deleteEntry(alias)
+            }
+        }
+        return deleted
+    }
+
     private fun pageName(id: Long, page: Int): String = "doc_" + id + "_page_" + page + ".enc"
     private fun encrypt(clear: ByteArray): ByteArray {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
