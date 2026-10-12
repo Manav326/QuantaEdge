@@ -1,7 +1,7 @@
 package com.quantaedge.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.SecureRandom;
@@ -549,7 +549,7 @@ public class CertificateController {
   private String json(Map<String, Object> value) {
     try {
       return objectMapper.writeValueAsString(value);
-    } catch (JsonProcessingException ex) {
+    } catch (JacksonException ex) {
       throw new IllegalStateException("Certificate audit snapshot could not be serialized.", ex);
     }
   }
