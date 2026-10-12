@@ -721,3 +721,158 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 
 .qe-model-answer{display:flex;align-items:flex-start;gap:10px;margin:14px 0 0;padding:12px 14px;border:1px solid var(--qe-answer-correct-border);border-radius:12px;background:var(--qe-answer-correct-bg);color:var(--qe-answer-correct-text)!important;text-align:left!important;line-height:1.65}
 .qe-model-answer strong{color:var(--qe-answer-correct-text)}
+
+
+/* Admin navigation refresh: grouped desktop workflows and a compact, accessible mobile menu. */
+.qe-admin-workspace-layout .qe-admin-navigation{display:flex;flex:0 0 auto;flex-direction:column;gap:5px;min-width:0;margin:0}
+.qe-admin-workspace-layout .qe-admin-navigation>.qe-nav-link,
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a{display:flex;align-items:center;gap:10px;min-height:41px;min-width:0;padding:9px 10px;border:1px solid transparent;border-radius:11px;background:transparent;color:#69738a;font-size:12px;font-weight:700;line-height:1.35;text-decoration:none;transition:background .16s ease,color .16s ease,border-color .16s ease}
+.qe-admin-workspace-layout .qe-admin-navigation .qe-nav-icon,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts .qe-nav-icon{flex:0 0 24px}
+.qe-admin-workspace-layout .qe-admin-navigation .qe-nav-label,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts .qe-nav-label{flex:1;min-width:0;white-space:normal;overflow-wrap:anywhere}
+.qe-admin-workspace-layout .qe-admin-navigation>.qe-nav-link:hover,
+.qe-admin-workspace-layout .qe-admin-navigation>.qe-nav-link:focus-visible,
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link:hover,
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link:focus-visible,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a:hover,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a:focus-visible{outline:none;border-color:#ffdfc4;background:#fff7f0;color:#9a3412}
+.qe-admin-workspace-layout .qe-admin-navigation>.qe-nav-link.active,
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link.active,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a.active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
+.qe-admin-workspace-layout .qe-admin-navigation>.qe-nav-link.active .qe-nav-icon,
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link.active .qe-nav-icon,
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a.active .qe-nav-icon{background:#fff;color:#c2410c}
+.qe-admin-workspace-layout .qe-admin-nav-group{min-width:0;margin-top:5px;padding-top:7px;border-top:1px solid #eef0f5}
+.qe-admin-workspace-layout .qe-admin-nav-group-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:32px;padding:5px 8px;border:1px solid transparent;border-radius:8px;background:transparent;color:#858da0;font:800 9px/1.35 'DM Sans',Arial,sans-serif;letter-spacing:.65px;text-align:left;text-transform:uppercase;cursor:pointer}
+.qe-admin-workspace-layout .qe-admin-nav-group-toggle:hover,
+.qe-admin-workspace-layout .qe-admin-nav-group-toggle:focus-visible{outline:none;background:#f7f8fb;color:#344158}
+.qe-admin-workspace-layout .qe-admin-nav-group.has-active-page>.qe-admin-nav-group-toggle{color:#9a3412}
+.qe-admin-workspace-layout .qe-admin-nav-chevron{display:grid;flex:0 0 20px;width:20px;height:20px;place-items:center;border:1px solid #e7eaf0;border-radius:6px;background:#fff;color:#778198;font-size:13px;letter-spacing:0}
+.qe-admin-workspace-layout .qe-admin-nav-group-items{display:flex;flex-direction:column;gap:3px;padding:2px 0 0 5px}
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link{min-height:39px;font-size:11.5px}
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link .qe-nav-icon{background:#f7f8fa}
+.qe-admin-workspace-layout .qe-admin-nav-group-items>.qe-nav-link.active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts{margin-top:5px}
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>.sidebar-label{margin-top:10px}
+.qe-admin-workspace-layout .qe-admin-overview-shortcuts>a{min-height:36px;padding-top:6px;padding-bottom:6px;font-size:10.5px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-navigation{gap:5px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-nav-group{margin-top:5px;padding-top:5px;border-top-color:#eef0f5}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-nav-group-items{gap:5px;padding:0}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-navigation .qe-nav-link,
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-overview-shortcuts>a{justify-content:center;padding-left:5px;padding-right:5px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-navigation .qe-nav-icon,
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-overview-shortcuts .qe-nav-icon{flex-basis:28px;width:28px;height:28px}
+.qe-admin-mobile-menu-backdrop,
+.qe-admin-mobile-menu{display:none}
+
+@media(max-width:900px){
+ .qe-admin-workspace-layout .qe-admin-mobile-nav{z-index:103;display:flex;align-items:stretch;justify-content:space-around;gap:4px;overflow:visible;padding:7px 8px max(8px,env(safe-area-inset-bottom));}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button{display:flex;flex:1 1 0;min-width:0;max-width:none;align-items:center;justify-content:center;gap:4px;padding:5px 4px;border:1px solid transparent;border-radius:11px;background:transparent;color:#7b8497;text-decoration:none;}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a>span,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button>span{display:grid;place-items:center;min-height:20px;font-size:17px;line-height:1.1}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a>small,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button>small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:750;line-height:1.2}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a.is-active,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button.is-active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a:focus-visible,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button:focus-visible{outline:2px solid #e7a087;outline-offset:1px}
+ .qe-admin-workspace-layout .qe-admin-mobile-menu-backdrop{position:fixed;inset:0;z-index:99;display:block;width:100%;height:100%;padding:0;border:0;background:rgba(17,27,45,.28);backdrop-filter:blur(2px)}
+ .qe-admin-workspace-layout .qe-admin-mobile-menu{position:fixed;left:50%;bottom:calc(71px + env(safe-area-inset-bottom));z-index:101;display:flex;flex-direction:column;width:min(650px,calc(100vw - 20px));max-height:min(68vh,620px);min-height:180px;overflow:hidden;transform:translateX(-50%);border:1px solid #e4e8ef;border-radius:20px;background:#fff;box-shadow:0 22px 70px rgba(21,32,56,.2);color:#152038}
+ .qe-admin-mobile-menu-header{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px;padding:16px 17px 13px;border-bottom:1px solid #eef0f5}
+ .qe-admin-mobile-menu-header>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+ .qe-admin-mobile-menu-header strong{font-size:14px;font-weight:800;letter-spacing:-.2px}
+ .qe-admin-mobile-menu-header small{color:#858da0;font-size:10px;font-weight:600}
+ .qe-admin-mobile-menu-header>button{display:grid;flex:0 0 32px;width:32px;height:32px;place-items:center;border:1px solid #e7eaf0;border-radius:10px;background:#fff;color:#566176;font-size:22px;line-height:1;cursor:pointer}
+ .qe-admin-mobile-menu-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:4px 14px 12px}
+ .qe-admin-mobile-menu-group{margin-top:14px}
+ .qe-admin-mobile-menu-group h2{margin:0 2px 8px;color:#81899b;font-size:9px;font-weight:850;letter-spacing:.7px;line-height:1.4;text-transform:uppercase}
+ .qe-admin-mobile-menu-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .qe-admin-mobile-menu-items>a{display:flex;align-items:center;gap:9px;min-height:45px;min-width:0;padding:8px 10px;border:1px solid #e9ecf2;border-radius:12px;background:#fff;color:#47536a;font-size:11px;font-weight:750;line-height:1.3;text-decoration:none;overflow-wrap:anywhere}
+ .qe-admin-mobile-menu-items>a:hover,
+ .qe-admin-mobile-menu-items>a:focus-visible{outline:none;border-color:#f4c29f;background:#fff7f0;color:#9a3412}
+ .qe-admin-mobile-menu-items>a.is-active{border-color:#ffdfc4;background:#fff0e5;color:#9a3412}
+ .qe-admin-mobile-menu-icon{display:grid;flex:0 0 27px;width:27px;height:27px;place-items:center;border-radius:8px;background:#f4f5f8;color:#677188;font-size:15px}
+ .qe-admin-mobile-menu-items>a.is-active .qe-admin-mobile-menu-icon{background:#fff;color:#c2410c}
+ .qe-admin-mobile-menu-footer{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:10px;padding:11px 15px calc(11px + env(safe-area-inset-bottom));border-top:1px solid #eef0f5;background:#fff}
+ .qe-admin-mobile-menu-footer>span{min-width:0;overflow:hidden;color:#7b8497;font-size:10px;font-weight:650;text-overflow:ellipsis;white-space:nowrap}
+ .qe-admin-mobile-menu-footer>button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:35px;padding:8px 12px;border:1px solid #ffdfc4;border-radius:10px;background:#fff7f0;color:#9a3412;font:750 11px/1 'DM Sans',Arial,sans-serif;white-space:nowrap;cursor:pointer}
+ .qe-admin-mobile-menu-footer>button:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+ .qe-admin-mobile-menu-footer>button:disabled{opacity:.65;cursor:wait}
+}
+@media(max-width:420px){
+ .qe-admin-workspace-layout .qe-admin-mobile-nav{gap:2px;padding-left:5px;padding-right:5px}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button{padding-left:2px;padding-right:2px}
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>a>small,
+ .qe-admin-workspace-layout .qe-admin-mobile-nav>button>small{font-size:8px}
+ .qe-admin-mobile-menu-items{grid-template-columns:minmax(0,1fr)}
+ .qe-admin-workspace-layout .qe-admin-mobile-menu{width:calc(100vw - 14px);border-radius:17px}
+}
+
+
+/* Staff identity and action polish: make authorization level visible at a glance. */
+.qe-admin-workspace-layout .qe-admin-user-footer{gap:9px;padding-top:12px}
+.qe-admin-workspace-layout .qe-admin-user-identity{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.qe-admin-workspace-layout .qe-admin-user-identity .avatar{display:grid;flex:0 0 36px;width:36px;height:36px;place-items:center;border:1px solid #f5d9c6;border-radius:12px;background:linear-gradient(145deg,#fff3e8,#ffe6d2);color:#a54112;font-size:13px;font-weight:850}
+.qe-admin-workspace-layout .qe-admin-user-identity .admin-user-copy{display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.qe-admin-workspace-layout .qe-admin-user-identity .admin-user-copy strong{max-width:100%;overflow:hidden;color:#202d44;font-size:10.5px;font-weight:800;line-height:1.3;text-overflow:ellipsis;white-space:nowrap}
+.qe-admin-workspace-layout .qe-staff-role-badge{display:inline-flex;align-items:center;justify-content:flex-start;gap:5px;max-width:100%;min-height:21px;padding:3px 7px;border:1px solid #e3e8f0;border-radius:999px;background:#f7f8fb;color:#566176;font-size:8.5px;font-weight:850;line-height:1.2;letter-spacing:.28px;white-space:nowrap}
+.qe-admin-workspace-layout .qe-staff-role-dot{display:inline-block;flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:#7b8497}
+.qe-admin-workspace-layout .qe-staff-role-admin{border-color:#f3cfb3;background:#fff0e5;color:#9a3412}
+.qe-admin-workspace-layout .qe-staff-role-admin .qe-staff-role-dot{background:#c2410c;box-shadow:0 0 0 3px rgba(194,65,12,.1)}
+.qe-admin-workspace-layout .qe-staff-role-manager{border-color:#d8defb;background:#f0f2ff;color:#4343a3}
+.qe-admin-workspace-layout .qe-staff-role-manager .qe-staff-role-dot{background:#5b5bd6}
+.qe-admin-workspace-layout .qe-staff-role-content-author{border-color:#d7e8dc;background:#eef8f0;color:#22633b}
+.qe-admin-workspace-layout .qe-staff-role-content-author .qe-staff-role-dot{background:#2f855a}
+.qe-admin-workspace-layout .qe-staff-role-content-reviewer,
+.qe-admin-workspace-layout .qe-staff-role-moderator{border-color:#d7e5fb;background:#eff6ff;color:#285c98}
+.qe-admin-workspace-layout .qe-staff-role-content-reviewer .qe-staff-role-dot,
+.qe-admin-workspace-layout .qe-staff-role-moderator .qe-staff-role-dot{background:#3478bd}
+.qe-admin-workspace-layout .qe-staff-role-publisher{border-color:#f3dfad;background:#fff8df;color:#856114}
+.qe-admin-workspace-layout .qe-staff-role-publisher .qe-staff-role-dot{background:#b78619}
+.qe-admin-workspace-layout .qe-staff-role-full{display:inline}
+.qe-admin-workspace-layout .qe-staff-role-short{display:none}
+.qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:8px 10px;border:1px solid #f0c7b0;border-radius:11px;background:#fff8f4;color:#a33f17;font:800 10px/1 'DM Sans',Arial,sans-serif;white-space:nowrap;box-shadow:0 2px 7px rgba(154,52,18,.035);transition:background .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+.qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout:hover{border-color:#e9ad8b;background:#fff0e5;box-shadow:0 4px 12px rgba(154,52,18,.09)}
+.qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout:active{transform:translateY(1px)}
+.qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout:focus-visible{outline:2px solid #e7a087;outline-offset:2px}
+.qe-admin-workspace-layout .qe-sidebar-logout-icon{display:grid;place-items:center;font-size:15px;line-height:1}
+.qe-admin-workspace-layout .qe-admin-mobile-user{display:flex;flex:1;flex-direction:column;gap:6px;min-width:0}
+.qe-admin-workspace-layout .qe-admin-mobile-user>strong{max-width:100%;overflow:hidden;color:#202d44;font-size:11px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}
+.qe-admin-workspace-layout .qe-admin-mobile-user .qe-staff-role-badge{align-self:flex-start}
+.qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button{box-shadow:0 2px 7px rgba(154,52,18,.035);transition:background .16s ease,border-color .16s ease,box-shadow .16s ease}
+.qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button:hover{border-color:#e9ad8b;background:#fff0e5;box-shadow:0 4px 12px rgba(154,52,18,.09)}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-footer{align-items:center;gap:9px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-identity{flex-direction:column;gap:5px;flex:0 0 auto}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-identity .admin-user-copy{display:flex!important;align-items:center;gap:0;max-width:48px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-identity .admin-user-copy strong{display:none}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-staff-role-badge{justify-content:center;gap:0;min-height:18px;padding:3px 4px;font-size:7px;letter-spacing:0}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-staff-role-dot,
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-staff-role-full{display:none}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-staff-role-short{display:inline}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-footer .qe-sidebar-logout{width:34px;min-height:34px;padding:0;border-radius:10px}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-admin-user-footer .qe-sidebar-logout-label{display:none}
+.qe-admin-workspace-layout .qe-shared-sidebar.is-collapsed .qe-sidebar-logout-icon{font-size:16px}
+
+@media(max-width:900px){
+ .qe-admin-workspace-layout .qe-admin-user-footer{display:none}
+ .qe-admin-workspace-layout .qe-admin-mobile-menu-footer{gap:12px;align-items:center}
+ .qe-admin-workspace-layout .qe-admin-mobile-user{flex:1;min-width:0}
+ .qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button{min-height:37px;padding:8px 11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout,
+ .qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button{transition:none}
+}
+
+
+/* Final footer alignment: make the role and sign-out action fit even in the narrow sidebar. */
+.qe-admin-workspace-layout .qe-admin-user-footer .qe-sidebar-logout{gap:5px;min-height:35px;padding:7px 8px;font-size:9.5px}
+.qe-admin-workspace-layout .qe-admin-user-identity .admin-user-copy{max-width:100%}
+.qe-admin-workspace-layout .qe-admin-user-identity .qe-staff-role-badge{overflow:hidden;text-overflow:ellipsis}
+.qe-admin-workspace-layout .qe-admin-mobile-menu-footer>button>span{display:grid;place-items:center;font-size:15px;line-height:1}
+.qe-admin-workspace-layout .qe-admin-mobile-menu-header>button:hover{border-color:#ffdfc4;background:#fff7f0;color:#9a3412}
+.qe-admin-workspace-layout .qe-admin-mobile-menu-header>button:focus-visible{outline:2px solid #e7a087;outline-offset:2px}

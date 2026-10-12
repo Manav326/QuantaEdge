@@ -1,11 +1,24 @@
 'use client';
 
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
-import { AdminWorkspaceContext } from './AdminWorkspaceContext';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AdminWorkspaceContext } from './AdminWorkspaceContext';
+import {
+  ADMIN_NAV_GROUPS,
+  ADMIN_OVERVIEW_ITEM,
+  adminNavGroupLabel,
+  adminNavHref,
+  adminNavLabel,
+  adminRoleClass,
+  adminRoleCompactLabel,
+  adminRoleLabel,
+  canSeeAdminItem,
+  type AdminSection,
+} from './admin-navigation';
 
-export type AdminSection = 'overview' | 'content' | 'questions' | 'resources' | 'sources' | 'assessments' | 'classes' | 'students' | 'parents' | 'staff' | 'translations';
+export type { AdminSection } from './admin-navigation';
+
 type AdminSidebarProps = {
   active: AdminSection;
   variant?: 'default' | 'overview' | 'content';
@@ -13,29 +26,20 @@ type AdminSidebarProps = {
   persistent?: boolean;
 };
 
-const links: Array<{ key: AdminSection; href: string; icon: string; label: string }> = [
-  { key: 'overview', href: '/', icon: '▦', label: 'Overview' },
-  { key: 'content', href: '/content', icon: '◈', label: 'Content Studio' },
-  { key: 'translations', href: '/translations', icon: '文', label: 'Language review' },
-  { key: 'questions', href: '/questions', icon: '✓', label: 'Question review' },
-  { key: 'resources', href: '/resources', icon: '▤', label: 'Textbook library' },
-  { key: 'sources', href: '/source-ingestion', icon: '⇣', label: 'Source ingestion' },
-  { key: 'assessments', href: '/assessments', icon: '✓', label: 'Tests & grading' },
-  { key: 'classes', href: '/classes', icon: '◷', label: 'Live & recorded classes' },
-  { key: 'students', href: '/students', icon: '◉', label: 'Students' },
-  { key: 'parents', href: '/parents', icon: '♧', label: 'Parents & families' },
-];
-
 export default function AdminSidebar({ active, variant = 'default', displayName, persistent = false }: AdminSidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [role, setRole] = useState('');
   const [permissions, setPermissions] = useState<string[]>([]);
   const [accountName, setAccountName] = useState('');
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({ curriculum: true });
   const workspace = useContext(AdminWorkspaceContext);
   const { insideWorkspace, locale, role: workspaceRole, permissions: workspacePermissions, displayName: workspaceDisplayName } = workspace;
   const visibleRole = insideWorkspace ? workspaceRole : role;
   const visiblePermissions = insideWorkspace ? workspacePermissions : permissions;
   const visibleAccountName = displayName || (insideWorkspace ? workspaceDisplayName : accountName) || 'Staff account';
+  const roleLabel = adminRoleLabel(visibleRole);
+  const compactRoleLabel = adminRoleCompactLabel(visibleRole);
+  const roleClass = adminRoleClass(visibleRole);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,6 +60,18 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
       .catch(() => undefined);
   }, [insideWorkspace]);
 
+  const visibleGroups = useMemo(
+    () => ADMIN_NAV_GROUPS
+      .map(group => ({ ...group, items: group.items.filter(item => canSeeAdminItem(item, visibleRole, visiblePermissions)) }))
+      .filter(group => group.items.length > 0),
+    [visibleRole, visiblePermissions],
+  );
+  const activeGroup = visibleGroups.find(group => group.items.some(item => item.key === active))?.id;
+
+  useEffect(() => {
+    if (activeGroup) setExpandedGroups(current => current[activeGroup] ? current : { ...current, [activeGroup]: true });
+  }, [active, activeGroup]);
+
   function toggleCollapsed() {
     const next = !collapsed;
     setCollapsed(next);
@@ -66,20 +82,23 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
     }
   }
 
+  function toggleGroup(groupId: string) {
+    setExpandedGroups(current => ({ ...current, [groupId]: !current[groupId] }));
+  }
+
   async function logout() {
     try {
-      await fetch('/api/v1/auth/logout', { method: 'POST' });
+      await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch {
+      // Return to login even if the logout request cannot reach the server.
     } finally {
       router.replace('/login');
     }
   }
 
   if (insideWorkspace && !persistent) return null;
-  const localizedLabel = (key: AdminSection, label: string) => {
-    if (locale === 'english') return label;
-    const labels: Partial<Record<AdminSection, string>> = { questions: 'MCQ समीक्षा', sources: 'Sources जोड़ें', classes: 'Live classes' };
-    return labels[key] || label;
-  };
+
+  const showOverview = canSeeAdminItem(ADMIN_OVERVIEW_ITEM, visibleRole, visiblePermissions);
 
   return (
     <aside className={'admin-sidebar qe-shared-sidebar' + (collapsed ? ' is-collapsed' : '')}>
@@ -106,50 +125,92 @@ export default function AdminSidebar({ active, variant = 'default', displayName,
       </div>
 
       <div className="qe-sidebar-scroll">
-      <div className="sidebar-label">{variant === 'content' ? 'LEARNING OPERATIONS' : 'WORKSPACE'}</div>
-      <nav aria-label="Admin navigation">
-        {links.filter(item => {
-          if (!visibleRole) return true;
-          if (item.key === 'overview') return visibleRole === 'ADMIN';
-          if (item.key === 'students' || item.key === 'parents') return visibleRole === 'ADMIN';
-          if (item.key === 'content') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW');
-          if (item.key === 'translations') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_REVIEW') || visiblePermissions.includes('CONTENT_EDIT');
-          if (item.key === 'questions') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_REVIEW');
-          if (item.key === 'resources') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_EDIT') || visiblePermissions.includes('CONTENT_PUBLISH');
-          if (item.key === 'sources') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_REVIEW');
-          if (item.key === 'assessments') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CONTENT_CREATE') || visiblePermissions.includes('ASSESSMENT_GRADE');
-          if (item.key === 'classes') return visibleRole === 'ADMIN' || visiblePermissions.includes('CONTENT_VIEW') || visiblePermissions.includes('CLASS_MANAGE');
-          return true;
-        }).map(item => (
-          <Link key={item.key} href={item.href} title={collapsed ? item.label : undefined} className={active === item.key ? 'active' : ''}>
-            <span className="qe-nav-icon" aria-hidden="true">{item.icon}</span>
-            <span className="qe-nav-label">{localizedLabel(item.key, item.label)}</span>
-            {item.key === 'content' && variant === 'overview' ? <small>01</small> : null}
-          </Link>
-        ))}
-        {visibleRole === 'ADMIN' ? <Link href="/legacy-content" title={collapsed ? 'Detailed authoring' : undefined} className="qe-legacy-nav">
-          <span className="qe-nav-icon" aria-hidden="true">✎</span><span className="qe-nav-label">Detailed authoring</span>
-        </Link> : null}
-        {visibleRole === 'ADMIN' ? <Link href="/employees" title={collapsed ? 'Staff & audit' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
-          <span className="qe-nav-icon" aria-hidden="true">♙</span><span className="qe-nav-label">Staff & audit</span>
-        </Link> : visiblePermissions.includes('AUDIT_VIEW') ? <Link href="/employees?view=audit" title={collapsed ? 'Activity trail' : undefined} className={'qe-staff-nav '+(active === 'staff' ? 'active' : '')}>
-          <span className="qe-nav-icon" aria-hidden="true">◷</span><span className="qe-nav-label">Activity trail</span>
-        </Link> : null}
-      </nav>
+        {!collapsed ? <div className="sidebar-label">{variant === 'content' ? 'LEARNING OPERATIONS' : 'WORKSPACE'}</div> : null}
+        <nav className="qe-admin-navigation" aria-label="Admin navigation">
+          {showOverview ? (
+            <Link
+              href={ADMIN_OVERVIEW_ITEM.href}
+              title={collapsed ? ADMIN_OVERVIEW_ITEM.english : undefined}
+              className={'qe-nav-link' + (active === 'overview' ? ' active' : '')}
+              aria-current={active === 'overview' ? 'page' : undefined}
+            >
+              <span className="qe-nav-icon" aria-hidden="true">{ADMIN_OVERVIEW_ITEM.icon}</span>
+              <span className="qe-nav-label">{adminNavLabel(ADMIN_OVERVIEW_ITEM, locale, visibleRole)}</span>
+            </Link>
+          ) : null}
 
-      {variant === 'overview' ? <>
-        <div className="sidebar-divider" />
-        <div className="sidebar-label">SYSTEM</div>
-        <a href="#analytics" title={collapsed ? 'Learning analytics' : undefined}><span className="qe-nav-icon" aria-hidden="true">◌</span><span className="qe-nav-label">Learning analytics</span></a>
-        <a href="#governance" title={collapsed ? 'Content governance' : undefined}><span className="qe-nav-icon" aria-hidden="true">✓</span><span className="qe-nav-label">Content governance</span></a>
-      </> : null}
+          {visibleGroups.map(group => {
+            const expanded = collapsed || Boolean(expandedGroups[group.id]);
+            const groupHasActivePage = group.items.some(item => item.key === active);
+            return (
+              <section key={group.id} className={'qe-admin-nav-group' + (groupHasActivePage ? ' has-active-page' : '') + (expanded ? ' is-expanded' : '')}>
+                {!collapsed ? (
+                  <button
+                    type="button"
+                    className="qe-admin-nav-group-toggle"
+                    onClick={() => toggleGroup(group.id)}
+                    aria-expanded={Boolean(expandedGroups[group.id])}
+                  >
+                    <span>{adminNavGroupLabel(group, locale)}</span>
+                    <span className="qe-admin-nav-chevron" aria-hidden="true">{expandedGroups[group.id] ? '−' : '+'}</span>
+                  </button>
+                ) : null}
+                {expanded ? (
+                  <div className="qe-admin-nav-group-items">
+                    {group.items.map(item => (
+                      <Link
+                        key={item.key}
+                        href={adminNavHref(item, visibleRole)}
+                        title={collapsed ? adminNavLabel(item, locale, visibleRole) : undefined}
+                        className={'qe-nav-link' + (active === item.key ? ' active' : '')}
+                        aria-current={active === item.key ? 'page' : undefined}
+                      >
+                        <span className="qe-nav-icon" aria-hidden="true">{item.icon}</span>
+                        <span className="qe-nav-label">{adminNavLabel(item, locale, visibleRole)}</span>
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </section>
+            );
+          })}
+        </nav>
 
+        {variant === 'overview' ? (
+          <div className="qe-admin-overview-shortcuts">
+            <div className="sidebar-divider" />
+            {!collapsed ? <div className="sidebar-label">OVERVIEW SHORTCUTS</div> : null}
+            <a href="#analytics" title={collapsed ? 'Learning analytics' : undefined}>
+              <span className="qe-nav-icon" aria-hidden="true">◌</span>
+              <span className="qe-nav-label">Learning analytics</span>
+            </a>
+            <a href="#governance" title={collapsed ? 'Content governance' : undefined}>
+              <span className="qe-nav-icon" aria-hidden="true">✓</span>
+              <span className="qe-nav-label">Content governance</span>
+            </a>
+          </div>
+        ) : null}
       </div>
-      <div className="admin-user">
-        <span className="avatar">{visibleAccountName.trim().slice(0, 1).toUpperCase() || 'A'}</span>
-        <div className="admin-user-copy"><strong>{visibleAccountName}</strong><small>Authorized operator</small></div>
-        <button className="qe-sidebar-logout" type="button" aria-label="Logout" title="Logout" onClick={logout}>
-          <span aria-hidden="true">↗</span><span className="qe-sidebar-logout-label">Logout</span>
+
+      <div className="admin-user qe-admin-user-footer">
+        <div className="qe-admin-user-identity">
+          <span className="avatar" aria-hidden="true">{visibleAccountName.trim().slice(0, 1).toUpperCase() || 'A'}</span>
+          <div className="admin-user-copy">
+            <strong title={visibleAccountName}>{visibleAccountName}</strong>
+            <span
+              className={'qe-staff-role-badge qe-staff-role-' + roleClass}
+              title={'Assigned role: ' + roleLabel}
+              aria-label={'Assigned role: ' + roleLabel}
+            >
+              <span className="qe-staff-role-dot" aria-hidden="true" />
+              <span className="qe-staff-role-full">{roleLabel}</span>
+              <span className="qe-staff-role-short" aria-hidden="true">{compactRoleLabel}</span>
+            </span>
+          </div>
+        </div>
+        <button className="qe-sidebar-logout" type="button" aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'} title={locale === 'english' ? 'Log out' : 'लॉग आउट'} onClick={() => void logout()}>
+          <span className="qe-sidebar-logout-icon" aria-hidden="true">↪</span>
+          <span className="qe-sidebar-logout-label">{locale === 'english' ? 'Log out' : 'लॉग आउट'}</span>
         </button>
       </div>
     </aside>
