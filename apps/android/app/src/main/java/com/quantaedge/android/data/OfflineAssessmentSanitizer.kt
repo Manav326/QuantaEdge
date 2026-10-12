@@ -29,6 +29,16 @@ internal object OfflineAssessmentSanitizer {
         return result
     }
 
+    /**
+     * Called only with authenticated server responses. Released results may legitimately contain
+     * correct answers and explanations for student review; unreleased responses remain redacted.
+     */
+    fun sanitizeServerResult(source: JSONObject): JSONObject {
+        val released = source.optBoolean("resultReleased") ||
+            source.optString("status").equals("RELEASED", ignoreCase = true)
+        return if (released) JSONObject(source.toString()) else sanitize(source)
+    }
+
     private fun sanitize(source: JSONArray): JSONArray {
         val result = JSONArray()
         for (index in 0 until source.length()) {

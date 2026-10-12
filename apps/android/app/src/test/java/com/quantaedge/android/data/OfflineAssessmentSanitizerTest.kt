@@ -48,6 +48,28 @@ class OfflineAssessmentSanitizerTest {
     }
 
     @Test
+    fun unreleasedServerResponseRemainsRedactedButReleasedReviewKeepsCorrectAnswer() {
+        val unreleased = JSONObject()
+            .put("status", "AWAITING_REVIEW")
+            .put("resultReleased", false)
+            .put("questions", org.json.JSONArray().put(
+                JSONObject().put("correctAnswer", "A").put("answer", "B")
+            ))
+        val safeUnreleased = OfflineAssessmentSanitizer.sanitizeServerResult(unreleased)
+        assertFalse(safeUnreleased.getJSONArray("questions").getJSONObject(0).has("correctAnswer"))
+
+        val released = JSONObject()
+            .put("status", "RELEASED")
+            .put("resultReleased", true)
+            .put("questions", org.json.JSONArray().put(
+                JSONObject().put("correctAnswer", "A").put("answer", "B")
+            ))
+        val safeReleased = OfflineAssessmentSanitizer.sanitizeServerResult(released)
+        assertEquals("A", safeReleased.getJSONArray("questions").getJSONObject(0).getString("correctAnswer"))
+        assertEquals("B", safeReleased.getJSONArray("questions").getJSONObject(0).getString("answer"))
+    }
+
+    @Test
     fun removesCommonNamingVariantsCaseInsensitively() {
         val input = JSONObject()
             .put("Correct_Answer", "SECRET_A")

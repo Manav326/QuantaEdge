@@ -116,7 +116,7 @@ class OfflineAssessmentStore(context: Context, private val ownerKey: String) {
         synchronized(lock) {
             val record = readRecordInternal(attemptId) ?: return
             record.optJSONObject("attempt")?.remove("offlinePackageToken")
-            record.put("syncResult", OfflineAssessmentSanitizer.sanitize(serverResult))
+            record.put("syncResult", OfflineAssessmentSanitizer.sanitizeServerResult(serverResult))
                 .put("state", "SYNCED")
                 .put("updatedAtMillis", System.currentTimeMillis())
             record.remove("lastError")
