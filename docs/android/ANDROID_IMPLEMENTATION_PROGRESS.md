@@ -47,6 +47,14 @@ Last updated: 2026-10-12
 - Added parent profile editing against the current guardian-profile endpoint.
 - Child provisioning follows backend support: Hindi is the supported profile language at present; the Android UI does not offer an unsupported English child-account option.
 
+## Milestone 6 — Student profile and progress
+
+**Status:** Added to source; CI verification pending.
+
+- Student can edit profile details through the existing profile endpoint.
+- Language changes persist to the server-side student record as well as the app preference.
+- Added a server-backed dashboard for curriculum completion, question accuracy, concept mastery, study time, and released assessment performance.
+
 ## Verification record
 
 - GitHub Actions is configured to compile the debug APK and run unit tests on pushes to main.

@@ -61,7 +61,7 @@ private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
     PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, RESOURCES,
-    DOCUMENT_READER, PROFILE, TUTOR, CLASSES, RECORDING_PLAYER
+    DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER
 }
 
 @Composable
@@ -91,6 +91,7 @@ fun QuantaEdgeApp() {
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var progressData by remember { mutableStateOf(JSONObject()) }
     var documents by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
     var documentPage by remember { mutableStateOf(1) }
@@ -549,7 +550,32 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun openParentProfile() {
+    fun openStudentProfile() {
+        runTask {
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+            route = AppRoute.PROFILE
+        }
+    }
+
+    fun saveStudentProfile(body: JSONObject) {
+        runTask {
+            val profile = ApiClient.putObject("/api/v1/students/me/profile", body)
+            studentProfile = ApiClient.getObject("/api/v1/students/me")
+            studentProfile.put("display_name", profile.textAny("display_name", "displayName"))
+            auth = JSONObject(auth.toString()).put("displayName", profile.textAny("display_name", "displayName"))
+            status = "छात्र प्रोफ़ाइल सुरक्षित हो गई।"
+            route = AppRoute.PROFILE
+        }
+    }
+
+    fun openProgress() {
+        runTask {
+            progressData = ApiClient.getObject("/api/v1/students/me")
+            route = AppRoute.PROGRESS
+        }
+    }
+
+        fun openParentProfile() {
         runTask {
             parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
             route = AppRoute.PARENT_PROFILE
@@ -644,6 +670,11 @@ fun QuantaEdgeApp() {
     fun toggleLanguage() {
         runTask {
             val nextLanguage = if (language == "hi") "en" else "hi"
+            if (!auth.textAny("role").contains("PARENT", true) && !auth.textAny("role").contains("GUARDIAN", true)) {
+                ApiClient.patchObject("/api/v1/students/me/language", JSONObject().put("language", nextLanguage))
+                studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+                studentProfile.put("language", nextLanguage)
+            }
             language = nextLanguage
             preferences.edit().putString("language", nextLanguage).apply()
             when (route) {
@@ -686,7 +717,7 @@ fun QuantaEdgeApp() {
         route = when (route) {
             AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
-            AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
+            AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.LESSON -> AppRoute.SUBJECT_LESSONS
             AppRoute.PRACTICE -> AppRoute.LESSON
             AppRoute.TUTOR -> AppRoute.LESSON
@@ -901,13 +932,15 @@ fun QuantaEdgeApp() {
                         onPage = { page -> runTask { loadPage(page) } },
                         onDownload = { downloadDocument(selectedDocument) }
                     )
-                    AppRoute.PROFILE -> ProfileScreen(
-                        auth = auth,
+                    AppRoute.PROFILE -> StudentProfileScreen(
                         profile = studentProfile,
                         language = language,
+                        busy = busy,
+                        onSave = ::saveStudentProfile,
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )
+                    AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, ::openProgress)
                     AppRoute.TUTOR -> TutorScreen(
                         lessonTitle = lesson.textAny("title"),
                         available = tutorAvailable,
@@ -1116,6 +1149,7 @@ private fun StudentHomeScreen(
     onResources: (String) -> Unit,
     onResults: () -> Unit,
     onProfile: () -> Unit,
+    onProgress: () -> Unit,
     onRefresh: () -> Unit,
     onOpenRecommendation: (JSONObject) -> Unit,
     onClasses: (String) -> Unit
@@ -1138,6 +1172,7 @@ private fun StudentHomeScreen(
         ActionRow("Textbook Library", "पुस्तक और अध्याय संसाधन ऐप में पढ़ें; अनुमति होने पर ऑफ़लाइन डाउनलोड करें।", "लाइब्रेरी खोलें") { onResources("maths") }
         ActionRow("Live classes और recordings", "Schedule की गई classes, recorded lessons और आपकी playback progress।", "Classes खोलें") { onClasses("maths") }
         ActionRow("मेरे परिणाम", "जारी किए गए टेस्ट परिणाम और उत्तर समीक्षा।", "परिणाम देखें", onResults)
+        ActionRow("प्रगति और mastery", "पाठ completion, accuracy, concept mastery और assessment performance।", "मेरी प्रगति देखें", onProgress)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             TextButton(onClick = onProfile) { Text("प्रोफ़ाइल और सेटिंग") }
             TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
