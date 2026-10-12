@@ -16,8 +16,10 @@ public class TutorController {
   }
 
   @GetMapping("/sessions/{sessionId}/messages")
-  public List<Map<String,Object>> messages(@RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long sessionId){
-    return tutor.messages(context,sessionId);
+  public Map<String,Object> messages(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long sessionId,
+      @RequestParam(defaultValue="30") Integer limit,@RequestParam(required=false) Long beforeId){
+    return tutor.messages(context,sessionId,limit,beforeId);
   }
 
   @PostMapping("/sessions/{sessionId}/messages")

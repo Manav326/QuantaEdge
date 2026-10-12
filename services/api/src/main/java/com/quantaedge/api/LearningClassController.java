@@ -92,37 +92,35 @@ public class LearningClassController {
   }
 
   @GetMapping("/admin/live-classes")
-  public List<Map<String, Object>> adminLiveClasses(
-      @RequestParam(required = false) String classCode,
-      @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) String status,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+  public Map<String,Object> adminLiveClasses(
+      @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
+      @RequestParam(required=false) String status,@RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireClassView(context);
-    String classFilter = safeText(classCode, 30);
-    String subjectFilter = safeText(subjectCode, 40);
-    String statusFilter = safeText(status, 20).toUpperCase(Locale.ROOT);
-    if (statusFilter.isEmpty()) statusFilter = "ALL";
-    if (!Set.of("ALL", "SCHEDULED", "LIVE", "COMPLETED", "CANCELLED").contains(statusFilter)) {
-      throw badRequest("Choose a valid live class status.");
-    }
-    return jdbc.queryForList("""
+    String classFilter=safeText(classCode,30),subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(statusFilter.isEmpty())statusFilter="ALL";
+    if(!Set.of("ALL","SCHEDULED","LIVE","COMPLETED","CANCELLED").contains(statusFilter))throw badRequest("Choose a valid live class status.");
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
              cs.host_staff_id,host.display_name as host_staff_name,cs.created_at,cs.updated_at,
-             c.code as class_code,c.display_name as class_name,
-             s.code as subject_code,s.display_name as subject_name,
+             c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from learning_class_attendance ca where ca.session_id=cs.id) as attendee_count,
              (select count(*) from recorded_class rc where rc.class_session_id=cs.id and rc.status='PUBLISHED') as published_recording_count
-      from learning_class_session cs
-      join curriculum_subject s on s.id=cs.subject_id
-      join curriculum_class c on c.id=s.class_id
-      left join curriculum_chapter ch on ch.id=cs.chapter_id
+      from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
+      join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=cs.chapter_id
       left join staff_account host on host.id=cs.host_staff_id
-      where (?='' or c.code=?) and (?='' or s.code=?)
-        and (?='ALL' or cs.status=?)
-      order by cs.starts_at desc,cs.id desc
-      limit 500
-      """, classFilter, classFilter, subjectFilter, subjectFilter, statusFilter, statusFilter);
+      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or cs.status=?)
+      order by cs.starts_at desc,cs.id desc limit ? offset ?
+      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or cs.status=?)
+      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/admin/live-classes")
@@ -223,37 +221,33 @@ public class LearningClassController {
   // ---------------- Staff: upload and publish private recordings ----------------
 
   @GetMapping("/admin/recorded-classes")
-  public List<Map<String, Object>> adminRecordedClasses(
-      @RequestParam(required = false) String classCode,
-      @RequestParam(required = false) String subjectCode,
-      @RequestParam(required = false) String status,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+  public Map<String,Object> adminRecordedClasses(
+      @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
+      @RequestParam(required=false) String status,@RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireClassView(context);
-    String classFilter = safeText(classCode, 30);
-    String subjectFilter = safeText(subjectCode, 40);
-    String statusFilter = safeText(status, 20).toUpperCase(Locale.ROOT);
-    if (statusFilter.isEmpty()) statusFilter = "ALL";
-    if (!Set.of("ALL", "DRAFT", "PUBLISHED", "ARCHIVED").contains(statusFilter)) {
-      throw badRequest("Choose a valid recording status.");
-    }
-    return jdbc.queryForList("""
+    String classFilter=safeText(classCode,30),subjectFilter=safeText(subjectCode,40),statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
+    if(statusFilter.isEmpty())statusFilter="ALL";
+    if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid recording status.");
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select rc.id as recorded_class_id,rc.title,rc.description,rc.original_filename,rc.media_type,
-             rc.file_size_bytes,rc.sha256,rc.duration_seconds,rc.status,rc.class_session_id,
-             rc.created_at,rc.updated_at,rc.published_at,
-             c.code as class_code,c.display_name as class_name,
-             s.code as subject_code,s.display_name as subject_name,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
-             cs.title as session_title
-      from recorded_class rc
-      join curriculum_subject s on s.id=rc.subject_id
-      join curriculum_class c on c.id=s.class_id
-      left join curriculum_chapter ch on ch.id=rc.chapter_id
+             rc.file_size_bytes,rc.sha256,rc.duration_seconds,rc.status,rc.class_session_id,rc.created_at,rc.updated_at,rc.published_at,
+             c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
+             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,cs.title as session_title
+      from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
+      join curriculum_class c on c.id=s.class_id left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id
-      where (?='' or c.code=?) and (?='' or s.code=?)
-        and (?='ALL' or rc.status=?)
-      order by rc.created_at desc,rc.id desc
-      limit 500
-      """, classFilter, classFilter, subjectFilter, subjectFilter, statusFilter, statusFilter);
+      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or rc.status=?)
+      order by rc.created_at desc,rc.id desc limit ? offset ?
+      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or rc.status=?)
+      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping(value = "/admin/recorded-classes", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -350,33 +344,40 @@ public class LearningClassController {
   // ---------------- Student: protected live class access and attendance ----------------
 
   @GetMapping("/learning/live-classes")
-  public List<Map<String, Object>> studentLiveClasses(
-      @RequestParam(required = false) String subjectCode,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = authorization.requireStudent(context);
-    String subjectFilter = safeText(subjectCode, 40);
-    return jdbc.queryForList("""
+  public Map<String,Object> studentLiveClasses(
+      @RequestParam(required=false) String subjectCode,@RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    String subjectFilter=safeText(subjectCode,40);
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
-             s.code as subject_code,s.display_name as subject_name,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
-             host.display_name as host_staff_name,
+             s.code as subject_code,s.display_name as subject_name,ch.id as chapter_id,ch.code as chapter_code,
+             ch.display_name as chapter_name,host.display_name as host_staff_name,
              exists(select 1 from recorded_class rc where rc.class_session_id=cs.id and rc.status='PUBLISHED') as has_recording,
              coalesce(att.join_count,0) as join_count,coalesce(att.total_seconds,0) as attended_seconds,
              (att.active_since_at is not null) as currently_joined
-      from learning_class_session cs
-      join curriculum_subject s on s.id=cs.subject_id and s.active=true
+      from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
+      left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
+      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days' and (?='' or s.code=?)
+        and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+      order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
+      """,context.studentId(),subjectFilter,subjectFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from learning_class_session cs join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      left join staff_account host on host.id=cs.host_staff_id
-      left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
-      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
-        and (?='' or s.code=?)
+      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc
-      limit 300
-      """, context.studentId(), subjectFilter, subjectFilter);
+      """,Long.class,context.studentId(),subjectFilter,subjectFilter);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @PostMapping("/learning/live-classes/{sessionId}/join")
@@ -449,33 +450,41 @@ public class LearningClassController {
   // ---------------- Student: private recorded class library and byte-range streaming ----------------
 
   @GetMapping("/learning/recorded-classes")
-  public List<Map<String, Object>> studentRecordedClasses(
-      @RequestParam(required = false) String subjectCode,
-      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
-    context = authorization.requireStudent(context);
-    String subjectFilter = safeText(subjectCode, 40);
-    return jdbc.queryForList("""
+  public Map<String,Object> studentRecordedClasses(
+      @RequestParam(required=false) String subjectCode,@RequestParam(defaultValue="25") Integer limit,
+      @RequestParam(defaultValue="0") Integer offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    String subjectFilter=safeText(subjectCode,40);
+    int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select rc.id as recorded_class_id,rc.title,rc.description,rc.media_type,rc.file_size_bytes,
-             rc.duration_seconds,rc.created_at,rc.published_at,s.code as subject_code,
-             s.display_name as subject_name,c.code as class_code,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+             rc.duration_seconds,rc.created_at,rc.published_at,s.code as subject_code,s.display_name as subject_name,
+             c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              cs.id as session_id,cs.title as session_title,cs.starts_at as session_starts_at,
              coalesce(progress.last_position_seconds,0) as last_position_seconds,
              coalesce(progress.watched_seconds,0) as watched_seconds,coalesce(progress.completed,false) as completed
-      from recorded_class rc
-      join curriculum_subject s on s.id=rc.subject_id and s.active=true
+      from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=rc.chapter_id
       left join learning_class_session cs on cs.id=rc.class_session_id
-      left join student_recorded_class_progress progress
-        on progress.recorded_class_id=rc.id and progress.student_id=st.id
+      left join student_recorded_class_progress progress on progress.recorded_class_id=rc.id and progress.student_id=st.id
       where rc.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
-      order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc
-      limit 500
-      """, context.studentId(), subjectFilter, subjectFilter);
+      order by coalesce(ch.teaching_order,ch.sort_order),rc.created_at desc,rc.id desc limit ? offset ?
+      """,context.studentId(),subjectFilter,subjectFilter,rowLimit,rowOffset);
+    Long total=jdbc.queryForObject("""
+      select count(*) from recorded_class rc join curriculum_subject s on s.id=rc.subject_id and s.active=true
+      join curriculum_class c on c.id=s.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join curriculum_chapter ch on ch.id=rc.chapter_id
+      where rc.status='PUBLISHED' and (?='' or s.code=?)
+        and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+      """,Long.class,context.studentId(),subjectFilter,subjectFilter);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
   @GetMapping("/learning/recorded-classes/{recordingId}")
