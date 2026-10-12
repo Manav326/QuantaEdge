@@ -95,3 +95,11 @@ This is a source-level correction. Keyboard navigation and assistive-technology 
 - `apps/admin/app/content/page.tsx`: expose the Content Studio connection/loading label as a polite live status, hide the decorative status dot from assistive technology, and give the icon-only refresh control an explicit accessible name and button type.
 - Existing lesson navigation, content API calls, permissions, and refresh behavior are unchanged.
 - These are source-level improvements; visual layout, keyboard traversal, and screen-reader announcements still require browser verification.
+
+
+## Fifth remediation pass — assessment workspace navigation
+
+- `apps/admin/app/assessments/page.tsx`: label the assessment section switcher as a group, expose its selected view through `aria-pressed`, and explicitly mark both view controls as non-submit buttons.
+- Added a programmatic accessible name to the teacher-review search field instead of relying on placeholder text alone.
+- Assessment permissions, question selection, test authoring, and teacher-review actions are unchanged.
+- Browser-based keyboard and screen-reader verification remains outstanding.
