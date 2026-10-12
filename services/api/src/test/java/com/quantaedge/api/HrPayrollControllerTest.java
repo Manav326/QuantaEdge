@@ -96,4 +96,16 @@ class HrPayrollControllerTest {
     verify(jdbc).queryForList(contains("select e.id employee_id,e.employee_number,e.display_name,x.currency"),any(Object[].class));
   }
 
+  @Test
+  void payrollSubmitterCannotApproveTheirOwnSubmittedRun() {
+    when(authorization.requirePermission(payrollManager,"HR_PAYROLL_APPROVE")).thenReturn(payrollManager);
+    when(jdbc.queryForList("select r.*,p.organization_id,p.period_name,p.start_date,p.end_date,p.status period_status from hr_payroll_run r join hr_payroll_period p on p.id=r.period_id where r.id=?",12L))
+        .thenReturn(List.of(Map.of("id",12L,"period_id",4L,"organization_id",1L,"status","SUBMITTED","created_by_staff_id",99L,"submitted_by_staff_id",100L)));
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.approve(12L,Map.of("reason","Reviewed"),payrollManager));
+    assertEquals(403,error.getStatusCode().value());
+    verify(jdbc,never()).update(org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.any(Object[].class));
+    verify(audit,never()).recordAction(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.anyString());
+  }
+
 }
