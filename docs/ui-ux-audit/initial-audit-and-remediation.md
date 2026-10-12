@@ -47,3 +47,17 @@ The route inventory above is derived from the current Git tree. It does not impl
 2. Run the applications in a browser and inspect the route inventory at approximately 320/375/390/430/768/1280/1440px.
 3. Exercise student login → class/subject → lesson → practice/test → progress; admin content edit → preview → publish controls; and People employee/attendance/leave workflows with appropriate permissions.
 4. Fix confirmed P0/P1 regressions first, add focused regression tests, and update this record with exact verification evidence.
+
+
+## Follow-up accessibility remediation
+
+Two additional UI-only changes were committed directly to `main` after the initial audit record:
+
+- `apps/people/app/page.tsx` — the Employees / Departments / Designations view switcher now exposes its group label and selected state with `role="group"` and `aria-pressed`, and explicitly uses non-submit buttons.
+- `apps/people/app/attendance/page.tsx` — the Attendance / Leave requests / Holiday calendar / Leave balances switcher now exposes the selected state and group label, and explicitly uses non-submit buttons.
+
+Commits:
+- `de50d24fea8ed75b8951143eebb39c0ac856ea28`
+- `393c47e26f3aa4ff9f708797c113cc9e4f17aab7`
+
+These are source-level accessibility corrections. They still require browser/keyboard verification; no manual assistive-technology test is claimed.
