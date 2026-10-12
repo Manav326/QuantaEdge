@@ -18,8 +18,6 @@ const palette = {
   muted: '#778398',
   border: '#e1e7f0',
   soft: '#f7f9fc',
-  accent: '#b84916',
-  accentSoft: '#fff2e9',
   active: '#24334b',
 };
 
@@ -113,7 +111,7 @@ export default function PremiumPagination({
   return (
     <nav aria-label={'Pagination for ' + itemLabel} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
-        <strong style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
+        <strong aria-live="polite" style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
           {safeTotal === 0 ? 'No ' + itemLabel : 'Showing ' + first.toLocaleString() + '–' + last.toLocaleString() + ' of ' + safeTotal.toLocaleString()}
         </strong>
         <span style={mutedText}>{safeTotal === 1 ? '1 item' : safeTotal.toLocaleString() + ' ' + itemLabel}</span>
@@ -133,7 +131,7 @@ export default function PremiumPagination({
           </select>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
           <button
             type="button"
             aria-label="Previous page"
