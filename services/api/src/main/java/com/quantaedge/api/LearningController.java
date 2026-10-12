@@ -83,7 +83,7 @@ public class LearningController {
         select count(*) filter(where q.question_type='MCQ') as mcq_count,
                count(*) filter(where q.question_type='MCQ' and exists(
                  select 1 from student_question_attempt a
-                 where a.student_id=learner.id and a.question_id=q.id
+                 where a.student_id=learner.id and a.question_id=q.id and a.activity_kind='LESSON_INLINE'
                )) as mcq_answered_count
         from question q
         where q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
@@ -326,7 +326,7 @@ public class LearningController {
              coalesce(qt.skill,q.skill) as skill,coalesce(qt.tags::text,q.tags::text) as tags,
              (qt.id is not null) as translated,
              exists(select 1 from student_question_attempt a
-                    where a.student_id=? and a.question_id=q.id) as attempted,
+                    where a.student_id=? and a.question_id=q.id and a.activity_kind='LESSON_INLINE') as attempted,
              case when qt.id is not null then coalesce(qt.options,'[]'::jsonb)
                   when q.question_type in ('MCQ','TRUE_FALSE') then
                     coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
