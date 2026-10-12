@@ -112,3 +112,12 @@ This is a source-level correction. Keyboard navigation and assistive-technology 
 - `apps/web/app/student/profile/page.tsx`: profile loading is now announced politely and its decorative spinner is hidden from assistive technology.
 - No API contracts, content workflow states, permissions, or student-visible publication rules were changed.
 - These are source-level fixes. Browser/keyboard/screen-reader verification remains outstanding.
+
+
+## Seventh remediation pass — workforce controls and loading feedback
+
+- People Operations employee, attendance/leave, payroll and teaching-assignment actions now use explicit button types where they trigger actions. Loading messages are announced as polite status updates.
+- Teaching assignment section tabs expose a labelled group and selected state. Commit: `c7355b3f8cb366f3bfe397a24948e67c22903e61`.
+- Question queue and question-history loading messages expose status semantics. Commit: `64d7b90f4765c1e764cc53bc78130564a62f4952`.
+- No business APIs or approval/publication rules were changed.
+- Source-level checks only; browser keyboard, responsive, and assistive-technology verification remains outstanding.
