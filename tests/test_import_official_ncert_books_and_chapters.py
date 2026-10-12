@@ -312,6 +312,28 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             [item["chapter_code"] for item in ranges],
         )
 
+    def test_detects_heading_when_pdf_text_extraction_order_is_not_visual_order(self):
+        path = self.root / "class7-maths-geometric-twins.pdf"
+        with fitz.open() as doc:
+            page = doc.new_page()
+            # Simulate PDFs whose internal content order puts body text before the visual
+            # chapter heading. The exact title remains positioned near the top of the page.
+            for index in range(20):
+                page.insert_text((50, 180 + index * 20), f"Section text {index}")
+            page.insert_text((50, 80), "Geometric Twins")
+            doc.save(path)
+
+        chapters = [{
+            "chapter_id": 709,
+            "chapter_code": "geometric-twins",
+            "chapter_name": "ज्यामितीय जुड़वाँ आकृतियाँ",
+        }]
+        original_bytes = path.read_bytes()
+        ranges = importer.detect_chapter_ranges(path, "7", "maths", "english", chapters)
+        self.assertEqual(1, ranges[0]["start_page"])
+        self.assertEqual(1, ranges[0]["end_page"])
+        self.assertEqual(original_bytes, path.read_bytes())
+
     def test_fails_closed_when_a_chapter_title_cannot_be_found(self):
         path = self.make_book(unknown_title=True)
         chapters = [
