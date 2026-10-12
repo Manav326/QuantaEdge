@@ -21,6 +21,9 @@ param(
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 $ApiUrl = $ApiUrl.TrimEnd('/')
+if ($PrepareReviewManifest -and $PublishAllDrafts) {
+    throw 'Use either -PrepareReviewManifest or -PublishAllDrafts, not both.'
+}
 
 function Get-QEField {
     param([object]$Object, [string[]]$Names)
@@ -243,9 +246,6 @@ if ($PrepareReviewManifest) {
 
 $manifestById = @{}
 $manifest = @()
-if ($PrepareReviewManifest -and $PublishAllDrafts) {
-    throw 'Use either -PrepareReviewManifest or -PublishAllDrafts, not both.'
-}
 if ($PublishAllDrafts) {
     # This mode implements the explicit request to publish every DRAFT in this import checkpoint.
     # It does not assert the PDFs went through the dedicated source-ingestion review queue.
@@ -464,7 +464,11 @@ if ($failures.Count -gt 0) {
 }
 
 $todo = @($actions | Where-Object { $_.result -eq 'READY_TO_PUBLISH' })
-Write-Host "Preflight passed. $($approved.Count) approved; $($todo.Count) will be published; $($actions.Count - $todo.Count) are already published or withheld."
+if ($PublishAllDrafts) {
+    Write-Host "Preflight passed. $($approved.Count) checkpoint resources authorized for bulk publication; $($todo.Count) will be newly published; $($actions.Count - $todo.Count) are already published."
+} else {
+    Write-Host "Preflight passed. $($approved.Count) individually approved; $($todo.Count) will be published; $($actions.Count - $todo.Count) are already published or withheld."
+}
 if ($PublishAllDrafts) {
     Write-Host 'BULK MODE: the operator has requested publication of every DRAFT in this checkpoint; the individual PDFs have not been marked human-reviewed by this script.' -ForegroundColor Yellow
 } else {
