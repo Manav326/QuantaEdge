@@ -295,7 +295,7 @@ public class LearningController {
     ensureStudentLessonAccess(context.studentId(),lessonId);
     Object submittedObject=body.get("answer");
     if(submittedObject==null)submittedObject="";
-    String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : submittedObject.toString();
+    String submitted=submittedObject instanceof String ? ((String)submittedObject).trim() : answerService.serializeForPersistence(submittedObject);
     String payload=String.valueOf(q.get("answer_payload"));
     QuestionAnswerService.Evaluation evaluation=answerService.evaluate(payload,submittedObject);
     if(practiceSessionId==null) {
