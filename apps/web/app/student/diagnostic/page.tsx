@@ -1,74 +1,116 @@
 'use client';
 
 import { LocaleText, useLocale } from '../../components/LanguageProvider';
-
 import Link from 'next/link';
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 
-type Q={id:number;question_type:string;prompt:string;explanation:string;options:string};
+type Q={id:number;question_type:string;prompt:string;explanation?:string;options:string;answered?:boolean;lastCorrect?:boolean|null;selectedAnswer?:any};
+type DiagnosticPayload={completed?:boolean;available?:boolean;attemptId?:number;status?:string;questionCount?:number;questions?:Q[];message?:string;detail?:string};
+
+async function readJson(response:Response):Promise<any>{
+  const raw=await response.text();
+  if(!raw.trim())return {};
+  try{return JSON.parse(raw)}catch{return {message:raw}}
+}
 
 export default function DiagnosticPage(){
   const router=useRouter();
-  const { locale } = useLocale();
-  const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
+  const {locale}=useLocale();
+  const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;
   const [qs,setQs]=useState<Q[]>([]);
   const [idx,setIdx]=useState(0);
-  const [value,setValue]=useState('');
+  const [value,setValue]=useState<any>('');
   const [result,setResult]=useState<any>(null);
-  const [session,setSession]=useState<number|null>(null);
-  const [started,setStarted]=useState<number|null>(null);
+  const [attemptId,setAttemptId]=useState<number|null>(null);
   const [error,setError]=useState('');
+  const [loading,setLoading]=useState(true);
+  const [saving,setSaving]=useState(false);
+  const [submitting,setSubmitting]=useState(false);
+  const [unavailable,setUnavailable]=useState(false);
 
   useEffect(()=>{
-    (async()=>{
-      const r=await fetch('/api/v1/diagnostic');
-      if(r.status===401||r.status===403){router.replace('/login/student');return;}
-      const b=await r.json();
-      if(!r.ok){setError(b.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic'));return;}
-      if(b.completed){router.replace('/student');return;}
-      setQs(b.questions||[]);
-      const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'DIAGNOSTIC'})});
-      if(sr.ok){const sb=await sr.json();setSession(Number(sb.sessionId));setStarted(Date.now());}
-    })().catch(e=>setError(e.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic')));
-  },[router]);
-
-  useEffect(()=>()=>{if(session&&started){
-    const minutes=Math.max(0,Math.min(240,Math.round((Date.now()-started)/60000)));
-    void fetch('/api/v1/learning/sessions/'+session+'/end',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({minutes}),keepalive:true});
-  }},[session,started]);
-
-  if(error)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><LocaleText hinglish="Diagnostic load नहीं हो पाया" english="Unable to load diagnostic" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← वापस" english="← Back" /></Link></div></section></main>;
-  if(!qs.length)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="Initial diagnostic तैयार हो रहा है…" english="Preparing the initial diagnostic…" /></div></section></main>;
+    let live=true;
+    async function load(){
+      setLoading(true);setError('');
+      try{
+        const response=await fetch('/api/v1/diagnostic',{cache:'no-store'});
+        if(response.status===401||response.status===403){router.replace('/login/student');return;}
+        const body:DiagnosticPayload=await readJson(response);
+        if(!response.ok)throw new Error(body.detail||body.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic'));
+        if(body.completed){router.replace('/student');return;}
+        const questions=Array.isArray(body.questions)?body.questions:[];
+        if(!live)return;
+        setAttemptId(Number(body.attemptId)||null);
+        setQs(questions);
+        setUnavailable(body.available===false||questions.length===0);
+        const firstUnanswered=questions.findIndex(q=>!q.answered);
+        setIdx(firstUnanswered<0?Math.max(0,questions.length-1):firstUnanswered);
+        if(firstUnanswered>=0)setValue(questions[firstUnanswered].selectedAnswer??'');
+        if(firstUnanswered<0&&questions.length&&body.attemptId){
+          const submitted=await fetch('/api/v1/diagnostic/attempts/'+body.attemptId+'/submit',{method:'POST',cache:'no-store'});
+          const submitBody=await readJson(submitted);
+          if(!submitted.ok)throw new Error(submitBody.detail||submitBody.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));
+          if(live)router.replace('/student');
+        }
+      }catch(e:any){if(live)setError(e?.message||tx('Diagnostic load नहीं हो पाया','Unable to load diagnostic'));}
+      finally{if(live)setLoading(false);}
+    }
+    void load();
+    return()=>{live=false;};
+  },[router,locale]);
 
   const q=qs[idx];
   let options:any[]=[];
-  try{options=JSON.parse(q.options||'[]')}catch{}
+  try{options=JSON.parse(q?.options||'[]')}catch{}
 
-  async function answer(v:string){
-    setValue(v);
-    const r=await fetch('/api/v1/learning/questions/'+q.id+'/answer',{
-      method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:v})
-    });
-    const b=await r.json();
-    if(!r.ok){setError(b.message||tx('Answer submit नहीं हो पाया','Answer failed'));return;}
-    setResult(b);
+  async function answer(v:any){
+    if(!q||!attemptId||saving||result)return;
+    setSaving(true);setError('');
+    try{
+      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/answers/'+q.id,{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:v})
+      });
+      const body=await readJson(response);
+      if(response.status===401||response.status===403){router.replace('/login/student');return;}
+      if(!response.ok)throw new Error(body.detail||body.message||tx('Answer save नहीं हुआ','Could not save this answer'));
+      setValue(v);setResult(body);
+      setQs(old=>old.map(item=>item.id===q.id?{...item,answered:true,lastCorrect:body.correct,selectedAnswer:v}:item));
+    }catch(e:any){setError(e?.message||tx('Answer submit नहीं हो पाया','Answer could not be submitted'));}
+    finally{setSaving(false);}
   }
 
-  function next(){
-    if(idx+1<qs.length){setIdx(idx+1);setValue('');setResult(null);}
-    else router.replace('/student');
+  async function next(){
+    if(!result||!attemptId||submitting)return;
+    const nextIndex=qs.findIndex((item,i)=>i>idx&&!item.answered);
+    if(nextIndex>=0){
+      setIdx(nextIndex);setValue(qs[nextIndex].selectedAnswer??'');setResult(null);setError('');return;
+    }
+    setSubmitting(true);setError('');
+    try{
+      const response=await fetch('/api/v1/diagnostic/attempts/'+attemptId+'/submit',{method:'POST'});
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.detail||body.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));
+      router.replace('/student');
+    }catch(e:any){setError(e?.message||tx('Diagnostic submit नहीं हो पाया','Unable to submit diagnostic'));}
+    finally{setSubmitting(false);}
   }
+
+  if(loading)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="आपका saved diagnostic खोल रहे हैं…" english="Loading your saved diagnostic…" /></div></section></main>;
+  if(error&&!q)return <main className="practice-page"><section className="practice-wrap"><div className="auth-card"><h1><LocaleText hinglish="Diagnostic load नहीं हो पाया" english="Unable to load diagnostic" /></h1><p>{error}</p><button type="button" className="button button-dark" onClick={()=>window.location.reload()}><LocaleText hinglish="दोबारा कोशिश करें" english="Try again" /></button><Link href="/student" className="text-link"><LocaleText hinglish="← वापस" english="← Back" /></Link></div></section></main>;
+  if(unavailable||!q)return <main className="practice-page"><section className="practice-wrap"><div className="eyebrow"><LocaleText hinglish="INITIAL DIAGNOSTIC" english="INITIAL DIAGNOSTIC" /></div><h1><LocaleText hinglish="Diagnostic अभी उपलब्ध नहीं है" english="Diagnostic is not available yet" /></h1><p><LocaleText hinglish="आपकी class और enrolled subjects के लिए पर्याप्त approved questions उपलब्ध होने पर diagnostic दिखाई देगा। आपकी progress सुरक्षित है।" english="The diagnostic will appear when enough approved questions are available for your class and enrolled subjects. Your progress is preserved." /></p><Link href="/student" className="button button-dark"><LocaleText hinglish="Student home →" english="Student home →" /></Link></section></main>;
 
   return <main className="practice-page">
     <header className="lesson-header"><Link href="/student" className="back"><LocaleText hinglish="← आज" english="← Today" /></Link><span><LocaleText hinglish="Initial diagnostic ·" english="Initial diagnostic ·" /> {idx+1} / {qs.length}</span><span className="avatar">अ</span></header>
     <section className="practice-wrap">
-      <div className="eyebrow"><LocaleText hinglish="पहले diagnostic, फिर आपके हिसाब से learning" english="First a diagnostic, then learning tailored to you" /></div>
+      <div className="eyebrow"><LocaleText hinglish="आपका saved diagnostic" english="Your saved diagnostic" /></div>
       <h1>{q.prompt}</h1>
-      <p><LocaleText hinglish="यह छोटा assessment आपकी शुरुआती learning recommendation बनाने में मदद करता है।" english="This short assessment helps create your starting learning recommendation." /></p>
-      <div className="option-grid">{options.map(o=><button key={o.key} className={value===o.key?'selected':''} disabled={!!result} onClick={()=>answer(o.key)}>{o.key}. {o.label}</button>)}</div>
-      {result&&<div className="practice-feedback"><strong>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:<LocaleText hinglish="अगला attempt आपकी learning समझने में मदद करेगा" english="Your next attempt will help us understand your learning" />}</strong><span>{result.feedback}</span></div>}
-      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button className="button button-dark" onClick={next}>{idx+1<qs.length?<LocaleText hinglish="अगला →" english="Next →" />:<LocaleText hinglish="Learning journey शुरू करें →" english="Start learning →" />}</button></div>}
+      <p><LocaleText hinglish="यह छोटा assessment आपकी शुरुआती learning recommendation बनाने में मदद करता है। आप बाद में लौटेंगे तो उत्तर सुरक्षित रहेंगे।" english="This short assessment helps create your starting learning recommendation. Your saved answers will remain available if you return later." /></p>
+      {q.answered&&!result&&<div className="practice-feedback"><span><LocaleText hinglish="यह उत्तर पहले save किया गया था।" english="This answer was saved earlier." /></span></div>}
+      <div className="option-grid">{options.map(o=><button type="button" key={o.key} className={value===o.key?'selected':''} disabled={!!result||Boolean(q.answered)||saving||submitting} onClick={()=>void answer(o.key)}>{o.key}. {o.label}</button>)}</div>
+      {error&&<p role="alert" className="feedback">{error}</p>}
+      {result&&<div className="practice-feedback"><strong>{result.correct===true?<LocaleText hinglish="✓ सही" english="✓ Correct" />:result.correct===false?<LocaleText hinglish="अगली बार और बेहतर होगा" english="You can improve with practice" />:<LocaleText hinglish="उत्तर save हो गया" english="Answer saved" />}</strong><span>{result.feedback}</span>{q.explanation&&<p>{q.explanation}</p>}</div>}
+      {result&&<div className="practice-footer"><span>{idx+1} / {qs.length}</span><button type="button" className="button button-dark" disabled={submitting} onClick={()=>void next()}>{submitting?<LocaleText hinglish="Submit कर रहे हैं…" english="Submitting…" />:idx+1<qs.length?<LocaleText hinglish="अगला →" english="Next →" />:<LocaleText hinglish="Diagnostic पूरा करें →" english="Finish diagnostic →" />}</button></div>}
     </section>
   </main>;
 }

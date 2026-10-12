@@ -34,6 +34,7 @@ class AssessmentControllerTest {
   @Mock private QuestionHistoryService questionHistory;
   @Mock private QuestionAnswerService answerService;
   @Mock private StaffAuditService staffAudit;
+  @Mock private AssessmentCatalogService assessmentCatalog;
 
   private final AuthContext student = new AuthContext(70L, 7L, "STUDENT", "Preview Student");
   private final AuthContext author = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Author");
@@ -43,7 +44,7 @@ class AssessmentControllerTest {
   @BeforeEach
   void setUp() {
     controller = new AssessmentController(
-        jdbc, authorization, questionHistory, answerService, staffAudit, new ObjectMapper());
+        jdbc, authorization, questionHistory, answerService, staffAudit, new ObjectMapper(), assessmentCatalog);
   }
 
   @Test

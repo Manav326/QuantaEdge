@@ -38,16 +38,18 @@ public class AssessmentController {
   private final QuestionAnswerService answerService;
   private final StaffAuditService staffAudit;
   private final ObjectMapper mapper;
+  private final AssessmentCatalogService assessmentCatalog;
 
   public AssessmentController(JdbcTemplate jdbc, AuthorizationService authorization,
       QuestionHistoryService questionHistory, QuestionAnswerService answerService,
-      StaffAuditService staffAudit, ObjectMapper mapper) {
+      StaffAuditService staffAudit, ObjectMapper mapper,AssessmentCatalogService assessmentCatalog) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.questionHistory = questionHistory;
     this.answerService = answerService;
     this.staffAudit = staffAudit;
     this.mapper = mapper;
+    this.assessmentCatalog=assessmentCatalog;
   }
 
   // ---------- Admin: assessment authoring and publication ----------
@@ -98,6 +100,7 @@ public class AssessmentController {
     requireContentView(context);
     String classFilter = safeText(classCode, 30);
     String subjectFilter = safeText(subjectCode, 40);
+    if(!classFilter.isBlank()) assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
     String statusFilter = safeText(status, 20).toUpperCase(Locale.ROOT);
     if (statusFilter.isEmpty()) statusFilter = "ALL";
     if (!Set.of("ALL", "DRAFT", "PUBLISHED", "ARCHIVED").contains(statusFilter)) {
@@ -105,6 +108,7 @@ public class AssessmentController {
     }
     return jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
+             a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -482,10 +486,13 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
+    // Generated assessments are refreshed by content-publication and question-review events;
+    // this catalogue read only lists the durable definitions and never regenerates question banks.
     String subjectFilter = safeText(subjectCode, 40);
     return jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
+             a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
@@ -523,8 +530,23 @@ public class AssessmentController {
       ) ct on true
       where a.status='PUBLISHED' and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
+        and (a.assessment_type<>'TOPIC_END' or (
+          a.lesson_id is not null
+          and exists(select 1 from lesson l where l.id=a.lesson_id and l.active=true and l.status='PUBLISHED')
+          and exists(select 1 from student_lesson_progress tp
+                     where tp.student_id=st.id and tp.lesson_id=a.lesson_id and tp.status='COMPLETED')
+        ))
+        and (a.assessment_type<>'CHAPTER_END' or not exists(
+          select 1 from lesson required_lesson
+          where required_lesson.chapter_id=ch.id
+            and required_lesson.active=true and required_lesson.status='PUBLISHED'
+            and not exists(select 1 from student_lesson_progress cp
+                           where cp.student_id=st.id and cp.lesson_id=required_lesson.id and cp.status='COMPLETED')
+        ))
+        and (not a.is_generated or a.is_current=true)
       group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
-      order by coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
+      order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
+               coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
       """, context.studentId(), language, language, language, subjectFilter, subjectFilter);
   }
 
@@ -847,7 +869,7 @@ public class AssessmentController {
     language = normalizeLanguage(language);
     return jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
-             att.graded_at,att.released_at,att.final_score,att.max_score,
+             att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
              coalesce((select t.title from assessment_translation t
                where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
                  and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
