@@ -87,3 +87,11 @@ Next, inspect the live Content Studio and student workflows in a browser-capable
 - Commit: `d4c313497fbad07c3af8b39f8041fbb4c509572e`.
 
 This is a source-level correction. Keyboard navigation and assistive-technology behavior still need browser verification.
+
+
+## Fourth remediation pass — student lesson navigation and Content Studio status
+
+- `apps/web/app/student/learn/LearnClient.tsx`: explicitly mark Previous lesson and Next lesson navigation controls as `type="button"`, avoiding accidental form-submit behavior if the surrounding layout is extended with a form later.
+- `apps/admin/app/content/page.tsx`: expose the Content Studio connection/loading label as a polite live status, hide the decorative status dot from assistive technology, and give the icon-only refresh control an explicit accessible name and button type.
+- Existing lesson navigation, content API calls, permissions, and refresh behavior are unchanged.
+- These are source-level improvements; visual layout, keyboard traversal, and screen-reader announcements still require browser verification.

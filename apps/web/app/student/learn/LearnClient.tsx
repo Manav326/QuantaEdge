@@ -636,9 +636,9 @@ export default function LearnClient() {
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
-        {currentIndex>0 ? <button className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><LocaleText hinglish="← पिछला" english="← Previous" /></button> : <span/>}
+        {currentIndex>0 ? <button type="button" className="button button-small" onClick={()=>loadLesson(lessons[currentIndex-1].id)}><LocaleText hinglish="← पिछला" english="← Previous" /></button> : <span/>}
         {currentIndex>=0 && currentIndex<lessons.length-1
-          ? <button className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><LocaleText hinglish="अगला lesson →" english="Next lesson →" /></button>
+          ? <button type="button" className="button button-dark button-small" onClick={()=>loadLesson(lessons[currentIndex+1].id)}><LocaleText hinglish="अगला lesson →" english="Next lesson →" /></button>
           : <Link href="/student" className="button button-dark button-small"><LocaleText hinglish="Student home →" english="Student home →" /></Link>}
       </div>
     </section>
