@@ -13,8 +13,10 @@ $env:APP_DEMO_SEED = if ($env:APP_DEMO_SEED) { $env:APP_DEMO_SEED } else { "true
 $localCorsOrigins = @(
   "http://localhost:3000",
   "http://localhost:3001",
+  "http://localhost:3002",
   "http://127.0.0.1:3000",
-  "http://127.0.0.1:3001"
+  "http://127.0.0.1:3001",
+  "http://127.0.0.1:3002"
 )
 if (-not [string]::IsNullOrWhiteSpace($env:APP_CORS_ALLOWED_ORIGINS)) {
   $localCorsOrigins += @($env:APP_CORS_ALLOWED_ORIGINS -split "," | ForEach-Object { $_.Trim() })
@@ -26,6 +28,7 @@ $env:APP_CORS_ALLOWED_ORIGINS = ($localCorsOrigins | Where-Object { -not [string
 $apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
 $webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
+$peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
 
 switch ($Action) {
   "up" {
@@ -62,6 +65,7 @@ for ($i = 0; $i -lt 30; $i++) {
     Write-Host "API:   http://localhost:$apiPort/actuator/health"
     Write-Host "Web:   http://localhost:$webPort"
     Write-Host "Admin: http://localhost:$adminPort"
+    Write-Host "People: http://localhost:$peoplePort"
     Write-Host "Preview student: /student"
     exit 0
   } catch {

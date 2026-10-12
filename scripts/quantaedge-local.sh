@@ -7,7 +7,7 @@ ACTION="${1:-up}"
 
 # Ensure local browser origins remain in the allow-list, even when a
 # developer's environment also defines production origins.
-local_cors_origins="http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001"
+local_cors_origins="http://localhost:3000,http://localhost:3001,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002"
 if [ -n "${APP_CORS_ALLOWED_ORIGINS:-}" ]; then
   export APP_CORS_ALLOWED_ORIGINS="${APP_CORS_ALLOWED_ORIGINS},${local_cors_origins}"
 else
@@ -57,6 +57,7 @@ for i in $(seq 1 30); do
     echo "API:   http://localhost:${API_PORT:-8080}/actuator/health"
     echo "Web:   http://localhost:${WEB_PORT:-3000}"
     echo "Admin: http://localhost:${ADMIN_PORT:-3001}"
+    echo "People: http://localhost:${PEOPLE_PORT:-3002}"
     echo "Preview student: /student"
     exit 0
   fi
