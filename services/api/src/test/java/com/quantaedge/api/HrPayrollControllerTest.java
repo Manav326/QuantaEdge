@@ -109,7 +109,7 @@ class HrPayrollControllerTest {
     when(jdbc.update("update hr_payroll_run set status='APPROVED',approved_by_staff_id=?,approved_at=now() where id=? and status='SUBMITTED'",77L,12L))
         .thenReturn(1);
     when(jdbc.queryForList(contains("jsonb_build_object"),(Object)any()))
-        .thenReturn(List.of(Map.of("employee_id",31L,"snapshot_json","{\\"employeeName\\":\\"A Teacher\\",\\"gross\\":100.00}")));
+        .thenReturn(List.of(Map.of("employee_id",31L,"snapshot_json","{\"employeeName\":\"A Teacher\",\"gross\":100.00}")));
     when(jdbc.update(contains("insert into hr_payslip"),any(Object[].class))).thenReturn(1);
 
     Map<String,Object> result=controller.approve(12L,Map.of("reason","Payroll reviewed"),payrollManager);
