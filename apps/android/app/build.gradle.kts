@@ -17,7 +17,7 @@ val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand
 android {
     sourceSets.getByName("main").res.srcDir(generatedBrandingRes)
     namespace = "com.quantaedge.android"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.quantaedge.android"
         minSdk = 26
