@@ -34,6 +34,7 @@ import org.json.JSONObject
 fun RecordedPlayerScreen(
     recording: JSONObject,
     startPositionSeconds: Long,
+    onSaveProgress: (Long, Long, Boolean) -> Unit,
     onSaveAndBack: (Long, Long, Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -74,11 +75,11 @@ fun RecordedPlayerScreen(
                 currentPosition = (player.currentPosition / 1000).coerceAtLeast(0)
                 watchedSeconds = (watchedSeconds + 15).coerceAtMost(durationSeconds.takeIf { it > 0 } ?: Long.MAX_VALUE)
                 val completed = durationSeconds > 0 && currentPosition >= durationSeconds - 10
-                onSaveAndBackProgress(currentPosition, watchedSeconds, completed, onSaveAndBack)
+                onSaveProgress(currentPosition, watchedSeconds, completed)
             }
             if (isEnded) {
                 currentPosition = (player.duration / 1000).coerceAtLeast(0)
-                onSaveAndBackProgress(currentPosition, watchedSeconds, true, onSaveAndBack)
+                onSaveProgress(currentPosition, watchedSeconds, true)
                 break
             }
         }
@@ -109,13 +110,3 @@ fun RecordedPlayerScreen(
     }
 }
 
-private fun onSaveAndBackProgress(
-    position: Long,
-    watched: Long,
-    completed: Boolean,
-    callback: (Long, Long, Boolean) -> Unit
-) {
-    // The containing screen sends this at 15-second intervals and stays in the player.
-    // Only the explicit back button navigates away.
-    callback(position, watched, completed)
-}

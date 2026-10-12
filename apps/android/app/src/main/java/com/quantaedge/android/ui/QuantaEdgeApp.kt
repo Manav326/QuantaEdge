@@ -360,6 +360,23 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun saveRecordingProgress(positionSeconds: Long, watchedSeconds: Long, completed: Boolean) {
+        runTask {
+            val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
+            ApiClient.putObject("/api/v1/learning/recorded-classes/" + id + "/progress",
+                JSONObject().put("positionSeconds", positionSeconds.coerceAtLeast(0))
+                    .put("watchedSeconds", watchedSeconds.coerceAtLeast(0)).put("completed", completed))
+            recordedClasses = recordedClasses.map { row ->
+                if (row.longAny("recorded_class_id", "recordingId", "id") == id) {
+                    JSONObject(row.toString())
+                        .put("last_position_seconds", positionSeconds)
+                        .put("watched_seconds", watchedSeconds)
+                        .put("completed", completed)
+                } else row
+            }
+        }
+    }
+
     fun saveRecordingProgressAndBack(positionSeconds: Long, watchedSeconds: Long, completed: Boolean) {
         runTask {
             val id = selectedRecording.longAny("recorded_class_id", "recordingId", "id")
@@ -813,6 +830,7 @@ fun QuantaEdgeApp() {
                     AppRoute.RECORDING_PLAYER -> RecordedPlayerScreen(
                         recording = selectedRecording,
                         startPositionSeconds = selectedRecording.optLongAny("last_position_seconds", "lastPositionSeconds"),
+                        onSaveProgress = ::saveRecordingProgress,
                         onSaveAndBack = ::saveRecordingProgressAndBack
                     )
                 }
