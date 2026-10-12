@@ -767,6 +767,11 @@ export default function TextbookLibraryPage() {
                   <button type="button" className={styles.secondaryButton} disabled={busy} onClick={() => {
                     setIntakeAssetId(Number(item.pdf_asset_id));
                     setIntakeReport(normalizeIntakeReport(item));
+                    setUploadCategory(String(item.category || 'MAIN_TEXTBOOK'));
+                    setUploadClassCode(String(item.class_code || '6'));
+                    setUploadSubjectCode(String(item.subject_code || 'maths'));
+                    setUploadLanguage(item.language === 'en' ? 'en' : 'hi');
+                    setUploadPartLabel(String(item.part_label || ''));
                     setReviewAcknowledged(false);
                     setReviewNotes(String(item.review_notes || ''));
                     setError('');
@@ -793,6 +798,26 @@ export default function TextbookLibraryPage() {
                 } finally { setBusy(false); }
               }}>Re-run analysis</button>
             </div>
+            <p>To correct the selected book's tags, edit the category, class, subject, language or part label in the form above, then save them here.</p>
+            <button type="button" className={styles.secondaryButton} disabled={busy} onClick={async () => {
+              setBusy(true); setError(''); setNotice('');
+              try {
+                await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId, {
+                  method: 'PUT',
+                  body: JSON.stringify({
+                    category: uploadCategory, classCode: uploadClassCode,
+                    subjectCode: uploadSubjectCode, language: uploadLanguage,
+                    partLabel: uploadPartLabel.trim() || null, reviewNotes: reviewNotes.trim() || null,
+                  }),
+                });
+                const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/analyze', { method: 'POST' });
+                setIntakeReport(normalizeIntakeReport(result));
+                await load();
+                setNotice('Classification saved and inventory analysis refreshed. Review the new report below; nothing was published.');
+              } catch (e) {
+                setError(e instanceof Error ? e.message : 'Classification could not be saved.');
+              } finally { setBusy(false); }
+            }}>Save classification and re-run analysis</button>
             {intakeReport ? <>
               <p><b>Status:</b> {String(intakeReport.status || 'NEEDS_REVIEW').replaceAll('_', ' ')}</p>
               <p>These are review signals, not automatic chapter assignments. Scanned page numbers are candidates only.</p>
