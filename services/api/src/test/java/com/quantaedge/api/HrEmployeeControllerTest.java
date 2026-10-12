@@ -48,6 +48,17 @@ class HrEmployeeControllerTest {
   }
 
   @Test
+  void employeeHistoryRequiresViewPermissionBeforeQueryingHistory() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_VIEW"))
+        .thenThrow(new SecurityException("Permission required"));
+
+    assertThrows(SecurityException.class, () -> controller.employeeHistory(9L, hrManager));
+
+    verify(authorization).requirePermission(hrManager, "HR_EMPLOYEE_VIEW");
+    verifyNoInteractions(jdbc, audit);
+  }
+
+  @Test
   void employeeCreationRequiresManagePermissionBeforeAnyDatabaseAccess() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE"))
         .thenThrow(new SecurityException("Permission required"));
