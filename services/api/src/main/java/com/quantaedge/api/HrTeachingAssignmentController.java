@@ -23,6 +23,18 @@ public class HrTeachingAssignmentController {
     this.jdbc=jdbc;this.authorization=authorization;this.audit=audit;
   }
 
+  @GetMapping("/academic-subjects")
+  public List<Map<String,Object>> subjects(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireView(context);
+    return jdbc.queryForList("""
+      select s.id subject_id,s.code subject_code,s.display_name subject_name,
+        c.id class_id,c.code class_code,c.display_name class_name,s.sort_order
+      from curriculum_subject s join curriculum_class c on c.id=s.class_id
+      where s.active=true and c.active=true
+      order by c.sort_order,s.sort_order,s.display_name
+      """);
+  }
+
   @GetMapping("/academic-periods")
   public List<Map<String,Object>> periods(@RequestParam long organizationId,
       @RequestParam(defaultValue="false") boolean includeInactive,
