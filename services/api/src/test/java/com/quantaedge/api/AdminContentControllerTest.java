@@ -28,11 +28,12 @@ class AdminContentControllerTest {
   @Mock private AuthorizationService authorization;
   @Mock private StaffAuditService staffAudit;
   @Mock private QuestionHistoryService questionHistory;
+  @Mock private AssessmentCatalogService assessmentCatalog;
 
 
   @Test
   void blockReadinessMatchesContentRenderedToLearners() {
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertTrue(controller.blockHasPublishableContent(
         "EXPLANATION", java.util.Map.of("description", "Visible explanation")));
@@ -49,7 +50,7 @@ class AdminContentControllerTest {
 
   @Test
   void learnerPathRequiresExplanationPracticeAndRecap() {
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.validateLearnerLessonStages(Set.of("EXPLANATION", "GUIDED_PRACTICE")));
@@ -59,7 +60,7 @@ class AdminContentControllerTest {
 
   @Test
   void learnerPathAcceptsIndependentPracticeAndRecapAlias() {
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertDoesNotThrow(() -> controller.validateLearnerLessonStages(
         Set.of("EXPLANATION", "INDEPENDENT_PRACTICE", "RECAP")));
@@ -67,7 +68,7 @@ class AdminContentControllerTest {
 
   @Test
   void learnerPathDoesNotAcceptPracticeWithoutCoreExplanation() {
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.validateLearnerLessonStages(
@@ -81,7 +82,7 @@ class AdminContentControllerTest {
     AuthContext author = new AuthContext(null, null, 42L, "CONTENT_AUTHOR", "Content author");
     when(jdbc.queryForObject("select content_revision from lesson where id=?", Long.class, 7L))
         .thenReturn(12L);
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
         () -> controller.markLessonPreviewChecked(7L, java.util.Map.of("contentRevision", 11L), author));
@@ -95,7 +96,7 @@ class AdminContentControllerTest {
     when(authorization.requirePermission(author, "CONTENT_REVIEW"))
         .thenThrow(new SecurityException("Question review permission required"));
     AdminContentController controller =
-        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
         () -> controller.reviewQuestion(7L, 9L, java.util.Map.of("status", "APPROVED"), author));
@@ -118,7 +119,7 @@ class AdminContentControllerTest {
         Map.of("review_status", "DRAFT", "active", false, "count", 6L)));
 
     AdminContentController controller =
-        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+        new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     Map<String,Object> summary = controller.questionReviewSummary(reviewer);
 
@@ -131,7 +132,7 @@ class AdminContentControllerTest {
   @Test
   void legacySharedTokenCannotAuthorizeContentCms() {
     when(authorization.requirePermission(null, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", null));
@@ -144,7 +145,7 @@ class AdminContentControllerTest {
   void studentSessionCannotReadAdminContentEvenWithLegacyToken() {
     AuthContext student = new AuthContext(10L, 20L, "STUDENT", "Student");
     when(authorization.requirePermission(student, "CONTENT_VIEW")).thenThrow(new SecurityException("View permission required"));
-    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory);
+    AdminContentController controller = new AdminContentController(jdbc, mapper, authorization, staffAudit, questionHistory, assessmentCatalog);
 
     assertThrows(SecurityException.class,
         () -> controller.chapter(7L, "legacy-shared-token", student));

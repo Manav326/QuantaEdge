@@ -486,7 +486,8 @@ public class AssessmentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
-    assessmentCatalog.ensureGeneratedAssessments(context.studentId());
+    // Generated assessments are refreshed by content-publication and question-review events;
+    // this catalogue read only lists the durable definitions and never regenerates question banks.
     String subjectFilter = safeText(subjectCode, 40);
     return jdbc.queryForList("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,

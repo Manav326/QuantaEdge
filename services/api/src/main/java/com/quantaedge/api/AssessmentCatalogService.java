@@ -29,6 +29,67 @@ public class AssessmentCatalogService {
     ensureGeneratedAssessmentsForClass(classCode);
   }
 
+  /**
+   * Refresh just the topic and chapter affected by a lesson publication, revision, or question
+   * review. Normal student reads stay read-only; catalogue generation is driven by content events.
+   */
+  @Transactional
+  public void refreshGeneratedAssessmentsForLesson(long lessonId) {
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select l.id as lesson_id,l.title as lesson_title,l.status as lesson_status,l.active as lesson_active,
+             l.chapter_id,ch.display_name as chapter_name,ch.content_status as chapter_status,
+             ch.active as chapter_active,s.id as subject_id,s.display_name as subject_name,
+             s.active as subject_active,c.active as class_active
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where l.id=?
+      """,lessonId);
+    if(rows.isEmpty()) return;
+    Map<String,Object> row=rows.getFirst();
+    long chapterId=n(row.get("chapter_id"));
+    long subjectId=n(row.get("subject_id"));
+    String title=t(row.get("lesson_title"));
+    String chapter=t(row.get("chapter_name"));
+    String subject=t(row.get("subject_name"));
+    boolean lessonEligible=Boolean.TRUE.equals(row.get("lesson_active"))
+        && "PUBLISHED".equalsIgnoreCase(t(row.get("lesson_status")))
+        && Boolean.TRUE.equals(row.get("chapter_active"))
+        && "PUBLISHED".equalsIgnoreCase(t(row.get("chapter_status")))
+        && Boolean.TRUE.equals(row.get("subject_active"))
+        && Boolean.TRUE.equals(row.get("class_active"));
+
+    if(lessonEligible) {
+      List<Long> topicIds=topicQuestionIds(lessonId);
+      if(topicIds.size()<TOPIC_MINIMUM) {
+        archiveCurrent("TOPIC_END","lesson_id",lessonId);
+      } else {
+        materialize("TOPIC_END",subjectId,chapterId,lessonId,"Topic-end test · "+title,
+            "A saved end-of-topic assessment for "+title+".",10,3,topicIds,fingerprint(title,topicIds),
+            "Topic-end test · "+title+" · "+chapter+" · "+subject);
+      }
+    } else {
+      archiveCurrent("TOPIC_END","lesson_id",lessonId);
+    }
+
+    if(Boolean.TRUE.equals(row.get("chapter_active"))
+        && "PUBLISHED".equalsIgnoreCase(t(row.get("chapter_status")))
+        && Boolean.TRUE.equals(row.get("subject_active"))
+        && Boolean.TRUE.equals(row.get("class_active"))) {
+      List<Long> chapterIds=chapterQuestionIds(chapterId);
+      if(chapterIds.size()<CHAPTER_MINIMUM) {
+        archiveCurrent("CHAPTER_END","chapter_id",chapterId);
+      } else {
+        materialize("CHAPTER_END",subjectId,chapterId,null,"Chapter-end test · "+chapter,
+            "A cumulative end-of-chapter assessment for "+chapter+".",30,2,chapterIds,
+            fingerprint(chapter,chapterIds),"Chapter-end test · "+chapter+" · "+subject);
+      }
+    } else {
+      archiveCurrent("CHAPTER_END","chapter_id",chapterId);
+    }
+  }
+
   @Transactional
   public void ensureGeneratedAssessmentsForClass(String classCode) {
     String normalized=classCode==null?"":classCode.trim();

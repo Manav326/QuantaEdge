@@ -50,14 +50,17 @@ public class AdminContentController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final QuestionHistoryService questionHistory;
+  private final AssessmentCatalogService assessmentCatalog;
 
   public AdminContentController(JdbcTemplate jdbc, ObjectMapper mapper, AuthorizationService authorization,
-      StaffAuditService staffAudit, QuestionHistoryService questionHistory) {
+      StaffAuditService staffAudit, QuestionHistoryService questionHistory,
+      AssessmentCatalogService assessmentCatalog) {
     this.jdbc = jdbc;
     this.mapper = mapper;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.questionHistory = questionHistory;
+    this.assessmentCatalog = assessmentCatalog;
   }
 
   @GetMapping
@@ -570,6 +573,7 @@ public class AdminContentController {
     }
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/submit",
         "Submitted micro-topic '"+current.get("lesson_title")+"' for review.");
+    assessmentCatalog.refreshGeneratedAssessmentsForLesson(lessonId);
     return lessonById(lessonId);
   }
 
@@ -586,6 +590,7 @@ public class AdminContentController {
     }
     validateLessonForPublishing(lessonId);
     jdbc.update("update lesson set status='PUBLISHED', active=true where id=?",lessonId);
+    assessmentCatalog.refreshGeneratedAssessmentsForLesson(lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/publish",
         "Published micro-topic '"+current.get("lesson_title")+"'.");
     return lessonById(lessonId);
@@ -600,6 +605,7 @@ public class AdminContentController {
     lessonById(lessonId);
     jdbc.update("update lesson set status='DRAFT', active=true where id=?",lessonId);
     Map<String,Object> result=lessonById(lessonId);
+    assessmentCatalog.refreshGeneratedAssessmentsForLesson(lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/unpublish",
         "Unpublished micro-topic '"+result.get("lesson_title")+"' and returned it to draft.");
     return result;
@@ -648,6 +654,7 @@ public class AdminContentController {
         notes==null||notes.isBlank()?"Reviewer set status to "+status+".":notes,beforeSnapshot,afterSnapshot);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/questions/"+questionId+"/review",
         "Question review state changed to "+status+"; reviewer notes "+(notes==null||notes.isBlank()?"not supplied":"supplied")+".");
+    assessmentCatalog.refreshGeneratedAssessmentsForLesson(lessonId);
     return jdbc.queryForMap("""
         select id,lesson_id,question_type,prompt,review_status,review_notes,reviewed_at,active
         from question where id=? and lesson_id=?
@@ -895,6 +902,7 @@ public class AdminContentController {
     Map<String,Object> result=lessonById(lessonId);
     staffAudit.recordAction(context,"/api/v1/admin/content/lessons/"+lessonId+"/updated",
         "Saved micro-topic '"+result.get("lesson_title")+"'; resulting workflow status="+result.get("lesson_status")+".");
+    assessmentCatalog.refreshGeneratedAssessmentsForLesson(lessonId);
     return result;
   }
 
