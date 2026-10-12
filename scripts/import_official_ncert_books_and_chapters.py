@@ -798,9 +798,9 @@ def validate_input_book_presence(books_dir: Path, languages: tuple[str, ...]) ->
         for subject in SUBJECTS:
             for language in languages:
                 canonical = books_dir / book_filename(grade, subject, language)
-                if canonical.is_file():
-                    continue
                 if grade in {"7", "8"} and subject == "maths":
+                    # These are student-facing part-wise textbooks. An old whole-book convenience
+                    # PDF must never silently stand in for either of the two official volumes.
                     part1 = books_dir / part_book_filename(grade, subject, language, 1)
                     part2 = books_dir / part_book_filename(grade, subject, language, 2)
                     if part1.is_file() and part2.is_file():
@@ -808,13 +808,21 @@ def validate_input_book_presence(books_dir: Path, languages: tuple[str, ...]) ->
                     if part1.is_file() != part2.is_file():
                         present = part1.name if part1.is_file() else part2.name
                         missing_name = part2.name if part1.is_file() else part1.name
-                        missing.append(f"Found {present} but its matching part is missing: {missing_name}")
+                        missing.append(
+                            f"Part-wise NCERT Mathematics is required for Class {grade}: found {present}, "
+                            f"but {missing_name} is missing. The canonical convenience PDF {canonical.name} "
+                            "does not replace the student-facing parts."
+                        )
                     else:
                         missing.append(
-                            f"Missing {canonical.name}; alternatively provide both {part1.name} and {part2.name}"
+                            f"Part-wise NCERT Mathematics is required for Class {grade}; provide BOTH "
+                            f"{part1.name} and {part2.name}. The canonical convenience PDF {canonical.name} "
+                            "is not accepted as a substitute."
                         )
-                else:
-                    missing.append(f"Missing {canonical.name}")
+                    continue
+                if canonical.is_file():
+                    continue
+                missing.append(f"Missing {canonical.name}")
     if missing:
         raise FileNotFoundError(
             f"Input precheck failed for {len(missing)} required source-book slot(s) in {books_dir}. "

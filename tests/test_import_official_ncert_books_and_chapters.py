@@ -174,16 +174,39 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         books_dir.mkdir()
         for grade in importer.CLASSES:
             for subject in importer.SUBJECTS:
-                path = books_dir / importer.book_filename(grade, subject, "english")
-                with fitz.open() as doc:
-                    doc.new_page()
-                    doc.save(path)
+                if grade in {"7", "8"} and subject == "maths":
+                    paths = [
+                        books_dir / importer.part_book_filename(grade, subject, "english", 1),
+                        books_dir / importer.part_book_filename(grade, subject, "english", 2),
+                    ]
+                else:
+                    paths = [books_dir / importer.book_filename(grade, subject, "english")]
+                for path in paths:
+                    with fitz.open() as doc:
+                        doc.new_page()
+                        doc.save(path)
         importer.validate_input_book_presence(books_dir, ("english",))
         with self.assertRaisesRegex(FileNotFoundError, "Missing NCERT_Class_6_Maths_Hindi_BOOK.pdf"):
             importer.validate_input_book_presence(books_dir, ("english", "hindi"))
         missing = books_dir / importer.book_filename("8", "science", "english")
         missing.unlink()
         with self.assertRaisesRegex(FileNotFoundError, "NCERT_Class_8_Science_English_BOOK.pdf"):
+            importer.validate_input_book_presence(books_dir, ("english",))
+
+
+    def test_input_presence_rejects_canonical_class_7_8_math_copy_without_both_parts(self):
+        books_dir = self.root / "books"
+        books_dir.mkdir()
+        for grade in importer.CLASSES:
+            for subject in importer.SUBJECTS:
+                path = books_dir / importer.book_filename(grade, subject, "english")
+                with fitz.open() as doc:
+                    doc.new_page()
+                    doc.save(path)
+
+        with self.assertRaisesRegex(
+            FileNotFoundError, "Part-wise NCERT Mathematics is required for Class 7"
+        ):
             importer.validate_input_book_presence(books_dir, ("english",))
 
     def test_no_chapter_extracts_written_until_all_book_mappings_validate(self):
