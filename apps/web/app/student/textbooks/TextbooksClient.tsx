@@ -356,7 +356,7 @@ export default function TextbooksClient() {
                 {book && !hasBookParts && <button type="button" className="qe-textbook-open-book" onClick={()=>openDocument(book.document_id,code)} aria-label={'Open complete textbook '+book.title}>Open book ↗</button>}
               </div>
               {expanded&&<div className="qe-textbook-book-contents" id={'qe-textbook-chapters-' + code}>
-                {subjectBooks.length>1 && <div className="qe-textbook-edition-list" aria-label={hasBookParts ? 'Textbook parts' : 'Textbook editions'}>
+                {(hasBookParts || subjectBooks.length>1) && <div className="qe-textbook-edition-list" aria-label={hasBookParts ? 'Textbook parts' : 'Textbook editions'}>
                   {(hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0) : subjectBooks.slice(1)).map(item => <button type="button" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                     <span className="qe-library-mini-pdf">PDF</span>
                     <span><strong>{hasBookParts && item.book_part ? partLabel(Number(item.book_part)) : item.title}</strong><small>{item.edition || (hasBookParts ? 'NCERT textbook part' : 'Complete subject book')} · {item.page_count} pages</small></span>

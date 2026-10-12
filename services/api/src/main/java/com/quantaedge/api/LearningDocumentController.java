@@ -295,14 +295,27 @@ public class LearningDocumentController {
       if (start < 1 || end < start || end > actualPageCount) {
         throw badRequest("The assigned PDF page range is invalid.");
       }
-      jdbc.update("""
-        update learning_document set status='ARCHIVED',updated_at=now()
-        where scope=? and subject_id=? and language=?
-          and chapter_id is not distinct from ?
-          and status='PUBLISHED' and id<>?
-          and (? is null or book_part is null or book_part=?)
-        """, current.get("scope"), current.get("subject_id"), current.get("language"),
-        current.get("chapter_id"), documentId, current.get("book_part"), current.get("book_part"));
+      if (current.get("book_part") == null) {
+        // A whole-book or chapter replacement supersedes the full existing publication slot.
+        jdbc.update("""
+          update learning_document set status='ARCHIVED',updated_at=now()
+          where scope=? and subject_id=? and language=?
+            and chapter_id is not distinct from ?
+            and status='PUBLISHED' and id<>?
+          """, current.get("scope"), current.get("subject_id"), current.get("language"),
+          current.get("chapter_id"), documentId);
+      } else {
+        // Publishing Part I must preserve Part II, and vice versa; only archive the same part
+        // plus any legacy whole-book row that occupied the slot before the migration.
+        jdbc.update("""
+          update learning_document set status='ARCHIVED',updated_at=now()
+          where scope=? and subject_id=? and language=?
+            and chapter_id is not distinct from ?
+            and status='PUBLISHED' and id<>?
+            and (book_part is null or book_part=?)
+          """, current.get("scope"), current.get("subject_id"), current.get("language"),
+          current.get("chapter_id"), documentId, current.get("book_part"));
+      }
       jdbc.update("""
         update learning_document set status='PUBLISHED',published_by_staff_id=?,published_at=now(),updated_at=now()
         where id=?
