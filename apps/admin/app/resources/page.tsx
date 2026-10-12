@@ -53,7 +53,7 @@ function normalizeIntakeReport(value: any): any {
     }
     return item && typeof item === 'object' ? item : {};
   };
-  return { ...(value || {}), inventory: parseJson(value?.inventory), reconciliation: parseJson(value?.reconciliation) };
+  return { ...(value || {}), inventory: parseJson(value?.inventory), reconciliation: parseJson(value?.reconciliation), chapter_ranges: parseJson(value?.chapter_ranges) };
 }
 
 async function api(url: string, init: RequestInit = {}) {
@@ -216,6 +216,8 @@ export default function TextbookLibraryPage() {
   const [intakeAssetId, setIntakeAssetId] = useState<number | null>(null);
   const [intakeReport, setIntakeReport] = useState<any>(null);
   const [intakeRows, setIntakeRows] = useState<any[]>([]);
+  const [intakeRanges, setIntakeRanges] = useState<any[]>([]);
+  const [rangeReviewNotes, setRangeReviewNotes] = useState('');
   const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
   const [reviewNotes, setReviewNotes] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -231,6 +233,20 @@ export default function TextbookLibraryPage() {
   const [notice, setNotice] = useState('');
   const previewOriginScrollY = useRef(0);
   const previewHistoryEntry = useRef(false);
+
+  useEffect(() => {
+    if (!intakeAssetId) { setIntakeRanges([]); return; }
+    const saved = Array.isArray(intakeReport?.chapter_ranges) ? intakeReport.chapter_ranges : [];
+    setIntakeRanges(chapters.map(chapter => {
+      const match = saved.find((row: any) => Number(row.chapter_id) === Number(chapter.chapter_id));
+      return {
+        chapterId: Number(chapter.chapter_id),
+        title: chapter.chapter_name,
+        pageStart: match ? String(match.page_start ?? '') : '',
+        pageEnd: match ? String(match.page_end ?? '') : '',
+      };
+    }));
+  }, [chapters, intakeAssetId, intakeReport?.chapter_ranges]);
 
   const isAdmin = role === 'ADMIN';
   const maxPdfBytes = isAdmin ? 500 * 1024 * 1024 : 50 * 1024 * 1024;
@@ -785,6 +801,12 @@ export default function TextbookLibraryPage() {
                     setUploadSubjectCode(String(item.subject_code || 'maths'));
                     setUploadLanguage(item.language === 'en' ? 'en' : 'hi');
                     setUploadPartLabel(String(item.part_label || ''));
+                    setClassCode(String(item.class_code || '6'));
+                    setSubjectCode(String(item.subject_code || 'maths'));
+                    setResourceLanguage(item.language === 'en' ? 'en' : 'hi');
+                    setSelectedPdfId(String(item.pdf_asset_id));
+                    setScope('CHAPTER_PDF');
+                    setRangeReviewNotes(String(item.ranges_review_notes || ''));
                     setReviewAcknowledged(false);
                     setReviewNotes(String(item.review_notes || ''));
                     setError('');
@@ -883,6 +905,66 @@ export default function TextbookLibraryPage() {
                     } finally { setBusy(false); }
                   }}>Record review (does not publish)</button>
               </div>}
+              <div className={styles.rangeReview}>
+                <div className={styles.uploadTitle}>
+                  <b>Manual chapter page ranges</b>
+                  <small>{intakeRanges.filter((row: any) => row.pageStart && row.pageEnd).length} range(s) entered</small>
+                </div>
+                <p>Use the page numbers printed by the PDF viewer, not guessed chapter order. Save ranges only after checking the original PDF. Overlapping ranges and chapters from another subject are rejected.</p>
+                {chapters.length === 0 ? <p>No curriculum chapters are loaded for this book yet. Check the class and subject selection above, then reopen the book.</p> :
+                  <div className={styles.rangeReviewList}>
+                    {intakeRanges.map((range: any) => <div className={styles.rangeReviewRow} key={range.chapterId}>
+                      <div className={styles.rangeReviewChapter}>
+                        <b>{range.title}</b>
+                        <small>Chapter ID {range.chapterId}</small>
+                      </div>
+                      <label className={styles.field}>PDF start page
+                        <input type="number" min="1" max={Number(intakeRows.find((r: any) => Number(r.pdf_asset_id) === intakeAssetId)?.page_count || 2000)}
+                          value={range.pageStart} onChange={e => setIntakeRanges(rows => rows.map((row: any) => row.chapterId === range.chapterId ? {...row,pageStart:e.target.value} : row))} />
+                      </label>
+                      <label className={styles.field}>PDF end page
+                        <input type="number" min={range.pageStart || 1} max={Number(intakeRows.find((r: any) => Number(r.pdf_asset_id) === intakeAssetId)?.page_count || 2000)}
+                          value={range.pageEnd} onChange={e => setIntakeRanges(rows => rows.map((row: any) => row.chapterId === range.chapterId ? {...row,pageEnd:e.target.value} : row))} />
+                      </label>
+                      <button type="button" className={styles.secondaryButton} disabled={busy || !range.pageStart || !range.pageEnd}
+                        onClick={() => {
+                          const book = intakeRows.find((r: any) => Number(r.pdf_asset_id) === intakeAssetId);
+                          setSelectedPdfId(String(intakeAssetId));
+                          setClassCode(String(book?.class_code || uploadClassCode));
+                          setSubjectCode(String(book?.subject_code || uploadSubjectCode));
+                          setScope('CHAPTER_PDF');
+                          setChapterId(String(range.chapterId));
+                          setResourceLanguage(book?.language === 'en' ? 'en' : 'hi');
+                          setTitle(String(book?.title || 'Textbook') + ' — ' + range.title);
+                          setSourceTitle(String(book?.title || ''));
+                          setPageStart(String(range.pageStart));
+                          setPageEnd(String(range.pageEnd));
+                          setNotice('Draft placement prepared for ' + range.title + '. Verify the official source URL and edition below, then attach it as a draft. Nothing is published.');
+                        }}>Prepare draft</button>
+                    </div>)}
+                  </div>}
+                <label className={styles.field}>Range review notes
+                  <textarea rows={2} value={rangeReviewNotes} onChange={e => setRangeReviewNotes(e.target.value)} placeholder="Optional notes about page numbering, contents pages, or uncertain boundaries." />
+                </label>
+                <button type="button" className={styles.primaryButton} disabled={busy || !intakeRanges.some((row: any) => row.pageStart && row.pageEnd)}
+                  onClick={async () => {
+                    const chapterRanges = intakeRanges.filter((row: any) => String(row.pageStart).trim() && String(row.pageEnd).trim())
+                      .map((row: any) => ({chapterId:row.chapterId,title:row.title,pageStart:Number(row.pageStart),pageEnd:Number(row.pageEnd)}));
+                    setBusy(true); setError(''); setNotice('');
+                    try {
+                      const result = await api('/api/v1/admin/source-ingestion/intake/' + intakeAssetId + '/chapter-ranges', {
+                        method: 'PATCH', body: JSON.stringify({chapterRanges,notes:rangeReviewNotes.trim() || null}),
+                      });
+                      const normalized = normalizeIntakeReport({ ...(intakeReport || {}), ...result });
+                      setIntakeReport(normalized);
+                      setNotice('Manual chapter ranges saved. They remain private review metadata; use Prepare draft for a chapter, then verify source metadata before attaching.');
+                      await load();
+                    } catch (e) {
+                      setError(e instanceof Error ? e.message : 'Chapter ranges could not be saved.');
+                    } finally { setBusy(false); }
+                  }}>Save reviewed page ranges</button>
+                {intakeReport.ranges_reviewed_at && <small>Ranges last saved for review: {String(intakeReport.ranges_reviewed_at)}. Saving ranges does not publish or approve student visibility.</small>}
+              </div>
               {intakeReport.status === 'REVIEWED' && <p><b>Human review recorded.</b> The source remains private and unpublished.</p>}
               <small>Original PDF is retained. Chapter page ranges are not guessed, approved, or published by this scan.</small>
             </> : <p>Classification has been saved. Run the inventory scan to compare the PDF against the selected curriculum.</p>}

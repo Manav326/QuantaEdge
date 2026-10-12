@@ -73,7 +73,8 @@ public class SourceIngestionController {
       select i.pdf_asset_id,a.title,a.original_filename,a.page_count,a.file_size_bytes,a.sha256,
              a.review_status as asset_review_status,i.category,i.class_id,c.code as class_code,
              c.display_name as class_name,i.subject_id,s.code as subject_code,s.display_name as subject_name,
-             i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.analysis_error,
+             i.language,i.part_label,i.status,i.inventory,i.reconciliation,i.chapter_ranges,
+             i.ranges_reviewed_at,i.ranges_review_notes,i.analysis_error,
              i.analyzed_at,i.reviewed_at,i.review_notes,i.created_at,i.updated_at
       from learning_book_intake i
       join learning_pdf_asset a on a.id=i.pdf_asset_id
@@ -158,6 +159,30 @@ public class SourceIngestionController {
           or learning_book_intake.category<>excluded.category
           or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
           then null else learning_book_intake.reviewed_at end,
+        chapter_ranges=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then '[]'::jsonb else learning_book_intake.chapter_ranges end,
+        ranges_reviewed_by_staff_id=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_reviewed_by_staff_id end,
+        ranges_reviewed_at=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_reviewed_at end,
+        ranges_review_notes=case when learning_book_intake.class_id<>excluded.class_id
+          or learning_book_intake.subject_id<>excluded.subject_id
+          or learning_book_intake.language<>excluded.language
+          or learning_book_intake.category<>excluded.category
+          or coalesce(learning_book_intake.part_label,'')<>coalesce(excluded.part_label,'')
+          then null else learning_book_intake.ranges_review_notes end,
         review_notes=excluded.review_notes,updated_at=now()
       """, assetId, category, classId, subjectId, language, partLabel, notes, context.staffId());
     staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId,
@@ -217,6 +242,73 @@ public class SourceIngestionController {
    * Independently inspect every PDF page, discover numbered chapter/appendix headings and locate
    * curriculum chapter titles. This is a reconciliation aid only; all boundaries remain unapproved.
    */
+  /**
+   * Save human-selected chapter page ranges for a classified complete-book PDF.
+   * Ranges are persisted for review and can only seed draft placement; they never publish content.
+   */
+  @PatchMapping("/intake/{assetId}/chapter-ranges")
+  @Transactional
+  public Map<String, Object> saveIntakeChapterRanges(
+      @PathVariable long assetId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = requireReviewer(context);
+    List<Map<String,Object>> intakeRows = jdbc.queryForList("""
+      select i.subject_id,a.page_count,i.status
+      from learning_book_intake i join learning_pdf_asset a on a.id=i.pdf_asset_id
+      where i.pdf_asset_id=?
+      """, assetId);
+    if (intakeRows.isEmpty()) throw notFound("Classified book intake", assetId);
+    Map<String,Object> intake = intakeRows.getFirst();
+    int pageCount = ((Number) intake.get("page_count")).intValue();
+    Object raw = body.get("chapterRanges");
+    if (!(raw instanceof List<?> submitted) || submitted.isEmpty() || submitted.size() > 100) {
+      throw badRequest("Enter at least one chapter range, with a maximum of 100.");
+    }
+    List<Map<String,Object>> ranges = new ArrayList<>();
+    java.util.Set<Long> chapterIds = new java.util.HashSet<>();
+    for (Object value : submitted) {
+      if (!(value instanceof Map<?,?> item)) throw badRequest("Each chapter range must be an object.");
+      long chapterId = longValue(item.get("chapterId"), "chapterId");
+      int start = integerValue(item.get("pageStart"), "pageStart", 1, pageCount);
+      int end = integerValue(item.get("pageEnd"), "pageEnd", start, pageCount);
+      if (!chapterIds.add(chapterId)) throw badRequest("Each curriculum chapter can appear only once.");
+      List<Map<String,Object>> chapterRows = jdbc.queryForList("""
+        select id,code,display_name from curriculum_chapter
+        where id=? and subject_id=? and active=true
+        """, chapterId, intake.get("subject_id"));
+      if (chapterRows.isEmpty()) throw badRequest("A selected chapter does not belong to this book's subject.");
+      Map<String,Object> chapter = chapterRows.getFirst();
+      Map<String,Object> row = new LinkedHashMap<>();
+      row.put("chapter_id", chapterId);
+      row.put("chapter_code", chapter.get("code"));
+      row.put("title", optionalText(item.get("title"), 300) == null
+          ? chapter.get("display_name") : optionalText(item.get("title"), 300));
+      row.put("page_start", start);
+      row.put("page_end", end);
+      ranges.add(row);
+    }
+    ranges.sort(java.util.Comparator.comparingInt(row -> ((Number) row.get("page_start")).intValue()));
+    for (int i=1;i<ranges.size();i++) {
+      int previousEnd = ((Number) ranges.get(i-1).get("page_end")).intValue();
+      int currentStart = ((Number) ranges.get(i).get("page_start")).intValue();
+      if (currentStart <= previousEnd) throw badRequest("Chapter page ranges overlap. Correct the page numbers before saving.");
+    }
+    String rangesJson = jsonObjects(ranges);
+    jdbc.update("""
+      update learning_book_intake set chapter_ranges=?::jsonb,
+        ranges_reviewed_by_staff_id=?,ranges_reviewed_at=now(),
+        ranges_review_notes=?,updated_at=now()
+      where pdf_asset_id=?
+      """, rangesJson, context.staffId(), optionalText(body.get("notes"), 2000), assetId);
+    staffAudit.recordAction(context, "/api/v1/admin/source-ingestion/intake/" + assetId + "/chapter-ranges",
+        "Saved manually reviewed chapter page ranges. Ranges remain draft-only and do not publish content.");
+    return jdbc.queryForMap("""
+      select pdf_asset_id,chapter_ranges,ranges_reviewed_by_staff_id,ranges_reviewed_at,
+             ranges_review_notes
+      from learning_book_intake where pdf_asset_id=?
+      """, assetId);
+  }
+
   @PostMapping("/intake/{assetId}/analyze")
   public Map<String, Object> analyzeBookIntake(
       @PathVariable long assetId,
