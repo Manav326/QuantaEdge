@@ -134,7 +134,12 @@ ENGLISH_TITLES: dict[tuple[str, str], dict[str, list[str]]] = {
         "sharing-makes-grow": ["We Distribute, Yet Things Multiply", "Sharing Makes Grow"],
         "proportional-reasoning-1": ["Proportional Reasoning-1", "Proportional Reasoning–1", "Proportional Reasoning 1"],
         "fractions-in-disguise": ["Fractions in Disguise"],
-        "baudhayana-pythagoras-theorem": ["The Baudhayana-Pythagoras Theorem", "The Baudhayana–Pythagoras Theorem", "Baudhayana-Pythagoras Theorem"],
+        "baudhayana-pythagoras-theorem": [
+            "The Baudhayana-Pythagoras Theorem", "The Baudhayana–Pythagoras Theorem",
+            "Baudhayana-Pythagoras Theorem", "The Baudhāyana-Pythagoras Theorem",
+            "The Baudhāyana–Pythagoras Theorem", "Baudhāyana-Pythagoras Theorem",
+            "Baudhāyana–Pythagoras Theorem",
+        ],
         "proportional-reasoning-2": ["Proportional Reasoning-2", "Proportional Reasoning–2", "Proportional Reasoning 2"],
         "exploring-geometric-themes": ["Exploring Some Geometric Themes", "Exploring Geometric Themes"],
         "tales-by-dots-and-lines": ["Tales by Dots and Lines"],

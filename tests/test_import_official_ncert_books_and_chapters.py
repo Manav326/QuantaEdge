@@ -357,6 +357,50 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
             self.assertEqual(2, pdf.page_count)
             self.assertIn("Patterns in Mathematics", pdf[0].get_text("text"))
 
+    def test_baudhayana_aliases_accept_the_nc ert_diacritic_spelling(self):
+        chapter = {
+            "chapter_id": 809,
+            "chapter_code": "baudhayana-pythagoras-theorem",
+            "chapter_name": "बौधायन-पाइथागोरस प्रमेय",
+        }
+        aliases = importer.aliases_for("8", "maths", "english", chapter)
+        self.assertIn("The Baudhāyana-Pythagoras Theorem", aliases)
+        self.assertTrue(
+            importer.line_matches_title(
+                "THE BAUDHĀYANA-PYTHAGORAS THEOREM",
+                "The Baudhāyana-Pythagoras Theorem",
+            )
+        )
+
+    def test_detects_baudhayana_chapter_heading_with_macron(self):
+        path = self.root / "class8-maths-baudhayana.pdf"
+        with fitz.open() as doc:
+            page = doc.new_page()
+            page.insert_text((50, 50), "Contents")
+            page.insert_text((50, 90), "Chapter 1 Fractions in Disguise 1")
+            page.insert_text((50, 110), "Chapter 2 The Baudhāyana-Pythagoras Theorem 20")
+
+            page = doc.new_page()
+            page.insert_text((50, 60), "Chapter 1")
+            page.insert_text((50, 100), "Fractions in Disguise")
+            page.insert_text((50, 150), "Fractions content.")
+
+            page = doc.new_page()
+            page.insert_text((50, 60), "Chapter 2")
+            page.insert_text((50, 100), "THE BAUDHĀYANA-PYTHAGORAS THEOREM")
+            page.insert_text((50, 150), "The theorem chapter content.")
+            doc.save(path)
+
+        chapters = [
+            {"chapter_id": 808, "chapter_code": "fractions-in-disguise", "chapter_name": "भिन्नों के छिपे रूप"},
+            {"chapter_id": 809, "chapter_code": "baudhayana-pythagoras-theorem", "chapter_name": "बौधायन-पाइथागोरस प्रमेय"},
+        ]
+        ranges = importer.detect_chapter_ranges(path, "8", "maths", "english", chapters)
+        self.assertEqual(
+            [(2, 2), (3, 3)],
+            [(row["start_page"], row["end_page"]) for row in ranges],
+        )
+
     def test_short_official_titles_down_to_four_characters_are_supported(self):
         for code, title in (("area", "Area"), ("circle", "Circle"), ("square", "Square")):
             with self.subTest(title=title):
