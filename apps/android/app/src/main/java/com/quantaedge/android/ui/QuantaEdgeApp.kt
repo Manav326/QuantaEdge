@@ -67,12 +67,13 @@ private enum class AppRoute {
 fun QuantaEdgeApp() {
     val context = LocalContext.current
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
-    val resourceStore = remember { ProtectedResourceStore(context) }
     val scope = rememberCoroutineScope()
+    var auth by remember { mutableStateOf(JSONObject()) }
+    val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
+    val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
 
     var route by remember { mutableStateOf(AppRoute.LOGIN) }
     var language by remember { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
-    var auth by remember { mutableStateOf(JSONObject()) }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
@@ -304,19 +305,9 @@ fun QuantaEdgeApp() {
                 (doc.optInt("page_end", 1) - doc.optInt("page_start", 1) + 1).coerceAtLeast(1))
             if (id <= 0L || count <= 0) throw IOException("डाउनलोड की जानकारी उपलब्ध नहीं है।")
             resourceStore.saveDocument(doc)
-            for (page in 1..count) {
-                if (resourceStore.hasPage(id, page)) {
-                    status = "पहले से डाउनलोड: पृष्ठ " + page + " / " + count
-                    continue
-                }
-                status = "सुरक्षित डाउनलोड: पृष्ठ " + page + " / " + count
-                val bytes = ApiClient.getBytes("/api/v1/learning/documents/" + id + "/pages/" + page)
-                resourceStore.savePage(id, page, bytes)
-            }
-            status = "डाउनलोड पूरा। सामग्री केवल इसी डिवाइस के QuantaEdge ऐप में उपलब्ध है।"
-            documents = documents.map {
-                if (it.optLongAny("document_id", "id") == id) doc else it
-            }
+            com.quantaedge.android.data.ResourceDownloadScheduler.enqueue(context, resourceOwner, id)
+            status = "सुरक्षित डाउनलोड बैकग्राउंड में शुरू हुआ। प्रगति देखने के लिए लाइब्रेरी रिफ्रेश करें।"
+            documents = documents.map { if (it.optLongAny("document_id", "id") == id) doc else it }
         }
     }
 
@@ -521,7 +512,8 @@ fun QuantaEdgeApp() {
                         onRefresh = { runTask {
                             studentProfile = ApiClient.getObject("/api/v1/students/me")
                             recommendation = ApiClient.getObject("/api/v1/recommendations/next")
-                        } }
+                        } },
+                        onOpenRecommendation = { recommended -> openLesson(recommended) }
                     )
                     AppRoute.PARENT_HOME -> ParentHomeScreen(
                         parent = parentAccount,
@@ -709,7 +701,8 @@ private fun StudentHomeScreen(
     onResources: (String) -> Unit,
     onResults: () -> Unit,
     onProfile: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onOpenRecommendation: (JSONObject) -> Unit
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { "विद्यार्थी" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
@@ -738,8 +731,8 @@ private fun StudentHomeScreen(
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text("आपके लिए अगला पाठ", style = MaterialTheme.typography.titleMedium)
                     Text(next.textAny("title", "lesson_title"))
-                    TextButton(onClick = { onSubject(next.textAny("subject_code").ifBlank { "maths" }) }) {
-                        Text("विषय खोलें")
+                    TextButton(onClick = { onOpenRecommendation(next) }) {
+                        Text("अगला पाठ खोलें")
                     }
                 }
             }
@@ -845,9 +838,10 @@ private fun LessonScreen(
                         answer = answer,
                         onAnswerChange = { onAnswerChange(id, it) },
                         onSubmit = { onAnswer(question, answer) },
-                        locked = !feedbacks[id].isNullOrBlank(),
+                        locked = question.optBoolean("answered") || !feedbacks[id].isNullOrBlank(),
                         saving = busy,
-                        feedback = feedbacks[id]
+                        feedback = feedbacks[id],
+                        status = if (question.optBoolean("answered")) "उत्तर पहले से सुरक्षित है।" else null
                     )
                 }
             }

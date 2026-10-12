@@ -7,6 +7,7 @@ import android.util.Base64
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.security.MessageDigest
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -14,10 +15,13 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /** App-private encrypted cache for server-rendered protected textbook pages. */
-class ProtectedResourceStore(context: Context) {
-    private val root = File(context.applicationContext.filesDir, "protected_learning_resources").apply { mkdirs() }
-    private val preferences = context.applicationContext.getSharedPreferences("qe_downloaded_resource_manifest", Context.MODE_PRIVATE)
-    private val alias = "quantaedge_protected_resource_key"
+class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
+    private val ownerNamespace = MessageDigest.getInstance("SHA-256")
+        .digest(ownerKey.ifBlank { "guest" }.toByteArray(Charsets.UTF_8))
+        .take(12).joinToString("") { "%02x".format(it) }
+    private val root = File(context.applicationContext.filesDir, "protected_learning_resources/" + ownerNamespace).apply { mkdirs() }
+    private val preferences = context.applicationContext.getSharedPreferences("qe_downloaded_resource_manifest_" + ownerNamespace, Context.MODE_PRIVATE)
+    private val alias = "qe_resource_key_" + ownerNamespace
 
     fun saveDocument(document: JSONObject) {
         val id = document.optLongAny("document_id", "id")

@@ -28,6 +28,6 @@ gradle -p apps/android assembleRelease -PquantaedgeApiBaseUrl=https://your-real-
 
 Do not use an invented host. Release signing must be configured outside this repository; never commit signing keys or passwords.
 
-The Gradle build copies the canonical approved wordmark from apps/web/public/branding into Android generated resources. Protected textbook pages are encrypted at rest with Android Keystore and stored only in app-private internal storage. Screens use FLAG_SECURE and app backup is disabled.
+The Gradle build copies the canonical approved wordmark from apps/web/public/branding into Android generated resources. Protected textbook pages are encrypted at rest with Android Keystore and stored only in app-private internal storage, namespaced per authenticated account. Unique WorkManager jobs download authorized rendered page images when connected, skip cached pages and retry transient server/network failures. Screens use FLAG_SECURE and app backup is disabled.
 
 Client-side anti-capture controls reduce casual copying but cannot prevent another device from photographing the screen. Do not publish a release until endpoint configuration, signing, real-device flows, and privacy/legal review are complete.
