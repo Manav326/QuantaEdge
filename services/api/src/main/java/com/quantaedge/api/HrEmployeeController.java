@@ -214,10 +214,10 @@ public class HrEmployeeController {
     int safeOffset=Math.max(0,Math.min(offset,1000000));
     String term="%"+(q==null?"":q.trim().replace("%","\\%").replace("_","\\_"))+"%";
     List<Map<String,Object>> items=jdbc.queryForList("""
-      with recursive reporting(id) as (
-        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+      with recursive reporting(id,organization_id) as (
+        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
           where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
@@ -236,10 +236,10 @@ public class HrEmployeeController {
       limit ? offset ?
       """,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),safeLimit,safeOffset);
     Long total=jdbc.queryForObject("""
-      with recursive reporting(id) as (
-        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+      with recursive reporting(id,organization_id) as (
+        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
           where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select count(*) from hr_employee e
