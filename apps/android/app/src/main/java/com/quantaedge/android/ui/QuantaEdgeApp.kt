@@ -2130,18 +2130,26 @@ private fun AssessmentAttemptScreen(
 @Composable
 private fun ResultsScreen(
     resultItems: List<JSONObject>,
-    onReview: (Long) -> Unit
+    certificateEligibility: Map<Long, JSONObject>,
+    language: String,
+    busy: Boolean,
+    onReview: (Long) -> Unit,
+    onIssueCertificate: (Long) -> Unit,
+    onDownloadCertificate: (Long, String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
-        Text("हर टेस्ट के नवीनतम तीन जारी attempts और उनमें सर्वश्रेष्ठ अंक देखें।",
-            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+        Text(
+            if (language == "hi") "हर result के साथ certificate की पात्रता और उपलब्ध download देखें।"
+            else "Check certificate eligibility and access available downloads from each released result.",
+            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary
+        )
         if (resultItems.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
             items(resultItems) { item ->
                 val attempts = item.optJSONArray("attempts")?.objectItems() ?: emptyList()
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                         Text(item.textAny("assessment_title", "title").ifBlank { "मूल्यांकन" },
                             style = MaterialTheme.typography.titleMedium)
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
@@ -2152,17 +2160,29 @@ private fun ResultsScreen(
                         Text("कुल जारी attempts: " + item.optInt("attempt_count", attempts.size) +
                             " • प्रश्न: " + item.optInt("question_count", 0),
                             style = MaterialTheme.typography.bodySmall)
-                        if (attempts.isNotEmpty()) {
-                            Text("Attempt history", style = MaterialTheme.typography.titleSmall)
-                            attempts.forEachIndexed { index, attempt ->
+                        val history = if (attempts.isNotEmpty()) attempts else listOf(item)
+                        Text(if (language == "hi") "Attempt history और certificate" else "Attempt history & certificate",
+                            style = MaterialTheme.typography.titleSmall)
+                        history.forEachIndexed { index, attempt ->
+                            val attemptId = attempt.optLongAny("attempt_id", "attemptId")
+                            val certificate = certificateEligibility[attemptId]
+                            val certificateStatus = certificate?.optString("certificate_status").orEmpty()
+                            val certificateId = certificate?.optLongAny("certificate_id", "certificateId") ?: 0L
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                                verticalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                                 ) {
                                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                        Text("Attempt " + attempt.optInt("attempt_number", index + 1),
-                                            style = MaterialTheme.typography.bodyMedium)
+                                        Text(
+                                            (if (language == "hi") "Attempt " else "Attempt ") +
+                                                attempt.optInt("attempt_number", index + 1),
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
                                         Text(
                                             attempt.textAny("released_at", "submitted_at") + " • " +
                                                 attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
@@ -2170,15 +2190,52 @@ private fun ResultsScreen(
                                             color = MaterialTheme.colorScheme.secondary
                                         )
                                     }
-                                    TextButton(
-                                        onClick = { onReview(attempt.longAny("attempt_id", "attemptId")) }
-                                    ) { Text("उत्तर समीक्षा") }
+                                    TextButton(onClick = { onReview(attemptId) }, enabled = !busy) {
+                                        Text(if (language == "hi") "उत्तर समीक्षा" else "Review")
+                                    }
+                                }
+                                when {
+                                    certificateStatus == "ISSUED" && certificateId > 0L -> {
+                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            OutlinedButton(
+                                                onClick = { onDownloadCertificate(certificateId, "pdf") },
+                                                enabled = !busy
+                                            ) { Text(if (language == "hi") "PDF सेव करें" else "Save PDF") }
+                                            OutlinedButton(
+                                                onClick = { onDownloadCertificate(certificateId, "png") },
+                                                enabled = !busy
+                                            ) { Text(if (language == "hi") "PNG सेव करें" else "Save PNG") }
+                                        }
+                                    }
+                                    certificateStatus == "REVOKED" -> Text(
+                                        if (language == "hi") "यह certificate निरस्त है।"
+                                        else "This certificate has been revoked.",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    certificate?.optBoolean("eligible", false) == true -> Button(
+                                        onClick = { onIssueCertificate(attemptId) },
+                                        enabled = !busy && attemptId > 0L
+                                    ) {
+                                        Text(if (language == "hi") "प्रमाणपत्र जारी करें" else "Issue certificate")
+                                    }
+                                    else -> {
+                                        val reason = certificate?.optString("eligibility_reason").orEmpty()
+                                        val hint = when (reason) {
+                                            "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
+                                            "RESULT_NOT_RELEASED" -> if (language == "hi") "Final result जारी होने के बाद पात्रता जाँची जाएगी।" else "Eligibility is checked after the final result is released."
+                                            "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
+                                            "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject में published lessons अभी उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
+                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                            "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + certificate.optString("pass_threshold_percent", "80") + "% से कम है।" else "The score is below the " + certificate.optString("pass_threshold_percent", "80") + "% certificate threshold."
+                                            "INVALID_SCORE" -> if (language == "hi") "इस result का score मान्य नहीं है।" else "This result has an invalid score."
+                                            else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results refresh करें।" else "Certificate eligibility could not be checked. Refresh results."
+                                        }
+                                        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                                    }
                                 }
                             }
-                        } else {
-                            TextButton(onClick = { onReview(item.longAny("attempt_id", "attemptId")) }) {
-                                Text("उत्तर समीक्षा खोलें")
-                            }
+                            if (index < history.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
                         }
                     }
                 }
