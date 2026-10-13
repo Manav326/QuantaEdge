@@ -127,8 +127,9 @@ public class HrmsAccessController {
         staffId = jdbc.queryForObject("""
             insert into staff_account(
               public_id, mobile_e164, display_name, role, active, username,
-              password_hash, must_change_password, created_by_staff_id
-            ) values (?,?,?,'EMPLOYEE',true,?,?,true,?) returning id
+              password_hash, must_change_password, education_access_enabled,
+              education_access_configured, created_by_staff_id
+            ) values (?,?,?,'EMPLOYEE',true,?,?,true,false,false,?) returning id
             """, Long.class, UUID.randomUUID(), null, String.valueOf(employee.get("display_name")),
             username, passwordEncoder.encode(password), context.staffId());
         if (staffId == null) throw new IllegalStateException("Could not create the employee login identity.");
