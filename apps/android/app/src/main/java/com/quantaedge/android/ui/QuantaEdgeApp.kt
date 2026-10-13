@@ -1556,7 +1556,8 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         onSave = ::saveParentProfile,
                         onUploadPhoto = ::saveParentPhoto,
-                        onRemovePhoto = ::removeParentPhoto
+                        onRemovePhoto = ::removeParentPhoto,
+                        onLogout = ::logout
                     )
                     AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
                         busy = busy,
@@ -1713,7 +1714,6 @@ fun QuantaEdgeApp() {
                         onSave = ::saveStudentProfile,
                         onUploadPhoto = ::saveStudentPhoto,
                         onRemovePhoto = ::removeStudentPhoto,
-                        onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )
                     AppRoute.PROGRESS -> StudentProgressScreen(
