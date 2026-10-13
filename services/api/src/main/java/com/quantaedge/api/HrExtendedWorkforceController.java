@@ -218,7 +218,7 @@ public class HrExtendedWorkforceController {
   @GetMapping("/assets")
   public List<Map<String,Object>> assets(@RequestParam long organizationId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_ASSET_VIEW"); organization(organizationId);
-    return jdbc.queryForList("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.returned_at,x.condition_on_assignment,x.condition_on_return,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id where a.organization_id=? order by a.asset_status,a.asset_tag",organizationId);
+    return jdbc.queryForList("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.expected_return_date,x.returned_at,x.condition_on_assignment,x.condition_on_return,(x.returned_at is null and x.expected_return_date<current_date) overdue,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id where a.organization_id=? order by a.asset_status,a.asset_tag",organizationId);
   }
   @PostMapping("/assets") @Transactional
   public Map<String,Object> createAsset(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -244,7 +244,7 @@ public class HrExtendedWorkforceController {
     long employee=id(b.get("employeeId"),"Employee"); employeeInOrg(employee,((Number)asset.get("organization_id")).longValue());
     String condition=optional(b.get("condition"),20); if(condition==null)condition="GOOD"; condition=condition.toUpperCase();
     if(!List.of("NEW","GOOD","FAIR","DAMAGED","UNKNOWN").contains(condition)) throw bad("Unsupported asset condition.");
-    Long key=jdbc.queryForObject("insert into hr_asset_assignment(asset_id,employee_id,assigned_by_staff_id,condition_on_assignment,assignment_note) values (?,?,?,?,?) returning id",Long.class,id,employee,c.staffId(),condition,optional(b.get("note"),1000));
+    Long key=jdbc.queryForObject("insert into hr_asset_assignment(asset_id,employee_id,assigned_by_staff_id,condition_on_assignment,assignment_note,expected_return_date) values (?,?,?,?,?,?) returning id",Long.class,id,employee,c.staffId(),condition,optional(b.get("note"),1000),b.get("expectedReturnDate")==null?null:Date.valueOf(date(String.valueOf(b.get("expectedReturnDate")),"Expected return date")));
     jdbc.update("update hr_asset set asset_status='ASSIGNED',updated_at=now() where id=?",id);
     event(((Number)asset.get("organization_id")).longValue(),"ASSET",id,"ASSIGNED",c,optional(b.get("note"),1000),"{\"employeeId\":"+employee+",\"assignmentId\":"+key+"}");
     return one("select * from hr_asset_assignment where id=?",key);
