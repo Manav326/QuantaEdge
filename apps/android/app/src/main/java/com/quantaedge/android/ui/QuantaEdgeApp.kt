@@ -1322,7 +1322,7 @@ fun QuantaEdgeApp() {
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )
-                    AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, ::openProgress)
+                    AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, language, ::openCertificateForAttempt, ::openProgress)
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
                         initialAssessmentAttemptId = certificateAttemptId,
