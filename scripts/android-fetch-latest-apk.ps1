@@ -4,8 +4,7 @@
 param(
     [string]$Repository = "Manav326/QuantaEdge",
     [string]$Branch = "main",
-    [string]$ArtifactName = "",
-    [switch]$ForceDownload
+    [string]$ArtifactName = ""
 )
 
 $ErrorActionPreference = "Stop"
