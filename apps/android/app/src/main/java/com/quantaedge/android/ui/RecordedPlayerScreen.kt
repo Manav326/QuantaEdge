@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,9 +42,9 @@ fun RecordedPlayerScreen(
     val context = LocalContext.current
     val recordingId = recording.optLongAny("recorded_class_id", "recordingId", "id")
     val durationSeconds = recording.optLongAny("duration_seconds", "durationSeconds")
-    var watchedSeconds by remember(recordingId) { mutableStateOf(recording.optLongAny("watched_seconds", "watchedSeconds")) }
-    var currentPosition by remember(recordingId) { mutableStateOf(startPositionSeconds.coerceAtLeast(0)) }
-    var isEnded by remember(recordingId) { mutableStateOf(false) }
+    var watchedSeconds by rememberSaveable(recordingId) { mutableStateOf(recording.optLongAny("watched_seconds", "watchedSeconds")) }
+    var currentPosition by rememberSaveable(recordingId) { mutableStateOf(startPositionSeconds.coerceAtLeast(0)) }
+    var isEnded by rememberSaveable(recordingId) { mutableStateOf(false) }
 
     val player = remember(recordingId) {
         val dataSource = OkHttpDataSource.Factory(ApiClient.authenticatedHttpClient())
@@ -52,7 +53,7 @@ fun RecordedPlayerScreen(
             .build().apply {
                 setMediaItem(MediaItem.fromUri(ApiClient.absoluteUrl("/api/v1/learning/recorded-classes/" + recordingId + "/stream")))
                 prepare()
-                seekTo(startPositionSeconds.coerceAtLeast(0) * 1000)
+                seekTo(currentPosition.coerceAtLeast(0) * 1000)
             }
     }
 
