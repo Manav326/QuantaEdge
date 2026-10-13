@@ -38,10 +38,10 @@ public class HrAttendanceCorrectionReviewController {
       throw bad("Choose a supported correction-request status.");
     int pageSize=Math.max(1,Math.min(limit,200));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      with recursive reporting(id) as (
-        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+      with recursive reporting(id,organization_id) as (
+        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
           where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select r.id,r.public_id,r.attendance_record_id,r.employee_id,e.employee_number,e.display_name,
