@@ -44,6 +44,7 @@ public class AuthorizationService {
     if (!context.isEmployee() || permission == null || permission.isBlank()) return false;
     // Role-based permissions are evaluated live on every request. An HRMS-scoped session
     // never inherits the Education Admin global ADMIN bypass.
+    String workspace = "HRMS".equals(AuthService.normalizeWorkspace(context.workspace())) ? "HRMS" : "EDUCATION_ADMIN";
     Boolean granted = jdbc.queryForObject("""
         select exists (
           select 1
@@ -52,13 +53,15 @@ public class AuthorizationService {
           where s.id = ? and s.active = true
             and (
               exists (select 1 from staff_permission_grant g
-                      where g.staff_id=s.id and g.permission_key=p.permission_key)
+                      where g.staff_id=s.id and g.permission_key=p.permission_key
+                        and g.workspace_key=?)
               or exists (select 1 from staff_additional_role ar
                          join staff_role_permission rp on rp.role_code=ar.role_code
-                         where ar.staff_id=s.id and rp.permission_key=p.permission_key)
+                         where ar.staff_id=s.id and rp.permission_key=p.permission_key
+                           and rp.workspace_key=?)
             )
         )
-        """, Boolean.class, permission, context.staffId());
+        """, Boolean.class, permission, context.staffId(), workspace, workspace);
     return Boolean.TRUE.equals(granted);
   }
 
