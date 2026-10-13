@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { LanguageSwitcher, LocaleText, useLocale } from '../../components/LanguageProvider';
 
@@ -14,7 +13,6 @@ async function readApi(response: Response): Promise<any> {
 }
 
 export default function StudentLoginPage() {
-  const router = useRouter();
   const { locale } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [parentMobile, setParentMobile] = useState('');
@@ -32,7 +30,13 @@ export default function StudentLoginPage() {
       });
       const body = await readApi(response);
       if (!response.ok) throw new Error(body.message || tx('Login details match नहीं हुईं। Parent से check करके दोबारा प्रयास करें।','Login details did not match. Check with your parent and try again.'));
-      router.replace('/student'); router.refresh();
+      // Treat only an explicitly issued Student session as a successful Student login.
+      if (body.role !== 'STUDENT' || body.workspace !== 'STUDENT' || Number(body.studentId) <= 0) {
+        throw new Error(tx('Student session verify नहीं हो पाया। दोबारा sign in करें।', 'The server did not confirm a Student session. Please sign in again.'));
+      }
+      // A full navigation lets the browser commit the HttpOnly scoped cookies before
+      // the server-side route guard evaluates /student.
+      window.location.replace('/student');
     } catch (e: any) {
       setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
     } finally { setBusy(false); }
