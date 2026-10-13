@@ -213,6 +213,15 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
       ...group,
       items: group.items.filter(item => {
         if (!session?.staffId) return false;
+        if (item.href === '/self-service') {
+          const role = String(session.role || '').toUpperCase();
+          const employeeWorkspacePermissions = [
+            'HR_EMPLOYEE_VIEW', 'HR_ATTENDANCE_VIEW', 'HR_LEAVE_VIEW',
+            'HR_PAYROLL_VIEW', 'TEACHING_ASSIGNMENT_VIEW',
+          ];
+          return !isAdmin && (role === 'EMPLOYEE'
+            || employeeWorkspacePermissions.some(permission => permissions.includes(permission)));
+        }
         if (isAdmin || !item.permissions?.length) return true;
         return item.permissions.some(permission => permissions.includes(permission));
       }),

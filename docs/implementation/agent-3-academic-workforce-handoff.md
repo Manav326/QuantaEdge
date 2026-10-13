@@ -1,6 +1,15 @@
 # Agent 3 handoff — Academic workforce, scheduling and Google Meet
 
-**Status:** implementation committed to the assigned working branch; local builds, automated tests, database migration execution, and live Google Meet creation have **not** been verified in this session. Do not merge or describe this as production-verified until the test suite and migration run successfully.
+**Status of original handoff:** the branch/verification notes below were written during the earlier implementation and are now historical. They do not describe the current repository head or current CI status.
+
+## Current main verification (2026-10-13)
+
+The academic-workforce integration and shared teaching-eligibility policy are now present on `main`. The integrated policy rechecks the linked HR employee's allowed employment status, joining/last-working dates, approved assignment dates, and approved leave for the specific class date at assignment, live-class, reschedule, and teacher meeting-link access points.
+
+- Repository: [Manav326/QuantaEdge](https://github.com/Manav326/QuantaEdge)
+- Main-branch CI history: [GitHub Actions](https://github.com/Manav326/QuantaEdge/actions?query=branch%3Amain)
+- The historical Google Meet live-event checks below remain deployment-time tasks: successful build/unit checks do not prove that real OAuth credentials work or that a live Calendar/Meet event can be created, rescheduled, cancelled, and accessed by the intended identities.
+- Read this file's original branch and commit inventory as a historical engineering record, not as a claim that implementation remains unmerged or that current CI is green. The live CI result for the current main head is authoritative.
 
 - Repository: [Manav326/QuantaEdge](https://github.com/Manav326/QuantaEdge)
 - Baseline branch: `main`
@@ -186,7 +195,7 @@ Recommended verification once a runner is available:
 - Assignment effective dates protect access even if the assignment row retains an approved historical status. The records are not deleted.
 - Builds, unit tests, migration execution, real OAuth, real event creation, event cancellation/rescheduling, and end-to-end student/teacher link access remain unverified until the recommended verification runs complete.
 
-## 9. Branch and commit record
+## 9. Branch and commit record (historical; superseded by current main integration)
 
 Working branch: `agent/academic-workforce-google-meet`
 
@@ -208,4 +217,4 @@ Representative implementation commits recorded on this branch:
 
 The concurrent main updates were merged into the feature branch in a two-parent merge commit, visible in the linked branch history. The feature branch includes this latest main commit as an ancestor; use the linked GitHub comparison for current ahead/behind counts. Those updates covered `.github/workflows/ci.yml`, `apps/android/app/build.gradle.kts`, and `scripts/android-fetch-latest-apk.ps1`; the comparison did not show HRMS, assignment, curriculum or live-class API/model files in that main delta.
 
-All implementation changes and the handoff file are committed on the remote feature branch. Remote branch updates succeeded; no commit was made directly to `main`, no force-push was performed, and no pull request was opened. The current branch head in GitHub is the final revision authority, because additional maintenance commits follow the representative hashes listed above.
+Historical note: the statements in this section describe the original handoff point and are no longer a current branch-status assertion. The integrated changes have since been committed directly to `main`. Use the live GitHub Actions history linked above to evaluate the current main head; real Google Meet provider validation still needs authorized live credentials.

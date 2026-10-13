@@ -25,6 +25,7 @@ export default function EmployeeSelfServicePage(){
   const router=useRouter();
   const [session,setSession]=useState<Session|null>(null);
   const [profile,setProfile]=useState<any|null>(null);
+  const [unlinked,setUnlinked]=useState(false);
   const [attendance,setAttendance]=useState<any[]>([]);
   const [requests,setRequests]=useState<any[]>([]);
   const [types,setTypes]=useState<LeaveType[]>([]);
@@ -41,13 +42,23 @@ export default function EmployeeSelfServicePage(){
   const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const daySpan=Math.floor((Date.parse(range.to+'T00:00:00Z')-Date.parse(range.from+'T00:00:00Z'))/86400000);
   const load=useCallback(async()=>{
-    setLoading(true);setError('');
+    setLoading(true);setError('');setUnlinked(false);
     try{
       const me=await api('/api/v1/auth/me');
       if(!me.staffId){router.replace('/login');return}
       setSession(me);
-      const ownProfile=await api('/api/v1/hr/self-service/profile');
-      setProfile(ownProfile);
+      let ownProfile:any;
+      try {
+        ownProfile=await api('/api/v1/hr/self-service/profile');
+      } catch(e) {
+        if(e instanceof Error && e.message.includes('No active employee record is linked to this account')) {
+          setUnlinked(true);setProfile(null);setAttendance([]);setRequests([]);setTypes([]);setBalances([]);
+          setPayslips([]);setProfileChangeRequests([]);setAttendanceCorrectionRequests([]);setError('');
+          return;
+        }
+        throw e;
+      }
+      setUnlinked(false);setProfile(ownProfile);
       const [a,l,t,b,ps,pr,cr]=await Promise.all([
         api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
@@ -114,7 +125,7 @@ export default function EmployeeSelfServicePage(){
       <PeoplePageHeader eyebrow={"YOUR EMPLOYMENT · PRIVATE WORKSPACE"} title={"My workspace"} description={"Review your own employment details, attendance, leave requests and available leave balances. HR-only records and other employees remain outside this view."} />
       {error&&<PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
       {notice&&<PeopleFeedback tone="success" role="status">{notice}</PeopleFeedback>}
-      {profile&&<section className="panel" aria-labelledby="profile-heading">
+      {!unlinked&&profile&&<section className="panel" aria-labelledby="profile-heading">
         <div style={{display:'flex',justifyContent:'space-between',gap:16,alignItems:'start',flexWrap:'wrap'}}>
           <div><div className="eyebrow">EMPLOYEE PROFILE</div><h2 id="profile-heading">{profile.display_name}</h2><p className="small">{profile.employee_number} · {profile.organization_name}</p></div>
           <PeopleStatusBadge status={pretty(profile.employment_status)} />
@@ -125,7 +136,7 @@ export default function EmployeeSelfServicePage(){
           <section className="card"><div className="label">Reporting manager</div><div style={{fontWeight:700}}>{profile.manager_name||'Not assigned'}</div><div className="small">{profile.email||profile.phone_e164||'No contact details on file'}</div></section>
         </div>
       </section>}
-      <section className="panel" style={{marginTop:20}}>
+      {!unlinked&&<section className="panel" style={{marginTop:20}}>
         <div className="tabs" role="group" aria-label="My employment information">
           <button type="button" aria-pressed={tab==='attendance'} className={tab==='attendance'?'active':''} onClick={()=>setTab('attendance')}>My attendance</button>
           <button type="button" aria-pressed={tab==='leave'} className={tab==='leave'?'active':''} onClick={()=>setTab('leave')}>My leave</button>
@@ -244,9 +255,10 @@ export default function EmployeeSelfServicePage(){
           </section>}
         </>}
         {loading&&<p className="small" role="status" aria-live="polite">Loading your employee records…</p>}
-      </section>
+      </section>}
+      {unlinked&&<section className="panel"><PeopleEmptyState title="Employee profile not linked" description="This staff login does not have an active canonical HRMS employee record. Ask People Operations to link the account before using self-service. No employee records are displayed here." /></section>}
       <p className="small" style={{marginTop:18}}>This workspace is scoped to the employee linked to your authenticated account. Payslips are available only after an authorized reviewer approves the payroll run. Profile changes, attendance corrections and private documents still require separate controlled workflows.</p>
-      {session&&!profile&&!loading&&<p className="small">If you believe your employment record should be linked, contact your People Operations administrator.</p>}
+      {!unlinked&&session&&!profile&&!loading&&<p className="small">If you believe your employment record should be linked, contact your People Operations administrator.</p>}
     </main>
   </div>;
 }
