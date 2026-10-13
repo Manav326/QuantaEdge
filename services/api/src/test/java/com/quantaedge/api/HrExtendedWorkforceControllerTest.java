@@ -34,7 +34,7 @@ class HrExtendedWorkforceControllerTest {
 
   @Test void recruitmentReadPermissionIsRequiredBeforeDatabaseAccess(){
     when(authorization.requirePermission(manager,"HR_RECRUITMENT_VIEW")).thenThrow(new SecurityException("Permission required"));
-    assertThrows(SecurityException.class,()->controller.vacancies(1L,manager));
+    assertThrows(SecurityException.class,()->controller.vacancies(1L,20,0,manager));
     verify(authorization).requirePermission(manager,"HR_RECRUITMENT_VIEW");
     verifyNoInteractions(jdbc,audit);
   }
