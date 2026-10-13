@@ -29,8 +29,8 @@ import tools.jackson.databind.ObjectMapper;
 @Component
 public class SourcePdfDownloadService {
   static final int DEFAULT_MAX_PDF_BYTES = 500 * 1024 * 1024;
-  static final int MAX_PDF_BYTES = configuredMaxPdfBytes();
   private static final int MAX_CONFIGURABLE_PDF_BYTES = 500 * 1024 * 1024;
+  static final int MAX_PDF_BYTES = configuredMaxPdfBytes();
   private static final int MAX_HTML_BYTES = 4 * 1024 * 1024;
 
   /**
