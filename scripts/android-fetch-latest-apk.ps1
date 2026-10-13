@@ -8,6 +8,11 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+# PowerShell 7 can promote native stderr (expected when an artifact is absent) to a terminating error.
+# Keep gh's non-zero exit code available so missing artifacts can be handled deliberately.
+if (Get-Variable -Name PSNativeCommandUseErrorActionPreference -ErrorAction SilentlyContinue) {
+    $PSNativeCommandUseErrorActionPreference = $false
+}
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $repoRoot
 
