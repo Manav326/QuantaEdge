@@ -276,6 +276,17 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void publicCertificateVerificationReturnsNotFoundForUnknownCertificateNumber() {
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+
+    org.springframework.web.server.ResponseStatusException error = assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.verifyCertificate("QE-2026-ABCDEF1234567890"));
+
+    assertEquals(org.springframework.http.HttpStatus.NOT_FOUND, error.getStatusCode());
+  }
+
+  @Test
   void publicCertificateVerificationRejectsInternalOrMalformedIdentifiers() {
     assertThrows(org.springframework.web.server.ResponseStatusException.class,
         () -> controller.verifyCertificate("3007"));
