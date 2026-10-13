@@ -812,10 +812,14 @@ public class AuthService {
         "select role from staff_account where id=?", String.class, staffId);
     // Global ADMIN semantics apply only to the education workspace. HRMS permissions are
     // explicit and remain least-privilege even if a staff identity has an education role.
-    if ("ADMIN".equals(role) && !"HRMS".equals(normalizeWorkspace(workspace))) {
-      return jdbc.queryForList(
-          "select permission_key from staff_permission_catalog order by permission_key",
-          String.class);
+    String permissionWorkspace = "HRMS".equals(normalizeWorkspace(workspace)) ? "HRMS" : "EDUCATION_ADMIN";
+    if ("ADMIN".equals(role) && "EDUCATION_ADMIN".equals(permissionWorkspace)) {
+      return jdbc.queryForList("""
+          select permission_key from staff_permission_catalog
+          where permission_key not like 'HR\\_%' escape '\\'
+            and permission_key <> 'HR_SELF_SERVICE_VIEW'
+          order by permission_key
+          """, String.class);
     }
     return jdbc.queryForList("""
         select effective.permission_key
@@ -823,16 +827,16 @@ public class AuthService {
           select g.permission_key
           from staff_permission_grant g
           join staff_permission_catalog p on p.permission_key=g.permission_key
-          where g.staff_id=?
+          where g.staff_id=? and g.workspace_key=?
           union
           select rp.permission_key
           from staff_additional_role ar
           join staff_role_permission rp on rp.role_code=ar.role_code
           join staff_permission_catalog p on p.permission_key=rp.permission_key
-          where ar.staff_id=?
+          where ar.staff_id=? and rp.workspace_key=?
         ) effective
         order by effective.permission_key
-        """, String.class, staffId, staffId);
+        """, String.class, staffId, permissionWorkspace, staffId, permissionWorkspace);
   }
 
   public AuthContext contextForStudent(Long userId,long studentId) {
