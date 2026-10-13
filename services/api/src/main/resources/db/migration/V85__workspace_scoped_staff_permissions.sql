@@ -4,7 +4,7 @@ alter table staff_permission_grant
 
 update staff_permission_grant
 set workspace_key = case
-  when permission_key like 'HR\_%' escape '\' or permission_key='HR_SELF_SERVICE_VIEW' then 'HRMS'
+  when permission_key like 'HR\_%' escape '\' or permission_key in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE') then 'HRMS'
   else 'EDUCATION_ADMIN'
 end;
 
