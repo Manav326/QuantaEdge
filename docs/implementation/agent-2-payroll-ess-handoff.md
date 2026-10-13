@@ -117,7 +117,7 @@ Also validate migration V71 against a clean PostgreSQL 17 database and an upgrad
 
 Working branch: `agent/payroll-ess-extended-hr`
 
-Commits made through GitHub on this branch:
+Key commits made through GitHub on this branch:
 - `48eb2f4` — Add extended HR workflow schema
 - `7918e3b` — Implement extended HR workflow APIs
 - `d1636cd` / `4eb2a60` — Add and refine extended HR tests
@@ -125,5 +125,11 @@ Commits made through GitHub on this branch:
 - `10fcdf0` — Link extended HR workspace from People portal
 - `2141adb` — Merge latest `main` into Agent 2 implementation without force-pushing
 - `0aab1c0` — Record latest main sync in handoff
+- `5cbf98e` — Complete extended HR query and asset status workflows
+- `421a2a3` — Connect candidate onboarding and exit clearance UI
+- `cc90704` — Track expected asset returns for overdue handling
+- `90e0575` — Expose overdue asset status and expected return dates
+- `70c3d8b` — Add asset due dates and overdue indicators to People UI
+- `1995c79` — Update extended HR handoff for completed workflows
 
 The remote branch was available and these commits were written to it. `main` advanced during the work with two Android APK workflow/script commits; both were incorporated into the agent branch with merge commit `2141adb8d25308c8a14678fd5ad6a660cf60a693`. No commit was made to `main`; no force-push or pull request was used.
