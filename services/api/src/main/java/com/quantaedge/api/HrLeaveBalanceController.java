@@ -101,6 +101,8 @@ public class HrLeaveBalanceController {
       throw bad("An adjustment requires a reason.");
     }
     LocalDate effectiveDate=parseRequiredDate(body.get("effectiveDate"));
+    if(quantity.signum()<0&&effectiveDate.isBefore(LocalDate.now()))
+      throw bad("Negative balance adjustments must be effective today or in the future; use a linked reversal for a posted transaction.");
     String reason=required(body.get("reason"),1000,"Reason");
     String sourceType=required(body.getOrDefault("sourceType","MANUAL"),32,"Source type").toUpperCase();
     String sourceReference=optional(body.get("sourceReference"),160);
