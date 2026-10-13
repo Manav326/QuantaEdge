@@ -27,7 +27,7 @@ public class HrReportingScopeService {
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
         union
         select child.id,child.organization_id from hr_employee child
-        join reporting parent on child.manager_employee_id=parent.id
+        join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id
         where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select exists(select 1 from reporting where id=?)
