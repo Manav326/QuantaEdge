@@ -129,6 +129,10 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
+    // Keep the app interface locale separate from the learner preferred content language.
+    val learningContentLanguage = studentProfile.textAny("language").trim().lowercase()
+        .takeIf { it == "hi" || it == "en" }
+        ?: (preferences.getString("contentLanguage", "hi") ?: "hi")
 
     fun persistPendingCertificate(uri: android.net.Uri?) {
         val bytes = pendingCertificateBytes
@@ -257,11 +261,7 @@ fun QuantaEdgeApp() {
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
-            val accountLanguage = studentProfile.textAny("language").trim().lowercase()
-            if (accountLanguage == "hi" || accountLanguage == "en") {
-                language = accountLanguage
-                preferences.edit().putString("language", accountLanguage).apply()
-            }
+            // A profile language selects learning content, not the application UI.
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
             route = AppRoute.STUDENT_HOME
         } else {
@@ -336,7 +336,7 @@ fun QuantaEdgeApp() {
             }
             if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली। अपने खाते की जानकारी जाँचें।")
             val path = "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
-                "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + language
+                "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
             lessons = ApiClient.getArray(path).objectItems()
             route = AppRoute.SUBJECT_LESSONS
         }
@@ -347,7 +347,7 @@ fun QuantaEdgeApp() {
             val id = lessonRow.longAny("id", "lesson_id")
             if (id <= 0L) throw IOException("यह पाठ पहचान में नहीं आया।")
             ApiClient.postObject("/api/v1/learning/lessons/" + id + "/start")
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?language=" + language)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + id + "?language=" + learningContentLanguage)
             answers.clear()
             feedbacks.clear()
             lessonAnswerLocks.clear()
@@ -359,7 +359,7 @@ fun QuantaEdgeApp() {
         runTask {
             val lessonId = lesson.longAny("id", "lesson_id")
             practice = ApiClient.postObject("/api/v1/learning/practice/sessions/from-lesson",
-                JSONObject().put("lessonId", lessonId).put("language", language))
+                JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
             answers.clear()
             feedbacks.clear()
             route = AppRoute.PRACTICE
@@ -383,7 +383,7 @@ fun QuantaEdgeApp() {
             val localIds = local.map { it.optLongAny("assessment_id", "assessmentId", "id") }.toSet()
             val online = runCatching {
                 val path = "/api/v1/learning/assessments?subjectCode=" +
-                    ApiClient.encodeQuery(subjectCode) + "&language=" + language
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
                 ApiClient.getObject(path).optJSONArray("items").objectItems()
             }.getOrElse {
                 status = if (local.isEmpty()) {
@@ -471,7 +471,7 @@ fun QuantaEdgeApp() {
                 return@runTask
             }
             assessmentAttempt = ApiClient.postObject(
-                "/api/v1/learning/assessments/" + assessmentId + "/attempts?language=" + language
+                "/api/v1/learning/assessments/" + assessmentId + "/attempts?language=" + learningContentLanguage
             )
             answers.clear()
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
@@ -500,7 +500,7 @@ fun QuantaEdgeApp() {
             if (!item.optBoolean("offline_enabled")) throw IOException("यह test offline उपयोग के लिए अनुमत नहीं है।")
             val attempt = ApiClient.postObject(
                 "/api/v1/learning/assessments/" + assessmentId +
-                    "/attempts?language=" + language + "&offlineMode=true"
+                    "/attempts?language=" + learningContentLanguage + "&offlineMode=true"
             )
             if (!attempt.optBoolean("offlineMode") ||
                 attempt.textAny("offlinePackageToken").isBlank()) {
@@ -518,7 +518,7 @@ fun QuantaEdgeApp() {
 
 
     suspend fun loadAssessmentResultsData() {
-        val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
+        val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + learningContentLanguage)
             .optJSONArray("items").objectItems()
         assessmentResults = loaded
         val attemptIds = loaded.flatMap { result ->
@@ -555,7 +555,7 @@ fun QuantaEdgeApp() {
                     .put("achievementType", "ASSESSMENT_PASS")
                     .put("assessmentAttemptId", attemptId)
                     .put("templateId", "CLASSIC")
-                    .put("language", language)
+                    .put("language", learningContentLanguage)
             )
             loadAssessmentResultsData()
             status = "Certificate issued. You can now save its PDF or PNG from this result."
@@ -716,7 +716,7 @@ fun QuantaEdgeApp() {
         runTask {
             val local = resourceStore.downloadedDocuments()
             val online = runCatching {
-                val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + language
+                val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
                 ApiClient.getArray(path).objectItems()
             }.getOrElse {
                 status = "ऑफ़लाइन: केवल इस डिवाइस पर पहले डाउनलोड की गई सामग्री दिखाई जा रही है।"
@@ -724,7 +724,7 @@ fun QuantaEdgeApp() {
             }
             val combined = (online + local).distinctBy { it.optLongAny("document_id", "id") }
                 .filter { it.textAny("subject_code", "subjectCode").isBlank() || it.textAny("subject_code", "subjectCode") == subjectCode }
-                .filter { it.textAny("language").isBlank() || it.textAny("language") == language }
+                .filter { it.textAny("language").isBlank() || it.textAny("language") == learningContentLanguage }
             documents = combined
             route = AppRoute.RESOURCES
         }
@@ -782,14 +782,14 @@ fun QuantaEdgeApp() {
             val online = runCatching {
                 ApiClient.getArray(
                     "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(currentSubject) +
-                        "&language=" + language
+                        "&language=" + learningContentLanguage
                 ).objectItems()
             }.getOrDefault(emptyList())
             documents = (online + resourceStore.downloadedDocuments())
                 .distinctBy { it.optLongAny("document_id", "id") }
                 .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
                     it.textAny("subject_code", "subjectCode") == currentSubject }
-                .filter { it.textAny("language").isBlank() || it.textAny("language") == language }
+                .filter { it.textAny("language").isBlank() || it.textAny("language") == learningContentLanguage }
             resourceDownloadStates.remove(id)
             status = "इस डिवाइस से offline copy हटाई गई। Server पर मूल पुस्तक नहीं बदली गई।"
         }
@@ -800,7 +800,7 @@ fun QuantaEdgeApp() {
             val id = question.longAny("id", "questionId", "question_id")
             if (id <= 0L) throw IOException("प्रश्न की पहचान नहीं मिली।")
             val result = ApiClient.postObject(
-                "/api/v1/learning/questions/" + id + "/answer?language=" + language,
+                "/api/v1/learning/questions/" + id + "/answer?language=" + learningContentLanguage,
                 JSONObject().put("answer", answer)
             )
             val feedback = result.textAny("feedback").ifBlank {
@@ -814,7 +814,7 @@ fun QuantaEdgeApp() {
                 if (hasGrade) result.optBoolean("correct") else null
             )
             feedbacks[answerKey] = feedback
-            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + language)
+            lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + learningContentLanguage)
         }
     }
 
@@ -824,7 +824,7 @@ fun QuantaEdgeApp() {
             val sessionId = practice.longAny("sessionId", "session_id")
             if (questionId <= 0L || sessionId <= 0L) throw IOException("Practice session की जानकारी अधूरी है।")
             val response = ApiClient.postObject(
-                "/api/v1/learning/questions/" + questionId + "/answer?language=" + language,
+                "/api/v1/learning/questions/" + questionId + "/answer?language=" + learningContentLanguage,
                 JSONObject().put("answer", answer).put("practiceSessionId", sessionId)
             )
             feedbacks[questionId.toString()] = response.textAny("feedback").ifBlank {
@@ -832,7 +832,7 @@ fun QuantaEdgeApp() {
                 else if (response.optBoolean("correct")) "सही उत्तर।"
                 else "उत्तर सही नहीं था। फिर प्रयास करें।"
             }
-            practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + language)
+            practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + learningContentLanguage)
         }
     }
 
@@ -1086,50 +1086,11 @@ fun QuantaEdgeApp() {
     }
 
     fun toggleLanguage() {
-        runTask {
-            val nextLanguage = if (language == "hi") "en" else "hi"
-            if (!auth.textAny("role").contains("PARENT", true) && !auth.textAny("role").contains("GUARDIAN", true)) {
-                ApiClient.patchObject("/api/v1/students/me/language", JSONObject().put("language", nextLanguage))
-                studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
-                studentProfile.put("language", nextLanguage)
-            }
-            language = nextLanguage
-            preferences.edit().putString("language", nextLanguage).apply()
-            when (route) {
-                AppRoute.SUBJECT_LESSONS -> {
-                    var classCode = studentProfile.textAny("class_code", "classCode")
-                    if (classCode.isBlank()) {
-                        val profile = ApiClient.getObject("/api/v1/students/me/profile")
-                        classCode = profile.textAny("class_code", "classCode")
-                    }
-                    if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली।")
-                    val path = "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
-                        "&subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
-                    lessons = ApiClient.getArray(path).objectItems()
-                }
-                AppRoute.LESSON -> {
-                    lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + nextLanguage)
-                }
-                AppRoute.PRACTICE -> {
-                    practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" +
-                        practice.longAny("sessionId", "session_id") + "?language=" + nextLanguage)
-                }
-                AppRoute.ASSESSMENTS -> {
-                    val path = "/api/v1/learning/assessments?subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
-                    assessments = ApiClient.getObject(path).optJSONArray("items").objectItems()
-                }
-                AppRoute.RESOURCES -> {
-                    val path = "/api/v1/learning/documents?subjectCode=" + ApiClient.encodeQuery(currentSubject) + "&language=" + nextLanguage
-                    val online = ApiClient.getArray(path).objectItems()
-                    documents = (online + resourceStore.downloadedDocuments())
-                        .distinctBy { it.optLongAny("document_id", "id") }
-                        .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
-                            it.textAny("subject_code", "subjectCode") == currentSubject }
-                        .filter { it.textAny("language").isBlank() || it.textAny("language") == nextLanguage }
-                }
-                else -> Unit
-            }
-        }
+        // Interface locale switches immediately; learning content preference is saved separately.
+        language = if (language == "hi") "en" else "hi"
+        preferences.edit().putString("language", language).apply()
+        error = ""
+        status = ""
     }
 
     fun goBack() {
