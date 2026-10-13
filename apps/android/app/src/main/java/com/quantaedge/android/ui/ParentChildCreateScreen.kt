@@ -17,7 +17,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,13 +28,13 @@ fun ParentChildCreateScreen(
     remainingSlots: Int,
     onCreate: (String, String, String, String, List<String>, Boolean) -> Unit
 ) {
-    var name by remember { mutableStateOf("") }
-    var classCode by remember { mutableStateOf("7") }
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var maths by remember { mutableStateOf(true) }
-    var science by remember { mutableStateOf(true) }
-    var consent by remember { mutableStateOf(false) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var classCode by rememberSaveable { mutableStateOf("7") }
+    var username by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var maths by rememberSaveable { mutableStateOf(true) }
+    var science by rememberSaveable { mutableStateOf(true) }
+    var consent by rememberSaveable { mutableStateOf(false) }
     val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
