@@ -122,6 +122,7 @@ create table hr_asset_assignment (
   asset_id bigint not null references hr_asset(id) on delete restrict,
   employee_id bigint not null references hr_employee(id) on delete restrict,
   assigned_at timestamptz not null default now(),
+  expected_return_date date,
   assigned_by_staff_id bigint references staff_account(id) on delete set null,
   condition_on_assignment varchar(20) not null default 'GOOD' check (condition_on_assignment in ('NEW','GOOD','FAIR','DAMAGED','UNKNOWN')),
   assignment_note varchar(1000),
@@ -130,6 +131,7 @@ create table hr_asset_assignment (
   condition_on_return varchar(20) check (condition_on_return is null or condition_on_return in ('NEW','GOOD','FAIR','DAMAGED','UNKNOWN')),
   return_note varchar(1000),
   created_at timestamptz not null default now(),
+  check (expected_return_date is null or expected_return_date >= assigned_at::date),
   check (returned_at is null or returned_at >= assigned_at)
 );
 create unique index uq_hr_asset_current_assignment on hr_asset_assignment(asset_id) where returned_at is null;
