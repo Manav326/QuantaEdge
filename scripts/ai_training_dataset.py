@@ -237,8 +237,13 @@ def validate_rows(rows:list[dict[str,Any]], require_approved:bool=False)->list[s
   if not str(meta.get("source_edition","")).strip() or str(meta.get("source_edition","")).strip().casefold() in PLACEHOLDER: errors.append(f"{label}: missing verified source edition")
   if meta.get("review_status") not in {"machine_validated_draft","human_reviewed","approved"}: errors.append(f"{label}: invalid review_status")
   if require_approved and meta.get("review_status")!="approved": errors.append(f"{label}: not approved")
-  if not meta.get("source_id") or not isinstance(meta.get("source_url"),str) or not meta.get("source_url","").startswith("https://") or not re.fullmatch(r"[0-9a-fA-F]{64}",str(meta.get("source_pdf_sha256",""))): errors.append(f"{label}: missing/invalid source provenance")
-  if not isinstance(meta.get("source_pages"),list) or not meta["source_pages"]: errors.append(f"{label}: missing source_pages")
+  if not meta.get("source_id") or not isinstance(meta.get("source_url"),str) or not meta.get("source_url","").startswith("https://"): errors.append(f"{label}: missing/invalid source provenance")
+  if meta.get("provenance_type") == "synthetic_curriculum_alignment":
+   if not isinstance(meta.get("source_pages"),list): errors.append(f"{label}: source_pages must be a list (empty is valid for curriculum-alignment-only drafts)")
+   if meta.get("source_pdf_sha256") is not None: errors.append(f"{label}: synthetic records must not claim a source PDF hash")
+  else:
+   if not re.fullmatch(r"[0-9a-fA-F]{64}",str(meta.get("source_pdf_sha256",""))): errors.append(f"{label}: missing/invalid source PDF SHA-256")
+   if not isinstance(meta.get("source_pages"),list) or not meta["source_pages"]: errors.append(f"{label}: missing source_pages")
   eid=row.get("example_id")
   if not isinstance(eid,str) or not eid: errors.append(f"{label}: missing example_id")
   elif eid in ids: errors.append(f"{label}: duplicate example_id {eid}")
