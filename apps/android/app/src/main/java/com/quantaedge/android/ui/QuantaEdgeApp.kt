@@ -557,7 +557,6 @@ fun QuantaEdgeApp() {
                     .put("language", language)
             )
             loadAssessmentResultsData()
-            route = AppRoute.ASSESSMENT_RESULTS
             status = "Certificate issued. You can now save its PDF or PNG from this result."
         }
     }
@@ -920,6 +919,9 @@ fun QuantaEdgeApp() {
                 "/api/v1/learning/assessment-attempts/" + id + "/submit"
             )
             route = AppRoute.ASSESSMENT_ATTEMPT
+            if (assessmentAttempt.optBoolean("resultReleased")) {
+                runCatching { loadAssessmentResultsData() }
+            }
             status = if (assessmentAttempt.optBoolean("resultReleased")) {
                 "टेस्ट जमा हुआ और परिणाम जारी है।"
             } else {
@@ -1334,7 +1336,11 @@ fun QuantaEdgeApp() {
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
                         busy = busy,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
@@ -1358,7 +1364,11 @@ fun QuantaEdgeApp() {
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
                         busy = busy,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
@@ -1976,7 +1986,11 @@ private fun AssessmentAttemptScreen(
     attempt: JSONObject,
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
+    certificateEligibility: Map<Long, JSONObject>,
+    language: String,
     busy: Boolean,
+    onIssueCertificate: (Long) -> Unit,
+    onDownloadCertificate: (Long, String) -> Unit,
     onAnswerChange: (String, String) -> Unit,
     onSave: (JSONObject, String) -> Unit,
     onSubmit: () -> Unit,
@@ -2054,6 +2068,52 @@ private fun AssessmentAttemptScreen(
         if (released) {
             Text("अंक: " + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
+            val certificate = certificateEligibility[attemptId]
+            val certificateStatus = certificate?.optString("certificate_status").orEmpty()
+            val certificateId = certificate?.optLongValue("certificate_id", "certificateId") ?: 0L
+            Card(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text(if (language == "hi") "इस result का certificate" else "Certificate for this result",
+                        style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        if (language == "hi") "Admin-created test, qualifying released score और सभी published lessons पूरे होना ज़रूरी है।"
+                        else "Requires an admin-created test, a qualifying released score and completion of all published lessons.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    when {
+                        certificateStatus == "ISSUED" && certificateId > 0L -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy) {
+                                Text(if (language == "hi") "PDF सेव करें" else "Save PDF")
+                            }
+                            OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy) {
+                                Text(if (language == "hi") "PNG सेव करें" else "Save PNG")
+                            }
+                        }
+                        certificateStatus == "REVOKED" -> Text(
+                            if (language == "hi") "यह certificate निरस्त है।"
+                            else "This certificate has been revoked.",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error
+                        )
+                        certificate?.optBoolean("eligible", false) == true -> Button(
+                            onClick = { onIssueCertificate(attemptId) }, enabled = !busy && attemptId > 0L,
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text(if (language == "hi") "प्रमाणपत्र जारी करें" else "Issue certificate") }
+                        else -> {
+                            val reason = certificate?.optString("eligibility_reason").orEmpty()
+                            val message = when (reason) {
+                                "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
+                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold से कम है।" else "The score is below the certificate threshold."
+                                "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
+                                "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject के published lessons उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
+                                else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results स्क्रीन खोलकर refresh करें।" else "Certificate eligibility could not be checked. Open the results screen to refresh."
+                            }
+                            Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                        }
+                    }
+                }
+            }
         } else if (phase == "AWAITING_REVIEW") {
             Text("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।", modifier = Modifier.padding(vertical = 8.dp))
         }
