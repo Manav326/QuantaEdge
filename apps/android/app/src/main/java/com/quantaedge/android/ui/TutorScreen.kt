@@ -79,7 +79,17 @@ fun TutorScreen(
                         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(if (isAssistant) t("Tutor", "ट्यूटर") else t("You", "आप"), style = MaterialTheme.typography.labelMedium,
                                 color = if (isAssistant) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                            if (item.textAny("mode").isNotBlank()) Text(item.textAny("mode").replace('_', ' '), style = MaterialTheme.typography.labelSmall)
+                            if (item.textAny("mode").isNotBlank()) {
+                                val modeLabel = when (item.textAny("mode").uppercase()) {
+                                    "HINT" -> t("Hint", "संकेत")
+                                    "EXPLAIN" -> t("Explain", "समझाएँ")
+                                    "EXAMPLE" -> t("Example", "उदाहरण")
+                                    "STEP_BY_STEP" -> t("Step by step", "चरण-दर-चरण")
+                                    "CHECK_MY_WORK" -> t("Check my work", "मेरे काम की जाँच")
+                                    else -> item.textAny("mode").replace('_', ' ')
+                                }
+                                Text(modeLabel, style = MaterialTheme.typography.labelSmall)
+                            }
                             Text(item.textAny("message"), style = MaterialTheme.typography.bodyLarge)
                         }
                     }
