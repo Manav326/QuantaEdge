@@ -201,8 +201,8 @@ fun StudentProgressScreen(
                                     "SUBJECT_COMPLETION_REQUIRED" -> t("Complete all published lessons in this subject to unlock the test certificate.",
                                         "टेस्ट प्रमाणपत्र पाने के लिए इस विषय के सभी प्रकाशित पाठ पूरे करें।")
                                     "PASS_THRESHOLD_NOT_MET" -> t("The released score is below the " +
-                                        (eligibility?.textAny("pass_threshold_percent").ifBlank { "80" }) + "% certificate threshold.",
-                                        "जारी अंक " + (eligibility?.textAny("pass_threshold_percent").ifBlank { "80" }) + "% प्रमाणपत्र सीमा से कम हैं।")
+                                        ((eligibility?.textAny("pass_threshold_percent")).orEmpty().ifBlank { "80" }) + "% certificate threshold.",
+                                        "जारी अंक " + ((eligibility?.textAny("pass_threshold_percent")).orEmpty().ifBlank { "80" }) + "% प्रमाणपत्र सीमा से कम हैं।")
                                     "PUBLISHED_LESSONS_NOT_AVAILABLE" -> t("Published lessons are not available for this subject yet.",
                                         "इस विषय के प्रकाशित पाठ अभी उपलब्ध नहीं हैं।")
                                     "SUBJECT_TRACK_NOT_ACTIVE" -> t("An active subject enrolment is required.",
