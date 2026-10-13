@@ -54,7 +54,13 @@ private fun localizedCertificateSubject(code: String, displayName: String, langu
 }
 
 @Composable
-fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long = 0L, onBack: () -> Unit) {
+fun StudentCertificatesScreen(
+    language: String,
+    certificateLanguage: String,
+    onCertificateLanguageChange: (String) -> Unit,
+    initialAssessmentAttemptId: Long = 0L,
+    onBack: () -> Unit
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val compact = LocalConfiguration.current.screenWidthDp < 390
@@ -265,7 +271,7 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                 val body = JSONObject()
                     .put("achievementType", selectedAchievement)
                     .put("templateId", template)
-                    .put("language", language)
+                    .put("language", certificateLanguage)
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
                     body.put("subjectCode", subjectCode)
                 } else {
@@ -372,6 +378,19 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(if (language == "hi") "नई उपलब्धि का प्रमाणपत्र" else "Issue an achievement certificate", style = MaterialTheme.typography.titleMedium)
+                Text(if (language == "hi") "प्रमाणपत्र की भाषा" else "Certificate language")
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (certificateLanguage == "hi") Button(onClick = { onCertificateLanguageChange("hi") }) {
+                        Text("हिन्दी")
+                    } else OutlinedButton(onClick = { onCertificateLanguageChange("hi") }) {
+                        Text("हिन्दी")
+                    }
+                    if (certificateLanguage == "en") Button(onClick = { onCertificateLanguageChange("en") }) {
+                        Text("English")
+                    } else OutlinedButton(onClick = { onCertificateLanguageChange("en") }) {
+                        Text("English")
+                    }
+                }
                 Text(if (language == "hi") "डिज़ाइन चुनें" else "Choose a design")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf("CLASSIC", "MODERN", "ACADEMIC").forEach { id ->

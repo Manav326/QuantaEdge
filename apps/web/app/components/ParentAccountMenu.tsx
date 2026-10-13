@@ -10,6 +10,8 @@ type ParentAccountMenuProps = {
   displayName?: string;
   mobile?: string;
   profileImageUrl?: string | null;
+  onLogout: () => void;
+  loggingOut: boolean;
 };
 
 function ParentMenuIcon() {
@@ -21,6 +23,8 @@ export default function ParentAccountMenu({
   displayName = 'Parent account',
   mobile = '',
   profileImageUrl,
+  onLogout,
+  loggingOut,
 }: ParentAccountMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -76,6 +80,13 @@ export default function ParentAccountMenu({
             <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>
             <span className="parent-account__arrow">→</span>
           </Link>
+          <div className="parent-account__divider" />
+          <button type="button" className="parent-account__logout" disabled={loggingOut}
+            aria-label={loggingOut ? 'Logging out' : 'Log out'}
+            onClick={() => { closeMenu(); onLogout(); }}>
+            <span aria-hidden="true">↗</span>
+            <span><LocaleText hinglish={loggingOut ? 'लॉग आउट…' : 'लॉग आउट'} english={loggingOut ? 'Logging out…' : 'Log out'} /></span>
+          </button>
         </div>
       )}
     </div>

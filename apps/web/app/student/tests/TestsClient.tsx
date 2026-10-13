@@ -140,8 +140,8 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
 
 export default function TestsClient(){
   const router=useRouter();
-  const {locale}=useLocale();
-  const language=locale==='english'?'en':'hi';
+  const {learningLanguage, certificateLanguage}=useLocale();
+  const language=learningLanguage;
   const [tests,setTests]=useState<AssessmentCard[]>([]);
   const [testsPage,setTestsPage]=useState(0);
   const [testsTotal,setTestsTotal]=useState(0);
@@ -236,7 +236,7 @@ export default function TestsClient(){
     try{
       const response=await fetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:certificateLanguage})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||body.detail||body.error||'Certificate could not be issued.');
