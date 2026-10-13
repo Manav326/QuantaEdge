@@ -323,6 +323,7 @@ public class HrEmployeeController {
   public Map<String,Object> updateEmployee(@PathVariable long id,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
+    reportingScope.requireEmployeeAccess(context,id);
     Map<String,Object> before=employeeById(id);
     String name=required(body.get("displayName"),120,"Employee name");
     String email=optionalText(body.get("email"),254);
@@ -363,6 +364,7 @@ public class HrEmployeeController {
   public Map<String,Object> updateStatus(@PathVariable long id,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
+    reportingScope.requireEmployeeAccess(context,id);
     Map<String,Object> before=employeeById(id);
     String status=required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status))
