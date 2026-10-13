@@ -82,7 +82,7 @@ class HrEmployeeSelfServiceControllerTest {
         .thenReturn(List.of(Map.of("id",6L,"public_id","payslip-public-id","run_id",12L,"version_no",1,
             "snapshot","{\"employeeName\":\"Employee\",\"net\":100.00}","checksum","a".repeat(64))));
 
-    Map<String,Object> result=controller.payslips(employee);
+    Map<String,Object> result=controller.payslips(employee,20,0);
     @SuppressWarnings("unchecked")
     List<Map<String,Object>> items=(List<Map<String,Object>>)result.get("items");
 
