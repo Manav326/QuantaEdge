@@ -57,6 +57,7 @@ public class AuthController {
       if ("HRMS".equals(workspace)) {
         throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
       }
+      auth.requireEducationAccess(context.staffId());
       staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Education Admin staff sign-in succeeded.");
     } else if (context.isStudent()) {
       workspace = "STUDENT";
