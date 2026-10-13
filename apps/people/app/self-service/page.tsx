@@ -1,5 +1,5 @@
 'use client';
-import { PeoplePageHeader, PeopleStatusBadge } from '../components/PeopleUI';
+import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback } from '../components/PeopleUI';
 
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -112,8 +112,8 @@ export default function EmployeeSelfServicePage(){
     
     <main className="main">
       <PeoplePageHeader eyebrow={"YOUR EMPLOYMENT · PRIVATE WORKSPACE"} title={"My workspace"} description={"Review your own employment details, attendance, leave requests and available leave balances. HR-only records and other employees remain outside this view."} />
-      {error&&<div className="error" role="alert">{error}</div>}
-      {notice&&<div className="notice" role="status">{notice}</div>}
+      {error&&<PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
+      {notice&&<PeopleFeedback tone="success" role="status">{notice}</PeopleFeedback>}
       {profile&&<section className="panel" aria-labelledby="profile-heading">
         <div style={{display:'flex',justifyContent:'space-between',gap:16,alignItems:'start',flexWrap:'wrap'}}>
           <div><div className="eyebrow">EMPLOYEE PROFILE</div><h2 id="profile-heading">{profile.display_name}</h2><p className="small">{profile.employee_number} · {profile.organization_name}</p></div>

@@ -14,7 +14,31 @@
   --success-soft: #ecfdf3;
   --warning: #b54708;
   --warning-soft: #fffaeb;
-  --focus: #f97316;
+  --focus: #c2410c;
+  --qe-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --qe-type-xs: 10px;
+  --qe-type-sm: 12px;
+  --qe-type-base: 14px;
+  --qe-type-md: 16px;
+  --qe-type-lg: 18px;
+  --qe-type-xl: 28px;
+  --qe-line-body: 1.5;
+  --qe-line-tight: 1.2;
+  --qe-space-1: 4px;
+  --qe-space-2: 8px;
+  --qe-space-3: 12px;
+  --qe-space-4: 16px;
+  --qe-space-5: 20px;
+  --qe-space-6: 24px;
+  --qe-space-8: 32px;
+  --qe-radius-control: 9px;
+  --qe-radius-card: 13px;
+  --qe-radius-dialog: 15px;
+  --qe-radius-pill: 999px;
+  --qe-shadow-card: 0 3px 12px rgba(21, 32, 56, .035);
+  --qe-shadow-dialog: 0 22px 70px rgba(11, 26, 51, .23);
+  --qe-control-height: 42px;
+  --qe-button-height: 40px;
   --qe-people-sidebar-width: 248px;
 }
 
@@ -27,9 +51,9 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  font-family: var(--qe-font-body);
+  font-size: var(--qe-type-base);
+  line-height: var(--qe-line-body);
 }
 
 button,
@@ -462,16 +486,16 @@ button:disabled,
 }
 
 .qe-people-page-slot .cards {
-  gap: 14px;
-  margin: 23px 0;
+  gap: var(--qe-space-3);
+  margin: var(--qe-space-6) 0;
 }
 
 .qe-people-page-slot .card,
 .qe-people-page-slot .panel {
   border: 1px solid var(--line);
-  border-radius: 13px;
+  border-radius: var(--qe-radius-card);
   background: var(--card);
-  box-shadow: 0 3px 12px rgba(21, 32, 56, .035);
+  box-shadow: var(--qe-shadow-card);
 }
 
 .qe-people-page-slot .card {
@@ -511,8 +535,8 @@ button:disabled,
   min-height: 40px;
   padding: 9px 14px;
   border: 1px solid var(--brand);
-  border-radius: 9px;
-  background: var(--brand);
+  border-radius: var(--qe-radius-control);
+  background: var(--brand2);
   color: #fff;
   font-size: 12px;
   font-weight: 750;
@@ -522,8 +546,8 @@ button:disabled,
 
 .qe-people-page-slot .primary:hover,
 .qe-people-page-slot button.primary:hover {
-  border-color: var(--brand2);
-  background: var(--brand2);
+  border-color: #9a3412;
+  background: #9a3412;
 }
 
 .qe-people-page-slot .primary:active,
@@ -644,7 +668,7 @@ button:disabled,
   max-width: 100%;
   padding: 4px 9px;
   border: 1px solid #e4e7ec;
-  border-radius: 999px;
+  border-radius: var(--qe-radius-pill);
   background: #f8fafc;
   color: #475467;
   font-size: 10px;
@@ -696,8 +720,8 @@ button:disabled,
 
 .qe-people-page-slot .modal {
   border: 1px solid rgba(21, 32, 56, .08);
-  border-radius: 15px;
-  box-shadow: 0 22px 70px rgba(11, 26, 51, .23);
+  border-radius: var(--qe-radius-dialog);
+  box-shadow: var(--qe-shadow-dialog);
 }
 
 .login-wrap {
@@ -759,14 +783,14 @@ button:disabled,
 .login-card .primary,
 .login-card button.primary {
   min-height: 46px;
-  border-radius: 10px;
-  background: var(--brand);
+  border-radius: var(--qe-radius-control);
+  background: var(--brand2);
   color: #fff;
 }
 
 .login-card .primary:hover,
 .login-card button.primary:hover {
-  background: var(--brand2);
+  background: #9a3412;
 }
 
 .login-card .secondary {
@@ -1219,6 +1243,7 @@ button:disabled,
 
 .qe-people-feedback {
   display: flex;
+  margin: 12px 0;
   align-items: flex-start;
   gap: 10px;
   padding: 12px 14px;
@@ -1262,7 +1287,7 @@ button:disabled,
   gap: 8px;
   padding: 9px 14px;
   border: 1px solid transparent;
-  border-radius: 9px;
+  border-radius: var(--qe-radius-control);
   font-size: 12px;
   font-weight: 750;
   line-height: 1.4;
@@ -1272,14 +1297,14 @@ button:disabled,
 }
 
 .qe-people-button--primary {
-  border-color: var(--brand);
-  background: var(--brand);
+  border-color: var(--brand2);
+  background: var(--brand2);
   color: #fff;
 }
 
 .qe-people-button--primary:hover {
-  border-color: var(--brand2);
-  background: var(--brand2);
+  border-color: #9a3412;
+  background: #9a3412;
 }
 
 .qe-people-button--secondary {

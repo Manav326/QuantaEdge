@@ -50,29 +50,29 @@
 
 ## Phase 3 — People Operations app shell and navigation
 
-- [ ] Add a dedicated People Operations workspace layout.
-- [ ] Centralize HRMS navigation, active-route behavior and labels.
-- [ ] Group navigation by People/Organization, Time/Leave, Payroll, Academic Workforce, and My Employment.
-- [ ] Display links based on session role/permissions without replacing API enforcement.
-- [ ] Remove per-page duplicate navigation headers while preserving each page's unique body and workflow.
-- [ ] Provide desktop collapsible sidebar and accessible mobile navigation drawer.
-- [ ] Standardize identity, role display and sign-out action.
-- [ ] Keep login/public route outside the authenticated workspace chrome.
+- [x] Add a dedicated People Operations workspace layout.
+- [x] Centralize HRMS navigation, active-route behavior and labels.
+- [x] Group navigation by People/Organization, Time/Leave, Payroll, Academic Workforce, and My Employment.
+- [x] Display links based on session role/permissions without replacing API enforcement.
+- [x] Remove per-page duplicate navigation headers while preserving each page's unique body and workflow.
+- [x] Provide desktop collapsible sidebar and accessible mobile navigation drawer.
+- [x] Standardize identity, role display and sign-out action.
+- [x] Keep login/public route outside the authenticated workspace chrome.
 - [ ] Verify each existing route is represented in the navigation/inventory.
 
 **Gate:** all routes load within the common shell; login remains independent and API authorization is unchanged.
 
 ## Phase 4 — Reusable HRMS component foundation
 
-- [ ] Page header / contextual action area.
-- [ ] Primary, secondary, neutral, destructive, loading and disabled buttons.
+- [x] Page header / contextual action area.
+- [x] Primary, secondary, neutral, destructive, loading and disabled buttons.
 - [ ] Metric cards, content cards, section panels, and layout primitives.
 - [ ] Fields, labels, hints, inline validation and responsive form grids.
-- [ ] Tabs and segmented navigation.
+- [x] Tabs and segmented navigation.
 - [ ] Tables, row action groups, overflow behavior and pagination where needed.
 - [ ] Semantic status badges for employment, attendance, leave, payroll/payment and assignment states.
-- [ ] Success/error/warning/information feedback patterns.
-- [ ] Empty, loading, unavailable and retry states.
+- [x] Success/error/warning/information feedback patterns.
+- [x] Empty, loading, unavailable and retry states.
 - [ ] Dialogs/confirmations with focus, scroll and keyboard behavior.
 - [ ] Remove redundant inline layout styling where a shared variant or layout convention fits.
 - [ ] Avoid forcing the same content density/layout onto every module.
@@ -203,3 +203,20 @@ Maintain status per task using: **Not started / In progress / Implemented / Veri
 - [ ] Green builds and regression evidence.
 
 This document is the persistent checklist for continuing the work on `main`. Update it as tasks are completed; do not claim completion for unchecked verification items.
+
+
+## Execution log — October 13, 2026
+
+Implementation is progressing directly on `main`; the checklist distinguishes committed code from validated behavior.
+
+- [x] Commit `ec8ca2b`: introduced the People Operations design stylesheet and workspace shell; packaged the official QuantaEdge wordmark and icon inside the People app.
+- [x] Commit `1c2f66e`: preserved the HRMS-specific session boundary and workspace scope; do not replace it with the Educational Admin session behavior.
+- [x] Commit `aba8567`: removed duplicated per-page navigation headers and corrected the shell's page-content landmark to avoid nested `<main>` elements.
+- [x] Commit `b00477c`: introduced reusable People UI primitives and migrated the seven content-route page headers.
+- [x] Commit `e399ee4`: migrated employee/attendance metric cards and attendance, self-service, and class status badges to reusable components. CI run [38368109768](https://github.com/Manav326/QuantaEdge/actions/runs/38368109768) completed successfully, including the People Operations image build, Admin/Web/API builds, API verification, content safeguards, and Android build for that commit.
+- [x] Subsequent commits `d086428` and `ba27cd8`: standardized class empty states and additional payroll/workforce/teaching-assignment status presentation.
+- [x] Shared layout includes desktop navigation collapse, a mobile drawer with focus trapping/return and Escape handling, route-aware permission-filtered links, a skip link, and standalone login/password-change rendering.
+- [ ] Re-run the full CI on the final commit after all UI changes in this sequence.
+- [ ] Render and inspect desktop/tablet/mobile screens, exercise real navigation/session workflows, compare before/after screenshots, and confirm print behavior.
+
+The successful CI result above applies to commit `e399ee4`; it does **not** prove that later commits or the final visual browser review are green.

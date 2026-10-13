@@ -1,5 +1,5 @@
 'use client';
-import { PeoplePageHeader, PeopleStatusBadge } from '../components/PeopleUI';
+import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback } from '../components/PeopleUI';
 
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -73,7 +73,7 @@ export default function ExtendedWorkforcePage(){
  return <div className="shell">
   
   <main className="main"><PeoplePageHeader eyebrow={"PEOPLE OPERATIONS · EXTENDED HR"} title={"Workforce lifecycle"} description={"Recruitment, performance, asset custody and exit clearance. Each workflow is permission-checked by the API and uses the canonical employee records."} />
-   {error&&<div className="error" role="alert">{error}</div>}{notice&&<div className="notice" role="status">{notice}</div>}
+   {error&&<PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}{notice&&<PeopleFeedback tone="success" role="status">{notice}</PeopleFeedback>}
    <section className="panel"><div className="tabs" role="group" aria-label="Extended HR modules">
     {(['recruitment','performance','assets','exits'] as Tab[]).map(t=><button key={t} type="button" className={tab===t?'active':''} aria-pressed={tab===t} onClick={()=>{setTab(t);setError('');setNotice('')}}>{pretty(t)}</button>)}
    </div>
