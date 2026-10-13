@@ -96,10 +96,15 @@ class QuestionGenerationTests(unittest.TestCase):
 
         with patch.object(GEN.urllib.request, "urlopen", side_effect=[rate_limit, response]) as request, \
                 patch.object(GEN.time, "sleep") as sleep:
-            result = GEN.call_model("prompt", "test-key", "https://api.example.com/v1", "test-model", 1)
+            attempts = [0]
+            result = GEN.call_model(
+                "prompt", "test-key", "https://api.example.com/v1", "test-model", 1,
+                attempt_counter=attempts,
+            )
 
         self.assertEqual(sample_model_output(), result)
         self.assertEqual(2, request.call_count)
+        self.assertEqual(2, attempts[0])
         sleep.assert_called_once_with(0.0)
 
     def test_model_call_does_not_retry_permanent_authentication_errors(self):
