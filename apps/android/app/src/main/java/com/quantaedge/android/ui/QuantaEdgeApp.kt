@@ -127,6 +127,10 @@ fun QuantaEdgeApp() {
     var diagnostic by remember { mutableStateOf(JSONObject()) }
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
+    var offlineAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var assessmentsPageSize by rememberSaveable { mutableStateOf(10) }
+    var assessmentsPageOffset by rememberSaveable { mutableStateOf(0) }
+    var assessmentsTotal by remember { mutableStateOf(0) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
     var resultsPageSize by rememberSaveable { mutableStateOf(10) }
     var resultsPageOffset by rememberSaveable { mutableStateOf(0) }
@@ -409,30 +413,42 @@ fun QuantaEdgeApp() {
     }
 
     fun openAssessments(subjectCode: String = currentSubject) {
+        if (currentSubject != subjectCode) assessmentsPageOffset = 0
         currentSubject = subjectCode
         runTask {
             val local = withContext(Dispatchers.IO) { offlineAssessmentStore.catalogueItems() }
                 .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
                     it.textAny("subject_code", "subjectCode") == subjectCode }
+            offlineAssessments = local
             val localIds = local.map { it.optLongAny("assessment_id", "assessmentId", "id") }.toSet()
-            val online = runCatching {
+            val onlineResponse = runCatching {
                 val path = "/api/v1/learning/assessments?subjectCode=" +
-                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
-                ApiClient.getObject(path).optJSONArray("items").objectItems()
-            }.getOrElse {
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage +
+                    "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
+                ApiClient.getObject(path)
+            }.getOrNull()
+            val onlinePage = onlineResponse?.optJSONArray("items").objectItems()
+            assessmentsTotal = if (onlineResponse != null) onlineResponse.optInt("total", onlinePage.size) else 0
+            assessments = onlinePage.filterNot {
+                it.optLongAny("assessment_id", "assessmentId", "id") in localIds
+            }
+            if (onlineResponse == null) {
                 status = if (local.isEmpty()) {
                     "ऑफ़लाइन: पहले से तैयार offline tests उपलब्ध नहीं हैं। नया test डाउनलोड करने के लिए internet चाहिए।"
                 } else {
                     "ऑफ़लाइन: पहले से तैयार encrypted test यहीं जारी रखें। उत्तर reconnect होने पर server पर जाँचे जाएँगे।"
                 }
-                emptyList()
-            }
-            assessments = local + online.filterNot { it.optLongAny("assessment_id", "assessmentId", "id") in localIds }
-            if (local.isNotEmpty() && online.isNotEmpty()) {
+            } else if (local.isNotEmpty()) {
                 status = "Prepared offline attempts इस device पर उपलब्ध हैं; नए tests के लिए server catalogue sync है।"
             }
             route = AppRoute.ASSESSMENTS
         }
+    }
+
+    fun changeAssessmentsPage(pageSize: Int, pageOffset: Int) {
+        assessmentsPageSize = pageSize.coerceIn(10, 50)
+        assessmentsPageOffset = pageOffset.coerceAtLeast(0)
+        openAssessments(currentSubject)
     }
 
     fun restoreOfflineAssessment(record: JSONObject) {
@@ -1511,7 +1527,13 @@ fun QuantaEdgeApp() {
                     AppRoute.ASSESSMENTS -> AssessmentListScreen(
                         subject = currentSubject,
                         assessmentItems = assessments,
+                        offlineItems = offlineAssessments,
+                        total = assessmentsTotal,
+                        pageSize = assessmentsPageSize,
+                        pageOffset = assessmentsPageOffset,
+                        language = language,
                         busy = busy,
+                        onPageChange = ::changeAssessmentsPage,
                         onSubject = ::openAssessments,
                         onOpen = ::openAssessment,
                         onPrepareOffline = ::prepareOfflineAssessment,
@@ -2158,89 +2180,177 @@ private fun DiagnosticScreen(
 }
 
 @Composable
+@Composable
 private fun AssessmentListScreen(
     subject: String,
     assessmentItems: List<JSONObject>,
+    offlineItems: List<JSONObject>,
+    total: Int,
+    pageSize: Int,
+    pageOffset: Int,
+    language: String,
     busy: Boolean,
+    onPageChange: (Int, Int) -> Unit,
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
     onPrepareOffline: (JSONObject) -> Unit,
     onResults: () -> Unit,
     onRefresh: () -> Unit
 ) {
+    val compact = LocalConfiguration.current.screenWidthDp < 390
+    val pageCount = ((total + pageSize - 1) / pageSize).coerceAtLeast(1)
+    val pageIndex = (pageOffset / pageSize).coerceIn(0, pageCount - 1)
+    var pageSizeMenuExpanded by remember { mutableStateOf(false) }
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("टेस्ट और मूल्यांकन"), style = MaterialTheme.typography.headlineSmall)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-            TextButton(onClick = onResults, enabled = !busy) { Text(localizedUiText("मेरे परिणाम")) }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+        if (compact) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
+                else TextButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
+                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
+                else TextButton(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                TextButton(onClick = onResults, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("मेरे परिणाम")) }
+                TextButton(onClick = onRefresh, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("रिफ्रेश")) }
+            }
+        } else {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+                else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+                else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+                TextButton(onClick = onResults, enabled = !busy) { Text(localizedUiText("मेरे परिणाम")) }
+                TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+            }
         }
-        if (assessmentItems.any { it.optBoolean("offline_enabled") }) {
+        if (offlineItems.isNotEmpty() || assessmentItems.any { it.optBoolean("offline_enabled") }) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(localizedUiText("संरक्षित offline test"), style = MaterialTheme.typography.titleSmall)
-                    Text(localizedUiText("Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचता है। यह सुविधा केवल staff-approved low-stakes tests के लिए है।"),
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    Text(localizedUiText("Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचेगा। यह सुविधा केवल staff-approved low-stakes tests के लिए है।"),
+                        style = MaterialTheme.typography.bodySmall)
                 }
             }
         }
-        if (assessmentItems.isEmpty() && !busy) EmptyState("कोई प्रकाशित टेस्ट नहीं", "सिर्फ उपलब्ध और आपके खाते के लिए अनुमत मूल्यांकन यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
-            items(assessmentItems) { item ->
-                val used = item.optInt("attempts_used", 0)
-                val max = item.optInt("max_attempts", 1)
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(item.textAny("title").ifBlank { "मूल्यांकन" }, style = MaterialTheme.typography.titleMedium)
-                        Text(item.textAny("description"), style = MaterialTheme.typography.bodyMedium)
-                        Text(
-                            item.textAny("chapter_name", "subject_name") + " • " +
-                                item.optInt("question_count", 0) + " प्रश्न • " +
-                                item.optInt("duration_minutes", 0) + " मिनट",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                        Text(localizedUiText("प्रयास: ") + used + " / " + max, style = MaterialTheme.typography.bodySmall)
-                        val offlineLocal = item.optBoolean("offline_local")
-                        val pendingSync = item.textAny("offline_state") == "QUEUED" ||
-                            item.textAny("offline_state") == "SYNC_ERROR"
-                        if (offlineLocal) {
+            if (offlineItems.isNotEmpty()) {
+                item { Text(t("Offline attempts to resume", "जारी रखने के लिए ऑफ़लाइन प्रयास"), style = MaterialTheme.typography.titleMedium) }
+                items(offlineItems) { item ->
+                    AssessmentRowCard(item, language, busy, onOpen, onPrepareOffline)
+                }
+            }
+            item { Text(t("Available tests", "उपलब्ध टेस्ट"), style = MaterialTheme.typography.titleMedium) }
+            if (assessmentItems.isEmpty() && !busy && total <= 0) {
+                item { EmptyState("कोई प्रकाशित टेस्ट नहीं", "सिर्फ उपलब्ध और आपके खाते के लिए अनुमत मूल्यांकन यहाँ दिखेंगे।") }
+            } else if (total > 0) {
+                item {
+                    if (compact) {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
                             Text(
-                                when (item.textAny("offline_state")) {
-                                    "QUEUED" -> "Offline answers saved · sync pending"
-                                    "SYNC_ERROR" -> "Offline answers saved · sync needs attention"
-                                    "SYNCED" -> when (item.textAny("offline_result_status")) {
-                                        "RELEASED" -> "Synced · result released"
-                                        "AWAITING_REVIEW" -> "Synced · awaiting teacher review"
-                                        else -> "Synced to server"
-                                    }
-                                    else -> "Encrypted offline attempt ready"
-                                },
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.primary
+                                if (language == "hi") "पृष्ठ " + (pageIndex + 1) + " / " + pageCount + " • कुल " + total
+                                else "Page " + (pageIndex + 1) + " of " + pageCount + " • " + total + " tests",
+                                style = MaterialTheme.typography.bodySmall
                             )
-                        }
-                        Button(onClick = { onOpen(item) }, enabled = !busy &&
-                            (offlineLocal || item.optLong("in_progress_attempt_id", 0L) > 0L || used < max),
-                            modifier = Modifier.fillMaxWidth()) {
-                            Text(when {
-                                pendingSync -> "Offline attempt / sync status"
-                                offlineLocal -> "Offline test जारी रखें"
-                                item.optLong("in_progress_attempt_id", 0L) > 0L -> "टेस्ट जारी रखें"
-                                else -> "टेस्ट शुरू करें"
-                            })
-                        }
-                        if (!offlineLocal && item.optBoolean("offline_enabled") &&
-                            item.optLong("in_progress_attempt_id", 0L) <= 0L && used < max) {
-                            TextButton(onClick = { onPrepareOffline(item) }, enabled = !busy,
-                                modifier = Modifier.fillMaxWidth()) {
-                                Text(localizedUiText("Offline test शुरू करें (timer अभी शुरू होगा)"))
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                                Box(modifier = Modifier.weight(1f)) {
+                                    TextButton(onClick = { pageSizeMenuExpanded = true }) {
+                                        Text(t("Rows: ", "पंक्तियाँ: ") + pageSize)
+                                    }
+                                    DropdownMenu(expanded = pageSizeMenuExpanded, onDismissRequest = { pageSizeMenuExpanded = false }) {
+                                        listOf(10, 20, 50).forEach { size ->
+                                            DropdownMenuItem(text = { Text(size.toString()) },
+                                                onClick = { pageSizeMenuExpanded = false; onPageChange(size, 0) })
+                                        }
+                                    }
+                                }
+                                TextButton(onClick = { onPageChange(pageSize, ((pageIndex - 1).coerceAtLeast(0)) * pageSize) },
+                                    enabled = pageIndex > 0 && !busy) { Text(t("Previous", "पिछला")) }
+                                TextButton(onClick = { onPageChange(pageSize, (pageIndex + 1) * pageSize) },
+                                    enabled = pageIndex < pageCount - 1 && !busy) { Text(t("Next", "अगला")) }
                             }
                         }
+                    } else {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.fillMaxWidth()) {
+                            Text(if (language == "hi") "पृष्ठ " + (pageIndex + 1) + " / " + pageCount + " • कुल " + total
+                                else "Page " + (pageIndex + 1) + " of " + pageCount + " • " + total + " tests",
+                                modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                            Box {
+                                TextButton(onClick = { pageSizeMenuExpanded = true }) { Text(t("Rows: ", "पंक्तियाँ: ") + pageSize) }
+                                DropdownMenu(expanded = pageSizeMenuExpanded, onDismissRequest = { pageSizeMenuExpanded = false }) {
+                                    listOf(10, 20, 50).forEach { size ->
+                                        DropdownMenuItem(text = { Text(size.toString()) },
+                                            onClick = { pageSizeMenuExpanded = false; onPageChange(size, 0) })
+                                    }
+                                }
+                            }
+                            TextButton(onClick = { onPageChange(pageSize, ((pageIndex - 1).coerceAtLeast(0)) * pageSize) },
+                                enabled = pageIndex > 0 && !busy) { Text(t("Previous", "← पिछला")) }
+                            TextButton(onClick = { onPageChange(pageSize, (pageIndex + 1) * pageSize) },
+                                enabled = pageIndex < pageCount - 1 && !busy) { Text(t("Next", "अगला →")) }
+                        }
                     }
+                }
+            }
+            items(assessmentItems) { item ->
+                AssessmentRowCard(item, language, busy, onOpen, onPrepareOffline)
+            }
+        }
+    }
+}
+
+@Composable
+private fun AssessmentRowCard(
+    item: JSONObject,
+    language: String,
+    busy: Boolean,
+    onOpen: (JSONObject) -> Unit,
+    onPrepareOffline: (JSONObject) -> Unit
+) {
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
+    val used = item.optInt("attempts_used", 0)
+    val max = item.optInt("max_attempts", 1)
+    val offlineLocal = item.optBoolean("offline_local")
+    val pendingSync = item.textAny("offline_state") == "QUEUED" || item.textAny("offline_state") == "SYNC_ERROR"
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(item.textAny("title").ifBlank { t("Assessment", "मूल्यांकन") }, style = MaterialTheme.typography.titleMedium)
+            Text(item.textAny("description"), style = MaterialTheme.typography.bodyMedium)
+            Text(item.textAny("chapter_name", "subject_name") + " • " +
+                item.optInt("question_count", 0) + " " + t("questions", "प्रश्न") + " • " +
+                item.optInt("duration_minutes", 0) + " " + t("minutes", "मिनट"),
+                style = MaterialTheme.typography.bodySmall)
+            Text(t("Attempts: ", "प्रयास: ") + used + " / " + max, style = MaterialTheme.typography.bodySmall)
+            if (offlineLocal) {
+                val stateLabel = when (item.textAny("offline_state")) {
+                    "QUEUED" -> t("Offline answers saved · sync pending", "ऑफ़लाइन उत्तर सुरक्षित · sync बाकी")
+                    "SYNC_ERROR" -> t("Offline answers saved · sync needs attention", "ऑफ़लाइन उत्तर सुरक्षित · sync में समस्या")
+                    "SYNCED" -> when (item.textAny("offline_result_status")) {
+                        "RELEASED" -> t("Synced · result released", "Sync हुआ · परिणाम जारी")
+                        "AWAITING_REVIEW" -> t("Synced · awaiting teacher review", "Sync हुआ · शिक्षक की समीक्षा बाकी")
+                        else -> t("Synced to server", "Server पर sync हुआ")
+                    }
+                    else -> t("Encrypted offline attempt ready", "Encrypted offline attempt तैयार")
+                }
+                Text(stateLabel, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            }
+            Button(onClick = { onOpen(item) }, enabled = !busy &&
+                (offlineLocal || item.optLong("in_progress_attempt_id", 0L) > 0L || used < max),
+                modifier = Modifier.fillMaxWidth()) {
+                Text(when {
+                    pendingSync -> t("Offline attempt / sync status", "ऑफ़लाइन प्रयास / sync स्थिति")
+                    offlineLocal -> t("Continue offline test", "ऑफ़लाइन टेस्ट जारी रखें")
+                    item.optLong("in_progress_attempt_id", 0L) > 0L -> t("Resume test", "टेस्ट जारी रखें")
+                    else -> t("Start test", "टेस्ट शुरू करें")
+                })
+            }
+            if (!offlineLocal && item.optBoolean("offline_enabled") &&
+                item.optLong("in_progress_attempt_id", 0L) <= 0L && used < max) {
+                TextButton(onClick = { onPrepareOffline(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                    Text(localizedUiText("Offline test शुरू करें (timer अभी शुरू होगा)"))
                 }
             }
         }
