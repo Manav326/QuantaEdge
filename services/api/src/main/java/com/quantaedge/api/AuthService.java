@@ -9,6 +9,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Arrays;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -85,6 +87,28 @@ public class AuthService {
   private int staffAbsoluteHours = 8;
   @Value("${app.auth.learning-absolute-days:30}")
   private int learningAbsoluteDays = 30;
+  @Value("${app.environment:local}")
+  private String appEnvironment = "local";
+  @Value("${spring.profiles.active:}")
+  private String activeProfiles = "";
+
+  @PostConstruct
+  void validateSecurityConfiguration() {
+    boolean production = "production".equalsIgnoreCase(appEnvironment)
+        || "prod".equalsIgnoreCase(appEnvironment)
+        || Arrays.stream(activeProfiles.split(","))
+            .map(String::trim)
+            .anyMatch(profile -> "prod".equalsIgnoreCase(profile) || "production".equalsIgnoreCase(profile));
+    if (production && !secureCookies) {
+      throw new IllegalStateException("APP_AUTH_SECURE_COOKIES must be true in production.");
+    }
+    if (production && demoSeed) {
+      throw new IllegalStateException("APP_DEMO_SEED must be false in production.");
+    }
+    if (production && allowRepeatedDemoOtp) {
+      throw new IllegalStateException("APP_AUTH_ALLOW_REPEATED_DEMO_OTP must be false in production.");
+    }
+  }
 
   public AuthService(
       JdbcTemplate jdbc,
