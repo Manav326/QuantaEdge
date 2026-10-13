@@ -67,7 +67,7 @@ object ApiClient {
                         .url(absoluteUrl("/api/v1/auth/refresh"))
                         .post("{}".toRequestBody(jsonType))
                         .header("Accept", "application/json")
-                        .header("X-QE-Workspace", "LEARNING")
+                        .header("X-QE-Workspace", "STUDENT")
                         .build()
                     val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
                     if (refreshed) response.request.newBuilder().removeHeader("Cookie").build() else null
@@ -100,7 +100,7 @@ object ApiClient {
             val absoluteRequestUrl = path.startsWith("https://", true) || path.startsWith("http://", true)
             val url = if (absoluteRequestUrl) path else BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
             val builder = Request.Builder().url(url).header("Accept", "application/json, image/png")
-            if (!absoluteRequestUrl) builder.header("X-QE-Workspace", "LEARNING")
+            if (!absoluteRequestUrl) builder.header("X-QE-Workspace", "STUDENT")
             val requestBody = body?.toRequestBody(jsonType)
             when (method) {
                 "GET" -> builder.get()
@@ -118,7 +118,7 @@ object ApiClient {
                         .url(BuildConfig.API_BASE_URL.trimEnd('/') + "/api/v1/auth/refresh")
                         .post("{}".toRequestBody(jsonType))
                         .header("Accept", "application/json")
-                        .header("X-QE-Workspace", "LEARNING")
+                        .header("X-QE-Workspace", "STUDENT")
                         .build()
                     val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
                     if (!refreshed) {
