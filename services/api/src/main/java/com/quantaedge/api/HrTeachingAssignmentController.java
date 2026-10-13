@@ -77,6 +77,48 @@ public class HrTeachingAssignmentController {
     return row;
   }
 
+  @PatchMapping("/academic-periods/{id}/status")
+  @Transactional
+  public Map<String,Object> changePeriodStatus(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> period=periodById(id);
+    String previous=String.valueOf(period.get("status"));
+    String next=required(body.get("status"),16,"Status").toUpperCase();
+    String reason=optional(body.get("reason"),1000);
+    LocalDate today=LocalDate.now(ZoneId.of("Asia/Kolkata"));
+    LocalDate starts=((Date)period.get("start_date")).toLocalDate();
+    LocalDate ends=((Date)period.get("end_date")).toLocalDate();
+    boolean allowed=("PLANNED".equals(previous)&&List.of("ACTIVE","CANCELLED").contains(next))
+        ||("ACTIVE".equals(previous)&&"CLOSED".equals(next));
+    if(!allowed)throw conflict("Academic period status transition "+previous+" → "+next+" is not allowed.");
+    if("ACTIVE".equals(next)&&today.isAfter(ends))throw conflict("An already-ended academic period cannot be activated.");
+    if("CANCELLED".equals(next)) {
+      if(reason==null||reason.isBlank())throw bad("A cancellation reason is required.");
+      Boolean hasAssignments=jdbc.queryForObject("""
+        select exists(select 1 from hr_teaching_assignment where academic_period_id=?
+          and status in ('PENDING_APPROVAL','APPROVED'))
+        """,Boolean.class,id);
+      if(Boolean.TRUE.equals(hasAssignments))throw conflict("This period has pending or approved assignments. Preserve them and close the period after its effective end rather than cancelling it.");
+    }
+    if("CLOSED".equals(next)) {
+      if(!today.isAfter(ends))throw conflict("An academic period can be closed only after its end date.");
+      Boolean hasFutureClasses=jdbc.queryForObject("""
+        select exists(select 1 from learning_class_session cs join hr_teaching_assignment a on a.id=cs.teaching_assignment_id
+          where a.academic_period_id=? and cs.status in ('SCHEDULED','LIVE') and cs.ends_at>now())
+        """,Boolean.class,id);
+      if(Boolean.TRUE.equals(hasFutureClasses))throw conflict("The period still has scheduled/live class sessions. Resolve them before closing it.");
+      if(reason==null||reason.isBlank())throw bad("A closure reason is required.");
+    }
+    int changed=jdbc.update("update hr_academic_period set status=?,updated_at=now() where id=? and status=?",
+        next,id,previous);
+    if(changed!=1)throw conflict("The academic period changed while you were editing it. Refresh and try again.");
+    audit.recordAction(context,"/api/v1/hr/academic-periods/"+id+"/status",
+        "Changed academic period "+period.get("period_code")+" from "+previous+" to "+next
+            +(reason==null||reason.isBlank()?"":"; reason: "+reason)+".");
+    return periodById(id);
+  }
+
   @GetMapping("/teaching-assignments")
   public Map<String,Object> assignments(@RequestParam long organizationId,
       @RequestParam(required=false) Long academicPeriodId,@RequestParam(defaultValue="ALL") String status,
