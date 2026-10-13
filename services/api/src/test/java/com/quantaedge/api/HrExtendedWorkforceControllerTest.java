@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +58,7 @@ class HrExtendedWorkforceControllerTest {
     ResponseStatusException ex=assertThrows(ResponseStatusException.class,
         ()->controller.convertCandidate(9L,Map.of("joiningDate","2026-10-13","employmentTypeCode","FULL_TIME"),manager));
     assertEquals(HttpStatus.CONFLICT.value(),ex.getStatusCode().value());
-    verify(jdbc,never()).queryForObject(contains("insert into hr_employee"),any(Object[].class));
+    verify(jdbc,never()).queryForObject(contains("insert into hr_employee"),eq(Long.class),any(Object[].class));
   }
 
   @Test void invalidAssetReturnConditionCannotChangeAssignmentOrInventory(){
