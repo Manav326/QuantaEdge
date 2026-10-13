@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +19,17 @@ public class HrLeaveBalanceController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final HrReportingScopeService reportingScope;
 
-  public HrLeaveBalanceController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+  @Autowired
+  public HrLeaveBalanceController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit,HrReportingScopeService reportingScope) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.audit = audit;
+    this.reportingScope = reportingScope;
+  }
+  public HrLeaveBalanceController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+    this(jdbc,authorization,audit,new HrReportingScopeService(jdbc,authorization));
   }
 
   @GetMapping("/leave/balances")
@@ -32,6 +39,7 @@ public class HrLeaveBalanceController {
     authorization.requirePermission(context, "HR_LEAVE_BALANCE_VIEW");
     if (employeeId <= 0) throw bad("Employee ID must be a positive integer.");
     LocalDate date = parseDate(asOf);
+    reportingScope.requireEmployeeAccess(context,employeeId);
     ensureEmployee(employeeId);
     List<Map<String,Object>> items = jdbc.queryForList("""
       select t.code leave_type_code,t.display_name,t.paid,
@@ -53,6 +61,7 @@ public class HrLeaveBalanceController {
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     authorization.requirePermission(context, "HR_LEAVE_BALANCE_VIEW");
     if (employeeId <= 0) throw bad("Employee ID must be a positive integer.");
+    reportingScope.requireEmployeeAccess(context,employeeId);
     ensureEmployee(employeeId);
     int pageSize=Math.max(1,Math.min(limit,200)), pageOffset=Math.max(0,Math.min(offset,1000000));
     String type=leaveTypeCode==null||leaveTypeCode.isBlank()?null:leaveTypeCode.trim().toUpperCase();
@@ -79,6 +88,7 @@ public class HrLeaveBalanceController {
     if(!List.of("GRANT","ACCRUAL","ADJUSTMENT").contains(transactionType))throw bad("Only GRANT, ACCRUAL and ADJUSTMENT may be entered manually.");
     // Reject unsupported/manual consumption before any database lookup. Consumption must be
     // created only by the approved-leave workflow, never by a caller-supplied transaction.
+    reportingScope.requireEmployeeAccess(context,employeeId);
     Map<String,Object> employee=ensureEmployee(employeeId);
     Boolean activeType=jdbc.queryForObject("select exists(select 1 from hr_leave_type where code=? and active=true)",Boolean.class,type);
     if(!Boolean.TRUE.equals(activeType))throw bad("Choose an active leave type.");
@@ -127,6 +137,7 @@ public class HrLeaveBalanceController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Leave ledger transaction not found.");
     }
     long employeeId=((Number)original.get("employee_id")).longValue();
+    reportingScope.requireEmployeeAccess(context,employeeId);
     if("REVERSAL".equals(String.valueOf(original.get("transaction_type"))))throw new ResponseStatusException(HttpStatus.CONFLICT,"A reversal cannot itself be reversed; record an authorized adjustment with a reason.");
     long organizationId=((Number)original.get("organization_id")).longValue();
     String type=String.valueOf(original.get("leave_type_code"));
