@@ -20,6 +20,7 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 app:
+  environment: ${APP_ENVIRONMENT:local}
   media:
     storage-dir: ${APP_MEDIA_STORAGE_DIR:/var/lib/quantaedge/media}
   certificates:
