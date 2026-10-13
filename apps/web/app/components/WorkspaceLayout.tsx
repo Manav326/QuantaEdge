@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { LanguageSwitcher, useLocale } from './LanguageProvider';
+import { LanguageSwitcher, LearningLanguageSwitcher, useLocale } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
@@ -263,6 +263,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           {role === 'student'
             ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} />
             : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} />}
+          {role === 'student' ? <LearningLanguageSwitcher compact /> : null}
           <LanguageSwitcher compact />
         </div>
       </header>
@@ -308,10 +309,6 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               <span aria-hidden="true">{group.icon}</span><small>{locale === 'english' ? group.mobileEnglish : group.mobileHinglish}</small>
             </button>
           ))}
-          <button type="button" onClick={() => { setMobileOpenGroup(null); void logout(); }} disabled={loggingOut}
-            aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}>
-            <span aria-hidden="true">↗</span><small>{loggingOut ? '…' : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</small>
-          </button>
         </nav>
       </>
     ) : (
@@ -319,9 +316,6 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         {items.map(item => <Link key={item.href} href={item.href} aria-current={active(item) ? 'page' : undefined} className={active(item) ? 'is-active' : ''} title={itemLabel(item)}>
           <span aria-hidden="true">{item.icon}</span><small>{itemLabel(item)}</small>
         </Link>)}
-        <button type="button" onClick={() => void logout()} disabled={loggingOut} aria-label={locale === 'english' ? 'Log out' : 'लॉग आउट'}>
-          <span aria-hidden="true">↗</span><small>{loggingOut ? '…' : (locale === 'english' ? 'Logout' : 'लॉग आउट')}</small>
-        </button>
       </nav>
     )}
   </div>;
