@@ -127,6 +127,7 @@ public class HrLeaveBalanceController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Leave ledger transaction not found.");
     }
     long employeeId=((Number)original.get("employee_id")).longValue();
+    if("REVERSAL".equals(String.valueOf(original.get("transaction_type"))))throw new ResponseStatusException(HttpStatus.CONFLICT,"A reversal cannot itself be reversed; record an authorized adjustment with a reason.");
     long organizationId=((Number)original.get("organization_id")).longValue();
     String type=String.valueOf(original.get("leave_type_code"));
     jdbc.query("select pg_advisory_xact_lock(hashtext(?))",rs->{if(rs.next())rs.getObject(1);},organizationId+":"+employeeId+":"+type);
