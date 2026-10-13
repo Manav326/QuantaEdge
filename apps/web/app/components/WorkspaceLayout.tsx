@@ -165,6 +165,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     if (collapsed) {
       setCollapsed(false);
       try { window.localStorage.setItem('qe-student-sidebar-collapsed', 'false'); } catch {}
+      setExpandedStudentGroup(groupId);
+      return;
     }
     setExpandedStudentGroup(current => current === groupId ? null : groupId);
   }
