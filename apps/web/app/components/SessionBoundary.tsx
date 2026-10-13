@@ -100,8 +100,17 @@ function installRefreshRecovery() {
 }
 
 function roleHome(session: Session): string | null {
-  if (session.studentId || session.role === 'STUDENT') return '/student';
-  if (session.role === 'PARENT') return '/parent';
+  const hasStudentIdentity = Number(session.studentId) > 0
+    && !(Number(session.userId) > 0)
+    && !(Number(session.staffId) > 0);
+  const hasParentIdentity = Number(session.userId) > 0
+    && !(Number(session.studentId) > 0)
+    && !(Number(session.staffId) > 0);
+
+  // Require matching role, identity shape, and requested workspace. Never infer
+  // a learner's workspace from a generic "authenticated" flag or another ID.
+  if (session.role === 'STUDENT' && session.workspace === 'STUDENT' && hasStudentIdentity) return '/student';
+  if (session.role === 'PARENT' && session.workspace === 'PARENT' && hasParentIdentity) return '/parent';
   return null;
 }
 function workspaceRole(home: string | null): WorkspaceRole | null {
@@ -143,9 +152,10 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       try {
         const response = await withSessionTimeout((async () => {
           let current = await fetch('/api/v1/auth/me', { cache: 'no-store' });
-          // At the public landing page, either a parent or student may already be signed in.
-          // Probe the student scope separately so going Back does not hide an active student session.
-          if (!current.ok && pathname === '/') {
+          // On the home or Parent login entry, check Student as well so a logged-in
+          // student cannot use browser Back to remain on a public login page.
+          // /login/student stays Student-only: a Parent cookie must not hijack that entry.
+          if (!current.ok && (pathname === '/' || pathname === '/login')) {
             const studentResponse = await fetch('/api/v1/auth/me', {
               headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
             });
