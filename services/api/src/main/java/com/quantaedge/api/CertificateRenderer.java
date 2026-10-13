@@ -77,7 +77,10 @@ public class CertificateRenderer {
       drawContent(g, template, hindi, recipientName, achievementTitle, achievementSummary,
           certificateNumber, issuedAt);
       if (sample) drawSampleWatermark(g, hindi);
-      else drawVerificationQr(g, certificateNumber, hindi);
+      else {
+        drawVerificationQr(g, certificateNumber, hindi);
+        drawVerificationBarcode(g, certificateNumber, hindi);
+      }
     } finally {
       g.dispose();
     }
@@ -150,6 +153,27 @@ public class CertificateRenderer {
       drawCentered(g, font(hindi, Font.BOLD, 18), (hindi ? "स्कैन करके सत्यापित करें" : "SCAN TO VERIFY"), x + size / 2, y - 15, size + 30);
     } catch (WriterException ex) {
       throw new IllegalStateException("Certificate verification QR code could not be generated.", ex);
+    }
+  }
+
+  private void drawVerificationBarcode(Graphics2D g, String certificateNumber, boolean hindi) {
+    try {
+      int width = 520;
+      int height = 60;
+      int x = WIDTH - 660;
+      int y = HEIGHT - 150;
+      BitMatrix matrix = new MultiFormatWriter().encode(certificateNumber, BarcodeFormat.CODE_128,
+          width, height, Map.of(EncodeHintType.MARGIN, 2));
+      BufferedImage barcode = MatrixToImageWriter.toBufferedImage(matrix);
+      g.setColor(Color.WHITE);
+      g.fillRoundRect(x - 12, y - 34, width + 24, height + 44, 10, 10);
+      g.setColor(MUTED);
+      drawCentered(g, font(hindi, Font.BOLD, 15),
+          hindi ? "प्रमाणपत्र नंबर बारकोड" : "BARCODE · CERTIFICATE ID",
+          x + width / 2, y - 12, width);
+      g.drawImage(barcode, x, y, width, height, null);
+    } catch (WriterException ex) {
+      throw new IllegalStateException("Certificate verification barcode could not be generated.", ex);
     }
   }
 
