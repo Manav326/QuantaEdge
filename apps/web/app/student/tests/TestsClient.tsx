@@ -195,7 +195,7 @@ export default function TestsClient(){
             const id=Number(item.attempt_id);
             if(Number.isSafeInteger(id)&&id>0)eligibilityMap[id]=item as CertificateEligibility;
           }
-        }catch(e:any){
+        }catch{
           // Certificate status is supplemental to saved assessment results; keep results visible
           // when this optional endpoint is temporarily unavailable.
         }
