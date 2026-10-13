@@ -1486,7 +1486,12 @@ fun QuantaEdgeApp() {
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )
-                    AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, ::openProgress)
+                    AppRoute.PROGRESS -> StudentProgressScreen(
+                        data = progressData,
+                        language = language,
+                        busy = busy,
+                        onRefresh = ::openProgress
+                    )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
                         onBack = { route = AppRoute.STUDENT_HOME }
