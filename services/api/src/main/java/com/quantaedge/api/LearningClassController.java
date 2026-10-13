@@ -415,6 +415,57 @@ public class LearningClassController {
     return adminSessionById(sessionId);
   }
 
+  @PutMapping("/admin/live-classes/{sessionId}/teacher-assignment")
+  public Map<String,Object> replaceScheduledClassTeacher(
+      @PathVariable long sessionId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireClassManage(context);
+    long assignmentId=positiveLong(body.get("teachingAssignmentId"),"Teaching assignment");
+    List<Map<String,Object>> sessions=jdbc.queryForList("""
+      select id,title,status,subject_id,starts_at,ends_at,teaching_assignment_id,host_staff_id
+      from learning_class_session where id=?
+      """,sessionId);
+    if(sessions.isEmpty())throw notFound("Live class",sessionId);
+    Map<String,Object> session=sessions.getFirst();
+    if(!"SCHEDULED".equals(session.get("status")))throw conflict("Teacher replacement is only allowed before the class starts. Preserve the current live/past record and schedule a new class if replacement is needed.");
+    OffsetDateTime startsAt=toOffsetDateTime(session.get("starts_at")),endsAt=toOffsetDateTime(session.get("ends_at"));
+    java.time.LocalDate classDate=startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
+    List<Map<String,Object>> assignments=jdbc.queryForList("""
+      select a.id,a.employee_id,a.subject_id,a.academic_period_id,a.effective_start,a.effective_end,
+        a.status,a.organization_id,e.display_name as employee_name,e.employee_number,
+        e.employment_status,e.linked_staff_account_id,p.status as period_status,p.name as period_name
+      from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id
+      join hr_academic_period p on p.id=a.academic_period_id
+      where a.id=?
+      """,assignmentId);
+    if(assignments.isEmpty())throw notFound("Teaching assignment",assignmentId);
+    Map<String,Object> assignment=assignments.getFirst();
+    if(!"APPROVED".equals(assignment.get("status"))
+        ||!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(assignment.get("employment_status")))
+        ||Set.of("CLOSED","CANCELLED").contains(String.valueOf(assignment.get("period_status")))
+        ||classDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
+        ||classDate.isAfter(((java.sql.Date)assignment.get("effective_end")).toLocalDate())) {
+      throw conflict("Choose an approved assignment whose academic period, effective dates and employee eligibility cover this scheduled class.");
+    }
+    if(((Number)assignment.get("subject_id")).longValue()!=((Number)session.get("subject_id")).longValue()) {
+      throw badRequest("The replacement assignment must match this class's subject.");
+    }
+    Long employeeId=((Number)assignment.get("employee_id")).longValue();
+    Long newHost=assignment.get("linked_staff_account_id") instanceof Number n?n.longValue():null;
+    validateNoScheduleConflict(newHost,employeeId,startsAt,endsAt,sessionId);
+    Object oldAssignment=session.get("teaching_assignment_id");
+    Long changed=jdbc.queryForObject("""
+      update learning_class_session set teaching_assignment_id=?,host_staff_id=?,updated_at=now()
+      where id=? and status='SCHEDULED' returning id
+      """,Long.class,assignmentId,newHost,sessionId);
+    Map<String,Object> after=adminSessionById(changed);
+    staffAudit.recordAction(context,"/api/v1/admin/live-classes/"+sessionId+"/teacher-assignment",
+        "Changed scheduled class #"+sessionId+" teaching assignment from "
+          +(oldAssignment==null?"unassigned":"#"+oldAssignment)+" to #"+assignmentId
+          +" ("+assignment.get("employee_name")+", employee #"+assignment.get("employee_number")+").");
+    return after;
+  }
+
   @PutMapping("/admin/live-classes/{sessionId}/schedule")
   public Map<String,Object> rescheduleLiveClass(
       @PathVariable long sessionId, @RequestBody Map<String,Object> body,
@@ -978,6 +1029,12 @@ public class LearningClassController {
       """, studentId, recordingId);
     if (rows.isEmpty()) throw notFound("Recorded class", recordingId);
     return new LinkedHashMap<>(rows.getFirst());
+  }
+
+  private long positiveLong(Object value,String label) {
+    try { long parsed=Long.parseLong(String.valueOf(value)); if(parsed>0)return parsed; }
+    catch(RuntimeException ignored) {}
+    throw badRequest(label+" ID must be a positive integer.");
   }
 
   private void validateNoScheduleConflict(Long hostStaffId, Long employeeId,
