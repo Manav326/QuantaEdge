@@ -1,4 +1,4 @@
--- V70: retain prior certificate artifacts and audit safe corrections to the rendered certificate.
+-- V93: retain prior certificate artifacts and audit safe corrections to the rendered certificate.
 ALTER TABLE student_certificate
   ADD COLUMN artifact_version integer NOT NULL DEFAULT 1 CHECK (artifact_version >= 1);
 

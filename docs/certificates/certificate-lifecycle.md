@@ -42,7 +42,7 @@ The API returns binary attachments with Cache-Control: no-store and X-Content-Ty
 
 ## Operational notes
 
-- The schema migration must run before certificate endpoints are used; normal Flyway startup applies it. Migration V70 archives the superseded metadata and artifact hashes for legacy assessment-certificate corrections.
+- The schema migration must run before certificate endpoints are used; normal Flyway startup applies it. Migration V93 archives the superseded metadata and artifact hashes for legacy assessment-certificate corrections.
 - Back up both PostgreSQL and the shared media volume. Database metadata without its corresponding artifact is intentionally treated as an unavailable certificate, not silently regenerated.
 - The student result history, direct released-result view and progress page expose issue/view/download actions for the exact attempt. Parent result history exposes view/download only; parents cannot issue certificates on behalf of a child.
 - Admins may retrieve a revoked original strictly as an audit copy. Student and parent view/download endpoints return a gone response for revoked certificates.
