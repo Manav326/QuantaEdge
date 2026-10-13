@@ -44,6 +44,7 @@ fun ProfilePhotoPickerInput(
     onPhotoSelected: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val language = LocalQuantaLanguage.current
     val scope = rememberCoroutineScope()
     var displayedBytes by remember { mutableStateOf<ByteArray?>(null) }
     var selectedDataUrl by remember { mutableStateOf<String?>(null) }
@@ -51,7 +52,12 @@ fun ProfilePhotoPickerInput(
     var error by remember { mutableStateOf("") }
 
     LaunchedEffect(profilePhotoUrl) {
-        if (selectedDataUrl == null && !profilePhotoUrl.isNullOrBlank()) {
+        if (profilePhotoUrl.isNullOrBlank()) {
+            // A successful photo-removal action must remove the old preview as well.
+            selectedDataUrl = null
+            displayedBytes = null
+            error = ""
+        } else if (selectedDataUrl == null) {
             displayedBytes = runCatching { ApiClient.getBytes(profilePhotoUrl) }.getOrNull()
         }
     }
@@ -67,7 +73,7 @@ fun ProfilePhotoPickerInput(
                     displayedBytes = Base64.decode(dataUrl.substringAfter(','), Base64.NO_WRAP)
                     onPhotoSelected(dataUrl)
                 } catch (failure: Exception) {
-                    error = failure.message ?: "फोटो पढ़ी नहीं जा सकी।"
+                    error = if (language == "hi") "फोटो पढ़ी नहीं जा सकी।" else "Could not read the selected photo."
                 } finally {
                     selecting = false
                 }
@@ -79,7 +85,7 @@ fun ProfilePhotoPickerInput(
         displayedBytes?.let { bytes ->
             val bitmap = remember(bytes) { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }
             if (bitmap != null) {
-                Image(bitmap = bitmap, contentDescription = "Profile photo",
+                Image(bitmap = bitmap, contentDescription = localizedUiText("Profile photo"),
                     modifier = Modifier.size(88.dp), contentScale = ContentScale.Crop)
             }
         }
@@ -87,16 +93,16 @@ fun ProfilePhotoPickerInput(
             Button(onClick = {
                 picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }, enabled = !busy && !selecting) {
-                Text(if (selecting) "फोटो तैयार हो रही है…" else "प्रोफ़ाइल फोटो चुनें")
+                Text(localizedUiText(if (selecting) "फोटो तैयार हो रही है…" else "प्रोफ़ाइल फोटो चुनें"))
             }
             if (selectedDataUrl != null) {
-                Text("नई फोटो चुनी गई", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Text(localizedUiText("नई फोटो चुनी गई"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             } else if (displayedBytes != null) {
-                Text("वर्तमान फोटो", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Text(localizedUiText("वर्तमान फोटो"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
         }
-        if (error.isNotBlank()) Text(error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-        Text("केवल फोटो चुनी जाती है। कोई broad storage permission नहीं माँगी जाती; सुरक्षित JPEG को आपके QuantaEdge खाते में भेजा जाता है।",
+        if (error.isNotBlank()) Text(localizedUiText(error), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+        Text(localizedUiText("केवल फोटो चुनी जाती है। कोई broad storage permission नहीं माँगी जाती; सुरक्षित JPEG को आपके QuantaEdge खाते में भेजा जाता है।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }
