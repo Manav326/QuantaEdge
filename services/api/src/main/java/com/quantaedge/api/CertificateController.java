@@ -101,6 +101,7 @@ public class CertificateController {
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
         WHERE att.student_id=? AND att.status='RELEASED'
+          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
           AND att.final_score IS NOT NULL AND att.max_score>0
           AND 100.0*att.final_score/NULLIF(att.max_score,0)>=?
         ORDER BY att.released_at DESC,att.id DESC
@@ -109,6 +110,75 @@ public class CertificateController {
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
+    return result;
+  }
+
+  @GetMapping("/students/me/certificates/assessment-attempts/{attemptId}")
+  public Map<String, Object> certificateEligibilityForAttempt(@PathVariable long attemptId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    Map<String, Object> attempt = queryOptional("""
+        SELECT att.id AS attempt_id,att.status,att.final_score,att.max_score,
+               a.assessment_type,a.is_generated
+        FROM student_assessment_attempt att
+        JOIN assessment a ON a.id=att.assessment_id
+        WHERE att.id=? AND att.student_id=?
+        """, attemptId, context.studentId());
+    if (attempt == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment result not found.");
+    }
+
+    String status = String.valueOf(attempt.get("status"));
+    String assessmentType = String.valueOf(attempt.get("assessment_type"));
+    boolean generated = Boolean.TRUE.equals(attempt.get("is_generated"));
+    BigDecimal finalScore = attempt.get("final_score") == null ? null : decimal(attempt.get("final_score"));
+    BigDecimal maxScore = attempt.get("max_score") == null ? BigDecimal.ZERO : decimal(attempt.get("max_score"));
+    BigDecimal scorePercent = finalScore != null && maxScore.signum() > 0
+        ? finalScore.multiply(BigDecimal.valueOf(100)).divide(maxScore, 2, RoundingMode.HALF_UP)
+        : null;
+    boolean adminCreated = "ADMIN_CREATED".equals(assessmentType) && !generated;
+    boolean released = "RELEASED".equals(status);
+    boolean passed = scorePercent != null && scorePercent.compareTo(minimumPassPercent) >= 0;
+    boolean eligible = adminCreated && released && passed;
+
+    Map<String, Object> certificate = queryOptional("""
+        SELECT id,certificate_number,achievement_title,status,issued_at
+        FROM student_certificate
+        WHERE student_id=? AND assessment_attempt_id=?
+        ORDER BY issued_at DESC,id DESC
+        LIMIT 1
+        """, context.studentId(), attemptId);
+
+    String reason = "";
+    if (certificate != null) {
+      reason = "ISSUED".equals(String.valueOf(certificate.get("status")))
+          ? "A certificate has already been issued for this result."
+          : "The certificate for this result was revoked; contact support if you believe this is an error.";
+    } else if (!adminCreated) {
+      reason = "Only admin-created assessments qualify. Topic-end and chapter-end tests are excluded.";
+    } else if (!released) {
+      reason = "The final result must be released before a certificate can be issued.";
+    } else if (scorePercent == null) {
+      reason = "A final score is not available for this result.";
+    } else if (!passed) {
+      reason = "A score of at least "
+          + minimumPassPercent.stripTrailingZeros().toPlainString()
+          + "% is required; this result is " + scorePercent.toPlainString() + "%.";
+    }
+
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("attemptId", attemptId);
+    result.put("assessmentType", assessmentType);
+    result.put("isGenerated", generated);
+    result.put("status", status);
+    result.put("finalScore", finalScore);
+    result.put("maxScore", maxScore);
+    result.put("scorePercent", scorePercent);
+    result.put("passThresholdPercent", minimumPassPercent);
+    result.put("eligible", eligible);
+    result.put("canIssue", eligible && certificate == null);
+    result.put("reason", reason);
+    result.put("certificate", certificate);
     return result;
   }
 
@@ -216,6 +286,7 @@ public class CertificateController {
         JOIN curriculum_class cc ON cc.id=s.class_id
         JOIN student st ON st.id=att.student_id AND st.active=true
         WHERE st.id=? AND att.student_id=? AND att.id=? AND att.status='RELEASED'
+          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
           AND att.final_score IS NOT NULL AND att.max_score>0
         """, studentId, studentId, attemptId);
     if (achievement == null) {
@@ -300,11 +371,16 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/download")
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
+      @RequestParam(defaultValue = "attachment") String disposition,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     String normalizedFormat = format.trim().toLowerCase(Locale.ROOT);
+    String normalizedDisposition = disposition == null ? "attachment" : disposition.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
+    }
+    if (!List.of("attachment", "inline").contains(normalizedDisposition)) {
+      throw new IllegalArgumentException("Choose inline or attachment certificate delivery.");
     }
     Map<String, Object> certificate = queryOptional("""
         SELECT id,certificate_number,status,pdf_storage_key,png_storage_key,pdf_sha256,png_sha256
@@ -325,7 +401,7 @@ public class CertificateController {
     MediaType contentType = pdfFormat ? MediaType.APPLICATION_PDF : MediaType.IMAGE_PNG;
     String filename = "QuantaEdge-" + certificate.get("certificate_number") + "." + normalizedFormat;
     return ResponseEntity.ok().contentType(contentType).cacheControl(CacheControl.noStore())
-        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(filename).build().toString())
+        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.builder(normalizedDisposition).filename(filename).build().toString())
         .header("X-Content-Type-Options", "nosniff")
         .header("X-Certificate-Number", String.valueOf(certificate.get("certificate_number")))
         .body(bytes);
