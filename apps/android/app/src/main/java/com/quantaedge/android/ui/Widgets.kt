@@ -208,7 +208,7 @@ fun QuestionCard(
                             )
                         }
                     }
-                    Text(localizedUiText("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}."),
+                    Text(localizedUiText("Enter matching pairs as a JSON map (for example, 1 maps to A and 2 maps to B)."),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     OutlinedTextField(
                         value = answer,
@@ -258,7 +258,7 @@ fun QuestionCard(
                 }
                 else -> {
                     if (isOrder) {
-                        Text(localizedUiText("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"]."),
+                        Text(localizedUiText("Enter the order as a JSON array (for example, B, C, A)."),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     }
                     val inputLabel = when {

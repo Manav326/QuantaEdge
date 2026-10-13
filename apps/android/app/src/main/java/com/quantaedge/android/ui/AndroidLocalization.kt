@@ -93,6 +93,10 @@ private val uiPhrases = listOf(
     UiPhrase("offline_answers", "Answers are encrypted and stored on this device.", "उत्तर इस device पर encrypted सुरक्षित हैं"),
     UiPhrase("offline_info", "The offline timer starts immediately. Answers remain encrypted on this device; no local score is shown. When online, the server syncs and grades answers. This is only for staff-approved low-stakes tests.", "Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचता है। यह सुविधा केवल staff-approved low-stakes tests के लिए है।"),
     UiPhrase("offline_sync_info", "These answers are not graded here. When internet returns, the authenticated server syncs and grades them. The offline package can sync until 72 hours after the timer expires.", "इन answers को यहाँ grade नहीं किया जा रहा। Internet मिलने पर authenticated server उन्हें sync करके जाँचेगा। Offline package की sync सीमा timer खत्म होने के 72 घंटे बाद तक है।"),
+    UiPhrase("generic_lesson_label", "Lesson", "पाठ"),
+    UiPhrase("offline_remove_confirmation_help", "This only removes encrypted page copies kept on this device. The published resource remains on the server and can be downloaded again later.", "यह केवल इस डिवाइस पर रखी एन्क्रिप्टेड पेज प्रतियाँ हटाएगा। प्रकाशित सामग्री सर्वर पर बनी रहेगी और बाद में दोबारा डाउनलोड की जा सकती है।"),
+    UiPhrase("matching_format_help", "Enter matching pairs as a JSON map (for example, 1 maps to A and 2 maps to B).", "मिलान को JSON मैप के रूप में लिखें (उदाहरण: 1 का मिलान A से और 2 का B से)।"),
+    UiPhrase("ordering_format_help", "Enter the order as a JSON array (for example, B, C, A).", "क्रम को JSON ऐरे के रूप में लिखें (उदाहरण: B, C, A)।"),
     UiPhrase("remove_offline_title", "Remove offline copy?", "Offline copy हटाएँ?"),
     UiPhrase("remove_offline", "Remove offline copy", "Offline copy हटाएँ"),
     UiPhrase("remove_download", "Remove downloaded copy", "Downloaded copy हटाएँ"),
@@ -363,7 +367,7 @@ internal fun localizedUiText(source: String): String {
         else -> ""
     }
     val resourceId = context.resources.getIdentifier("qe_" + phrase.key, "string", context.packageName)
-    if (resourceId == 0) return source
+    if (resourceId == 0) return (if (language == "hi") phrase.hindi else phrase.english) + suffix
     val configuration = Configuration(context.resources.configuration).apply {
         setLocale(Locale.forLanguageTag(if (language == "hi") "hi" else "en"))
     }

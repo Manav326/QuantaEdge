@@ -2491,7 +2491,7 @@ private fun LessonScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(lesson.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.secondary)
-            Text(lesson.textAny("title").ifBlank { localizedUiText("पाठ") }, style = MaterialTheme.typography.headlineSmall)
+            Text(lesson.textAny("title").ifBlank { localizedUiText("Lesson") }, style = MaterialTheme.typography.headlineSmall)
             Text(lesson.textAny("summary"), style = MaterialTheme.typography.bodyLarge)
             if (blocks.isEmpty()) {
                 EmptyState("पाठ की सामग्री उपलब्ध नहीं", "इस प्रकाशित पाठ में अभी कोई पढ़ने योग्य ब्लॉक नहीं मिला।")
@@ -2818,7 +2818,7 @@ private fun AssessmentListScreen(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(localizedUiText("संरक्षित offline test"), style = MaterialTheme.typography.titleSmall)
-                    Text(localizedUiText("Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचेगा। यह सुविधा केवल staff-approved low-stakes tests के लिए है।"),
+                    Text(localizedUiText("The offline timer starts immediately. Answers remain encrypted on this device; no local score is shown. When online, the server syncs and grades answers. This is only for staff-approved low-stakes tests."),
                         style = MaterialTheme.typography.bodySmall)
                 }
             }
@@ -3033,7 +3033,7 @@ private fun AssessmentAttemptScreen(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(localizedUiText("उत्तर इस device पर encrypted सुरक्षित हैं"), style = MaterialTheme.typography.titleSmall)
-                    Text(localizedUiText("इन answers को यहाँ grade नहीं किया जा रहा। Internet मिलने पर authenticated server उन्हें sync करके जाँचेगा। Offline package की sync सीमा timer खत्म होने के 72 घंटे बाद तक है."),
+                    Text(localizedUiText("These answers are not graded here. When internet returns, the authenticated server syncs and grades them. The offline package can sync until 72 hours after the timer expires."),
                         style = MaterialTheme.typography.bodyMedium)
                 }
             }
@@ -3455,7 +3455,7 @@ private fun ResourcesScreen(
         AlertDialog(
             onDismissRequest = { pendingRemoval = null },
             title = { Text(localizedUiText("Offline copy हटाएँ?")) },
-            text = { Text(localizedUiText("यह केवल इस device पर रखे encrypted page copies हटाएगा। Published resource server पर बना रहेगा और बाद में दोबारा डाउनलोड किया जा सकता है।")) },
+            text = { Text(localizedUiText("This only removes encrypted page copies kept on this device. The published resource remains on the server and can be downloaded again later.")) },
             confirmButton = {
                 Button(onClick = {
                     val selected = pendingRemoval
