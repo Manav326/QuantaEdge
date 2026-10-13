@@ -26,23 +26,33 @@ public class AuthService {
   public static final String STAFF_REFRESH_COOKIE = "QE_STAFF_REFRESH";
   public static final String LEARNING_COOKIE = "QE_LEARN_SESSION";
   public static final String LEARNING_REFRESH_COOKIE = "QE_LEARN_REFRESH";
+  public static final String HRMS_COOKIE = "QE_HRMS_SESSION";
+  public static final String HRMS_REFRESH_COOKIE = "QE_HRMS_REFRESH";
   public static final String WORKSPACE_HEADER = "X-QE-Workspace";
 
   public static String normalizeWorkspace(String value) {
     if (value == null) return null;
     return switch (value.trim().toUpperCase(java.util.Locale.ROOT)) {
-      case "STAFF" -> "STAFF";
+      case "STAFF" -> "STAFF"; // Legacy education-staff scope.
+      case "EDUCATION_ADMIN" -> "EDUCATION_ADMIN";
+      case "HRMS" -> "HRMS";
       case "LEARNING" -> "LEARNING";
       default -> null;
     };
   }
 
   public static String sessionCookieForWorkspace(String workspace) {
-    return "STAFF".equals(normalizeWorkspace(workspace)) ? STAFF_COOKIE : LEARNING_COOKIE;
+    String normalized = normalizeWorkspace(workspace);
+    if ("HRMS".equals(normalized)) return HRMS_COOKIE;
+    if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_COOKIE;
+    return LEARNING_COOKIE;
   }
 
   public static String refreshCookieForWorkspace(String workspace) {
-    return "STAFF".equals(normalizeWorkspace(workspace)) ? STAFF_REFRESH_COOKIE : LEARNING_REFRESH_COOKIE;
+    String normalized = normalizeWorkspace(workspace);
+    if ("HRMS".equals(normalized)) return HRMS_REFRESH_COOKIE;
+    if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_REFRESH_COOKIE;
+    return LEARNING_REFRESH_COOKIE;
   }
 
   public static String workspaceForContext(AuthContext context) {
@@ -61,6 +71,10 @@ public class AuthService {
   // This opt-in is effective only with demo OTP mode, never with real OTP delivery.
   @Value("${app.auth.allow-repeated-demo-otp:false}")
   private boolean allowRepeatedDemoOtp = false;
+  @Value("${app.auth.staff-absolute-hours:8}")
+  private int staffAbsoluteHours = 8;
+  @Value("${app.auth.learning-absolute-days:30}")
+  private int learningAbsoluteDays = 30;
 
   public AuthService(
       JdbcTemplate jdbc,
@@ -271,6 +285,8 @@ public class AuthService {
           "update user_account set password_hash=?,updated_at=now() where id=? and active=true and role='PARENT'",
           passwordEncoder.encode(newPassword), parentId);
       if(changed!=1) throw new SecurityException("Active parent account not found.");
+      // A password reset invalidates every previously issued parent access/refresh token.
+      jdbc.update("update auth_session set revoked_at=now() where user_id=? and revoked_at is null", parentId);
       jdbc.update("update otp_challenge set consumed_at=now() where id=?",row.get("id"));
       return contextForUser(parentId);
     }
@@ -307,6 +323,77 @@ public class AuthService {
     return contextForUser(userId);
   }
 
+
+  /** Username/password login for the isolated HRMS workspace. */
+  public AuthContext loginHrms(String username, String password) {
+    String normalized = username == null ? "" : username.trim().toLowerCase(java.util.Locale.ROOT);
+    if (!normalized.matches("^[a-z0-9][a-z0-9._-]{2,63}$") || password == null || password.isBlank()) {
+      throw new IllegalArgumentException("Username or password is incorrect.");
+    }
+    List<Map<String,Object>> rows = jdbc.queryForList("""
+        select id, password_hash from staff_account
+        where lower(username)=? and active=true
+        """, normalized);
+    if (rows.isEmpty()) throw new IllegalArgumentException("Username or password is incorrect.");
+    Object stored = rows.getFirst().get("password_hash");
+    if (stored == null || String.valueOf(stored).isBlank()
+        || !passwordEncoder.matches(password, String.valueOf(stored))) {
+      throw new IllegalArgumentException("Username or password is incorrect.");
+    }
+    return contextForStaff(((Number) rows.getFirst().get("id")).longValue());
+  }
+
+  public boolean staffMustChangePassword(long staffId) {
+    try {
+      return Boolean.TRUE.equals(jdbc.queryForObject(
+          "select must_change_password from staff_account where id=? and active=true",
+          Boolean.class, staffId));
+    } catch (EmptyResultDataAccessException ex) {
+      return true;
+    }
+  }
+
+  @Transactional
+  public void changeHrmsPassword(long staffId, String currentPassword, String newPassword, String accessToken) {
+    validatePassword(newPassword, 12, "New password");
+    String currentHash;
+    try {
+      currentHash = jdbc.queryForObject(
+          "select password_hash from staff_account where id=? and active=true",
+          String.class, staffId);
+    } catch (EmptyResultDataAccessException ex) {
+      throw new SecurityException("Active HRMS account required.");
+    }
+    if (currentHash == null || !passwordEncoder.matches(
+        currentPassword == null ? "" : currentPassword, currentHash)) {
+      throw new SecurityException("Current password is incorrect.");
+    }
+    if (passwordEncoder.matches(newPassword, currentHash)) {
+      throw new IllegalArgumentException("Choose a new password different from the current password.");
+    }
+    Long currentSessionId = null;
+    if (accessToken != null && !accessToken.isBlank()) {
+      List<Long> ids = jdbc.queryForList("""
+          select id from auth_session
+          where token_hash=? and staff_id=? and workspace_key='HRMS' and revoked_at is null
+          """, Long.class, hash(accessToken), staffId);
+      if (!ids.isEmpty()) currentSessionId = ids.getFirst();
+    }
+    int changed = jdbc.update("""
+        update staff_account
+        set password_hash=?, must_change_password=false, password_changed_at=now(), updated_at=now()
+        where id=? and active=true
+        """, passwordEncoder.encode(newPassword), staffId);
+    if (changed != 1) throw new SecurityException("Active HRMS account required.");
+    if (currentSessionId == null) {
+      jdbc.update("update auth_session set revoked_at=now() where staff_id=? and workspace_key='HRMS' and revoked_at is null", staffId);
+    } else {
+      jdbc.update("""
+          update auth_session set revoked_at=now()
+          where staff_id=? and workspace_key='HRMS' and revoked_at is null and id<>?
+          """, staffId, currentSessionId);
+    }
+  }
 
   /** Password-based parent login. OTP is not required for returning parent sessions. */
   public AuthContext loginParent(String mobile,String password) {
@@ -502,7 +589,7 @@ public class AuthService {
     if(token==null || token.isBlank()) return null;
     String scope = workspacePredicate(workspace, "s");
     var rows=jdbc.queryForList("""
-      select s.user_id,s.student_id,s.staff_id,
+      select s.user_id,s.student_id,s.staff_id,s.workspace_key,
              u.role,u.display_name,st.display_name as student_name,
              e.role as staff_role,e.display_name as staff_name
       from auth_session s
@@ -510,6 +597,7 @@ public class AuthService {
       left join student st on st.id=s.student_id
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
+        and s.absolute_expires_at>now()
         and s.last_seen_at>now()-interval '4 hours'
         and (s.refresh_expires_at is null or s.refresh_expires_at>now())
         and (s.user_id is null or u.active=true)
@@ -529,7 +617,7 @@ public class AuthService {
     }
     // Keep this guard in Java as well as in SQL so tests and future query changes cannot
     // accidentally let a staff cookie authenticate a learner request (or the reverse).
-    if (!workspaceMatches(userId, studentId, staffId, workspace)) return null;
+    if (!workspaceMatches(userId, studentId, staffId, String.valueOf(r.get("workspace_key")), workspace)) return null;
     jdbc.update("""
       update auth_session set last_seen_at=now(),
         refresh_expires_at=case when refresh_token_hash is not null
@@ -550,23 +638,58 @@ public class AuthService {
   /** Legacy token helper retained for compatibility. Web sign-ins use issueSession. */
   public String issueToken(AuthContext context) {
     String raw=randomToken();
+    String workspace = workspaceForContext(context);
+    Instant now = Instant.now();
+    Instant absoluteExpiry = "LEARNING".equals(workspace)
+        ? now.plus(Duration.ofDays(Math.max(1, learningAbsoluteDays)))
+        : now.plus(Duration.ofHours(Math.max(1, staffAbsoluteHours)));
     jdbc.update("""
-      insert into auth_session(token_hash,user_id,student_id,staff_id,expires_at)
-      values (?,?,?,?,?)
-      """,hash(raw),context.userId(),context.studentId(),context.staffId(),java.sql.Timestamp.from(Instant.now().plus(Duration.ofHours(sessionHours))));
+      insert into auth_session(token_hash,user_id,student_id,staff_id,expires_at,workspace_key,absolute_expires_at)
+      values (?,?,?,?,?,?,?)
+      """,hash(raw),context.userId(),context.studentId(),context.staffId(),
+      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))), workspace,
+      java.sql.Timestamp.from(absoluteExpiry));
     return raw;
   }
 
-  /** Issue short-lived access plus independently stored refresh credentials. */
+  /** Issue short-lived access plus independently stored refresh credentials in one application scope. */
+  @Transactional
   public SessionTokens issueSession(AuthContext context) {
+    return issueSession(context, workspaceForContext(context));
+  }
+
+  @Transactional
+  public SessionTokens issueSession(AuthContext context, String requestedWorkspace) {
+    if (context == null) throw new SecurityException("Authentication required.");
+    String workspace = normalizeWorkspace(requestedWorkspace);
+    if (workspace == null) workspace = workspaceForContext(context);
+    boolean staffWorkspace = "STAFF".equals(workspace)
+        || "EDUCATION_ADMIN".equals(workspace) || "HRMS".equals(workspace);
+    if (context.isEmployee() != staffWorkspace) {
+      throw new SecurityException("This identity cannot create a session in the requested application.");
+    }
     Instant now=Instant.now();
     String access=randomToken(), refresh=randomToken();
+    Instant absoluteExpiry = "LEARNING".equals(workspace)
+        ? now.plus(Duration.ofDays(Math.max(1, learningAbsoluteDays)))
+        : now.plus(Duration.ofHours(Math.max(1, staffAbsoluteHours)));
+    // HRMS intentionally supports one active device/session per staff identity. This
+    // revocation is scoped to HRMS and never touches Education Admin or learner sessions.
+    if ("HRMS".equals(workspace)) {
+      jdbc.update("""
+          update auth_session set revoked_at=now()
+          where staff_id=? and workspace_key='HRMS' and revoked_at is null
+          """, context.staffId());
+    }
     jdbc.update("""
-      insert into auth_session(token_hash,refresh_token_hash,user_id,student_id,staff_id,expires_at,refresh_expires_at)
-      values (?,?,?,?,?,?,?)
+      insert into auth_session(
+        token_hash,refresh_token_hash,user_id,student_id,staff_id,
+        expires_at,refresh_expires_at,workspace_key,absolute_expires_at)
+      values (?,?,?,?,?,?,?,?,?)
       """,hash(access),hash(refresh),context.userId(),context.studentId(),context.staffId(),
       java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
-      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))));
+      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))),
+      workspace, java.sql.Timestamp.from(absoluteExpiry));
     return new SessionTokens(access,refresh,context);
   }
 
@@ -588,6 +711,7 @@ public class AuthService {
       left join student st on st.id=s.student_id and st.active=true
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.refresh_token_hash=? and s.revoked_at is null and s.refresh_expires_at>now()
+        and s.absolute_expires_at>now()
         and s.last_seen_at>now()-interval '4 hours'
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
@@ -675,12 +799,21 @@ public class AuthService {
           String.class);
     }
     return jdbc.queryForList("""
-        select g.permission_key
-        from staff_permission_grant g
-        join staff_permission_catalog p on p.permission_key=g.permission_key
-        where g.staff_id=?
-        order by g.permission_key
-        """, String.class, staffId);
+        select effective.permission_key
+        from (
+          select g.permission_key
+          from staff_permission_grant g
+          join staff_permission_catalog p on p.permission_key=g.permission_key
+          where g.staff_id=?
+          union
+          select rp.permission_key
+          from staff_additional_role ar
+          join staff_role_permission rp on rp.role_code=ar.role_code
+          join staff_permission_catalog p on p.permission_key=rp.permission_key
+          where ar.staff_id=?
+        ) effective
+        order by effective.permission_key
+        """, String.class, staffId, staffId);
   }
 
   public AuthContext contextForStudent(Long userId,long studentId) {
@@ -697,21 +830,38 @@ public class AuthService {
   private String workspacePredicate(String workspace, String alias) {
     String normalized = normalizeWorkspace(workspace);
     String prefix = alias == null || alias.isBlank() ? "" : alias + ".";
-    if ("STAFF".equals(normalized)) {
-      return "\n        and " + prefix + "staff_id is not null"
+    if ("HRMS".equals(normalized)) {
+      return "\n        and " + prefix + "workspace_key='HRMS'"
+          + " and " + prefix + "staff_id is not null"
+          + " and " + prefix + "user_id is null"
+          + " and " + prefix + "student_id is null";
+    }
+    if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) {
+      return "\n        and " + prefix + "workspace_key in ('STAFF','EDUCATION_ADMIN')"
+          + " and " + prefix + "staff_id is not null"
           + " and " + prefix + "user_id is null"
           + " and " + prefix + "student_id is null";
     }
     if ("LEARNING".equals(normalized)) {
-      return "\n        and " + prefix + "staff_id is null";
+      return "\n        and " + prefix + "workspace_key='LEARNING'"
+          + " and " + prefix + "staff_id is null";
     }
     return "";
   }
 
-  private boolean workspaceMatches(Long userId, Long studentId, Long staffId, String workspace) {
-    if ("STAFF".equals(workspace)) return staffId != null && userId == null && studentId == null;
-    if ("LEARNING".equals(workspace)) return staffId == null && (userId != null || studentId != null);
-    return true;
+  private boolean workspaceMatches(Long userId, Long studentId, Long staffId, String sessionWorkspace, String workspace) {
+    if (workspace == null) return true;
+    if ("HRMS".equals(workspace)) return "HRMS".equals(sessionWorkspace)
+        && staffId != null && userId == null && studentId == null;
+    if ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)) {
+      return ("STAFF".equals(sessionWorkspace) || "EDUCATION_ADMIN".equals(sessionWorkspace))
+          && staffId != null && userId == null && studentId == null;
+    }
+    if ("LEARNING".equals(workspace)) {
+      return "LEARNING".equals(sessionWorkspace) && staffId == null
+          && (userId != null || studentId != null);
+    }
+    return false;
   }
 
   private String hash(String value) {
