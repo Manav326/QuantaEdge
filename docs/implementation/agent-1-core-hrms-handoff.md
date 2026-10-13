@@ -87,3 +87,18 @@ Remaining policy work identified by inspection:
 - No CI run or test result is claimed in this handoff.
 
 The branch was created from `0d71946b3854a68c894001193a5174a41fa9a45b`. Existing repository migrations already run through V70, so the new policy migrations are V71–V73; duplicate migration versions discovered during review were removed before proceeding. While working, `main` advanced by four commits affecting only `.github/workflows/ci.yml` and `scripts/android-fetch-latest-apk.ps1`, with no path overlap against the HRMS changes. This branch has not yet been rebased/merged with those four commits, so it must be synchronized before integration.
+
+## Follow-up implementation (2026-10-13)
+
+Additional work has now been committed on the same isolated branch:
+
+- **Employee attendance corrections:** V74 adds a request table tied to the existing attendance record, required reason, status/reviewer fields, duplicate-pending protection and a dedicated review permission. Employee self-service endpoints submit/list/cancel requests without accepting a caller-supplied employee ID. HR review endpoints list requests and approve/reject them. Approval locks both request and attendance rows, validates approved leave for an ON_LEAVE status, writes immutable before/after correction history and updates attendance in the same transaction. Employee and HR People portal screens now expose request and review flows.
+- **Lifecycle approval policy:** V75 adds organization-scoped transition rules keyed by from/to status and required permission. The employee status API now fails closed if no active rule exists and requires the configured permission in addition to the existing employee-manage permission. The policy API is permission-controlled (HR_APPROVAL_POLICY_MANAGE) and records configuration changes in the staff audit log. The migration seeds rules for the currently supported common transitions for existing organizations; newly created organizations must have their rules configured before status changes are permitted.
+- **Holiday provenance:** V75 adds source type, source URL, jurisdiction, year and verification metadata to holiday records; the API returns these fields. Existing manually entered holidays are marked ORG_MANUAL. No default dates are fabricated. The organization must import/enter an applicable official central/state/local calendar and verify its source before treating it as an official holiday baseline.
+- **Tests added:** a review-controller test covers the dedicated permission boundary and rejects unsupported decisions before mutation. Existing self-service, HR attendance/leave and leave-ledger tests have not been executed in this environment.
+
+## Remaining release blockers
+
+The request/approval workflows are implemented in code but are **not yet verified green**. A real local checkout/build and database migration test is still required. In particular, verify V71–V75 on both a clean database and an existing schema through V70, run the complete Maven test suite and People Next.js build, and fix every compile/schema/test failure before calling the branch complete.
+
+Manager-only row-level scoping remains a release blocker: current general HR endpoints still rely on their granted HR permissions, and this handoff does not claim that all manager queries/details/decision endpoints are restricted to reporting employees. India holiday data remains source metadata plus organization override support, not a populated or verified default calendar. The configurable policy currently governs employment-status transitions; it does not yet generalize approval routing to every HR workflow (for example leave approvals), whose existing review permission remains HR_LEAVE_MANAGE.
