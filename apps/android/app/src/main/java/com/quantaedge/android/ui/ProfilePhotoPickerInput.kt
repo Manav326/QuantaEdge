@@ -67,7 +67,7 @@ fun ProfilePhotoPickerInput(
                     displayedBytes = Base64.decode(dataUrl.substringAfter(','), Base64.NO_WRAP)
                     onPhotoSelected(dataUrl)
                 } catch (failure: Exception) {
-                    error = failure.message ?: "फोटो पढ़ी नहीं जा सकी।"
+                    error = localizedUiText(failure.message ?: "फोटो पढ़ी नहीं जा सकी।")
                 } finally {
                     selecting = false
                 }
@@ -79,7 +79,7 @@ fun ProfilePhotoPickerInput(
         displayedBytes?.let { bytes ->
             val bitmap = remember(bytes) { BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap() }
             if (bitmap != null) {
-                Image(bitmap = bitmap, contentDescription = "Profile photo",
+                Image(bitmap = bitmap, contentDescription = localizedUiText("Profile photo"),
                     modifier = Modifier.size(88.dp), contentScale = ContentScale.Crop)
             }
         }
@@ -87,7 +87,7 @@ fun ProfilePhotoPickerInput(
             Button(onClick = {
                 picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }, enabled = !busy && !selecting) {
-                Text(if (selecting) "फोटो तैयार हो रही है…" else "प्रोफ़ाइल फोटो चुनें")
+                Text(localizedUiText(if (selecting) "फोटो तैयार हो रही है…" else "प्रोफ़ाइल फोटो चुनें"))
             }
             if (selectedDataUrl != null) {
                 Text(localizedUiText("नई फोटो चुनी गई"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
