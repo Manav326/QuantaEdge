@@ -52,7 +52,12 @@ fun ProfilePhotoPickerInput(
     var error by remember { mutableStateOf("") }
 
     LaunchedEffect(profilePhotoUrl) {
-        if (selectedDataUrl == null && !profilePhotoUrl.isNullOrBlank()) {
+        if (profilePhotoUrl.isNullOrBlank()) {
+            // A successful photo-removal action must remove the old preview as well.
+            selectedDataUrl = null
+            displayedBytes = null
+            error = ""
+        } else if (selectedDataUrl == null) {
             displayedBytes = runCatching { ApiClient.getBytes(profilePhotoUrl) }.getOrNull()
         }
     }
