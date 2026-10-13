@@ -27,6 +27,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
@@ -101,6 +103,8 @@ fun QuantaEdgeApp() {
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
 
     var route by remember { mutableStateOf(AppRoute.LOGIN) }
+    var lessonReturnRoute by remember { mutableStateOf(AppRoute.STUDENT_HOME) }
+    var resultsReturnRoute by remember { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by remember { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
@@ -355,6 +359,9 @@ fun QuantaEdgeApp() {
     }
 
     fun openLesson(lessonRow: JSONObject) {
+        lessonReturnRoute = route.takeIf {
+            it !in setOf(AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.TUTOR, AppRoute.RECORDING_PLAYER)
+        } ?: AppRoute.SUBJECT_LESSONS
         runTask {
             val id = lessonRow.longAny("id", "lesson_id")
             if (id <= 0L) throw IOException("यह पाठ पहचान में नहीं आया।")
@@ -552,6 +559,7 @@ fun QuantaEdgeApp() {
     }
 
     fun loadAssessmentResults() {
+        if (route != AppRoute.ASSESSMENT_RESULTS) resultsReturnRoute = route
         runTask {
             loadAssessmentResultsData()
             route = AppRoute.ASSESSMENT_RESULTS
@@ -1148,8 +1156,13 @@ fun QuantaEdgeApp() {
             AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
-            AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
-            AppRoute.LESSON -> AppRoute.SUBJECT_LESSONS
+            AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
+            AppRoute.ASSESSMENT_RESULTS -> when (resultsReturnRoute) {
+                AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT, AppRoute.ASSESSMENT_REVIEW,
+                AppRoute.PROGRESS, AppRoute.PROFILE, AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC -> resultsReturnRoute
+                else -> AppRoute.STUDENT_HOME
+            }
+            AppRoute.LESSON -> if (lessonReturnRoute in setOf(AppRoute.SUBJECT_LESSONS, AppRoute.STUDENT_HOME)) lessonReturnRoute else AppRoute.SUBJECT_LESSONS
             AppRoute.PRACTICE -> AppRoute.LESSON
             AppRoute.TUTOR -> AppRoute.LESSON
             AppRoute.CLASSES -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
@@ -2341,6 +2354,15 @@ private fun ResultsScreen(
     onIssueCertificate: (Long) -> Unit,
     onDownloadCertificate: (Long, String) -> Unit
 ) {
+    var pageSize by remember { mutableStateOf(10) }
+    var pageIndex by remember { mutableStateOf(0) }
+    var pageSizeMenuExpanded by remember { mutableStateOf(false) }
+    val pageCount = ((resultItems.size + pageSize - 1) / pageSize).coerceAtLeast(1)
+    val safePageIndex = pageIndex.coerceIn(0, pageCount - 1)
+    val visibleResults = resultItems.drop(safePageIndex * pageSize).take(pageSize)
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
+    LaunchedEffect(resultItems.size, pageSize) { pageIndex = 0 }
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("मेरे परिणाम"), style = MaterialTheme.typography.headlineSmall)
         Text(
@@ -2348,9 +2370,46 @@ private fun ResultsScreen(
             else "Check certificate eligibility and access available downloads from each released result.",
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary
         )
-        if (resultItems.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
+        if (resultItems.isEmpty()) {
+            EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(t("Rows per page", "प्रति पृष्ठ पंक्तियाँ"), modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodySmall)
+                Box {
+                    TextButton(onClick = { pageSizeMenuExpanded = true }) {
+                        Text(pageSize.toString())
+                    }
+                    DropdownMenu(expanded = pageSizeMenuExpanded, onDismissRequest = { pageSizeMenuExpanded = false }) {
+                        listOf(10, 20, 50).forEach { size ->
+                            DropdownMenuItem(
+                                text = { Text(size.toString()) },
+                                onClick = { pageSize = size; pageSizeMenuExpanded = false; pageIndex = 0 }
+                            )
+                        }
+                    }
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(if (language == "hi") "पृष्ठ " + (safePageIndex + 1) + " / " + pageCount
+                    else "Page " + (safePageIndex + 1) + " of " + pageCount,
+                    modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                TextButton(onClick = { pageIndex = (safePageIndex - 1).coerceAtLeast(0) },
+                    enabled = safePageIndex > 0 && !busy) { Text(localizedUiText("Previous ←")) }
+                TextButton(onClick = { pageIndex = (safePageIndex + 1).coerceAtMost(pageCount - 1) },
+                    enabled = safePageIndex < pageCount - 1 && !busy) { Text(localizedUiText("Next →")) }
+            }
+        }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
-            items(resultItems) { item ->
+            items(visibleResults) { item ->
                 val attempts = item.optJSONArray("attempts")?.objectItems() ?: emptyList()
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
