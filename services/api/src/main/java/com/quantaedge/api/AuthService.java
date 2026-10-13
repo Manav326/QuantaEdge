@@ -361,7 +361,7 @@ public class AuthService {
 
 
   /** Username/password login for the isolated HRMS workspace. */
-  @Transactional
+  @Transactional(noRollbackFor = {IllegalArgumentException.class, ResponseStatusException.class})
   public AuthContext loginHrms(String username, String password) {
     String normalized = username == null ? "" : username.trim().toLowerCase(java.util.Locale.ROOT);
     if (!normalized.matches("^[a-z0-9][a-z0-9._-]{2,63}$") || password == null || password.isBlank()) {
