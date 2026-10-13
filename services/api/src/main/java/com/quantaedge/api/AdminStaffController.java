@@ -191,9 +191,9 @@ public class AdminStaffController {
           """,staffId);
     }
     staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/status",
-        (active?"Activated":"Suspended")+" staff identity; "+(!active?"active sessions were revoked.":""));
+        (active?"Enabled":"Disabled")+" Educational Admin access; "+(!active?"Education portal sessions were revoked.":""));
     Map<String,Object> result=staffById(staffId);
-    result.put("message",active?"Staff account activated.":"Staff account suspended; active sessions revoked.");
+    result.put("message",active?"Educational Admin access enabled.":"Educational Admin access disabled; education portal sessions revoked.");
     return result;
   }
 
