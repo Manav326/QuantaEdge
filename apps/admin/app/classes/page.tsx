@@ -280,7 +280,7 @@ export default function ClassesPage(){
             <label>Chapter (optional)<select value={chapterId} onChange={e=>setChapterId(e.target.value)}><option value="">Whole subject</option>{chapters.map(ch=><option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}</select></label>
             <label className={styles.wide}>Student-facing details<textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder="What will students learn or prepare for?"/></label>
           </div>
-          <div className={styles.submitBar}><p>Class  {classCode} · {subjectLabel}. Enrolled students can join 15 minutes before the start time through the class page.</p><button type="button" className={styles.primaryButton} disabled={busy||!title.trim()||!joinUrl.trim()} onClick={()=>void createSession()}>{busy?'Saving…':'Schedule class'}</button></div>
+          <div className={styles.submitBar}><p>Class  {classCode} · {subjectLabel}. Enrolled students can join 15 minutes before the start time through the class page.</p><button type="button" className={styles.primaryButton} disabled={busy||!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||(provider==='GOOGLE_MEET'&&!teachingAssignmentId)} onClick={()=>void createSession()}>{busy?'Saving…':'Schedule class'}</button></div>
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>SESSION MANAGEMENT</span><h2>Scheduled and completed classes</h2><p>Change a session to Live when the meeting opens, then mark it completed when finished. Attendance records are retained.</p></div></div>

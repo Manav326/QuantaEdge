@@ -282,7 +282,11 @@ public class HrTeachingAssignmentController {
   @GetMapping("/teaching-workload-policy")
   public Map<String,Object> workloadPolicy(@RequestParam long organizationId,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
-    requireView(context);ensureOrganization(organizationId);
+    authorization.requireAuth(context);
+    if(!context.isAdmin()&&!authorization.hasPermission(context,"HR_ACADEMIC_ASSIGNMENT_VIEW")
+        &&!authorization.hasPermission(context,"CLASS_SCHEDULE_POLICY_MANAGE"))
+      throw new SecurityException("Teaching workload policy view permission required.");
+    ensureOrganization(organizationId);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select organization_id,weekly_minutes_limit,updated_by_staff_id,created_at,updated_at
       from hr_teaching_workload_policy where organization_id=?
