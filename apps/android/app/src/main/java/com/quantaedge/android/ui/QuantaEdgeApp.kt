@@ -1508,6 +1508,15 @@ fun QuantaEdgeApp() {
                             modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 2.dp),
                             horizontalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
+                            TextButton(
+                                onClick = {
+                                    if (lesson.longAny("id", "lesson_id") > 0L) startPractice()
+                                    else openSubject(currentSubject)
+                                },
+                                enabled = !busy
+                            ) {
+                                Text(if (language == "hi") "विषय अभ्यास" else "Topic practice")
+                            }
                             TextButton(onClick = { openAssessments("ALL") }, enabled = !busy) {
                                 Text(if (language == "hi") "टेस्ट" else "Tests")
                             }
@@ -1817,7 +1826,7 @@ fun QuantaEdgeApp() {
                                 preferences.edit().putString("certificateLanguage", next).apply()
                             }
                         },
-                        onBack = { route = AppRoute.STUDENT_HOME }
+                        onBack = ::openProgress
                     )
                     AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
                         language = language,
