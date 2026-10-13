@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
@@ -66,7 +67,8 @@ fun ParentChildManageScreen(
         OutlinedTextField(value = username, onValueChange = { username = it.trim().lowercase().filter { c -> c.isLetterOrDigit() || c in "._-" }.take(32) },
             label = { Text(localizedUiText("Login username")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = password, onValueChange = { password = it },
-            label = { Text(localizedUiText("नया पासवर्ड (कम-से-कम 8 अक्षर)")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            label = { Text(localizedUiText("नया पासवर्ड (कम-से-कम 8 अक्षर)")) },
+            singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
         Button(onClick = { onSaveCredentials(username, password); password = "" },
             enabled = !busy && username.length >= 3 && password.length >= 8,
             modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("Credentials सुरक्षित करें")) }
