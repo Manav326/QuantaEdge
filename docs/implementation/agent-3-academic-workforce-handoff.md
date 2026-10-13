@@ -145,7 +145,7 @@ A real Google Meet session has **not** been created or verified in this implemen
 
 ### Migration and legacy data
 
-Migration `V71__managed_google_meet_and_workload_policy.sql` adds provider lifecycle/error/attempt fields, makes `private_join_url` nullable so failed/pending Meet creation can be represented accurately, and adds the configurable workload-policy table and permission catalog entries.
+Migration `V71__managed_google_meet_and_workload_policy.sql` adds provider lifecycle/error/attempt fields, makes `private_join_url` nullable so failed/pending Meet creation can be represented accurately, and adds the configurable workload-policy table and workload-policy permission catalog entry.
 
 Existing `GOOGLE_MEET` records are marked `FAILED / LEGACY_UNVERIFIED`, because a legacy stored URL alone does not establish that a managed Calendar conference exists. Their old URL is not disclosed through staff/student Meet-link paths while unverified. An admin can link an eligible assignment to a scheduled record and retry managed Meet setup.
 
@@ -199,5 +199,9 @@ Key committed changes on the branch include:
 - `7813c556e068c8e33210802239cb5017415d4a96` — admin teacher replacement controls.
 - `d7f0aa27062f9490f3fdd6ba3079fa5bd90eab64` — idempotent Meet cancellation/retry behavior.
 - `5d404de810df9dc2fbef4aa0055ca32c2e6a7153` — academic period lifecycle controls.
+- `527558df2913aedb72542d51be016c705842b0ea` — employee-eligibility gates for student class links.
+- `64bc8340e0b12007e54c6dbead42d04df3a896cd` — restore legacy non-Meet cancellation UI.
+- `3f7ca5dc058cf4dc74cf54f1300fa7bb52dc399f` — least-privilege Calendar scope guidance.
+- `b26168a46746748d08c89151b64099d34d7b8149` — initial handoff document commit.
 
 All listed commits were created on the remote feature branch. This handoff document is committed separately; inspect the branch head for the exact final revision. No commit was made to `main`, no force-push was performed, and no pull request was opened.

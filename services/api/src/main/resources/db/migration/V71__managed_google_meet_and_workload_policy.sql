@@ -30,7 +30,6 @@ create table hr_teaching_workload_policy (
 );
 
 insert into staff_permission_catalog(permission_key,display_name,description) values
- ('CLASS_SCHEDULE_REPORT_VIEW','View academic schedule reports','View persisted teaching coverage, workload, scheduling, and class history reports.'),
  ('CLASS_SCHEDULE_POLICY_MANAGE','Manage teaching workload policy','Configure organisation-level weekly scheduled teaching workload limits.')
 on conflict(permission_key) do update
 set display_name=excluded.display_name,description=excluded.description;
