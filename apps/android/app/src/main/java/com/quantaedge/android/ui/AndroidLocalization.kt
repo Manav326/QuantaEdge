@@ -175,7 +175,7 @@ private val uiPhrases = listOf(
     UiPhrase("widget_order_json", "Enter the order as a JSON array, e.g. [\"B\",\"C\",\"A\"].", "क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"]."),
     UiPhrase("parent_active_prefix", "Active children: ", "सक्रिय छात्र: "),
     UiPhrase("lessons_completed_prefix", "Lessons completed: ", "पूरे किए गए पाठ: "),
-    UiPhrase("attempt_label_prefix", "Attempt: ", "प्रयास: ")
+    UiPhrase("attempt_label_prefix", "Attempt: ", "प्रयास: "),
     UiPhrase("audit_lesson_empty", "No lessons available yet", "अभी कोई पाठ उपलब्ध नहीं"),
     UiPhrase("audit_lesson_empty_help", "Published lessons for this class and subject will appear here when available.", "इस कक्षा और विषय के प्रकाशित पाठ सर्वर पर उपलब्ध होने पर वे यहाँ दिखेंगे।"),
     UiPhrase("audit_lesson_content_empty", "Lesson content is not available", "पाठ की सामग्री उपलब्ध नहीं"),
@@ -248,7 +248,7 @@ private val uiPhrases = listOf(
     UiPhrase("audit_download_again", "Download again", "फिर डाउनलोड"),
     UiPhrase("audit_save_answer", "Save answer", "उत्तर सुरक्षित करें"),
     UiPhrase("audit_saving_answer", "Saving…", "सहेज रहे हैं…"),
-    UiPhrase("audit_image_unavailable", "Image unavailable", "Image unavailable"),
+    UiPhrase("audit_image_unavailable", "Image unavailable", "चित्र उपलब्ध नहीं"),
     UiPhrase("audit_photo_read_failed", "Could not read the selected photo.", "फोटो पढ़ी नहीं जा सकी।"),
     UiPhrase("audit_hint_mode", "Hint", "संकेत"),
     UiPhrase("audit_explain_mode", "Explain", "समझाएँ"),
