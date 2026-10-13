@@ -170,6 +170,14 @@ def messages_ok(row: Any) -> bool:
  if len(msgs)<3 or any(not isinstance(m,dict) for m in msgs): return False
  return msgs[0].get("role")=="system" and any(m.get("role")=="user" and str(m.get("content","")).strip() for m in msgs) and any(m.get("role")=="assistant" and str(m.get("content","")).strip() for m in msgs)
 
+def simhash(text: str) -> int:
+ tokens=re.findall(r"[\\w\\u0900-\\u097f]+",norm(text))
+ if not tokens: return 0
+ weights=[0]*64
+ for token in tokens:
+  h=int(hashlib.blake2b(token.encode(),digest_size=8).hexdigest(),16)
+  for i in range(64): weights[i]+=1 if h&(1<<i) else -1
+ return sum(1<<i for i,w in enumerate(weights) if w>=0)
 def prompt_of(row:dict[str,Any])->str:
  return " ".join(str(m.get("content","")) for m in row["messages"] if m.get("role")=="user")
 def deduplicate(rows:list[dict[str,Any]])->tuple[list[dict[str,Any]],int]:
