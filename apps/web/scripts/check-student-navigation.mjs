@@ -37,7 +37,7 @@ assert.ok(!sessionProxy.includes('if (publicEntry && learnerSession)'),
   'A Parent cookie must not hijack the Student login route before the user can sign in.');
 
 for (const [label, source] of [['SessionBoundary', sessionBoundary], ['session landing', sessionLanding]]) {
-  assert.ok(source.includes("session.role === 'STUDENT'"), `${label} must verify the Student role explicitly.`);
+  assert.ok(source.includes("session.role === 'STUDENT'") || source.includes("identity.role === 'STUDENT'"), `${label} must verify the Student role explicitly.`);
   assert.ok(source.includes("session.role === 'PARENT'") || source.includes("identity.role === 'PARENT'"),
     `${label} must verify the Parent role explicitly.`);
   assert.ok(source.includes("workspace === 'STUDENT'") || source.includes("session.workspace === 'STUDENT'"),
