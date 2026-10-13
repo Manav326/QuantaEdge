@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 
 export type PeopleStatusTone = 'success' | 'warning' | 'danger' | 'info' | 'neutral';
-export type PeopleButtonVariant = 'primary' | 'secondary' | 'danger';
+export type PeopleButtonVariant = 'primary' | 'secondary' | 'neutral' | 'danger';
 
 export function PeoplePageHeader({
   eyebrow,
@@ -88,10 +88,18 @@ export function PeopleButton({
   variant = 'primary',
   className = '',
   children,
+  loading = false,
+  disabled = false,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: PeopleButtonVariant }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: PeopleButtonVariant; loading?: boolean }) {
   return (
-    <button {...props} className={['qe-people-button', 'qe-people-button--' + variant, className].filter(Boolean).join(' ')}>
+    <button
+      {...props}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={['qe-people-button', 'qe-people-button--' + variant, className].filter(Boolean).join(' ')}
+    >
+      {loading ? <span className="qe-people-button-spinner" aria-hidden="true" /> : null}
       {children}
     </button>
   );
