@@ -35,10 +35,25 @@ public class HrReportingScopeService {
     if(!Boolean.TRUE.equals(allowed))throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee not found.");
   }
 
-  public String sqlScopePredicate(String employeeAlias){
-    return "(not exists(select 1 from staff_permission_grant scope_grant where scope_grant.staff_id=? and scope_grant.permission_key='HR_MANAGER_TEAM_VIEW' and scope_grant.workspace_key='HRMS') or "
-      +employeeAlias+".id in (with recursive reporting(id) as ("
-      +"select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?) and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT') "
-      +"union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')) select id from reporting))";
+  /**
+   * SQL equivalent of requireEmployeeAccess for collection queries. The decision to scope comes
+   * from the authenticated permission service rather than a separate SQL grant-marker check.
+   */
+  public String sqlScopePredicate(AuthContext context,String employeeAlias){
+    if(!isManagerScoped(context))return "true";
+    return employeeAlias+".id in (with recursive reporting(id,organization_id) as ("
+      +"select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?) and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT') "
+      +"union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')) select id from reporting)";
+  }
+
+  /** Insert the optional reporting-tree bind between filter arguments and SQL suffix arguments. */
+  public Object[] withScopeArgs(AuthContext context,Object[] filterArgs,Object... suffixArgs){
+    boolean scoped=isManagerScoped(context);
+    Object[] result=new Object[filterArgs.length+(scoped?1:0)+suffixArgs.length];
+    System.arraycopy(filterArgs,0,result,0,filterArgs.length);
+    int index=filterArgs.length;
+    if(scoped)result[index++]=context==null?null:context.staffId();
+    System.arraycopy(suffixArgs,0,result,index,suffixArgs.length);
+    return result;
   }
 }
