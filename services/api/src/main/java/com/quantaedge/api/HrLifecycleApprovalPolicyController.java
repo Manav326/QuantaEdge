@@ -47,6 +47,7 @@ public class HrLifecycleApprovalPolicyController {
     if(!STATUSES.contains(from)||!STATUSES.contains(to)||from.equals(to))
       throw bad("Choose two different supported employment statuses.");
     if(!key.matches("[A-Z0-9_]+"))throw bad("Transition key may contain only uppercase letters, digits and underscores.");
+    if(!key.equals(from+"_TO_"+to))throw bad("Transition key must match FROMSTATUS_TOTOSTATUS for the selected statuses.");
     if(!Boolean.TRUE.equals(jdbc.queryForObject("select exists(select 1 from staff_permission_catalog where permission_key=?)",Boolean.class,permission)))
       throw bad("Choose a permission key from the permission catalog.");
     boolean active=body.get("active")==null||Boolean.parseBoolean(String.valueOf(body.get("active")));
