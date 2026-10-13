@@ -67,7 +67,7 @@ def main() -> int:
     parser.add_argument("--source-url", required=True, help="Canonical SCERT source URL")
     parser.add_argument("--edition", default="unknown", help="Edition/session shown by the source")
     parser.add_argument("--publication-year", type=int)
-    parser.add_argument("--language", default="hi")
+    parser.add_argument("--language", choices=("hi", "en"), default="hi", help="Source PDF language: hi (Hindi) or en (English)")
     parser.add_argument("--chapter-map", type=Path, help="Reviewed JSON chapter/page map; ranges are 1-based PDF pages")
     parser.add_argument("--ocr", action="store_true", help="OCR pages with too little extractable text")
     parser.add_argument("--ocr-language", default="hin+eng")
