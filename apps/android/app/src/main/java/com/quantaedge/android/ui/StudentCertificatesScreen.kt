@@ -280,7 +280,7 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
             else "Certificates are issued only for verified achievements. The server verifies identity, scores and eligibility.",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error)
+        if (error.isNotBlank()) Text(localizedUiText(error), color = MaterialTheme.colorScheme.error)
         if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.primary)
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
