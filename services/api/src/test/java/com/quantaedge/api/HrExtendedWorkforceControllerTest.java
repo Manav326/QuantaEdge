@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,26 +49,27 @@ class HrExtendedWorkforceControllerTest {
     verify(jdbc,never()).update(contains("update hr_vacancy"),any(Object[].class));
   }
 
-  @Test void acceptedCandidateCannotBeConvertedTwiceOrWithoutApprovedDecision(){
+  @Test void candidateConversionRequiresAnApprovedHiringDecision(){
     when(authorization.requirePermission(manager,"HR_RECRUITMENT_MANAGE")).thenReturn(manager);
-    when(jdbc.queryForList("select * from hr_candidate where id=? for update",9L))
-        .thenReturn(List.of(Map.of("id",9L,"organization_id",1L,"hiring_decision","PENDING","converted_employee_id",nullValue())));
+    Map<String,Object> candidate=new HashMap<>();
+    candidate.put("id",9L); candidate.put("organization_id",1L);
+    candidate.put("hiring_decision","PENDING"); candidate.put("converted_employee_id",null);
+    when(jdbc.queryForList("select * from hr_candidate where id=? for update",9L)).thenReturn(List.of(candidate));
     ResponseStatusException ex=assertThrows(ResponseStatusException.class,
         ()->controller.convertCandidate(9L,Map.of("joiningDate","2026-10-13","employmentTypeCode","FULL_TIME"),manager));
     assertEquals(HttpStatus.CONFLICT.value(),ex.getStatusCode().value());
-    verify(jdbc,never()).update(contains("insert into hr_employee"),any(Object[].class));
+    verify(jdbc,never()).queryForObject(contains("insert into hr_employee"),any(Object[].class));
   }
 
   @Test void invalidAssetReturnConditionCannotChangeAssignmentOrInventory(){
     when(authorization.requirePermission(manager,"HR_ASSET_MANAGE")).thenReturn(manager);
-    when(jdbc.queryForList(contains("from hr_asset_assignment x join hr_asset t"),(Object)any()))
-        .thenReturn(List.of(Map.of("id",3L,"asset_id",2L,"organization_id",1L,"returned_at",nullValue())));
+    Map<String,Object> assignment=new HashMap<>();
+    assignment.put("id",3L); assignment.put("asset_id",2L); assignment.put("organization_id",1L); assignment.put("returned_at",null);
+    when(jdbc.queryForList(contains("from hr_asset_assignment x join hr_asset t"),(Object)any())).thenReturn(List.of(assignment));
     ResponseStatusException ex=assertThrows(ResponseStatusException.class,
         ()->controller.returnAsset(3L,Map.of("condition","EXPLODED"),manager));
     assertEquals(HttpStatus.BAD_REQUEST.value(),ex.getStatusCode().value());
     verify(jdbc,never()).update(contains("update hr_asset_assignment"),any(Object[].class));
     verify(audit,never()).recordAction(any(),any(),any());
   }
-
-  private static Object nullValue(){return null;}
 }
