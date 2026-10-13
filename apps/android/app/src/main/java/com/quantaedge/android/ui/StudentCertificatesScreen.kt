@@ -45,6 +45,14 @@ import java.net.URI
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+private fun localizedCertificateSubject(code: String, displayName: String, language: String): String {
+    return when (code.trim().lowercase()) {
+        "maths", "math", "mathematics" -> if (language == "hi") "गणित" else "Mathematics"
+        "science" -> if (language == "hi") "विज्ञान" else "Science"
+        else -> displayName.ifBlank { code }
+    }
+}
+
 @Composable
 fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long = 0L, onBack: () -> Unit) {
     val context = LocalContext.current
@@ -52,9 +60,10 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
     val compact = LocalConfiguration.current.screenWidthDp < 390
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var eligibleAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var subjectTracks by remember { mutableStateOf(emptyList<JSONObject>()) }
     var template by remember { mutableStateOf("CLASSIC") }
     var selectedAchievement by remember { mutableStateOf("SUBJECT_COMPLETION") }
-    var subjectCode by remember { mutableStateOf("maths") }
+    var subjectCode by remember { mutableStateOf("") }
     var selectedAttemptId by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     var loading by remember { mutableStateOf(true) }
@@ -94,6 +103,11 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
         loading = true
         error = ""
         try {
+            val profile = ApiClient.getObject("/api/v1/students/me")
+            subjectTracks = profile.optJSONArray("curriculum").toObjectList()
+            if (subjectTracks.none { it.optString("subject_code") == subjectCode }) {
+                subjectCode = subjectTracks.firstOrNull()?.optString("subject_code").orEmpty()
+            }
             val issued = ApiClient.getObject("/api/v1/students/me/certificates")
             certificates = issued.optJSONArray("items").toObjectList()
             val eligible = ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
@@ -337,6 +351,8 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                     val classCode = result.optString("classCode")
                     Text((if (language == "hi") "कक्षा: " else "Class: ") +
                         if (classCode.isNotBlank()) "Class $classCode" else "—")
+                    Text((if (language == "hi") "विषय ट्रैक: " else "Subject track: ") +
+                        result.optString("subjectTrack", "—"))
                     val issuedAt = result.optString("issuedAt").substringBefore("T")
                     Text((if (language == "hi") "जारी करने की तारीख: " else "Issue date: ") +
                         if (issuedAt.isNotBlank()) issuedAt else "—")
@@ -371,11 +387,23 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                     else OutlinedButton(onClick = { selectedAchievement = "ASSESSMENT_PASS" }) { Text(if (language == "hi") "टेस्ट पास" else "Assessment pass") }
                 }
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (subjectCode == "maths") Button(onClick = { subjectCode = "maths" }) { Text(if (language == "hi") "गणित" else "Maths") }
-                        else OutlinedButton(onClick = { subjectCode = "maths" }) { Text(if (language == "hi") "गणित" else "Maths") }
-                        if (subjectCode == "science") Button(onClick = { subjectCode = "science" }) { Text(if (language == "hi") "विज्ञान" else "Science") }
-                        else OutlinedButton(onClick = { subjectCode = "science" }) { Text(if (language == "hi") "विज्ञान" else "Science") }
+                    if (subjectTracks.isEmpty()) {
+                        Text(
+                            if (language == "hi") "आपकी कक्षा में कोई सक्रिय subject track उपलब्ध नहीं है।"
+                            else "No active subject track is available for your current class.",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    } else {
+                        Text(if (language == "hi") "विषय ट्रैक चुनें" else "Choose subject track")
+                        subjectTracks.forEach { track ->
+                            val code = track.optString("subject_code")
+                            val name = localizedCertificateSubject(code, track.optString("subject_name"), language)
+                            val selectedLabel = if (language == "hi") "चुना गया" else "Selected"
+                            val label = name + " · " + track.optInt("completed") + " / " + track.optInt("lessons") +
+                                (if (language == "hi") " पाठ पूरे" else " lessons complete")
+                            if (subjectCode == code) Button(onClick = { subjectCode = code }, modifier = Modifier.fillMaxWidth()) { Text("$label · $selectedLabel") }
+                            else OutlinedButton(onClick = { subjectCode = code }, modifier = Modifier.fillMaxWidth()) { Text(label) }
+                        }
                     }
                 } else {
                     if (eligibleAssessments.isEmpty()) {
@@ -389,7 +417,13 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                         eligibleAssessments.forEach { item ->
                             val id = item.optLongValue("attempt_id", "attemptId", "id").toString()
                             val certificateStatus = item.optString("certificate_status")
-                            val title = item.optString("assessment_title", item.optString("title", "Assessment")) +
+                            val trackName = localizedCertificateSubject(
+                                item.optString("subject_code"), item.optString("subject_name"), language)
+                            val classCode = item.optString("class_code")
+                            val trackLabel = (if (language == "hi") "कक्षा " else "Class ") +
+                                classCode + " · " + trackName
+                            val title = trackLabel + " — " +
+                                item.optString("assessment_title", item.optString("title", "Assessment")) +
                                 " · " + item.optString("final_score", item.optString("score", "—")) +
                                 "/" + item.optString("max_score", "—") +
                                 when (certificateStatus) {
@@ -406,8 +440,11 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                     it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
                 }?.optString("certificate_status").orEmpty()
                 Button(onClick = { issueCertificate() }, enabled = !busy && !loading &&
-                    (selectedAchievement != "ASSESSMENT_PASS" ||
-                        (selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"))) {
+                    (if (selectedAchievement == "SUBJECT_COMPLETION") {
+                        subjectTracks.any { it.optString("subject_code") == subjectCode }
+                    } else {
+                        selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"
+                    })) {
                     Text(if (busy) "…" else if (selectedCertificateStatus == "ISSUED") {
                         if (language == "hi") "मौजूदा प्रमाणपत्र खोलें" else "Open existing certificate"
                     } else if (selectedCertificateStatus == "REVOKED") {
@@ -425,6 +462,13 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(certificate.optString("achievement_title", certificate.optString("achievementTitle", "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
+                    val certificateClass = certificate.optString("class_code")
+                    val subject = localizedCertificateSubject(
+                        certificate.optString("subject_code"), certificate.optString("subject_name"), language)
+                    if (certificateClass.isNotBlank() && subject.isNotBlank()) {
+                        Text((if (language == "hi") "कक्षा " else "Class ") + certificateClass + " · " + subject,
+                            style = MaterialTheme.typography.bodyMedium)
+                    }
                     Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")), style = MaterialTheme.typography.bodySmall)
                     val rawStatus = certificate.optString("status", "ISSUED").uppercase()
                     val statusLabel = when (rawStatus) {

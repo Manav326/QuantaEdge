@@ -24,7 +24,8 @@ Keep assessment certificates, the student certificate page, certificate artifact
 | Certificate issued from the test result page | Same assessment remains visible in the picker with its existing certificate state; no duplicate record is created |
 | Revoked certificate | Visible as revoked, cannot be silently reissued, public verifier reports REVOKED |
 | Unreleased, failing, generated/practice attempt or inactive track | Rejected according to the authoritative API rules |
-| Issued certificate PDF and PNG | Same human-readable certificate number and corresponding QR/Code 128 payload |
+| Issued certificate PDF and PNG | Subject track is printed for both achievement types; same human-readable certificate number and corresponding QR/Code 128 payload |
+| Legacy assessment certificate from before track display | First authenticated view/download creates a corrected artifact revision, archives the prior artifact metadata, and keeps the same certificate number and issue date |
 | QR scan | Opens the public verification page and checks current status against the server |
 | Code 128 scan or manual certificate number entry | Resolves the same canonical certificate record |
 | Unknown or malformed identifier | NOT FOUND with no private learner data disclosed |

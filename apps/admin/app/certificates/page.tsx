@@ -14,6 +14,7 @@ type CertificateRow = {
   achievement_type: string;
   class_code: string;
   subject_code?: string;
+  subject_name?: string;
   achievement_title: string;
   template_id: string;
   language: string;
@@ -29,6 +30,8 @@ export default function AdminCertificatesPage() {
   const router = useRouter();
   const [rows, setRows] = useState<CertificateRow[]>([]);
   const [status, setStatus] = useState('ALL');
+  const [achievementType, setAchievementType] = useState('ALL');
+  const [language, setLanguage] = useState('ALL');
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -47,6 +50,8 @@ export default function AdminCertificatesPage() {
     try {
       const params = new URLSearchParams({
         status,
+        achievementType,
+        language,
         limit: String(PAGE_SIZE),
         offset: String(page * PAGE_SIZE),
       });
@@ -67,7 +72,7 @@ export default function AdminCertificatesPage() {
     } finally {
       setLoading(false);
     }
-  }, [router, status, page]);
+  }, [router, status, achievementType, language, page]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -162,6 +167,22 @@ export default function AdminCertificatesPage() {
                 <option value="REVOKED">Revoked</option>
               </select>
             </label>
+            <label>
+              <span>Achievement type</span>
+              <select value={achievementType} onChange={(event) => { setAchievementType(event.target.value); setPage(0); setRevoking(null); }}>
+                <option value="ALL">All achievements</option>
+                <option value="SUBJECT_COMPLETION">Subject completion</option>
+                <option value="ASSESSMENT_PASS">Assessment pass</option>
+              </select>
+            </label>
+            <label>
+              <span>Certificate language</span>
+              <select value={language} onChange={(event) => { setLanguage(event.target.value); setPage(0); setRevoking(null); }}>
+                <option value="ALL">All languages</option>
+                <option value="hi">Hindi</option>
+                <option value="en">English</option>
+              </select>
+            </label>
             <span className={styles.range}>{total ? ('Showing ' + firstRecord + '–' + lastRecord + ' of ' + total) : 'No records'}</span>
           </div>
 
@@ -180,7 +201,7 @@ export default function AdminCertificatesPage() {
                     <Fragment key={row.id}>
                       <tr>
                       <td><strong>{row.recipient_name}</strong><small>{row.certificate_number}</small><small>Class {row.class_code} · Student #{row.student_id}</small></td>
-                      <td><strong>{row.achievement_title}</strong><small>{row.achievement_type === 'SUBJECT_COMPLETION' ? 'Subject completion' : 'Assessment pass'}{row.subject_code ? ' · ' + row.subject_code : ''}</small></td>
+                      <td><strong>{row.achievement_title}</strong><small>Class {row.class_code} · {row.subject_name || row.subject_code || 'Subject unavailable'}</small><small>{row.achievement_type === 'SUBJECT_COMPLETION' ? 'Subject completion' : 'Assessment pass'}</small></td>
                       <td>{row.template_id}<small>{row.language === 'hi' ? 'Hindi' : 'English'}</small></td>
                       <td>{new Date(row.issued_at).toLocaleDateString()}</td>
                       <td><span className={row.status === 'ISSUED' ? styles.valid : styles.revoked}>{row.status}</span>

@@ -193,9 +193,9 @@ class CertificateControllerEligibilityTest {
     assertEquals("ASSESSMENT_PASS", issued.get("achievement_type"));
     assertEquals("QE-2026-ABCDEF1234567890", issued.get("certificate_number"));
     verify(renderer).render(eq("CLASSIC"), eq("en"), eq("Test Learner"),
+        eq("Class 6 · Science"),
         org.mockito.ArgumentMatchers.contains("Perfect admin-created test"),
-        org.mockito.ArgumentMatchers.contains("100"), anyString(),
-        any(java.time.OffsetDateTime.class), eq(false));
+        anyString(), any(java.time.OffsetDateTime.class), eq(false));
   }
 
   @Test
@@ -248,6 +248,8 @@ class CertificateControllerEligibilityTest {
     assertEquals("QE-2026-ABCDEF1234567890", result.get("certificateNumber"));
     assertEquals("VALID", result.get("status"));
     assertEquals(true, result.get("verified"));
+    assertEquals("Class 6 · Science", result.get("subjectTrack"));
+    assertEquals("en", result.get("language"));
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
     verify(jdbc).queryForList(sql.capture(), args.capture());
@@ -292,6 +294,33 @@ class CertificateControllerEligibilityTest {
         () -> controller.verifyCertificate("3007"));
     assertThrows(org.springframework.web.server.ResponseStatusException.class,
         () -> controller.verifyCertificate("../QE-2026-ABCDEF1234567890"));
+  }
+
+
+
+  @Test
+  void adminRegisterWiresStatusAchievementTypeAndLanguageFiltersIntoBothRowsAndCount() {
+    when(authorization.requireAdmin(student)).thenReturn(student);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(0L);
+
+    controller.adminCertificates("ISSUED", "ASSESSMENT_PASS", "en", 50, 0, student);
+
+    ArgumentCaptor<String> rowSql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> rowArgs = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(rowSql.capture(), rowArgs.capture());
+    assertTrue(rowSql.getValue().contains("c.status=?"));
+    assertTrue(rowSql.getValue().contains("c.achievement_type=?"));
+    assertTrue(rowSql.getValue().contains("c.language=?"));
+    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en", 50, 0), List.of(rowArgs.getValue()));
+
+    ArgumentCaptor<String> countSql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> countArgs = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForObject(countSql.capture(), eq(Long.class), countArgs.capture());
+    assertTrue(countSql.getValue().contains("c.status=?"));
+    assertTrue(countSql.getValue().contains("c.achievement_type=?"));
+    assertTrue(countSql.getValue().contains("c.language=?"));
+    assertEquals(List.of("ISSUED", "ASSESSMENT_PASS", "en"), List.of(countArgs.getValue()));
   }
 
   @SuppressWarnings("unchecked")

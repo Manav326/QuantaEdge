@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
 
 const TEMPLATES = [
@@ -10,6 +11,13 @@ const TEMPLATES = [
   { id: 'MODERN', name: 'Modern', description: 'Clean navy layout with orange accents' },
   { id: 'ACADEMIC', name: 'Academic', description: 'Academic green and gold frame' },
 ];
+
+function localizedTrackName(code: string | undefined, name: string | undefined, language: string) {
+  const normalized = String(code || '').trim().toLowerCase();
+  if (['maths', 'math', 'mathematics'].includes(normalized)) return language === 'hi' ? 'गणित' : 'Mathematics';
+  if (normalized === 'science') return language === 'hi' ? 'विज्ञान' : 'Science';
+  return name || code || '';
+}
 
 type Certificate = {
   id: number;
@@ -28,19 +36,24 @@ type Certificate = {
 
 export default function StudentCertificatesPage() {
   const router = useRouter();
+  const { locale } = useLocale();
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [eligibleAttempts, setEligibleAttempts] = useState<any[]>([]);
   const [passThreshold, setPassThreshold] = useState(80);
   const [selectedTemplate, setSelectedTemplate] = useState('CLASSIC');
   const [achievementType, setAchievementType] = useState<'SUBJECT_COMPLETION' | 'ASSESSMENT_PASS'>('SUBJECT_COMPLETION');
-  const [subjectCode, setSubjectCode] = useState('maths');
+  const [subjectCode, setSubjectCode] = useState('');
   const [attemptId, setAttemptId] = useState('');
-  const [language, setLanguage] = useState('hi');
+  const [language, setLanguage] = useState(locale === 'english' ? 'en' : 'hi');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const languageInitialized = useRef(false);
+  const languageManuallyChosen = useRef(false);
+
+  useEffect(() => {
+    if (!languageManuallyChosen.current) setLanguage(locale === 'english' ? 'en' : 'hi');
+  }, [locale]);
 
   const refresh = useCallback(async () => {
     setError('');
@@ -65,13 +78,8 @@ export default function StudentCertificatesPage() {
       setEligibleAttempts(Array.isArray(eligible.items) ? eligible.items : []);
       setPassThreshold(Number(eligible.passThresholdPercent || 80));
       const curriculum = Array.isArray(progress.curriculum) ? progress.curriculum : [];
-      if (curriculum.length && !curriculum.some((item: any) => item.subject_code === subjectCode)) {
-        setSubjectCode(String(curriculum[0].subject_code || 'maths'));
-      }
-      if (!languageInitialized.current) {
-        const accountLanguage = String(progress.language || '').toLowerCase();
-        setLanguage(accountLanguage === 'en' || accountLanguage === 'english' ? 'en' : 'hi');
-        languageInitialized.current = true;
+      if (!curriculum.some((item: any) => item.subject_code === subjectCode)) {
+        setSubjectCode(String(curriculum[0]?.subject_code || ''));
       }
     } catch (e: any) {
       setError(e?.message || 'Unable to load certificates.');
@@ -182,18 +190,24 @@ export default function StudentCertificatesPage() {
             </label>
             <label className={styles.field}>
               <span>Certificate language</span>
-              <select value={language} onChange={(event) => setLanguage(event.target.value)}>
+              <select value={language} onChange={(event) => { languageManuallyChosen.current = true; setLanguage(event.target.value); }}>
                 <option value="hi">हिन्दी (Hindi)</option>
                 <option value="en">English</option>
               </select>
+              <small className={styles.help}>
+                {language === 'hi'
+                  ? 'यह प्रमाणपत्र की भाषा, कक्षा/विषय शीर्षक और विवरण चुनता है। परीक्षा का मूल नाम उसी भाषा में रहेगा जिसमें वह बनाया गया था।'
+                  : 'This controls certificate language, class/subject heading, and explanatory text. Assessment titles remain in the language in which they were authored.'}
+              </small>
             </label>
             {achievementType === 'SUBJECT_COMPLETION' ? (
               <label className={styles.field}>
                 <span>Subject track</span>
                 <select value={subjectCode} onChange={(event) => setSubjectCode(event.target.value)}>
+                  {!tracks.length && <option value="">{language === 'hi' ? 'कोई सक्रिय विषय ट्रैक उपलब्ध नहीं' : 'No active subject track available'}</option>}
                   {tracks.map((track: any) => (
                     <option key={track.subject_code} value={track.subject_code}>
-                      {track.subject_name || track.subject_code} · {Number(track.completed || 0)} / {Number(track.lessons || 0)} lessons complete
+                      {localizedTrackName(track.subject_code, track.subject_name, language)} · {Number(track.completed || 0)} / {Number(track.lessons || 0)} {language === 'hi' ? 'पाठ पूरे' : 'lessons complete'}
                     </option>
                   ))}
                 </select>
@@ -205,7 +219,7 @@ export default function StudentCertificatesPage() {
                   <option value="">Choose a qualifying released result</option>
                   {releasedAttempts.map((attempt: any) => (
                     <option key={attempt.attempt_id} value={attempt.attempt_id}>
-                      {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
+                      {language === 'hi' ? 'कक्षा ' : 'Class '}{attempt.class_code} · {localizedTrackName(attempt.subject_code, attempt.subject_name, language)} — {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
                       {attempt.certificate_status === 'ISSUED' ? ' · Certificate already issued' : ''}
                       {attempt.certificate_status === 'REVOKED' ? ' · Certificate revoked' : ''}
                     </option>
@@ -234,7 +248,9 @@ export default function StudentCertificatesPage() {
           </div>
           <button className="button button-dark" type="button"
             onClick={() => void issueCertificate()}
-            disabled={busy || (achievementType === 'ASSESSMENT_PASS' && (!attemptId || selectedAssessment?.certificate_status === 'REVOKED'))}>
+            disabled={busy
+              || (achievementType === 'SUBJECT_COMPLETION' && (!subjectCode || !tracks.some((track: any) => track.subject_code === subjectCode)))
+              || (achievementType === 'ASSESSMENT_PASS' && (!attemptId || !selectedAssessment || selectedAssessment?.certificate_status === 'REVOKED'))}>
             {busy ? 'Verifying achievement…' : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
               ? 'Open existing certificate'
               : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED'
@@ -257,6 +273,7 @@ export default function StudentCertificatesPage() {
                   <div className={styles.certificateIcon} aria-hidden="true">QE</div>
                   <div className={styles.certificateInfo}>
                     <strong>{certificate.achievement_title}</strong>
+                    <span>{(certificate.language || 'en') === 'hi' ? 'कक्षा ' : 'Class '}{certificate.class_code} · {localizedTrackName(certificate.subject_code, certificate.subject_name, certificate.language || 'en')}</span>
                     <span>{certificate.certificate_number} · {certificate.template_id}</span>
                     <small>Issued {new Date(certificate.issued_at).toLocaleDateString()} · {certificate.language === 'hi' ? 'Hindi' : 'English'}</small>
                   </div>

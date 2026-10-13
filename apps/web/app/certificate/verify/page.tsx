@@ -178,6 +178,7 @@ export default function CertificateVerifyPage() {
               <div><dt>Recipient</dt><dd>{data.recipientName}</dd></div>
               <div><dt>Achievement</dt><dd>{data.achievementTitle}</dd></div>
               <div><dt>Class</dt><dd>{data.classCode ? 'Class ' + data.classCode : '—'}</dd></div>
+              <div><dt>Subject track</dt><dd>{data.subjectTrack || '—'}</dd></div>
               <div><dt>Issue date</dt><dd>{data.issuedAt ? new Date(data.issuedAt).toLocaleDateString() : '—'}</dd></div>
             </dl>
             <p className={styles.privacy}>This check confirms the current certificate status; it does not disclose the student's profile or assessment history.</p>

@@ -29,6 +29,7 @@ type Result = {attempt_id:number;assessment_id:number;attempt_number:number;stat
 type CertificateEligibility = {
   attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
   certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
+  class_code?:string;subject_code?:string;subject_name?:string;
 };
 
 type LeaderboardEntry = {
@@ -547,7 +548,9 @@ export default function TestsClient(){
             const certificateId=Number(cert?.certificate_id||0);
             return <section className={styles.certificateResultPanel} aria-live="polite">
               <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
-                <p>Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate.</p></div>
+                <p>Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate. The class and subject track are included; certificate language follows your current app language, while the assessment title stays as authored.</p>
+                {cert?.subject_name && <small>{language === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {language === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {cert.subject_name}</small>}
+              </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
