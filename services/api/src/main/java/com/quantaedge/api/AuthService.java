@@ -629,7 +629,8 @@ public class AuthService {
         (r.get("display_name")==null?null:String.valueOf(r.get("display_name")));
     String role=studentId!=null?"STUDENT":
         staffId!=null?String.valueOf(r.get("staff_role")):String.valueOf(r.get("role"));
-    return new AuthContext(userId,studentId,staffId,role,name);
+    String effectiveWorkspace = workspace == null ? String.valueOf(r.get("workspace_key")) : workspace;
+    return new AuthContext(userId,studentId,staffId,role,name,effectiveWorkspace);
   }
 
   public record SessionTokens(String accessToken,String refreshToken,AuthContext context) {}
@@ -789,11 +790,15 @@ public class AuthService {
   }
 
   public List<String> permissionsForStaff(long staffId) {
+    return permissionsForStaff(staffId, null);
+  }
+
+  public List<String> permissionsForStaff(long staffId, String workspace) {
     String role=jdbc.queryForObject(
         "select role from staff_account where id=?", String.class, staffId);
-    // ADMIN is a system role, not a snapshot of grants. Always use the live permission
-    // catalogue so adding a new task cannot silently make the administrator second-class.
-    if ("ADMIN".equals(role)) {
+    // Global ADMIN semantics apply only to the education workspace. HRMS permissions are
+    // explicit and remain least-privilege even if a staff identity has an education role.
+    if ("ADMIN".equals(role) && !"HRMS".equals(normalizeWorkspace(workspace))) {
       return jdbc.queryForList(
           "select permission_key from staff_permission_catalog order by permission_key",
           String.class);
