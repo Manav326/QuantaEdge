@@ -28,7 +28,6 @@ const NAVIGATION: NavigationGroup[] = [
     label: 'People and organization',
     items: [
       { label: 'Employee directory', href: '/', icon: '◉', permissions: ['HR_EMPLOYEE_VIEW'] },
-      { label: 'Employee login access', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
       {
         label: 'Workforce lifecycle',
         href: '/workforce',
@@ -40,6 +39,12 @@ const NAVIGATION: NavigationGroup[] = [
           'HR_EXIT_VIEW', 'HR_EXIT_MANAGE',
         ],
       },
+    ],
+  },
+  {
+    label: 'Access governance',
+    items: [
+      { label: 'Employee login access', href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE'] },
     ],
   },
   {
@@ -78,7 +83,7 @@ const NAVIGATION: NavigationGroup[] = [
         label: 'Teaching assignments',
         href: '/assignments',
         icon: '◇',
-        permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE', 'TEACHING_ASSIGNMENT_VIEW', 'CLASS_SCHEDULE_POLICY_MANAGE'],
+        permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE'],
       },
       { label: 'My teaching classes', href: '/my-classes', icon: '▤', permissions: ['TEACHING_ASSIGNMENT_VIEW'] },
     ],

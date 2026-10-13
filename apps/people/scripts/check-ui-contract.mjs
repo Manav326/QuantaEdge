@@ -31,6 +31,9 @@ assert(sessionBoundary.includes("'HRMS'"), 'Session boundary must preserve HRMS 
 assert(workspace.includes("pathname === '/change-password'"), 'Forced password-change route must remain outside the workspace chrome.');
 assert(workspace.includes('id="main-content" tabIndex={-1}'), 'Skip link target must be programmatically focusable.');
 assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
+assert(workspace.includes("label: 'Access governance'"), 'Access management must have a distinct Access Governance navigation group.');
+assert(workspace.includes("permissions: ['HR_ACADEMIC_ASSIGNMENT_VIEW', 'HR_ACADEMIC_ASSIGNMENT_MANAGE', 'HR_ACADEMIC_ASSIGNMENT_APPROVE']"), 'Teaching-assignment navigation must match the page authorization contract.');
+
 assert(workspace.includes("'TEACHING_ASSIGNMENT_VIEW'"), 'Teaching classes/assignment navigation must honor TEACHING_ASSIGNMENT_VIEW.');
 assert(!workspace.includes('<main className="qe-people-page-slot"'), 'Workspace must not nest a main landmark around page mains.');
 
@@ -44,6 +47,10 @@ for (const exportName of [
   'PeopleDialog',
 ]) {
   assert(components.includes(`export function ${exportName}`), `Missing shared People UI primitive: ${exportName}`);
+assert(components.includes("'primary' | 'secondary' | 'neutral' | 'danger'"), 'Shared People buttons must include the semantic variants.');
+assert(components.includes('loading = false') && components.includes('disabled={disabled || loading}'), 'Shared People buttons must expose safe loading/disabled behavior.');
+assert(styles.includes('.qe-people-button--neutral') && styles.includes('.qe-people-button-spinner'), 'Shared People button variants and loading indicator styles must exist.');
+
 }
 
 const routePages = [
@@ -56,6 +63,10 @@ const routePages = [
   ['/my-classes', 'apps/people/app/my-classes/page.tsx'],
   ['/access', 'apps/people/app/access/page.tsx'],
 ];
+
+const accessRouteSource = read('apps/people/app/access/page.tsx');
+assert(accessRouteSource.includes('HR_ACCESS_MANAGE'), 'Access governance page must retain its permission check.');
+assert(accessRouteSource.includes('<PeopleButton variant='), 'Access governance actions must use shared People buttons.');
 
 for (const [route, path] of routePages) {
   const source = read(path);

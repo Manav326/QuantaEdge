@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge } from '../components/PeopleUI';
+import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge, PeopleButton } from '../components/PeopleUI';
 
 type Session = { staffId?: number; role?: string; displayName?: string; permissions?: string[]; workspace?: string };
 type AccessUser = {
@@ -185,7 +185,7 @@ export default function HrmsAccessPage() {
         <section className="panel">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             <div><div className="eyebrow">EMPLOYEE DIRECTORY</div><h2>Access and role assignments</h2><p className="small">Only authorised HRMS access managers can open this screen. Permission checks are also enforced by the API.</p></div>
-            <button className="secondary" type="button" onClick={() => void load()} disabled={loading || saving}>Refresh</button>
+            <PeopleButton variant="secondary" type="button" onClick={() => void load()} disabled={loading || saving}>Refresh</PeopleButton>
           </div>
           <label style={{ display: 'block', margin: '16px 0' }}>Search employees
             <input className="input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Name, employee number, username or role" />
@@ -203,9 +203,9 @@ export default function HrmsAccessPage() {
                       <td><PeopleStatusBadge status={row.hrms_access_enabled ? 'Enabled' : 'Disabled'} /></td>
                       <td>{row.last_login_at ? new Date(row.last_login_at).toLocaleString() : 'Never'}</td>
                       <td style={{ minWidth: 180 }}>
-                        <button className="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? 'View account' : 'Manage access'}</button>
-                        {!reserved(row) && row.staff_id !== session?.staffId && <button className="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id}>{row.hrms_access_enabled ? 'Disable' : 'Enable'}</button>}
-                        {!row.staff_id && <button className="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>Create login</button>}
+                        <PeopleButton variant="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? 'View account' : 'Manage access'}</PeopleButton>
+                        {!reserved(row) && row.staff_id !== session?.staffId && <PeopleButton variant="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id}>{row.hrms_access_enabled ? 'Disable' : 'Enable'}</PeopleButton>}
+                        {!row.staff_id && <PeopleButton variant="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>Create login</PeopleButton>}
                       </td>
                     </tr>
                   ))}
@@ -220,7 +220,7 @@ export default function HrmsAccessPage() {
           <section className="panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'start' }}>
               <div><div className="eyebrow">EMPLOYEE ACCESS CONFIGURATION</div><h2>{selected.display_name}</h2><p className="small">{selected.employee_number} · <PeopleStatusBadge status={pretty(selected.employment_status)} /></p></div>
-              <button className="secondary" type="button" onClick={() => { setSelectedId(null); setShowCredentials(false); }} disabled={saving}>Close</button>
+              <PeopleButton variant="secondary" type="button" onClick={() => { setSelectedId(null); setShowCredentials(false); }} disabled={saving}>Close</PeopleButton>
             </div>
 
             <div className="cards">
@@ -249,16 +249,16 @@ export default function HrmsAccessPage() {
             </div>
 
             {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && (
-              <button className="primary" type="button" onClick={() => void saveRoles()} disabled={saving}>
+              <PeopleButton variant="primary" type="button" onClick={() => void saveRoles()} disabled={saving}>
                 {saving ? 'Saving…' : 'Save roles and permissions'}
-              </button>
+              </PeopleButton>
             )}
 
             {!isReserved && !isSelf && (
               <div style={{ marginTop: 18 }}>
-                <button className="secondary" type="button" onClick={() => setShowCredentials((value) => !value)} disabled={saving}>
+                <PeopleButton variant="secondary" type="button" onClick={() => setShowCredentials((value) => !value)} disabled={saving}>
                   {showCredentials ? 'Hide credential form' : selected.username ? 'Set / reset password' : 'Create username and password'}
-                </button>
+                </PeopleButton>
                 {showCredentials && (
                   <form className="card" style={{ marginTop: 12 }} onSubmit={(event) => { event.preventDefault(); void provision(); }}>
                     <h3>{selected.username ? 'Reset HRMS credentials' : 'Create HRMS credentials'}</h3>
@@ -269,7 +269,7 @@ export default function HrmsAccessPage() {
                     <label>Temporary password (at least 12 characters)
                       <input className="input" required type="password" minLength={12} maxLength={128} autoComplete="new-password" value={initialPassword} onChange={(event) => setInitialPassword(event.target.value)} />
                     </label>
-                    <button className="primary" disabled={saving || !username.trim() || initialPassword.length < 12}>{saving ? 'Saving securely…' : 'Save credentials and roles'}</button>
+                    <PeopleButton variant="primary" disabled={saving || !username.trim() || initialPassword.length < 12}>{saving ? 'Saving securely…' : 'Save credentials and roles'}</PeopleButton>
                   </form>
                 )}
               </div>
