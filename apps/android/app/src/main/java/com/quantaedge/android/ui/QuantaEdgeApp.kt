@@ -1744,6 +1744,50 @@ private fun StudentHomeScreen(
         Text(if (language == "hi") "नमस्ते, $name" else "Welcome, $name", style = MaterialTheme.typography.headlineSmall)
         Text(if (className.isNotBlank()) "कक्षा $className" else "आपकी सीखने की जगह", style = MaterialTheme.typography.bodyMedium)
         if (lessonCount >= 0) Text(localizedUiText("पूरे किए गए पाठ: $lessonCount"), style = MaterialTheme.typography.bodySmall)
+        val lessonStats = profile.optJSONObject("lessonStats") ?: JSONObject()
+        val completedLessons = profile.optInt("completedLessons",
+            profile.optInt("completed_lessons", lessonStats.optInt("completed_lessons", 0)))
+        val totalLessons = profile.optInt("totalLessons",
+            profile.optInt("total_lessons", lessonStats.optInt("total_lessons", 0)))
+        val hasLessonSummary = profile.has("completedLessons") || profile.has("completed_lessons") || profile.has("lessonStats")
+        if (hasLessonSummary) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                ParentReportMetric(
+                    if (language == "hi") "पाठ पूरे" else "Lessons completed",
+                    if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
+                    if (language == "hi") "सीखने की प्रगति" else "Learning progress",
+                    Modifier.weight(1f)
+                )
+                val questionStats = profile.optJSONObject("questionStats")
+                if (questionStats != null) {
+                    ParentReportMetric(
+                        if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
+                        questionStats.optString("accuracy_percent", "0") + "%",
+                        questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
+                        Modifier.weight(1f)
+                    )
+                }
+            }
+        }
+        val curriculum = profile.optJSONArray("curriculum")?.objectItems() ?: emptyList()
+        if (curriculum.isNotEmpty()) {
+            Text(if (language == "hi") "विषयवार प्रगति" else "Subject progress",
+                style = MaterialTheme.typography.titleLarge)
+            curriculum.take(4).forEach { subject ->
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            Text(localizedUiText(subject.textAny("subject_name", "subject_code")), style = MaterialTheme.typography.titleSmall)
+                            Text(subject.optString("completion_percent", "0") + "%", style = MaterialTheme.typography.labelMedium)
+                        }
+                        LinearProgressIndicator(
+                            progress = { subject.optDouble("completion_percent", 0.0).toFloat().coerceIn(0f, 100f) / 100f },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
             SubjectCard("गणित", "Maths", Modifier.weight(1f)) { onSubject("maths") }
             SubjectCard("विज्ञान", "Science", Modifier.weight(1f)) { onSubject("science") }
