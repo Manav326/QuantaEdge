@@ -46,6 +46,19 @@ class HrLeaveBalanceControllerTest {
     verifyNoInteractions(jdbc,audit);
   }
 
+  @Test void reversalRequiresExplicitBalanceManagePermission() {
+    when(authorization.requirePermission(manager,"HR_LEAVE_BALANCE_MANAGE")).thenThrow(new SecurityException("denied"));
+    assertThrows(SecurityException.class, () -> controller.reverseTransaction(17,Map.of("reason","Correct erroneous grant"),manager));
+    verifyNoInteractions(jdbc,audit);
+  }
+
+  @Test void invalidReversalIdIsRejectedBeforeDatabaseLookups() {
+    when(authorization.requirePermission(manager,"HR_LEAVE_BALANCE_MANAGE")).thenReturn(manager);
+    ResponseStatusException ex=assertThrows(ResponseStatusException.class,()->controller.reverseTransaction(0,Map.of("reason","Correct erroneous grant"),manager));
+    assertEquals(400,ex.getStatusCode().value());
+    verifyNoInteractions(jdbc,audit);
+  }
+
   @Test void manualConsumptionIsRejectedBeforeDatabase() {
     when(authorization.requirePermission(manager,"HR_LEAVE_BALANCE_MANAGE")).thenReturn(manager);
     ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> controller.recordTransaction(Map.of(
