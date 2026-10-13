@@ -23,9 +23,15 @@ public class AuthController {
   }
 
   @PostMapping("/request-otp")
-  public Map<String,Object> requestOtp(@RequestBody Map<String,Object> body) {
+  public Map<String,Object> requestOtp(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
     String mobile=String.valueOf(body.getOrDefault("mobile",""));
     String purpose=String.valueOf(body.getOrDefault("purpose","LOGIN"));
+    if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))
+        && "STAFF_LOGIN".equals(purpose)) {
+      throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
+    }
     String devCode=auth.requestOtp(mobile,purpose);
     var result=new LinkedHashMap<String,Object>();
     result.put("accepted",true); result.put("expiresInSeconds",300);
