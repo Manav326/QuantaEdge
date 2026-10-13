@@ -234,6 +234,7 @@ export default function TestsClient(){
       if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
       setNotice('Certificate issued successfully. View or download it from this result.');
       await loadOverview();
+      await refreshCertificateEligibilityForAttempts([attemptId]);
     }catch(e:any){
       setError(e?.message||'Certificate could not be issued.');
     }finally{
@@ -302,7 +303,7 @@ export default function TestsClient(){
     return()=>window.clearTimeout(timer);
   },[dirtyAnswers,attempt?.attempt_id,attempt?.status,saveAnswersBatch]);
 
-  async function refreshCertificateEligibilityForAttempts(attemptIds:number[]){
+  const refreshCertificateEligibilityForAttempts=useCallback(async(attemptIds:number[])=>{
     const ids=[...new Set(attemptIds.filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
     if(!ids.length)return;
     try{
@@ -316,7 +317,7 @@ export default function TestsClient(){
     }catch{
       // A temporary eligibility lookup failure must not hide the released test result.
     }
-  }
+  },[]);
 
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
@@ -414,7 +415,7 @@ export default function TestsClient(){
       autoSubmitted.current=false;
       setError(e instanceof Error?e.message:'Could not submit your test. Saved answers are still preserved.');
     }finally{setBusy(false);}
-  },[loadOverview,flushSavedAnswers]);
+  },[loadOverview,flushSavedAnswers,refreshCertificateEligibilityForAttempts]);
   useEffect(()=>{submitFnRef.current=submitTest;},[submitTest]);
 
   useEffect(()=>{
