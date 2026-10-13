@@ -1,5 +1,10 @@
+import copy
 import importlib.util
+import io
+import json
 import unittest
+import urllib.error
+from unittest.mock import MagicMock, patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,6 +80,60 @@ class QuestionGenerationTests(unittest.TestCase):
         self.assertEqual(2, source["pdf_page_count"])
         self.assertEqual("algebraic-expressions", chapters[0]["code"])
         self.assertEqual([1, 2], [p["page_number"] for p in chapters[0]["pages"]])
+
+    def test_model_call_retries_transient_rate_limit_and_honors_retry_after(self):
+        response_content = json.dumps(sample_model_output(), ensure_ascii=False)
+        response_body = json.dumps({
+            "choices": [{"message": {"content": response_content}}]
+        }, ensure_ascii=False).encode("utf-8")
+        response = MagicMock()
+        response.__enter__.return_value = response
+        response.read.return_value = response_body
+        rate_limit = urllib.error.HTTPError(
+            "https://api.example.com/v1/chat/completions",
+            429, "Too Many Requests", {"Retry-After": "0"}, io.BytesIO(b"rate limited"),
+        )
+
+        with patch.object(GEN.urllib.request, "urlopen", side_effect=[rate_limit, response]) as request, \
+                patch.object(GEN.time, "sleep") as sleep:
+            result = GEN.call_model("prompt", "test-key", "https://api.example.com/v1", "test-model", 1)
+
+        self.assertEqual(sample_model_output(), result)
+        self.assertEqual(2, request.call_count)
+        sleep.assert_called_once_with(0.0)
+
+    def test_model_call_does_not_retry_permanent_authentication_errors(self):
+        unauthorized = urllib.error.HTTPError(
+            "https://api.example.com/v1/chat/completions",
+            401, "Unauthorized", {}, io.BytesIO(b"invalid key"),
+        )
+        with patch.object(GEN.urllib.request, "urlopen", side_effect=unauthorized) as request, \
+                patch.object(GEN.time, "sleep") as sleep:
+            with self.assertRaisesRegex(RuntimeError, "HTTP 401"):
+                GEN.call_model("prompt", "bad-key", "https://api.example.com/v1", "test-model", 1)
+        self.assertEqual(1, request.call_count)
+        sleep.assert_not_called()
+
+    def test_resume_candidate_requires_matching_source_and_review_gate(self):
+        curriculum, source, chapters = GEN.validate_extraction(sample_extraction())
+        chapter = chapters[0]
+        chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
+        candidate = GEN.build_candidate_bundle(curriculum, source, chapter, [(chunk, checked)], "test-model")
+
+        self.assertEqual(1, GEN.validate_resume_candidate(
+            candidate, curriculum, source, chapter, 1, "test-model",
+        ))
+
+        wrong_source = copy.deepcopy(candidate)
+        wrong_source["source"]["pdf_sha256"] = "b" * 64
+        with self.assertRaisesRegex(ValueError, "different source PDF"):
+            GEN.validate_resume_candidate(wrong_source, curriculum, source, chapter, 1, "test-model")
+
+        auto_publish = copy.deepcopy(candidate)
+        auto_publish["generated_by"]["auto_publish"] = True
+        with self.assertRaisesRegex(ValueError, "review-only publishing gate"):
+            GEN.validate_resume_candidate(auto_publish, curriculum, source, chapter, 1, "test-model")
 
     def test_unknown_edition_is_rejected(self):
         bundle = sample_extraction()
