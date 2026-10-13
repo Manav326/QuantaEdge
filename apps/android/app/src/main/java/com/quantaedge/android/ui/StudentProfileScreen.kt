@@ -67,16 +67,20 @@ fun StudentProfileScreen(
     var learningLanguage by rememberSaveable { mutableStateOf("hi") }
     var schoolMediumExpanded by rememberSaveable { mutableStateOf(false) }
     var favoriteSubjectExpanded by rememberSaveable { mutableStateOf(false) }
+    var profileDraftHydrated by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(profile) {
-        displayName = profile.textAny("display_name", "displayName")
-        city = profile.textAny("city")
-        state = profile.textAny("state")
-        schoolName = profile.textAny("school_name", "schoolName")
-        schoolMedium = profile.textAny("school_medium", "schoolMedium").ifBlank { "Hindi" }
-        favoriteSubject = profile.textAny("favorite_subject", "favoriteSubject").ifBlank { "both" }
-        learningGoal = profile.textAny("learning_goal", "learningGoal")
-        learningLanguage = profile.textAny("language").trim().lowercase().let { if (it == "en") "en" else "hi" }
+        if (!profileDraftHydrated) {
+            displayName = profile.textAny("display_name", "displayName")
+            city = profile.textAny("city")
+            state = profile.textAny("state")
+            schoolName = profile.textAny("school_name", "schoolName")
+            schoolMedium = profile.textAny("school_medium", "schoolMedium").ifBlank { "Hindi" }
+            favoriteSubject = profile.textAny("favorite_subject", "favoriteSubject").ifBlank { "both" }
+            learningGoal = profile.textAny("learning_goal", "learningGoal")
+            learningLanguage = profile.textAny("language").trim().lowercase().let { if (it == "en") "en" else "hi" }
+            profileDraftHydrated = true
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize().widthIn(max = 760.dp).verticalScroll(rememberScrollState()).padding(18.dp),
