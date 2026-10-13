@@ -42,17 +42,23 @@ public class AuthorizationService {
     if (context == null || !context.isAuthenticated()) return false;
     if (context.isAdmin()) return true;
     if (!context.isEmployee() || permission == null || permission.isBlank()) return false;
+    // Role-based permissions are evaluated live on every request. An HRMS-scoped session
+    // never inherits the Education Admin global ADMIN bypass.
     Boolean granted = jdbc.queryForObject("""
         select exists (
           select 1
-          from staff_permission_grant g
-          join staff_account s on s.id = g.staff_id
-          join staff_permission_catalog p on p.permission_key = g.permission_key
-          where g.staff_id = ?
-            and g.permission_key = ?
-            and s.active = true
+          from staff_account s
+          join staff_permission_catalog p on p.permission_key = ?
+          where s.id = ? and s.active = true
+            and (
+              exists (select 1 from staff_permission_grant g
+                      where g.staff_id=s.id and g.permission_key=p.permission_key)
+              or exists (select 1 from staff_additional_role ar
+                         join staff_role_permission rp on rp.role_code=ar.role_code
+                         where ar.staff_id=s.id and rp.permission_key=p.permission_key)
+            )
         )
-        """, Boolean.class, context.staffId(), permission);
+        """, Boolean.class, permission, context.staffId());
     return Boolean.TRUE.equals(granted);
   }
 
