@@ -132,7 +132,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
 
     let active = true;
     fetch('/api/v1/auth/me', {
-      headers: { 'X-QE-Workspace': 'STAFF' },
+      headers: { 'X-QE-Workspace': 'HRMS' },
       credentials: 'same-origin',
       cache: 'no-store',
     })
@@ -236,7 +236,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
       await fetch('/api/v1/auth/logout', {
         method: 'POST',
         credentials: 'same-origin',
-        headers: { 'X-QE-Workspace': 'STAFF' },
+        headers: { 'X-QE-Workspace': 'HRMS' },
       });
     } catch {
       // Return to the login page even when the logout endpoint is unavailable.
