@@ -1884,6 +1884,7 @@ private fun StudentHomeScreen(
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { "विद्यार्थी" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
+    val compact = LocalConfiguration.current.screenWidthDp < 390
     val lessonCount = profile.optInt("completedLessons", profile.optInt("completed_lessons", -1))
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -1897,21 +1898,40 @@ private fun StudentHomeScreen(
             profile.optInt("total_lessons", lessonStats.optInt("total_lessons", 0)))
         val hasLessonSummary = profile.has("completedLessons") || profile.has("completed_lessons") || profile.has("lessonStats")
         if (hasLessonSummary) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                ParentReportMetric(
-                    if (language == "hi") "पाठ पूरे" else "Lessons completed",
-                    if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
-                    if (language == "hi") "सीखने की प्रगति" else "Learning progress",
-                    Modifier.weight(1f)
-                )
-                val questionStats = profile.optJSONObject("questionStats")
-                if (questionStats != null) {
+            val questionStats = profile.optJSONObject("questionStats")
+            if (compact) {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                     ParentReportMetric(
-                        if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
-                        questionStats.optString("accuracy_percent", "0") + "%",
-                        questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
+                        if (language == "hi") "पाठ पूरे" else "Lessons completed",
+                        if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
+                        if (language == "hi") "सीखने की प्रगति" else "Learning progress",
+                        Modifier.fillMaxWidth()
+                    )
+                    if (questionStats != null) {
+                        ParentReportMetric(
+                            if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
+                            questionStats.optString("accuracy_percent", "0") + "%",
+                            questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
+                            Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            } else {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                    ParentReportMetric(
+                        if (language == "hi") "पाठ पूरे" else "Lessons completed",
+                        if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
+                        if (language == "hi") "सीखने की प्रगति" else "Learning progress",
                         Modifier.weight(1f)
                     )
+                    if (questionStats != null) {
+                        ParentReportMetric(
+                            if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
+                            questionStats.optString("accuracy_percent", "0") + "%",
+                            questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
+                            Modifier.weight(1f)
+                        )
+                    }
                 }
             }
         }
@@ -2578,6 +2598,7 @@ private fun ResultsScreen(
     onDownloadCertificate: (Long, String) -> Unit,
     onViewCertificate: (Long) -> Unit
 ) {
+    val compact = LocalConfiguration.current.screenWidthDp < 390
     var pageSizeMenuExpanded by remember { mutableStateOf(false) }
     val pageCount = ((resultTotal + pageSize - 1) / pageSize).coerceAtLeast(1)
     val safePageIndex = (pageOffset / pageSize).coerceIn(0, pageCount - 1)
@@ -2614,20 +2635,31 @@ private fun ResultsScreen(
                     }
                 }
             }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                val rangeStart = if (resultTotal == 0) 0 else pageOffset + 1
-                val rangeEnd = (pageOffset + resultItems.size).coerceAtMost(resultTotal)
-                Text(if (language == "hi") "$rangeStart–$rangeEnd / $resultTotal परिणाम"
-                    else "Showing $rangeStart–$rangeEnd of $resultTotal results",
-                    modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                TextButton(onClick = { onPageChange(pageSize, ((safePageIndex - 1).coerceAtLeast(0)) * pageSize) },
-                    enabled = safePageIndex > 0 && !busy) { Text(localizedUiText("Previous ←")) }
-                TextButton(onClick = { onPageChange(pageSize, (safePageIndex + 1) * pageSize) },
-                    enabled = safePageIndex < pageCount - 1 && !busy) { Text(localizedUiText("Next →")) }
+            val rangeStart = if (resultTotal == 0) 0 else pageOffset + 1
+            val rangeEnd = (pageOffset + resultItems.size).coerceAtMost(resultTotal)
+            if (compact) {
+                Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(if (language == "hi") "$rangeStart–$rangeEnd / $resultTotal परिणाम"
+                        else "Showing $rangeStart–$rangeEnd of $resultTotal results",
+                        style = MaterialTheme.typography.bodySmall)
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        TextButton(onClick = { onPageChange(pageSize, ((safePageIndex - 1).coerceAtLeast(0)) * pageSize) },
+                            enabled = safePageIndex > 0 && !busy) { Text(localizedUiText("Previous ←")) }
+                        TextButton(onClick = { onPageChange(pageSize, (safePageIndex + 1) * pageSize) },
+                            enabled = safePageIndex < pageCount - 1 && !busy) { Text(localizedUiText("Next →")) }
+                    }
+                }
+            } else {
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(if (language == "hi") "$rangeStart–$rangeEnd / $resultTotal परिणाम"
+                        else "Showing $rangeStart–$rangeEnd of $resultTotal results",
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = { onPageChange(pageSize, ((safePageIndex - 1).coerceAtLeast(0)) * pageSize) },
+                        enabled = safePageIndex > 0 && !busy) { Text(localizedUiText("Previous ←")) }
+                    TextButton(onClick = { onPageChange(pageSize, (safePageIndex + 1) * pageSize) },
+                        enabled = safePageIndex < pageCount - 1 && !busy) { Text(localizedUiText("Next →")) }
+                }
             }
         }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
@@ -2681,19 +2713,24 @@ private fun ResultsScreen(
                                 }
                                 when {
                                     certificateStatus == "ISSUED" && certificateId > 0L -> {
-                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                                            OutlinedButton(
-                                                onClick = { onViewCertificate(certificateId) },
-                                                enabled = !busy
-                                            ) { Text(if (language == "hi") "देखें" else "View") }
-                                            OutlinedButton(
-                                                onClick = { onDownloadCertificate(certificateId, "pdf") },
-                                                enabled = !busy
-                                            ) { Text(if (language == "hi") "PDF सेव करें" else "Save PDF") }
-                                            OutlinedButton(
-                                                onClick = { onDownloadCertificate(certificateId, "png") },
-                                                enabled = !busy
-                                            ) { Text(if (language == "hi") "PNG सेव करें" else "Save PNG") }
+                                        if (compact) {
+                                            Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+                                                OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
+                                                    modifier = Modifier.fillMaxWidth()) { Text(if (language == "hi") "प्रमाणपत्र देखें" else "View certificate") }
+                                                OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy,
+                                                    modifier = Modifier.fillMaxWidth()) { Text(if (language == "hi") "PDF सेव करें" else "Save PDF") }
+                                                OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy,
+                                                    modifier = Modifier.fillMaxWidth()) { Text(if (language == "hi") "PNG सेव करें" else "Save PNG") }
+                                            }
+                                        } else {
+                                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                                                OutlinedButton(onClick = { onViewCertificate(certificateId) }, enabled = !busy,
+                                                    modifier = Modifier.weight(1f)) { Text(if (language == "hi") "देखें" else "View") }
+                                                OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy,
+                                                    modifier = Modifier.weight(1f)) { Text(if (language == "hi") "PDF सेव करें" else "Save PDF") }
+                                                OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy,
+                                                    modifier = Modifier.weight(1f)) { Text(if (language == "hi") "PNG सेव करें" else "Save PNG") }
+                                            }
                                         }
                                     }
                                     certificateStatus == "REVOKED" -> Text(
