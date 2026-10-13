@@ -39,11 +39,18 @@ public class AuthorizationService {
   }
 
   public boolean hasPermission(AuthContext context, String permission) {
-    if (context == null || !context.isAuthenticated()) return false;
-    if (context.isAdmin()) return true;
-    if (!context.isEmployee() || permission == null || permission.isBlank()) return false;
-    // Role-based permissions are evaluated live on every request. An HRMS-scoped session
-    // never inherits the Education Admin global ADMIN bypass.
+    if (context == null || !context.isAuthenticated() || permission == null || permission.isBlank()) return false;
+    boolean hrmsPermission = permission.startsWith("HR_")
+        || "HR_SELF_SERVICE_VIEW".equals(permission)
+        || "TEACHING_ASSIGNMENT_VIEW".equals(permission)
+        || "CLASS_SCHEDULE_POLICY_MANAGE".equals(permission);
+    // The Education Admin global bypass can never satisfy an HRMS-only capability,
+    // even if an endpoint is reached through an unexpected URL or proxy path.
+    if (hrmsPermission && !"HRMS".equals(AuthService.normalizeWorkspace(context.workspace()))) return false;
+    if (context.isAdmin()) return !hrmsPermission;
+    if (!context.isEmployee()) return false;
+    // Role-based permissions are evaluated live on every request; HRMS-only keys remain
+    // scoped even when one staff identity legitimately has roles in both applications.
     String workspace = "HRMS".equals(AuthService.normalizeWorkspace(context.workspace())) ? "HRMS" : "EDUCATION_ADMIN";
     Boolean granted = jdbc.queryForObject("""
         select exists (
