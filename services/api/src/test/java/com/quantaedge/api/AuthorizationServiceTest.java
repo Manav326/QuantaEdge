@@ -29,6 +29,27 @@ class AuthorizationServiceTest {
   }
 
   @Test
+  void educationAdminCannotBypassHrmsOnlyPermissions() {
+    AuthorizationService authorization = new AuthorizationService(jdbc);
+    AuthContext educationAdmin = new AuthContext(null, null, 7L, "ADMIN", "Admin", "EDUCATION_ADMIN");
+
+    assertFalse(authorization.hasPermission(educationAdmin, "HR_ACCESS_MANAGE"));
+    assertFalse(authorization.hasPermission(educationAdmin, "TEACHING_ASSIGNMENT_VIEW"));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void hrmsSessionCannotUseEducationAdminGlobalBypass() {
+    AuthorizationService authorization = new AuthorizationService(jdbc);
+    AuthContext hrmsIdentity = new AuthContext(null, null, 7L, "ADMIN", "Admin", "HRMS");
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("HRMS"), eq("HRMS")))
+        .thenReturn(false);
+
+    assertFalse(authorization.hasPermission(hrmsIdentity, "CONTENT_PUBLISH"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("HRMS"), eq("HRMS"));
+  }
+
+  @Test
   void employeeMustHaveAnExplicitActivePermissionGrant() {
     AuthorizationService authorization = new AuthorizationService(jdbc);
     AuthContext author = new AuthContext(null, null, 19L, "CONTENT_AUTHOR", "Author");
