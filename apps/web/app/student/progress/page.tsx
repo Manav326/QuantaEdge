@@ -45,7 +45,7 @@ export default function ProgressPage(){
     try{
       const response=await fetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:'en'})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi'})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
