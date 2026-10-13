@@ -190,7 +190,7 @@ private fun LessonImage(url: String, alt: String) {
         Image(bitmap = bitmap!!, contentDescription = alt,
             modifier = Modifier.fillMaxWidth().height(220.dp), contentScale = ContentScale.Fit)
     } else if (loadFailed) {
-        Text(if (alt.isNotBlank()) alt else "Image unavailable", style = MaterialTheme.typography.bodySmall,
+        Text(if (alt.isNotBlank()) alt else localizedUiText("Image unavailable"), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
     } else {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
