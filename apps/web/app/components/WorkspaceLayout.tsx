@@ -76,7 +76,6 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const visibleStudentNavGroups = studentNavGroups.map(group => group.id === 'practice'
     ? { ...group, children: group.children?.filter(item => item.href !== '/student/diagnostic' || diagnosticAvailable) }
     : group);
-  const mobileOpenStudentGroup = visibleStudentNavGroups.find(group => group.id === mobileOpenGroup);
 
   useEffect(() => {
     if (!role) return;
@@ -226,8 +225,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                   <span className="qe-workspace-link-label">{itemLabel(group)}</span>
                   <span className="qe-workspace-group-chevron" aria-hidden="true">⌄</span>
                 </button>
-                {expandedStudentGroup === group.id && group.children?.length ? (
-                  <div className="qe-workspace-subnav" id={'qe-student-group-' + group.id}>
+                {group.children?.length ? (
+                  <div className="qe-workspace-subnav" id={'qe-student-group-' + group.id} hidden={expandedStudentGroup !== group.id}>
                     {group.children.map(item => <Link key={item.href} href={item.href}
                       title={collapsed ? itemLabel(item) : undefined}
                       aria-current={routeActive(item.href) ? 'page' : undefined}
@@ -268,16 +267,16 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     </div>
     {role === 'student' ? (
       <>
-        {mobileOpenStudentGroup?.children?.length ? (
-          <section className="qe-workspace-mobile-subnav" id={'qe-mobile-subnav-' + mobileOpenStudentGroup.id}
-            role="region" aria-label={itemLabel(mobileOpenStudentGroup)}>
+        {visibleStudentNavGroups.map(group => group.children?.length ? (
+          <section key={group.id} className="qe-workspace-mobile-subnav" id={'qe-mobile-subnav-' + group.id}
+            hidden={mobileOpenGroup !== group.id} role="region" aria-label={itemLabel(group)}>
             <div className="qe-workspace-mobile-subnav-heading">
-              <strong>{itemLabel(mobileOpenStudentGroup)}</strong>
+              <strong>{itemLabel(group)}</strong>
               <button type="button" onClick={() => setMobileOpenGroup(null)}
                 aria-label={locale === 'english' ? 'Close navigation submenu' : 'Navigation submenu बंद करें'}>×</button>
             </div>
             <div className="qe-workspace-mobile-subnav-links">
-              {mobileOpenStudentGroup.children.map(item => <Link key={item.href} href={item.href}
+              {group.children.map(item => <Link key={item.href} href={item.href}
                 aria-current={routeActive(item.href) ? 'page' : undefined}
                 className={routeActive(item.href) ? 'is-active' : ''}
                 onClick={() => setMobileOpenGroup(null)}>
@@ -285,8 +284,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
               </Link>)}
             </div>
           </section>
-        ) : null}
-        <nav className="qe-workspace-mobile-nav qe-student-mobile-nav" aria-label="Student navigation">
+        ) : null)}
+                <nav className="qe-workspace-mobile-nav qe-student-mobile-nav" aria-label="Student navigation">
           {visibleStudentNavGroups.map(group => group.href ? (
             <Link key={group.id} href={group.href} aria-current={routeActive(group.href) ? 'page' : undefined}
               className={routeActive(group.href) ? 'is-active' : ''} title={itemLabel(group)}
