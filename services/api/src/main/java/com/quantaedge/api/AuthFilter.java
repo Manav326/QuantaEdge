@@ -49,6 +49,16 @@ public class AuthFilter extends OncePerRequestFilter {
         if (token != null) context = auth.currentForWorkspace(token, workspace);
         // Existing browsers can have the old shared cookie. Accept it only when the
         // session record itself belongs to this workspace.
+        if (context == null && ("PARENT".equals(workspace) || "STUDENT".equals(workspace))) {
+          // Migrate older browsers/apps that still hold the former shared learner cookie.
+          // The AuthService workspace predicate verifies the stored parent/student identity,
+          // so this compatibility path never turns a parent cookie into a student session.
+          String legacyLearnerToken = cookieValue(request, AuthService.LEARNING_COOKIE);
+          if (legacyLearnerToken != null) {
+            context = auth.currentForWorkspace(legacyLearnerToken, workspace);
+            if (context != null) token = legacyLearnerToken;
+          }
+        }
         if (context == null) {
           String legacyToken = cookieValue(request, AuthService.COOKIE);
           if (legacyToken != null) {
