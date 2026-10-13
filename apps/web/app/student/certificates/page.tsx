@@ -219,14 +219,8 @@ export default function StudentCertificatesPage() {
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
                 <article className={styles.certificateRow} key={certificate.id}>
-                  <div className={styles.certificateIcon} aria-hidden="true">QE</div>
-                  <div className={styles.certificateInfo}>
-                    <strong>{certificate.achievement_title}</strong>
-                    <span>{certificate.certificate_number} · {certificate.template_id}</span>
-                    <small>Issued {new Date(certificate.issued_at).toLocaleDateString()} · {certificate.language === 'hi' ? 'Hindi' : 'English'}</small>
-                  </div>
-                  <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status}</span>
                   <CertificateActions certificate={certificate} language={certificate.language} compact />
+                  <small className={styles.recordMeta}>Issued {new Date(certificate.issued_at).toLocaleDateString()} · {certificate.template_id} · {certificate.language === 'hi' ? 'Hindi' : 'English'}</small>
                 </article>
               ))}
             </div>
