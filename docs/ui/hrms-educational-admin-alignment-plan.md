@@ -73,7 +73,7 @@
 - [x] Semantic status badges for employment, attendance, leave, payroll/payment and assignment states.
 - [x] Success/error/warning/information feedback patterns.
 - [x] Empty, loading, unavailable and retry states.
-- [ ] Dialogs/confirmations with focus, scroll and keyboard behavior.
+- [x] Dialogs/confirmations with focus, scroll and keyboard behavior.
 - [ ] Remove redundant inline layout styling where a shared variant or layout convention fits.
 - [ ] Avoid forcing the same content density/layout onto every module.
 
@@ -181,13 +181,13 @@
 
 ## Route inventory
 
-- [ ] `/` — Employee directory and organization structure.
-- [ ] `/attendance` — Attendance, leave, corrections, approvals, holidays, balances.
-- [ ] `/payroll` — Payroll periods, compensation, components, runs/payments/payslips as exposed by the current route.
-- [ ] `/workforce` — Recruitment, performance, assets and exits.
-- [ ] `/assignments` — Teaching assignments, academic periods, reports/workload.
-- [ ] `/my-classes` — Upcoming/live/past teaching classes and private meeting links.
-- [ ] `/self-service` — Profile, employee requests, leave, corrections and issued payslips.
+- [x] `/` — Employee directory and organization structure.
+- [x] `/attendance` — Attendance, leave, corrections, approvals, holidays, balances.
+- [x] `/payroll` — Payroll periods, compensation, components, runs/payments/payslips as exposed by the current route.
+- [x] `/workforce` — Recruitment, performance, assets and exits.
+- [x] `/assignments` — Teaching assignments, academic periods, reports/workload.
+- [x] `/my-classes` — Upcoming/live/past teaching classes and private meeting links.
+- [x] `/self-service` — Profile, employee requests, leave, corrections and issued payslips.
 - [x] `/login` — Staff login and OTP verification.
 - [x] `/change-password` — forced password-change flow; keep it outside the authenticated workspace chrome.
 
@@ -208,17 +208,19 @@ This document is the persistent checklist for continuing the work on `main`. Upd
 
 ## Execution log — October 13, 2026
 
-Implementation is proceeding directly on `main`; the checklist intentionally separates source changes, CI results, and rendered-screen validation.
+Implementation is proceeding directly on `main`. Each check distinguishes source implementation, CI verification, and rendered-browser QA.
 
 - [x] Commit `ec8ca2b`: added the People Operations design stylesheet and workspace shell; packaged the official QuantaEdge wordmark and icon inside the People app.
-- [x] Commit `1c2f66e`: retained the pre-existing HRMS session boundary, forced-password-change handling, refresh recovery, and HRMS-specific workspace scope.
-- [x] Commit `aba8567`: removed duplicated page navigation headers, avoided nested `<main>` landmarks, and added a skip link.
+- [x] Commit `1c2f66e`: retained the existing HRMS-specific session boundary, forced-password-change handling, refresh recovery, and HRMS workspace scope.
+- [x] Commit `aba8567`: removed duplicate route headers, avoided nested `<main>` elements, and added the skip link.
 - [x] Commit `b00477c`: introduced shared People UI primitives and migrated all seven content-route page headers.
 - [x] Commits `e399ee4`, `d086428`, and `ba27cd8`: migrated metric cards, status badges, and class empty states across core HRMS screens.
-- [x] Commit `be098d6`: standardized route-level success/error feedback and introduced a formal design-token scale.
-- [x] Full GitHub Actions run [38368701148](https://github.com/Manav326/QuantaEdge/actions/runs/38368701148) passed for commit `be098d6`: People Operations, Admin, Web and API image builds, API verification, content-import safeguards and Android build all reported success.
-- [x] Official brand asset paths exist inside `apps/people/public/branding`, and People Operations still uses `PeopleSessionBoundary` rather than the Educational Admin session component.
-- [ ] The final token-consistency CSS change being prepared after `be098d6` needs a new full CI run before it can be called green.
-- [ ] Rendered desktop/tablet/mobile screenshot comparison, real browser interaction tests, live navigation/session workflows, and payslip print review remain pending because they cannot be inferred from image-build CI alone.
+- [x] Commit `be098d6`: standardized top-level feedback and introduced a formal design-token scale.
+- [x] Commit `f2715ce`: applied the final CSS token-consistency pass and updated this checklist.
+- [x] Commit `0878d62`: expanded semantic status badges and standardized plain empty states. Full Actions run [38369668028](https://github.com/Manav326/QuantaEdge/actions/runs/38369668028) completed successfully: People Operations, Admin, Web and API images, API verification, content-import safeguards and Android build all passed.
+- [x] Official branding assets are packaged under `apps/people/public/branding`; the People app retains `PeopleSessionBoundary` and the HRMS workspace header.
+- [x] Current implementation adds a shared `PeopleDialog` for employee-history/create/edit/organization-structure and teaching-assignment history dialogs, including focus trap/restoration, Escape close, backdrop close, and scroll locking.
+- [x] Added a static People UI contract checker and a CI step to prevent route/shell/token/accessibility/asset regressions. The commit containing this addition still requires its own full CI run.
+- [ ] Rendered desktop/tablet/mobile screenshots, live browser interactions, role/session workflows, and payslip-print review remain pending. These must not be inferred from image builds alone.
 
-The completed CI run above validates commit `be098d6` only. Do not treat it as evidence that the pending CSS change or the manual visual-review gate has passed.
+The latest completed full CI result is run `38369668028` on commit `0878d62`. The next commit adds accessible dialog behavior and a new UI-contract CI gate; wait for that commit's workflow before declaring the current code green.
