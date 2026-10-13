@@ -40,7 +40,8 @@ fun ParentProfileScreen(
     busy: Boolean,
     onSave: (JSONObject) -> Unit,
     onUploadPhoto: (String) -> Unit,
-    onRemovePhoto: () -> Unit
+    onRemovePhoto: () -> Unit,
+    onLogout: () -> Unit
 ) {
     val context = LocalContext.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -131,5 +132,8 @@ fun ParentProfileScreen(
         Text(t("Your preferred learning language is a profile preference; it does not change the app interface language.",
             "पढ़ाई की पसंदीदा भाषा प्रोफ़ाइल की सेटिंग है; इससे ऐप की इंटरफ़ेस भाषा नहीं बदलती।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+        TextButton(onClick = onLogout, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(t("Sign out", "साइन आउट"))
+        }
     }
 }
