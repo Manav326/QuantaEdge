@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,9 +26,16 @@ public class HrExtendedWorkforceController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final HrReportingScopeService reportingScope;
+
+  @Autowired
+  public HrExtendedWorkforceController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit,
+      HrReportingScopeService reportingScope) {
+    this.jdbc=jdbc; this.authorization=authorization; this.audit=audit; this.reportingScope=reportingScope;
+  }
 
   public HrExtendedWorkforceController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
-    this.jdbc=jdbc; this.authorization=authorization; this.audit=audit;
+    this(jdbc,authorization,audit,new HrReportingScopeService(jdbc,authorization));
   }
 
   // Recruitment
@@ -189,7 +197,7 @@ public class HrExtendedWorkforceController {
   @PostMapping("/performance/cycles/{cycleId}/goals") @Transactional
   public Map<String,Object> createGoal(@PathVariable long cycleId,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_MANAGE"); Map<String,Object> cycle=one("select * from hr_performance_cycle where id=?",cycleId);
-    long employee=id(b.get("employeeId"),"Employee"); employeeInOrg(employee,((Number)cycle.get("organization_id")).longValue());
+    long employee=id(b.get("employeeId"),"Employee"); reportingScope.requireEmployeeAccess(c,employee); employeeInOrg(employee,((Number)cycle.get("organization_id")).longValue());
     Long key=jdbc.queryForObject("insert into hr_employee_goal(cycle_id,employee_id,title,description,success_measure,target_date,created_by_staff_id) values (?,?,?,?,?,?,?) returning id",Long.class,cycleId,employee,required(b.get("title"),200,"Goal title"),optional(b.get("description"),4000),optional(b.get("successMeasure"),2000),b.get("targetDate")==null?null:Date.valueOf(date(String.valueOf(b.get("targetDate")),"Target date")),c.staffId());
     return one("select * from hr_employee_goal where id=?",key);
   }
@@ -202,18 +210,22 @@ public class HrExtendedWorkforceController {
     String where=" where c.organization_id=?";
     Object[] args={organizationId};
     if(employeeId!=null){where+=" and r.employee_id=?";args=new Object[]{organizationId,employeeId};}
-    return page("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id"+where+" order by r.created_at desc,r.id desc",
-        "select count(*) from hr_performance_review r join hr_performance_cycle c on c.id=r.cycle_id"+where,limit,offset,args);
+    String scope=reportingScope.sqlScopePredicate(c,"e");
+    return page("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id"+where+" and "+scope+" order by r.created_at desc,r.id desc",
+        "select count(*) from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id"+where+" and "+scope,
+        limit,offset,reportingScope.withScopeArgs(c,args));
   }
   @GetMapping("/performance/cycles/{cycleId}/goals")
   public List<Map<String,Object>> goals(@PathVariable long cycleId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
-    require(c,"HR_PERFORMANCE_VIEW"); one("select id from hr_performance_cycle where id=?",cycleId);
-    return jdbc.queryForList("select g.*,e.employee_number,e.display_name from hr_employee_goal g join hr_employee e on e.id=g.employee_id where g.cycle_id=? order by e.display_name,g.id",cycleId);
+    require(c,"HR_PERFORMANCE_VIEW"); Map<String,Object> cycle=one("select id,organization_id from hr_performance_cycle where id=?",cycleId);
+    String scope=reportingScope.sqlScopePredicate(c,"e");
+    return jdbc.queryForList("select g.*,e.employee_number,e.display_name from hr_employee_goal g join hr_employee e on e.id=g.employee_id where g.cycle_id=? and "+scope+" order by e.display_name,g.id",
+        reportingScope.withScopeArgs(c,new Object[]{cycleId}));
   }
   @PostMapping("/performance/reviews") @Transactional
   public Map<String,Object> createReview(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_MANAGE"); long cycle=id(b.get("cycleId"),"Cycle"),employee=id(b.get("employeeId"),"Employee");
-    Map<String,Object> cy=one("select * from hr_performance_cycle where id=?",cycle); employeeInOrg(employee,((Number)cy.get("organization_id")).longValue());
+    Map<String,Object> cy=one("select * from hr_performance_cycle where id=?",cycle); reportingScope.requireEmployeeAccess(c,employee); employeeInOrg(employee,((Number)cy.get("organization_id")).longValue());
     if(!"OPEN".equals(cy.get("cycle_status"))) throw conflict("Reviews can only be created in an open cycle.");
     Long reviewer=optionalId(b.get("reviewerEmployeeId")); if(reviewer!=null) employeeInOrg(reviewer,((Number)cy.get("organization_id")).longValue());
     Long key=jdbc.queryForObject("insert into hr_performance_review(cycle_id,employee_id,reviewer_employee_id,created_by_staff_id) values (?,?,?,?) returning id",Long.class,cycle,employee,reviewer,c.staffId());
@@ -222,6 +234,7 @@ public class HrExtendedWorkforceController {
   @PatchMapping("/performance/reviews/{id}") @Transactional
   public Map<String,Object> updateReview(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_MANAGE"); Map<String,Object> old=one("select * from hr_performance_review where id=? for update",id);
+    reportingScope.requireEmployeeAccess(c,((Number)old.get("employee_id")).longValue());
     String status=String.valueOf(old.get("review_status")),action=required(b.get("action"),20,"Action").toUpperCase();
     if("SUBMIT".equals(action)&&"DRAFT".equals(status)) {
       String self=optional(b.get("selfAssessment"),16000); if(self==null) self="{}";
@@ -243,8 +256,11 @@ public class HrExtendedWorkforceController {
       @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_ASSET_VIEW"); organization(organizationId);
-    return page("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.expected_return_date,x.returned_at,x.condition_on_assignment,x.condition_on_return,(x.returned_at is null and x.expected_return_date<current_date) overdue,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id where a.organization_id=? order by a.asset_status,a.asset_tag",
-        "select count(distinct a.id) from hr_asset a where a.organization_id=?",limit,offset,organizationId);
+    String scope=reportingScope.sqlScopePredicate(c,"e");
+    String where=" where a.organization_id=? and (x.employee_id is null or "+scope+")";
+    Object[] args=reportingScope.withScopeArgs(c,new Object[]{organizationId});
+    return page("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.expected_return_date,x.returned_at,x.condition_on_assignment,x.condition_on_return,(x.returned_at is null and x.expected_return_date<current_date) overdue,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id"+where+" order by a.asset_status,a.asset_tag",
+        "select count(distinct a.id) from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id"+where,limit,offset,args);
   }
   @PostMapping("/assets") @Transactional
   public Map<String,Object> createAsset(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -287,19 +303,22 @@ public class HrExtendedWorkforceController {
     return one("select * from hr_asset_assignment where id=?",assignmentId);
   }
 
-  // Exit: this module records the process and settlement inputs; the canonical employee status
-  // is changed only through HrEmployeeController after the authorised clearance workflow.
+  // Exit records stay attached to the canonical employee. Final separation is committed only
+  // after the approved last-working date, checklist and settlement are all satisfied.
   @GetMapping("/exits")
   public Map<String,Object> exits(@RequestParam long organizationId,
       @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_EXIT_VIEW"); organization(organizationId);
-    return page("select x.*,e.employee_number,e.display_name,e.employment_status from hr_employee_exit x join hr_employee e on e.id=x.employee_id where e.organization_id=? order by x.created_at desc,x.id desc",
-        "select count(*) from hr_employee_exit x join hr_employee e on e.id=x.employee_id where e.organization_id=?",limit,offset,organizationId);
+    String scope=reportingScope.sqlScopePredicate(c,"e");
+    String where=" where e.organization_id=? and "+scope;
+    Object[] args=reportingScope.withScopeArgs(c,new Object[]{organizationId});
+    return page("select x.*,e.employee_number,e.display_name,e.employment_status from hr_employee_exit x join hr_employee e on e.id=x.employee_id"+where+" order by x.created_at desc,x.id desc",
+        "select count(*) from hr_employee_exit x join hr_employee e on e.id=x.employee_id"+where,limit,offset,args);
   }
   @PostMapping("/exits") @Transactional
   public Map<String,Object> initiateExit(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
-    require(c,"HR_EXIT_MANAGE"); long employee=id(b.get("employeeId"),"Employee"); Map<String,Object> e=one("select * from hr_employee where id=?",employee);
+    require(c,"HR_EXIT_MANAGE"); long employee=id(b.get("employeeId"),"Employee"); reportingScope.requireEmployeeAccess(c,employee); Map<String,Object> e=one("select * from hr_employee where id=?",employee);
     if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(e.get("employment_status")))) throw conflict("Only current employees can initiate an exit.");
     String type=required(b.get("exitType"),24,"Exit type").toUpperCase(); if(!List.of("RESIGNATION","RETIREMENT","END_OF_CONTRACT","TERMINATION","OTHER").contains(type)) throw bad("Unsupported exit type.");
     LocalDate last=date(required(b.get("requestedLastWorkingDate"),10,"Requested last working date"),"Requested last working date");
@@ -312,12 +331,14 @@ public class HrExtendedWorkforceController {
   }
   @GetMapping("/exits/{id}/checklist")
   public List<Map<String,Object>> exitChecklist(@PathVariable long id,@RequestAttribute(value="authContext",required=false) AuthContext c) {
-    require(c,"HR_EXIT_VIEW"); one("select id from hr_employee_exit where id=?",id);
+    require(c,"HR_EXIT_VIEW"); Map<String,Object> exit=one("select employee_id from hr_employee_exit where id=?",id);
+    reportingScope.requireEmployeeAccess(c,((Number)exit.get("employee_id")).longValue());
     return jdbc.queryForList("select * from hr_exit_checklist_item where exit_id=? order by id",id);
   }
   @PatchMapping("/exits/{id}/status") @Transactional
   public Map<String,Object> exitStatus(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_EXIT_MANAGE"); Map<String,Object> old=one("select x.*,e.organization_id from hr_employee_exit x join hr_employee e on e.id=x.employee_id where x.id=? for update",id);
+    reportingScope.requireEmployeeAccess(c,((Number)old.get("employee_id")).longValue());
     String current=String.valueOf(old.get("exit_status")),next=required(b.get("status"),24,"Status").toUpperCase();
     if(!Map.of("REQUESTED",List.of("UNDER_REVIEW","CANCELLED"),"UNDER_REVIEW",List.of("APPROVED","CANCELLED"),"APPROVED",List.of("CLEARANCE","CANCELLED"),"CLEARANCE",List.of("READY_FOR_SETTLEMENT"),"READY_FOR_SETTLEMENT",List.of("COMPLETED"),"COMPLETED",List.of(),"CANCELLED",List.of()).getOrDefault(current,List.of()).contains(next)) throw conflict("Invalid exit workflow transition.");
     LocalDate approved=old.get("approved_last_working_date") instanceof Date d?d.toLocalDate():null;
@@ -349,7 +370,8 @@ public class HrExtendedWorkforceController {
   }
   @PatchMapping("/exits/{id}/checklist/{itemId}") @Transactional
   public Map<String,Object> checklist(@PathVariable long id,@PathVariable long itemId,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
-    require(c,"HR_EXIT_MANAGE"); Map<String,Object> exit=one("select x.id,e.organization_id from hr_employee_exit x join hr_employee e on e.id=x.employee_id where x.id=?",id);
+    require(c,"HR_EXIT_MANAGE"); Map<String,Object> exit=one("select x.id,x.employee_id,e.organization_id from hr_employee_exit x join hr_employee e on e.id=x.employee_id where x.id=?",id);
+    reportingScope.requireEmployeeAccess(c,((Number)exit.get("employee_id")).longValue());
     String status=required(b.get("status"),16,"Checklist status").toUpperCase(); if(!List.of("PENDING","IN_PROGRESS","CLEARED","WAIVED").contains(status)) throw bad("Unsupported checklist status.");
     int n=jdbc.update("update hr_exit_checklist_item set item_status=?,notes=?,completed_by_staff_id=case when ? in ('CLEARED','WAIVED') then ? else null end,completed_at=case when ? in ('CLEARED','WAIVED') then now() else null end where id=? and exit_id=?",status,optional(b.get("notes"),1000),status,c.staffId(),status,itemId,id);
     if(n!=1) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Exit checklist item not found.");
@@ -359,6 +381,7 @@ public class HrExtendedWorkforceController {
   @PatchMapping("/exits/{id}/settlement") @Transactional
   public Map<String,Object> settlement(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_EXIT_MANAGE"); Map<String,Object> old=one("select x.*,e.organization_id from hr_employee_exit x join hr_employee e on e.id=x.employee_id where x.id=? for update",id);
+    reportingScope.requireEmployeeAccess(c,((Number)old.get("employee_id")).longValue());
     String status=required(b.get("status"),24,"Settlement status").toUpperCase(); if(!List.of("NOT_STARTED","INPUTS_READY","IN_PROGRESS","SETTLED","ON_HOLD").contains(status)) throw bad("Unsupported settlement status.");
     if("SETTLED".equals(status)&&!"READY_FOR_SETTLEMENT".equals(old.get("exit_status"))) throw conflict("Exit clearance must be ready before final settlement can be marked settled.");
     jdbc.update("update hr_employee_exit set final_settlement_status=?,updated_at=now() where id=?",status,id);
