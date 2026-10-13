@@ -175,8 +175,9 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   }
 
   function studentGroupActive(group: StudentNavGroup) {
-    if (group.href && routeActive(group.href)) return true;
-    return Boolean(group.children?.some(item => routeActive(item.href)));
+    const fullGroup = studentNavGroups.find(item => item.id === group.id) ?? group;
+    if (fullGroup.href && routeActive(fullGroup.href)) return true;
+    return Boolean(fullGroup.children?.some(item => routeActive(item.href)));
   }
 
   async function logout() {
@@ -267,6 +268,9 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     </div>
     {role === 'student' ? (
       <>
+        {mobileOpenGroup ? <button type="button" className="qe-workspace-mobile-nav-backdrop"
+          aria-label={locale === 'english' ? 'Close navigation submenu' : 'Navigation submenu बंद करें'}
+          onClick={() => setMobileOpenGroup(null)} /> : null}
         {visibleStudentNavGroups.map(group => group.children?.length ? (
           <section key={group.id} className="qe-workspace-mobile-subnav" id={'qe-mobile-subnav-' + group.id}
             hidden={mobileOpenGroup !== group.id} role="region" aria-label={itemLabel(group)}>
