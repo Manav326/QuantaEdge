@@ -138,7 +138,9 @@ public class CertificateController {
         : null;
     boolean adminCreated = "ADMIN_CREATED".equals(assessmentType) && !generated;
     boolean released = "RELEASED".equals(status);
-    boolean passed = scorePercent != null && scorePercent.compareTo(minimumPassPercent) >= 0;
+    boolean passed = finalScore != null && maxScore.signum() > 0
+        && finalScore.multiply(BigDecimal.valueOf(100))
+            .compareTo(maxScore.multiply(minimumPassPercent)) >= 0;
     boolean eligible = adminCreated && released && passed;
 
     Map<String, Object> certificate = queryOptional("""
@@ -301,7 +303,8 @@ public class CertificateController {
     BigDecimal maxScore = decimal(achievement.get("max_score"));
     if (maxScore.signum() <= 0) throw new ResponseStatusException(HttpStatus.CONFLICT, "Assessment maximum score is invalid.");
     BigDecimal percent = finalScore.multiply(BigDecimal.valueOf(100)).divide(maxScore, 2, RoundingMode.HALF_UP);
-    if (percent.compareTo(minimumPassPercent) < 0) {
+    if (finalScore.multiply(BigDecimal.valueOf(100))
+        .compareTo(maxScore.multiply(minimumPassPercent)) < 0) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "Certificate requires at least " + minimumPassPercent.stripTrailingZeros().toPlainString()
               + "%; your released result is " + percent.toPlainString() + "%.");
