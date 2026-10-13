@@ -215,7 +215,7 @@ export default function TestsClient(){
       case 'SUBJECT_TRACK_NOT_ACTIVE':return 'An active enrollment in this subject and current class is required.';
       case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return 'Certificates unlock after this subject has published lessons.';
       case 'SUBJECT_COMPLETION_REQUIRED':return 'Complete all published lessons in this subject to unlock the test certificate.';
-      case 'PASS_THRESHOLD_NOT_MET':return 'The result is below the '+String(certificateEligibility[0]?.pass_threshold_percent||80)+'% certificate threshold.';
+      case 'PASS_THRESHOLD_NOT_MET':return 'The result is below the '+String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80)+'% certificate threshold.';
       case 'INVALID_SCORE':return 'This result has no valid maximum score.';
       case 'CERTIFICATE_REVOKED':return 'This certificate has been revoked; contact an administrator.';
       default:return 'Certificate eligibility is unavailable. Refresh results to check again.';
