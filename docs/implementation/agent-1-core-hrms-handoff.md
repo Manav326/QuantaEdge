@@ -60,3 +60,30 @@ The following contract should be treated as the minimum boundary for Agents 2 an
 - Baseline: `0d71946b3854a68c894001193a5174a41fa9a45b`
 - Handoff commit: to be recorded after this file is committed.
 - Remote push: this change is being authored directly on the assigned remote branch through the GitHub file API; a local Git push was not performed.
+
+## Current implementation progress
+
+The owner-approved decisions are documented in `docs/implementation/agent-1-hrms-policy-decisions.md` and referenced from the product architecture.
+
+Implemented on this branch:
+- UI working-week fallback is six days, while still allowing five or six days to be selected.
+- Flyway V28 sets the database column default for newly created organization rows to six days without rewriting existing organizations' configured values.
+- Flyway V29 creates attendance correction history, retains before/after status, timestamps, notes, actor and required reason, and blocks update/delete of the history table at the database layer.
+- The attendance write API now requires a non-empty correction reason when a row for the employee/work-date already exists and records the old and requested values before updating it in the same transaction.
+- A permission-checked attendance correction history read endpoint was added.
+- API unit tests were added for missing correction reason rejection and denial of correction-history reads without attendance-view permission.
+
+## Not yet safe to call complete
+
+This is a partial implementation, not a green, complete HRMS release. The repository connector does not run Maven/Next.js locally, so tests and builds have not been executed here. CI must validate the migration and Java/test compilation.
+
+Remaining policy work identified by inspection:
+- The existing leave-decision handler changes request status but does not create a leave-usage transaction in the balance ledger. This must be integrated atomically with approval, with a defined paid/unpaid and insufficient-balance policy.
+- The ledger UI supports manual grants/accruals/adjustments, but the inspected code does not yet provide a complete authorized reversal workflow. Posted ledger transactions must be immutable and reversal references unique.
+- Employee self-service has leave and profile-change requests, but no attendance-correction request endpoint/workflow was found in the inspected route. Direct HR corrections are now auditable; the employee request + approval side of the owner's "both" decision remains incomplete.
+- Approval rules are not yet shown to be configurable per lifecycle transition. Current leave decisions use the shared `HR_LEAVE_MANAGE` permission.
+- Manager reporting-employee-only row scope and explicit manager capabilities need API-wide negative-path tests; permission checks alone do not prove row-level scoping.
+- India holiday defaults require a source-verified central/state calendar and jurisdiction/source metadata. The existing UI accepts organization-entered holidays; no unverified holiday list should be described as preloaded.
+- No CI run or test result is claimed in this handoff.
+
+The branch was created from `0d71946b3854a68c894001193a5174a41fa9a45b`. While working, `main` advanced by two commits affecting only `.github/workflows/ci.yml` and `scripts/android-fetch-latest-apk.ps1`, with no path overlap against the HRMS changes. This branch has not yet been rebased/merged with those two commits, so it must be synchronized before integration.
