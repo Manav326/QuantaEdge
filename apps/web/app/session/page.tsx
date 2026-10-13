@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type Identity = { role?: string; staffId?: number; studentId?: number; userId?: number };
+type Identity = { role?: string; workspace?: string; staffId?: number; studentId?: number; userId?: number };
 const SESSION_CHECK_TIMEOUT_MS = 10_000;
 
 function withSessionTimeout<T>(operation: Promise<T>): Promise<T> {
@@ -25,8 +25,16 @@ function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string
 }
 
 function homeFor(identity: Identity) {
-  if (identity.studentId || identity.role === 'STUDENT') return '/student';
-  if (identity.userId && identity.role === 'PARENT') return '/parent';
+  const workspace = identity.workspace;
+  const hasStudentIdentity = Number(identity.studentId) > 0
+    && !(Number(identity.userId) > 0)
+    && !(Number(identity.staffId) > 0);
+  const hasParentIdentity = Number(identity.userId) > 0
+    && !(Number(identity.studentId) > 0)
+    && !(Number(identity.staffId) > 0);
+
+  if (identity.role === 'STUDENT' && workspace === 'STUDENT' && hasStudentIdentity) return '/student';
+  if (identity.role === 'PARENT' && workspace === 'PARENT' && hasParentIdentity) return '/parent';
   return null;
 }
 
