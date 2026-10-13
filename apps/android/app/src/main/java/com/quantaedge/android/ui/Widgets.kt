@@ -272,7 +272,7 @@ fun QuestionCard(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text(inputLabel) },
+                        label = { Text(localizedUiText(inputLabel)) },
                         enabled = !locked && !saving,
                         minLines = if (longAnswer) 3 else 1,
                         maxLines = 6
@@ -290,7 +290,7 @@ fun QuestionCard(
                     enabled = !saving && answer.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (saving) "सहेज रहे हैं…" else submitLabel)
+                    Text(localizedUiText(if (saving) "सहेज रहे हैं…" else submitLabel))
                 }
             }
         }
