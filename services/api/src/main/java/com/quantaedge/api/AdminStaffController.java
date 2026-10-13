@@ -47,6 +47,7 @@ public class AdminStaffController {
         select id, public_id, mobile_e164, display_name, role, active,
                created_at, updated_at, last_login_at
         from staff_account
+        where lower(coalesce(username,'')) <> 'hrms_admin'
         order by case when role='ADMIN' then 0 else 1 end, lower(display_name), id
         """);
     for (Map<String,Object> row : rows) {
@@ -208,11 +209,16 @@ public class AdminStaffController {
 
   private Map<String,Object> staffById(long id) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select id,public_id,mobile_e164,display_name,role,active,created_at,updated_at,last_login_at
+        select id,public_id,mobile_e164,display_name,role,active,created_at,updated_at,last_login_at,username
         from staff_account where id=?
         """,id);
     if (rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Staff account not found.");
     Map<String,Object> row=rows.getFirst();
+    if ("hrms_admin".equalsIgnoreCase(String.valueOf(row.get("username")))) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "The People Operations Super Admin identity is managed only through the protected HRMS bootstrap process.");
+    }
+    row.remove("username");
     row.put("permissions",auth.permissionsForStaff(id));
     return row;
   }
