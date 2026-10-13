@@ -37,12 +37,18 @@ public class GoogleMeetCalendarService {
   private final String timeZone;
 
   @Autowired
-  public GoogleMeetCalendarService(RestClient.Builder builder,
+  public GoogleMeetCalendarService(
       @Value("${app.google-meet.client-id:}") String clientId,
       @Value("${app.google-meet.client-secret:}") String clientSecret,
       @Value("${app.google-meet.refresh-token:}") String refreshToken,
       @Value("${app.google-meet.calendar-id:primary}") String calendarId,
       @Value("${app.google-meet.time-zone:Asia/Kolkata}") String timeZone) {
+    this(RestClient.builder().build(), clientId, clientSecret, refreshToken, calendarId, timeZone);
+  }
+
+  /** Injectable HTTP builder for isolated Calendar API tests. */
+  GoogleMeetCalendarService(RestClient.Builder builder, String clientId, String clientSecret,
+      String refreshToken, String calendarId, String timeZone) {
     this(builder.build(), clientId, clientSecret, refreshToken, calendarId, timeZone);
   }
 
