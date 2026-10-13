@@ -280,7 +280,7 @@ fun QuestionCard(
                 }
             }
 
-            if (!status.isNullOrBlank()) Text(status, style = MaterialTheme.typography.bodyMedium)
+            if (!status.isNullOrBlank()) Text(localizedUiText(status), style = MaterialTheme.typography.bodyMedium)
             if (!feedback.isNullOrBlank()) {
                 Text(feedback, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
