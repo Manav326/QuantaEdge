@@ -266,8 +266,8 @@ export default function StudentCertificatesPage() {
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=pdf'}>Download PDF</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=png'}>Download PNG</a>
-                      <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify ↗</Link>
                     </> : <small>Revoked · contact support if you believe this is an error.</small>}
+                    <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify status ↗</Link>
                   </div>
                 </article>
               ))}
