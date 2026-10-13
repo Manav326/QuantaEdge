@@ -2813,6 +2813,11 @@ private fun AssessmentAttemptScreen(
     val questions = attempt.optJSONArray("questions")?.objectItems() ?: emptyList()
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     val attemptId = attempt.longAny("attempt_id", "attemptId", "id")
+    var currentQuestionIndex by rememberSaveable(attemptId) { mutableStateOf(0) }
+    LaunchedEffect(attemptId, questions.size) {
+        currentQuestionIndex = currentQuestionIndex.coerceIn(0, (questions.size - 1).coerceAtLeast(0))
+    }
+    val safeQuestionIndex = currentQuestionIndex.coerceIn(0, (questions.size - 1).coerceAtLeast(0))
     val phase = attempt.textAny("status")
     val released = attempt.optBoolean("resultReleased")
     val offlinePendingSync = attempt.optBoolean("offlinePendingSync")
@@ -2935,50 +2940,137 @@ private fun AssessmentAttemptScreen(
         } else if (phase == "AWAITING_REVIEW") {
             Text(localizedUiText("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।"), modifier = Modifier.padding(vertical = 8.dp))
         }
-        LazyColumn(modifier = Modifier.weight(1f).padding(top = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(questions) { question ->
-                val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
-                val serverAnswer = question.textAny("answer")
-                val value = answers[id] ?: serverAnswer
-                QuestionCard(
-                    question = question,
-                    answer = value,
-                    onAnswerChange = { onAnswerChange(id, it) },
-                    onSubmit = { onSave(question, value) },
-                    locked = !inProgress || deadlineReached,
-                    saving = busy,
-                    feedback = feedbacks[id],
-                    status = if (released) {
-                        val correctness = when {
-                            question.has("isCorrect") && !question.isNull("isCorrect") ->
-                                if (question.optBoolean("isCorrect")) "सही" else "गलत"
-                            else -> "जाँच पूरी"
-                        }
-                        "परिणाम: " + correctness + " • अंक: " + question.textAny("awardedMarks", "maxMarks")
-                    } else null,
-                    submitLabel = "उत्तर सहेजें"
+        if (questions.isEmpty()) {
+            EmptyState(
+                if (language == "hi") "प्रश्न उपलब्ध नहीं हैं" else "No questions available",
+                if (language == "hi") "इस टेस्ट के प्रश्न लोड नहीं हो पाए। रिफ्रेश करके फिर प्रयास करें।" else "The test questions could not be loaded. Refresh and try again."
+            )
+        } else {
+            val answeredCount = questions.count { item ->
+                val answerId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
+                (answers[answerId] ?: item.textAny("answer")).isNotBlank()
+            }
+            Column(
+                modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        if (language == "hi") "प्रश्न ${safeQuestionIndex + 1} / ${questions.size}" else "Question ${safeQuestionIndex + 1} of ${questions.size}",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        if (language == "hi") "$answeredCount उत्तर दिए" else "$answeredCount answered",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                LinearProgressIndicator(
+                    progress = { (safeQuestionIndex + 1).toFloat() / questions.size.toFloat() },
+                    modifier = Modifier.fillMaxWidth()
                 )
-                if (released) {
-                    val correctAnswer = question.optJSONObject("correctAnswer")
-                    val options = question.optJSONArray("options")?.objectItems() ?: emptyList()
-                    val key = correctAnswer?.textAny("correctOption", "correct_option", "option_key", "key", "answer", "value").orEmpty()
-                    val optionLabel = options.firstOrNull { it.textAny("key", "option_key") == key }?.textAny("label", "text").orEmpty()
-                    val displayAnswer = optionLabel.ifBlank { key.ifBlank { correctAnswer?.toString().orEmpty() } }
-                    if (displayAnswer.isNotBlank() && displayAnswer != "{}") {
-                        Text(localizedUiText("सही उत्तर: ") + displayAnswer, style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary)
-                    }
-                    if (question.textAny("teacherFeedback").isNotBlank()) {
-                        Text(localizedUiText("शिक्षक की टिप्पणी: ") + question.textAny("teacherFeedback"), style = MaterialTheme.typography.bodyMedium)
-                    }
-                    if (question.textAny("explanation").isNotBlank()) {
-                        Card(modifier = Modifier.fillMaxWidth()) {
-                            Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text(localizedUiText("व्याख्या"), style = MaterialTheme.typography.titleSmall)
-                                Text(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
+                Column(
+                    modifier = Modifier.weight(1f).fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    val question = questions[safeQuestionIndex]
+                    val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
+                    val serverAnswer = question.textAny("answer")
+                    val value = answers[id] ?: serverAnswer
+                    QuestionCard(
+                        question = question,
+                        answer = value,
+                        onAnswerChange = { onAnswerChange(id, it) },
+                        onSubmit = { onSave(question, value) },
+                        locked = !inProgress || deadlineReached,
+                        saving = busy,
+                        feedback = feedbacks[id],
+                        status = if (released) {
+                            val correctness = when {
+                                question.has("isCorrect") && !question.isNull("isCorrect") ->
+                                    if (question.optBoolean("isCorrect")) "सही" else "गलत"
+                                else -> "जाँच पूरी"
+                            }
+                            "परिणाम: " + correctness + " • अंक: " + question.textAny("awardedMarks", "maxMarks")
+                        } else null,
+                        submitLabel = "उत्तर सहेजें"
+                    )
+                    if (released) {
+                        val correctAnswer = question.optJSONObject("correctAnswer")
+                        val options = question.optJSONArray("options")?.objectItems() ?: emptyList()
+                        val key = correctAnswer?.textAny("correctOption", "correct_option", "option_key", "key", "answer", "value").orEmpty()
+                        val optionLabel = options.firstOrNull { it.textAny("key", "option_key") == key }?.textAny("label", "text").orEmpty()
+                        val displayAnswer = optionLabel.ifBlank { key.ifBlank { correctAnswer?.toString().orEmpty() } }
+                        if (displayAnswer.isNotBlank() && displayAnswer != "{}") {
+                            Text(
+                                localizedUiText("सही उत्तर: ") + displayAnswer,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        if (question.textAny("teacherFeedback").isNotBlank()) {
+                            Text(localizedUiText("शिक्षक की टिप्पणी: ") + question.textAny("teacherFeedback"),
+                                style = MaterialTheme.typography.bodyMedium)
+                        }
+                        if (question.textAny("explanation").isNotBlank()) {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = MaterialTheme.shapes.small,
+                                color = MaterialTheme.colorScheme.surfaceVariant
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text(localizedUiText("व्याख्या"), style = MaterialTheme.typography.titleSmall)
+                                    Text(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
+                                }
                             }
                         }
                     }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            val question = questions[safeQuestionIndex]
+                            val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
+                            val value = answers[id] ?: question.textAny("answer")
+                            if (inProgress && !deadlineReached && value.isNotBlank() && value != question.textAny("answer")) {
+                                onSave(question, value)
+                            }
+                            currentQuestionIndex = (safeQuestionIndex - 1).coerceAtLeast(0)
+                        },
+                        enabled = safeQuestionIndex > 0 && !busy,
+                        modifier = Modifier.weight(1f)
+                    ) { Text(if (language == "hi") "← पिछला" else "← Previous") }
+                    Text(
+                        "${safeQuestionIndex + 1}/${questions.size}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Button(
+                        onClick = {
+                            val question = questions[safeQuestionIndex]
+                            val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
+                            val value = answers[id] ?: question.textAny("answer")
+                            if (inProgress && !deadlineReached && value.isNotBlank() && value != question.textAny("answer")) {
+                                onSave(question, value)
+                            }
+                            currentQuestionIndex = (safeQuestionIndex + 1).coerceAtMost(questions.lastIndex)
+                        },
+                        enabled = safeQuestionIndex < questions.lastIndex && !busy,
+                        modifier = Modifier.weight(1f)
+                    ) { Text(if (language == "hi") "अगला →" else "Next →") }
                 }
             }
         }
