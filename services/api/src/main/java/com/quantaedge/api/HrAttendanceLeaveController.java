@@ -9,10 +9,10 @@ public class HrAttendanceLeaveController {
  @GetMapping("/attendance") public Map<String,Object> attendance(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(required=false) String from,@RequestParam(required=false) String to,@RequestParam(required=false) Long employeeId,@RequestParam(defaultValue="0") int offset,@RequestParam(defaultValue="100") int limit){
  require(c,"HR_ATTENDANCE_VIEW");LocalDate end=to==null||to.isBlank()?LocalDate.now():date(to,"End date"),start=from==null||from.isBlank()?end.minusDays(30):date(from,"Start date");range(start,end,93);int lim=Math.max(1,Math.min(limit,200)),off=Math.max(0,Math.min(offset,1000000));
  List<Map<String,Object>> items=jdbc.queryForList("""
- with recursive reporting(id) as (
-   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+ with recursive reporting(id,organization_id) as (
+   select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select a.id,a.employee_id,e.employee_number,e.display_name,a.work_date,a.attendance_status,a.check_in_at,a.check_out_at,case when a.check_in_at is not null and a.check_out_at is not null then floor(extract(epoch from (a.check_out_at-a.check_in_at))/60)::int else null end minutes_worked,a.notes,a.recorded_by_staff_id,a.updated_by_staff_id,a.created_at,a.updated_at
@@ -22,10 +22,10 @@ public class HrAttendanceLeaveController {
  order by a.work_date desc,e.display_name limit ? offset ?
  """,c.staffId(),Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId(),lim,off);
  Long total=jdbc.queryForObject("""
- with recursive reporting(id) as (
-   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+ with recursive reporting(id,organization_id) as (
+   select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select count(*) from hr_attendance_record a join hr_employee e on e.id=a.employee_id
@@ -33,10 +33,10 @@ public class HrAttendanceLeaveController {
    and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
  """,Long.class,c.staffId(),Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId());return Map.of("items",items,"total",total==null?0L:total,"from",start.toString(),"to",end.toString(),"limit",lim,"offset",off);}
  @GetMapping("/attendance/summary") public Map<String,Object> summary(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(required=false) String date){require(c,"HR_ATTENDANCE_VIEW");LocalDate d=date==null||date.isBlank()?LocalDate.now():date(date,"Date");Map<String,Object> r=jdbc.queryForMap("""
- with recursive reporting(id) as (
-   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+ with recursive reporting(id,organization_id) as (
+   select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select count(*) active_employees,count(a.id) marked,count(*) filter(where a.attendance_status='PRESENT') present,count(*) filter(where a.attendance_status='REMOTE') remote,count(*) filter(where a.attendance_status='HALF_DAY') half_day,count(*) filter(where a.attendance_status='ABSENT') absent,count(*) filter(where a.attendance_status='ON_LEAVE') on_leave,count(*) filter(where a.attendance_status='HOLIDAY') holiday
@@ -64,10 +64,10 @@ public class HrAttendanceLeaveController {
  @GetMapping("/leave/requests") public Map<String,Object> leaves(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(defaultValue="ALL") String status,@RequestParam(required=false) Long employeeId,@RequestParam(defaultValue="0") int offset,@RequestParam(defaultValue="100") int limit){
  require(c,"HR_LEAVE_VIEW");String st=status==null?"ALL":status.trim().toUpperCase();if(!List.of("ALL","PENDING","APPROVED","REJECTED","CANCELLED").contains(st))throw bad("Choose a supported leave-request status.");int lim=Math.max(1,Math.min(limit,200)),off=Math.max(0,Math.min(offset,1000000));
  List<Map<String,Object>> items=jdbc.queryForList("""
- with recursive reporting(id) as (
-   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+ with recursive reporting(id,organization_id) as (
+   select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,r.leave_type_code,t.display_name leave_type,t.paid,r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,r.reviewed_by_staff_id,r.reviewed_at,r.created_by_staff_id,r.created_at,r.updated_at
@@ -77,10 +77,10 @@ public class HrAttendanceLeaveController {
  order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at desc limit ? offset ?
  """,c.staffId(),st,st,employeeId,employeeId,c.staffId(),lim,off);
  Long total=jdbc.queryForObject("""
- with recursive reporting(id) as (
-   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+ with recursive reporting(id,organization_id) as (
+   select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select count(*) from hr_leave_request r join hr_employee e on e.id=r.employee_id
