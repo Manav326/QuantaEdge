@@ -618,7 +618,7 @@ public class AuthService {
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
         and s.absolute_expires_at>now()
-        and s.last_seen_at>now()-interval '4 hours'
+        and s.last_seen_at>now()-(case when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes' else interval '4 hours' end)
         and (s.refresh_expires_at is null or s.refresh_expires_at>now())
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
@@ -752,7 +752,7 @@ public class AuthService {
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.refresh_token_hash=? and s.revoked_at is null and s.refresh_expires_at>now()
         and s.absolute_expires_at>now()
-        and s.last_seen_at>now()-interval '4 hours'
+        and s.last_seen_at>now()-(case when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes' else interval '4 hours' end)
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
