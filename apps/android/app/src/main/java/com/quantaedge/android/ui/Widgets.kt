@@ -14,10 +14,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.json.JSONArray
 import org.json.JSONObject
@@ -129,7 +131,7 @@ fun QuestionCard(
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("प्रश्न " + question.textAny("sequence_no", "sort_order").ifBlank { "" },
+                Text(localizedUiText("प्रश्न ") + question.textAny("sequence_no", "sort_order").ifBlank { "" },
                     style = MaterialTheme.typography.labelMedium)
                 Text(type.replace('_', ' '), style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary)
@@ -138,7 +140,7 @@ fun QuestionCard(
 
             when {
                 isOrder && options.isNotEmpty() -> {
-                    Text("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।",
+                    Text(localizedUiText("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary)
                     orderedKeys.forEachIndexed { index, key ->
@@ -162,7 +164,7 @@ fun QuestionCard(
                                         onAnswerChange(JSONArray(next).toString())
                                     },
                                     enabled = !locked && !saving && index > 0
-                                ) { Text("↑") }
+                                ) { Text(localizedUiText("↑")) }
                                 TextButton(
                                     onClick = {
                                         val next = orderedKeys.toMutableList()
@@ -171,13 +173,13 @@ fun QuestionCard(
                                         onAnswerChange(JSONArray(next).toString())
                                     },
                                     enabled = !locked && !saving && index < orderedKeys.lastIndex
-                                ) { Text("↓") }
+                                ) { Text(localizedUiText("↓")) }
                             }
                         }
                     }
                 }
                 isMultiSelect && options.isNotEmpty() -> {
-                    Text("सभी लागू विकल्प चुनें।", style = MaterialTheme.typography.bodySmall,
+                    Text(localizedUiText("सभी लागू विकल्प चुनें।"), style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary)
                     options.forEach { option ->
                         val key = option.textAny("key", "option_key", "value")
@@ -206,13 +208,13 @@ fun QuestionCard(
                             )
                         }
                     }
-                    Text("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}.",
+                    Text(localizedUiText("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}."),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     OutlinedTextField(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("मिलान के उत्तर") },
+                        label = { Text(localizedUiText("मिलान के उत्तर")) },
                         enabled = !locked && !saving,
                         minLines = 3,
                         maxLines = 6
@@ -223,7 +225,7 @@ fun QuestionCard(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("अपना संख्यात्मक उत्तर लिखें") },
+                        label = { Text(localizedUiText("अपना संख्यात्मक उत्तर लिखें")) },
                         enabled = !locked && !saving,
                         minLines = 1,
                         maxLines = 2,
@@ -256,7 +258,7 @@ fun QuestionCard(
                 }
                 else -> {
                     if (isOrder) {
-                        Text("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"].",
+                        Text(localizedUiText("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"]."),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     }
                     val inputLabel = when {
@@ -272,7 +274,7 @@ fun QuestionCard(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text(inputLabel) },
+                        label = { Text(localizedUiText(inputLabel)) },
                         enabled = !locked && !saving,
                         minLines = if (longAnswer) 3 else 1,
                         maxLines = 6
@@ -280,7 +282,7 @@ fun QuestionCard(
                 }
             }
 
-            if (!status.isNullOrBlank()) Text(status, style = MaterialTheme.typography.bodyMedium)
+            if (!status.isNullOrBlank()) Text(localizedUiText(status), style = MaterialTheme.typography.bodyMedium)
             if (!feedback.isNullOrBlank()) {
                 Text(feedback, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
@@ -290,7 +292,7 @@ fun QuestionCard(
                     enabled = !saving && answer.isNotBlank(),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (saving) "सहेज रहे हैं…" else submitLabel)
+                    Text(localizedUiText(if (saving) "सहेज रहे हैं…" else submitLabel))
                 }
             }
         }
@@ -315,13 +317,28 @@ private fun displayedOrder(answer: String, optionKeys: List<String>): List<Strin
 
 @Composable
 fun EmptyState(title: String, detail: String) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceVariant
     ) {
-        Text(title, style = MaterialTheme.typography.titleLarge)
-        Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                localizedUiText(title),
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                localizedUiText(detail),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -329,9 +346,9 @@ fun EmptyState(title: String, detail: String) {
 fun ActionRow(title: String, detail: String, actionLabel: String, onClick: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
-            if (detail.isNotBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-            TextButton(onClick = onClick) { Text(actionLabel) }
+            Text(localizedUiText(title), style = MaterialTheme.typography.titleMedium)
+            if (detail.isNotBlank()) Text(localizedUiText(detail), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+            TextButton(onClick = onClick) { Text(localizedUiText(actionLabel)) }
         }
     }
 }
