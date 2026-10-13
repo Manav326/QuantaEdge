@@ -1761,8 +1761,13 @@ fun QuantaEdgeApp() {
                         answers = answers,
                         feedbacks = feedbacks,
                         busy = busy,
-                        onAnswerChange = { id, value -> answers[id] = value },
-                        onAnswer = ::savePracticeAnswer
+                        onAnswerChange = { id, value ->
+                            answers[id] = value
+                            if (value.isNotBlank()) feedbacks.remove(id)
+                        },
+                        onAnswer = ::savePracticeAnswer,
+                        onComplete = { route = AppRoute.LESSON },
+                        onProgress = ::openProgress
                     )
                     AppRoute.DIAGNOSTIC -> DiagnosticScreen(
                         diagnostic = diagnostic,
@@ -2526,45 +2531,177 @@ private fun PracticeScreen(
     feedbacks: MutableMap<String, String>,
     busy: Boolean,
     onAnswerChange: (String, String) -> Unit,
-    onAnswer: (JSONObject, String) -> Unit
+    onAnswer: (JSONObject, String) -> Unit,
+    onComplete: () -> Unit,
+    onProgress: () -> Unit
 ) {
     val questions = practice.optJSONArray("questions")?.objectItems() ?: emptyList()
     val sessionId = practice.longAny("sessionId", "session_id")
     val statusText = practice.textAny("status")
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(localizedUiText("अभ्यास सत्र"), style = MaterialTheme.typography.headlineSmall)
-        Text(practice.textAny("message").ifBlank { "आपकी सीख से जुड़े अभ्यास प्रश्न।" }, style = MaterialTheme.typography.bodyMedium)
-        Text(localizedUiText("सत्र: ") + sessionId + "  •  स्थिति: " + statusText, style = MaterialTheme.typography.labelSmall)
-        if (questions.isEmpty()) EmptyState("अभ्यास प्रश्न उपलब्ध नहीं", "इस पाठ के लिए स्वीकृत प्रश्न उपलब्ध होने पर अभ्यास शुरू हो सकेगा।")
-        else LazyColumn(modifier = Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(questions) { question ->
+    var currentQuestionIndex by rememberSaveable(sessionId) {
+        mutableStateOf(questions.indexOfFirst { !it.optBoolean("answered") }
+            .let { firstUnanswered -> if (firstUnanswered >= 0) firstUnanswered else questions.size })
+    }
+    LaunchedEffect(sessionId, questions.size) {
+        currentQuestionIndex = currentQuestionIndex.coerceIn(0, questions.size)
+    }
+    if (questions.isNotEmpty() && currentQuestionIndex >= questions.size) {
+        val correctCount = questions.count { it.has("lastCorrect") && !it.isNull("lastCorrect") && it.optBoolean("lastCorrect") }
+        val gradedCount = questions.count { it.has("lastCorrect") && !it.isNull("lastCorrect") }
+        Column(
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            Text(if (language == "hi") "बहुत अच्छा! अभ्यास पूरा हुआ।" else "Well done! Practice complete.",
+                style = MaterialTheme.typography.headlineSmall)
+            Text(practice.textAny("message").ifBlank {
+                if (language == "hi") "इस अभ्यास सत्र के प्रश्न पूरे हो गए हैं।" else "You have reached the end of this practice session."
+            }, style = MaterialTheme.typography.bodyMedium)
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
+            ) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(if (language == "hi") "इस सत्र का परिणाम" else "Session result",
+                        style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        if (gradedCount > 0) {
+                            if (language == "hi") "$correctCount / $gradedCount प्रश्नों का नवीनतम जाँचा गया उत्तर सही है"
+                            else "$correctCount of $gradedCount questions have a correct latest graded answer"
+                        } else if (language == "hi") {
+                            "आपके उत्तर सुरक्षित हैं।"
+                        } else {
+                            "Your submitted answers have been saved."
+                        },
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Text(
+                        if (language == "hi") "प्रगति जाँचे गए उत्तरों के आधार पर सुरक्षित होती है।"
+                        else "Learning progress is updated from graded answers.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            Button(onClick = onComplete, modifier = Modifier.fillMaxWidth()) {
+                Text(if (language == "hi") "पाठ पर लौटें" else "Return to lesson")
+            }
+            TextButton(onClick = onProgress, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                Text(if (language == "hi") "मेरी प्रगति देखें" else "View my progress")
+            }
+        }
+    } else {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Text(if (language == "hi") "अब खुद करके देखें" else "Now, put it into practice",
+                style = MaterialTheme.typography.headlineSmall)
+            Text(practice.textAny("message").ifBlank {
+                if (language == "hi") "पहले खुद सोचें, फिर उत्तर जमा करें और feedback से सीखें।"
+                else "Think it through, submit your answer, and learn from the feedback."
+            }, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                (if (language == "hi") "सत्र " else "Session ") + sessionId +
+                    " · " + (if (language == "hi") "स्थिति " else "Status ") + statusText,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (questions.isEmpty()) {
+                EmptyState(
+                    if (language == "hi") "अभ्यास प्रश्न उपलब्ध नहीं" else "No practice questions available",
+                    if (language == "hi") "इस पाठ के लिए स्वीकृत प्रश्न उपलब्ध होने पर अभ्यास शुरू हो सकेगा।"
+                    else "Practice will be available when approved questions are published for this lesson."
+                )
+            } else {
+                val safeIndex = currentQuestionIndex.coerceIn(0, questions.lastIndex)
+                val question = questions[safeIndex]
                 val id = question.longAny("id", "questionId", "question_id").toString()
-                val answered = question.optBoolean("answered")
                 val hasLast = question.has("lastCorrect") && !question.isNull("lastCorrect")
                 val lastCorrect = if (hasLast) question.optBoolean("lastCorrect") else null
                 val attemptCount = question.optInt("attemptCount", 0)
                 val existing = answers[id] ?: ""
+                val answered = question.optBoolean("answered")
+                val canAdvance = answered || (hasLast && lastCorrect == null && attemptCount > 0)
                 val statusMessage = when {
-                    answered && lastCorrect == true -> "उत्तर सही है और सुरक्षित है।"
-                    answered && lastCorrect == null -> "उत्तर सुरक्षित है; मूल्यांकन बाकी है।"
-                    !answered && lastCorrect == false && attemptCount > 0 -> "पिछला उत्तर सही नहीं था। फिर प्रयास करें।"
+                    answered && lastCorrect == true -> if (language == "hi") "उत्तर सही है और सुरक्षित है।" else "Correct answer saved."
+                    answered && lastCorrect == null -> if (language == "hi") "उत्तर सुरक्षित है; मूल्यांकन बाकी है।" else "Answer saved; review may still be pending."
+                    !answered && lastCorrect == false && attemptCount > 0 -> if (language == "hi") "पिछला उत्तर सही नहीं था। फिर प्रयास करें।" else "The previous answer was incorrect. Try again."
                     else -> null
                 }
-                QuestionCard(
-                    question = question,
-                    answer = existing,
-                    onAnswerChange = { onAnswerChange(id, it) },
-                    onSubmit = { onAnswer(question, existing) },
-                    locked = answered,
-                    saving = busy,
-                    feedback = feedbacks[id],
-                    status = statusMessage,
-                    submitLabel = "उत्तर जमा करें"
+
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        if (language == "hi") "प्रश्न ${safeIndex + 1} / ${questions.size}" else "Question ${safeIndex + 1} of ${questions.size}",
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        if (language == "hi") "${(safeIndex * 100 / questions.size)}% पूरा" else "${(safeIndex * 100 / questions.size)}% complete",
+                        style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                LinearProgressIndicator(
+                    progress = { (safeIndex + 1).toFloat() / questions.size.toFloat() },
+                    modifier = Modifier.fillMaxWidth()
                 )
+                Column(
+                    modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    QuestionCard(
+                        question = question,
+                        answer = existing,
+                        onAnswerChange = { onAnswerChange(id, it) },
+                        onSubmit = { onAnswer(question, existing) },
+                        locked = answered,
+                        saving = busy,
+                        feedback = feedbacks[id],
+                        status = statusMessage,
+                        submitLabel = if (language == "hi") "उत्तर जमा करें" else "Submit answer"
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (!canAdvance) {
+                        Text(
+                            if (lastCorrect == false) {
+                                if (language == "hi") "उत्तर सुधारकर फिर जमा करें।" else "Revise your answer and submit again."
+                            } else if (language == "hi") {
+                                "आगे बढ़ने से पहले उत्तर जमा करें।"
+                            } else {
+                                "Submit your answer before continuing."
+                            },
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                    Button(
+                        onClick = { currentQuestionIndex = (safeIndex + 1).coerceAtMost(questions.size) },
+                        enabled = canAdvance && !busy,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(if (safeIndex == questions.lastIndex) {
+                            if (language == "hi") "नतीजे देखें →" else "See results →"
+                        } else {
+                            if (language == "hi") "अगला प्रश्न →" else "Next question →"
+                        })
+                    }
+                }
             }
+            Text(
+                if (language == "hi") "सिर्फ स्वीकृत प्रश्न · आपके उत्तर सुरक्षित रूप से सहेजे जाते हैं।"
+                else "Approved questions only · Your answers are saved securely.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
-        Text(localizedUiText("गलत auto-graded उत्तर पर फिर प्रयास कर सकते हैं। जमा हुआ अनिर्णीत उत्तर दोबारा नहीं भेजा जा सकता।"),
-            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
