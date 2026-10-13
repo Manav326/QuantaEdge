@@ -1149,6 +1149,30 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun viewParentCertificate(childId: Long, certificateId: Long) {
+        runTask {
+            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            val bytes = withContext(Dispatchers.IO) {
+                ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
+                    certificateId + "/view?format=pdf")
+            }
+            if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
+            val directory = java.io.File(context.cacheDir, "certificates")
+            if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare certificate preview.")
+            val file = java.io.File(directory, "quantaedge-child-" + childId + "-certificate-" + certificateId + ".pdf")
+            withContext(Dispatchers.IO) { file.writeBytes(bytes) }
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                context, context.packageName + ".fileprovider", file
+            )
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
+                .setDataAndType(uri, "application/pdf")
+                .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(android.content.Intent.createChooser(
+                intent, if (language == "hi") "प्रमाणपत्र देखें" else "View certificate"
+            ))
+        }
+    }
+
     fun downloadParentCertificate(childId: Long, certificateId: Long, format: String) {
         runTask {
             if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
@@ -1507,6 +1531,7 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         certificates = parentCertificates,
                         onSelectChild = ::openParentReport,
+                        onViewCertificate = ::viewParentCertificate,
                         onDownloadCertificate = ::downloadParentCertificate
                     )
                     AppRoute.PARENT_PROFILE -> ParentProfileScreen(
@@ -3009,6 +3034,7 @@ private fun ParentReportScreen(
     busy: Boolean,
     certificates: List<JSONObject>,
     onSelectChild: (JSONObject) -> Unit,
+    onViewCertificate: (Long, Long) -> Unit,
     onDownloadCertificate: (Long, Long, String) -> Unit
 ) {
     val childId = report.optLong("_childId", 0L)
@@ -3103,11 +3129,38 @@ private fun ParentReportScreen(
                 when(cert?.textAny("status")) {
                     "ISSUED" -> {
                         Text(t("Certificate available","प्रमाणपत्र उपलब्ध है"), color=MaterialTheme.colorScheme.primary)
-                        Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                            OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"pdf")},
-                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text(localizedUiText("PDF")) }
-                            OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"png")},
-                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text(localizedUiText("PNG")) }
+                        val certificateId = cert.optLong("id", 0L)
+                        val canAccess = !busy && childId > 0L && certificateId > 0L
+                        if (compact) {
+                            Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                    enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("View certificate", "प्रमाणपत्र देखें"))
+                                }
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                    enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("Save PDF", "PDF सेव करें"))
+                                }
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                    enabled = canAccess, modifier = Modifier.fillMaxWidth()) {
+                                    Text(t("Save PNG", "PNG सेव करें"))
+                                }
+                            }
+                        } else {
+                            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { onViewCertificate(childId, certificateId) },
+                                    enabled = canAccess, modifier = Modifier.weight(1f)) {
+                                    Text(t("View", "देखें"))
+                                }
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "pdf") },
+                                    enabled = canAccess, modifier = Modifier.weight(1f)) {
+                                    Text(t("Save PDF", "PDF सेव करें"))
+                                }
+                                OutlinedButton(onClick = { onDownloadCertificate(childId, certificateId, "png") },
+                                    enabled = canAccess, modifier = Modifier.weight(1f)) {
+                                    Text(t("Save PNG", "PNG सेव करें"))
+                                }
+                            }
                         }
                     }
                     "REVOKED" -> Text(t("Certificate revoked","प्रमाणपत्र निरस्त है"), color=MaterialTheme.colorScheme.error)
