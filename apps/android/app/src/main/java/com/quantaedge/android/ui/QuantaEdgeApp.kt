@@ -1248,8 +1248,45 @@ fun QuantaEdgeApp() {
             }
             auth = JSONObject()
             studentProfile = JSONObject()
+            recommendation = JSONObject()
+            parentAccount = JSONObject()
             parentChildren = emptyList()
+            parentReport = JSONObject()
+            parentCertificates = emptyList()
+            parentProfile = JSONObject()
+            selectedChild = JSONObject()
+            lessons = emptyList()
+            lesson = JSONObject()
+            practice = JSONObject()
+            diagnostic = JSONObject()
+            assessments = emptyList()
+            offlineAssessments = emptyList()
+            assessmentsPageOffset = 0
+            assessmentsTotal = 0
+            assessmentAttempt = JSONObject()
+            assessmentResults = emptyList()
+            resultsPageOffset = 0
+            resultsTotal = 0
+            assessmentCertificateEligibility = emptyMap()
+            pendingCertificateBytes = null
+            progressData = JSONObject()
+            documents = emptyList()
+            selectedDocument = JSONObject()
+            documentPage = 1
+            documentImage = null
+            tutorSession = JSONObject()
+            tutorMessages = emptyList()
+            tutorAvailable = false
+            liveClasses = emptyList()
+            recordedClasses = emptyList()
+            selectedRecording = JSONObject()
+            answers.clear()
+            feedbacks.clear()
+            lessonAnswerLocks.clear()
+            resourceDownloadStates.clear()
+            currentSubject = "maths"
             route = AppRoute.LOGIN
+            error = ""
             status = "आप सुरक्षित रूप से साइन आउट हो गए।"
         }
     }
@@ -1702,7 +1739,7 @@ private fun LoginScreen(
     var mobile by rememberSaveable { mutableStateOf("") }
     var parentMobile by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 22.dp),
@@ -1777,10 +1814,10 @@ private fun ParentOtpFlowScreen(
 ) {
     var mobile by rememberSaveable { mutableStateOf("") }
     var displayName by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var otp by rememberSaveable { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var otp by remember { mutableStateOf("") }
     var otpRequested by rememberSaveable { mutableStateOf(false) }
-    var devCode by rememberSaveable { mutableStateOf("") }
+    var devCode by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
@@ -2498,7 +2535,7 @@ private fun AssessmentAttemptScreen(
                             val reason = certificate?.optString("eligibility_reason").orEmpty()
                             val message = when (reason) {
                                 "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
-                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "विषय पूरा करने का प्रमाणपत्र अलग है; टेस्ट प्रमाणपत्र के लिए जारी परिणाम और सक्रिय विषय नामांकन आवश्यक हैं।" else "Subject completion is a separate certificate; a test certificate depends on the released result and active subject enrolment."
                                 "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold से कम है।" else "The score is below the certificate threshold."
                                 "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
                                 "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject के published lessons उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
@@ -2752,7 +2789,7 @@ private fun ResultsScreen(
                                             "RESULT_NOT_RELEASED" -> if (language == "hi") "Final result जारी होने के बाद पात्रता जाँची जाएगी।" else "Eligibility is checked after the final result is released."
                                             "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
                                             "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject में published lessons अभी उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
-                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "विषय पूरा करने का प्रमाणपत्र अलग है; टेस्ट प्रमाणपत्र के लिए जारी परिणाम और सक्रिय विषय नामांकन आवश्यक हैं।" else "Subject completion is a separate certificate; a test certificate depends on the released result and active subject enrolment."
                                             "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + passThreshold + "% से कम है।" else "The score is below the " + passThreshold + "% certificate threshold."
                                             "INVALID_SCORE" -> if (language == "hi") "इस result का score मान्य नहीं है।" else "This result has an invalid score."
                                             else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results refresh करें।" else "Certificate eligibility could not be checked. Refresh results."
@@ -2785,6 +2822,7 @@ private fun ResourcesScreen(
     onRefresh: () -> Unit
 ) {
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
+    val compact = LocalConfiguration.current.screenWidthDp < 390
     if (pendingRemoval != null) {
         AlertDialog(
             onDismissRequest = { pendingRemoval = null },
@@ -2806,12 +2844,22 @@ private fun ResourcesScreen(
         Text(localizedUiText("Textbook Library"), style = MaterialTheme.typography.headlineSmall)
         Text(localizedUiText("सामग्री ऐप के अंदर पढ़ें। ऑफ़लाइन डाउनलोड पब्लिक Downloads या दूसरी ऐप में उपलब्ध नहीं होगा।"),
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+        if (compact) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
+                else TextButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
+                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
+                else TextButton(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
+            }
+            TextButton(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("रिफ्रेश")) }
+        } else {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+                else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+                else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+                TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+            }
         }
         if (documents.isEmpty() && !busy) EmptyState("संसाधन उपलब्ध नहीं", "इस भाषा और विषय के लिए डाउनलोड की अनुमति वाले प्रकाशित संसाधन दिखाई देंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
@@ -2850,7 +2898,7 @@ private fun ResourcesScreen(
                 }
             }
         }
-        if (downloadStatus.isNotBlank()) Text(downloadStatus, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
+        if (downloadStatus.isNotBlank()) Text(localizedUiText(downloadStatus), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
     }
 }
 
