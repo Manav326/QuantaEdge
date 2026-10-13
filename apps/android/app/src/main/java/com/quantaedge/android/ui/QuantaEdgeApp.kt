@@ -104,6 +104,7 @@ fun QuantaEdgeApp() {
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var certificateAttemptId by remember { mutableStateOf(0L) }
     var progressData by remember { mutableStateOf(JSONObject()) }
     var documents by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
@@ -489,6 +490,12 @@ fun QuantaEdgeApp() {
                 .optJSONArray("items").objectItems()
             route = AppRoute.ASSESSMENT_RESULTS
         }
+    }
+
+    fun openCertificateForAttempt(attemptId: Long) {
+        if (attemptId <= 0L) return
+        certificateAttemptId = attemptId
+        route = AppRoute.CERTIFICATES
     }
 
     fun openAssessmentReview(attemptId: Long) {
@@ -1247,6 +1254,8 @@ fun QuantaEdgeApp() {
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
+                        language = language,
+                        onCertificate = ::openCertificateForAttempt,
                         onRefresh = {
                             runTask {
                                 val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
@@ -1256,7 +1265,9 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
                         resultItems = assessmentResults,
-                        onReview = ::openAssessmentReview
+                        language = language,
+                        onReview = ::openAssessmentReview,
+                        onCertificate = ::openCertificateForAttempt
                     )
                     AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
@@ -1266,6 +1277,8 @@ fun QuantaEdgeApp() {
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
+                        language = language,
+                        onCertificate = ::openCertificateForAttempt,
                         onRefresh = {
                             runTask {
                                 val id = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
@@ -1312,7 +1325,8 @@ fun QuantaEdgeApp() {
                     AppRoute.PROGRESS -> StudentProgressScreen(progressData, busy, ::openProgress)
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
-                        onBack = { route = AppRoute.STUDENT_HOME }
+                        initialAssessmentAttemptId = certificateAttemptId,
+                        onBack = { certificateAttemptId = 0L; route = AppRoute.STUDENT_HOME }
                     )
                     AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
                         language = language,
@@ -1884,7 +1898,9 @@ private fun AssessmentAttemptScreen(
     onAnswerChange: (String, String) -> Unit,
     onSave: (JSONObject, String) -> Unit,
     onSubmit: () -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    language: String,
+    onCertificate: (Long) -> Unit
 ) {
     val questions = attempt.optJSONArray("questions")?.objectItems() ?: emptyList()
     val attemptId = attempt.longAny("attempt_id", "attemptId", "id")
@@ -1958,6 +1974,14 @@ private fun AssessmentAttemptScreen(
         if (released) {
             Text("अंक: " + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
+            CertificateResultActions(
+                attemptId = attemptId,
+                assessmentType = attempt.textAny("assessment_type"),
+                isGenerated = attempt.optBoolean("is_generated"),
+                status = phase,
+                language = language,
+                onOpenCertificates = onCertificate
+            )
         } else if (phase == "AWAITING_REVIEW") {
             Text("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।", modifier = Modifier.padding(vertical = 8.dp))
         }
@@ -2034,7 +2058,9 @@ private fun AssessmentAttemptScreen(
 @Composable
 private fun ResultsScreen(
     resultItems: List<JSONObject>,
-    onReview: (Long) -> Unit
+    language: String,
+    onReview: (Long) -> Unit,
+    onCertificate: (Long) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
@@ -2078,11 +2104,27 @@ private fun ResultsScreen(
                                         onClick = { onReview(attempt.longAny("attempt_id", "attemptId")) }
                                     ) { Text("उत्तर समीक्षा") }
                                 }
+                                CertificateResultActions(
+                                    attemptId = attempt.longAny("attempt_id", "attemptId"),
+                                    assessmentType = item.textAny("assessment_type"),
+                                    isGenerated = item.optBoolean("is_generated"),
+                                    status = attempt.textAny("status"),
+                                    language = language,
+                                    onOpenCertificates = onCertificate
+                                )
                             }
                         } else {
                             TextButton(onClick = { onReview(item.longAny("attempt_id", "attemptId")) }) {
                                 Text("उत्तर समीक्षा खोलें")
                             }
+                            CertificateResultActions(
+                                attemptId = item.longAny("attempt_id", "attemptId"),
+                                assessmentType = item.textAny("assessment_type"),
+                                isGenerated = item.optBoolean("is_generated"),
+                                status = item.textAny("status"),
+                                language = language,
+                                onOpenCertificates = onCertificate
+                            )
                         }
                     }
                 }
