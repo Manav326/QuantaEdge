@@ -387,6 +387,18 @@ public class AuthService {
     return contextForStaff(((Number) rows.getFirst().get("id")).longValue());
   }
 
+  public void requireEducationAccess(long staffId) {
+    Boolean enabled = jdbc.queryForObject("""
+        select exists(
+          select 1 from staff_account
+          where id=? and active=true and education_access_enabled=true
+        )
+        """, Boolean.class, staffId);
+    if (!Boolean.TRUE.equals(enabled)) {
+      throw new SecurityException("Educational Admin access is not enabled for this account.");
+    }
+  }
+
   public boolean staffMustChangePassword(long staffId) {
     try {
       return Boolean.TRUE.equals(jdbc.queryForObject(
@@ -655,6 +667,10 @@ public class AuthService {
               and he.hrms_access_enabled=true
               and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
           ))
+        and (s.workspace_key not in ('STAFF','EDUCATION_ADMIN')
+          or exists (select 1 from staff_account education_sa
+              where education_sa.id=s.staff_id and education_sa.active=true
+                and education_sa.education_access_enabled=true))
       """ + scope,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
@@ -788,6 +804,10 @@ public class AuthService {
               and he.hrms_access_enabled=true
               and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
           ))
+        and (s.workspace_key not in ('STAFF','EDUCATION_ADMIN')
+          or exists (select 1 from staff_account education_sa
+              where education_sa.id=s.staff_id and education_sa.active=true
+                and education_sa.education_access_enabled=true))
       """ + workspacePredicate(workspace, "s") + "\n      for update of s";
     var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
