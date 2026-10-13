@@ -2,6 +2,9 @@ package com.quantaedge.api;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.DayOfWeek;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -58,6 +61,11 @@ public class HrTeachingAssignmentController {
     String name=required(body.get("name"),120,"Period name");
     LocalDate start=date(body.get("startDate"),"Start date"),end=date(body.get("endDate"),"End date");
     if(end.isBefore(start))throw bad("Academic period end date cannot be before its start date.");
+    Boolean periodOverlap=jdbc.queryForObject("""
+      select exists(select 1 from hr_academic_period where organization_id=? and status<>'CANCELLED'
+        and start_date<=? and end_date>=?)
+      """,Boolean.class,orgId,Date.valueOf(end),Date.valueOf(start));
+    if(Boolean.TRUE.equals(periodOverlap))throw conflict("Academic periods for one organisation cannot overlap. Adjust the dates or close/cancel the prior period first.");
     Long id;
     try{id=jdbc.queryForObject("""
       insert into hr_academic_period(organization_id,period_code,name,start_date,end_date,created_by_staff_id)
@@ -67,6 +75,48 @@ public class HrTeachingAssignmentController {
     Map<String,Object> row=periodById(id);
     audit.recordAction(context,"/api/v1/hr/academic-periods/"+id,"Created academic period "+code);
     return row;
+  }
+
+  @PatchMapping("/academic-periods/{id}/status")
+  @Transactional
+  public Map<String,Object> changePeriodStatus(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> period=periodById(id);
+    String previous=String.valueOf(period.get("status"));
+    String next=required(body.get("status"),16,"Status").toUpperCase();
+    String reason=optional(body.get("reason"),1000);
+    LocalDate today=LocalDate.now(ZoneId.of("Asia/Kolkata"));
+    LocalDate starts=((Date)period.get("start_date")).toLocalDate();
+    LocalDate ends=((Date)period.get("end_date")).toLocalDate();
+    boolean allowed=("PLANNED".equals(previous)&&List.of("ACTIVE","CANCELLED").contains(next))
+        ||("ACTIVE".equals(previous)&&"CLOSED".equals(next));
+    if(!allowed)throw conflict("Academic period status transition "+previous+" → "+next+" is not allowed.");
+    if("ACTIVE".equals(next)&&today.isAfter(ends))throw conflict("An already-ended academic period cannot be activated.");
+    if("CANCELLED".equals(next)) {
+      if(reason==null||reason.isBlank())throw bad("A cancellation reason is required.");
+      Boolean hasAssignments=jdbc.queryForObject("""
+        select exists(select 1 from hr_teaching_assignment where academic_period_id=?
+          and status in ('PENDING_APPROVAL','APPROVED'))
+        """,Boolean.class,id);
+      if(Boolean.TRUE.equals(hasAssignments))throw conflict("This period has pending or approved assignments. Preserve them and close the period after its effective end rather than cancelling it.");
+    }
+    if("CLOSED".equals(next)) {
+      if(!today.isAfter(ends))throw conflict("An academic period can be closed only after its end date.");
+      Boolean hasFutureClasses=jdbc.queryForObject("""
+        select exists(select 1 from learning_class_session cs join hr_teaching_assignment a on a.id=cs.teaching_assignment_id
+          where a.academic_period_id=? and cs.status in ('SCHEDULED','LIVE') and cs.ends_at>now())
+        """,Boolean.class,id);
+      if(Boolean.TRUE.equals(hasFutureClasses))throw conflict("The period still has scheduled/live class sessions. Resolve them before closing it.");
+      if(reason==null||reason.isBlank())throw bad("A closure reason is required.");
+    }
+    int changed=jdbc.update("update hr_academic_period set status=?,updated_at=now() where id=? and status=?",
+        next,id,previous);
+    if(changed!=1)throw conflict("The academic period changed while you were editing it. Refresh and try again.");
+    audit.recordAction(context,"/api/v1/hr/academic-periods/"+id+"/status",
+        "Changed academic period "+period.get("period_code")+" from "+previous+" to "+next
+            +(reason==null||reason.isBlank()?"":"; reason: "+reason)+".");
+    return periodById(id);
   }
 
   @GetMapping("/teaching-assignments")
@@ -198,6 +248,195 @@ public class HrTeachingAssignmentController {
     Map<String,Object> result=assignmentViewById(id);
     audit.recordAction(context,"/api/v1/hr/teaching-assignments/"+id+"/decision",decision+" teaching assignment "+id);
     return result;
+  }
+
+  @PutMapping("/teaching-assignments/{id}")
+  @Transactional
+  public Map<String,Object> amendAssignment(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> current=assignmentById(id);
+    if(!"PENDING_APPROVAL".equals(current.get("status"))) {
+      throw conflict("Only pending proposals can be amended. For an approved assignment, submit a replacement so the existing record and history remain intact.");
+    }
+    long orgId=((Number)current.get("organization_id")).longValue();
+    long employeeId=positive(body.getOrDefault("employeeId",current.get("employee_id")),"Employee");
+    Map<String,Object> employee=employee(employeeId);
+    if(((Number)employee.get("organization_id")).longValue()!=orgId)throw bad("The employee must belong to the same organisation.");
+    if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(employee.get("employment_status"))))
+      throw bad("Teaching assignments require an active employment record.");
+    long subjectId=positive(body.getOrDefault("subjectId",current.get("subject_id")),"Subject");
+    Map<String,Object> subject=subject(subjectId);
+    if(!Boolean.TRUE.equals(subject.get("active")))throw bad("Choose an active class subject.");
+    long periodId=positive(body.getOrDefault("academicPeriodId",current.get("academic_period_id")),"Academic period");
+    Map<String,Object> period=periodById(periodId);
+    if(((Number)period.get("organization_id")).longValue()!=orgId||List.of("CLOSED","CANCELLED").contains(String.valueOf(period.get("status"))))
+      throw bad("Choose an open academic period in the employee's organisation.");
+    LocalDate start=date(body.getOrDefault("effectiveStart",String.valueOf(current.get("effective_start"))),"Effective start");
+    LocalDate end=date(body.getOrDefault("effectiveEnd",String.valueOf(current.get("effective_end"))),"Effective end");
+    LocalDate periodStart=((Date)period.get("start_date")).toLocalDate(),periodEnd=((Date)period.get("end_date")).toLocalDate();
+    if(end.isBefore(start)||start.isBefore(periodStart)||end.isAfter(periodEnd))throw bad("Assignment dates must be valid and stay within the academic period.");
+    Long replaces=body.containsKey("replacesAssignmentId")?optionalLong(body.get("replacesAssignmentId")):
+      (current.get("replaces_assignment_id") instanceof Number n?n.longValue():null);
+    if(replaces!=null) {
+      if(replaces==id)throw bad("An assignment cannot replace itself.");
+      Map<String,Object> prior=assignmentById(replaces);
+      if(!"APPROVED".equals(prior.get("status"))||((Number)prior.get("organization_id")).longValue()!=orgId
+          ||((Number)prior.get("subject_id")).longValue()!=subjectId||((Number)prior.get("academic_period_id")).longValue()!=periodId)
+        throw bad("A replacement must reference an approved assignment for the same organisation, subject and academic period.");
+      LocalDate priorStart=((Date)prior.get("effective_start")).toLocalDate(),priorEnd=((Date)prior.get("effective_end")).toLocalDate();
+      if(!start.isAfter(priorStart)||start.isAfter(priorEnd))throw bad("Replacement start must follow the prior assignment start and fall within its effective period.");
+    }
+    String note=body.containsKey("assignmentNote")?optional(body.get("assignmentNote"),1000):
+      (current.get("assignment_note")==null?null:String.valueOf(current.get("assignment_note")));
+    String reason=optional(body.get("reason"),1000);
+    String before=snapshot(id);
+    int changed=jdbc.update("""
+      update hr_teaching_assignment set employee_id=?,subject_id=?,academic_period_id=?,effective_start=?,
+        effective_end=?,replaces_assignment_id=?,assignment_note=?,updated_at=now()
+      where id=? and status='PENDING_APPROVAL'
+      """,employeeId,subjectId,periodId,Date.valueOf(start),Date.valueOf(end),replaces,note,id);
+    if(changed!=1)throw conflict("The assignment changed while you were editing it. Refresh and try again.");
+    history(id,"ASSIGNMENT_AMENDED",context,start,reason,before,snapshot(id));
+    audit.recordAction(context,"/api/v1/hr/teaching-assignments/"+id,"Amended pending teaching assignment "+id);
+    return assignmentViewById(id);
+  }
+
+  @PatchMapping("/teaching-assignments/{id}/status")
+  @Transactional
+  public Map<String,Object> setAssignmentStatus(@PathVariable long id,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireManage(context);
+    Map<String,Object> assignment=assignmentById(id);
+    String previous=String.valueOf(assignment.get("status"));
+    String next=required(body.get("status"),20,"Status").toUpperCase();
+    if(!"CANCELLED".equals(next))throw bad("This endpoint only supports cancellation. Approved replacements must use the approval workflow.");
+    if(!List.of("PENDING_APPROVAL","APPROVED").contains(previous))throw conflict("Only pending or approved assignments can be cancelled.");
+    String reason=required(body.get("reason"),1000,"Cancellation reason");
+    String before=snapshot(id);
+    int changed=jdbc.update("update hr_teaching_assignment set status='CANCELLED',decision_reason=?,updated_at=now() where id=? and status=?",reason,id,previous);
+    if(changed!=1)throw conflict("The assignment changed while you were cancelling it. Refresh and try again.");
+    history(id,"ASSIGNMENT_CANCELLED",context,LocalDate.now(ZoneId.of("Asia/Kolkata")),reason,before,snapshot(id));
+    audit.recordAction(context,"/api/v1/hr/teaching-assignments/"+id+"/status","Cancelled teaching assignment "+id);
+    return assignmentViewById(id);
+  }
+
+  @GetMapping("/teaching-workload-policy")
+  public Map<String,Object> workloadPolicy(@RequestParam long organizationId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requireAuth(context);
+    if(!context.isAdmin()&&!authorization.hasPermission(context,"HR_ACADEMIC_ASSIGNMENT_VIEW")
+        &&!authorization.hasPermission(context,"CLASS_SCHEDULE_POLICY_MANAGE"))
+      throw new SecurityException("Teaching workload policy view permission required.");
+    ensureOrganization(organizationId);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select organization_id,weekly_minutes_limit,updated_by_staff_id,created_at,updated_at
+      from hr_teaching_workload_policy where organization_id=?
+      """,organizationId);
+    Map<String,Object> result=new java.util.LinkedHashMap<>();
+    result.put("organizationId",organizationId);
+    result.put("configured",!rows.isEmpty());
+    if(!rows.isEmpty())result.putAll(rows.getFirst());
+    return result;
+  }
+
+  @PutMapping("/teaching-workload-policy")
+  @Transactional
+  public Map<String,Object> setWorkloadPolicy(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"CLASS_SCHEDULE_POLICY_MANAGE");
+    long orgId=positive(body.get("organizationId"),"Organisation");ensureOrganization(orgId);
+    int minutes;
+    try{minutes=Integer.parseInt(String.valueOf(body.get("weeklyMinutesLimit")));}catch(RuntimeException ex){throw bad("Weekly workload limit must be a number of minutes.");}
+    if(minutes<60||minutes>6000)throw bad("Weekly workload limit must be between 60 and 6000 minutes.");
+    jdbc.update("""
+      insert into hr_teaching_workload_policy(organization_id,weekly_minutes_limit,updated_by_staff_id,updated_at)
+      values(?,?,?,now())
+      on conflict(organization_id) do update set weekly_minutes_limit=excluded.weekly_minutes_limit,
+        updated_by_staff_id=excluded.updated_by_staff_id,updated_at=now()
+      """,orgId,minutes,context.staffId());
+    audit.recordAction(context,"/api/v1/hr/teaching-workload-policy","Set weekly teaching workload limit for organisation "+orgId+" to "+minutes+" minutes.");
+    return workloadPolicy(orgId,context);
+  }
+
+  @GetMapping("/academic-reporting")
+  public Map<String,Object> academicReporting(@RequestParam long organizationId,
+      @RequestParam(required=false) Long academicPeriodId,
+      @RequestParam(required=false) String from,@RequestParam(required=false) String to,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireView(context);ensureOrganization(organizationId);
+    LocalDate today=LocalDate.now(ZoneId.of("Asia/Kolkata"));
+    LocalDate fromDate=from==null||from.isBlank()?today.with(DayOfWeek.MONDAY):date(from,"From date");
+    LocalDate toDate=to==null||to.isBlank()?fromDate.plusDays(6):date(to,"To date");
+    if(toDate.isBefore(fromDate)||toDate.isAfter(fromDate.plusDays(92)))throw bad("Report date range must be ordered and no longer than 93 days.");
+    java.sql.Timestamp rangeStart=java.sql.Timestamp.from(fromDate.atStartOfDay(ZoneId.of("Asia/Kolkata")).toInstant());
+    java.sql.Timestamp rangeEnd=java.sql.Timestamp.from(toDate.plusDays(1).atStartOfDay(ZoneId.of("Asia/Kolkata")).toInstant());
+    List<Map<String,Object>> assignments=jdbc.queryForList("""
+      select a.id,a.employee_id,e.employee_number,e.display_name employee_name,a.subject_id,s.code subject_code,
+        s.display_name subject_name,c.code class_code,c.display_name class_name,a.academic_period_id,p.name period_name,
+        a.effective_start,a.effective_end,a.status,a.replaces_assignment_id
+      from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id
+      join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
+      join hr_academic_period p on p.id=a.academic_period_id
+      where a.organization_id=? and (?::bigint is null or a.academic_period_id=?)
+      order by c.sort_order,s.sort_order,e.display_name,a.effective_start
+      """,organizationId,academicPeriodId,academicPeriodId);
+    List<Map<String,Object>> coverage=jdbc.queryForList("""
+      select c.code class_code,c.display_name class_name,s.id subject_id,s.code subject_code,s.display_name subject_name,
+        count(distinct a.id) filter(where a.status='APPROVED' and a.effective_start<=? and a.effective_end>=?) approved_assignment_count,
+        coalesce(string_agg(distinct e.display_name,', ' order by e.display_name)
+          filter(where a.status='APPROVED' and a.effective_start<=? and a.effective_end>=?), '') assigned_teachers
+      from curriculum_subject s join curriculum_class c on c.id=s.class_id
+      left join hr_teaching_assignment a on a.subject_id=s.id and a.organization_id=?
+        and (?::bigint is null or a.academic_period_id=?)
+        and a.effective_start<=? and a.effective_end>=?
+      left join hr_employee e on e.id=a.employee_id
+      where c.active=true and s.active=true
+      group by c.sort_order,c.code,c.display_name,s.id,s.code,s.display_name
+      order by c.sort_order,s.sort_order,s.display_name
+      """,Date.valueOf(toDate),Date.valueOf(fromDate),Date.valueOf(toDate),Date.valueOf(fromDate),
+      organizationId,academicPeriodId,academicPeriodId,Date.valueOf(toDate),Date.valueOf(fromDate));
+    List<Map<String,Object>> workload=jdbc.queryForList("""
+      select e.id employee_id,e.employee_number,e.display_name employee_name,
+        date_trunc('week',cs.starts_at at time zone 'Asia/Kolkata')::date week_start,
+        count(cs.id) scheduled_class_count,
+        coalesce(sum(greatest(0,extract(epoch from (cs.ends_at-cs.starts_at))/60)),0)::bigint scheduled_minutes,
+        wp.weekly_minutes_limit,
+        (wp.weekly_minutes_limit is not null and
+          coalesce(sum(greatest(0,extract(epoch from (cs.ends_at-cs.starts_at))/60)),0)>wp.weekly_minutes_limit) over_limit
+      from hr_employee e
+      left join hr_teaching_assignment a on a.employee_id=e.id and a.organization_id=?
+        and (?::bigint is null or a.academic_period_id=?)
+      left join learning_class_session cs on cs.teaching_assignment_id=a.id
+        and cs.status in ('SCHEDULED','LIVE','COMPLETED')
+        and cs.starts_at<?::timestamptz and cs.ends_at>?::timestamptz
+      left join hr_teaching_workload_policy wp on wp.organization_id=e.organization_id
+      where e.organization_id=?
+      group by e.id,e.employee_number,e.display_name,week_start,wp.weekly_minutes_limit
+      having count(cs.id)>0
+      order by week_start,e.display_name
+      """,organizationId,academicPeriodId,academicPeriodId,rangeEnd,rangeStart,organizationId);
+    List<Map<String,Object>> sessions=jdbc.queryForList("""
+      select cs.status,count(*) class_count
+      from learning_class_session cs join hr_teaching_assignment a on a.id=cs.teaching_assignment_id
+      where a.organization_id=? and (?::bigint is null or a.academic_period_id=?)
+        and cs.starts_at<?::timestamptz and cs.ends_at>?::timestamptz
+      group by cs.status order by cs.status
+      """,organizationId,academicPeriodId,academicPeriodId,rangeEnd,rangeStart);
+    Long conflicts=jdbc.queryForObject("""
+      select count(*) from learning_class_session a join learning_class_session b on a.id<b.id
+      left join hr_teaching_assignment aa on aa.id=a.teaching_assignment_id
+      left join hr_teaching_assignment ba on ba.id=b.teaching_assignment_id
+      where a.status in ('SCHEDULED','LIVE') and b.status in ('SCHEDULED','LIVE')
+        and a.starts_at<b.ends_at and b.starts_at<a.ends_at
+        and ((a.host_staff_id is not null and a.host_staff_id=b.host_staff_id)
+          or (aa.employee_id is not null and aa.employee_id=ba.employee_id))
+        and a.starts_at<?::timestamptz and a.ends_at>?::timestamptz
+        and (aa.organization_id=? or ba.organization_id=?)
+      """,Long.class,rangeEnd,rangeStart,organizationId,organizationId);
+    return Map.of("organizationId",organizationId,"academicPeriodId",academicPeriodId==null?0L:academicPeriodId,
+      "from",fromDate.toString(),"to",toDate.toString(),"assignments",assignments,"teacherCoverage",coverage,
+      "weeklyWorkload",workload,"classStatusCounts",sessions,"schedulingConflictCount",conflicts==null?0L:conflicts);
   }
 
   @GetMapping("/approved-teaching-assignments")

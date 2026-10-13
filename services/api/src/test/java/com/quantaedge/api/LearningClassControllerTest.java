@@ -93,8 +93,9 @@ class LearningClassControllerTest {
   @Test
   void completingASessionClosesOpenAttendanceClocks() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
-    when(jdbc.queryForList(contains("select id,status,title from learning_class_session"), eq(44L)))
-        .thenReturn(List.of(Map.of("id", 44L, "status", "LIVE", "title", "Revision class")));
+    when(jdbc.queryForList(contains("select cs.id,cs.status,cs.title,cs.provider"), eq(44L)))
+        .thenReturn(List.of(Map.of("id", 44L, "status", "LIVE", "title", "Revision class",
+            "provider", "CUSTOM", "provider_operation_status", "NOT_REQUIRED")));
     when(jdbc.queryForList(contains("select cs.id as session_id"), eq(44L)))
         .thenReturn(List.of(Map.of("session_id", 44L, "title", "Revision class", "status", "COMPLETED")));
 
@@ -103,6 +104,22 @@ class LearningClassControllerTest {
     assertEquals("COMPLETED", result.get("status"));
     verify(jdbc).update(contains("update learning_class_attendance att set"), eq(44L));
     verify(staffAudit).recordAction(eq(admin), contains("/admin/live-classes/44/status"), anyString());
+  }
+
+  @Test
+  void unverifiedGoogleMeetLinkIsNeverReturnedToStaff() {
+    when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
+    when(jdbc.queryForList(contains("select id,title,provider,private_join_url"), eq(44L)))
+        .thenReturn(List.of(Map.of(
+            "id", 44L, "title", "Revision class", "provider", "GOOGLE_MEET",
+            "private_join_url", "https://meet.google.com/abc-defg-hij",
+            "provider_operation_status", "FAILED",
+            "provider_error_message", "Google permission denied")));
+
+    Map<String, Object> result = controller.revealLiveClassMeetingLink(44L, admin);
+
+    assertEquals("FAILED", result.get("integrationStatus"));
+    assertEquals(null, result.get("joinUrl"));
   }
 
   @Test
