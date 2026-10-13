@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 type Session={staffId?:number;role?:string;displayName?:string;permissions?:string[]};
 type Tab='recruitment'|'performance'|'assets'|'exits';
 async function api(path:string,init:RequestInit={}) {
-  const headers=new Headers(init.headers); headers.set('X-QE-Workspace','STAFF');
+  const headers=new Headers(init.headers); headers.set('X-QE-Workspace','HRMS');
   if(init.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
   const response=await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text(); let data:any={}; try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}
