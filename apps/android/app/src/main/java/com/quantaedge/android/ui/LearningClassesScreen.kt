@@ -37,6 +37,8 @@ fun LearningClassesScreen(
     onLeave: (JSONObject) -> Unit,
     onRecording: (JSONObject) -> Unit
 ) {
+    val language = LocalQuantaLanguage.current
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     var tab by remember { mutableStateOf("LIVE") }
     Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
         Text(localizedUiText("Live classes और recordings"), style = MaterialTheme.typography.headlineSmall)
@@ -94,12 +96,12 @@ fun LearningClassesScreen(
                         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                             Text(item.textAny("title").ifBlank { "Recorded class" }, style = MaterialTheme.typography.titleMedium)
                             Text(item.textAny("chapter_name", "subject_name", "description"), style = MaterialTheme.typography.bodyMedium)
-                            Text(if (duration > 0) "अवधि: " + (duration / 60) + " मिनट" else "Recorded learning session",
+                            Text(if (duration > 0) t("Duration: ", "अवधि: ") + (duration / 60) + t(" minutes", " मिनट") else t("Recorded learning session", "रिकॉर्ड किया गया अध्ययन सत्र"),
                                 style = MaterialTheme.typography.bodySmall)
-                            Text(if (done) "पूरी देखी गई" else if (position > 0) "आगे जारी रखें: " + (position / 60) + " मिनट" else "अभी तक नहीं देखी",
+                            Text(if (done) t("Watched", "पूरी देखी गई") else if (position > 0) t("Continue from where you left off: ", "आगे जारी रखें: ") + (position / 60) + t(" minutes", " मिनट") else t("Not watched yet", "अभी तक नहीं देखी"),
                                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                             Button(onClick = { onRecording(item) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                                Text(if (position > 0 && !done) "जहाँ छोड़ा था वहीं से चलाएँ" else "Recording चलाएँ")
+                                Text(if (position > 0 && !done) t("Continue from where you left off", "जहाँ छोड़ा था वहीं से चलाएँ") else t("Play recording", "Recording चलाएँ"))
                             }
                         }
                     }
