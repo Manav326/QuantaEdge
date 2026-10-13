@@ -3147,14 +3147,14 @@ private fun AssessmentAttemptScreen(
                         val optionLabel = options.firstOrNull { it.textAny("key", "option_key") == key }?.textAny("label", "text").orEmpty()
                         val displayAnswer = optionLabel.ifBlank { key.ifBlank { correctAnswer?.toString().orEmpty() } }
                         if (displayAnswer.isNotBlank() && displayAnswer != "{}") {
-                            Text(
+                            LearningMathText(
                                 localizedUiText("सही उत्तर: ") + displayAnswer,
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
                         if (question.textAny("teacherFeedback").isNotBlank()) {
-                            Text(localizedUiText("शिक्षक की टिप्पणी: ") + question.textAny("teacherFeedback"),
+                            LearningMathText(localizedUiText("शिक्षक की टिप्पणी: ") + question.textAny("teacherFeedback"),
                                 style = MaterialTheme.typography.bodyMedium)
                         }
                         if (question.textAny("explanation").isNotBlank()) {
@@ -3168,7 +3168,7 @@ private fun AssessmentAttemptScreen(
                                     verticalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
                                     Text(localizedUiText("व्याख्या"), style = MaterialTheme.typography.titleSmall)
-                                    Text(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
+                                    LearningMathText(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
                                 }
                             }
                         }
