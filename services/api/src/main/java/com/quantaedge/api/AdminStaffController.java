@@ -218,11 +218,14 @@ public class AdminStaffController {
   }
 
   private void replacePermissions(long staffId,List<String> permissions,Long grantedBy) {
-    jdbc.update("delete from staff_permission_grant where staff_id=?",staffId);
+    // Education Admin may edit only education-workspace grants; HRMS grants are managed
+    // through the HRMS access screen and must survive education staff profile updates.
+    jdbc.update("delete from staff_permission_grant where staff_id=? and workspace_key='EDUCATION_ADMIN'",staffId);
     for (String permission : permissions) {
       jdbc.update("""
-          insert into staff_permission_grant(staff_id,permission_key,granted_by_staff_id)
-          values (?,?,?)
+          insert into staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
+          values (?,'EDUCATION_ADMIN',?,?)
+          on conflict(staff_id,workspace_key,permission_key) do nothing
           """,staffId,permission,grantedBy);
     }
   }
