@@ -38,11 +38,13 @@ jobs:
 
       - name: Audit and export existing records only
         shell: bash
+        env:
+          SAMPLE_SIZE: ${{ inputs.sample_size || '10' }}
         run: |
           python scripts/audit_ai_training_dataset.py \
             --dataset-dir data/ai-training/datasets \
             --output-dir artifacts/class6-maths-audit \
-            --sample-size "${{ inputs.sample_size }}"
+            --sample-size "$SAMPLE_SIZE"
 
       - name: Upload review batch and audit report
         uses: actions/upload-artifact@v4
