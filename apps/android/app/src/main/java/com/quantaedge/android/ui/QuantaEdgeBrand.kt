@@ -25,11 +25,12 @@ import com.quantaedge.android.R
 @Composable
 fun QuantaEdgeBrand(
     modifier: Modifier = Modifier,
-    compact: Boolean = true
+    compact: Boolean = true,
+    centered: Boolean = false
 ) {
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.Start,
+        horizontalAlignment = if (centered) Alignment.CenterHorizontally else Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(if (compact) 1.dp else 3.dp)
     ) {
         Image(
