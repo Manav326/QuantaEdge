@@ -59,7 +59,7 @@ public class HrAttendanceLeaveController {
    if(balance==null||balance.compareTo(days)<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"Insufficient paid-leave balance for this approval. Record an authorized grant/accrual or reject the request.");
    try{
      jdbc.update("insert into hr_leave_balance_transaction(organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date,source_type,source_reference,reason,created_by_staff_id) values (?,?,?,?,?,?,?,?,?,?)",
-       organizationId,employeeId,type,"USAGE",days.negate(),Date.valueOf(start),"LEAVE_REQUEST",String.valueOf(id),"Approved paid leave request #"+id,c.staffId());
+       organizationId,employeeId,type,"CONSUMPTION",days.negate(),Date.valueOf(start),"LEAVE_REQUEST",String.valueOf(id),"Approved paid leave request #"+id,c.staffId());
    }catch(DuplicateKeyException ex){throw new ResponseStatusException(HttpStatus.CONFLICT,"A leave-usage transaction already exists for this request.");}
  }
  int changed=jdbc.update("update hr_leave_request set request_status=?,review_note=?,reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now() where id=? and request_status='PENDING'",decision,optional(b.get("reviewNote"),1000),c.staffId(),id);if(changed!=1)throw new ResponseStatusException(HttpStatus.CONFLICT,"This leave request was already reviewed.");Map<String,Object> after=leaveById(id);audit.recordAction(c,"/api/v1/hr/leave/requests/"+id+"/decision",decision+" leave request "+id);return after;}
