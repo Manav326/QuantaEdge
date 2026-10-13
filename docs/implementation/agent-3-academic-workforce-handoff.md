@@ -4,10 +4,17 @@
 
 - Repository: [Manav326/QuantaEdge](https://github.com/Manav326/QuantaEdge)
 - Baseline branch: `main`
-- Audited main commit: `0d71946b3854a68c894001193a5174a41fa9a45b`
+- Initial audited main commit: `0d71946b3854a68c894001193a5174a41fa9a45b`
 - Working branch: `agent/academic-workforce-google-meet`
-- Code checkpoint immediately before this handoff document: `5d404de810df9dc2fbef4aa0055ca32c2e6a7153`
+- Code checkpoint before the initial handoff write: `5d404de810df9dc2fbef4aa0055ca32c2e6a7153`
+- Latest main found during the final audit: `a99ebf3c55c15932637738ac111823b64e836d79`
+- Merge commit bringing that latest main into this feature branch: `a2bb15577203c4e65141ffcbaf3d4dca6374c6f5`
+- Feature branch comparison after the merge: 24 commits ahead of main, 0 behind at that checkpoint.
 - Pull request: none opened, as requested.
+
+### Concurrent main update
+
+During the final audit, `main` advanced beyond the initial baseline. Comparing the new main with the initial audit point showed five new main commits affecting `.github/workflows/ci.yml`, `apps/android/app/build.gradle.kts`, and `scripts/android-fetch-latest-apk.ps1`. No HRMS, assignment, curriculum, or live-class API/model files were changed in that main delta. Those main changes were merged into this feature branch with `a2bb15577203c4e65141ffcbaf3d4dca6374c6f5`; the feature branch was not force-pushed and main was not changed by this work.
 
 ## 1. Baseline audit
 
@@ -199,9 +206,11 @@ Key committed changes on the branch include:
 - `7813c556e068c8e33210802239cb5017415d4a96` — admin teacher replacement controls.
 - `d7f0aa27062f9490f3fdd6ba3079fa5bd90eab64` — idempotent Meet cancellation/retry behavior.
 - `5d404de810df9dc2fbef4aa0055ca32c2e6a7153` — academic period lifecycle controls.
+- `d1f2014ebff521c87559cabf0f3a73c0694c0774` — handoff/migration cleanup.
+- `a2bb15577203c4e65141ffcbaf3d4dca6374c6f5` — merge latest main into the feature branch.
 - `527558df2913aedb72542d51be016c705842b0ea` — employee-eligibility gates for student class links.
 - `64bc8340e0b12007e54c6dbead42d04df3a896cd` — restore legacy non-Meet cancellation UI.
 - `3f7ca5dc058cf4dc74cf54f1300fa7bb52dc399f` — least-privilege Calendar scope guidance.
 - `b26168a46746748d08c89151b64099d34d7b8149` — initial handoff document commit.
 
-All listed commits were created on the remote feature branch. This handoff document is committed separately; inspect the branch head for the exact final revision. No commit was made to `main`, no force-push was performed, and no pull request was opened.
+All listed feature commits were created on the remote feature branch. The latest-main merge includes the five intervening main commits as its second parent. This handoff document is committed separately; inspect the current branch head for the exact final revision. No commit was made to `main`, no force-push was performed, and no pull request was opened.
