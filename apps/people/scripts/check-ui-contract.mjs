@@ -64,6 +64,21 @@ const routePages = [
   ['/access', 'apps/people/app/access/page.tsx'],
 ];
 
+const attendanceSource = read('apps/people/app/attendance/page.tsx');
+assert(attendanceSource.includes('<PeopleStatusBadge status={pretty(r.requested_status)} />'), 'Attendance-correction requested status must use a semantic status badge.');
+assert(!attendanceSource.includes("{r.paid?'Yes':'No'}"), 'Leave paid/unpaid status must not remain an unstyled Yes/No value.');
+assert(!attendanceSource.includes('<div className="small">Inactive</div>'), 'Inactive holiday state must use the semantic status badge.');
+
+const payrollSource = read('apps/people/app/payroll/page.tsx');
+assert(payrollSource.includes("<PeopleStatusBadge status={c.active?'Active':'Inactive'} />"), 'Salary component active status must use the semantic badge.');
+
+const selfServiceSource = read('apps/people/app/self-service/page.tsx');
+assert(selfServiceSource.includes("<PeopleStatusBadge status={item.paid?'Paid':'Unpaid'} />"), 'Self-service leave/balance paid status must use the semantic badge.');
+assert(!selfServiceSource.includes("<td>{item.paid?'Yes':'No'}</td>"), 'Self-service paid status must not remain an unstyled Yes/No value.');
+
+const assignmentsSource = read('apps/people/app/assignments/page.tsx');
+assert(assignmentsSource.includes("tone={Number(x.approved_assignment_count)>0?'success':'danger'}"), 'Class and subject coverage must visibly distinguish covered and missing coverage.');
+
 const accessRouteSource = read('apps/people/app/access/page.tsx');
 assert(accessRouteSource.includes('HR_ACCESS_MANAGE'), 'Access governance page must retain its permission check.');
 assert(accessRouteSource.includes('<PeopleButton variant='), 'Access governance actions must use shared People buttons.');

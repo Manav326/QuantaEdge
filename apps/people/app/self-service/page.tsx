@@ -199,13 +199,13 @@ export default function EmployeeSelfServicePage(){
           </form>
           <h2>My requests</h2>
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Dates / days</th><th>Reason</th><th>Status</th><th>Review note</th></tr></thead><tbody>
-            {requests.map((item:any)=><tr key={item.id}><td>{item.leave_type}<div className="small">{item.paid?'Paid':'Unpaid'}</div></td><td>{String(item.start_date).slice(0,10)} → {String(item.end_date).slice(0,10)}<div className="small">{Number(item.requested_days)} working day(s)</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td></tr>)}
+            {requests.map((item:any)=><tr key={item.id}><td>{item.leave_type}<div className="small"><PeopleStatusBadge status={item.paid?'Paid':'Unpaid'} /></div></td><td>{String(item.start_date).slice(0,10)} → {String(item.end_date).slice(0,10)}<div className="small">{Number(item.requested_days)} working day(s)</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td></tr>)}
           </tbody></table>{!loading&&!requests.length&&<PeopleEmptyState title="You have not submitted any leave requests." />}</div>
         </>}
         {tab==='balances'&&<>
           <p className="small">Balances are calculated from the official leave-balance ledger as of today. No balance is invented when no grant/accrual has been recorded.</p>
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Paid</th><th>Balance (days)</th></tr></thead><tbody>
-            {balances.map((item:any)=><tr key={item.leave_type_code}><td>{item.display_name}</td><td>{item.paid?'Yes':'No'}</td><td><b>{Number(item.balance_days).toFixed(2)}</b></td></tr>)}
+            {balances.map((item:any)=><tr key={item.leave_type_code}><td>{item.display_name}</td><td><PeopleStatusBadge status={item.paid?'Paid':'Unpaid'} /></td><td><b>{Number(item.balance_days).toFixed(2)}</b></td></tr>)}
           </tbody></table>{!loading&&!balances.length&&<PeopleEmptyState title="No active leave types or balances are available." />}</div>
         </>}
         {tab==='payslips'&&<>
