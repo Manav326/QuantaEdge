@@ -1,6 +1,11 @@
 name: Audit existing AI training dataset
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/audit-ai-training-dataset.yml"
   workflow_dispatch:
     inputs:
       sample_size:
