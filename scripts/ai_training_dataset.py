@@ -5,7 +5,7 @@ Uses only the Python standard library. Source extraction bundles stay local/priv
 Generated examples are original drafts; this tool never marks them human-approved.
 """
 from __future__ import annotations
-import argparse, difflib, hashlib, json, os, re, sys, time, urllib.error, urllib.request
+import argparse, difflib, hashlib, json, os, re, subprocess, sys, time, urllib.error, urllib.request
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -76,7 +76,13 @@ def request_examples(context: dict[str,Any], language: str, batch: int, model: s
  else:
   context_pages=all_pages
  context["context_pages"]=[p["page_number"] for p in context_pages]
- page_text="\n\n".join(f"PDF page {p['page_number']}:\n{str(p['text'])[:2200]}" for p in context_pages)
+ page_text="\\n\\n".join(f"PDF page {p['page_number']}:\\n{str(p['text'])[:2200]}" for p in context_pages)
+ allowed=", ".join(sorted(TYPES))
+ prompt = f"""Create exactly {batch} DISTINCT original educational AI-tutor training examples based on this curriculum context. Return ONLY a JSON object with an examples array. Every item must have keys: example_type, student_message, assistant_message, source_pages. example_type must be one of: {allowed}. Each student_message and assistant_message must be non-empty. Use language {language} throughout. Mix useful types; include stepwise teaching and feedback, not just quiz-answer pairs. For maths, independently calculate and explain. For science, avoid unsupported claims. Create new examples in your own words; never copy source wording or reproduce a full textbook question. source_pages must be a list of 1-based PDF page numbers from the context that actually support the example. Do not make up curriculum facts outside the provided context. If context is insufficient, create a basic conceptual question only when supported; do not hallucinate.
+Curriculum: Bihar Board, Class {cur['class_code']}, subject {cur['subject_code']}, chapter {ch['title']} ({ch['code']}).
+Source: {src['title']}, edition {src['edition']}.
+Context:
+{page_text}"""
 
  url=base_url.rstrip("/")+"/v1/chat/completions"
  body={"model":model,"temperature":0.35,"messages":[{"role":"system","content":SYSTEMS[language]},{"role":"user","content":prompt}],"response_format":{"type":"json_object"}}
@@ -97,6 +103,28 @@ def request_examples(context: dict[str,Any], language: str, batch: int, model: s
    if isinstance(exc,urllib.error.HTTPError) and exc.code not in {408,425,429,500,502,503,504}: break
    time.sleep(min(2**attempt,20))
  raise RuntimeError(f"generation request failed after retries: {last}")
+def commit_and_push_dataset(path: Path) -> None:
+ repo_root=Path(__file__).resolve().parents[1]
+ resolved=path.resolve()
+ try: relative=resolved.relative_to(repo_root.resolve())
+ except ValueError as exc: raise ValueError("GitHub output must be inside the QuantaEdge repository.") from exc
+ def git(*args: str) -> str:
+  return subprocess.run(["git",*args],cwd=repo_root,check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
+ branch=git("branch","--show-current")
+ if branch!="main": raise ValueError(f"Refusing to push dataset from branch {branch!r}; switch to main first.")
+ git("fetch","origin","main")
+ if git("rev-parse","HEAD")!=git("rev-parse","origin/main"):
+  raise ValueError("Local main is not exactly aligned with origin/main. Pull/reconcile first; dataset was not pushed.")
+ git("add","--",str(relative))
+ changed=subprocess.run(["git","diff","--cached","--quiet","--",str(relative)],cwd=repo_root)
+ if changed.returncode==0:
+  print("No dataset changes to commit.")
+  return
+ if changed.returncode not in (0,1): raise RuntimeError("Unable to inspect staged dataset changes.")
+ subprocess.run(["git","commit","--only","-m","Save generated QuantaEdge AI training data","--",str(relative)],cwd=repo_root,check=True)
+ git("push","origin","main")
+ print(f"Committed and pushed dataset to main: {relative.as_posix()}")
+
 def cmd_generate(a: argparse.Namespace) -> int:
  if not a.generate or not a.confirm_external_processing:
   print("DRY RUN: no provider request made. Re-run with --generate --confirm-external-processing after reviewing provider privacy/rights.")
@@ -128,10 +156,11 @@ def cmd_generate(a: argparse.Namespace) -> int:
   lang="hi" if (count % 5) < 3 else "en"
   ctx=item["source_bundle"]
   calls+=1
-  try: generated=request_examples({"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]},lang,min(a.batch_size,a.target-count),model,base,key)
+  gen_context={"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]}
+  try: generated=request_examples(gen_context,lang,min(a.batch_size,a.target-count),model,base,key)
   except RuntimeError as e:
    print(str(e),file=sys.stderr); continue
-  page_nums=set(ctx.get("context_pages",[]))
+  page_nums=set(gen_context.get("context_pages",[]))
   for n,g in enumerate(generated):
    if not isinstance(g,dict): continue
    student=str(g.get("student_message","")).strip(); assistant=str(g.get("assistant_message","")).strip()
@@ -149,6 +178,7 @@ def cmd_generate(a: argparse.Namespace) -> int:
     if count>=a.target: break
   write_jsonl(out,existing)
   if calls%10==0: print(f"calls={calls} records={count}/{a.target}")
+ if a.commit_and_push: commit_and_push_dataset(out)
  print(json.dumps({"output":str(out),"draft_records":len(existing),"target":a.target,"api_calls":calls,"status":"DRAFTS_ONLY","remaining":max(0,a.target-len(existing))},ensure_ascii=False,indent=2))
  return 0
 def messages_ok(row: Any) -> bool:
@@ -157,6 +187,14 @@ def messages_ok(row: Any) -> bool:
  if len(msgs)<3 or any(not isinstance(m,dict) for m in msgs): return False
  return msgs[0].get("role")=="system" and any(m.get("role")=="user" and str(m.get("content","")).strip() for m in msgs) and any(m.get("role")=="assistant" and str(m.get("content","")).strip() for m in msgs)
 
+def simhash(text: str) -> int:
+ tokens=re.findall(r"[\w\u0900-\u097f]+",norm(text))
+ if not tokens: return 0
+ weights=[0]*64
+ for token in tokens:
+  h=int(hashlib.blake2b(token.encode(),digest_size=8).hexdigest(),16)
+  for i in range(64): weights[i]+=1 if h&(1<<i) else -1
+ return sum(1<<i for i,w in enumerate(weights) if w>=0)
 def prompt_of(row:dict[str,Any])->str:
  return " ".join(str(m.get("content","")) for m in row["messages"] if m.get("role")=="user")
 def deduplicate(rows:list[dict[str,Any]])->tuple[list[dict[str,Any]],int]:
@@ -238,6 +276,9 @@ def cmd_validate(a:argparse.Namespace)->int:
   part=read_jsonl(p); split_ids[name]={r.get("example_id") for r in part}
   split_groups[name]={"|".join(str(r.get("metadata",{}).get(k,"")) for k in ("class_code","subject_code","source_id","chapter_code")) for r in part}
   errors+= [f"{name}: {e}" for e in validate_rows(part,require_approved=a.require_approved)]
+ expected_ids={r.get("example_id") for r in rows}
+ actual_ids=set().union(*split_ids.values()) if split_ids else set()
+ if expected_ids != actual_ids: errors.append(f"split/master mismatch: {len(expected_ids-actual_ids)} missing and {len(actual_ids-expected_ids)} unexpected IDs")
  for x,y in (("train","validation"),("train","test"),("validation","test")):
   overlap=split_ids.get(x,set())&split_ids.get(y,set())
   if overlap: errors.append(f"split leakage: {x}/{y} share {len(overlap)} example IDs")
@@ -249,7 +290,7 @@ def cmd_validate(a:argparse.Namespace)->int:
  return 0
 def main()->int:
  p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="command",required=True)
- g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.set_defaults(func=cmd_generate)
+ g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="commit only the generated JSONL file and push it to origin/main after generation; requires a clean, synced local main"); g.set_defaults(func=cmd_generate)
  b=sub.add_parser("build"); b.add_argument("--input",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); b.add_argument("--output-dir",type=Path,default=Path("data/ai-training/datasets")); b.add_argument("--include-drafts",action="store_true"); b.set_defaults(func=cmd_build)
  v=sub.add_parser("validate"); v.add_argument("--dataset-dir",type=Path,default=Path("data/ai-training/datasets")); v.add_argument("--require-approved",action="store_true"); v.set_defaults(func=cmd_validate)
  a=p.parse_args()
