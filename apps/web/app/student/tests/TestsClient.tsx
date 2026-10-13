@@ -485,9 +485,13 @@ export default function TestsClient(){
                          <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
                          <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>PDF</a>
                          <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>PNG</a>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
                        </div>
                      ):certificate?.certificate_status==='REVOKED'?(
-                       <small className={styles.certificateEligibilityHint}>Certificate revoked</small>
+                       <div className={styles.certificateActionLinks}>
+                         <small className={styles.certificateEligibilityHint}>Certificate revoked</small>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                       </div>
                      ):certificate?.eligible?(
                        <button type="button" className={styles.certificateIssueButton}
                          disabled={issuingCertificateAttemptId!==null}
@@ -543,15 +547,19 @@ export default function TestsClient(){
             const certificateId=Number(cert?.certificate_id||0);
             return <section className={styles.certificateResultPanel} aria-live="polite">
               <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
-                <p>Test certificates require an admin-created test, a released qualifying score, and completion of all published lessons in this subject.</p></div>
+                <p>Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate.</p></div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>Download PDF</a>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>Download PNG</a>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
                 </div>
               ):cert?.certificate_status==='REVOKED'?(
-                <small className={styles.certificateEligibilityHint}>This certificate has been revoked.</small>
+                <div className={styles.certificateActionLinks}>
+                  <small className={styles.certificateEligibilityHint}>This certificate has been revoked.</small>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                </div>
               ):cert?.eligible?(
                 <button type="button" className={styles.certificateIssueButton}
                   disabled={issuingCertificateAttemptId!==null}

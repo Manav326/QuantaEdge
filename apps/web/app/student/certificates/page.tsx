@@ -82,8 +82,25 @@ export default function StudentCertificatesPage() {
 
   const tracks = useMemo(() => Array.isArray(profile?.curriculum) ? profile.curriculum : [], [profile]);
   const releasedAttempts = useMemo(() => eligibleAttempts, [eligibleAttempts]);
+  const selectedAssessment = useMemo(
+    () => releasedAttempts.find((attempt: any) => String(attempt.attempt_id) === attemptId),
+    [releasedAttempts, attemptId],
+  );
 
   async function issueCertificate() {
+    if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
+        && Number.isSafeInteger(Number(selectedAssessment.certificate_id))) {
+      setError('');
+      setNotice('This assessment already has an issued certificate. Opening the existing certificate.');
+      window.open('/api/v1/students/me/certificates/' + Number(selectedAssessment.certificate_id) + '/view?format=pdf',
+        '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED') {
+      setError('A certificate for this assessment has been revoked and cannot be reissued. Contact support if you believe this is an error.');
+      setNotice('');
+      return;
+    }
     setBusy(true);
     setError('');
     setNotice('');
@@ -189,21 +206,40 @@ export default function StudentCertificatesPage() {
                   {releasedAttempts.map((attempt: any) => (
                     <option key={attempt.attempt_id} value={attempt.attempt_id}>
                       {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
+                      {attempt.certificate_status === 'ISSUED' ? ' · Certificate already issued' : ''}
+                      {attempt.certificate_status === 'REVOKED' ? ' · Certificate revoked' : ''}
                     </option>
                   ))}
                 </select>
               </label>
+            )}
+            {achievementType === 'ASSESSMENT_PASS' && releasedAttempts.length === 0 && (
+              <p className={styles.help}>
+                No qualifying released assessment results were found. The result must be released, meet the {passThreshold}% threshold, belong to an active subject track, and come from an admin-created test (not a generated or practice test).
+                {' '}<Link href="/student/tests">Check your test results</Link>. A certificate issued from the test-result screen should remain listed here after refresh.
+              </p>
+            )}
+            {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED' && (
+              <p className={styles.help}>A certificate has already been issued for this result. You can open the existing certificate; a duplicate will not be created.</p>
+            )}
+            {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED' && (
+              <p className={styles.error}>The existing certificate is revoked. It cannot be replaced automatically.</p>
             )}
           </div>
           <div className={styles.rule}>
             <strong>Eligibility rule</strong>
             {achievementType === 'SUBJECT_COMPLETION'
               ? 'All currently published lessons in your active subject track must be completed. The server checks your actual progress records.'
-              : 'Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ' + passThreshold + '% pass threshold, and all currently published lessons in that subject must be completed.'}
+              : 'Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ' + passThreshold + '% pass threshold, and belong to an active subject track. Completing every published lesson is not required for an assessment-pass certificate.'}
           </div>
           <button className="button button-dark" type="button"
-            onClick={() => void issueCertificate()} disabled={busy || (achievementType === 'ASSESSMENT_PASS' && !attemptId)}>
-            {busy ? 'Verifying achievement…' : 'Verify eligibility & issue certificate'}
+            onClick={() => void issueCertificate()}
+            disabled={busy || (achievementType === 'ASSESSMENT_PASS' && (!attemptId || selectedAssessment?.certificate_status === 'REVOKED'))}>
+            {busy ? 'Verifying achievement…' : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
+              ? 'Open existing certificate'
+              : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED'
+                ? 'Certificate revoked'
+                : 'Verify eligibility & issue certificate'}
           </button>
         </section>
 
@@ -213,7 +249,7 @@ export default function StudentCertificatesPage() {
             <span className={styles.meta}>{certificates.length} records</span>
           </div>
           {!certificates.length ? (
-            <div className={styles.empty}><strong>No certificates yet</strong><p>Complete all published lessons in a subject, or pass an eligible admin-created assessment after completing that subject. Practice and generated topic/chapter tests do not issue test certificates.</p></div>
+            <div className={styles.empty}><strong>No certificates yet</strong><p>Earn a subject-completion certificate by completing all published lessons in an active subject track, or earn an assessment-pass certificate by passing a released, eligible admin-created test. Assessment-pass certificates do not require completing every lesson first.</p></div>
           ) : (
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
@@ -230,8 +266,8 @@ export default function StudentCertificatesPage() {
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=pdf'}>Download PDF</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=png'}>Download PNG</a>
-                      <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify ↗</Link>
                     </> : <small>Revoked · contact support if you believe this is an error.</small>}
+                    <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify status ↗</Link>
                   </div>
                 </article>
               ))}
