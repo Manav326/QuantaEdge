@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,10 +21,14 @@ import org.springframework.web.server.ResponseStatusException;
 public class HrEmployeeSelfServiceController {
   private final JdbcTemplate jdbc;
   private final StaffAuditService audit;
+  private final AuthorizationService authorization;
 
-  public HrEmployeeSelfServiceController(JdbcTemplate jdbc, StaffAuditService audit) {
+  @Autowired
+  public HrEmployeeSelfServiceController(JdbcTemplate jdbc, StaffAuditService audit,
+      AuthorizationService authorization) {
     this.jdbc = jdbc;
     this.audit = audit;
+    this.authorization = authorization;
   }
 
   @GetMapping("/profile")
@@ -302,6 +307,7 @@ public class HrEmployeeSelfServiceController {
   }
 
   private long linkedEmployeeId(AuthContext context) {
+    authorization.requirePermission(context, "HR_SELF_SERVICE_VIEW");
     if(context==null||context.staffId()==null) throw new SecurityException("Authenticated employee access required.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select id from hr_employee where linked_staff_account_id=?
