@@ -76,7 +76,20 @@ def request_examples(context: dict[str,Any], language: str, batch: int, model: s
  else:
   context_pages=all_pages
  context["context_pages"]=[p["page_number"] for p in context_pages]
- page_text="\n\n".join(f"PDF page {p['page_number']}:\n{str(p['text'])[:2200]}" for p in context_pages)
+ all_pages=ch["pages"]
+ if len(all_pages) > 6:
+  selected_indices=sorted(set(round(i*(len(all_pages)-1)/5) for i in range(6)))
+  context_pages=[all_pages[i] for i in selected_indices]
+ else:
+  context_pages=all_pages
+ context["context_pages"]=[p["page_number"] for p in context_pages]
+ page_text="\\n\\n".join(f"PDF page {p['page_number']}:\\n{str(p['text'])[:2200]}" for p in context_pages)
+ allowed=", ".join(sorted(TYPES))
+ prompt = f"""Create exactly {batch} DISTINCT original educational AI-tutor training examples based on this curriculum context. Return ONLY a JSON object with an examples array. Every item must have keys: example_type, student_message, assistant_message, source_pages. example_type must be one of: {allowed}. Each student_message and assistant_message must be non-empty. Use language {language} throughout. Mix useful types; include stepwise teaching and feedback, not just quiz-answer pairs. For maths, independently calculate and explain. For science, avoid unsupported claims. Create new examples in your own words; never copy source wording or reproduce a full textbook question. source_pages must be a list of 1-based PDF page numbers from the context that actually support the example. Do not make up curriculum facts outside the provided context. If context is insufficient, create a basic conceptual question only when supported; do not hallucinate.
+Curriculum: Bihar Board, Class {cur['class_code']}, subject {cur['subject_code']}, chapter {ch['title']} ({ch['code']}).
+Source: {src['title']}, edition {src['edition']}.
+Context:
+{page_text}"""
 
  url=base_url.rstrip("/")+"/v1/chat/completions"
  body={"model":model,"temperature":0.35,"messages":[{"role":"system","content":SYSTEMS[language]},{"role":"user","content":prompt}],"response_format":{"type":"json_object"}}
@@ -238,6 +251,9 @@ def cmd_validate(a:argparse.Namespace)->int:
   part=read_jsonl(p); split_ids[name]={r.get("example_id") for r in part}
   split_groups[name]={"|".join(str(r.get("metadata",{}).get(k,"")) for k in ("class_code","subject_code","source_id","chapter_code")) for r in part}
   errors+= [f"{name}: {e}" for e in validate_rows(part,require_approved=a.require_approved)]
+ expected_ids={r.get("example_id") for r in rows}
+ actual_ids=set().union(*split_ids.values()) if split_ids else set()
+ if expected_ids != actual_ids: errors.append(f"split/master mismatch: {len(expected_ids-actual_ids)} missing and {len(actual_ids-expected_ids)} unexpected IDs")
  for x,y in (("train","validation"),("train","test"),("validation","test")):
   overlap=split_ids.get(x,set())&split_ids.get(y,set())
   if overlap: errors.append(f"split leakage: {x}/{y} share {len(overlap)} example IDs")
