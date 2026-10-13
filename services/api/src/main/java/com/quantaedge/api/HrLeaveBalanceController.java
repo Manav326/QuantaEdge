@@ -144,12 +144,13 @@ public class HrLeaveBalanceController {
     jdbc.query("select pg_advisory_xact_lock(hashtext(?))",rs->{if(rs.next())rs.getObject(1);},organizationId+":"+employeeId+":"+type);
     Boolean alreadyReversed=jdbc.queryForObject("select exists(select 1 from hr_leave_balance_transaction where reverses_transaction_id=?)",Boolean.class,transactionId);
     if(Boolean.TRUE.equals(alreadyReversed))throw new ResponseStatusException(HttpStatus.CONFLICT,"This ledger transaction has already been reversed.");
-    LocalDate effectiveDate=body.get("effectiveDate")==null?((Date)original.get("effective_date")).toLocalDate():parseRequiredDate(body.get("effectiveDate"));
+    LocalDate effectiveDate=body.get("effectiveDate")==null?LocalDate.now():parseRequiredDate(body.get("effectiveDate"));
+    if(effectiveDate.isBefore(LocalDate.now()))throw bad("A ledger reversal must be effective today or in the future; original ledger history is never rewritten.");
     String reason=required(body.get("reason"),1000,"Reversal reason");
     BigDecimal reversalQuantity=((BigDecimal)original.get("quantity_days")).negate();
     if(reversalQuantity.signum()<0) {
-      BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(effectiveDate));
-      if(balance==null||balance.add(reversalQuantity).signum()<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"This reversal would make the leave balance negative. Reverse dependent consumption first.");
+      BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(LocalDate.now()));
+      if(balance==null||balance.add(reversalQuantity).signum()<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"This reversal would make the current leave balance negative. Reverse dependent consumption first.");
     }
     Long id;
     try {
