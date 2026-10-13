@@ -548,6 +548,41 @@ fun QuantaEdgeApp() {
     }
 
 
+    suspend fun loadProgressCertificateData(data: JSONObject) {
+        val recent = data.optJSONArray("recentAssessments")?.objectItems() ?: emptyList()
+        val attemptIds = recent.map { it.longAny("attempt_id", "attemptId") }
+            .filter { it > 0L }.distinct().take(100)
+        val mapped = linkedMapOf<Long, JSONObject>()
+        if (attemptIds.isNotEmpty()) {
+            runCatching {
+                ApiClient.getObject(
+                    "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" +
+                        attemptIds.joinToString(",")
+                ).optJSONArray("items").objectItems()
+            }.getOrDefault(emptyList()).forEach { item ->
+                val id = item.longAny("attempt_id", "attemptId")
+                if (id > 0L) mapped[id] = JSONObject(item.toString())
+            }
+        }
+        // The issued-certificate catalogue is authoritative for the existing View/PDF/PNG actions.
+        runCatching {
+            ApiClient.getObject("/api/v1/students/me/certificates")
+                .optJSONArray("items").objectItems()
+        }.getOrDefault(emptyList()).forEach { certificate ->
+            val attemptId = certificate.longAny("assessment_attempt_id", "assessmentAttemptId", "attempt_id", "attemptId")
+            val certificateId = certificate.longAny("id", "certificate_id", "certificateId")
+            if (attemptId > 0L && (attemptIds.isEmpty() || attemptId in attemptIds)) {
+                val entry = JSONObject((mapped[attemptId] ?: JSONObject()).toString())
+                entry.put("attempt_id", attemptId)
+                if (certificateId > 0L) entry.put("certificate_id", certificateId)
+                entry.put("certificate_status", certificate.textAny("status", "certificate_status").uppercase())
+                if (certificate.has("certificate_number")) entry.put("certificate_number", certificate.optString("certificate_number"))
+                mapped[attemptId] = entry
+            }
+        }
+        assessmentCertificateEligibility = mapped
+    }
+
     suspend fun loadAssessmentResultsData() {
         val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + learningContentLanguage)
             .optJSONArray("items").objectItems()
@@ -590,7 +625,32 @@ fun QuantaEdgeApp() {
                     .put("language", learningContentLanguage)
             )
             loadAssessmentResultsData()
-            status = "Certificate issued. You can now save its PDF or PNG from this result."
+            if (route == AppRoute.PROGRESS) loadProgressCertificateData(progressData)
+            status = if (language == "hi") "प्रमाणपत्र जारी हो गया। अब इस परिणाम से PDF या PNG सेव करें।"
+                else "Certificate issued. You can now save its PDF or PNG from this result."
+        }
+    }
+
+    fun viewResultCertificate(certificateId: Long) {
+        runTask {
+            if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            val bytes = withContext(Dispatchers.IO) {
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/view?format=pdf")
+            }
+            if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
+            val directory = java.io.File(context.cacheDir, "certificates")
+            if (!directory.exists() && !directory.mkdirs()) throw IOException("Could not prepare certificate preview.")
+            val file = java.io.File(directory, "quantaedge-certificate-" + certificateId + ".pdf")
+            withContext(Dispatchers.IO) { file.writeBytes(bytes) }
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                context, context.packageName + ".fileprovider", file
+            )
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
+                .setDataAndType(uri, "application/pdf")
+                .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            context.startActivity(android.content.Intent.createChooser(
+                intent, if (language == "hi") "प्रमाणपत्र देखें" else "View certificate"
+            ))
         }
     }
 
@@ -1007,6 +1067,7 @@ fun QuantaEdgeApp() {
     fun openProgress() {
         runTask {
             progressData = ApiClient.getObject("/api/v1/students/me")
+            loadProgressCertificateData(progressData)
             route = AppRoute.PROGRESS
         }
     }
@@ -1526,7 +1587,11 @@ fun QuantaEdgeApp() {
                         data = progressData,
                         language = language,
                         busy = busy,
-                        onRefresh = ::openProgress
+                        certificateEligibility = assessmentCertificateEligibility,
+                        onRefresh = ::openProgress,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onViewCertificate = ::viewResultCertificate,
+                        onDownloadCertificate = ::downloadResultCertificate
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
