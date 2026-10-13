@@ -78,6 +78,37 @@ jobs:
           echo "people=$people" >> "$GITHUB_OUTPUT"
           echo "content=$content" >> "$GITHUB_OUTPUT"
 
+  build-android-apk:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # The action's legacy default requests the removed SDK package "tools".
+          # Install only current SDK packages needed by this compileSdk 36 project.
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+      - name: Run Android unit tests and build debug APK
+        run: gradle -p apps/android testDebugUnitTest assembleDebug
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-android-apk
+          path: apps/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
   validate-content-import:
     name: Content import safeguards
     runs-on: ubuntu-latest
