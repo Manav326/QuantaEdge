@@ -18,6 +18,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -359,11 +361,22 @@ public class AuthService {
 
 
   /** Username/password login for the isolated HRMS workspace. */
+  @Transactional
   public AuthContext loginHrms(String username, String password) {
     String normalized = username == null ? "" : username.trim().toLowerCase(java.util.Locale.ROOT);
     if (!normalized.matches("^[a-z0-9][a-z0-9._-]{2,63}$") || password == null || password.isBlank()) {
       throw new IllegalArgumentException("Username or password is incorrect.");
     }
+    String identifierHash = hash("hrms-login:" + normalized);
+    Long recentFailures = jdbc.queryForObject("""
+        select count(*) from hrms_login_failure
+        where identifier_hash=? and attempted_at>now()-interval '15 minutes'
+        """, Long.class, identifierHash);
+    if (recentFailures != null && recentFailures >= 5) {
+      throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
+          "Too many sign-in attempts. Please wait 15 minutes before trying again.");
+    }
+
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select s.id, s.password_hash
         from staff_account s
@@ -378,13 +391,33 @@ public class AuthService {
             )
           )
         """, normalized);
-    if (rows.isEmpty()) throw new IllegalArgumentException("Username or password is incorrect.");
-    Object stored = rows.getFirst().get("password_hash");
-    if (stored == null || String.valueOf(stored).isBlank()
-        || !passwordEncoder.matches(password, String.valueOf(stored))) {
+    if (rows.isEmpty()) {
+      // Match the normal BCrypt cost for unknown usernames to reduce account-enumeration timing.
+      passwordEncoder.matches(password, "$2a$12$vv2074FPhWNMKb9HDsP9hu3Av11EyJX/Z8cjDAaCShvZWbrV1m2bK");
+      recordHrmsLoginFailure(identifierHash);
       throw new IllegalArgumentException("Username or password is incorrect.");
     }
+    Object stored = rows.getFirst().get("password_hash");
+    boolean validPassword = false;
+    if (stored != null && !String.valueOf(stored).isBlank()) {
+      try {
+        validPassword = passwordEncoder.matches(password, String.valueOf(stored));
+      } catch (IllegalArgumentException ignored) {
+        validPassword = false;
+      }
+    } else {
+      passwordEncoder.matches(password, "$2a$12$vv2074FPhWNMKb9HDsP9hu3Av11EyJX/Z8cjDAaCShvZWbrV1m2bK");
+    }
+    if (!validPassword) {
+      recordHrmsLoginFailure(identifierHash);
+      throw new IllegalArgumentException("Username or password is incorrect.");
+    }
+    jdbc.update("delete from hrms_login_failure where identifier_hash=?", identifierHash);
     return contextForStaff(((Number) rows.getFirst().get("id")).longValue());
+  }
+
+  private void recordHrmsLoginFailure(String identifierHash) {
+    jdbc.update("insert into hrms_login_failure(identifier_hash) values (?)", identifierHash);
   }
 
   public void requireEducationAccess(long staffId) {
