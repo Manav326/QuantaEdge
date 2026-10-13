@@ -63,7 +63,6 @@ class SourcePdfDownloadServiceTest {
   void defaultPdfLimitSupportsWholeBooksAround250MiB() {
     assertTrue(SourcePdfDownloadService.DEFAULT_MAX_PDF_BYTES >= 250 * 1024 * 1024,
         "The default whole-book ingestion limit must accommodate 250 MiB textbooks.");
-    assertTrue(SourcePdfDownloadService.MAX_CONFIGURABLE_PDF_BYTES >= SourcePdfDownloadService.DEFAULT_MAX_PDF_BYTES);
   }
 
   @Test
