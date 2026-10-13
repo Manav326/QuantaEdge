@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
@@ -19,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
 @Composable
-fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit) {
+fun StudentProgressScreen(data: JSONObject, language: String, busy: Boolean, onRefresh: () -> Unit) {
     val lessons = data.optJSONObject("lessonStats") ?: JSONObject()
     val questions = data.optJSONObject("questionStats") ?: JSONObject()
     val mastery = data.optJSONObject("mastery") ?: JSONObject()
@@ -29,10 +30,10 @@ fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit
     val concepts = data.optJSONArray("masteryDetails")?.objectItems() ?: emptyList()
     val recentTests = data.optJSONArray("recentAssessments")?.objectItems() ?: emptyList()
 
-    Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
+    Column(modifier = Modifier.fillMaxSize().widthIn(max = 1000.dp).padding(14.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("मेरी सीखने की प्रगति", style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+            Text(if (language == "hi") "मेरी सीखने की प्रगति" else "My learning progress", style = MaterialTheme.typography.headlineSmall)
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(if (language == "hi") "रिफ्रेश" else "Refresh") }
         }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 6.dp)) {
             item {
@@ -55,7 +56,7 @@ fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit
                 MetricCard("पिछले 30 दिन", sessions.optString("sessions_30d", "0") + " learning sessions",
                     sessions.optString("minutes_30d", "0") + " मिनट tracked", Modifier.fillMaxWidth())
             }
-            item { Text("विषयवार प्रगति", style = MaterialTheme.typography.titleLarge) }
+            item { Text(if (language == "hi") "विषयवार प्रगति" else "Subject progress", style = MaterialTheme.typography.titleLarge) }
             if (curriculum.isEmpty()) item {
                 EmptyState("अभी विषयवार प्रगति नहीं", "आपकी कक्षा के प्रकाशित पाठ और विषय enrollment उपलब्ध होने पर आँकड़े यहाँ दिखेंगे।")
             }
@@ -88,7 +89,7 @@ fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit
                     }
                 }
             }
-            item { Text("हाल के टेस्ट", style = MaterialTheme.typography.titleLarge) }
+            item { Text(if (language == "hi") "हाल के टेस्ट" else "Recent tests", style = MaterialTheme.typography.titleLarge) }
             if (recentTests.isEmpty()) item {
                 Text("अभी कोई टेस्ट attempt नहीं है।", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
