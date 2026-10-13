@@ -325,6 +325,123 @@ public class LearningClassController {
     return adminSessionById(sessionId);
   }
 
+  @PutMapping("/admin/live-classes/{sessionId}/schedule")
+  public Map<String,Object> rescheduleLiveClass(
+      @PathVariable long sessionId, @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireClassManage(context);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select cs.id,cs.title,cs.description,cs.provider,cs.status,cs.teaching_assignment_id,
+        cs.provider_event_id,cs.provider_conference_request_id,cs.provider_operation_status,
+        cs.host_staff_id,ta.employee_id,ta.status as assignment_status,ta.effective_start,ta.effective_end
+      from learning_class_session cs left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      where cs.id=?
+      """,sessionId);
+    if(rows.isEmpty())throw notFound("Live class",sessionId);
+    Map<String,Object> row=rows.getFirst();
+    if(!"SCHEDULED".equals(row.get("status")))throw conflict("Only scheduled classes can be rescheduled.");
+    OffsetDateTime startsAt=parseDate(body.get("startsAt"),"Start time");
+    OffsetDateTime endsAt=parseDate(body.get("endsAt"),"End time");
+    if(!endsAt.isAfter(startsAt))throw badRequest("End time must be after the start time.");
+    if(endsAt.isAfter(startsAt.plusHours(8)))throw badRequest("A live class cannot be longer than 8 hours.");
+    if(startsAt.isBefore(OffsetDateTime.now().minusHours(2)))throw badRequest("Choose a future start time.");
+    Long assignmentId=row.get("teaching_assignment_id") instanceof Number n?n.longValue():null;
+    Long employeeId=row.get("employee_id") instanceof Number n?n.longValue():null;
+    if(assignmentId!=null) {
+      java.time.LocalDate localDate=startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
+      if(!"APPROVED".equals(row.get("assignment_status"))
+          ||localDate.isBefore(((java.sql.Date)row.get("effective_start")).toLocalDate())
+          ||localDate.isAfter(((java.sql.Date)row.get("effective_end")).toLocalDate())) {
+        throw conflict("The approved teaching assignment must cover the rescheduled date.");
+      }
+    }
+    Long hostId=row.get("host_staff_id") instanceof Number n?n.longValue():null;
+    validateNoScheduleConflict(hostId,employeeId,startsAt,endsAt,sessionId);
+    String provider=String.valueOf(row.get("provider"));
+    String operation=String.valueOf(row.get("provider_operation_status"));
+    if("GOOGLE_MEET".equals(provider)) {
+      if(!"CREATED".equals(operation)||row.get("provider_event_id")==null) {
+        throw conflict("Resolve Google Meet creation first; rescheduling is disabled until the external meeting is verified.");
+      }
+      String eventId=String.valueOf(row.get("provider_event_id"));
+      String requestId=row.get("provider_conference_request_id")==null?"":String.valueOf(row.get("provider_conference_request_id"));
+      try {
+        GoogleMeetCalendarService.MeetingResult result=googleMeet.rescheduleMeeting(eventId,requestId,
+            String.valueOf(row.get("title")),row.get("description")==null?null:String.valueOf(row.get("description")),startsAt,endsAt);
+        jdbc.update("""
+          update learning_class_session set starts_at=?,ends_at=?,private_join_url=?,
+            provider_conference_request_id=?,provider_operation_status=?,provider_error_code=?,
+            provider_error_message=?,provider_operation_attempts=provider_operation_attempts+1,
+            provider_last_attempt_at=now(),updated_at=now() where id=?
+          """,startsAt,endsAt,result.joinUrl(),result.conferenceRequestId(),result.status(),
+          result.errorCode(),shortMessage(result.errorMessage()),sessionId);
+      } catch(GoogleMeetCalendarService.GoogleMeetException ex) {
+        jdbc.update("""
+          update learning_class_session set provider_error_code=?,provider_error_message=?,
+            provider_last_attempt_at=now(),updated_at=now() where id=?
+          """,ex.code(),shortMessage(ex.getMessage()),sessionId);
+        throw new org.springframework.web.server.ResponseStatusException(HttpStatus.BAD_GATEWAY,
+            "Google Calendar did not confirm the reschedule. The QuantaEdge schedule was not changed. "+ex.getMessage());
+      }
+    } else {
+      jdbc.update("update learning_class_session set starts_at=?,ends_at=?,updated_at=now() where id=?",startsAt,endsAt,sessionId);
+    }
+    staffAudit.recordAction(context,"/api/v1/admin/live-classes/"+sessionId+"/schedule",
+        "Rescheduled live class #"+sessionId+" to "+startsAt+"–"+endsAt+".");
+    return adminSessionById(sessionId);
+  }
+
+  @PostMapping("/admin/live-classes/{sessionId}/google-meet/retry")
+  public Map<String,Object> retryGoogleMeet(
+      @PathVariable long sessionId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=requireClassManage(context);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select id,title,description,provider,status,starts_at,ends_at,provider_event_id,
+        provider_conference_request_id,provider_operation_status
+      from learning_class_session where id=?
+      """,sessionId);
+    if(rows.isEmpty())throw notFound("Live class",sessionId);
+    Map<String,Object> row=rows.getFirst();
+    if(!"GOOGLE_MEET".equals(row.get("provider")))throw badRequest("This class does not use managed Google Meet.");
+    String status=String.valueOf(row.get("status"));
+    if("COMPLETED".equals(status))throw conflict("A completed live class cannot be retried.");
+    String eventId=row.get("provider_event_id")==null?"":String.valueOf(row.get("provider_event_id"));
+    String requestId=row.get("provider_conference_request_id")==null?"":String.valueOf(row.get("provider_conference_request_id"));
+    try {
+      if("CANCELLED".equals(status)) {
+        if(!eventId.isBlank())googleMeet.cancelMeeting(eventId);
+        jdbc.update("""
+          update learning_class_session set provider_operation_status='CANCELLED',provider_error_code=null,
+            provider_error_message=null,provider_operation_attempts=provider_operation_attempts+1,
+            provider_last_attempt_at=now(),updated_at=now() where id=?
+          """,sessionId);
+      } else {
+        OffsetDateTime startsAt=toOffsetDateTime(row.get("starts_at")),endsAt=toOffsetDateTime(row.get("ends_at"));
+        GoogleMeetCalendarService.MeetingResult result=eventId.isBlank()
+          ?googleMeet.createOrGetMeeting(sessionId,requestId,String.valueOf(row.get("title")),
+              row.get("description")==null?null:String.valueOf(row.get("description")),startsAt,endsAt)
+          :googleMeet.refreshOrRetryMeeting(eventId,requestId);
+        jdbc.update("""
+          update learning_class_session set private_join_url=?,provider_event_id=?,provider_conference_request_id=?,
+            provider_operation_status=?,provider_error_code=?,provider_error_message=?,
+            provider_operation_attempts=provider_operation_attempts+1,provider_last_attempt_at=now(),updated_at=now()
+          where id=?
+          """,result.joinUrl(),result.eventId(),result.conferenceRequestId(),result.status(),
+          result.errorCode(),shortMessage(result.errorMessage()),sessionId);
+      }
+    } catch(GoogleMeetCalendarService.GoogleMeetException ex) {
+      jdbc.update("""
+        update learning_class_session set provider_operation_status='FAILED',provider_error_code=?,
+          provider_error_message=?,provider_operation_attempts=provider_operation_attempts+1,
+          provider_last_attempt_at=now(),updated_at=now() where id=?
+        """,ex.code(),shortMessage(ex.getMessage()),sessionId);
+    }
+    staffAudit.recordAction(context,"/api/v1/admin/live-classes/"+sessionId+"/google-meet/retry",
+        "Retried Google Meet lifecycle operation for live class #"+sessionId+".");
+    return adminSessionById(sessionId);
+  }
+
   @GetMapping("/admin/live-classes/{sessionId}/meeting-link")
   public Map<String, Object> revealLiveClassMeetingLink(
       @PathVariable long sessionId,
