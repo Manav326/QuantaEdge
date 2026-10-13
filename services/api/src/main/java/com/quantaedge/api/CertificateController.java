@@ -144,12 +144,17 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
                s.display_name AS subject_name,cc.code AS class_code,
-               round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent
+               round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
+               existing.id AS certificate_id,existing.certificate_number,
+               existing.status AS certificate_status
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
         JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
         JOIN student st ON st.id=att.student_id AND st.active=true AND st.class_code=cc.code
+        LEFT JOIN student_certificate existing
+          ON existing.student_id=att.student_id AND existing.assessment_attempt_id=att.id
+             AND existing.achievement_type='ASSESSMENT_PASS'
         WHERE att.student_id=? AND att.status='RELEASED'
           AND att.final_score IS NOT NULL AND att.max_score>0
           AND 100.0*att.final_score/att.max_score >= ?
@@ -157,12 +162,6 @@ public class CertificateController {
           AND EXISTS (
             SELECT 1 FROM student_track_enrollment ste
             WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
-          )
-          AND NOT EXISTS (
-            SELECT 1 FROM student_certificate existing
-            WHERE existing.student_id=att.student_id
-              AND existing.assessment_attempt_id=att.id
-              AND existing.achievement_type='ASSESSMENT_PASS'
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
