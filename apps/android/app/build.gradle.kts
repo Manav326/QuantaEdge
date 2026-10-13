@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage
 import org.gradle.api.tasks.Copy
 
 plugins {
@@ -82,10 +83,10 @@ tasks.register<Copy>("syncQuantaEdgeBranding") {
             .file("drawable-nodpi/quantaedge_wordmark.png").asFile
         val sourceImage = javax.imageio.ImageIO.read(target)
             ?: error("Unable to decode approved QuantaEdge wordmark: " + target.absolutePath)
-        val normalized = java.awt.image.BufferedImage(
+        val normalized = BufferedImage(
             sourceImage.width,
             sourceImage.height,
-            java.awt.image.BufferedImage.TYPE_INT_ARGB
+            BufferedImage.TYPE_INT_ARGB
         )
         val graphics = normalized.createGraphics()
         try {
