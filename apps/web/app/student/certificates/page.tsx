@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Certificates.module.css';
+import CertificateActions from '../../components/CertificateActions';
 
 const TEMPLATES = [
   { id: 'CLASSIC', name: 'Classic', description: 'Formal navy and gold frame' },
@@ -225,13 +226,7 @@ export default function StudentCertificatesPage() {
                     <small>Issued {new Date(certificate.issued_at).toLocaleDateString()} · {certificate.language === 'hi' ? 'Hindi' : 'English'}</small>
                   </div>
                   <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status}</span>
-                  <div className={styles.downloads}>
-                    {certificate.status === 'ISSUED' ? <>
-                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=pdf'}>Download PDF</a>
-                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=png'}>Download PNG</a>
-                      <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify ↗</Link>
-                    </> : <small>Revoked · contact support if you believe this is an error.</small>}
-                  </div>
+                  <CertificateActions certificate={certificate} language={certificate.language} compact />
                 </article>
               ))}
             </div>
