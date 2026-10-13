@@ -1,0 +1,67 @@
+name: Generate API-key-free AI training dataset
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/ai_training_offline_seed.py"
+      - ".github/workflows/ai-training-offline-dataset.yml"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Number of synthetic curriculum-aligned draft examples"
+        required: true
+        default: "25000"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: quantaedge-offline-dataset-main
+  cancel-in-progress: false
+
+jobs:
+  generate-and-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate deterministic draft dataset without API credentials
+        shell: bash
+        run: |
+          TARGET="${{ github.event.inputs.target || '25000' }}"
+          python scripts/ai_training_offline_seed.py --target "$TARGET" --output-dir data/ai-training/datasets
+      - name: Validate dataset and split integrity
+        shell: bash
+        run: |
+          python scripts/ai_training_dataset.py validate --dataset-dir data/ai-training/datasets
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("data/ai-training/datasets")
+          master = [json.loads(x) for x in (root / "dataset_master.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
+          assert len(master) == 25000, f"Expected 25000 records, found {len(master)}"
+          assert len({x["example_id"] for x in master}) == len(master), "Duplicate IDs found"
+          assert all(x["metadata"]["provenance_type"] == "synthetic_curriculum_alignment" for x in master)
+          print(f"Verified {len(master)} unique records; no source PDF pages/hashes were fabricated.")
+          PY
+      - name: Commit generated dataset to main
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ai-training/datasets/
+          if git diff --cached --quiet; then
+            echo "Dataset unchanged; no commit required."
+            exit 0
+          fi
+          git commit -m "Add 25000 API-key-free curriculum-aligned draft examples [skip ci]"
+          git push origin HEAD:main
