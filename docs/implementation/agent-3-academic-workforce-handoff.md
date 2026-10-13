@@ -9,7 +9,6 @@
 - Code checkpoint before the initial handoff write: `5d404de810df9dc2fbef4aa0055ca32c2e6a7153`
 - Latest main found during the final audit: `a99ebf3c55c15932637738ac111823b64e836d79`
 - Merge commit bringing that latest main into this feature branch: `a2bb15577203c4e65141ffcbaf3d4dca6374c6f5`
-- Feature branch comparison after the merge: 24 commits ahead of main, 0 behind at that checkpoint.
 - Pull request: none opened, as requested.
 
 ### Concurrent main update
@@ -207,6 +206,6 @@ Representative implementation commits recorded on this branch:
 - `d7f0aa27062f9490f3fdd6ba3079fa5bd90eab64` — idempotent Meet retry/cancellation improvements.
 - `5d404de810df9dc2fbef4aa0055ca32c2e6a7153` — academic-period lifecycle controls.
 
-The concurrent main updates were merged into the feature branch in a two-parent merge commit, visible in the linked branch history. Those updates covered `.github/workflows/ci.yml`, `apps/android/app/build.gradle.kts`, and `scripts/android-fetch-latest-apk.ps1`; the comparison did not show HRMS, assignment, curriculum or live-class API/model files in that main delta.
+The concurrent main updates were merged into the feature branch in a two-parent merge commit, visible in the linked branch history. The feature branch includes this latest main commit as an ancestor; use the linked GitHub comparison for current ahead/behind counts. Those updates covered `.github/workflows/ci.yml`, `apps/android/app/build.gradle.kts`, and `scripts/android-fetch-latest-apk.ps1`; the comparison did not show HRMS, assignment, curriculum or live-class API/model files in that main delta.
 
 All implementation changes and the handoff file are committed on the remote feature branch. Remote branch updates succeeded; no commit was made directly to `main`, no force-push was performed, and no pull request was opened. The current branch head in GitHub is the final revision authority, because additional maintenance commits follow the representative hashes listed above.

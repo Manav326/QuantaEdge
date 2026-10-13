@@ -417,6 +417,7 @@ public class LearningClassController {
   }
 
   @PutMapping("/admin/live-classes/{sessionId}/teacher-assignment")
+  @Transactional
   public Map<String,Object> replaceScheduledClassTeacher(
       @PathVariable long sessionId,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
