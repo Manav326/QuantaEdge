@@ -73,7 +73,7 @@ fun ParentChildCreateScreen(
             }
             Button(onClick = { onCreate(name.trim(), classCode, username, password, tracks, consent) },
                 enabled = !busy && name.trim().length >= 2 && username.length >= 3 && password.length >= 8 && tracks.isNotEmpty() && consent,
-                modifier = Modifier.fillMaxWidth()) { Text(if (busy) "बना रहे हैं…" else "सहमति के साथ छात्र बनाएँ") }
+                modifier = Modifier.fillMaxWidth()) { Text(localizedUiText(if (busy) "बना रहे हैं…" else "सहमति के साथ छात्र बनाएँ")) }
         }
     }
 }
