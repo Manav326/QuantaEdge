@@ -563,6 +563,8 @@ def load_curriculum_question_targets(path: Path, curriculum: dict[str, Any],
     subject_code = str(curriculum.get("subject_code", "")).strip().lower()
     required_codes = {str(chapter["code"]) for chapter in chapters}
     counts: dict[str, dict[str, int]] = {code: {} for code in required_codes}
+    target_rows_seen: set[str] = set()
+    eligible_target_seen: set[str] = set()
     with path.open(encoding="utf-8-sig", newline="") as handle:
         for line, row in enumerate(csv.DictReader(handle), start=2):
             try:
@@ -576,18 +578,32 @@ def load_curriculum_question_targets(path: Path, curriculum: dict[str, Any],
                 raise ValueError(f"Invalid question target row {line}: {exc}") from exc
             if row_class != class_code or row_subject != subject_code or code not in required_codes:
                 continue
+            target_rows_seen.add(code)
             if qtype not in SUPPORTED_TYPES or minimum < 0:
                 raise ValueError(f"Unsupported question target at CSV line {line}: {qtype}/{minimum}.")
             if eligible and minimum > 0:
-                counts[code][qtype] = counts[code].get(qtype, 0) + minimum
-    schedules = {
+                eligible_target_seen.add(code)
+                # The CSV's actual_active_approved_count is the documented migration-derived
+                # snapshot; refresh that inventory before production bulk generation if the live
+                # database has since changed.
+                try:
+                    actual = max(0, int(row.get("actual_active_approved_count", "0") or 0))
+                except (TypeError, ValueError) as exc:
+                    raise ValueError(f"Invalid approved count at CSV line {line}.") from exc
+                remaining = max(0, minimum - actual)
+                if remaining:
+                    counts[code][qtype] = counts[code].get(qtype, 0) + remaining
+    missing_rows = sorted(required_codes - target_rows_seen)
+    if missing_rows:
+        raise ValueError("Question target CSV has no rows for extracted chapter(s): " + ", ".join(missing_rows))
+    no_targets = sorted(required_codes - eligible_target_seen)
+    if no_targets:
+        raise ValueError("Question target CSV has no positive eligible targets for chapter(s): " + ", ".join(no_targets))
+    # Include empty lists for chapters whose documented approved count already meets every target.
+    return {
         code: [qtype for qtype in sorted(type_counts) for _ in range(type_counts[qtype])]
-        for code, type_counts in counts.items() if type_counts
+        for code, type_counts in counts.items()
     }
-    missing = sorted(required_codes - set(schedules))
-    if missing:
-        raise ValueError("No positive curriculum target rows for extracted chapter(s): " + ", ".join(missing))
-    return schedules
 
 
 def main() -> int:
@@ -628,7 +644,7 @@ def main() -> int:
             raise ValueError("Question types must be selected from MCQ,TRUE_FALSE,INPUT,NUMERICAL,MATCH,ORDER,ASSERTION_REASON,CASE_BASED,SHORT_ANSWER,LONG_ANSWER,DIAGRAM,MAP,SOURCE_BASED. Non-auto-gradable types stay review-only.")
         if not requested_types:
             requested_types = ({"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL", "MATCH", "ORDER",
-                                "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER"}
+                                "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "DIAGRAM"}
                                if str(extraction.get("curriculum", {}).get("subject_code", "")) == "maths"
                                else {"MCQ", "TRUE_FALSE", "INPUT", "MATCH", "ORDER", "ASSERTION_REASON",
                                      "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "DIAGRAM"})
@@ -649,11 +665,19 @@ def main() -> int:
             chapter["code"]: len(target_schedules[chapter["code"]]) if args.use_curriculum_targets else args.questions_per_chapter
             for chapter in chapters
         }
+        target_satisfied_chapters = (
+            sorted(code for code, schedule in target_schedules.items() if not schedule)
+            if args.use_curriculum_targets else []
+        )
+        generation_chapters = (
+            [chapter for chapter in chapters if target_schedules[chapter["code"]]]
+            if args.use_curriculum_targets else chapters
+        )
         plan = []
-        for chapter in chapters:
+        for chapter in generation_chapters:
             chunks = make_chunks(chapter["pages"], args.max_context_chars)
             plan.append((chapter, allocate_questions(chunks, question_counts[chapter["code"]])))
-        if not plan:
+        if not plan and not args.use_curriculum_targets:
             raise ValueError("No eligible mapped chapters remain after filters.")
         output_files = [args.output_dir / f"{chapter['code']}.ai-generated-draft.json" for chapter, _ in plan]
         existing = [str(path) for path in output_files if path.exists()]
@@ -699,6 +723,8 @@ def main() -> int:
             "planned_question_total": sum(question_counts.values()),
             "pending_question_total": sum(question_counts[chapter["code"]] for chapter, _ in plan),
             "completed_chapter_codes": [item["chapter_code"] for item in completed],
+            "chapters_already_at_documented_question_target": target_satisfied_chapters,
+            "note": "Question targets use the checked-in CSV approved-count snapshot, not a live database count.",
             "output_directory": str(args.output_dir), "source_pdf_sha256": source["pdf_sha256"],
             "model": args.model or "(not configured)", "auto_publish": False,
             "chapter_codes": [chapter["code"] for chapter, _ in plan],
@@ -712,6 +738,7 @@ def main() -> int:
             print(json.dumps({
                 "mode": "GENERATED_DRAFT_CANDIDATES", "results": completed,
                 "auto_publish": False, "resumed_without_new_model_calls": True,
+                "chapters_already_at_documented_question_target": target_satisfied_chapters,
                 "model_api_requests_used": 0,
             }, ensure_ascii=False, indent=2))
             return 0
