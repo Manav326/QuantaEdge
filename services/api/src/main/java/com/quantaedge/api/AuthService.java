@@ -95,9 +95,9 @@ public class AuthService {
       @Value("${app.auth.admin-mobiles:7070107483}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
-    // Keep the idle timeout predictable even if an older deployment still sets 168 hours.
-    // Refresh credentials are renewed by authenticated activity, not by elapsed wall-clock time.
-    this.sessionHours=4;
+    // Respect shorter deployments' configured idle timeout, but cap refresh-cookie lifetime.
+    // Refresh credentials slide with authenticated activity; absolute expiry is enforced separately.
+    this.sessionHours=Math.min(4, Math.max(1, sessionHours));
     this.secureCookies=secureCookies;
     this.otpCooldownSeconds=otpCooldownSeconds;
     this.adminMobiles=List.of(adminMobiles.split(",")).stream()
@@ -704,6 +704,9 @@ public class AuthService {
     // HRMS intentionally supports one active device/session per staff identity. This
     // revocation is scoped to HRMS and never touches Education Admin or learner sessions.
     if ("HRMS".equals(workspace)) {
+      // Serialize concurrent logins for this staff identity. The partial unique index below
+      // remains a second line of defence if another write path is introduced later.
+      jdbc.queryForObject("select id from staff_account where id=? for update", Long.class, context.staffId());
       jdbc.update("""
           update auth_session set revoked_at=now()
           where staff_id=? and workspace_key='HRMS' and revoked_at is null
