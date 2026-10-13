@@ -211,6 +211,76 @@ class CertificateControllerEligibilityTest {
     assertTrue(sql.getValue().contains("a.is_generated=false"));
     org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("student_lesson_progress"));
     org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("p.status IS DISTINCT FROM 'COMPLETED'"));
+    assertTrue(sql.getValue().contains("LEFT JOIN student_certificate existing"));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("NOT EXISTS ("));
+  }
+
+  @Test
+  void eligibleAssessmentPickerKeepsAnAlreadyIssuedAssessmentVisible() {
+    Map<String, Object> row = attemptRow(
+        "ADMIN_CREATED", false, "RELEASED", "100", "100", 6, 0, true, "ISSUED");
+    when(jdbc.queryForList(anyString(), eq(student.studentId()), eq(threshold))).thenReturn(List.of(row));
+
+    Map<String, Object> response = controller.eligibleAssessments(student);
+    Map<String, Object> item = firstItem(response);
+
+    assertEquals(3001L, item.get("certificate_id"));
+    assertEquals("QE-2026-ABCDEF1234567890", item.get("certificate_number"));
+    assertEquals("ISSUED", item.get("certificate_status"));
+  }
+
+  @Test
+  void publicCertificateVerificationResolvesHumanReadableCertificateNumber() {
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    row.put("recipient_name", "Test Learner");
+    row.put("achievement_type", "ASSESSMENT_PASS");
+    row.put("class_code", "6");
+    row.put("subject_code", "science");
+    row.put("achievement_title", "Assessment achievement: Perfect admin-created test");
+    row.put("issued_at", java.time.OffsetDateTime.parse("2026-10-13T12:55:00+05:30"));
+    row.put("status", "ISSUED");
+    row.put("revoked_at", null);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
+
+    Map<String, Object> result = controller.verifyCertificate(" qe-2026-abcdef1234567890 ");
+
+    assertEquals("QE-2026-ABCDEF1234567890", result.get("certificateNumber"));
+    assertEquals("VALID", result.get("status"));
+    assertEquals(true, result.get("verified"));
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(sql.capture(), args.capture());
+    assertTrue(sql.getValue().contains("WHERE c.certificate_number=?"));
+    assertEquals("QE-2026-ABCDEF1234567890", args.getValue()[0]);
+  }
+
+  @Test
+  void publicCertificateVerificationReportsRevokedCertificate() {
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    row.put("recipient_name", "Test Learner");
+    row.put("achievement_type", "ASSESSMENT_PASS");
+    row.put("class_code", "6");
+    row.put("subject_code", "science");
+    row.put("achievement_title", "Assessment achievement");
+    row.put("issued_at", java.time.OffsetDateTime.parse("2026-10-13T12:55:00+05:30"));
+    row.put("status", "REVOKED");
+    row.put("revoked_at", java.time.OffsetDateTime.parse("2026-10-13T13:00:00+05:30"));
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
+
+    Map<String, Object> result = controller.verifyCertificate("QE-2026-ABCDEF1234567890");
+
+    assertEquals("REVOKED", result.get("status"));
+    assertEquals(false, result.get("verified"));
+  }
+
+  @Test
+  void publicCertificateVerificationRejectsInternalOrMalformedIdentifiers() {
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.verifyCertificate("3007"));
+    assertThrows(org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.verifyCertificate("../QE-2026-ABCDEF1234567890"));
   }
 
   @SuppressWarnings("unchecked")
