@@ -8,7 +8,7 @@ plugins {
 
 val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .orElse(providers.environmentVariable("QUANTAEDGE_API_BASE_URL"))
-    .orElse("http://10.0.2.2:8080/")
+    .orElse("http://192.168.31.47:8080/")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
