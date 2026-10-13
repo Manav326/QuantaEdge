@@ -29,6 +29,12 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 
 Parent registration collects the parent name and verifies the mobile OTP before creating the account. Local demo mode returns OTP `123456`. Each parent can manage a configurable number of active child profiles (default `APP_AUTH_MAX_CHILDREN_PER_PARENT=3`); increase this environment variable to expand the limit. Each child may subscribe to Maths, Science, or both, and the API enforces these subscriptions when listing, opening, starting, or practising lessons. Administrators can suspend/reactivate parent accounts and student profiles and manage subject tracks in the admin console under **Parents & families**. Suspension revokes current sessions; archiving a parent-child link retains learning history.
 
+## Saved curriculum pipeline implementation plan
+
+The execution checklist for the complete-book → chapter → original learning material → bilingual assessment workflow is saved in [docs/product/curriculum-pipeline-implementation-plan.md](docs/product/curriculum-pipeline-implementation-plan.md).
+
+Run offline target validation with `python scripts/audit_curriculum_pipeline.py --skip-registry --strict`. After pulling the real class/language GHCR images, run the strict asset audit and retain its JSON report. The audit is read-only and does not publish content or change the database schema.
+
 ## Curriculum and content status
 
 The canonical curriculum outline contains 102 chapter rows across the six Class 6–8 Mathematics and Science tracks. Student pages and API requests are scoped to the authenticated student's class and the selected subject. The admin Content Studio lists chapters and lessons by class, subject, status and search; content can be created as draft, edited, reviewed and published/unpublished through authenticated admin access.
