@@ -64,6 +64,8 @@ export default function AssessmentsPage(){
   const [queueStatus,setQueueStatus]=useState('AWAITING_REVIEW');
   const [query,setQuery]=useState('');
   const [review,setReview]=useState<ReviewAttempt|null>(null);
+  const [reviewCertificate,setReviewCertificate]=useState<any>(null);
+  const [reviewCertificateLoading,setReviewCertificateLoading]=useState(false);
   const [marks,setMarks]=useState<Record<number,string>>({});
   const [feedback,setFeedback]=useState<Record<number,string>>({});
   const [overallNote,setOverallNote]=useState('');
@@ -172,14 +174,25 @@ export default function AssessmentsPage(){
     catch(e){setError(e instanceof Error?e.message:'Grader assignment failed.');}
     finally{setBusy(false);}
   }
+  async function loadReviewCertificate(attemptId:number){
+    setReviewCertificateLoading(true);
+    try{
+      const data=await api('/api/v1/admin/certificates/for-attempt/'+attemptId);
+      setReviewCertificate(data?.issued?data.certificate:null);
+    }catch{
+      setReviewCertificate(null);
+    }finally{setReviewCertificateLoading(false);}
+  }
+
   async function openReview(attemptId:number){
-    setBusy(true);setError('');setNotice('');
+    setBusy(true);setError('');setNotice('');setReviewCertificate(null);
     try{
       const data=await api('/api/v1/admin/assessment-attempts/'+attemptId);
       setReview(data);
       const nextMarks:Record<number,string>={},nextFeedback:Record<number,string>={};
       (data.questions||[]).forEach((q:ReviewQuestion)=>{if(q.manualReviewRequired){nextMarks[q.answerId]=q.awardedMarks===null||q.awardedMarks===undefined?'':String(q.awardedMarks);nextFeedback[q.answerId]=q.teacherFeedback||'';}});
       setMarks(nextMarks);setFeedback(nextFeedback);setOverallNote('');
+      if(data.status==='RELEASED')await loadReviewCertificate(attemptId);
     }catch(e){setError(e instanceof Error?e.message:'Could not open this submitted test.');}
     finally{setBusy(false);}
   }
@@ -204,6 +217,7 @@ export default function AssessmentsPage(){
       (data.questions||[]).forEach((q:ReviewQuestion)=>{if(q.manualReviewRequired){nextMarks[q.answerId]=q.awardedMarks===null||q.awardedMarks===undefined?'':String(q.awardedMarks);nextFeedback[q.answerId]=q.teacherFeedback||'';}});
       setMarks(nextMarks);setFeedback(nextFeedback);
       setNotice(data.status==='RELEASED'?'All answers are graded and the result is released to the student.':'Saved grading. This test still has answers awaiting review.');
+      if(data.status==='RELEASED')await loadReviewCertificate(data.attempt_id);
       await loadQueue();await loadAssessments();
     }catch(e){setError(e instanceof Error?e.message:'Could not save grading.');}
     finally{setBusy(false);}
@@ -275,6 +289,31 @@ export default function AssessmentsPage(){
         <section className={styles.reviewModal} role="dialog" aria-modal="true" aria-labelledby="review-title">
           <div className={styles.modalHeader}><div><span>TEST-LEVEL REVIEW</span><h2 id="review-title">{review.assessment_title}</h2><p>{review.student_name} · Class {review.class_code} · {review.status}</p></div><button type="button" aria-label="Close review" onClick={()=>setReview(null)}>×</button></div>
           <div className={styles.resultStats}><div><small>Test status</small><b>{review.status}</b></div><div><small>Maximum marks</small><b>{review.max_score}</b></div><div><small>Current result</small><b>{review.status==='RELEASED'?String(review.final_score):'Not released'}</b></div></div>
+          {review.status==='RELEASED'&&<section className={styles.certificatePanel} aria-live="polite">
+            <div><span className={styles.certificateEyebrow}>CERTIFICATE RECORD</span><h3>Certificate for this result</h3>
+              <p>Issuance is controlled by the server-side admin-test, released-score and subject-completion rules.</p></div>
+            {reviewCertificateLoading?<small>Checking certificate record…</small>:reviewCertificate?(
+              <div className={styles.certificateRecordActions}>
+                <span className={reviewCertificate.status==='ISSUED'?styles.certificateValid:styles.certificateRevoked}>
+                  {reviewCertificate.status==='ISSUED'?'ISSUED · VALID': 'REVOKED · AUDIT COPY'}
+                </span>
+                <small>{reviewCertificate.certificate_number}</small>
+                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=pdf'}>
+                  {reviewCertificate.status==='ISSUED'?'View/download PDF':'Audit copy PDF'}
+                </a>
+                <a href={'/api/v1/admin/certificates/'+reviewCertificate.id+'/download?format=png'}>
+                  {reviewCertificate.status==='ISSUED'?'Download PNG':'Audit copy PNG'}
+                </a>
+                <button type="button" className={styles.secondaryButton}
+                  onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh</button>
+              </div>
+            ):<div className={styles.certificateRecordActions}>
+              <small>No certificate has been issued for this attempt yet. The student can request it after all eligibility rules are met.</small>
+              <button type="button" className={styles.secondaryButton}
+                onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh certificate status</button>
+              <a href="/admin/certificates">Open certificate register ↗</a>
+            </div>}
+          </section>}
           <div className={styles.reviewQuestions}>{review.questions.map((q,index)=><article key={q.attemptQuestionId} className={styles.reviewQuestion}><div className={styles.questionHeading}><span>QUESTION {index+1} · {q.question_type}</span><b>{q.maxMarks} marks</b></div><h3>{q.prompt}</h3>{(q.teacherOptions?.length?q.teacherOptions:q.options)?.length>0&&<ul>{(q.teacherOptions?.length?q.teacherOptions:q.options).map(o=><li key={o.key}>{o.label}{'isCorrect' in o&&o.isCorrect?' · Correct answer':''}</li>)}</ul>}{q.answerKey!==undefined&&q.answerKey!==null&&q.answerKey!==''&&<div className={styles.teacherReference}><small>REFERENCE ANSWER / RUBRIC · STAFF ONLY</small><pre>{referenceAnswerText(q.answerKey)}</pre></div>}<div className={styles.studentAnswer}><small>STUDENT'S SAVED ANSWER</small><p>{answerText(q.answer)}</p></div>
             {q.manualReviewRequired&&<div className={styles.gradeFields}><label>Marks awarded (0–{q.maxMarks})<input type="number" min="0" max={Number(q.maxMarks)} step="0.25" value={marks[q.answerId]??''} onChange={e=>setMarks(m=>({...m,[q.answerId]:e.target.value}))}/></label><label>Feedback visible to student<textarea rows={2} maxLength={2000} value={feedback[q.answerId]??''} onChange={e=>setFeedback(m=>({...m,[q.answerId]:e.target.value}))} placeholder="Explain how the student can improve."/></label></div>}
             {q.answerStatus==='AUTO_GRADED'&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Auto-graded · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}{q.answerStatus==='GRADED'&&!q.manualReviewRequired&&<div className={[styles.autoGrade,q.isCorrect===true?styles.autoGradeCorrect:q.isCorrect===false?styles.autoGradeIncorrect:styles.autoGradeNeutral].join(' ')}>Teacher checked · {q.awardedMarks??0} / {q.maxMarks} marks{q.isCorrect===true?' · Correct':q.isCorrect===false?' · Incorrect':''}</div>}
