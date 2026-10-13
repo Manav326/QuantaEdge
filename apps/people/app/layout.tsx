@@ -1,4 +1,24 @@
 import './globals.css';
-import PeopleSessionBoundary from './components/PeopleSessionBoundary';
-export const metadata={title:{default:'QuantaEdge People',template:'%s | QuantaEdge People'},description:'People Operations for QuantaEdge.',applicationName:'QuantaEdge People'};
-export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><PeopleSessionBoundary>{children}</PeopleSessionBoundary></body></html>;}
+import './people-design-system.css';
+import PeopleWorkspaceLayout from './components/PeopleWorkspaceLayout';
+
+export const metadata = {
+  title: { default: 'QuantaEdge People', template: '%s | QuantaEdge People' },
+  description: 'People Operations for QuantaEdge.',
+  applicationName: 'QuantaEdge People',
+  icons: {
+    icon: [{ url: '/branding/quantaedge-icon.png', type: 'image/png' }],
+    shortcut: '/branding/quantaedge-icon.png',
+    apple: '/branding/quantaedge-icon.png',
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        <PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout>
+      </body>
+    </html>
+  );
+}
