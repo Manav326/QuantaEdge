@@ -90,9 +90,97 @@ export default function ExtendedWorkforcePage(){
     {tab==='assets'&&<>{can('HR_ASSET_MANAGE')&&<div className="cards"><form className="card" onSubmit={createAsset}><h2>Add inventory asset</h2><label>Asset tag<input className="input" required value={asset.assetTag} onChange={e=>setAsset({...asset,assetTag:e.target.value})}/></label><label>Type<input className="input" required value={asset.assetType} onChange={e=>setAsset({...asset,assetType:e.target.value})}/></label><label>Description<input className="input" value={asset.description} onChange={e=>setAsset({...asset,description:e.target.value})}/></label><label>Serial number<input className="input" value={asset.serialNumber} onChange={e=>setAsset({...asset,serialNumber:e.target.value})}/></label><button className="primary" disabled={saving}>Add asset</button></form><form className="card" onSubmit={e=>{e.preventDefault();void mutate('/api/v1/hr/assets/'+assign.assetId+'/assign',{employeeId:Number(assign.employeeId),condition:assign.condition,note:assign.note,expectedReturnDate:assign.expectedReturnDate||null})}}><h2>Assign available asset</h2><label>Asset<select className="input" required value={assign.assetId} onChange={e=>setAssign({...assign,assetId:e.target.value})}><option value="">Choose asset</option>{assets.filter(a=>a.asset_status==='AVAILABLE').map(a=><option key={a.id} value={a.id}>{a.asset_tag} · {a.asset_type}</option>)}</select></label><label>Employee<select className="input" required value={assign.employeeId} onChange={e=>setAssign({...assign,employeeId:e.target.value})}><option value="">Choose employee</option>{employees.map(e=><option key={e.id} value={e.id}>{e.employee_number} · {e.display_name}</option>)}</select></label><label>Expected return date<input className="input" type="date" value={assign.expectedReturnDate} onChange={e=>setAssign({...assign,expectedReturnDate:e.target.value})}/></label><label>Condition<select className="input" value={assign.condition} onChange={e=>setAssign({...assign,condition:e.target.value})}>{['NEW','GOOD','FAIR','DAMAGED','UNKNOWN'].map(x=><option key={x}>{x}</option>)}</select></label><button className="primary" disabled={saving||!assign.assetId||!assign.employeeId}>Assign asset</button></form></div>}
      <div className="table-wrap"><table><thead><tr><th>Asset</th><th>Type / serial</th><th>Condition</th><th>Status</th><th>Current custodian</th>{can('HR_ASSET_MANAGE')&&<th>Action</th>}</tr></thead><tbody>{assets.map(a=><tr key={a.id}><td>{a.asset_tag}</td><td>{a.asset_type}<div className="small">{a.serial_number||'No serial recorded'}</div></td><td>{pretty(a.condition_status)}</td><td>{pretty(a.asset_status)}{a.overdue&&<div className="error">Overdue · due {a.expected_return_date}</div>}</td><td>{a.employee_name||'—'}{a.expected_return_date&&<div className="small">Due {a.expected_return_date}</div>}</td>{can('HR_ASSET_MANAGE')&&<td style={{display:'flex',gap:5,flexWrap:'wrap'}}>{a.assignment_id&&<button className="secondary" onClick={()=>void mutate('/api/v1/hr/assets/assignments/'+a.assignment_id+'/return',{condition:'GOOD',note:'Returned and inspected'})}>Record return</button>}{!a.assignment_id&&a.asset_status!=='RETIRED'&&<><button className="secondary" onClick={()=>void mutate('/api/v1/hr/assets/'+a.id+'/status',{status:'MISSING',reason:'Asset marked missing after inventory review'},'PATCH')}>Mark missing</button><button className="secondary" onClick={()=>void mutate('/api/v1/hr/assets/'+a.id+'/status',{status:'RETIRED',reason:'Asset retired by authorised inventory manager'},'PATCH')}>Retire</button></>}</td>}</tr>)}</tbody></table>{!assets.length&&<div className="empty">No inventory assets recorded.</div>}</div>
     </>}
-    {tab==='exits'&&<>{can('HR_EXIT_MANAGE')&&<form className="card" onSubmit={startExit}><h2>Initiate exit</h2><div className="cards"><label>Employee<select className="input" required value={exit.employeeId} onChange={e=>setExit({...exit,employeeId:e.target.value})}><option value="">Choose employee</option>{employees.map(e=><option key={e.id} value={e.id}>{e.employee_number} · {e.display_name}</option>)}</select></label><label>Exit type<select className="input" value={exit.exitType} onChange={e=>setExit({...exit,exitType:e.target.value})}>{['RESIGNATION','RETIREMENT','END_OF_CONTRACT','TERMINATION','OTHER'].map(x=><option key={x}>{pretty(x)}</option>)}</select></label><label>Requested last working date<input className="input" type="date" required min={today()} value={exit.requestedLastWorkingDate} onChange={e=>setExit({...exit,requestedLastWorkingDate:e.target.value})}/></label><label>Notice period (days)<input className="input" type="number" min="0" max="3650" value={exit.noticePeriodDays} onChange={e=>setExit({...exit,noticePeriodDays:e.target.value})}/></label><label>Reason<input className="input" value={exit.reason} onChange={e=>setExit({...exit,reason:e.target.value})}/></label></div><button className="primary" disabled={saving||!exit.employeeId}>Start exit workflow</button></form>}
-     <div className="table-wrap"><table><thead><tr><th>Employee</th><th>Exit type</th><th>Requested last day</th><th>Workflow</th><th>Final settlement</th>{can('HR_EXIT_MANAGE')&&<th>Next action</th>}</tr></thead><tbody>{exits.map(x=><tr key={x.id}><td>{x.display_name}<div className="small">{x.employee_number}</div></td><td>{pretty(x.exit_type)}</td><td>{x.requested_last_working_date}</td><td>{pretty(x.exit_status)}</td><td>{pretty(x.final_settlement_status)}</td>{can('HR_EXIT_MANAGE')&&<td style={{display:'flex',gap:6,flexWrap:'wrap'}}><button className="secondary" onClick={()=>void openChecklist(x.id)}>Checklist</button>{exitNextStatus[x.exit_status]&&<button className="secondary" onClick={()=>void mutate('/api/v1/hr/exits/'+x.id+'/status',{status:exitNextStatus[x.exit_status],notes:'Reviewed in People Operations'},'PATCH')}>Advance workflow</button>}{x.exit_status==='READY_FOR_SETTLEMENT'&&x.final_settlement_status!=='SETTLED'&&<button className="secondary" onClick={()=>void mutate('/api/v1/hr/exits/'+x.id+'/settlement',{status:'SETTLED',reason:'Settlement confirmed by authorised payroll reviewer'},'PATCH')}>Record settlement</button>}{x.exit_status==='READY_FOR_SETTLEMENT'&&x.final_settlement_status==='SETTLED'&&<button className="secondary" onClick={()=>void mutate('/api/v1/hr/exits/'+x.id+'/status',{status:'COMPLETED'},'PATCH')}>Complete exit</button>}</td>}</tr>)}</tbody></table>{!exits.length&&<div className="empty">No exit workflows recorded.</div>}</div>{selectedExitId!==null&&<div className="table-wrap"><h2>Exit checklist · #{selectedExitId}</h2><table><thead><tr><th>Item</th><th>Owner</th><th>Status</th><th>Action</th></tr></thead><tbody>{checklistRows.map(item=><tr key={item.id}><td>{item.title}<div className="small">{item.notes||''}</div></td><td>{pretty(item.owner_role)}</td><td>{pretty(item.item_status)}</td><td>{!['CLEARED','WAIVED'].includes(item.item_status)&&<div style={{display:'flex',gap:6}}><button className="secondary" disabled={saving} onClick={()=>void updateChecklist(item.id,'CLEARED')}>Clear</button><button className="secondary" disabled={saving} onClick={()=>void updateChecklist(item.id,'WAIVED')}>Waive</button></div>}</td></tr>)}</tbody></table>{!checklistRows.length&&<div className="empty">No checklist items found.</div>}</div>
-    </>}
+    {tab === 'exits' && (
+      <>
+        {can('HR_EXIT_MANAGE') && (
+          <form className="card" onSubmit={startExit}>
+            <h2>Initiate exit</h2>
+            <div className="cards">
+              <label>Employee
+                <select className="input" required value={exit.employeeId} onChange={e => setExit({...exit, employeeId: e.target.value})}>
+                  <option value="">Choose employee</option>
+                  {employees.map(employee => <option key={employee.id} value={employee.id}>{employee.employee_number} · {employee.display_name}</option>)}
+                </select>
+              </label>
+              <label>Exit type
+                <select className="input" value={exit.exitType} onChange={e => setExit({...exit, exitType: e.target.value})}>
+                  {['RESIGNATION', 'RETIREMENT', 'END_OF_CONTRACT', 'TERMINATION', 'OTHER'].map(type => <option key={type} value={type}>{pretty(type)}</option>)}
+                </select>
+              </label>
+              <label>Requested last working date
+                <input className="input" type="date" required min={today()} value={exit.requestedLastWorkingDate} onChange={e => setExit({...exit, requestedLastWorkingDate: e.target.value})} />
+              </label>
+              <label>Notice period (days)
+                <input className="input" type="number" min="0" max="3650" value={exit.noticePeriodDays} onChange={e => setExit({...exit, noticePeriodDays: e.target.value})} />
+              </label>
+              <label>Reason
+                <input className="input" value={exit.reason} onChange={e => setExit({...exit, reason: e.target.value})} />
+              </label>
+            </div>
+            <button className="primary" disabled={saving || !exit.employeeId}>Start exit workflow</button>
+          </form>
+        )}
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Employee</th><th>Exit type</th><th>Requested last day</th><th>Workflow</th><th>Final settlement</th>{can('HR_EXIT_MANAGE') && <th>Next action</th>}</tr>
+            </thead>
+            <tbody>
+              {exits.map(item => (
+                <tr key={item.id}>
+                  <td>{item.display_name}<div className="small">{item.employee_number}</div></td>
+                  <td>{pretty(item.exit_type)}</td>
+                  <td>{item.requested_last_working_date}</td>
+                  <td>{pretty(item.exit_status)}</td>
+                  <td>{pretty(item.final_settlement_status)}</td>
+                  {can('HR_EXIT_MANAGE') && (
+                    <td style={{display: 'flex', gap: 6, flexWrap: 'wrap'}}>
+                      <button className="secondary" type="button" onClick={() => void openChecklist(item.id)}>Checklist</button>
+                      {exitNextStatus[item.exit_status] && (
+                        <button className="secondary" type="button" onClick={() => void mutate('/api/v1/hr/exits/' + item.id + '/status', {status: exitNextStatus[item.exit_status], notes: 'Reviewed in People Operations'}, 'PATCH')}>Advance workflow</button>
+                      )}
+                      {item.exit_status === 'READY_FOR_SETTLEMENT' && item.final_settlement_status !== 'SETTLED' && (
+                        <button className="secondary" type="button" onClick={() => void mutate('/api/v1/hr/exits/' + item.id + '/settlement', {status: 'SETTLED', reason: 'Settlement confirmed by authorised payroll reviewer'}, 'PATCH')}>Record settlement</button>
+                      )}
+                      {item.exit_status === 'READY_FOR_SETTLEMENT' && item.final_settlement_status === 'SETTLED' && (
+                        <button className="secondary" type="button" onClick={() => void mutate('/api/v1/hr/exits/' + item.id + '/status', {status: 'COMPLETED'}, 'PATCH')}>Complete exit</button>
+                      )}
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {!exits.length && <div className="empty">No exit workflows recorded.</div>}
+        </div>
+        {selectedExitId !== null && (
+          <div className="table-wrap">
+            <h2>Exit checklist · #{selectedExitId}</h2>
+            <table>
+              <thead><tr><th>Item</th><th>Owner</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                {checklistRows.map(item => (
+                  <tr key={item.id}>
+                    <td>{item.title}<div className="small">{item.notes || ''}</div></td>
+                    <td>{pretty(item.owner_role)}</td>
+                    <td>{pretty(item.item_status)}</td>
+                    <td>
+                      {!['CLEARED', 'WAIVED'].includes(item.item_status) && (
+                        <div style={{display: 'flex', gap: 6}}>
+                          <button className="secondary" type="button" disabled={saving} onClick={() => void updateChecklist(item.id, 'CLEARED')}>Clear</button>
+                          <button className="secondary" type="button" disabled={saving} onClick={() => void updateChecklist(item.id, 'WAIVED')}>Waive</button>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {!checklistRows.length && <div className="empty">No checklist items found.</div>}
+          </div>
+        )}
+      </>
+    )}
    </>}
   </section>
   <p className="small">Sensitive HR actions are checked by the API. Candidate records and employment records are distinct until an approved candidate is explicitly converted. Exit workflows do not independently disable accounts or change employee status. No bank transfer is initiated by this workspace.</p>
