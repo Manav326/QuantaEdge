@@ -427,7 +427,7 @@ fun QuantaEdgeApp() {
                     "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
                 ApiClient.getObject(path)
             }.getOrNull()
-            val onlinePage = onlineResponse?.optJSONArray("items").objectItems()
+            val onlinePage = onlineResponse?.optJSONArray("items")?.objectItems().orEmpty()
             assessmentsTotal = if (onlineResponse != null) onlineResponse.optInt("total", onlinePage.size) else 0
             assessments = onlinePage.filterNot {
                 it.optLongAny("assessment_id", "assessmentId", "id") in localIds
@@ -2199,7 +2199,6 @@ private fun DiagnosticScreen(
     }
 }
 
-@Composable
 @Composable
 private fun AssessmentListScreen(
     subject: String,
