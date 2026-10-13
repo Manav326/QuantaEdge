@@ -18,7 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,7 +39,7 @@ fun LearningClassesScreen(
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    var tab by remember { mutableStateOf("LIVE") }
+    var tab by rememberSaveable { mutableStateOf("LIVE") }
     Column(modifier = Modifier.fillMaxSize().padding(14.dp)) {
         Text(localizedUiText("Live classes और recordings"), style = MaterialTheme.typography.headlineSmall)
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
