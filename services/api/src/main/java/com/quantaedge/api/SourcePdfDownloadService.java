@@ -16,7 +16,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -310,7 +309,9 @@ public class SourcePdfDownloadService {
             total += count;
           }
         }
-        if (total < bytes.length) return Arrays.copyOf(bytes, total);
+        if (total < bytes.length) {
+          throw new IllegalArgumentException("The source response ended before the advertised content length.");
+        }
         if (in.read() != -1) {
           throw new IllegalArgumentException("The source response exceeds the permitted download size.");
         }
