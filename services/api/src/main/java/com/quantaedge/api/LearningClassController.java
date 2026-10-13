@@ -198,13 +198,17 @@ public class LearningClassController {
     if (teachingAssignmentId != null) {
       // CLASS_MANAGE authorizes consuming the approved teacher reference for timetable setup.
       List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
-        select a.id,a.employee_id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
+        select a.id,a.employee_id,a.subject_id,a.effective_start,a.effective_end,a.status,
+          e.linked_staff_account_id,e.employment_status
         from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id where a.id=?
         """, teachingAssignmentId);
       if (assignmentRows.isEmpty()) throw badRequest("Choose a valid approved teaching assignment.");
       Map<String,Object> assignment = assignmentRows.getFirst();
       if (!"APPROVED".equals(assignment.get("status"))) throw badRequest("Live classes can only use approved teaching assignments.");
       assignedEmployeeId = ((Number)assignment.get("employee_id")).longValue();
+      if (!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(assignment.get("employment_status")))) {
+        throw conflict("The assigned employee is not currently eligible to teach under the employee lifecycle policy.");
+      }
       if (((Number)assignment.get("subject_id")).longValue() != subjectId) throw badRequest("The teaching assignment must match the selected class and subject.");
       java.time.LocalDate sessionDate = startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
       if (sessionDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
@@ -269,8 +273,15 @@ public class LearningClassController {
     context = requireClassManage(context);
     String status = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!SESSION_STATUSES.contains(status)) throw badRequest("Choose SCHEDULED, LIVE, COMPLETED, or CANCELLED.");
-    List<Map<String, Object>> rows = jdbc.queryForList(
-        "select id,status,title,provider,provider_event_id,provider_operation_status from learning_class_session where id=?", sessionId);
+    List<Map<String, Object>> rows = jdbc.queryForList("""
+      select cs.id,cs.status,cs.title,cs.provider,cs.provider_event_id,cs.provider_operation_status,
+        cs.starts_at,cs.teaching_assignment_id,ta.status as assignment_status,ta.effective_start,ta.effective_end,
+        e.employment_status
+      from learning_class_session cs
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee e on e.id=ta.employee_id
+      where cs.id=?
+      """,sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
     Map<String,Object> current = rows.getFirst();
     String previous = String.valueOf(current.get("status"));
@@ -284,6 +295,21 @@ public class LearningClassController {
       default -> false;
     };
     if (!allowed) throw conflict("The requested live-class status transition is not allowed.");
+    if ("LIVE".equals(status) && "GOOGLE_MEET".equals(provider) && !"CREATED".equals(integration)) {
+      throw conflict("This class cannot be marked live until Google Meet creation is verified. Resolve the integration status first.");
+    }
+    if ("LIVE".equals(status) && current.get("teaching_assignment_id") instanceof Number) {
+      if (!"APPROVED".equals(current.get("assignment_status"))
+          || !Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(current.get("employment_status")))) {
+        throw conflict("The assigned teacher is no longer eligible or the teaching assignment is not approved.");
+      }
+      OffsetDateTime scheduledStart=toOffsetDateTime(current.get("starts_at"));
+      java.time.LocalDate effectiveDate=scheduledStart==null?null:scheduledStart.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
+      if (effectiveDate==null||effectiveDate.isBefore(((java.sql.Date)current.get("effective_start")).toLocalDate())
+          ||effectiveDate.isAfter(((java.sql.Date)current.get("effective_end")).toLocalDate())) {
+        throw conflict("The approved teaching assignment is not effective on the scheduled class date.");
+      }
+    }
     if ("COMPLETED".equals(previous) && !"COMPLETED".equals(status)) {
       throw conflict("Completed live classes are terminal. Create a new class record instead.");
     }

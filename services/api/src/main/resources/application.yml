@@ -48,7 +48,6 @@ app:
     max-messages-per-10m: ${APP_AI_TUTOR_MAX_MESSAGES_PER_10M:20}
     max-messages-per-day: ${APP_AI_TUTOR_MAX_MESSAGES_PER_DAY:100}
     history-messages: ${APP_AI_TUTOR_HISTORY_MESSAGES:10}
-app:
   google-meet:
     client-id: ${GOOGLE_MEET_CLIENT_ID:}
     client-secret: ${GOOGLE_MEET_CLIENT_SECRET:}
