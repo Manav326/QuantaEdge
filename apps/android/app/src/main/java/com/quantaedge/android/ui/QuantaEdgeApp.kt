@@ -1766,6 +1766,7 @@ fun QuantaEdgeApp() {
                             if (value.isNotBlank()) feedbacks.remove(id)
                         },
                         onAnswer = ::savePracticeAnswer,
+                        language = language,
                         onComplete = { route = AppRoute.LESSON },
                         onProgress = ::openProgress
                     )
@@ -2532,6 +2533,7 @@ private fun PracticeScreen(
     busy: Boolean,
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
+    language: String,
     onComplete: () -> Unit,
     onProgress: () -> Unit
 ) {
