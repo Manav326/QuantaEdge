@@ -59,3 +59,19 @@ Teaching assignment is not part of the employee CRUD API. In the academic-workfo
 - API input is validated and relational references must belong to the same organisation.
 - Sensitive personal data is minimised. Bank/tax data, payroll and private documents will be introduced only with dedicated permissions and controls.
 - Attendance, leave and payroll will be separate domain modules; they must not be implemented as mutable columns on the employee record.
+
+## Approved HRMS policy decisions (2026-10-13)
+
+The implementation contract and safety gaps are tracked in [Agent 1 HRMS Policy Decisions](../implementation/agent-1-hrms-policy-decisions.md).
+
+- Organization working week defaults to six days and may be configured to five. The API/database default is authoritative; a UI fallback is not sufficient.
+- Attendance supports permission-controlled correction requests and direct HR correction. Corrections preserve prior approved values and include actor, timestamp, reason and linkage. Attendance write permission alone does not grant historical-correction permission.
+- Leave types are configurable paid/unpaid types. Policy attributes must explicitly govern eligibility, balance requirements, negative balances and approvals.
+- Leave balances derive from an append-only transaction ledger. Reversals/adjustments compensate for earlier entries; posted transactions are not overwritten or deleted.
+- Holiday policy uses an India-oriented baseline with explicit organization overrides and jurisdiction/source provenance. Central, state, local and optional holidays must remain distinguishable; never seed an unverified list as official.
+- Lifecycle approval requirements are configurable per transition and permission, enforced by the API, with self-approval prohibited.
+- Calendar scope is organization-wide. Manager access is limited to reporting employees and separately granted capabilities.
+- Approved history is preserved. Status changes, attendance corrections and ledger reversals remain auditable.
+- Employee lifecycle, organization, attendance, leave, approvals, ledger, permissions and audit foundations are to be delivered together, with tests and a handoff.
+
+A feature is not complete merely because a People portal control calls an endpoint. API authorization, database invariants, migration compatibility and negative-path tests are required. If a policy cannot yet be enforced safely, the corresponding write path must remain unavailable and the blocker documented.

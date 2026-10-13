@@ -163,6 +163,78 @@ public class HrEmployeeSelfServiceController {
       """,id);
   }
 
+  @GetMapping("/attendance/correction-requests")
+  public Map<String,Object> attendanceCorrectionRequests(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    return Map.of("items",jdbc.queryForList("""
+      select r.id,r.public_id,r.attendance_record_id,r.work_date,r.requested_status,
+        r.requested_check_in_at,r.requested_check_out_at,r.requested_notes,r.reason,
+        r.request_status,r.review_note,r.reviewed_at,r.created_at,r.updated_at
+      from hr_attendance_correction_request r where r.employee_id=?
+      order by r.created_at desc,r.id desc limit 100
+      """,employeeId));
+  }
+
+  @PostMapping("/attendance/correction-requests")
+  @Transactional
+  public Map<String,Object> requestAttendanceCorrection(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    LocalDate workDate=parseDate(required(body.get("workDate"),10,"Work date"),null);
+    List<Map<String,Object>> records=jdbc.queryForList("""
+      select id,attendance_status,check_in_at,check_out_at,notes
+      from hr_attendance_record where employee_id=? and work_date=? for update
+      """,employeeId,Date.valueOf(workDate));
+    if(records.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+      "No attendance record exists for that date. Contact People Operations if a record needs to be created.");
+    String status=required(body.get("status"),16,"Requested attendance status").toUpperCase();
+    if(!List.of("PRESENT","ABSENT","HALF_DAY","REMOTE","ON_LEAVE","HOLIDAY").contains(status))
+      throw bad("Choose a supported attendance status.");
+    java.time.OffsetDateTime in=parseTimestamp(body.get("checkInAt"),"Check-in time");
+    java.time.OffsetDateTime out=parseTimestamp(body.get("checkOutAt"),"Check-out time");
+    if(out!=null&&in==null) throw bad("A check-out time requires a check-in time.");
+    if(in!=null&&out!=null&&!out.isAfter(in)) throw bad("Check-out must be later than check-in.");
+    if(List.of("ABSENT","ON_LEAVE","HOLIDAY").contains(status)&&(in!=null||out!=null))
+      throw bad("Absent, on-leave and holiday requests cannot include check-in/out times.");
+    String reason=required(body.get("reason"),1000,"Reason");
+    long recordId=((Number)records.getFirst().get("id")).longValue();
+    Long id;
+    try {
+      id=jdbc.queryForObject("""
+        insert into hr_attendance_correction_request(attendance_record_id,employee_id,work_date,
+          requested_status,requested_check_in_at,requested_check_out_at,requested_notes,reason,requested_by_staff_id)
+        values (?,?,?,?,?,?,?,?,?) returning id
+        """,Long.class,recordId,employeeId,Date.valueOf(workDate),status,in,out,
+          optionalText(body.get("notes"),500),reason,context.staffId());
+    } catch(DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+        "A pending attendance correction already exists for this date.");
+    }
+    audit.recordAction(context,"/api/v1/hr/self-service/attendance/correction-requests",
+      "Submitted attendance correction request "+id+" for "+workDate);
+    return jdbc.queryForMap("""
+      select id,public_id,attendance_record_id,employee_id,work_date,requested_status,
+        requested_check_in_at,requested_check_out_at,requested_notes,reason,request_status,created_at
+      from hr_attendance_correction_request where id=? and employee_id=?
+      """,id,employeeId);
+  }
+
+  @PatchMapping("/attendance/correction-requests/{requestId}/cancel")
+  @Transactional
+  public Map<String,Object> cancelAttendanceCorrection(@PathVariable long requestId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    long employeeId=linkedEmployeeId(context);
+    int changed=jdbc.update("""
+      update hr_attendance_correction_request set request_status='CANCELLED',updated_at=now()
+      where id=? and employee_id=? and request_status='PENDING'
+      """,requestId,employeeId);
+    if(changed!=1) throw new ResponseStatusException(HttpStatus.CONFLICT,
+      "The correction request was not found or is no longer pending.");
+    audit.recordAction(context,"/api/v1/hr/self-service/attendance/correction-requests/"+requestId+"/cancel",
+      "Cancelled attendance correction request "+requestId);
+    return jdbc.queryForMap("select id,public_id,work_date,request_status,updated_at from hr_attendance_correction_request where id=?",requestId);
+  }
+
   @GetMapping("/profile-change-requests")
   public Map<String,Object> profileChangeRequests(@RequestAttribute(value="authContext",required=false) AuthContext context) {
     long employeeId=linkedEmployeeId(context);
@@ -240,6 +312,18 @@ public class HrEmployeeSelfServiceController {
     return ((Number)rows.getFirst().get("id")).longValue();
   }
 
+  private static java.time.OffsetDateTime parseTimestamp(Object value,String label) {
+    if(value==null||String.valueOf(value).isBlank()) return null;
+    try { return java.time.OffsetDateTime.parse(String.valueOf(value)); }
+    catch(java.time.format.DateTimeParseException ex) { throw bad(label+" must be an ISO-8601 timestamp with timezone."); }
+  }
+  private static String optionalText(Object value,int max) {
+    if(value==null) return null;
+    String text=String.valueOf(value).trim();
+    if(text.isEmpty()) return null;
+    if(text.length()>max) throw bad("Notes must be at most "+max+" characters.");
+    return text;
+  }
   private static LocalDate parseDate(String value,LocalDate fallback) {
     if(value==null||value.isBlank()) {
       if(fallback!=null) return fallback;
