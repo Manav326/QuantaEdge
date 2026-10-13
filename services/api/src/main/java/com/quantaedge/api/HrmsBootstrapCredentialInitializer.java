@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -78,13 +79,20 @@ public class HrmsBootstrapCredentialInitializer {
   }
 
   private void validateBootstrapPassword() {
+    String normalized = bootstrapPassword == null ? "" : bootstrapPassword.trim().toLowerCase(Locale.ROOT);
+    boolean placeholder = normalized.contains("replace-with")
+        || normalized.contains("change-this")
+        || normalized.contains("placeholder")
+        || normalized.startsWith("your-password")
+        || normalized.startsWith("your-secret");
     if (bootstrapPassword == null
         || bootstrapPassword.length() < 12
         || bootstrapPassword.getBytes(StandardCharsets.UTF_8).length > 72
         || bootstrapPassword.isBlank()
-        || "admin".equalsIgnoreCase(bootstrapPassword.trim())) {
+        || "admin".equals(normalized)
+        || placeholder) {
       throw new IllegalStateException(
-          "Set APP_HRMS_BOOTSTRAP_PASSWORD to a unique 12–72 byte secret before the first production start.");
+          "Set APP_HRMS_BOOTSTRAP_PASSWORD to a unique non-placeholder 12–72 byte secret before the first production start.");
     }
   }
 }

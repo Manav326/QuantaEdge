@@ -51,6 +51,21 @@ class HrmsBootstrapCredentialInitializerTest {
   }
 
   @Test
+  void productionRejectsTheDocumentedExamplePlaceholder() {
+    JdbcTemplate jdbc = mock(JdbcTemplate.class);
+    TransactionTemplate transactions = executeTransactionsInline();
+    when(jdbc.queryForList(contains("select initialized"), eq(STATE_KEY)))
+        .thenReturn(List.of(Map.of("initialized", false)));
+    HrmsBootstrapCredentialInitializer initializer =
+        new HrmsBootstrapCredentialInitializer(jdbc, transactions, "production", "",
+            "replace-with-strong-random-secret-before-first-start");
+
+    assertThrows(IllegalStateException.class, initializer::initializeProductionBootstrapCredential);
+    verify(jdbc, never()).update(contains("update staff_account"), anyString());
+    verify(jdbc, never()).update(contains("update auth_bootstrap_state"), anyString());
+  }
+
+  @Test
   void firstProductionStartHashesSecretAndMarksItInitialized() {
     String secret = "a-unique-bootstrap-secret-2026";
     JdbcTemplate jdbc = mock(JdbcTemplate.class);
