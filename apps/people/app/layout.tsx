@@ -1,6 +1,7 @@
 import './globals.css';
 import './people-design-system.css';
 import PeopleWorkspaceLayout from './components/PeopleWorkspaceLayout';
+import PeopleSessionBoundary from './components/PeopleSessionBoundary';
 
 export const metadata = {
   title: { default: 'QuantaEdge People', template: '%s | QuantaEdge People' },
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout>
+        <PeopleSessionBoundary><PeopleWorkspaceLayout>{children}</PeopleWorkspaceLayout></PeopleSessionBoundary>
       </body>
     </html>
   );
