@@ -9,7 +9,7 @@ type LeaveType={code:string;display_name:string;paid:boolean};
 type Range={from:string;to:string};
 async function api(path:string,init:RequestInit={}) {
   const headers=new Headers(init.headers);
-  headers.set('X-QE-Workspace','STAFF');
+  headers.set('X-QE-Workspace','HRMS');
   if(init.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
   const response=await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text();
