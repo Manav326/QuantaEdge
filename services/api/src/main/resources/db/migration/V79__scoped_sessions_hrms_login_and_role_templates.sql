@@ -43,7 +43,7 @@ alter table staff_account add constraint staff_account_role_check
 do $bootstrap$
 declare
   bootstrap_staff_id bigint;
-  initial_password_hash constant text := '$2a$12$sThMmW486BCNoOUisIy8eeON2caIhSRTgdSct3Kf91y7JOiS1lKgC';
+  initial_password_hash constant text := '$2a$12$vv2074FPhWNMKb9HDsP9hu3Av11EyJX/Z8cjDAaCShvZWbrV1m2bK';
 begin
   select id into bootstrap_staff_id
   from staff_account
@@ -51,29 +51,48 @@ begin
   limit 1;
 
   if bootstrap_staff_id is null then
-    select id into bootstrap_staff_id
-    from staff_account
-    where role = 'ADMIN' and active = true
-    order by id
-    limit 1;
-  end if;
-
-  if bootstrap_staff_id is null then
     insert into staff_account(
       public_id, mobile_e164, display_name, role, active, username,
       password_hash, must_change_password, created_at, updated_at
     ) values (
-      gen_random_uuid(), null, 'People Operations Super Admin', 'ADMIN', true, 'HRMS_Admin',
+      gen_random_uuid(), null, 'People Operations Super Admin', 'HR', true, 'HRMS_Admin',
       initial_password_hash, true, now(), now()
     ) returning id into bootstrap_staff_id;
   else
+    -- This is a separate HRMS identity and is never repurposed from an education administrator.
     update staff_account
-    set username = 'HRMS_Admin',
-        password_hash = initial_password_hash,
+    set mobile_e164 = null,
+        display_name = 'People Operations Super Admin',
+        role = 'HR',
+        active = true,
+        password_hash = coalesce(password_hash, initial_password_hash),
         must_change_password = true,
-        password_changed_at = null,
         updated_at = now()
     where id = bootstrap_staff_id;
+  end if;
+
+  -- Seed HRMS-only powers directly. The account does not receive education content permissions
+  -- or the global ADMIN role and therefore cannot silently become an Education Admin.
+  insert into staff_permission_grant(staff_id, permission_key)
+  select bootstrap_staff_id, permission_key
+  from staff_permission_catalog
+  where permission_key like 'HR\_%' escape '\'
+     or permission_key = 'AUDIT_VIEW'
+  on conflict(staff_id, permission_key) do nothing;
+
+  -- Keep the bootstrap administrator attached to the HR employee directory as well.
+  if not exists (select 1 from hr_employee where linked_staff_account_id = bootstrap_staff_id) then
+    insert into hr_employee(
+      public_id, employee_number, organization_id, employment_type_code,
+      linked_staff_account_id, display_name, joining_date, employment_status
+    )
+    select gen_random_uuid(),
+           'QE-' || lpad(nextval('hr_employee_number_seq')::text, 6, '0'),
+           o.id, 'FULL_TIME', bootstrap_staff_id,
+           'People Operations Super Admin', current_date, 'ACTIVE'
+    from hr_organization o
+    where o.name = 'QuantaEdge'
+    limit 1;
   end if;
 end
 $bootstrap$;
