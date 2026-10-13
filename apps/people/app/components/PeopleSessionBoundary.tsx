@@ -155,7 +155,10 @@ export default function PeopleSessionBoundary({ children }: { children: React.Re
   }, [ready, isLogin]);
 
   useEffect(() => {
-    const onExpired = () => window.location.replace('/login');
+    const onExpired = () => {
+      // The login page probes /auth/me; never reload it repeatedly if no session exists.
+      if (window.location.pathname !== '/login') window.location.replace('/login');
+    };
     window.addEventListener('qe:hrms-session-expired', onExpired);
     return () => window.removeEventListener('qe:hrms-session-expired', onExpired);
   }, []);
