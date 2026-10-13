@@ -44,13 +44,20 @@ public class AuthController {
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
         Boolean.TRUE.equals(body.get("firstAccess")),
         body.get("password")==null?null:String.valueOf(body.get("password")));
-    String workspace = context.isEmployee() ? AuthService.normalizeWorkspace(workspaceHeader) : "LEARNING";
+    String workspace;
     if (context.isEmployee()) {
+      workspace = AuthService.normalizeWorkspace(workspaceHeader);
       if (workspace == null) workspace = "STAFF";
       if ("HRMS".equals(workspace)) {
         throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
       }
       staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Education Admin staff sign-in succeeded.");
+    } else if (context.isStudent()) {
+      workspace = "STUDENT";
+    } else if (context.isParent()) {
+      workspace = "PARENT";
+    } else {
+      workspace = "LEARNING";
     }
     return withCookie(auth.issueSession(context, workspace), workspace);
   }
@@ -86,14 +93,14 @@ public class AuthController {
   public ResponseEntity<Map<String,Object>> parentLogin(@RequestBody Map<String,Object> body) {
     AuthContext context=auth.loginParent(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueSession(context));
+    return withCookie(auth.issueSession(context, "PARENT"), "PARENT");
   }
 
   @PostMapping("/student-login")
   public ResponseEntity<Map<String,Object>> studentLogin(@RequestBody Map<String,Object> body) {
     AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueSession(context));
+    return withCookie(auth.issueSession(context, "STUDENT"), "STUDENT");
   }
 
   @PostMapping("/preview-login")
