@@ -1018,3 +1018,6 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .student-cert-issue:disabled{opacity:.5;cursor:wait}
 .student-cert-hint{max-width:310px;color:var(--muted,#667085);font-size:10px;line-height:1.5;text-align:right}
 @media(max-width:620px){.parent-test-line{flex-direction:column}.parent-test-result{width:100%;justify-items:start}.parent-certificate-actions,.student-certificate-actions{justify-content:flex-start}.student-result-actions{justify-content:flex-start}.student-cert-hint{text-align:left}}
+.student-test-line{align-items:flex-start;gap:12px}
+.student-test-result{display:grid;justify-items:end;gap:7px;min-width:0}
+@media(max-width:620px){.student-test-line{flex-direction:column}.student-test-result{width:100%;justify-items:start}}
