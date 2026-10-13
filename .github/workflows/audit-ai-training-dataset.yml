@@ -1,0 +1,48 @@
+name: Audit existing AI training dataset
+
+on:
+  workflow_dispatch:
+    inputs:
+      sample_size:
+        description: "Number of existing Class 6 Maths training records to export"
+        required: true
+        default: "10"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quantaedge-ai-training-readonly-audit
+  cancel-in-progress: false
+
+jobs:
+  audit-existing-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Audit and export existing records only
+        shell: bash
+        run: |
+          python scripts/audit_ai_training_dataset.py \
+            --dataset-dir data/ai-training/datasets \
+            --output-dir artifacts/class6-maths-audit \
+            --sample-size "${{ inputs.sample_size }}"
+
+      - name: Upload review batch and audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-class6-maths-audit
+          path: artifacts/class6-maths-audit/
+          if-no-files-found: error
+          retention-days: 30
