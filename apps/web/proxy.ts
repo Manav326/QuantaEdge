@@ -21,7 +21,7 @@ function hasLegacySessionCookie(request: NextRequest) {
 
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const learningSession = hasLearnerSessionCookie(request);
+  const learnerSession = hasLearnerSessionCookie(request);
   // Legacy shared cookies are only a migration hint; the API validates their role.
   const legacySession = hasLegacySessionCookie(request);
   const publicEntry = path === '/' || path === '/login' || path === '/login/student';
@@ -29,10 +29,10 @@ export function proxy(request: NextRequest) {
   const parentRoute = path === '/parent' || path.startsWith('/parent/');
 
   // Staff cookies are deliberately ignored by the learning site and vice versa.
-  if (publicEntry && learningSession) {
+  if (publicEntry && learnerSession) {
     return NextResponse.redirect(new URL('/session', request.url));
   }
-  if ((studentRoute || parentRoute) && !learningSession && !legacySession) {
+  if ((studentRoute || parentRoute) && !learnerSession && !legacySession) {
     return NextResponse.redirect(new URL(studentRoute ? '/login/student' : '/login', request.url));
   }
   return NextResponse.next();
