@@ -1,4 +1,5 @@
 'use client';
+import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -46,9 +47,9 @@ export default function ChangeHrmsPassword() {
   return (
     <main className="login-wrap">
       <aside className="login-story">
-        <div className="brand">QuantaEdge <span>PEOPLE OPERATIONS</span></div>
+        <div className="brand qe-people-login-brand"><img src="/branding/quantaedge-wordmark.png" alt="QuantaEdge" width={196} height={31} /><span>PEOPLE OPERATIONS</span></div>
         <div>
-          <div className="eyebrow" style={{ color: '#a9c7ff' }}>ONE-TIME ACCOUNT SETUP</div>
+          <div className="eyebrow">ONE-TIME ACCOUNT SETUP</div>
           <h1>Secure your HRMS access.</h1>
           <p>Before opening employee or payroll information, replace the initial password with a strong, private password.</p>
         </div>
@@ -59,7 +60,7 @@ export default function ChangeHrmsPassword() {
           <div className="eyebrow">PASSWORD CHANGE REQUIRED</div>
           <h2>Create a new password</h2>
           <p>Use at least 12 characters. Do not reuse the initial or another account password.</p>
-          {error && <div className="error" role="alert">{error}</div>}
+          {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
           <form onSubmit={submit}>
             <label htmlFor="current-password">Current password</label>
             <input id="current-password" className="input" type="password" autoComplete="current-password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} required />
@@ -67,9 +68,9 @@ export default function ChangeHrmsPassword() {
             <input id="new-password" className="input" type="password" autoComplete="new-password" minLength={12} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required />
             <label htmlFor="confirm-password">Confirm new password</label>
             <input id="confirm-password" className="input" type="password" autoComplete="new-password" minLength={12} value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} required />
-            <button className="primary" disabled={busy || !currentPassword || newPassword.length < 12 || newPassword !== confirmPassword}>
+            <PeopleButton variant="primary" loading={busy} disabled={!currentPassword || newPassword.length < 12 || newPassword !== confirmPassword}>
               {busy ? 'Updating securely…' : 'Change password and continue'}
-            </button>
+            </PeopleButton>
           </form>
         </div>
       </section>

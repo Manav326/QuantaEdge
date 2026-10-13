@@ -101,6 +101,19 @@ for (const asset of [
   const absolute = join(root, asset);
   assert(existsSync(absolute) && statSync(absolute).size > 0, `Missing packaged QuantaEdge asset: ${asset}`);
 }
+
+for (const [route, path] of [
+  ['/login', 'apps/people/app/login/page.tsx'],
+  ['/change-password', 'apps/people/app/change-password/page.tsx'],
+]) {
+  const source = read(path);
+  assert(source.includes('src="/branding/quantaedge-wordmark.png"'), `${route} must render the packaged QuantaEdge wordmark as an image.`);
+  assert(source.includes('<PeopleButton variant="primary"'), `${route} must use the shared primary button.`);
+  assert(source.includes('<PeopleFeedback tone="danger" role="alert">'), `${route} must use accessible shared error feedback.`);
+}
+assert(styles.includes('.login-story .brand img'), 'Login wordmark must have responsive presentation styles.');
+assert(styles.includes('.login-card .qe-people-button'), 'Authentication primary actions must retain adequate button sizing.');
+
 assert(alignmentPlan.includes('Phase 10'), 'Persistent HRMS alignment plan must be present.');
 
 if (failures.length) {

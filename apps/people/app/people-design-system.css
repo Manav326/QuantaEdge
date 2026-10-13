@@ -743,12 +743,25 @@ button:disabled,
 }
 
 .login-story .brand::before {
+  display: none;
+  content: "";
+}
+
+.login-story .brand img {
   display: block;
   width: 196px;
-  height: 39px;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
   border-radius: 7px;
-  background: #fff url('/branding/quantaedge-wordmark.png') center / contain no-repeat;
-  content: "";
+  background: #fff;
+  padding: 4px 5px;
+}
+
+.login-card .qe-people-button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 8px;
 }
 
 .login-story .brand span {

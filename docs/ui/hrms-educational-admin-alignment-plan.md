@@ -136,14 +136,14 @@
 
 ## Phase 8 — Employee self-service, access governance and authentication
 
-- [ ] HRMS access governance: employee login provisioning, role/permission assignment, access enable/disable, credential reset and reserved-account safeguards.
+- [x] HRMS access governance: employee login provisioning, role/permission assignment, access enable/disable, credential reset and reserved-account safeguards.
 - [ ] Profile details and profile-change requests/history.
 - [ ] Attendance correction request/history.
 - [ ] Leave requests and outcomes.
 - [ ] Payslip list, detail and print.
 - [ ] Salary component disclosure as already allowed by product policy.
-- [ ] Branded login and OTP request/verification states.
-- [ ] Invalid/expired code, rate limit, server error, loading and retry states.
+- [ ] Branded HRMS username/password login and forced password-change screens.
+- [ ] Invalid credentials, authentication/server errors, loading, disabled and retry states.
 - [ ] Preserve first access, staff identity, session cookies, redirects and access rules.
 - [x] Ensure People branding assets exist within the People app's Docker build context.
 
@@ -220,8 +220,8 @@ Implementation is proceeding directly on `main`. Each check distinguishes source
 - [x] Commit `f2715ce`: formalized token usage for spacing, radii, controls, surfaces and focus styling.
 - [x] Commit `2c57445`: introduced the shared accessible dialog for employee directory and teaching-assignment history/edit flows.
 - [x] Commit `c0bc8cc`: added the static HRMS UI contract checker to the People Operations CI job. Full Actions run [38370400699](https://github.com/Manav326/QuantaEdge/actions/runs/38370400699) completed successfully: People Operations, Admin, Web and API images, API verification, content-import safeguards and Android build all passed.
-- [x] Current follow-up adds `/access` to the common shell/page-header/component system; places it in a distinct Access Governance group; restricts it to `HR_ACCESS_MANAGE`; aligns teaching-assignment navigation with its actual page permissions and `TEACHING_ASSIGNMENT_VIEW` for My Classes; adds shared `PeopleButton` neutral/loading variants and uses them for access actions; and extends the CI contract to verify these rules. The commit containing this follow-up is awaiting its full CI run.
+- [x] Current follow-up adds `/access` to the common shell/page-header/component system; places it in a distinct Access Governance group; restricts it to `HR_ACCESS_MANAGE`; aligns teaching-assignment navigation with its actual page permissions and `TEACHING_ASSIGNMENT_VIEW` for My Classes; adds shared `PeopleButton` neutral/loading variants and uses them for access actions; and extends the CI contract to verify these rules. The access-governance/navigation follow-up is green on commit `26b171c`; full Actions run [38371731018](https://github.com/Manav326/QuantaEdge/actions/runs/38371731018) passed the UI contract, People/Admin/Web/API image builds, API verification, content-import safeguards and Android build. A further auth-screen branding cleanup is now being staged and needs its own CI run.
 - [x] Official branding assets are packaged under `apps/people/public/branding`; the People app retains `PeopleSessionBoundary` and the HRMS workspace header.
 - [ ] Rendered desktop/tablet/mobile screenshots, live browser interactions, role/session workflows, and payslip-print review remain pending. These must not be inferred from image builds alone.
 
-Run `38370400699` validates commit `c0bc8cc`. The route-inventory/permission follow-up is not considered green until its own full workflow completes.
+Run `38371731018` validates commit `26b171c`. Auth-screen branding/component changes after that commit still need their own full workflow. Rendered screenshot/browser QA remains a separate pending gate.

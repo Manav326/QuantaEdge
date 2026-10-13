@@ -1,4 +1,5 @@
 'use client';
+import { PeopleButton, PeopleFeedback } from '../components/PeopleUI';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -50,9 +51,9 @@ export default function PeopleLogin() {
   return (
     <main className="login-wrap">
       <aside className="login-story">
-        <div className="brand">QuantaEdge <span>PEOPLE OPERATIONS</span></div>
+        <div className="brand qe-people-login-brand"><img src="/branding/quantaedge-wordmark.png" alt="QuantaEdge" width={196} height={31} /><span>PEOPLE OPERATIONS</span></div>
         <div>
-          <div className="eyebrow" style={{ color: '#a9c7ff' }}>SECURE HRMS WORKSPACE</div>
+          <div className="eyebrow">SECURE HRMS WORKSPACE</div>
           <h1>Great learning starts with great people.</h1>
           <p>Employee records, attendance, leave, payroll and team operations in a dedicated, access-controlled workspace.</p>
         </div>
@@ -63,7 +64,7 @@ export default function PeopleLogin() {
           <div className="eyebrow">EMPLOYEE ACCESS</div>
           <h2>Sign in to People Operations</h2>
           <p>Use the HRMS username and password assigned to your account. HRMS sign-in does not use OTP.</p>
-          {error && <div className="error" role="alert">{error}</div>}
+          {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
           <form onSubmit={(event) => { event.preventDefault(); if (!busy) void signIn(); }}>
             <label htmlFor="username">Username</label>
             <input
@@ -85,9 +86,9 @@ export default function PeopleLogin() {
               autoComplete="current-password"
               required
             />
-            <button className="primary" disabled={busy || !username.trim() || !password}>
+            <PeopleButton variant="primary" loading={busy} disabled={!username.trim() || !password}>
               {busy ? 'Signing in securely…' : 'Sign in securely'}
-            </button>
+            </PeopleButton>
           </form>
           <p className="small">For a forgotten password, contact the authorised People Operations administrator. Never share your password.</p>
         </div>
