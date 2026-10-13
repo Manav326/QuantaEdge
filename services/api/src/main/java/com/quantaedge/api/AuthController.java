@@ -155,6 +155,7 @@ public class AuthController {
       HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     String workspace = AuthService.normalizeWorkspace(workspaceHeader);
+    if (workspace == null) throw new SecurityException("Application workspace context is required to sign out safely.");
     int legacyRevoked = 0;
     if (workspace == null) {
       auth.revoke(cookieValue(request, AuthService.COOKIE), cookieValue(request, AuthService.REFRESH_COOKIE));
@@ -174,7 +175,7 @@ public class AuthController {
     String refreshCookie = workspace == null ? AuthService.REFRESH_COOKIE : AuthService.refreshCookieForWorkspace(workspace);
     result.header("Set-Cookie", expiredCookie(sessionCookie).toString());
     result.header("Set-Cookie", expiredCookie(refreshCookie).toString());
-    if (workspace == null || legacyRevoked > 0) {
+    if (legacyRevoked > 0) {
       result.header("Set-Cookie", expiredCookie(AuthService.COOKIE).toString());
       result.header("Set-Cookie", expiredCookie(AuthService.REFRESH_COOKIE).toString());
     }
