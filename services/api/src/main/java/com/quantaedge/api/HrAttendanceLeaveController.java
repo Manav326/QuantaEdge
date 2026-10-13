@@ -25,7 +25,7 @@ public class HrAttendanceLeaveController {
  with recursive reporting(id) as (
    select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select count(*) from hr_attendance_record a join hr_employee e on e.id=a.employee_id
@@ -67,7 +67,7 @@ public class HrAttendanceLeaveController {
  with recursive reporting(id) as (
    select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,r.leave_type_code,t.display_name leave_type,t.paid,r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,r.reviewed_by_staff_id,r.reviewed_at,r.created_by_staff_id,r.created_at,r.updated_at
@@ -80,7 +80,7 @@ public class HrAttendanceLeaveController {
  with recursive reporting(id) as (
    select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
      and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+   union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
      where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
  )
  select count(*) from hr_leave_request r join hr_employee e on e.id=r.employee_id
