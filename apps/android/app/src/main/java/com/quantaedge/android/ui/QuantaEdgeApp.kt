@@ -106,6 +106,7 @@ fun QuantaEdgeApp() {
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
+    var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
 
@@ -974,6 +975,14 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun removeStudentPhoto() {
+        runTask {
+            ApiClient.deleteObject("/api/v1/students/me/profile-photo")
+            studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+            status = if (language == "hi") "प्रोफ़ाइल फ़ोटो हटा दी गई।" else "Profile photo removed."
+        }
+    }
+
     fun openProgress() {
         runTask {
             progressData = ApiClient.getObject("/api/v1/students/me")
@@ -1003,6 +1012,30 @@ fun QuantaEdgeApp() {
                 JSONObject().put("profileImageDataUrl", dataUrl))
             parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
             status = "अभिभावक की प्रोफ़ाइल फोटो सुरक्षित हो गई।"
+        }
+    }
+
+    fun removeParentPhoto() {
+        runTask {
+            ApiClient.deleteObject("/api/v1/guardians/profile-photo")
+            parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
+            status = if (language == "hi") "अभिभावक की प्रोफ़ाइल फ़ोटो हटा दी गई।" else "Parent profile photo removed."
+        }
+    }
+
+    fun downloadParentCertificate(childId: Long, certificateId: Long, format: String) {
+        runTask {
+            if (childId <= 0L || certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
+            val bytes = withContext(Dispatchers.IO) {
+                ApiClient.getBytes("/api/v1/guardians/children/" + childId + "/certificates/" +
+                    certificateId + "/download?format=" + format)
+            }
+            if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
+            pendingCertificateBytes = bytes
+            pendingCertificateFilename = "quantaedge-child-$childId-certificate-$certificateId.$format"
+            if (format == "pdf") resultCertificatePdfLauncher.launch(pendingCertificateFilename)
+            else resultCertificatePngLauncher.launch(pendingCertificateFilename)
         }
     }
 
@@ -1078,6 +1111,11 @@ fun QuantaEdgeApp() {
             val id = child.longAny("id")
             parentReport = ApiClient.getObject("/api/v1/guardians/children/" + id + "/report")
             parentReport.put("_childName", child.textAny("display_name", "displayName"))
+            parentReport.put("_childId", id)
+            parentCertificates = runCatching {
+                ApiClient.getObject("/api/v1/guardians/children/" + id + "/certificates")
+                    .optJSONArray("items").objectItems()
+            }.getOrDefault(emptyList())
             route = AppRoute.PARENT_REPORT
         }
     }
@@ -1286,12 +1324,20 @@ fun QuantaEdgeApp() {
                         onLogout = ::logout,
                         maxChildren = parentAccount.optInt("maxChildren", 3)
                     )
-                    AppRoute.PARENT_REPORT -> ParentReportScreen(parentReport)
+                    AppRoute.PARENT_REPORT -> ParentReportScreen(
+                        report = parentReport,
+                        language = language,
+                        busy = busy,
+                        certificates = parentCertificates,
+                        onDownloadCertificate = ::downloadParentCertificate
+                    )
                     AppRoute.PARENT_PROFILE -> ParentProfileScreen(
                         profile = parentProfile,
+                        language = language,
                         busy = busy,
                         onSave = ::saveParentProfile,
-                        onUploadPhoto = ::saveParentPhoto
+                        onUploadPhoto = ::saveParentPhoto,
+                        onRemovePhoto = ::removeParentPhoto
                     )
                     AppRoute.PARENT_CHILD_CREATE -> ParentChildCreateScreen(
                         busy = busy,
@@ -1436,6 +1482,7 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         onSave = ::saveStudentProfile,
                         onUploadPhoto = ::saveStudentPhoto,
+                        onRemovePhoto = ::removeStudentPhoto,
                         onToggleLanguage = ::toggleLanguage,
                         onLogout = ::logout
                     )
@@ -2520,25 +2567,124 @@ private fun ParentHomeScreen(
 }
 
 @Composable
-private fun ParentReportScreen(report: JSONObject) {
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(report.textAny("_childName", "display_name").ifBlank { "छात्र की रिपोर्ट" }, style = MaterialTheme.typography.headlineSmall)
-        Text("कक्षा " + report.textAny("class_code", "classCode"), style = MaterialTheme.typography.bodyMedium)
-        val excluded = setOf("_childName", "display_name", "public_id", "class_code", "board", "language")
-        val keys = report.keys()
-        while (keys.hasNext()) {
-            val key = keys.next()
-            if (key in excluded || report.isNull(key)) continue
-            val value = report.opt(key)
-            if (value is JSONObject || value is JSONArray) continue
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text(key.replace('_', ' ').replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.labelMedium)
-                    Text(value.toString(), style = MaterialTheme.typography.titleMedium)
-                }
-            }
+private fun ParentReportScreen(
+    report: JSONObject,
+    language: String,
+    busy: Boolean,
+    certificates: List<JSONObject>,
+    onDownloadCertificate: (Long, Long, String) -> Unit
+) {
+    val childId = report.optLong("_childId", 0L)
+    val lessons = report.optJSONObject("lessonStats") ?: JSONObject()
+    val questions = report.optJSONObject("questionStats") ?: JSONObject()
+    val mastery = report.optJSONObject("mastery") ?: JSONObject()
+    val sessions = report.optJSONObject("sessionStats") ?: JSONObject()
+    val stats = report.optJSONObject("assessmentStats") ?: JSONObject()
+    val curriculum = report.optJSONArray("curriculum")?.objectItems() ?: emptyList()
+    val concepts = report.optJSONArray("masteryDetails")?.objectItems() ?: emptyList()
+    val tests = report.optJSONArray("recentAssessments")?.objectItems() ?: emptyList()
+    val practice = report.optJSONArray("recentAttempts")?.objectItems() ?: emptyList()
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
+
+    Column(modifier = Modifier.fillMaxSize().widthIn(max = 1000.dp).verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(report.textAny("_childName", "display_name").ifBlank { t("Student report", "छात्र की रिपोर्ट") },
+            style = MaterialTheme.typography.headlineSmall)
+        Text(t("Class", "कक्षा") + " " + report.textAny("class_code", "classCode"),
+            color = MaterialTheme.colorScheme.secondary)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
+                lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.weight(1f))
+            ParentReportMetric(t("Practice accuracy","अभ्यास सटीकता"), questions.optString("accuracy_percent","0")+"%",
+                questions.optString("attempts","0")+" "+t("attempts","प्रयास"), Modifier.weight(1f))
         }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            ParentReportMetric(t("Average mastery","औसत महारत"), mastery.optString("average_mastery","0")+"%",
+                mastery.optString("mastered","0")+" "+t("concepts mastered","अवधारणाएँ पूरी"), Modifier.weight(1f))
+            ParentReportMetric(t("Tests released","जारी टेस्ट"), stats.optString("released","0"),
+                stats.optString("awaiting_review","0")+" "+t("awaiting review","समीक्षा बाकी"), Modifier.weight(1f))
+        }
+        ParentReportSectionTitle(t("Curriculum covered","पूरा किया गया पाठ्यक्रम"))
+        if (curriculum.isEmpty()) {
+            EmptyState(t("No curriculum summary yet","अभी पाठ्यक्रम सारांश नहीं है"),
+                t("Published lessons will appear here when available.","प्रकाशित पाठ उपलब्ध होने पर यहाँ दिखेंगे।"))
+        } else curriculum.forEach { item ->
+            Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(13.dp), verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                Text(item.textAny("subject_name","subject_code"), style=MaterialTheme.typography.titleMedium)
+                Text(item.optString("completed","0")+" / "+item.optString("lessons","0")+" "+t("lessons","पाठ")+
+                    " · "+item.optString("chapters","0")+" "+t("chapters","अध्याय"), style=MaterialTheme.typography.bodySmall)
+            } }
+        }
+        ParentReportSectionTitle(t("Learning signals","सीखने के संकेत"))
+        Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(13.dp), verticalArrangement=Arrangement.spacedBy(8.dp)) {
+            ParentReportLine(t("Mastered concepts","पूरी की गई अवधारणाएँ"), mastery.optString("mastered","0"))
+            ParentReportLine(t("Needs support","सहायता चाहिए"), mastery.optString("needs_support","0"))
+            ParentReportLine(t("Learning time · 30 days","अध्ययन समय · 30 दिन"), sessions.optString("minutes_30d","0")+" min")
+            ParentReportLine(t("Average released score","जारी टेस्ट का औसत अंक"), stats.optString("average_released_percent","0")+"%")
+        } }
+        ParentReportSectionTitle(t("Test history and certificates","टेस्ट इतिहास और प्रमाणपत्र"))
+        if (tests.isEmpty()) EmptyState(t("No test attempts yet","अभी कोई टेस्ट प्रयास नहीं"),
+            t("The child's test attempts will appear here.","बच्चे के टेस्ट प्रयास यहाँ दिखाई देंगे।"))
+        else tests.take(20).forEach { attempt ->
+            val attemptId=attempt.optLongAny("attempt_id","attemptId","assessment_attempt_id","assessmentAttemptId")
+            val cert=certificates.firstOrNull { it.optLongAny("assessment_attempt_id","assessmentAttemptId")==attemptId }
+            Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(13.dp), verticalArrangement=Arrangement.spacedBy(6.dp)) {
+                Text(attempt.textAny("assessment_title","title").ifBlank { "Assessment" }, style=MaterialTheme.typography.titleMedium)
+                Text(attempt.textAny("subject_name","chapter_name","assessment_type"), style=MaterialTheme.typography.bodySmall,
+                    color=MaterialTheme.colorScheme.secondary)
+                val state=attempt.textAny("status")
+                Text(if(state=="RELEASED") attempt.textAny("final_score","score")+" / "+attempt.textAny("max_score")+" · "+t("Result released","परिणाम जारी")
+                    else t("Status","स्थिति")+": "+state)
+                when(cert?.textAny("status")) {
+                    "ISSUED" -> {
+                        Text(t("Certificate available","प्रमाणपत्र उपलब्ध है"), color=MaterialTheme.colorScheme.primary)
+                        Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                            OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"pdf")},
+                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text("PDF") }
+                            OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"png")},
+                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text("PNG") }
+                        }
+                    }
+                    "REVOKED" -> Text(t("Certificate revoked","प्रमाणपत्र निरस्त है"), color=MaterialTheme.colorScheme.error)
+                }
+            } }
+        }
+        ParentReportSectionTitle(t("Concepts needing support","जिन अवधारणाओं में सहायता चाहिए"))
+        if (concepts.isEmpty()) Text(t("No concept mastery details are available yet.","अभी अवधारणा महारत का विवरण उपलब्ध नहीं है।"),
+            color=MaterialTheme.colorScheme.secondary)
+        else concepts.take(6).forEach { item ->
+            Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp), verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                Text(item.textAny("concept_title").ifBlank { "Concept" }, style=MaterialTheme.typography.titleSmall)
+                Text(item.textAny("subject_name","chapter_name"), style=MaterialTheme.typography.bodySmall)
+                Text(item.optString("mastery_percent","0")+"% "+t("mastery","महारत"))
+            } }
+        }
+        ParentReportSectionTitle(t("Recent practice","हाल का अभ्यास"))
+        if(practice.isEmpty()) Text(t("No recent practice attempts.","अभ्यास के हाल के प्रयास नहीं हैं。"), color=MaterialTheme.colorScheme.secondary)
+        else practice.take(6).forEach { item ->
+            Card(Modifier.fillMaxWidth()) { Row(Modifier.fillMaxWidth().padding(12.dp),horizontalArrangement=Arrangement.SpaceBetween) {
+                Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(3.dp)) {
+                    Text(item.textAny("concept_title","chapter_name").ifBlank{"Practice"},style=MaterialTheme.typography.titleSmall)
+                    Text(item.textAny("question_type").ifBlank{"Question"},style=MaterialTheme.typography.bodySmall)
+                }
+                Text(if(item.optBoolean("correct")) t("Correct","सही") else if(item.has("correct")&&!item.isNull("correct")) t("Incorrect","गलत") else t("Review","समीक्षा"))
+            } }
+        }
+        Text(t("Parent view is read-only. The child must sign in with their own credentials to learn and take assessments.",
+            "अभिभावक दृश्य केवल देखने के लिए है। पढ़ाई और टेस्ट के लिए बच्चे को अपने लॉगिन से प्रवेश करना होगा।"),
+            style=MaterialTheme.typography.bodySmall, color=MaterialTheme.colorScheme.secondary)
+    }
+}
+@Composable private fun ParentReportMetric(title:String,value:String,detail:String,modifier:Modifier) {
+    Card(modifier=modifier) { Column(Modifier.padding(11.dp),verticalArrangement=Arrangement.spacedBy(4.dp)) {
+        Text(title,style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.secondary)
+        Text(value,style=MaterialTheme.typography.titleLarge); Text(detail,style=MaterialTheme.typography.bodySmall)
+    } }
+}
+@Composable private fun ParentReportSectionTitle(title:String) { Text(title,style=MaterialTheme.typography.titleLarge) }
+@Composable private fun ParentReportLine(label:String,value:String) {
+    Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween) {
+        Text(label,Modifier.weight(1f),style=MaterialTheme.typography.bodyMedium); Text(value,style=MaterialTheme.typography.titleSmall)
     }
 }
 
