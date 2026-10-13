@@ -125,7 +125,7 @@ internal data class InlineFractionPart(
 )
 
 internal fun splitInlineFractions(source: String): List<InlineFractionPart> {
-    val pattern = Regex("""(?<![\\w./])(\\d+)\\s*/\\s*(\\d+)(?![\\w.])""")
+    val pattern = Regex("""(?<![\w./])(\d+)\s*/\s*(\d+)(?![\w.])""")
     val result = mutableListOf<InlineFractionPart>()
     var cursor = 0
     for (match in pattern.findAll(source)) {
