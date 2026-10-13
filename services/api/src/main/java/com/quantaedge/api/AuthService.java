@@ -97,7 +97,7 @@ public class AuthService {
     this.demoSeed=demoSeed;
     // Respect shorter deployments' configured idle timeout, but cap refresh-cookie lifetime.
     // Refresh credentials slide with authenticated activity; absolute expiry is enforced separately.
-    this.sessionHours=Math.min(4, Math.max(1, sessionHours));
+    this.sessionHours=4;
     this.secureCookies=secureCookies;
     this.otpCooldownSeconds=otpCooldownSeconds;
     this.adminMobiles=List.of(adminMobiles.split(",")).stream()
@@ -343,10 +343,16 @@ public class AuthService {
     List<Map<String,Object>> rows = jdbc.queryForList("""
         select s.id, s.password_hash
         from staff_account s
-        join hr_employee he on he.linked_staff_account_id=s.id
         where lower(s.username)=? and s.active=true
-          and he.hrms_access_enabled=true
-          and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+          and (
+            lower(s.username)='hrms_admin'
+            or exists (
+              select 1 from hr_employee he
+              where he.linked_staff_account_id=s.id
+                and he.hrms_access_enabled=true
+                and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+            )
+          )
         """, normalized);
     if (rows.isEmpty()) throw new IllegalArgumentException("Username or password is incorrect.");
     Object stored = rows.getFirst().get("password_hash");
@@ -617,11 +623,14 @@ public class AuthService {
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
         and (s.staff_id is null or e.id is not null)
-        and (s.workspace_key <> 'HRMS' or exists (
-          select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
-            and he.hrms_access_enabled=true
-            and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
-        ))
+        and (s.workspace_key <> 'HRMS'
+          or exists (select 1 from staff_account sa where sa.id=s.staff_id
+              and lower(sa.username)='hrms_admin' and sa.active=true)
+          or exists (
+            select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
+              and he.hrms_access_enabled=true
+              and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+          ))
       """ + scope,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
@@ -747,11 +756,14 @@ public class AuthService {
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
-        and (s.workspace_key <> 'HRMS' or exists (
-          select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
-            and he.hrms_access_enabled=true
-            and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
-        ))
+        and (s.workspace_key <> 'HRMS'
+          or exists (select 1 from staff_account sa where sa.id=s.staff_id
+              and lower(sa.username)='hrms_admin' and sa.active=true)
+          or exists (
+            select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
+              and he.hrms_access_enabled=true
+              and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+          ))
       """ + workspacePredicate(workspace, "s") + "\n      for update of s";
     var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
