@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { PeopleEmptyState, PeopleFeedback, PeopleMetricCard, PeoplePageHeader, PeopleStatusBadge } from '../components/PeopleUI';
 
 type Session = { staffId?: number; role?: string; displayName?: string; permissions?: string[]; workspace?: string };
 type AccessUser = {
@@ -165,40 +166,20 @@ export default function HrmsAccessPage() {
     } finally { setSaving(false); }
   }
 
-  async function logout() {
-    try { await api('/api/v1/auth/logout', { method: 'POST' }); }
-    finally { router.replace('/login'); }
-  }
-
-  return (
+    return (
     <div className="shell">
-      <header className="topbar">
-        <div className="brand">QuantaEdge <span>PEOPLE OPERATIONS</span></div>
-        <nav aria-label="People Operations navigation" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <a href="/" className="secondary">Employees</a>
-          <a href="/attendance" className="secondary">Attendance & leave</a>
-          <a href="/payroll" className="secondary">Payroll</a>
-          <a href="/workforce" className="secondary">Extended HR</a>
-          <a href="/self-service" className="secondary">My workspace</a>
-        </nav>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span className="small">{session?.displayName || 'Team member'}</span>
-          <button type="button" className="secondary" onClick={() => void logout()}>Sign out</button>
-        </div>
-      </header>
+      
 
       <main className="main">
-        <div className="eyebrow">ACCESS GOVERNANCE · HRMS ONLY</div>
-        <h1>Employee login access</h1>
-        <p className="sub">Create employee logins, assign multiple HRMS roles, and revoke HRMS access without signing the employee out of Educational Admin.</p>
+        <PeoplePageHeader eyebrow="ACCESS GOVERNANCE · HRMS ONLY" title="Employee login access" description="Create employee logins, assign multiple HRMS roles, and revoke HRMS access without signing the employee out of Educational Admin." />
 
-        {error && <div className="error" role="alert">{error}</div>}
-        {notice && <div className="notice" role="status">{notice}</div>}
+        {error && <PeopleFeedback tone="danger" role="alert">{error}</PeopleFeedback>}
+        {notice && <PeopleFeedback tone="success" role="status">{notice}</PeopleFeedback>}
 
         <div className="cards">
-          <section className="card"><div className="label">Employee records</div><div className="metric">{loading ? '—' : rows.length}</div><div className="small">Canonical HR records</div></section>
-          <section className="card"><div className="label">HRMS access enabled</div><div className="metric">{loading ? '—' : rows.filter((r) => r.hrms_access_enabled).length}</div><div className="small">Access may still expire or be revoked</div></section>
-          <section className="card"><div className="label">No login linked</div><div className="metric">{loading ? '—' : rows.filter((r) => !r.staff_id).length}</div><div className="small">Employees awaiting credentials</div></section>
+          <PeopleMetricCard label="Employee records" value={loading ? '—' : rows.length} help="Canonical HR records" />
+          <PeopleMetricCard label="HRMS access enabled" value={loading ? '—' : rows.filter((r) => r.hrms_access_enabled).length} help="Access may still expire or be revoked" />
+          <PeopleMetricCard label="No login linked" value={loading ? '—' : rows.filter((r) => !r.staff_id).length} help="Employees awaiting credentials" />
         </div>
 
         <section className="panel">
@@ -209,17 +190,17 @@ export default function HrmsAccessPage() {
           <label style={{ display: 'block', margin: '16px 0' }}>Search employees
             <input className="input" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Name, employee number, username or role" />
           </label>
-          {loading ? <div className="empty">Loading employee access records…</div> : (
+          {loading ? <div className="empty" role="status" aria-live="polite">Loading employee access records…</div> : (
             <div className="table-wrap">
               <table>
                 <thead><tr><th>Employee</th><th>HRMS username</th><th>Assigned roles</th><th>HRMS access</th><th>Last sign-in</th><th>Action</th></tr></thead>
                 <tbody>
                   {filtered.map((row) => (
                     <tr key={row.employee_id}>
-                      <td><strong>{row.display_name}</strong><div className="small">{row.employee_number} · {pretty(row.employment_status)}</div></td>
+                      <td><strong>{row.display_name}</strong><div className="small">{row.employee_number} · <PeopleStatusBadge status={pretty(row.employment_status)} /></div></td>
                       <td>{row.username || 'Not created'}{reserved(row) && <div className="small">People Operations Super Admin</div>}</td>
                       <td>{(row.roles || []).map(pretty).join(', ') || 'Employee'}<div className="small">{(row.permissions || []).length} effective permissions</div></td>
-                      <td><span className={row.hrms_access_enabled ? 'status status-active' : 'status'}>{row.hrms_access_enabled ? 'Enabled' : 'Disabled'}</span></td>
+                      <td><PeopleStatusBadge status={row.hrms_access_enabled ? 'Enabled' : 'Disabled'} /></td>
                       <td>{row.last_login_at ? new Date(row.last_login_at).toLocaleString() : 'Never'}</td>
                       <td style={{ minWidth: 180 }}>
                         <button className="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? 'View account' : 'Manage access'}</button>
@@ -230,7 +211,7 @@ export default function HrmsAccessPage() {
                   ))}
                 </tbody>
               </table>
-              {!filtered.length && <div className="empty">No employees match the search.</div>}
+              {!filtered.length && <PeopleEmptyState title="No employees match the search." />}
             </div>
           )}
         </section>
@@ -238,7 +219,7 @@ export default function HrmsAccessPage() {
         {selected && (
           <section className="panel">
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'start' }}>
-              <div><div className="eyebrow">EMPLOYEE ACCESS CONFIGURATION</div><h2>{selected.display_name}</h2><p className="small">{selected.employee_number} · {pretty(selected.employment_status)}</p></div>
+              <div><div className="eyebrow">EMPLOYEE ACCESS CONFIGURATION</div><h2>{selected.display_name}</h2><p className="small">{selected.employee_number} · <PeopleStatusBadge status={pretty(selected.employment_status)} /></p></div>
               <button className="secondary" type="button" onClick={() => { setSelectedId(null); setShowCredentials(false); }} disabled={saving}>Close</button>
             </div>
 

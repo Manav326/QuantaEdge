@@ -52,7 +52,7 @@
 
 - [x] Add a dedicated People Operations workspace layout.
 - [x] Centralize HRMS navigation, active-route behavior and labels.
-- [x] Group navigation by People/Organization, Time/Leave, Payroll, Academic Workforce, and My Employment.
+- [x] Group navigation by People/Organization, Access Governance, Time/Leave, Payroll, Academic Workforce, and My Employment.
 - [x] Display links based on session role/permissions without replacing API enforcement.
 - [x] Remove per-page duplicate navigation headers while preserving each page's unique body and workflow.
 - [x] Provide desktop collapsible sidebar and accessible mobile navigation drawer.
@@ -134,8 +134,9 @@
 
 **Gate:** no financial or workforce lifecycle rule is altered by UI work; all available automated and manual checks pass.
 
-## Phase 8 — Employee self-service and authentication
+## Phase 8 — Employee self-service, access governance and authentication
 
+- [ ] HRMS access governance: employee login provisioning, role/permission assignment, access enable/disable, credential reset and reserved-account safeguards.
 - [ ] Profile details and profile-change requests/history.
 - [ ] Attendance correction request/history.
 - [ ] Leave requests and outcomes.
@@ -187,6 +188,7 @@
 - [x] `/workforce` — Recruitment, performance, assets and exits.
 - [x] `/assignments` — Teaching assignments, academic periods, reports/workload.
 - [x] `/my-classes` — Upcoming/live/past teaching classes and private meeting links.
+- [x] `/access` — HRMS login access, role/permission assignments and credential reset.
 - [x] `/self-service` — Profile, employee requests, leave, corrections and issued payslips.
 - [x] `/login` — Staff login and OTP verification.
 - [x] `/change-password` — forced password-change flow; keep it outside the authenticated workspace chrome.
@@ -213,14 +215,13 @@ Implementation is proceeding directly on `main`. Each check distinguishes source
 - [x] Commit `ec8ca2b`: added the People Operations design stylesheet and workspace shell; packaged the official QuantaEdge wordmark and icon inside the People app.
 - [x] Commit `1c2f66e`: retained the existing HRMS-specific session boundary, forced-password-change handling, refresh recovery, and HRMS workspace scope.
 - [x] Commit `aba8567`: removed duplicate route headers, avoided nested `<main>` elements, and added the skip link.
-- [x] Commit `b00477c`: introduced shared People UI primitives and migrated all seven content-route page headers.
-- [x] Commits `e399ee4`, `d086428`, and `ba27cd8`: migrated metric cards, status badges, and class empty states across core HRMS screens.
-- [x] Commit `be098d6`: standardized top-level feedback and introduced a formal design-token scale.
-- [x] Commit `f2715ce`: applied the final CSS token-consistency pass and updated this checklist.
-- [x] Commit `0878d62`: expanded semantic status badges and standardized plain empty states. Full Actions run [38369668028](https://github.com/Manav326/QuantaEdge/actions/runs/38369668028) completed successfully: People Operations, Admin, Web and API images, API verification, content-import safeguards and Android build all passed.
+- [x] Commit `b00477c`: introduced shared People UI primitives and migrated all seven original content-route page headers.
+- [x] Commits `e399ee4`, `d086428`, `ba27cd8`, and `0878d62`: migrated metric cards, semantic status badges, feedback patterns, and reusable empty states across the original HRMS routes.
+- [x] Commit `f2715ce`: formalized token usage for spacing, radii, controls, surfaces and focus styling.
+- [x] Commit `2c57445`: introduced the shared accessible dialog for employee directory and teaching-assignment history/edit flows.
+- [x] Commit `c0bc8cc`: added the static HRMS UI contract checker to the People Operations CI job. Full Actions run [38370400699](https://github.com/Manav326/QuantaEdge/actions/runs/38370400699) completed successfully: People Operations, Admin, Web and API images, API verification, content-import safeguards and Android build all passed.
+- [x] Current follow-up adds `/access` to the common shell and page-header/component system; corrects navigation visibility to reflect `HR_ACCESS_MANAGE` and `TEACHING_ASSIGNMENT_VIEW`; and extends the UI contract checker to include access governance. Its CI run is pending.
 - [x] Official branding assets are packaged under `apps/people/public/branding`; the People app retains `PeopleSessionBoundary` and the HRMS workspace header.
-- [x] Current implementation adds a shared `PeopleDialog` for employee-history/create/edit/organization-structure and teaching-assignment history dialogs, including focus trap/restoration, Escape close, backdrop close, and scroll locking.
-- [x] Added a static People UI contract checker and a CI step to prevent route/shell/token/accessibility/asset regressions. The commit containing this addition still requires its own full CI run.
 - [ ] Rendered desktop/tablet/mobile screenshots, live browser interactions, role/session workflows, and payslip-print review remain pending. These must not be inferred from image builds alone.
 
-The latest completed full CI result is run `38369668028` on commit `0878d62`. The next commit adds accessible dialog behavior and a new UI-contract CI gate; wait for that commit's workflow before declaring the current code green.
+Run `38370400699` validates commit `c0bc8cc`. The route-inventory/permission follow-up is not considered green until its own full workflow completes.

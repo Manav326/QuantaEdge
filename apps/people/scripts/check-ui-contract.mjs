@@ -30,6 +30,8 @@ assert(workspace.includes("X-QE-Workspace': 'HRMS'"), 'Workspace session request
 assert(sessionBoundary.includes("'HRMS'"), 'Session boundary must preserve HRMS workspace validation.');
 assert(workspace.includes("pathname === '/change-password'"), 'Forced password-change route must remain outside the workspace chrome.');
 assert(workspace.includes('id="main-content" tabIndex={-1}'), 'Skip link target must be programmatically focusable.');
+assert(workspace.includes("href: '/access', icon: '⌁', permissions: ['HR_ACCESS_MANAGE']"), 'HRMS access management must be permission-gated in navigation.');
+assert(workspace.includes("'TEACHING_ASSIGNMENT_VIEW'"), 'Teaching classes/assignment navigation must honor TEACHING_ASSIGNMENT_VIEW.');
 assert(!workspace.includes('<main className="qe-people-page-slot"'), 'Workspace must not nest a main landmark around page mains.');
 
 for (const exportName of [
@@ -52,6 +54,7 @@ const routePages = [
   ['/self-service', 'apps/people/app/self-service/page.tsx'],
   ['/assignments', 'apps/people/app/assignments/page.tsx'],
   ['/my-classes', 'apps/people/app/my-classes/page.tsx'],
+  ['/access', 'apps/people/app/access/page.tsx'],
 ];
 
 for (const [route, path] of routePages) {

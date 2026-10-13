@@ -1317,6 +1317,33 @@ button:disabled,
   background: #f8fafc;
 }
 
+
+.qe-people-button--neutral {
+  border-color: var(--line);
+  background: #f8fafc;
+  color: var(--ink);
+}
+
+.qe-people-button--neutral:hover {
+  border-color: #d0d5dd;
+  background: #f2f4f7;
+}
+
+.qe-people-button-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  flex: 0 0 13px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: qe-people-button-spin .7s linear infinite;
+}
+
+@keyframes qe-people-button-spin {
+  to { transform: rotate(360deg); }
+}
+
 .qe-people-button--danger {
   border-color: #fecdca;
   background: #fff1f0;

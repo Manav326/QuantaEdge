@@ -46,8 +46,8 @@ export function PeopleMetricCard({
 
 function inferredTone(status: string): PeopleStatusTone {
   const value = status.trim().toLowerCase().replaceAll('_', ' ');
-  if (/\b(active|approved|complete|completed|published|paid|present|verified|issued|accepted|created|effective|success)\b/.test(value)) return 'success';
-  if (/\b(rejected|failed|failure|cancelled|canceled|inactive|separated|absent|denied|error|overdue|unpaid)\b/.test(value)) return 'danger';
+  if (/\b(active|enabled|approved|complete|completed|published|paid|present|verified|issued|accepted|created|effective|success)\b/.test(value)) return 'success';
+  if (/\b(rejected|failed|failure|cancelled|canceled|inactive|disabled|separated|absent|denied|error|overdue|unpaid)\b/.test(value)) return 'danger';
   if (/\b(pending|draft|review|planned|half day|awaiting|queued|processing|on leave|probation)\b/.test(value)) return 'warning';
   if (/\b(remote|scheduled|live|upcoming|in progress|submitted)\b/.test(value)) return 'info';
   return 'neutral';
