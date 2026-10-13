@@ -53,37 +53,42 @@ public class HrEmployeeSelfServiceController {
   @GetMapping("/attendance")
   public Map<String,Object> attendance(@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestParam(required=false) String from, @RequestParam(required=false) String to,
-      @RequestParam(defaultValue="100") int limit) {
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset) {
     long employeeId = linkedEmployeeId(context);
     LocalDate end = parseDate(to, LocalDate.now());
     LocalDate start = parseDate(from, end.withDayOfMonth(1));
     if (end.isBefore(start)) throw bad("The end date cannot be before the start date.");
     if (java.time.temporal.ChronoUnit.DAYS.between(start,end)>92) throw bad("Choose an attendance range of 93 days or fewer.");
-    int pageSize=Math.max(1,Math.min(limit,200));
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int pageOffset=Math.max(0,Math.min(offset,1_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select work_date,attendance_status,check_in_at,check_out_at,
         case when check_in_at is not null and check_out_at is not null
           then floor(extract(epoch from (check_out_at-check_in_at))/60)::int else null end minutes_worked,
         notes
       from hr_attendance_record where employee_id=? and work_date between ? and ?
-      order by work_date desc limit ?
-      """,employeeId,Date.valueOf(start),Date.valueOf(end),pageSize);
-    return Map.of("items",items,"from",start.toString(),"to",end.toString(),"limit",pageSize);
+      order by work_date desc limit ? offset ?
+      """,employeeId,Date.valueOf(start),Date.valueOf(end),pageSize,pageOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_attendance_record where employee_id=? and work_date between ? and ?",
+      Long.class,employeeId,Date.valueOf(start),Date.valueOf(end));
+    return Map.of("items",items,"total",total==null?0L:total,"from",start.toString(),"to",end.toString(),"limit",pageSize,"offset",pageOffset);
   }
 
   @GetMapping("/leave/requests")
   public Map<String,Object> leaveRequests(@RequestAttribute(value="authContext",required=false) AuthContext context,
-      @RequestParam(defaultValue="100") int limit) {
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset) {
     long employeeId=linkedEmployeeId(context);
-    int pageSize=Math.max(1,Math.min(limit,200));
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int pageOffset=Math.max(0,Math.min(offset,1_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select r.id,r.public_id,r.leave_type_code,t.display_name leave_type,t.paid,
         r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,
         r.reviewed_at,r.created_at,r.updated_at
       from hr_leave_request r join hr_leave_type t on t.code=r.leave_type_code
-      where r.employee_id=? order by r.created_at desc,r.id desc limit ?
-      """,employeeId,pageSize);
-    return Map.of("items",items,"limit",pageSize);
+      where r.employee_id=? order by r.created_at desc,r.id desc limit ? offset ?
+      """,employeeId,pageSize,pageOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_leave_request where employee_id=?",Long.class,employeeId);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",pageSize,"offset",pageOffset);
   }
 
   @GetMapping("/leave/types")
@@ -93,13 +98,17 @@ public class HrEmployeeSelfServiceController {
   }
 
   @GetMapping("/payslips")
-  public Map<String,Object> payslips(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> payslips(@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset) {
     long employeeId=linkedEmployeeId(context);
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int pageOffset=Math.max(0,Math.min(offset,1_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
       select id,public_id,run_id,version_no,snapshot::text snapshot,checksum,issued_at
-      from hr_payslip where employee_id=? order by issued_at desc,id desc
-      """,employeeId);
-    return Map.of("items",items);
+      from hr_payslip where employee_id=? order by issued_at desc,id desc limit ? offset ?
+      """,employeeId,pageSize,pageOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_payslip where employee_id=?",Long.class,employeeId);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",pageSize,"offset",pageOffset);
   }
 
   @GetMapping("/leave/balances")
@@ -169,15 +178,20 @@ public class HrEmployeeSelfServiceController {
   }
 
   @GetMapping("/attendance/correction-requests")
-  public Map<String,Object> attendanceCorrectionRequests(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> attendanceCorrectionRequests(@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset) {
     long employeeId=linkedEmployeeId(context);
-    return Map.of("items",jdbc.queryForList("""
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int pageOffset=Math.max(0,Math.min(offset,1_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select r.id,r.public_id,r.attendance_record_id,r.work_date,r.requested_status,
         r.requested_check_in_at,r.requested_check_out_at,r.requested_notes,r.reason,
         r.request_status,r.review_note,r.reviewed_at,r.created_at,r.updated_at
       from hr_attendance_correction_request r where r.employee_id=?
-      order by r.created_at desc,r.id desc limit 100
-      """,employeeId));
+      order by r.created_at desc,r.id desc limit ? offset ?
+      """,employeeId,pageSize,pageOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_attendance_correction_request where employee_id=?",Long.class,employeeId);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",pageSize,"offset",pageOffset);
   }
 
   @PostMapping("/attendance/correction-requests")
@@ -241,14 +255,19 @@ public class HrEmployeeSelfServiceController {
   }
 
   @GetMapping("/profile-change-requests")
-  public Map<String,Object> profileChangeRequests(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> profileChangeRequests(@RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset) {
     long employeeId=linkedEmployeeId(context);
-    return Map.of("items",jdbc.queryForList("""
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int pageOffset=Math.max(0,Math.min(offset,1_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select id,public_id,requested_values::text requested_values,reason,request_status,
         review_note,reviewed_at,created_at,updated_at
       from hr_employee_change_request where employee_id=?
-      order by created_at desc,id desc limit 100
-      """,employeeId));
+      order by created_at desc,id desc limit ? offset ?
+      """,employeeId,pageSize,pageOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_employee_change_request where employee_id=?",Long.class,employeeId);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",pageSize,"offset",pageOffset);
   }
 
   @PostMapping("/profile-change-requests")
