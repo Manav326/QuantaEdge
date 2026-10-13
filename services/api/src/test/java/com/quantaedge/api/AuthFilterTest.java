@@ -43,6 +43,38 @@ class AuthFilterTest {
   }
 
   @Test
+  void hrmsWorkspaceCannotInvokeParentLogin() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest("POST", "/api/v1/auth/parent-login");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "HRMS");
+    request.addHeader("Origin", "http://localhost:3002");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+
+    filter.doFilter(request, response, new MockFilterChain());
+
+    assertEquals(403, response.getStatus());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
+  void parentWorkspaceCannotInvokeHrmsLogin() throws Exception {
+    AuthService auth = mock(AuthService.class);
+    StaffAuditService audit = mock(StaffAuditService.class);
+    AuthFilter filter = new AuthFilter(auth, audit);
+    MockHttpServletRequest request = new MockHttpServletRequest("POST", "/api/v1/auth/hrms-login");
+    request.addHeader(AuthService.WORKSPACE_HEADER, "PARENT");
+    request.addHeader("Origin", "http://localhost:3000");
+    MockHttpServletResponse response = new MockHttpServletResponse();
+
+    filter.doFilter(request, response, new MockFilterChain());
+
+    assertEquals(403, response.getStatus());
+    verifyNoInteractions(auth);
+  }
+
+  @Test
   void corsPreflightDoesNotRequireWorkspaceCookie() throws Exception {
     AuthService auth = mock(AuthService.class);
     StaffAuditService audit = mock(StaffAuditService.class);
