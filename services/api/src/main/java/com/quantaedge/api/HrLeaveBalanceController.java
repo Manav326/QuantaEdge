@@ -96,7 +96,7 @@ public class HrLeaveBalanceController {
     String sourceReference=optional(body.get("sourceReference"),160);
     long organizationId=((Number)employee.get("organization_id")).longValue();
     if(quantity.signum()<0){
-      jdbc.queryForObject("select pg_advisory_xact_lock(hashtext(?))",Object.class,organizationId+":"+employeeId+":"+type);
+      jdbc.query("select pg_advisory_xact_lock(hashtext(?))",rs->{if(rs.next())rs.getObject(1);},organizationId+":"+employeeId+":"+type);
       BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(effectiveDate));
       if(balance==null||balance.add(quantity).signum()<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"This adjustment would make the leave balance negative.");
     }
@@ -111,6 +111,42 @@ public class HrLeaveBalanceController {
     }
     Map<String,Object> row=jdbc.queryForMap("select id,organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date,source_type,source_reference,reason,reverses_transaction_id,created_by_staff_id,created_at from hr_leave_balance_transaction where id=?",id);
     audit.recordAction(context,"/api/v1/hr/leave/balances/transactions/"+id,"Recorded "+transactionType+" leave balance transaction for employee "+employeeId+" ("+type+")");
+    return row;
+  }
+
+  @PostMapping("/leave/balances/transactions/{transactionId}/reverse")
+  @Transactional
+  public Map<String,Object> reverseTransaction(@PathVariable long transactionId,@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    authorization.requirePermission(context,"HR_LEAVE_BALANCE_MANAGE");
+    if(transactionId<=0)throw bad("Transaction ID must be positive.");
+    Map<String,Object> original;
+    try {
+      original=jdbc.queryForMap("select id,organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date from hr_leave_balance_transaction where id=?",transactionId);
+    } catch(org.springframework.dao.EmptyResultDataAccessException ex) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Leave ledger transaction not found.");
+    }
+    long employeeId=((Number)original.get("employee_id")).longValue();
+    long organizationId=((Number)original.get("organization_id")).longValue();
+    String type=String.valueOf(original.get("leave_type_code"));
+    jdbc.query("select pg_advisory_xact_lock(hashtext(?))",rs->{if(rs.next())rs.getObject(1);},organizationId+":"+employeeId+":"+type);
+    Boolean alreadyReversed=jdbc.queryForObject("select exists(select 1 from hr_leave_balance_transaction where reverses_transaction_id=?)",Boolean.class,transactionId);
+    if(Boolean.TRUE.equals(alreadyReversed))throw new ResponseStatusException(HttpStatus.CONFLICT,"This ledger transaction has already been reversed.");
+    LocalDate effectiveDate=body.get("effectiveDate")==null?((Date)original.get("effective_date")).toLocalDate():parseRequiredDate(body.get("effectiveDate"));
+    String reason=required(body.get("reason"),1000,"Reversal reason");
+    BigDecimal reversalQuantity=((BigDecimal)original.get("quantity_days")).negate();
+    if(reversalQuantity.signum()<0) {
+      BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(effectiveDate));
+      if(balance==null||balance.add(reversalQuantity).signum()<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"This reversal would make the leave balance negative. Reverse dependent consumption first.");
+    }
+    Long id;
+    try {
+      id=jdbc.queryForObject("insert into hr_leave_balance_transaction(organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date,source_type,source_reference,reason,reverses_transaction_id,created_by_staff_id) values (?,?,?,?,?,?,?,?,?,?,?) returning id",Long.class,organizationId,employeeId,type,"REVERSAL",reversalQuantity,Date.valueOf(effectiveDate),"REVERSAL","TXN:"+transactionId,reason,transactionId,context.staffId());
+    } catch(org.springframework.dao.DuplicateKeyException ex) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"This ledger transaction has already been reversed.");
+    }
+    Map<String,Object> row=jdbc.queryForMap("select id,organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date,source_type,source_reference,reason,reverses_transaction_id,created_by_staff_id,created_at from hr_leave_balance_transaction where id=?",id);
+    audit.recordAction(context,"/api/v1/hr/leave/balances/transactions/"+id+"/reverse","Reversed leave ledger transaction "+transactionId+" for employee "+employeeId+" ("+type+")");
     return row;
   }
 
