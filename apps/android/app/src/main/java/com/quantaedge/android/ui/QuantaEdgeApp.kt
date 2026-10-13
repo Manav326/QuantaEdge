@@ -1225,8 +1225,10 @@ fun QuantaEdgeApp() {
                         contentScale = ContentScale.Fit
                     )
                     Spacer(modifier = Modifier.weight(1f))
-                    TextButton(onClick = { toggleLanguage() }, enabled = !busy) {
-                        Text(if (language == "hi") "EN" else "हिंदी")
+                    if (route !in setOf(AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)) {
+                        TextButton(onClick = { toggleLanguage() }, enabled = !busy) {
+                            Text(if (language == "hi") "EN" else "हिंदी")
+                        }
                     }
                 }
                 HorizontalDivider()
@@ -1742,7 +1744,7 @@ private fun StudentHomeScreen(
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(if (language == "hi") "नमस्ते, $name" else "Welcome, $name", style = MaterialTheme.typography.headlineSmall)
-        Text(if (className.isNotBlank()) "कक्षा $className" else "आपकी सीखने की जगह", style = MaterialTheme.typography.bodyMedium)
+        Text(localizedUiText(if (className.isNotBlank()) "कक्षा $className" else "आपकी सीखने की जगह"), style = MaterialTheme.typography.bodyMedium)
         if (lessonCount >= 0) Text(localizedUiText("पूरे किए गए पाठ: $lessonCount"), style = MaterialTheme.typography.bodySmall)
         val lessonStats = profile.optJSONObject("lessonStats") ?: JSONObject()
         val completedLessons = profile.optInt("completedLessons",
@@ -1843,7 +1845,7 @@ private fun LessonListScreen(
     Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(if (subject == "maths") "गणित" else "विज्ञान", style = MaterialTheme.typography.headlineSmall)
+                Text(localizedUiText(if (subject == "maths") "गणित" else "विज्ञान"), style = MaterialTheme.typography.headlineSmall)
                 Text(if (language == "hi") "प्रकाशित पाठ और प्रगति" else "Published lessons and progress",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
@@ -2184,7 +2186,7 @@ private fun AssessmentAttemptScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(if (deadlineReached) "समय पूरा" else "समय शेष", style = MaterialTheme.typography.titleSmall)
+                    Text(localizedUiText(if (deadlineReached) "समय पूरा" else "समय शेष"), style = MaterialTheme.typography.titleSmall)
                     Text(localizedUiText("$minutes:$seconds"), style = MaterialTheme.typography.titleLarge,
                         color = if (remainingSeconds <= 60L) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
                 }
@@ -2319,7 +2321,7 @@ private fun AssessmentAttemptScreen(
         } else if (offlinePendingSync) {
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0,
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                Text(if (busy) "Sync शुरू हो रहा है…" else "Sync की कोशिश करें")
+                Text(localizedUiText(if (busy) "Sync शुरू हो रहा है…" else "Sync की कोशिश करें"))
             }
         } else if (!released) {
             Button(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
@@ -2514,7 +2516,7 @@ private fun ResourcesScreen(
                             Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("पढ़ें")) }
                             TextButton(onClick = { onDownload(doc) }, enabled = !busy && downloadState?.active != true,
                                 modifier = Modifier.weight(1f)) {
-                                Text(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड")
+                                Text(localizedUiText(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड"))
                             }
                         }
                         if (cached > 0) {
