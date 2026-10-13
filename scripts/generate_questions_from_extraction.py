@@ -13,6 +13,7 @@ import math
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -20,6 +21,9 @@ from pathlib import Path
 from typing import Any
 
 SUPPORTED_TYPES = {"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL"}
+MAX_MODEL_ATTEMPTS = 5
+RETRYABLE_HTTP_STATUSES = frozenset({408, 425, 429, 500, 502, 503, 504})
+MAX_MODEL_RETRY_DELAY_SECONDS = 30
 DIFFICULTIES = {"EASY", "MEDIUM", "HARD"}
 CODE_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 SHA_RE = re.compile(r"[0-9a-fA-F]{64}")
@@ -215,7 +219,21 @@ def model_endpoint(base_url: str) -> str:
     return base + "/chat/completions" if base.endswith("/v1") else base + "/v1/chat/completions"
 
 
-def call_model(prompt: str, api_key: str, base_url: str, model: str, timeout: int) -> dict[str, Any]:
+def _model_retry_delay(attempt: int, retry_after: str | None = None) -> float:
+    if retry_after is not None:
+        try:
+            return min(MAX_MODEL_RETRY_DELAY_SECONDS, max(0.0, float(retry_after.strip())))
+        except (TypeError, ValueError):
+            pass
+    return min(MAX_MODEL_RETRY_DELAY_SECONDS, float(2 ** attempt))
+
+
+def call_model(
+    prompt: str, api_key: str, base_url: str, model: str, timeout: int,
+    max_attempts: int = MAX_MODEL_ATTEMPTS,
+) -> dict[str, Any]:
+    if not 1 <= max_attempts <= MAX_MODEL_ATTEMPTS:
+        raise ValueError(f"max_attempts must be between 1 and {MAX_MODEL_ATTEMPTS}.")
     payload = {
         "model": model, "temperature": 0.2,
         "messages": [
@@ -227,14 +245,28 @@ def call_model(prompt: str, api_key: str, base_url: str, model: str, timeout: in
         model_endpoint(base_url), data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), method="POST",
         headers={"Authorization": "Bearer " + api_key, "Content-Type": "application/json; charset=utf-8", "Accept": "application/json"},
     )
-    try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            raw = response.read().decode("utf-8")
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:1200]
-        raise RuntimeError(f"Question model API returned HTTP {exc.code}: {detail}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"Cannot reach configured question model API: {exc.reason}") from exc
+    raw: str | None = None
+    for attempt in range(max_attempts):
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                raw = response.read().decode("utf-8")
+            break
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")[:1200]
+            if exc.code in RETRYABLE_HTTP_STATUSES and attempt + 1 < max_attempts:
+                headers = getattr(exc, "headers", None)
+                retry_after = headers.get("Retry-After") if headers is not None else None
+                time.sleep(_model_retry_delay(attempt, retry_after))
+                continue
+            raise RuntimeError(f"Question model API returned HTTP {exc.code}: {detail}") from exc
+        except (urllib.error.URLError, TimeoutError) as exc:
+            if attempt + 1 < max_attempts:
+                time.sleep(_model_retry_delay(attempt))
+                continue
+            reason = exc.reason if isinstance(exc, urllib.error.URLError) else str(exc)
+            raise RuntimeError(f"Cannot reach configured question model API after {max_attempts} attempts: {reason}") from exc
+    if raw is None:
+        raise RuntimeError(f"Question model request failed after {max_attempts} attempts.")
     try:
         response_data = json.loads(raw)
         content = response_data["choices"][0]["message"]["content"]
@@ -425,6 +457,63 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
     }
 
 
+def validate_resume_candidate(
+    candidate: dict[str, Any], curriculum: dict[str, Any], source: dict[str, Any],
+    chapter: dict[str, Any], questions_per_chapter: int, model: str,
+) -> int:
+    """Validate a previously completed chapter bundle before skipping it on --resume."""
+    if not isinstance(candidate, dict):
+        raise ValueError("Existing resume candidate must be a JSON object.")
+    generated = candidate.get("generated_by")
+    candidate_source = candidate.get("source")
+    candidate_chapter = candidate.get("chapter")
+    candidate_curriculum = candidate.get("curriculum")
+    if candidate.get("bundle_status") != "AI_GENERATED_DRAFT":
+        raise ValueError("Existing resume candidate is not marked AI_GENERATED_DRAFT.")
+    if not isinstance(generated, dict) or generated.get("method") != "ai-question-generation":
+        raise ValueError("Existing resume candidate has no recognized AI-generation metadata.")
+    if (generated.get("source_pdf_sha256") != source.get("pdf_sha256")
+            or not isinstance(candidate_source, dict)
+            or candidate_source.get("pdf_sha256") != source.get("pdf_sha256")):
+        raise ValueError("Existing resume candidate uses a different source PDF; refusing to skip or overwrite it.")
+    if (not isinstance(candidate_chapter, dict)
+            or candidate_chapter.get("code") != chapter.get("code")):
+        raise ValueError("Existing resume candidate targets a different chapter; refusing to reuse it.")
+    if generated.get("model") != model:
+        raise ValueError("Existing resume candidate was generated by a different model; pass the same --model or use a new output directory.")
+    if generated.get("review_required") is not True or generated.get("auto_publish") is not False:
+        raise ValueError("Existing resume candidate does not preserve the mandatory review-only publishing gate.")
+    if not isinstance(candidate_curriculum, dict):
+        raise ValueError("Existing resume candidate is missing curriculum identity.")
+    expected_curriculum = {
+        "class_code": str(curriculum.get("class_code")),
+        "subject_code": curriculum.get("subject_code"),
+        "language": curriculum.get("language", "hi"),
+    }
+    for key, expected in expected_curriculum.items():
+        if str(candidate_curriculum.get(key, "")) != str(expected):
+            raise ValueError(f"Existing resume candidate has a different curriculum {key}; refusing to reuse it.")
+    lessons = candidate.get("lessons")
+    if not isinstance(lessons, list) or not lessons:
+        raise ValueError("Existing resume candidate contains no completed lessons.")
+    question_count = 0
+    for lesson in lessons:
+        if not isinstance(lesson, dict) or not isinstance(lesson.get("questions"), list):
+            raise ValueError("Existing resume candidate has malformed lesson/question data.")
+        for question in lesson["questions"]:
+            if (not isinstance(question, dict)
+                    or not isinstance(question.get("prompt"), str) or not question["prompt"].strip()
+                    or question.get("question_type") not in SUPPORTED_TYPES):
+                raise ValueError("Existing resume candidate contains a malformed question.")
+            question_count += 1
+    if question_count != questions_per_chapter or generated.get("question_count") != question_count:
+        raise ValueError(
+            f"Existing resume candidate contains {question_count} questions; expected {questions_per_chapter}. "
+            "Use a new output directory rather than overwriting a different candidate."
+        )
+    return question_count
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--extraction", required=True, type=Path, help="DRAFT_EXTRACTION_ONLY JSON from scert_extract_review.py")
@@ -435,6 +524,7 @@ def main() -> int:
     parser.add_argument("--chapter-code", action="append", default=[], help="Chapter code filter; repeat as needed")
     parser.add_argument("--max-chapters", type=int, default=0, help="Budget/test limit; zero means all mapped chapters")
     parser.add_argument("--max-api-calls", type=int, default=100, help="Hard cap on model requests per run")
+    parser.add_argument("--resume", action="store_true", help="Skip only validated, matching chapter bundles already completed in the output directory")
     parser.add_argument("--api-base-url", default=os.environ.get("OPENAI_API_BASE_URL", "https://api.openai.com"))
     parser.add_argument("--model", default=os.environ.get("QUANTAEDGE_QUESTION_MODEL", ""))
     parser.add_argument("--timeout", type=int, default=90)
@@ -476,25 +566,61 @@ def main() -> int:
         for chapter in chapters:
             chunks = make_chunks(chapter["pages"], args.max_context_chars)
             plan.append((chapter, allocate_questions(chunks, args.questions_per_chapter)))
-        total_calls = sum(len(allocations) for _, allocations in plan)
         if not plan:
             raise ValueError("No eligible mapped chapters remain after filters.")
-        if total_calls > args.max_api_calls:
-            raise ValueError(f"Planned model requests ({total_calls}) exceed --max-api-calls ({args.max_api_calls}); reduce filters or deliberately raise the cap.")
         output_files = [args.output_dir / f"{chapter['code']}.ai-generated-draft.json" for chapter, _ in plan]
         existing = [str(path) for path in output_files if path.exists()]
-        if existing:
-            raise ValueError("Refusing to overwrite existing candidate bundle(s): " + ", ".join(existing))
+        if existing and not args.resume:
+            raise ValueError("Refusing to overwrite existing candidate bundle(s): " + ", ".join(existing)
+                             + ". To continue a failed run, pass --resume with the same source, model and question target.")
+
+        completed = []
+        pending_plan = []
+        for chapter, allocations in plan:
+            destination = args.output_dir / f"{chapter['code']}.ai-generated-draft.json"
+            if not destination.exists():
+                pending_plan.append((chapter, allocations))
+                continue
+            try:
+                existing_bundle = json.loads(destination.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                raise ValueError(f"Cannot resume from {destination}: existing candidate JSON is unreadable.") from exc
+            question_count = validate_resume_candidate(
+                existing_bundle, curriculum, source, chapter, args.questions_per_chapter, args.model,
+            )
+            completed.append({
+                "chapter_code": chapter["code"], "file": str(destination),
+                "question_count": question_count, "lesson_count": len(existing_bundle["lessons"]),
+                "bundle_status": "AI_GENERATED_DRAFT", "resumed_existing": True,
+                "student_delivery_allowed": False,
+            })
+        plan = pending_plan
+        total_calls = sum(len(allocations) for _, allocations in plan)
+        if total_calls > args.max_api_calls:
+            raise ValueError(f"Planned model requests for unfinished chapters ({total_calls}) exceed --max-api-calls ({args.max_api_calls}); reduce filters or deliberately raise the cap.")
         summary = {
-            "mode": "GENERATE" if args.generate else "DRY_RUN", "chapters": len(plan),
-            "planned_model_requests": total_calls, "questions_per_chapter": args.questions_per_chapter,
-            "planned_question_total": len(plan) * args.questions_per_chapter,
+            "mode": "GENERATE" if args.generate else "DRY_RUN",
+            "chapters": len(plan) + len(completed),
+            "chapters_pending": len(plan),
+            "chapters_already_completed": len(completed),
+            "planned_model_requests": total_calls,
+            "questions_per_chapter": args.questions_per_chapter,
+            "planned_question_total": (len(plan) + len(completed)) * args.questions_per_chapter,
+            "pending_question_total": len(plan) * args.questions_per_chapter,
+            "completed_chapter_codes": [item["chapter_code"] for item in completed],
             "output_directory": str(args.output_dir), "source_pdf_sha256": source["pdf_sha256"],
             "model": args.model or "(not configured)", "auto_publish": False,
             "chapter_codes": [chapter["code"] for chapter, _ in plan],
+            "resume_enabled": args.resume,
         }
         if not args.generate:
             print(json.dumps(summary, ensure_ascii=False, indent=2))
+            return 0
+        if not plan:
+            print(json.dumps({
+                "mode": "GENERATED_DRAFT_CANDIDATES", "results": completed,
+                "auto_publish": False, "resumed_without_new_model_calls": True,
+            }, ensure_ascii=False, indent=2))
             return 0
         if not args.confirm_external_processing:
             raise ValueError("Generation sends extracted text to the configured model provider. Review data/privacy requirements, then pass --confirm-external-processing.")
@@ -539,7 +665,7 @@ def main() -> int:
                 "lesson_count": len(candidate["lessons"]), "bundle_status": candidate["bundle_status"],
                 "student_delivery_allowed": False,
             })
-        print(json.dumps({"mode": "GENERATED_DRAFT_CANDIDATES", "results": generated, "auto_publish": False}, ensure_ascii=False, indent=2))
+        print(json.dumps({"mode": "GENERATED_DRAFT_CANDIDATES", "results": completed + generated, "auto_publish": False}, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError, json.JSONDecodeError, RuntimeError) as exc:
         print(f"Question generation stopped safely: {exc}", file=sys.stderr)
