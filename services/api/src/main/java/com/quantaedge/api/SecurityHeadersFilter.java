@@ -5,6 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,6 +17,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class SecurityHeadersFilter extends OncePerRequestFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(SecurityHeadersFilter.class);
+  private final Set<String> allowedOrigins;
+
+  public SecurityHeadersFilter(@Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:3001}") String origins) {
+    this.allowedOrigins = Arrays.stream(origins.split(","))
+        .map(String::trim)
+        .filter(origin -> !origin.isBlank())
+        .collect(Collectors.toUnmodifiableSet());
+  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
@@ -32,6 +44,26 @@ public class SecurityHeadersFilter extends OncePerRequestFilter {
     if(uri.startsWith("/api/")) {
       response.setHeader("Cache-Control","no-store");
       response.setHeader("Pragma","no-cache");
+    }
+
+    // SameSite cookies are an important layer, but not the only CSRF defence.
+    // Validate browser write origins explicitly against the same configured allowlist as CORS.
+    String method = request.getMethod();
+    boolean stateChanging = !("GET".equalsIgnoreCase(method)
+        || "HEAD".equalsIgnoreCase(method)
+        || "OPTIONS".equalsIgnoreCase(method)
+        || "TRACE".equalsIgnoreCase(method));
+    if (stateChanging) {
+      String origin = request.getHeader("Origin");
+      String fetchSite = request.getHeader("Sec-Fetch-Site");
+      if ((origin != null && !allowedOrigins.contains(origin))
+          || "cross-site".equalsIgnoreCase(fetchSite)) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"CSRF_ORIGIN_REJECTED\",\"message\":\"The request origin is not authorised.\"}");
+        return;
+      }
     }
     try {
       chain.doFilter(request,response);

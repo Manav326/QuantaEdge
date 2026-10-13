@@ -7,6 +7,8 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -26,11 +28,26 @@ import org.springframework.web.server.ResponseStatusException;
 class HrEmployeeSelfServiceControllerTest {
   @Mock private JdbcTemplate jdbc;
   @Mock private StaffAuditService audit;
+  @Mock private AuthorizationService authorization;
   private HrEmployeeSelfServiceController controller;
   private final AuthContext employee = new AuthContext(100L,null,77L,"STAFF","Employee");
 
   @BeforeEach
-  void setUp() { controller = new HrEmployeeSelfServiceController(jdbc,audit); }
+  void setUp() {
+    controller = new HrEmployeeSelfServiceController(jdbc,audit,authorization);
+    when(authorization.requirePermission(employee, "HR_SELF_SERVICE_VIEW")).thenReturn(employee);
+  }
+
+  @Test
+  void employeeWithoutSelfServicePermissionCannotReadOwnRecords() {
+    when(authorization.requirePermission(employee, "HR_SELF_SERVICE_VIEW"))
+        .thenThrow(new SecurityException("Permission required: HR_SELF_SERVICE_VIEW"));
+
+    assertThrows(SecurityException.class, () -> controller.profile(employee));
+
+    verifyNoInteractions(jdbc);
+    verifyNoInteractions(audit);
+  }
 
   @Test
   void unlinkedAccountCannotReadEmployeeProfile() {

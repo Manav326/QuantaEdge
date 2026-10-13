@@ -19,18 +19,32 @@ export default function SessionLandingPage() {
     setError('');
     setMessage('Aapka secure session check ho raha hai…');
     try {
-      const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+      let response = await fetch('/api/v1/auth/me', {
+        headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
+      });
+      if (!response.ok) {
+        const studentResponse = await fetch('/api/v1/auth/me', {
+          headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+        });
+        response = studentResponse;
+      }
       if (response.ok) {
         const identity = await response.json() as Identity;
         const home = homeFor(identity);
         if (home) { router.replace(home); return; }
         // A staff or stale legacy cookie should never force a learner to sign out.
-        // Return to the learning site's public entry; scoped cookies remain isolated.
         window.location.replace('/');
         return;
       }
       if (response.status === 401 || response.status === 403) {
-        await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
+        await Promise.all([
+          fetch('/api/v1/auth/logout', {
+            method: 'POST', headers: { 'X-QE-Workspace': 'PARENT' },
+          }).catch(() => undefined),
+          fetch('/api/v1/auth/logout', {
+            method: 'POST', headers: { 'X-QE-Workspace': 'STUDENT' },
+          }).catch(() => undefined),
+        ]);
         window.location.replace('/');
         return;
       }
@@ -41,7 +55,14 @@ export default function SessionLandingPage() {
     setMessage('Secure session check complete nahi ho paaya.');
   }
   async function logoutToSwitch() {
-    await fetch('/api/v1/auth/logout', { method: 'POST' }).catch(() => undefined);
+    await Promise.all([
+      fetch('/api/v1/auth/logout', {
+        method: 'POST', headers: { 'X-QE-Workspace': 'PARENT' },
+      }).catch(() => undefined),
+      fetch('/api/v1/auth/logout', {
+        method: 'POST', headers: { 'X-QE-Workspace': 'STUDENT' },
+      }).catch(() => undefined),
+    ]);
     window.location.replace('/');
   }
   useEffect(() => { void resolveSession(); }, []);

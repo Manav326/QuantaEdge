@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 type Session={staffId?:number;role?:string;displayName?:string;permissions?:string[]};
 type Tab='recruitment'|'performance'|'assets'|'exits';
 async function api(path:string,init:RequestInit={}) {
-  const headers=new Headers(init.headers); headers.set('X-QE-Workspace','STAFF');
+  const headers=new Headers(init.headers); headers.set('X-QE-Workspace','HRMS');
   if(init.body&&!headers.has('Content-Type'))headers.set('Content-Type','application/json');
   const response=await fetch(path,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text(); let data:any={}; try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}
@@ -70,7 +70,7 @@ export default function ExtendedWorkforcePage(){
  async function convertCandidate(e:React.FormEvent){e.preventDefault();if(!candidateToConvert)return;await mutate('/api/v1/hr/recruitment/candidates/'+candidateToConvert.id+'/convert',{joiningDate:convertDate,employmentTypeCode:convertType,reason:'Approved recruitment conversion'});setCandidateToConvert(null)}
  async function logout(){try{await api('/api/v1/auth/logout',{method:'POST'})}finally{router.replace('/login')}}
  return <div className="shell">
-  <header className="topbar"><div className="brand">QuantaEdge <span>PEOPLE OPERATIONS</span></div><nav style={{display:'flex',gap:8,flexWrap:'wrap'}}><a href="/" className="secondary">Employees</a><a href="/attendance" className="secondary">Attendance & leave</a><a href="/payroll" className="secondary">Payroll</a><a href="/self-service" className="secondary">My workspace</a></nav><div style={{display:'flex',alignItems:'center',gap:12}}><span className="small">{session?.displayName||'Team member'}</span><button className="secondary" type="button" onClick={()=>void logout()}>Sign out</button></div></header>
+  <header className="topbar"><div className="brand">QuantaEdge <span>PEOPLE OPERATIONS</span></div><nav style={{display:'flex',gap:8,flexWrap:'wrap'}}><a href="/" className="secondary">Employees</a><a href="/attendance" className="secondary">Attendance & leave</a><a href="/payroll" className="secondary">Payroll</a>{session?.permissions?.includes('HR_ACCESS_MANAGE')&&<a href="/access" className="secondary">Employee access</a>}<a href="/self-service" className="secondary">My workspace</a></nav><div style={{display:'flex',alignItems:'center',gap:12}}><span className="small">{session?.displayName||'Team member'}</span><button className="secondary" type="button" onClick={()=>void logout()}>Sign out</button></div></header>
   <main className="main"><div className="eyebrow">PEOPLE OPERATIONS · EXTENDED HR</div><h1>Workforce lifecycle</h1><p className="sub">Recruitment, performance, asset custody and exit clearance. Each workflow is permission-checked by the API and uses the canonical employee records.</p>
    {error&&<div className="error" role="alert">{error}</div>}{notice&&<div className="notice" role="status">{notice}</div>}
    <section className="panel"><div className="tabs" role="group" aria-label="Extended HR modules">

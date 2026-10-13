@@ -29,18 +29,39 @@ class AuthorizationServiceTest {
   }
 
   @Test
+  void educationAdminCannotBypassHrmsOnlyPermissions() {
+    AuthorizationService authorization = new AuthorizationService(jdbc);
+    AuthContext educationAdmin = new AuthContext(null, null, 7L, "ADMIN", "Admin", "EDUCATION_ADMIN");
+
+    assertFalse(authorization.hasPermission(educationAdmin, "HR_ACCESS_MANAGE"));
+    assertFalse(authorization.hasPermission(educationAdmin, "TEACHING_ASSIGNMENT_VIEW"));
+    verifyNoInteractions(jdbc);
+  }
+
+  @Test
+  void hrmsSessionCannotUseEducationAdminGlobalBypass() {
+    AuthorizationService authorization = new AuthorizationService(jdbc);
+    AuthContext hrmsIdentity = new AuthContext(null, null, 7L, "ADMIN", "Admin", "HRMS");
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("HRMS"), eq("HRMS")))
+        .thenReturn(false);
+
+    assertFalse(authorization.hasPermission(hrmsIdentity, "CONTENT_PUBLISH"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(7L), eq("HRMS"), eq("HRMS"));
+  }
+
+  @Test
   void employeeMustHaveAnExplicitActivePermissionGrant() {
     AuthorizationService authorization = new AuthorizationService(jdbc);
     AuthContext author = new AuthContext(null, null, 19L, "CONTENT_AUTHOR", "Author");
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_EDIT")))
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_EDIT"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
         .thenReturn(true);
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_PUBLISH")))
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
         .thenReturn(false);
 
     assertTrue(authorization.hasPermission(author, "CONTENT_EDIT"));
     assertFalse(authorization.hasPermission(author, "CONTENT_PUBLISH"));
-    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_EDIT"));
-    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_PUBLISH"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_EDIT"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
   }
 
   @Test

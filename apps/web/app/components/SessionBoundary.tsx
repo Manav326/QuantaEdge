@@ -13,7 +13,10 @@ let verifiedWorkspace: WorkspaceRole | null = null;
 function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
   new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
-  headers.set('X-QE-Workspace', 'LEARNING');
+  const explicitWorkspace = headers.get('X-QE-Workspace');
+  const path = window.location.pathname;
+  const inferredWorkspace = path.startsWith('/student') || path === '/login/student' ? 'STUDENT' : 'PARENT';
+  headers.set('X-QE-Workspace', explicitWorkspace || inferredWorkspace);
   return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
 }
 
@@ -37,7 +40,7 @@ function installRefreshRecovery() {
     const requestInit = isApi ? undefined : init;
     const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
     const response = await nativeFetch(requestInput, requestInit);
-    if (skip || (response.status !== 401 && response.status !== 403)) return response;
+    if (skip || response.status !== 401) return response;
     if (!refreshInFlight) {
       refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
@@ -103,7 +106,15 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       }
       setReady(false);
       try {
-        const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+        let response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+        // At the public landing page, either a parent or student may already be signed in.
+        // Probe the student scope separately so going Back does not hide an active student session.
+        if (!response.ok && pathname === '/') {
+          const studentResponse = await fetch('/api/v1/auth/me', {
+            headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+          });
+          if (studentResponse.ok) response = studentResponse;
+        }
         if (!alive) return;
         if (!response.ok) {
           verifiedWorkspace = null;
