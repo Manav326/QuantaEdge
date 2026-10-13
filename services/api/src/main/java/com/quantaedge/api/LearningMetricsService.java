@@ -99,7 +99,7 @@ public class LearningMetricsService {
     result.put("recentAssessments",jdbc.queryForList("""
       select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.final_score,
              att.auto_score,att.max_score,att.started_at,att.submitted_at,att.released_at,
-             a.title as assessment_title,a.assessment_type,s.code as subject_code,s.display_name as subject_name,
+             a.title as assessment_title,a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,
              ch.display_name as chapter_name,l.title as lesson_title
       from student_assessment_attempt att join assessment a on a.id=att.assessment_id
       join curriculum_subject s on s.id=a.subject_id

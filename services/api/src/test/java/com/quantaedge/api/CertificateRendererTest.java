@@ -27,7 +27,7 @@ class CertificateRendererTest {
       CertificateRenderer.RenderedCertificate rendered = renderer.render(
           template, "hi", "परीक्षण विद्यार्थी", "कक्षा 6 · गणित",
           "इस विषय में प्रकाशित सभी 10 पाठ सफलतापूर्वक पूरे किए।",
-          "QE-2026-ABCDEF123456", issuedAt, false);
+          "QE-2026-ABCDEF1234567890", issuedAt, false);
 
       assertTrue(rendered.pdf().length > 1_000, template + " PDF should contain the rendered page");
       assertTrue(rendered.png().length > 1_000, template + " PNG should contain the rendered page");
@@ -39,8 +39,14 @@ class CertificateRendererTest {
       var qrCrop = image.getSubimage(2480 - 390, 1754 - 455, 250, 250);
       String decodedUrl = new MultiFormatReader().decode(
           new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(qrCrop)))).getText();
-      assertEquals("http://localhost:3000/certificate/verify?code=QE-2026-ABCDEF123456", decodedUrl,
+      assertEquals("http://localhost:3000/certificate/verify?code=QE-2026-ABCDEF1234567890", decodedUrl,
           "QR must open the official verification page for the exact certificate");
+
+      var barcodeCrop = image.getSubimage(2480 - 660, 1754 - 160, 520, 60);
+      String decodedBarcode = new MultiFormatReader().decode(
+          new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(barcodeCrop)))).getText();
+      assertEquals("QE-2026-ABCDEF1234567890", decodedBarcode,
+          "The linear barcode must encode the same certificate number.");
 
       try (PDDocument document = Loader.loadPDF(rendered.pdf())) {
         assertEquals(1, document.getNumberOfPages());

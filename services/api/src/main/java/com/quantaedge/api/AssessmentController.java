@@ -1251,7 +1251,7 @@ public class AssessmentController {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       with ranked as (
         select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
-               att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,
+               att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,a.is_generated,
                coalesce((select t.title from assessment_translation t
                  where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
                    and t.source_hash::text=md5(jsonb_build_object('title',a.title,'description',a.description)::text)
@@ -1293,7 +1293,7 @@ public class AssessmentController {
       )
       select latest.attempt_id,latest.assessment_id,latest.attempt_number,latest.status,
              latest.submitted_at,latest.released_at,latest.final_score,latest.max_score,
-             latest.assessment_type,latest.assessment_title,latest.subject_code,latest.subject_name,
+             latest.assessment_type,latest.is_generated,latest.assessment_title,latest.subject_code,latest.subject_name,
              latest.chapter_name,latest.question_count,
              grouped.best_score,grouped.attempt_count,grouped.attempts_json
       from ranked latest
@@ -1356,7 +1356,7 @@ public class AssessmentController {
              att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
              att.assessment_snapshot::text as assessment_snapshot,
              st.display_name as student_name,st.class_code,a.title as assessment_title,
-             s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
+             a.assessment_type,a.is_generated,s.code as subject_code,s.display_name as subject_name,ch.display_name as chapter_name
       from student_assessment_attempt att
       join assessment a on a.id=att.assessment_id
       join curriculum_subject s on s.id=a.subject_id

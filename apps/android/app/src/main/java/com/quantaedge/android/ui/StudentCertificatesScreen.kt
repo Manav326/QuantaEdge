@@ -45,7 +45,7 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
+fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long = 0L, onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -95,7 +95,11 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
             certificates = issued.optJSONArray("items").toObjectList()
             val eligible = ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
             eligibleAssessments = eligible.optJSONArray("items").toObjectList()
-            if (selectedAttemptId.isBlank() && eligibleAssessments.isNotEmpty()) {
+            val requestedAttempt = eligibleAssessments.firstOrNull { it.optLongValue("attempt_id", "attemptId", "id") == initialAssessmentAttemptId }
+            if (initialAssessmentAttemptId > 0L && requestedAttempt != null) {
+                selectedAchievement = "ASSESSMENT_PASS"
+                selectedAttemptId = initialAssessmentAttemptId.toString()
+            } else if (selectedAttemptId.isBlank() && eligibleAssessments.isNotEmpty()) {
                 selectedAttemptId = eligibleAssessments.first().optLongValue("attempt_id", "attemptId", "id").takeIf { it > 0 }?.toString().orEmpty()
             }
         } catch (e: Exception) {
@@ -105,7 +109,7 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
         }
     }
 
-    LaunchedEffect(language) { reload() }
+    LaunchedEffect(language, initialAssessmentAttemptId) { reload() }
 
     fun verifyScannedCertificate(code: String) {
         scope.launch {
@@ -146,8 +150,8 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
                 val code = barcode.rawValue?.let { parseQuantaEdgeCertificateQr(it, BuildConfig.DEBUG) }
                 if (code == null) {
                     verifyingQr = false
-                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR नहीं है।"
-                    else "This is not a valid QuantaEdge certificate QR code."
+                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
+                    else "This is not a valid QuantaEdge certificate QR or barcode."
                 } else {
                     verifyScannedCertificate(code)
                 }
@@ -158,7 +162,7 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
                 error = if (failure is com.google.android.gms.common.api.ApiException &&
                     failure.statusCode == CommonStatusCodes.CANCELED) "" else {
                     if (language == "hi") "QR स्कैन नहीं हो सका। कृपया दोबारा कोशिश करें।"
-                    else "QR scanning failed. Please try again."
+                    else "QR/barcode scanning failed. Please try again."
                 }
             }
     }
@@ -232,13 +236,13 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
                     style = MaterialTheme.typography.titleMedium)
                 Text(if (language == "hi")
                     "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
-                    else "Scan a QR code from any QuantaEdge certificate. Its current status is checked with the server.",
+                    else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server.",
                     style = MaterialTheme.typography.bodyMedium)
                 Button(onClick = { scanCertificateQr() }, enabled = !verifyingQr && !busy) {
                     Text(if (verifyingQr) {
                         if (language == "hi") "जाँच हो रही है…" else "Checking…"
                     } else {
-                        if (language == "hi") "QR स्कैनर खोलें" else "Scan certificate QR"
+                        if (language == "hi") "QR स्कैनर खोलें" else "Scan QR / barcode"
                     })
                 }
             }
@@ -374,7 +378,10 @@ private fun JSONObject.optLongValue(vararg keys: String): Long {
  * Never trust a certificate number from an arbitrary QR payload.
  */
 internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): String? {
-    val uri = runCatching { URI(raw.trim()) }.getOrNull() ?: return null
+    val input = raw.trim()
+    val directCode = input.uppercase()
+    if (directCode.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}"))) return directCode
+    val uri = runCatching { URI(input) }.getOrNull() ?: return null
     val host = uri.host?.lowercase() ?: return null
     val production = uri.scheme.equals("https", ignoreCase = true) &&
         host == "qe.thinkwithsujeet.in" && (uri.port == -1 || uri.port == 443)
