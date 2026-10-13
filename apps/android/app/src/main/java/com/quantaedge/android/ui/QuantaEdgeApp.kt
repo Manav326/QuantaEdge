@@ -130,6 +130,7 @@ fun QuantaEdgeApp() {
     var offlineAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentsPageSize by rememberSaveable { mutableStateOf(10) }
     var assessmentsPageOffset by rememberSaveable { mutableStateOf(0) }
+    var assessmentSubjectFilter by rememberSaveable { mutableStateOf("ALL") }
     var assessmentsTotal by remember { mutableStateOf(0) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
     var resultsPageSize by rememberSaveable { mutableStateOf(10) }
@@ -412,19 +413,27 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun openAssessments(subjectCode: String = currentSubject) {
-        if (currentSubject != subjectCode) assessmentsPageOffset = 0
-        currentSubject = subjectCode
+    fun openAssessments(subjectFilter: String = "ALL") {
+        val normalizedFilter = subjectFilter.uppercase().takeIf { it == "ALL" }
+            ?: subjectFilter.lowercase().takeIf { it in setOf("maths", "science") }
+            ?: "ALL"
+        if (assessmentSubjectFilter != normalizedFilter) assessmentsPageOffset = 0
+        assessmentSubjectFilter = normalizedFilter
+        if (normalizedFilter in setOf("maths", "science")) currentSubject = normalizedFilter
+        val subjectCode = if (normalizedFilter == "ALL") "" else normalizedFilter
         runTask {
             val local = withContext(Dispatchers.IO) { offlineAssessmentStore.catalogueItems() }
-                .filter { it.textAny("subject_code", "subjectCode").isBlank() ||
-                    it.textAny("subject_code", "subjectCode") == subjectCode }
+                .filter {
+                    subjectCode.isBlank() || it.textAny("subject_code", "subjectCode").isBlank() ||
+                        it.textAny("subject_code", "subjectCode") == subjectCode
+                }
             offlineAssessments = local
             val localIds = local.map { it.optLongAny("assessment_id", "assessmentId", "id") }.toSet()
             val onlineResponse = runCatching {
-                val path = "/api/v1/learning/assessments?subjectCode=" +
-                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage +
-                    "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
+                val filterQuery = if (subjectCode.isBlank()) "" else
+                    "&subjectCode=" + ApiClient.encodeQuery(subjectCode)
+                val path = "/api/v1/learning/assessments?language=" + learningContentLanguage +
+                    filterQuery + "&limit=" + assessmentsPageSize + "&offset=" + assessmentsPageOffset
                 ApiClient.getObject(path)
             }.getOrNull()
             val onlinePage = onlineResponse?.optJSONArray("items")?.objectItems().orEmpty()
@@ -448,7 +457,7 @@ fun QuantaEdgeApp() {
     fun changeAssessmentsPage(pageSize: Int, pageOffset: Int) {
         assessmentsPageSize = pageSize.coerceIn(10, 50)
         assessmentsPageOffset = pageOffset.coerceAtLeast(0)
-        openAssessments(currentSubject)
+        openAssessments(assessmentSubjectFilter)
     }
 
     fun restoreOfflineAssessment(record: JSONObject) {
@@ -1354,7 +1363,7 @@ fun QuantaEdgeApp() {
         when (key) {
             "home" -> route = if (parentRole) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             "learn" -> openSubject(currentSubject)
-            "tests" -> openAssessments(currentSubject)
+            "tests" -> openAssessments("ALL")
             "results" -> loadAssessmentResults()
             "profile" -> if (parentRole) openParentProfile() else openStudentProfile()
         }
@@ -1562,7 +1571,7 @@ fun QuantaEdgeApp() {
                         onRefresh = ::openDiagnostic
                     )
                     AppRoute.ASSESSMENTS -> AssessmentListScreen(
-                        subject = currentSubject,
+                        subject = assessmentSubjectFilter,
                         assessmentItems = assessments,
                         offlineItems = offlineAssessments,
                         total = assessmentsTotal,
@@ -1575,7 +1584,7 @@ fun QuantaEdgeApp() {
                         onOpen = ::openAssessment,
                         onPrepareOffline = ::prepareOfflineAssessment,
                         onResults = ::loadAssessmentResults,
-                        onRefresh = { openAssessments(currentSubject) }
+                        onRefresh = { openAssessments(assessmentSubjectFilter) }
                     )
                     AppRoute.ASSESSMENT_ATTEMPT -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
@@ -2262,7 +2271,9 @@ private fun AssessmentListScreen(
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("टेस्ट और मूल्यांकन"), style = MaterialTheme.typography.headlineSmall)
         if (compact) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "ALL") Button(onClick = { onSubject("ALL") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(t("All", "सभी")) }
+                else TextButton(onClick = { onSubject("ALL") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(t("All", "सभी")) }
                 if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
                 else TextButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
                 if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
@@ -2273,7 +2284,9 @@ private fun AssessmentListScreen(
                 TextButton(onClick = onRefresh, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("रिफ्रेश")) }
             }
         } else {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                if (subject == "ALL") Button(onClick = { onSubject("ALL") }, enabled = !busy) { Text(t("All subjects", "सभी विषय")) }
+                else TextButton(onClick = { onSubject("ALL") }, enabled = !busy) { Text(t("All subjects", "सभी विषय")) }
                 if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
                 else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
                 if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
