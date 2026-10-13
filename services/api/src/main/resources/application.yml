@@ -33,7 +33,9 @@ app:
     content-token: ${APP_ADMIN_CONTENT_TOKEN:}
   auth:
     session-hours: ${APP_AUTH_SESSION_HOURS:4}
-    secure-cookies: ${APP_AUTH_SECURE_COOKIES:false}
+    staff-absolute-hours: ${APP_AUTH_STAFF_ABSOLUTE_HOURS:8}
+    learning-absolute-days: ${APP_AUTH_LEARNING_ABSOLUTE_DAYS:30}
+    secure-cookies: ${APP_AUTH_SECURE_COOKIES:true}
     otp-cooldown-seconds: ${APP_AUTH_OTP_COOLDOWN_SECONDS:60}
     allow-repeated-demo-otp: ${APP_AUTH_ALLOW_REPEATED_DEMO_OTP:false}
     admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:7070107483}
