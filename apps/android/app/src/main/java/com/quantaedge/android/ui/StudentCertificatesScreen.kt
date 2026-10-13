@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.data.ApiClient
@@ -48,6 +49,7 @@ import java.nio.charset.StandardCharsets
 fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long = 0L, onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val compact = LocalConfiguration.current.screenWidthDp < 390
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var eligibleAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var template by remember { mutableStateOf("CLASSIC") }
@@ -193,6 +195,39 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
         }
     }
 
+
+    fun viewCertificate(certificate: JSONObject) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val id = certificate.optLongValue("id", "certificate_id", "certificateId")
+                if (id <= 0L) throw IOException("Certificate record की पहचान नहीं मिली।")
+                val bytes = withContext(Dispatchers.IO) {
+                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/view?format=pdf")
+                }
+                if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
+                val directory = java.io.File(context.cacheDir, "certificates")
+                if (!directory.exists() && !directory.mkdirs()) throw IOException("प्रमाणपत्र preview तैयार नहीं हो सका।")
+                val file = java.io.File(directory, "quantaedge-certificate-" + id + ".pdf")
+                withContext(Dispatchers.IO) { file.writeBytes(bytes) }
+                val uri = androidx.core.content.FileProvider.getUriForFile(
+                    context, context.packageName + ".fileprovider", file
+                )
+                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW)
+                    .setDataAndType(uri, "application/pdf")
+                    .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                context.startActivity(android.content.Intent.createChooser(
+                    intent, if (language == "hi") "प्रमाणपत्र देखें" else "View certificate"
+                ))
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate खोला नहीं जा सका।" else "Could not open this certificate."
+            } finally {
+                busy = false
+            }
+        }
+    }
 
     fun issueCertificate() {
         val selectedAttempt = eligibleAssessments.firstOrNull {
@@ -391,16 +426,47 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(certificate.optString("achievement_title", certificate.optString("achievementTitle", "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
                     Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")), style = MaterialTheme.typography.bodySmall)
+                    val rawStatus = certificate.optString("status", "ISSUED").uppercase()
+                    val statusLabel = when (rawStatus) {
+                        "ISSUED" -> if (language == "hi") "जारी" else "Issued"
+                        "REVOKED" -> if (language == "hi") "निरस्त" else "Revoked"
+                        else -> rawStatus.replace('_', ' ')
+                    }
+                    val rawLanguage = certificate.optString("language", language).lowercase()
+                    val languageLabel = when (rawLanguage) {
+                        "hi" -> if (language == "hi") "हिंदी" else "Hindi"
+                        "en" -> if (language == "hi") "अंग्रेज़ी" else "English"
+                        else -> rawLanguage.uppercase()
+                    }
                     Text(
-                        (certificate.optString("status", "ISSUED")) + " · " +
+                        statusLabel + " · " +
                             certificate.optString("template_id", certificate.optString("templateId", "CLASSIC")) + " · " +
-                            certificate.optString("language", language),
-                        color = if (certificate.optString("status", "ISSUED") == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
+                            languageLabel,
+                        color = if (rawStatus == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
                     )
                     if (certificate.optString("status", "ISSUED") == "ISSUED") {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy) { Text("PDF") }
-                            OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy) { Text("PNG") }
+                        if (compact) {
+                            Column(verticalArrangement = Arrangement.spacedBy(5.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { viewCertificate(certificate) }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) {
+                                    Text(if (language == "hi") "प्रमाणपत्र देखें" else "View certificate")
+                                }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("PDF")) }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy,
+                                    modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("PNG")) }
+                            }
+                        } else {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(onClick = { viewCertificate(certificate) }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) {
+                                    Text(if (language == "hi") "देखें" else "View")
+                                }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) { Text(localizedUiText("PDF")) }
+                                OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) { Text(localizedUiText("PNG")) }
+                            }
                         }
                     } else {
                         Text(if (language == "hi") "यह प्रमाणपत्र निरस्त है; मान्य प्रमाण के रूप में डाउनलोड नहीं किया जा सकता।" else "This certificate is revoked and cannot be downloaded as valid proof.", color = MaterialTheme.colorScheme.error)
