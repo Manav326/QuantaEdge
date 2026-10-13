@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -51,13 +54,23 @@ public class LearningClassController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final PrivateMediaStorageService mediaStorage;
+  private final GoogleMeetCalendarService googleMeet;
 
+  @Autowired
   public LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
-      StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage) {
+      StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage,
+      GoogleMeetCalendarService googleMeet) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.mediaStorage = mediaStorage;
+    this.googleMeet = googleMeet;
+  }
+
+  // Existing unit tests retain their constructor; the fallback fails closed without credentials.
+  LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
+      StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage) {
+    this(jdbc, authorization, staffAudit, mediaStorage, new GoogleMeetCalendarService());
   }
 
   // A safe staff picker for live-class host assignment; no login/contact secrets are returned.
@@ -91,6 +104,29 @@ public class LearningClassController {
       """, requiredText(classCode,"Class",30),requiredText(subjectCode,"Subject",40));
   }
 
+  @GetMapping("/admin/approved-teaching-assignments")
+  public List<Map<String,Object>> approvedTeachingAssignments(
+      @RequestParam String classCode, @RequestParam String subjectCode,
+      @RequestParam(required=false) String onDate,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    requireClassManage(context);
+    String cc=requiredText(classCode,"Class",30),sc=requiredText(subjectCode,"Subject",40);
+    java.time.LocalDate date;
+    try { date=onDate==null||onDate.isBlank()?java.time.LocalDate.now(ZoneId.of("Asia/Kolkata")):java.time.LocalDate.parse(onDate); }
+    catch(RuntimeException ex){throw badRequest("Assignment date must use YYYY-MM-DD format.");}
+    return jdbc.queryForList("""
+      select a.id as teaching_assignment_id,a.employee_id,e.display_name as employee_name,
+        e.employee_number,e.linked_staff_account_id,a.subject_id,a.academic_period_id,p.name as period_name,
+        a.effective_start,a.effective_end
+      from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id
+      join hr_academic_period p on p.id=a.academic_period_id
+      join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
+      where a.status='APPROVED' and a.effective_start<=? and a.effective_end>=?
+        and c.code=? and s.code=? and c.active=true and s.active=true
+      order by e.display_name,a.id
+      """,java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),cc,sc);
+  }
+
   @GetMapping("/admin/live-classes")
   public Map<String,Object> adminLiveClasses(
       @RequestParam(required=false) String classCode,@RequestParam(required=false) String subjectCode,
@@ -106,6 +142,7 @@ public class LearningClassController {
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
+             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,
              cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -129,7 +166,6 @@ public class LearningClassController {
   }
 
   @PostMapping("/admin/live-classes")
-  @Transactional
   public Map<String, Object> createLiveClass(
       @RequestBody Map<String, Object> body,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -140,7 +176,7 @@ public class LearningClassController {
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     String provider = safeText(body.getOrDefault("provider", "CUSTOM"), 32).toUpperCase(Locale.ROOT);
     if (!PROVIDERS.contains(provider)) throw badRequest("Choose a supported live class provider.");
-    String joinUrl = validJoinUrl(body.get("joinUrl"));
+    String joinUrl = "GOOGLE_MEET".equals(provider) ? null : validJoinUrl(body.get("joinUrl"));
     OffsetDateTime startsAt = parseDate(body.get("startsAt"), "Start time");
     OffsetDateTime endsAt = parseDate(body.get("endsAt"), "End time");
     if (!endsAt.isAfter(startsAt)) throw badRequest("End time must be after the start time.");
@@ -155,17 +191,22 @@ public class LearningClassController {
     if (chapterId != null) validateChapter(chapterId, subjectId, false);
     Long hostStaffId = optionalLong(body.get("hostStaffId"), "hostStaffId");
     Long teachingAssignmentId = optionalLong(body.get("teachingAssignmentId"), "teachingAssignmentId");
+    if ("GOOGLE_MEET".equals(provider) && teachingAssignmentId == null) {
+      throw badRequest("Google Meet scheduling requires an approved teaching assignment for this class, subject, and date.");
+    }
+    Long assignedEmployeeId = null;
     if (teachingAssignmentId != null) {
       authorization.requirePermission(context,"TEACHING_ASSIGNMENT_VIEW");
       List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
-        select a.id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
+        select a.id,a.employee_id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
         from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id where a.id=?
         """, teachingAssignmentId);
       if (assignmentRows.isEmpty()) throw badRequest("Choose a valid approved teaching assignment.");
       Map<String,Object> assignment = assignmentRows.getFirst();
       if (!"APPROVED".equals(assignment.get("status"))) throw badRequest("Live classes can only use approved teaching assignments.");
+      assignedEmployeeId = ((Number)assignment.get("employee_id")).longValue();
       if (((Number)assignment.get("subject_id")).longValue() != subjectId) throw badRequest("The teaching assignment must match the selected class and subject.");
-      java.time.LocalDate sessionDate = startsAt.toLocalDate();
+      java.time.LocalDate sessionDate = startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
       if (sessionDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
           || sessionDate.isAfter(((java.sql.Date)assignment.get("effective_end")).toLocalDate()))
         throw badRequest("The teaching assignment must be effective on the live class date.");
@@ -180,16 +221,43 @@ public class LearningClassController {
       if (hostCount == null || hostCount == 0) throw badRequest("Choose an active staff member as the class host.");
     }
 
+    validateNoScheduleConflict(hostStaffId, assignedEmployeeId, startsAt, endsAt, null);
+    String requestId = "GOOGLE_MEET".equals(provider) ? UUID.randomUUID().toString() : null;
     Long id = jdbc.queryForObject("""
       insert into learning_class_session(
         title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,starts_at,ends_at,
-        status,host_staff_id,created_by_staff_id
-      ) values(?,?,?,?,?,?,?,?,?, 'SCHEDULED',?,?) returning id
+        status,host_staff_id,created_by_staff_id,provider_operation_status,provider_conference_request_id
+      ) values(?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
       """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl,
-        startsAt, endsAt, hostStaffId, context.staffId());
+        startsAt, endsAt, hostStaffId, context.staffId(),
+        "GOOGLE_MEET".equals(provider) ? "PENDING" : "NOT_REQUIRED", requestId);
+
+    // Save the local schedule before making a network call. If Google is unavailable, retry later
+    // against the same persisted record instead of losing the user's schedule.
+    if ("GOOGLE_MEET".equals(provider)) {
+      try {
+        GoogleMeetCalendarService.MeetingResult result = googleMeet.createOrGetMeeting(
+            id, requestId, title, description, startsAt, endsAt);
+        jdbc.update("""
+          update learning_class_session set private_join_url=?,provider_event_id=?,
+            provider_conference_request_id=?,provider_operation_status=?,provider_error_code=?,
+            provider_error_message=?,provider_operation_attempts=provider_operation_attempts+1,
+            provider_last_attempt_at=now(),updated_at=now() where id=?
+          """, result.joinUrl(), result.eventId(), result.conferenceRequestId(), result.status(),
+          result.errorCode(), shortMessage(result.errorMessage()), id);
+      } catch (GoogleMeetCalendarService.GoogleMeetException ex) {
+        jdbc.update("""
+          update learning_class_session set provider_operation_status='FAILED',provider_error_code=?,
+            provider_error_message=?,provider_operation_attempts=provider_operation_attempts+1,
+            provider_last_attempt_at=now(),updated_at=now() where id=?
+          """, ex.code(), shortMessage(ex.getMessage()), id);
+      }
+    }
+    Map<String,Object> created = adminSessionById(id);
     staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + id + "/created",
-        "Scheduled live class #" + id + " for class " + classCode + " / subject " + subjectCode + ".");
-    return adminSessionById(id);
+        "Scheduled live class #" + id + " for class " + classCode + " / subject " + subjectCode
+            + ("GOOGLE_MEET".equals(provider) ? "; Google Meet=" + created.get("provider_operation_status") : "") + ".");
+    return created;
   }
 
   @PatchMapping("/admin/live-classes/{sessionId}/status")
@@ -202,10 +270,43 @@ public class LearningClassController {
     String status = requiredText(body.get("status"), "Status", 20).toUpperCase(Locale.ROOT);
     if (!SESSION_STATUSES.contains(status)) throw badRequest("Choose SCHEDULED, LIVE, COMPLETED, or CANCELLED.");
     List<Map<String, Object>> rows = jdbc.queryForList(
-        "select id,status,title from learning_class_session where id=?", sessionId);
+        "select id,status,title,provider,provider_event_id,provider_operation_status from learning_class_session where id=?", sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
-    String previous = String.valueOf(rows.getFirst().get("status"));
-    jdbc.update("update learning_class_session set status=?,updated_at=now() where id=?", status, sessionId);
+    Map<String,Object> current = rows.getFirst();
+    String previous = String.valueOf(current.get("status"));
+    String provider = String.valueOf(current.get("provider"));
+    String integration = String.valueOf(current.get("provider_operation_status"));
+    boolean allowed = switch (previous) {
+      case "SCHEDULED" -> Set.of("SCHEDULED","LIVE","CANCELLED").contains(status);
+      case "LIVE" -> Set.of("LIVE","COMPLETED","CANCELLED").contains(status);
+      case "CANCELLED" -> Set.of("CANCELLED","SCHEDULED").contains(status);
+      case "COMPLETED" -> "COMPLETED".equals(status);
+      default -> false;
+    };
+    if (!allowed) throw conflict("The requested live-class status transition is not allowed.");
+    if ("COMPLETED".equals(previous) && !"COMPLETED".equals(status)) {
+      throw conflict("Completed live classes are terminal. Create a new class record instead.");
+    }
+    String providerErrorCode = null, providerErrorMessage = null;
+    if ("CANCELLED".equals(status) && "GOOGLE_MEET".equals(provider)) {
+      Object eventValue=current.get("provider_event_id");
+      String eventId=eventValue==null?"":String.valueOf(eventValue);
+      if (!eventId.isBlank()) {
+        try { googleMeet.cancelMeeting(eventId); integration="CANCELLED"; }
+        catch (GoogleMeetCalendarService.GoogleMeetException ex) {
+          integration="FAILED";providerErrorCode=ex.code();providerErrorMessage=shortMessage(ex.getMessage());
+        }
+      } else integration="CANCELLED";
+      jdbc.update("""
+        update learning_class_session set status=?,provider_operation_status=?,provider_error_code=?,
+          provider_error_message=?,updated_at=now() where id=?
+        """,status,integration,providerErrorCode,providerErrorMessage,sessionId);
+    } else {
+      if ("GOOGLE_MEET".equals(provider) && "CANCELLED".equals(previous) && "SCHEDULED".equals(status)) {
+        throw conflict("A cancelled Google Meet event cannot be restored. Create a new scheduled class.");
+      }
+      jdbc.update("update learning_class_session set status=?,updated_at=now() where id=?", status, sessionId);
+    }
     if ("COMPLETED".equals(status)) {
       // Close open attendance clocks against the scheduled end time so an abandoned tab
       // cannot leave an active attendance session running indefinitely.
@@ -219,7 +320,8 @@ public class LearningClassController {
         """, sessionId);
     }
     staffAudit.recordAction(context, "/api/v1/admin/live-classes/" + sessionId + "/status",
-        "Changed live class status from " + previous + " to " + status + ".");
+        "Changed live class status from " + previous + " to " + status
+            + ("GOOGLE_MEET".equals(provider) ? "; Meet integration=" + integration : "") + ".");
     return adminSessionById(sessionId);
   }
 
@@ -229,7 +331,7 @@ public class LearningClassController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = requireClassManage(context);
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select id,title,provider,private_join_url from learning_class_session where id=?
+      select id,title,provider,private_join_url,provider_operation_status,provider_error_message from learning_class_session where id=?
       """, sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
     Map<String, Object> row = rows.getFirst();
@@ -239,7 +341,11 @@ public class LearningClassController {
     result.put("sessionId", sessionId);
     result.put("title", row.get("title"));
     result.put("provider", row.get("provider"));
-    result.put("joinUrl", row.get("private_join_url"));
+    String integration = String.valueOf(row.get("provider_operation_status"));
+    result.put("integrationStatus", integration);
+    result.put("errorMessage", row.get("provider_error_message"));
+    boolean verified = !"GOOGLE_MEET".equals(row.get("provider")) || "CREATED".equals(integration);
+    result.put("joinUrl", verified ? row.get("private_join_url") : null);
     return result;
   }
 
@@ -389,7 +495,9 @@ public class LearningClassController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
-      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days' and (?='' or s.code=?)
+      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+        and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
+        and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
       """,context.studentId(),subjectFilter,subjectFilter,rowLimit,rowOffset);
@@ -419,7 +527,8 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.id=? and cs.status in ('SCHEDULED','LIVE')
+      where cs.id=? and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
+        and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       """, context.studentId(), sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
@@ -640,11 +749,37 @@ public class LearningClassController {
     return new LinkedHashMap<>(rows.getFirst());
   }
 
+  private void validateNoScheduleConflict(Long hostStaffId, Long employeeId,
+      OffsetDateTime startsAt, OffsetDateTime endsAt, Long excludedSessionId) {
+    if (hostStaffId == null && employeeId == null) return;
+    Boolean overlaps = jdbc.queryForObject("""
+      select exists(
+        select 1 from learning_class_session other
+        left join hr_teaching_assignment oa on oa.id=other.teaching_assignment_id
+        where other.status in ('SCHEDULED','LIVE')
+          and ((?::bigint is not null and other.host_staff_id=?)
+            or (?::bigint is not null and oa.employee_id=?))
+          and other.starts_at < ? and other.ends_at > ?
+          and (?::bigint is null or other.id<>?)
+      )
+      """,Boolean.class,hostStaffId,hostStaffId,employeeId,employeeId,endsAt,startsAt,excludedSessionId,excludedSessionId);
+    if (Boolean.TRUE.equals(overlaps)) {
+      throw conflict("This teacher or host already has an overlapping scheduled/live class. Resolve the timetable conflict before saving.");
+    }
+  }
+
+  private String shortMessage(String message) {
+    if (message == null || message.isBlank()) return null;
+    String value=message.trim();
+    return value.length()>500?value.substring(0,500):value;
+  }
+
   private Map<String, Object> adminSessionById(long sessionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
+             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,
              cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
