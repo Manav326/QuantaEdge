@@ -230,7 +230,7 @@ def _model_retry_delay(attempt: int, retry_after: str | None = None) -> float:
 
 def call_model(
     prompt: str, api_key: str, base_url: str, model: str, timeout: int,
-    max_attempts: int = MAX_MODEL_ATTEMPTS,
+    max_attempts: int = MAX_MODEL_ATTEMPTS, attempt_counter: list[int] | None = None,
 ) -> dict[str, Any]:
     if not 1 <= max_attempts <= MAX_MODEL_ATTEMPTS:
         raise ValueError(f"max_attempts must be between 1 and {MAX_MODEL_ATTEMPTS}.")
@@ -247,6 +247,10 @@ def call_model(
     )
     raw: str | None = None
     for attempt in range(max_attempts):
+        if attempt_counter is not None:
+            if not attempt_counter:
+                attempt_counter.append(0)
+            attempt_counter[0] += 1
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 raw = response.read().decode("utf-8")
@@ -604,6 +608,7 @@ def main() -> int:
             "chapters_pending": len(plan),
             "chapters_already_completed": len(completed),
             "planned_model_requests": total_calls,
+            "max_model_http_requests": args.max_api_calls,
             "questions_per_chapter": args.questions_per_chapter,
             "planned_question_total": (len(plan) + len(completed)) * args.questions_per_chapter,
             "pending_question_total": len(plan) * args.questions_per_chapter,
@@ -620,6 +625,7 @@ def main() -> int:
             print(json.dumps({
                 "mode": "GENERATED_DRAFT_CANDIDATES", "results": completed,
                 "auto_publish": False, "resumed_without_new_model_calls": True,
+                "model_api_requests_used": 0,
             }, ensure_ascii=False, indent=2))
             return 0
         if not args.confirm_external_processing:
@@ -634,6 +640,7 @@ def main() -> int:
 
         args.output_dir.mkdir(parents=True, exist_ok=True)
         generated = []
+        api_requests_used = 0
         for chapter, allocations in plan:
             chunk_results = []
             type_schedule = scheduled_question_types(args.questions_per_chapter, allowed_types, curriculum["subject_code"])
@@ -642,10 +649,20 @@ def main() -> int:
             for chunk, count in allocations:
                 expected_types = type_schedule[type_cursor:type_cursor + count]
                 type_cursor += count
+                remaining_request_budget = args.max_api_calls - api_requests_used
+                if remaining_request_budget < 1:
+                    raise ValueError(
+                        f"--max-api-calls ({args.max_api_calls}) was exhausted after {api_requests_used} HTTP attempts. "
+                        "Rerun with --resume and a deliberate higher budget to continue unfinished chapters."
+                    )
+                attempts_used = [0]
                 model_output = call_model(
                     make_prompt(curriculum, chapter, chunk, expected_types, str(curriculum.get("language", "hi"))),
                     api_key, args.api_base_url, args.model, args.timeout,
+                    max_attempts=min(MAX_MODEL_ATTEMPTS, remaining_request_budget),
+                    attempt_counter=attempts_used,
                 )
+                api_requests_used += attempts_used[0]
                 checked = validate_model_output(model_output, expected_types, chunk)
                 for question in checked["questions"]:
                     fingerprint = re.sub(r"\W+", "", question["prompt"].casefold())
@@ -665,7 +682,11 @@ def main() -> int:
                 "lesson_count": len(candidate["lessons"]), "bundle_status": candidate["bundle_status"],
                 "student_delivery_allowed": False,
             })
-        print(json.dumps({"mode": "GENERATED_DRAFT_CANDIDATES", "results": completed + generated, "auto_publish": False}, ensure_ascii=False, indent=2))
+        print(json.dumps({
+            "mode": "GENERATED_DRAFT_CANDIDATES", "results": completed + generated,
+            "auto_publish": False, "model_api_requests_used": api_requests_used,
+            "max_model_http_requests": args.max_api_calls,
+        }, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError, json.JSONDecodeError, RuntimeError) as exc:
         print(f"Question generation stopped safely: {exc}", file=sys.stderr)
