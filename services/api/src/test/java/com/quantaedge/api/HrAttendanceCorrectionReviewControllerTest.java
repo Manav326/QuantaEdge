@@ -32,7 +32,7 @@ class HrAttendanceCorrectionReviewControllerTest {
 
   @Test void reviewListRequiresDedicatedPermissionBeforeDatabase(){
     when(authorization.requirePermission(manager,"HR_ATTENDANCE_CORRECTION_REVIEW")).thenThrow(new SecurityException("denied"));
-    assertThrows(SecurityException.class,()->controller.list("PENDING",100,manager));
+    assertThrows(SecurityException.class,()->controller.list("PENDING",20,0,manager));
     verifyNoInteractions(jdbc,audit);
   }
 

@@ -30,31 +30,31 @@ public class HrAttendanceCorrectionReviewController {
 
   @GetMapping
   public Map<String,Object> list(@RequestParam(defaultValue="PENDING") String status,
-      @RequestParam(defaultValue="100") int limit,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     authorization.requirePermission(context,"HR_ATTENDANCE_CORRECTION_REVIEW");
     String state=status==null?"PENDING":status.trim().toUpperCase();
     if(!List.of("ALL","PENDING","APPROVED","REJECTED","CANCELLED").contains(state))
       throw bad("Choose a supported correction-request status.");
-    int pageSize=Math.max(1,Math.min(limit,200));
+    int pageSize=List.of(10,20,50).contains(limit)?limit:20;
+    int safeOffset=Math.max(0,Math.min(offset,1_000_000));
+    String scope=reportingScope.sqlScopePredicate(context,"e");
+    Object[] filters={state,state};
     List<Map<String,Object>> items=jdbc.queryForList("""
-      with recursive reporting(id,organization_id) as (
-        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
-          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
-          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-      )
       select r.id,r.public_id,r.attendance_record_id,r.employee_id,e.employee_number,e.display_name,
         r.work_date,r.requested_status,r.requested_check_in_at,r.requested_check_out_at,
         r.requested_notes,r.reason,r.request_status,r.review_note,r.requested_by_staff_id,
         r.reviewed_by_staff_id,r.reviewed_at,r.created_at,r.updated_at
       from hr_attendance_correction_request r join hr_employee e on e.id=r.employee_id
-      where (?='ALL' or r.request_status=?)
-        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW' and workspace_key='HRMS') or e.id in (select id from reporting))
+      where (?='ALL' or r.request_status=?) and """+scope+"""
       order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at,r.id
-      limit ?
-      """,context.staffId(),state,state,context.staffId(),pageSize);
-    return Map.of("items",items,"status",state,"limit",pageSize);
+      limit ? offset ?
+      """,reportingScope.withScopeArgs(context,filters,pageSize,safeOffset));
+    Long total=jdbc.queryForObject("""
+      select count(*) from hr_attendance_correction_request r join hr_employee e on e.id=r.employee_id
+      where (?='ALL' or r.request_status=?) and """+scope,
+      Long.class,reportingScope.withScopeArgs(context,filters));
+    return Map.of("items",items,"status",state,"limit",pageSize,"offset",safeOffset,"total",total==null?0L:total);
   }
 
   @PatchMapping("/{requestId}/decision")
