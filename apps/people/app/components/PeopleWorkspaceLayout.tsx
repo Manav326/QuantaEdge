@@ -340,7 +340,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
           </div>
         </header>
 
-        <div className="qe-people-page-slot" id="main-content">
+        <div className="qe-people-page-slot" id="main-content" tabIndex={-1}>
           {children}
         </div>
       </div>
