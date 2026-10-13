@@ -151,7 +151,7 @@ try {
     }
 
     if (-not $downloadedApk) {
-        throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The workflow must build the Android app and upload its release APK with actions/upload-artifact using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
+        throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The Android build workflow must build and upload the installable APK with actions/upload-artifact using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
     }
 
     # Validate the ZIP-extracted file looks like a real APK before replacing the last known file.

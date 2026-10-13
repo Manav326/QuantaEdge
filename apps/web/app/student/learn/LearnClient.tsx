@@ -257,6 +257,9 @@ export default function LearnClient() {
   const learningBlocks=useMemo(
     ()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),
     [orderedBlocks]);
+  const recapBlocks=useMemo(
+    ()=>orderedBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),
+    [orderedBlocks]);
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
     [lesson]);
@@ -631,6 +634,14 @@ export default function LearnClient() {
           ? <Link href={'/student/practice?lessonId='+lesson.id} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
+
+      {recapBlocks.length>0&&<section className="lesson-recap" aria-label={tx('पाठ का दोहराव','Lesson recap')}>
+        <div className="content-heading">
+          <h2><LocaleText hinglish="अब दोहराएँ" english="Recap" /></h2>
+          <span><LocaleText hinglish="मुख्य बातें" english="Key takeaways" /></span>
+        </div>
+        {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+      </section>}
 
       <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />

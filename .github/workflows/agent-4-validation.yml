@@ -1,0 +1,119 @@
+name: Agent 4 branch validation
+
+on:
+  push:
+    branches:
+      - agent/learning-content-ai-android
+    paths:
+      - ".github/workflows/agent-4-validation.yml"
+      - ".github/workflows/ci.yml"
+      - "services/api/**"
+      - "scripts/**"
+      - "tests/**"
+      - "apps/android/**"
+      - "apps/admin/**"
+      - "apps/web/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agent-4-validation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  content-pipeline-tests:
+    name: Content ingestion and AI generation tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF extraction test dependency
+        run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+      - name: Run content pipeline regression suite
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+  frontend-builds:
+    name: Build student web and Admin Content Studio
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [web, admin]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install frontend dependencies
+        working-directory: apps/${{ matrix.app }}
+        run: npm install --no-package-lock --no-audit --no-fund
+      - name: Build frontend
+        working-directory: apps/${{ matrix.app }}
+        run: npm run build
+
+  api-verification:
+    name: API build and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: quantaedge
+          POSTGRES_USER: quantaedge
+          POSTGRES_PASSWORD: quantaedge-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U quantaedge -d quantaedge"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/quantaedge
+      SPRING_DATASOURCE_USERNAME: quantaedge
+      SPRING_DATASOURCE_PASSWORD: quantaedge-test
+      APP_DEMO_SEED: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Run API tests and verification
+        working-directory: services/api
+        run: mvn -B -ntp verify
+
+  android-build-and-tests:
+    name: Android SDK setup, unit tests and debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          # Match main CI: install current SDK packages without requesting the removed "tools" package.
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+      - name: Run Android unit tests and assemble installable APK
+        run: gradle -p apps/android testDebugUnitTest assembleDebug
+      - name: Upload installable debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: quantaedge-android-apk
+          path: apps/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
