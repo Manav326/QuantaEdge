@@ -231,7 +231,7 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW' and workspace_key='HRMS') or e.id in (select id from reporting))
       order by e.display_name,e.id
       limit ? offset ?
       """,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),safeLimit,safeOffset);
@@ -247,7 +247,7 @@ public class HrEmployeeController {
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW' and workspace_key='HRMS') or e.id in (select id from reporting))
       """,Long.class,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId());
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
