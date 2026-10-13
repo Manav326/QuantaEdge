@@ -541,6 +541,9 @@ public class AuthService {
         on conflict(guardian_user_id,student_id) do update
           set username=excluded.username,password_hash=excluded.password_hash,active=true,updated_at=now()
         """,parentUserId,studentId,cleanUsername,passwordEncoder.encode(password));
+      // Credential rotation invalidates every already-issued student access/refresh token,
+      // without revoking the parent's separate session.
+      jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null", studentId);
     } catch(DuplicateKeyException ex) {
       throw new IllegalArgumentException("That username is already used by another child on this parent account. Choose a different username.");
     }
