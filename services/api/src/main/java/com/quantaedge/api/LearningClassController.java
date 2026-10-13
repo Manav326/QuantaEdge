@@ -252,8 +252,8 @@ public class LearningClassController {
     if (chapterId != null) validateChapter(chapterId, subjectId, false);
     Long hostStaffId = optionalLong(body.get("hostStaffId"), "hostStaffId");
     Long teachingAssignmentId = optionalLong(body.get("teachingAssignmentId"), "teachingAssignmentId");
-    if ("GOOGLE_MEET".equals(provider) && teachingAssignmentId == null) {
-      throw badRequest("Google Meet scheduling requires an approved teaching assignment for this class, subject, and date.");
+    if (teachingAssignmentId == null) {
+      throw badRequest("Live-class scheduling requires an approved teaching assignment for this class, subject, and date.");
     }
     Long assignedEmployeeId = null;
     if (teachingAssignmentId != null) {
@@ -359,7 +359,10 @@ public class LearningClassController {
     if ("LIVE".equals(status) && "GOOGLE_MEET".equals(provider) && !"CREATED".equals(integration)) {
       throw conflict("This class cannot be marked live until Google Meet creation is verified. Resolve the integration status first.");
     }
-    if ("LIVE".equals(status) && current.get("teaching_assignment_id") instanceof Number) {
+    if ("LIVE".equals(status) && !(current.get("teaching_assignment_id") instanceof Number)) {
+      throw conflict("A class without a canonical teaching assignment cannot go live. Link it to an approved effective assignment or create a new scheduled class.");
+    }
+    if ("LIVE".equals(status)) {
       if (!"APPROVED".equals(current.get("assignment_status"))
           || !Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(current.get("employment_status")))) {
         throw conflict("The assigned teacher is no longer eligible or the teaching assignment is not approved.");
@@ -436,7 +439,8 @@ public class LearningClassController {
     if(startsAt.isBefore(OffsetDateTime.now().minusHours(2)))throw badRequest("Choose a future start time.");
     Long assignmentId=row.get("teaching_assignment_id") instanceof Number n?n.longValue():null;
     Long employeeId=row.get("employee_id") instanceof Number n?n.longValue():null;
-    if(assignmentId!=null) {
+    if(assignmentId==null)throw conflict("A scheduled class must be linked to an approved teaching assignment before it can be rescheduled.");
+    {
       java.time.LocalDate localDate=startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
       if(!"APPROVED".equals(row.get("assignment_status"))
           ||!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(row.get("employment_status")))
@@ -706,10 +710,10 @@ public class LearningClassController {
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
-        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
-          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
-          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
-          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
+        and ta.id is not null and ta.status='APPROVED'
+        and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
@@ -724,10 +728,10 @@ public class LearningClassController {
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
-        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
-          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
-          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
-          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
+        and ta.id is not null and ta.status='APPROVED'
+        and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       """,Long.class,context.studentId(),subjectFilter,subjectFilter);
@@ -752,10 +756,10 @@ public class LearningClassController {
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.id=? and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
-        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
-          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
-          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
-          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
+        and ta.id is not null and ta.status='APPROVED'
+        and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       """, context.studentId(), sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
