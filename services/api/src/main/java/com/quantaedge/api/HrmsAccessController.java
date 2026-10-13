@@ -48,6 +48,19 @@ public class HrmsAccessController {
     this.audit = audit;
   }
 
+  @GetMapping("/permissions")
+  public List<Map<String,Object>> listAvailablePermissions(
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    requireAccessManager(context);
+    return jdbc.queryForList("""
+        select permission_key, display_name, description
+        from staff_permission_catalog
+        where permission_key like 'HR\\_%' escape '\\'
+           or permission_key='HR_SELF_SERVICE_VIEW'
+        order by case when permission_key='HR_ACCESS_MANAGE' then 0 else 1 end, display_name
+        """);
+  }
+
   @GetMapping
   public List<Map<String,Object>> listAccessUsers(
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
@@ -67,6 +80,7 @@ public class HrmsAccessController {
         long staffId = ((Number) staffValue).longValue();
         row.put("roles", assignedRoles(staffId));
         row.put("permissions", auth.permissionsForStaff(staffId, "HRMS"));
+        row.put("assigned_permissions", assignedPermissions(staffId));
       } else {
         row.put("roles", List.of("EMPLOYEE"));
         row.put("permissions", List.of());
@@ -101,6 +115,9 @@ public class HrmsAccessController {
     List<String> roles = readRoles(body.get("roles"));
     Long staffId = employee.get("linked_staff_account_id") == null
         ? null : ((Number) employee.get("linked_staff_account_id")).longValue();
+    List<String> customPermissions = body.containsKey("permissions")
+        ? readPermissions(body.get("permissions"))
+        : staffId == null ? List.of() : assignedPermissions(staffId);
     if (staffId != null && staffId.equals(context.staffId())) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot change your own HRMS credentials or roles.");
     }
@@ -139,6 +156,7 @@ public class HrmsAccessController {
         jdbc.update("update hr_employee set hrms_access_enabled=true, updated_at=now() where id=?", employeeId);
       }
       replaceHrmsRoles(staffId, roles);
+      replaceCustomPermissions(staffId, customPermissions, context.staffId());
       jdbc.update("""
           update auth_session set revoked_at=now()
           where staff_id=? and workspace_key='HRMS' and revoked_at is null
@@ -176,7 +194,11 @@ public class HrmsAccessController {
           "The initial People Operations Super Admin roles are managed through the protected system bootstrap.");
     }
     List<String> roles = readRoles(body.get("roles"));
+    List<String> customPermissions = body.containsKey("permissions")
+        ? readPermissions(body.get("permissions"))
+        : assignedPermissions(staffId);
     replaceHrmsRoles(staffId, roles);
+    replaceCustomPermissions(staffId, customPermissions, context.staffId());
     jdbc.update("""
         update auth_session set revoked_at=now()
         where staff_id=? and workspace_key='HRMS' and revoked_at is null
@@ -281,6 +303,52 @@ public class HrmsAccessController {
     return new ArrayList<>(roles);
   }
 
+  private List<String> readPermissions(Object raw) {
+    if (!(raw instanceof List<?> requested)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Additional permissions must be a list.");
+    }
+    Set<String> distinct = new LinkedHashSet<>();
+    for (Object value : requested) {
+      if (!(value instanceof String permission)) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Each permission must be a permission key.");
+      }
+      String normalized = permission.trim().toUpperCase(Locale.ROOT);
+      Boolean exists = jdbc.queryForObject("""
+          select exists(
+            select 1 from staff_permission_catalog
+            where permission_key=?
+              and (permission_key like 'HR\\_%' escape '\\' or permission_key='HR_SELF_SERVICE_VIEW')
+          )
+          """, Boolean.class, normalized);
+      if (!Boolean.TRUE.equals(exists)) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Only HRMS-scoped permissions can be assigned from this screen.");
+      }
+      distinct.add(normalized);
+    }
+    return new ArrayList<>(distinct);
+  }
+
+  private List<String> assignedPermissions(long staffId) {
+    return jdbc.queryForList("""
+        select permission_key from staff_permission_grant
+        where staff_id=? and workspace_key='HRMS'
+        order by permission_key
+        """, String.class, staffId);
+  }
+
+  private void replaceCustomPermissions(long staffId, List<String> permissions, Long grantedBy) {
+    jdbc.update("delete from staff_permission_grant where staff_id=? and workspace_key='HRMS'", staffId);
+    for (String permission : permissions) {
+      jdbc.update("""
+          insert into staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
+          values (?, 'HRMS', ?, ?)
+          on conflict(staff_id,workspace_key,permission_key) do update
+          set granted_by_staff_id=excluded.granted_by_staff_id, granted_at=now()
+          """, staffId, permission, grantedBy);
+    }
+  }
+
   private void replaceHrmsRoles(long staffId, List<String> roles) {
     jdbc.update("""
         delete from staff_additional_role
@@ -319,6 +387,7 @@ public class HrmsAccessController {
       long staffId = ((Number) row.get("staff_id")).longValue();
       row.put("roles", assignedRoles(staffId));
       row.put("permissions", auth.permissionsForStaff(staffId, "HRMS"));
+      row.put("assigned_permissions", assignedPermissions(staffId));
     } else {
       row.put("roles", List.of("EMPLOYEE"));
       row.put("permissions", List.of());
