@@ -1,6 +1,7 @@
 package com.quantaedge.android.ui
 
 import android.graphics.BitmapFactory
+import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -113,6 +115,8 @@ fun QuantaEdgeApp() {
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
     var currentSubject by rememberSaveable { mutableStateOf("maths") }
+    var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
+    var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
@@ -1375,38 +1379,58 @@ fun QuantaEdgeApp() {
         error = ""
     }
 
-    val wideLayout = LocalConfiguration.current.screenWidthDp >= 600
+    // Orientation controls navigation placement: portrait uses the bottom bar, landscape the left rail.
+    val landscapeLayout = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+
+    fun studentGroupForRoute(destination: AppRoute): String = when (destination) {
+        AppRoute.PROFILE -> lastStudentNavGroup
+        AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"
+        AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"
+        AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
+        AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD -> "practice"
+        AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
+        AppRoute.RECORDING_PLAYER -> "learn"
+        else -> "today"
+    }
+
+    // Keep the same five student groups and order as the web workspace.
+    // Parent accounts retain their own three web destinations.
     val navItems = if (parentRole) listOf(
-        AppNavItem("home", if (language == "hi") "होम" else "Home", "⌂"),
+        AppNavItem("family", if (language == "hi") "परिवार" else "Family report", "⌂"),
+        AppNavItem("children", if (language == "hi") "बच्चे" else "Children", "♧"),
         AppNavItem("profile", if (language == "hi") "प्रोफ़ाइल" else "Profile", "◉")
     ) else listOf(
-        AppNavItem("home", if (language == "hi") "होम" else "Home", "⌂"),
-        AppNavItem("learn", if (language == "hi") "सीखें" else "Learn", "▤"),
-        AppNavItem("tests", if (language == "hi") "टेस्ट" else "Tests", "✓"),
-        AppNavItem("results", if (language == "hi") "परिणाम" else "Results", "▥"),
-        AppNavItem("profile", if (language == "hi") "प्रोफ़ाइल" else "Profile", "◉")
+        AppNavItem("today", if (language == "hi") "आज" else "Today", "⌂"),
+        AppNavItem("learn", if (language == "hi") "पढ़ाई" else "Learn", "▤"),
+        AppNavItem("practice", if (language == "hi") "अभ्यास" else "Practice", "✦"),
+        AppNavItem("progress", if (language == "hi") "प्रगति" else "Progress", "↗"),
+        AppNavItem("library", if (language == "hi") "किताबें" else "Books", "▣")
     )
-    val selectedNavKey = when {
-        parentRole -> if (route == AppRoute.PARENT_PROFILE) "profile" else "home"
-        route == AppRoute.PROFILE -> "profile"
-        route == AppRoute.ASSESSMENT_RESULTS -> "results"
-        route in setOf(AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT, AppRoute.ASSESSMENT_REVIEW) -> "tests"
-        route in setOf(AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.DIAGNOSTIC,
-            AppRoute.RESOURCES, AppRoute.DOCUMENT_READER, AppRoute.PROGRESS, AppRoute.TUTOR,
-            AppRoute.CLASSES, AppRoute.RECORDING_PLAYER) -> "learn"
-        else -> "home"
-    }
+    val selectedNavKey = if (parentRole) {
+        when (route) {
+            AppRoute.PARENT_PROFILE -> "profile"
+            AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE -> "children"
+            else -> parentSection
+        }
+    } else studentGroupForRoute(route)
+
     fun selectPrimaryDestination(key: String) {
         error = ""; status = ""
         when (key) {
-            "home" -> route = if (parentRole) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
-            "learn" -> openSubject(currentSubject)
-            "tests" -> openAssessments("ALL")
-            "results" -> loadAssessmentResults()
-            "profile" -> if (parentRole) openParentProfile() else openStudentProfile()
+            "family" -> { parentSection = "family"; route = AppRoute.PARENT_HOME }
+            "children" -> { parentSection = "children"; route = AppRoute.PARENT_HOME }
+            "profile" -> if (parentRole) openParentProfile() else {
+                lastStudentNavGroup = studentGroupForRoute(route)
+                openStudentProfile()
+            }
+            "today" -> { lastStudentNavGroup = key; route = AppRoute.STUDENT_HOME }
+            "learn" -> { lastStudentNavGroup = key; openSubject(currentSubject) }
+            "practice" -> { lastStudentNavGroup = key; openAssessments("ALL") }
+            "progress" -> { lastStudentNavGroup = key; openProgress() }
+            "library" -> { lastStudentNavGroup = key; openResources(currentSubject) }
         }
     }
     BackHandler(enabled = signedIn) {
@@ -1415,7 +1439,7 @@ fun QuantaEdgeApp() {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (signedIn && wideLayout) NavigationRail {
+            if (signedIn && landscapeLayout) NavigationRail {
                 navItems.forEach { item ->
                     NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
@@ -1437,6 +1461,22 @@ fun QuantaEdgeApp() {
                         contentScale = ContentScale.Fit
                     )
                     Spacer(modifier = Modifier.weight(1f))
+                    if (signedIn && !parentRole) {
+                        TextButton(onClick = {
+                            lastStudentNavGroup = when (route) {
+                                AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"
+                                AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"
+                                AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
+                                AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD -> "practice"
+                                AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
+                                AppRoute.RECORDING_PLAYER -> "learn"
+                                else -> "today"
+                            }
+                            openStudentProfile()
+                        }, enabled = !busy) {
+                            Text(if (language == "hi") "प्रोफ़ाइल" else "Profile")
+                        }
+                    }
                     if (route !in setOf(AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)) {
                         TextButton(onClick = { toggleLanguage() }, enabled = !busy) {
                             Text(if (language == "hi") "EN" else "हिंदी")
@@ -1444,16 +1484,52 @@ fun QuantaEdgeApp() {
                     }
                 }
                 HorizontalDivider()
-                if (route == AppRoute.STUDENT_HOME && auth.textAny("role").contains("STUDENT", true)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        TextButton(onClick = { route = AppRoute.CERTIFICATES }) {
-                            Text(if (language == "hi") "🏅 प्रमाणपत्र" else "🏅 Certificates")
+                // Secondary links stay text-first within their group; no feature route becomes a new primary icon.
+                if (signedIn && !parentRole) {
+                    when (selectedNavKey) {
+                        "learn" -> Row(
+                            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 2.dp),
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            TextButton(onClick = { openSubject(currentSubject) }, enabled = !busy) {
+                                Text(if (language == "hi") "पाठ और विषय" else "Lessons & topics")
+                            }
+                            TextButton(onClick = { openClasses(currentSubject) }, enabled = !busy) {
+                                Text(if (language == "hi") "कक्षाएँ" else "Live classes")
+                            }
+                            TextButton(onClick = { openTutor() }, enabled = !busy && lesson.longAny("id", "lesson_id") > 0L) {
+                                Text(if (language == "hi") "ट्यूटर" else "Tutor")
+                            }
                         }
-                        TextButton(onClick = { route = AppRoute.LEADERBOARD }) {
-                            Text(if (language == "hi") "🏆 टॉप 20 टेस्ट" else "🏆 Top 20 tests")
+                        "practice" -> Row(
+                            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 2.dp),
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            TextButton(onClick = { openAssessments("ALL") }, enabled = !busy) {
+                                Text(if (language == "hi") "टेस्ट" else "Tests")
+                            }
+                            TextButton(onClick = { loadAssessmentResults() }, enabled = !busy) {
+                                Text(if (language == "hi") "परिणाम" else "Results")
+                            }
+                            if (recommendation.textAny("kind", "type").contains("DIAGNOSTIC", true)) {
+                                TextButton(onClick = { openDiagnostic() }, enabled = !busy) {
+                                    Text(if (language == "hi") "डायग्नोस्टिक" else "Diagnostic")
+                                }
+                            }
+                            TextButton(onClick = { route = AppRoute.LEADERBOARD }, enabled = !busy) {
+                                Text(if (language == "hi") "टॉप 20" else "Top 20")
+                            }
+                        }
+                        "progress" -> Row(
+                            modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 8.dp, vertical = 2.dp),
+                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        ) {
+                            TextButton(onClick = { openProgress() }, enabled = !busy) {
+                                Text(if (language == "hi") "प्रगति" else "My progress")
+                            }
+                            TextButton(onClick = { route = AppRoute.CERTIFICATES }, enabled = !busy) {
+                                Text(if (language == "hi") "प्रमाणपत्र" else "Certificates")
+                            }
                         }
                     }
                 }
@@ -1529,6 +1605,8 @@ fun QuantaEdgeApp() {
                     AppRoute.PARENT_HOME -> ParentHomeScreen(
                         parent = parentAccount,
                         children = parentChildren,
+                        section = parentSection,
+                        language = language,
                         busy = busy,
                         onRefresh = { runTask {
                             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
@@ -1764,7 +1842,7 @@ fun QuantaEdgeApp() {
                 }
                 }
             }
-            if (signedIn && !wideLayout) NavigationBar {
+            if (signedIn && !landscapeLayout) NavigationBar {
                 navItems.forEach { item ->
                     NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) })
@@ -3003,6 +3081,8 @@ private fun DocumentReaderScreen(
 private fun ParentHomeScreen(
     parent: JSONObject,
     children: List<JSONObject>,
+    section: String,
+    language: String,
     busy: Boolean,
     onRefresh: () -> Unit,
     onReport: (JSONObject) -> Unit,
@@ -3013,18 +3093,37 @@ private fun ParentHomeScreen(
     maxChildren: Int
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(localizedUiText("अभिभावक डैशबोर्ड"), style = MaterialTheme.typography.headlineSmall)
-        Text(parent.textAny("parentName").ifBlank { "अभिभावक" }, style = MaterialTheme.typography.titleMedium)
-        Text(localizedUiText("सक्रिय छात्र: ") + parent.optInt("activeChildren", children.size) + " / " + maxChildren,
-            style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = if (section == "children") {
+                if (language == "hi") "बच्चों के प्रोफ़ाइल" else "Children’s profiles"
+            } else {
+                if (language == "hi") "परिवार की रिपोर्ट" else "Family report"
+            },
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Text(parent.textAny("parentName").ifBlank { if (language == "hi") "अभिभावक" else "Parent account" },
+            style = MaterialTheme.typography.titleMedium)
+        Text(
+            (if (language == "hi") "सक्रिय छात्र: " else "Active students: ") +
+                parent.optInt("activeChildren", children.size) + " / " + maxChildren,
+            style = MaterialTheme.typography.bodySmall
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
-            TextButton(onClick = onProfile, enabled = !busy) { Text(localizedUiText("प्रोफ़ाइल")) }
-            TextButton(onClick = onLogout, enabled = !busy) { Text(localizedUiText("साइन आउट")) }
+            TextButton(onClick = onRefresh, enabled = !busy) {
+                Text(if (language == "hi") "रिफ्रेश" else "Refresh")
+            }
+            TextButton(onClick = onLogout, enabled = !busy) {
+                Text(if (language == "hi") "साइन आउट" else "Sign out")
+            }
         }
         Button(onClick = onAddChild, enabled = !busy && children.size < maxChildren,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) { Text(localizedUiText("नया छात्र प्रोफ़ाइल बनाएँ")) }
-        if (children.isEmpty()) EmptyState("कोई सक्रिय छात्र प्रोफ़ाइल नहीं", "अभिभावक खाते से जुड़े सक्रिय छात्र यहाँ दिखेंगे।")
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            Text(if (language == "hi") "नया छात्र प्रोफ़ाइल बनाएँ" else "Create child profile")
+        }
+        if (children.isEmpty()) EmptyState(
+            if (language == "hi") "कोई सक्रिय छात्र प्रोफ़ाइल नहीं" else "No active child profiles",
+            if (language == "hi") "अभिभावक खाते से जुड़े सक्रिय छात्र यहाँ दिखेंगे।" else "Active student profiles connected to this parent account appear here."
+        )
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
             items(children) { child ->
                 Card(modifier = Modifier.fillMaxWidth()) {
@@ -3032,14 +3131,23 @@ private fun ParentHomeScreen(
                         Text(child.textAny("display_name", "displayName").ifBlank { "छात्र" }, style = MaterialTheme.typography.titleMedium)
                         Text(localizedUiText("कक्षा ") + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
                             style = MaterialTheme.typography.bodySmall)
-                        Text(localizedUiText("यूज़रनेम: ") + child.textAny("login_username").ifBlank { "सेट नहीं" },
-                            style = MaterialTheme.typography.bodySmall)
+                        if (section == "children") {
+                            Text(
+                                (if (language == "hi") "यूज़रनेम: " else "Username: ") +
+                                    child.textAny("login_username").ifBlank { if (language == "hi") "सेट नहीं" else "Not set" },
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = { onReport(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text(localizedUiText("सीखने की रिपोर्ट"))
+                            Button(onClick = { onReport(child) }, enabled = !busy,
+                                modifier = Modifier.weight(1f)) {
+                                Text(if (language == "hi") "सीखने की रिपोर्ट" else "Learning report")
                             }
-                            TextButton(onClick = { onManageChild(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text(localizedUiText("Login / विषय"))
+                            if (section == "children") {
+                                TextButton(onClick = { onManageChild(child) }, enabled = !busy,
+                                    modifier = Modifier.weight(1f)) {
+                                    Text(if (language == "hi") "Login / विषय" else "Login / subjects")
+                                }
                             }
                         }
                     }
