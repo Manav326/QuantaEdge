@@ -346,10 +346,7 @@ public class CertificateController {
     }
 
     boolean hindi = "hi".equals(language);
-    String subjectName = "maths".equals(subjectCode)
-        ? (hindi ? "गणित" : "Mathematics")
-        : "science".equals(subjectCode) ? (hindi ? "विज्ञान" : "Science")
-        : String.valueOf(achievement.get("subject_name"));
+    String subjectName = localizedSubjectName(subjectCode, achievement.get("subject_name"), language);
     String title = (hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName;
     String summary = hindi
         ? "इस विषय में प्रकाशित सभी " + total + " पाठ सफलतापूर्वक पूरे किए।"

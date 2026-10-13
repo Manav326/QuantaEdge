@@ -32,6 +32,13 @@ type CertificateEligibility = {
   class_code?:string;subject_code?:string;subject_name?:string;
 };
 
+function certificateTrackName(code: string | undefined, name: string | undefined, language: string) {
+  const normalized = String(code || '').trim().toLowerCase();
+  if (['maths', 'math', 'mathematics'].includes(normalized)) return language === 'hi' ? 'गणित' : 'Mathematics';
+  if (normalized === 'science') return language === 'hi' ? 'विज्ञान' : 'Science';
+  return name || code || '';
+}
+
 type LeaderboardEntry = {
   rank:number;
   student_name:string;
@@ -549,7 +556,7 @@ export default function TestsClient(){
             return <section className={styles.certificateResultPanel} aria-live="polite">
               <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
                 <p>Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate. The class and subject track are included; certificate language follows your current app language, while the assessment title stays as authored.</p>
-                {cert?.subject_name && <small>{language === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {language === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {cert.subject_name}</small>}
+                {cert?.subject_name && <small>{language === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {language === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, language)}</small>}
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
