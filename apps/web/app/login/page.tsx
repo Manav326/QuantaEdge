@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import QuantaEdgeBrand from '../components/QuantaEdgeBrand';
 import { LanguageSwitcher, LocaleText, useLocale } from '../components/LanguageProvider';
 
@@ -18,7 +17,6 @@ async function readApi(response: Response): Promise<any> {
 }
 
 export default function ParentLoginPage() {
-  const router = useRouter();
   const { locale } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [mode, setMode] = useState<Mode>('login');
@@ -63,7 +61,10 @@ export default function ParentLoginPage() {
         }
         throw new Error(message || 'Unable to sign in. Check your mobile number and password.');
       }
-      router.replace('/parent'); router.refresh();
+      if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
+        throw new Error(tx('Parent session verify नहीं हो पाया। दोबारा sign in करें।', 'The server did not confirm a Parent session. Please sign in again.'));
+      }
+      window.location.replace('/parent');
     } catch (e: any) {
       setError(e?.message || tx('Sign in नहीं हो पाया। दोबारा प्रयास करें।','Unable to sign in. Please try again.'));
     } finally { setBusy(false); }
@@ -118,8 +119,10 @@ export default function ParentLoginPage() {
       });
       const body = await readApi(response);
       if (!response.ok) throw new Error(body.message || 'Verification failed. Please try again.');
-      router.replace(mode === 'register' ? '/parent/children' : '/parent');
-      router.refresh();
+      if (body.role !== 'PARENT' || body.workspace !== 'PARENT' || Number(body.userId) <= 0 || Number(body.studentId) > 0) {
+        throw new Error(tx('Parent session verify नहीं हो पाया। दोबारा sign in करें।', 'The server did not confirm a Parent session. Please sign in again.'));
+      }
+      window.location.replace(mode === 'register' ? '/parent/children' : '/parent');
     } catch (e: any) {
       setError(e?.message || 'Verification failed. Please try again.');
     } finally { setBusy(false); }
