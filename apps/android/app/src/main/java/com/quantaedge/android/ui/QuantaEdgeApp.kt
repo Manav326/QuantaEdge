@@ -1,6 +1,7 @@
 package com.quantaedge.android.ui
 
 import android.graphics.BitmapFactory
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +31,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -46,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +79,8 @@ private data class ResourceDownloadUiState(
     val progress: Float? = null,
     val active: Boolean = false
 )
+
+private data class AppNavItem(val key: String, val label: String, val glyph: String)
 
 private enum class AppRoute {
     LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
@@ -1095,7 +1105,8 @@ fun QuantaEdgeApp() {
 
     fun goBack() {
         route = when (route) {
-            AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
+            AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME -> route
+            AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.ASSESSMENT_RESULTS, AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
@@ -1113,8 +1124,52 @@ fun QuantaEdgeApp() {
         error = ""
     }
 
+    val wideLayout = LocalConfiguration.current.screenWidthDp >= 600
+    val role = auth.textAny("role")
+    val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
+    val signedIn = role.isNotBlank() && route !in setOf(AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    val navItems = if (parentRole) listOf(
+        AppNavItem("home", if (language == "hi") "होम" else "Home", "⌂"),
+        AppNavItem("profile", if (language == "hi") "प्रोफ़ाइल" else "Profile", "◉")
+    ) else listOf(
+        AppNavItem("home", if (language == "hi") "होम" else "Home", "⌂"),
+        AppNavItem("learn", if (language == "hi") "सीखें" else "Learn", "▤"),
+        AppNavItem("tests", if (language == "hi") "टेस्ट" else "Tests", "✓"),
+        AppNavItem("results", if (language == "hi") "परिणाम" else "Results", "▥"),
+        AppNavItem("profile", if (language == "hi") "प्रोफ़ाइल" else "Profile", "◉")
+    )
+    val selectedNavKey = when {
+        parentRole -> if (route == AppRoute.PARENT_PROFILE) "profile" else "home"
+        route == AppRoute.PROFILE -> "profile"
+        route == AppRoute.ASSESSMENT_RESULTS -> "results"
+        route in setOf(AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT, AppRoute.ASSESSMENT_REVIEW) -> "tests"
+        route in setOf(AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.DIAGNOSTIC,
+            AppRoute.RESOURCES, AppRoute.DOCUMENT_READER, AppRoute.PROGRESS, AppRoute.TUTOR,
+            AppRoute.CLASSES, AppRoute.RECORDING_PLAYER) -> "learn"
+        else -> "home"
+    }
+    fun selectPrimaryDestination(key: String) {
+        error = ""; status = ""
+        when (key) {
+            "home" -> route = if (parentRole) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
+            "learn" -> openSubject(currentSubject)
+            "tests" -> openAssessments(currentSubject)
+            "results" -> loadAssessmentResults()
+            "profile" -> if (parentRole) openParentProfile() else openStudentProfile()
+        }
+    }
+    BackHandler(enabled = signedIn) {
+        if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) goBack()
+    }
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxSize()) {
+            if (signedIn && wideLayout) NavigationRail {
+                navItems.forEach { item ->
+                    NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
+                        icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
+                }
+            }
+            Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
             if (route != AppRoute.LOGIN) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
@@ -1166,7 +1221,8 @@ fun QuantaEdgeApp() {
                 )
             }
 
-            Box(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+                Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 when (route) {
                     AppRoute.LOGIN -> LoginScreen(
                         busy = busy,
@@ -1412,9 +1468,17 @@ fun QuantaEdgeApp() {
                         onSaveAndBack = ::saveRecordingProgressAndBack
                     )
                 }
+                }
+            }
+            if (signedIn && !wideLayout) NavigationBar {
+                navItems.forEach { item ->
+                    NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
+                        icon = { Text(item.glyph) }, label = { Text(item.label) })
+                }
             }
         }
     }
+}
 }
 
 @Composable
