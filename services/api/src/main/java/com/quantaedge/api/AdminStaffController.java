@@ -66,7 +66,7 @@ public class AdminStaffController {
         select permission_key, display_name, description
         from staff_permission_catalog
         where permission_key not like 'HR\\_%' escape '\\'
-          and permission_key <> 'HR_SELF_SERVICE_VIEW'
+          and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
         order by case when permission_key like 'CONTENT_%' then 0 else 1 end, display_name
         """);
   }
@@ -244,7 +244,7 @@ public class AdminStaffController {
         throw badRequest("Each permission must be a valid permission key.");
       }
       String normalized = permission.trim().toUpperCase();
-      if (normalized.startsWith("HR_") || "HR_SELF_SERVICE_VIEW".equals(normalized)) {
+      if (normalized.startsWith("HR_") || Set.of("HR_SELF_SERVICE_VIEW","TEACHING_ASSIGNMENT_VIEW","CLASS_SCHEDULE_POLICY_MANAGE").contains(normalized)) {
         throw badRequest("HRMS permissions can only be assigned from the HRMS access-management workspace.");
       }
       distinct.add(normalized);
@@ -282,7 +282,7 @@ public class AdminStaffController {
       case "ADMIN" -> jdbc.queryForList("""
           select permission_key from staff_permission_catalog
           where permission_key not like 'HR\\_%' escape '\\'
-            and permission_key <> 'HR_SELF_SERVICE_VIEW'
+            and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
           order by permission_key
           """,String.class);
       case "MANAGER" -> List.of("CONTENT_VIEW","CONTENT_CREATE","CONTENT_EDIT","CONTENT_SUBMIT",
@@ -299,7 +299,7 @@ public class AdminStaffController {
     Integer count=jdbc.queryForObject("""
         select count(*) from staff_permission_catalog
         where permission_key not like 'HR\\_%' escape '\\'
-          and permission_key <> 'HR_SELF_SERVICE_VIEW'
+          and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
         """,Integer.class);
     return count==null?0:count;
   }
