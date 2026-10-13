@@ -17,7 +17,9 @@ type AccessUser = {
   last_login_at: string | null;
   roles: string[];
   permissions: string[];
+  assigned_permissions: string[];
 };
+type Permission = { permission_key: string; display_name: string; description: string };
 
 const ROLE_OPTIONS = [
   { value: 'EMPLOYEE', label: 'Employee', description: 'Own profile and permitted self-service only.' },
@@ -45,6 +47,8 @@ export default function HrmsAccessPage() {
   const router = useRouter();
   const [session, setSession] = useState<Session | null>(null);
   const [rows, setRows] = useState<AccessUser[]>([]);
+  const [permissionOptions, setPermissionOptions] = useState<Permission[]>([]);
+  const [assignedPermissions, setAssignedPermissions] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [search, setSearch] = useState('');
   const [username, setUsername] = useState('');
@@ -68,8 +72,12 @@ export default function HrmsAccessPage() {
         setError('Your account cannot manage HRMS login access. Ask the People Operations Super Admin to grant HR_ACCESS_MANAGE.');
         return;
       }
-      const result = await api('/api/v1/hrms/access-users');
+      const [result, options] = await Promise.all([
+        api('/api/v1/hrms/access-users'),
+        api('/api/v1/hrms/access-users/permissions'),
+      ]);
       setRows(Array.isArray(result) ? result : []);
+      setPermissionOptions(Array.isArray(options) ? options : []);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Employee access records could not be loaded.');
       if (String(cause).toLowerCase().includes('authentication required')) router.replace('/login');
@@ -93,6 +101,7 @@ export default function HrmsAccessPage() {
     setUsername(row.username || '');
     setInitialPassword('');
     setRoles(Array.isArray(row.roles) && row.roles.length ? [...row.roles] : ['EMPLOYEE']);
+    setAssignedPermissions(Array.isArray(row.assigned_permissions) ? [...row.assigned_permissions] : []);
     setShowCredentials(!row.username || !row.hrms_access_enabled);
     setError('');
     setNotice('');
@@ -116,7 +125,7 @@ export default function HrmsAccessPage() {
     try {
       await api('/api/v1/hrms/access-users/' + selected.employee_id, {
         method: 'POST',
-        body: JSON.stringify({ username: username.trim(), initialPassword, roles }),
+        body: JSON.stringify({ username: username.trim(), initialPassword, roles, permissions: assignedPermissions }),
       });
       setNotice('Login credentials saved. The employee must change the initial password at first sign-in; previous HRMS sessions have been revoked.');
       setInitialPassword('');
@@ -131,7 +140,7 @@ export default function HrmsAccessPage() {
     setSaving(true); setError(''); setNotice('');
     try {
       await api('/api/v1/hrms/access-users/' + selected.employee_id + '/roles', {
-        method: 'PUT', body: JSON.stringify({ roles }),
+        method: 'PUT', body: JSON.stringify({ roles, permissions: assignedPermissions }),
       });
       setNotice('Roles updated. The API enforces these permissions immediately; active HRMS sessions were revoked for a fresh sign-in.');
       await load();
@@ -214,7 +223,7 @@ export default function HrmsAccessPage() {
                       <td>{row.last_login_at ? new Date(row.last_login_at).toLocaleString() : 'Never'}</td>
                       <td style={{ minWidth: 180 }}>
                         <button className="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>{reserved(row) ? 'View account' : 'Manage access'}</button>
-                        {!reserved(row) && !isSelf && <button className="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id || (!row.hrms_access_enabled && !row.staff_id)}>{row.hrms_access_enabled ? 'Disable' : 'Enable'}</button>}
+                        {!reserved(row) && row.staff_id !== session?.staffId && <button className="secondary" type="button" onClick={() => void toggleAccess(row)} disabled={saving || !row.staff_id}>{row.hrms_access_enabled ? 'Disable' : 'Enable'}</button>}
                         {!row.staff_id && <button className="secondary" type="button" onClick={() => selectEmployee(row)} disabled={saving}>Create login</button>}
                       </td>
                     </tr>
@@ -241,11 +250,26 @@ export default function HrmsAccessPage() {
                 </label>
               ))}
             </div>
-            <p className="small">Roles combine by union, but the API still limits the data and operations each permission grants. Education content publishing is not assignable here.</p>
+            <p className="small">Roles combine by union. Additional permissions below are HRMS-scoped and cannot grant education content access. The API checks every permission server-side.</p>
+            <div className="cards">
+              {permissionOptions.map((permission) => (
+                <label className="card" key={permission.permission_key} style={{ cursor: 'pointer', display: 'flex', gap: 10, alignItems: 'start' }}>
+                  <input
+                    type="checkbox"
+                    checked={assignedPermissions.includes(permission.permission_key)}
+                    onChange={(event) => setAssignedPermissions((current) => event.target.checked
+                      ? [...new Set([...current, permission.permission_key])]
+                      : current.filter((key) => key !== permission.permission_key))}
+                    disabled={saving || isReserved || isSelf}
+                  />
+                  <span><strong>{permission.display_name}</strong><div className="small">{permission.description}</div><div className="small">{permission.permission_key}</div></span>
+                </label>
+              ))}
+            </div>
 
             {selected.staff_id && selected.hrms_access_enabled && !isReserved && !isSelf && (
               <button className="primary" type="button" onClick={() => void saveRoles()} disabled={saving}>
-                {saving ? 'Saving…' : 'Save role assignments'}
+                {saving ? 'Saving…' : 'Save roles and permissions'}
               </button>
             )}
 
