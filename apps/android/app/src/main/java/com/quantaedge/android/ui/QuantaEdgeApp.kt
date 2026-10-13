@@ -974,7 +974,10 @@ fun QuantaEdgeApp() {
             lessonAnswerLocks[answerKey] = com.quantaedge.android.domain.LessonAnswerPolicy.shouldLock(
                 if (hasGrade) result.optBoolean("correct") else null
             )
-            feedbacks[answerKey] = feedback
+            val explanation = result.textAny("explanation")
+            feedbacks[answerKey] = if (explanation.isNotBlank()) {
+                feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
+            } else feedback
             lesson = ApiClient.getObject("/api/v1/learning/lessons/" + lesson.longAny("id") + "?language=" + learningContentLanguage)
         }
     }
@@ -988,11 +991,15 @@ fun QuantaEdgeApp() {
                 "/api/v1/learning/questions/" + questionId + "/answer?language=" + learningContentLanguage,
                 JSONObject().put("answer", answer).put("practiceSessionId", sessionId)
             )
-            feedbacks[questionId.toString()] = response.textAny("feedback").ifBlank {
+            val feedback = response.textAny("feedback").ifBlank {
                 if (response.isNull("correct")) "उत्तर सुरक्षित हुआ; मूल्यांकन बाकी है।"
                 else if (response.optBoolean("correct")) "सही उत्तर।"
                 else "उत्तर सही नहीं था। फिर प्रयास करें।"
             }
+            val explanation = response.textAny("explanation")
+            feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
+                feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
+            } else feedback
             practice = ApiClient.getObject("/api/v1/learning/practice/sessions/" + sessionId + "?language=" + learningContentLanguage)
         }
     }
@@ -1005,7 +1012,11 @@ fun QuantaEdgeApp() {
                 "/api/v1/diagnostic/attempts/" + attemptId + "/answers/" + questionId,
                 JSONObject().put("answer", answer)
             )
-            feedbacks[questionId.toString()] = response.textAny("feedback").ifBlank { "उत्तर सुरक्षित हुआ।" }
+            val feedback = response.textAny("feedback").ifBlank { "उत्तर सुरक्षित हुआ।" }
+            val explanation = response.textAny("explanation")
+            feedbacks[questionId.toString()] = if (explanation.isNotBlank()) {
+                feedback + "\n\n" + (if (language == "hi") "व्याख्या: " else "Explanation: ") + explanation
+            } else feedback
             diagnostic = ApiClient.getObject("/api/v1/diagnostic")
         }
     }
