@@ -90,6 +90,52 @@ public class CertificateController {
     return Map.of("items", items);
   }
 
+  @GetMapping("/guardians/children/{studentId}/certificates")
+  public Map<String, Object> childCertificates(@PathVariable long studentId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    List<Map<String, Object>> items = jdbc.queryForList("""
+        SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
+        WHERE c.student_id=?
+        ORDER BY c.issued_at DESC,c.id DESC
+        LIMIT 200
+        """, studentId);
+    return Map.of("items", items, "studentId", studentId);
+  }
+
+  @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/view")
+  public ResponseEntity<byte[]> viewChildCertificate(@PathVariable long studentId,
+      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    return certificateArtifact(certificateId, studentId, format, true);
+  }
+
+  @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/download")
+  public ResponseEntity<byte[]> downloadChildCertificate(@PathVariable long studentId,
+      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    return certificateArtifact(certificateId, studentId, format, false);
+  }
+
+  private void requireGuardianChild(AuthContext context, long studentId) {
+    Boolean allowed = jdbc.queryForObject("""
+        SELECT EXISTS (
+          SELECT 1 FROM guardian_student gs
+          JOIN student st ON st.id=gs.student_id
+          WHERE gs.guardian_user_id=? AND gs.student_id=? AND gs.active=true
+            AND gs.consent_status='CONSENTED' AND st.active=true
+        )
+        """, Boolean.class, context.userId(), studentId);
+    if (!Boolean.TRUE.equals(allowed)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Child not found.");
+    }
+  }
+
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -470,14 +516,19 @@ public class CertificateController {
   private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId, String format,
       AuthContext context, boolean inline) {
     context = authorization.requireStudent(context);
-    String normalizedFormat = format.trim().toLowerCase(Locale.ROOT);
+    return certificateArtifact(certificateId, context.studentId(), format, inline);
+  }
+
+  private ResponseEntity<byte[]> certificateArtifact(long certificateId, long studentId,
+      String format, boolean inline) {
+    String normalizedFormat = format == null ? "pdf" : format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
     }
     Map<String, Object> certificate = queryOptional("""
         SELECT id,certificate_number,status,pdf_storage_key,png_storage_key,pdf_sha256,png_sha256
         FROM student_certificate WHERE id=? AND student_id=?
-        """, certificateId, context.studentId());
+        """, certificateId, studentId);
     if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.GONE, "This certificate has been revoked and is no longer downloadable as valid proof.");
