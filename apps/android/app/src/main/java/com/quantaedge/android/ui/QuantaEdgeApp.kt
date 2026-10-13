@@ -3568,17 +3568,23 @@ private fun ParentHomeScreen(
     onLogout: () -> Unit,
     maxChildren: Int
 ) {
+    val parentName = parent.textAny("parentName").ifBlank { if (language == "hi") "अभिभावक" else "Parent account" }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text(HomeGreeting.text(LocalTime.now().hour, language),
+            style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold)
+        Text(
+            (if (language == "hi") "नमस्ते, " else "Hello, ") + parentName + " 👋",
+            style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.secondary
+        )
         Text(
             text = if (section == "children") {
                 if (language == "hi") "बच्चों के प्रोफ़ाइल" else "Children’s profiles"
             } else {
                 if (language == "hi") "परिवार की रिपोर्ट" else "Family report"
             },
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.titleMedium
         )
-        Text(parent.textAny("parentName").ifBlank { if (language == "hi") "अभिभावक" else "Parent account" },
-            style = MaterialTheme.typography.titleMedium)
         Text(
             (if (language == "hi") "सक्रिय छात्र: " else "Active students: ") +
                 parent.optInt("activeChildren", children.size) + " / " + maxChildren,
