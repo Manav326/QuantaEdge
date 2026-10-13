@@ -126,17 +126,23 @@ public class HrPayrollController {
   }
 
   @GetMapping("/periods")
-  public List<Map<String,Object>> periods(@RequestParam long organizationId,
+  public Map<String,Object> periods(@RequestParam long organizationId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context); ensureOrganization(organizationId);
-    return jdbc.queryForList("""
+    int safeLimit=List.of(10,20,50).contains(limit)?limit:20;
+    int safeOffset=Math.max(0,Math.min(offset,1_000_000));
+    List<Map<String,Object>> items=jdbc.queryForList("""
       select p.id,p.organization_id,p.period_name,p.start_date,p.end_date,p.status,p.created_at,p.updated_at,
         r.id latest_run_id,r.version_no latest_run_version,r.status latest_run_status,
         r.total_gross,r.total_deductions,r.total_net,r.currency
       from hr_payroll_period p
       left join lateral (select * from hr_payroll_run x where x.period_id=p.id order by x.version_no desc limit 1) r on true
       where p.organization_id=? order by p.start_date desc,p.id desc
-      """,organizationId);
+      limit ? offset ?
+      """,organizationId,safeLimit,safeOffset);
+    Long total=jdbc.queryForObject("select count(*) from hr_payroll_period where organization_id=?",Long.class,organizationId);
+    return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
   @PostMapping("/periods")
