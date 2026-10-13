@@ -54,7 +54,7 @@ public class HrAttendanceLeaveController {
    BigDecimal days=new BigDecimal(String.valueOf(before.get("requested_days")));
    Map<String,Object> employee=jdbc.queryForList("select id,organization_id from hr_employee where id=?",employeeId).stream().findFirst().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee not found."));
    long organizationId=((Number)employee.get("organization_id")).longValue();
-   jdbc.queryForObject("select pg_advisory_xact_lock(hashtext(?))",Object.class,organizationId+":"+employeeId+":"+type);
+   jdbc.query("select pg_advisory_xact_lock(hashtext(?))",rs->{if(rs.next())rs.getObject(1);},organizationId+":"+employeeId+":"+type);
    BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(start));
    if(balance==null||balance.compareTo(days)<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"Insufficient paid-leave balance for this approval. Record an authorized grant/accrual or reject the request.");
    try{
