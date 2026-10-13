@@ -69,7 +69,9 @@ public class AuthController {
       @RequestBody Map<String,Object> body,
       HttpServletRequest request,
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
-    if (context == null || !context.isEmployee()) {
+    if (context == null || !context.isEmployee()
+        || !"HRMS".equals(AuthService.normalizeWorkspace(
+            (String) request.getAttribute("authWorkspace")))) {
       throw new SecurityException("An authenticated HRMS employee session is required.");
     }
     auth.changeHrmsPassword(context.staffId(),
@@ -126,7 +128,8 @@ public class AuthController {
     result.put("displayName",context.displayName());
     result.put("staffId",context.staffId());
     result.put("workspace", workspace == null ? AuthService.workspaceForContext(context) : workspace);
-    result.put("permissions",context.staffId()==null?java.util.List.of():auth.permissionsForStaff(context.staffId()));
+    result.put("permissions",context.staffId()==null?java.util.List.of():
+        auth.permissionsForStaff(context.staffId(), workspace == null ? context.workspace() : workspace));
     result.put("mustChangePassword",context.staffId()!=null && "HRMS".equals(workspace)
         && auth.staffMustChangePassword(context.staffId()));
     return result;
