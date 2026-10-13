@@ -351,7 +351,19 @@ public class HrEmployeeController {
     LocalDate joining=((java.sql.Date)before.get("joining_date")).toLocalDate();
     LocalDate probation=before.get("probation_end_date") instanceof java.sql.Date existingProbation ? existingProbation.toLocalDate() : null;
     validateEmploymentDates(joining,probation,exit);
-    validateEmploymentStatusTransition(String.valueOf(before.get("employment_status")),status,exit);
+    String previousStatus=String.valueOf(before.get("employment_status"));
+    validateEmploymentStatusTransition(previousStatus,status,exit);
+    if(!previousStatus.equals(status)) {
+      long organizationId=((Number)before.get("organization_id")).longValue();
+      String transitionKey=previousStatus+"_TO_"+status;
+      List<Map<String,Object>> rules=jdbc.queryForList("""
+        select required_permission_key from hr_lifecycle_approval_rule
+        where organization_id=? and transition_key=? and from_status=? and to_status=? and active=true
+        """,organizationId,transitionKey,previousStatus,status);
+      if(rules.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT,
+        "No active approval rule is configured for "+previousStatus+" -> "+status+". Ask an approval-policy administrator to configure it.");
+      authorization.requirePermission(context,String.valueOf(rules.getFirst().get("required_permission_key")));
+    }
     jdbc.update("update hr_employee set employment_status=?,exit_date=?,updated_by_staff_id=?,updated_at=now() where id=?",
       status,exit==null?null:Date.valueOf(exit),context.staffId(),id);
     Map<String,Object> after=employeeById(id);
