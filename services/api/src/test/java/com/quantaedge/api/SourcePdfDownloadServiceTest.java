@@ -3,7 +3,10 @@ package com.quantaedge.api;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
@@ -54,6 +57,27 @@ class SourcePdfDownloadServiceTest {
         () -> cacheOnly.download("https://ncert.nic.in/textbook.php?ln=en", "Missing textbook"));
 
     org.junit.jupiter.api.Assertions.assertTrue(error.getMessage().contains("textbook-cache-only"));
+  }
+
+  @Test
+  void defaultPdfLimitSupportsWholeBooksAround250MiB() {
+    assertTrue(SourcePdfDownloadService.DEFAULT_MAX_PDF_BYTES >= 250 * 1024 * 1024,
+        "The default whole-book ingestion limit must accommodate 250 MiB textbooks.");
+    assertTrue(SourcePdfDownloadService.MAX_CONFIGURABLE_PDF_BYTES >= SourcePdfDownloadService.DEFAULT_MAX_PDF_BYTES);
+  }
+
+  @Test
+  void contentLengthReaderUsesExactBufferAndRejectsTruncatedOrOverlongBodies() throws IOException {
+    byte[] expected = "%PDF-fixture".getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+    assertArrayEquals(expected, service.readLimited(
+        new ByteArrayInputStream(expected), expected.length, expected.length));
+
+    assertThrows(IllegalArgumentException.class, () -> service.readLimited(
+        new ByteArrayInputStream(new byte[] {1, 2}), 4, 4));
+    assertThrows(IllegalArgumentException.class, () -> service.readLimited(
+        new ByteArrayInputStream(new byte[] {1, 2, 3, 4}), 3, 3));
+    assertThrows(IllegalArgumentException.class, () -> service.readLimited(
+        new ByteArrayInputStream(new byte[] {1, 2, 3, 4}), 3, 4));
   }
 
   @Test
