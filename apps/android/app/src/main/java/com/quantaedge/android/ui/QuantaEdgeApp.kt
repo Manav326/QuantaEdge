@@ -321,6 +321,10 @@ fun QuantaEdgeApp() {
                     .put("username", username.trim()).put("password", password))
             }
             refreshUser()
+            // Remove unauthenticated form state (including saved password/OTP drafts) once login succeeds.
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState("anonymous:${savedRoute.name}")
+            }
         }
     }
 
@@ -343,6 +347,9 @@ fun QuantaEdgeApp() {
             ApiClient.postObject("/api/v1/auth/verify-otp", body)
             status = if (purpose == "SIGNUP") "अभिभावक खाता बन गया।" else "पासवर्ड अपडेट हो गया।"
             refreshUser()
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState("anonymous:${savedRoute.name}")
+            }
         }
     }
 
