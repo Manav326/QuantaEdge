@@ -67,15 +67,15 @@ The owner-approved decisions are documented in `docs/implementation/agent-1-hrms
 
 Implemented on this branch:
 - UI working-week fallback is six days, while still allowing five or six days to be selected.
-- Flyway V28 sets the database column default for newly created organization rows to six days without rewriting existing organizations' configured values.
-- Flyway V29 creates attendance correction history, retains before/after status, timestamps, notes, actor and required reason, and blocks update/delete of the history table at the database layer.
+- Flyway V71 sets the database column default for newly created organization rows to six days without rewriting existing organizations' configured values.
+- Flyway V72 creates attendance correction history, retains before/after status, timestamps, notes, actor and required reason, and blocks update/delete of the history table at the database layer.
 - The attendance write API now requires a non-empty correction reason when a row for the employee/work-date already exists and records the old and requested values before updating it in the same transaction.
 - A permission-checked attendance correction history read endpoint was added.
 - API unit tests were added for missing correction reason rejection and denial of correction-history reads without attendance-view permission.
 
 ## Not yet safe to call complete
 
-This is a partial implementation, not a green, complete HRMS release. The repository connector does not run Maven/Next.js locally, so tests and builds have not been executed here. CI must validate the migration and Java/test compilation.
+This is a partial implementation, not a green, complete HRMS release. During migration audit, existing migrations V28–V70 were discovered; the new migrations have been placed at V71–V73 to avoid version collisions. The repository connector does not run Maven/Next.js locally, so tests and builds have not been executed here. CI must validate the migration and Java/test compilation.
 
 Remaining policy work identified by inspection:
 - Paid-leave approval now posts a negative `USAGE` transaction within the same database transaction as the request decision, guarded by a per-employee/type advisory lock and a sufficient-balance check. Unpaid leave does not consume a paid-leave balance. The selected safe policy is to reject approval when the paid balance is insufficient. A unit test covers the insufficient-balance rejection, but the API test suite has not been run here.
