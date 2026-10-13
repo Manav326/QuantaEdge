@@ -8,7 +8,7 @@
 - **Latest integration commit:** `09b10b71a2b35574379c497ea7cb3079f8e10c65` (second parent is the latest main above; main remains unmodified by Agent 4)
 - **Repository:** [Manav326/QuantaEdge](https://github.com/Manav326/QuantaEdge)
 - **Pull request:** Not created, as required.
-- **Latest completed branch CI:** [Run 38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed all five jobs for commit `8131893ce4dc8a6f26f8ece3a6d5adece70b9ae6`; subsequent Android SDK argument alignment is being revalidated in runs 38341744121 and 38341748078.
+- **Latest full branch CI:** [Run 38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078) passed all five jobs for commit `4695181cfd61b97a5052a22162eb869db66ff954`, including the exact Android SDK package list from latest `main`.
 - **Important validation caveat:** Verification was executed remotely in GitHub Actions. This environment still could not resolve GitHub for a local clone, so no local build or test command was run. The Android unit-test task was reported `FROM-CACHE`; no physical-device test was performed.
 
 ## 1. Initial audit and baseline
@@ -89,7 +89,7 @@ Files:
 
 The standalone Android build workflow now uploads its installable debug APK as `quantaedge-android-apk`, matching the install helper's default exact artifact name. The helper's failure text now correctly describes an installable APK rather than calling it a release APK; the existing main-branch PowerShell handling for native stderr/missing artifacts was preserved during integration.
 
-The latest main CI added a `build-android-apk` job running `testDebugUnitTest assembleDebug` and uploading `quantaedge-android-apk`. The initial run failed before Gradle because the SDK action requested the removed legacy package `tools`. Latest main commit `e56620a3c59276a23dca5c2f7bbedbcf020f7da1` corrected the package list to `platform-tools platforms;android-36 build-tools;36.0.0`; that current-main configuration is integrated into both `.github/workflows/ci.yml` and the branch-only validation workflow. Run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed SDK setup/build with `platform-tools`; newer runs are checking the exact updated package list.
+The latest main CI added a `build-android-apk` job running `testDebugUnitTest assembleDebug` and uploading `quantaedge-android-apk`. The initial run failed before Gradle because the SDK action requested the removed legacy package `tools`. Latest main commit `e56620a3c59276a23dca5c2f7bbedbcf020f7da1` corrected the package list to `platform-tools platforms;android-36 build-tools;36.0.0`; that current-main configuration is integrated into both `.github/workflows/ci.yml` and the branch-only validation workflow. The final package-list rerun [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078) passed SDK setup, Gradle build/unit-test tasks, and debug APK upload.
 
 This is a debug APK, not a signed Play Store release. No Android emulator/physical device was available for an end-to-end learning-session test.
 
@@ -123,7 +123,7 @@ The workflow can be run from **Actions → QuantaEdge Textbook Cache → Run wor
 - Artifact naming is now aligned to `quantaedge-android-apk` in both relevant workflow paths and the install helper.
 - The latest main's dedicated Android job remains part of the branch integration; a branch-only validation workflow was added so tests can run without publishing branch-built container images.
 - The existing installer still checks that a successful build exists for the exact requested branch/commit, verifies that a plausible APK exists before replacing the local copy, and asks before ADB installation.
-- Branch CI run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) completed `testDebugUnitTest assembleDebug` and uploaded `quantaedge-android-apk` (14,570,459 bytes; artifact ID `11786094554`). This is an installable debug APK, not a signed Play Store release; Gradle may restore unit-test execution from cache.
+- Final package-list validation [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078) completed `testDebugUnitTest assembleDebug` and uploaded `quantaedge-android-apk` (14,570,463 bytes; artifact ID `11787276837`). This is an installable debug APK, not a signed Play Store release; Gradle restored `testDebugUnitTest` and related tasks from cache.
 
 Not performed: physical-device installation, APK signing/Play Store release validation, or real student login/lesson/progress/question submission against a live backend. A passing CI compile is not a substitute for those device and backend checks.
 
@@ -144,17 +144,17 @@ Not performed: physical-device installation, APK signing/Play Store release vali
 | Source PDF regression tests | Passed in branch CI | `SourcePdfDownloadServiceTest`: 7 tests, zero failures/errors |
 | AI generation recovery tests | Passed in branch CI | Transient retry, no-retry-on-401, and resume-review-gate tests included in Python suite |
 | API Maven verification | Passed | `mvn -B -ntp verify`: 195 tests, zero failures/errors; `BUILD SUCCESS` |
-| Python test suite | Passed | 161 tests in 0.504 seconds on run 38341468420; passed again in newer branch validation runs |
-| Student web build | Passed | `npm run build` in branch CI |
-| Admin Content Studio build | Passed | `npm run build` after preview alignment changes |
-| Android setup/build/unit tests | Passed in branch CI | Gradle `testDebugUnitTest assembleDebug` succeeded and a debug APK was uploaded; current-main SDK package configuration is being revalidated in run 38341744121/38341748078 |
+| Python test suite | Passed | 161 tests in 0.307 seconds on final run 38341748078 |
+| Student web build | Passed | `npm run build` in final branch validation |
+| Admin Content Studio build | Passed | `npm run build` in final branch validation after preview alignment changes |
+| Android setup/build/unit tests | Passed | Exact current-main SDK packages; Gradle `testDebugUnitTest assembleDebug` succeeded; test task restored `FROM-CACHE`; APK uploaded as artifact `11787276837` |
 | Baseline main workflow | Failed in Android setup | Run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) requested the removed `tools` SDK package. Latest main's explicit current-package correction is now integrated into the branch. |
 | Real model generation | Not run | No provider credentials supplied/verified |
 | GHCR read/publish | Not run | No live class/language image validation performed |
 | Physical-device test | Not run | No device bridge available |
 | Student/CMS browser E2E | Not run | Needs runtime with persisted data and authenticated roles |
 
-The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. A branch-scoped validation workflow (`.github/workflows/agent-4-validation.yml`) runs checks without publishing Docker images. Run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed all five jobs: 161 Python tests, 195 API tests with zero failures/errors, student web build, Admin Content Studio build, and Android SDK setup/Gradle build with a debug APK upload. The earlier main run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) failed at the obsolete `tools` SDK request; latest main's explicit current package list is integrated and being revalidated by runs 38341744121/38341748078. Live AI-provider requests, GHCR registry checks, browser E2E and physical-device use remain unverified.
+The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. The branch-scoped validation workflow (`.github/workflows/agent-4-validation.yml`) runs checks without publishing Docker images. Final run [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078) passed all five jobs: 161 Python tests, 195 API tests with zero failures/errors, student web build, Admin Content Studio build, and Android SDK setup/Gradle build with debug APK upload. The earlier main run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) failed at the obsolete `tools` SDK request; latest main's explicit current package list now passes. Live AI-provider requests, GHCR registry checks, browser E2E and physical-device use remain unverified.
 
 ## 9. Remaining gaps and blockers
 
@@ -181,8 +181,8 @@ Agents 1–3 own HRMS, payroll and academic workforce management. Agent 4 did no
 - **Android installer/main-sync commit:** `3c1142e93a43742140c635f1d7c85a038219643d`
 - **Android CI SDK package fix:** `116e8651c0f31e4ab1b9ffa8f80c5517fb1b1916`
 - **Branch validation workflow:** `.github/workflows/agent-4-validation.yml`
-- **Passing full branch CI run:** [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420), source/UI commit `8131893ce4dc8a6f26f8ece3a6d5adece70b9ae6`
-- **New runs for explicit Android SDK package list:** [38341744121](https://github.com/Manav326/QuantaEdge/actions/runs/38341744121) and [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078); confirm final status before treating package-list-only changes as verified.
+- **Passing full branch CI run:** [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078), tested code/workflow commit `4695181cfd61b97a5052a22162eb869db66ff954`
+- **Uploaded debug APK:** artifact ID `11787276837`, 14,570,463 bytes, not expired.
 - **Remote status:** changes have been committed to the GitHub working branch. No PR was opened and `main` was not modified by Agent 4.
 
 The branch history is the source of truth for the exact final handoff-report commit SHA; it is committed after the integration commit listed above.
