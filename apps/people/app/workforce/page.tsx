@@ -19,7 +19,8 @@ export default function ExtendedWorkforcePage(){
  const router=useRouter();
  const [session,setSession]=useState<Session|null>(null),[org,setOrg]=useState<any>(null),[tab,setTab]=useState<Tab>('recruitment');
  const [vacancies,setVacancies]=useState<any[]>([]),[candidates,setCandidates]=useState<any[]>([]),[cycles,setCycles]=useState<any[]>([]),[reviews,setReviews]=useState<any[]>([]),[assets,setAssets]=useState<any[]>([]),[exits,setExits]=useState<any[]>([]),[employees,setEmployees]=useState<any[]>([]);
- const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');\n const [candidateToConvert,setCandidateToConvert]=useState<any|null>(null),[convertDate,setConvertDate]=useState(today()),[convertType,setConvertType]=useState('FULL_TIME');\n const [selectedExitId,setSelectedExitId]=useState<number|null>(null),[checklistRows,setChecklistRows]=useState<any[]>([]);
+ const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const [candidateToConvert,setCandidateToConvert]=useState<any|null>(null),[convertDate,setConvertDate]=useState(today()),[convertType,setConvertType]=useState('FULL_TIME');\n const [selectedExitId,setSelectedExitId]=useState<number|null>(null),[checklistRows,setChecklistRows]=useState<any[]>([]);
  const [vacancy,setVacancy]=useState({title:'',description:'',openings:'1'}),[candidate,setCandidate]=useState({fullName:'',email:'',phoneE164:'',vacancyId:'',notes:''});
  const [cycle,setCycle]=useState({name:'',startDate:today(),endDate:today(),dueDate:''}),[review,setReview]=useState({cycleId:'',employeeId:'',reviewerEmployeeId:''});
  const [asset,setAsset]=useState({assetTag:'',assetType:'',description:'',serialNumber:''}),[assign,setAssign]=useState({assetId:'',employeeId:'',condition:'GOOD',note:'',expectedReturnDate:''});
