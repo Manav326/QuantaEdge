@@ -191,26 +191,22 @@ Recommended verification once a runner is available:
 
 Working branch: `agent/academic-workforce-google-meet`
 
-Key committed changes on the branch include:
+- Baseline used to start this work: `0d71946b3854a68c894001193a5174a41fa9a45b`
+- Latest `main` seen in the final audit: `a99ebf3c55c15932637738ac111823b64e836d79`
+- Feature branch: [open branch history](https://github.com/Manav326/QuantaEdge/commits/agent/academic-workforce-google-meet/)
 
-- `3e123bde54a0e88885707fde04d5b84f12891ed0` — enforce approved/effective assignment state for class access.
-- `f76ba19532af3f92be74bf9510ec67a2768a2ff8` — assignment amendment and workload reporting API.
-- `e663ddf16e7fe998e4dab4de74d1bc806f356f74` — People assignment amendment/cancellation UI.
-- `32a77f7c9b49f59f745c49c7f17333b8e22cc087` — academic coverage/workload reporting UI.
-- `15342d6f4a2ffbbfca1cc4d690bfb09bf1726835` — Google configuration cleanup and live status checks.
-- `2eefcd1c0ed060301f17a2c1ba7f0b4e667028b5` — authorized teacher live-class endpoints.
+Representative implementation commits recorded on this branch:
+
+- `15342d6f4a2ffbbfca1cc4d690bfb09bf1726835` — Google configuration cleanup and live-status checks.
+- `2eefcd1c0ed060301f17a2c1ba7f0b4e667028b5` — permission-checked teacher live-class endpoints.
 - `07dcffd7fd5461462cb136f87a2cc7ae4715a690` — People My Classes workspace.
-- `fd37a51bd24d757e24e5f5e30492e16a398d5b74` — Meet/assignment safeguards tests.
-- `8a7b39a2dd31df3299bcfbc3a030e5858fe84a09` — require canonical teacher assignment for new/live student access.
-- `0e313c7df4322d1bb596e14950a30267d89a6cfd` — scheduled teacher replacement endpoint.
-- `7813c556e068c8e33210802239cb5017415d4a96` — admin teacher replacement controls.
-- `d7f0aa27062f9490f3fdd6ba3079fa5bd90eab64` — idempotent Meet cancellation/retry behavior.
-- `5d404de810df9dc2fbef4aa0055ca32c2e6a7153` — academic period lifecycle controls.
-- `d1f2014ebff521c87559cabf0f3a73c0694c0774` — handoff/migration cleanup.
-- `a2bb15577203c4e65141ffcbaf3d4dca6374c6f5` — merge latest main into the feature branch.
-- `527558df2913aedb72542d51be016c705842b0ea` — employee-eligibility gates for student class links.
-- `64bc8340e0b12007e54c6dbead42d04df3a896cd` — restore legacy non-Meet cancellation UI.
-- `3f7ca5dc058cf4dc74cf54f1300fa7bb52dc399f` — least-privilege Calendar scope guidance.
-- `b26168a46746748d08c89151b64099d34d7b8149` — initial handoff document commit.
+- `fd37a51bd24d757e24e5f5e30492e16a398d5b74` — Google Meet and assignment safeguard tests.
+- `8a7b39a2dd31df3299bcfbc3a030e5858fe84a09` — require canonical assignment for new classes/student access.
+- `0e313c7df4322d1bb596e14950a30267d89a6cfd` — scheduled teacher-replacement API.
+- `7813c556e068c8e33210802239cb5017415d4a96` — admin teacher-replacement controls.
+- `d7f0aa27062f9490f3fdd6ba3079fa5bd90eab64` — idempotent Meet retry/cancellation improvements.
+- `5d404de810df9dc2fbef4aa0055ca32c2e6a7153` — academic-period lifecycle controls.
 
-All listed feature commits were created on the remote feature branch. The latest-main merge includes the five intervening main commits as its second parent. This handoff document is committed separately; inspect the current branch head for the exact final revision. No commit was made to `main`, no force-push was performed, and no pull request was opened.
+The concurrent main updates were merged into the feature branch in a two-parent merge commit, visible in the linked branch history. Those updates covered `.github/workflows/ci.yml`, `apps/android/app/build.gradle.kts`, and `scripts/android-fetch-latest-apk.ps1`; the comparison did not show HRMS, assignment, curriculum or live-class API/model files in that main delta.
+
+All implementation changes and the handoff file are committed on the remote feature branch. Remote branch updates succeeded; no commit was made directly to `main`, no force-push was performed, and no pull request was opened. The current branch head in GitHub is the final revision authority, because additional maintenance commits follow the representative hashes listed above.
