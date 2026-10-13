@@ -74,6 +74,67 @@ public class LearningClassController {
   }
 
   // A safe staff picker for live-class host assignment; no login/contact secrets are returned.
+  @GetMapping("/teaching/my-live-classes")
+  public Map<String,Object> myTeachingLiveClasses(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
+        cs.provider_operation_status,cs.provider_error_message,cs.teaching_assignment_id,
+        s.code as subject_code,s.display_name as subject_name,c.code as class_code,c.display_name as class_name,
+        p.name as academic_period_name,
+        (cs.status in ('SCHEDULED','LIVE') and cs.starts_at<=now()+interval '15 minutes'
+          and cs.ends_at>now() and cs.private_join_url is not null
+          and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')) as joinable
+      from hr_employee e join hr_teaching_assignment a on a.employee_id=e.id
+      join learning_class_session cs on cs.teaching_assignment_id=a.id
+      join curriculum_subject s on s.id=cs.subject_id join curriculum_class c on c.id=s.class_id
+      join hr_academic_period p on p.id=a.academic_period_id
+      where e.linked_staff_account_id=? and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and a.status='APPROVED'
+        and a.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and a.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+      order by cs.starts_at asc,cs.id desc limit 250
+      """,context.staffId());
+    return Map.of("items",items,"total",items.size());
+  }
+
+  @GetMapping("/teaching/live-classes/{sessionId}/meeting-link")
+  public Map<String,Object> teacherLiveClassMeetingLink(
+      @PathVariable long sessionId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireAuth(context);
+    if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select cs.id,cs.title,cs.provider,cs.private_join_url,cs.starts_at,cs.ends_at,cs.status,
+        cs.provider_operation_status,cs.provider_error_message
+      from learning_class_session cs
+      join hr_teaching_assignment a on a.id=cs.teaching_assignment_id and a.status='APPROVED'
+      join hr_employee e on e.id=a.employee_id and e.linked_staff_account_id=?
+      where cs.id=? and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and a.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and a.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
+        and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
+      """,context.staffId(),sessionId);
+    if(rows.isEmpty())throw notFound("Assigned live class",sessionId);
+    Map<String,Object> row=rows.getFirst();
+    OffsetDateTime now=OffsetDateTime.now();
+    OffsetDateTime startsAt=toOffsetDateTime(row.get("starts_at")),endsAt=toOffsetDateTime(row.get("ends_at"));
+    if(startsAt!=null&&startsAt.isAfter(now.plusMinutes(15)))throw conflict("The teacher join window opens 15 minutes before the scheduled start.");
+    if(endsAt==null||!endsAt.isAfter(now))throw conflict("This class has ended.");
+    staffAudit.recordAction(context,"/api/v1/teaching/live-classes/"+sessionId+"/meeting-link",
+        "Retrieved the assigned teacher's private meeting link for class #"+sessionId+".");
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("sessionId",sessionId);
+    result.put("title",row.get("title"));
+    result.put("provider",row.get("provider"));
+    result.put("joinUrl",row.get("private_join_url"));
+    return result;
+  }
+
   @GetMapping("/admin/class-staff")
   public List<Map<String, Object>> listClassStaff(
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
