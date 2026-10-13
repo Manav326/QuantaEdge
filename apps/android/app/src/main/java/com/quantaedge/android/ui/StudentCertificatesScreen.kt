@@ -370,13 +370,31 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
         certificates.forEach { certificate ->
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
-                    Text(certificate.optString("achievement_title", certificate.optString("achievementTitle", "QuantaEdge achievement")), style = MaterialTheme.typography.titleMedium)
-                    Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")), style = MaterialTheme.typography.bodySmall)
                     Text(
-                        (certificate.optString("status", "ISSUED")) + " · " +
+                        certificate.optString("achievement_title", certificate.optString(
+                            "achievementTitle", if (language == "hi") "उपलब्धि प्रमाणपत्र" else "QuantaEdge achievement"
+                        )),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Text(certificate.optString("certificate_number", certificate.optString("certificateNumber", "")),
+                        style = MaterialTheme.typography.bodySmall)
+                    val rawStatus = certificate.optString("status", "ISSUED").uppercase()
+                    val statusLabel = when (rawStatus) {
+                        "ISSUED" -> if (language == "hi") "जारी" else "Issued"
+                        "REVOKED" -> if (language == "hi") "निरस्त" else "Revoked"
+                        else -> rawStatus.replace('_', ' ')
+                    }
+                    val rawLanguage = certificate.optString("language", language).lowercase()
+                    val languageLabel = when (rawLanguage) {
+                        "hi" -> if (language == "hi") "हिंदी" else "Hindi"
+                        "en" -> if (language == "hi") "अंग्रेज़ी" else "English"
+                        else -> rawLanguage.uppercase()
+                    }
+                    Text(
+                        statusLabel + " · " +
                             certificate.optString("template_id", certificate.optString("templateId", "CLASSIC")) + " · " +
-                            certificate.optString("language", language),
-                        color = if (certificate.optString("status", "ISSUED") == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
+                            languageLabel,
+                        color = if (rawStatus == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
                     )
                     if (certificate.optString("status", "ISSUED") == "ISSUED") {
                         if (compact) {
