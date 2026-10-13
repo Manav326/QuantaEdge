@@ -235,7 +235,6 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                       aria-current={routeActive(item.href) ? 'page' : undefined}
                       onClick={() => setMobileOpenGroup(null)}
                       className={routeActive(item.href) ? 'qe-workspace-link is-active' : 'qe-workspace-link'}>
-                      <span className="qe-workspace-icon" aria-hidden="true">{item.icon}</span>
                       <span className="qe-workspace-link-label">{itemLabel(item)}</span>
                     </Link>)}
                   </div>
@@ -287,7 +286,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
                 aria-current={routeActive(item.href) ? 'page' : undefined}
                 className={routeActive(item.href) ? 'is-active' : ''}
                 onClick={() => setMobileOpenGroup(null)}>
-                <span aria-hidden="true">{item.icon}</span><span>{itemLabel(item)}</span>
+                <span>{itemLabel(item)}</span>
               </Link>)}
             </div>
           </section>

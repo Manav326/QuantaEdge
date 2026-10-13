@@ -557,7 +557,7 @@ export default function LearnClient() {
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
             <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} pages · {textbookChapterTitle(item, locale==='english'?'en':'hi')}</small></span>
+            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} {tx('पृष्ठ','pages')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
             <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
           </Link>)}
           {expanded&&<div className="qe-student-chapter-content">

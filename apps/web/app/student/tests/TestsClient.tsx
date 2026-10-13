@@ -106,6 +106,8 @@ type QuestionContentProps={
   question:AttemptQuestion;response:any;review?:boolean;disabled?:boolean;onAnswer?:(value:any)=>void;
 };
 function QuestionContent({question,response,review=false,disabled=false,onAnswer}:QuestionContentProps){
+  const {locale}=useLocale();
+  const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const selectedKeys=new Set(answerValues(response));
   const rightKeys=new Set(correctOptionKeys(question));
   const hasOptions=Array.isArray(question.options)&&question.options.length>0;
@@ -119,29 +121,45 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
       const correct=rightKeys.has(key);
       const wrongChosen=review&&chosen&&question.isCorrect===false;
       const tone=wrongChosen?styles.optionIncorrect:review&&(correct||(chosen&&question.isCorrect===true))?styles.optionCorrect:review&&chosen?styles.optionNeutral:'';
-      const hint=review&&chosen&&correct?'Your answer · Correct answer':review&&chosen&&question.isCorrect===false?'Your recorded answer · Incorrect':review&&chosen&&question.isCorrect===true?'Your recorded answer · Correct':review&&chosen?'Your recorded answer':review&&correct?'Correct answer':'';
+      const hint=review&&chosen&&correct?t('Your answer · Correct answer','आपका उत्तर · सही उत्तर')
+        :review&&chosen&&question.isCorrect===false?t('Your recorded answer · Incorrect','आपका दर्ज उत्तर · गलत')
+        :review&&chosen&&question.isCorrect===true?t('Your recorded answer · Correct','आपका दर्ज उत्तर · सही')
+        :review&&chosen?t('Your recorded answer','आपका दर्ज उत्तर')
+        :review&&correct?t('Correct answer','सही उत्तर'):'';
       return <label key={option.key} className={[styles.option,!review&&chosen?styles.optionSelected:'',tone].filter(Boolean).join(' ')}>
         <input type="radio" name={'question-'+question.attemptQuestionId} value={key} checked={chosen} disabled={disabled||review} onChange={()=>onAnswer?.(option.key)}/>
         <span className={styles.optionKey}>{option.key}</span>
         <span className={styles.optionText}>{option.label}{hint&&<small className={wrongChosen?styles.optionHintIncorrect:correct||question.isCorrect===true?styles.optionHintCorrect:styles.optionHintNeutral}>{hint}</small>}</span>
-        {review&&(chosen||correct)&&<span className={styles.optionOutcome} aria-label={wrongChosen?'Incorrect answer':correct?'Correct answer':question.isCorrect===true?'Correct':'Recorded answer'}>{wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}</span>}
+        {review&&(chosen||correct)&&<span className={styles.optionOutcome}
+          aria-label={wrongChosen?t('Incorrect answer','गलत उत्तर'):correct?t('Correct answer','सही उत्तर'):question.isCorrect===true?t('Correct','सही'):t('Recorded answer','दर्ज उत्तर')}>
+          {wrongChosen?'!':correct||question.isCorrect===true?'✓':'i'}
+        </span>}
       </label>;
     })}</div>}
     {!hasOptions&&<label className={[styles.answerField,review?answerTone:''].filter(Boolean).join(' ')}>
-      <span>{question.question_type==='NUMERICAL'?'Your numerical answer':'Your answer'}</span>
+      <span>{question.question_type==='NUMERICAL'?t('Your numerical answer','आपका संख्यात्मक उत्तर'):t('Your answer','आपका उत्तर')}</span>
       {question.question_type==='INPUT'||question.question_type==='NUMERICAL'
-        ?<input value={answerText(response)} disabled={disabled||review} type={question.question_type==='NUMERICAL'?'number':'text'} onChange={event=>onAnswer?.(event.target.value)} placeholder="Type your answer here…"/>
-        :<textarea value={answerText(response)} disabled={disabled||review} rows={6} onChange={event=>onAnswer?.(event.target.value)} placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(question.question_type)?'Write your answer or reasoning clearly…':'Enter your answer here…'}/>}
-      {!review&&<small>{['INPUT','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(question.question_type)?'This response is sent for staff checking. Your final result is released after all required answers are reviewed.':''}</small>}
+        ?<input value={answerText(response)} disabled={disabled||review} type={question.question_type==='NUMERICAL'?'number':'text'} onChange={event=>onAnswer?.(event.target.value)}
+          placeholder={t('Type your answer here…','अपना उत्तर यहाँ लिखें…')}/>
+        :<textarea value={answerText(response)} disabled={disabled||review} rows={6} onChange={event=>onAnswer?.(event.target.value)}
+          placeholder={['MATCH','ORDER','CASE_BASED','ASSERTION_REASON'].includes(question.question_type)
+            ?t('Write your answer or reasoning clearly…','अपना उत्तर या तर्क स्पष्ट रूप से लिखें…')
+            :t('Enter your answer here…','अपना उत्तर यहाँ लिखें…')}/>}
+      {!review&&<small>{['INPUT','SHORT_ANSWER','LONG_ANSWER','CASE_BASED','SOURCE_BASED','DIAGRAM','MAP','ASSERTION_REASON','MATCH','ORDER'].includes(question.question_type)
+        ?t('This response is sent for staff checking. Your final result is released after all required answers are reviewed.','यह उत्तर स्टाफ़ द्वारा जाँच के लिए भेजा जाता है। सभी ज़रूरी उत्तरों की समीक्षा के बाद अंतिम परिणाम जारी होगा।')
+        :''}</small>}
     </label>}
-    {review&&correctText&&(!hasOptions||rightKeys.size===0)&&<div className={styles.correctAnswerBox}><strong>Correct answer</strong><span>{correctText}</span></div>}
+    {review&&correctText&&(!hasOptions||rightKeys.size===0)&&<div className={styles.correctAnswerBox}>
+      <strong>{t('Correct answer','सही उत्तर')}</strong><span>{correctText}</span>
+    </div>}
   </>;
 }
-
 export default function TestsClient(){
   const router=useRouter();
-  const {learningLanguage, certificateLanguage}=useLocale();
+  const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
+  const uiLanguage=locale==='english'?'en':'hi';
+  const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [tests,setTests]=useState<AssessmentCard[]>([]);
   const [testsPage,setTestsPage]=useState(0);
   const [testsTotal,setTestsTotal]=useState(0);
@@ -215,7 +233,7 @@ export default function TestsClient(){
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
-  const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?'Topic-end test':kind==='CHAPTER_END'?'Chapter-end test':'Admin-created test';
+  const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?t('Topic-end test','टॉपिक-एंड टेस्ट'):kind==='CHAPTER_END'?t('Chapter-end test','अध्याय-एंड टेस्ट'):t('Admin-created test','एडमिन द्वारा बनाया गया टेस्ट');
   const certificateEligibilityMessage=(reason?:string|null)=>{
     switch(reason){
       case 'ADMIN_CREATED_TEST_ONLY':return 'Only admin-created tests qualify; generated topic/chapter tests and practice are excluded.';
@@ -240,7 +258,7 @@ export default function TestsClient(){
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||body.detail||body.error||'Certificate could not be issued.');
-      setNotice('Certificate issued successfully. View or download it from this result.');
+      setNotice(t('Certificate issued successfully. View or download it from this result.','प्रमाणपत्र सफलतापूर्वक जारी हुआ। इसे इसी परिणाम से देखें या डाउनलोड करें।'));
       await loadOverview();
       await refreshCertificateEligibilityForAttempts([attemptId]);
     }catch(e:any){
@@ -446,22 +464,22 @@ export default function TestsClient(){
     <section className={styles.wrap}>
       {!attempt?<>
         {error&&<div className={styles.error} role="alert">{error}</div>}
-        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>Available tests <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>My results <span>{resultsTotal}</span></button></div>
+        <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{t('Available tests','उपलब्ध टेस्ट')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{t('My results','मेरे परिणाम')} <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>YOUR ASSESSMENTS</span><h2>Tests available to you</h2><p>Tests are shown only for your enrolled class and subjects.</p></div><label>Subject<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">All subjects</option><option value="maths">Mathematics</option><option value="science">Science</option></select></label></div>
-          {loading?<div className={styles.empty}>Loading your tests…</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>No published tests yet</b><small>Your teacher’s published tests will appear here.</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('YOUR ASSESSMENTS','आपके टेस्ट')}</span><h2>{t('Tests available to you','आपके लिए उपलब्ध टेस्ट')}</h2><p>{t('Tests are shown only for your enrolled class and subjects.','यहाँ केवल आपकी नामांकित कक्षा और विषयों के टेस्ट दिखते हैं।')}</p></div><label>{t('Subject','विषय')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{t('All subjects','सभी विषय')}</option><option value="maths">{t('Mathematics','गणित')}</option><option value="science">{t('Science','विज्ञान')}</option></select></label></div>
+          {loading?<div className={styles.empty}>{t('Loading your tests…','आपके टेस्ट लोड हो रहे हैं…')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{t('No published tests yet','अभी कोई प्रकाशित टेस्ट नहीं है')}</b><small>{t('Your teacher’s published tests will appear here.','शिक्षक द्वारा प्रकाशित टेस्ट यहाँ दिखेंगे।')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?'Mathematics':'Science'}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} questions</span><span>◷ {test.duration_minutes} min</span><span>★ {test.max_score} marks</span></div><div className={styles.attemptTrack}><span>Attempts used</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?'Opening…':started?'Resume attempt':exhausted?'Attempts used':'Start test'}</button><button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> Top 20 leaderboard</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>Latest result ↗</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>You have used all allowed attempts.</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume attempt','प्रयास फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button><button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
-            itemLabel="available tests" loading={loading} />
+            itemLabel={t('available tests','उपलब्ध टेस्ट')} loading={loading} />
         </>:<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>SAVED RESULTS</span><h2>Your test history</h2><p>Only released results appear here. Pending teacher checks are not shown as final scores.</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>Refresh</button></div>
-          {loading?<div className={styles.empty}>Loading saved results…</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>No released results yet</b><small>When you finish a test, your score and teacher feedback will be saved here after any required review.</small></div>:<div className={styles.resultList}>{results.map(result=>{
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('SAVED RESULTS','सहेजे गए परिणाम')}</span><h2>{t('Your test history','आपके टेस्ट का इतिहास')}</h2><p>{t('Only released results appear here. Pending teacher checks are not shown as final scores.','यहाँ केवल जारी परिणाम दिखते हैं। जाँच की प्रतीक्षा वाले परिणाम अंतिम स्कोर के रूप में नहीं दिखाए जाते।')}</p></div><button className={styles.secondaryButton} type="button" onClick={()=>void loadOverview()}>{t('Refresh','रिफ्रेश')}</button></div>
+          {loading?<div className={styles.empty}>{t('Loading saved results…','सहेजे गए परिणाम लोड हो रहे हैं…')}</div>:results.length===0?<div className={styles.empty}><span>▤</span><b>{t('No released results yet','अभी कोई जारी परिणाम नहीं है')}</b><small>{t('When you finish a test, your score and teacher feedback will be saved here after any required review.','टेस्ट पूरा होने पर, ज़रूरी समीक्षा के बाद आपका स्कोर और शिक्षक की प्रतिक्रिया यहाँ सहेजी जाएगी।')}</small></div>:<div className={styles.resultList}>{results.map(result=>{
              const latestAttempts=Array.isArray(result.attempts)&&result.attempts.length?result.attempts.slice(0,3):[{attempt_id:result.attempt_id,attempt_number:result.attempt_number,status:result.status,submitted_at:result.submitted_at,released_at:result.released_at,final_score:result.final_score,max_score:result.max_score}];
              const bestScore=Number(result.best_score??Math.max(...latestAttempts.map(item=>Number(item.final_score??0))));
              const bestPercent=Number(result.max_score)>0?Math.round(bestScore/Number(result.max_score)*100):0;
@@ -470,14 +488,14 @@ export default function TestsClient(){
                <span className={styles.resultIcon}>✓</span>
                <div className={styles.resultSummary}>
                  <h3>{result.assessment_title}</h3>
-                 <p>{result.assessment_type==='TOPIC_END'?'Topic-end test':result.assessment_type==='CHAPTER_END'?'Chapter-end test':'Admin-created test'} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
-                 <small>{attemptsInHistory} released attempt{attemptsInHistory===1?'':'s'} · {result.question_count} questions · Latest: {fmtDate(result.released_at)}</small>
+                 <p>{assessmentTypeLabel(result.assessment_type)} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
+                 <small>{attemptsInHistory} {t('released attempt','जारी प्रयास')}{attemptsInHistory===1?'':t('s','')} · {result.question_count} {t('questions','प्रश्न')} · {t('Latest:','नवीनतम:')} {fmtDate(result.released_at)}</small>
                </div>
                <div className={styles.score} aria-label={'Best score among latest attempts: '+bestScore+' out of '+result.max_score}>
                  <b>{bestScore} <small>/ {result.max_score}</small></b><span>{bestPercent}%</span><small>Best of last {Math.min(3,latestAttempts.length)}</small>
                </div>
                <div className={styles.resultAttemptPicker}>
-                 <span>Open attempt feedback <small>· newest first</small></span>
+                 <span>{t('Open attempt feedback','प्रयास की प्रतिक्रिया खोलें')} <small>· {t('newest first','नवीनतम पहले')}</small></span>
                  <div>{latestAttempts.map((item,attemptIndex)=>{
                    const positionLabel=attemptIndex===0?'Latest':attemptIndex===1?'Previous':'Earlier';
                    const scoreLabel=Number(item.final_score??0)+' / '+Number(item.max_score??result.max_score);
@@ -485,20 +503,20 @@ export default function TestsClient(){
                    const certificate=certificateEligibility[attemptId];
                    const certificateId=Number(certificate?.certificate_id||0);
                    return <div key={item.attempt_id} className={styles.resultAttemptItem}>
-                     <button type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(attemptId)} aria-label={'Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel} title={positionLabel+' · Attempt #'+item.attempt_number+' · '+scoreLabel}>
+                     <button type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(attemptId)} aria-label={t('Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel,'प्रयास #'+item.attempt_number+' खोलें, अंक '+scoreLabel)} title={positionLabel+' · '+t('Attempt','प्रयास')+' #'+item.attempt_number+' · '+scoreLabel}>
                        <b>{attemptIndex+1}</b><span>{positionLabel}</span>
                      </button>
                      {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
                        <div className={styles.certificateActionLinks}>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>PDF</a>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>PNG</a>
-                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</a>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>{t('PDF','PDF')}</a>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>{t('PNG','PNG')}</a>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                        </div>
                      ):certificate?.certificate_status==='REVOKED'?(
                        <div className={styles.certificateActionLinks}>
-                         <small className={styles.certificateEligibilityHint}>Certificate revoked</small>
-                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                         <small className={styles.certificateEligibilityHint}>{t('Certificate revoked','प्रमाणपत्र निरस्त')}</small>
+                         <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                        </div>
                      ):certificate?.eligible?(
                        <button type="button" className={styles.certificateIssueButton}
@@ -521,11 +539,11 @@ export default function TestsClient(){
            })}</div>}
           <PremiumPagination page={resultsPage} total={resultsTotal} pageSize={resultsPageSize}
             onPageChange={setResultsPage} onPageSizeChange={size=>{setResultsPageSize(size);setResultsPage(0);}}
-            itemLabel="released results" loading={loading} />
+            itemLabel={t('released results','जारी परिणाम')} loading={loading} />
         </>}
       </>:<>
-        <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← Tests & results</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
-        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1><p>Attempt {attempt.attempt_number} · {attempt.questions.length} questions · {attempt.max_score} marks</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>TIME REMAINING</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?'Saving answer…':'Answers auto-save'}</span></div>}</div>
+        <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← {t('Tests & results','टेस्ट और परिणाम')}</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
+        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1><p>{t('Attempt','प्रयास')} {attempt.attempt_number} · {attempt.questions.length} {t('questions','प्रश्न')} · {attempt.max_score} {t('marks','अंक')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{t('TIME REMAINING','शेष समय')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?t('Saving answer…','उत्तर सहेजा जा रहा है…'):t('Answers auto-save','उत्तर अपने-आप सहेजे जाते हैं')}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
         {attempt.translation_complete===false&&<div className={styles.languageNotice} role="status">
           <b><LocaleText hinglish="भाषा कवरेज" english="Language coverage" /></b>
@@ -537,38 +555,38 @@ export default function TestsClient(){
         {released?<section className={styles.releasedResult} aria-live="polite">
           <div className={styles.resultHero}>
             <span className={styles.resultHeroIcon}>✓</span>
-            <div><span className={styles.eyebrow}>RESULT READY</span><h2>Test submitted successfully</h2><p>Your test is closed. Here is your result; the active question navigator is no longer available.</p></div>
+            <div><span className={styles.eyebrow}>{t('RESULT READY','परिणाम तैयार')}</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your test is closed. Here is your result; the active question navigator is no longer available.','आपका टेस्ट बंद हो गया है। नीचे परिणाम देखें; सक्रिय प्रश्न नेविगेटर अब उपलब्ध नहीं है।')}</p></div>
           </div>
           <div className={styles.resultScoreGrid}>
             <article className={styles.resultScorePrimary}>
-              <small>YOUR SCORE</small>
+              <small>{t('YOUR SCORE','आपके अंक')}</small>
               <strong>{resultScore} <span>/ {resultMax}</span></strong>
               <div className={styles.resultScoreProgress}><i style={{width:Math.min(100,Math.max(0,resultPercent))+'%'}}/></div>
-              <b>{resultPercent}%</b><p>Overall score</p>
+              <b>{resultPercent}%</b><p>{t('Overall score','कुल अंक')}</p>
             </article>
-            <article className={styles.resultMetric}><strong>{correctCount}</strong><span>Correct</span></article>
-            <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>Incorrect</span></article>
-            <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>Not answered</span></article>
+            <article className={styles.resultMetric}><strong>{correctCount}</strong><span>{t(t('Correct','सही'),'सही')}</span></article>
+            <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>{t('Incorrect','गलत')}</span></article>
+            <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>{t('Not answered','अनुत्तरित')}</span></article>
           </div>
           {released&&(()=>{
             const cert=certificateEligibility[Number(attempt?.attempt_id)];
             const certificateId=Number(cert?.certificate_id||0);
             return <section className={styles.certificateResultPanel} aria-live="polite">
-              <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
-                <p>Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate. The class and subject track are included; certificate language follows your current app language, while the assessment title stays as authored.</p>
-                {cert?.subject_name && <small>{language === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {language === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, language)}</small>}
+              <div><span className={styles.eyebrow}>{t('CERTIFICATE','प्रमाणपत्र')}</span><h3>{t('Certificate for this result','इस परिणाम का प्रमाणपत्र')}</h3>
+                <p>{t('Test certificates require an admin-created, non-generated test, a released passing score, and active enrollment in the subject. Completing every published lesson is required only for a subject-completion certificate. The class and subject track are included; certificate language follows your separate certificate-language preference, while the assessment title stays as authored.','टेस्ट प्रमाणपत्र के लिए एडमिन द्वारा बनाया गया गैर-जनरेटेड टेस्ट, जारी पास परिणाम और विषय में सक्रिय नामांकन आवश्यक है। सभी प्रकाशित पाठ पूरे करना केवल विषय-पूर्णता प्रमाणपत्र के लिए ज़रूरी है। कक्षा और विषय ट्रैक शामिल होते हैं। प्रमाणपत्र की भाषा अलग प्रमाणपत्र-भाषा सेटिंग के अनुसार होती है; टेस्ट का शीर्षक मूल भाषा में रहता है।')}</p>
+                {cert?.subject_name && <small>{uiLanguage === 'hi' ? 'प्रमाणपत्र ट्रैक:' : 'Certificate track:'} {uiLanguage === 'hi' ? 'कक्षा ' : 'Class '}{cert.class_code || ''} · {certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)}</small>}
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
-                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</a>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>Download PDF</a>
                   <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>Download PNG</a>
-                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                 </div>
               ):cert?.certificate_status==='REVOKED'?(
                 <div className={styles.certificateActionLinks}>
-                  <small className={styles.certificateEligibilityHint}>This certificate has been revoked.</small>
-                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">Verify status ↗</a>
+                  <small className={styles.certificateEligibilityHint}>{t('This certificate has been revoked.','यह प्रमाणपत्र निरस्त कर दिया गया है।')}</small>
+                  <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                 </div>
               ):cert?.eligible?(
                 <button type="button" className={styles.certificateIssueButton}
@@ -582,10 +600,10 @@ export default function TestsClient(){
             </section>;
           })()}
           <section className={styles.resultDetails}>
-            <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
+            <div className={styles.resultDetailsHeading}><h3>{t('Question-wise result','प्रश्नवार परिणाम')}</h3><p>{t('Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.','अंक और परिणाम समीक्षा के लिए दिखाए गए हैं। जमा किए गए प्रश्न फिर से नहीं खोले या बदले जा सकते।')}</p></div>
             <div className={styles.resultReviewList}>
               {attempt.questions.map((question,questionIndex)=>{
-                const outcome=question.isCorrect===true?'Correct':question.isCorrect===false?'Incorrect':isEmpty(question.answer)?'Not answered':'Reviewed';
+                const outcome=question.isCorrect===true?t(t('Correct','सही'),'सही'):question.isCorrect===false?t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Reviewed','समीक्षा हुई');
                 const outcomeClass=question.isCorrect===true?styles.reviewCorrect:question.isCorrect===false?styles.reviewIncorrect:styles.reviewNeutral;
                 return <article className={styles.resultReviewItem} key={question.attemptQuestionId}>
                   <section className={styles.questionPanel}>
@@ -600,32 +618,32 @@ export default function TestsClient(){
                       title={question.isCorrect===true?'✓ Correct':question.isCorrect===false?'✕ Incorrect':isEmpty(question.answer)?'Not answered':'Answer reviewed'}
                       message={<>Marks: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
                       explanation={question.explanation||undefined}
-                      explanationLabel="Explanation"
+                      explanationLabel={t('Explanation','व्याख्या')}
                     />
                   </section>
                 </article>;
               })}
             </div>
           </section>
-          <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to results</button></div>
+          <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to results','परिणामों पर वापस जाएँ')}</button></div>
         </section>
-        :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>Test submitted successfully</h2><p>Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
-        :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>This attempt is closed</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests</button></div>
-        :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>This attempt is closed.</h2><p>You cannot return to the question navigator after submission.</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>Back to tests and results</button></div>
+        :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.','आपके उत्तर सहेज लिए गए हैं। रिक्त स्थान, छोटे और लंबे उत्तर कर्मचारी समीक्षक को भेजे गए हैं। सभी ज़रूरी जाँच पूरी होने पर अंतिम स्कोर और प्रतिक्रिया यहाँ दिखेगी।')}</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
+        :attempt.status==='ABANDONED'?<div className={styles.pendingResult}><h2>{t('This attempt is closed','यह प्रयास बंद हो चुका है')}</h2><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests','टेस्ट पर वापस जाएँ')}</button></div>
+        :attempt.status!=='IN_PROGRESS'||!current?<div className={styles.pendingResult}><h2>{t('This attempt is closed.','यह प्रयास बंद हो चुका है।')}</h2><p>{t('You cannot return to the question navigator after submission.','जमा करने के बाद प्रश्न नेविगेटर पर वापस नहीं जा सकते।')}</p><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
         :<div className={styles.examLayout}>
-          <aside className={styles.questionRail}><div><b>Questions</b><small>{answeredCount}/{attempt.questions.length} answered</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={'Question '+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>Current</span><span><i className={styles.legendAnswered}/>Answered</span></div></aside>
-          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>QUESTION {index+1} OF {attempt.questions.length}</span><b>{current.maxMarks} mark(s)</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
+          <aside className={styles.questionRail}><div><b>{t('Questions','प्रश्न')}</b><small>{answeredCount}/{attempt.questions.length} {t('answered','उत्तर दिए')}</small></div><div className={styles.questionNumbers}>{attempt.questions.map((q,i)=><button type="button" key={q.attemptQuestionId} className={[i===index?styles.currentNumber:'',!isEmpty(responses[q.attemptQuestionId]??q.answer)?styles.answeredNumber:''].filter(Boolean).join(' ')} onClick={()=>setIndex(i)} aria-label={t('Question ','प्रश्न ')+(i+1)}>{i+1}</button>)}</div><div className={styles.railLegend}><span><i className={styles.legendCurrent}/>{t('Current','वर्तमान')}</span><span><i className={styles.legendAnswered}/>{t('Answered','उत्तर दिया')}</span></div></aside>
+          <section className={styles.questionPanel}><div className={styles.questionPanelTop}><span>{t('QUESTION','प्रश्न')} {index+1} {t('OF','में से')} {attempt.questions.length}</span><b>{current.maxMarks} {t('mark(s)','अंक')}</b></div><div className={styles.questionProgress}><i style={{width:((index+1)/attempt.questions.length*100)+'%'}}/></div><QuestionContent question={current} response={currentResponse} disabled={submitted} onAnswer={value=>updateResponse(current,value)}/>
             {released&&<AnswerFeedback
               outcome={current.isCorrect===true?'correct':current.isCorrect===false?'incorrect':'ungraded'}
               title={current.isCorrect===true?'✓ Correct':current.isCorrect===false?'✕ Incorrect':'Teacher checked'}
               message={<>Marks: {current.awardedMarks??0} / {current.maxMarks}{current.teacherFeedback?<> · {current.teacherFeedback}</>:null}</>}
               explanation={current.explanation||undefined}
-              explanationLabel="Explanation"
+              explanationLabel={t('Explanation','व्याख्या')}
             />}
-            <div className={styles.questionFooter}><span>{saving?'Saving…':Object.keys(dirtyAnswers).length?'Save pending':'✓ Saved answers are preserved'}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← Previous</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>Next question →</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>Review & submit</button>:null}</div></div>
+            <div className={styles.questionFooter}><span>{saving?t('Saving…','सहेजा जा रहा है…'):Object.keys(dirtyAnswers).length?t('Save pending','सहेजना बाकी है'):t('✓ Saved answers are preserved','✓ सहेजे गए उत्तर सुरक्षित हैं')}</span><div><button type="button" className={styles.secondaryButton} disabled={index===0} onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {t('Previous','पिछला')}</button>{index<attempt.questions.length-1?<button type="button" className={styles.primaryButton} onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{t('Next question →','अगला प्रश्न →')}</button>:attempt.status==='IN_PROGRESS'?<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>setShowSubmit(true)}>{t('Review & submit','समीक्षा करें और जमा करें')}</button>:null}</div></div>
           </section>
         </div>}
-        {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>FINAL CHECK</span><h2>Submit this test?</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>Keep working</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?'Submitting…':'Submit test'}</button></div></section></div>}
+        {attempt.status==='IN_PROGRESS'&&showSubmit&&<div className={styles.confirmBackdrop}><section className={styles.confirmModal}><span className={styles.eyebrow}>{t('FINAL CHECK','अंतिम जाँच')}</span><h2>{t('Submit this test?','क्या यह टेस्ट जमा करें?')}</h2><p>You have answered {answeredCount} of {attempt.questions.length} questions. Unanswered questions will be saved as blank and marked accordingly. You cannot change answers after submission.</p><div><button type="button" className={styles.secondaryButton} onClick={()=>setShowSubmit(false)}>{t('Keep working','जारी रखें')}</button><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void submitTest(false)}>{busy?t('Submitting…','जमा हो रहा है…'):t('Submit test','टेस्ट जमा करें')}</button></div></section></div>}
       </>}
     </section>
 
@@ -635,21 +653,21 @@ export default function TestsClient(){
           <div className={styles.leaderboardHeading}>
             <span className={styles.leaderboardEyebrow}>QUANTAEDGE · STUDENT RANKINGS</span>
             <h2 id="qe-leaderboard-title">{leaderboardData?.assessment_title||leaderboardTest.title}</h2>
-            <p>Top 20 performers · Higher marks rank first; faster completion breaks a marks tie.</p>
+            <p>{t('Top 20 performers · Higher marks rank first; faster completion breaks a marks tie.','शीर्ष 20 विद्यार्थी · अधिक अंक पहले रैंक करते हैं; बराबर अंक पर कम समय लेने वाला आगे रहता है।')}</p>
           </div>
-          <button type="button" className={styles.leaderboardClose} onClick={closeLeaderboard} aria-label="Close leaderboard">×</button>
+          <button type="button" className={styles.leaderboardClose} onClick={closeLeaderboard} aria-label={t('Close leaderboard','लीडरबोर्ड बंद करें')}>×</button>
         </header>
-        {leaderboardError&&<div className={styles.leaderboardInlineError} role="alert"><span>{leaderboardError}</span><button type="button" className={styles.secondaryButton} onClick={()=>void openLeaderboard(leaderboardTest)}>Try again</button></div>}
-        {leaderboardLoading?<div className={styles.leaderboardLoading}><span className={styles.leaderboardSpinner}/><b>Preparing the leaderboard</b><small>Only completed tests with released scores are ranked.</small></div>
+        {leaderboardError&&<div className={styles.leaderboardInlineError} role="alert"><span>{leaderboardError}</span><button type="button" className={styles.secondaryButton} onClick={()=>void openLeaderboard(leaderboardTest)}>{t('Try again','फिर प्रयास करें')}</button></div>}
+        {leaderboardLoading?<div className={styles.leaderboardLoading}><span className={styles.leaderboardSpinner}/><b>{t('Preparing the leaderboard','लीडरबोर्ड तैयार हो रहा है')}</b><small>{t('Only completed tests with released scores are ranked.','केवल पूरे हुए टेस्ट जिनके परिणाम जारी हैं, रैंक किए जाते हैं।')}</small></div>
         :leaderboardData&&<>
           <div className={styles.leaderboardMetrics}>
-            <div><span>PARTICIPANTS</span><b>{leaderboardData.participant_count}</b></div>
-            <div><span>RANKING RULE</span><b>Marks first <i>·</i> time second</b></div>
-            <div><span>DISPLAYING</span><b>{Math.min(20,leaderboardData.items.length)} of {leaderboardData.participant_count}</b></div>
+            <div><span>{t('PARTICIPANTS','प्रतिभागी')}</span><b>{leaderboardData.participant_count}</b></div>
+            <div><span>{t('RANKING RULE','रैंकिंग नियम')}</span><b>{t('Marks first','अंक पहले')} <i>·</i> {t('time second','समय दूसरे')}</b></div>
+            <div><span>{t('DISPLAYING','दिखाए जा रहे')}</span><b>{Math.min(20,leaderboardData.items.length)} {t('of','में से')} {leaderboardData.participant_count}</b></div>
           </div>
-          {leaderboardData.items.length===0?<div className={styles.leaderboardEmpty}><span>♛</span><h3>The race starts here</h3><p>No released scores are available for this test yet. The leaderboard will appear as results are finalised.</p></div>
+          {leaderboardData.items.length===0?<div className={styles.leaderboardEmpty}><span>♛</span><h3>{t('The race starts here','शुरुआत यहाँ से होती है')}</h3><p>{t('No released scores are available for this test yet. The leaderboard will appear as results are finalised.','इस टेस्ट के लिए अभी जारी स्कोर उपलब्ध नहीं हैं। परिणाम अंतिम होने पर लीडरबोर्ड दिखेगा।')}</p></div>
           :<>
-            {leaderboardData.items.length>=3&&<div className={styles.leaderboardPodium} aria-label="Top three students">
+            {leaderboardData.items.length>=3&&<div className={styles.leaderboardPodium} aria-label={t('Top three students','शीर्ष तीन विद्यार्थी')}>
               {[2,1,3].map(rank=>{
                 const entry=leaderboardData.items.find(item=>item.rank===rank);
                 if(!entry)return null;
@@ -660,28 +678,28 @@ export default function TestsClient(){
                   <b className={styles.leaderboardStudentName}>{entry.student_name}</b>
                   <strong className={styles.leaderboardPodiumScore}>{formatMarks(entry.score)}<small> / {formatMarks(entry.max_score)}</small></strong>
                   <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span>
-                  {entry.is_current_student&&<span className={styles.leaderboardYou}>YOU</span>}
+                  {entry.is_current_student&&<span className={styles.leaderboardYou}>{t('YOU','आप')}</span>}
                 </article>;
               })}
             </div>}
             {(leaderboardData.items.length<3||leaderboardData.items.some(item=>item.rank>3))&&<div className={styles.leaderboardTableWrap}>
               <table className={styles.leaderboardTable}>
-                <thead><tr><th scope="col">Rank</th><th scope="col">Student</th><th scope="col">Marks</th><th scope="col">Time taken</th></tr></thead>
+                <thead><tr><th scope="col">{t('Rank','रैंक')}</th><th scope="col">{t('Student','विद्यार्थी')}</th><th scope="col">{t('Marks','अंक')}</th><th scope="col">{t('Time taken','लगा समय')}</th></tr></thead>
                 <tbody>{leaderboardData.items.filter(item=>leaderboardData.items.length<3||item.rank>3).map(entry=><tr key={entry.rank} className={entry.is_current_student?styles.leaderboardTableMine:''}>
                   <td><span className={styles.leaderboardRankNumber}>{String(entry.rank).padStart(2,'0')}</span></td>
-                  <td><div className={styles.leaderboardStudentCell}><span className={styles.leaderboardTableAvatar}>{studentInitials(entry.student_name)}</span><b>{entry.student_name}</b>{entry.is_current_student&&<span className={styles.leaderboardYou}>YOU</span>}</div></td>
+                  <td><div className={styles.leaderboardStudentCell}><span className={styles.leaderboardTableAvatar}>{studentInitials(entry.student_name)}</span><b>{entry.student_name}</b>{entry.is_current_student&&<span className={styles.leaderboardYou}>{t('YOU','आप')}</span>}</div></td>
                   <td><strong className={styles.leaderboardTableScore}>{formatMarks(entry.score)} <small>/ {formatMarks(entry.max_score)}</small></strong></td>
                   <td><span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(entry.time_taken_seconds)||0))}</span></td>
                 </tr>)}</tbody>
               </table>
             </div>}
             {leaderboardData.current_student&&leaderboardData.current_student.rank>20&&<div className={styles.leaderboardMyStanding}>
-              <div><span>YOUR CURRENT POSITION</span><b>#{leaderboardData.current_student.rank} <small>outside the Top 20</small></b></div>
-              <strong>{formatMarks(leaderboardData.current_student.score)} <small>/ {formatMarks(leaderboardData.current_student.max_score)} marks</small></strong>
+              <div><span>{t('YOUR CURRENT POSITION','आपकी वर्तमान स्थिति')}</span><b>#{leaderboardData.current_student.rank} <small>{t('outside the Top 20','शीर्ष 20 से बाहर')}</small></b></div>
+              <strong>{formatMarks(leaderboardData.current_student.score)} <small>/ {formatMarks(leaderboardData.current_student.max_score)} {t('marks','अंक')}</small></strong>
               <span className={styles.leaderboardTime}><i aria-hidden="true">◷</i> {clock(Math.floor(Number(leaderboardData.current_student.time_taken_seconds)||0))}</span>
             </div>}
           </>}
-          <footer className={styles.leaderboardFooter}><span>Rankings use the best released attempt per student.</span><button type="button" className={styles.secondaryButton} onClick={closeLeaderboard}>Close leaderboard</button></footer>
+          <footer className={styles.leaderboardFooter}><span>{t('Rankings use the best released attempt per student.','रैंकिंग में प्रति विद्यार्थी का सबसे अच्छा जारी प्रयास लिया जाता है।')}</span><button type="button" className={styles.secondaryButton} onClick={closeLeaderboard}>{t('Close leaderboard','लीडरबोर्ड बंद करें')}</button></footer>
         </>}
       </section>
     </div>}
