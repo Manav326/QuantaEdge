@@ -101,6 +101,9 @@ public class HrmsAccessController {
     List<String> roles = readRoles(body.get("roles"));
     Long staffId = employee.get("linked_staff_account_id") == null
         ? null : ((Number) employee.get("linked_staff_account_id")).longValue();
+    if (staffId != null && staffId.equals(context.staffId())) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot change your own HRMS credentials or roles.");
+    }
 
     try {
       if (staffId == null) {
@@ -164,6 +167,9 @@ public class HrmsAccessController {
     if (staffId == null || !Boolean.TRUE.equals(employee.get("hrms_access_enabled"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Enable HRMS login access before assigning roles.");
     }
+    if (staffId.equals(context.staffId())) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot change your own HRMS roles.");
+    }
     Map<String,Object> linked = staffIdentity(staffId);
     if ("hrms_admin".equalsIgnoreCase(String.valueOf(linked.get("username")))) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,
@@ -193,6 +199,9 @@ public class HrmsAccessController {
         ? null : ((Number) employee.get("linked_staff_account_id")).longValue();
     if (staffId == null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "This employee has no linked login identity yet.");
+    }
+    if (staffId.equals(context.staffId())) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot disable or re-enable your own HRMS access.");
     }
     Map<String,Object> linked = staffIdentity(staffId);
     if ("hrms_admin".equalsIgnoreCase(String.valueOf(linked.get("username")))) {
