@@ -28,8 +28,7 @@ public class AuthController {
       @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
     String mobile=String.valueOf(body.getOrDefault("mobile",""));
     String purpose=String.valueOf(body.getOrDefault("purpose","LOGIN"));
-    if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))
-        && "STAFF_LOGIN".equals(purpose)) {
+    if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))) {
       throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
     }
     String devCode=auth.requestOtp(mobile,purpose);
@@ -44,6 +43,9 @@ public class AuthController {
   public ResponseEntity<Map<String,Object>> verifyOtp(
       @RequestBody Map<String,Object> body,
       @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
+    if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))) {
+      throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
+    }
     AuthContext context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("otp","")),
         String.valueOf(body.getOrDefault("purpose","LOGIN")),
