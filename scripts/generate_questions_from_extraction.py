@@ -8,6 +8,7 @@ OpenAI-compatible chat-completions API.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
 import os
@@ -485,6 +486,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
 def validate_resume_candidate(
     candidate: dict[str, Any], curriculum: dict[str, Any], source: dict[str, Any],
     chapter: dict[str, Any], questions_per_chapter: int, model: str,
+    expected_types: list[str] | None = None,
 ) -> int:
     """Validate a previously completed chapter bundle before skipping it on --resume."""
     if not isinstance(candidate, dict):
@@ -536,15 +538,66 @@ def validate_resume_candidate(
             f"Existing resume candidate contains {question_count} questions; expected {questions_per_chapter}. "
             "Use a new output directory rather than overwriting a different candidate."
         )
+    if expected_types is not None:
+        actual_types = sorted(
+            str(question.get("question_type", "")).upper()
+            for lesson in lessons if isinstance(lesson, dict)
+            for question in lesson.get("questions", []) if isinstance(question, dict)
+        )
+        if actual_types != sorted(expected_types):
+            raise ValueError("Existing resume candidate does not match exact curriculum question-type quotas.")
     return question_count
+
+
+
+def load_curriculum_question_targets(path: Path, curriculum: dict[str, Any],
+                                     chapters: list[dict[str, Any]]) -> dict[str, list[str]]:
+    """Read exact planned question-type quotas for the selected chapter codes.
+
+    Uses planned minimums in the checked-in CSV, not live approved-question counts.
+    Resulting bundles remain AI_GENERATED_DRAFT and require editorial review.
+    """
+    if not path.is_file():
+        raise ValueError(f"Question target CSV does not exist: {path}")
+    class_code = str(curriculum.get("class_code", ""))
+    subject_code = str(curriculum.get("subject_code", "")).strip().lower()
+    required_codes = {str(chapter["code"]) for chapter in chapters}
+    counts: dict[str, dict[str, int]] = {code: {} for code in required_codes}
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        for line, row in enumerate(csv.DictReader(handle), start=2):
+            try:
+                row_class = str(int(row["class_code"]))
+                row_subject = str(row["subject_code"]).strip().lower()
+                code = str(row["chapter_code"]).strip()
+                qtype = str(row["question_type"]).strip().upper()
+                minimum = int(row["minimum_target_count"])
+                eligible = str(row.get("target_eligible", "true")).strip().lower() != "false"
+            except (KeyError, TypeError, ValueError) as exc:
+                raise ValueError(f"Invalid question target row {line}: {exc}") from exc
+            if row_class != class_code or row_subject != subject_code or code not in required_codes:
+                continue
+            if qtype not in SUPPORTED_TYPES or minimum < 0:
+                raise ValueError(f"Unsupported question target at CSV line {line}: {qtype}/{minimum}.")
+            if eligible and minimum > 0:
+                counts[code][qtype] = counts[code].get(qtype, 0) + minimum
+    schedules = {
+        code: [qtype for qtype in sorted(type_counts) for _ in range(type_counts[qtype])]
+        for code, type_counts in counts.items() if type_counts
+    }
+    missing = sorted(required_codes - set(schedules))
+    if missing:
+        raise ValueError("No positive curriculum target rows for extracted chapter(s): " + ", ".join(missing))
+    return schedules
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--extraction", required=True, type=Path, help="DRAFT_EXTRACTION_ONLY JSON from scert_extract_review.py")
     parser.add_argument("--output-dir", required=True, type=Path, help="Private folder for AI_GENERATED_DRAFT JSON bundles")
-    parser.add_argument("--questions-per-chapter", type=int, default=12)
-    parser.add_argument("--question-types", default="", help="Comma-separated supported types; default mix varies by Maths/Science")
+    parser.add_argument("--questions-per-chapter", type=int, default=12, help="Experimental balanced mix size; overridden by --use-curriculum-targets")
+    parser.add_argument("--question-types", default="", help="Comma-separated types: MCQ,TRUE_FALSE,INPUT,NUMERICAL,MATCH,ORDER,ASSERTION_REASON,CASE_BASED,SHORT_ANSWER,LONG_ANSWER,DIAGRAM,MAP,SOURCE_BASED")
+    parser.add_argument("--use-curriculum-targets", action="store_true", help="Use exact per-chapter question-type quotas in the curriculum target CSV")
+    parser.add_argument("--target-csv", type=Path, default=Path("docs/product/curriculum-question-targets.csv"), help="Question target matrix for --use-curriculum-targets")
     parser.add_argument("--max-context-chars", type=int, default=14000)
     parser.add_argument("--chapter-code", action="append", default=[], help="Chapter code filter; repeat as needed")
     parser.add_argument("--max-chapters", type=int, default=0, help="Budget/test limit; zero means all mapped chapters")
@@ -561,6 +614,8 @@ def main() -> int:
         parser.error(f"Extraction bundle does not exist: {args.extraction}")
     if not 1 <= args.questions_per_chapter <= 100:
         parser.error("--questions-per-chapter must be between 1 and 100.")
+    if args.use_curriculum_targets and args.question_types.strip():
+        parser.error("--use-curriculum-targets already provides per-type quotas; do not combine it with --question-types.")
     if not 2000 <= args.max_context_chars <= 50000:
         parser.error("--max-context-chars must be between 2000 and 50000.")
     if args.max_api_calls < 1 or args.timeout < 1:
@@ -589,10 +644,15 @@ def main() -> int:
             if args.max_chapters < 1:
                 raise ValueError("--max-chapters must be positive when supplied.")
             chapters = chapters[:args.max_chapters]
+        target_schedules = load_curriculum_question_targets(args.target_csv, curriculum, chapters) if args.use_curriculum_targets else {}
+        question_counts = {
+            chapter["code"]: len(target_schedules[chapter["code"]]) if args.use_curriculum_targets else args.questions_per_chapter
+            for chapter in chapters
+        }
         plan = []
         for chapter in chapters:
             chunks = make_chunks(chapter["pages"], args.max_context_chars)
-            plan.append((chapter, allocate_questions(chunks, args.questions_per_chapter)))
+            plan.append((chapter, allocate_questions(chunks, question_counts[chapter["code"]])))
         if not plan:
             raise ValueError("No eligible mapped chapters remain after filters.")
         output_files = [args.output_dir / f"{chapter['code']}.ai-generated-draft.json" for chapter, _ in plan]
@@ -613,7 +673,8 @@ def main() -> int:
             except (OSError, json.JSONDecodeError) as exc:
                 raise ValueError(f"Cannot resume from {destination}: existing candidate JSON is unreadable.") from exc
             question_count = validate_resume_candidate(
-                existing_bundle, curriculum, source, chapter, args.questions_per_chapter, args.model,
+                existing_bundle, curriculum, source, chapter, question_counts[chapter["code"]], args.model,
+                expected_types=target_schedules.get(chapter["code"]),
             )
             completed.append({
                 "chapter_code": chapter["code"], "file": str(destination),
@@ -632,13 +693,16 @@ def main() -> int:
             "chapters_already_completed": len(completed),
             "planned_model_requests": total_calls,
             "max_model_http_requests": args.max_api_calls,
-            "questions_per_chapter": args.questions_per_chapter,
-            "planned_question_total": (len(plan) + len(completed)) * args.questions_per_chapter,
-            "pending_question_total": len(plan) * args.questions_per_chapter,
+            "question_selection_mode": "CURRICULUM_TARGETS" if args.use_curriculum_targets else "BALANCED_EXPERIMENTAL_MIX",
+            "questions_per_chapter": args.questions_per_chapter if not args.use_curriculum_targets else None,
+            "question_counts_by_chapter": question_counts,
+            "planned_question_total": sum(question_counts.values()),
+            "pending_question_total": sum(question_counts[chapter["code"]] for chapter, _ in plan),
             "completed_chapter_codes": [item["chapter_code"] for item in completed],
             "output_directory": str(args.output_dir), "source_pdf_sha256": source["pdf_sha256"],
             "model": args.model or "(not configured)", "auto_publish": False,
             "chapter_codes": [chapter["code"] for chapter, _ in plan],
+            "curriculum_target_csv": str(args.target_csv) if args.use_curriculum_targets else None,
             "resume_enabled": args.resume,
         }
         if not args.generate:
@@ -666,7 +730,7 @@ def main() -> int:
         api_requests_used = 0
         for chapter, allocations in plan:
             chunk_results = []
-            type_schedule = scheduled_question_types(args.questions_per_chapter, allowed_types, curriculum["subject_code"])
+            type_schedule = target_schedules[chapter["code"]] if args.use_curriculum_targets else scheduled_question_types(args.questions_per_chapter, allowed_types, curriculum["subject_code"])
             type_cursor = 0
             seen_prompts: set[str] = set()
             for chunk, count in allocations:
