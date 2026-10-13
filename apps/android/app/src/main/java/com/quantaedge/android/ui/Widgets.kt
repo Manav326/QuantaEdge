@@ -136,7 +136,7 @@ fun QuestionCard(
                 Text(type.replace('_', ' '), style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary)
             }
-            Text(prompt, style = MaterialTheme.typography.titleMedium)
+            LearningMathText(prompt, style = MaterialTheme.typography.titleMedium)
 
             when {
                 isOrder && options.isNotEmpty() -> {
@@ -155,7 +155,7 @@ fun QuestionCard(
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Text((index + 1).toString() + ".", style = MaterialTheme.typography.titleSmall)
-                                Text(label, modifier = Modifier.weight(1f))
+                                LearningMathText(label, modifier = Modifier.weight(1f))
                                 TextButton(
                                     onClick = {
                                         val next = orderedKeys.toMutableList()
@@ -195,14 +195,14 @@ fun QuestionCard(
                                 },
                                 enabled = !locked && !saving
                             )
-                            Text(label, modifier = Modifier.weight(1f))
+                            LearningMathText(label, modifier = Modifier.weight(1f))
                         }
                     }
                 }
                 isMatch -> {
                     if (options.isNotEmpty()) {
                         options.forEach { option ->
-                            Text(
+                            LearningMathText(
                                 option.textAny("key", "option_key") + " — " + option.textAny("label", "text"),
                                 style = MaterialTheme.typography.bodySmall
                             )
@@ -252,7 +252,7 @@ fun QuestionCard(
                                 onClick = { onAnswerChange(key) },
                                 enabled = !locked && !saving
                             )
-                            Text(label, modifier = Modifier.weight(1f).padding(start = 8.dp))
+                            LearningMathText(label, modifier = Modifier.weight(1f).padding(start = 8.dp))
                         }
                     }
                 }
