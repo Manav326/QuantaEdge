@@ -33,11 +33,11 @@ The current People Operations attendance screen already calls attendance, leave 
 
 The UI previously fell back to five working days when the organization response omitted the setting. The UI fallback is now six, but the authoritative organization creation/default path and existing organizations must also be migrated/normalized to six days. A frontend default alone is insufficient.
 
-The UI supports manually entering holidays and labels the jurisdiction (default form value: Bihar), but the current code inspected does not prove that a source-verified India baseline is installed or that an organization override has deterministic precedence. Do not silently invent a holiday list. A baseline must be checked against authoritative central/state notifications and carry source/version metadata; until that source-backed import exists, the UI must clearly describe the calendar as organization-managed rather than claiming it is preloaded.
+The calendar is organization-managed and does not seed dates automatically. A permission-controlled import accepts bounded entries from an HTTPS government domain and stores source type, URL, jurisdiction, year, verification timestamp and verifying staff member. This is a recorded staff attestation, not automatic validation of every date. Import the central/state/district calendar that actually applies to the organization; manual entries remain explicit organization overrides.
 
 The visible balance screen records `GRANT`, `ACCRUAL`, and `ADJUSTMENT` transactions and reads a ledger. The screen does not establish whether posted transactions can be updated/deleted, whether leave consumption/reversal is atomic with request approval, or whether actor/reason/source fields are enforced server-side. These are mandatory backend checks.
 
-Transition-specific approval configuration, correction-request workflow, manager-only reporting scope, effective-dated schedule changes, ledger reversal semantics, and comprehensive authorization tests must be verified in API code and migrations. If the existing API cannot safely support one of these, leave the operation unavailable rather than simulate security in the client, and record the blocker in the implementation handoff.
+Transition-specific approval configuration, employee correction requests, and manager reporting-tree scope have been added to API code and migrations. Manager scope activates only when HR_MANAGER_TEAM_VIEW is explicitly granted, and must be combined with the relevant HR view/manage permission. Integration tests must still prove list, detail, update, decision and balance isolation, as well as lifecycle-rule enforcement and ledger reversal semantics.
 
 ## Acceptance evidence required
 
