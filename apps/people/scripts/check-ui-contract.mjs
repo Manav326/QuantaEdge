@@ -47,11 +47,11 @@ for (const exportName of [
   'PeopleDialog',
 ]) {
   assert(components.includes(`export function ${exportName}`), `Missing shared People UI primitive: ${exportName}`);
+}
+
 assert(components.includes("'primary' | 'secondary' | 'neutral' | 'danger'"), 'Shared People buttons must include the semantic variants.');
 assert(components.includes('loading = false') && components.includes('disabled={disabled || loading}'), 'Shared People buttons must expose safe loading/disabled behavior.');
 assert(styles.includes('.qe-people-button--neutral') && styles.includes('.qe-people-button-spinner'), 'Shared People button variants and loading indicator styles must exist.');
-
-}
 
 const routePages = [
   ['/', 'apps/people/app/page.tsx'],
