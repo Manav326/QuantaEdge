@@ -50,7 +50,7 @@ public class HrEmployeeChangeRequestReviewController {
         r.reviewed_by_staff_id,r.reviewed_at,r.created_at,r.updated_at
       from hr_employee_change_request r join hr_employee e on e.id=r.employee_id
       where (?='ALL' or r.request_status=?)
-        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW' and workspace_key='HRMS') or e.id in (select id from reporting))
       order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at desc,r.id desc
       limit ?
       """,context.staffId(),state,state,context.staffId(),pageSize);
