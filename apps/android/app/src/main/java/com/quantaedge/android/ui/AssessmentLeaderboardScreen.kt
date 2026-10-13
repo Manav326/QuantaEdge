@@ -105,7 +105,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
             else "Each test's ranking is provided by the server, using its authoritative score and tie-break rules.",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error)
+        if (error.isNotBlank()) Text(localizedUiText(error), color = MaterialTheme.colorScheme.error)
         if (loadingTests) CircularProgressIndicator()
         if (!loadingTests && tests.isEmpty()) Text(if (language == "hi") "अभी कोई प्रकाशित test उपलब्ध नहीं है।" else "No published tests are available.")
         tests.forEach { test ->
