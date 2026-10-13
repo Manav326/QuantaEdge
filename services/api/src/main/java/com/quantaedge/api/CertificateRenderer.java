@@ -161,7 +161,7 @@ public class CertificateRenderer {
       int width = 520;
       int height = 60;
       int x = WIDTH - 660;
-      int y = HEIGHT - 150;
+      int y = HEIGHT - 160;
       BitMatrix matrix = new MultiFormatWriter().encode(certificateNumber, BarcodeFormat.CODE_128,
           width, height, Map.of(EncodeHintType.MARGIN, 2));
       BufferedImage barcode = MatrixToImageWriter.toBufferedImage(matrix);
