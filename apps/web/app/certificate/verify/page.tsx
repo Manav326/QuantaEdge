@@ -64,7 +64,11 @@ export default function CertificateVerifyPage() {
       const parsed = new URL(raw);
       const code = parsed.searchParams.get('code');
       if (code) return code;
-      const match = parsed.pathname.match(/\\/api\\/v1\\/certificates\\/verify\\/([^/]+)$/);
+      const verificationPath = '/api/v1/certificates/verify/';
+      const verificationPathIndex = parsed.pathname.indexOf(verificationPath);
+      if (verificationPathIndex >= 0) {
+        return decodeURIComponent(parsed.pathname.slice(verificationPathIndex + verificationPath.length));
+      }
       if (match) return decodeURIComponent(match[1]);
     } catch {
       // A linear barcode normally contains only the certificate number, not a URL.
@@ -145,6 +149,9 @@ export default function CertificateVerifyPage() {
             </button>
             {scanning && <button type="button" className="button button-light" onClick={stopScanner}>Stop camera</button>}
           </div>
+          <p className={styles.scannerHint}>
+            A QR code opens this verifier automatically. You can also scan the printed Code 128 barcode with a supported camera or handheld scanner, or enter the certificate ID above.
+          </p>
           {scanning && (
             <div className={styles.scannerPanel}>
               <video ref={videoRef} className={styles.scannerVideo} muted playsInline autoPlay aria-label="Live certificate code scanner" />
