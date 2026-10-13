@@ -40,6 +40,7 @@ app:
     otp-cooldown-seconds: ${APP_AUTH_OTP_COOLDOWN_SECONDS:60}
     allow-repeated-demo-otp: ${APP_AUTH_ALLOW_REPEATED_DEMO_OTP:false}
     admin-mobiles: ${APP_AUTH_ADMIN_MOBILES:}
+    hrms-bootstrap-password: ${APP_HRMS_BOOTSTRAP_PASSWORD:}
     workspace-origins:
       education-admin: ${APP_AUTH_EDUCATION_ADMIN_ORIGINS:http://localhost:3001}
       hrms: ${APP_AUTH_HRMS_ORIGINS:http://localhost:3002}
