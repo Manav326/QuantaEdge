@@ -9,7 +9,7 @@ let recoveryInstalled = false;
 function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
   new Headers(init?.headers).forEach((value, key) => headers.set(key, value));
-  headers.set('X-QE-Workspace', 'STAFF');
+  headers.set('X-QE-Workspace', 'EDUCATION_ADMIN');
   return new Request(input instanceof Request ? input.clone() : input, { ...init, headers });
 }
 
@@ -33,7 +33,7 @@ function installRefreshRecovery() {
     const requestInit = isApi ? undefined : init;
     const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
     const response = await nativeFetch(requestInput, requestInit);
-    if (skip || (response.status !== 401 && response.status !== 403)) return response;
+    if (skip || response.status !== 401) return response;
     if (!refreshInFlight) refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' })).then(r => r.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     if (!await refreshInFlight) {
       // A different tab may have won the rotating-refresh-token race and already
