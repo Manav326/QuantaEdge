@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Tests.module.css';
+import CertificateActions from '../../components/CertificateActions';
 
 type AssessmentCard = {
   assessment_id:number;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -22,10 +23,11 @@ type AttemptQuestion = {
 type Attempt = {
   attempt_id:number;assessment_id:number;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
+  assessment_type?:string;is_generated?:boolean;
   questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
-type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
+type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;is_generated?:boolean;subject_name:string;chapter_name?:string|null;question_count:number};
 
 type LeaderboardEntry = {
   rank:number;
@@ -407,6 +409,8 @@ export default function TestsClient(){
                    </button>
                  </div>
                </div>
+               <CertificateActions attemptId={Number(result.attempt_id)} assessmentType={result.assessment_type}
+                 isGenerated={result.is_generated} status={result.status} language={language} compact />
              </article>;
            })}</div>}
           <PremiumPagination page={resultsPage} total={resultsTotal} pageSize={resultsPageSize}
@@ -440,6 +444,8 @@ export default function TestsClient(){
             <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>Incorrect</span></article>
             <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>Not answered</span></article>
           </div>
+          <CertificateActions attemptId={Number(attempt.attempt_id)} assessmentType={attempt.assessment_type}
+            isGenerated={attempt.is_generated} status={attempt.status} language={language} />
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
             <div className={styles.resultReviewList}>
