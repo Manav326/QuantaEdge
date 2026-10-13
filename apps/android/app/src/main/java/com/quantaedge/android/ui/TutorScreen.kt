@@ -107,6 +107,6 @@ fun TutorScreen(
                 ) { Text(t(if (busy) "Thinking…" else "Ask", if (busy) "सोच रहा है…" else "पूछें")) }
             }
         }
-        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+        if (error.isNotBlank()) Text(localizedUiText(error), color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
     }
 }
