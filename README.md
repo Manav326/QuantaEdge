@@ -120,6 +120,16 @@ PostgreSQL + Redis
 
 The browser does not need a hard-coded API host. Next.js proxies /api/* to the internal API service, which keeps local Docker and future production domains aligned.
 
+## Run the AI tutor locally without an API key
+
+A local Ollama-backed tutor is available as an optional Compose override. From the repository root, run:
+
+```powershell
+docker compose -f docker-compose.yml -f docker-compose.ai.yml up -d --build
+```
+
+On first start, Docker downloads the Ollama runtime and the small `qwen2.5:0.5b` model. Then open `http://localhost:3000/student`, sign in to the local preview student, and open a published lesson to use the tutor. The model is stored in a persistent Docker volume. First startup needs internet and additional disk/RAM; this small general-purpose model is an MVP, not a teacher-validated or fine-tuned model. It may make mistakes and must not be presented as official SCERT/NCERT content. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md) for limitations and shutdown instructions. The normal stack remains unchanged when the override is not used.
+
 ## Production deployment shape
 
 GitHub Actions validates the API, runs content-import safeguards, and builds/publishes immutable SHA-tagged images to GHCR on main. A separate workflow is manual-dispatch only; no deployment was performed as part of the current content audit.
