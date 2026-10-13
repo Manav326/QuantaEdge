@@ -61,6 +61,7 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
     var pendingBytes by remember { mutableStateOf<ByteArray?>(null) }
     var pendingName by remember { mutableStateOf("quantaedge-certificate") }
     var verification by remember { mutableStateOf<JSONObject?>(null) }
+    var verificationCode by remember { mutableStateOf("") }
     var verifyingQr by remember { mutableStateOf(false) }
 
     fun writeDownloadedFile(uri: android.net.Uri?) {
@@ -168,6 +169,19 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
     }
 
     fun issueCertificate() {
+        val selectedAttempt = eligibleAssessments.firstOrNull {
+            it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+        }
+        if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "ISSUED") {
+            downloadCertificate(selectedAttempt, "pdf")
+            return
+        }
+        if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "REVOKED") {
+            error = if (language == "hi") "इस result का प्रमाणपत्र निरस्त है; इसे दोबारा जारी नहीं किया जा सकता।"
+                else "The certificate for this result is revoked and cannot be reissued. Contact support if this is unexpected."
+            notice = ""
+            return
+        }
         scope.launch {
             busy = true
             error = ""
@@ -238,12 +252,28 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                     "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
                     else "Scan the QR or linear barcode on a QuantaEdge certificate. Its current status is checked with the server.",
                     style = MaterialTheme.typography.bodyMedium)
-                Button(onClick = { scanCertificateQr() }, enabled = !verifyingQr && !busy) {
-                    Text(if (verifyingQr) {
-                        if (language == "hi") "जाँच हो रही है…" else "Checking…"
-                    } else {
-                        if (language == "hi") "QR स्कैनर खोलें" else "Scan QR / barcode"
-                    })
+                OutlinedTextField(
+                    value = verificationCode,
+                    onValueChange = { verificationCode = it },
+                    label = { Text(if (language == "hi") "प्रमाणपत्र ID / नंबर" else "Certificate ID / number") },
+                    placeholder = { Text("QE-2026-ABCDEF1234567890") },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = { verifyScannedCertificate(verificationCode.trim()) },
+                        enabled = !verifyingQr && !busy && verificationCode.isNotBlank()
+                    ) {
+                        Text(if (language == "hi") "नंबर सत्यापित करें" else "Verify ID")
+                    }
+                    OutlinedButton(onClick = { scanCertificateQr() }, enabled = !verifyingQr && !busy) {
+                        Text(if (verifyingQr) {
+                            if (language == "hi") "जाँच हो रही है…" else "Checking…"
+                        } else {
+                            if (language == "hi") "QR / बारकोड स्कैन करें" else "Scan QR / barcode"
+                        })
+                    }
                 }
             }
         }
@@ -313,25 +343,39 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                 } else {
                     if (eligibleAssessments.isEmpty()) {
                         Text(
-                            if (language == "hi") "कोई पात्र result नहीं मिला। Test certificate के लिए admin-created test का result RELEASED होना चाहिए, pass mark पूरा होना चाहिए और subject enrollment active होना चाहिए। किसी specific test की वजह जानने के लिए उसका result खोलें।"
-                            else "No eligible result found. A test certificate requires a released result from an admin-created test, a passing score and an active subject enrollment. Open a specific test result to see its eligibility reason.",
+                            if (language == "hi") "कोई पात्र result नहीं मिला। Test certificate के लिए admin-created test का result RELEASED होना चाहिए, pass mark पूरा होना चाहिए और subject enrollment active होना चाहिए। सभी lessons पूरे करना ज़रूरी नहीं है। किसी specific test की वजह जानने के लिए उसका result खोलें।"
+                            else "No eligible result found. A test certificate requires a released result from an admin-created test, a passing score and an active subject enrollment; completing every lesson is not required. Open a specific test result to see its eligibility reason.",
                             color = MaterialTheme.colorScheme.secondary
                         )
                     } else {
                         Text(if (language == "hi") "पात्र test चुनें" else "Select an eligible test")
                         eligibleAssessments.forEach { item ->
                             val id = item.optLongValue("attempt_id", "attemptId", "id").toString()
+                            val certificateStatus = item.optString("certificate_status")
                             val title = item.optString("assessment_title", item.optString("title", "Assessment")) +
                                 " · " + item.optString("final_score", item.optString("score", "—")) +
-                                "/" + item.optString("max_score", "—")
+                                "/" + item.optString("max_score", "—") +
+                                when (certificateStatus) {
+                                    "ISSUED" -> if (language == "hi") " · प्रमाणपत्र जारी है" else " · Certificate already issued"
+                                    "REVOKED" -> if (language == "hi") " · प्रमाणपत्र निरस्त" else " · Certificate revoked"
+                                    else -> ""
+                                }
                             if (selectedAttemptId == id) Button(onClick = { selectedAttemptId = id }, modifier = Modifier.fillMaxWidth()) { Text(title) }
                             else OutlinedButton(onClick = { selectedAttemptId = id }, modifier = Modifier.fillMaxWidth()) { Text(title) }
                         }
                     }
                 }
+                val selectedCertificateStatus = eligibleAssessments.firstOrNull {
+                    it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                }?.optString("certificate_status").orEmpty()
                 Button(onClick = { issueCertificate() }, enabled = !busy && !loading &&
-                    (selectedAchievement != "ASSESSMENT_PASS" || selectedAttemptId.isNotBlank())) {
-                    Text(if (busy) "…" else if (language == "hi") "पात्रता जाँचें और जारी करें" else "Verify eligibility & issue")
+                    (selectedAchievement != "ASSESSMENT_PASS" ||
+                        (selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"))) {
+                    Text(if (busy) "…" else if (selectedCertificateStatus == "ISSUED") {
+                        if (language == "hi") "मौजूदा प्रमाणपत्र खोलें" else "Open existing certificate"
+                    } else if (selectedCertificateStatus == "REVOKED") {
+                        if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
+                    } else if (language == "hi") "पात्रता जाँचें और जारी करें" else "Verify eligibility & issue")
                 }
             }
         }
