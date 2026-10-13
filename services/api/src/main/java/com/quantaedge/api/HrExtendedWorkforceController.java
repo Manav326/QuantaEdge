@@ -98,6 +98,12 @@ public class HrExtendedWorkforceController {
     return one("select * from hr_candidate where id=?",id);
   }
 
+  @GetMapping("/recruitment/candidates/{id}/evaluations")
+  public List<Map<String,Object>> candidateEvaluations(@PathVariable long id,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+    require(c,"HR_RECRUITMENT_VIEW"); one("select id from hr_candidate where id=?",id);
+    return jdbc.queryForList("select * from hr_candidate_evaluation where candidate_id=? order by created_at desc,id desc",id);
+  }
+
   @PostMapping("/recruitment/candidates/{id}/evaluations") @Transactional
   public Map<String,Object> evaluateCandidate(@PathVariable long id,@RequestBody Map<String,Object> b,
       @RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -176,6 +182,11 @@ public class HrExtendedWorkforceController {
     if(employeeId!=null) employeeInOrg(employeeId,organizationId);
     return employeeId==null?jdbc.queryForList("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id where c.organization_id=? order by r.created_at desc,r.id desc",organizationId):jdbc.queryForList("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id where c.organization_id=? and r.employee_id=? order by r.created_at desc,r.id desc",organizationId,employeeId);
   }
+  @GetMapping("/performance/cycles/{cycleId}/goals")
+  public List<Map<String,Object>> goals(@PathVariable long cycleId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+    require(c,"HR_PERFORMANCE_VIEW"); one("select id from hr_performance_cycle where id=?",cycleId);
+    return jdbc.queryForList("select g.*,e.employee_number,e.display_name from hr_employee_goal g join hr_employee e on e.id=g.employee_id where g.cycle_id=? order by e.display_name,g.id",cycleId);
+  }
   @PostMapping("/performance/reviews") @Transactional
   public Map<String,Object> createReview(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_MANAGE"); long cycle=id(b.get("cycleId"),"Cycle"),employee=id(b.get("employeeId"),"Employee");
@@ -214,6 +225,17 @@ public class HrExtendedWorkforceController {
     require(c,"HR_ASSET_MANAGE"); long org=id(b.get("organizationId"),"Organisation"); organization(org);
     Long key=jdbc.queryForObject("insert into hr_asset(organization_id,asset_tag,asset_type,description,serial_number,acquired_on,created_by_staff_id) values (?,?,?,?,?,?,?) returning id",Long.class,org,required(b.get("assetTag"),80,"Asset tag"),required(b.get("assetType"),80,"Asset type"),optional(b.get("description"),500),optional(b.get("serialNumber"),160),b.get("acquiredOn")==null?null:Date.valueOf(date(String.valueOf(b.get("acquiredOn")),"Acquired date")),c.staffId());
     event(org,"ASSET",key,"CREATED",c,null,"{}"); record(c,"/api/v1/hr/assets/"+key,"Created asset inventory record"); return one("select * from hr_asset where id=?",key);
+  }
+  @PatchMapping("/assets/{id}/status") @Transactional
+  public Map<String,Object> assetStatus(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+    require(c,"HR_ASSET_MANAGE"); Map<String,Object> asset=one("select * from hr_asset where id=? for update",id);
+    String next=required(b.get("status"),20,"Status").toUpperCase();
+    if(!List.of("AVAILABLE","MAINTENANCE","MISSING","RETIRED").contains(next)) throw bad("Asset status must be AVAILABLE, MAINTENANCE, MISSING or RETIRED; use assignment workflow for ASSIGNED.");
+    if("ASSIGNED".equals(asset.get("asset_status"))) throw conflict("Return the current assignment before changing asset status.");
+    if("RETIRED".equals(asset.get("asset_status"))&&!next.equals("RETIRED")) throw conflict("Retired assets cannot be reactivated.");
+    jdbc.update("update hr_asset set asset_status=?,retired_at=case when ?='RETIRED' then coalesce(retired_at,now()) else retired_at end,updated_at=now() where id=?",next,next,id);
+    event(((Number)asset.get("organization_id")).longValue(),"ASSET",id,"STATUS_"+next,c,required(b.get("reason"),1000,"Reason"),"{\"status\":\""+next+"\"}");
+    return one("select * from hr_asset where id=?",id);
   }
   @PostMapping("/assets/{id}/assign") @Transactional
   public Map<String,Object> assignAsset(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -258,6 +280,11 @@ public class HrExtendedWorkforceController {
     jdbc.update("insert into hr_exit_checklist_item(exit_id,item_key,title,owner_role) values (?,?,?,?),(?,?,?,?),(?,?,?,?),(?,?,?,?)",key,"HANDOVER","Knowledge and work handover","MANAGER",key,"ASSET_RETURN","Return assigned assets","IT",key,"ACCESS_REVIEW","Review access removal","IT",key,"FINAL_SETTLEMENT_INPUTS","Prepare final-settlement inputs","PAYROLL");
     event(((Number)e.get("organization_id")).longValue(),"EXIT",key,"REQUESTED",c,optional(b.get("reason"),1000),"{\"employeeId\":"+employee+"}");
     record(c,"/api/v1/hr/exits/"+key,"Initiated employee exit workflow"); return one("select * from hr_employee_exit where id=?",key);
+  }
+  @GetMapping("/exits/{id}/checklist")
+  public List<Map<String,Object>> exitChecklist(@PathVariable long id,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+    require(c,"HR_EXIT_VIEW"); one("select id from hr_employee_exit where id=?",id);
+    return jdbc.queryForList("select * from hr_exit_checklist_item where exit_id=? order by id",id);
   }
   @PatchMapping("/exits/{id}/status") @Transactional
   public Map<String,Object> exitStatus(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
