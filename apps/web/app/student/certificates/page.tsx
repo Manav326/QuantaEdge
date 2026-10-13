@@ -77,7 +77,7 @@ export default function StudentCertificatesPage() {
         setSubjectCode(String(curriculum[0]?.subject_code || ''));
       }
     } catch (e: any) {
-      setError(e?.message || 'Unable to load certificates.');
+      setError(e?.message || t('Unable to load certificates.','प्रमाणपत्र लोड नहीं हो सके।'));
     }
   }, [router, subjectCode, locale]);
 
@@ -224,7 +224,9 @@ export default function StudentCertificatesPage() {
             )}
             {achievementType === 'ASSESSMENT_PASS' && releasedAttempts.length === 0 && (
               <p className={styles.help}>
-                {t('No qualifying released assessment results were found. The result must be released, meet the','कोई पात्र जारी टेस्ट परिणाम नहीं मिला। परिणाम जारी होना चाहिए, '+String(passThreshold)+'% की सीमा पूरी करनी चाहिए, सक्रिय विषय ट्रैक से संबंधित होना चाहिए और एडमिन द्वारा बनाया गया टेस्ट होना चाहिए (generated या practice test नहीं)।')} {passThreshold}%
+                {locale === 'english'
+                  ? `No qualifying released assessment results were found. The result must be released, meet the ${passThreshold}% threshold, belong to an active subject track, and come from an admin-created test (not a generated or practice test).`
+                  : `कोई पात्र जारी टेस्ट परिणाम नहीं मिला। परिणाम जारी होना चाहिए, ${passThreshold}% की सीमा पूरी करनी चाहिए, सक्रिय विषय ट्रैक से संबंधित होना चाहिए और एडमिन द्वारा बनाया गया टेस्ट होना चाहिए (generated या practice test नहीं)।`}
                 {' '}<Link href="/student/tests">{t('Check your test results','अपने टेस्ट परिणाम देखें')}</Link>. {t('A certificate issued from the test-result screen should remain listed here after refresh.','टेस्ट परिणाम स्क्रीन से जारी प्रमाणपत्र रिफ्रेश करने के बाद भी यहाँ दिखना चाहिए।')}
               </p>
             )}
@@ -239,7 +241,7 @@ export default function StudentCertificatesPage() {
             <strong>{t('Eligibility rule','पात्रता नियम')}</strong>
             {achievementType === 'SUBJECT_COMPLETION'
               ? t('All currently published lessons in your active subject track must be completed. The server checks your actual progress records.','आपके सक्रिय विषय ट्रैक के सभी प्रकाशित पाठ पूरे होने चाहिए। सर्वर आपके वास्तविक प्रगति रिकॉर्ड की जाँच करता है।')
-              : t('Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ','केवल एडमिन द्वारा बनाया गया, non-generated टेस्ट पात्र हो सकता है (practice, topic-end या chapter-end टेस्ट नहीं)। परिणाम जारी होना चाहिए, पास सीमा पूरी करनी चाहिए और सक्रिय विषय ट्रैक से संबंधित होना चाहिए। हर प्रकाशित पाठ पूरा करना आवश्यक नहीं है।') + passThreshold + t('% pass threshold, and belong to an active subject track. Completing every published lesson is not required for an assessment-pass certificate.','% की पास सीमा और सक्रिय विषय ट्रैक से संबंधित होना चाहिए। टेस्ट पास प्रमाणपत्र के लिए सभी प्रकाशित पाठ पूरे करना आवश्यक नहीं है।')}
+              : t(`Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ${passThreshold}% pass threshold, and belong to an active subject track. Completing every published lesson is not required for an assessment-pass certificate.`,`केवल एडमिन द्वारा बनाया गया non-generated टेस्ट पात्र हो सकता है (practice, topic-end या chapter-end टेस्ट नहीं)। परिणाम जारी होना चाहिए, ${passThreshold}% की पास सीमा पूरी करनी चाहिए और सक्रिय विषय ट्रैक से संबंधित होना चाहिए। टेस्ट पास प्रमाणपत्र के लिए सभी प्रकाशित पाठ पूरे करना आवश्यक नहीं है।`)}
           </div>
           <button className="button button-dark" type="button"
             onClick={() => void issueCertificate()}
