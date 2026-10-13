@@ -198,8 +198,8 @@ fun StudentProgressScreen(
                                 val hint = when (reason) {
                                     "ADMIN_CREATED_TEST_ONLY" -> t("Only admin-created tests qualify; generated tests and practice are excluded.",
                                         "केवल admin-created tests पात्र हैं; generated tests और practice शामिल नहीं हैं।")
-                                    "SUBJECT_COMPLETION_REQUIRED" -> t("Complete all published lessons in this subject to unlock the test certificate.",
-                                        "टेस्ट प्रमाणपत्र पाने के लिए इस विषय के सभी प्रकाशित पाठ पूरे करें।")
+                                    "SUBJECT_COMPLETION_REQUIRED" -> t("Subject completion is a separate certificate; a test certificate depends on the released result and active subject enrolment.",
+                                        "विषय पूरा करने का प्रमाणपत्र अलग है; टेस्ट प्रमाणपत्र के लिए जारी परिणाम और सक्रिय विषय नामांकन आवश्यक हैं।")
                                     "PASS_THRESHOLD_NOT_MET" -> t("The released score is below the " +
                                         ((eligibility?.textAny("pass_threshold_percent")).orEmpty().ifBlank { "80" }) + "% certificate threshold.",
                                         "जारी अंक " + ((eligibility?.textAny("pass_threshold_percent")).orEmpty().ifBlank { "80" }) + "% प्रमाणपत्र सीमा से कम हैं।")
