@@ -1,6 +1,8 @@
 package com.quantaedge.android.ui
 
 import android.graphics.BitmapFactory
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -104,6 +107,9 @@ fun QuantaEdgeApp() {
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var assessmentCertificateEligibility by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
+    var pendingCertificateBytes by remember { mutableStateOf<ByteArray?>(null) }
+    var pendingCertificateFilename by remember { mutableStateOf("quantaedge-certificate.pdf") }
     var progressData by remember { mutableStateOf(JSONObject()) }
     var documents by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
@@ -123,6 +129,34 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
+
+    fun persistPendingCertificate(uri: android.net.Uri?) {
+        val bytes = pendingCertificateBytes
+        if (uri == null || bytes == null) {
+            pendingCertificateBytes = null
+            return
+        }
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
+                        ?: throw IOException("Certificate could not be saved to the selected location.")
+                }
+                status = "Certificate saved successfully."
+            } catch (exception: Exception) {
+                error = exception.message ?: "Certificate could not be saved."
+            } finally {
+                pendingCertificateBytes = null
+            }
+        }
+    }
+
+    val resultCertificatePdfLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri -> persistPendingCertificate(uri) }
+    val resultCertificatePngLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("image/png")
+    ) { uri -> persistPendingCertificate(uri) }
 
     LaunchedEffect(resourceOwner, auth.toString()) {
         if (resourceOwner.isNotBlank() && resourceOwner != "guest") {
@@ -483,11 +517,68 @@ fun QuantaEdgeApp() {
     }
 
 
+    suspend fun loadAssessmentResultsData() {
+        val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
+            .optJSONArray("items").objectItems()
+        assessmentResults = loaded
+        val attemptIds = loaded.flatMap { result ->
+            val attempts = result.optJSONArray("attempts").objectItems()
+            if (attempts.isNotEmpty()) attempts else listOf(result)
+        }.map { it.optLongAny("attempt_id", "attemptId") }
+            .filter { it > 0L }.distinct().take(100)
+        assessmentCertificateEligibility = if (attemptIds.isEmpty()) emptyMap() else try {
+            ApiClient.getObject(
+                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptIds.joinToString(",")
+            ).optJSONArray("items").objectItems().mapNotNull { item ->
+                val id = item.optLongAny("attempt_id", "attemptId")
+                if (id > 0L) id to item else null
+            }.toMap()
+        } catch (_: Exception) {
+            // Keep released result history usable even if the certificate policy endpoint is down.
+            emptyMap()
+        }
+    }
+
     fun loadAssessmentResults() {
         runTask {
-            assessmentResults = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
-                .optJSONArray("items").objectItems()
+            loadAssessmentResultsData()
             route = AppRoute.ASSESSMENT_RESULTS
+        }
+    }
+
+    fun issueCertificateForAttempt(attemptId: Long) {
+        runTask {
+            if (attemptId <= 0L) throw IOException("Assessment attempt could not be identified.")
+            ApiClient.postObject(
+                "/api/v1/students/me/certificates/issue",
+                JSONObject()
+                    .put("achievementType", "ASSESSMENT_PASS")
+                    .put("assessmentAttemptId", attemptId)
+                    .put("templateId", "CLASSIC")
+                    .put("language", language)
+            )
+            loadAssessmentResultsData()
+            status = "Certificate issued. You can now save its PDF or PNG from this result."
+        }
+    }
+
+    fun downloadResultCertificate(certificateId: Long, format: String) {
+        runTask {
+            if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
+            val bytes = withContext(Dispatchers.IO) {
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?format=" + format)
+            }
+            if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
+            val certificateNumber = assessmentCertificateEligibility.values
+                .firstOrNull { it.optLongAny("certificate_id", "certificateId") == certificateId }
+                ?.optString("certificate_number").orEmpty()
+                .replace(Regex("[^A-Za-z0-9_-]"), "_")
+                .ifBlank { certificateId.toString() }
+            pendingCertificateBytes = bytes
+            pendingCertificateFilename = "quantaedge-$certificateNumber.$format"
+            if (format == "pdf") resultCertificatePdfLauncher.launch(pendingCertificateFilename)
+            else resultCertificatePngLauncher.launch(pendingCertificateFilename)
         }
     }
 
@@ -829,6 +920,9 @@ fun QuantaEdgeApp() {
                 "/api/v1/learning/assessment-attempts/" + id + "/submit"
             )
             route = AppRoute.ASSESSMENT_ATTEMPT
+            if (assessmentAttempt.optBoolean("resultReleased")) {
+                runCatching { loadAssessmentResultsData() }
+            }
             status = if (assessmentAttempt.optBoolean("resultReleased")) {
                 "टेस्ट जमा हुआ और परिणाम जारी है।"
             } else {
@@ -1243,7 +1337,11 @@ fun QuantaEdgeApp() {
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
                         busy = busy,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
@@ -1256,13 +1354,22 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
                         resultItems = assessmentResults,
-                        onReview = ::openAssessmentReview
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
+                        busy = busy,
+                        onReview = ::openAssessmentReview,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate
                     )
                     AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
                         answers = answers,
                         feedbacks = feedbacks,
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
                         busy = busy,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
                         onSave = ::saveAssessmentAnswer,
                         onSubmit = ::submitAssessment,
@@ -1880,7 +1987,11 @@ private fun AssessmentAttemptScreen(
     attempt: JSONObject,
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
+    certificateEligibility: Map<Long, JSONObject>,
+    language: String,
     busy: Boolean,
+    onIssueCertificate: (Long) -> Unit,
+    onDownloadCertificate: (Long, String) -> Unit,
     onAnswerChange: (String, String) -> Unit,
     onSave: (JSONObject, String) -> Unit,
     onSubmit: () -> Unit,
@@ -1958,6 +2069,52 @@ private fun AssessmentAttemptScreen(
         if (released) {
             Text("अंक: " + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
+            val certificate = certificateEligibility[attemptId]
+            val certificateStatus = certificate?.optString("certificate_status").orEmpty()
+            val certificateId = certificate?.optLongAny("certificate_id", "certificateId") ?: 0L
+            Card(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
+                Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Text(if (language == "hi") "इस result का certificate" else "Certificate for this result",
+                        style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        if (language == "hi") "Admin-created test, qualifying released score और सभी published lessons पूरे होना ज़रूरी है।"
+                        else "Requires an admin-created test, a qualifying released score and completion of all published lessons.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    when {
+                        certificateStatus == "ISSUED" && certificateId > 0L -> Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            OutlinedButton(onClick = { onDownloadCertificate(certificateId, "pdf") }, enabled = !busy) {
+                                Text(if (language == "hi") "PDF सेव करें" else "Save PDF")
+                            }
+                            OutlinedButton(onClick = { onDownloadCertificate(certificateId, "png") }, enabled = !busy) {
+                                Text(if (language == "hi") "PNG सेव करें" else "Save PNG")
+                            }
+                        }
+                        certificateStatus == "REVOKED" -> Text(
+                            if (language == "hi") "यह certificate निरस्त है।"
+                            else "This certificate has been revoked.",
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error
+                        )
+                        certificate?.optBoolean("eligible", false) == true -> Button(
+                            onClick = { onIssueCertificate(attemptId) }, enabled = !busy && attemptId > 0L,
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text(if (language == "hi") "प्रमाणपत्र जारी करें" else "Issue certificate") }
+                        else -> {
+                            val reason = certificate?.optString("eligibility_reason").orEmpty()
+                            val message = when (reason) {
+                                "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
+                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold से कम है।" else "The score is below the certificate threshold."
+                                "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
+                                "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject के published lessons उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
+                                else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results स्क्रीन खोलकर refresh करें।" else "Certificate eligibility could not be checked. Open the results screen to refresh."
+                            }
+                            Text(message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                        }
+                    }
+                }
+            }
         } else if (phase == "AWAITING_REVIEW") {
             Text("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।", modifier = Modifier.padding(vertical = 8.dp))
         }
@@ -2034,18 +2191,26 @@ private fun AssessmentAttemptScreen(
 @Composable
 private fun ResultsScreen(
     resultItems: List<JSONObject>,
-    onReview: (Long) -> Unit
+    certificateEligibility: Map<Long, JSONObject>,
+    language: String,
+    busy: Boolean,
+    onReview: (Long) -> Unit,
+    onIssueCertificate: (Long) -> Unit,
+    onDownloadCertificate: (Long, String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
-        Text("हर टेस्ट के नवीनतम तीन जारी attempts और उनमें सर्वश्रेष्ठ अंक देखें।",
-            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+        Text(
+            if (language == "hi") "हर result के साथ certificate की पात्रता और उपलब्ध download देखें।"
+            else "Check certificate eligibility and access available downloads from each released result.",
+            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary
+        )
         if (resultItems.isEmpty()) EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
             items(resultItems) { item ->
                 val attempts = item.optJSONArray("attempts")?.objectItems() ?: emptyList()
                 Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
+                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
                         Text(item.textAny("assessment_title", "title").ifBlank { "मूल्यांकन" },
                             style = MaterialTheme.typography.titleMedium)
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
@@ -2056,17 +2221,29 @@ private fun ResultsScreen(
                         Text("कुल जारी attempts: " + item.optInt("attempt_count", attempts.size) +
                             " • प्रश्न: " + item.optInt("question_count", 0),
                             style = MaterialTheme.typography.bodySmall)
-                        if (attempts.isNotEmpty()) {
-                            Text("Attempt history", style = MaterialTheme.typography.titleSmall)
-                            attempts.forEachIndexed { index, attempt ->
+                        val history = if (attempts.isNotEmpty()) attempts else listOf(item)
+                        Text(if (language == "hi") "Attempt history और certificate" else "Attempt history & certificate",
+                            style = MaterialTheme.typography.titleSmall)
+                        history.forEachIndexed { index, attempt ->
+                            val attemptId = attempt.optLongAny("attempt_id", "attemptId")
+                            val certificate = certificateEligibility[attemptId]
+                            val certificateStatus = certificate?.optString("certificate_status").orEmpty()
+                            val certificateId = certificate?.optLongAny("certificate_id", "certificateId") ?: 0L
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                                verticalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
                                 ) {
                                     Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                                        Text("Attempt " + attempt.optInt("attempt_number", index + 1),
-                                            style = MaterialTheme.typography.bodyMedium)
+                                        Text(
+                                            (if (language == "hi") "Attempt " else "Attempt ") +
+                                                attempt.optInt("attempt_number", index + 1),
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
                                         Text(
                                             attempt.textAny("released_at", "submitted_at") + " • " +
                                                 attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
@@ -2074,15 +2251,53 @@ private fun ResultsScreen(
                                             color = MaterialTheme.colorScheme.secondary
                                         )
                                     }
-                                    TextButton(
-                                        onClick = { onReview(attempt.longAny("attempt_id", "attemptId")) }
-                                    ) { Text("उत्तर समीक्षा") }
+                                    TextButton(onClick = { onReview(attemptId) }, enabled = !busy) {
+                                        Text(if (language == "hi") "उत्तर समीक्षा" else "Review")
+                                    }
+                                }
+                                when {
+                                    certificateStatus == "ISSUED" && certificateId > 0L -> {
+                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            OutlinedButton(
+                                                onClick = { onDownloadCertificate(certificateId, "pdf") },
+                                                enabled = !busy
+                                            ) { Text(if (language == "hi") "PDF सेव करें" else "Save PDF") }
+                                            OutlinedButton(
+                                                onClick = { onDownloadCertificate(certificateId, "png") },
+                                                enabled = !busy
+                                            ) { Text(if (language == "hi") "PNG सेव करें" else "Save PNG") }
+                                        }
+                                    }
+                                    certificateStatus == "REVOKED" -> Text(
+                                        if (language == "hi") "यह certificate निरस्त है।"
+                                        else "This certificate has been revoked.",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                    certificate?.optBoolean("eligible", false) == true -> Button(
+                                        onClick = { onIssueCertificate(attemptId) },
+                                        enabled = !busy && attemptId > 0L
+                                    ) {
+                                        Text(if (language == "hi") "प्रमाणपत्र जारी करें" else "Issue certificate")
+                                    }
+                                    else -> {
+                                        val reason = certificate?.optString("eligibility_reason").orEmpty()
+                                        val passThreshold = certificate?.optString("pass_threshold_percent", "80") ?: "80"
+                                        val hint = when (reason) {
+                                            "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
+                                            "RESULT_NOT_RELEASED" -> if (language == "hi") "Final result जारी होने के बाद पात्रता जाँची जाएगी।" else "Eligibility is checked after the final result is released."
+                                            "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
+                                            "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject में published lessons अभी उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
+                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                            "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + passThreshold + "% से कम है।" else "The score is below the " + passThreshold + "% certificate threshold."
+                                            "INVALID_SCORE" -> if (language == "hi") "इस result का score मान्य नहीं है।" else "This result has an invalid score."
+                                            else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results refresh करें।" else "Certificate eligibility could not be checked. Refresh results."
+                                        }
+                                        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                                    }
                                 }
                             }
-                        } else {
-                            TextButton(onClick = { onReview(item.longAny("attempt_id", "attemptId")) }) {
-                                Text("उत्तर समीक्षा खोलें")
-                            }
+                            if (index < history.lastIndex) HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant)
                         }
                     }
                 }

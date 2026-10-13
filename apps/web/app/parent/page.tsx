@@ -22,6 +22,7 @@ export default function ParentPage(){
   const router=useRouter();
   const [children,setChildren]=useState<ChildRow[]>([]);
   const [selected,setSelected]=useState<ParentReport|null>(null);
+  const [childCertificates,setChildCertificates]=useState<any[]>([]);
   const [error,setError]=useState('');
   const [loading,setLoading]=useState(true);
   const [switchingChild,setSwitchingChild]=useState(false);
@@ -42,13 +43,22 @@ export default function ParentPage(){
       if(!Array.isArray(cb))throw new Error('The API returned an invalid child-profile list.');
       setChildren(cb);
       const child=cb.find((x:ChildRow)=>x.id===id)||cb[0];
-      if(!child){setSelected(null);return;}
+      if(!child){setSelected(null);setChildCertificates([]);return;}
+      setChildCertificates([]);
 
       const rr=await fetch(`/api/v1/guardians/children/${child.id}/report`,{cache:'no-store'});
       const rb=await readApi(rr);
       if(!rr.ok)throw new Error(rb.message||`Unable to load the learning report (HTTP ${rr.status}).`);
       if(!rb||typeof rb!=='object')throw new Error('The API returned an invalid learning report.');
       setSelected(rb);
+      try{
+        const certificatesResponse=await fetch(`/api/v1/guardians/children/${child.id}/certificates`,{cache:'no-store'});
+        const certificateBody=await readApi(certificatesResponse);
+        setChildCertificates(certificatesResponse.ok&&Array.isArray(certificateBody.items)?certificateBody.items:[]);
+      }catch{
+        // Keep the read-only learning report usable if certificate retrieval is temporarily unavailable.
+        setChildCertificates([]);
+      }
     }catch(e:any){
       setSelected(null);
       setError(e?.message||'The parent report could not be loaded. Check the local services and retry.');
@@ -103,7 +113,20 @@ export default function ParentPage(){
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="Learning signals" english="Learning signals" /></strong><span>→</span></div><div className="topic-line"><b><LocaleText hinglish="Average mastery" english="Average mastery" /></b><span className="good">{mastery.average_mastery??0}%</span></div><div className="topic-line"><b><LocaleText hinglish="Mastered concepts" english="Mastered concepts" /></b><span className="good">{mastery.mastered??0}</span></div><div className="topic-line"><b><LocaleText hinglish="जिन्हें मदद चाहिए" english="Needs support" /></b><span>{mastery.needs_support??0}</span></div><div className="topic-line"><b><LocaleText hinglish="Learning time · 30d" english="Learning time · 30d" /></b><span>{sessionStats.minutes_30d??0} min</span></div></article>
       </div>
       <div className="parent-grid">
-        <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="Test history" english="Test history" /></strong><span>✓</span></div>{recentAssessments.length?recentAssessments.map((m:any)=><div className="topic-line" key={m.attempt_id}><div><b>{m.assessment_title||assessmentTypeLabel(m.assessment_type)}</b><small>{assessmentTypeLabel(m.assessment_type)} · {m.subject_name||'—'}{m.chapter_name?' · '+m.chapter_name:''}</small></div><span className={m.status==='RELEASED'?'good':''}>{m.status==='RELEASED'?String(m.final_score??'—')+' / '+String(m.max_score??'—'):assessmentStatusLabel(m.status)}</span></div>):<p><LocaleText hinglish="Student के test attempts यहाँ दिखाई देंगे।" english="The student's test attempts will appear here." /></p>}</article>
+        <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="Test history" english="Test history" /></strong><span>✓</span></div>{recentAssessments.length?recentAssessments.map((m:any)=>{
+          const certificate=childCertificates.find((item:any)=>Number(item.assessment_attempt_id)===Number(m.attempt_id));
+          return <div className="topic-line parent-test-line" key={m.attempt_id}>
+            <div><b>{m.assessment_title||assessmentTypeLabel(m.assessment_type)}</b><small>{assessmentTypeLabel(m.assessment_type)} · {m.subject_name||'—'}{m.chapter_name?' · '+m.chapter_name:''}</small></div>
+            <div className="parent-test-result">
+              <span className={m.status==='RELEASED'?'good':''}>{m.status==='RELEASED'?String(m.final_score??'—')+' / '+String(m.max_score??'—'):assessmentStatusLabel(m.status)}</span>
+              {certificate?.status==='ISSUED'?<div className="parent-certificate-actions">
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/view?format=pdf`} target="_blank" rel="noreferrer">View certificate ↗</a>
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?format=pdf`}>PDF</a>
+                <a href={`/api/v1/guardians/children/${selected?.id}/certificates/${certificate.id}/download?format=png`}>PNG</a>
+              </div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked">Certificate revoked</small>:null}
+            </div>
+          </div>;
+        }):<p><LocaleText hinglish="Student के test attempts यहाँ दिखाई देंगे।" english="The student's test attempts will appear here." /></p>}</article>
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="जिन concepts में मदद चाहिए" english="Concepts needing support" /></strong><span>↗</span></div>{masteryDetails.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={m.concept_title||i}><div><b>{m.concept_title||'Concept'}</b><small>{m.subject_name} · {m.chapter_name}</small></div><span>{m.mastery_percent??0}%</span></div>)}</article>
         <article className="report-panel"><div className="panel-title"><strong><LocaleText hinglish="हाल की Practice" english="Recent practice" /></strong><span>✓</span></div>{recentAttempts.slice(0,6).map((m:any,i:number)=><div className="topic-line" key={i}><div><b>{m.concept_title||m.chapter_name||'Practice'}</b><small>{m.question_type||'Question'}</small></div><span className={m.correct===true?'good':''}>{m.correct===true?<LocaleText hinglish="सही" english="Correct" />:m.correct===false?<LocaleText hinglish="गलत" english="Incorrect" />:<LocaleText hinglish="Review" english="Review" />}</span></div>)}</article>
       </div>

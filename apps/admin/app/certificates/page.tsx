@@ -187,8 +187,8 @@ export default function AdminCertificatesPage() {
                         {row.revocation_reason && <small className={styles.reason}>{row.revocation_reason}</small>}</td>
                       <td>
                         <div className={styles.actionLinks}>
-                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=pdf'}>Original PDF</a>
-                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=png'}>Original PNG</a>
+                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=pdf'}>{row.status === 'ISSUED' ? 'Certificate PDF' : 'Audit copy PDF'}</a>
+                          <a href={'/api/v1/admin/certificates/' + row.id + '/download?format=png'}>{row.status === 'ISSUED' ? 'Certificate PNG' : 'Audit copy PNG'}</a>
                           <button type="button" className={styles.auditButton}
                             onClick={() => void toggleAudit(row.id)}>{auditFor === row.id ? 'Hide audit' : 'View audit'}</button>
                           {row.status === 'ISSUED' ? (
