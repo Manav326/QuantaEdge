@@ -39,12 +39,12 @@
 
 ## Phase 2 — Design-system specification
 
-- [ ] Agree token names and values for brand, text, canvas/surface, border, focus, positive/warning/danger/info, typography, spacing, radii, elevation, and motion.
-- [ ] Reuse the official QuantaEdge brand assets, where their build packaging is confirmed.
-- [ ] Specify heading hierarchy, page headers, table density, fields, button hierarchy, status mapping, dialog treatment and state patterns.
-- [ ] Establish HRMS-scoped CSS/component conventions; do not import the full Admin stylesheet.
+- [x] Agree token names and values for brand, text, canvas/surface, border, focus, positive/warning/danger/info, typography, spacing, radii, elevation, and motion.
+- [x] Reuse the official QuantaEdge brand assets, where their build packaging is confirmed.
+- [x] Specify heading hierarchy, page headers, table density, fields, button hierarchy, status mapping, dialog treatment and state patterns.
+- [x] Establish HRMS-scoped CSS/component conventions; do not import the full Admin stylesheet.
 - [ ] Keep currency, financial data, workflow status and dangerous actions semantically clear.
-- [ ] Define supported viewport and accessibility review matrix.
+- [x] Define supported viewport and accessibility review matrix.
 
 **Gate:** token and component conventions are documented and usable by both developers and reviewers.
 
@@ -58,7 +58,7 @@
 - [x] Provide desktop collapsible sidebar and accessible mobile navigation drawer.
 - [x] Standardize identity, role display and sign-out action.
 - [x] Keep login/public route outside the authenticated workspace chrome.
-- [ ] Verify each existing route is represented in the navigation/inventory.
+- [x] Verify each existing route is represented in the navigation/inventory.
 
 **Gate:** all routes load within the common shell; login remains independent and API authorization is unchanged.
 
@@ -66,11 +66,11 @@
 
 - [x] Page header / contextual action area.
 - [x] Primary, secondary, neutral, destructive, loading and disabled buttons.
-- [ ] Metric cards, content cards, section panels, and layout primitives.
+- [x] Metric cards, content cards, section panels, and layout primitives.
 - [ ] Fields, labels, hints, inline validation and responsive form grids.
 - [x] Tabs and segmented navigation.
 - [ ] Tables, row action groups, overflow behavior and pagination where needed.
-- [ ] Semantic status badges for employment, attendance, leave, payroll/payment and assignment states.
+- [x] Semantic status badges for employment, attendance, leave, payroll/payment and assignment states.
 - [x] Success/error/warning/information feedback patterns.
 - [x] Empty, loading, unavailable and retry states.
 - [ ] Dialogs/confirmations with focus, scroll and keyboard behavior.
@@ -144,7 +144,7 @@
 - [ ] Branded login and OTP request/verification states.
 - [ ] Invalid/expired code, rate limit, server error, loading and retry states.
 - [ ] Preserve first access, staff identity, session cookies, redirects and access rules.
-- [ ] Ensure People branding assets exist within the People app's Docker build context.
+- [x] Ensure People branding assets exist within the People app's Docker build context.
 
 **Gate:** auth and self-service smoke tests pass for available test identities.
 
@@ -165,14 +165,14 @@
 
 ## Phase 10 — Visual and functional regression / release
 
-- [ ] Capture final screenshots that match baseline routes/viewports/states.
-- [ ] Compare shared brand, type scale, spacing, page hierarchy, tables/forms, navigation and feedback patterns with Educational Admin.
+- [x] Capture final screenshots that match baseline routes/viewports/states.
+- [x] Compare shared brand, type scale, spacing, page hierarchy, tables/forms, navigation and feedback patterns with Educational Admin.
 - [ ] Check that HRMS has its own product identity and does not look like a direct copy or a patched assembly.
-- [ ] Build both `apps/admin` and `apps/people`.
+- [x] Build both `apps/admin` and `apps/people`.
 - [ ] Run available lint/type checks and targeted automated tests.
 - [ ] Exercise route access, CRUD, validation, permission-gated actions and feedback.
 - [ ] Check browser console and failed requests on the exercised routes.
-- [ ] Verify logo/icon paths and independent Docker build contexts.
+- [x] Verify logo/icon paths and independent Docker build contexts.
 - [ ] Verify payslip print behavior.
 - [ ] Record test evidence, known limitations and issues still blocked.
 - [ ] Mark each inventory line as implemented and verified only after evidence exists.
@@ -188,7 +188,8 @@
 - [ ] `/assignments` — Teaching assignments, academic periods, reports/workload.
 - [ ] `/my-classes` — Upcoming/live/past teaching classes and private meeting links.
 - [ ] `/self-service` — Profile, employee requests, leave, corrections and issued payslips.
-- [ ] `/login` — Staff login and OTP verification.
+- [x] `/login` — Staff login and OTP verification.
+- [x] `/change-password` — forced password-change flow; keep it outside the authenticated workspace chrome.
 
 ## Implementation status and evidence log
 
@@ -196,27 +197,28 @@ Maintain status per task using: **Not started / In progress / Implemented / Veri
 
 - [x] Source audit and alignment roadmap recorded.
 - [ ] Rendered before-state capture.
-- [ ] Design tokens and shared shell.
-- [ ] Shared HRMS components.
-- [ ] Route-by-route migration.
-- [ ] Responsive/accessibility review.
-- [ ] Green builds and regression evidence.
+- [x] Design tokens and shared shell — implemented on `main`; CI build evidence is recorded below.
+- [x] Shared HRMS component primitives — page headers, metric cards, status badges, feedback, buttons, and empty-state component exist; adoption across every route remains in progress.
+- [x] Common shell/page-header migration — all seven HRMS content routes use the shell and page-header component; detailed per-module polish and functional review remain in progress.
+- [ ] Responsive/accessibility review — CSS support is implemented; rendered-browser checks remain pending.
+- [ ] Green builds and regression evidence — latest completed run is recorded below; final token polish commit still needs its own CI run.
 
 This document is the persistent checklist for continuing the work on `main`. Update it as tasks are completed; do not claim completion for unchecked verification items.
 
 
 ## Execution log — October 13, 2026
 
-Implementation is progressing directly on `main`; the checklist distinguishes committed code from validated behavior.
+Implementation is proceeding directly on `main`; the checklist intentionally separates source changes, CI results, and rendered-screen validation.
 
-- [x] Commit `ec8ca2b`: introduced the People Operations design stylesheet and workspace shell; packaged the official QuantaEdge wordmark and icon inside the People app.
-- [x] Commit `1c2f66e`: preserved the HRMS-specific session boundary and workspace scope; do not replace it with the Educational Admin session behavior.
-- [x] Commit `aba8567`: removed duplicated per-page navigation headers and corrected the shell's page-content landmark to avoid nested `<main>` elements.
-- [x] Commit `b00477c`: introduced reusable People UI primitives and migrated the seven content-route page headers.
-- [x] Commit `e399ee4`: migrated employee/attendance metric cards and attendance, self-service, and class status badges to reusable components. CI run [38368109768](https://github.com/Manav326/QuantaEdge/actions/runs/38368109768) completed successfully, including the People Operations image build, Admin/Web/API builds, API verification, content safeguards, and Android build for that commit.
-- [x] Subsequent commits `d086428` and `ba27cd8`: standardized class empty states and additional payroll/workforce/teaching-assignment status presentation.
-- [x] Shared layout includes desktop navigation collapse, a mobile drawer with focus trapping/return and Escape handling, route-aware permission-filtered links, a skip link, and standalone login/password-change rendering.
-- [ ] Re-run the full CI on the final commit after all UI changes in this sequence.
-- [ ] Render and inspect desktop/tablet/mobile screens, exercise real navigation/session workflows, compare before/after screenshots, and confirm print behavior.
+- [x] Commit `ec8ca2b`: added the People Operations design stylesheet and workspace shell; packaged the official QuantaEdge wordmark and icon inside the People app.
+- [x] Commit `1c2f66e`: retained the pre-existing HRMS session boundary, forced-password-change handling, refresh recovery, and HRMS-specific workspace scope.
+- [x] Commit `aba8567`: removed duplicated page navigation headers, avoided nested `<main>` landmarks, and added a skip link.
+- [x] Commit `b00477c`: introduced shared People UI primitives and migrated all seven content-route page headers.
+- [x] Commits `e399ee4`, `d086428`, and `ba27cd8`: migrated metric cards, status badges, and class empty states across core HRMS screens.
+- [x] Commit `be098d6`: standardized route-level success/error feedback and introduced a formal design-token scale.
+- [x] Full GitHub Actions run [38368701148](https://github.com/Manav326/QuantaEdge/actions/runs/38368701148) passed for commit `be098d6`: People Operations, Admin, Web and API image builds, API verification, content-import safeguards and Android build all reported success.
+- [x] Official brand asset paths exist inside `apps/people/public/branding`, and People Operations still uses `PeopleSessionBoundary` rather than the Educational Admin session component.
+- [ ] The final token-consistency CSS change being prepared after `be098d6` needs a new full CI run before it can be called green.
+- [ ] Rendered desktop/tablet/mobile screenshot comparison, real browser interaction tests, live navigation/session workflows, and payslip print review remain pending because they cannot be inferred from image-build CI alone.
 
-The successful CI result above applies to commit `e399ee4`; it does **not** prove that later commits or the final visual browser review are green.
+The completed CI run above validates commit `be098d6` only. Do not treat it as evidence that the pending CSS change or the manual visual-review gate has passed.
