@@ -123,5 +123,7 @@ Commits made through GitHub on this branch:
 - `d1636cd` / `4eb2a60` — Add and refine extended HR tests
 - `0dfe5f7` — Add extended HR workflow workspace
 - `10fcdf0` — Link extended HR workspace from People portal
+- `2141adb` — Merge latest `main` into Agent 2 implementation without force-pushing
+- `0aab1c0` — Record latest main sync in handoff
 
 The remote branch was available and these commits were written to it. `main` advanced during the work with two Android APK workflow/script commits; both were incorporated into the agent branch with merge commit `2141adb8d25308c8a14678fd5ad6a660cf60a693`. No commit was made to `main`; no force-push or pull request was used.
