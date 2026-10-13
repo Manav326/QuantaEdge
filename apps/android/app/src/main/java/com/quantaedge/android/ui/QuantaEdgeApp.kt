@@ -90,12 +90,7 @@ private data class ResourceDownloadUiState(
 
 private data class AppNavItem(val key: String, val label: String, val glyph: String)
 
-private enum class AppRoute {
-    LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
-    PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, SUBJECT_LESSONS, LESSON, PRACTICE,
-    DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, ASSESSMENT_REVIEW, RESOURCES,
-    DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER, CERTIFICATES, LEADERBOARD
-}
+
 
 @Composable
 fun QuantaEdgeApp() {
@@ -1383,21 +1378,15 @@ fun QuantaEdgeApp() {
     }
 
     // Orientation controls navigation placement: portrait uses the bottom bar, landscape the left rail.
-    val landscapeLayout = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val landscapeLayout = StudentNavigationContract.usesLeftRail(
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    )
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
 
-    fun studentGroupForRoute(destination: AppRoute): String = when (destination) {
-        AppRoute.PROFILE -> lastStudentNavGroup
-        AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"
-        AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"
-        AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
-        AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD -> "practice"
-        AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
-        AppRoute.RECORDING_PLAYER -> "learn"
-        else -> "today"
-    }
+    fun studentGroupForRoute(destination: AppRoute): String =
+        StudentNavigationContract.studentGroupForRoute(destination, lastStudentNavGroup)
 
     // Keep the same five student groups and order as the web workspace.
     // Parent accounts retain their own three web destinations.
@@ -1413,11 +1402,7 @@ fun QuantaEdgeApp() {
         AppNavItem("library", if (language == "hi") "किताबें" else "Books", "▣")
     )
     val selectedNavKey = if (parentRole) {
-        when (route) {
-            AppRoute.PARENT_PROFILE -> "profile"
-            AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE -> "children"
-            else -> parentSection
-        }
+        StudentNavigationContract.parentGroupForRoute(route, parentSection)
     } else studentGroupForRoute(route)
 
     fun selectPrimaryDestination(key: String) {
@@ -1515,7 +1500,11 @@ fun QuantaEdgeApp() {
                                 },
                                 enabled = !busy
                             ) {
-                                Text(if (language == "hi") "विषय अभ्यास" else "Topic practice")
+                                Text(if (lesson.longAny("id", "lesson_id") > 0L) {
+                                    if (language == "hi") "विषय अभ्यास" else "Topic practice"
+                                } else {
+                                    if (language == "hi") "विषय चुनें" else "Choose a topic"
+                                })
                             }
                             TextButton(onClick = { openAssessments("ALL") }, enabled = !busy) {
                                 Text(if (language == "hi") "टेस्ट" else "Tests")

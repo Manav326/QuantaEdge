@@ -106,7 +106,7 @@ export default function PracticePage(){
         }
 
         if(requestedSessionId){
-          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+(locale==='english'?'en':'hi'),{cache:'no-store'});
+          const sessionResponse=await fetch('/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+learningLanguage,{cache:'no-store'});
           const body=await readBody(sessionResponse);
           if(!sessionResponse.ok)throw new Error(body.detail||body.message||tx('Practice session दोबारा नहीं खुल पाया।','Could not reopen this practice session.'));
           if(!active)return;

@@ -8,8 +8,32 @@ const accountMenu = read('../app/components/StudentAccountMenu.tsx');
 const parentAccountMenu = read('../app/components/ParentAccountMenu.tsx');
 const languageProvider = read('../app/components/LanguageProvider.tsx');
 const testsClient = read('../app/student/tests/TestsClient.tsx');
+const practiceClient = read('../app/student/practice/PracticeClient.tsx');
+const learnClient = read('../app/student/learn/LearnClient.tsx');
 const certificatesPage = read('../app/student/certificates/page.tsx');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
+const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
+const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
+// Route inventory and pure navigation functions must be exhaustive over AppRoute.
+// Kotlin's exhaustive enum when-expressions also fail compilation when a new route is not categorized.
+const enumStart = androidNavigationContract.indexOf('internal enum class AppRoute {');
+const enumEnd = androidNavigationContract.indexOf('\n}', enumStart);
+assert.notEqual(enumStart, -1, 'Android AppRoute enum must be explicitly declared.');
+assert.notEqual(enumEnd, -1, 'Android AppRoute enum must close correctly.');
+const enumBody = androidNavigationContract.slice(enumStart, enumEnd);
+const appRouteIds = [...enumBody.matchAll(/\\b([A-Z][A-Z0-9_]+)\\b/g)].map((match) => match[1]);
+const studentMappingStart = androidNavigationContract.indexOf('fun studentGroupForRoute(');
+const parentMappingStart = androidNavigationContract.indexOf('fun parentGroupForRoute(', studentMappingStart);
+assert.ok(studentMappingStart >= 0 && parentMappingStart > studentMappingStart, 'Student and parent route mapping functions must be separately testable.');
+const studentMapping = androidNavigationContract.slice(studentMappingStart, parentMappingStart);
+const parentMapping = androidNavigationContract.slice(parentMappingStart);
+const studentMappedRoutes = [...new Set([...studentMapping.matchAll(/AppRoute\\.([A-Z_]+)/g)].map((match) => match[1]))].sort();
+const parentMappedRoutes = [...new Set([...parentMapping.matchAll(/AppRoute\\.([A-Z_]+)/g)].map((match) => match[1]))].sort();
+assert.deepEqual(studentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have a documented student-group owner or explicit auth/parent exception.');
+assert.deepEqual(parentMappedRoutes, [...appRouteIds].sort(), 'Every Android route must have documented parent-group ownership or an explicit non-parent exception.');
+assert.ok(androidNavigationContract.includes('listOf("today", "learn", "practice", "progress", "library")'), 'Android contract must own the five canonical student group IDs.');
+assert.ok(androidNavigationContract.includes('listOf("family", "children", "profile")'), 'Android contract must own the three parent group IDs.');
+
 const androidCertificates = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
 
 const arrayStart = layout.indexOf('const studentNavGroups: StudentNavGroup[] = [');
@@ -57,6 +81,14 @@ assert.ok(layout.includes("event.key === 'Escape'"), 'Mobile navigation must clo
 assert.ok(layout.includes('qe-workspace-mobile-nav-backdrop'), 'Mobile navigation must support dismissal by tapping the backdrop.');
 assert.ok(layout.includes('hidden={expandedStudentGroup !== group.id}'), 'Desktop submenu target must remain mounted for aria-controls.');
 assert.ok(layout.includes('hidden={mobileOpenGroup !== group.id}'), 'Mobile submenu targets must remain mounted for aria-controls.');
+const desktopNestedStart = layout.indexOf('<div className="qe-workspace-subnav"');
+const desktopNestedEnd = layout.indexOf('</div>', desktopNestedStart);
+const mobileNestedStart = layout.indexOf('<div className="qe-workspace-mobile-subnav-links">');
+const mobileNestedEnd = layout.indexOf('</div>', mobileNestedStart);
+assert.ok(desktopNestedStart >= 0 && desktopNestedEnd > desktopNestedStart, 'Desktop nested links must exist.');
+assert.ok(mobileNestedStart >= 0 && mobileNestedEnd > mobileNestedStart, 'Mobile nested links must exist.');
+assert.ok(!layout.slice(desktopNestedStart, desktopNestedEnd).includes('qe-workspace-icon'), 'Desktop nested links must be text-first, without competing feature icons.');
+assert.ok(!layout.slice(mobileNestedStart, mobileNestedEnd).includes('item.icon'), 'Mobile nested links must be text-first, without competing feature icons.');
 assert.ok(css.includes('.qe-workspace-subnav[hidden]') && css.includes('.qe-workspace-mobile-subnav[hidden]'), 'Closed submenu targets must be visually hidden.');
 assert.ok(css.includes('.qe-workspace-mobile-nav-backdrop'), 'Mobile submenu backdrop styles must exist.');
 
@@ -85,11 +117,19 @@ assert.ok(androidApp.includes('LocalConfiguration.current.orientation == Configu
 assert.ok(androidApp.includes('if (signedIn && landscapeLayout) NavigationRail'), 'Android landscape must use the left navigation rail.');
 assert.ok(androidApp.includes('if (signedIn && !landscapeLayout) NavigationBar'), 'Android portrait must use the bottom navigation bar.');
 assert.ok(!androidApp.includes('screenWidthDp >= 600'), 'Screen width must not choose Android primary navigation placement.');
+// Testable, non-Compose route ownership: all detailed Android destinations map to one of the shared five groups.
 for (const routeGroup of [
   'AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"',
   'AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"',
-  'AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT'
-]) assert.ok(androidApp.includes(routeGroup), `Android route ownership must retain mapping: ${routeGroup}`);
+  'AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT',
+  'AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES',
+  'AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD'
+]) assert.ok(androidNavigationContract.includes(routeGroup), `Android route ownership must retain mapping: ${routeGroup}`);
+assert.ok(androidApp.includes('StudentNavigationContract.studentGroupForRoute(destination, lastStudentNavGroup)'), 'Compose navigation must use the independently testable route contract.');
+assert.ok(androidApp.includes('StudentNavigationContract.parentGroupForRoute(route, parentSection)'), 'Parent navigation must use its role-specific route contract.');
+assert.ok(androidNavigationTests.includes('fun canonicalGroupsMatchTheWebOrder()'), 'Android group-order unit test is required.');
+assert.ok(androidNavigationTests.includes('fun profileReturnsToTheLastValidStudentGroup()'), 'Profile return behaviour must be unit-tested.');
+assert.ok(androidNavigationTests.includes('fun layoutPlacementIsDrivenByOrientationNotWidth()'), 'Orientation behaviour must be unit-tested.');
 
 // App language, learning content language and certificate language are separate preferences.
 const uiSetterStart = languageProvider.indexOf('const setLocale = useCallback');
@@ -99,6 +139,9 @@ assert.ok(!languageProvider.slice(uiSetterStart, learningSetterStart).includes('
 assert.ok(languageProvider.slice(learningSetterStart).includes('/api/v1/students/me/language'), 'Learning-language changes must persist to the student preference API.');
 assert.ok(languageProvider.includes("'qe-learning-language'") && languageProvider.includes("'qe-certificate-language'"), 'Learning and certificate language preferences must have independent persistence keys.');
 assert.ok(testsClient.includes('const language=learningLanguage;') && testsClient.includes('language:certificateLanguage'), 'Tests must use learning language for content and certificate language for issuance.');
+assert.ok(testsClient.includes("const uiLanguage=locale==='english'?'en':'hi';") && testsClient.includes('certificateTrackName(cert.subject_code, cert.subject_name, uiLanguage)'), 'Test-result labels must follow app language independently of content language.');
+assert.ok(practiceClient.includes("'/api/v1/learning/practice/sessions/'+requestedSessionId+'?language='+learningLanguage"), 'Reopening practice must use learning-content language, not app UI language.');
+assert.ok(learnClient.includes('textbookChapterTitle(item, learningLanguage)'), 'Lesson PDF titles must follow selected content language.');
 assert.ok(certificatesPage.includes('certificateLanguage') && certificatesPage.includes('setCertificateLanguage'), 'The certificate centre must expose an independent certificate-language preference.');
 assert.ok(androidApp.includes('mutableStateOf(preferences.getString("certificateLanguage"') && androidApp.includes('.put("language", certificateLanguage)'), 'Android certificate issuance must use its separately persisted certificate language.');
 assert.ok(androidCertificates.includes('onCertificateLanguageChange("hi")') && androidCertificates.includes('onCertificateLanguageChange("en")'), 'Android certificate centre must expose Hindi/English certificate-language choices.');
