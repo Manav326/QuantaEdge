@@ -1060,3 +1060,5 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 /* Keep aria-controls targets mounted while grouped menus are collapsed. */
 .qe-workspace-subnav[hidden],
 .qe-workspace-mobile-subnav[hidden]{display:none!important}
+
+.qe-workspace-mobile-nav-backdrop{position:fixed;inset:0;z-index:90;border:0;background:rgba(21,32,56,.12);cursor:default}
