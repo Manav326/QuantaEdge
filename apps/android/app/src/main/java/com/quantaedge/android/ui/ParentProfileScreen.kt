@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,14 +44,14 @@ fun ParentProfileScreen(
 ) {
     val context = LocalContext.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    var displayName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var state by remember { mutableStateOf("") }
-    var occupation by remember { mutableStateOf("") }
-    var organization by remember { mutableStateOf("") }
-    var preferredLanguage by remember { mutableStateOf("Hindi") }
-    var languageMenuExpanded by remember { mutableStateOf(false) }
+    var displayName by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { mutableStateOf("") }
+    var state by rememberSaveable { mutableStateOf("") }
+    var occupation by rememberSaveable { mutableStateOf("") }
+    var organization by rememberSaveable { mutableStateOf("") }
+    var preferredLanguage by rememberSaveable { mutableStateOf("Hindi") }
+    var languageMenuExpanded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(profile) {
         displayName = profile.textAny("display_name", "displayName")

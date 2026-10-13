@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -56,16 +57,16 @@ fun StudentProfileScreen(
     onLogout: () -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    var displayName by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var state by remember { mutableStateOf("") }
-    var schoolName by remember { mutableStateOf("") }
-    var schoolMedium by remember { mutableStateOf("Hindi") }
-    var favoriteSubject by remember { mutableStateOf("both") }
-    var learningGoal by remember { mutableStateOf("") }
-    var learningLanguage by remember { mutableStateOf("hi") }
-    var schoolMediumExpanded by remember { mutableStateOf(false) }
-    var favoriteSubjectExpanded by remember { mutableStateOf(false) }
+    var displayName by rememberSaveable { mutableStateOf("") }
+    var city by rememberSaveable { mutableStateOf("") }
+    var state by rememberSaveable { mutableStateOf("") }
+    var schoolName by rememberSaveable { mutableStateOf("") }
+    var schoolMedium by rememberSaveable { mutableStateOf("Hindi") }
+    var favoriteSubject by rememberSaveable { mutableStateOf("both") }
+    var learningGoal by rememberSaveable { mutableStateOf("") }
+    var learningLanguage by rememberSaveable { mutableStateOf("hi") }
+    var schoolMediumExpanded by rememberSaveable { mutableStateOf(false) }
+    var favoriteSubjectExpanded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(profile) {
         displayName = profile.textAny("display_name", "displayName")
