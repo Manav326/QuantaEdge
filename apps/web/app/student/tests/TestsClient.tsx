@@ -555,7 +555,7 @@ export default function TestsClient(){
         {released?<section className={styles.releasedResult} aria-live="polite">
           <div className={styles.resultHero}>
             <span className={styles.resultHeroIcon}>✓</span>
-            <div><span className={styles.eyebrow}>{t('RESULT READY','परिणाम तैयार')}</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your test is closed. Here is your result; the active question navigator is no longer available.','आपका टेस्ट बंद हो गया है। नीचे परिणाम देखें; सक्रिय प्रश्न नेविगेटर अब उपलब्ध नहीं है।')}</p></div>
+            <div><span className={styles.eyebrow}>{t('RESULT READY','परिणाम तैयार')}</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your test is closed. Review one question at a time with Previous and Next.','आपका टेस्ट बंद हो गया है। पिछले और अगले बटन से एक समय में एक प्रश्न की समीक्षा करें।')}</p></div>
           </div>
           <div className={styles.resultScoreGrid}>
             <article className={styles.resultScorePrimary}>
@@ -602,29 +602,37 @@ export default function TestsClient(){
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>{t('Question-wise result','प्रश्नवार परिणाम')}</h3><p>{t('Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.','अंक और परिणाम समीक्षा के लिए दिखाए गए हैं। जमा किए गए प्रश्न फिर से नहीं खोले या बदले जा सकते।')}</p></div>
             <div className={styles.resultReviewList}>
-              {attempt.questions.map((question,questionIndex)=>{
-                const outcome=question.isCorrect===true?t(t('Correct','सही'),'सही'):question.isCorrect===false?t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Reviewed','समीक्षा हुई');
+              {current&&(()=>{
+                const question=current;
+                const questionIndex=index;
+                const outcome=question.isCorrect===true?t('Correct','सही'):question.isCorrect===false?t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Reviewed','समीक्षा हुई');
                 const outcomeClass=question.isCorrect===true?styles.reviewCorrect:question.isCorrect===false?styles.reviewIncorrect:styles.reviewNeutral;
                 return <article className={styles.resultReviewItem} key={question.attemptQuestionId}>
                   <section className={styles.questionPanel}>
                     <div className={styles.questionPanelTop}>
-                      <span>QUESTION {questionIndex+1} OF {attempt.questions.length}</span>
-                      <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} marks</b>
+                      <span>{t('QUESTION ','प्रश्न ')}{questionIndex+1} {t('OF ','में से ')}{attempt.questions.length}</span>
+                      <b className={outcomeClass}>{outcome} · {Number(question.awardedMarks??0)} / {Number(question.maxMarks??0)} {t('marks','अंक')}</b>
                     </div>
                     <div className={styles.questionProgress}><i style={{width:((questionIndex+1)/attempt.questions.length*100)+'%'}}/></div>
                     <QuestionContent question={question} response={question.answer} review disabled/>
                     <AnswerFeedback
                       outcome={question.isCorrect===true?'correct':question.isCorrect===false?'incorrect':'ungraded'}
-                      title={question.isCorrect===true?'✓ Correct':question.isCorrect===false?'✕ Incorrect':isEmpty(question.answer)?'Not answered':'Answer reviewed'}
-                      message={<>Marks: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
+                      title={question.isCorrect===true?'✓ '+t('Correct','सही'):question.isCorrect===false?'✕ '+t('Incorrect','गलत'):isEmpty(question.answer)?t('Not answered','अनुत्तरित'):t('Answer reviewed','उत्तर की समीक्षा हुई')}
+                      message={<>{t('Marks','अंक')}: {question.awardedMarks??0} / {question.maxMarks}{question.teacherFeedback?<> · {question.teacherFeedback}</>:null}</>}
                       explanation={question.explanation||undefined}
                       explanationLabel={t('Explanation','व्याख्या')}
                     />
                   </section>
                 </article>;
-              })}
+              })()}
             </div>
-          </section>
+            {attempt.questions.length>0&&<nav className={styles.resultQuestionNav} aria-label={t('Question review navigation','प्रश्न समीक्षा नेविगेशन')}>
+              <button type="button" className={styles.secondaryButton} disabled={index===0}
+                onClick={()=>setIndex(i=>Math.max(0,i-1))}>← {t('Previous','पिछला')}</button>
+              <span>{t('Question ','प्रश्न ')}{Math.min(index+1,attempt.questions.length)} {t('of','में से')} {attempt.questions.length}</span>
+              <button type="button" className={styles.primaryButton} disabled={index>=attempt.questions.length-1}
+                onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{t('Next','अगला')} →</button>
+            </nav>}
           <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to results','परिणामों पर वापस जाएँ')}</button></div>
         </section>
         :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.','आपके उत्तर सहेज लिए गए हैं। रिक्त स्थान, छोटे और लंबे उत्तर कर्मचारी समीक्षक को भेजे गए हैं। सभी ज़रूरी जाँच पूरी होने पर अंतिम स्कोर और प्रतिक्रिया यहाँ दिखेगी।')}</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
