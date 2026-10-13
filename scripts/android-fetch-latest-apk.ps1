@@ -4,7 +4,7 @@
 param(
     [string]$Repository = "Manav326/QuantaEdge",
     [string]$Branch = "main",
-    [string]$ArtifactName = ""
+    [string]$ArtifactName = "quantaedge-android-apk"
 )
 
 $ErrorActionPreference = "Stop"
@@ -125,8 +125,9 @@ try {
         $runDir = Join-Path $tempDir ([string]$run.databaseId)
         $null = New-Item -ItemType Directory -Path $runDir -Force
         Write-Status ("Checking run {0}: {1} ({2})" -f $run.databaseId, $run.workflowName, $run.createdAt) "Cyan"
-        $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--dir", $runDir)
-        if (-not [string]::IsNullOrWhiteSpace($ArtifactName)) { $ghArgs += @("--name", $ArtifactName) }
+        # Never download all artifacts: Buildx emits *.dockerbuild cache artifacts that
+        # are not APK ZIPs and make broad downloads fail. Require the dedicated APK artifact.
+        $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
         $downloadOutput = @(& gh @ghArgs 2>&1)
         $downloadExit = $LASTEXITCODE
         if ($downloadExit -eq 0) {
@@ -145,10 +146,7 @@ try {
     }
 
     if (-not $downloadedApk) {
-        if ($ArtifactName) {
-            throw "No APK was found in the successful runs for commit $headSha using artifact name '$ArtifactName'. Confirm the workflow's upload-artifact name."
-        }
-        throw "No APK artifact was found in successful Actions runs for current commit $headSha. Ensure the Android workflow uploads its APK with actions/upload-artifact."
+        throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The workflow must build the Android app and upload its release APK with actions/upload-artifact using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
     }
 
     # Validate the ZIP-extracted file looks like a real APK before replacing the last known file.
