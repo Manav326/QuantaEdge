@@ -199,7 +199,7 @@ export default function StudentCertificatesPage() {
             <strong>Eligibility rule</strong>
             {achievementType === 'SUBJECT_COMPLETION'
               ? 'All currently published lessons in your active subject track must be completed. The server checks your actual progress records.'
-              : 'Only your own released assessment result qualifies, and the final score must meet the configured pass threshold (' + passThreshold + '% by default). Pending or in-progress tests do not qualify.'}
+              : 'Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ' + passThreshold + '% pass threshold, and all currently published lessons in that subject must be completed.'}
           </div>
           <button className="button button-dark" type="button"
             onClick={() => void issueCertificate()} disabled={busy || (achievementType === 'ASSESSMENT_PASS' && !attemptId)}>
@@ -213,7 +213,7 @@ export default function StudentCertificatesPage() {
             <span className={styles.meta}>{certificates.length} records</span>
           </div>
           {!certificates.length ? (
-            <div className={styles.empty}><strong>No certificates yet</strong><p>Complete a published subject track or qualify in a released assessment to earn your first certificate.</p></div>
+            <div className={styles.empty}><strong>No certificates yet</strong><p>Complete all published lessons in a subject, or pass an eligible admin-created assessment after completing that subject. Practice and generated topic/chapter tests do not issue test certificates.</p></div>
           ) : (
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
@@ -227,6 +227,7 @@ export default function StudentCertificatesPage() {
                   <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status}</span>
                   <div className={styles.downloads}>
                     {certificate.status === 'ISSUED' ? <>
+                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=pdf'}>Download PDF</a>
                       <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=png'}>Download PNG</a>
                       <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">Verify ↗</Link>
