@@ -291,6 +291,15 @@ public class HrEmployeeController {
     Long department=optionalLong(body.get("departmentId"));
     Long designation=optionalLong(body.get("designationId"));
     Long manager=optionalLong(body.get("managerEmployeeId"));
+    if(reportingScope.isManagerScoped(context)) {
+      List<Map<String,Object>> linked=jdbc.queryForList("select id,organization_id from hr_employee where linked_staff_account_id=? and employment_status not in ('SEPARATED','INACTIVE','DRAFT')",context.staffId());
+      if(linked.isEmpty())throw new ResponseStatusException(HttpStatus.FORBIDDEN,"A manager must have an active linked employee record to create reporting employees.");
+      long ownEmployeeId=((Number)linked.getFirst().get("id")).longValue();
+      long ownOrganizationId=((Number)linked.getFirst().get("organization_id")).longValue();
+      if(orgId!=ownOrganizationId)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Organization not found.");
+      if(manager!=null&&manager.longValue()!=ownEmployeeId)throw badRequest("Managers may create employees only in their own reporting line.");
+      manager=ownEmployeeId;
+    }
     validateReference("hr_department",department,orgId,"Department");
     validateReference("hr_designation",designation,orgId,"Designation");
     validateManager(manager,null,orgId);
@@ -299,6 +308,11 @@ public class HrEmployeeController {
     String status=String.valueOf(body.getOrDefault("employmentStatus","ACTIVE")).toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status)) throw badRequest("Choose a supported employment status.");
     if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
+    if(!"DRAFT".equals(status)) {
+      List<Map<String,Object>> rules=jdbc.queryForList("select required_permission_key from hr_lifecycle_approval_rule where organization_id=? and transition_key=? and from_status='DRAFT' and to_status=? and active=true",orgId,"DRAFT_TO_"+status,status);
+      if(rules.isEmpty())throw new ResponseStatusException(HttpStatus.CONFLICT,"No active approval rule is configured for DRAFT -> "+status+". Ask an approval-policy administrator to configure it.");
+      authorization.requirePermission(context,String.valueOf(rules.getFirst().get("required_permission_key")));
+    }
     String number="QE-EMP-"+String.format("%06d",jdbc.queryForObject("select nextval('hr_employee_number_seq')",Long.class));
     try {
       Long id=jdbc.queryForObject("""
