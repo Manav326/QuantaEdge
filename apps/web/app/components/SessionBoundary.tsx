@@ -101,7 +101,7 @@ function installRefreshRecovery() {
 
 function roleHome(session: Session): string | null {
   if (session.studentId || session.role === 'STUDENT') return '/student';
-  if (session.userId && session.role === 'PARENT') return '/parent';
+  if (session.role === 'PARENT') return '/parent';
   return null;
 }
 function workspaceRole(home: string | null): WorkspaceRole | null {
