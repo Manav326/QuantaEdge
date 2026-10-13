@@ -103,8 +103,8 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          # Do not request the obsolete SDK package "tools"; modern repositories expose platform-tools.
-          packages: platform-tools
+          # Match main CI: install current SDK packages without requesting the removed "tools" package.
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.11.1"
