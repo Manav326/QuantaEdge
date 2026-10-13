@@ -80,20 +80,8 @@ begin
      or permission_key = 'AUDIT_VIEW'
   on conflict(staff_id, permission_key) do nothing;
 
-  -- Keep the bootstrap administrator attached to the HR employee directory as well.
-  if not exists (select 1 from hr_employee where linked_staff_account_id = bootstrap_staff_id) then
-    insert into hr_employee(
-      public_id, employee_number, organization_id, employment_type_code,
-      linked_staff_account_id, display_name, joining_date, employment_status
-    )
-    select gen_random_uuid(),
-           'QE-' || lpad(nextval('hr_employee_number_seq')::text, 6, '0'),
-           o.id, 'FULL_TIME', bootstrap_staff_id,
-           'People Operations Super Admin', current_date, 'ACTIVE'
-    from hr_organization o
-    where o.name = 'QuantaEdge'
-    limit 1;
-  end if;
+  -- The system bootstrap identity is not a synthetic employee record. HR employees are
+  -- created only through the normal HRMS onboarding/recruitment workflow.
 end
 $bootstrap$;
 
