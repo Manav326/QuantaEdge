@@ -26,8 +26,7 @@ export default function SessionLandingPage() {
         const studentResponse = await fetch('/api/v1/auth/me', {
           headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
         });
-        if (studentResponse.ok) response = studentResponse;
-        else response = studentResponse;
+        response = studentResponse;
       }
       if (response.ok) {
         const identity = await response.json() as Identity;
