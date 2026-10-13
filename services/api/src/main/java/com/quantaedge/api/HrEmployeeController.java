@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,10 +22,15 @@ public class HrEmployeeController {
   private final StaffAuditService audit;
   private final HrReportingScopeService reportingScope;
 
-  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+  @Autowired
+  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit,HrReportingScopeService reportingScope) {
     this.jdbc=jdbc;
     this.authorization=authorization;
     this.audit=audit;
+    this.reportingScope=reportingScope;
+  }
+  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+    this(jdbc,authorization,audit,new HrReportingScopeService(jdbc,authorization));
   }
 
   @GetMapping("/organization")
