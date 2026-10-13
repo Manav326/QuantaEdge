@@ -213,6 +213,12 @@ public class HrEmployeeController {
     int safeOffset=Math.max(0,Math.min(offset,1000000));
     String term="%"+(q==null?"":q.trim().replace("%","\\%").replace("_","\\_"))+"%";
     List<Map<String,Object>> items=jdbc.queryForList("""
+      with recursive reporting(id) as (
+        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+        union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+      )
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
              e.joining_date,e.probation_end_date,e.employment_status,e.exit_date,e.employment_type_code,
              e.department_id,d.name as department_name,e.designation_id,g.name as designation_name,
@@ -224,18 +230,24 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """ + reportingScope.sqlScopePredicate("e") + """
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
       order by e.display_name,e.id
       limit ? offset ?
-      """,includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),context.staffId(),safeLimit,safeOffset);
+      """,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),safeLimit,safeOffset);
     Long total=jdbc.queryForObject("""
+      with recursive reporting(id) as (
+        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+        union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+      )
       select count(*) from hr_employee e
       left join hr_department d on d.id=e.department_id
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-        and """ + reportingScope.sqlScopePredicate("e") + """
-      """,Long.class,includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),context.staffId());
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+      """,Long.class,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId());
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
