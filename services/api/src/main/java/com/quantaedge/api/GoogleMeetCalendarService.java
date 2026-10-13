@@ -135,6 +135,11 @@ public class GoogleMeetCalendarService {
     return meetingResult(eventId, requestId, event);
   }
 
+  /** Stable identifier also permits cleanup after a successful Google request whose response was lost. */
+  public String eventIdForSession(long sessionId) {
+    return managedEventId(sessionId);
+  }
+
   public void cancelMeeting(String eventId) {
     requireConfigured();
     String token = accessToken();
@@ -220,6 +225,10 @@ public class GoogleMeetCalendarService {
 
   private GoogleMeetException apiFailure(RestClientResponseException ex, boolean tokenRequest) {
     int status = ex.getStatusCode().value();
+    if (tokenRequest && (status == 400 || status == 401)) {
+      return new GoogleMeetException("GOOGLE_AUTH_FAILED",
+          "Google OAuth rejected the client credentials or refresh token. Re-authorize the integration account and update GOOGLE_MEET_CLIENT_ID, GOOGLE_MEET_CLIENT_SECRET, and GOOGLE_MEET_REFRESH_TOKEN.");
+    }
     if (status == 401) return new GoogleMeetException("GOOGLE_AUTH_FAILED",
         tokenRequest
             ? "Google OAuth rejected the refresh token. Re-authorize the account and update GOOGLE_MEET_REFRESH_TOKEN."

@@ -380,7 +380,8 @@ public class LearningClassController {
     String providerErrorCode = null, providerErrorMessage = null;
     if ("CANCELLED".equals(status) && "GOOGLE_MEET".equals(provider)) {
       Object eventValue=current.get("provider_event_id");
-      String eventId=eventValue==null?"":String.valueOf(eventValue);
+      String eventId=eventValue==null||String.valueOf(eventValue).isBlank()
+          ?googleMeet.eventIdForSession(sessionId):String.valueOf(eventValue);
       if (!eventId.isBlank()) {
         try { googleMeet.cancelMeeting(eventId); integration="CANCELLED"; }
         catch (GoogleMeetCalendarService.GoogleMeetException ex) {
@@ -555,7 +556,7 @@ public class LearningClassController {
     String requestId=row.get("provider_conference_request_id")==null?"":String.valueOf(row.get("provider_conference_request_id"));
     try {
       if("CANCELLED".equals(status)) {
-        if(!eventId.isBlank())googleMeet.cancelMeeting(eventId);
+        googleMeet.cancelMeeting(eventId.isBlank()?googleMeet.eventIdForSession(sessionId):eventId);
         jdbc.update("""
           update learning_class_session set provider_operation_status='CANCELLED',provider_error_code=null,
             provider_error_message=null,provider_operation_attempts=provider_operation_attempts+1,
