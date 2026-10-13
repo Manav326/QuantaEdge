@@ -1,5 +1,5 @@
 'use client';
-import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback } from '../components/PeopleUI';
+import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback, PeopleEmptyState } from '../components/PeopleUI';
 
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -151,7 +151,7 @@ export default function EmployeeSelfServicePage(){
           </section>
           <section className="panel">
             <h2>Your profile change requests</h2>
-            {profileChangeRequests.length===0?<div className="empty">You have not submitted any profile change requests.</div>:<div className="table-wrap"><table><thead><tr><th>Submitted</th><th>Requested changes</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
+            {profileChangeRequests.length===0?<PeopleEmptyState title="You have not submitted any profile change requests." />:<div className="table-wrap"><table><thead><tr><th>Submitted</th><th>Requested changes</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
               {profileChangeRequests.map((item:any)=><tr key={item.id}><td>{new Date(item.created_at).toLocaleString()}</td><td>{item.requested_values?.email&&<div>Email: {item.requested_values.email}</div>}{item.requested_values?.phoneE164&&<div>Phone: {item.requested_values.phoneE164}</div>}</td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelProfileChange(item.id)}>Cancel</button>:'—'}</td></tr>)}
             </tbody></table></div>}
           </section>
@@ -177,13 +177,13 @@ export default function EmployeeSelfServicePage(){
           </section>
           <section className="panel">
             <h2>My attendance correction requests</h2>
-            {attendanceCorrectionRequests.length===0?<div className="empty">You have not submitted any attendance correction requests.</div>:<div className="table-wrap"><table><thead><tr><th>Work date</th><th>Requested status</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
+            {attendanceCorrectionRequests.length===0?<PeopleEmptyState title="You have not submitted any attendance correction requests." />:<div className="table-wrap"><table><thead><tr><th>Work date</th><th>Requested status</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
               {attendanceCorrectionRequests.map((item:any)=><tr key={item.id}><td>{String(item.work_date).slice(0,10)}</td><td>{pretty(item.requested_status)}<div className="small">{item.requested_check_in_at?'In: '+new Date(item.requested_check_in_at).toLocaleString()+' ':''}{item.requested_check_out_at?'Out: '+new Date(item.requested_check_out_at).toLocaleString():''}</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelAttendanceCorrection(item.id)}>Cancel</button>:'—'}</td></tr>)}
             </tbody></table></div>}
           </section>
           <div className="table-wrap"><table><thead><tr><th>Work date</th><th>Status</th><th>Check in</th><th>Check out</th><th>Worked</th><th>Note</th></tr></thead><tbody>
             {attendance.map((item:any)=><tr key={item.work_date}><td>{String(item.work_date).slice(0,10)}</td><td><PeopleStatusBadge status={pretty(item.attendance_status)} /></td><td>{item.check_in_at?new Date(item.check_in_at).toLocaleString():'—'}</td><td>{item.check_out_at?new Date(item.check_out_at).toLocaleString():'—'}</td><td>{item.minutes_worked==null?'—':Math.floor(item.minutes_worked/60)+'h '+item.minutes_worked%60+'m'}</td><td>{item.notes||'—'}</td></tr>)}
-          </tbody></table>{!loading&&!attendance.length&&<div className="empty">No attendance records were returned for this date range.</div>}</div>
+          </tbody></table>{!loading&&!attendance.length&&<PeopleEmptyState title="No attendance records were returned for this date range." />}</div>
         </>}
         {tab==='leave'&&<>
           <form className="panel" onSubmit={submitLeave} style={{marginBottom:20}}>
@@ -200,13 +200,13 @@ export default function EmployeeSelfServicePage(){
           <h2>My requests</h2>
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Dates / days</th><th>Reason</th><th>Status</th><th>Review note</th></tr></thead><tbody>
             {requests.map((item:any)=><tr key={item.id}><td>{item.leave_type}<div className="small">{item.paid?'Paid':'Unpaid'}</div></td><td>{String(item.start_date).slice(0,10)} → {String(item.end_date).slice(0,10)}<div className="small">{Number(item.requested_days)} working day(s)</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td></tr>)}
-          </tbody></table>{!loading&&!requests.length&&<div className="empty">You have not submitted any leave requests.</div>}</div>
+          </tbody></table>{!loading&&!requests.length&&<PeopleEmptyState title="You have not submitted any leave requests." />}</div>
         </>}
         {tab==='balances'&&<>
           <p className="small">Balances are calculated from the official leave-balance ledger as of today. No balance is invented when no grant/accrual has been recorded.</p>
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Paid</th><th>Balance (days)</th></tr></thead><tbody>
             {balances.map((item:any)=><tr key={item.leave_type_code}><td>{item.display_name}</td><td>{item.paid?'Yes':'No'}</td><td><b>{Number(item.balance_days).toFixed(2)}</b></td></tr>)}
-          </tbody></table>{!loading&&!balances.length&&<div className="empty">No active leave types or balances are available.</div>}</div>
+          </tbody></table>{!loading&&!balances.length&&<PeopleEmptyState title="No active leave types or balances are available." />}</div>
         </>}
         {tab==='payslips'&&<>
           <h2>Issued payslips</h2>
@@ -219,7 +219,7 @@ export default function EmployeeSelfServicePage(){
             <div className="small">Issued {new Date(item.issued_at).toLocaleDateString()}</div>
             <button type="button" className="primary" style={{marginTop:12}} onClick={()=>setSelectedPayslip(item)}>View payslip</button>
           </article>)}</div>
-          {!loading&&!payslips.length&&<div className="empty">No payslips have been issued to your employee record yet.</div>}
+          {!loading&&!payslips.length&&<PeopleEmptyState title="No payslips have been issued to your employee record yet." />}
           {selectedPayslip&&<section className="panel payslip-print" aria-label="Selected payslip">
             <div className="no-print actions" style={{justifyContent:'space-between',marginTop:0,marginBottom:18}}>
               <button type="button" className="secondary" onClick={()=>setSelectedPayslip(null)}>Back to list</button>
