@@ -850,7 +850,7 @@ public class AuthService {
       return jdbc.queryForList("""
           select permission_key from staff_permission_catalog
           where permission_key not like 'HR\\_%' escape '\\'
-            and permission_key <> 'HR_SELF_SERVICE_VIEW'
+            and permission_key not in ('HR_SELF_SERVICE_VIEW','TEACHING_ASSIGNMENT_VIEW','CLASS_SCHEDULE_POLICY_MANAGE')
           order by permission_key
           """, String.class);
     }
