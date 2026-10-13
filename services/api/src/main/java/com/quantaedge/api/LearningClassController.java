@@ -196,7 +196,7 @@ public class LearningClassController {
     }
     Long assignedEmployeeId = null;
     if (teachingAssignmentId != null) {
-      authorization.requirePermission(context,"TEACHING_ASSIGNMENT_VIEW");
+      // CLASS_MANAGE authorizes consuming the approved teacher reference for timetable setup.
       List<Map<String,Object>> assignmentRows = jdbc.queryForList("""
         select a.id,a.employee_id,a.subject_id,a.effective_start,a.effective_end,a.status,e.linked_staff_account_id
         from hr_teaching_assignment a join hr_employee e on e.id=a.employee_id where a.id=?
@@ -610,10 +610,14 @@ public class LearningClassController {
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
+        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
         and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       order by case when cs.ends_at>now() then 0 else 1 end,cs.starts_at asc,cs.id desc limit ? offset ?
@@ -623,8 +627,14 @@ public class LearningClassController {
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days' and (?='' or s.code=?)
+      where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
+        and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
+        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
+        and (?='' or s.code=?)
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       """,Long.class,context.studentId(),subjectFilter,subjectFilter);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
@@ -643,9 +653,13 @@ public class LearningClassController {
       join curriculum_class c on c.id=s.class_id and c.active=true
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
+      left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.id=? and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
+        and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+          and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
       """, context.studentId(), sessionId);
     if (rows.isEmpty()) throw notFound("Live class", sessionId);
