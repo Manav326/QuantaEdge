@@ -69,13 +69,15 @@ def check_source(bundle: Any, path: Path) -> dict[str, Any]:
  return {"path":str(path),"class_code":cls,"subject_code":sub,"source":s,"curriculum":c,"chapters":usable}
 def request_examples(context: dict[str,Any], language: str, batch: int, model: str, base_url: str, api_key: str) -> list[dict[str,Any]]:
  ch=context["chapter"]; src=context["source"]; cur=context["curriculum"]
- page_text="\n\n".join(f"PDF page {p['page_number']}:\n{str(p['text'])[:2200]}" for p in ch["pages"])
- allowed=", ".join(sorted(TYPES))
- prompt = f"""Create exactly {batch} DISTINCT original educational AI-tutor training examples based on this curriculum context. Return ONLY a JSON array. Every item must have keys: example_type, student_message, assistant_message, source_pages. example_type must be one of: {allowed}. Each student_message and assistant_message must be non-empty. Use language {language} throughout. Mix useful types; include stepwise teaching and feedback, not just quiz-answer pairs. For maths, independently calculate and explain. For science, avoid unsupported claims. Create new examples in your own words; never copy source wording or reproduce a full textbook question. source_pages must be a list of 1-based PDF page numbers from the context that actually support the example. Do not make up curriculum facts outside the provided context. If context is insufficient, create a basic conceptual question only when supported; do not hallucinate.
-Curriculum: Bihar Board, Class {cur['class_code']}, subject {cur['subject_code']}, chapter {ch['title']} ({ch['code']}).
-Source: {src['title']}, edition {src['edition']}.
-Context:
-{page_text}"""
+ all_pages=ch["pages"]
+ if len(all_pages) > 6:
+  selected_indices=sorted(set(round(i*(len(all_pages)-1)/5) for i in range(6)))
+  context_pages=[all_pages[i] for i in selected_indices]
+ else:
+  context_pages=all_pages
+ context["context_pages"]=[p["page_number"] for p in context_pages]
+ page_text="\n\n".join(f"PDF page {p['page_number']}:\n{str(p['text'])[:2200]}" for p in context_pages)
+
  url=base_url.rstrip("/")+"/v1/chat/completions"
  body={"model":model,"temperature":0.35,"messages":[{"role":"system","content":SYSTEMS[language]},{"role":"user","content":prompt}],"response_format":{"type":"json_object"}}
  # JSON object wrapper avoids providers that reject top-level JSON arrays.
@@ -102,7 +104,7 @@ def cmd_generate(a: argparse.Namespace) -> int:
   return 0
  key=os.getenv("OPENAI_API_KEY","").strip(); base=os.getenv("OPENAI_API_BASE_URL","https://api.openai.com").strip(); model=os.getenv("QUANTAEDGE_TRAINING_DATA_MODEL","").strip()
  if not key or not model: raise ValueError("Set OPENAI_API_KEY and QUANTAEDGE_TRAINING_DATA_MODEL in the local environment.")
- paths=sorted(a.input_dir.glob("*.json"))
+ paths=sorted(a.input_dir.rglob("*.json"))
  if not paths: raise ValueError(f"No extraction JSON files found in {a.input_dir}. Keep raw bundles private; see docs/ai/training-dataset-plan.md.")
  sources=[]
  for p in paths:
@@ -125,11 +127,11 @@ def cmd_generate(a: argparse.Namespace) -> int:
   item=chapters[cursor % len(chapters)]; cursor+=1
   lang="hi" if (count % 5) < 3 else "en"
   ctx=item["source_bundle"]
+  calls+=1
   try: generated=request_examples({"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]},lang,min(a.batch_size,a.target-count),model,base,key)
   except RuntimeError as e:
    print(str(e),file=sys.stderr); continue
-  calls+=1
-  page_nums={p["page_number"] for p in item["chapter"]["pages"]}
+  page_nums=set(ctx.get("context_pages",[]))
   for n,g in enumerate(generated):
    if not isinstance(g,dict): continue
    student=str(g.get("student_message","")).strip(); assistant=str(g.get("assistant_message","")).strip()
@@ -152,15 +154,9 @@ def cmd_generate(a: argparse.Namespace) -> int:
 def messages_ok(row: Any) -> bool:
  if not isinstance(row,dict) or not isinstance(row.get("messages"),list): return False
  msgs=row["messages"]
- return len(msgs)>=3 and msgs[0].get("role")=="system" and any(m.get("role")=="user" and str(m.get("content","")).strip() for m in msgs) and any(m.get("role")=="assistant" and str(m.get("content","")).strip() for m in msgs)
-def simhash(text: str) -> int:
- tokens=re.findall(r"[\w\u0900-\u097f]+",norm(text))
- if not tokens: return 0
- weights=[0]*64
- for token in tokens:
-  h=int(hashlib.blake2b(token.encode(),digest_size=8).hexdigest(),16)
-  for i in range(64): weights[i]+=1 if h&(1<<i) else -1
- return sum(1<<i for i,w in enumerate(weights) if w>=0)
+ if len(msgs)<3 or any(not isinstance(m,dict) for m in msgs): return False
+ return msgs[0].get("role")=="system" and any(m.get("role")=="user" and str(m.get("content","")).strip() for m in msgs) and any(m.get("role")=="assistant" and str(m.get("content","")).strip() for m in msgs)
+
 def prompt_of(row:dict[str,Any])->str:
  return " ".join(str(m.get("content","")) for m in row["messages"] if m.get("role")=="user")
 def deduplicate(rows:list[dict[str,Any]])->tuple[list[dict[str,Any]],int]:
@@ -197,10 +193,13 @@ def validate_rows(rows:list[dict[str,Any]], require_approved:bool=False)->list[s
   label=f"record {i}"
   if not messages_ok(row): errors.append(f"{label}: invalid conversational messages"); continue
   meta=row.get("metadata",{})
+  if not isinstance(meta,dict): errors.append(f"{label}: metadata must be an object"); continue
   if str(meta.get("class_code")) not in CLASSES or meta.get("subject_code") not in SUBJECTS or meta.get("language") not in LANGUAGES: errors.append(f"{label}: invalid class/subject/language")
+  if meta.get("example_type") not in TYPES: errors.append(f"{label}: invalid example_type")
+  if not str(meta.get("source_edition","")).strip() or str(meta.get("source_edition","")).strip().casefold() in PLACEHOLDER: errors.append(f"{label}: missing verified source edition")
   if meta.get("review_status") not in {"machine_validated_draft","human_reviewed","approved"}: errors.append(f"{label}: invalid review_status")
   if require_approved and meta.get("review_status")!="approved": errors.append(f"{label}: not approved")
-  if not meta.get("source_id") or not meta.get("source_url","").startswith("https://") or not re.fullmatch(r"[0-9a-fA-F]{64}",str(meta.get("source_pdf_sha256",""))): errors.append(f"{label}: missing/invalid source provenance")
+  if not meta.get("source_id") or not isinstance(meta.get("source_url"),str) or not meta.get("source_url","").startswith("https://") or not re.fullmatch(r"[0-9a-fA-F]{64}",str(meta.get("source_pdf_sha256",""))): errors.append(f"{label}: missing/invalid source provenance")
   if not isinstance(meta.get("source_pages"),list) or not meta["source_pages"]: errors.append(f"{label}: missing source_pages")
   eid=row.get("example_id")
   if not isinstance(eid,str) or not eid: errors.append(f"{label}: missing example_id")
@@ -232,15 +231,18 @@ def cmd_validate(a:argparse.Namespace)->int:
  master=root/"dataset_master.jsonl"
  if not master.exists(): raise ValueError(f"Missing {master}")
  rows=read_jsonl(master); errors+=validate_rows(rows,require_approved=a.require_approved)
- split_ids={}
+ split_ids={}; split_groups={}
  for name in ("train","validation","test"):
   p=root/f"{name}.jsonl"
   if not p.exists(): errors.append(f"Missing split file {p}"); continue
   part=read_jsonl(p); split_ids[name]={r.get("example_id") for r in part}
+  split_groups[name]={"|".join(str(r.get("metadata",{}).get(k,"")) for k in ("class_code","subject_code","source_id","chapter_code")) for r in part}
   errors+= [f"{name}: {e}" for e in validate_rows(part,require_approved=a.require_approved)]
  for x,y in (("train","validation"),("train","test"),("validation","test")):
   overlap=split_ids.get(x,set())&split_ids.get(y,set())
   if overlap: errors.append(f"split leakage: {x}/{y} share {len(overlap)} example IDs")
+  group_overlap=split_groups.get(x,set())&split_groups.get(y,set())
+  if group_overlap: errors.append(f"source/chapter leakage: {x}/{y} share {len(group_overlap)} groups")
  if errors:
   print("\n".join(errors[:100]),file=sys.stderr); return 1
  print(json.dumps({"valid":True,"records":len(rows),"splits":{k:len(v) for k,v in split_ids.items()}},indent=2))
