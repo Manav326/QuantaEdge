@@ -51,6 +51,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,10 +103,11 @@ fun QuantaEdgeApp() {
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
 
-    var route by remember { mutableStateOf(AppRoute.LOGIN) }
-    var lessonReturnRoute by remember { mutableStateOf(AppRoute.STUDENT_HOME) }
-    var resultsReturnRoute by remember { mutableStateOf(AppRoute.STUDENT_HOME) }
-    var language by remember { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var route by rememberSaveable { mutableStateOf(AppRoute.LOGIN) }
+    var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
+    var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
+    var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var currentSubject by rememberSaveable { mutableStateOf("maths") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
@@ -115,7 +117,6 @@ fun QuantaEdgeApp() {
     var parentProfile by remember { mutableStateOf(JSONObject()) }
     var selectedChild by remember { mutableStateOf(JSONObject()) }
 
-    var currentSubject by remember { mutableStateOf("maths") }
     var lessons by remember { mutableStateOf(emptyList<JSONObject>()) }
     var lesson by remember { mutableStateOf(JSONObject()) }
     var practice by remember { mutableStateOf(JSONObject()) }
@@ -1343,9 +1344,11 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.PARENT_REPORT -> ParentReportScreen(
                         report = parentReport,
+                        children = parentChildren,
                         language = language,
                         busy = busy,
                         certificates = parentCertificates,
+                        onSelectChild = ::openParentReport,
                         onDownloadCertificate = ::downloadParentCertificate
                     )
                     AppRoute.PARENT_PROFILE -> ParentProfileScreen(
@@ -2681,12 +2684,16 @@ private fun ParentHomeScreen(
 @Composable
 private fun ParentReportScreen(
     report: JSONObject,
+    children: List<JSONObject>,
     language: String,
     busy: Boolean,
     certificates: List<JSONObject>,
+    onSelectChild: (JSONObject) -> Unit,
     onDownloadCertificate: (Long, Long, String) -> Unit
 ) {
     val childId = report.optLong("_childId", 0L)
+    val otherChildren = children.filter { it.longAny("id") > 0L && it.longAny("id") != childId }
+    val compact = LocalConfiguration.current.screenWidthDp < 390
     val lessons = report.optJSONObject("lessonStats") ?: JSONObject()
     val questions = report.optJSONObject("questionStats") ?: JSONObject()
     val mastery = report.optJSONObject("mastery") ?: JSONObject()
@@ -2704,17 +2711,43 @@ private fun ParentReportScreen(
             style = MaterialTheme.typography.headlineSmall)
         Text(t("Class", "कक्षा") + " " + report.textAny("class_code", "classCode"),
             color = MaterialTheme.colorScheme.secondary)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-            ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
-                lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.weight(1f))
-            ParentReportMetric(t("Practice accuracy","अभ्यास सटीकता"), questions.optString("accuracy_percent","0")+"%",
-                questions.optString("attempts","0")+" "+t("attempts","प्रयास"), Modifier.weight(1f))
+        if (otherChildren.isNotEmpty()) {
+            Text(t("Switch child report", "दूसरे बच्चे की रिपोर्ट देखें"), style = MaterialTheme.typography.titleMedium)
+            otherChildren.forEach { child ->
+                OutlinedButton(
+                    onClick = { onSelectChild(child) },
+                    enabled = !busy,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(t("View report: ", "रिपोर्ट देखें: ") +
+                        child.textAny("display_name", "displayName").ifBlank { t("Student", "छात्र") })
+                }
+            }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-            ParentReportMetric(t("Average mastery","औसत महारत"), mastery.optString("average_mastery","0")+"%",
-                mastery.optString("mastered","0")+" "+t("concepts mastered","अवधारणाएँ पूरी"), Modifier.weight(1f))
-            ParentReportMetric(t("Tests released","जारी टेस्ट"), stats.optString("released","0"),
-                stats.optString("awaiting_review","0")+" "+t("awaiting review","समीक्षा बाकी"), Modifier.weight(1f))
+        if (compact) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
+                    lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.fillMaxWidth())
+                ParentReportMetric(t("Practice accuracy","अभ्यास सटीकता"), questions.optString("accuracy_percent","0")+"%",
+                    questions.optString("attempts","0")+" "+t("attempts","प्रयास"), Modifier.fillMaxWidth())
+                ParentReportMetric(t("Average mastery","औसत महारत"), mastery.optString("average_mastery","0")+"%",
+                    mastery.optString("mastered","0")+" "+t("concepts mastered","अवधारणाएँ पूरी"), Modifier.fillMaxWidth())
+                ParentReportMetric(t("Tests released","जारी टेस्ट"), stats.optString("released","0"),
+                    stats.optString("awaiting_review","0")+" "+t("awaiting review","समीक्षा बाकी"), Modifier.fillMaxWidth())
+            }
+        } else {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                ParentReportMetric(t("Lessons", "पाठ"), lessons.optString("completed_lessons","0")+" / "+lessons.optString("total_lessons","0"),
+                    lessons.optString("completion_percent","0")+"% "+t("complete","पूरे"), Modifier.weight(1f))
+                ParentReportMetric(t("Practice accuracy","अभ्यास सटीकता"), questions.optString("accuracy_percent","0")+"%",
+                    questions.optString("attempts","0")+" "+t("attempts","प्रयास"), Modifier.weight(1f))
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                ParentReportMetric(t("Average mastery","औसत महारत"), mastery.optString("average_mastery","0")+"%",
+                    mastery.optString("mastered","0")+" "+t("concepts mastered","अवधारणाएँ पूरी"), Modifier.weight(1f))
+                ParentReportMetric(t("Tests released","जारी टेस्ट"), stats.optString("released","0"),
+                    stats.optString("awaiting_review","0")+" "+t("awaiting review","समीक्षा बाकी"), Modifier.weight(1f))
+            }
         }
         ParentReportSectionTitle(t("Curriculum covered","पूरा किया गया पाठ्यक्रम"))
         if (curriculum.isEmpty()) {
