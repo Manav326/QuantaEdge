@@ -66,6 +66,7 @@ export default function AssessmentsPage(){
   const [review,setReview]=useState<ReviewAttempt|null>(null);
   const [reviewCertificate,setReviewCertificate]=useState<any>(null);
   const [reviewCertificateLoading,setReviewCertificateLoading]=useState(false);
+  const [reviewCertificateLookupFailed,setReviewCertificateLookupFailed]=useState(false);
   const [marks,setMarks]=useState<Record<number,string>>({});
   const [feedback,setFeedback]=useState<Record<number,string>>({});
   const [overallNote,setOverallNote]=useState('');
@@ -176,11 +177,13 @@ export default function AssessmentsPage(){
   }
   async function loadReviewCertificate(attemptId:number){
     setReviewCertificateLoading(true);
+    setReviewCertificateLookupFailed(false);
     try{
       const data=await api('/api/v1/admin/certificates/for-attempt/'+attemptId);
       setReviewCertificate(data?.issued?data.certificate:null);
     }catch{
       setReviewCertificate(null);
+      setReviewCertificateLookupFailed(true);
     }finally{setReviewCertificateLoading(false);}
   }
 
@@ -308,7 +311,9 @@ export default function AssessmentsPage(){
                   onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh</button>
               </div>
             ):<div className={styles.certificateRecordActions}>
-              <small>No certificate has been issued for this attempt yet. The student can request it after all eligibility rules are met.</small>
+              <small>{reviewCertificateLookupFailed
+                ? 'Certificate status could not be checked with this account or is temporarily unavailable. An administrator can verify it in the certificate register.'
+                : 'No certificate has been issued for this attempt yet. The student can request it after all eligibility rules are met.'}</small>
               <button type="button" className={styles.secondaryButton}
                 onClick={()=>void loadReviewCertificate(review.attempt_id)}>Refresh certificate status</button>
               <a href="/admin/certificates">Open certificate register ↗</a>
