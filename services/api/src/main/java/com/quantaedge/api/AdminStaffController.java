@@ -44,10 +44,11 @@ public class AdminStaffController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     requireStaffManager(context);
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select id, public_id, mobile_e164, display_name, role, active,
-               created_at, updated_at, last_login_at
+        select id, public_id, mobile_e164, display_name, role,
+               (active and education_access_enabled) as active,
+               active as identity_active, created_at, updated_at, last_login_at
         from staff_account
-        where lower(coalesce(username,'')) <> 'hrms_admin'
+        where education_access_configured=true
         order by case when role='ADMIN' then 0 else 1 end, lower(display_name), id
         """);
     for (Map<String,Object> row : rows) {
@@ -99,8 +100,10 @@ public class AdminStaffController {
     Long id;
     try {
       id=jdbc.queryForObject("""
-          insert into staff_account(public_id,mobile_e164,display_name,role,active,created_by_staff_id)
-          values (?,?,?,?,true,?) returning id
+          insert into staff_account(
+            public_id,mobile_e164,display_name,role,active,
+            education_access_enabled,education_access_configured,created_by_staff_id)
+          values (?,?,?,?,true,true,true,?) returning id
           """, Long.class, UUID.randomUUID(), mobile, name, role, context.staffId());
     } catch (org.springframework.dao.DuplicateKeyException ex) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -141,6 +144,10 @@ public class AdminStaffController {
     List<String> beforePermissions=auth.permissionsForStaff(staffId);
     jdbc.update("update staff_account set role=?,updated_at=now() where id=?",role,staffId);
     replacePermissions(staffId,permissions,context.staffId());
+    jdbc.update("""
+        update auth_session set revoked_at=now()
+        where staff_id=? and workspace_key in ('STAFF','EDUCATION_ADMIN') and revoked_at is null
+        """,staffId);
     staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/permissions",
         "Role changed from "+beforeRole+" to "+role+"; permissions changed from ["+
         String.join(", ",beforePermissions)+"] to ["+String.join(", ",permissions)+"]");
@@ -162,18 +169,26 @@ public class AdminStaffController {
     if (context.staffId()!=null && context.staffId()==staffId && !active) {
       throw badRequest("You cannot suspend your own staff account.");
     }
+    if (active && !Boolean.TRUE.equals(staff.get("identity_active"))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This staff identity is globally suspended. Reactivate it through the approved identity-recovery process first.");
+    }
     if (!active && "ADMIN".equals(staff.get("role"))) {
       Long otherAdmins=jdbc.queryForObject("""
           select count(*) from staff_account
-          where role='ADMIN' and active=true and id<>?
+          where role='ADMIN' and active=true and education_access_enabled=true
+            and education_access_configured=true and id<>?
           """, Long.class, staffId);
       if (otherAdmins==null || otherAdmins<1) {
-        throw badRequest("At least one active administrator must remain.");
+        throw badRequest("At least one active Educational Admin must remain.");
       }
     }
-    jdbc.update("update staff_account set active=?,updated_at=now() where id=?",active,staffId);
+    jdbc.update("update staff_account set education_access_enabled=?,updated_at=now() where id=? and education_access_configured=true",active,staffId);
     if (!active) {
-      jdbc.update("update auth_session set revoked_at=now() where staff_id=? and revoked_at is null",staffId);
+      jdbc.update("""
+          update auth_session set revoked_at=now()
+          where staff_id=? and workspace_key in ('STAFF','EDUCATION_ADMIN') and revoked_at is null
+          """,staffId);
     }
     staffAudit.recordAction(context,"/api/v1/admin/staff/"+staffId+"/status",
         (active?"Activated":"Suspended")+" staff identity; "+(!active?"active sessions were revoked.":""));
@@ -209,8 +224,11 @@ public class AdminStaffController {
 
   private Map<String,Object> staffById(long id) {
     List<Map<String,Object>> rows=jdbc.queryForList("""
-        select id,public_id,mobile_e164,display_name,role,active,created_at,updated_at,last_login_at,username
-        from staff_account where id=?
+        select id,public_id,mobile_e164,display_name,role,
+               (active and education_access_enabled) as active,
+               active as identity_active,education_access_enabled,education_access_configured,
+               created_at,updated_at,last_login_at,username
+        from staff_account where id=? and education_access_configured=true
         """,id);
     if (rows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Staff account not found.");
     Map<String,Object> row=rows.getFirst();
