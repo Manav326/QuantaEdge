@@ -462,10 +462,9 @@ export default function ContentStudio(){
   const structureStageIssues=lessonStructureIssues(activeBlocks);
   const blocksReady=activeBlocks.length>0&&activeBlocks.some(block=>block.block_type!=='AI_HELP')&&blocksCompleteCount===activeBlocks.length&&structureStageIssues.length===0;
   const previewBlocks=orderedLearnerBlocks(activeBlocks);
-  // Preserve authored order; insert assessment before the first recap, without regrouping later blocks.
-  const previewPracticeIndex=previewBlocks.findIndex(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
-  const previewTeachingBlocks=previewPracticeIndex<0?previewBlocks:previewBlocks.slice(0,previewPracticeIndex);
-  const previewRecapBlocks=previewPracticeIndex<0?[]:previewBlocks.slice(previewPracticeIndex);
+  // Mirror LearnClient: keep every non-recap block in authored order before assessment, then show recap blocks after practice.
+  const previewTeachingBlocks=previewBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP');
+  const previewRecapBlocks=previewBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
   const unsupportedActiveBlocks=activeBlocks.filter(block=>!LEARNER_BLOCK_TYPES.has(block.block_type));
   const activeQuestions=questions.filter(question=>question.active!==false);
   const validActiveQuestionCount=activeQuestions.filter(questionHasValidAnswer).length;
