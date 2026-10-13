@@ -40,6 +40,8 @@ fun RecordedPlayerScreen(
     onSaveAndBack: (Long, Long, Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val language = LocalQuantaLanguage.current
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     val recordingId = recording.optLongAny("recorded_class_id", "recordingId", "id")
     val durationSeconds = recording.optLongAny("duration_seconds", "durationSeconds")
     var watchedSeconds by rememberSaveable(recordingId) { mutableStateOf(recording.optLongAny("watched_seconds", "watchedSeconds")) }
@@ -88,7 +90,7 @@ fun RecordedPlayerScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(recording.textAny("title").ifBlank { "Recorded class" }, style = MaterialTheme.typography.headlineSmall)
+        Text(recording.textAny("title").ifBlank { t("Recorded class", "रिकॉर्ड किया गया सत्र") }, style = MaterialTheme.typography.headlineSmall)
         Text(recording.textAny("chapter_name", "subject_name", "description"), style = MaterialTheme.typography.bodyMedium)
         AndroidView(
             factory = { viewContext ->
@@ -101,7 +103,8 @@ fun RecordedPlayerScreen(
             update = { it.player = player },
             modifier = Modifier.fillMaxWidth().height(250.dp)
         )
-        Text(localizedUiText("Playback position: ") + currentPosition + " seconds", style = MaterialTheme.typography.bodySmall)
+        Text(t("Playback position: ", "वीडियो की स्थिति: ") + currentPosition + " " + t("seconds", "सेकंड"),
+            style = MaterialTheme.typography.bodySmall)
         Text(localizedUiText("Progress is saved to your QuantaEdge account periodically."), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
         Button(onClick = {
