@@ -216,7 +216,7 @@ public class HrEmployeeController {
       with recursive reporting(id) as (
         select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
           where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
@@ -238,7 +238,7 @@ public class HrEmployeeController {
       with recursive reporting(id) as (
         select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
           where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
       )
       select count(*) from hr_employee e
