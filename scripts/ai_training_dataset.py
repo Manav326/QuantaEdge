@@ -76,13 +76,6 @@ def request_examples(context: dict[str,Any], language: str, batch: int, model: s
  else:
   context_pages=all_pages
  context["context_pages"]=[p["page_number"] for p in context_pages]
- all_pages=ch["pages"]
- if len(all_pages) > 6:
-  selected_indices=sorted(set(round(i*(len(all_pages)-1)/5) for i in range(6)))
-  context_pages=[all_pages[i] for i in selected_indices]
- else:
-  context_pages=all_pages
- context["context_pages"]=[p["page_number"] for p in context_pages]
  page_text="\\n\\n".join(f"PDF page {p['page_number']}:\\n{str(p['text'])[:2200]}" for p in context_pages)
  allowed=", ".join(sorted(TYPES))
  prompt = f"""Create exactly {batch} DISTINCT original educational AI-tutor training examples based on this curriculum context. Return ONLY a JSON object with an examples array. Every item must have keys: example_type, student_message, assistant_message, source_pages. example_type must be one of: {allowed}. Each student_message and assistant_message must be non-empty. Use language {language} throughout. Mix useful types; include stepwise teaching and feedback, not just quiz-answer pairs. For maths, independently calculate and explain. For science, avoid unsupported claims. Create new examples in your own words; never copy source wording or reproduce a full textbook question. source_pages must be a list of 1-based PDF page numbers from the context that actually support the example. Do not make up curriculum facts outside the provided context. If context is insufficient, create a basic conceptual question only when supported; do not hallucinate.
@@ -141,10 +134,11 @@ def cmd_generate(a: argparse.Namespace) -> int:
   lang="hi" if (count % 5) < 3 else "en"
   ctx=item["source_bundle"]
   calls+=1
-  try: generated=request_examples({"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]},lang,min(a.batch_size,a.target-count),model,base,key)
+  gen_context={"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]}
+  try: generated=request_examples(gen_context,lang,min(a.batch_size,a.target-count),model,base,key)
   except RuntimeError as e:
    print(str(e),file=sys.stderr); continue
-  page_nums=set(ctx.get("context_pages",[]))
+  page_nums=set(gen_context.get("context_pages",[]))
   for n,g in enumerate(generated):
    if not isinstance(g,dict): continue
    student=str(g.get("student_message","")).strip(); assistant=str(g.get("assistant_message","")).strip()
@@ -171,7 +165,7 @@ def messages_ok(row: Any) -> bool:
  return msgs[0].get("role")=="system" and any(m.get("role")=="user" and str(m.get("content","")).strip() for m in msgs) and any(m.get("role")=="assistant" and str(m.get("content","")).strip() for m in msgs)
 
 def simhash(text: str) -> int:
- tokens=re.findall(r"[\\w\\u0900-\\u097f]+",norm(text))
+ tokens=re.findall(r"[\w\u0900-\u097f]+",norm(text))
  if not tokens: return 0
  weights=[0]*64
  for token in tokens:
