@@ -152,6 +152,8 @@ public class AuthController {
     }
     String refreshToken = firstNonBlank(
         cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)),
+        cookieValue(request, ("PARENT".equals(workspace) || "STUDENT".equals(workspace))
+            ? AuthService.LEARNING_REFRESH_COOKIE : AuthService.REFRESH_COOKIE),
         cookieValue(request, AuthService.REFRESH_COOKIE));
     return withCookie(auth.refreshSession(refreshToken, workspace), workspace);
   }
@@ -162,31 +164,45 @@ public class AuthController {
       HttpServletRequest request,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     String workspace = AuthService.normalizeWorkspace(workspaceHeader);
-    if (workspace == null) throw new SecurityException("Application workspace context is required to sign out safely.");
-    int legacyRevoked = 0;
     if (workspace == null) {
-      auth.revoke(cookieValue(request, AuthService.COOKIE), cookieValue(request, AuthService.REFRESH_COOKIE));
-    } else {
-      auth.revokeForWorkspace(
-          cookieValue(request, AuthService.sessionCookieForWorkspace(workspace)),
-          cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)), workspace);
-      // A legacy cookie is cleared only when its backing session belonged to this
-      // portal, so signing out of one workspace cannot revoke the other workspace.
-      legacyRevoked = auth.revokeForWorkspace(
-          cookieValue(request, AuthService.COOKIE), cookieValue(request, AuthService.REFRESH_COOKIE), workspace);
+      throw new SecurityException("Application workspace context is required to sign out safely.");
     }
-    if(context!=null&&context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/logout","Staff signed out.");
+
+    int legacyRevoked = auth.revokeForWorkspace(
+        cookieValue(request, AuthService.sessionCookieForWorkspace(workspace)),
+        cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)), workspace);
+
+    // Legacy cookies are revoked only when their stored session identity matches this
+    // workspace. This lets older clients sign out safely without affecting a different portal.
+    legacyRevoked += auth.revokeForWorkspace(
+        cookieValue(request, AuthService.COOKIE),
+        cookieValue(request, AuthService.REFRESH_COOKIE), workspace);
+
+    boolean learnerWorkspace = "PARENT".equals(workspace) || "STUDENT".equals(workspace);
+    if (learnerWorkspace) {
+      legacyRevoked += auth.revokeForWorkspace(
+          cookieValue(request, AuthService.LEARNING_COOKIE),
+          cookieValue(request, AuthService.LEARNING_REFRESH_COOKIE), workspace);
+    }
+
+    if (context != null && context.isEmployee()) {
+      staffAudit.recordAction(context, "/api/v1/auth/logout", "Staff signed out.");
+    }
 
     ResponseEntity.BodyBuilder result = ResponseEntity.ok();
-    String sessionCookie = workspace == null ? AuthService.COOKIE : AuthService.sessionCookieForWorkspace(workspace);
-    String refreshCookie = workspace == null ? AuthService.REFRESH_COOKIE : AuthService.refreshCookieForWorkspace(workspace);
-    result.header("Set-Cookie", expiredCookie(sessionCookie).toString());
-    result.header("Set-Cookie", expiredCookie(refreshCookie).toString());
+    result.header("Set-Cookie", expiredCookie(AuthService.sessionCookieForWorkspace(workspace)).toString());
+    result.header("Set-Cookie", expiredCookie(AuthService.refreshCookieForWorkspace(workspace)).toString());
     if (legacyRevoked > 0) {
       result.header("Set-Cookie", expiredCookie(AuthService.COOKIE).toString());
       result.header("Set-Cookie", expiredCookie(AuthService.REFRESH_COOKIE).toString());
     }
-    return result.body(Map.of("loggedOut",true));
+    if (learnerWorkspace) {
+      // The former learner cookies are shared, so expire them only after scoped server-side
+      // revocation checks have been attempted. Other application cookies remain untouched.
+      result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_COOKIE).toString());
+      result.header("Set-Cookie", expiredCookie(AuthService.LEARNING_REFRESH_COOKIE).toString());
+    }
+    return result.body(Map.of("loggedOut", true));
   }
 
   private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens) {
