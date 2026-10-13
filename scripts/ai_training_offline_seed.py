@@ -136,13 +136,17 @@ def main():
     a=p.parse_args()
     if a.target < 1: p.error("--target must be positive")
     records=[]
+    track_index=0
+    track_count=sum(len(subjects)*2 for subjects in TOPICS.values())
     for cls, subjects in TOPICS.items():
       for subject, topics in subjects.items():
        for lang in ("hi","en"):
         track=[]
         rng=random.Random(f"quantaedge-{cls}-{subject}-{lang}-v1")
+        track_target=a.target // track_count + (1 if track_index < a.target % track_count else 0)
+        track_index += 1
         i=0
-        while len(track) < a.target:
+        while len(track) < track_target:
          code,title=topics[i%len(topics)]
          if subject=="maths":
           q,answer,kind=math_example(cls,code,lang,i,rng)
@@ -174,13 +178,17 @@ def main():
         records.extend(track)
     # A target other than the default is supported, but the standard corpus is exactly 25k.
     records=records[:a.target]
-    # Stable split by example ID gives exact record-level disjointness. A separate check
-    # documents that template families may share concepts and require teacher review.
+    # Keep every source/topic group in exactly one split to prevent chapter leakage.
     records.sort(key=lambda r:r["example_id"])
     splits={"train":[],"validation":[],"test":[]}
+    group_split={}
     for row in records:
-      n=int(digest(row["example_id"])[:8],16)%100
-      splits["train" if n<80 else ("validation" if n<90 else "test")].append(row)
+      m=row["metadata"]
+      group="|".join(str(m[k]) for k in ("class_code","subject_code","source_id","chapter_code"))
+      if group not in group_split:
+        n=int(digest(group)[:8],16)%100
+        group_split[group]="train" if n<80 else ("validation" if n<90 else "test")
+      splits[group_split[group]].append(row)
     a.output_dir.mkdir(parents=True,exist_ok=True)
     def dump(path,rows):
       with path.open("w",encoding="utf-8",newline="\n") as f:
