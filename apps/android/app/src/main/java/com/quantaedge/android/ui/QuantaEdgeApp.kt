@@ -2483,6 +2483,7 @@ private fun AssessmentAttemptScreen(
     onRefresh: () -> Unit
 ) {
     val questions = attempt.optJSONArray("questions")?.objectItems() ?: emptyList()
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     val attemptId = attempt.longAny("attempt_id", "attemptId", "id")
     val phase = attempt.textAny("status")
     val released = attempt.optBoolean("resultReleased")
@@ -2536,8 +2537,11 @@ private fun AssessmentAttemptScreen(
         }
         if (deadlineReached) {
             Text(
-                if (attempt.optBoolean("offlineMode")) "समय पूरा हो गया है। आपके सुरक्षित उत्तर स्वतः sync queue में भेजे जा रहे हैं।"
-                else "समय पूरा हो गया है। आपका टेस्ट स्वतः जमा किया जा रहा है।",
+                if (attempt.optBoolean("offlineMode"))
+                    t("Time is up. Your encrypted answers are being queued for sync.",
+                        "समय पूरा हो गया है। आपके सुरक्षित उत्तर sync queue में भेजे जा रहे हैं।")
+                else t("Time is up. Your test is being submitted automatically.",
+                    "समय पूरा हो गया है। आपका टेस्ट स्वतः जमा किया जा रहा है।"),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error
             )
@@ -2654,9 +2658,9 @@ private fun AssessmentAttemptScreen(
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                 Text(
                     when {
-                        deadlineReached && attempt.optBoolean("offlineMode") -> "समय पूरा — answers sync करें"
-                        deadlineReached -> "समय पूरा — टेस्ट जमा करें"
-                        else -> "टेस्ट जमा करें"
+                        deadlineReached && attempt.optBoolean("offlineMode") -> t("Time is up — sync answers", "समय पूरा — उत्तर sync करें")
+                        deadlineReached -> t("Time is up — submit test", "समय पूरा — टेस्ट जमा करें")
+                        else -> t("Submit test", "टेस्ट जमा करें")
                     }
                 )
             }
