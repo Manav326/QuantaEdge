@@ -94,7 +94,7 @@ jobs:
         with:
           # The action's legacy default requests the removed SDK package "tools".
           # Install only current SDK packages needed by this compileSdk 36 project.
-          packages: "platform-tools,platforms;android-36,build-tools;36.0.0"
+          packages: "platform-tools platforms;android-36 build-tools;36.0.0"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
