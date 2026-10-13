@@ -18,7 +18,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -33,12 +33,12 @@ fun ParentChildManageScreen(
     onArchive: () -> Unit
 ) {
     val childId = child.longAny("id")
-    var username by remember(childId) { mutableStateOf(child.textAny("login_username")) }
-    var password by remember(childId) { mutableStateOf("") }
+    var username by rememberSaveable(childId) { mutableStateOf(child.textAny("login_username")) }
+    var password by rememberSaveable(childId) { mutableStateOf("") }
     val oldTracks = child.textAny("track_codes").split(',').map { it.trim() }.filter { it.isNotBlank() }
-    var maths by remember(childId) { mutableStateOf("maths" in oldTracks) }
-    var science by remember(childId) { mutableStateOf("science" in oldTracks) }
-    var confirmArchive by remember(childId) { mutableStateOf(false) }
+    var maths by rememberSaveable(childId) { mutableStateOf("maths" in oldTracks) }
+    var science by rememberSaveable(childId) { mutableStateOf("science" in oldTracks) }
+    var confirmArchive by rememberSaveable(childId) { mutableStateOf(false) }
     val tracks = listOfNotNull("maths".takeIf { maths }, "science".takeIf { science })
 
     if (confirmArchive) {
