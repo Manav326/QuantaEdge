@@ -52,6 +52,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -99,6 +100,9 @@ fun QuantaEdgeApp() {
     val preferences = remember { context.getSharedPreferences("qe_preferences", 0) }
     val scope = rememberCoroutineScope()
     var auth by remember { mutableStateOf(JSONObject()) }
+    val saveableStateHolder = rememberSaveableStateHolder()
+    val stateOwnerKey = auth.textAny("user_id", "userId", "id", "account_id", "mobile_e164")
+        .ifBlank { auth.textAny("role", "displayName", "display_name").ifBlank { "anonymous" } }
     val resourceOwner = remember(auth) { com.quantaedge.android.data.ResourceOwnerKey.fromAuth(auth) }
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
@@ -1135,6 +1139,10 @@ fun QuantaEdgeApp() {
             runCatching { ApiClient.postObject("/api/v1/auth/logout") }
             WorkManager.getInstance(context.applicationContext).cancelAllWorkByTag("quantaedge-resource-download")
             ApiClient.clearSession()
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState("$stateOwnerKey:${savedRoute.name}")
+                saveableStateHolder.removeState("anonymous:${savedRoute.name}")
+            }
             auth = JSONObject()
             studentProfile = JSONObject()
             parentChildren = emptyList()
@@ -1279,6 +1287,7 @@ fun QuantaEdgeApp() {
 
             Box(modifier = Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
+                saveableStateHolder.SaveableStateProvider("$stateOwnerKey:${route.name}") {
                 when (route) {
                     AppRoute.LOGIN -> LoginScreen(
                         language = language,
@@ -1547,6 +1556,7 @@ fun QuantaEdgeApp() {
                     )
                 }
                 }
+                }
             }
             if (signedIn && !wideLayout) NavigationBar {
                 navItems.forEach { item ->
@@ -1570,11 +1580,11 @@ private fun LoginScreen(
     onSignup: () -> Unit,
     onResetPassword: () -> Unit
 ) {
-    var mode by remember { mutableStateOf("STUDENT") }
-    var mobile by remember { mutableStateOf("") }
-    var parentMobile by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var mode by rememberSaveable { mutableStateOf("STUDENT") }
+    var mobile by rememberSaveable { mutableStateOf("") }
+    var parentMobile by rememberSaveable { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 22.dp),
@@ -1647,12 +1657,12 @@ private fun ParentOtpFlowScreen(
     onRequestOtp: (String, (String?) -> Unit) -> Unit,
     onVerify: (String, String, String, String) -> Unit
 ) {
-    var mobile by remember { mutableStateOf("") }
-    var displayName by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var otp by remember { mutableStateOf("") }
-    var otpRequested by remember { mutableStateOf(false) }
-    var devCode by remember { mutableStateOf("") }
+    var mobile by rememberSaveable { mutableStateOf("") }
+    var displayName by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var otp by rememberSaveable { mutableStateOf("") }
+    var otpRequested by rememberSaveable { mutableStateOf(false) }
+    var devCode by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp),
