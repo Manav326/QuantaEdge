@@ -1,6 +1,8 @@
 package com.quantaedge.android.ui
 
 import android.graphics.BitmapFactory
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -104,6 +106,9 @@ fun QuantaEdgeApp() {
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var assessmentCertificateEligibility by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
+    var pendingCertificateBytes by remember { mutableStateOf<ByteArray?>(null) }
+    var pendingCertificateFilename by remember { mutableStateOf("quantaedge-certificate.pdf") }
     var progressData by remember { mutableStateOf(JSONObject()) }
     var documents by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
@@ -123,6 +128,34 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
+
+    fun persistPendingCertificate(uri: android.net.Uri?) {
+        val bytes = pendingCertificateBytes
+        if (uri == null || bytes == null) {
+            pendingCertificateBytes = null
+            return
+        }
+        scope.launch {
+            try {
+                withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
+                        ?: throw IOException("Certificate could not be saved to the selected location.")
+                }
+                status = "Certificate saved successfully."
+            } catch (exception: Exception) {
+                error = exception.message ?: "Certificate could not be saved."
+            } finally {
+                pendingCertificateBytes = null
+            }
+        }
+    }
+
+    val resultCertificatePdfLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/pdf")
+    ) { uri -> persistPendingCertificate(uri) }
+    val resultCertificatePngLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("image/png")
+    ) { uri -> persistPendingCertificate(uri) }
 
     LaunchedEffect(resourceOwner, auth.toString()) {
         if (resourceOwner.isNotBlank() && resourceOwner != "guest") {
@@ -483,11 +516,69 @@ fun QuantaEdgeApp() {
     }
 
 
+    suspend fun loadAssessmentResultsData() {
+        val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
+            .optJSONArray("items").objectItems()
+        assessmentResults = loaded
+        val attemptIds = loaded.flatMap { result ->
+            val attempts = result.optJSONArray("attempts").objectItems()
+            if (attempts.isNotEmpty()) attempts else listOf(result)
+        }.map { it.optLongAny("attempt_id", "attemptId") }
+            .filter { it > 0L }.distinct().take(100)
+        assessmentCertificateEligibility = if (attemptIds.isEmpty()) emptyMap() else try {
+            ApiClient.getObject(
+                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptIds.joinToString(",")
+            ).optJSONArray("items").objectItems().mapNotNull { item ->
+                val id = item.optLongAny("attempt_id", "attemptId")
+                if (id > 0L) id to item else null
+            }.toMap()
+        } catch (_: Exception) {
+            // Keep released result history usable even if the certificate policy endpoint is down.
+            emptyMap()
+        }
+    }
+
     fun loadAssessmentResults() {
         runTask {
-            assessmentResults = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + language)
-                .optJSONArray("items").objectItems()
+            loadAssessmentResultsData()
             route = AppRoute.ASSESSMENT_RESULTS
+        }
+    }
+
+    fun issueCertificateForAttempt(attemptId: Long) {
+        runTask {
+            if (attemptId <= 0L) throw IOException("Assessment attempt could not be identified.")
+            ApiClient.postObject(
+                "/api/v1/students/me/certificates/issue",
+                JSONObject()
+                    .put("achievementType", "ASSESSMENT_PASS")
+                    .put("assessmentAttemptId", attemptId)
+                    .put("templateId", "CLASSIC")
+                    .put("language", language)
+            )
+            loadAssessmentResultsData()
+            route = AppRoute.ASSESSMENT_RESULTS
+            status = "Certificate issued. You can now save its PDF or PNG from this result."
+        }
+    }
+
+    fun downloadResultCertificate(certificateId: Long, format: String) {
+        runTask {
+            if (certificateId <= 0L) throw IOException("Certificate record could not be identified.")
+            if (format != "pdf" && format != "png") throw IOException("Choose PDF or PNG.")
+            val bytes = withContext(Dispatchers.IO) {
+                ApiClient.getBytes("/api/v1/students/me/certificates/" + certificateId + "/download?format=" + format)
+            }
+            if (bytes.isEmpty()) throw IOException("The server returned an empty certificate file.")
+            val certificateNumber = assessmentCertificateEligibility.values
+                .firstOrNull { it.optLongAny("certificate_id", "certificateId") == certificateId }
+                ?.optString("certificate_number").orEmpty()
+                .replace(Regex("[^A-Za-z0-9_-]"), "_")
+                .ifBlank { certificateId.toString() }
+            pendingCertificateBytes = bytes
+            pendingCertificateFilename = "quantaedge-$certificateNumber.$format"
+            if (format == "pdf") resultCertificatePdfLauncher.launch(pendingCertificateFilename)
+            else resultCertificatePngLauncher.launch(pendingCertificateFilename)
         }
     }
 
@@ -1256,7 +1347,12 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
                         resultItems = assessmentResults,
-                        onReview = ::openAssessmentReview
+                        certificateEligibility = assessmentCertificateEligibility,
+                        language = language,
+                        busy = busy,
+                        onReview = ::openAssessmentReview,
+                        onIssueCertificate = ::issueCertificateForAttempt,
+                        onDownloadCertificate = ::downloadResultCertificate
                     )
                     AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
