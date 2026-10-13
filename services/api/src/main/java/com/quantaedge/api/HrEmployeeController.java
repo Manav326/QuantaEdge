@@ -128,7 +128,7 @@ public class HrEmployeeController {
       Boolean cycle=jdbc.queryForObject("""
         with recursive ancestors(id,parent_department_id) as (
           select id,parent_department_id from hr_department where id=? and organization_id=?
-          union all
+          union
           select p.id,p.parent_department_id from hr_department p
           join ancestors a on p.id=a.parent_department_id where p.organization_id=?
         )
