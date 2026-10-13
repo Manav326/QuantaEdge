@@ -611,6 +611,20 @@ public class CertificateController {
         .body(bytes);
   }
 
+  @GetMapping("/admin/certificates/for-attempt/{attemptId}")
+  public Map<String, Object> adminCertificateForAttempt(@PathVariable long attemptId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requireAdmin(context);
+    Map<String, Object> row = queryOptional("""
+        SELECT id FROM student_certificate
+        WHERE assessment_attempt_id=? AND achievement_type='ASSESSMENT_PASS'
+        ORDER BY id DESC LIMIT 1
+        """, attemptId);
+    if (row == null) return Map.of("issued", false);
+    return Map.of("issued", true,
+        "certificate", adminCertificateById(((Number) row.get("id")).longValue()));
+  }
+
   @GetMapping("/admin/certificates")
   public Map<String, Object> adminCertificates(@RequestParam(defaultValue = "ALL") String status,
       @RequestParam(defaultValue = "100") int limit, @RequestParam(defaultValue = "0") int offset,
