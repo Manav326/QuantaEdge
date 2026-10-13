@@ -61,6 +61,21 @@ class HrExtendedWorkforceControllerTest {
     verify(jdbc,never()).queryForObject(contains("insert into hr_employee"),eq(Long.class),any(Object[].class));
   }
 
+  @Test void futureLastWorkingDateCannotCompleteExitEarly(){
+    when(authorization.requirePermission(manager,"HR_EXIT_MANAGE")).thenReturn(manager);
+    Map<String,Object> exit=Map.of(
+        "id",44L,"employee_id",31L,"organization_id",1L,"exit_status","READY_FOR_SETTLEMENT",
+        "final_settlement_status","SETTLED","approved_last_working_date",java.sql.Date.valueOf("2099-12-31"));
+    when(jdbc.queryForList(contains("from hr_employee_exit x join hr_employee e"),(Object)any()))
+        .thenReturn(List.of(exit));
+
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,
+        ()->controller.exitStatus(44L,Map.of("status","COMPLETED"),manager));
+
+    assertEquals(409,error.getStatusCode().value());
+    verify(jdbc,never()).update(contains("update hr_employee set employment_status='SEPARATED'"),any(Object[].class));
+  }
+
   @Test void invalidAssetReturnConditionCannotChangeAssignmentOrInventory(){
     when(authorization.requirePermission(manager,"HR_ASSET_MANAGE")).thenReturn(manager);
     Map<String,Object> assignment=new HashMap<>();

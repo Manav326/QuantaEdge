@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,7 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Extended HR workflows. Employee records always use hr_employee; this controller never
- * creates an alternate employee registry or silently changes employment status on exit.
+ * creates an alternate employee registry and finalizes separation only after the approved
+ * last-working date, checklist and settlement are all satisfied.
  */
 @RestController
 @RequestMapping("/api/v1/hr")
@@ -291,15 +293,31 @@ public class HrExtendedWorkforceController {
     require(c,"HR_EXIT_MANAGE"); Map<String,Object> old=one("select x.*,e.organization_id from hr_employee_exit x join hr_employee e on e.id=x.employee_id where x.id=? for update",id);
     String current=String.valueOf(old.get("exit_status")),next=required(b.get("status"),24,"Status").toUpperCase();
     if(!Map.of("REQUESTED",List.of("UNDER_REVIEW","CANCELLED"),"UNDER_REVIEW",List.of("APPROVED","CANCELLED"),"APPROVED",List.of("CLEARANCE","CANCELLED"),"CLEARANCE",List.of("READY_FOR_SETTLEMENT"),"READY_FOR_SETTLEMENT",List.of("COMPLETED"),"COMPLETED",List.of(),"CANCELLED",List.of()).getOrDefault(current,List.of()).contains(next)) throw conflict("Invalid exit workflow transition.");
+    LocalDate approved=old.get("approved_last_working_date") instanceof Date d?d.toLocalDate():null;
+    if(b.get("approvedLastWorkingDate")!=null) approved=date(String.valueOf(b.get("approvedLastWorkingDate")),"Approved last working date");
+    if("APPROVED".equals(next)&&approved==null)
+      throw bad("Record the approved last working date before approving this exit.");
     if("COMPLETED".equals(next)) {
+      if(approved==null) throw conflict("An approved last working date is required before exit completion.");
+      LocalDate today=LocalDate.now(ZoneId.of("Asia/Kolkata"));
+      if(approved.isAfter(today))
+        throw conflict("The approved last working date is in the future. Complete the exit and revoke access on or after that date.");
       Long pending=jdbc.queryForObject("select count(*) from hr_exit_checklist_item where exit_id=? and item_status not in ('CLEARED','WAIVED')",Long.class,id);
       if(pending!=null&&pending>0) throw conflict("All exit checklist items must be cleared or waived before completion.");
       if(!"SETTLED".equals(old.get("final_settlement_status"))) throw conflict("Final settlement must be confirmed as settled before exit completion.");
+      int changedEmployee=jdbc.update("""
+        update hr_employee set employment_status='SEPARATED',exit_date=?,hrms_access_enabled=false,
+          updated_by_staff_id=?,updated_at=now()
+        where id=? and organization_id=? and employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        """,Date.valueOf(approved),c.staffId(),old.get("employee_id"),old.get("organization_id"));
+      if(changedEmployee!=1)
+        throw conflict("The canonical employee record changed or is already separated. Refresh the employee and exit workflow before retrying.");
     }
-    LocalDate approved=old.get("approved_last_working_date") instanceof Date d?d.toLocalDate():null;
-    if(b.get("approvedLastWorkingDate")!=null) approved=date(String.valueOf(b.get("approvedLastWorkingDate")),"Approved last working date");
     jdbc.update("update hr_employee_exit set exit_status=?,approved_last_working_date=coalesce(?,approved_last_working_date),hr_notes=coalesce(?,hr_notes),completed_at=case when ?='COMPLETED' then now() else completed_at end,updated_at=now() where id=?",next,approved==null?null:Date.valueOf(approved),optional(b.get("notes"),4000),next,id);
-    event(((Number)old.get("organization_id")).longValue(),"EXIT",id,"STATUS_"+next,c,optional(b.get("reason"),1000),"{}");
+    event(((Number)old.get("organization_id")).longValue(),"EXIT",id,"STATUS_"+next,c,optional(b.get("reason"),1000),
+        "COMPLETED".equals(next)?"{\"employeeId\":"+old.get("employee_id")+",\"employmentStatus\":\"SEPARATED\",\"exitDate\":\""+approved+"\"}":"{}");
+    if("COMPLETED".equals(next))
+      record(c,"/api/v1/hr/exits/"+id,"Finalized employee separation effective "+approved+" and disabled HRMS access.");
     return one("select * from hr_employee_exit where id=?",id);
   }
   @PatchMapping("/exits/{id}/checklist/{itemId}") @Transactional

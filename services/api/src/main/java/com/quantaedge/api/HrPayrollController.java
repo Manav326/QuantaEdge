@@ -172,7 +172,7 @@ public class HrPayrollController {
     long orgId=((Number)period.get("organization_id")).longValue();
     LocalDate start=((Date)period.get("start_date")).toLocalDate(),end=((Date)period.get("end_date")).toLocalDate();
     Boolean partialEmployment=jdbc.queryForObject("""
-      select exists(select 1 from hr_employee e where e.organization_id=? and e.employment_status='ACTIVE'
+      select exists(select 1 from hr_employee e where e.organization_id=? and (e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD','SEPARATED') and (e.employment_status<>'SEPARATED' or e.exit_date is not null))
         and e.joining_date<=? and (e.exit_date is null or e.exit_date>=?)
         and (e.joining_date>? or (e.exit_date is not null and e.exit_date<?)))
       """,Boolean.class,orgId,Date.valueOf(end),Date.valueOf(start),Date.valueOf(start),Date.valueOf(end));
@@ -180,7 +180,7 @@ public class HrPayrollController {
       throw conflict("An employee joins or exits inside this payroll month. Configure a reviewed proration policy before calculating payroll.");
     Boolean partialCompensation=jdbc.queryForObject("""
       select exists(select 1 from hr_employee_salary_component x join hr_employee e on e.id=x.employee_id
-        where x.organization_id=? and e.employment_status='ACTIVE' and e.joining_date<=?
+        where x.organization_id=? and (e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD','SEPARATED') and (e.employment_status<>'SEPARATED' or e.exit_date is not null)) and e.joining_date<=?
           and (e.exit_date is null or e.exit_date>=?) and x.effective_from<=?
           and (x.effective_to is null or x.effective_to>=?)
           and (x.effective_from>? or (x.effective_to is not null and x.effective_to<?)))
@@ -189,7 +189,7 @@ public class HrPayrollController {
       throw conflict("A compensation component changes inside this payroll month. Configure a reviewed proration policy before calculating payroll.");
     List<Map<String,Object>> missing=jdbc.queryForList("""
       select e.id,e.employee_number from hr_employee e
-      where e.organization_id=? and e.employment_status='ACTIVE' and e.joining_date<=?
+      where e.organization_id=? and (e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD','SEPARATED') and (e.employment_status<>'SEPARATED' or e.exit_date is not null)) and e.joining_date<=?
         and (e.exit_date is null or e.exit_date>=?)
         and not exists(select 1 from hr_employee_salary_component x where x.employee_id=e.id
           and x.organization_id=e.organization_id and x.effective_from<=?
@@ -211,11 +211,11 @@ public class HrPayrollController {
       join hr_employee_salary_component x on x.employee_id=e.id and x.organization_id=e.organization_id
         and x.effective_from<=? and (x.effective_to is null or x.effective_to>=?)
       join hr_salary_component c on c.id=x.component_id and c.organization_id=e.organization_id
-      where e.organization_id=? and e.employment_status='ACTIVE' and e.joining_date<=?
+      where e.organization_id=? and (e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD','SEPARATED') and (e.employment_status<>'SEPARATED' or e.exit_date is not null)) and e.joining_date<=?
         and (e.exit_date is null or e.exit_date>=?)
       group by e.id,e.employee_number,e.display_name,x.currency order by e.employee_number,e.id
       """,Date.valueOf(end),Date.valueOf(start),orgId,Date.valueOf(end),Date.valueOf(start));
-    if(lines.isEmpty()) throw conflict("No active employees with effective compensation are eligible for this payroll period.");
+    if(lines.isEmpty()) throw conflict("No employees with eligible employment dates and effective compensation are available for this payroll period.");
     String currency=String.valueOf(lines.getFirst().get("currency"));
     if(lines.stream().anyMatch(line->!currency.equals(String.valueOf(line.get("currency"))))) throw bad("One payroll run cannot mix currencies. Separate the payroll by currency.");
     if(lines.stream().anyMatch(line->((BigDecimal)line.get("gross_amount")).compareTo((BigDecimal)line.get("deduction_amount"))<0))

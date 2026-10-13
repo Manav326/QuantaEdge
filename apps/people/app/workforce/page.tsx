@@ -22,7 +22,7 @@ export default function ExtendedWorkforcePage(){
  const [vacancies,setVacancies]=useState<any[]>([]),[candidates,setCandidates]=useState<any[]>([]),[cycles,setCycles]=useState<any[]>([]),[reviews,setReviews]=useState<any[]>([]),[assets,setAssets]=useState<any[]>([]),[exits,setExits]=useState<any[]>([]),[employees,setEmployees]=useState<any[]>([]);
  const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [candidateToConvert,setCandidateToConvert]=useState<any|null>(null),[convertDate,setConvertDate]=useState(today()),[convertType,setConvertType]=useState('FULL_TIME');
- const [selectedExitId,setSelectedExitId]=useState<number|null>(null),[checklistRows,setChecklistRows]=useState<any[]>([]);
+ const [selectedExitId,setSelectedExitId]=useState<number|null>(null),[checklistRows,setChecklistRows]=useState<any[]>([]),[approvedExitDates,setApprovedExitDates]=useState<Record<number,string>>({});
  const [vacancy,setVacancy]=useState({title:'',description:'',openings:'1'}),[candidate,setCandidate]=useState({fullName:'',email:'',phoneE164:'',vacancyId:'',notes:''});
  const [cycle,setCycle]=useState({name:'',startDate:today(),endDate:today(),dueDate:''}),[review,setReview]=useState({cycleId:'',employeeId:'',reviewerEmployeeId:''});
  const [asset,setAsset]=useState({assetTag:'',assetType:'',description:'',serialNumber:''}),[assign,setAssign]=useState({assetId:'',employeeId:'',condition:'GOOD',note:'',expectedReturnDate:''});
@@ -124,7 +124,7 @@ export default function ExtendedWorkforcePage(){
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>Employee</th><th>Exit type</th><th>Requested last day</th><th>Workflow</th><th>Final settlement</th>{can('HR_EXIT_MANAGE') && <th>Next action</th>}</tr>
+              <tr><th>Employee</th><th>Exit type</th><th>Requested last day</th><th>Approved last day</th><th>Workflow</th><th>Final settlement</th>{can('HR_EXIT_MANAGE') && <th>Next action</th>}</tr>
             </thead>
             <tbody>
               {exits.map(item => (
@@ -132,13 +132,28 @@ export default function ExtendedWorkforcePage(){
                   <td>{item.display_name}<div className="small">{item.employee_number}</div></td>
                   <td>{pretty(item.exit_type)}</td>
                   <td>{item.requested_last_working_date}</td>
+                  <td>{item.approved_last_working_date || 'Not approved'}</td>
                   <td><PeopleStatusBadge status={pretty(item.exit_status)} /></td>
                   <td><PeopleStatusBadge status={pretty(item.final_settlement_status)} /></td>
                   {can('HR_EXIT_MANAGE') && (
                     <td style={{display: 'flex', gap: 6, flexWrap: 'wrap'}}>
                       <button className="secondary" type="button" onClick={() => void openChecklist(item.id)}>Checklist</button>
+                      {item.exit_status === 'UNDER_REVIEW' && (
+                        <label className="small">Approved last working date
+                          <input className="input" type="date" required min={today()} value={approvedExitDates[item.id] ?? String(item.requested_last_working_date || '').slice(0,10)} onChange={e => setApprovedExitDates(v => ({...v, [item.id]: e.target.value}))} />
+                        </label>
+                      )}
                       {exitNextStatus[item.exit_status] && (
-                        <button className="secondary" type="button" onClick={() => void mutate('/api/v1/hr/exits/' + item.id + '/status', {status: exitNextStatus[item.exit_status], notes: 'Reviewed in People Operations'}, 'PATCH')}>Advance workflow</button>
+                        <button className="secondary" type="button" disabled={item.exit_status === 'UNDER_REVIEW' && !(approvedExitDates[item.id] ?? String(item.requested_last_working_date || '').slice(0,10))} onClick={() => {
+                          const approvedLastWorkingDate = item.exit_status === 'UNDER_REVIEW'
+                            ? (approvedExitDates[item.id] ?? String(item.requested_last_working_date || '').slice(0,10))
+                            : undefined;
+                          void mutate('/api/v1/hr/exits/' + item.id + '/status', {
+                            status: exitNextStatus[item.exit_status],
+                            notes: 'Reviewed in People Operations',
+                            ...(approvedLastWorkingDate ? {approvedLastWorkingDate} : {})
+                          }, 'PATCH');
+                        }}>Advance workflow</button>
                       )}
                       {item.exit_status === 'READY_FOR_SETTLEMENT' && item.final_settlement_status !== 'SETTLED' && (
                         <button className="secondary" type="button" onClick={() => void mutate('/api/v1/hr/exits/' + item.id + '/settlement', {status: 'SETTLED', reason: 'Settlement confirmed by authorised payroll reviewer'}, 'PATCH')}>Record settlement</button>
