@@ -37,7 +37,7 @@ function installRefreshRecovery() {
     const requestInit = isApi ? undefined : init;
     const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
     const response = await nativeFetch(requestInput, requestInit);
-    if (skip || (response.status !== 401 && response.status !== 403)) return response;
+    if (skip || response.status !== 401) return response;
     if (!refreshInFlight) {
       refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
