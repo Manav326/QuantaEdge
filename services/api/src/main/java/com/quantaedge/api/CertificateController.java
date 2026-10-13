@@ -9,10 +9,13 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.HexFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ContentDisposition;
@@ -87,6 +90,52 @@ public class CertificateController {
     return Map.of("items", items);
   }
 
+  @GetMapping("/guardians/children/{studentId}/certificates")
+  public Map<String, Object> childCertificates(@PathVariable long studentId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    List<Map<String, Object>> items = jdbc.queryForList("""
+        SELECT """ + CERTIFICATE_COLUMNS + " " + CERTIFICATE_JOIN + """
+        WHERE c.student_id=?
+        ORDER BY c.issued_at DESC,c.id DESC
+        LIMIT 200
+        """, studentId);
+    return Map.of("items", items, "studentId", studentId);
+  }
+
+  @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/view")
+  public ResponseEntity<byte[]> viewChildCertificate(@PathVariable long studentId,
+      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    return certificateArtifact(certificateId, studentId, format, true);
+  }
+
+  @GetMapping("/guardians/children/{studentId}/certificates/{certificateId}/download")
+  public ResponseEntity<byte[]> downloadChildCertificate(@PathVariable long studentId,
+      @PathVariable long certificateId, @RequestParam(defaultValue = "pdf") String format,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireParent(context);
+    requireGuardianChild(context, studentId);
+    return certificateArtifact(certificateId, studentId, format, false);
+  }
+
+  private void requireGuardianChild(AuthContext context, long studentId) {
+    Boolean allowed = jdbc.queryForObject("""
+        SELECT EXISTS (
+          SELECT 1 FROM guardian_student gs
+          JOIN student st ON st.id=gs.student_id
+          WHERE gs.guardian_user_id=? AND gs.student_id=? AND gs.active=true
+            AND gs.consent_status='CONSENTED' AND st.active=true
+        )
+        """, Boolean.class, context.userId(), studentId);
+    if (!Boolean.TRUE.equals(allowed)) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Child not found.");
+    }
+  }
+
   @GetMapping("/students/me/certificates/eligible-assessments")
   public Map<String, Object> eligibleAssessments(
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
@@ -98,90 +147,146 @@ public class CertificateController {
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
-        JOIN curriculum_subject s ON s.id=a.subject_id
-        JOIN curriculum_class cc ON cc.id=s.class_id
+        JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
+        JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
+        JOIN student st ON st.id=att.student_id AND st.active=true AND st.class_code=cc.code
         WHERE att.student_id=? AND att.status='RELEASED'
-          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
           AND att.final_score IS NOT NULL AND att.max_score>0
-          AND 100.0*att.final_score/NULLIF(att.max_score,0)>=?
+          AND 100.0*att.final_score/att.max_score >= ?
+          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
+          AND EXISTS (
+            SELECT 1 FROM student_track_enrollment ste
+            WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+          )
+          AND EXISTS (
+            SELECT 1 FROM curriculum_chapter ch
+            JOIN lesson l ON l.chapter_id=ch.id
+            WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
+              AND l.active=true AND l.status='PUBLISHED'
+          )
+          AND NOT EXISTS (
+            SELECT 1 FROM curriculum_chapter ch
+            JOIN lesson l ON l.chapter_id=ch.id
+            LEFT JOIN student_lesson_progress p ON p.student_id=st.id AND p.lesson_id=l.id
+            WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
+              AND l.active=true AND l.status='PUBLISHED'
+              AND p.status IS DISTINCT FROM 'COMPLETED'
+          )
+          AND NOT EXISTS (
+            SELECT 1 FROM student_certificate existing
+            WHERE existing.student_id=att.student_id
+              AND existing.assessment_attempt_id=att.id
+              AND existing.achievement_type='ASSESSMENT_PASS'
+          )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
         """, context.studentId(), minimumPassPercent);
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
+    result.put("rule", "ADMIN_CREATED_RELEASED_PASS_AND_SUBJECT_COMPLETION");
     return result;
   }
 
-  @GetMapping("/students/me/certificates/assessment-attempts/{attemptId}")
-  public Map<String, Object> certificateEligibilityForAttempt(@PathVariable long attemptId,
+  /**
+   * Evaluates the exact result attempts currently displayed to a student. Attempt IDs are
+   * always re-scoped to the authenticated student; client-supplied eligibility is never trusted.
+   */
+  @GetMapping("/students/me/certificates/assessment-eligibility")
+  public Map<String, Object> assessmentCertificateEligibility(
+      @RequestParam String attemptIds,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
-    Map<String, Object> attempt = queryOptional("""
-        SELECT att.id AS attempt_id,att.status,att.final_score,att.max_score,
-               a.assessment_type,a.is_generated
+    Set<Long> uniqueIds = new LinkedHashSet<>();
+    for (String raw : attemptIds.split(",")) {
+      String value = raw.trim();
+      if (value.isEmpty()) continue;
+      try {
+        long id = Long.parseLong(value);
+        if (id < 1) throw new NumberFormatException();
+        uniqueIds.add(id);
+      } catch (NumberFormatException ex) {
+        throw new IllegalArgumentException("Assessment attempt IDs must be positive integers.");
+      }
+      if (uniqueIds.size() > 100) {
+        throw new IllegalArgumentException("Check certificate eligibility for at most 100 attempts at a time.");
+      }
+    }
+    if (uniqueIds.isEmpty()) return Map.of("items", List.of(), "passThresholdPercent", minimumPassPercent);
+
+    String placeholders = String.join(",", java.util.Collections.nCopies(uniqueIds.size(), "?"));
+    List<Object> args = new ArrayList<>();
+    args.add(context.studentId());
+    args.addAll(uniqueIds);
+    String sql = """
+        SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
+               att.status,att.final_score,att.max_score,att.released_at,s.id AS subject_id,
+               s.code AS subject_code,s.display_name AS subject_name,cc.code AS class_code,
+               round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
+               EXISTS (
+                 SELECT 1 FROM student_track_enrollment ste
+                 JOIN student active_st ON active_st.id=ste.student_id AND active_st.active=true
+                 JOIN curriculum_subject active_s ON active_s.id=ste.subject_id AND active_s.active=true
+                 JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id
+                   AND active_cc.active=true AND active_cc.code=active_st.class_code
+                 WHERE ste.student_id=att.student_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                   AND active_st.id=att.student_id AND active_s.id=s.id
+               ) AS active_subject_track,
+               COALESCE(progress.total_lessons,0) AS published_lessons,
+               COALESCE(progress.completed_lessons,0) AS completed_lessons,
+               cert.id AS certificate_id,cert.certificate_number,cert.status AS certificate_status
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
-        WHERE att.id=? AND att.student_id=?
-        """, attemptId, context.studentId());
-    if (attempt == null) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Assessment result not found.");
+        JOIN curriculum_subject s ON s.id=a.subject_id
+        JOIN curriculum_class cc ON cc.id=s.class_id
+        JOIN student st ON st.id=att.student_id AND st.active=true
+        LEFT JOIN LATERAL (
+          SELECT COUNT(DISTINCT l.id) AS total_lessons,
+                 COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
+          FROM curriculum_chapter ch
+          JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
+          LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.lesson_id=l.id
+          WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
+        ) progress ON true
+        LEFT JOIN student_certificate cert
+          ON cert.student_id=att.student_id AND cert.assessment_attempt_id=att.id
+             AND cert.achievement_type='ASSESSMENT_PASS'
+        WHERE att.student_id=?
+        ORDER BY att.released_at DESC NULLS LAST,att.id DESC
+        """;
+    sql = sql.replace("WHERE att.student_id=?", "WHERE att.student_id=? AND att.id IN (" + placeholders + ")");
+    List<Map<String, Object>> rows = jdbc.queryForList(sql, args.toArray());
+    List<Map<String, Object>> items = new ArrayList<>();
+    for (Map<String, Object> row : rows) {
+      Map<String, Object> item = new LinkedHashMap<>(row);
+      String reason = assessmentEligibilityReason(row);
+      item.put("eligible", reason == null);
+      item.put("eligibility_reason", reason);
+      item.put("pass_threshold_percent", minimumPassPercent);
+      items.add(item);
     }
+    return Map.of("items", items, "passThresholdPercent", minimumPassPercent);
+  }
 
-    String status = String.valueOf(attempt.get("status"));
-    String assessmentType = String.valueOf(attempt.get("assessment_type"));
-    boolean generated = Boolean.TRUE.equals(attempt.get("is_generated"));
-    BigDecimal finalScore = attempt.get("final_score") == null ? null : decimal(attempt.get("final_score"));
-    BigDecimal maxScore = attempt.get("max_score") == null ? BigDecimal.ZERO : decimal(attempt.get("max_score"));
-    BigDecimal scorePercent = finalScore != null && maxScore.signum() > 0
-        ? finalScore.multiply(BigDecimal.valueOf(100)).divide(maxScore, 2, RoundingMode.HALF_UP)
-        : null;
-    boolean adminCreated = "ADMIN_CREATED".equals(assessmentType) && !generated;
-    boolean released = "RELEASED".equals(status);
-    boolean passed = finalScore != null && maxScore.signum() > 0
-        && finalScore.multiply(BigDecimal.valueOf(100))
-            .compareTo(maxScore.multiply(minimumPassPercent)) >= 0;
-    boolean eligible = adminCreated && released && passed;
-
-    Map<String, Object> certificate = queryOptional("""
-        SELECT id,certificate_number,achievement_title,status,issued_at
-        FROM student_certificate
-        WHERE student_id=? AND assessment_attempt_id=?
-        ORDER BY issued_at DESC,id DESC
-        LIMIT 1
-        """, context.studentId(), attemptId);
-
-    String reason = "";
-    if (certificate != null) {
-      reason = "ISSUED".equals(String.valueOf(certificate.get("status")))
-          ? "A certificate has already been issued for this result."
-          : "The certificate for this result was revoked; contact support if you believe this is an error.";
-    } else if (!adminCreated) {
-      reason = "Only admin-created assessments qualify. Topic-end and chapter-end tests are excluded.";
-    } else if (!released) {
-      reason = "The final result must be released before a certificate can be issued.";
-    } else if (scorePercent == null) {
-      reason = "A final score is not available for this result.";
-    } else if (!passed) {
-      reason = "A score of at least "
-          + minimumPassPercent.stripTrailingZeros().toPlainString()
-          + "% is required; this result is " + scorePercent.toPlainString() + "%.";
-    }
-
-    Map<String, Object> result = new LinkedHashMap<>();
-    result.put("attemptId", attemptId);
-    result.put("assessmentType", assessmentType);
-    result.put("isGenerated", generated);
-    result.put("status", status);
-    result.put("finalScore", finalScore);
-    result.put("maxScore", maxScore);
-    result.put("scorePercent", scorePercent);
-    result.put("passThresholdPercent", minimumPassPercent);
-    result.put("eligible", eligible);
-    result.put("canIssue", eligible && certificate == null);
-    result.put("reason", reason);
-    result.put("certificate", certificate);
-    return result;
+  private String assessmentEligibilityReason(Map<String, Object> attempt) {
+    String certificateStatus = clean(attempt.get("certificate_status"));
+    if ("ISSUED".equals(certificateStatus)) return "ALREADY_ISSUED";
+    if ("REVOKED".equals(certificateStatus)) return "CERTIFICATE_REVOKED";
+    if (!"ADMIN_CREATED".equals(clean(attempt.get("assessment_type")))
+        || Boolean.TRUE.equals(attempt.get("is_generated"))) return "ADMIN_CREATED_TEST_ONLY";
+    if (!"RELEASED".equals(clean(attempt.get("status")))) return "RESULT_NOT_RELEASED";
+    if (!Boolean.TRUE.equals(attempt.get("active_subject_track"))) return "SUBJECT_TRACK_NOT_ACTIVE";
+    long total = number(attempt.get("published_lessons"));
+    long completed = number(attempt.get("completed_lessons"));
+    if (total < 1) return "PUBLISHED_LESSONS_NOT_AVAILABLE";
+    if (completed != total) return "SUBJECT_COMPLETION_REQUIRED";
+    if (attempt.get("final_score") == null || attempt.get("max_score") == null) return "INVALID_SCORE";
+    BigDecimal score = decimal(attempt.get("final_score"));
+    BigDecimal max = decimal(attempt.get("max_score"));
+    if (max.signum() <= 0) return "INVALID_SCORE";
+    if (score.multiply(BigDecimal.valueOf(100))
+        .compareTo(max.multiply(minimumPassPercent)) < 0) return "PASS_THRESHOLD_NOT_MET";
+    return null;
   }
 
   @PostMapping("/students/me/certificates/issue")
@@ -280,15 +385,14 @@ public class CertificateController {
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
                cc.code AS class_code,s.id AS subject_id,s.code AS subject_code,s.display_name AS subject_name,
-               a.title AS assessment_title,att.id AS assessment_attempt_id,
-               att.final_score,att.max_score,att.released_at
+               a.title AS assessment_title,a.assessment_type,a.is_generated,
+               att.id AS assessment_attempt_id,att.final_score,att.max_score,att.released_at
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
-        JOIN student st ON st.id=att.student_id AND st.active=true
+        JOIN student st ON st.id=att.student_id AND st.active=true AND st.class_code=cc.code
         WHERE st.id=? AND att.student_id=? AND att.id=? AND att.status='RELEASED'
-          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
           AND att.final_score IS NOT NULL AND att.max_score>0
         """, studentId, studentId, attemptId);
     if (achievement == null) {
@@ -297,14 +401,38 @@ public class CertificateController {
     }
     String key = "ASSESSMENT_PASS:" + attemptId;
     Map<String, Object> existing = existingCertificate(studentId, key);
+    // Previously issued records remain immutable and downloadable unless revoked, even if
+    // curriculum content later changes. New issuance below must pass today's full policy.
     if (existing != null) return existingOrRejectRevoked(existing);
+
+    if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
+        || Boolean.TRUE.equals(achievement.get("is_generated"))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "Only admin-created assessments (not generated topic/chapter tests or practice) can earn a test certificate.");
+    }
+
+    Map<String, Object> progress = subjectCompletionStats(studentId,
+        ((Number) achievement.get("subject_id")).longValue());
+    if (!Boolean.TRUE.equals(progress.get("active_subject_track"))) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "Certificate requires an active enrollment in this subject for your current class.");
+    }
+    long publishedLessons = number(progress.get("total_lessons"));
+    long completedLessons = number(progress.get("completed_lessons"));
+    if (publishedLessons < 1) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "This subject has no currently published lessons ready for certificate completion.");
+    }
+    if (completedLessons != publishedLessons) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          "Complete all " + publishedLessons + " currently published lessons in this subject before requesting its test certificate.");
+    }
 
     BigDecimal finalScore = decimal(achievement.get("final_score"));
     BigDecimal maxScore = decimal(achievement.get("max_score"));
     if (maxScore.signum() <= 0) throw new ResponseStatusException(HttpStatus.CONFLICT, "Assessment maximum score is invalid.");
     BigDecimal percent = finalScore.multiply(BigDecimal.valueOf(100)).divide(maxScore, 2, RoundingMode.HALF_UP);
-    if (finalScore.multiply(BigDecimal.valueOf(100))
-        .compareTo(maxScore.multiply(minimumPassPercent)) < 0) {
+    if (finalScore.multiply(BigDecimal.valueOf(100)).compareTo(maxScore.multiply(minimumPassPercent)) < 0) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "Certificate requires at least " + minimumPassPercent.stripTrailingZeros().toPlainString()
               + "%; your released result is " + percent.toPlainString() + "%.");
@@ -374,26 +502,37 @@ public class CertificateController {
   @GetMapping("/students/me/certificates/{certificateId}/download")
   public ResponseEntity<byte[]> downloadMyCertificate(@PathVariable long certificateId,
       @RequestParam(defaultValue = "pdf") String format,
-      @RequestParam(defaultValue = "attachment") String disposition,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return studentCertificateArtifact(certificateId, format, context, false);
+  }
+
+  @GetMapping("/students/me/certificates/{certificateId}/view")
+  public ResponseEntity<byte[]> viewMyCertificate(@PathVariable long certificateId,
+      @RequestParam(defaultValue = "pdf") String format,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    return studentCertificateArtifact(certificateId, format, context, true);
+  }
+
+  private ResponseEntity<byte[]> studentCertificateArtifact(long certificateId, String format,
+      AuthContext context, boolean inline) {
     context = authorization.requireStudent(context);
-    String normalizedFormat = format.trim().toLowerCase(Locale.ROOT);
-    String normalizedDisposition = disposition == null ? "attachment" : disposition.trim().toLowerCase(Locale.ROOT);
+    return certificateArtifact(certificateId, context.studentId(), format, inline);
+  }
+
+  private ResponseEntity<byte[]> certificateArtifact(long certificateId, long studentId,
+      String format, boolean inline) {
+    String normalizedFormat = format == null ? "pdf" : format.trim().toLowerCase(Locale.ROOT);
     if (!List.of("pdf", "png").contains(normalizedFormat)) {
       throw new IllegalArgumentException("Choose PDF or PNG format.");
-    }
-    if (!List.of("attachment", "inline").contains(normalizedDisposition)) {
-      throw new IllegalArgumentException("Choose inline or attachment certificate delivery.");
     }
     Map<String, Object> certificate = queryOptional("""
         SELECT id,certificate_number,status,pdf_storage_key,png_storage_key,pdf_sha256,png_sha256
         FROM student_certificate WHERE id=? AND student_id=?
-        """, certificateId, context.studentId());
+        """, certificateId, studentId);
     if (certificate == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.GONE, "This certificate has been revoked and is no longer downloadable as valid proof.");
     }
-
     boolean pdfFormat = "pdf".equals(normalizedFormat);
     String key = String.valueOf(certificate.get(pdfFormat ? "pdf_storage_key" : "png_storage_key"));
     String expectedHash = String.valueOf(certificate.get(pdfFormat ? "pdf_sha256" : "png_sha256")).trim();
@@ -403,8 +542,11 @@ public class CertificateController {
     }
     MediaType contentType = pdfFormat ? MediaType.APPLICATION_PDF : MediaType.IMAGE_PNG;
     String filename = "QuantaEdge-" + certificate.get("certificate_number") + "." + normalizedFormat;
+    ContentDisposition disposition = inline
+        ? ContentDisposition.inline().filename(filename).build()
+        : ContentDisposition.attachment().filename(filename).build();
     return ResponseEntity.ok().contentType(contentType).cacheControl(CacheControl.noStore())
-        .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.builder(normalizedDisposition).filename(filename).build().toString())
+        .header(HttpHeaders.CONTENT_DISPOSITION, disposition.toString())
         .header("X-Content-Type-Options", "nosniff")
         .header("X-Certificate-Number", String.valueOf(certificate.get("certificate_number")))
         .body(bytes);
@@ -467,6 +609,20 @@ public class CertificateController {
         .header("X-Content-Type-Options", "nosniff")
         .header("X-Robots-Tag", "noindex, nofollow")
         .body(bytes);
+  }
+
+  @GetMapping("/admin/certificates/for-attempt/{attemptId}")
+  public Map<String, Object> adminCertificateForAttempt(@PathVariable long attemptId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorization.requireAdmin(context);
+    Map<String, Object> row = queryOptional("""
+        SELECT id FROM student_certificate
+        WHERE assessment_attempt_id=? AND achievement_type='ASSESSMENT_PASS'
+        ORDER BY id DESC LIMIT 1
+        """, attemptId);
+    if (row == null) return Map.of("issued", false);
+    return Map.of("issued", true,
+        "certificate", adminCertificateById(((Number) row.get("id")).longValue()));
   }
 
   @GetMapping("/admin/certificates")
@@ -565,6 +721,29 @@ public class CertificateController {
         VALUES (?,?,'ADMIN','REVOKED',?::jsonb)
         """, certificateId, context.staffId(), json(detail));
     return adminCertificateById(certificateId);
+  }
+
+  private Map<String, Object> subjectCompletionStats(long studentId, long subjectId) {
+    return jdbc.queryForMap("""
+        SELECT EXISTS (
+                 SELECT 1
+                 FROM student st
+                 JOIN student_track_enrollment ste
+                   ON ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+                 JOIN curriculum_class cc
+                   ON cc.id=s.class_id AND cc.code=st.class_code AND cc.active=true
+                 WHERE st.id=? AND st.active=true AND s.active=true
+               ) AS active_subject_track,
+               COUNT(DISTINCT l.id) AS total_lessons,
+               COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
+        FROM curriculum_subject s
+        LEFT JOIN curriculum_chapter ch
+          ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
+        LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
+        LEFT JOIN student_lesson_progress p ON p.student_id=? AND p.lesson_id=l.id
+        WHERE s.id=?
+        GROUP BY s.id
+        """, studentId, studentId, subjectId);
   }
 
   private Map<String, Object> existingCertificate(long studentId, String key) {

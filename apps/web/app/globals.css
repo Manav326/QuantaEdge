@@ -1004,3 +1004,20 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
     outline-offset: 3px;
   }
 }
+
+
+/* Certificate access on learner results and the read-only parent report. */
+.parent-test-line{align-items:flex-start;gap:12px}
+.parent-test-result{display:grid;justify-items:end;gap:7px;min-width:0}
+.parent-certificate-actions,.student-certificate-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.parent-certificate-actions a,.student-certificate-actions a{display:inline-flex;align-items:center;min-height:27px;padding:5px 8px;border:1px solid #e6c5ad;border-radius:8px;background:#fff8f2;color:#963d12;text-decoration:none;font-size:10px;font-weight:800;white-space:nowrap}
+.parent-certificate-actions a:hover,.student-certificate-actions a:hover{background:#fff0e5;border-color:#d97745}
+.parent-certificate-revoked{font-size:10px;color:#a32828}
+.student-result-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;flex-wrap:wrap;margin-top:6px}
+.student-cert-issue{display:inline-flex;align-items:center;min-height:28px;padding:6px 9px;border:1px solid #c2410c;border-radius:8px;background:#c2410c;color:#fff;font:inherit;font-size:10px;font-weight:800;cursor:pointer}
+.student-cert-issue:disabled{opacity:.5;cursor:wait}
+.student-cert-hint{max-width:310px;color:var(--muted,#667085);font-size:10px;line-height:1.5;text-align:right}
+@media(max-width:620px){.parent-test-line{flex-direction:column}.parent-test-result{width:100%;justify-items:start}.parent-certificate-actions,.student-certificate-actions{justify-content:flex-start}.student-result-actions{justify-content:flex-start}.student-cert-hint{text-align:left}}
+.student-test-line{align-items:flex-start;gap:12px}
+.student-test-result{display:grid;justify-items:end;gap:7px;min-width:0}
+@media(max-width:620px){.student-test-line{flex-direction:column}.student-test-result{width:100%;justify-items:start}}

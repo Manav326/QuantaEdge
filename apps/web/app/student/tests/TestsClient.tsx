@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Tests.module.css';
-import CertificateActions from '../../components/CertificateActions';
 
 type AssessmentCard = {
   assessment_id:number;title:string;description?:string;duration_minutes:number;max_attempts:number;
@@ -23,11 +22,14 @@ type AttemptQuestion = {
 type Attempt = {
   attempt_id:number;assessment_id:number;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
-  assessment_type?:string;is_generated?:boolean;
   questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
-type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;is_generated?:boolean;subject_name:string;chapter_name?:string|null;question_count:number};
+type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
+type CertificateEligibility = {
+  attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
+  certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
+};
 
 type LeaderboardEntry = {
   rank:number;
@@ -140,6 +142,8 @@ export default function TestsClient(){
   const [resultsPage,setResultsPage]=useState(0);
   const [resultsTotal,setResultsTotal]=useState(0);
   const [resultsPageSize,setResultsPageSize]=useState(10);
+  const [certificateEligibility,setCertificateEligibility]=useState<Record<number,CertificateEligibility>>({});
+  const [issuingCertificateAttemptId,setIssuingCertificateAttemptId]=useState<number|null>(null);
   const [leaderboardTest,setLeaderboardTest]=useState<{assessment_id:number;title:string}|null>(null);
   const [leaderboardData,setLeaderboardData]=useState<LeaderboardData|null>(null);
   const [leaderboardLoading,setLeaderboardLoading]=useState(false);
@@ -174,10 +178,29 @@ export default function TestsClient(){
         api('/api/v1/learning/assessment-results?language='+language+'&limit='+resultsPageSize+'&offset='+(resultsPage*resultsPageSize))
       ]);
       const catalogItems=Array.isArray(catalog?.items)?catalog.items:(Array.isArray(catalog)?catalog:[]);
+      const resultItems:Result[]=Array.isArray(studentResults?.items)?studentResults.items:(Array.isArray(studentResults)?studentResults:[]);
       setTests(catalogItems);
       setTestsTotal(Number(catalog?.total ?? catalogItems.length));
-      setResults(Array.isArray(studentResults?.items)?studentResults.items:(Array.isArray(studentResults)?studentResults:[]));
+      setResults(resultItems);
       setResultsTotal(Number(studentResults?.total??(Array.isArray(studentResults)?studentResults.length:0)));
+      const attemptIds=[...new Set(resultItems.flatMap(result=>{
+        const history=Array.isArray(result.attempts)&&result.attempts.length?result.attempts:[result];
+        return history.map(item=>Number(item.attempt_id)).filter(id=>Number.isSafeInteger(id)&&id>0);
+      }))].slice(0,100);
+      const eligibilityMap:Record<number,CertificateEligibility>={};
+      if(attemptIds.length){
+        try{
+          const eligibility=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+attemptIds.join(','));
+          for(const item of Array.isArray(eligibility?.items)?eligibility.items:[]){
+            const id=Number(item.attempt_id);
+            if(Number.isSafeInteger(id)&&id>0)eligibilityMap[id]=item as CertificateEligibility;
+          }
+        }catch{
+          // Certificate status is supplemental to saved assessment results; keep results visible
+          // when this optional endpoint is temporarily unavailable.
+        }
+      }
+      setCertificateEligibility(eligibilityMap);
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
   },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize]);
@@ -185,6 +208,39 @@ export default function TestsClient(){
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
   const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?'Topic-end test':kind==='CHAPTER_END'?'Chapter-end test':'Admin-created test';
+  const certificateEligibilityMessage=(reason?:string|null)=>{
+    switch(reason){
+      case 'ADMIN_CREATED_TEST_ONLY':return 'Only admin-created tests qualify; generated topic/chapter tests and practice are excluded.';
+      case 'RESULT_NOT_RELEASED':return 'Certificate unlocks after the final result is released.';
+      case 'SUBJECT_TRACK_NOT_ACTIVE':return 'An active enrollment in this subject and current class is required.';
+      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return 'Certificates unlock after this subject has published lessons.';
+      case 'SUBJECT_COMPLETION_REQUIRED':return 'Complete all published lessons in this subject to unlock the test certificate.';
+      case 'PASS_THRESHOLD_NOT_MET':return 'The result is below the '+String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80)+'% certificate threshold.';
+      case 'INVALID_SCORE':return 'This result has no valid maximum score.';
+      case 'CERTIFICATE_REVOKED':return 'This certificate has been revoked; contact an administrator.';
+      default:return 'Certificate eligibility is unavailable. Refresh results to check again.';
+    }
+  };
+
+  async function issueCertificateForAttempt(attemptId:number){
+    if(!Number.isSafeInteger(attemptId)||attemptId<1)return;
+    setIssuingCertificateAttemptId(attemptId);setError('');setNotice('');
+    try{
+      const response=await fetch('/api/v1/students/me/certificates/issue',{
+        method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language})
+      });
+      const body=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
+      setNotice('Certificate issued successfully. View or download it from this result.');
+      await loadOverview();
+      await refreshCertificateEligibilityForAttempts([attemptId]);
+    }catch(e:any){
+      setError(e?.message||'Certificate could not be issued.');
+    }finally{
+      setIssuingCertificateAttemptId(null);
+    }
+  }
 
   const filteredTests=tests.filter(t=>subjectFilter==='ALL'||t.subject_code===subjectFilter);
   const current=attempt?.questions?.[index];
@@ -247,6 +303,22 @@ export default function TestsClient(){
     return()=>window.clearTimeout(timer);
   },[dirtyAnswers,attempt?.attempt_id,attempt?.status,saveAnswersBatch]);
 
+  const refreshCertificateEligibilityForAttempts=useCallback(async(attemptIds:number[])=>{
+    const ids=[...new Set(attemptIds.filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
+    if(!ids.length)return;
+    try{
+      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+ids.join(','));
+      const updates:Record<number,CertificateEligibility>={};
+      for(const item of Array.isArray(response?.items)?response.items:[]){
+        const id=Number(item.attempt_id);
+        if(Number.isSafeInteger(id)&&id>0)updates[id]=item as CertificateEligibility;
+      }
+      setCertificateEligibility(current=>({...current,...updates}));
+    }catch{
+      // A temporary eligibility lookup failure must not hide the released test result.
+    }
+  },[]);
+
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
@@ -266,6 +338,7 @@ export default function TestsClient(){
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
+      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([attemptId]);
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not open this result.');}
     finally{setBusy(false);}
   }
@@ -337,11 +410,12 @@ export default function TestsClient(){
       setTab(data.status==='RELEASED'?'results':'tests');
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Fill-in, short-answer and long-answer responses are waiting for an assigned staff reviewer. Your final score and feedback will appear after all required answers are checked.');
       await loadOverview();
+      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([Number(data.attempt_id||currentAttempt.attempt_id)]);
     }catch(e:any){
       autoSubmitted.current=false;
       setError(e instanceof Error?e.message:'Could not submit your test. Saved answers are still preserved.');
     }finally{setBusy(false);}
-  },[loadOverview,flushSavedAnswers]);
+  },[loadOverview,flushSavedAnswers,refreshCertificateEligibilityForAttempts]);
   useEffect(()=>{submitFnRef.current=submitTest;},[submitTest]);
 
   useEffect(()=>{
@@ -399,9 +473,31 @@ export default function TestsClient(){
                  <div>{latestAttempts.map((item,attemptIndex)=>{
                    const positionLabel=attemptIndex===0?'Latest':attemptIndex===1?'Previous':'Earlier';
                    const scoreLabel=Number(item.final_score??0)+' / '+Number(item.max_score??result.max_score);
-                   return <button key={item.attempt_id} type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(Number(item.attempt_id))} aria-label={'Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel} title={positionLabel+' · Attempt #'+item.attempt_number+' · '+scoreLabel}>
-                     <b>{attemptIndex+1}</b><span>{positionLabel}</span>
-                   </button>;
+                   const attemptId=Number(item.attempt_id);
+                   const certificate=certificateEligibility[attemptId];
+                   const certificateId=Number(certificate?.certificate_id||0);
+                   return <div key={item.attempt_id} className={styles.resultAttemptItem}>
+                     <button type="button" className={styles.resultAttemptButton} disabled={busy} onClick={()=>void openResult(attemptId)} aria-label={'Open '+positionLabel.toLowerCase()+' attempt #'+item.attempt_number+', score '+scoreLabel} title={positionLabel+' · Attempt #'+item.attempt_number+' · '+scoreLabel}>
+                       <b>{attemptIndex+1}</b><span>{positionLabel}</span>
+                     </button>
+                     {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
+                       <div className={styles.certificateActionLinks}>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>PDF</a>
+                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>PNG</a>
+                       </div>
+                     ):certificate?.certificate_status==='REVOKED'?(
+                       <small className={styles.certificateEligibilityHint}>Certificate revoked</small>
+                     ):certificate?.eligible?(
+                       <button type="button" className={styles.certificateIssueButton}
+                         disabled={issuingCertificateAttemptId!==null}
+                         onClick={()=>void issueCertificateForAttempt(attemptId)}>
+                         {issuingCertificateAttemptId===attemptId?'Issuing…':'Issue certificate'}
+                       </button>
+                     ):(
+                       <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(certificate?.eligibility_reason)}</small>
+                     )}
+                   </div>;
                  })}
                    <button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading}
                      onClick={()=>void openLeaderboard({assessment_id:result.assessment_id,title:result.assessment_title})}>
@@ -409,8 +505,6 @@ export default function TestsClient(){
                    </button>
                  </div>
                </div>
-               <CertificateActions attemptId={Number(result.attempt_id)} assessmentType={result.assessment_type}
-                 isGenerated={result.is_generated} status={result.status} language={language} compact />
              </article>;
            })}</div>}
           <PremiumPagination page={resultsPage} total={resultsTotal} pageSize={resultsPageSize}
@@ -444,8 +538,31 @@ export default function TestsClient(){
             <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>Incorrect</span></article>
             <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>Not answered</span></article>
           </div>
-          <CertificateActions attemptId={Number(attempt.attempt_id)} assessmentType={attempt.assessment_type}
-            isGenerated={attempt.is_generated} status={attempt.status} language={language} />
+          {released&&(()=>{
+            const cert=certificateEligibility[Number(attempt?.attempt_id)];
+            const certificateId=Number(cert?.certificate_id||0);
+            return <section className={styles.certificateResultPanel} aria-live="polite">
+              <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
+                <p>Test certificates require an admin-created test, a released qualifying score, and completion of all published lessons in this subject.</p></div>
+              {cert?.certificate_status==='ISSUED'&&certificateId>0?(
+                <div className={styles.certificateActionLinks}>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>Download PDF</a>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>Download PNG</a>
+                </div>
+              ):cert?.certificate_status==='REVOKED'?(
+                <small className={styles.certificateEligibilityHint}>This certificate has been revoked.</small>
+              ):cert?.eligible?(
+                <button type="button" className={styles.certificateIssueButton}
+                  disabled={issuingCertificateAttemptId!==null}
+                  onClick={()=>void issueCertificateForAttempt(Number(attempt?.attempt_id))}>
+                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?'Issuing…':'Issue certificate'}
+                </button>
+              ):(
+                <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>
+              )}
+            </section>;
+          })()}
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
             <div className={styles.resultReviewList}>
