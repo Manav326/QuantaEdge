@@ -43,7 +43,6 @@ public class HrmsBootstrapCredentialInitializer {
   @PostConstruct
   void initializeProductionBootstrapCredential() {
     if (!isProduction()) return;
-    validateBootstrapPassword();
     transactions.executeWithoutResult(status -> {
       List<Map<String,Object>> rows = jdbc.queryForList("""
           select initialized from auth_bootstrap_state
@@ -54,6 +53,7 @@ public class HrmsBootstrapCredentialInitializer {
       }
       if (Boolean.TRUE.equals(rows.getFirst().get("initialized"))) return;
 
+      validateBootstrapPassword();
       int changed = jdbc.update("""
           update staff_account
           set password_hash=?, must_change_password=true, password_changed_at=null, updated_at=now()
