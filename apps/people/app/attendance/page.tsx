@@ -1,6 +1,6 @@
 'use client';
 import { PeoplePageHeader, PeopleMetricCard, PeopleStatusBadge } from '../components/PeopleUI';
-import {useCallback,useEffect,useMemo,useState} from 'react';import Link from 'next/link';import {useRouter} from 'next/navigation';
+import {useCallback,useEffect,useMemo,useState} from 'react';import {useRouter} from 'next/navigation';
 type Session={staffId?:number;role?:string;displayName?:string;permissions?:string[]};type Employee={id:number;employee_number:string;display_name:string;employment_status:string};type LeaveType={code:string;display_name:string;paid:boolean};
 async function api(path:string,init:RequestInit={}){const h=new Headers(init.headers);h.set('X-QE-Workspace','HRMS');if(init.body&&!h.has('Content-Type'))h.set('Content-Type','application/json');const r=await fetch(path,{...init,headers:h,credentials:'same-origin',cache:'no-store'});const raw=await r.text();let data:any={};try{data=raw?JSON.parse(raw):{}}catch{data={message:raw}}if(!r.ok)throw new Error(data.message||data.detail||data.error||'Request failed ('+r.status+')');return data}
 const today=()=>new Date().toLocaleDateString('en-CA'),statuses=['PRESENT','ABSENT','HALF_DAY','REMOTE','ON_LEAVE','HOLIDAY'];const pretty=(s:string)=>s.replaceAll('_',' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
