@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("up", "rebuild", "clean-build", "down", "reset", "logs", "ps")]
+  [ValidateSet("up", "ai", "rebuild", "clean-build", "down", "reset", "logs", "ps")]
   [string]$Action = "up",
 
   # Use "all" for the first start. Select one application for routine iteration.
@@ -46,6 +46,16 @@ function Invoke-Compose {
   }
 }
 
+function Invoke-AiCompose {
+  param([Parameter(Mandatory = $true)][string[]]$ComposeArgs)
+
+  & docker compose -f docker-compose.yml -f docker-compose.ai.yml @ComposeArgs
+  $exitCode = $LASTEXITCODE
+  if ($exitCode -ne 0) {
+    throw "AI tutor Compose command failed (exit code $exitCode). Check Docker Desktop and available disk/RAM, then inspect with: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
+  }
+}
+
 function Get-TargetArgs {
   if ($Service -eq "all") { return @() }
   return @($Service)
@@ -63,6 +73,11 @@ switch ($Action) {
       Invoke-Compose (@("build", "--parallel") + $targetArgs)
       Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
     }
+  }
+  "ai" {
+    # Starts the normal stack plus a private-network Ollama model for an end-to-end tutor demo.
+    # This intentionally preserves database and model volumes; no volume deletion is performed.
+    Invoke-AiCompose @("up", "-d", "--build", "--remove-orphans")
   }
   "rebuild" {
     # Cached rebuild is the normal path; --no-cache is reserved for clean-build.
@@ -96,7 +111,8 @@ switch ($Action) {
 Invoke-Compose @("ps")
 Write-Host ""
 Write-Host "Waiting for API health..."
-for ($i = 0; $i -lt 30; $i++) {
+$healthAttempts = if ($Action -eq "ai") { 180 } else { 30 }
+for ($i = 0; $i -lt $healthAttempts; $i++) {
   try {
     Invoke-WebRequest -UseBasicParsing "http://localhost:$apiPort/actuator/health" | Out-Null
     Write-Host "API:    http://localhost:$apiPort/actuator/health"
@@ -104,9 +120,14 @@ for ($i = 0; $i -lt 30; $i++) {
     Write-Host "Admin:  http://localhost:$adminPort"
     Write-Host "People: http://localhost:$peoplePort"
     Write-Host "Student preview: http://localhost:$webPort/student"
+    if ($Action -eq "ai") {
+      Write-Host "AI tutor mode: Ollama / qwen2.5:0.5b (first launch may take several minutes)."
+      Write-Host "Open a published lesson and select the tutor dock. The model is a local MVP and may make mistakes."
+      Write-Host "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
+    }
     exit 0
   } catch {
     Start-Sleep -Seconds 2
   }
 }
-throw "API did not become healthy within 60 seconds."
+throw "API did not become healthy within $([int]($healthAttempts * 2)) seconds. Inspect services with: docker compose ps; for AI mode also run: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
