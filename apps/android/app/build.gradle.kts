@@ -1,4 +1,3 @@
-import java.awt.image.BufferedImage
 import org.gradle.api.tasks.Copy
 
 plugins {
@@ -65,7 +64,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
+val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-icon.png")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandWordmark)
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
@@ -73,29 +72,6 @@ tasks.register<Copy>("syncQuantaEdgeBranding") {
     doFirst {
         check(brandWordmark.asFile.exists()) {
             "Approved QuantaEdge wordmark is missing at " + brandWordmark.asFile.absolutePath
-        }
-    }
-    doLast {
-        // The source wordmark is an indexed-colour PNG (colour type 3). Android's
-        // drawable decoder can fail on this asset on some devices. Re-encode it
-        // as a standard 32-bit RGBA PNG before it enters the APK resources.
-        val target = generatedBrandingRes.get()
-            .file("drawable-nodpi/quantaedge_wordmark.png").asFile
-        val sourceImage = javax.imageio.ImageIO.read(target)
-            ?: error("Unable to decode approved QuantaEdge wordmark: " + target.absolutePath)
-        val normalized = BufferedImage(
-            sourceImage.width,
-            sourceImage.height,
-            BufferedImage.TYPE_INT_ARGB
-        )
-        val graphics = normalized.createGraphics()
-        try {
-            graphics.drawImage(sourceImage, 0, 0, null)
-        } finally {
-            graphics.dispose()
-        }
-        check(javax.imageio.ImageIO.write(normalized, "png", target)) {
-            "Unable to normalize QuantaEdge wordmark PNG: " + target.absolutePath
         }
     }
 }
