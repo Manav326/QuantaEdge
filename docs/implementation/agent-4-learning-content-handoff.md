@@ -4,11 +4,11 @@
 
 - **Working branch:** `agent/learning-content-ai-android`
 - **Baseline audited:** `0d71946b3854a68c894001193a5174a41fa9a45b` (`main` as observed at task start)
-- **Latest main integrated:** `00ed52ad75432153aefc93105cd83ae2c472843c`
-- **Branch integration commit:** `3e2933e0475378ffaac0ff0d889fff1a1696f188` (first parent is the task branch head; second parent is the latest main above)
+- **Latest main integrated:** `e56620a3c59276a23dca5c2f7bbedbcf020f7da1`
+- **Latest integration commit:** `09b10b71a2b35574379c497ea7cb3079f8e10c65` (second parent is the latest main above; main remains unmodified by Agent 4)
 - **Repository:** [Manav326/QuantaEdge](https://github.com/Manav326/QuantaEdge)
 - **Pull request:** Not created, as required.
-- **Branch CI:** [Run 38341156189](https://github.com/Manav326/QuantaEdge/actions/runs/38341156189) completed successfully for commit `a12c244befab9953d09775a7f2d1cc9728384278`.
+- **Latest completed branch CI:** [Run 38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed all five jobs for commit `8131893ce4dc8a6f26f8ece3a6d5adece70b9ae6`; subsequent Android SDK argument alignment is being revalidated in runs 38341744121 and 38341748078.
 - **Important validation caveat:** Verification was executed remotely in GitHub Actions. This environment still could not resolve GitHub for a local clone, so no local build or test command was run. The Android unit-test task was reported `FROM-CACHE`; no physical-device test was performed.
 
 ## 1. Initial audit and baseline
@@ -50,7 +50,7 @@ File: `services/api/src/test/java/com/quantaedge/api/SourcePdfDownloadServiceTes
 
 Added tests for a default limit that accommodates 250 MiB books and for exact-length stream reading, truncated bodies, and bodies exceeding their advertised/allowed size. Existing cache checksum, HTTPS and local/private-host guards remain in place.
 
-**Tests added but not run in this environment.**
+**Tests pass in branch CI:** `SourcePdfDownloadServiceTest` reported 7 tests, zero failures/errors.
 
 ### C. AI-generation recovery and bounded transient retries
 
@@ -79,7 +79,7 @@ File: `tests/test_question_generation.py`
 
 Added controlled tests for retrying a transient 429 while honoring `Retry-After`, not retrying a permanent 401 response, counting HTTP attempts, and accepting only a matching review-gated resume candidate. Tests use mocks and do not require a live AI account.
 
-**Tests added but not run in this environment.**
+**Tests pass in branch CI:** these controlled cases run as part of the 161-test Python suite.
 
 ### E. Android APK workflow/installer alignment
 
@@ -89,15 +89,15 @@ Files:
 
 The standalone Android build workflow now uploads its installable debug APK as `quantaedge-android-apk`, matching the install helper's default exact artifact name. The helper's failure text now correctly describes an installable APK rather than calling it a release APK; the existing main-branch PowerShell handling for native stderr/missing artifacts was preserved during integration.
 
-The latest main commit `00ed52ad75432153aefc93105cd83ae2c472843c` added a `build-android-apk` job to `.github/workflows/ci.yml` that runs `testDebugUnitTest assembleDebug` and uploads the same `quantaedge-android-apk` artifact. That newer CI job was retained by merging the latest main tree into the branch rather than replacing the current workflow. Its first run failed before Gradle because `android-actions/setup-android@v3` attempted to install the legacy SDK package `tools`, which the current SDK manager reported as missing. The branch limits that action's explicit package request to `platform-tools`, and the same setup then passed in branch CI run [38341156189](https://github.com/Manav326/QuantaEdge/actions/runs/38341156189).
+The latest main CI added a `build-android-apk` job running `testDebugUnitTest assembleDebug` and uploading `quantaedge-android-apk`. The initial run failed before Gradle because the SDK action requested the removed legacy package `tools`. Latest main commit `e56620a3c59276a23dca5c2f7bbedbcf020f7da1` corrected the package list to `platform-tools platforms;android-36 build-tools;36.0.0`; that current-main configuration is integrated into both `.github/workflows/ci.yml` and the branch-only validation workflow. Run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed SDK setup/build with `platform-tools`; newer runs are checking the exact updated package list.
 
 This is a debug APK, not a signed Play Store release. No Android emulator/physical device was available for an end-to-end learning-session test.
 
 ## 3. Student learning, CMS and publishing workflow
 
-The audit confirmed existing server-side class/subject and published-content isolation and existing CMS lifecycle endpoints. The implemented changes in this handoff deliberately concentrate on the verified ingestion, AI recovery and Android artifact mismatches instead of rewriting the larger student or administrator frontend without being able to run it.
+The audit confirmed existing server-side class/subject and published-content isolation and existing CMS lifecycle endpoints. Two learner/CMS rendering gaps were corrected while tracing the content flow: (1) the student lesson filtered `SUMMARY`/`RECAP` blocks before assessment but never rendered them later, hiding authored recaps; it now renders all active recap blocks after topic practice. (2) the Admin preview now keeps all non-recap blocks in authored order before the inline assessment, shows only active approved MCQs in that check (other approved question types belong to topic practice), displays the next topic-practice step, and then renders recap blocks. Both frontend builds passed in branch CI.
 
-No new lesson, chapter, source citation, or question was fabricated to inflate coverage. The documented learning sequence (समझें, अब खुद करें, Recap), teaching-block rendering parity, and desktop/phone learner preview need browser-level validation against real persisted content before declaring them done. The CMS should continue using its existing canonical lesson/question models and authorization rules.
+No new lesson, chapter, source citation, or question was fabricated to inflate coverage. Browser-level checks using real persisted content are still needed, and the admin/student block-rendering components remain separately implemented, so future edits can drift. The CMS should continue using its existing canonical lesson/question models and authorization rules.
 
 ## 4. Ingestion, chapter extraction, recovery and provenance
 
@@ -123,7 +123,7 @@ The workflow can be run from **Actions → QuantaEdge Textbook Cache → Run wor
 - Artifact naming is now aligned to `quantaedge-android-apk` in both relevant workflow paths and the install helper.
 - The latest main's dedicated Android job remains part of the branch integration; a branch-only validation workflow was added so tests can run without publishing branch-built container images.
 - The existing installer still checks that a successful build exists for the exact requested branch/commit, verifies that a plausible APK exists before replacing the local copy, and asks before ADB installation.
-- Branch CI completed `testDebugUnitTest assembleDebug` successfully and uploaded artifact `quantaedge-android-apk` (14,570,461 bytes; artifact ID `11787160719`). The unit-test task was restored `FROM-CACHE`.
+- Branch CI run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) completed `testDebugUnitTest assembleDebug` and uploaded `quantaedge-android-apk` (14,570,459 bytes; artifact ID `11786094554`). This is an installable debug APK, not a signed Play Store release; Gradle may restore unit-test execution from cache.
 
 Not performed: physical-device installation, APK signing/Play Store release validation, or real student login/lesson/progress/question submission against a live backend. A passing CI compile is not a substitute for those device and backend checks.
 
@@ -144,20 +144,22 @@ Not performed: physical-device installation, APK signing/Play Store release vali
 | Source PDF regression tests | Passed in branch CI | `SourcePdfDownloadServiceTest`: 7 tests, zero failures/errors |
 | AI generation recovery tests | Passed in branch CI | Transient retry, no-retry-on-401, and resume-review-gate tests included in Python suite |
 | API Maven verification | Passed | `mvn -B -ntp verify`: 195 tests, zero failures/errors; `BUILD SUCCESS` |
-| Python test suite | Passed | 161 tests in 0.472 seconds |
-| Android setup/build/unit tests | Passed in branch CI | Android SDK setup succeeded after removing legacy `tools`; Gradle `testDebugUnitTest assembleDebug` successful; unit-test task restored `FROM-CACHE`; installable debug APK uploaded |
-| Baseline main workflow | Failed in Android setup | Run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286): requested removed `tools` SDK package. This branch's corrected setup passed in run [38341156189](https://github.com/Manav326/QuantaEdge/actions/runs/38341156189). |
+| Python test suite | Passed | 161 tests in 0.504 seconds on run 38341468420; passed again in newer branch validation runs |
+| Student web build | Passed | `npm run build` in branch CI |
+| Admin Content Studio build | Passed | `npm run build` after preview alignment changes |
+| Android setup/build/unit tests | Passed in branch CI | Gradle `testDebugUnitTest assembleDebug` succeeded and a debug APK was uploaded; current-main SDK package configuration is being revalidated in run 38341744121/38341748078 |
+| Baseline main workflow | Failed in Android setup | Run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) requested the removed `tools` SDK package. Latest main's explicit current-package correction is now integrated into the branch. |
 | Real model generation | Not run | No provider credentials supplied/verified |
 | GHCR read/publish | Not run | No live class/language image validation performed |
 | Physical-device test | Not run | No device bridge available |
 | Student/CMS browser E2E | Not run | Needs runtime with persisted data and authenticated roles |
 
-The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. A branch-scoped validation workflow (`.github/workflows/agent-4-validation.yml`) was added to run the relevant checks without publishing Docker images. Run [38341156189](https://github.com/Manav326/QuantaEdge/actions/runs/38341156189) completed successfully: all 161 Python tests passed, Maven verification passed all 195 API tests with zero failures/errors, Android SDK setup passed, and Gradle assembled and uploaded the debug APK. The earlier main run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) failed at the obsolete `tools` SDK package request; the branch correction was verified by the successful setup/build run. Live AI-provider requests, GHCR registry checks, browser E2E and physical-device use remain unverified.
+The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. A branch-scoped validation workflow (`.github/workflows/agent-4-validation.yml`) runs checks without publishing Docker images. Run [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420) passed all five jobs: 161 Python tests, 195 API tests with zero failures/errors, student web build, Admin Content Studio build, and Android SDK setup/Gradle build with a debug APK upload. The earlier main run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286) failed at the obsolete `tools` SDK request; latest main's explicit current package list is integrated and being revalidated by runs 38341744121/38341748078. Live AI-provider requests, GHCR registry checks, browser E2E and physical-device use remain unverified.
 
 ## 9. Remaining gaps and blockers
 
 1. **Curriculum and editorial completeness:** verify all six relevant official book editions and chapter/page mappings; compare each of the 102 chapter rows against authoritative SCERT/Bihar Board scope; author/review substantive teaching blocks, examples, visual content and answers. Do not count shells or target quantities as completed content.
-2. **CMS preview parity:** test that draft preview and student rendering use shared data/presentation behavior for arbitrary teaching-block counts and responsive layouts. Validate all state transitions and backend permission failures in a running environment.
+2. **CMS preview parity:** authored sequence, inline-MCQ separation and recap visibility were aligned and both frontends build; still test real interactions and desktop/phone rendering against persisted content. Admin/student rich-block renderers remain separate and may drift.
 3. **PDF operational sizing:** 500 MiB is the configured maximum, not a universal memory guarantee. Confirm heap, container, proxy, multipart and database limits. Add production telemetry around failed/oversized/truncated ingestion and test with a genuinely large full-book PDF.
 4. **AI resume robustness:** the new resume validator validates source identity, chapter/model/curriculum, review guard and candidate counts, but does not replace full subject-matter re-review. Validate against interrupted real runs and malformed provider responses using the CI suite before enabling generation.
 5. **Source availability and registry retention:** run the textbook workflow with registry access; inspect each class/medium image manifest, checksum, gaps report and retention configuration. Confirm that failures of individual books remain visible and do not masquerade as complete coverage.
@@ -172,14 +174,15 @@ Agents 1–3 own HRMS, payroll and academic workforce management. Agent 4 did no
 
 - **Branch:** `agent/learning-content-ai-android`
 - **Start baseline:** `0d71946b3854a68c894001193a5174a41fa9a45b`
-- **Latest main merged into branch:** `00ed52ad75432153aefc93105cd83ae2c472843c`
-- **Merge/integration commit:** `3e2933e0475378ffaac0ff0d889fff1a1696f188`
+- **Latest main merged into branch:** `e56620a3c59276a23dca5c2f7bbedbcf020f7da1`
+- **Merge/integration commit:** `09b10b71a2b35574379c497ea7cb3079f8e10c65`
 - **AI retry/resume implementation commit:** `94f971b526255c8e30716d341c273867721cf2f7`
 - **AI regression test commit:** `1a25e1c52af380ea16e12dd1241c1dec2d0f8a05`
 - **Android installer/main-sync commit:** `3c1142e93a43742140c635f1d7c85a038219643d`
 - **Android CI SDK package fix:** `116e8651c0f31e4ab1b9ffa8f80c5517fb1b1916`
-- **Branch validation workflow:** `a12c244befab9953d09775a7f2d1cc9728384278`
-- **Passing branch CI run:** [38341156189](https://github.com/Manav326/QuantaEdge/actions/runs/38341156189), commit `a12c244befab9953d09775a7f2d1cc9728384278`
+- **Branch validation workflow:** `.github/workflows/agent-4-validation.yml`
+- **Passing full branch CI run:** [38341468420](https://github.com/Manav326/QuantaEdge/actions/runs/38341468420), source/UI commit `8131893ce4dc8a6f26f8ece3a6d5adece70b9ae6`
+- **New runs for explicit Android SDK package list:** [38341744121](https://github.com/Manav326/QuantaEdge/actions/runs/38341744121) and [38341748078](https://github.com/Manav326/QuantaEdge/actions/runs/38341748078); confirm final status before treating package-list-only changes as verified.
 - **Remote status:** changes have been committed to the GitHub working branch. No PR was opened and `main` was not modified by Agent 4.
 
 The branch history is the source of truth for the exact final handoff-report commit SHA; it is committed after the integration commit listed above.
