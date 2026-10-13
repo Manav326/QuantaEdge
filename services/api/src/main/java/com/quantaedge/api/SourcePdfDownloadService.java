@@ -16,6 +16,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -28,8 +29,34 @@ import tools.jackson.databind.ObjectMapper;
 /** Downloads source PDFs from HTTPS pages/direct links with SSRF and size guards. */
 @Component
 public class SourcePdfDownloadService {
-  static final int MAX_PDF_BYTES = 50 * 1024 * 1024;
+  static final int DEFAULT_MAX_PDF_BYTES = 500 * 1024 * 1024;
+  static final int MAX_PDF_BYTES = configuredMaxPdfBytes();
+  private static final int MAX_CONFIGURABLE_PDF_BYTES = 500 * 1024 * 1024;
   private static final int MAX_HTML_BYTES = 4 * 1024 * 1024;
+
+  /**
+   * Keep whole-book ingestion practical for large official textbooks while retaining a hard
+   * resource bound. Override via JVM property or environment for constrained deployments.
+   */
+  private static int configuredMaxPdfBytes() {
+    String configured = System.getProperty("quantaedge.source-ingestion.max-pdf-bytes", "").trim();
+    if (configured.isEmpty()) {
+      configured = System.getenv().getOrDefault("QUANTAEDGE_SOURCE_MAX_PDF_BYTES", "").trim();
+    }
+    if (configured.isEmpty()) return DEFAULT_MAX_PDF_BYTES;
+    final long parsed;
+    try {
+      parsed = Long.parseLong(configured);
+    } catch (NumberFormatException ex) {
+      throw new ExceptionInInitializerError(
+          "quantaedge.source-ingestion.max-pdf-bytes must be an integer byte count.");
+    }
+    if (parsed < 1024L * 1024L || parsed > MAX_CONFIGURABLE_PDF_BYTES) {
+      throw new ExceptionInInitializerError(
+          "Source PDF size limit must be between 1048576 and 524288000 bytes.");
+    }
+    return (int) parsed;
+  }
   private static final Pattern PDF_LINK = Pattern.compile(
       "(?is)<a\\b[^>]*?href\\s*=\\s*['\\x22]([^'\\x22]+)['\\x22][^>]*>(.*?)</a>");
   private final HttpClient client = HttpClient.newBuilder()
@@ -160,8 +187,9 @@ public class SourcePdfDownloadService {
               + ". Re-sync the corresponding GHCR language image before retrying.");
         }
         if (bytes.length > MAX_PDF_BYTES) {
-          throw new IllegalArgumentException("Cached textbook " + title + " exceeds the 50 MiB database-library limit. "
-              + "Split it with the textbook_registry.py prepare-library command and import the smaller chapter PDFs.");
+          throw new IllegalArgumentException("Cached textbook " + title + " exceeds the configured "
+              + (MAX_PDF_BYTES / (1024 * 1024)) + " MiB source download limit. "
+              + "Check QUANTAEDGE_SOURCE_MAX_PDF_BYTES and the available memory before retrying.");
         }
         String filename = title.replaceAll("[^A-Za-z0-9._() -]", "_").trim();
         if (filename.isBlank()) filename = "cached-source";
@@ -207,7 +235,10 @@ public class SourcePdfDownloadService {
   }
 
   private DownloadedPdf result(byte[] bytes, URI url) {
-    if (bytes.length > MAX_PDF_BYTES) throw new IllegalArgumentException("PDF files must be 50 MB or smaller.");
+    if (bytes.length > MAX_PDF_BYTES) {
+      throw new IllegalArgumentException("PDF files must be "
+          + (MAX_PDF_BYTES / (1024 * 1024)) + " MiB or smaller.");
+    }
     String path = url.getPath() == null ? "" : url.getPath();
     String name = path.substring(path.lastIndexOf('/') + 1);
     name = name.replaceAll("[^A-Za-z0-9._() -]", "_");
@@ -240,7 +271,12 @@ public class SourcePdfDownloadService {
         }
         int limit = response.headers().firstValue("content-type").orElse("").toLowerCase(Locale.ROOT).contains("text/html")
             ? MAX_HTML_BYTES : MAX_PDF_BYTES;
-        byte[] bytes = readLimited(response.body(), limit);
+        long contentLength = response.headers().firstValueAsLong("content-length").orElse(-1L);
+        if (contentLength > limit) {
+          try { response.body().close(); } catch (IOException ignored) { }
+          throw new IllegalArgumentException("The source response exceeds the permitted download size.");
+        }
+        byte[] bytes = readLimited(response.body(), limit, contentLength);
         return new HttpResult(bytes, uri);
       } catch (IOException ex) {
         throw new IllegalArgumentException("The source PDF could not be downloaded: " + ex.getMessage());
@@ -252,17 +288,48 @@ public class SourcePdfDownloadService {
     throw new IllegalArgumentException("The source URL has too many redirects.");
   }
 
-  private byte[] readLimited(InputStream input, int limit) throws IOException {
-    try (InputStream in = input; ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-      byte[] buffer = new byte[16 * 1024];
-      int total = 0;
-      int count;
-      while ((count = in.read(buffer)) != -1) {
-        total += count;
-        if (total > limit) throw new IllegalArgumentException("The source response exceeds the permitted download size.");
-        output.write(buffer, 0, count);
+  byte[] readLimited(InputStream input, int limit, long expectedLength) throws IOException {
+    try (InputStream in = input) {
+      if (expectedLength > limit) {
+        throw new IllegalArgumentException("The source response exceeds the permitted download size.");
       }
-      return output.toByteArray();
+
+      // Most official PDF endpoints send Content-Length. Allocate exactly once when available,
+      // avoiding the large backing-buffer + toByteArray copy for 250–500 MiB books.
+      if (expectedLength >= 0) {
+        byte[] bytes = new byte[(int) expectedLength];
+        int total = 0;
+        while (total < bytes.length) {
+          int count = in.read(bytes, total, bytes.length - total);
+          if (count < 0) break;
+          if (count == 0) {
+            int one = in.read();
+            if (one < 0) break;
+            bytes[total++] = (byte) one;
+          } else {
+            total += count;
+          }
+        }
+        if (total < bytes.length) return Arrays.copyOf(bytes, total);
+        if (in.read() != -1) {
+          throw new IllegalArgumentException("The source response exceeds the permitted download size.");
+        }
+        return bytes;
+      }
+
+      try (ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+        byte[] buffer = new byte[64 * 1024];
+        int total = 0;
+        int count;
+        while ((count = in.read(buffer)) != -1) {
+          if (count > limit - total) {
+            throw new IllegalArgumentException("The source response exceeds the permitted download size.");
+          }
+          total += count;
+          output.write(buffer, 0, count);
+        }
+        return output.toByteArray();
+      }
     }
   }
 
