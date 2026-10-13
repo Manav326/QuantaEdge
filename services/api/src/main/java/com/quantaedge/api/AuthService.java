@@ -119,8 +119,8 @@ public class AuthService {
       @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
-    // Respect shorter deployments' configured idle timeout, but cap refresh-cookie lifetime.
-    // Refresh credentials slide with authenticated activity; absolute expiry is enforced separately.
+    // Keep the sliding refresh lifetime at four hours for compatibility. The separate
+    // per-workspace idle and absolute-expiry predicates enforce the actual session limits.
     this.sessionHours=4;
     this.secureCookies=secureCookies;
     this.otpCooldownSeconds=otpCooldownSeconds;
@@ -391,7 +391,7 @@ public class AuthService {
     Boolean enabled = jdbc.queryForObject("""
         select exists(
           select 1 from staff_account
-          where id=? and active=true and education_access_enabled=true
+          where id=? and active=true and education_access_enabled=true and education_access_configured=true
         )
         """, Boolean.class, staffId);
     if (!Boolean.TRUE.equals(enabled)) {
@@ -670,7 +670,8 @@ public class AuthService {
         and (s.workspace_key not in ('STAFF','EDUCATION_ADMIN')
           or exists (select 1 from staff_account education_sa
               where education_sa.id=s.staff_id and education_sa.active=true
-                and education_sa.education_access_enabled=true))
+                and education_sa.education_access_enabled=true
+                and education_sa.education_access_configured=true))
       """ + scope,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
@@ -807,7 +808,8 @@ public class AuthService {
         and (s.workspace_key not in ('STAFF','EDUCATION_ADMIN')
           or exists (select 1 from staff_account education_sa
               where education_sa.id=s.staff_id and education_sa.active=true
-                and education_sa.education_access_enabled=true))
+                and education_sa.education_access_enabled=true
+                and education_sa.education_access_configured=true))
       """ + workspacePredicate(workspace, "s") + "\n      for update of s";
     var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
