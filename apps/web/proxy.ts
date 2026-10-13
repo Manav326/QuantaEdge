@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-function hasLearningSessionCookie(request: NextRequest) {
-  return request.cookies.has('QE_LEARN_SESSION') || request.cookies.has('QE_LEARN_REFRESH');
+// Cookie presence is only a routing hint; the API verifies identity and workspace.
+const LEARNER_SESSION_COOKIE_NAMES = [
+  'QE_LEARN_SESSION',
+  'QE_LEARN_REFRESH',
+  'QE_PARENT_SESSION',
+  'QE_PARENT_REFRESH',
+  'QE_STUDENT_SESSION',
+  'QE_STUDENT_REFRESH',
+] as const;
+
+function hasLearnerSessionCookie(request: NextRequest) {
+  return LEARNER_SESSION_COOKIE_NAMES.some(name => request.cookies.has(name));
 }
 
 function hasLegacySessionCookie(request: NextRequest) {
@@ -11,7 +21,7 @@ function hasLegacySessionCookie(request: NextRequest) {
 
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const learningSession = hasLearningSessionCookie(request);
+  const learningSession = hasLearnerSessionCookie(request);
   // Legacy shared cookies are only a migration hint; the API validates their role.
   const legacySession = hasLegacySessionCookie(request);
   const publicEntry = path === '/' || path === '/login' || path === '/login/student';

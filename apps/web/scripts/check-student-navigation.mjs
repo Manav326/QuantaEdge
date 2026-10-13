@@ -7,6 +7,7 @@ const css = read('../app/globals.css');
 const accountMenu = read('../app/components/StudentAccountMenu.tsx');
 const parentAccountMenu = read('../app/components/ParentAccountMenu.tsx');
 const languageProvider = read('../app/components/LanguageProvider.tsx');
+const sessionProxy = read('../proxy.ts');
 const testsClient = read('../app/student/tests/TestsClient.tsx');
 const practiceClient = read('../app/student/practice/PracticeClient.tsx');
 const learnClient = read('../app/student/learn/LearnClient.tsx');
@@ -14,6 +15,24 @@ const certificatesPage = read('../app/student/certificates/page.tsx');
 const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/ui/QuantaEdgeApp.kt');
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
 const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
+
+ // Parent/student logins now issue workspace-specific cookies. The route guard must
+ // recognise both access and refresh cookies or it will redirect a successful login
+ // back to the login page before SessionBoundary can validate the account.
+const learnerCookieGuardStart = sessionProxy.indexOf('const LEARNER_SESSION_COOKIE_NAMES = [');
+const learnerCookieGuardEnd = sessionProxy.indexOf('] as const;', learnerCookieGuardStart);
+assert.ok(learnerCookieGuardStart >= 0 && learnerCookieGuardEnd > learnerCookieGuardStart, 'The proxy must define one explicit set of recognised learner session cookies.');
+const learnerCookieGuard = sessionProxy.slice(learnerCookieGuardStart, learnerCookieGuardEnd);
+for (const cookieName of [
+  'QE_LEARN_SESSION', 'QE_LEARN_REFRESH',
+  'QE_PARENT_SESSION', 'QE_PARENT_REFRESH',
+  'QE_STUDENT_SESSION', 'QE_STUDENT_REFRESH'
+]) {
+  assert.ok(learnerCookieGuard.includes(cookieName), `The web route guard must recognise ${cookieName}.`);
+}
+assert.ok(sessionProxy.includes('if (publicEntry && learnerSession)'), 'Existing learner sessions must route through server-verified workspace resolution.');
+assert.ok(sessionProxy.includes('(studentRoute || parentRoute) && !learnerSession && !legacySession'), 'Protected learner routes must admit new scoped cookies and keep redirecting visitors with no session hint.');
+
 // Route inventory and pure navigation functions must be exhaustive over AppRoute.
 // Kotlin's exhaustive enum when-expressions also fail compilation when a new route is not categorized.
 const enumStart = androidNavigationContract.indexOf('internal enum class AppRoute {');
