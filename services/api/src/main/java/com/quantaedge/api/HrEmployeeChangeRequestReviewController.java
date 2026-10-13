@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +15,17 @@ public class HrEmployeeChangeRequestReviewController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final HrReportingScopeService reportingScope;
 
-  public HrEmployeeChangeRequestReviewController(JdbcTemplate jdbc,AuthorizationService authorization,StaffAuditService audit) {
+  @Autowired
+  public HrEmployeeChangeRequestReviewController(JdbcTemplate jdbc,AuthorizationService authorization,StaffAuditService audit,HrReportingScopeService reportingScope) {
     this.jdbc=jdbc;
     this.authorization=authorization;
     this.audit=audit;
+    this.reportingScope=reportingScope;
+  }
+  public HrEmployeeChangeRequestReviewController(JdbcTemplate jdbc,AuthorizationService authorization,StaffAuditService audit) {
+    this(jdbc,authorization,audit,new HrReportingScopeService(jdbc,authorization));
   }
 
   @GetMapping("/employee-change-requests")
@@ -31,15 +38,22 @@ public class HrEmployeeChangeRequestReviewController {
       throw bad("Choose a supported profile-change request status.");
     int pageSize=Math.max(1,Math.min(limit,200));
     List<Map<String,Object>> items=jdbc.queryForList("""
+      with recursive reporting(id) as (
+        select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+        union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+      )
       select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,
         e.email current_email,e.phone_e164 current_phone,r.requested_by_staff_id,
         r.requested_values::text requested_values,r.reason,r.request_status,r.review_note,
         r.reviewed_by_staff_id,r.reviewed_at,r.created_at,r.updated_at
       from hr_employee_change_request r join hr_employee e on e.id=r.employee_id
       where (?='ALL' or r.request_status=?)
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
       order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at desc,r.id desc
       limit ?
-      """,state,state,pageSize);
+      """,context.staffId(),state,state,context.staffId(),pageSize);
     return Map.of("items",items,"limit",pageSize,"status",state);
   }
 
@@ -65,6 +79,7 @@ public class HrEmployeeChangeRequestReviewController {
       throw bad("A profile change decision must be APPROVED or REJECTED.");
     String reviewNote=required(body.get("reviewNote"),1000,"Review note");
     long employeeId=((Number)request.get("employee_id")).longValue();
+    reportingScope.requireEmployeeAccess(context,employeeId);
     if(context.staffId()!=null&&Boolean.TRUE.equals(jdbc.queryForObject(
         "select exists(select 1 from hr_employee where id=? and linked_staff_account_id=?)",Boolean.class,employeeId,context.staffId())))
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"An employee cannot review their own profile change request.");
