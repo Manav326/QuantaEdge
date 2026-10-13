@@ -1,9 +1,12 @@
+# syntax=docker/dockerfile:1.7
 FROM maven:3.9.12-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY pom.xml .
-RUN mvn -q -DskipTests dependency:go-offline
+COPY pom.xml ./
+# Keep Maven artifacts in BuildKit's persistent cache across rebuilds.
+RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests dependency:go-offline
 COPY src ./src
-RUN mvn -q -DskipTests package
+RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests package
+
 FROM eclipse-temurin:21-jre
 # Hindi and English OCR language packs are used only when an admin explicitly requests OCR review.
 RUN apt-get update \

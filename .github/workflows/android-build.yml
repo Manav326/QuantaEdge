@@ -1,18 +1,16 @@
-name: Android app build
+name: Android app build (manual fallback)
 
+# Every main commit already builds and uploads the current APK in ci.yml.
+# Keep this separate workflow available for an on-demand Android-only build,
+# without compiling the same APK twice on every Android-related push.
 on:
-  push:
-    branches: [main]
-    paths:
-      - "apps/android/**"
-      - ".github/workflows/android-build.yml"
-      - "apps/web/public/branding/quantaedge-wordmark.png"
   workflow_dispatch:
 
 permissions:
   contents: read
+
 concurrency:
-  group: android-build-main
+  group: android-build-manual
   cancel-in-progress: true
 
 jobs:
@@ -29,10 +27,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.11.1"
-      - name: Assemble debug APK
-        run: gradle -p apps/android assembleDebug
-      - name: Run unit tests
-        run: gradle -p apps/android testDebugUnitTest
+      - name: Build debug APK and run tests
+        run: gradle -p apps/android testDebugUnitTest assembleDebug --build-cache --parallel
       - name: Upload installable debug APK
         uses: actions/upload-artifact@v4
         with:

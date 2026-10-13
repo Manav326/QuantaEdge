@@ -1,0 +1,8 @@
+# Maven output is created inside the image, not copied from the workstation.
+target/
+.git/
+.idea/
+.vscode/
+*.log
+*.iml
+.DS_Store

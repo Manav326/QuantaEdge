@@ -1,0 +1,25 @@
+# Host-generated dependencies and Next.js build output must not enter Docker builds.
+node_modules
+.next
+out
+dist
+coverage
+.nyc_output
+.turbo
+.cache
+
+# Local-only files and environment secrets.
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+
+# Editor, log, and incremental compiler artifacts.
+.vscode
+.idea
+*.log
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
