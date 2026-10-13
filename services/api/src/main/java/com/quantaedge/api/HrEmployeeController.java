@@ -19,6 +19,7 @@ public class HrEmployeeController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final HrReportingScopeService reportingScope;
 
   public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
     this.jdbc=jdbc;
@@ -217,22 +218,25 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
+        and """ + reportingScope.sqlScopePredicate("e") + """
       order by e.display_name,e.id
       limit ? offset ?
-      """,includeInactive,q==null?"":q.trim(),term,term,term,term,safeLimit,safeOffset);
+      """,includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),context.staffId(),safeLimit,safeOffset);
     Long total=jdbc.queryForObject("""
       select count(*) from hr_employee e
       left join hr_department d on d.id=e.department_id
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-      """,Long.class,includeInactive,q==null?"":q.trim(),term,term,term,term);
+        and """ + reportingScope.sqlScopePredicate("e") + """
+      """,Long.class,includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),context.staffId());
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
   @GetMapping("/employees/{id}")
   public Map<String,Object> employee(@PathVariable long id,@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
+    reportingScope.requireEmployeeAccess(context,id);
     return employeeById(id);
   }
 
