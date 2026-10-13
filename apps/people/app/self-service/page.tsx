@@ -32,7 +32,7 @@ export default function EmployeeSelfServicePage(){
   const [payslips,setPayslips]=useState<any[]>([]);
   const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
   const [attendanceCorrectionRequests,setAttendanceCorrectionRequests]=useState<any[]>([]);
-  const [correctionDraft,setCorrectionDraft]=useState({workDate:'',status:'PRESENT',notes:'',reason:''});
+  const [correctionDraft,setCorrectionDraft]=useState({workDate:'',status:'PRESENT',checkInAt:'',checkOutAt:'',notes:'',reason:''});
   const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
   const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'|'profile'>('attendance');
@@ -78,9 +78,9 @@ export default function EmployeeSelfServicePage(){
   async function submitAttendanceCorrection(event:React.FormEvent){
     event.preventDefault();setSaving(true);setError('');setNotice('');
     try{
-      const result=await api('/api/v1/hr/self-service/attendance/correction-requests',{method:'POST',body:JSON.stringify(correctionDraft)});
+      const payload={...correctionDraft,checkInAt:correctionDraft.checkInAt?new Date(correctionDraft.checkInAt).toISOString():null,checkOutAt:correctionDraft.checkOutAt?new Date(correctionDraft.checkOutAt).toISOString():null};const result=await api('/api/v1/hr/self-service/attendance/correction-requests',{method:'POST',body:JSON.stringify(payload)});
       setNotice('Attendance correction request #'+result.id+' submitted for review.');
-      setCorrectionDraft(v=>({...v,notes:'',reason:''}));
+      setCorrectionDraft(v=>({...v,checkInAt:'',checkOutAt:'',notes:'',reason:''}));
       await load();setTab('attendance');
     }catch(e){setError(e instanceof Error?e.message:'Attendance correction request could not be submitted.')}finally{setSaving(false)}
   }
@@ -176,6 +176,8 @@ export default function EmployeeSelfServicePage(){
             <form className="form-grid" onSubmit={submitAttendanceCorrection}>
               <label className="field">Work date<input className="input" type="date" required value={correctionDraft.workDate} onChange={e=>setCorrectionDraft(v=>({...v,workDate:e.target.value}))}/></label>
               <label className="field">Requested status<select required value={correctionDraft.status} onChange={e=>setCorrectionDraft(v=>({...v,status:e.target.value}))}>{['PRESENT','ABSENT','HALF_DAY','REMOTE','ON_LEAVE','HOLIDAY'].map(status=><option key={status} value={status}>{pretty(status)}</option>)}</select></label>
+              <label className="field">Requested check-in (optional)<input className="input" type="datetime-local" value={correctionDraft.checkInAt} onChange={e=>setCorrectionDraft(v=>({...v,checkInAt:e.target.value}))}/></label>
+              <label className="field">Requested check-out (optional)<input className="input" type="datetime-local" value={correctionDraft.checkOutAt} min={correctionDraft.checkInAt||undefined} onChange={e=>setCorrectionDraft(v=>({...v,checkOutAt:e.target.value}))}/></label>
               <label className="field full">Corrected note (optional)<textarea className="input" rows={2} maxLength={500} value={correctionDraft.notes} onChange={e=>setCorrectionDraft(v=>({...v,notes:e.target.value}))}/></label>
               <label className="field full">Reason for correction<textarea className="input" rows={3} required maxLength={1000} value={correctionDraft.reason} onChange={e=>setCorrectionDraft(v=>({...v,reason:e.target.value}))} placeholder="Explain what is incorrect and why it should be changed."/></label>
               <div className="actions"><button className="primary" disabled={saving||loading||!correctionDraft.workDate||!correctionDraft.reason.trim()}>{saving?'Submitting…':'Submit correction request'}</button></div>
