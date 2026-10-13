@@ -212,10 +212,9 @@ public class HrEmployeeController {
     requireView(context);
     int safeLimit=List.of(10,20,50).contains(limit)?limit:50;
     int safeOffset=Math.max(0,Math.min(offset,1000000));
-    String term="%"+(q==null?"":q.trim().replace("%","\\%").replace("_","\\_"))+"%";
     String scope=reportingScope.sqlScopePredicate(context,"e");
     String normalizedQuery=q==null?"":q.trim();
-    String term="%"+normalizedQuery.replace("%","\\\\%").replace("_","\\\\_")+"%";
+    String term="%"+normalizedQuery.replace("%","\\%").replace("_","\\_")+"%";
     Object[] filters={includeInactive,normalizedQuery,term,term,term,term};
     List<Map<String,Object>> items=jdbc.queryForList("""
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
