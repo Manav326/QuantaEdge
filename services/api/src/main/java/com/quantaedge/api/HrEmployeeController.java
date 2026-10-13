@@ -263,7 +263,9 @@ public class HrEmployeeController {
   public List<Map<String,Object>> employeeHistory(@PathVariable long id,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
-    // Resolve the employee first so callers get a consistent 404 for unknown records.
+    // Apply the same manager reporting-tree policy as employee detail before resolving or reading
+    // the employee's snapshots, so out-of-scope existence and history are not disclosed.
+    reportingScope.requireEmployeeAccess(context,id);
     employeeById(id);
     return jdbc.queryForList("""
       select h.id,h.employee_id,h.changed_by_staff_id,h.change_type,h.effective_date,

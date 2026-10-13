@@ -59,6 +59,19 @@ class HrEmployeeControllerTest {
   }
 
   @Test
+  void managerCannotReadEmployeeHistoryOutsideReportingTree() {
+    when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_VIEW")).thenReturn(hrManager);
+    when(authorization.hasPermission(hrManager, "HR_MANAGER_TEAM_VIEW")).thenReturn(true);
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), any(Object[].class))).thenReturn(false);
+
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.employeeHistory(9L, hrManager));
+
+    assertEquals(404, error.getStatusCode().value());
+    verify(jdbc, never()).queryForList(anyString(), any(Object[].class));
+  }
+
+  @Test
   void employeeCreationRequiresManagePermissionBeforeAnyDatabaseAccess() {
     when(authorization.requirePermission(hrManager, "HR_EMPLOYEE_MANAGE"))
         .thenThrow(new SecurityException("Permission required"));
