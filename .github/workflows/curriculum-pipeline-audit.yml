@@ -4,7 +4,11 @@ on:
     branches: ["main"]
     paths:
       - "scripts/audit_curriculum_pipeline.py"
+      - "scripts/generate_questions_from_extraction.py"
+      - "scripts/scert_extract_review.py"
+      - "scripts/review_generated_question_bundle.py"
       - "tests/test_audit_curriculum_pipeline.py"
+      - "tests/test_generate_questions_from_extraction.py"
       - "docs/product/curriculum-question-targets.csv"
       - ".github/workflows/curriculum-pipeline-audit.yml"
   workflow_dispatch:
@@ -30,6 +34,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
       - run: python -m unittest tests.test_audit_curriculum_pipeline -v
+      - run: python -m unittest tests.test_generate_questions_from_extraction -v
       - run: python scripts/audit_curriculum_pipeline.py --skip-registry --strict
   live-registry:
     if: github.event_name == 'workflow_dispatch' && inputs.pull_live_registry
