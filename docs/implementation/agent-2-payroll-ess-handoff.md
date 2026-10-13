@@ -1,7 +1,8 @@
 # Agent 2 — Payroll, Employee Self-Service and Extended HR Handoff
 
 **Repository:** `Manav326/QuantaEdge`  
-**Baseline:** `main` at `0d71946b3854a68c894001193a5174a41fa9a45b`  
+**Initial audit baseline:** `main` at `0d71946b3854a68c894001193a5174a41fa9a45b`  
+**Latest `main` incorporated:** `00ed52ad75432153aefc93105cd83ae2c472843c`  
 **Working branch:** `agent/payroll-ess-extended-hr`  
 **Status:** Partial implementation committed; runtime verification remains outstanding.
 
@@ -123,4 +124,4 @@ Commits made through GitHub on this branch:
 - `0dfe5f7` — Add extended HR workflow workspace
 - `10fcdf0` — Link extended HR workspace from People portal
 
-The remote branch was available and these commits were written to it. No commit was made to `main`; no force-push or pull request was used.
+The remote branch was available and these commits were written to it. `main` advanced during the work with two Android APK workflow/script commits; both were incorporated into the agent branch with merge commit `2141adb8d25308c8a14678fd5ad6a660cf60a693`. No commit was made to `main`; no force-push or pull request was used.
