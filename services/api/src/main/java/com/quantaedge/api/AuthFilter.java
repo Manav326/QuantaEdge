@@ -36,6 +36,31 @@ public class AuthFilter extends OncePerRequestFilter {
         .collect(Collectors.toUnmodifiableSet());
   }
 
+  private static boolean authOperationAllowed(String uri, String workspace) {
+    if (workspace == null) return true; // legacy non-browser clients are still constrained by token identity
+    if (uri.equals("/api/v1/auth/me")
+        || uri.equals("/api/v1/auth/refresh")
+        || uri.equals("/api/v1/auth/logout")) return true;
+    if (uri.equals("/api/v1/auth/request-otp") || uri.equals("/api/v1/auth/verify-otp")) {
+      return Set.of("STAFF", "EDUCATION_ADMIN", "PARENT", "LEARNING").contains(workspace);
+    }
+    if (uri.equals("/api/v1/auth/hrms-login")
+        || uri.equals("/api/v1/auth/hrms/change-password")) return "HRMS".equals(workspace);
+    if (uri.equals("/api/v1/auth/parent-login")) {
+      return "PARENT".equals(workspace) || "LEARNING".equals(workspace);
+    }
+    if (uri.equals("/api/v1/auth/student-login")) {
+      return "STUDENT".equals(workspace) || "LEARNING".equals(workspace);
+    }
+    if (uri.equals("/api/v1/auth/preview-login")) {
+      return Set.of("PARENT", "STUDENT", "LEARNING").contains(workspace);
+    }
+    if (uri.equals("/api/v1/auth/select-student") || uri.equals("/api/v1/auth/switch-parent")) {
+      return Set.of("PARENT", "STUDENT", "LEARNING").contains(workspace);
+    }
+    return false;
+  }
+
   public AuthFilter(AuthService auth, StaffAuditService staffAudit) {
     this.auth = auth;
     this.staffAudit = staffAudit;
@@ -87,6 +112,13 @@ public class AuthFilter extends OncePerRequestFilter {
           || path.startsWith("/api/v1/hr/")
           || path.startsWith("/api/v1/hrms/");
       boolean authEndpoint = path.startsWith("/api/v1/auth/");
+      if (!preflight && authEndpoint && !authOperationAllowed(path, workspace)) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"AUTH_OPERATION_SCOPE_MISMATCH\",\"message\":\"This authentication operation is not available in the requested application workspace.\"}");
+        return;
+      }
       if (!preflight && hrmsEndpoint && !"HRMS".equals(workspace)) {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setCharacterEncoding("UTF-8");
