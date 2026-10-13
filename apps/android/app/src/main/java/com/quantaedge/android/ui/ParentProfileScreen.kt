@@ -52,15 +52,19 @@ fun ParentProfileScreen(
     var organization by rememberSaveable { mutableStateOf("") }
     var preferredLanguage by rememberSaveable { mutableStateOf("Hindi") }
     var languageMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    var profileDraftHydrated by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(profile) {
-        displayName = profile.textAny("display_name", "displayName")
-        email = profile.textAny("email")
-        city = profile.textAny("city")
-        state = profile.textAny("state")
-        occupation = profile.textAny("occupation")
-        organization = profile.textAny("organization")
-        preferredLanguage = profile.textAny("preferred_language", "preferredLanguage").ifBlank { "Hindi" }
+        if (!profileDraftHydrated) {
+            displayName = profile.textAny("display_name", "displayName")
+            email = profile.textAny("email")
+            city = profile.textAny("city")
+            state = profile.textAny("state")
+            occupation = profile.textAny("occupation")
+            organization = profile.textAny("organization")
+            preferredLanguage = profile.textAny("preferred_language", "preferredLanguage").ifBlank { "Hindi" }
+            profileDraftHydrated = true
+        }
     }
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
