@@ -25,7 +25,7 @@ public class HrReportingScopeService {
         where child.manager_employee_id in
           (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
           and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
-        union all
+        union
         select child.id,child.organization_id from hr_employee child
         join reporting parent on child.manager_employee_id=parent.id
         where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
