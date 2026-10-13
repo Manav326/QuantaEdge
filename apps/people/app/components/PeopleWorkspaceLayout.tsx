@@ -106,7 +106,7 @@ function initials(name: string): string {
 export default function PeopleWorkspaceLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname() || '/';
   const router = useRouter();
-  const publicRoute = pathname === '/login' || pathname.startsWith('/login/');
+  const publicRoute = pathname === '/login' || pathname.startsWith('/login/') || pathname === '/change-password';
   const [session, setSession] = useState<StaffSession | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,4 +1,5 @@
 'use client';
+import { PeoplePageHeader } from '../components/PeopleUI';
 
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -110,9 +111,7 @@ export default function EmployeeSelfServicePage(){
   return <div className="shell">
     
     <main className="main">
-      <div className="eyebrow">YOUR EMPLOYMENT · PRIVATE WORKSPACE</div>
-      <h1>My workspace</h1>
-      <p className="sub">Review your own employment details, attendance, leave requests and available leave balances. HR-only records and other employees remain outside this view.</p>
+      <PeoplePageHeader eyebrow={"YOUR EMPLOYMENT · PRIVATE WORKSPACE"} title={"My workspace"} description={"Review your own employment details, attendance, leave requests and available leave balances. HR-only records and other employees remain outside this view."} />
       {error&&<div className="error" role="alert">{error}</div>}
       {notice&&<div className="notice" role="status">{notice}</div>}
       {profile&&<section className="panel" aria-labelledby="profile-heading">
