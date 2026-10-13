@@ -1,6 +1,7 @@
 package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -96,6 +97,42 @@ class CertificateControllerEligibilityTest {
     Map<String, Object> revoked = firstItem(controller.assessmentCertificateEligibility("9006", student));
     assertEquals(false, revoked.get("eligible"));
     assertEquals("CERTIFICATE_REVOKED", revoked.get("eligibility_reason"));
+  }
+
+  @Test
+  void issuanceEndpointIndependentlyRejectsGeneratedAssessmentEvenIfClientCallsItDirectly() {
+    Map<String, Object> studentRow = new LinkedHashMap<>();
+    studentRow.put("id", 81L);
+    studentRow.put("display_name", "Test Learner");
+    studentRow.put("class_code", "6");
+    studentRow.put("language", "en");
+
+    Map<String, Object> attempt = new LinkedHashMap<>();
+    attempt.put("recipient_name", "Test Learner");
+    attempt.put("student_language", "en");
+    attempt.put("class_code", "6");
+    attempt.put("subject_id", 5L);
+    attempt.put("subject_code", "science");
+    attempt.put("subject_name", "Science");
+    attempt.put("assessment_title", "Generated topic test");
+    attempt.put("assessment_type", "TOPIC_END");
+    attempt.put("is_generated", true);
+    attempt.put("assessment_attempt_id", 9001L);
+    attempt.put("final_score", new BigDecimal("100"));
+    attempt.put("max_score", new BigDecimal("100"));
+    attempt.put("released_at", null);
+
+    when(jdbc.queryForList(anyString(), any(Object[].class)))
+        .thenReturn(List.of(studentRow), List.of(attempt), List.of());
+
+    org.springframework.web.server.ResponseStatusException error = assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.issueCertificate(
+            new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9001L, "CLASSIC", "en"),
+            student));
+
+    assertEquals(409, error.getStatusCode().value());
+    assertTrue(error.getReason().contains("Only admin-created assessments"));
   }
 
   @Test
