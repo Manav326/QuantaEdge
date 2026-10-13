@@ -20,7 +20,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,8 +39,8 @@ fun TutorScreen(
 ) {
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    var input by remember { mutableStateOf("") }
-    var selectedMode by remember { mutableStateOf("HINT") }
+    var input by rememberSaveable { mutableStateOf("") }
+    var selectedMode by rememberSaveable { mutableStateOf("HINT") }
 
     Column(modifier = Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(localizedUiText("QuantaEdge Tutor"), style = MaterialTheme.typography.headlineSmall)
