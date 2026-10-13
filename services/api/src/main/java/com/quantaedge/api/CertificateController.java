@@ -158,20 +158,6 @@ public class CertificateController {
             SELECT 1 FROM student_track_enrollment ste
             WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
           )
-          AND EXISTS (
-            SELECT 1 FROM curriculum_chapter ch
-            JOIN lesson l ON l.chapter_id=ch.id
-            WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
-              AND l.active=true AND l.status='PUBLISHED'
-          )
-          AND NOT EXISTS (
-            SELECT 1 FROM curriculum_chapter ch
-            JOIN lesson l ON l.chapter_id=ch.id
-            LEFT JOIN student_lesson_progress p ON p.student_id=st.id AND p.lesson_id=l.id
-            WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
-              AND l.active=true AND l.status='PUBLISHED'
-              AND p.status IS DISTINCT FROM 'COMPLETED'
-          )
           AND NOT EXISTS (
             SELECT 1 FROM student_certificate existing
             WHERE existing.student_id=att.student_id
@@ -184,7 +170,7 @@ public class CertificateController {
     Map<String, Object> result = new LinkedHashMap<>();
     result.put("items", items);
     result.put("passThresholdPercent", minimumPassPercent);
-    result.put("rule", "ADMIN_CREATED_RELEASED_PASS_AND_SUBJECT_COMPLETION");
+    result.put("rule", "ADMIN_CREATED_RELEASED_PASS");
     return result;
   }
 
@@ -276,10 +262,6 @@ public class CertificateController {
         || Boolean.TRUE.equals(attempt.get("is_generated"))) return "ADMIN_CREATED_TEST_ONLY";
     if (!"RELEASED".equals(clean(attempt.get("status")))) return "RESULT_NOT_RELEASED";
     if (!Boolean.TRUE.equals(attempt.get("active_subject_track"))) return "SUBJECT_TRACK_NOT_ACTIVE";
-    long total = number(attempt.get("published_lessons"));
-    long completed = number(attempt.get("completed_lessons"));
-    if (total < 1) return "PUBLISHED_LESSONS_NOT_AVAILABLE";
-    if (completed != total) return "SUBJECT_COMPLETION_REQUIRED";
     if (attempt.get("final_score") == null || attempt.get("max_score") == null) return "INVALID_SCORE";
     BigDecimal score = decimal(attempt.get("final_score"));
     BigDecimal max = decimal(attempt.get("max_score"));
@@ -417,17 +399,6 @@ public class CertificateController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
           "Certificate requires an active enrollment in this subject for your current class.");
     }
-    long publishedLessons = number(progress.get("total_lessons"));
-    long completedLessons = number(progress.get("completed_lessons"));
-    if (publishedLessons < 1) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "This subject has no currently published lessons ready for certificate completion.");
-    }
-    if (completedLessons != publishedLessons) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "Complete all " + publishedLessons + " currently published lessons in this subject before requesting its test certificate.");
-    }
-
     BigDecimal finalScore = decimal(achievement.get("final_score"));
     BigDecimal maxScore = decimal(achievement.get("max_score"));
     if (maxScore.signum() <= 0) throw new ResponseStatusException(HttpStatus.CONFLICT, "Assessment maximum score is invalid.");
@@ -447,7 +418,7 @@ public class CertificateController {
         : "Scored " + finalScore.stripTrailingZeros().toPlainString() + " / "
             + maxScore.stripTrailingZeros().toPlainString() + " (" + percent.toPlainString() + "%).";
     Map<String, Object> snapshot = new LinkedHashMap<>();
-    snapshot.put("rule", "RELEASED_ASSESSMENT_AT_OR_ABOVE_PASS_THRESHOLD");
+    snapshot.put("rule", "RELEASED_ADMIN_CREATED_ASSESSMENT_AT_OR_ABOVE_PASS_THRESHOLD");
     snapshot.put("assessmentAttemptId", attemptId);
     snapshot.put("assessmentTitle", assessmentTitle);
     snapshot.put("finalScore", finalScore);

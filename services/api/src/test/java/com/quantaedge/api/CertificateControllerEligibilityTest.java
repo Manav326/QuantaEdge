@@ -23,10 +23,11 @@ import tools.jackson.databind.ObjectMapper;
 class CertificateControllerEligibilityTest {
   private final JdbcTemplate jdbc = mock(JdbcTemplate.class);
   private final AuthorizationService authorization = mock(AuthorizationService.class);
+  private final CertificateRenderer renderer = mock(CertificateRenderer.class);
   private final AuthContext student = new AuthContext(71L, 81L, "STUDENT", "Test Learner");
   private final BigDecimal threshold = new BigDecimal("80");
   private final CertificateController controller = new CertificateController(
-      jdbc, authorization, new CertificateRenderer(),
+      jdbc, authorization, renderer,
       new CertificateArtifactStorage(System.getProperty("java.io.tmpdir")),
       new ObjectMapper(), threshold);
 
@@ -36,9 +37,9 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
-  void qualifyingAdminCreatedTestRequiresCompletedSubjectAndPassThreshold() {
+  void qualifyingAdminCreatedTestCanEarnCertificateWithIncompleteLessonsAndPerfectScore() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(attemptRow(
-        "ADMIN_CREATED", false, "RELEASED", "80", "100", 6L, 6L, true, null)));
+        "ADMIN_CREATED", false, "RELEASED", "100", "100", 6L, 0L, true, null)));
 
     Map<String, Object> response = controller.assessmentCertificateEligibility("9001", student);
     Map<String, Object> item = firstItem(response);
@@ -73,14 +74,14 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
-  void allPublishedLessonsMustBeCompletedBeforeAssessmentCertificateIsEligible() {
+  void incompleteSubjectLessonsDoNotBlockAnOtherwiseQualifyingAssessmentCertificate() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(
-        attemptRow("ADMIN_CREATED", false, "RELEASED", "90", "100", 6L, 5L, true, null)));
+        attemptRow("ADMIN_CREATED", false, "RELEASED", "90", "100", 6L, 1L, true, null)));
 
     Map<String, Object> item = firstItem(controller.assessmentCertificateEligibility("9004", student));
 
-    assertEquals(false, item.get("eligible"));
-    assertEquals("SUBJECT_COMPLETION_REQUIRED", item.get("eligibility_reason"));
+    assertEquals(true, item.get("eligible"));
+    assertEquals(null, item.get("eligibility_reason"));
   }
 
   @Test
@@ -136,16 +137,80 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
-  void eligibleAssessmentPickerQueryEnforcesAdminSourceAndSubjectCompletion() {
+  void issuingPerfectAdminCreatedTestDoesNotRequireAllPublishedLessonsCompleted() {
+    Map<String, Object> studentRow = new LinkedHashMap<>();
+    studentRow.put("id", 81L);
+    studentRow.put("display_name", "Test Learner");
+    studentRow.put("class_code", "6");
+    studentRow.put("language", "en");
+
+    Map<String, Object> attempt = new LinkedHashMap<>();
+    attempt.put("recipient_name", "Test Learner");
+    attempt.put("student_language", "en");
+    attempt.put("class_code", "6");
+    attempt.put("subject_id", 5L);
+    attempt.put("subject_code", "science");
+    attempt.put("subject_name", "Science");
+    attempt.put("assessment_title", "Perfect admin-created test");
+    attempt.put("assessment_type", "ADMIN_CREATED");
+    attempt.put("is_generated", false);
+    attempt.put("assessment_attempt_id", 9007L);
+    attempt.put("final_score", new BigDecimal("100"));
+    attempt.put("max_score", new BigDecimal("100"));
+
+    Map<String, Object> progress = new LinkedHashMap<>();
+    progress.put("active_subject_track", true);
+    progress.put("total_lessons", 6L);
+    progress.put("completed_lessons", 0L);
+
+    Map<String, Object> certificate = new LinkedHashMap<>();
+    certificate.put("id", 3007L);
+    certificate.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    certificate.put("achievement_type", "ASSESSMENT_PASS");
+    certificate.put("status", "ISSUED");
+
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
+      String sql = invocation.getArgument(0, String.class);
+      if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("FROM student_assessment_attempt att") && sql.contains("assessment_type")) return List.of(attempt);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) {
+        return List.of();
+      }
+      if (sql.contains("FROM student_certificate c") && sql.contains("WHERE c.id=? AND c.student_id=?")) {
+        return List.of(certificate);
+      }
+      return List.of();
+    });
+    when(jdbc.queryForMap(anyString(), any(Object[].class))).thenReturn(progress);
+    when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(3007L);
+    when(renderer.render(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
+        any(java.time.OffsetDateTime.class), eq(false)))
+        .thenReturn(new CertificateRenderer.RenderedCertificate(new byte[] {1, 2, 3}, new byte[] {4, 5, 6}));
+
+    Map<String, Object> issued = controller.issueCertificate(
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9007L, "CLASSIC", "en"), student);
+
+    assertEquals("ASSESSMENT_PASS", issued.get("achievement_type"));
+    assertEquals("QE-2026-ABCDEF1234567890", issued.get("certificate_number"));
+    verify(renderer).render(eq("CLASSIC"), eq("en"), eq("Test Learner"),
+        org.mockito.ArgumentMatchers.contains("Perfect admin-created test"),
+        org.mockito.ArgumentMatchers.contains("100"), anyString(),
+        any(java.time.OffsetDateTime.class), eq(false));
+  }
+
+  @Test
+  void eligibleAssessmentPickerUsesReleasedPassingAdminCreatedTestsWithoutCourseCompletionGate() {
     when(jdbc.queryForList(anyString(), eq(student.studentId()), eq(threshold))).thenReturn(List.of());
 
     controller.eligibleAssessments(student);
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc).queryForList(sql.capture(), eq(student.studentId()), eq(threshold));
+    assertTrue(sql.getValue().contains("att.status='RELEASED'"));
     assertTrue(sql.getValue().contains("a.assessment_type='ADMIN_CREATED'"));
     assertTrue(sql.getValue().contains("a.is_generated=false"));
-    assertTrue(sql.getValue().contains("p.status IS DISTINCT FROM 'COMPLETED'"));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("student_lesson_progress"));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("p.status IS DISTINCT FROM 'COMPLETED'"));
   }
 
   @SuppressWarnings("unchecked")

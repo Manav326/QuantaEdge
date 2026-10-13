@@ -213,8 +213,8 @@ export default function TestsClient(){
       case 'ADMIN_CREATED_TEST_ONLY':return 'Only admin-created tests qualify; generated topic/chapter tests and practice are excluded.';
       case 'RESULT_NOT_RELEASED':return 'Certificate unlocks after the final result is released.';
       case 'SUBJECT_TRACK_NOT_ACTIVE':return 'An active enrollment in this subject and current class is required.';
-      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return 'Certificates unlock after this subject has published lessons.';
-      case 'SUBJECT_COMPLETION_REQUIRED':return 'Complete all published lessons in this subject to unlock the test certificate.';
+      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return 'A released, passing admin-created test is enough for a test certificate; refresh the result list to retry eligibility.';
+      case 'SUBJECT_COMPLETION_REQUIRED':return 'Test certificates no longer require completing every published lesson. Refresh results and retry eligibility.';
       case 'PASS_THRESHOLD_NOT_MET':return 'The result is below the '+String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80)+'% certificate threshold.';
       case 'INVALID_SCORE':return 'This result has no valid maximum score.';
       case 'CERTIFICATE_REVOKED':return 'This certificate has been revoked; contact an administrator.';
@@ -231,7 +231,7 @@ export default function TestsClient(){
         body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language})
       });
       const body=await response.json().catch(()=>({}));
-      if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
+      if(!response.ok)throw new Error(body.message||body.detail||body.error||'Certificate could not be issued.');
       setNotice('Certificate issued successfully. View or download it from this result.');
       await loadOverview();
       await refreshCertificateEligibilityForAttempts([attemptId]);

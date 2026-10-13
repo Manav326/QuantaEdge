@@ -16,10 +16,17 @@ import javax.imageio.ImageIO;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 
 class CertificateRendererTest {
   private final CertificateRenderer renderer = new CertificateRenderer();
   private final OffsetDateTime issuedAt = OffsetDateTime.parse("2026-10-12T18:00:00+05:30");
+
+  @Test
+  void publicVerificationOriginReadsTheConfiguredAppPublicBaseUrlEnvironmentProperty() throws Exception {
+    Value value = CertificateRenderer.class.getDeclaredField("publicBaseUrl").getAnnotation(Value.class);
+    assertEquals("${app.public.base.url:http://localhost:3000}", value.value());
+  }
 
   @Test
   void allTemplatesRenderPdfAndPngFromTheSameA4LandscapeCanvas() throws Exception {

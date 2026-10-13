@@ -312,7 +312,11 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
                     }
                 } else {
                     if (eligibleAssessments.isEmpty()) {
-                        Text(if (language == "hi") "अभी कोई पात्र जारी किया गया test नहीं मिला।" else "No eligible released test result was found.", color = MaterialTheme.colorScheme.secondary)
+                        Text(
+                            if (language == "hi") "कोई पात्र result नहीं मिला। Test certificate के लिए admin-created test का result RELEASED होना चाहिए, pass mark पूरा होना चाहिए और subject enrollment active होना चाहिए। किसी specific test की वजह जानने के लिए उसका result खोलें।"
+                            else "No eligible result found. A test certificate requires a released result from an admin-created test, a passing score and an active subject enrollment. Open a specific test result to see its eligibility reason.",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
                     } else {
                         Text(if (language == "hi") "पात्र test चुनें" else "Select an eligible test")
                         eligibleAssessments.forEach { item ->

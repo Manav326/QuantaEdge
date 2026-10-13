@@ -54,7 +54,7 @@ public class CertificateRenderer {
   private static final Color PAPER = new Color(0xFFFCF5);
   private static final Color PALE = new Color(0xF3F5F8);
 
-  @Value("${app.certificates.public-base-url:http://localhost:3000}")
+  @Value("${app.public.base.url:http://localhost:3000}")
   private String publicBaseUrl = "http://localhost:3000";
 
   public record RenderedCertificate(byte[] pdf, byte[] png) {}

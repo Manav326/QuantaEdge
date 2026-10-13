@@ -2077,8 +2077,8 @@ private fun AssessmentAttemptScreen(
                     Text(if (language == "hi") "इस result का certificate" else "Certificate for this result",
                         style = MaterialTheme.typography.titleSmall)
                     Text(
-                        if (language == "hi") "Admin-created test, qualifying released score और सभी published lessons पूरे होना ज़रूरी है।"
-                        else "Requires an admin-created test, a qualifying released score and completion of all published lessons.",
+                        if (language == "hi") "Admin-created test, जारी किया गया qualifying result, pass mark और active subject enrollment ज़रूरी है।"
+                        else "Requires a released passing result from an admin-created test and an active subject enrollment.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary
                     )
