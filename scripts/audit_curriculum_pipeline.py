@@ -61,6 +61,10 @@ def audit_book(root,e,page_check=True):
   except ImportError:bad.append(issue("WARNING","registry","PYMUPDF_MISSING","Install PyMuPDF to check actual page count.",book_id=bid))
   except Exception as ex:bad.append(issue("BLOCKER","registry","PDF_UNREADABLE","Cannot parse PDF.",book_id=bid,error=str(ex)))
  if isinstance(e.get("page_count"),int) and pages is not None and pages!=e["page_count"]:bad.append(issue("BLOCKER","registry","PAGE_COUNT_MISMATCH","Actual page count differs from manifest.",book_id=bid,expected=e["page_count"],actual=pages))
+ edition=str(e.get("edition") or "").strip().lower()
+ if edition in {"","unknown","unverified","current","n/a","not specified"}:bad.append(issue("BLOCKER","registry","EDITION_UNVERIFIED","Actual source edition/session is not recorded.",book_id=bid,edition=edition))
+ source_url=str(e.get("source_url") or e.get("catalog_entry_url") or "")
+ if not source_url.startswith("https://"):bad.append(issue("BLOCKER","registry","SOURCE_URL_MISSING","Official HTTPS source URL is missing.",book_id=bid))
  declared=str(cov.get("status") or "").lower();method=str(e.get("download_method") or "").lower()
  if declared in {"partial","unavailable"} or "partial" in method:
   status="partial";bad.append(issue("BLOCKER","registry","PARTIAL_BOOK_NOT_COMPLETE","Partial asset cannot satisfy whole-book coverage.",book_id=bid,missing_chapters=cov.get("missing_chapters",[])))
@@ -102,6 +106,10 @@ def audit_extraction(b,path):
  c=b.get("curriculum") if isinstance(b.get("curriculum"),dict) else {};grade=str(c.get("class_code",""));sub=str(c.get("subject_code","")).lower();lang=LANG.get(str(c.get("language","")).lower())
  if grade not in {"6","7","8"} or sub not in {"maths","science"} or not lang:bad.append(issue("BLOCKER","extraction","TRACK_INVALID","Class/subject/language invalid.",path=str(path),curriculum=c))
  src=b.get("source") if isinstance(b.get("source"),dict) else {};n=src.get("pdf_page_count");hs=str(src.get("pdf_sha256") or "").lower()
+ edition=str(src.get("edition") or "").strip().lower()
+ if edition in {"","unknown","unverified","current","n/a","not specified"}:bad.append(issue("BLOCKER","extraction","EDITION_UNVERIFIED","Actual source edition/session is missing.",path=str(path)))
+ source_url=str(src.get("url") or "")
+ if not source_url.startswith("https://"):bad.append(issue("BLOCKER","extraction","SOURCE_URL_MISSING","Official source URL is missing.",path=str(path)))
  if not isinstance(n,int) or n<1:bad.append(issue("BLOCKER","extraction","PAGE_COUNT_INVALID","Source PDF page count invalid.",path=str(path)));n=0
  if not re.fullmatch(r"[0-9a-f]{64}",hs):bad.append(issue("BLOCKER","extraction","SOURCE_HASH_INVALID","Source SHA-256 invalid.",path=str(path)))
  chapters=b.get("chapter_map")
@@ -152,8 +160,14 @@ def audit_dir(folder,kind):
   counts={};total=0
   for lesson in lessons:
    if not isinstance(lesson,dict):bad.append(issue("BLOCKER",stage,"LESSON_INVALID","Lesson row malformed.",path=str(p)));continue
-   for block in lesson.get("blocks",[]) if isinstance(lesson.get("blocks",[]),list) else []:
+   blocks=lesson.get("blocks",[]) if isinstance(lesson.get("blocks",[]),list) else []
+   block_types=set()
+   for block in blocks:
     if not isinstance(block,dict) or not isinstance(block.get("content"),dict):bad.append(issue("BLOCKER",stage,"BLOCK_INVALID","Lesson block malformed.",path=str(p)))
+    elif block.get("active",True):block_types.add(str(block.get("block_type") or "").upper())
+   required_blocks={"EXPLANATION","WORKED_EXAMPLE","GUIDED_PRACTICE","INDEPENDENT_PRACTICE","RECAP"}
+   missing_blocks=sorted(required_blocks-block_types)
+   if missing_blocks:bad.append(issue("BLOCKER",stage,"TEACHING_SECTION_GAP","Draft lesson lacks required teaching sections.",path=str(p),missing_blocks=missing_blocks))
    qs=lesson.get("questions")
    if not isinstance(qs,list):bad.append(issue("BLOCKER",stage,"QUESTIONS_INVALID","Questions not a list.",path=str(p)));continue
    for q in qs:
@@ -178,6 +192,48 @@ def summary(rows):
  for t in tracks.values():t["chapter_count"]=len(t.pop("chapter_codes"));t["remaining_to_target"]=max(0,t["target"]-t["documented_baseline"])
  return {"canonical_chapters":len(chapters),"minimum_question_target":target,"documented_baseline_approved_questions":base,"remaining_to_target_at_documented_baseline":max(0,target-base),"tracks":list(tracks.values())}
 
+
+def reconcile_coverage(target_rows,grades,languages,extractions,candidates,reviewed):
+ expected={(r["class_code"],r["subject_code"],r["chapter_code"],lang) for r in target_rows if r["class_code"] in grades for lang in languages}
+ issues=[]; ex_found=set(); candidate_found=set()
+ if extractions.get("configured"):
+  for item in extractions.get("items",[]):
+   for code in item.get("chapter_codes",[]): ex_found.add((item["class_code"],item["subject_code"],code,item["language"]))
+  missing=sorted(expected-ex_found)
+  if missing:issues.append(issue("BLOCKER","extraction","BILINGUAL_CHAPTER_COVERAGE_GAP","Canonical chapters are not represented in extraction bundles for both selected languages.",missing_count=len(missing),examples=[{"class_code":g,"subject_code":sub,"chapter_code":ch,"language":lang} for g,sub,ch,lang in missing[:80]]))
+ if candidates.get("configured"):
+  for item in candidates.get("items",[]):candidate_found.add((item["class_code"],item["subject_code"],item["chapter_code"],item["language"]))
+ if reviewed.get("configured"):
+  for item in reviewed.get("items",[]):candidate_found.add((item["class_code"],item["subject_code"],item["chapter_code"],item["language"]))
+ if candidates.get("configured") or reviewed.get("configured"):
+  missing=sorted(expected-candidate_found)
+  if missing:issues.append(issue("BLOCKER","question_generation","BILINGUAL_CANDIDATE_COVERAGE_GAP","Not every canonical chapter has a generated/reviewed draft for both selected languages.",missing_count=len(missing),examples=[{"class_code":g,"subject_code":sub,"chapter_code":ch,"language":lang} for g,sub,ch,lang in missing[:80]]))
+ # Candidate and reviewed copies can represent the same bundle; use the larger tier count, never their sum.
+ def count_by_type(report):
+  counts={}
+  for item in report.get("items",[]):
+   prefix=(item["class_code"],item["subject_code"],item["chapter_code"],item["language"])
+   for typ,n in item.get("question_type_counts",{}).items():
+    key=prefix+(typ,);counts[key]=counts.get(key,0)+int(n)
+  return counts
+ draft_counts=count_by_type(candidates);reviewed_counts=count_by_type(reviewed)
+ gaps=[];expected_by_language=0
+ for row in target_rows:
+  if row["class_code"] not in grades or not row["target_eligible"] or row["minimum_target_count"]<1:continue
+  for lang in languages:
+   expected_by_language+=row["minimum_target_count"]
+   key=(row["class_code"],row["subject_code"],row["chapter_code"],lang,row["question_type"])
+   count=max(draft_counts.get(key,0),reviewed_counts.get(key,0))
+   if count<row["minimum_target_count"]:
+    gaps.append({"class_code":row["class_code"],"subject_code":row["subject_code"],"chapter_code":row["chapter_code"],"language":lang,"question_type":row["question_type"],"target":row["minimum_target_count"],"draft_or_reviewed_count":count,"gap":row["minimum_target_count"]-count})
+ if gaps and (candidates.get("configured") or reviewed.get("configured")):
+  issues.append(issue("BLOCKER","question_generation","BILINGUAL_QUESTION_TARGET_GAPS","Generated/reviewed drafts do not yet cover the curriculum question targets for both languages; draft counts are not approved/published questions.",gap_rows=len(gaps),missing_question_total=sum(x["gap"] for x in gaps),examples=gaps[:100]))
+ return {"expected_chapter_track_language_rows":len(expected),"extraction_rows_found":len(ex_found),"extraction_rows_missing":len(expected-ex_found) if extractions.get("configured") else None,
+         "candidate_chapter_track_language_rows":len(candidate_found),"candidate_rows_missing":len(expected-candidate_found) if (candidates.get("configured") or reviewed.get("configured")) else None,
+         "question_target_for_selected_languages":expected_by_language,"question_type_gap_rows":len(gaps) if (candidates.get("configured") or reviewed.get("configured")) else None,
+         "missing_question_total":sum(x["gap"] for x in gaps) if (candidates.get("configured") or reviewed.get("configured")) else None,
+         "candidate_counts_are_not_approved_or_published":True},issues
+
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument("--cache-root",type=Path,default=Path("source-pdfs/registry-cache"));p.add_argument("--targets-csv",type=Path,default=Path("docs/product/curriculum-question-targets.csv"))
  p.add_argument("--extraction-dir",type=Path);p.add_argument("--candidate-dir",type=Path);p.add_argument("--reviewed-dir",type=Path);p.add_argument("--classes",default="6,7,8");p.add_argument("--languages",default="hi,en")
@@ -190,6 +246,7 @@ def main():
  if not grades or any(x not in {"6","7","8"} for x in grades):p.error("classes must be 6,7,8")
  t,ti=load_targets(a.targets_csv);reg,ri=({"skipped":True,"images":[],"tracks":[]},[]) if a.skip_registry else audit_registry(a.cache_root,grades,langs)
  ex,ei=audit_dir(a.extraction_dir,"extraction");ca,ci=audit_dir(a.candidate_dir,"candidate");rv,vi=audit_dir(a.reviewed_dir,"candidate")
+ coverage,coverage_issues=reconcile_coverage(t,grades,langs,ex,ca,rv)
  live={"status":"NOT_RUN"};li=[];session=os.environ.get("QUANTAEDGE_ADMIN_SESSION","").strip()
  if a.live_api:
   live={"status":"CHECKED","tracks":[]}
@@ -203,11 +260,11 @@ def main():
       if not isinstance(body,list):raise ValueError("expected a JSON array")
       live["tracks"].append({"class_code":grade,"subject_code":sub,"records":len(body)})
      except (HTTPError,URLError,TimeoutError,OSError,ValueError,json.JSONDecodeError) as e:li.append(issue("BLOCKER","live_cms","LIVE_API_FAILED","CMS read failed.",class_code=grade,subject_code=sub,error=str(e)))
- findings=ti+ri+ei+ci+vi+li
+ findings=ti+ri+ei+ci+vi+coverage_issues+li
  report={"schema_version":1,"audit":"QuantaEdge textbook/chapter/bilingual assessment pipeline","read_only":True,"database_schema_changed":False,"scope":{"classes":grades,"languages":langs,"subjects":["maths","science"]},
  "overall_status":"BLOCKED" if any(x["severity"]=="BLOCKER" for x in findings) else "NEEDS_RUNTIME_VERIFICATION","runtime_end_to_end_test":"NOT_PROVEN_BY_ASSET_AUDIT",
  "summary":{"blockers":sum(x["severity"]=="BLOCKER" for x in findings),"warnings":sum(x["severity"]=="WARNING" for x in findings),"findings":len(findings)},
- "curriculum_targets":summary(t),"book_assets":reg,"chapter_extraction":ex,"question_candidates":ca,"reviewed_bundles":rv,"live_cms":live,"findings":findings,
+ "curriculum_targets":summary(t),"book_assets":reg,"chapter_extraction":ex,"bilingual_coverage":coverage,"question_candidates":ca,"reviewed_bundles":rv,"live_cms":live,"findings":findings,
  "question_type_capabilities":{"candidate_generation_schema":sorted(TYPES),"automatic_grading_types":sorted(AUTO),"draft_only_until_interaction_and_grading_exists":sorted(TYPES-AUTO)},
  "important_limits":["Checksum/page-count checks do not prove official edition or complete curriculum coverage.","Generated/reviewed candidates remain drafts until CMS approval.","Static checks do not prove browser render, assessment grading or progress persistence.","Target CSV counts are migration-derived, not live database counts."]}
  text=json.dumps(report,ensure_ascii=False,indent=2);print(text)
