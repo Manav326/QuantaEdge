@@ -71,7 +71,7 @@ tasks.register<Copy>("syncQuantaEdgeBranding") {
     rename { "quantaedge_wordmark.png" }
     doFirst {
         check(brandWordmark.asFile.exists()) {
-            "Approved QuantaEdge wordmark is missing at " + brandWordmark.asFile.absolutePath
+            "QuantaEdge Android branding asset is missing at " + brandWordmark.asFile.absolutePath
         }
     }
 }
