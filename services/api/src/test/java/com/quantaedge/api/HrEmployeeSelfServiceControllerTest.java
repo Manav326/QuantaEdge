@@ -78,7 +78,7 @@ class HrEmployeeSelfServiceControllerTest {
   void payslipsAreLoadedOnlyForTheAuthenticatedEmployee() {
     when(jdbc.queryForList(contains("linked_staff_account_id=?"),(Object)any()))
         .thenReturn(List.of(Map.of("id",31L)));
-    when(jdbc.queryForList(contains("from hr_payslip where employee_id=?"),(Object)any()))
+    when(jdbc.queryForList(contains("from hr_payslip where employee_id=?"),eq(31L),eq(20),eq(0)))
         .thenReturn(List.of(Map.of("id",6L,"public_id","payslip-public-id","run_id",12L,"version_no",1,
             "snapshot","{\"employeeName\":\"Employee\",\"net\":100.00}","checksum","a".repeat(64))));
 
@@ -87,7 +87,9 @@ class HrEmployeeSelfServiceControllerTest {
     List<Map<String,Object>> items=(List<Map<String,Object>>)result.get("items");
 
     assertEquals("{\"employeeName\":\"Employee\",\"net\":100.00}",items.getFirst().get("snapshot"));
-    verify(jdbc).queryForList(contains("from hr_payslip where employee_id=?"),(Object)any());
+    assertEquals(20,result.get("limit"));
+    assertEquals(0,result.get("offset"));
+    verify(jdbc).queryForList(contains("from hr_payslip where employee_id=?"),eq(31L),eq(20),eq(0));
   }
 
   @Test
