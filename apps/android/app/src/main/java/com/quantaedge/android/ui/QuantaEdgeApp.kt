@@ -1225,6 +1225,8 @@ fun QuantaEdgeApp() {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 when (route) {
                     AppRoute.LOGIN -> LoginScreen(
+                        language = language,
+                        onToggleLanguage = ::toggleLanguage,
                         busy = busy,
                         error = error,
                         onSignIn = ::signIn,
@@ -1232,6 +1234,8 @@ fun QuantaEdgeApp() {
                         onResetPassword = { route = AppRoute.PARENT_RESET }
                     )
                     AppRoute.PARENT_SIGNUP -> ParentOtpFlowScreen(
+                        language = language,
+                        onToggleLanguage = ::toggleLanguage,
                         isSignup = true,
                         busy = busy,
                         status = status,
@@ -1239,6 +1243,8 @@ fun QuantaEdgeApp() {
                         onVerify = { mobile, name, otp, password -> verifyParentOtp("SIGNUP", mobile, name, otp, password) }
                     )
                     AppRoute.PARENT_RESET -> ParentOtpFlowScreen(
+                        language = language,
+                        onToggleLanguage = ::toggleLanguage,
                         isSignup = false,
                         busy = busy,
                         status = status,
@@ -1483,6 +1489,8 @@ fun QuantaEdgeApp() {
 
 @Composable
 private fun LoginScreen(
+    language: String,
+    onToggleLanguage: () -> Unit,
     busy: Boolean,
     error: String,
     onSignIn: (String, String, String, String, String) -> Unit,
@@ -1508,24 +1516,28 @@ private fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text("Smarter Decisions. Greater Growth.", style = MaterialTheme.typography.bodyMedium)
-        Text("सीखना शुरू करें", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold,
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if (language == "hi") "EN" else "हिंदी") }
+        }
+        Text(if (language == "hi") "सीखना शुरू करें" else "Start learning",
+            style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(top = 22.dp, bottom = 16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text("छात्र") }
-            else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text("छात्र") }
-            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text("अभिभावक") }
-            else TextButton(onClick = { mode = "PARENT" }, enabled = !busy) { Text("अभिभावक") }
+            if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
+            else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
+            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text(if (language=="hi") "अभिभावक" else "Parent") }
+            else TextButton(onClick = { mode = "PARENT" }, enabled = !busy) { Text(if (language=="hi") "अभिभावक" else "Parent") }
         }
         if (mode == "PARENT") {
-            OutlinedTextField(value = mobile, onValueChange = { mobile = it }, label = { Text("अभिभावक का मोबाइल") },
+            OutlinedTextField(value = mobile, onValueChange = { mobile = it }, label = { Text(if(language=="hi") "अभिभावक का मोबाइल" else "Parent mobile number") },
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
         } else {
-            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it }, label = { Text("अभिभावक का पंजीकृत मोबाइल") },
+            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it }, label = { Text(if(language=="hi") "अभिभावक का पंजीकृत मोबाइल" else "Registered parent mobile") },
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
-            OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("छात्र यूज़रनेम") },
+            OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text(if(language=="hi") "छात्र यूज़रनेम" else "Student username") },
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
         }
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("पासवर्ड") },
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text(if(language=="hi") "पासवर्ड" else "Password") },
             singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
         Button(
             onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
@@ -1533,18 +1545,18 @@ private fun LoginScreen(
                 (if (mode == "PARENT") mobile.isNotBlank() else parentMobile.isNotBlank() && username.isNotBlank()),
             modifier = Modifier.fillMaxWidth().padding(top = 18.dp)
         ) {
-            Text(if (busy) "साइन इन हो रहा है…" else "साइन इन करें")
+            Text(if (language=="hi") { if(busy) "साइन इन हो रहा है…" else "साइन इन करें" } else { if(busy) "Signing in…" else "Sign in" })
         }
         if (mode == "PARENT") {
             TextButton(onClick = onSignup, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                Text("नया अभिभावक खाता बनाएँ")
+                Text(if(language=="hi") "नया अभिभावक खाता बनाएँ" else "Create parent account")
             }
             TextButton(onClick = onResetPassword, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                Text("पासवर्ड भूल गए?")
+                Text(if(language=="hi") "पासवर्ड भूल गए?" else "Forgot password?")
             }
         }
         Text(
-            "अपने अभिभावक द्वारा बनाए गए छात्र खाते या मौजूदा अभिभावक खाते से साइन इन करें।",
+            if(language=="hi") "अपने अभिभावक द्वारा बनाए गए छात्र खाते या मौजूदा अभिभावक खाते से साइन इन करें。" else "Students use parent-created login details. Parents use their own account.",
             modifier = Modifier.padding(top = 14.dp),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary
@@ -1554,6 +1566,8 @@ private fun LoginScreen(
 
 @Composable
 private fun ParentOtpFlowScreen(
+    language: String,
+    onToggleLanguage: () -> Unit,
     isSignup: Boolean,
     busy: Boolean,
     status: String,
@@ -1572,18 +1586,22 @@ private fun ParentOtpFlowScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(if (isSignup) "अभिभावक खाता बनाएँ" else "पासवर्ड रीसेट करें",
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if (language=="hi") "EN" else "हिंदी") }
+        }
+        Text(if(language=="hi") { if(isSignup) "अभिभावक खाता बनाएँ" else "पासवर्ड रीसेट करें" }
+            else { if(isSignup) "Create parent account" else "Reset password" },
             style = MaterialTheme.typography.headlineSmall)
         Text(
-            if (isSignup) "मोबाइल नंबर सत्यापित करके अपना अभिभावक खाता बनाएँ।"
-            else "अपने पंजीकृत मोबाइल पर OTP प्राप्त करके नया पासवर्ड सेट करें।",
+            if(language=="hi") { if(isSignup) "मोबाइल नंबर सत्यापित करके अपना अभिभावक खाता बनाएँ।" else "अपने पंजीकृत मोबाइल पर OTP प्राप्त करके नया पासवर्ड सेट करें।" }
+            else { if(isSignup) "Verify your mobile number to create your parent account." else "Request an OTP on your registered mobile and set a new password." },
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.padding(top = 8.dp, bottom = 14.dp)
         )
         OutlinedTextField(
             value = mobile,
             onValueChange = { mobile = it.filter { ch -> ch.isDigit() }.take(13) },
-            label = { Text("मोबाइल नंबर") },
+            label = { Text(if(language=="hi") "मोबाइल नंबर" else "Mobile number") },
             singleLine = true,
             enabled = !otpRequested && !busy,
             modifier = Modifier.fillMaxWidth()
@@ -1592,7 +1610,7 @@ private fun ParentOtpFlowScreen(
             OutlinedTextField(
                 value = displayName,
                 onValueChange = { displayName = it },
-                label = { Text("पूरा नाम") },
+                label = { Text(if(language=="hi") "पूरा नाम" else "Full name") },
                 singleLine = true,
                 enabled = !otpRequested && !busy,
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
@@ -1601,7 +1619,7 @@ private fun ParentOtpFlowScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("नया पासवर्ड (कम से कम 8 अक्षर)") },
+            label = { Text(if(language=="hi") "नया पासवर्ड (कम से कम 8 अक्षर)" else "New password (at least 8 characters)") },
             singleLine = true,
             enabled = !busy,
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
@@ -1616,7 +1634,7 @@ private fun ParentOtpFlowScreen(
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
             )
             if (devCode.isNotBlank()) {
-                Text("स्थानीय विकास OTP: " + devCode, color = MaterialTheme.colorScheme.secondary,
+                Text((if(language=="hi") "स्थानीय विकास OTP: " else "Development OTP: ") + devCode, color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
             }
             Button(
@@ -1625,10 +1643,10 @@ private fun ParentOtpFlowScreen(
                     (!isSignup || displayName.trim().length >= 2),
                 modifier = Modifier.fillMaxWidth().padding(top = 14.dp)
             ) {
-                Text(if (isSignup) "खाता सत्यापित कर बनाएँ" else "पासवर्ड अपडेट करें")
+                Text(if(language=="hi") { if(isSignup) "खाता सत्यापित कर बनाएँ" else "पासवर्ड अपडेट करें" } else { if(isSignup) "Verify and create account" else "Update password" })
             }
             TextButton(onClick = { otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) {
-                Text("मोबाइल नंबर बदलें")
+                Text(if(language=="hi") "मोबाइल नंबर बदलें" else "Change mobile number")
             }
         } else {
             Button(
@@ -1636,7 +1654,7 @@ private fun ParentOtpFlowScreen(
                 enabled = !busy && mobile.filter { it.isDigit() }.length >= 10 &&
                     password.length >= 8 && (!isSignup || displayName.trim().length >= 2),
                 modifier = Modifier.fillMaxWidth().padding(top = 14.dp)
-            ) { Text("OTP भेजें") }
+            ) { Text(if(language=="hi") "OTP भेजें" else "Send OTP") }
         }
         if (status.isNotBlank()) {
             Text(status, style = MaterialTheme.typography.bodySmall,
