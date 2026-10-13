@@ -5,7 +5,7 @@ Uses only the Python standard library. Source extraction bundles stay local/priv
 Generated examples are original drafts; this tool never marks them human-approved.
 """
 from __future__ import annotations
-import argparse, difflib, hashlib, json, os, re, sys, time, urllib.error, urllib.request
+import argparse, difflib, hashlib, json, os, re, subprocess, sys, time, urllib.error, urllib.request
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -103,6 +103,28 @@ Context:
    if isinstance(exc,urllib.error.HTTPError) and exc.code not in {408,425,429,500,502,503,504}: break
    time.sleep(min(2**attempt,20))
  raise RuntimeError(f"generation request failed after retries: {last}")
+def commit_and_push_dataset(path: Path) -> None:
+ repo_root=Path(__file__).resolve().parents[1]
+ resolved=path.resolve()
+ try: relative=resolved.relative_to(repo_root.resolve())
+ except ValueError as exc: raise ValueError("GitHub output must be inside the QuantaEdge repository.") from exc
+ def git(*args: str) -> str:
+  return subprocess.run(["git",*args],cwd=repo_root,check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
+ branch=git("branch","--show-current")
+ if branch!="main": raise ValueError(f"Refusing to push dataset from branch {branch!r}; switch to main first.")
+ git("fetch","origin","main")
+ if git("rev-parse","HEAD")!=git("rev-parse","origin/main"):
+  raise ValueError("Local main is not exactly aligned with origin/main. Pull/reconcile first; dataset was not pushed.")
+ git("add","--",str(relative))
+ changed=subprocess.run(["git","diff","--cached","--quiet","--",str(relative)],cwd=repo_root)
+ if changed.returncode==0:
+  print("No dataset changes to commit.")
+  return
+ if changed.returncode not in (0,1): raise RuntimeError("Unable to inspect staged dataset changes.")
+ subprocess.run(["git","commit","--only","-m","Save generated QuantaEdge AI training data","--",str(relative)],cwd=repo_root,check=True)
+ git("push","origin","main")
+ print(f"Committed and pushed dataset to main: {relative.as_posix()}")
+
 def cmd_generate(a: argparse.Namespace) -> int:
  if not a.generate or not a.confirm_external_processing:
   print("DRY RUN: no provider request made. Re-run with --generate --confirm-external-processing after reviewing provider privacy/rights.")
@@ -156,6 +178,7 @@ def cmd_generate(a: argparse.Namespace) -> int:
     if count>=a.target: break
   write_jsonl(out,existing)
   if calls%10==0: print(f"calls={calls} records={count}/{a.target}")
+ if a.commit_and_push: commit_and_push_dataset(out)
  print(json.dumps({"output":str(out),"draft_records":len(existing),"target":a.target,"api_calls":calls,"status":"DRAFTS_ONLY","remaining":max(0,a.target-len(existing))},ensure_ascii=False,indent=2))
  return 0
 def messages_ok(row: Any) -> bool:
@@ -267,7 +290,7 @@ def cmd_validate(a:argparse.Namespace)->int:
  return 0
 def main()->int:
  p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="command",required=True)
- g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.set_defaults(func=cmd_generate)
+ g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="commit only the generated JSONL file and push it to origin/main after generation; requires a clean, synced local main"); g.set_defaults(func=cmd_generate)
  b=sub.add_parser("build"); b.add_argument("--input",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); b.add_argument("--output-dir",type=Path,default=Path("data/ai-training/datasets")); b.add_argument("--include-drafts",action="store_true"); b.set_defaults(func=cmd_build)
  v=sub.add_parser("validate"); v.add_argument("--dataset-dir",type=Path,default=Path("data/ai-training/datasets")); v.add_argument("--require-approved",action="store_true"); v.set_defaults(func=cmd_validate)
  a=p.parse_args()

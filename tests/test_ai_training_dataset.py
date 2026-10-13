@@ -18,7 +18,7 @@ def record(eid, prompt, chapter="fractions", lang="hi"):
         {"role":"assistant","content":"यह एक उदाहरणात्मक उत्तर है।"}
       ],
       "metadata":{
-        "class_code":"6","subject_code":"maths","language":lang,"chapter_code":chapter,"example_type":"concept_explanation",
+        "class_code":"6","subject_code":"maths","language":lang,"chapter_code":chapter,
         "source_id":"source-a","source_url":"https://example.org/book","source_edition":"2025 edition",
         "source_pdf_sha256":"a"*64,"source_pages":[12],"review_status":"approved"
       }
