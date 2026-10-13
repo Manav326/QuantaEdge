@@ -330,7 +330,7 @@ fun ActionRow(title: String, detail: String, actionLabel: String, onClick: () ->
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(localizedUiText(title), style = MaterialTheme.typography.titleMedium)
-            if (detail.isNotBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+            if (detail.isNotBlank()) Text(localizedUiText(detail), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             TextButton(onClick = onClick) { Text(localizedUiText(actionLabel)) }
         }
     }
