@@ -196,6 +196,8 @@ Output shape:
   ]
 }}
 
+Important: the question example above illustrates the common object shape. For review-only types (MATCH, ORDER, ASSERTION_REASON, CASE_BASED, SHORT_ANSWER, LONG_ANSWER, DIAGRAM, MAP, SOURCE_BASED), override the example fields exactly as their rule specifies: options=[] and answer_payload={{}}. Never fabricate structured automatic answer payloads for review-only types.
+
 Rules:
 1. Produce exactly {count} questions, use only {types}, and use a type only if genuinely suitable for the topic.
 2. MCQ requires exactly four distinct plausible options and exactly one correct option; answer_payload is {{"kind":"OPTION","value":"<correct key>"}}.
@@ -475,7 +477,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
         "review_checklist": [
             "Compare each question and cited page with the exact PDF edition.",
             "Independently solve every question and verify every answer key/explanation.",
-            "Check Hindi wording, age suitability, difficulty, duplicates and curriculum alignment.",
+            f"Check {\"English\" if str(curriculum.get(\"language\", \"hi\")).lower() in {\"en\", \"english\"} else \"Hindi\"} wording, age suitability, difficulty, duplicates and curriculum alignment.",
             "Check OCR-sensitive numerals, equations, units, diagrams and science terminology.",
             "Confirm originality and permitted reuse before setting rights_reviewed=true.",
             "Import only as drafts; approve questions and publish explicitly in Admin Content Studio.",
