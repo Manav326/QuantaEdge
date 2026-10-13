@@ -1,40 +1,55 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Cookie presence is only a routing hint; the API verifies identity and workspace.
-const LEARNER_SESSION_COOKIE_NAMES = [
-  'QE_LEARN_SESSION',
-  'QE_LEARN_REFRESH',
+// Cookie presence is a routing hint only. The API remains responsible for
+// validating the identity and its workspace on every protected request.
+const PARENT_SESSION_COOKIE_NAMES = [
   'QE_PARENT_SESSION',
   'QE_PARENT_REFRESH',
+] as const;
+
+const STUDENT_SESSION_COOKIE_NAMES = [
   'QE_STUDENT_SESSION',
   'QE_STUDENT_REFRESH',
 ] as const;
 
-function hasLearnerSessionCookie(request: NextRequest) {
-  return LEARNER_SESSION_COOKIE_NAMES.some(name => request.cookies.has(name));
+const LEGACY_SESSION_COOKIE_NAMES = [
+  'QE_LEARN_SESSION',
+  'QE_LEARN_REFRESH',
+  'QE_SESSION',
+  'QE_REFRESH',
+] as const;
+
+function hasAnyCookie(request: NextRequest, names: readonly string[]) {
+  return names.some(name => request.cookies.has(name));
 }
 
-function hasLegacySessionCookie(request: NextRequest) {
-  return request.cookies.has('QE_SESSION') || request.cookies.has('QE_REFRESH');
+function hasWorkspaceSessionHint(request: NextRequest, workspace: 'PARENT' | 'STUDENT') {
+  const scoped = workspace === 'PARENT'
+    ? PARENT_SESSION_COOKIE_NAMES
+    : STUDENT_SESSION_COOKIE_NAMES;
+  // Legacy cookies can belong to either learner workspace. Let the API's
+  // workspace-scoped auth check decide; never treat one scoped cookie as the other.
+  return hasAnyCookie(request, scoped) || hasAnyCookie(request, LEGACY_SESSION_COOKIE_NAMES);
 }
 
 export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const learnerSession = hasLearnerSessionCookie(request);
-  // Legacy shared cookies are only a migration hint; the API validates their role.
-  const legacySession = hasLegacySessionCookie(request);
-  const publicEntry = path === '/' || path === '/login' || path === '/login/student';
   const studentRoute = path === '/student' || path.startsWith('/student/');
   const parentRoute = path === '/parent' || path.startsWith('/parent/');
 
-  // Staff cookies are deliberately ignored by the learning site and vice versa.
-  if (publicEntry && learnerSession) {
-    return NextResponse.redirect(new URL('/session', request.url));
+  // Protect each workspace with its own session-cookie family. An active
+  // parent session must not be mistaken for a student session, or vice versa.
+  if (studentRoute && !hasWorkspaceSessionHint(request, 'STUDENT')) {
+    return NextResponse.redirect(new URL('/login/student', request.url));
   }
-  if ((studentRoute || parentRoute) && !learnerSession && !legacySession) {
-    return NextResponse.redirect(new URL(studentRoute ? '/login/student' : '/login', request.url));
+  if (parentRoute && !hasWorkspaceSessionHint(request, 'PARENT')) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
+
+  // Public entry pages deliberately reach the client session boundary. It
+  // checks the intended role before redirecting, so a parent's cookie cannot
+  // hijack /login/student and a student's cookie cannot hijack /login.
   return NextResponse.next();
 }
 
