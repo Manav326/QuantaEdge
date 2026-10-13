@@ -302,6 +302,22 @@ export default function TestsClient(){
     return()=>window.clearTimeout(timer);
   },[dirtyAnswers,attempt?.attempt_id,attempt?.status,saveAnswersBatch]);
 
+  async function refreshCertificateEligibilityForAttempts(attemptIds:number[]){
+    const ids=[...new Set(attemptIds.filter(id=>Number.isSafeInteger(id)&&id>0))].slice(0,100);
+    if(!ids.length)return;
+    try{
+      const response=await api('/api/v1/students/me/certificates/assessment-eligibility?attemptIds='+ids.join(','));
+      const updates:Record<number,CertificateEligibility>={};
+      for(const item of Array.isArray(response?.items)?response.items:[]){
+        const id=Number(item.attempt_id);
+        if(Number.isSafeInteger(id)&&id>0)updates[id]=item as CertificateEligibility;
+      }
+      setCertificateEligibility(current=>({...current,...updates}));
+    }catch{
+      // A temporary eligibility lookup failure must not hide the released test result.
+    }
+  }
+
   async function openTest(testId:number){
     setBusy(true);setError('');setNotice('');setAttempt(null);setShowSubmit(false);autoSubmitted.current=false;
     try{
@@ -321,6 +337,7 @@ export default function TestsClient(){
       const nextResponses:Record<number,any>={};
       (data.questions||[]).forEach((q:AttemptQuestion)=>{nextResponses[q.attemptQuestionId]=q.answer??'';});
       setAttempt(data);attemptRef.current=data;setResponses(nextResponses);dirtyRef.current={};setDirtyAnswers({});setIndex(0);setTab('results');
+      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([attemptId]);
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not open this result.');}
     finally{setBusy(false);}
   }
@@ -392,6 +409,7 @@ export default function TestsClient(){
       setTab(data.status==='RELEASED'?'results':'tests');
       setNotice(data.status==='RELEASED'?'Your test was submitted and the result has been saved.': 'Your test was submitted. Fill-in, short-answer and long-answer responses are waiting for an assigned staff reviewer. Your final score and feedback will appear after all required answers are checked.');
       await loadOverview();
+      if(data.status==='RELEASED')await refreshCertificateEligibilityForAttempts([Number(data.attempt_id||currentAttempt.attempt_id)]);
     }catch(e:any){
       autoSubmitted.current=false;
       setError(e instanceof Error?e.message:'Could not submit your test. Saved answers are still preserved.');
@@ -519,6 +537,31 @@ export default function TestsClient(){
             <article className={styles.resultMetric}><strong>{incorrectCount}</strong><span>Incorrect</span></article>
             <article className={styles.resultMetric}><strong>{unansweredCount}</strong><span>Not answered</span></article>
           </div>
+          {released&&(()=>{
+            const cert=certificateEligibility[Number(attempt?.attempt_id)];
+            const certificateId=Number(cert?.certificate_id||0);
+            return <section className={styles.certificateResultPanel} aria-live="polite">
+              <div><span className={styles.eyebrow}>CERTIFICATE</span><h3>Certificate for this result</h3>
+                <p>Test certificates require an admin-created test, a released qualifying score, and completion of all published lessons in this subject.</p></div>
+              {cert?.certificate_status==='ISSUED'&&certificateId>0?(
+                <div className={styles.certificateActionLinks}>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">View certificate ↗</a>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>Download PDF</a>
+                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>Download PNG</a>
+                </div>
+              ):cert?.certificate_status==='REVOKED'?(
+                <small className={styles.certificateEligibilityHint}>This certificate has been revoked.</small>
+              ):cert?.eligible?(
+                <button type="button" className={styles.certificateIssueButton}
+                  disabled={issuingCertificateAttemptId!==null}
+                  onClick={()=>void issueCertificateForAttempt(Number(attempt?.attempt_id))}>
+                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?'Issuing…':'Issue certificate'}
+                </button>
+              ):(
+                <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>
+              )}
+            </section>;
+          })()}
           <section className={styles.resultDetails}>
             <div className={styles.resultDetailsHeading}><h3>Question-wise result</h3><p>Marks and outcomes are shown for review. Submitted questions cannot be reopened or changed.</p></div>
             <div className={styles.resultReviewList}>
