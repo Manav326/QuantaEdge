@@ -90,7 +90,7 @@ fun LessonContentBlock(
                     val content = if (html.isNotBlank()) htmlToPlainText(html) else body
                     if (content.isNotBlank()) Text(content, style = MaterialTheme.typography.bodyLarge)
                     points.forEach { point ->
-                        Text("•  " + point, style = MaterialTheme.typography.bodyMedium)
+                        Text(localizedUiText("•  ") + point, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 "WORKED_EXAMPLE" -> {
@@ -150,7 +150,7 @@ fun LessonContentBlock(
                 }
                 "SUMMARY", "RECAP" -> {
                     points.forEach { point ->
-                        Text("✓  " + point, style = MaterialTheme.typography.bodyLarge)
+                        Text(localizedUiText("✓  ") + point, style = MaterialTheme.typography.bodyLarge)
                     }
                     if (points.isEmpty() && body.isNotBlank()) Text(body, style = MaterialTheme.typography.bodyLarge)
                 }
@@ -195,7 +195,7 @@ private fun LessonImage(url: String, alt: String) {
     } else {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
-            Text("Visual लोड हो रहा है…", style = MaterialTheme.typography.bodySmall)
+            Text(localizedUiText("Visual लोड हो रहा है…"), style = MaterialTheme.typography.bodySmall)
         }
     }
 }

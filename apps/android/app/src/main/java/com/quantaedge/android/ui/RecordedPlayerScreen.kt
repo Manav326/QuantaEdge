@@ -100,14 +100,14 @@ fun RecordedPlayerScreen(
             update = { it.player = player },
             modifier = Modifier.fillMaxWidth().height(250.dp)
         )
-        Text("Playback position: " + currentPosition + " seconds", style = MaterialTheme.typography.bodySmall)
-        Text("Progress is saved to your QuantaEdge account periodically.", style = MaterialTheme.typography.bodySmall,
+        Text(localizedUiText("Playback position: ") + currentPosition + " seconds", style = MaterialTheme.typography.bodySmall)
+        Text(localizedUiText("Progress is saved to your QuantaEdge account periodically."), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
         Button(onClick = {
             currentPosition = (player.currentPosition / 1000).coerceAtLeast(0)
             val complete = isEnded || (durationSeconds > 0 && currentPosition >= durationSeconds - 10)
             onSaveAndBack(currentPosition, watchedSeconds, complete)
-        }, modifier = Modifier.fillMaxWidth()) { Text("प्रगति सुरक्षित कर वापस जाएँ") }
+        }, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("प्रगति सुरक्षित कर वापस जाएँ")) }
     }
 }
 

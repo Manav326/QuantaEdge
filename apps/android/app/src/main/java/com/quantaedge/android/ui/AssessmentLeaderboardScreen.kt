@@ -142,7 +142,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
                     Card(modifier = Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(13.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                             Text(if (language == "hi") "आपकी स्थिति" else "Your standing", style = MaterialTheme.typography.titleMedium)
-                            Text("#" + current.optString("rank", "—") + " · " +
+                            Text(localizedUiText("#") + current.optString("rank", "—") + " · " +
                                 current.optString("student_name", if (language == "hi") "आप" else "You"))
                             Text(current.optString("score", "—") + " / " + current.optString("max_score", maxScore))
                         }
@@ -156,7 +156,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                                    Text("#" + entry.optString("rank", "—") + "  " +
+                                    Text(localizedUiText("#") + entry.optString("rank", "—") + "  " +
                                         entry.optString("student_name", if (language == "hi") "विद्यार्थी" else "Student"),
                                         style = MaterialTheme.typography.titleSmall)
                                     Text(entry.optString("score", "—") + " / " + entry.optString("max_score", maxScore),

@@ -129,7 +129,7 @@ fun QuestionCard(
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("प्रश्न " + question.textAny("sequence_no", "sort_order").ifBlank { "" },
+                Text(localizedUiText("प्रश्न ") + question.textAny("sequence_no", "sort_order").ifBlank { "" },
                     style = MaterialTheme.typography.labelMedium)
                 Text(type.replace('_', ' '), style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary)
@@ -138,7 +138,7 @@ fun QuestionCard(
 
             when {
                 isOrder && options.isNotEmpty() -> {
-                    Text("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।",
+                    Text(localizedUiText("नीचे दिए गए items को सही क्रम में रखें। ↑ / ↓ से क्रम बदलें।"),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary)
                     orderedKeys.forEachIndexed { index, key ->
@@ -162,7 +162,7 @@ fun QuestionCard(
                                         onAnswerChange(JSONArray(next).toString())
                                     },
                                     enabled = !locked && !saving && index > 0
-                                ) { Text("↑") }
+                                ) { Text(localizedUiText("↑")) }
                                 TextButton(
                                     onClick = {
                                         val next = orderedKeys.toMutableList()
@@ -171,13 +171,13 @@ fun QuestionCard(
                                         onAnswerChange(JSONArray(next).toString())
                                     },
                                     enabled = !locked && !saving && index < orderedKeys.lastIndex
-                                ) { Text("↓") }
+                                ) { Text(localizedUiText("↓")) }
                             }
                         }
                     }
                 }
                 isMultiSelect && options.isNotEmpty() -> {
-                    Text("सभी लागू विकल्प चुनें।", style = MaterialTheme.typography.bodySmall,
+                    Text(localizedUiText("सभी लागू विकल्प चुनें।"), style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary)
                     options.forEach { option ->
                         val key = option.textAny("key", "option_key", "value")
@@ -206,13 +206,13 @@ fun QuestionCard(
                             )
                         }
                     }
-                    Text("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}.",
+                    Text(localizedUiText("मिलान को JSON map के रूप में लिखें, जैसे {\"1\":\"A\",\"2\":\"B\"}."),
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     OutlinedTextField(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("मिलान के उत्तर") },
+                        label = { Text(localizedUiText("मिलान के उत्तर")) },
                         enabled = !locked && !saving,
                         minLines = 3,
                         maxLines = 6
@@ -223,7 +223,7 @@ fun QuestionCard(
                         value = answer,
                         onValueChange = onAnswerChange,
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("अपना संख्यात्मक उत्तर लिखें") },
+                        label = { Text(localizedUiText("अपना संख्यात्मक उत्तर लिखें")) },
                         enabled = !locked && !saving,
                         minLines = 1,
                         maxLines = 2,
@@ -256,7 +256,7 @@ fun QuestionCard(
                 }
                 else -> {
                     if (isOrder) {
-                        Text("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"].",
+                        Text(localizedUiText("क्रम को JSON array के रूप में लिखें, जैसे [\"B\",\"C\",\"A\"]."),
                             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                     }
                     val inputLabel = when {
@@ -320,8 +320,8 @@ fun EmptyState(title: String, detail: String) {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(title, style = MaterialTheme.typography.titleLarge)
-        Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+        Text(localizedUiText(title), style = MaterialTheme.typography.titleLarge)
+        Text(localizedUiText(detail), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
     }
 }
 
@@ -329,9 +329,9 @@ fun EmptyState(title: String, detail: String) {
 fun ActionRow(title: String, detail: String, actionLabel: String, onClick: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
+            Text(localizedUiText(title), style = MaterialTheme.typography.titleMedium)
             if (detail.isNotBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-            TextButton(onClick = onClick) { Text(actionLabel) }
+            TextButton(onClick = onClick) { Text(localizedUiText(actionLabel)) }
         }
     }
 }

@@ -47,7 +47,7 @@ fun TutorScreen(
     var selectedMode by remember { mutableStateOf("HINT") }
 
     Column(modifier = Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("QuantaEdge Tutor", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("QuantaEdge Tutor"), style = MaterialTheme.typography.headlineSmall)
         Text(lessonTitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
         if (!available) {
             EmptyState("AI Tutor अभी उपलब्ध नहीं", "Tutor सुविधा backend पर AI provider configure होने पर ही चालू होगी। यह स्क्रीन कोई नकली उत्तर नहीं दिखाती।")
@@ -64,8 +64,8 @@ fun TutorScreen(
             if (messages.isEmpty()) {
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp)) {
-                        Text("पहले Hint से शुरू करें", style = MaterialTheme.typography.titleMedium)
-                        Text("Tutor इसी पाठ की प्रकाशित सामग्री और आपकी learning context के आधार पर मदद करेगा।", style = MaterialTheme.typography.bodyMedium)
+                        Text(localizedUiText("पहले Hint से शुरू करें"), style = MaterialTheme.typography.titleMedium)
+                        Text(localizedUiText("Tutor इसी पाठ की प्रकाशित सामग्री और आपकी learning context के आधार पर मदद करेगा।"), style = MaterialTheme.typography.bodyMedium)
                     }
                 }
             }
@@ -87,7 +87,7 @@ fun TutorScreen(
                 onValueChange = { input = it.take(1200) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !busy,
-                label = { Text("आप कहाँ अटके हैं?") },
+                label = { Text(localizedUiText("आप कहाँ अटके हैं?")) },
                 minLines = 2,
                 maxLines = 4
             )

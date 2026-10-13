@@ -72,9 +72,9 @@ fun StudentProgressScreen(data: JSONObject, language: String, busy: Boolean, onR
                     }
                 }
             }
-            item { Text("जिन concepts पर फिर काम कर सकते हैं", style = MaterialTheme.typography.titleLarge) }
+            item { Text(localizedUiText("जिन concepts पर फिर काम कर सकते हैं"), style = MaterialTheme.typography.titleLarge) }
             if (concepts.isEmpty()) item {
-                Text("अभी concept mastery उपलब्ध नहीं है। प्रकाशित पाठ के प्रश्नों का अभ्यास करने पर यहाँ दिखाई देगी।",
+                Text(localizedUiText("अभी concept mastery उपलब्ध नहीं है। प्रकाशित पाठ के प्रश्नों का अभ्यास करने पर यहाँ दिखाई देगी।"),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
             items(concepts) { item ->
@@ -91,14 +91,14 @@ fun StudentProgressScreen(data: JSONObject, language: String, busy: Boolean, onR
             }
             item { Text(if (language == "hi") "हाल के टेस्ट" else "Recent tests", style = MaterialTheme.typography.titleLarge) }
             if (recentTests.isEmpty()) item {
-                Text("अभी कोई टेस्ट attempt नहीं है।", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+                Text(localizedUiText("अभी कोई टेस्ट attempt नहीं है।"), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
             items(recentTests) { item ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(item.textAny("assessment_title"), style = MaterialTheme.typography.titleSmall)
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
-                        Text("स्थिति: " + item.textAny("status") + " • अंक: " + item.textAny("final_score", "auto_score") +
+                        Text(localizedUiText("स्थिति: ") + item.textAny("status") + " • अंक: " + item.textAny("final_score", "auto_score") +
                             " / " + item.textAny("max_score"), style = MaterialTheme.typography.bodyMedium)
                     }
                 }

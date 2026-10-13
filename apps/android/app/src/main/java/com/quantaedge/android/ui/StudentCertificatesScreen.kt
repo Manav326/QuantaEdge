@@ -345,8 +345,8 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
                     )
                     if (certificate.optString("status", "ISSUED") == "ISSUED") {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy) { Text("PDF") }
-                            OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy) { Text("PNG") }
+                            OutlinedButton(onClick = { downloadCertificate(certificate, "pdf") }, enabled = !busy) { Text(localizedUiText("PDF")) }
+                            OutlinedButton(onClick = { downloadCertificate(certificate, "png") }, enabled = !busy) { Text(localizedUiText("PNG")) }
                         }
                     } else {
                         Text(if (language == "hi") "यह प्रमाणपत्र निरस्त है; मान्य प्रमाण के रूप में डाउनलोड नहीं किया जा सकता।" else "This certificate is revoked and cannot be downloaded as valid proof.", color = MaterialTheme.colorScheme.error)

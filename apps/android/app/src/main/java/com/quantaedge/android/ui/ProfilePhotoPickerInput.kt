@@ -90,13 +90,13 @@ fun ProfilePhotoPickerInput(
                 Text(if (selecting) "फोटो तैयार हो रही है…" else "प्रोफ़ाइल फोटो चुनें")
             }
             if (selectedDataUrl != null) {
-                Text("नई फोटो चुनी गई", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Text(localizedUiText("नई फोटो चुनी गई"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             } else if (displayedBytes != null) {
-                Text("वर्तमान फोटो", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Text(localizedUiText("वर्तमान फोटो"), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
         }
         if (error.isNotBlank()) Text(error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-        Text("केवल फोटो चुनी जाती है। कोई broad storage permission नहीं माँगी जाती; सुरक्षित JPEG को आपके QuantaEdge खाते में भेजा जाता है।",
+        Text(localizedUiText("केवल फोटो चुनी जाती है। कोई broad storage permission नहीं माँगी जाती; सुरक्षित JPEG को आपके QuantaEdge खाते में भेजा जाता है।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }

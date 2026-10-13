@@ -42,6 +42,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -1200,6 +1201,7 @@ fun QuantaEdgeApp() {
         if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) goBack()
     }
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && wideLayout) NavigationRail {
                 navItems.forEach { item ->
@@ -1214,7 +1216,7 @@ fun QuantaEdgeApp() {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.RECORDING_PLAYER)) {
-                        TextButton(onClick = { goBack() }) { Text("←") }
+                        TextButton(onClick = { goBack() }) { Text(localizedUiText("←")) }
                     }
                     Image(
                         painter = painterResource(R.drawable.quantaedge_wordmark),
@@ -1536,7 +1538,8 @@ fun QuantaEdgeApp() {
             }
         }
     }
-}
+        }
+    }
 }
 
 @Composable
@@ -1567,7 +1570,7 @@ private fun LoginScreen(
             contentScale = ContentScale.Fit
         )
         Spacer(modifier = Modifier.height(12.dp))
-        Text("Smarter Decisions. Greater Growth.", style = MaterialTheme.typography.bodyMedium)
+        Text(localizedUiText("Smarter Decisions. Greater Growth."), style = MaterialTheme.typography.bodyMedium)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if (language == "hi") "EN" else "हिंदी") }
         }
@@ -1680,7 +1683,7 @@ private fun ParentOtpFlowScreen(
             OutlinedTextField(
                 value = otp,
                 onValueChange = { otp = it.filter { ch -> ch.isDigit() }.take(6) },
-                label = { Text("OTP") },
+                label = { Text(localizedUiText("OTP")) },
                 singleLine = true,
                 enabled = !busy,
                 modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
@@ -1740,7 +1743,7 @@ private fun StudentHomeScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(if (language == "hi") "नमस्ते, $name" else "Welcome, $name", style = MaterialTheme.typography.headlineSmall)
         Text(if (className.isNotBlank()) "कक्षा $className" else "आपकी सीखने की जगह", style = MaterialTheme.typography.bodyMedium)
-        if (lessonCount >= 0) Text("पूरे किए गए पाठ: $lessonCount", style = MaterialTheme.typography.bodySmall)
+        if (lessonCount >= 0) Text(localizedUiText("पूरे किए गए पाठ: $lessonCount"), style = MaterialTheme.typography.bodySmall)
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
             SubjectCard("गणित", "Maths", Modifier.weight(1f)) { onSubject("maths") }
             SubjectCard("विज्ञान", "Science", Modifier.weight(1f)) { onSubject("science") }
@@ -1753,22 +1756,22 @@ private fun StudentHomeScreen(
         ActionRow("मेरे परिणाम", "जारी किए गए टेस्ट परिणाम और उत्तर समीक्षा।", "परिणाम देखें", onResults)
         ActionRow("प्रगति और mastery", "पाठ completion, accuracy, concept mastery और assessment performance।", "मेरी प्रगति देखें", onProgress)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = onProfile) { Text("प्रोफ़ाइल और सेटिंग") }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+            TextButton(onClick = onProfile) { Text(localizedUiText("प्रोफ़ाइल और सेटिंग")) }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
         if (recommendation.optBoolean("available") && recommendation.has("lesson")) {
             val next = recommendation.optJSONObject("lesson") ?: JSONObject()
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("आपके लिए अगला पाठ", style = MaterialTheme.typography.titleMedium)
+                    Text(localizedUiText("आपके लिए अगला पाठ"), style = MaterialTheme.typography.titleMedium)
                     Text(next.textAny("title", "lesson_title"))
                     TextButton(onClick = { onOpenRecommendation(next) }) {
-                        Text("अगला पाठ खोलें")
+                        Text(localizedUiText("अगला पाठ खोलें"))
                     }
                 }
             }
         } else if (recommendation.textAny("kind") == "DIAGNOSTIC") {
-            Text("अपनी अगली सीख तय करने के लिए प्रारंभिक जाँच पूरी करें।", style = MaterialTheme.typography.bodyMedium)
+            Text(localizedUiText("अपनी अगली सीख तय करने के लिए प्रारंभिक जाँच पूरी करें।"), style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -1777,9 +1780,9 @@ private fun StudentHomeScreen(
 private fun SubjectCard(title: String, subtitle: String, modifier: Modifier, onClick: () -> Unit) {
     Card(modifier = modifier.clickable(onClick = onClick)) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-            Text("पाठ और अभ्यास देखें →", style = MaterialTheme.typography.bodySmall)
+            Text(localizedUiText(title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+            Text(localizedUiText(subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+            Text(localizedUiText("पाठ और अभ्यास देखें →"), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -1800,7 +1803,7 @@ private fun LessonListScreen(
                 Text(if (language == "hi") "प्रकाशित पाठ और प्रगति" else "Published lessons and progress",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
         if (lessons.isEmpty() && !busy) {
             EmptyState("अभी कोई पाठ उपलब्ध नहीं", "इस कक्षा और विषय के प्रकाशित पाठ सर्वर पर उपलब्ध होने पर वे यहाँ दिखेंगे।")
@@ -1813,10 +1816,10 @@ private fun LessonListScreen(
                             Text(item.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                             Text(item.textAny("title").ifBlank { "पाठ" }, style = MaterialTheme.typography.titleMedium)
                             Text(item.textAny("summary"), style = MaterialTheme.typography.bodyMedium)
-                            Text("समय: " + item.optInt("estimated_minutes", 0) + " मिनट  •  प्रगति: " + progress + "%",
+                            Text(localizedUiText("समय: ") + item.optInt("estimated_minutes", 0) + " मिनट  •  प्रगति: " + progress + "%",
                                 style = MaterialTheme.typography.bodySmall)
                             LinearProgressIndicator(progress = { progress.coerceIn(0, 100) / 100f }, modifier = Modifier.fillMaxWidth())
-                            Text("पाठ खोलें →", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
+                            Text(localizedUiText("पाठ खोलें →"), color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge)
                         }
                     }
                 }
@@ -1904,9 +1907,9 @@ private fun PracticeScreen(
     val sessionId = practice.longAny("sessionId", "session_id")
     val statusText = practice.textAny("status")
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("अभ्यास सत्र", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("अभ्यास सत्र"), style = MaterialTheme.typography.headlineSmall)
         Text(practice.textAny("message").ifBlank { "आपकी सीख से जुड़े अभ्यास प्रश्न।" }, style = MaterialTheme.typography.bodyMedium)
-        Text("सत्र: " + sessionId + "  •  स्थिति: " + statusText, style = MaterialTheme.typography.labelSmall)
+        Text(localizedUiText("सत्र: ") + sessionId + "  •  स्थिति: " + statusText, style = MaterialTheme.typography.labelSmall)
         if (questions.isEmpty()) EmptyState("अभ्यास प्रश्न उपलब्ध नहीं", "इस पाठ के लिए स्वीकृत प्रश्न उपलब्ध होने पर अभ्यास शुरू हो सकेगा।")
         else LazyColumn(modifier = Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items(questions) { question ->
@@ -1935,7 +1938,7 @@ private fun PracticeScreen(
                 )
             }
         }
-        Text("गलत auto-graded उत्तर पर फिर प्रयास कर सकते हैं। जमा हुआ अनिर्णीत उत्तर दोबारा नहीं भेजा जा सकता।",
+        Text(localizedUiText("गलत auto-graded उत्तर पर फिर प्रयास कर सकते हैं। जमा हुआ अनिर्णीत उत्तर दोबारा नहीं भेजा जा सकता।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(top = 8.dp))
     }
 }
@@ -1954,15 +1957,15 @@ private fun DiagnosticScreen(
     val questions = diagnostic.optJSONArray("questions")?.objectItems() ?: emptyList()
     val attemptId = diagnostic.longAny("attemptId", "attempt_id")
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("प्रारंभिक जाँच", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("प्रारंभिक जाँच"), style = MaterialTheme.typography.headlineSmall)
         if (diagnostic.optBoolean("completed")) {
             EmptyState("जाँच पूरी हो चुकी है", "आपकी आगे की पढ़ाई और अनुशंसाएँ सर्वर पर उपलब्ध प्रगति के अनुसार हैं।")
-            Button(onClick = onRefresh, enabled = !busy) { Text("स्थिति रिफ्रेश करें") }
+            Button(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("स्थिति रिफ्रेश करें")) }
         } else if (!diagnostic.optBoolean("available")) {
             EmptyState("जाँच अभी उपलब्ध नहीं", "आपकी कक्षा और विषयों के लिए स्वीकृत प्रश्न उपलब्ध होने पर यहाँ जाँच शुरू हो सकेगी।")
-            Button(onClick = onRefresh, enabled = !busy) { Text("दोबारा जाँचें") }
+            Button(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("दोबारा जाँचें")) }
         } else {
-            Text("प्रश्न: " + questions.size + "  •  जवाब सर्वर पर सुरक्षित होंगे।")
+            Text(localizedUiText("प्रश्न: ") + questions.size + "  •  जवाब सर्वर पर सुरक्षित होंगे।")
             LazyColumn(modifier = Modifier.weight(1f).padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 items(questions) { question ->
                     val id = question.longAny("id", "questionId", "question_id").toString()
@@ -1980,7 +1983,7 @@ private fun DiagnosticScreen(
                 }
             }
             Button(onClick = onSubmit, enabled = !busy && attemptId > 0, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                Text("जाँच जमा करें")
+                Text(localizedUiText("जाँच जमा करें"))
             }
         }
     }
@@ -1998,21 +2001,20 @@ private fun AssessmentListScreen(
     onRefresh: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("टेस्ट और मूल्यांकन", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("टेस्ट और मूल्यांकन"), style = MaterialTheme.typography.headlineSmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
-            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
-            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
-            TextButton(onClick = onResults, enabled = !busy) { Text("मेरे परिणाम") }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+            TextButton(onClick = onResults, enabled = !busy) { Text(localizedUiText("मेरे परिणाम")) }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
         if (assessmentItems.any { it.optBoolean("offline_enabled") }) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("संरक्षित offline test", style = MaterialTheme.typography.titleSmall)
-                    Text(
-                        "Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचता है। यह सुविधा केवल staff-approved low-stakes tests के लिए है।",
+                    Text(localizedUiText("संरक्षित offline test"), style = MaterialTheme.typography.titleSmall)
+                    Text(localizedUiText("Offline mode शुरू करते ही test का timer शुरू हो जाता है। Answers इस device पर encrypted रहते हैं; कोई local score नहीं दिखाया जाता। Internet मिलने पर server answers sync करके जाँचता है। यह सुविधा केवल staff-approved low-stakes tests के लिए है।"),
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -2033,7 +2035,7 @@ private fun AssessmentListScreen(
                                 item.optInt("duration_minutes", 0) + " मिनट",
                             style = MaterialTheme.typography.bodySmall
                         )
-                        Text("प्रयास: " + used + " / " + max, style = MaterialTheme.typography.bodySmall)
+                        Text(localizedUiText("प्रयास: ") + used + " / " + max, style = MaterialTheme.typography.bodySmall)
                         val offlineLocal = item.optBoolean("offline_local")
                         val pendingSync = item.textAny("offline_state") == "QUEUED" ||
                             item.textAny("offline_state") == "SYNC_ERROR"
@@ -2067,7 +2069,7 @@ private fun AssessmentListScreen(
                             item.optLong("in_progress_attempt_id", 0L) <= 0L && used < max) {
                             TextButton(onClick = { onPrepareOffline(item) }, enabled = !busy,
                                 modifier = Modifier.fillMaxWidth()) {
-                                Text("Offline test शुरू करें (timer अभी शुरू होगा)")
+                                Text(localizedUiText("Offline test शुरू करें (timer अभी शुरू होगा)"))
                             }
                         }
                     }
@@ -2127,7 +2129,7 @@ private fun AssessmentAttemptScreen(
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(attempt.textAny("assessment_title", "title").ifBlank { "टेस्ट" }, style = MaterialTheme.typography.headlineSmall)
-        Text("प्रयास " + attempt.optInt("attempt_number", 1) + " • स्थिति: " +
+        Text(localizedUiText("प्रयास ") + attempt.optInt("attempt_number", 1) + " • स्थिति: " +
             if (offlinePendingSync) "OFFLINE_PENDING_SYNC" else phase, style = MaterialTheme.typography.bodySmall)
         if (inProgress && remainingSeconds != null) {
             val minutes = (remainingSeconds / 60L).toString().padStart(2, '0')
@@ -2139,7 +2141,7 @@ private fun AssessmentAttemptScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(if (deadlineReached) "समय पूरा" else "समय शेष", style = MaterialTheme.typography.titleSmall)
-                    Text("$minutes:$seconds", style = MaterialTheme.typography.titleLarge,
+                    Text(localizedUiText("$minutes:$seconds"), style = MaterialTheme.typography.titleLarge,
                         color = if (remainingSeconds <= 60L) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
                 }
             }
@@ -2155,14 +2157,14 @@ private fun AssessmentAttemptScreen(
         if (offlinePendingSync) {
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("उत्तर इस device पर encrypted सुरक्षित हैं", style = MaterialTheme.typography.titleSmall)
-                    Text("इन answers को यहाँ grade नहीं किया जा रहा। Internet मिलने पर authenticated server उन्हें sync करके जाँचेगा। Offline package की sync सीमा timer खत्म होने के 72 घंटे बाद तक है.",
+                    Text(localizedUiText("उत्तर इस device पर encrypted सुरक्षित हैं"), style = MaterialTheme.typography.titleSmall)
+                    Text(localizedUiText("इन answers को यहाँ grade नहीं किया जा रहा। Internet मिलने पर authenticated server उन्हें sync करके जाँचेगा। Offline package की sync सीमा timer खत्म होने के 72 घंटे बाद तक है."),
                         style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }
         if (released) {
-            Text("अंक: " + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
+            Text(localizedUiText("अंक: ") + attempt.textAny("final_score") + " / " + attempt.textAny("max_score"),
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
             val certificate = certificateEligibility[attemptId]
             val certificateStatus = certificate?.optString("certificate_status").orEmpty()
@@ -2211,7 +2213,7 @@ private fun AssessmentAttemptScreen(
                 }
             }
         } else if (phase == "AWAITING_REVIEW") {
-            Text("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।", modifier = Modifier.padding(vertical = 8.dp))
+            Text(localizedUiText("टेस्ट जमा है। लिखित उत्तरों का मूल्यांकन होने पर परिणाम जारी होगा।"), modifier = Modifier.padding(vertical = 8.dp))
         }
         LazyColumn(modifier = Modifier.weight(1f).padding(top = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items(questions) { question ->
@@ -2243,16 +2245,16 @@ private fun AssessmentAttemptScreen(
                     val optionLabel = options.firstOrNull { it.textAny("key", "option_key") == key }?.textAny("label", "text").orEmpty()
                     val displayAnswer = optionLabel.ifBlank { key.ifBlank { correctAnswer?.toString().orEmpty() } }
                     if (displayAnswer.isNotBlank() && displayAnswer != "{}") {
-                        Text("सही उत्तर: " + displayAnswer, style = MaterialTheme.typography.bodyMedium,
+                        Text(localizedUiText("सही उत्तर: ") + displayAnswer, style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary)
                     }
                     if (question.textAny("teacherFeedback").isNotBlank()) {
-                        Text("शिक्षक की टिप्पणी: " + question.textAny("teacherFeedback"), style = MaterialTheme.typography.bodyMedium)
+                        Text(localizedUiText("शिक्षक की टिप्पणी: ") + question.textAny("teacherFeedback"), style = MaterialTheme.typography.bodyMedium)
                     }
                     if (question.textAny("explanation").isNotBlank()) {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text("व्याख्या", style = MaterialTheme.typography.titleSmall)
+                                Text(localizedUiText("व्याख्या"), style = MaterialTheme.typography.titleSmall)
                                 Text(question.textAny("explanation"), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
@@ -2277,7 +2279,7 @@ private fun AssessmentAttemptScreen(
             }
         } else if (!released) {
             Button(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
-                Text("परिणाम की स्थिति रिफ्रेश करें")
+                Text(localizedUiText("परिणाम की स्थिति रिफ्रेश करें"))
             }
         }
     }
@@ -2294,7 +2296,7 @@ private fun ResultsScreen(
     onDownloadCertificate: (Long, String) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("मेरे परिणाम", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("मेरे परिणाम"), style = MaterialTheme.typography.headlineSmall)
         Text(
             if (language == "hi") "हर result के साथ certificate की पात्रता और उपलब्ध download देखें।"
             else "Check certificate eligibility and access available downloads from each released result.",
@@ -2309,11 +2311,11 @@ private fun ResultsScreen(
                         Text(item.textAny("assessment_title", "title").ifBlank { "मूल्यांकन" },
                             style = MaterialTheme.typography.titleMedium)
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
-                        Text("नवीनतम अंक: " + item.textAny("final_score", "score") + " / " + item.textAny("max_score"),
+                        Text(localizedUiText("नवीनतम अंक: ") + item.textAny("final_score", "score") + " / " + item.textAny("max_score"),
                             style = MaterialTheme.typography.bodyLarge)
-                        Text("पिछले तीन में सर्वश्रेष्ठ: " + item.textAny("best_score") + " / " + item.textAny("max_score"),
+                        Text(localizedUiText("पिछले तीन में सर्वश्रेष्ठ: ") + item.textAny("best_score") + " / " + item.textAny("max_score"),
                             style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
-                        Text("कुल जारी attempts: " + item.optInt("attempt_count", attempts.size) +
+                        Text(localizedUiText("कुल जारी attempts: ") + item.optInt("attempt_count", attempts.size) +
                             " • प्रश्न: " + item.optInt("question_count", 0),
                             style = MaterialTheme.typography.bodySmall)
                         val history = if (attempts.isNotEmpty()) attempts else listOf(item)
@@ -2419,30 +2421,30 @@ private fun ResourcesScreen(
     if (pendingRemoval != null) {
         AlertDialog(
             onDismissRequest = { pendingRemoval = null },
-            title = { Text("Offline copy हटाएँ?") },
-            text = { Text("यह केवल इस device पर रखे encrypted page copies हटाएगा। Published resource server पर बना रहेगा और बाद में दोबारा डाउनलोड किया जा सकता है।") },
+            title = { Text(localizedUiText("Offline copy हटाएँ?")) },
+            text = { Text(localizedUiText("यह केवल इस device पर रखे encrypted page copies हटाएगा। Published resource server पर बना रहेगा और बाद में दोबारा डाउनलोड किया जा सकता है।")) },
             confirmButton = {
                 Button(onClick = {
                     val selected = pendingRemoval
                     pendingRemoval = null
                     if (selected != null) onRemoveOffline(selected)
-                }, enabled = !busy) { Text("Offline copy हटाएँ") }
+                }, enabled = !busy) { Text(localizedUiText("Offline copy हटाएँ")) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingRemoval = null }, enabled = !busy) { Text("रद्द करें") }
+                TextButton(onClick = { pendingRemoval = null }, enabled = !busy) { Text(localizedUiText("रद्द करें")) }
             }
         )
     }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Textbook Library", style = MaterialTheme.typography.headlineSmall)
-        Text("सामग्री ऐप के अंदर पढ़ें। ऑफ़लाइन डाउनलोड पब्लिक Downloads या दूसरी ऐप में उपलब्ध नहीं होगा।",
+        Text(localizedUiText("Textbook Library"), style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("सामग्री ऐप के अंदर पढ़ें। ऑफ़लाइन डाउनलोड पब्लिक Downloads या दूसरी ऐप में उपलब्ध नहीं होगा।"),
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
-            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text("गणित") }
-            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
-            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text("विज्ञान") }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
+            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+            else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
+            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+            else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
         }
         if (documents.isEmpty() && !busy) EmptyState("संसाधन उपलब्ध नहीं", "इस भाषा और विषय के लिए डाउनलोड की अनुमति वाले प्रकाशित संसाधन दिखाई देंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
@@ -2465,7 +2467,7 @@ private fun ResourcesScreen(
                             }
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("पढ़ें") }
+                            Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("पढ़ें")) }
                             TextButton(onClick = { onDownload(doc) }, enabled = !busy && downloadState?.active != true,
                                 modifier = Modifier.weight(1f)) {
                                 Text(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड")
@@ -2474,7 +2476,7 @@ private fun ResourcesScreen(
                         if (cached > 0) {
                             TextButton(onClick = { pendingRemoval = doc }, enabled = !busy,
                                 modifier = Modifier.fillMaxWidth()) {
-                                Text("Downloaded copy हटाएँ", color = MaterialTheme.colorScheme.error)
+                                Text(localizedUiText("Downloaded copy हटाएँ"), color = MaterialTheme.colorScheme.error)
                             }
                         }
                     }
@@ -2498,14 +2500,14 @@ private fun DocumentReaderScreen(
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(document.textAny("title").ifBlank { "पुस्तक" }, style = MaterialTheme.typography.titleLarge)
-        Text("पृष्ठ " + page + " / " + pageCount + " • सुरक्षित ऑफ़लाइन प्रतियाँ: " + cachedCount,
+        Text(localizedUiText("पृष्ठ ") + page + " / " + pageCount + " • सुरक्षित ऑफ़लाइन प्रतियाँ: " + cachedCount,
             style = MaterialTheme.typography.bodySmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-            TextButton(onClick = { onPage(page - 1) }, enabled = !busy && page > 1) { Text("← पिछला") }
+            TextButton(onClick = { onPage(page - 1) }, enabled = !busy && page > 1) { Text(localizedUiText("← पिछला")) }
             Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text("ऑफ़लाइन डाउनलोड") }
+            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text(localizedUiText("ऑफ़लाइन डाउनलोड")) }
             Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text("अगला →") }
+            TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text(localizedUiText("अगला →")) }
         }
         if (image != null) {
             Image(bitmap = image, contentDescription = "पुस्तक का पृष्ठ " + page,
@@ -2516,7 +2518,7 @@ private fun DocumentReaderScreen(
                 else EmptyState("पृष्ठ अभी लोड नहीं हुआ", "नेटवर्क उपलब्ध होने पर या पृष्ठ डाउनलोड होने पर फिर प्रयास करें।")
             }
         }
-        Text("यह सामग्री केवल QuantaEdge ऐप में दिखाई जाती है; export और share विकल्प उपलब्ध नहीं हैं।",
+        Text(localizedUiText("यह सामग्री केवल QuantaEdge ऐप में दिखाई जाती है; export और share विकल्प उपलब्ध नहीं हैं।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }
@@ -2535,33 +2537,33 @@ private fun ParentHomeScreen(
     maxChildren: Int
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("अभिभावक डैशबोर्ड", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("अभिभावक डैशबोर्ड"), style = MaterialTheme.typography.headlineSmall)
         Text(parent.textAny("parentName").ifBlank { "अभिभावक" }, style = MaterialTheme.typography.titleMedium)
-        Text("सक्रिय छात्र: " + parent.optInt("activeChildren", children.size) + " / " + maxChildren,
+        Text(localizedUiText("सक्रिय छात्र: ") + parent.optInt("activeChildren", children.size) + " / " + maxChildren,
             style = MaterialTheme.typography.bodySmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = onRefresh, enabled = !busy) { Text("रिफ्रेश") }
-            TextButton(onClick = onProfile, enabled = !busy) { Text("प्रोफ़ाइल") }
-            TextButton(onClick = onLogout, enabled = !busy) { Text("साइन आउट") }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+            TextButton(onClick = onProfile, enabled = !busy) { Text(localizedUiText("प्रोफ़ाइल")) }
+            TextButton(onClick = onLogout, enabled = !busy) { Text(localizedUiText("साइन आउट")) }
         }
         Button(onClick = onAddChild, enabled = !busy && children.size < maxChildren,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) { Text("नया छात्र प्रोफ़ाइल बनाएँ") }
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) { Text(localizedUiText("नया छात्र प्रोफ़ाइल बनाएँ")) }
         if (children.isEmpty()) EmptyState("कोई सक्रिय छात्र प्रोफ़ाइल नहीं", "अभिभावक खाते से जुड़े सक्रिय छात्र यहाँ दिखेंगे।")
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
             items(children) { child ->
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         Text(child.textAny("display_name", "displayName").ifBlank { "छात्र" }, style = MaterialTheme.typography.titleMedium)
-                        Text("कक्षा " + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
+                        Text(localizedUiText("कक्षा ") + child.textAny("class_code", "class_name") + " • " + child.textAny("track_codes"),
                             style = MaterialTheme.typography.bodySmall)
-                        Text("यूज़रनेम: " + child.textAny("login_username").ifBlank { "सेट नहीं" },
+                        Text(localizedUiText("यूज़रनेम: ") + child.textAny("login_username").ifBlank { "सेट नहीं" },
                             style = MaterialTheme.typography.bodySmall)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Button(onClick = { onReport(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text("सीखने की रिपोर्ट")
+                                Text(localizedUiText("सीखने की रिपोर्ट"))
                             }
                             TextButton(onClick = { onManageChild(child) }, enabled = !busy, modifier = Modifier.weight(1f)) {
-                                Text("Login / विषय")
+                                Text(localizedUiText("Login / विषय"))
                             }
                         }
                     }
@@ -2645,9 +2647,9 @@ private fun ParentReportScreen(
                         Text(t("Certificate available","प्रमाणपत्र उपलब्ध है"), color=MaterialTheme.colorScheme.primary)
                         Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"pdf")},
-                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text("PDF") }
+                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text(localizedUiText("PDF")) }
                             OutlinedButton(onClick={onDownloadCertificate(childId,cert.optLong("id",0L),"png")},
-                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text("PNG") }
+                                enabled=!busy && childId>0L && cert.optLong("id",0L)>0L) { Text(localizedUiText("PNG")) }
                         }
                     }
                     "REVOKED" -> Text(t("Certificate revoked","प्रमाणपत्र निरस्त है"), color=MaterialTheme.colorScheme.error)
@@ -2703,16 +2705,16 @@ private fun ProfileScreen(
 ) {
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("प्रोफ़ाइल और सेटिंग", style = MaterialTheme.typography.headlineSmall)
+        Text(localizedUiText("प्रोफ़ाइल और सेटिंग"), style = MaterialTheme.typography.headlineSmall)
         Text(auth.textAny("displayName", "display_name", "role"), style = MaterialTheme.typography.titleMedium)
-        Text("खाता: " + auth.textAny("role"), style = MaterialTheme.typography.bodyMedium)
-        Text("कक्षा: " + profile.textAny("class_code", "classCode"), style = MaterialTheme.typography.bodyMedium)
-        Text("ऐप भाषा: " + if (language == "hi") "हिंदी" else "English", style = MaterialTheme.typography.bodyMedium)
+        Text(localizedUiText("खाता: ") + auth.textAny("role"), style = MaterialTheme.typography.bodyMedium)
+        Text(localizedUiText("कक्षा: ") + profile.textAny("class_code", "classCode"), style = MaterialTheme.typography.bodyMedium)
+        Text(localizedUiText("ऐप भाषा: ") + if (language == "hi") "हिंदी" else "English", style = MaterialTheme.typography.bodyMedium)
         Button(onClick = onToggleLanguage, modifier = Modifier.fillMaxWidth()) {
             Text(if (language == "hi") "Switch to English" else "हिंदी में बदलें")
         }
-        Button(onClick = onLogout, modifier = Modifier.fillMaxWidth()) { Text("साइन आउट") }
-        Text("डाउनलोड की गई अध्ययन सामग्री ऐप के निजी स्टोरेज में encrypted रहती है और Android backup में शामिल नहीं होती।",
+        Button(onClick = onLogout, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("साइन आउट")) }
+        Text(localizedUiText("डाउनलोड की गई अध्ययन सामग्री ऐप के निजी स्टोरेज में encrypted रहती है और Android backup में शामिल नहीं होती।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }
