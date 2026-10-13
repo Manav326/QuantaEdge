@@ -157,6 +157,7 @@ public class HrmsAccessController {
       }
       replaceHrmsRoles(staffId, roles);
       replaceCustomPermissions(staffId, customPermissions, context.staffId());
+      syncManagerScopeMarker(staffId, roles, customPermissions, context.staffId());
       jdbc.update("""
           update auth_session set revoked_at=now()
           where staff_id=? and workspace_key='HRMS' and revoked_at is null
@@ -199,6 +200,7 @@ public class HrmsAccessController {
         : assignedPermissions(staffId);
     replaceHrmsRoles(staffId, roles);
     replaceCustomPermissions(staffId, customPermissions, context.staffId());
+    syncManagerScopeMarker(staffId, roles, customPermissions, context.staffId());
     jdbc.update("""
         update auth_session set revoked_at=now()
         where staff_id=? and workspace_key='HRMS' and revoked_at is null
@@ -346,6 +348,27 @@ public class HrmsAccessController {
           on conflict(staff_id,workspace_key,permission_key) do update
           set granted_by_staff_id=excluded.granted_by_staff_id, granted_at=now()
           """, staffId, permission, grantedBy);
+    }
+  }
+
+  private void syncManagerScopeMarker(long staffId, List<String> roles,
+      List<String> permissions, Long grantedBy) {
+    // A few legacy reporting queries use a direct marker to decide whether recursive team
+    // scoping applies. Keep it synchronized with the effective HRMS role/permission.
+    boolean teamScoped = roles.contains("PEOPLE_MANAGER")
+        || permissions.contains("HR_MANAGER_TEAM_VIEW");
+    if (teamScoped) {
+      jdbc.update("""
+          insert into staff_permission_grant(staff_id,workspace_key,permission_key,granted_by_staff_id)
+          values (?,'HRMS','HR_MANAGER_TEAM_VIEW',?)
+          on conflict(staff_id,workspace_key,permission_key) do update
+          set granted_by_staff_id=excluded.granted_by_staff_id, granted_at=now()
+          """, staffId, grantedBy);
+    } else {
+      jdbc.update("""
+          delete from staff_permission_grant
+          where staff_id=? and workspace_key='HRMS' and permission_key='HR_MANAGER_TEAM_VIEW'
+          """, staffId);
     }
   }
 
