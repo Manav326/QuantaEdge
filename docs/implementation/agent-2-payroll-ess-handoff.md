@@ -48,17 +48,17 @@ No employee, candidate, payroll or asset sample data is seeded.
 Added `HrExtendedWorkforceController` under `/api/v1/hr` with permission-checked endpoints for:
 
 - `/recruitment/vacancies` — create/list vacancies and publish/hold/close/cancel state changes.
-- `/recruitment/candidates` — create/list applications, stage changes, evaluations/hiring decisions, and approved-candidate conversion.
+- `/recruitment/candidates` — create/list applications, stage changes, evaluation history and hiring decisions, and approved-candidate conversion.
 - `/recruitment/candidates/{id}/convert` — transactionally creates the canonical `hr_employee` row and `hr_employee_history` event; candidate conversion is unique and requires an approved hiring decision.
-- `/performance/cycles`, `/performance/reviews` and cycle/goal/review actions — cycle lifecycle, review assignment, self-assessment submission, manager assessment and approval.
-- `/assets`, `/assets/{id}/assign` and `/assets/assignments/{assignmentId}/return` — inventory, custody, condition and return handling. Damaged returns move the asset to maintenance.
-- `/exits`, exit status/checklist/settlement routes — auditable clearance state, with completion blocked until checklist clearance and settlement confirmation.
+- `/performance/cycles`, cycle goals, `/performance/reviews` and cycle/goal/review actions — cycle lifecycle, goal listing/assignment, review assignment, self-assessment submission, manager assessment and approval.
+- `/assets`, `/assets/{id}/assign`, `/assets/{id}/status` and `/assets/assignments/{assignmentId}/return` — inventory, custody, expected return dates, overdue indicators, missing/retired status, condition and return handling. Damaged returns move the asset to maintenance.
+- `/exits`, checklist retrieval/update, exit status and settlement routes — auditable clearance state, with completion blocked until checklist clearance and settlement confirmation. The UI can clear or waive checklist items.
 
 All sensitive mutation routes check dedicated permissions in the backend. Related employees/departments are checked against the owning organisation. Candidate-to-employee conversion reuses `hr_employee`; it does not create a second employee registry. Exit workflow does not silently change employee status, revoke a login or transfer money.
 
 ### People portal
 
-Added `apps/people/app/workforce/page.tsx` and linked it from the People portal home. The page has recruitment, performance, asset and exit sections, forms, tables, workflow actions, loading/error/success states and permission-aware controls. API results, rather than optimistic UI state, determine success messages.
+Added `apps/people/app/workforce/page.tsx` and linked it from the People portal home. The page has recruitment, performance, asset and exit sections, forms, tables, workflow actions, candidate-to-employee onboarding, exit checklist controls, asset due dates/overdue indicators, loading/error/success states and permission-aware controls. API results, rather than optimistic UI state, determine success messages.
 
 ### Tests added
 
@@ -108,7 +108,7 @@ Also validate migration V71 against a clean PostgreSQL 17 database and an upgrad
 - Recruitment candidate conversion requires the canonical employment type and joining date supplied by an authorised operator. The API creates the canonical employee and history record, but does not automatically provision a login or permissions.
 - Candidate resume references are metadata only; secure document upload, malware scanning, private download and retention policy are not included.
 - Performance workflow currently provides a configurable JSON evaluation schema and optional numeric rating, but not a complete form-schema editor, manager/employee scoped portal view or goal progress reporting.
-- Asset workflows track assignment and return; automated overdue reminders, depreciation and procurement are not included.
+- Asset workflows track assignment, due dates, overdue status, missing/damaged/retired states and return; automated overdue reminders, depreciation and procurement are not included.
 - Exit workflow tracks clearance and settlement state; it does not automatically alter employment status, disable accounts, calculate a final settlement amount, or deduct asset loss from payroll.
 - Payroll proration, percentage/formula components, adjustment/reversal workflow, PDF payslip rendering, and private document storage/download remain incomplete.
 - The new test suite does not yet cover every acceptance item from the task. Expand it after the first CI run, especially migration upgrade, review authorization, two-employee isolation, asset concurrency, exit transitions and recruitment conversion uniqueness.
