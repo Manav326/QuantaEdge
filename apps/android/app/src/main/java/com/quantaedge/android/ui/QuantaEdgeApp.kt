@@ -2149,7 +2149,7 @@ private fun LessonScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(lesson.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.secondary)
-            Text(lesson.textAny("title").ifBlank { "पाठ" }, style = MaterialTheme.typography.headlineSmall)
+            Text(lesson.textAny("title").ifBlank { localizedUiText("पाठ") }, style = MaterialTheme.typography.headlineSmall)
             Text(lesson.textAny("summary"), style = MaterialTheme.typography.bodyLarge)
             if (blocks.isEmpty()) {
                 EmptyState("पाठ की सामग्री उपलब्ध नहीं", "इस प्रकाशित पाठ में अभी कोई पढ़ने योग्य ब्लॉक नहीं मिला।")
