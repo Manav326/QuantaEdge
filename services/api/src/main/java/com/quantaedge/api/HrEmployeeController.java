@@ -35,7 +35,8 @@ public class HrEmployeeController {
 
   @GetMapping("/organization")
   public Map<String,Object> organization(@RequestAttribute(value="authContext",required=false) AuthContext context) {
-    requireView(context);
+    if(!authorization.hasPermission(context,"HR_EMPLOYEE_VIEW")&&!authorization.hasPermission(context,"HR_APPROVAL_POLICY_MANAGE"))
+      throw new SecurityException("Permission required: HR_EMPLOYEE_VIEW or HR_APPROVAL_POLICY_MANAGE");
     return jdbc.queryForMap("select id,public_id,name,legal_name,timezone,active,working_days_per_week from hr_organization order by id limit 1");
   }
 
