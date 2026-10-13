@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,6 +60,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -81,6 +83,7 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
+import java.time.LocalTime
 
 private data class ResourceDownloadUiState(
     val label: String,
@@ -109,6 +112,9 @@ fun QuantaEdgeApp() {
     var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var accountMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    var languageMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    var headerPhotoBytes by remember { mutableStateOf<ByteArray?>(null) }
     var certificateLanguage by rememberSaveable {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
@@ -1343,12 +1349,18 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun toggleLanguage() {
-        // Interface locale switches immediately; learning content preference is saved separately.
-        language = if (language == "hi") "en" else "hi"
-        preferences.edit().putString("language", language).apply()
+    fun setLanguage(nextLanguage: String) {
+        val next = if (nextLanguage == "en") "en" else "hi"
+        language = next
+        preferences.edit().putString("language", next).apply()
+        languageMenuExpanded = false
         error = ""
         status = ""
+    }
+
+    fun toggleLanguage() {
+        // Interface locale switches immediately; learning content preference is saved separately.
+        setLanguage(if (language == "hi") "en" else "hi")
     }
 
     fun goBack() {
@@ -1384,6 +1396,29 @@ fun QuantaEdgeApp() {
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
     val signedIn = role.isNotBlank() && route !in setOf(AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    val headerPhotoUrl = if (parentRole) {
+        parentProfile.textAny("profile_image_url", "profileImageUrl")
+            .ifBlank { parentAccount.textAny("profile_image_url", "profileImageUrl") }
+    } else {
+        studentProfile.textAny("profile_image_url", "profileImageUrl")
+            .ifBlank { auth.textAny("profile_image_url", "profileImageUrl") }
+    }
+    val headerDisplayName = if (parentRole) {
+        parentProfile.textAny("display_name", "displayName", "name")
+            .ifBlank { parentAccount.textAny("parentName", "display_name", "displayName", "name") }
+    } else {
+        studentProfile.textAny("display_name", "displayName", "name")
+            .ifBlank { auth.textAny("display_name", "displayName", "name") }
+    }
+    LaunchedEffect(headerPhotoUrl) {
+        headerPhotoBytes = if (headerPhotoUrl.isBlank()) null
+            else runCatching { ApiClient.getBytes(headerPhotoUrl) }.getOrNull()
+    }
+    val headerPhotoBitmap = remember(headerPhotoBytes) {
+        headerPhotoBytes?.let { bytes -> runCatching {
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)?.asImageBitmap()
+        }.getOrNull() }
+    }
 
     fun studentGroupForRoute(destination: AppRoute): String =
         StudentNavigationContract.studentGroupForRoute(destination, lastStudentNavGroup)
@@ -1442,32 +1477,79 @@ fun QuantaEdgeApp() {
                     if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.RECORDING_PLAYER)) {
                         TextButton(onClick = { goBack() }) { Text(localizedUiText("←")) }
                     }
-                    Image(
-                        painter = painterResource(R.drawable.quantaedge_wordmark),
-                        contentDescription = "QuantaEdge",
-                        modifier = Modifier.width(148.dp).heightIn(max = 42.dp),
-                        contentScale = ContentScale.Fit
-                    )
+                    QuantaEdgeBrand(modifier = Modifier, compact = true)
                     Spacer(modifier = Modifier.weight(1f))
-                    if (signedIn && !parentRole) {
-                        TextButton(onClick = {
-                            lastStudentNavGroup = when (route) {
-                                AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"
-                                AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"
-                                AppRoute.PRACTICE, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT,
-                                AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD -> "practice"
-                                AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.TUTOR, AppRoute.CLASSES,
-                                AppRoute.RECORDING_PLAYER -> "learn"
-                                else -> "today"
+                    if (signedIn) {
+                        Box {
+                            Surface(
+                                modifier = Modifier.size(38.dp).clickable(enabled = !busy) {
+                                    accountMenuExpanded = true
+                                },
+                                shape = CircleShape,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                tonalElevation = 1.dp
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    if (headerPhotoBitmap != null) {
+                                        Image(
+                                            bitmap = headerPhotoBitmap,
+                                            contentDescription = if (language == "hi") "प्रोफ़ाइल खोलें" else "Open profile",
+                                            modifier = Modifier.fillMaxSize().clip(CircleShape),
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    } else {
+                                        Text(
+                                            headerDisplayName.firstOrNull()?.uppercase() ?: "Q",
+                                            color = MaterialTheme.colorScheme.primary,
+                                            style = MaterialTheme.typography.titleMedium,
+                                            fontWeight = FontWeight.SemiBold
+                                        )
+                                    }
+                                }
                             }
-                            openStudentProfile()
-                        }, enabled = !busy) {
-                            Text(if (language == "hi") "प्रोफ़ाइल" else "Profile")
+                            DropdownMenu(
+                                expanded = accountMenuExpanded,
+                                onDismissRequest = { accountMenuExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text(if (language == "hi") "प्रोफ़ाइल और सेटिंग" else "Profile & settings") },
+                                    onClick = {
+                                        accountMenuExpanded = false
+                                        if (parentRole) openParentProfile() else {
+                                            lastStudentNavGroup = studentGroupForRoute(route)
+                                            openStudentProfile()
+                                        }
+                                    },
+                                    enabled = !busy
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(if (language == "hi") "साइन आउट" else "Log out") },
+                                    onClick = { accountMenuExpanded = false; logout() },
+                                    enabled = !busy
+                                )
+                            }
                         }
                     }
                     if (route !in setOf(AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)) {
-                        TextButton(onClick = { toggleLanguage() }, enabled = !busy) {
-                            Text(if (language == "hi") "EN" else "हिंदी")
+                        Box {
+                            TextButton(onClick = { languageMenuExpanded = true }, enabled = !busy) {
+                                Text(if (language == "hi") "हिन्दी ▾" else "English ▾")
+                            }
+                            DropdownMenu(
+                                expanded = languageMenuExpanded,
+                                onDismissRequest = { languageMenuExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text((if (language == "hi") "✓ " else "") + "हिन्दी") },
+                                    onClick = { setLanguage("hi") },
+                                    enabled = !busy && language != "hi"
+                                )
+                                DropdownMenuItem(
+                                    text = { Text((if (language == "en") "✓ " else "") + "English") },
+                                    onClick = { setLanguage("en") },
+                                    enabled = !busy && language != "en"
+                                )
+                            }
                         }
                     }
                 }
@@ -1883,14 +1965,8 @@ private fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(R.drawable.quantaedge_wordmark),
-            contentDescription = "QuantaEdge",
-            modifier = Modifier.fillMaxWidth().heightIn(max = 90.dp),
-            contentScale = ContentScale.Fit
-        )
+        QuantaEdgeBrand(modifier = Modifier.fillMaxWidth(), compact = false, centered = true)
         Spacer(modifier = Modifier.height(12.dp))
-        Text(localizedUiText("Smarter Decisions. Greater Growth."), style = MaterialTheme.typography.bodyMedium)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if (language == "hi") "EN" else "हिंदी") }
         }
@@ -2058,106 +2134,269 @@ private fun StudentHomeScreen(
     onOpenRecommendation: (JSONObject) -> Unit,
     onClasses: (String) -> Unit
 ) {
-    val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { "विद्यार्थी" } }
+    val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { if (language == "hi") "विद्यार्थी" else "Learner" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
-    val compact = LocalConfiguration.current.screenWidthDp < 390
-    val lessonCount = profile.optInt("completedLessons", profile.optInt("completed_lessons", -1))
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(if (language == "hi") "नमस्ते, $name" else "Welcome, $name", style = MaterialTheme.typography.headlineSmall)
-        Text(localizedUiText(if (className.isNotBlank()) "कक्षा $className" else "आपकी सीखने की जगह"), style = MaterialTheme.typography.bodyMedium)
-        if (lessonCount >= 0) Text(localizedUiText("पूरे किए गए पाठ: $lessonCount"), style = MaterialTheme.typography.bodySmall)
-        val lessonStats = profile.optJSONObject("lessonStats") ?: JSONObject()
-        val completedLessons = profile.optInt("completedLessons",
-            profile.optInt("completed_lessons", lessonStats.optInt("completed_lessons", 0)))
-        val totalLessons = profile.optInt("totalLessons",
-            profile.optInt("total_lessons", lessonStats.optInt("total_lessons", 0)))
-        val hasLessonSummary = profile.has("completedLessons") || profile.has("completed_lessons") || profile.has("lessonStats")
+    val lessonStats = profile.optJSONObject("lessonStats") ?: JSONObject()
+    val completedLessons = profile.optInt("completedLessons",
+        profile.optInt("completed_lessons", lessonStats.optInt("completed_lessons", 0)))
+    val totalLessons = profile.optInt("totalLessons",
+        profile.optInt("total_lessons", lessonStats.optInt("total_lessons", 0)))
+    val questionStats = profile.optJSONObject("questionStats")
+    val hasLessonSummary = profile.has("completedLessons") || profile.has("completed_lessons") || profile.has("lessonStats")
+    val percent = if (totalLessons > 0) (completedLessons * 100 / totalLessons).coerceIn(0, 100) else 0
+    val curriculum = profile.optJSONArray("curriculum")?.objectItems()?.take(2) ?: emptyList()
+    val greeting = HomeGreeting.text(LocalTime.now().hour, language)
+
+    Column(
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(greeting, style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
+            Text("$name 👋", style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.SemiBold)
+            Text(
+                if (className.isNotBlank()) {
+                    if (language == "hi") "आपकी सीखने की जगह · कक्षा $className" else "Your learning space · Class $className"
+                } else if (language == "hi") "आपकी सीखने की जगह" else "Your learning space",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
         if (hasLessonSummary) {
-            val questionStats = profile.optJSONObject("questionStats")
-            if (compact) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    ParentReportMetric(
-                        if (language == "hi") "पाठ पूरे" else "Lessons completed",
-                        if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
-                        if (language == "hi") "सीखने की प्रगति" else "Learning progress",
-                        Modifier.fillMaxWidth()
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text(if (language == "hi") "सीखने की प्रगति" else "Learning progress",
+                                style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            Text(
+                                if (language == "hi") "$completedLessons / $totalLessons पाठ पूरे" else "$completedLessons of $totalLessons lessons completed",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Text("$percent%", style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                    }
+                    LinearProgressIndicator(
+                        progress = { percent / 100f },
+                        modifier = Modifier.fillMaxWidth()
                     )
                     if (questionStats != null) {
-                        ParentReportMetric(
-                            if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
-                            questionStats.optString("accuracy_percent", "0") + "%",
-                            questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
-                            Modifier.fillMaxWidth()
-                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
+                            Text(
+                                (if (language == "hi") "अभ्यास सटीकता " else "Practice accuracy ") +
+                                    questionStats.optString("accuracy_percent", "0") + "%",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                questionStats.optString("attempts", "0") +
+                                    if (language == "hi") " प्रयास" else " attempts",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        Text(if (language == "hi") "आपके विषय" else "Your subjects",
+            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+            if (curriculum.isNotEmpty()) {
+                curriculum.forEach { subject ->
+                    val code = subject.textAny("subject_code", "subjectCode").ifBlank { "maths" }.lowercase()
+                    Surface(
+                        modifier = Modifier.weight(1f).clickable { onSubject(code) },
+                        shape = MaterialTheme.shapes.medium,
+                        color = MaterialTheme.colorScheme.surface,
+                        tonalElevation = 1.dp
+                    ) {
+                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(
+                                subject.textAny("subject_name", "subject_code").ifBlank {
+                                    if (code == "science") "Science" else "Mathematics"
+                                },
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(subject.optInt("completion_percent", 0).toString() + "%",
+                                style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                            LinearProgressIndicator(
+                                progress = { subject.optDouble("completion_percent", 0.0).toFloat().coerceIn(0f, 100f) / 100f },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.primary)
+                        }
+                    }
+                }
+                if (curriculum.size == 1) {
+                    Surface(
+                        modifier = Modifier.weight(1f).clickable {
+                            onSubject(if (curriculum.first().textAny("subject_code").equals("maths", true)) "science" else "maths")
+                        },
+                        shape = MaterialTheme.shapes.medium,
+                        color = MaterialTheme.colorScheme.surfaceVariant
+                    ) {
+                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(if (language == "hi") "दूसरा विषय" else "Other subject",
+                                style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                            Text(if (language == "hi") "अध्याय देखें →" else "Explore chapters →",
+                                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                 }
             } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    ParentReportMetric(
-                        if (language == "hi") "पाठ पूरे" else "Lessons completed",
-                        if (totalLessons > 0) "$completedLessons / $totalLessons" else completedLessons.toString(),
-                        if (language == "hi") "सीखने की प्रगति" else "Learning progress",
-                        Modifier.weight(1f)
-                    )
-                    if (questionStats != null) {
-                        ParentReportMetric(
-                            if (language == "hi") "अभ्यास सटीकता" else "Practice accuracy",
-                            questionStats.optString("accuracy_percent", "0") + "%",
-                            questionStats.optString("attempts", "0") + if (language == "hi") " प्रयास" else " attempts",
-                            Modifier.weight(1f)
-                        )
+                Surface(
+                    modifier = Modifier.weight(1f).clickable { onSubject("maths") },
+                    shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surface, tonalElevation = 1.dp
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(if (language == "hi") "गणित" else "Mathematics",
+                            style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
+                            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
+                    }
+                }
+                Surface(
+                    modifier = Modifier.weight(1f).clickable { onSubject("science") },
+                    shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surface, tonalElevation = 1.dp
+                ) {
+                    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(if (language == "hi") "विज्ञान" else "Science",
+                            style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                        Text(if (language == "hi") "पाठ खोलें →" else "Open lessons →",
+                            style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
         }
-        val curriculum = profile.optJSONArray("curriculum")?.objectItems() ?: emptyList()
-        if (curriculum.isNotEmpty()) {
-            Text(if (language == "hi") "विषयवार प्रगति" else "Subject progress",
-                style = MaterialTheme.typography.titleLarge)
-            curriculum.take(4).forEach { subject ->
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(localizedUiText(subject.textAny("subject_name", "subject_code")), style = MaterialTheme.typography.titleSmall)
-                            Text(subject.optString("completion_percent", "0") + "%", style = MaterialTheme.typography.labelMedium)
-                        }
-                        LinearProgressIndicator(
-                            progress = { subject.optDouble("completion_percent", 0.0).toFloat().coerceIn(0f, 100f) / 100f },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-            }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            SubjectCard("गणित", "Maths", Modifier.weight(1f)) { onSubject("maths") }
-            SubjectCard("विज्ञान", "Science", Modifier.weight(1f)) { onSubject("science") }
-        }
-        ActionRow("सीखना जारी रखें", "अपनी कक्षा और विषय के प्रकाशित पाठ खोलें।", "पाठ खोलें") { onSubject("maths") }
-        ActionRow("प्रारंभिक जाँच", "आपके वर्तमान ज्ञान को समझने के लिए सर्वर पर उपलब्ध डायग्नोस्टिक।", "जाँच शुरू करें", onDiagnostic)
-        ActionRow("टेस्ट", "प्रकाशित अध्याय और विषय मूल्यांकन।", "टेस्ट देखें") { onTests("maths") }
-        ActionRow("Textbook Library", "पुस्तक और अध्याय संसाधन ऐप में पढ़ें; अनुमति होने पर ऑफ़लाइन डाउनलोड करें।", "लाइब्रेरी खोलें") { onResources("maths") }
-        ActionRow("Live classes और recordings", "Schedule की गई classes, recorded lessons और आपकी playback progress।", "Classes खोलें") { onClasses("maths") }
-        ActionRow("मेरे परिणाम", "जारी किए गए टेस्ट परिणाम और उत्तर समीक्षा।", "परिणाम देखें", onResults)
-        ActionRow("प्रगति और mastery", "पाठ completion, accuracy, concept mastery और assessment performance।", "मेरी प्रगति देखें", onProgress)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = onProfile) { Text(localizedUiText("प्रोफ़ाइल और सेटिंग")) }
-            TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
-        }
+
+        Text(if (language == "hi") "त्वरित पहुँच" else "Quick access",
+            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        DashboardActionRow(
+            title = if (language == "hi") "पढ़ाई जारी रखें" else "Continue learning",
+            subtitle = if (language == "hi") "प्रकाशित पाठ और विषय खोलें" else "Open published lessons and topics",
+            action = if (language == "hi") "खोलें" else "Open",
+            glyph = "↗", enabled = !busy, onClick = { onSubject("maths") }
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "अभ्यास और टेस्ट" else "Practice & tests",
+            subtitle = if (language == "hi") "विषय अभ्यास, टेस्ट और परिणाम" else "Topic practice, assessments and results",
+            action = if (language == "hi") "देखें" else "View",
+            glyph = "✓", enabled = !busy, onClick = { onTests("ALL") }
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "किताबें और अध्याय" else "Books & chapters",
+            subtitle = if (language == "hi") "किताबें पढ़ें और उपलब्ध पेज डाउनलोड करें" else "Read books and download available pages",
+            action = if (language == "hi") "लाइब्रेरी" else "Library",
+            glyph = "▤", enabled = !busy, onClick = { onResources("maths") }
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "Live classes और recordings" else "Live classes & recordings",
+            subtitle = if (language == "hi") "कक्षाएँ और आपकी playback progress" else "Classes and your playback progress",
+            action = if (language == "hi") "खोलें" else "Open",
+            glyph = "▷", enabled = !busy, onClick = { onClasses("maths") }
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "मेरे परिणाम और समीक्षा" else "My results & review",
+            subtitle = if (language == "hi") "जारी टेस्ट परिणाम और उत्तर समीक्षा" else "Released test results and answer review",
+            action = if (language == "hi") "परिणाम" else "Results",
+            glyph = "✓", enabled = !busy, onClick = onResults
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "प्रारंभिक जाँच" else "Initial diagnostic",
+            subtitle = if (language == "hi") "आपकी वर्तमान समझ के अनुसार सीखने की योजना" else "Personalise your learning plan to your current understanding",
+            action = if (language == "hi") "शुरू करें" else "Start",
+            glyph = "◎", enabled = !busy, onClick = onDiagnostic
+        )
+        DashboardActionRow(
+            title = if (language == "hi") "प्रगति और प्रमाणपत्र" else "Progress & certificates",
+            subtitle = if (language == "hi") "सीखे गए पाठ और आपकी उपलब्धियाँ" else "Completed learning and earned achievements",
+            action = if (language == "hi") "देखें" else "View",
+            glyph = "↗", enabled = !busy, onClick = onProgress
+        )
+
         if (recommendation.optBoolean("available") && recommendation.has("lesson")) {
             val next = recommendation.optJSONObject("lesson") ?: JSONObject()
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(localizedUiText("आपके लिए अगला पाठ"), style = MaterialTheme.typography.titleMedium)
-                    Text(next.textAny("title", "lesson_title"))
-                    TextButton(onClick = { onOpenRecommendation(next) }) {
-                        Text(localizedUiText("अगला पाठ खोलें"))
-                    }
+            DashboardActionRow(
+                title = if (language == "hi") "आपके लिए अगला पाठ" else "Next lesson for you",
+                subtitle = next.textAny("title", "lesson_title"),
+                action = if (language == "hi") "खोलें" else "Open",
+                glyph = "→", enabled = !busy, onClick = { onOpenRecommendation(next) }
+            )
+        } else if (recommendation.textAny("kind") == "DIAGNOSTIC") {
+            Text(
+                if (language == "hi") "अपनी अगली सीख तय करने के लिए प्रारंभिक जाँच पूरी करें।"
+                else "Complete your initial diagnostic to tailor your next learning steps.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TextButton(onClick = onProfile, enabled = !busy) {
+                Text(if (language == "hi") "प्रोफ़ाइल और सेटिंग" else "Profile & settings")
+            }
+            TextButton(onClick = onRefresh, enabled = !busy) {
+                Text(if (language == "hi") "रिफ्रेश" else "Refresh")
+            }
+        }
+    }
+}
+
+@Composable
+private fun DashboardActionRow(
+    title: String,
+    subtitle: String,
+    action: String,
+    glyph: String,
+    enabled: Boolean,
+    onClick: () -> Unit
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth().clickable(enabled = enabled, onClick = onClick),
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 1.dp
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 9.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Surface(
+                modifier = Modifier.size(34.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(glyph, color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 }
             }
-        } else if (recommendation.textAny("kind") == "DIAGNOSTIC") {
-            Text(localizedUiText("अपनी अगली सीख तय करने के लिए प्रारंभिक जाँच पूरी करें।"), style = MaterialTheme.typography.bodyMedium)
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                Text(subtitle, style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Text(action, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
         }
     }
 }
