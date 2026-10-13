@@ -420,8 +420,10 @@ public class LearningClassController {
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select cs.id,cs.title,cs.description,cs.provider,cs.status,cs.teaching_assignment_id,
         cs.provider_event_id,cs.provider_conference_request_id,cs.provider_operation_status,
-        cs.host_staff_id,ta.employee_id,ta.status as assignment_status,ta.effective_start,ta.effective_end
+        cs.host_staff_id,ta.employee_id,ta.status as assignment_status,ta.effective_start,ta.effective_end,
+        e.employment_status
       from learning_class_session cs left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee e on e.id=ta.employee_id
       where cs.id=?
       """,sessionId);
     if(rows.isEmpty())throw notFound("Live class",sessionId);
@@ -437,6 +439,7 @@ public class LearningClassController {
     if(assignmentId!=null) {
       java.time.LocalDate localDate=startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
       if(!"APPROVED".equals(row.get("assignment_status"))
+          ||!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(row.get("employment_status")))
           ||localDate.isBefore(((java.sql.Date)row.get("effective_start")).toLocalDate())
           ||localDate.isAfter(((java.sql.Date)row.get("effective_end")).toLocalDate())) {
         throw conflict("The approved teaching assignment must cover the rescheduled date.");
@@ -698,11 +701,13 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id left join staff_account host on host.id=cs.host_staff_id
       left join learning_class_attendance att on att.session_id=cs.id and att.student_id=st.id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
           and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
           and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
         and (?='' or s.code=?)
@@ -715,10 +720,12 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.status<>'CANCELLED' and cs.ends_at>now()-interval '60 days'
         and (cs.provider<>'GOOGLE_MEET' or (cs.provider_operation_status='CREATED' and cs.private_join_url is not null))
         and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
           and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
           and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
         and (?='' or s.code=?)
@@ -741,10 +748,12 @@ public class LearningClassController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
+      left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
       where cs.id=? and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
         and (cs.teaching_assignment_id is null or (ta.status='APPROVED'
+          and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
           and ta.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
           and ta.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date))
         and (ch.id is null or (ch.active=true and ch.content_status='PUBLISHED'))
