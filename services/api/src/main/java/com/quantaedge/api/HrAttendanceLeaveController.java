@@ -47,6 +47,21 @@ public class HrAttendanceLeaveController {
  @PatchMapping("/leave/requests/{id}/decision") @Transactional public Map<String,Object> decide(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c){
  require(c,"HR_LEAVE_MANAGE");Map<String,Object> before=leaveById(id);if(!"PENDING".equals(before.get("request_status")))throw new ResponseStatusException(HttpStatus.CONFLICT,"Only pending leave requests can be reviewed.");String decision=required(b.get("status"),16,"Decision").toUpperCase();if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("A leave decision must be APPROVED or REJECTED.");
  if(c.staffId()!=null){Boolean self=jdbc.queryForObject("select exists(select 1 from hr_employee where id=? and linked_staff_account_id=?)",Boolean.class,before.get("employee_id"),c.staffId());if(Boolean.TRUE.equals(self))throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Employees cannot approve their own leave request.");}
+ if("APPROVED".equals(decision)&&Boolean.TRUE.equals(before.get("paid"))){
+   long employeeId=((Number)before.get("employee_id")).longValue();
+   String type=String.valueOf(before.get("leave_type_code"));
+   LocalDate start=LocalDate.parse(String.valueOf(before.get("start_date")).substring(0,10));
+   BigDecimal days=new BigDecimal(String.valueOf(before.get("requested_days")));
+   Map<String,Object> employee=jdbc.queryForList("select id,organization_id from hr_employee where id=?",employeeId).stream().findFirst().orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee not found."));
+   long organizationId=((Number)employee.get("organization_id")).longValue();
+   jdbc.queryForObject("select pg_advisory_xact_lock(hashtext(?))",Object.class,organizationId+":"+employeeId+":"+type);
+   BigDecimal balance=jdbc.queryForObject("select coalesce(sum(quantity_days),0) from hr_leave_balance_transaction where organization_id=? and employee_id=? and leave_type_code=? and effective_date<=?",BigDecimal.class,organizationId,employeeId,type,Date.valueOf(start));
+   if(balance==null||balance.compareTo(days)<0)throw new ResponseStatusException(HttpStatus.CONFLICT,"Insufficient paid-leave balance for this approval. Record an authorized grant/accrual or reject the request.");
+   try{
+     jdbc.update("insert into hr_leave_balance_transaction(organization_id,employee_id,leave_type_code,transaction_type,quantity_days,effective_date,source_type,source_reference,reason,created_by_staff_id) values (?,?,?,?,?,?,?,?,?,?)",
+       organizationId,employeeId,type,"USAGE",days.negate(),Date.valueOf(start),"LEAVE_REQUEST",String.valueOf(id),"Approved paid leave request #"+id,c.staffId());
+   }catch(DuplicateKeyException ex){throw new ResponseStatusException(HttpStatus.CONFLICT,"A leave-usage transaction already exists for this request.");}
+ }
  int changed=jdbc.update("update hr_leave_request set request_status=?,review_note=?,reviewed_by_staff_id=?,reviewed_at=now(),updated_at=now() where id=? and request_status='PENDING'",decision,optional(b.get("reviewNote"),1000),c.staffId(),id);if(changed!=1)throw new ResponseStatusException(HttpStatus.CONFLICT,"This leave request was already reviewed.");Map<String,Object> after=leaveById(id);audit.recordAction(c,"/api/v1/hr/leave/requests/"+id+"/decision",decision+" leave request "+id);return after;}
  private Map<String,Object> activeEmployee(long id){List<Map<String,Object>> r=jdbc.queryForList("select id,organization_id,employee_number,display_name,employment_status from hr_employee where id=? and employment_status not in ('SEPARATED','INACTIVE','DRAFT')",id);if(r.isEmpty())throw bad("Choose an active employee.");return r.getFirst();}
  private Map<String,Object> leaveById(long id){List<Map<String,Object>> r=jdbc.queryForList("select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,r.leave_type_code,t.display_name leave_type,t.paid,r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,r.reviewed_by_staff_id,r.reviewed_at,r.created_by_staff_id,r.created_at,r.updated_at from hr_leave_request r join hr_employee e on e.id=r.employee_id join hr_leave_type t on t.code=r.leave_type_code where r.id=?",id);if(r.isEmpty())throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Leave request not found.");return r.getFirst();}
