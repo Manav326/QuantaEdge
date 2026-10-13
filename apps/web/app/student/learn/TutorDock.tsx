@@ -23,9 +23,14 @@ export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{les
   useEffect(()=>{
     if(!open)return;
     let cancelled=false;
+    setSessionId(null);
+    setAvailable(null);
+    setMessages([]);
+    setHasOlderMessages(false);
+    setOlderBeforeId(null);
+    setError('');
     (async()=>{
       try{
-        setError('');
         const r=await fetch('/api/v1/tutor/sessions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lessonId})});
         const b=await r.json();
         if(cancelled)return;
@@ -70,7 +75,7 @@ export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{les
       const b=await r.json();
       if(!r.ok)throw new Error(b.message||'Tutor request failed');
       setMessages(x=>[...x,{role:'ASSISTANT',mode,message:b.message}]);
-    }catch(e:any){setMessages(x=>x.slice(0,-1));setError(e.message||'Tutor request failed')}
+    }catch(e:any){setMessages(x=>x.slice(0,-1));setInput(message);setError(e.message||'Tutor request failed')}
     finally{setBusy(false)}
   }
 
