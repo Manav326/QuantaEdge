@@ -140,7 +140,7 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
 
 export default function TestsClient(){
   const router=useRouter();
-  const {locale, learningLanguage, certificateLanguage}=useLocale();
+  const {learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
   const [tests,setTests]=useState<AssessmentCard[]>([]);
   const [testsPage,setTestsPage]=useState(0);

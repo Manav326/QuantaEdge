@@ -73,9 +73,9 @@ const mobileParentNav = layout.slice(mobileParentStart, mobileParentEnd);
 assert.ok(!mobileParentNav.includes('logout(') && !mobileParentNav.includes('Logout'), 'Parent mobile primary navigation must contain only the three parent destinations.');
 
 // Android shares the canonical group IDs and selects its rail/bar by orientation rather than width.
-const androidStudentGroupIds = [...androidApp.matchAll(/AppNavItem\\("(today|learn|practice|progress|library)"/g)].map((match) => match[1]);
+const androidStudentGroupIds = [...androidApp.matchAll(/AppNavItem\("(today|learn|practice|progress|library)"/g)].map((match) => match[1]);
 assert.deepEqual(androidStudentGroupIds, ['today', 'learn', 'practice', 'progress', 'library'], 'Android must render the same five student groups in web order.');
-const androidParentGroupIds = [...androidApp.matchAll(/AppNavItem\\("(family|children|profile)"/g)].map((match) => match[1]);
+const androidParentGroupIds = [...androidApp.matchAll(/AppNavItem\("(family|children|profile)"/g)].map((match) => match[1]);
 assert.deepEqual(androidParentGroupIds, ['family', 'children', 'profile'], 'Android parent navigation must keep its three role-specific destinations.');
 assert.ok(androidApp.includes('LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE'), 'Android navigation must derive placement from device orientation.');
 assert.ok(androidApp.includes('if (signedIn && landscapeLayout) NavigationRail'), 'Android landscape must use the left navigation rail.');
