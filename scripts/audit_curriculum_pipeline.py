@@ -226,16 +226,18 @@ def reconcile_coverage(target_rows,grades,languages,extractions,candidates,revie
    draft_or_reviewed=max(draft_counts.get(key,0),reviewed_counts.get(key,0))
    # Include the inventory's documented approved baseline. This is explicitly a CSV
    # snapshot (not a live database read), so refresh the inventory before release decisions.
-   approved_baseline=max(0,int(row["actual_active_approved_count"]))
+   # The target CSV has no language column. Its migration-derived approved count
+   # describes the base Hindi bank only; English variants are counted separately as translations.
+   approved_baseline=max(0,int(row["actual_active_approved_count"])) if lang=="hindi" else 0
    count=approved_baseline+draft_or_reviewed
    if count<row["minimum_target_count"]:
     gaps.append({"class_code":row["class_code"],"subject_code":row["subject_code"],"chapter_code":row["chapter_code"],"language":lang,"question_type":row["question_type"],"target":row["minimum_target_count"],"documented_approved_baseline":approved_baseline,"draft_or_reviewed_count":draft_or_reviewed,"evidenced_total_for_target_check":count,"gap":row["minimum_target_count"]-count})
  if gaps and (candidates.get("configured") or reviewed.get("configured")):
-  issues.append(issue("BLOCKER","question_generation","BILINGUAL_QUESTION_TARGET_GAPS","The documented approved baseline plus generated/reviewed drafts does not cover the curriculum question targets in both languages; CSV approved counts are a migration-derived snapshot and drafts are not approved/published questions.",gap_rows=len(gaps),missing_question_total=sum(x["gap"] for x in gaps),examples=gaps[:100]))
+  issues.append(issue("BLOCKER","question_generation","BILINGUAL_QUESTION_TARGET_GAPS","The documented approved baseline plus generated/reviewed drafts does not cover the curriculum question targets in both languages; CSV approved counts are a migration-derived snapshot for the primary Hindi/base bank; English translation coverage is separate and drafts are not approved/published questions.",gap_rows=len(gaps),missing_question_total=sum(x["gap"] for x in gaps),examples=gaps[:100]))
  return {"expected_chapter_track_language_rows":len(expected),"extraction_rows_found":len(ex_found),"extraction_rows_missing":len(expected-ex_found) if extractions.get("configured") else None,
          "candidate_chapter_track_language_rows":len(candidate_found),"candidate_rows_missing":len(expected-candidate_found) if (candidates.get("configured") or reviewed.get("configured")) else None,
          "question_target_for_selected_languages":expected_by_language,
-         "target_baseline_source":"migration-derived actual_active_approved_count in target CSV; refresh before release decisions","question_type_gap_rows":len(gaps) if (candidates.get("configured") or reviewed.get("configured")) else None,
+         "target_baseline_source":"migration-derived actual_active_approved_count in target CSV for the primary Hindi/base bank only; refresh before release decisions","question_type_gap_rows":len(gaps) if (candidates.get("configured") or reviewed.get("configured")) else None,
          "missing_question_total":sum(x["gap"] for x in gaps) if (candidates.get("configured") or reviewed.get("configured")) else None,
          "candidate_counts_are_not_approved_or_published":True},issues
 
