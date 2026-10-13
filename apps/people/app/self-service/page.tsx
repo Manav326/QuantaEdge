@@ -31,6 +31,8 @@ export default function EmployeeSelfServicePage(){
   const [balances,setBalances]=useState<any[]>([]);
   const [payslips,setPayslips]=useState<any[]>([]);
   const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
+  const [attendanceCorrectionRequests,setAttendanceCorrectionRequests]=useState<any[]>([]);
+  const [correctionDraft,setCorrectionDraft]=useState({workDate:'',status:'PRESENT',checkInAt:'',checkOutAt:'',notes:'',reason:''});
   const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
   const [tab,setTab]=useState<'attendance'|'leave'|'balances'|'payslips'|'profile'>('attendance');
@@ -46,15 +48,16 @@ export default function EmployeeSelfServicePage(){
       setSession(me);
       const ownProfile=await api('/api/v1/hr/self-service/profile');
       setProfile(ownProfile);
-      const [a,l,t,b,ps,pr]=await Promise.all([
+      const [a,l,t,b,ps,pr,cr]=await Promise.all([
         api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
         api('/api/v1/hr/self-service/leave/requests?limit=100'),
         api('/api/v1/hr/self-service/leave/types'),
         api('/api/v1/hr/self-service/leave/balances'),
         api('/api/v1/hr/self-service/payslips'),
-        api('/api/v1/hr/self-service/profile-change-requests')
+        api('/api/v1/hr/self-service/profile-change-requests'),
+        api('/api/v1/hr/self-service/attendance/correction-requests')
       ]);
-      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));setProfileChangeRequests((pr.items||[]).map((item:any)=>({...item,requested_values:typeof item.requested_values==='string'?JSON.parse(item.requested_values):item.requested_values})));
+      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));setProfileChangeRequests((pr.items||[]).map((item:any)=>({...item,requested_values:typeof item.requested_values==='string'?JSON.parse(item.requested_values):item.requested_values})));setAttendanceCorrectionRequests(cr.items||[]);
       if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
     }catch(e){
       setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
@@ -71,6 +74,20 @@ export default function EmployeeSelfServicePage(){
       await load();
       setTab('leave');
     }catch(e){setError(e instanceof Error?e.message:'Leave request could not be submitted.')}finally{setSaving(false)}
+  }
+  async function submitAttendanceCorrection(event:React.FormEvent){
+    event.preventDefault();setSaving(true);setError('');setNotice('');
+    try{
+      const payload={...correctionDraft,checkInAt:correctionDraft.checkInAt?new Date(correctionDraft.checkInAt).toISOString():null,checkOutAt:correctionDraft.checkOutAt?new Date(correctionDraft.checkOutAt).toISOString():null};const result=await api('/api/v1/hr/self-service/attendance/correction-requests',{method:'POST',body:JSON.stringify(payload)});
+      setNotice('Attendance correction request #'+result.id+' submitted for review.');
+      setCorrectionDraft(v=>({...v,checkInAt:'',checkOutAt:'',notes:'',reason:''}));
+      await load();setTab('attendance');
+    }catch(e){setError(e instanceof Error?e.message:'Attendance correction request could not be submitted.')}finally{setSaving(false)}
+  }
+  async function cancelAttendanceCorrection(id:number){
+    setSaving(true);setError('');setNotice('');
+    try{await api('/api/v1/hr/self-service/attendance/correction-requests/'+id+'/cancel',{method:'PATCH'});setNotice('Attendance correction request cancelled.');await load();setTab('attendance')}
+    catch(e){setError(e instanceof Error?e.message:'Attendance correction request could not be cancelled.')}finally{setSaving(false)}
   }
   async function submitProfileChange(event:React.FormEvent){
     event.preventDefault();setSaving(true);setError('');setNotice('');
@@ -153,6 +170,25 @@ export default function EmployeeSelfServicePage(){
             <label className="field">To<input className="input" type="date" value={range.to} min={range.from} onChange={e=>setRange(v=>({...v,to:e.target.value}))}/></label>
           </div>
           {daySpan>92&&<div className="error" role="alert">Choose a date range of 93 days or fewer.</div>}
+          <section className="panel" style={{marginTop:18}}>
+            <h2>Request an attendance correction</h2>
+            <p className="small">Choose a date with an existing attendance record. Your record stays unchanged until an authorized reviewer approves the request.</p>
+            <form className="form-grid" onSubmit={submitAttendanceCorrection}>
+              <label className="field">Work date<input className="input" type="date" required value={correctionDraft.workDate} onChange={e=>setCorrectionDraft(v=>({...v,workDate:e.target.value}))}/></label>
+              <label className="field">Requested status<select required value={correctionDraft.status} onChange={e=>setCorrectionDraft(v=>({...v,status:e.target.value}))}>{['PRESENT','ABSENT','HALF_DAY','REMOTE','ON_LEAVE','HOLIDAY'].map(status=><option key={status} value={status}>{pretty(status)}</option>)}</select></label>
+              <label className="field">Requested check-in (optional)<input className="input" type="datetime-local" value={correctionDraft.checkInAt} onChange={e=>setCorrectionDraft(v=>({...v,checkInAt:e.target.value}))}/></label>
+              <label className="field">Requested check-out (optional)<input className="input" type="datetime-local" value={correctionDraft.checkOutAt} min={correctionDraft.checkInAt||undefined} onChange={e=>setCorrectionDraft(v=>({...v,checkOutAt:e.target.value}))}/></label>
+              <label className="field full">Corrected note (optional)<textarea className="input" rows={2} maxLength={500} value={correctionDraft.notes} onChange={e=>setCorrectionDraft(v=>({...v,notes:e.target.value}))}/></label>
+              <label className="field full">Reason for correction<textarea className="input" rows={3} required maxLength={1000} value={correctionDraft.reason} onChange={e=>setCorrectionDraft(v=>({...v,reason:e.target.value}))} placeholder="Explain what is incorrect and why it should be changed."/></label>
+              <div className="actions"><button className="primary" disabled={saving||loading||!correctionDraft.workDate||!correctionDraft.reason.trim()}>{saving?'Submitting…':'Submit correction request'}</button></div>
+            </form>
+          </section>
+          <section className="panel">
+            <h2>My attendance correction requests</h2>
+            {attendanceCorrectionRequests.length===0?<div className="empty">You have not submitted any attendance correction requests.</div>:<div className="table-wrap"><table><thead><tr><th>Work date</th><th>Requested status</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
+              {attendanceCorrectionRequests.map((item:any)=><tr key={item.id}><td>{String(item.work_date).slice(0,10)}</td><td>{pretty(item.requested_status)}<div className="small">{item.requested_check_in_at?'In: '+new Date(item.requested_check_in_at).toLocaleString()+' ':''}{item.requested_check_out_at?'Out: '+new Date(item.requested_check_out_at).toLocaleString():''}</div></td><td>{item.reason}</td><td><span className="pill">{pretty(item.request_status)}</span></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelAttendanceCorrection(item.id)}>Cancel</button>:'—'}</td></tr>)}
+            </tbody></table></div>}
+          </section>
           <div className="table-wrap"><table><thead><tr><th>Work date</th><th>Status</th><th>Check in</th><th>Check out</th><th>Worked</th><th>Note</th></tr></thead><tbody>
             {attendance.map((item:any)=><tr key={item.work_date}><td>{String(item.work_date).slice(0,10)}</td><td><span className="pill">{pretty(item.attendance_status)}</span></td><td>{item.check_in_at?new Date(item.check_in_at).toLocaleString():'—'}</td><td>{item.check_out_at?new Date(item.check_out_at).toLocaleString():'—'}</td><td>{item.minutes_worked==null?'—':Math.floor(item.minutes_worked/60)+'h '+item.minutes_worked%60+'m'}</td><td>{item.notes||'—'}</td></tr>)}
           </tbody></table>{!loading&&!attendance.length&&<div className="empty">No attendance records were returned for this date range.</div>}</div>

@@ -8,7 +8,7 @@ plugins {
 
 val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .orElse(providers.environmentVariable("QUANTAEDGE_API_BASE_URL"))
-    .orElse("http://10.0.2.2:8080/")
+    .orElse("http://192.168.31.47:8080/")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
@@ -64,14 +64,14 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
+val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-icon.png")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandWordmark)
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
     rename { "quantaedge_wordmark.png" }
     doFirst {
         check(brandWordmark.asFile.exists()) {
-            "Approved QuantaEdge wordmark is missing at " + brandWordmark.asFile.absolutePath
+            "QuantaEdge Android branding asset is missing at " + brandWordmark.asFile.absolutePath
         }
     }
 }
