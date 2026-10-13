@@ -123,7 +123,7 @@ public class HrHolidayController {
   private void ensureOrganization(long id) {
     if(id<=0||!Boolean.TRUE.equals(jdbc.queryForObject("select exists(select 1 from hr_organization where id=? and active=true)",Boolean.class,id))) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Active organisation not found.");
   }
-  private Map<String,Object> byId(long id) { return jdbc.queryForMap("select id,organization_id,holiday_date,name,description,region,active,created_at,updated_at from hr_holiday_calendar where id=?",id); }
+  private Map<String,Object> byId(long id) { return jdbc.queryForMap("select id,organization_id,holiday_date,name,description,region,calendar_source,source_url,jurisdiction,calendar_year,source_verified_at,source_verified_by_staff_id,active,created_at,updated_at from hr_holiday_calendar where id=?",id); }
   private LocalDate date(String value) { try { return LocalDate.parse(value); } catch(DateTimeParseException|NullPointerException ex) { throw bad("Holiday date must use YYYY-MM-DD format."); } }
   private String required(Object value,int max,String label) { if(!(value instanceof String s)||s.trim().isEmpty()||s.trim().length()>max) throw bad(label+" is required and must be no longer than "+max+" characters."); return s.trim(); }
   private String optional(Object value,int max) { if(value==null)return null; String s=String.valueOf(value).trim(); if(s.isEmpty())return null; if(s.length()>max)throw bad("A text field exceeds its maximum length of "+max+" characters."); return s; }
