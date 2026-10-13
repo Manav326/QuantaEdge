@@ -78,7 +78,7 @@ Implemented on this branch:
 This is a partial implementation, not a green, complete HRMS release. The repository connector does not run Maven/Next.js locally, so tests and builds have not been executed here. CI must validate the migration and Java/test compilation.
 
 Remaining policy work identified by inspection:
-- The existing leave-decision handler changes request status but does not create a leave-usage transaction in the balance ledger. This must be integrated atomically with approval, with a defined paid/unpaid and insufficient-balance policy.
+- Paid-leave approval now posts a negative `USAGE` transaction within the same database transaction as the request decision, guarded by a per-employee/type advisory lock and a sufficient-balance check. Unpaid leave does not consume a paid-leave balance. The selected safe policy is to reject approval when the paid balance is insufficient. A unit test covers the insufficient-balance rejection, but the API test suite has not been run here.
 - The ledger UI supports manual grants/accruals/adjustments, but the inspected code does not yet provide a complete authorized reversal workflow. Posted ledger transactions must be immutable and reversal references unique.
 - Employee self-service has leave and profile-change requests, but no attendance-correction request endpoint/workflow was found in the inspected route. Direct HR corrections are now auditable; the employee request + approval side of the owner's "both" decision remains incomplete.
 - Approval rules are not yet shown to be configurable per lifecycle transition. Current leave decisions use the shared `HR_LEAVE_MANAGE` permission.
