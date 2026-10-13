@@ -633,7 +633,7 @@ export default function TestsClient(){
               <button type="button" className={styles.primaryButton} disabled={index>=attempt.questions.length-1}
                 onClick={()=>setIndex(i=>Math.min(attempt.questions.length-1,i+1))}>{t('Next','अगला')} →</button>
             </nav>}
-          </div>
+          </section>
           <div className={styles.resultActions}><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to results','परिणामों पर वापस जाएँ')}</button></div>
         </section>
         :(attempt.status==='AWAITING_REVIEW'||attempt.status==='GRADED')?<div className={styles.pendingResult}><span>◷</span><h2>{t('Test submitted successfully','टेस्ट सफलतापूर्वक जमा हुआ')}</h2><p>{t('Your answers are saved. Fill-in, short-answer and long-answer responses are sent to an assigned staff reviewer. Your final score and feedback will appear here after all required checking is complete.','आपके उत्तर सहेज लिए गए हैं। रिक्त स्थान, छोटे और लंबे उत्तर कर्मचारी समीक्षक को भेजे गए हैं। सभी ज़रूरी जाँच पूरी होने पर अंतिम स्कोर और प्रतिक्रिया यहाँ दिखेगी।')}</p><small>Submitted: {fmtDate(attempt.submitted_at)}</small><button className={styles.primaryButton} type="button" onClick={closeAttempt}>{t('Back to tests and results','टेस्ट और परिणामों पर वापस जाएँ')}</button></div>
