@@ -1,9 +1,14 @@
+import csv
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts.generate_questions_from_extraction import (
     SUPPORTED_TYPES,
+    load_curriculum_question_targets,
     validate_model_output,
 )
+
 
 
 def lesson_result(question):
@@ -39,6 +44,27 @@ def question(question_type, **overrides):
 class QuestionGenerationSchemaTests(unittest.TestCase):
     def setUp(self):
         self.chunk = {"page_numbers": [3], "page_start": 3, "page_end": 3}
+
+    def test_curriculum_target_mode_generates_only_the_remaining_gap(self):
+        rows = [
+            {"class_code": "6", "subject_code": "maths", "chapter_code": "alpha", "question_type": "MCQ", "minimum_target_count": "5", "actual_active_approved_count": "2", "target_eligible": "true"},
+            {"class_code": "6", "subject_code": "maths", "chapter_code": "alpha", "question_type": "INPUT", "minimum_target_count": "2", "actual_active_approved_count": "2", "target_eligible": "true"},
+            {"class_code": "6", "subject_code": "maths", "chapter_code": "beta", "question_type": "MCQ", "minimum_target_count": "1", "actual_active_approved_count": "1", "target_eligible": "true"},
+            {"class_code": "7", "subject_code": "maths", "chapter_code": "alpha", "question_type": "MCQ", "minimum_target_count": "99", "actual_active_approved_count": "0", "target_eligible": "true"},
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "targets.csv"
+            with path.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+                writer.writeheader()
+                writer.writerows(rows)
+            result = load_curriculum_question_targets(
+                path,
+                {"class_code": "6", "subject_code": "maths"},
+                [{"code": "alpha"}, {"code": "beta"}],
+            )
+        self.assertEqual(["MCQ", "MCQ", "MCQ"], result["alpha"])
+        self.assertEqual([], result["beta"])
 
     def test_generator_declares_all_curriculum_types(self):
         self.assertTrue({
