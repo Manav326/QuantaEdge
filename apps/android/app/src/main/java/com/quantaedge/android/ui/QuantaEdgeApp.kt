@@ -657,6 +657,18 @@ fun QuantaEdgeApp() {
         }
     }
 
+    suspend fun refreshCertificateEligibilityForAttempt(attemptId: Long) {
+        if (attemptId <= 0L) return
+        runCatching {
+            ApiClient.getObject(
+                "/api/v1/students/me/certificates/assessment-eligibility?attemptIds=" + attemptId
+            ).optJSONArray("items").objectItems()
+                .firstOrNull { it.longAny("attempt_id", "attemptId") == attemptId }
+        }.getOrNull()?.let { refreshed ->
+            assessmentCertificateEligibility = assessmentCertificateEligibility + (attemptId to refreshed)
+        }
+    }
+
     fun issueCertificateForAttempt(attemptId: Long) {
         runTask {
             if (attemptId <= 0L) throw IOException("Assessment attempt could not be identified.")
@@ -668,8 +680,12 @@ fun QuantaEdgeApp() {
                     .put("templateId", "CLASSIC")
                     .put("language", learningContentLanguage)
             )
-            loadAssessmentResultsData()
-            if (route == AppRoute.PROGRESS) loadProgressCertificateData(progressData)
+            when (route) {
+                AppRoute.PROGRESS -> loadProgressCertificateData(progressData)
+                else -> loadAssessmentResultsData()
+            }
+            // Preserve the exact attempt even when it falls outside the visible results page.
+            refreshCertificateEligibilityForAttempt(attemptId)
             status = if (language == "hi") "प्रमाणपत्र जारी हो गया। अब इस परिणाम से PDF या PNG सेव करें।"
                 else "Certificate issued. You can now save its PDF or PNG from this result."
         }
