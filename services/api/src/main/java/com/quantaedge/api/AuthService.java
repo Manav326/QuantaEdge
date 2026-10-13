@@ -36,6 +36,8 @@ public class AuthService {
       case "STAFF" -> "STAFF"; // Legacy education-staff scope.
       case "EDUCATION_ADMIN" -> "EDUCATION_ADMIN";
       case "HRMS" -> "HRMS";
+      case "PARENT" -> "PARENT";
+      case "STUDENT" -> "STUDENT";
       case "LEARNING" -> "LEARNING";
       default -> null;
     };
@@ -45,6 +47,8 @@ public class AuthService {
     String normalized = normalizeWorkspace(workspace);
     if ("HRMS".equals(normalized)) return HRMS_COOKIE;
     if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_COOKIE;
+    if ("PARENT".equals(normalized)) return "QE_PARENT_SESSION";
+    if ("STUDENT".equals(normalized)) return "QE_STUDENT_SESSION";
     return LEARNING_COOKIE;
   }
 
@@ -52,11 +56,17 @@ public class AuthService {
     String normalized = normalizeWorkspace(workspace);
     if ("HRMS".equals(normalized)) return HRMS_REFRESH_COOKIE;
     if ("STAFF".equals(normalized) || "EDUCATION_ADMIN".equals(normalized)) return STAFF_REFRESH_COOKIE;
+    if ("PARENT".equals(normalized)) return "QE_PARENT_REFRESH";
+    if ("STUDENT".equals(normalized)) return "QE_STUDENT_REFRESH";
     return LEARNING_REFRESH_COOKIE;
   }
 
   public static String workspaceForContext(AuthContext context) {
-    return context != null && context.isEmployee() ? "STAFF" : "LEARNING";
+    if (context == null) return "LEARNING";
+    if (context.isEmployee()) return "STAFF";
+    if (context.isStudent()) return "STUDENT";
+    if (context.isParent()) return "PARENT";
+    return "LEARNING";
   }
   private final JdbcTemplate jdbc;
   private final SecureRandom random = new SecureRandom();
@@ -650,7 +660,7 @@ public class AuthService {
     String raw=randomToken();
     String workspace = workspaceForContext(context);
     Instant now = Instant.now();
-    Instant absoluteExpiry = "LEARNING".equals(workspace)
+    Instant absoluteExpiry = ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace))
         ? now.plus(Duration.ofDays(Math.max(1, learningAbsoluteDays)))
         : now.plus(Duration.ofHours(Math.max(1, staffAbsoluteHours)));
     jdbc.update("""
@@ -675,12 +685,20 @@ public class AuthService {
     if (workspace == null) workspace = workspaceForContext(context);
     boolean staffWorkspace = "STAFF".equals(workspace)
         || "EDUCATION_ADMIN".equals(workspace) || "HRMS".equals(workspace);
-    if (context.isEmployee() != staffWorkspace) {
+    boolean learnerWorkspace = "LEARNING".equals(workspace)
+        || "PARENT".equals(workspace) || "STUDENT".equals(workspace);
+    if (context.isEmployee() != staffWorkspace || (!context.isEmployee() && !learnerWorkspace)) {
       throw new SecurityException("This identity cannot create a session in the requested application.");
+    }
+    if ("PARENT".equals(workspace) && (!context.isParent() || context.studentId()!=null)) {
+      throw new SecurityException("A parent identity is required for the parent application.");
+    }
+    if ("STUDENT".equals(workspace) && (!context.isStudent() || context.userId()!=null)) {
+      throw new SecurityException("A student identity is required for the student application.");
     }
     Instant now=Instant.now();
     String access=randomToken(), refresh=randomToken();
-    Instant absoluteExpiry = "LEARNING".equals(workspace)
+    Instant absoluteExpiry = ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace))
         ? now.plus(Duration.ofDays(Math.max(1, learningAbsoluteDays)))
         : now.plus(Duration.ofHours(Math.max(1, staffAbsoluteHours)));
     // HRMS intentionally supports one active device/session per staff identity. This
@@ -865,6 +883,18 @@ public class AuthService {
           + " and " + prefix + "user_id is null"
           + " and " + prefix + "student_id is null";
     }
+    if ("PARENT".equals(normalized)) {
+      return "\n        and " + prefix + "workspace_key in ('PARENT','LEARNING')"
+          + " and " + prefix + "staff_id is null"
+          + " and " + prefix + "user_id is not null"
+          + " and " + prefix + "student_id is null";
+    }
+    if ("STUDENT".equals(normalized)) {
+      return "\n        and " + prefix + "workspace_key in ('STUDENT','LEARNING')"
+          + " and " + prefix + "staff_id is null"
+          + " and " + prefix + "user_id is null"
+          + " and " + prefix + "student_id is not null";
+    }
     if ("LEARNING".equals(normalized)) {
       return "\n        and " + prefix + "workspace_key='LEARNING'"
           + " and " + prefix + "staff_id is null";
@@ -879,6 +909,14 @@ public class AuthService {
     if ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)) {
       return ("STAFF".equals(sessionWorkspace) || "EDUCATION_ADMIN".equals(sessionWorkspace))
           && staffId != null && userId == null && studentId == null;
+    }
+    if ("PARENT".equals(workspace)) {
+      return ("PARENT".equals(sessionWorkspace) || "LEARNING".equals(sessionWorkspace))
+          && staffId == null && userId != null && studentId == null;
+    }
+    if ("STUDENT".equals(workspace)) {
+      return ("STUDENT".equals(sessionWorkspace) || "LEARNING".equals(sessionWorkspace))
+          && staffId == null && userId == null && studentId != null;
     }
     if ("LEARNING".equals(workspace)) {
       return "LEARNING".equals(sessionWorkspace) && staffId == null
