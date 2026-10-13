@@ -6,6 +6,10 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,6 +20,21 @@ public class AuthFilter extends OncePerRequestFilter {
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
   private final AuthService auth;
   private final StaffAuditService staffAudit;
+
+  @Value("${app.auth.workspace-origins.education-admin:http://localhost:3001}")
+  private String educationAdminOrigins = "http://localhost:3001";
+  @Value("${app.auth.workspace-origins.hrms:http://localhost:3002}")
+  private String hrmsOrigins = "http://localhost:3002";
+  @Value("${app.auth.workspace-origins.learning:http://localhost:3000}")
+  private String learningOrigins = "http://localhost:3000";
+
+  private static Set<String> parseOrigins(String raw) {
+    if (raw == null || raw.isBlank()) return Set.of();
+    return Arrays.stream(raw.split(","))
+        .map(String::trim)
+        .filter(origin -> !origin.isBlank())
+        .collect(Collectors.toUnmodifiableSet());
+  }
 
   public AuthFilter(AuthService auth, StaffAuditService staffAudit) {
     this.auth = auth;
@@ -42,6 +61,26 @@ public class AuthFilter extends OncePerRequestFilter {
     if (trace) LOGGER.info("HTTP_DIAG auth-filter-enter uri={} hasCookies={}", uri, request.getCookies() != null);
     try {
       String workspace = AuthService.normalizeWorkspace(request.getHeader(AuthService.WORKSPACE_HEADER));
+      String origin = request.getHeader("Origin");
+      if (origin != null && !origin.isBlank()) {
+        Set<String> educationOrigins = parseOrigins(educationAdminOrigins);
+        Set<String> hrmsOriginSet = parseOrigins(hrmsOrigins);
+        Set<String> learningOriginSet = parseOrigins(learningOrigins);
+        boolean expectedWorkspace =
+            (educationOrigins.contains(origin) && ("STAFF".equals(workspace) || "EDUCATION_ADMIN".equals(workspace)))
+            || (hrmsOriginSet.contains(origin) && "HRMS".equals(workspace))
+            || (learningOriginSet.contains(origin)
+                && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace)));
+        boolean registeredOrigin = educationOrigins.contains(origin)
+            || hrmsOriginSet.contains(origin) || learningOriginSet.contains(origin);
+        if (!registeredOrigin || !expectedWorkspace) {
+          response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+          response.setCharacterEncoding("UTF-8");
+          response.setContentType("application/json");
+          response.getWriter().write("{\"error\":\"WORKSPACE_ORIGIN_MISMATCH\",\"message\":\"This browser origin is not authorised for the requested application workspace.\"}");
+          return;
+        }
+      }
       String path = request.getRequestURI();
       boolean hrmsEndpoint = path.equals("/api/v1/hr")
           || path.startsWith("/api/v1/hr/")
