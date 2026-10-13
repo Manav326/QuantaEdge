@@ -1,11 +1,20 @@
 # Web–Android Navigation and Experience Unification — Actionable Plan
 
-**Status:** Planning baseline created; implementation not started  
+**Status:** Implementation in progress on `feat/web-android-navigation-unification`; navigation and language changes committed, CI verification pending  
 **Baseline branch:** \`main\`  
 **Baseline commit reviewed:** \`4e63e3ce8a4be6c7fc16b585252f54f8869c704f\`  
 **Plan branch:** \`plan/web-android-navigation-unification\`  
 **Scope:** Student/user web and Android app, with parent navigation alignment and shared-flow parity.  
 **Non-goal:** Do not redesign or remove Android-only offline assessment, protected offline document/PDF, scanner, native-save, or platform security functionality.
+
+## Implementation log
+
+- Baseline inspected on 2026-10-13 at main commit `4e63e3ce8a4be6c7fc16b585252f54f8869c704f`; the most recent web CI and Android build workflows were green before changes.
+- Android primary navigation refactored to canonical student groups `today`, `learn`, `practice`, `progress`, `library`; parent destinations remain role-specific.
+- Android navigation placement now follows orientation (portrait bottom bar, landscape rail), not a screen-width threshold. Existing AppRoute definitions and protected offline stores remain in place.
+- Web app-interface language is separate from learning-content language, and certificate language is a separate persisted preference on both clients.
+- Web classes journey received Hindi/English UI support; student mobile Logout was removed from the primary navigation bar while remaining available in the desktop utility area/account affordance.
+- Next verification gates: complete the missing web UI translations, run navigation/language contract validation, obtain green CI for web and Android, manually review the diff, then merge the feature branch into `main`.
 
 ## Product decisions that must not drift
 
