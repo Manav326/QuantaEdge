@@ -234,7 +234,7 @@ public class GoogleMeetCalendarService {
             ? "Google OAuth rejected the refresh token. Re-authorize the account and update GOOGLE_MEET_REFRESH_TOKEN."
             : "Google authorization was rejected. Re-authorize the account and retry.");
     if (status == 403) return new GoogleMeetException("GOOGLE_PERMISSION_DENIED",
-        "The authorized Google account lacks Calendar permission. Grant the calendar.events scope and verify Calendar API access.");
+        "The authorized Google account lacks Calendar permission. Grant an event-write scope: calendar.events.owned for an owned primary calendar, or calendar.events if the integration needs access to shared calendars. Verify Calendar API access.");
     if (status == 429) return new GoogleMeetException("GOOGLE_QUOTA_EXCEEDED",
         "Google Calendar quota was reached. Wait before retrying this operation.");
     if (status >= 500) return new GoogleMeetException("GOOGLE_TEMPORARY_FAILURE",

@@ -81,7 +81,7 @@ class GoogleMeetCalendarServiceTest {
             OffsetDateTime.parse("2026-10-20T11:00:00+05:30")));
 
     assertEquals("GOOGLE_PERMISSION_DENIED", error.code());
-    assertTrue(error.getMessage().contains("calendar.events"));
+    assertTrue(error.getMessage().contains("calendar.events.owned"));
     server.verify();
   }
 
