@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,11 +40,13 @@ fun RecordedPlayerScreen(
     onSaveAndBack: (Long, Long, Boolean) -> Unit
 ) {
     val context = LocalContext.current
+    val language = LocalQuantaLanguage.current
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     val recordingId = recording.optLongAny("recorded_class_id", "recordingId", "id")
     val durationSeconds = recording.optLongAny("duration_seconds", "durationSeconds")
-    var watchedSeconds by remember(recordingId) { mutableStateOf(recording.optLongAny("watched_seconds", "watchedSeconds")) }
-    var currentPosition by remember(recordingId) { mutableStateOf(startPositionSeconds.coerceAtLeast(0)) }
-    var isEnded by remember(recordingId) { mutableStateOf(false) }
+    var watchedSeconds by rememberSaveable(recordingId) { mutableStateOf(recording.optLongAny("watched_seconds", "watchedSeconds")) }
+    var currentPosition by rememberSaveable(recordingId) { mutableStateOf(startPositionSeconds.coerceAtLeast(0)) }
+    var isEnded by rememberSaveable(recordingId) { mutableStateOf(false) }
 
     val player = remember(recordingId) {
         val dataSource = OkHttpDataSource.Factory(ApiClient.authenticatedHttpClient())
@@ -52,7 +55,7 @@ fun RecordedPlayerScreen(
             .build().apply {
                 setMediaItem(MediaItem.fromUri(ApiClient.absoluteUrl("/api/v1/learning/recorded-classes/" + recordingId + "/stream")))
                 prepare()
-                seekTo(startPositionSeconds.coerceAtLeast(0) * 1000)
+                seekTo(currentPosition.coerceAtLeast(0) * 1000)
             }
     }
 
@@ -87,7 +90,7 @@ fun RecordedPlayerScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(recording.textAny("title").ifBlank { "Recorded class" }, style = MaterialTheme.typography.headlineSmall)
+        Text(recording.textAny("title").ifBlank { t("Recorded class", "रिकॉर्ड किया गया सत्र") }, style = MaterialTheme.typography.headlineSmall)
         Text(recording.textAny("chapter_name", "subject_name", "description"), style = MaterialTheme.typography.bodyMedium)
         AndroidView(
             factory = { viewContext ->
@@ -100,14 +103,15 @@ fun RecordedPlayerScreen(
             update = { it.player = player },
             modifier = Modifier.fillMaxWidth().height(250.dp)
         )
-        Text("Playback position: " + currentPosition + " seconds", style = MaterialTheme.typography.bodySmall)
-        Text("Progress is saved to your QuantaEdge account periodically.", style = MaterialTheme.typography.bodySmall,
+        Text(t("Playback position: ", "वीडियो की स्थिति: ") + currentPosition + " " + t("seconds", "सेकंड"),
+            style = MaterialTheme.typography.bodySmall)
+        Text(localizedUiText("Progress is saved to your QuantaEdge account periodically."), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
         Button(onClick = {
             currentPosition = (player.currentPosition / 1000).coerceAtLeast(0)
             val complete = isEnded || (durationSeconds > 0 && currentPosition >= durationSeconds - 10)
             onSaveAndBack(currentPosition, watchedSeconds, complete)
-        }, modifier = Modifier.fillMaxWidth()) { Text("प्रगति सुरक्षित कर वापस जाएँ") }
+        }, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("प्रगति सुरक्षित कर वापस जाएँ")) }
     }
 }
 

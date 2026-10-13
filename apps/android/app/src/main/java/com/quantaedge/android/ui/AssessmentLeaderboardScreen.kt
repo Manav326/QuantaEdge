@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.data.ApiClient
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +37,8 @@ import java.util.Locale
 @Composable
 fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
     val scope = rememberCoroutineScope()
+    val compact = LocalConfiguration.current.screenWidthDp < 390
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     var tests by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedTest by remember { mutableStateOf<JSONObject?>(null) }
     var leaderboard by remember { mutableStateOf(JSONObject()) }
@@ -87,7 +90,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
     val title = selectedTest?.optString("title")
         ?.takeIf { it.isNotBlank() }
         ?: selectedTest?.optString("assessment_title")?.takeIf { it.isNotBlank() }
-        ?: leaderboard.optString("assessment_title", "Test leaderboard")
+        ?: leaderboard.optString("assessment_title", t("Test leaderboard", "टेस्ट लीडरबोर्ड"))
     val entries = leaderboard.optJSONArray("items").asObjectList()
     val current = leaderboard.optJSONObject("current_student")
     val maxScore = leaderboard.optString("max_score", selectedTest?.optString("max_score", "—") ?: "—")
@@ -96,16 +99,25 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(if (language == "hi") "टॉप 20 टेस्ट लीडरबोर्ड" else "Top 20 test leaderboard", style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+        if (compact) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(if (language == "hi") "टॉप 20 टेस्ट लीडरबोर्ड" else "Top 20 test leaderboard",
+                    style = MaterialTheme.typography.headlineSmall)
+                TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+            }
+        } else {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(if (language == "hi") "टॉप 20 टेस्ट लीडरबोर्ड" else "Top 20 test leaderboard",
+                    style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
+                TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+            }
         }
         Text(
             if (language == "hi") "हर test की ranking server से आती है। अंक समान होने पर server के ranking rules लागू होते हैं।"
             else "Each test's ranking is provided by the server, using its authoritative score and tie-break rules.",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error)
+        if (error.isNotBlank()) Text(localizedUiText(error), color = MaterialTheme.colorScheme.error)
         if (loadingTests) CircularProgressIndicator()
         if (!loadingTests && tests.isEmpty()) Text(if (language == "hi") "अभी कोई प्रकाशित test उपलब्ध नहीं है।" else "No published tests are available.")
         tests.forEach { test ->
@@ -116,7 +128,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
                 Column(Modifier.padding(13.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                     Text(testTitle, style = MaterialTheme.typography.titleMedium)
                     Text(subject.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() } +
-                        " · " + test.optString("question_count", "—") + " questions",
+                        " · " + test.optString("question_count", "—") + " " + t("questions", "प्रश्न"),
                         color = MaterialTheme.colorScheme.secondary)
                     if (selectedTest?.optLongAny("assessment_id", "assessmentId", "id") == id) {
                         Text(if (language == "hi") "चुना गया" else "Selected", color = MaterialTheme.colorScheme.primary)
@@ -133,10 +145,22 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
             }
             if (loadingBoard) CircularProgressIndicator()
             else if (leaderboard.length() > 0) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    SummaryCard(if (language == "hi") "प्रतिभागी" else "Participants", leaderboard.optString("participant_count", "0"), Modifier.weight(1f))
-                    SummaryCard(if (language == "hi") "अधिकतम अंक" else "Max score", maxScore, Modifier.weight(1f))
-                    SummaryCard(if (language == "hi") "मेरी रैंक" else "My rank", current?.optString("rank") ?: "—", Modifier.weight(1f))
+                if (compact) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                        SummaryCard(if (language == "hi") "प्रतिभागी" else "Participants",
+                            leaderboard.optString("participant_count", "0"), Modifier.fillMaxWidth())
+                        SummaryCard(if (language == "hi") "अधिकतम अंक" else "Max score", maxScore, Modifier.fillMaxWidth())
+                        SummaryCard(if (language == "hi") "मेरी रैंक" else "My rank",
+                            current?.optString("rank") ?: "—", Modifier.fillMaxWidth())
+                    }
+                } else {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                        SummaryCard(if (language == "hi") "प्रतिभागी" else "Participants",
+                            leaderboard.optString("participant_count", "0"), Modifier.weight(1f))
+                        SummaryCard(if (language == "hi") "अधिकतम अंक" else "Max score", maxScore, Modifier.weight(1f))
+                        SummaryCard(if (language == "hi") "मेरी रैंक" else "My rank",
+                            current?.optString("rank") ?: "—", Modifier.weight(1f))
+                    }
                 }
                 if (current != null) {
                     Card(modifier = Modifier.fillMaxWidth()) {
