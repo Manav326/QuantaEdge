@@ -653,6 +653,11 @@ def main() -> int:
                                      "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "DIAGRAM"})
         allowed_types = requested_types
         curriculum, source, chapters = validate_extraction(extraction)
+        if args.use_curriculum_targets and str(curriculum.get("language", "hi")).strip().lower() not in {"hi", "hindi"}:
+            raise ValueError(
+                "--use-curriculum-targets applies the language-neutral approved-count baseline to the primary Hindi bank. "
+                "For English variants of the same questions, use the bilingual translation workflow so both languages share stable question IDs."
+            )
         if args.chapter_code:
             missing = sorted(set(args.chapter_code) - {chapter["code"] for chapter in chapters})
             if missing:
