@@ -62,6 +62,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.quantaedge.android.R
 import com.quantaedge.android.data.ApiClient
@@ -1826,7 +1827,8 @@ private fun LoginScreen(
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
         }
         OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text(if(language=="hi") "पासवर्ड" else "Password") },
-            singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
+            singleLine = true, visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
         Button(
             onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
             enabled = !busy && password.isNotBlank() &&
@@ -1909,6 +1911,7 @@ private fun ParentOtpFlowScreen(
             onValueChange = { password = it },
             label = { Text(if(language=="hi") "नया पासवर्ड (कम से कम 8 अक्षर)" else "New password (at least 8 characters)") },
             singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
             enabled = !busy,
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp)
         )
