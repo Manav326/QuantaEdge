@@ -35,15 +35,49 @@ public class AuthController {
   }
 
   @PostMapping("/verify-otp")
-  public ResponseEntity<Map<String,Object>> verifyOtp(@RequestBody Map<String,Object> body) {
+  public ResponseEntity<Map<String,Object>> verifyOtp(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
     AuthContext context=auth.verifyOtp(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("otp","")),
         String.valueOf(body.getOrDefault("purpose","LOGIN")),
         body.get("displayName")==null?null:String.valueOf(body.get("displayName")),
         Boolean.TRUE.equals(body.get("firstAccess")),
         body.get("password")==null?null:String.valueOf(body.get("password")));
-    if(context.isEmployee()) staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Staff sign-in succeeded.");
-    return withCookie(auth.issueSession(context));
+    String workspace = context.isEmployee() ? AuthService.normalizeWorkspace(workspaceHeader) : "LEARNING";
+    if (context.isEmployee()) {
+      if (workspace == null) workspace = "STAFF";
+      if ("HRMS".equals(workspace)) {
+        throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
+      }
+      staffAudit.recordAction(context,"/api/v1/auth/verify-otp","Education Admin staff sign-in succeeded.");
+    }
+    return withCookie(auth.issueSession(context, workspace), workspace);
+  }
+
+  @PostMapping("/hrms-login")
+  public ResponseEntity<Map<String,Object>> hrmsLogin(@RequestBody Map<String,Object> body) {
+    AuthContext context = auth.loginHrms(
+        String.valueOf(body.getOrDefault("username", "")),
+        String.valueOf(body.getOrDefault("password", "")));
+    staffAudit.recordAction(context, "/api/v1/auth/hrms-login", "HRMS password sign-in succeeded.");
+    return withCookie(auth.issueSession(context, "HRMS"), "HRMS");
+  }
+
+  @PostMapping("/hrms/change-password")
+  public ResponseEntity<Map<String,Object>> changeHrmsPassword(
+      @RequestBody Map<String,Object> body,
+      HttpServletRequest request,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    if (context == null || !context.isEmployee()) {
+      throw new SecurityException("An authenticated HRMS employee session is required.");
+    }
+    auth.changeHrmsPassword(context.staffId(),
+        String.valueOf(body.getOrDefault("currentPassword", "")),
+        String.valueOf(body.getOrDefault("newPassword", "")),
+        cookieValue(request, AuthService.HRMS_COOKIE));
+    staffAudit.recordAction(context, "/api/v1/auth/hrms/change-password", "HRMS password changed.");
+    return ResponseEntity.ok(Map.of("changed", true, "mustChangePassword", false));
   }
 
   @PostMapping("/parent-login")
@@ -79,8 +113,11 @@ public class AuthController {
   }
 
   @GetMapping("/me")
-  public Map<String,Object> me(@RequestAttribute(value="authContext",required=false) AuthContext context) {
+  public Map<String,Object> me(
+      @RequestAttribute(value="authContext",required=false) AuthContext context,
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
     if(context==null) throw new SecurityException("Authentication required");
+    String workspace = AuthService.normalizeWorkspace(workspaceHeader);
     var result=new LinkedHashMap<String,Object>();
     result.put("authenticated",true);
     result.put("role",context.role());
@@ -88,7 +125,10 @@ public class AuthController {
     result.put("userId",context.userId());
     result.put("displayName",context.displayName());
     result.put("staffId",context.staffId());
+    result.put("workspace", workspace == null ? AuthService.workspaceForContext(context) : workspace);
     result.put("permissions",context.staffId()==null?java.util.List.of():auth.permissionsForStaff(context.staffId()));
+    result.put("mustChangePassword",context.staffId()!=null && "HRMS".equals(workspace)
+        && auth.staffMustChangePassword(context.staffId()));
     return result;
   }
 
@@ -98,16 +138,12 @@ public class AuthController {
       HttpServletRequest request) {
     String workspace = AuthService.normalizeWorkspace(workspaceHeader);
     if (workspace == null) {
-      String refreshToken = firstNonBlank(
-          cookieValue(request, AuthService.REFRESH_COOKIE),
-          cookieValue(request, AuthService.STAFF_REFRESH_COOKIE),
-          cookieValue(request, AuthService.LEARNING_REFRESH_COOKIE));
-      return withCookie(auth.refreshSession(refreshToken));
+      throw new SecurityException("Application workspace context is required to refresh a session.");
     }
     String refreshToken = firstNonBlank(
         cookieValue(request, AuthService.refreshCookieForWorkspace(workspace)),
         cookieValue(request, AuthService.REFRESH_COOKIE));
-    return withCookie(auth.refreshSession(refreshToken, workspace));
+    return withCookie(auth.refreshSession(refreshToken, workspace), workspace);
   }
 
   @PostMapping("/logout")
@@ -143,20 +179,31 @@ public class AuthController {
   }
 
   private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens) {
+    return withCookie(tokens, AuthService.workspaceForContext(tokens.context()));
+  }
+
+  private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens, String requestedWorkspace) {
     AuthContext context=tokens.context();
-    String workspace = AuthService.workspaceForContext(context);
+    String workspace = AuthService.normalizeWorkspace(requestedWorkspace);
+    if (workspace == null) workspace = AuthService.workspaceForContext(context);
     ResponseCookie cookie=ResponseCookie.from(AuthService.sessionCookieForWorkspace(workspace),tokens.accessToken())
         .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofMinutes(AuthService.ACCESS_TOKEN_MINUTES)).build();
     ResponseCookie refreshCookie=ResponseCookie.from(AuthService.refreshCookieForWorkspace(workspace),tokens.refreshToken())
         .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofHours(auth.getSessionHours())).build();
+    var body = new LinkedHashMap<String,Object>();
+    body.put("authenticated",true);
+    body.put("role",context.role());
+    body.put("studentId",context.studentId()==null?0:context.studentId());
+    body.put("userId",context.userId()==null?0:context.userId());
+    body.put("staffId",context.staffId()==null?0:context.staffId());
+    body.put("displayName",context.displayName()==null?"":context.displayName());
+    body.put("workspace",workspace);
+    body.put("mustChangePassword",context.staffId()!=null && "HRMS".equals(workspace)
+        && auth.staffMustChangePassword(context.staffId()));
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
-        .body(Map.of("authenticated",true,"role",context.role(),
-            "studentId",context.studentId()==null?0:context.studentId(),
-            "userId",context.userId()==null?0:context.userId(),
-            "staffId",context.staffId()==null?0:context.staffId(),
-            "displayName",context.displayName()==null?"":context.displayName()));
+        .body(body);
   }
 
   private ResponseCookie expiredCookie(String name) {
