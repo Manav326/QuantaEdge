@@ -61,8 +61,9 @@ public class AuthFilter extends OncePerRequestFilter {
     if (trace) LOGGER.info("HTTP_DIAG auth-filter-enter uri={} hasCookies={}", uri, request.getCookies() != null);
     try {
       String workspace = AuthService.normalizeWorkspace(request.getHeader(AuthService.WORKSPACE_HEADER));
+      boolean preflight = "OPTIONS".equalsIgnoreCase(request.getMethod());
       String origin = request.getHeader("Origin");
-      if (origin != null && !origin.isBlank()) {
+      if (!preflight && origin != null && !origin.isBlank()) {
         Set<String> educationOrigins = parseOrigins(educationAdminOrigins);
         Set<String> hrmsOriginSet = parseOrigins(hrmsOrigins);
         Set<String> learningOriginSet = parseOrigins(learningOrigins);
@@ -86,14 +87,14 @@ public class AuthFilter extends OncePerRequestFilter {
           || path.startsWith("/api/v1/hr/")
           || path.startsWith("/api/v1/hrms/");
       boolean authEndpoint = path.startsWith("/api/v1/auth/");
-      if (hrmsEndpoint && !"HRMS".equals(workspace)) {
+      if (!preflight && hrmsEndpoint && !"HRMS".equals(workspace)) {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().write("{\"error\":\"WORKSPACE_MISMATCH\",\"message\":\"HRMS endpoints require an HRMS-scoped session.\"}");
         return;
       }
-      if ("HRMS".equals(workspace) && path.startsWith("/api/v1/") && !hrmsEndpoint && !authEndpoint) {
+      if (!preflight && "HRMS".equals(workspace) && path.startsWith("/api/v1/") && !hrmsEndpoint && !authEndpoint) {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
