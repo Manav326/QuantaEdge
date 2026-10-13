@@ -301,3 +301,15 @@
   .leaderboardInlineError{align-items:flex-start;flex-direction:column;margin:12px 10px}
 }
 
+
+
+/* Certificate controls are grouped with each released attempt for a clear, premium workflow. */
+.resultAttemptItem{display:grid;gap:6px;justify-items:start;min-width:0;max-width:100%}
+.certificateActionLinks{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding-left:2px}
+.certificateActionLinks a{display:inline-flex;align-items:center;min-height:28px;padding:5px 8px;border:1px solid #e6c5ad;border-radius:8px;background:#fff8f2;color:#963d12;text-decoration:none;font-size:9px;font-weight:850;white-space:nowrap}
+.certificateActionLinks a:hover{border-color:#d97745;background:#fff0e5}
+.certificateIssueButton{min-height:28px;padding:6px 9px;border:1px solid #c2410c;border-radius:8px;background:#c2410c;color:#fff;font:inherit;font-size:9px;font-weight:850;cursor:pointer}
+.certificateIssueButton:hover{background:#9a3412}
+.certificateIssueButton:disabled{opacity:.5;cursor:wait}
+.certificateEligibilityHint{display:block;max-width:215px;color:#8490a3;font-size:9px;line-height:1.45}
+@media(max-width:680px){.resultAttemptItem{width:100%;min-width:0}.certificateActionLinks{width:100%}.certificateActionLinks a{flex:1;justify-content:center}.certificateEligibilityHint{max-width:100%}}
