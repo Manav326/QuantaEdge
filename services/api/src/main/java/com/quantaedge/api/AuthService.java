@@ -92,7 +92,7 @@ public class AuthService {
       @Value("${app.auth.session-hours:168}") int sessionHours,
       @Value("${app.auth.secure-cookies:true}") boolean secureCookies,
       @Value("${app.auth.otp-cooldown-seconds:60}") int otpCooldownSeconds,
-      @Value("${app.auth.admin-mobiles:7070107483}") String adminMobiles) {
+      @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
     this.jdbc=jdbc;
     this.demoSeed=demoSeed;
     // Respect shorter deployments' configured idle timeout, but cap refresh-cookie lifetime.
