@@ -449,6 +449,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
             ],
             "questions": questions,
         })
+    language_name = "English" if str(curriculum.get("language", "hi")).strip().lower() in {"en", "english"} else "Hindi"
     source_record = {
         "title": source["title"], "url": source["url"], "edition": source["edition"],
         "publication_year": source.get("publication_year"), "pdf_page_count": source["pdf_page_count"],
@@ -477,7 +478,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
         "review_checklist": [
             "Compare each question and cited page with the exact PDF edition.",
             "Independently solve every question and verify every answer key/explanation.",
-            f"Check {\"English\" if str(curriculum.get(\"language\", \"hi\")).lower() in {\"en\", \"english\"} else \"Hindi\"} wording, age suitability, difficulty, duplicates and curriculum alignment.",
+            f"Check {language_name} wording, age suitability, difficulty, duplicates and curriculum alignment.",
             "Check OCR-sensitive numerals, equations, units, diagrams and science terminology.",
             "Confirm originality and permitted reuse before setting rights_reviewed=true.",
             "Import only as drafts; approve questions and publish explicitly in Admin Content Studio.",
