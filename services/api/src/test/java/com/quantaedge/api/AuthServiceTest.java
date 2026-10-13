@@ -405,12 +405,12 @@ class AuthServiceTest {
     assertEquals("PARENT", tokens.context().role());
     verify(jdbc).update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L));
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).queryForList(
-        contains("s.last_seen_at>now()-interval '4 hours'"), anyString());
+        contains("then interval '30 minutes' else interval '4 hours' end)"), anyString());
   }
 
 
   @Test
-  void authSessionIdleTimeoutIsFourHoursEvenWithLegacyConfiguration() {
+  void idleTimeoutIsScopedWhileRefreshCookieLifetimeStaysBounded() {
     AuthService legacyLongConfig = new AuthService(jdbc, false, 168, false, 60, "");
     AuthService shortConfig = new AuthService(jdbc, false, 1, false, 60, "");
 
