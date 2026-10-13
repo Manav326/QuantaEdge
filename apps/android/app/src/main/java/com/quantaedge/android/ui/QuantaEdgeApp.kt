@@ -128,6 +128,9 @@ fun QuantaEdgeApp() {
     var assessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var assessmentAttempt by remember { mutableStateOf(JSONObject()) }
     var assessmentResults by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var resultsPageSize by rememberSaveable { mutableStateOf(10) }
+    var resultsPageOffset by rememberSaveable { mutableStateOf(0) }
+    var resultsTotal by remember { mutableStateOf(0) }
     var assessmentCertificateEligibility by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var pendingCertificateBytes by remember { mutableStateOf<ByteArray?>(null) }
     var pendingCertificateFilename by remember { mutableStateOf("quantaedge-certificate.pdf") }
@@ -584,9 +587,13 @@ fun QuantaEdgeApp() {
     }
 
     suspend fun loadAssessmentResultsData() {
-        val loaded = ApiClient.getObject("/api/v1/learning/assessment-results?language=" + learningContentLanguage)
-            .optJSONArray("items").objectItems()
+        val resultResponse = ApiClient.getObject(
+            "/api/v1/learning/assessment-results?language=" + learningContentLanguage +
+                "&limit=" + resultsPageSize + "&offset=" + resultsPageOffset
+        )
+        val loaded = resultResponse.optJSONArray("items").objectItems()
         assessmentResults = loaded
+        resultsTotal = resultResponse.optInt("total", loaded.size)
         val attemptIds = loaded.flatMap { result ->
             val attempts = result.optJSONArray("attempts").objectItems()
             if (attempts.isNotEmpty()) attempts else listOf(result)
@@ -606,7 +613,19 @@ fun QuantaEdgeApp() {
     }
 
     fun loadAssessmentResults() {
-        if (route != AppRoute.ASSESSMENT_RESULTS) resultsReturnRoute = route
+        if (route != AppRoute.ASSESSMENT_RESULTS) {
+            resultsReturnRoute = route
+            resultsPageOffset = 0
+        }
+        runTask {
+            loadAssessmentResultsData()
+            route = AppRoute.ASSESSMENT_RESULTS
+        }
+    }
+
+    fun changeResultsPage(pageSize: Int, pageOffset: Int) {
+        resultsPageSize = pageSize.coerceIn(10, 50)
+        resultsPageOffset = pageOffset.coerceAtLeast(0)
         runTask {
             loadAssessmentResultsData()
             route = AppRoute.ASSESSMENT_RESULTS
@@ -1520,12 +1539,17 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.ASSESSMENT_RESULTS -> ResultsScreen(
                         resultItems = assessmentResults,
+                        resultTotal = resultsTotal,
+                        pageSize = resultsPageSize,
+                        pageOffset = resultsPageOffset,
                         certificateEligibility = assessmentCertificateEligibility,
                         language = language,
                         busy = busy,
+                        onPageChange = ::changeResultsPage,
                         onReview = ::openAssessmentReview,
                         onIssueCertificate = ::issueCertificateForAttempt,
-                        onDownloadCertificate = ::downloadResultCertificate
+                        onDownloadCertificate = ::downloadResultCertificate,
+                        onViewCertificate = ::viewResultCertificate
                     )
                     AppRoute.ASSESSMENT_REVIEW -> AssessmentAttemptScreen(
                         attempt = assessmentAttempt,
@@ -2432,21 +2456,22 @@ private fun AssessmentAttemptScreen(
 @Composable
 private fun ResultsScreen(
     resultItems: List<JSONObject>,
+    resultTotal: Int,
+    pageSize: Int,
+    pageOffset: Int,
     certificateEligibility: Map<Long, JSONObject>,
     language: String,
     busy: Boolean,
+    onPageChange: (Int, Int) -> Unit,
     onReview: (Long) -> Unit,
     onIssueCertificate: (Long) -> Unit,
-    onDownloadCertificate: (Long, String) -> Unit
+    onDownloadCertificate: (Long, String) -> Unit,
+    onViewCertificate: (Long) -> Unit
 ) {
-    var pageSize by remember { mutableStateOf(10) }
-    var pageIndex by remember { mutableStateOf(0) }
     var pageSizeMenuExpanded by remember { mutableStateOf(false) }
-    val pageCount = ((resultItems.size + pageSize - 1) / pageSize).coerceAtLeast(1)
-    val safePageIndex = pageIndex.coerceIn(0, pageCount - 1)
-    val visibleResults = resultItems.drop(safePageIndex * pageSize).take(pageSize)
+    val pageCount = ((resultTotal + pageSize - 1) / pageSize).coerceAtLeast(1)
+    val safePageIndex = (pageOffset / pageSize).coerceIn(0, pageCount - 1)
     fun t(en: String, hi: String) = if (language == "hi") hi else en
-    LaunchedEffect(resultItems.size, pageSize) { pageIndex = 0 }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("मेरे परिणाम"), style = MaterialTheme.typography.headlineSmall)
@@ -2455,7 +2480,7 @@ private fun ResultsScreen(
             else "Check certificate eligibility and access available downloads from each released result.",
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary
         )
-        if (resultItems.isEmpty()) {
+        if (resultItems.isEmpty() && resultTotal <= 0) {
             EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         } else {
             Row(
@@ -2473,7 +2498,7 @@ private fun ResultsScreen(
                         listOf(10, 20, 50).forEach { size ->
                             DropdownMenuItem(
                                 text = { Text(size.toString()) },
-                                onClick = { pageSize = size; pageSizeMenuExpanded = false; pageIndex = 0 }
+                                onClick = { pageSizeMenuExpanded = false; onPageChange(size, 0) }
                             )
                         }
                     }
@@ -2484,17 +2509,19 @@ private fun ResultsScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(if (language == "hi") "पृष्ठ " + (safePageIndex + 1) + " / " + pageCount
-                    else "Page " + (safePageIndex + 1) + " of " + pageCount,
+                val rangeStart = if (resultTotal == 0) 0 else pageOffset + 1
+                val rangeEnd = (pageOffset + resultItems.size).coerceAtMost(resultTotal)
+                Text(if (language == "hi") "$rangeStart–$rangeEnd / $resultTotal परिणाम"
+                    else "Showing $rangeStart–$rangeEnd of $resultTotal results",
                     modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                TextButton(onClick = { pageIndex = (safePageIndex - 1).coerceAtLeast(0) },
+                TextButton(onClick = { onPageChange(pageSize, ((safePageIndex - 1).coerceAtLeast(0)) * pageSize) },
                     enabled = safePageIndex > 0 && !busy) { Text(localizedUiText("Previous ←")) }
-                TextButton(onClick = { pageIndex = (safePageIndex + 1).coerceAtMost(pageCount - 1) },
+                TextButton(onClick = { onPageChange(pageSize, (safePageIndex + 1) * pageSize) },
                     enabled = safePageIndex < pageCount - 1 && !busy) { Text(localizedUiText("Next →")) }
             }
         }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 10.dp)) {
-            items(visibleResults) { item ->
+            items(resultItems) { item ->
                 val attempts = item.optJSONArray("attempts")?.objectItems() ?: emptyList()
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(9.dp)) {
@@ -2544,7 +2571,11 @@ private fun ResultsScreen(
                                 }
                                 when {
                                     certificateStatus == "ISSUED" && certificateId > 0L -> {
-                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                                            OutlinedButton(
+                                                onClick = { onViewCertificate(certificateId) },
+                                                enabled = !busy
+                                            ) { Text(if (language == "hi") "देखें" else "View") }
                                             OutlinedButton(
                                                 onClick = { onDownloadCertificate(certificateId, "pdf") },
                                                 enabled = !busy
