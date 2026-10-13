@@ -111,7 +111,6 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
   const [collapsed, setCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
-  const sidebarMenuRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLElement>(null);
   const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const menuWasOpen = useRef(false);
@@ -214,8 +213,6 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
     }))
     .filter(group => group.items.length > 0), [session, isAdmin, permissions]);
 
-  const activeItem = visibleGroups.flatMap(group => group.items)
-    .find(item => item.href === pathname);
   const displayName = session?.displayName?.trim() || 'Staff account';
   const currentRole = roleLabel(session?.role);
 
@@ -279,6 +276,7 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
 
   return (
     <div className={'qe-people-workspace' + (collapsed ? ' is-collapsed' : '')}>
+      <a className="qe-people-skip-link" href="#main-content">Skip to main content</a>
       <aside className="qe-people-sidebar" aria-label="Primary workspace">
         <div className="qe-people-brand-row">
           <Link href="/" className="qe-people-brand" aria-label="QuantaEdge People Operations home">
@@ -342,9 +340,9 @@ export default function PeopleWorkspaceLayout({ children }: { children: ReactNod
           </div>
         </header>
 
-        <main className="qe-people-page-slot" id="main-content">
+        <div className="qe-people-page-slot" id="main-content">
           {children}
-        </main>
+        </div>
       </div>
 
       {mobileMenuOpen && (

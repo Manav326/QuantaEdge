@@ -1,7 +1,6 @@
 'use client';
 
 import {useCallback,useEffect,useState} from 'react';
-import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
 type Session={staffId?:number;displayName?:string};
@@ -109,13 +108,7 @@ export default function EmployeeSelfServicePage(){
   }
   async function logout(){try{await api('/api/v1/auth/logout',{method:'POST'})}finally{router.replace('/login')}}
   return <div className="shell">
-    <header className="topbar">
-      <div className="brand">QuantaEdge <span>EMPLOYEE SELF-SERVICE</span></div>
-      <nav aria-label="Workspace navigation" style={{display:'flex',flexWrap:'wrap',gap:8,alignItems:'center'}}>
-        <Link href="/self-service" className="secondary" style={{textDecoration:'none'}}>My workspace</Link>
-        <button type="button" className="secondary" onClick={()=>void logout()}>Sign out</button>
-      </nav>
-    </header>
+    
     <main className="main">
       <div className="eyebrow">YOUR EMPLOYMENT · PRIVATE WORKSPACE</div>
       <h1>My workspace</h1>
