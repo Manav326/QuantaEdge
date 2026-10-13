@@ -8,8 +8,7 @@ param(
     [string]$ProjectRoot = (Get-Location).Path,
     [string]$ArtifactName = "",
     [switch]$BuildLocal,
-    [switch]$NoInstall,
-    [switch]$ForceDownload
+    [switch]$NoInstall
 )
 
 $ErrorActionPreference = "Stop"
