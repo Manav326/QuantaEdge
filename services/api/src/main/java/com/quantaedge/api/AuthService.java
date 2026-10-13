@@ -331,8 +331,12 @@ public class AuthService {
       throw new IllegalArgumentException("Username or password is incorrect.");
     }
     List<Map<String,Object>> rows = jdbc.queryForList("""
-        select id, password_hash from staff_account
-        where lower(username)=? and active=true
+        select s.id, s.password_hash
+        from staff_account s
+        join hr_employee he on he.linked_staff_account_id=s.id
+        where lower(s.username)=? and s.active=true
+          and he.hrms_access_enabled=true
+          and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
         """, normalized);
     if (rows.isEmpty()) throw new IllegalArgumentException("Username or password is incorrect.");
     Object stored = rows.getFirst().get("password_hash");
@@ -603,6 +607,11 @@ public class AuthService {
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
         and (s.staff_id is null or e.id is not null)
+        and (s.workspace_key <> 'HRMS' or exists (
+          select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
+            and he.hrms_access_enabled=true
+            and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        ))
       """ + scope,hash(token));
     if(rows.isEmpty()) return null;
     var r=rows.getFirst();
@@ -717,6 +726,11 @@ public class AuthService {
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
+        and (s.workspace_key <> 'HRMS' or exists (
+          select 1 from hr_employee he where he.linked_staff_account_id=s.staff_id
+            and he.hrms_access_enabled=true
+            and he.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        ))
       """ + workspacePredicate(workspace, "s") + "\n      for update of s";
     var rows=jdbc.queryForList(query,hash(refreshToken));
     if(rows.isEmpty()) throw new SecurityException("Session expired. Please sign in again.");
