@@ -1,5 +1,5 @@
 'use client';
-import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback, PeopleEmptyState } from '../components/PeopleUI';
+import { PeoplePageHeader, PeopleStatusBadge, PeopleFeedback, PeopleEmptyState, PeoplePagination } from '../components/PeopleUI';
 
 import {useCallback,useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
@@ -26,13 +26,13 @@ export default function EmployeeSelfServicePage(){
   const [session,setSession]=useState<Session|null>(null);
   const [profile,setProfile]=useState<any|null>(null);
   const [unlinked,setUnlinked]=useState(false);
-  const [attendance,setAttendance]=useState<any[]>([]);
-  const [requests,setRequests]=useState<any[]>([]);
+  const [attendance,setAttendance]=useState<any[]>([]),[attendancePageLimit,setAttendancePageLimit]=useState(20),[attendanceOffset,setAttendanceOffset]=useState(0),[attendanceTotal,setAttendanceTotal]=useState(0);
+  const [requests,setRequests]=useState<any[]>([]),[leavePageLimit,setLeavePageLimit]=useState(20),[leaveOffset,setLeaveOffset]=useState(0),[leaveTotal,setLeaveTotal]=useState(0);
   const [types,setTypes]=useState<LeaveType[]>([]);
   const [balances,setBalances]=useState<any[]>([]);
-  const [payslips,setPayslips]=useState<any[]>([]);
-  const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]);
-  const [attendanceCorrectionRequests,setAttendanceCorrectionRequests]=useState<any[]>([]);
+  const [payslips,setPayslips]=useState<any[]>([]),[payslipPageLimit,setPayslipPageLimit]=useState(20),[payslipOffset,setPayslipOffset]=useState(0),[payslipTotal,setPayslipTotal]=useState(0);
+  const [profileChangeRequests,setProfileChangeRequests]=useState<any[]>([]),[profilePageLimit,setProfilePageLimit]=useState(20),[profileOffset,setProfileOffset]=useState(0),[profileTotal,setProfileTotal]=useState(0);
+  const [attendanceCorrectionRequests,setAttendanceCorrectionRequests]=useState<any[]>([]),[correctionPageLimit,setCorrectionPageLimit]=useState(20),[correctionOffset,setCorrectionOffset]=useState(0),[correctionTotal,setCorrectionTotal]=useState(0);
   const [correctionDraft,setCorrectionDraft]=useState({workDate:'',status:'PRESENT',checkInAt:'',checkOutAt:'',notes:'',reason:''});
   const [selectedPayslip,setSelectedPayslip]=useState<any|null>(null);
   const [range,setRange]=useState<Range>(initialRange);
@@ -60,21 +60,24 @@ export default function EmployeeSelfServicePage(){
       }
       setUnlinked(false);setProfile(ownProfile);
       const [a,l,t,b,ps,pr,cr]=await Promise.all([
-        api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit=200'),
-        api('/api/v1/hr/self-service/leave/requests?limit=100'),
+        api('/api/v1/hr/self-service/attendance?from='+range.from+'&to='+range.to+'&limit='+attendancePageLimit+'&offset='+attendanceOffset),
+        api('/api/v1/hr/self-service/leave/requests?limit='+leavePageLimit+'&offset='+leaveOffset),
         api('/api/v1/hr/self-service/leave/types'),
         api('/api/v1/hr/self-service/leave/balances'),
-        api('/api/v1/hr/self-service/payslips'),
-        api('/api/v1/hr/self-service/profile-change-requests'),
-        api('/api/v1/hr/self-service/attendance/correction-requests')
+        api('/api/v1/hr/self-service/payslips?limit='+payslipPageLimit+'&offset='+payslipOffset),
+        api('/api/v1/hr/self-service/profile-change-requests?limit='+profilePageLimit+'&offset='+profileOffset),
+        api('/api/v1/hr/self-service/attendance/correction-requests?limit='+correctionPageLimit+'&offset='+correctionOffset)
       ]);
-      setAttendance(a.items||[]);setRequests(l.items||[]);setTypes(t||[]);setBalances(b.items||[]);setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));setProfileChangeRequests((pr.items||[]).map((item:any)=>({...item,requested_values:typeof item.requested_values==='string'?JSON.parse(item.requested_values):item.requested_values})));setAttendanceCorrectionRequests(cr.items||[]);
+      setAttendance(a.items||[]);setAttendanceTotal(Number(a.total||0));setRequests(l.items||[]);setLeaveTotal(Number(l.total||0));setTypes(t||[]);setBalances(b.items||[]);
+      setPayslips((ps.items||[]).map((item:any)=>({...item,snapshot:typeof item.snapshot==='string'?JSON.parse(item.snapshot):item.snapshot})));setPayslipTotal(Number(ps.total||0));
+      setProfileChangeRequests((pr.items||[]).map((item:any)=>({...item,requested_values:typeof item.requested_values==='string'?JSON.parse(item.requested_values):item.requested_values})));setProfileTotal(Number(pr.total||0));
+      setAttendanceCorrectionRequests(cr.items||[]);setCorrectionTotal(Number(cr.total||0));
       if(t.length&&!t.some((item:LeaveType)=>item.code===draft.leaveTypeCode))setDraft(v=>({...v,leaveTypeCode:t[0].code}));
     }catch(e){
       setError(e instanceof Error?e.message:'Your employee workspace could not be loaded.');
       if(String(e).includes('Authentication required')||String(e).includes('UNAUTHENTICATED'))router.replace('/login');
     }finally{setLoading(false)}
-  },[router,range.from,range.to]);
+  },[router,range.from,range.to,attendancePageLimit,attendanceOffset,leavePageLimit,leaveOffset,payslipPageLimit,payslipOffset,profilePageLimit,profileOffset,correctionPageLimit,correctionOffset]);
   useEffect(()=>{void load()},[load]);
   async function submitLeave(event:React.FormEvent){
     event.preventDefault();setSaving(true);setError('');setNotice('');
@@ -165,12 +168,13 @@ export default function EmployeeSelfServicePage(){
             {profileChangeRequests.length===0?<PeopleEmptyState title="You have not submitted any profile change requests." />:<div className="table-wrap"><table><thead><tr><th>Submitted</th><th>Requested changes</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
               {profileChangeRequests.map((item:any)=><tr key={item.id}><td>{new Date(item.created_at).toLocaleString()}</td><td>{item.requested_values?.email&&<div>Email: {item.requested_values.email}</div>}{item.requested_values?.phoneE164&&<div>Phone: {item.requested_values.phoneE164}</div>}</td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelProfileChange(item.id)}>Cancel</button>:'—'}</td></tr>)}
             </tbody></table></div>}
+            <PeoplePagination limit={profilePageLimit} offset={profileOffset} total={profileTotal} onPageChange={setProfileOffset} onLimitChange={limit=>{setProfilePageLimit(limit);setProfileOffset(0)}} />
           </section>
         </>}
         {tab==='attendance'&&<>
           <div className="toolbar">
-            <label className="field">From<input className="input" type="date" value={range.from} max={range.to} onChange={e=>setRange(v=>({...v,from:e.target.value}))}/></label>
-            <label className="field">To<input className="input" type="date" value={range.to} min={range.from} onChange={e=>setRange(v=>({...v,to:e.target.value}))}/></label>
+            <label className="field">From<input className="input" type="date" value={range.from} max={range.to} onChange={e=>{setRange(v=>({...v,from:e.target.value}));setAttendanceOffset(0)}}/></label>
+            <label className="field">To<input className="input" type="date" value={range.to} min={range.from} onChange={e=>{setRange(v=>({...v,to:e.target.value}));setAttendanceOffset(0)}}/></label>
           </div>
           {daySpan>92&&<div className="error" role="alert">Choose a date range of 93 days or fewer.</div>}
           <section className="panel" style={{marginTop:18}}>
@@ -191,10 +195,12 @@ export default function EmployeeSelfServicePage(){
             {attendanceCorrectionRequests.length===0?<PeopleEmptyState title="You have not submitted any attendance correction requests." />:<div className="table-wrap"><table><thead><tr><th>Work date</th><th>Requested status</th><th>Reason</th><th>Status</th><th>Review note</th><th>Action</th></tr></thead><tbody>
               {attendanceCorrectionRequests.map((item:any)=><tr key={item.id}><td>{String(item.work_date).slice(0,10)}</td><td>{pretty(item.requested_status)}<div className="small">{item.requested_check_in_at?'In: '+new Date(item.requested_check_in_at).toLocaleString()+' ':''}{item.requested_check_out_at?'Out: '+new Date(item.requested_check_out_at).toLocaleString():''}</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td><td>{item.request_status==='PENDING'?<button type="button" className="secondary" disabled={saving} onClick={()=>void cancelAttendanceCorrection(item.id)}>Cancel</button>:'—'}</td></tr>)}
             </tbody></table></div>}
+            <PeoplePagination limit={correctionPageLimit} offset={correctionOffset} total={correctionTotal} onPageChange={setCorrectionOffset} onLimitChange={limit=>{setCorrectionPageLimit(limit);setCorrectionOffset(0)}} />
           </section>
           <div className="table-wrap"><table><thead><tr><th>Work date</th><th>Status</th><th>Check in</th><th>Check out</th><th>Worked</th><th>Note</th></tr></thead><tbody>
             {attendance.map((item:any)=><tr key={item.work_date}><td>{String(item.work_date).slice(0,10)}</td><td><PeopleStatusBadge status={pretty(item.attendance_status)} /></td><td>{item.check_in_at?new Date(item.check_in_at).toLocaleString():'—'}</td><td>{item.check_out_at?new Date(item.check_out_at).toLocaleString():'—'}</td><td>{item.minutes_worked==null?'—':Math.floor(item.minutes_worked/60)+'h '+item.minutes_worked%60+'m'}</td><td>{item.notes||'—'}</td></tr>)}
           </tbody></table>{!loading&&!attendance.length&&<PeopleEmptyState title="No attendance records were returned for this date range." />}</div>
+          <PeoplePagination limit={attendancePageLimit} offset={attendanceOffset} total={attendanceTotal} onPageChange={setAttendanceOffset} onLimitChange={limit=>{setAttendancePageLimit(limit);setAttendanceOffset(0)}} />
         </>}
         {tab==='leave'&&<>
           <form className="panel" onSubmit={submitLeave} style={{marginBottom:20}}>
@@ -212,6 +218,7 @@ export default function EmployeeSelfServicePage(){
           <div className="table-wrap"><table><thead><tr><th>Leave type</th><th>Dates / days</th><th>Reason</th><th>Status</th><th>Review note</th></tr></thead><tbody>
             {requests.map((item:any)=><tr key={item.id}><td>{item.leave_type}<div className="small"><PeopleStatusBadge status={item.paid?'Paid':'Unpaid'} /></div></td><td>{String(item.start_date).slice(0,10)} → {String(item.end_date).slice(0,10)}<div className="small">{Number(item.requested_days)} working day(s)</div></td><td>{item.reason}</td><td><PeopleStatusBadge status={pretty(item.request_status)} /></td><td>{item.review_note||'—'}</td></tr>)}
           </tbody></table>{!loading&&!requests.length&&<PeopleEmptyState title="You have not submitted any leave requests." />}</div>
+          <PeoplePagination limit={leavePageLimit} offset={leaveOffset} total={leaveTotal} onPageChange={setLeaveOffset} onLimitChange={limit=>{setLeavePageLimit(limit);setLeaveOffset(0)}} />
         </>}
         {tab==='balances'&&<>
           <p className="small">Balances are calculated from the official leave-balance ledger as of today. No balance is invented when no grant/accrual has been recorded.</p>
@@ -230,6 +237,7 @@ export default function EmployeeSelfServicePage(){
             <div className="small">Issued {new Date(item.issued_at).toLocaleDateString()}</div>
             <button type="button" className="primary" style={{marginTop:12}} onClick={()=>setSelectedPayslip(item)}>View payslip</button>
           </article>)}</div>
+          <PeoplePagination limit={payslipPageLimit} offset={payslipOffset} total={payslipTotal} onPageChange={setPayslipOffset} onLimitChange={limit=>{setPayslipPageLimit(limit);setPayslipOffset(0)}} />
           {!loading&&!payslips.length&&<PeopleEmptyState title="No payslips have been issued to your employee record yet." />}
           {selectedPayslip&&<section className="panel payslip-print" aria-label="Selected payslip">
             <div className="no-print actions" style={{justifyContent:'space-between',marginTop:0,marginBottom:18}}>
