@@ -55,22 +55,30 @@ public class LearningClassController {
   private final StaffAuditService staffAudit;
   private final PrivateMediaStorageService mediaStorage;
   private final GoogleMeetCalendarService googleMeet;
+  private final TeachingEligibilityService teachingEligibility;
 
   @Autowired
   public LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
       StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage,
-      GoogleMeetCalendarService googleMeet) {
+      GoogleMeetCalendarService googleMeet, TeachingEligibilityService teachingEligibility) {
     this.jdbc = jdbc;
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.mediaStorage = mediaStorage;
     this.googleMeet = googleMeet;
+    this.teachingEligibility = teachingEligibility;
   }
 
-  // Existing unit tests retain their constructor; the fallback fails closed without credentials.
+  // Existing unit tests retain their constructors; the fallback fails closed without credentials.
+  LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
+      StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage,
+      GoogleMeetCalendarService googleMeet) {
+    this(jdbc, authorization, staffAudit, mediaStorage, googleMeet,new TeachingEligibilityService(jdbc));
+  }
+
   LearningClassController(JdbcTemplate jdbc, AuthorizationService authorization,
       StaffAuditService staffAudit, PrivateMediaStorageService mediaStorage) {
-    this(jdbc, authorization, staffAudit, mediaStorage, new GoogleMeetCalendarService());
+    this(jdbc, authorization, staffAudit, mediaStorage, new GoogleMeetCalendarService(),new TeachingEligibilityService(jdbc));
   }
 
   // A safe staff picker for live-class host assignment; no login/contact secrets are returned.
@@ -92,6 +100,11 @@ public class LearningClassController {
       join curriculum_subject s on s.id=cs.subject_id join curriculum_class c on c.id=s.class_id
       join hr_academic_period p on p.id=a.academic_period_id
       where e.linked_staff_account_id=? and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and e.joining_date <= (cs.starts_at at time zone 'Asia/Kolkata')::date
+        and (e.exit_date is null or e.exit_date >= (cs.starts_at at time zone 'Asia/Kolkata')::date)
+        and not exists(select 1 from hr_leave_request lr where lr.employee_id=e.id
+          and lr.request_status='APPROVED' and lr.start_date<=(cs.starts_at at time zone 'Asia/Kolkata')::date
+          and lr.end_date>=(cs.starts_at at time zone 'Asia/Kolkata')::date)
         and a.status='APPROVED'
         and a.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and a.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
@@ -109,7 +122,7 @@ public class LearningClassController {
     if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select cs.id,cs.title,cs.provider,cs.private_join_url,cs.starts_at,cs.ends_at,cs.status,
-        cs.provider_operation_status,cs.provider_error_message
+        cs.provider_operation_status,cs.provider_error_message,a.employee_id,a.effective_start,a.effective_end
       from learning_class_session cs
       join hr_teaching_assignment a on a.id=cs.teaching_assignment_id and a.status='APPROVED'
       join hr_employee e on e.id=a.employee_id and e.linked_staff_account_id=?
@@ -121,6 +134,12 @@ public class LearningClassController {
       """,context.staffId(),sessionId);
     if(rows.isEmpty())throw notFound("Assigned live class",sessionId);
     Map<String,Object> row=rows.getFirst();
+    OffsetDateTime classStart=toOffsetDateTime(row.get("starts_at"));
+    if(classStart==null)throw conflict("The class schedule is incomplete. Ask an administrator to review it.");
+    teachingEligibility.requireSessionEligible(((Number)row.get("employee_id")).longValue(),
+        classStart.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate(),
+        ((java.sql.Date)row.get("effective_start")).toLocalDate(),
+        ((java.sql.Date)row.get("effective_end")).toLocalDate());
     OffsetDateTime now=OffsetDateTime.now();
     OffsetDateTime startsAt=toOffsetDateTime(row.get("starts_at")),endsAt=toOffsetDateTime(row.get("ends_at"));
     if(startsAt!=null&&startsAt.isAfter(now.plusMinutes(15)))throw conflict("The teacher join window opens 15 minutes before the scheduled start.");
@@ -183,9 +202,14 @@ public class LearningClassController {
       join hr_academic_period p on p.id=a.academic_period_id
       join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
       where a.status='APPROVED' and a.effective_start<=? and a.effective_end>=?
+        and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
+        and e.joining_date<=? and (e.exit_date is null or e.exit_date>=?)
+        and not exists(select 1 from hr_leave_request lr where lr.employee_id=e.id
+          and lr.request_status='APPROVED' and lr.start_date<=? and lr.end_date>=?)
         and c.code=? and s.code=? and c.active=true and s.active=true
       order by e.display_name,a.id
-      """,java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),cc,sc);
+      """,java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),
+        java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),java.sql.Date.valueOf(date),cc,sc);
   }
 
   @GetMapping("/admin/live-classes")
@@ -267,14 +291,11 @@ public class LearningClassController {
       Map<String,Object> assignment = assignmentRows.getFirst();
       if (!"APPROVED".equals(assignment.get("status"))) throw badRequest("Live classes can only use approved teaching assignments.");
       assignedEmployeeId = ((Number)assignment.get("employee_id")).longValue();
-      if (!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(assignment.get("employment_status")))) {
-        throw conflict("The assigned employee is not currently eligible to teach under the employee lifecycle policy.");
-      }
       if (((Number)assignment.get("subject_id")).longValue() != subjectId) throw badRequest("The teaching assignment must match the selected class and subject.");
       java.time.LocalDate sessionDate = startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
-      if (sessionDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
-          || sessionDate.isAfter(((java.sql.Date)assignment.get("effective_end")).toLocalDate()))
-        throw badRequest("The teaching assignment must be effective on the live class date.");
+      teachingEligibility.requireSessionEligible(assignedEmployeeId,sessionDate,
+          ((java.sql.Date)assignment.get("effective_start")).toLocalDate(),
+          ((java.sql.Date)assignment.get("effective_end")).toLocalDate());
       Long linkedStaffId = assignment.get("linked_staff_account_id") instanceof Number n ? n.longValue() : null;
       if (hostStaffId != null && (linkedStaffId == null || !linkedStaffId.equals(hostStaffId)))
         throw badRequest("The selected host must be the staff account explicitly linked to the assigned employee.");
@@ -336,7 +357,7 @@ public class LearningClassController {
     if (!SESSION_STATUSES.contains(status)) throw badRequest("Choose SCHEDULED, LIVE, COMPLETED, or CANCELLED.");
     List<Map<String, Object>> rows = jdbc.queryForList("""
       select cs.id,cs.status,cs.title,cs.provider,cs.provider_event_id,cs.provider_operation_status,
-        cs.starts_at,cs.teaching_assignment_id,ta.status as assignment_status,ta.effective_start,ta.effective_end,
+        cs.starts_at,cs.teaching_assignment_id,ta.employee_id,ta.status as assignment_status,ta.effective_start,ta.effective_end,
         e.employment_status
       from learning_class_session cs
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
@@ -363,16 +384,15 @@ public class LearningClassController {
       throw conflict("A class without a canonical teaching assignment cannot go live. Link it to an approved effective assignment or create a new scheduled class.");
     }
     if ("LIVE".equals(status)) {
-      if (!"APPROVED".equals(current.get("assignment_status"))
-          || !Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(current.get("employment_status")))) {
-        throw conflict("The assigned teacher is no longer eligible or the teaching assignment is not approved.");
+      if (!"APPROVED".equals(current.get("assignment_status"))) {
+        throw conflict("The teaching assignment must be approved before the class can go live.");
       }
       OffsetDateTime scheduledStart=toOffsetDateTime(current.get("starts_at"));
-      java.time.LocalDate effectiveDate=scheduledStart==null?null:scheduledStart.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
-      if (effectiveDate==null||effectiveDate.isBefore(((java.sql.Date)current.get("effective_start")).toLocalDate())
-          ||effectiveDate.isAfter(((java.sql.Date)current.get("effective_end")).toLocalDate())) {
-        throw conflict("The approved teaching assignment is not effective on the scheduled class date.");
-      }
+      if(scheduledStart==null)throw conflict("The class schedule is incomplete. Review it before starting the class.");
+      teachingEligibility.requireSessionEligible(((Number)current.get("employee_id")).longValue(),
+          scheduledStart.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate(),
+          ((java.sql.Date)current.get("effective_start")).toLocalDate(),
+          ((java.sql.Date)current.get("effective_end")).toLocalDate());
     }
     if ("COMPLETED".equals(previous) && !"COMPLETED".equals(status)) {
       throw conflict("Completed live classes are terminal. Create a new class record instead.");
@@ -443,16 +463,16 @@ public class LearningClassController {
     if(assignments.isEmpty())throw notFound("Teaching assignment",assignmentId);
     Map<String,Object> assignment=assignments.getFirst();
     if(!"APPROVED".equals(assignment.get("status"))
-        ||!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(assignment.get("employment_status")))
-        ||Set.of("CLOSED","CANCELLED").contains(String.valueOf(assignment.get("period_status")))
-        ||classDate.isBefore(((java.sql.Date)assignment.get("effective_start")).toLocalDate())
-        ||classDate.isAfter(((java.sql.Date)assignment.get("effective_end")).toLocalDate())) {
-      throw conflict("Choose an approved assignment whose academic period, effective dates and employee eligibility cover this scheduled class.");
+        ||Set.of("CLOSED","CANCELLED").contains(String.valueOf(assignment.get("period_status")))) {
+      throw conflict("Choose an approved assignment in an open academic period for this scheduled class.");
     }
     if(((Number)assignment.get("subject_id")).longValue()!=((Number)session.get("subject_id")).longValue()) {
       throw badRequest("The replacement assignment must match this class's subject.");
     }
     Long employeeId=((Number)assignment.get("employee_id")).longValue();
+    teachingEligibility.requireSessionEligible(employeeId,classDate,
+        ((java.sql.Date)assignment.get("effective_start")).toLocalDate(),
+        ((java.sql.Date)assignment.get("effective_end")).toLocalDate());
     Long newHost=assignment.get("linked_staff_account_id") instanceof Number n?n.longValue():null;
     validateNoScheduleConflict(newHost,employeeId,startsAt,endsAt,sessionId);
     Object oldAssignment=session.get("teaching_assignment_id");
@@ -495,12 +515,11 @@ public class LearningClassController {
     if(assignmentId==null)throw conflict("A scheduled class must be linked to an approved teaching assignment before it can be rescheduled.");
     {
       java.time.LocalDate localDate=startsAt.atZoneSameInstant(ZoneId.of("Asia/Kolkata")).toLocalDate();
-      if(!"APPROVED".equals(row.get("assignment_status"))
-          ||!Set.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(row.get("employment_status")))
-          ||localDate.isBefore(((java.sql.Date)row.get("effective_start")).toLocalDate())
-          ||localDate.isAfter(((java.sql.Date)row.get("effective_end")).toLocalDate())) {
-        throw conflict("The approved teaching assignment must cover the rescheduled date.");
-      }
+      if(!"APPROVED".equals(row.get("assignment_status")))
+        throw conflict("The class must keep an approved teaching assignment before rescheduling.");
+      teachingEligibility.requireSessionEligible(employeeId,localDate,
+          ((java.sql.Date)row.get("effective_start")).toLocalDate(),
+          ((java.sql.Date)row.get("effective_end")).toLocalDate());
     }
     Long hostId=row.get("host_staff_id") instanceof Number n?n.longValue():null;
     validateNoScheduleConflict(hostId,employeeId,startsAt,endsAt,sessionId);

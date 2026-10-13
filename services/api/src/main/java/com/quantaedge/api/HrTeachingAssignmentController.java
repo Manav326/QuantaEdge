@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,9 +22,16 @@ public class HrTeachingAssignmentController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final TeachingEligibilityService teachingEligibility;
+
+  @Autowired
+  public HrTeachingAssignmentController(JdbcTemplate jdbc,AuthorizationService authorization,StaffAuditService audit,
+      TeachingEligibilityService teachingEligibility) {
+    this.jdbc=jdbc;this.authorization=authorization;this.audit=audit;this.teachingEligibility=teachingEligibility;
+  }
 
   public HrTeachingAssignmentController(JdbcTemplate jdbc,AuthorizationService authorization,StaffAuditService audit) {
-    this.jdbc=jdbc;this.authorization=authorization;this.audit=audit;
+    this(jdbc,authorization,audit,new TeachingEligibilityService(jdbc));
   }
 
   @GetMapping("/academic-subjects")
@@ -157,9 +165,6 @@ public class HrTeachingAssignmentController {
     long employeeId=positive(body.get("employeeId"),"Employee");
     Map<String,Object> employee=employee(employeeId);
     long orgId=((Number)employee.get("organization_id")).longValue();
-    String employmentStatus=String.valueOf(employee.get("employment_status"));
-    if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(employmentStatus))
-      throw bad("Teaching assignments require an active employment record.");
     long subjectId=positive(body.get("subjectId"),"Subject");
     Map<String,Object> subject=subject(subjectId);
     if(!Boolean.TRUE.equals(subject.get("active")))throw bad("Choose an active class subject.");
@@ -171,6 +176,7 @@ public class HrTeachingAssignmentController {
     LocalDate periodStart=((Date)period.get("start_date")).toLocalDate(),periodEnd=((Date)period.get("end_date")).toLocalDate();
     if(end.isBefore(start))throw bad("Assignment end date cannot be before its start date.");
     if(start.isBefore(periodStart)||end.isAfter(periodEnd))throw bad("Assignment dates must stay within the academic period.");
+    teachingEligibility.requireAssignmentEligible(employeeId,start,end);
     Long replaces=optionalLong(body.get("replacesAssignmentId"));
     if(replaces!=null){
       Map<String,Object> prior=assignmentById(replaces);
@@ -207,8 +213,8 @@ public class HrTeachingAssignmentController {
     long orgId=((Number)assignment.get("organization_id")).longValue(),subjectId=((Number)assignment.get("subject_id")).longValue(),periodId=((Number)assignment.get("academic_period_id")).longValue();
     if("APPROVED".equals(decision)){
       Map<String,Object> employee=employee(((Number)assignment.get("employee_id")).longValue());
-      if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(employee.get("employment_status"))))
-        throw conflict("The assigned employee is no longer eligible for teaching assignments.");
+      teachingEligibility.requireAssignmentEligible(((Number)assignment.get("employee_id")).longValue(),
+          ((Date)assignment.get("effective_start")).toLocalDate(),((Date)assignment.get("effective_end")).toLocalDate());
       Map<String,Object> period=periodById(periodId);
       if(List.of("CLOSED","CANCELLED").contains(String.valueOf(period.get("status"))))
         throw conflict("This academic period is closed or cancelled.");
@@ -263,8 +269,6 @@ public class HrTeachingAssignmentController {
     long employeeId=positive(body.getOrDefault("employeeId",current.get("employee_id")),"Employee");
     Map<String,Object> employee=employee(employeeId);
     if(((Number)employee.get("organization_id")).longValue()!=orgId)throw bad("The employee must belong to the same organisation.");
-    if(!List.of("ACTIVE","ON_LEAVE","NOTICE_PERIOD").contains(String.valueOf(employee.get("employment_status"))))
-      throw bad("Teaching assignments require an active employment record.");
     long subjectId=positive(body.getOrDefault("subjectId",current.get("subject_id")),"Subject");
     Map<String,Object> subject=subject(subjectId);
     if(!Boolean.TRUE.equals(subject.get("active")))throw bad("Choose an active class subject.");
@@ -276,6 +280,7 @@ public class HrTeachingAssignmentController {
     LocalDate end=date(body.getOrDefault("effectiveEnd",String.valueOf(current.get("effective_end"))),"Effective end");
     LocalDate periodStart=((Date)period.get("start_date")).toLocalDate(),periodEnd=((Date)period.get("end_date")).toLocalDate();
     if(end.isBefore(start)||start.isBefore(periodStart)||end.isAfter(periodEnd))throw bad("Assignment dates must be valid and stay within the academic period.");
+    teachingEligibility.requireAssignmentEligible(employeeId,start,end);
     Long replaces=body.containsKey("replacesAssignmentId")?optionalLong(body.get("replacesAssignmentId")):
       (current.get("replaces_assignment_id") instanceof Number n?n.longValue():null);
     if(replaces!=null) {
@@ -468,7 +473,7 @@ public class HrTeachingAssignmentController {
   }
 
   private Map<String,Object> employee(long id){
-    List<Map<String,Object>> r=jdbc.queryForList("select id,organization_id,employee_number,display_name,employment_status from hr_employee where id=?",id);
+    List<Map<String,Object>> r=jdbc.queryForList("select id,organization_id,employee_number,display_name,employment_status,joining_date,exit_date from hr_employee where id=?",id);
     if(r.isEmpty())throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee not found.");return r.getFirst();
   }
   private Map<String,Object> subject(long id){
