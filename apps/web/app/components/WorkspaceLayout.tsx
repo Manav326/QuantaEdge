@@ -261,8 +261,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
         <div className="qe-workspace-topbar-actions">
           {role === 'student'
-            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} />
-            : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} />}
+            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
+            : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
           {role === 'student' ? <LearningLanguageSwitcher compact /> : null}
           <LanguageSwitcher compact />
         </div>

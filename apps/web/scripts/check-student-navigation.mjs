@@ -5,6 +5,7 @@ const read = (relativePath) => readFileSync(new URL(relativePath, import.meta.ur
 const layout = read('../app/components/WorkspaceLayout.tsx');
 const css = read('../app/globals.css');
 const accountMenu = read('../app/components/StudentAccountMenu.tsx');
+const parentAccountMenu = read('../app/components/ParentAccountMenu.tsx');
 const languageProvider = read('../app/components/LanguageProvider.tsx');
 const testsClient = read('../app/student/tests/TestsClient.tsx');
 const certificatesPage = read('../app/student/certificates/page.tsx');
@@ -71,6 +72,9 @@ const mobileParentEnd = layout.indexOf('</nav>', mobileParentStart);
 assert.notEqual(mobileParentStart, -1, 'Parent mobile navigation must exist.');
 const mobileParentNav = layout.slice(mobileParentStart, mobileParentEnd);
 assert.ok(!mobileParentNav.includes('logout(') && !mobileParentNav.includes('Logout'), 'Parent mobile primary navigation must contain only the three parent destinations.');
+assert.ok(accountMenu.includes('student-account-menu__logout') && accountMenu.includes('onLogout();'), 'Student Logout must be available from the profile/account menu outside primary navigation.');
+assert.ok(parentAccountMenu.includes('parent-account__logout') && parentAccountMenu.includes('onLogout();'), 'Parent Logout must be available from the parent account menu outside primary navigation.');
+assert.ok(layout.includes('onLogout={() => void logout()} loggingOut={loggingOut}'), 'Account menus must reuse the existing session logout handler and in-progress state.');
 
 // Android shares the canonical group IDs and selects its rail/bar by orientation rather than width.
 const androidStudentGroupIds = [...androidApp.matchAll(/AppNavItem\("(today|learn|practice|progress|library)"/g)].map((match) => match[1]);
