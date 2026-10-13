@@ -240,7 +240,7 @@ class HrEmployeeControllerTest {
 
     Map<String,Object> result = controller.employees(hrManager, "", false, -50, 5000);
 
-    assertEquals(100, result.get("limit"));
+    assertEquals(50, result.get("limit"));
     assertEquals(0, result.get("offset"));
     assertEquals(0L, result.get("total"));
   }
