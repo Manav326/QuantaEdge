@@ -9,9 +9,29 @@ public class HrAttendanceLeaveController {
  @GetMapping("/attendance") public Map<String,Object> attendance(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(required=false) String from,@RequestParam(required=false) String to,@RequestParam(required=false) Long employeeId,@RequestParam(defaultValue="0") int offset,@RequestParam(defaultValue="100") int limit){
  require(c,"HR_ATTENDANCE_VIEW");LocalDate end=to==null||to.isBlank()?LocalDate.now():date(to,"End date"),start=from==null||from.isBlank()?end.minusDays(30):date(from,"Start date");range(start,end,93);int lim=Math.max(1,Math.min(limit,200)),off=Math.max(0,Math.min(offset,1000000));
  List<Map<String,Object>> items=jdbc.queryForList("""
- select a.id,a.employee_id,e.employee_number,e.display_name,a.work_date,a.attendance_status,a.check_in_at,a.check_out_at,case when a.check_in_at is not null and a.check_out_at is not null then floor(extract(epoch from (a.check_out_at-a.check_in_at))/60)::int else null end minutes_worked,a.notes,a.recorded_by_staff_id,a.updated_by_staff_id,a.created_at,a.updated_at from hr_attendance_record a join hr_employee e on e.id=a.employee_id where a.work_date between ? and ? and (cast(? as bigint) is null or a.employee_id=?) and """ + reportingScope.sqlScopePredicate("e") + """ order by a.work_date desc,e.display_name limit ? offset ?
- """,Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId(),c.staffId(),lim,off);
- Long total=jdbc.queryForObject("select count(*) from hr_attendance_record a join hr_employee e on e.id=a.employee_id where a.work_date between ? and ? and (cast(? as bigint) is null or a.employee_id=?) and """ + reportingScope.sqlScopePredicate("e"),Long.class,Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId(),c.staffId());return Map.of("items",items,"total",total==null?0L:total,"from",start.toString(),"to",end.toString(),"limit",lim,"offset",off);}
+ with recursive reporting(id) as (
+   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+     and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+     where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+ )
+ select a.id,a.employee_id,e.employee_number,e.display_name,a.work_date,a.attendance_status,a.check_in_at,a.check_out_at,case when a.check_in_at is not null and a.check_out_at is not null then floor(extract(epoch from (a.check_out_at-a.check_in_at))/60)::int else null end minutes_worked,a.notes,a.recorded_by_staff_id,a.updated_by_staff_id,a.created_at,a.updated_at
+ from hr_attendance_record a join hr_employee e on e.id=a.employee_id
+ where a.work_date between ? and ? and (cast(? as bigint) is null or a.employee_id=?)
+   and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+ order by a.work_date desc,e.display_name limit ? offset ?
+ """,c.staffId(),Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId(),lim,off);
+ Long total=jdbc.queryForObject("""
+ with recursive reporting(id) as (
+   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+     and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+     where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+ )
+ select count(*) from hr_attendance_record a join hr_employee e on e.id=a.employee_id
+ where a.work_date between ? and ? and (cast(? as bigint) is null or a.employee_id=?)
+   and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+ """,Long.class,c.staffId(),Date.valueOf(start),Date.valueOf(end),employeeId,employeeId,c.staffId());return Map.of("items",items,"total",total==null?0L:total,"from",start.toString(),"to",end.toString(),"limit",lim,"offset",off);}
  @GetMapping("/attendance/summary") public Map<String,Object> summary(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(required=false) String date){require(c,"HR_ATTENDANCE_VIEW");LocalDate d=date==null||date.isBlank()?LocalDate.now():date(date,"Date");Map<String,Object> r=jdbc.queryForMap("""
  select count(*) active_employees,count(a.id) marked,count(*) filter(where a.attendance_status='PRESENT') present,count(*) filter(where a.attendance_status='REMOTE') remote,count(*) filter(where a.attendance_status='HALF_DAY') half_day,count(*) filter(where a.attendance_status='ABSENT') absent,count(*) filter(where a.attendance_status='ON_LEAVE') on_leave,count(*) filter(where a.attendance_status='HOLIDAY') holiday from hr_employee e left join hr_attendance_record a on a.employee_id=e.id and a.work_date=? where e.employment_status='ACTIVE'
  """,Date.valueOf(d));r.put("date",d.toString());return r;}
@@ -36,8 +56,29 @@ public class HrAttendanceLeaveController {
  @GetMapping("/leave/requests") public Map<String,Object> leaves(@RequestAttribute(value="authContext",required=false) AuthContext c,@RequestParam(defaultValue="ALL") String status,@RequestParam(required=false) Long employeeId,@RequestParam(defaultValue="0") int offset,@RequestParam(defaultValue="100") int limit){
  require(c,"HR_LEAVE_VIEW");String st=status==null?"ALL":status.trim().toUpperCase();if(!List.of("ALL","PENDING","APPROVED","REJECTED","CANCELLED").contains(st))throw bad("Choose a supported leave-request status.");int lim=Math.max(1,Math.min(limit,200)),off=Math.max(0,Math.min(offset,1000000));
  List<Map<String,Object>> items=jdbc.queryForList("""
- select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,r.leave_type_code,t.display_name leave_type,t.paid,r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,r.reviewed_by_staff_id,r.reviewed_at,r.created_by_staff_id,r.created_at,r.updated_at from hr_leave_request r join hr_employee e on e.id=r.employee_id join hr_leave_type t on t.code=r.leave_type_code where (?='ALL' or r.request_status=?) and (cast(? as bigint) is null or r.employee_id=?) and """ + reportingScope.sqlScopePredicate("e") + """ order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at desc limit ? offset ?
- """,st,st,employeeId,employeeId,c.staffId(),c.staffId(),lim,off);Long total=jdbc.queryForObject("select count(*) from hr_leave_request r join hr_employee e on e.id=r.employee_id where (?='ALL' or r.request_status=?) and (cast(? as bigint) is null or r.employee_id=?) and """ + reportingScope.sqlScopePredicate("e"),Long.class,st,st,employeeId,employeeId,c.staffId(),c.staffId());return Map.of("items",items,"total",total==null?0L:total,"limit",lim,"offset",off);}
+ with recursive reporting(id) as (
+   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+     and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+     where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+ )
+ select r.id,r.public_id,r.employee_id,e.employee_number,e.display_name,r.leave_type_code,t.display_name leave_type,t.paid,r.start_date,r.end_date,r.requested_days,r.reason,r.request_status,r.review_note,r.reviewed_by_staff_id,r.reviewed_at,r.created_by_staff_id,r.created_at,r.updated_at
+ from hr_leave_request r join hr_employee e on e.id=r.employee_id join hr_leave_type t on t.code=r.leave_type_code
+ where (?='ALL' or r.request_status=?) and (cast(? as bigint) is null or r.employee_id=?)
+   and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+ order by case r.request_status when 'PENDING' then 0 else 1 end,r.created_at desc limit ? offset ?
+ """,c.staffId(),st,st,employeeId,employeeId,c.staffId(),lim,off);
+ Long total=jdbc.queryForObject("""
+ with recursive reporting(id) as (
+   select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+     and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+   union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id
+     where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+ )
+ select count(*) from hr_leave_request r join hr_employee e on e.id=r.employee_id
+ where (?='ALL' or r.request_status=?) and (cast(? as bigint) is null or r.employee_id=?)
+   and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+ """,Long.class,c.staffId(),st,st,employeeId,employeeId,c.staffId());return Map.of("items",items,"total",total==null?0L:total,"limit",lim,"offset",off);}
  @PostMapping("/leave/requests") @Transactional public Map<String,Object> createLeave(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c){
  require(c,"HR_LEAVE_MANAGE");long eid=positive(b.get("employeeId"),"Employee");reportingScope.requireEmployeeAccess(c,eid);Map<String,Object> emp=activeEmployee(eid);String type=required(b.get("leaveTypeCode"),32,"Leave type").toUpperCase();Boolean valid=jdbc.queryForObject("select exists(select 1 from hr_leave_type where code=? and active=true)",Boolean.class,type);if(!Boolean.TRUE.equals(valid))throw bad("Choose an active leave type.");
  LocalDate start=date(required(b.get("startDate"),10,"Start date"),"Start date"),end=date(required(b.get("endDate"),10,"End date"),"End date");if(end.isBefore(start))throw bad("Leave end date cannot be before its start date.");if(java.time.temporal.ChronoUnit.DAYS.between(start,end)+1>366)throw bad("A leave request cannot exceed 366 calendar days.");
@@ -46,11 +87,10 @@ public class HrAttendanceLeaveController {
  Long id;try{id=jdbc.queryForObject("insert into hr_leave_request(employee_id,leave_type_code,start_date,end_date,requested_days,reason,created_by_staff_id) values (?,?,?,?,?,?,?) returning id",Long.class,eid,type,Date.valueOf(start),Date.valueOf(end),days,required(b.get("reason"),1000,"Reason"),c.staffId());}catch(DuplicateKeyException ex){throw new ResponseStatusException(HttpStatus.CONFLICT,"The leave request conflicts with an existing record.");}
  Map<String,Object> row=leaveById(id);audit.recordAction(c,"/api/v1/hr/leave/requests/"+id,"Created leave request for "+emp.get("employee_number"));return row;}
  @PatchMapping("/leave/requests/{id}/decision") @Transactional public Map<String,Object> decide(@PathVariable long id,@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c){
- require(c,"HR_LEAVE_MANAGE");Map<String,Object> before=leaveById(id);if(!"PENDING".equals(before.get("request_status")))throw new ResponseStatusException(HttpStatus.CONFLICT,"Only pending leave requests can be reviewed.");String decision=required(b.get("status"),16,"Decision").toUpperCase();if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("A leave decision must be APPROVED or REJECTED.");
+ require(c,"HR_LEAVE_MANAGE");Map<String,Object> before=leaveById(id);reportingScope.requireEmployeeAccess(c,((Number)before.get("employee_id")).longValue());if(!"PENDING".equals(before.get("request_status")))throw new ResponseStatusException(HttpStatus.CONFLICT,"Only pending leave requests can be reviewed.");String decision=required(b.get("status"),16,"Decision").toUpperCase();if(!List.of("APPROVED","REJECTED").contains(decision))throw bad("A leave decision must be APPROVED or REJECTED.");
  if(c.staffId()!=null){Boolean self=jdbc.queryForObject("select exists(select 1 from hr_employee where id=? and linked_staff_account_id=?)",Boolean.class,before.get("employee_id"),c.staffId());if(Boolean.TRUE.equals(self))throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Employees cannot approve their own leave request.");}
  if("APPROVED".equals(decision)&&Boolean.TRUE.equals(before.get("paid"))){
    long employeeId=((Number)before.get("employee_id")).longValue();
-   reportingScope.requireEmployeeAccess(c,employeeId);
    String type=String.valueOf(before.get("leave_type_code"));
    LocalDate start=LocalDate.parse(String.valueOf(before.get("start_date")).substring(0,10));
    BigDecimal days=new BigDecimal(String.valueOf(before.get("requested_days")));
