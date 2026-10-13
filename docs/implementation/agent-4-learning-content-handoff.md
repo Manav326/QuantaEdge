@@ -26,7 +26,7 @@ The repository already has the main architectural pieces; replacing them with pa
 
 The repository README documents 102 canonical chapter rows across Class 6–8 Mathematics and Science. A chapter row or lesson shell is not proof of finished teaching content. The documented clean-migration baseline has four active approved original questions (three MCQ and one True/False), all in Class 7 Mathematics. All six official textbook edition and page mappings still require editorial verification. The 2,166-question bank is a planning target, not a claim of completed or published questions.
 
-A successful GitHub Actions run was observed for the pre-change baseline commit `0d71946b3854a68c894001193a5174a41fa9a45b` (run [38339756149](https://github.com/Manav326/QuantaEdge/actions/runs/38339756149)). This is **baseline evidence only**, not a pass for this branch. The main workflow for commit `00ed52ad75432153aefc93105cd83ae2c472843c` was still running when inspected.
+A successful GitHub Actions run was observed for the pre-change baseline commit `0d71946b3854a68c894001193a5174a41fa9a45b` (run [38339756149](https://github.com/Manav326/QuantaEdge/actions/runs/38339756149)). This is **baseline evidence only**, not a pass for this branch. The main workflow for commit `00ed52ad75432153aefc93105cd83ae2c472843c` subsequently completed with a failure in the new Android setup job; the exact cause and corrective change are recorded below.
 
 ## 2. Changes implemented
 
@@ -88,7 +88,7 @@ Files:
 
 The standalone Android build workflow now uploads its installable debug APK as `quantaedge-android-apk`, matching the install helper's default exact artifact name. The helper's failure text now correctly describes an installable APK rather than calling it a release APK; the existing main-branch PowerShell handling for native stderr/missing artifacts was preserved during integration.
 
-The latest main commit `00ed52ad75432153aefc93105cd83ae2c472843c` added a `build-android-apk` job to `.github/workflows/ci.yml` that runs `testDebugUnitTest assembleDebug` and uploads the same `quantaedge-android-apk` artifact. That newer CI job was retained by merging the latest main tree into the branch rather than replacing the current workflow.
+The latest main commit `00ed52ad75432153aefc93105cd83ae2c472843c` added a `build-android-apk` job to `.github/workflows/ci.yml` that runs `testDebugUnitTest assembleDebug` and uploads the same `quantaedge-android-apk` artifact. That newer CI job was retained by merging the latest main tree into the branch rather than replacing the current workflow. Its first run failed before Gradle because `android-actions/setup-android@v3` attempted to install the legacy SDK package `tools`, which the current SDK manager reported as missing. The branch now limits that action's explicit package request to `platform-tools`; a new CI run is required to verify the fix.
 
 This is a debug APK, not a signed Play Store release. No Android emulator/physical device was available for an end-to-end learning-session test.
 
@@ -143,13 +143,13 @@ Not performed: local Gradle build, Android unit-test execution, APK byte/signatu
 | AI generation recovery tests | Added, not run | Mock tests; not executed here |
 | API Maven verification | Not run | No local checkout/build execution available |
 | Python test suite | Not run | No local checkout/test execution available |
-| Android Gradle build/unit tests | Not run for this branch | Latest main contains build/test job; no branch-run result observed |
+| Android setup/build/unit tests | Baseline main run failed before Gradle | Run [38340721286](https://github.com/Manav326/QuantaEdge/actions/runs/38340721286): Android setup requested removed `tools` package; API verification, content-import safeguards, and other image builds passed. Branch adds a targeted package fix; not yet re-run. |
 | Real model generation | Not run | No provider credentials supplied/verified |
 | GHCR read/publish | Not run | No live class/language image validation performed |
 | Physical-device test | Not run | No device bridge available |
 | Student/CMS browser E2E | Not run | Needs runtime with persisted data and authenticated roles |
 
-The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. GitHub Actions dispatch is not exposed through the available write actions. The most recent main run was still in progress at the final audit point. Therefore the status above is intentionally explicit: commit presence is verified; branch runtime test results are not.
+The environment could use the connected GitHub API to inspect and write repository files, but local `git clone` failed because the runtime could not resolve `github.com`. GitHub Actions dispatch is not exposed through the available write actions. The most recent main run completed with a failure in Android SDK setup before Gradle started; the branch contains a scoped correction but there is no branch-run result proving it. Commit presence is verified; branch runtime test results are not.
 
 ## 9. Remaining gaps and blockers
 
@@ -174,6 +174,7 @@ Agents 1–3 own HRMS, payroll and academic workforce management. Agent 4 did no
 - **AI retry/resume implementation commit:** `94f971b526255c8e30716d341c273867721cf2f7`
 - **AI regression test commit:** `1a25e1c52af380ea16e12dd1241c1dec2d0f8a05`
 - **Android installer/main-sync commit:** `3c1142e93a43742140c635f1d7c85a038219643d`
+- **Android CI SDK package fix:** recorded in the branch history after integration commit `3e2933e0475378ffaac0ff0d889fff1a1696f188`
 - **Remote status:** changes have been committed to the GitHub working branch. No PR was opened and `main` was not modified by Agent 4.
 
 The branch history is the source of truth for the exact final handoff-report commit SHA; it is committed after the integration commit listed above.
