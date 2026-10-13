@@ -99,8 +99,18 @@ try {
 
     Write-Status "Finding a successful Actions run for this exact commit..." "Cyan"
     $runsRaw = & gh run list --repo $Repository --branch $Branch --limit 100 --json databaseId,workflowName,createdAt,headSha,status,conclusion 2>&1
-    if ($LASTEXITCODE -ne 0) { throw "Could not query GitHub Actions runs: $($runsRaw -join ' ')" }
-    $runs = @($runsRaw | ConvertFrom-Json)
+    $runsExitCode = $LASTEXITCODE
+    if ($runsExitCode -ne 0) { throw "Could not query GitHub Actions runs: $($runsRaw -join ' ')" }
+
+    # PowerShell can enumerate native-command output and JSON arrays in the pipeline.
+    # Join the complete JSON document first so each workflow run stays a separate object.
+    $runsJson = (@($runsRaw) | ForEach-Object { [string]$_ }) -join [Environment]::NewLine
+    try {
+        $parsedRuns = ConvertFrom-Json -InputObject $runsJson
+        $runs = @($parsedRuns)
+    } catch {
+        throw "GitHub CLI returned invalid workflow-run JSON. Response: $runsJson"
+    }
     $candidates = @($runs | Where-Object {
         $_.headSha -eq $headSha -and $_.status -eq "completed" -and $_.conclusion -eq "success"
     } | Sort-Object createdAt -Descending)
@@ -115,9 +125,9 @@ try {
         $runDir = Join-Path $tempDir ([string]$run.databaseId)
         $null = New-Item -ItemType Directory -Path $runDir -Force
         Write-Status ("Checking run {0}: {1} ({2})" -f $run.databaseId, $run.workflowName, $run.createdAt) "Cyan"
-        $args = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--dir", $runDir)
-        if (-not [string]::IsNullOrWhiteSpace($ArtifactName)) { $args += @("--name", $ArtifactName) }
-        $downloadOutput = @(& gh @args 2>&1)
+        $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--dir", $runDir)
+        if (-not [string]::IsNullOrWhiteSpace($ArtifactName)) { $ghArgs += @("--name", $ArtifactName) }
+        $downloadOutput = @(& gh @ghArgs 2>&1)
         $downloadExit = $LASTEXITCODE
         if ($downloadExit -eq 0) {
             $matches = @(Get-ChildItem -LiteralPath $runDir -Filter "*.apk" -File -Recurse -ErrorAction SilentlyContinue |
