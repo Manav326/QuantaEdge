@@ -44,6 +44,7 @@ fun ProfilePhotoPickerInput(
     onPhotoSelected: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val language = LocalQuantaLanguage.current
     val scope = rememberCoroutineScope()
     var displayedBytes by remember { mutableStateOf<ByteArray?>(null) }
     var selectedDataUrl by remember { mutableStateOf<String?>(null) }
@@ -67,7 +68,7 @@ fun ProfilePhotoPickerInput(
                     displayedBytes = Base64.decode(dataUrl.substringAfter(','), Base64.NO_WRAP)
                     onPhotoSelected(dataUrl)
                 } catch (failure: Exception) {
-                    error = localizedUiText(failure.message ?: "फोटो पढ़ी नहीं जा सकी।")
+                    error = if (language == "hi") "फोटो पढ़ी नहीं जा सकी।" else "Could not read the selected photo."
                 } finally {
                     selecting = false
                 }
