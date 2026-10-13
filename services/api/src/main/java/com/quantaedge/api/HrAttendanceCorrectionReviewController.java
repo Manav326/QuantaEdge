@@ -104,7 +104,7 @@ public class HrAttendanceCorrectionReviewController {
           request.get("previous_status"),request.get("previous_check_in_at"),request.get("previous_check_out_at"),
           request.get("previous_notes"),request.get("requested_status"),request.get("requested_check_in_at"),
           request.get("requested_check_out_at"),request.get("requested_notes"),
-          "Employee request #"+requestId+": "+request.get("reason")+"; reviewer: "+reviewNote,context.staffId());
+          String.valueOf(request.get("reason")),context.staffId());
       int updated=jdbc.update("""
         update hr_attendance_record set attendance_status=?,check_in_at=?,check_out_at=?,notes=?,
           updated_by_staff_id=?,updated_at=now() where id=? and employee_id=? and work_date=?
