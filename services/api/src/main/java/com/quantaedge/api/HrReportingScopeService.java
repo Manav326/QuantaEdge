@@ -13,7 +13,7 @@ public class HrReportingScopeService {
   public HrReportingScopeService(JdbcTemplate jdbc,AuthorizationService authorization){this.jdbc=jdbc;this.authorization=authorization;}
 
   public boolean isManagerScoped(AuthContext context){
-    return authorization.hasPermission(context,"HR_MANAGER_TEAM_VIEW");
+    return context!=null&&!context.isAdmin()&&authorization.hasPermission(context,"HR_MANAGER_TEAM_VIEW");
   }
 
   public void requireEmployeeAccess(AuthContext context,long employeeId){
