@@ -114,6 +114,9 @@ fun QuantaEdgeApp() {
     var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var certificateLanguage by rememberSaveable {
+        mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
+    }
     var currentSubject by rememberSaveable { mutableStateOf("maths") }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
     var parentSection by rememberSaveable { mutableStateOf("family") }
@@ -683,7 +686,7 @@ fun QuantaEdgeApp() {
                     .put("achievementType", "ASSESSMENT_PASS")
                     .put("assessmentAttemptId", attemptId)
                     .put("templateId", "CLASSIC")
-                    .put("language", learningContentLanguage)
+                    .put("language", certificateLanguage)
             )
             when (route) {
                 AppRoute.PROGRESS -> loadProgressCertificateData(progressData)
@@ -1807,6 +1810,13 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.CERTIFICATES -> StudentCertificatesScreen(
                         language = language,
+                        certificateLanguage = certificateLanguage,
+                        onCertificateLanguageChange = { next ->
+                            if (next == "hi" || next == "en") {
+                                certificateLanguage = next
+                                preferences.edit().putString("certificateLanguage", next).apply()
+                            }
+                        },
                         onBack = { route = AppRoute.STUDENT_HOME }
                     )
                     AppRoute.LEADERBOARD -> AssessmentLeaderboardScreen(
