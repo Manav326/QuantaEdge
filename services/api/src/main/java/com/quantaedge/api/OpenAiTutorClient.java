@@ -32,6 +32,10 @@ public class OpenAiTutorClient {
     this.http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8)).build();
   }
 
+  private boolean isOllama(){
+    return baseUrl.contains("ollama") || baseUrl.matches(".*:11434$");
+  }
+
   public boolean isEnabled(){return enabled;}
   public boolean isConfigured(){return enabled && apiKey!=null && !apiKey.isBlank();}
   public String model(){return model;}
@@ -39,16 +43,25 @@ public class OpenAiTutorClient {
   public TutorReply generate(String instructions,String input){
     if(!isConfigured()) throw new TutorUnavailableException("AI tutor is not configured");
     try{
+      boolean chatCompletions = isOllama();
       var root=mapper.createObjectNode();
       root.put("model",model);
-      root.put("instructions",instructions);
-      root.put("max_output_tokens",maxOutputTokens);
-      var message=root.putArray("input").addObject();
-      message.put("role","user");
-      message.putArray("content").addObject().put("type","input_text").put("text",input);
+      if(chatCompletions) {
+        root.put("max_tokens",maxOutputTokens);
+        root.put("stream",false);
+        var messages=root.putArray("messages");
+        messages.addObject().put("role","system").put("content",instructions);
+        messages.addObject().put("role","user").put("content",input);
+      } else {
+        root.put("instructions",instructions);
+        root.put("max_output_tokens",maxOutputTokens);
+        var message=root.putArray("input").addObject();
+        message.put("role","user");
+        message.putArray("content").addObject().put("type","input_text").put("text",input);
+      }
 
       HttpRequest req=HttpRequest.newBuilder()
-          .uri(URI.create(baseUrl+"/v1/responses"))
+          .uri(URI.create(baseUrl+(chatCompletions?"/v1/chat/completions":"/v1/responses")))
           .timeout(Duration.ofSeconds(30))
           .header("Authorization","Bearer "+apiKey)
           .header("Content-Type","application/json")
@@ -62,7 +75,7 @@ public class OpenAiTutorClient {
         throw new TutorProviderException("Tutor provider rejected request"+(detail.isBlank()?"":": "+detail));
       }
       JsonNode body=mapper.readTree(res.body());
-      String text=body.path("output_text").asText("");
+      String text=chatCompletions?body.path("choices").path(0).path("message").path("content").asText(""):body.path("output_text").asText("");
       if(text.isBlank() && body.path("output").isArray()){
         StringBuilder out=new StringBuilder();
         for(JsonNode item:body.path("output")) for(JsonNode part:item.path("content")){
@@ -72,9 +85,10 @@ public class OpenAiTutorClient {
       }
       if(text.isBlank()) throw new TutorProviderException("Tutor returned no text");
       JsonNode usage=body.path("usage");
+      int inputTokens=chatCompletions?usage.path("prompt_tokens").asInt(-1):usage.path("input_tokens").asInt(-1);
+      int outputTokens=chatCompletions?usage.path("completion_tokens").asInt(-1):usage.path("output_tokens").asInt(-1);
       return new TutorReply(text.trim(),body.path("id").asText(null),
-          usage.has("input_tokens")?usage.path("input_tokens").asInt():null,
-          usage.has("output_tokens")?usage.path("output_tokens").asInt():null);
+          inputTokens<0?null:inputTokens,outputTokens<0?null:outputTokens);
     }catch(TutorUnavailableException|TutorProviderException e){throw e;}
     catch(Exception e){throw new TutorProviderException("Tutor provider request failed",e);}
   }
