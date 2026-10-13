@@ -1,0 +1,38 @@
+# Optional no-API-key local AI tutor. Use alongside docker-compose.yml.
+# The model is downloaded into the persistent ollama volume on first start.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - quantaedge_ollama:/root/.ollama
+    healthcheck:
+      test: ["CMD-SHELL", "ollama list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  ollama-model-init:
+    image: ollama/ollama:latest
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    command: "until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull qwen2.5:0.5b"
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  api:
+    environment:
+      APP_AI_TUTOR_ENABLED: "true"
+      OPENAI_API_KEY: "local-ollama"
+      APP_AI_TUTOR_MODEL: "qwen2.5:0.5b"
+      OPENAI_API_BASE_URL: "http://ollama:11434"
+    depends_on:
+      ollama-model-init:
+        condition: service_completed_successfully
+
+volumes:
+  quantaedge_ollama:
