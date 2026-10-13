@@ -34,7 +34,7 @@ public class HrHolidayController {
     LocalDate end=to==null||to.isBlank()?null:date(to);
     if(start!=null&&end!=null&&end.isBefore(start)) throw bad("End date cannot be before start date.");
     if(start!=null&&end!=null&&java.time.temporal.ChronoUnit.DAYS.between(start,end)>731) throw bad("Holiday calendar range cannot exceed two years.");
-    return jdbc.queryForList("select id,organization_id,holiday_date,name,description,region,active,created_at,updated_at from hr_holiday_calendar where organization_id=? and (?=false or active=true) and (?::date is null or holiday_date>=?) and (?::date is null or holiday_date<=?) order by holiday_date,name",organizationId,activeOnly,start==null?null:Date.valueOf(start),start==null?null:Date.valueOf(start),end==null?null:Date.valueOf(end),end==null?null:Date.valueOf(end));
+    return jdbc.queryForList("select id,organization_id,holiday_date,name,description,region,calendar_source,source_url,jurisdiction,calendar_year,source_verified_at,source_verified_by_staff_id,active,created_at,updated_at from hr_holiday_calendar where organization_id=? and (?=false or active=true) and (?::date is null or holiday_date>=?) and (?::date is null or holiday_date<=?) order by holiday_date,name",organizationId,activeOnly,start==null?null:Date.valueOf(start),start==null?null:Date.valueOf(start),end==null?null:Date.valueOf(end),end==null?null:Date.valueOf(end));
   }
 
   @PostMapping
