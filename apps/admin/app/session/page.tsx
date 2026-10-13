@@ -4,6 +4,26 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type StaffSession = { role?: string; staffId?: number; permissions?: string[] };
+const SESSION_CHECK_TIMEOUT_MS = 10_000;
+
+function withSessionTimeout<T>(operation: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = window.setTimeout(() => reject(new Error('Session verification timed out. Please retry.')), SESSION_CHECK_TIMEOUT_MS);
+    operation.then(
+      value => { window.clearTimeout(timer); resolve(value); },
+      error => { window.clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string) {
+  const sourcePath = window.location.pathname;
+  router.replace(href);
+  window.setTimeout(() => {
+    if (window.location.pathname === sourcePath) window.location.replace(href);
+  }, 1_500);
+}
+
 function staffHome(session: StaffSession) {
   const permissions = Array.isArray(session.permissions) ? session.permissions : [];
   if (session.role === 'ADMIN') return '/';
@@ -19,11 +39,11 @@ export default function AdminSessionLandingPage() {
     setError('');
     setMessage('Checking your staff session…');
     try {
-      const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+      const response = await withSessionTimeout(fetch('/api/v1/auth/me', { cache: 'no-store' }));
       if (response.ok) {
         const identity = await response.json() as StaffSession;
         const home = identity.staffId ? staffHome(identity) : null;
-        if (home) { router.replace(home); return; }
+        if (home) { navigateWithFallback(router, home); return; }
         // Do not turn a stale or cross-portal cookie into a sign-out trap.
         // The admin login page will verify staff access using the isolated cookie.
         window.location.replace('/login');

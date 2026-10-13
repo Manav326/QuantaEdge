@@ -4,6 +4,25 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 type Identity = { role?: string; staffId?: number; studentId?: number; userId?: number };
+const SESSION_CHECK_TIMEOUT_MS = 10_000;
+
+function withSessionTimeout<T>(operation: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = window.setTimeout(() => reject(new Error('Session verification timed out. Please retry.')), SESSION_CHECK_TIMEOUT_MS);
+    operation.then(
+      value => { window.clearTimeout(timer); resolve(value); },
+      error => { window.clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string) {
+  const sourcePath = window.location.pathname;
+  router.replace(href);
+  window.setTimeout(() => {
+    if (window.location.pathname === sourcePath) window.location.replace(href);
+  }, 1_500);
+}
 
 function homeFor(identity: Identity) {
   if (identity.studentId || identity.role === 'STUDENT') return '/student';
@@ -19,19 +38,22 @@ export default function SessionLandingPage() {
     setError('');
     setMessage('Aapka secure session check ho raha hai…');
     try {
-      let response = await fetch('/api/v1/auth/me', {
-        headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
-      });
-      if (!response.ok) {
-        const studentResponse = await fetch('/api/v1/auth/me', {
-          headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+      const response = await withSessionTimeout((async () => {
+        let current = await fetch('/api/v1/auth/me', {
+          headers: { 'X-QE-Workspace': 'PARENT' }, cache: 'no-store',
         });
-        response = studentResponse;
-      }
+        if (!current.ok) {
+          const studentResponse = await fetch('/api/v1/auth/me', {
+            headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+          });
+          current = studentResponse;
+        }
+        return current;
+      })());
       if (response.ok) {
         const identity = await response.json() as Identity;
         const home = homeFor(identity);
-        if (home) { router.replace(home); return; }
+        if (home) { navigateWithFallback(router, home); return; }
         // A staff or stale legacy cookie should never force a learner to sign out.
         window.location.replace('/');
         return;

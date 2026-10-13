@@ -9,6 +9,39 @@ type Session = { role?: string; staffId?: number; studentId?: number; userId?: n
 type WorkspaceRole = 'student' | 'parent';
 let fetchRecoveryInstalled = false;
 let verifiedWorkspace: WorkspaceRole | null = null;
+const AUTH_REQUEST_TIMEOUT_MS = 8_000;
+const SESSION_CHECK_TIMEOUT_MS = 10_000;
+
+function boundedFetch(fetcher: typeof window.fetch, input: RequestInfo | URL, init?: RequestInit, timeoutMs = AUTH_REQUEST_TIMEOUT_MS) {
+  const inheritedSignal = init?.signal ?? (input instanceof Request ? input.signal : undefined);
+  const controller = new AbortController();
+  const relayAbort = () => controller.abort(inheritedSignal?.reason);
+  if (inheritedSignal?.aborted) controller.abort(inheritedSignal.reason);
+  else inheritedSignal?.addEventListener('abort', relayAbort, { once: true });
+  const timer = window.setTimeout(() => controller.abort(new DOMException('Request timed out.', 'TimeoutError')), timeoutMs);
+  return fetcher(input, { ...init, signal: controller.signal }).finally(() => {
+    window.clearTimeout(timer);
+    inheritedSignal?.removeEventListener('abort', relayAbort);
+  });
+}
+
+function withSessionTimeout<T>(operation: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = window.setTimeout(() => reject(new Error('Session verification timed out. Please retry.')), SESSION_CHECK_TIMEOUT_MS);
+    operation.then(
+      value => { window.clearTimeout(timer); resolve(value); },
+      error => { window.clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string) {
+  const sourcePath = window.location.pathname;
+  router.replace(href);
+  window.setTimeout(() => {
+    if (window.location.pathname === sourcePath) window.location.replace(href);
+  }, 1_500);
+}
 
 function workspaceRequest(input: RequestInfo | URL, init?: RequestInit): Request {
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
@@ -39,21 +72,23 @@ function installRefreshRecovery() {
     const requestInput = isApi ? workspaceRequest(input, init) : input;
     const requestInit = isApi ? undefined : init;
     const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
-    const response = await nativeFetch(requestInput, requestInit);
+    const response = isApi && target.pathname.startsWith('/api/v1/auth/')
+      ? await boundedFetch(nativeFetch, requestInput, requestInit)
+      : await nativeFetch(requestInput, requestInit);
     if (skip || response.status !== 401) return response;
     if (!refreshInFlight) {
-      refreshInFlight = nativeFetch(workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
+      refreshInFlight = boundedFetch(nativeFetch, workspaceRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }))
         .then(result => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     const refreshed = await refreshInFlight;
     if (!refreshed) {
       // Another tab may already have rotated the shared refresh cookie.
-      const crossTabRetry = await nativeFetch(retryInput);
+      const crossTabRetry = await boundedFetch(nativeFetch, retryInput);
       if (crossTabRetry.ok) return crossTabRetry;
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
       return crossTabRetry;
     }
-    const retriedResponse = await nativeFetch(retryInput);
+    const retriedResponse = await boundedFetch(nativeFetch, retryInput);
     if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:session-expired'));
     return retriedResponse;
   };
@@ -106,19 +141,22 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       }
       setReady(false);
       try {
-        let response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
-        // At the public landing page, either a parent or student may already be signed in.
-        // Probe the student scope separately so going Back does not hide an active student session.
-        if (!response.ok && pathname === '/') {
-          const studentResponse = await fetch('/api/v1/auth/me', {
-            headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
-          });
-          if (studentResponse.ok) response = studentResponse;
-        }
+        const response = await withSessionTimeout((async () => {
+          let current = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+          // At the public landing page, either a parent or student may already be signed in.
+          // Probe the student scope separately so going Back does not hide an active student session.
+          if (!current.ok && pathname === '/') {
+            const studentResponse = await fetch('/api/v1/auth/me', {
+              headers: { 'X-QE-Workspace': 'STUDENT' }, cache: 'no-store',
+            });
+            if (studentResponse.ok) current = studentResponse;
+          }
+          return current;
+        })());
         if (!alive) return;
         if (!response.ok) {
           verifiedWorkspace = null;
-          if (isProtected) router.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -128,19 +166,19 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
         const homeWorkspace = workspaceRole(home);
         if (isPublicEntry && home) {
           verifiedWorkspace = homeWorkspace;
-          router.replace(home);
+          navigateWithFallback(router, home);
           return;
         }
         if (protectedWorkspace && home && !pathname.startsWith(home)) {
           verifiedWorkspace = homeWorkspace;
-          router.replace(home);
+          navigateWithFallback(router, home);
           return;
         }
         if ((isPublicEntry || isProtected) && !home) {
           verifiedWorkspace = null;
           // A staff/legacy session must not block the learning site. Let the
           // appropriate public entry render or send a protected route to login.
-          if (isProtected) router.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
           else setReady(true);
           return;
         }
@@ -149,7 +187,7 @@ export default function SessionBoundary({ children }: { children: React.ReactNod
       } catch {
         if (alive) {
           verifiedWorkspace = null;
-          if (isProtected) router.replace(pathname.startsWith('/student') ? '/login/student' : '/login');
+          if (isProtected) navigateWithFallback(router, pathname.startsWith('/student') ? '/login/student' : '/login');
           else setReady(true);
         }
       }

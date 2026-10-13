@@ -12,6 +12,39 @@ type HrmsSession = {
 };
 
 let refreshRecoveryInstalled = false;
+const AUTH_REQUEST_TIMEOUT_MS = 8_000;
+const SESSION_CHECK_TIMEOUT_MS = 10_000;
+
+function boundedFetch(fetcher: typeof window.fetch, input: RequestInfo | URL, init?: RequestInit, timeoutMs = AUTH_REQUEST_TIMEOUT_MS) {
+  const inheritedSignal = init?.signal ?? (input instanceof Request ? input.signal : undefined);
+  const controller = new AbortController();
+  const relayAbort = () => controller.abort(inheritedSignal?.reason);
+  if (inheritedSignal?.aborted) controller.abort(inheritedSignal.reason);
+  else inheritedSignal?.addEventListener('abort', relayAbort, { once: true });
+  const timer = window.setTimeout(() => controller.abort(new DOMException('Request timed out.', 'TimeoutError')), timeoutMs);
+  return fetcher(input, { ...init, signal: controller.signal }).finally(() => {
+    window.clearTimeout(timer);
+    inheritedSignal?.removeEventListener('abort', relayAbort);
+  });
+}
+
+function withSessionTimeout<T>(operation: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = window.setTimeout(() => reject(new Error('Session verification timed out. Please retry.')), SESSION_CHECK_TIMEOUT_MS);
+    operation.then(
+      value => { window.clearTimeout(timer); resolve(value); },
+      error => { window.clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+function navigateWithFallback(router: ReturnType<typeof useRouter>, href: string) {
+  const sourcePath = window.location.pathname;
+  router.replace(href);
+  window.setTimeout(() => {
+    if (window.location.pathname === sourcePath) window.location.replace(href);
+  }, 1_500);
+}
 
 function hrmsRequest(input: RequestInfo | URL, init?: RequestInit): Request {
   const headers = new Headers(input instanceof Request ? input.headers : undefined);
@@ -48,22 +81,24 @@ function installHrmsRefreshRecovery() {
     const requestInput = isApi ? hrmsRequest(input, init) : input;
     const requestInit = isApi ? undefined : init;
     const retryInput = requestInput instanceof Request ? requestInput.clone() : requestInput;
-    const response = await nativeFetch(requestInput, requestInit);
+    const response = isApi && target.pathname.startsWith('/api/v1/auth/')
+      ? await boundedFetch(nativeFetch, requestInput, requestInit)
+      : await nativeFetch(requestInput, requestInit);
     // Refresh only on an authentication failure. A 403 is an authorization decision.
     if (skip || response.status !== 401) return response;
 
     if (!refreshInFlight) {
-      refreshInFlight = nativeFetch(
-        hrmsRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }),
+      refreshInFlight = boundedFetch(
+        nativeFetch, hrmsRequest('/api/v1/auth/refresh', { method: 'POST', cache: 'no-store' }),
       ).then((result) => result.ok).catch(() => false).finally(() => { refreshInFlight = null; });
     }
     if (!await refreshInFlight) {
       // Another tab may already have rotated the refresh cookie; retry once before signing out.
-      const crossTabRetry = await nativeFetch(retryInput);
+      const crossTabRetry = await boundedFetch(nativeFetch, retryInput);
       if (crossTabRetry.status === 401) window.dispatchEvent(new Event('qe:hrms-session-expired'));
       return crossTabRetry;
     }
-    const retriedResponse = await nativeFetch(retryInput);
+    const retriedResponse = await boundedFetch(nativeFetch, retryInput);
     if (retriedResponse.status === 401) window.dispatchEvent(new Event('qe:hrms-session-expired'));
     return retriedResponse;
   };
@@ -90,37 +125,37 @@ export default function PeopleSessionBoundary({ children }: { children: React.Re
     const check = async (force = false) => {
       if (!force) setReady(false);
       try {
-        const response = await fetch('/api/v1/auth/me', { cache: 'no-store' });
+        const response = await withSessionTimeout(fetch('/api/v1/auth/me', { cache: 'no-store' }));
         if (!alive) return;
         if (!response.ok) {
           if (isLogin) setReady(true);
-          else router.replace('/login');
+          else navigateWithFallback(router, '/login');
           return;
         }
         const session = await response.json() as HrmsSession;
         if (!alive) return;
         if (!session.staffId || session.workspace !== 'HRMS') {
           if (isLogin) setReady(true);
-          else router.replace('/login');
+          else navigateWithFallback(router, '/login');
           return;
         }
         if (session.mustChangePassword && !isPasswordChange) {
-          router.replace('/change-password');
+          navigateWithFallback(router, '/change-password');
           return;
         }
         if (!session.mustChangePassword && isPasswordChange) {
-          router.replace('/');
+          navigateWithFallback(router, '/');
           return;
         }
         if (isLogin) {
-          router.replace(session.mustChangePassword ? '/change-password' : '/');
+          navigateWithFallback(router, session.mustChangePassword ? '/change-password' : '/');
           return;
         }
         setReady(true);
       } catch {
         if (!alive) return;
         if (isLogin) setReady(true);
-        else router.replace('/login');
+        else navigateWithFallback(router, '/login');
       }
     };
 
