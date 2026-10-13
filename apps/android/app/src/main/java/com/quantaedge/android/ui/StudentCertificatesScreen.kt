@@ -45,7 +45,7 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
+fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long = 0L, onBack: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -95,7 +95,11 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
             certificates = issued.optJSONArray("items").toObjectList()
             val eligible = ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
             eligibleAssessments = eligible.optJSONArray("items").toObjectList()
-            if (selectedAttemptId.isBlank() && eligibleAssessments.isNotEmpty()) {
+            val requestedAttempt = eligibleAssessments.firstOrNull { it.optLongValue("attempt_id", "attemptId", "id") == initialAssessmentAttemptId }
+            if (initialAssessmentAttemptId > 0L && requestedAttempt != null) {
+                selectedAchievement = "ASSESSMENT_PASS"
+                selectedAttemptId = initialAssessmentAttemptId.toString()
+            } else if (selectedAttemptId.isBlank() && eligibleAssessments.isNotEmpty()) {
                 selectedAttemptId = eligibleAssessments.first().optLongValue("attempt_id", "attemptId", "id").takeIf { it > 0 }?.toString().orEmpty()
             }
         } catch (e: Exception) {
@@ -105,7 +109,7 @@ fun StudentCertificatesScreen(language: String, onBack: () -> Unit) {
         }
     }
 
-    LaunchedEffect(language) { reload() }
+    LaunchedEffect(language, initialAssessmentAttemptId) { reload() }
 
     fun verifyScannedCertificate(code: String) {
         scope.launch {
