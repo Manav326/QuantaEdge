@@ -7,7 +7,8 @@ import styles from './Classes.module.css';
 
 type Chapter = {chapter_id:number;chapter_code:string;chapter_name:string};
 type Staff = {staff_id:number;display_name:string;role:string};
-type LiveSession = {session_id:number;title:string;description?:string;provider:string;starts_at:string;ends_at:string;status:string;host_staff_id?:number|null;host_staff_name?:string|null;class_code:string;subject_code:string;subject_name:string;chapter_id?:number|null;chapter_name?:string|null;attendee_count?:number;published_recording_count?:number};
+type LiveSession = {session_id:number;title:string;description?:string;provider:string;starts_at:string;ends_at:string;status:string;provider_operation_status?:string;provider_error_message?:string|null;provider_event_id?:string|null;teaching_assignment_id?:number|null;assigned_teacher_name?:string|null;host_staff_id?:number|null;host_staff_name?:string|null;class_code:string;subject_code:string;subject_name:string;chapter_id?:number|null;chapter_name?:string|null;attendee_count?:number;published_recording_count?:number};
+type TeachingAssignmentOption = {teaching_assignment_id:number;employee_id:number;employee_name:string;employee_number:string;linked_staff_account_id?:number|null;period_name:string;effective_start:string;effective_end:string};
 type Recording = {recorded_class_id:number;title:string;description?:string;original_filename:string;media_type:string;file_size_bytes:number;sha256:string;duration_seconds?:number|null;status:string;class_session_id?:number|null;session_title?:string|null;class_code:string;subject_code:string;subject_name:string;chapter_id?:number|null;chapter_name?:string|null};
 
 async function api(url:string,init:RequestInit={}) {
@@ -23,6 +24,8 @@ function localTime(offsetMinutes:number){
   const d=new Date(Date.now()+offsetMinutes*60000);
   return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
 }
+function localInput(value?:string|null){if(!value)return '';const d=new Date(value);return Number.isNaN(d.getTime())?'':new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
+function indiaDate(value:string){const d=new Date(value);return Number.isNaN(d.getTime())?'':d.toLocaleDateString('en-CA',{timeZone:'Asia/Kolkata'});}
 function dateText(value?:string|null){
   if(!value)return '—';
   const date=new Date(value);
@@ -49,6 +52,11 @@ export default function ClassesPage(){
   const [revealedUrls,setRevealedUrls]=useState<Record<number,string>>({});
   const [chapters,setChapters]=useState<Chapter[]>([]);
   const [staff,setStaff]=useState<Staff[]>([]);
+  const [teachingAssignments,setTeachingAssignments]=useState<TeachingAssignmentOption[]>([]);
+  const [teachingAssignmentId,setTeachingAssignmentId]=useState('');
+  const [reschedulingSession,setReschedulingSession]=useState<number|null>(null);
+  const [rescheduleStartAt,setRescheduleStartAt]=useState('');
+  const [rescheduleEndAt,setRescheduleEndAt]=useState('');
   const [title,setTitle]=useState('');
   const [description,setDescription]=useState('');
   const [provider,setProvider]=useState('GOOGLE_MEET');
@@ -100,19 +108,42 @@ export default function ClassesPage(){
   },[classCode,subjectCode,statusFilter,sessionPage,recordingPage,sessionPageSize,recordingPageSize]);
   useEffect(()=>{void load();},[load]);
 
+  const loadApprovedAssignments=useCallback(async()=>{
+    if(!startAt){setTeachingAssignments([]);return;}
+    const params=new URLSearchParams({classCode,subjectCode,onDate:indiaDate(startAt)});
+    try{
+      const rows=await api('/api/v1/admin/approved-teaching-assignments?'+params.toString());
+      const list=Array.isArray(rows)?rows:[];
+      setTeachingAssignments(list);
+      setTeachingAssignmentId(current=>list.some((item:TeachingAssignmentOption)=>String(item.teaching_assignment_id)===current)?current:'');
+    }catch{
+      setTeachingAssignments([]);
+      setTeachingAssignmentId('');
+    }
+  },[classCode,subjectCode,startAt]);
+  useEffect(()=>{void loadApprovedAssignments();},[loadApprovedAssignments]);
+
   async function createSession(){
-    if(!title.trim()||!joinUrl.trim()||!startAt||!endAt){setError('Complete the live class title, secure meeting URL, start time, and end time.');return;}
+    if(!title.trim()||(provider!=='GOOGLE_MEET'&&!joinUrl.trim())||!startAt||!endAt){setError(provider==='GOOGLE_MEET'?'Complete the title and start/end times; choose an approved teaching assignment.':'Complete the title, secure meeting URL, start time, and end time.');return;}
+    if(provider==='GOOGLE_MEET'&&!teachingAssignmentId){setError('Select an approved teaching assignment effective on this date before creating a Google Meet class.');return;}
     if(new Date(endAt).getTime()<=new Date(startAt).getTime()){setError('End time must be after the start time.');return;}
     setBusy(true);setError('');setNotice('');
     try{
-      await api('/api/v1/admin/live-classes',{method:'POST',body:JSON.stringify({
+      const result=await api('/api/v1/admin/live-classes',{method:'POST',body:JSON.stringify({
         title:title.trim(),description:description.trim(),classCode,subjectCode,
-        chapterId:chapterId?Number(chapterId):null,provider,joinUrl:joinUrl.trim(),
+        chapterId:chapterId?Number(chapterId):null,provider,joinUrl:provider==='GOOGLE_MEET'?null:joinUrl.trim(),
+        teachingAssignmentId:teachingAssignmentId?Number(teachingAssignmentId):null,
         startsAt:new Date(startAt).toISOString(),endsAt:new Date(endAt).toISOString(),
         hostStaffId:hostStaffId?Number(hostStaffId):null
       })});
-      setTitle('');setDescription('');setJoinUrl('');setHostStaffId('');setChapterId('');
-      setNotice('Live class scheduled. Its private join link is returned to enrolled students only during the join window.');
+      setTitle('');setDescription('');setJoinUrl('');setHostStaffId('');setChapterId('');setTeachingAssignmentId('');
+      if(provider==='GOOGLE_MEET'&&result.provider_operation_status!=='CREATED'){
+        setNotice('The class schedule was saved, but Google Meet is '+String(result.provider_operation_status||'not verified').toLowerCase()+'. '+String(result.provider_error_message||'Retry Meet setup from the session card after checking the Google configuration.'));
+      }else if(provider==='GOOGLE_MEET'){
+        setNotice('The class and Google Meet event are created and verified. The private link is available only to authorized staff and eligible students during the join window.');
+      }else{
+        setNotice('Live class scheduled. Its private join link is returned to eligible students only during the join window.');
+      }
       await load();
     }catch(e){setError(e instanceof Error?e.message:'The live class could not be scheduled.');}
     finally{setBusy(false);}
@@ -125,7 +156,11 @@ export default function ClassesPage(){
     setBusy(true);setError('');setNotice('');
     try{
       const result=await api('/api/v1/admin/live-classes/'+session.session_id+'/meeting-link');
-      setRevealedUrls(old=>({...old,[session.session_id]:String(result.joinUrl||'')}));
+      if(!result.joinUrl){
+        setNotice(String(result.errorMessage||('Meeting link is not verified yet. Integration status: '+String(result.integrationStatus||'unknown')+'.')));
+        return;
+      }
+      setRevealedUrls(old=>({...old,[session.session_id]:String(result.joinUrl)}));
     }catch(e){setError(e instanceof Error?e.message:'Meeting link could not be retrieved.');}
     finally{setBusy(false);}
   }
@@ -138,12 +173,52 @@ export default function ClassesPage(){
   async function changeSessionStatus(session:LiveSession,status:'LIVE'|'COMPLETED'|'CANCELLED'|'SCHEDULED'){
     setBusy(true);setError('');setNotice('');
     try{
-      await api('/api/v1/admin/live-classes/'+session.session_id+'/status',{method:'PATCH',body:JSON.stringify({status})});
-      setNotice('“'+session.title+'” is now '+status.toLowerCase()+'.');
+      const result=await api('/api/v1/admin/live-classes/'+session.session_id+'/status',{method:'PATCH',body:JSON.stringify({status})});
+      setNotice(result.provider_operation_status==='FAILED'&&result.provider_error_message
+        ?'“'+session.title+'” is '+status.toLowerCase()+' locally, but Google Meet needs attention: '+result.provider_error_message
+        :'“'+session.title+'” is now '+status.toLowerCase()+'.');
       await load();
     }catch(e){setError(e instanceof Error?e.message:'The live class status could not be changed.');}
     finally{setBusy(false);}
   }
+  async function retryGoogleMeet(session:LiveSession){
+    setBusy(true);setError('');setNotice('');
+    try{
+      const result=await api('/api/v1/admin/live-classes/'+session.session_id+'/google-meet/retry',{method:'POST'});
+      setNotice(result.provider_operation_status==='CREATED'
+        ?'Google Meet is verified and ready for eligible students.'
+        :result.provider_operation_status==='CANCELLED'
+          ?'Google Calendar cancellation is confirmed.'
+          :'Google Meet status: '+String(result.provider_operation_status||'unknown')+'. '+String(result.provider_error_message||'Retry or check the integration again.'));
+      await load();
+    }catch(e){setError(e instanceof Error?e.message:'Google Meet retry failed.');}
+    finally{setBusy(false);}
+  }
+
+  function beginReschedule(session:LiveSession){
+    setReschedulingSession(session.session_id);
+    setRescheduleStartAt(localInput(session.starts_at));
+    setRescheduleEndAt(localInput(session.ends_at));
+  }
+
+  async function saveReschedule(session:LiveSession){
+    if(!rescheduleStartAt||!rescheduleEndAt||new Date(rescheduleEndAt)<=new Date(rescheduleStartAt)){
+      setError('Enter a valid new start and end time.');return;
+    }
+    setBusy(true);setError('');setNotice('');
+    try{
+      const result=await api('/api/v1/admin/live-classes/'+session.session_id+'/schedule',{method:'PUT',body:JSON.stringify({
+        startsAt:new Date(rescheduleStartAt).toISOString(),endsAt:new Date(rescheduleEndAt).toISOString()
+      })});
+      setNotice(result.provider_operation_status==='PENDING'
+        ?'The schedule was saved, but Google Meet is pending. Verify the integration before students join.'
+        :'Live class rescheduled successfully.');
+      setReschedulingSession(null);
+      await load();
+    }catch(e){setError(e instanceof Error?e.message:'The class could not be rescheduled.');}
+    finally{setBusy(false);}
+  }
+
   async function uploadRecording(){
     if(!file){setError('Choose a recording file first.');return;}
     if(!recordingTitle.trim()){setError('Enter a title students will recognize.');return;}
@@ -198,7 +273,8 @@ export default function ClassesPage(){
             <label className={styles.wide}>Class title<input value={title} onChange={e=>setTitle(e.target.value)} placeholder="e.g. Live revision — Fractions and decimals"/></label>
             <label>Meeting provider<select value={provider} onChange={e=>setProvider(e.target.value)}><option value="GOOGLE_MEET">Google Meet</option><option value="ZOOM">Zoom</option><option value="MICROSOFT_TEAMS">Microsoft Teams</option><option value="CUSTOM">Other secure meeting</option></select></label>
             <label>Host staff (optional)<select value={hostStaffId} onChange={e=>setHostStaffId(e.target.value)}><option value="">Select host…</option>{staff.map(person=><option key={person.staff_id} value={person.staff_id}>{person.display_name} · {person.role}</option>)}</select></label>
-            <label className={styles.wide}>Private meeting URL<input type="url" value={joinUrl} onChange={e=>setJoinUrl(e.target.value)} placeholder="https://meet.google.com/…"/></label>
+            {provider!=='GOOGLE_MEET'?<label className={styles.wide}>Private meeting URL<input type="url" required value={joinUrl} onChange={e=>setJoinUrl(e.target.value)} placeholder="https://…"/></label>:<p className={styles.empty}>Google Meet is created through QuantaEdge using the configured Google Calendar connection. QuantaEdge verifies the returned Meet URL and records pending or failed external operations.</p>}
+            <label className={styles.wide}>Approved teacher assignment<select value={teachingAssignmentId} required={provider==='GOOGLE_MEET'} onChange={e=>{setTeachingAssignmentId(e.target.value);const option=teachingAssignments.find(a=>String(a.teaching_assignment_id)===e.target.value);if(option?.linked_staff_account_id)setHostStaffId(String(option.linked_staff_account_id));}}><option value="">Choose assignment effective on this date…</option>{teachingAssignments.map(a=><option key={a.teaching_assignment_id} value={a.teaching_assignment_id}>{a.employee_name} · {a.employee_number} · {a.period_name} ({String(a.effective_start).slice(0,10)}–{String(a.effective_end).slice(0,10)})</option>)}</select>{provider==='GOOGLE_MEET'&&teachingAssignments.length===0&&<small>No approved, effective assignment is available for this class, subject and date. Propose and approve it in People Operations first.</small>}</label>
             <label>Start date and time<input type="datetime-local" value={startAt} onChange={e=>setStartAt(e.target.value)}/></label>
             <label>End date and time<input type="datetime-local" value={endAt} onChange={e=>setEndAt(e.target.value)}/></label>
             <label>Chapter (optional)<select value={chapterId} onChange={e=>setChapterId(e.target.value)}><option value="">Whole subject</option>{chapters.map(ch=><option key={ch.chapter_id} value={ch.chapter_id}>{ch.chapter_code} — {ch.chapter_name}</option>)}</select></label>
@@ -208,7 +284,7 @@ export default function ClassesPage(){
         </section>
         <section className={styles.panel}>
           <div className={styles.panelHeading}><div><span>SESSION MANAGEMENT</span><h2>Scheduled and completed classes</h2><p>Change a session to Live when the meeting opens, then mark it completed when finished. Attendance records are retained.</p></div></div>
-          {loading?<p className={styles.empty}>Loading classes…</p>:sessions.length===0?<div className={styles.empty}><b>No live class records in this view</b><span>Schedule a session above to make it available to enrolled students.</span></div>:<div className={styles.list}>{sessions.map(session=><article className={styles.card} key={session.session_id}><span className={styles.sessionIcon}>◷</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{session.title}</h3><span className={styles['status'+session.status]}>{session.status}</span></div><p>{session.class_code} · {session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><small>{dateText(session.starts_at)} – {dateText(session.ends_at)}</small><small>Provider: {session.provider.replaceAll('_',' ')} · Host: {session.host_staff_name||'Not assigned'}</small><small>{session.attendee_count||0} attendees · {session.published_recording_count||0} published recording(s)</small>{session.description&&<small>{session.description}</small>}{revealedUrls[session.session_id]&&<div className={styles.privateLink}><small>PRIVATE MEETING URL · STAFF ONLY</small><input aria-label="Private meeting URL" readOnly value={revealedUrls[session.session_id]}/><button type="button" className={styles.secondaryButton} onClick={()=>void copyMeetingLink(session.session_id)}>Copy link</button><a href={revealedUrls[session.session_id]} target="_blank" rel="noreferrer">Open meeting ↗</a></div>}</div><div className={styles.actions}><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void revealMeetingLink(session)}>{revealedUrls[session.session_id]?'Hide link':'Reveal link'}</button>{session.status==='SCHEDULED'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'LIVE')}>Mark live</button>}{session.status==='LIVE'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'COMPLETED')}>Complete</button>}{['SCHEDULED','LIVE'].includes(session.status)&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'CANCELLED')}>Cancel</button>}{session.status==='CANCELLED'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'SCHEDULED')}>Restore</button>}</div></article>)}</div>}
+          {loading?<p className={styles.empty}>Loading classes…</p>:sessions.length===0?<div className={styles.empty}><b>No live class records in this view</b><span>Schedule a session above to make it available to enrolled students.</span></div>:<div className={styles.list}>{sessions.map(session=><article className={styles.card} key={session.session_id}><span className={styles.sessionIcon}>◷</span><div className={styles.cardBody}><div className={styles.cardTitle}><h3>{session.title}</h3><span className={styles['status'+session.status]}>{session.status}</span></div><p>{session.class_code} · {session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><small>{dateText(session.starts_at)} – {dateText(session.ends_at)}</small><small>Provider: {session.provider.replaceAll('_',' ')} · Host: {session.host_staff_name||'Not assigned'}</small><small>{session.attendee_count||0} attendees · {session.published_recording_count||0} published recording(s)</small>{session.provider==='GOOGLE_MEET'&&<small>Google Meet: {session.provider_operation_status||'UNKNOWN'}{session.provider_error_message?' · '+session.provider_error_message:''}</small>}{session.description&&<small>{session.description}</small>}{revealedUrls[session.session_id]&&<div className={styles.privateLink}><small>PRIVATE MEETING URL · STAFF ONLY</small><input aria-label="Private meeting URL" readOnly value={revealedUrls[session.session_id]}/><button type="button" className={styles.secondaryButton} onClick={()=>void copyMeetingLink(session.session_id)}>Copy link</button><a href={revealedUrls[session.session_id]} target="_blank" rel="noreferrer">Open meeting ↗</a></div>}</div><div className={styles.actions}><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void revealMeetingLink(session)}>{revealedUrls[session.session_id]?'Hide link':'Reveal link'}</button>{session.provider==='GOOGLE_MEET'&&(['FAILED','PENDING'].includes(session.provider_operation_status||'')||session.status==='CANCELLED'&&session.provider_operation_status==='FAILED')&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void retryGoogleMeet(session)}>{session.status==='CANCELLED'?'Retry cancellation':'Check / retry Meet'}</button>}{session.status==='SCHEDULED'&&(session.provider!=='GOOGLE_MEET'||session.provider_operation_status==='CREATED')&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>beginReschedule(session)}>{reschedulingSession===session.session_id?'Hide reschedule':'Reschedule'}</button>}{session.status==='SCHEDULED'&&<button type="button" className={styles.primaryButton} disabled={busy||(session.provider==='GOOGLE_MEET'&&session.provider_operation_status!=='CREATED')} onClick={()=>void changeSessionStatus(session,'LIVE')}>Mark live</button>}{session.status==='LIVE'&&<button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'COMPLETED')}>Complete</button>}{['SCHEDULED','LIVE'].includes(session.status)&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void changeSessionStatus(session,'CANCELLED')}>Cancel</button>}</div>{reschedulingSession===session.session_id&&<div className={styles.fields}><label>New start time<input type="datetime-local" value={rescheduleStartAt} onChange={e=>setRescheduleStartAt(e.target.value)}/></label><label>New end time<input type="datetime-local" value={rescheduleEndAt} onChange={e=>setRescheduleEndAt(e.target.value)}/></label><div className={styles.submitBar}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void saveReschedule(session)}>{busy?'Saving…':'Save schedule'}</button><button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>setReschedulingSession(null)}>Discard</button></div></div></article>)}</div>}
         <PremiumPagination page={sessionPage} total={sessionsTotal} pageSize={sessionPageSize}
           onPageChange={setSessionPage} onPageSizeChange={size=>{setSessionPageSize(size);setSessionPage(0);}}
           itemLabel="live classes" loading={loading} />
