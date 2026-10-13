@@ -8,7 +8,7 @@ plugins {
 
 val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .orElse(providers.environmentVariable("QUANTAEDGE_API_BASE_URL"))
-    .orElse("http://10.0.2.2:8080/")
+    .orElse("http://192.168.31.47:8080/")
     .get()
     .let { if (it.endsWith("/")) it else "$it/" }
 
@@ -64,37 +64,14 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
+val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-icon.png")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
     from(brandWordmark)
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
     rename { "quantaedge_wordmark.png" }
     doFirst {
         check(brandWordmark.asFile.exists()) {
-            "Approved QuantaEdge wordmark is missing at " + brandWordmark.asFile.absolutePath
-        }
-    }
-    doLast {
-        // The source wordmark is an indexed-colour PNG (colour type 3). Android's
-        // drawable decoder can fail on this asset on some devices. Re-encode it
-        // as a standard 32-bit RGBA PNG before it enters the APK resources.
-        val target = generatedBrandingRes.get()
-            .file("drawable-nodpi/quantaedge_wordmark.png").asFile
-        val sourceImage = javax.imageio.ImageIO.read(target)
-            ?: error("Unable to decode approved QuantaEdge wordmark: " + target.absolutePath)
-        val normalized = java.awt.image.BufferedImage(
-            sourceImage.width,
-            sourceImage.height,
-            java.awt.image.BufferedImage.TYPE_INT_ARGB
-        )
-        val graphics = normalized.createGraphics()
-        try {
-            graphics.drawImage(sourceImage, 0, 0, null)
-        } finally {
-            graphics.dispose()
-        }
-        check(javax.imageio.ImageIO.write(normalized, "png", target)) {
-            "Unable to normalize QuantaEdge wordmark PNG: " + target.absolutePath
+            "QuantaEdge Android branding asset is missing at " + brandWordmark.asFile.absolutePath
         }
     }
 }

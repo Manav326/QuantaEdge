@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,16 +20,23 @@ public class HrEmployeeController {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final StaffAuditService audit;
+  private final HrReportingScopeService reportingScope;
 
-  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+  @Autowired
+  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit,HrReportingScopeService reportingScope) {
     this.jdbc=jdbc;
     this.authorization=authorization;
     this.audit=audit;
+    this.reportingScope=reportingScope;
+  }
+  public HrEmployeeController(JdbcTemplate jdbc, AuthorizationService authorization, StaffAuditService audit) {
+    this(jdbc,authorization,audit,new HrReportingScopeService(jdbc,authorization));
   }
 
   @GetMapping("/organization")
   public Map<String,Object> organization(@RequestAttribute(value="authContext",required=false) AuthContext context) {
-    requireView(context);
+    if(!authorization.hasPermission(context,"HR_EMPLOYEE_VIEW")&&!authorization.hasPermission(context,"HR_APPROVAL_POLICY_MANAGE"))
+      throw new SecurityException("Permission required: HR_EMPLOYEE_VIEW or HR_APPROVAL_POLICY_MANAGE");
     return jdbc.queryForMap("select id,public_id,name,legal_name,timezone,active,working_days_per_week from hr_organization order by id limit 1");
   }
 
@@ -121,7 +129,7 @@ public class HrEmployeeController {
       Boolean cycle=jdbc.queryForObject("""
         with recursive ancestors(id,parent_department_id) as (
           select id,parent_department_id from hr_department where id=? and organization_id=?
-          union all
+          union
           select p.id,p.parent_department_id from hr_department p
           join ancestors a on p.id=a.parent_department_id where p.organization_id=?
         )
@@ -206,6 +214,12 @@ public class HrEmployeeController {
     int safeOffset=Math.max(0,Math.min(offset,1000000));
     String term="%"+(q==null?"":q.trim().replace("%","\\%").replace("_","\\_"))+"%";
     List<Map<String,Object>> items=jdbc.queryForList("""
+      with recursive reporting(id,organization_id) as (
+        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
+          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+      )
       select e.id,e.public_id,e.employee_number,e.display_name,e.email,e.phone_e164,
              e.joining_date,e.probation_end_date,e.employment_status,e.exit_date,e.employment_type_code,
              e.department_id,d.name as department_name,e.designation_id,g.name as designation_name,
@@ -217,22 +231,31 @@ public class HrEmployeeController {
       left join hr_employee m on m.id=e.manager_employee_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
       order by e.display_name,e.id
       limit ? offset ?
-      """,includeInactive,q==null?"":q.trim(),term,term,term,term,safeLimit,safeOffset);
+      """,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId(),safeLimit,safeOffset);
     Long total=jdbc.queryForObject("""
+      with recursive reporting(id,organization_id) as (
+        select child.id,child.organization_id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?)
+          and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+        union select child.id,child.organization_id from hr_employee child join reporting parent on child.manager_employee_id=parent.id and child.organization_id=parent.organization_id and child.organization_id=parent.organization_id
+          where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')
+      )
       select count(*) from hr_employee e
       left join hr_department d on d.id=e.department_id
       left join hr_designation g on g.id=e.designation_id
       where (? or e.employment_status not in ('INACTIVE','SEPARATED'))
         and (?='' or e.display_name ilike ? or e.employee_number ilike ? or coalesce(d.name,'') ilike ? or coalesce(g.name,'') ilike ?)
-      """,Long.class,includeInactive,q==null?"":q.trim(),term,term,term,term);
+        and (not exists(select 1 from staff_permission_grant where staff_id=? and permission_key='HR_MANAGER_TEAM_VIEW') or e.id in (select id from reporting))
+      """,Long.class,context.staffId(),includeInactive,q==null?"":q.trim(),term,term,term,term,context.staffId());
     return Map.of("items",items,"total",total==null?0L:total,"limit",safeLimit,"offset",safeOffset);
   }
 
   @GetMapping("/employees/{id}")
   public Map<String,Object> employee(@PathVariable long id,@RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireView(context);
+    reportingScope.requireEmployeeAccess(context,id);
     return employeeById(id);
   }
 
@@ -269,6 +292,15 @@ public class HrEmployeeController {
     Long department=optionalLong(body.get("departmentId"));
     Long designation=optionalLong(body.get("designationId"));
     Long manager=optionalLong(body.get("managerEmployeeId"));
+    if(reportingScope.isManagerScoped(context)) {
+      List<Map<String,Object>> linked=jdbc.queryForList("select id,organization_id from hr_employee where linked_staff_account_id=? and employment_status not in ('SEPARATED','INACTIVE','DRAFT')",context.staffId());
+      if(linked.isEmpty())throw new ResponseStatusException(HttpStatus.FORBIDDEN,"A manager must have an active linked employee record to create reporting employees.");
+      long ownEmployeeId=((Number)linked.getFirst().get("id")).longValue();
+      long ownOrganizationId=((Number)linked.getFirst().get("organization_id")).longValue();
+      if(orgId!=ownOrganizationId)throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Organization not found.");
+      if(manager!=null&&manager.longValue()!=ownEmployeeId)throw badRequest("Managers may create employees only in their own reporting line.");
+      manager=ownEmployeeId;
+    }
     validateReference("hr_department",department,orgId,"Department");
     validateReference("hr_designation",designation,orgId,"Designation");
     validateManager(manager,null,orgId);
@@ -277,6 +309,11 @@ public class HrEmployeeController {
     String status=String.valueOf(body.getOrDefault("employmentStatus","ACTIVE")).toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status)) throw badRequest("Choose a supported employment status.");
     if("SEPARATED".equals(status)&&exit==null) throw badRequest("A separated employee must have an exit date.");
+    if(!"DRAFT".equals(status)) {
+      List<Map<String,Object>> rules=jdbc.queryForList("select required_permission_key from hr_lifecycle_approval_rule where organization_id=? and transition_key=? and from_status='DRAFT' and to_status=? and active=true",orgId,"DRAFT_TO_"+status,status);
+      if(rules.isEmpty())throw new ResponseStatusException(HttpStatus.CONFLICT,"No active approval rule is configured for DRAFT -> "+status+". Ask an approval-policy administrator to configure it.");
+      authorization.requirePermission(context,String.valueOf(rules.getFirst().get("required_permission_key")));
+    }
     String number="QE-EMP-"+String.format("%06d",jdbc.queryForObject("select nextval('hr_employee_number_seq')",Long.class));
     try {
       Long id=jdbc.queryForObject("""
@@ -301,6 +338,7 @@ public class HrEmployeeController {
   public Map<String,Object> updateEmployee(@PathVariable long id,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
+    reportingScope.requireEmployeeAccess(context,id);
     Map<String,Object> before=employeeById(id);
     String name=required(body.get("displayName"),120,"Employee name");
     String email=optionalText(body.get("email"),254);
@@ -341,6 +379,7 @@ public class HrEmployeeController {
   public Map<String,Object> updateStatus(@PathVariable long id,@RequestBody Map<String,Object> body,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireManage(context);
+    reportingScope.requireEmployeeAccess(context,id);
     Map<String,Object> before=employeeById(id);
     String status=required(body.get("employmentStatus"),24,"Employment status").toUpperCase();
     if(!List.of("DRAFT","ACTIVE","ON_LEAVE","NOTICE_PERIOD","SEPARATED","INACTIVE").contains(status))
@@ -351,7 +390,19 @@ public class HrEmployeeController {
     LocalDate joining=((java.sql.Date)before.get("joining_date")).toLocalDate();
     LocalDate probation=before.get("probation_end_date") instanceof java.sql.Date existingProbation ? existingProbation.toLocalDate() : null;
     validateEmploymentDates(joining,probation,exit);
-    validateEmploymentStatusTransition(String.valueOf(before.get("employment_status")),status,exit);
+    String previousStatus=String.valueOf(before.get("employment_status"));
+    validateEmploymentStatusTransition(previousStatus,status,exit);
+    if(!previousStatus.equals(status)) {
+      long organizationId=((Number)before.get("organization_id")).longValue();
+      String transitionKey=previousStatus+"_TO_"+status;
+      List<Map<String,Object>> rules=jdbc.queryForList("""
+        select required_permission_key from hr_lifecycle_approval_rule
+        where organization_id=? and transition_key=? and from_status=? and to_status=? and active=true
+        """,organizationId,transitionKey,previousStatus,status);
+      if(rules.isEmpty()) throw new ResponseStatusException(HttpStatus.CONFLICT,
+        "No active approval rule is configured for "+previousStatus+" -> "+status+". Ask an approval-policy administrator to configure it.");
+      authorization.requirePermission(context,String.valueOf(rules.getFirst().get("required_permission_key")));
+    }
     jdbc.update("update hr_employee set employment_status=?,exit_date=?,updated_by_staff_id=?,updated_at=now() where id=?",
       status,exit==null?null:Date.valueOf(exit),context.staffId(),id);
     Map<String,Object> after=employeeById(id);
