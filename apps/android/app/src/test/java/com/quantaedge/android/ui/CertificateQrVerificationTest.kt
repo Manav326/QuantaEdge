@@ -8,6 +8,12 @@ class CertificateQrVerificationTest {
     private val code = "QE-2026-ABCDEF1234567890"
 
     @Test
+    fun acceptsTheRawCertificateNumberFromASeparateLinearBarcode() {
+        assertEquals(code, parseQuantaEdgeCertificateQr(code, false))
+        assertEquals(code, parseQuantaEdgeCertificateQr(code.lowercase(), false))
+    }
+
+    @Test
     fun acceptsCanonicalProductionVerificationUrl() {
         assertEquals(
             code,

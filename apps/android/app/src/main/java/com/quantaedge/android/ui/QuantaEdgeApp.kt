@@ -2077,8 +2077,8 @@ private fun AssessmentAttemptScreen(
                     Text(if (language == "hi") "इस result का certificate" else "Certificate for this result",
                         style = MaterialTheme.typography.titleSmall)
                     Text(
-                        if (language == "hi") "Admin-created test, qualifying released score और सभी published lessons पूरे होना ज़रूरी है।"
-                        else "Requires an admin-created test, a qualifying released score and completion of all published lessons.",
+                        if (language == "hi") "Admin-created test, जारी किया गया qualifying result, pass mark और active subject enrollment ज़रूरी है।"
+                        else "Requires a released passing result from an admin-created test and an active subject enrollment.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.secondary
                     )
@@ -2104,7 +2104,7 @@ private fun AssessmentAttemptScreen(
                             val reason = certificate?.optString("eligibility_reason").orEmpty()
                             val message = when (reason) {
                                 "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
-                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Test certificate के लिए सभी lessons पूरे करना ज़रूरी नहीं है; सभी published lessons केवल subject-completion certificate के लिए पूरे करें।" else "A test certificate does not require completing every lesson; all published lessons are required only for a subject-completion certificate."
                                 "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold से कम है।" else "The score is below the certificate threshold."
                                 "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
                                 "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject के published lessons उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
@@ -2288,7 +2288,7 @@ private fun ResultsScreen(
                                             "RESULT_NOT_RELEASED" -> if (language == "hi") "Final result जारी होने के बाद पात्रता जाँची जाएगी।" else "Eligibility is checked after the final result is released."
                                             "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
                                             "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject में published lessons अभी उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
-                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
+                                            "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Test certificate के लिए सभी lessons पूरे करना ज़रूरी नहीं है; सभी published lessons केवल subject-completion certificate के लिए पूरे करें।" else "A test certificate does not require completing every lesson; all published lessons are required only for a subject-completion certificate."
                                             "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + passThreshold + "% से कम है।" else "The score is below the " + passThreshold + "% certificate threshold."
                                             "INVALID_SCORE" -> if (language == "hi") "इस result का score मान्य नहीं है।" else "This result has an invalid score."
                                             else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results refresh करें।" else "Certificate eligibility could not be checked. Refresh results."
