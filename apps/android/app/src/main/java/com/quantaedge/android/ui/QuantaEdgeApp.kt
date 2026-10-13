@@ -1730,7 +1730,7 @@ private fun ParentOtpFlowScreen(
             ) { Text(if(language=="hi") "OTP भेजें" else "Send OTP") }
         }
         if (status.isNotBlank()) {
-            Text(status, style = MaterialTheme.typography.bodySmall,
+            Text(localizedUiText(status), style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(top = 10.dp))
         }
     }
@@ -2568,7 +2568,7 @@ private fun ResourcesScreen(
                         Text(doc.textAny("chapter_name", "book_part", "scope"), style = MaterialTheme.typography.bodySmall)
                         Text(count.toString() + " पृष्ठ • ऑफ़लाइन: " + cached + " / " + count, style = MaterialTheme.typography.bodySmall)
                         if (downloadState != null) {
-                            Text(downloadState.label, style = MaterialTheme.typography.bodySmall,
+                            Text(localizedUiText(downloadState.label), style = MaterialTheme.typography.bodySmall,
                                 color = if (downloadState.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
                             if (downloadState.progress != null && downloadState.active) {
                                 LinearProgressIndicator(progress = { downloadState.progress }, modifier = Modifier.fillMaxWidth())
