@@ -39,6 +39,6 @@ public class HrReportingScopeService {
     return "(not exists(select 1 from staff_permission_grant scope_grant where scope_grant.staff_id=? and scope_grant.permission_key='HR_MANAGER_TEAM_VIEW') or "
       +employeeAlias+".id in (with recursive reporting(id) as ("
       +"select child.id from hr_employee child where child.manager_employee_id in (select manager.id from hr_employee manager where manager.linked_staff_account_id=?) and child.employment_status not in ('SEPARATED','INACTIVE','DRAFT') "
-      +"union all select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')) select id from reporting))";
+      +"union select child.id from hr_employee child join reporting parent on child.manager_employee_id=parent.id where child.employment_status not in ('SEPARATED','INACTIVE','DRAFT')) select id from reporting))";
   }
 }
