@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Map;
+import java.sql.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,6 +63,26 @@ class HrTeachingAssignmentControllerTest {
 
     assertEquals(400,error.getStatusCode().value());
     verify(jdbc,never()).update(org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.any(Object[].class));
+    verify(audit,never()).recordAction(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.anyString());
+  }
+
+  @Test
+  void academicPeriodRejectsOverlappingDatesInSameOrganisation() {
+    when(authorization.requirePermission(hrManager,"HR_ACADEMIC_ASSIGNMENT_MANAGE")).thenReturn(hrManager);
+    when(jdbc.queryForObject("select exists(select 1 from hr_organization where id=? and active=true)",Boolean.class,1L))
+        .thenReturn(true);
+    when(jdbc.queryForObject(org.mockito.ArgumentMatchers.contains("from hr_academic_period where organization_id=?"),
+        org.mockito.ArgumentMatchers.eq(Boolean.class),
+        org.mockito.ArgumentMatchers.eq(1L),
+        org.mockito.ArgumentMatchers.eq(Date.valueOf("2028-03-31")),
+        org.mockito.ArgumentMatchers.eq(Date.valueOf("2027-04-01"))))
+        .thenReturn(true);
+
+    ResponseStatusException error=assertThrows(ResponseStatusException.class,()->controller.createPeriod(Map.of(
+        "organizationId",1,"periodCode","AY-2028","name","Academic year 2028",
+        "startDate","2027-04-01","endDate","2028-03-31"),hrManager));
+
+    assertEquals(409,error.getStatusCode().value());
     verify(audit,never()).recordAction(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyString(),org.mockito.ArgumentMatchers.anyString());
   }
 
