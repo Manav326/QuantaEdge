@@ -41,6 +41,8 @@ jobs:
           python scripts/ai_training_offline_seed.py --target "$TARGET" --output-dir data/ai-training/datasets
       - name: Validate dataset and split integrity
         shell: bash
+        env:
+          EXPECTED_TARGET: ${{ github.event.inputs.target || '25000' }}
         run: |
           python scripts/ai_training_dataset.py validate --dataset-dir data/ai-training/datasets
           python - <<'PY'
@@ -48,7 +50,8 @@ jobs:
           from pathlib import Path
           root = Path("data/ai-training/datasets")
           master = [json.loads(x) for x in (root / "dataset_master.jsonl").read_text(encoding="utf-8").splitlines() if x.strip()]
-          assert len(master) == 25000, f"Expected 25000 records, found {len(master)}"
+          expected = int(__import__("os").environ["EXPECTED_TARGET"])
+          assert len(master) == expected, f"Expected {expected} records, found {len(master)}"
           assert len({x["example_id"] for x in master}) == len(master), "Duplicate IDs found"
           assert all(x["metadata"]["provenance_type"] == "synthetic_curriculum_alignment" for x in master)
           print(f"Verified {len(master)} unique records; no source PDF pages/hashes were fabricated.")
