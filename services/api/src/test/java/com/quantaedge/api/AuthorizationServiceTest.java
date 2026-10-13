@@ -32,15 +32,15 @@ class AuthorizationServiceTest {
   void employeeMustHaveAnExplicitActivePermissionGrant() {
     AuthorizationService authorization = new AuthorizationService(jdbc);
     AuthContext author = new AuthContext(null, null, 19L, "CONTENT_AUTHOR", "Author");
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_EDIT")))
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_EDIT"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
         .thenReturn(true);
-    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_PUBLISH")))
+    when(jdbc.queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN")))
         .thenReturn(false);
 
     assertTrue(authorization.hasPermission(author, "CONTENT_EDIT"));
     assertFalse(authorization.hasPermission(author, "CONTENT_PUBLISH"));
-    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_EDIT"));
-    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq(19L), eq("CONTENT_PUBLISH"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_EDIT"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
+    verify(jdbc).queryForObject(anyString(), eq(Boolean.class), eq("CONTENT_PUBLISH"), eq(19L), eq("EDUCATION_ADMIN"), eq("EDUCATION_ADMIN"));
   }
 
   @Test
