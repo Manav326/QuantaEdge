@@ -1,6 +1,6 @@
 import hashlib,tempfile,unittest
 from pathlib import Path
-from scripts.audit_curriculum_pipeline import audit_book,audit_extraction,audit_registry,LANG,summary
+from scripts.audit_curriculum_pipeline import audit_book,audit_extraction,audit_registry,LANG,summary,reconcile_coverage
 
 class PipelineAuditTests(unittest.TestCase):
  def test_language_aliases(self):
@@ -28,6 +28,21 @@ class PipelineAuditTests(unittest.TestCase):
   bundle={"schema_version":1,"bundle_status":"DRAFT_EXTRACTION_ONLY","curriculum":{"class_code":"6","subject_code":"maths","language":"hi"},"source":{"pdf_page_count":3,"pdf_sha256":"a"*64},"chapter_map":[{"code":"a","title":"A","page_start":1,"page_end":2},{"code":"b","title":"B","page_start":2,"page_end":3}],"extraction":{"requires_human_review":True},"pages":[{"page_number":1,"chapter_code":"a","text":"one"},{"page_number":3,"chapter_code":"b","text":"three"}]}
   _,bad=audit_extraction(bundle,Path("fixture.json"));codes={x["code"] for x in bad}
   self.assertIn("CHAPTER_RANGE_OVERLAP",codes);self.assertIn("PAGE_COVERAGE_GAP",codes)
+ def test_bilingual_reconciliation_reports_missing_chapters_and_type_targets(self):
+  targets=[{"class_code":"6","subject_code":"maths","chapter_code":"one","question_type":"MCQ","minimum_target_count":2,"actual_active_approved_count":0,"target_eligible":True}]
+  extraction={"configured":True,"items":[{"class_code":"6","subject_code":"maths","language":"hindi","chapter_codes":["one"]}]}
+  candidates={"configured":True,"items":[{"class_code":"6","subject_code":"maths","language":"hindi","chapter_code":"one","question_type_counts":{"MCQ":1}}]}
+  reviewed={"configured":True,"items":[]}
+  result,issues=reconcile_coverage(targets,["6"],["hindi","english"],extraction,candidates,reviewed)
+  self.assertEqual(2,result["expected_chapter_track_language_rows"])
+  self.assertEqual(1,result["extraction_rows_missing"])
+  self.assertEqual(1,result["candidate_rows_missing"])
+  self.assertEqual(3,result["missing_question_total"])
+  codes={x["code"] for x in issues}
+  self.assertIn("BILINGUAL_CHAPTER_COVERAGE_GAP",codes)
+  self.assertIn("BILINGUAL_CANDIDATE_COVERAGE_GAP",codes)
+  self.assertIn("BILINGUAL_QUESTION_TARGET_GAPS",codes)
+
  def test_planned_not_actual_count(self):
   r=summary([{"class_code":"6","subject_code":"maths","chapter_code":"a","question_type":"MCQ","minimum_target_count":5,"actual_active_approved_count":2,"target_eligible":True}])
   self.assertEqual(5,r["minimum_question_target"]);self.assertEqual(2,r["documented_baseline_approved_questions"]);self.assertEqual(3,r["remaining_to_target_at_documented_baseline"])
