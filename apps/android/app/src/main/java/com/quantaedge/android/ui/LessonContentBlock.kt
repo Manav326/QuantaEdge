@@ -88,32 +88,32 @@ fun LessonContentBlock(
             when (type) {
                 "PREREQUISITE", "EXPLANATION" -> {
                     val content = if (html.isNotBlank()) htmlToPlainText(html) else body
-                    if (content.isNotBlank()) Text(content, style = MaterialTheme.typography.bodyLarge)
+                    if (content.isNotBlank()) LearningMathText(content, style = MaterialTheme.typography.bodyLarge)
                     points.forEach { point ->
-                        Text(localizedUiText("•  ") + point, style = MaterialTheme.typography.bodyMedium)
+                        LearningMathText("•  " + point, style = MaterialTheme.typography.bodyMedium)
                     }
                 }
                 "WORKED_EXAMPLE" -> {
-                    if (body.isNotBlank()) Text(body, style = MaterialTheme.typography.bodyLarge)
+                    if (body.isNotBlank()) LearningMathText(body, style = MaterialTheme.typography.bodyLarge)
                     steps.forEachIndexed { index, step ->
-                        Text((index + 1).toString() + ".  " + step, style = MaterialTheme.typography.bodyMedium)
+                        LearningMathText((index + 1).toString() + ".  " + step, style = MaterialTheme.typography.bodyMedium)
                     }
                     val answer = data.textAny("answer")
                     if (answer.isNotBlank()) {
-                        Text((if (language == "hi") "हल: " else "Solution: ") + answer,
+                        LearningMathText((if (language == "hi") "हल: " else "Solution: ") + answer,
                             style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
                     }
                 }
                 "GUIDED_PRACTICE", "INDEPENDENT_PRACTICE", "CHALLENGE", "HINT" -> {
-                    if (body.isNotBlank()) Text(body, style = MaterialTheme.typography.bodyLarge)
+                    if (body.isNotBlank()) LearningMathText(body, style = MaterialTheme.typography.bodyLarge)
                     val hint = data.textAny("hint")
                     if (hint.isNotBlank()) {
-                        Text((if (language == "hi") "संकेत: " else "Hint: ") + hint,
+                        LearningMathText((if (language == "hi") "संकेत: " else "Hint: ") + hint,
                             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
                     }
                 }
                 "IMAGE", "DIAGRAM", "ANIMATION" -> {
-                    if (description.isNotBlank()) Text(description, style = MaterialTheme.typography.bodyMedium)
+                    if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
                     if (url.isNotBlank()) {
                         LessonImage(url = url, alt = data.textAny("alt").ifBlank { title })
                     } else {
@@ -123,10 +123,10 @@ fun LessonContentBlock(
                         }, style = MaterialTheme.typography.bodyMedium)
                     }
                     val caption = data.textAny("caption")
-                    if (caption.isNotBlank()) Text(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    if (caption.isNotBlank()) LearningMathText(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                 }
                 "VIDEO", "AUDIO" -> {
-                    if (description.isNotBlank()) Text(description, style = MaterialTheme.typography.bodyMedium)
+                    if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
                     if (url.isNotBlank()) LessonPlayableMedia(
                         url = url,
                         audioOnly = type == "AUDIO",
@@ -137,7 +137,7 @@ fun LessonContentBlock(
                         }, style = MaterialTheme.typography.bodyMedium
                     )
                     val caption = data.textAny("caption")
-                    if (caption.isNotBlank()) Text(caption, style = MaterialTheme.typography.bodySmall)
+                    if (caption.isNotBlank()) LearningMathText(caption, style = MaterialTheme.typography.bodySmall)
                 }
                 "AI_HELP" -> {
                     Text(if (language == "hi")
@@ -150,13 +150,13 @@ fun LessonContentBlock(
                 }
                 "SUMMARY", "RECAP" -> {
                     points.forEach { point ->
-                        Text(localizedUiText("✓  ") + point, style = MaterialTheme.typography.bodyLarge)
+                        LearningMathText("✓  " + point, style = MaterialTheme.typography.bodyLarge)
                     }
-                    if (points.isEmpty() && body.isNotBlank()) Text(body, style = MaterialTheme.typography.bodyLarge)
+                    if (points.isEmpty() && body.isNotBlank()) LearningMathText(body, style = MaterialTheme.typography.bodyLarge)
                 }
                 else -> {
                     val fallback = block.safeContentText()
-                    if (fallback.isNotBlank()) Text(fallback, style = MaterialTheme.typography.bodyLarge)
+                    if (fallback.isNotBlank()) LearningMathText(fallback, style = MaterialTheme.typography.bodyLarge)
                 }
             }
         }
