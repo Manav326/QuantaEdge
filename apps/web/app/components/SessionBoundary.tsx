@@ -5,7 +5,7 @@ import { LanguageSwitcher, LocaleText } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import { usePathname, useRouter } from 'next/navigation';
 
-type Session = { role?: string; staffId?: number; studentId?: number; userId?: number; permissions?: string[] };
+type Session = { role?: string; workspace?: string; staffId?: number; studentId?: number; userId?: number; permissions?: string[] };
 type WorkspaceRole = 'student' | 'parent';
 let fetchRecoveryInstalled = false;
 let verifiedWorkspace: WorkspaceRole | null = null;
