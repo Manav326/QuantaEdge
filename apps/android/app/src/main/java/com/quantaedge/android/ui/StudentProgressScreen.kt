@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
 @Composable
-fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit) {
+fun StudentProgressScreen(data: JSONObject, busy: Boolean, language: String, onCertificate: (Long) -> Unit, onRefresh: () -> Unit) {
     val lessons = data.optJSONObject("lessonStats") ?: JSONObject()
     val questions = data.optJSONObject("questionStats") ?: JSONObject()
     val mastery = data.optJSONObject("mastery") ?: JSONObject()
@@ -99,6 +99,14 @@ fun StudentProgressScreen(data: JSONObject, busy: Boolean, onRefresh: () -> Unit
                         Text(item.textAny("subject_name", "chapter_name"), style = MaterialTheme.typography.bodySmall)
                         Text("स्थिति: " + item.textAny("status") + " • अंक: " + item.textAny("final_score", "auto_score") +
                             " / " + item.textAny("max_score"), style = MaterialTheme.typography.bodyMedium)
+                        CertificateResultActions(
+                            attemptId = item.longAny("attempt_id", "attemptId"),
+                            assessmentType = item.textAny("assessment_type"),
+                            isGenerated = item.optBoolean("is_generated"),
+                            status = item.textAny("status"),
+                            language = language,
+                            onOpenCertificates = onCertificate
+                        )
                     }
                 }
             }
