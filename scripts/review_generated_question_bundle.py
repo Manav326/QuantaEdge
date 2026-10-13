@@ -15,6 +15,9 @@ def review_candidate(bundle: Any, reviewer: str, reviewed_at: str, confirmations
         raise ValueError("Expected a schema_version 1 generated bundle.")
     if bundle.get("bundle_status") != "AI_GENERATED_DRAFT" or not isinstance(bundle.get("generated_by"), dict):
         raise ValueError("Only an AI_GENERATED_DRAFT bundle can be promoted for editorial review.")
+    curriculum = bundle.get("curriculum") if isinstance(bundle.get("curriculum"), dict) else {}
+    language = str(curriculum.get("language", "hi")).strip().lower()
+    language_name = "English" if language in {"en", "english"} else "Hindi"
     lessons = bundle.get("lessons")
     if not isinstance(lessons, list) or not lessons:
         raise ValueError("Candidate contains no lessons.")
@@ -45,7 +48,7 @@ def review_candidate(bundle: Any, reviewer: str, reviewed_at: str, confirmations
         "checks": [
             "source edition, chapter map and cited page ranges checked against the original PDF",
             "every question solved independently; option keys and numerical calculations verified",
-            "Hindi wording, age suitability, curriculum alignment, explanations and difficulty checked",
+            f"{language_name} wording, age suitability, curriculum alignment, explanations and difficulty checked",
             "OCR-sensitive numerals, equations, units, science terms and duplicate coverage checked",
             "originality and applicable content-reuse rights reviewed by an authorized reviewer",
         ],
@@ -75,10 +78,13 @@ def main() -> int:
     try:
         bundle = json.loads(args.bundle.read_text(encoding="utf-8"))
         reviewer = args.reviewer or input("Responsible editor/reviewer name: ").strip()
+        curriculum = bundle.get("curriculum") if isinstance(bundle.get("curriculum"), dict) else {}
+        language = str(curriculum.get("language", "hi")).strip().lower()
+        language_name = "English" if language in {"en", "english"} else "Hindi"
         checks = [
             "I compared the exact PDF edition, chapter, and each cited page range.",
             "I independently solved every question and checked all answer keys and explanations.",
-            "I checked Hindi wording, class level, difficulty, alignment, and duplicates.",
+            f"I checked {language_name} wording, class level, difficulty, alignment, and duplicates.",
             "I checked OCR-sensitive content, including numerals, equations, units, and science terms.",
             "I confirmed the content is original and an authorized person has reviewed reuse rights.",
         ]
