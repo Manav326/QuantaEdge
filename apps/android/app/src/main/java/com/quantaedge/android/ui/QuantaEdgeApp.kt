@@ -28,6 +28,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -2070,7 +2071,7 @@ private fun AssessmentAttemptScreen(
                 style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(vertical = 8.dp))
             val certificate = certificateEligibility[attemptId]
             val certificateStatus = certificate?.optString("certificate_status").orEmpty()
-            val certificateId = certificate?.optLongValue("certificate_id", "certificateId") ?: 0L
+            val certificateId = certificate?.optLongAny("certificate_id", "certificateId") ?: 0L
             Card(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp)) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(7.dp)) {
                     Text(if (language == "hi") "इस result का certificate" else "Certificate for this result",
@@ -2281,13 +2282,14 @@ private fun ResultsScreen(
                                     }
                                     else -> {
                                         val reason = certificate?.optString("eligibility_reason").orEmpty()
+                                        val passThreshold = certificate?.optString("pass_threshold_percent", "80") ?: "80"
                                         val hint = when (reason) {
                                             "ADMIN_CREATED_TEST_ONLY" -> if (language == "hi") "केवल admin-created tests पात्र हैं; practice और generated tests नहीं।" else "Only admin-created tests qualify; practice and generated tests do not."
                                             "RESULT_NOT_RELEASED" -> if (language == "hi") "Final result जारी होने के बाद पात्रता जाँची जाएगी।" else "Eligibility is checked after the final result is released."
                                             "SUBJECT_TRACK_NOT_ACTIVE" -> if (language == "hi") "इस subject में active enrollment ज़रूरी है।" else "An active enrollment in this subject is required."
                                             "PUBLISHED_LESSONS_NOT_AVAILABLE" -> if (language == "hi") "इस subject में published lessons अभी उपलब्ध नहीं हैं।" else "Published lessons are not available for this subject yet."
                                             "SUBJECT_COMPLETION_REQUIRED" -> if (language == "hi") "Certificate unlock करने के लिए subject के सभी published lessons पूरे करें।" else "Complete all published lessons in this subject to unlock the certificate."
-                                            "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + certificate.optString("pass_threshold_percent", "80") + "% से कम है।" else "The score is below the " + certificate.optString("pass_threshold_percent", "80") + "% certificate threshold."
+                                            "PASS_THRESHOLD_NOT_MET" -> if (language == "hi") "Score certificate threshold " + passThreshold + "% से कम है।" else "The score is below the " + passThreshold + "% certificate threshold."
                                             "INVALID_SCORE" -> if (language == "hi") "इस result का score मान्य नहीं है।" else "This result has an invalid score."
                                             else -> if (language == "hi") "Certificate eligibility अभी जाँची नहीं जा सकी। Results refresh करें।" else "Certificate eligibility could not be checked. Refresh results."
                                         }
