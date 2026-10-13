@@ -69,7 +69,6 @@ export default function CertificateVerifyPage() {
       if (verificationPathIndex >= 0) {
         return decodeURIComponent(parsed.pathname.slice(verificationPathIndex + verificationPath.length));
       }
-      if (match) return decodeURIComponent(match[1]);
     } catch {
       // A linear barcode normally contains only the certificate number, not a URL.
     }
