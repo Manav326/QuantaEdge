@@ -202,3 +202,36 @@ export function PeopleDialog({
     </div>
   );
 }
+
+export function PeoplePagination({
+  limit,
+  offset,
+  total,
+  onPageChange,
+  onLimitChange,
+}: {
+  limit: number;
+  offset: number;
+  total: number;
+  onPageChange: (offset: number) => void;
+  onLimitChange: (limit: number) => void;
+}) {
+  const pages = Math.max(1, Math.ceil(total / limit));
+  const current = Math.min(pages, Math.floor(offset / limit) + 1);
+  const first = total === 0 ? 0 : offset + 1;
+  const last = Math.min(total, offset + limit);
+  return (
+    <div className="toolbar qe-people-pagination" aria-label="Table pagination">
+      <span className="small">Showing {first}–{last} of {total}</span>
+      <label className="small" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        Rows per page
+        <select className="input" value={limit} onChange={event => onLimitChange(Number(event.target.value))}>
+          {[10, 20, 50].map(size => <option key={size} value={size}>{size}</option>)}
+        </select>
+      </label>
+      <button type="button" className="secondary" disabled={offset <= 0} onClick={() => onPageChange(Math.max(0, offset - limit))}>Previous</button>
+      <span className="small">Page {current} of {pages}</span>
+      <button type="button" className="secondary" disabled={offset + limit >= total} onClick={() => onPageChange(offset + limit)}>Next</button>
+    </div>
+  );
+}

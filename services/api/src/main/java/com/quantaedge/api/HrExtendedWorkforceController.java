@@ -31,10 +31,12 @@ public class HrExtendedWorkforceController {
 
   // Recruitment
   @GetMapping("/recruitment/vacancies")
-  public List<Map<String,Object>> vacancies(@RequestParam long organizationId,
+  public Map<String,Object> vacancies(@RequestParam long organizationId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
       @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_RECRUITMENT_VIEW"); organization(organizationId);
-    return jdbc.queryForList("select * from hr_vacancy where organization_id=? order by created_at desc,id desc",organizationId);
+    return page("select * from hr_vacancy where organization_id=? order by created_at desc,id desc",
+        "select count(*) from hr_vacancy where organization_id=?",limit,offset,organizationId);
   }
 
   @PostMapping("/recruitment/vacancies") @Transactional
@@ -66,12 +68,21 @@ public class HrExtendedWorkforceController {
   }
 
   @GetMapping("/recruitment/candidates")
-  public List<Map<String,Object>> candidates(@RequestParam long organizationId,
-      @RequestParam(required=false) String stage,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+  public Map<String,Object> candidates(@RequestParam long organizationId,
+      @RequestParam(required=false) String stage,@RequestParam(defaultValue="20") int limit,
+      @RequestParam(defaultValue="0") int offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_RECRUITMENT_VIEW"); organization(organizationId);
-    if(stage==null||stage.isBlank()) return jdbc.queryForList("select c.*,v.title vacancy_title from hr_candidate c left join hr_vacancy v on v.id=c.vacancy_id where c.organization_id=? order by c.created_at desc,c.id desc",organizationId);
-    String s=stage.toUpperCase(); if(!List.of("APPLIED","SCREENING","INTERVIEW","OFFER","HIRED","REJECTED","WITHDRAWN").contains(s)) throw bad("Unsupported recruitment stage.");
-    return jdbc.queryForList("select c.*,v.title vacancy_title from hr_candidate c left join hr_vacancy v on v.id=c.vacancy_id where c.organization_id=? and c.pipeline_stage=? order by c.created_at desc,c.id desc",organizationId,s);
+    String where=" where c.organization_id=?";
+    Object[] args={organizationId};
+    if(stage!=null&&!stage.isBlank()) {
+      String s=stage.toUpperCase();
+      if(!List.of("APPLIED","SCREENING","INTERVIEW","OFFER","HIRED","REJECTED","WITHDRAWN").contains(s)) throw bad("Unsupported recruitment stage.");
+      where+=" and c.pipeline_stage=?";
+      args=new Object[]{organizationId,s};
+    }
+    return page("select c.*,v.title vacancy_title from hr_candidate c left join hr_vacancy v on v.id=c.vacancy_id"+where+" order by c.created_at desc,c.id desc",
+        "select count(*) from hr_candidate c"+where,limit,offset,args);
   }
 
   @PostMapping("/recruitment/candidates") @Transactional
@@ -148,9 +159,12 @@ public class HrExtendedWorkforceController {
 
   // Performance: schema is organisation-configurable JSON; ratings are optional, not hard-coded.
   @GetMapping("/performance/cycles")
-  public List<Map<String,Object>> cycles(@RequestParam long organizationId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+  public Map<String,Object> cycles(@RequestParam long organizationId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_VIEW"); organization(organizationId);
-    return jdbc.queryForList("select * from hr_performance_cycle where organization_id=? order by start_date desc,id desc",organizationId);
+    return page("select * from hr_performance_cycle where organization_id=? order by start_date desc,id desc",
+        "select count(*) from hr_performance_cycle where organization_id=?",limit,offset,organizationId);
   }
   @PostMapping("/performance/cycles") @Transactional
   public Map<String,Object> createCycle(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -179,10 +193,16 @@ public class HrExtendedWorkforceController {
     return one("select * from hr_employee_goal where id=?",key);
   }
   @GetMapping("/performance/reviews")
-  public List<Map<String,Object>> reviews(@RequestParam long organizationId,@RequestParam(required=false) Long employeeId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+  public Map<String,Object> reviews(@RequestParam long organizationId,@RequestParam(required=false) Long employeeId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_PERFORMANCE_VIEW"); organization(organizationId);
     if(employeeId!=null) employeeInOrg(employeeId,organizationId);
-    return employeeId==null?jdbc.queryForList("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id where c.organization_id=? order by r.created_at desc,r.id desc",organizationId):jdbc.queryForList("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id where c.organization_id=? and r.employee_id=? order by r.created_at desc,r.id desc",organizationId,employeeId);
+    String where=" where c.organization_id=?";
+    Object[] args={organizationId};
+    if(employeeId!=null){where+=" and r.employee_id=?";args=new Object[]{organizationId,employeeId};}
+    return page("select r.*,e.display_name employee_name,e.employee_number,c.name cycle_name from hr_performance_review r join hr_employee e on e.id=r.employee_id join hr_performance_cycle c on c.id=r.cycle_id"+where+" order by r.created_at desc,r.id desc",
+        "select count(*) from hr_performance_review r join hr_performance_cycle c on c.id=r.cycle_id"+where,limit,offset,args);
   }
   @GetMapping("/performance/cycles/{cycleId}/goals")
   public List<Map<String,Object>> goals(@PathVariable long cycleId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -218,9 +238,12 @@ public class HrExtendedWorkforceController {
 
   // Assets
   @GetMapping("/assets")
-  public List<Map<String,Object>> assets(@RequestParam long organizationId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+  public Map<String,Object> assets(@RequestParam long organizationId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_ASSET_VIEW"); organization(organizationId);
-    return jdbc.queryForList("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.expected_return_date,x.returned_at,x.condition_on_assignment,x.condition_on_return,(x.returned_at is null and x.expected_return_date<current_date) overdue,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id where a.organization_id=? order by a.asset_status,a.asset_tag",organizationId);
+    return page("select a.*,x.id assignment_id,x.employee_id,x.assigned_at,x.expected_return_date,x.returned_at,x.condition_on_assignment,x.condition_on_return,(x.returned_at is null and x.expected_return_date<current_date) overdue,e.display_name employee_name,e.employee_number from hr_asset a left join hr_asset_assignment x on x.asset_id=a.id and x.returned_at is null left join hr_employee e on e.id=x.employee_id where a.organization_id=? order by a.asset_status,a.asset_tag",
+        "select count(distinct a.id) from hr_asset a where a.organization_id=?",limit,offset,organizationId);
   }
   @PostMapping("/assets") @Transactional
   public Map<String,Object> createAsset(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -266,9 +289,12 @@ public class HrExtendedWorkforceController {
   // Exit: this module records the process and settlement inputs; the canonical employee status
   // is changed only through HrEmployeeController after the authorised clearance workflow.
   @GetMapping("/exits")
-  public List<Map<String,Object>> exits(@RequestParam long organizationId,@RequestAttribute(value="authContext",required=false) AuthContext c) {
+  public Map<String,Object> exits(@RequestParam long organizationId,
+      @RequestParam(defaultValue="20") int limit,@RequestParam(defaultValue="0") int offset,
+      @RequestAttribute(value="authContext",required=false) AuthContext c) {
     require(c,"HR_EXIT_VIEW"); organization(organizationId);
-    return jdbc.queryForList("select x.*,e.employee_number,e.display_name,e.employment_status from hr_employee_exit x join hr_employee e on e.id=x.employee_id where e.organization_id=? order by x.created_at desc,x.id desc",organizationId);
+    return page("select x.*,e.employee_number,e.display_name,e.employment_status from hr_employee_exit x join hr_employee e on e.id=x.employee_id where e.organization_id=? order by x.created_at desc,x.id desc",
+        "select count(*) from hr_employee_exit x join hr_employee e on e.id=x.employee_id where e.organization_id=?",limit,offset,organizationId);
   }
   @PostMapping("/exits") @Transactional
   public Map<String,Object> initiateExit(@RequestBody Map<String,Object> b,@RequestAttribute(value="authContext",required=false) AuthContext c) {
@@ -337,6 +363,16 @@ public class HrExtendedWorkforceController {
     jdbc.update("update hr_employee_exit set final_settlement_status=?,updated_at=now() where id=?",status,id);
     event(((Number)old.get("organization_id")).longValue(),"EXIT",id,"SETTLEMENT_"+status,c,optional(b.get("reason"),1000),"{}");
     return one("select * from hr_employee_exit where id=?",id);
+  }
+
+  private Map<String,Object> page(String itemsSql,String totalSql,int requestedLimit,int requestedOffset,Object... args) {
+    int limit=List.of(10,20,50).contains(requestedLimit)?requestedLimit:20;
+    int offset=Math.max(0,Math.min(requestedOffset,10_000_000));
+    Object[] itemArgs=Arrays.copyOf(args,args.length+2);
+    itemArgs[args.length]=limit;itemArgs[args.length+1]=offset;
+    List<Map<String,Object>> items=jdbc.queryForList(itemsSql+" limit ? offset ?",itemArgs);
+    Long result=jdbc.queryForObject(totalSql,Long.class,args);
+    return Map.of("items",items,"total",result==null?0L:result,"limit",limit,"offset",offset);
   }
 
   private void require(AuthContext c,String p){authorization.requirePermission(c,p);}
