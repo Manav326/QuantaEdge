@@ -71,7 +71,26 @@ public class AuthFilter extends OncePerRequestFilter {
       }
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-cookie-found={} workspace={} context-present={}",
           token != null, workspace, context != null);
-      if (context != null) request.setAttribute("authContext", context);
+      if (context != null) {
+        request.setAttribute("authContext", context);
+        request.setAttribute("authWorkspace", workspace);
+        if ("HRMS".equals(workspace) && context.staffId() != null
+            && auth.staffMustChangePassword(context.staffId())) {
+          boolean allowedDuringPasswordRotation = java.util.Set.of(
+              "/api/v1/auth/me",
+              "/api/v1/auth/logout",
+              "/api/v1/auth/refresh",
+              "/api/v1/auth/hrms/change-password"
+          ).contains(uri);
+          if (uri.startsWith("/api/v1/") && !allowedDuringPasswordRotation) {
+            response.setStatus(423);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"PASSWORD_CHANGE_REQUIRED\",\"message\":\"Change the initial HRMS password before continuing.\"}");
+            return;
+          }
+        }
+      }
       chain.doFilter(request, response);
       if (trace) LOGGER.info("HTTP_DIAG auth-filter-chain-returned status={} committed={}", response.getStatus(), response.isCommitted());
     } catch (IOException | ServletException | RuntimeException ex) {
