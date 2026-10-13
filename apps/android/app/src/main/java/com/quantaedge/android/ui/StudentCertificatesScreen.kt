@@ -168,6 +168,32 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
             }
     }
 
+    fun downloadCertificate(certificate: JSONObject, format: String) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val id = certificate.optLongValue("id", "certificate_id", "certificateId")
+                if (id <= 0) throw IOException("Certificate record की पहचान नहीं मिली।")
+                val bytes = withContext(Dispatchers.IO) {
+                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
+                }
+                if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
+                pendingBytes = bytes
+                val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
+                    .replace(Regex("[^A-Za-z0-9_-]"), "_")
+                pendingName = "quantaedge-$code.$format"
+                if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
+            } catch (e: Exception) {
+                error = e.message ?: "Certificate download नहीं हो सका।"
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+
     fun issueCertificate() {
         val selectedAttempt = eligibleAssessments.firstOrNull {
             it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
@@ -211,30 +237,6 @@ fun StudentCertificatesScreen(language: String, initialAssessmentAttemptId: Long
         }
     }
 
-    fun downloadCertificate(certificate: JSONObject, format: String) {
-        scope.launch {
-            busy = true
-            error = ""
-            notice = ""
-            try {
-                val id = certificate.optLongValue("id", "certificate_id", "certificateId")
-                if (id <= 0) throw IOException("Certificate record की पहचान नहीं मिली।")
-                val bytes = withContext(Dispatchers.IO) {
-                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
-                }
-                if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
-                pendingBytes = bytes
-                val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
-                    .replace(Regex("[^A-Za-z0-9_-]"), "_")
-                pendingName = "quantaedge-$code.$format"
-                if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
-            } catch (e: Exception) {
-                error = e.message ?: "Certificate download नहीं हो सका।"
-            } finally {
-                busy = false
-            }
-        }
-    }
 
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
