@@ -111,6 +111,15 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
     setMobileOpenGroup(null);
   }, [pathname, role]);
 
+  useEffect(() => {
+    if (!mobileOpenGroup) return;
+    function handleNavigationKey(event: KeyboardEvent) {
+      if (event.key === 'Escape') setMobileOpenGroup(null);
+    }
+    window.addEventListener('keydown', handleNavigationKey);
+    return () => window.removeEventListener('keydown', handleNavigationKey);
+  }, [mobileOpenGroup]);
+
   // Keep account identity in the persistent header; refresh only when the role changes
   // or when a profile page explicitly reports a saved profile/photo.
   useEffect(() => {
