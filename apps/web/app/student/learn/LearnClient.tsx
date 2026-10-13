@@ -159,7 +159,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
 }
 
 function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
-  const { locale } = useLocale();
+  const { locale, learningLanguage } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [value,setValue]=useState('');
   const [busy,setBusy]=useState(false);
@@ -174,7 +174,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     if (!next.trim() || submitted || busy) return;
     setBusy(true);setAnswerError('');setResult(null);
     try {
-      const language=locale==='english'?'en':'hi';
+      const language=learningLanguage;
       const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language,{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
@@ -231,7 +231,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
 }
 
 export default function LearnClient() {
-  const { locale } = useLocale();
+  const { locale, learningLanguage } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [lessons,setLessons]=useState<Lesson[]>([]);
   const [lesson,setLesson]=useState<Detail|null>(null);
@@ -285,21 +285,21 @@ export default function LearnClient() {
         );
         if(existing){
           if(document.chapter_code&&existing.code===existing.name)existing.code=document.chapter_code;
-          if(locale==='english')existing.name=textbookChapterTitle(document,'en');
+          if(learningLanguage==='en')existing.name=textbookChapterTitle(document,'en');
           return;
         }
-        const name=locale==='english'?textbookChapterTitle(document,'en'):(document.chapter_name||document.title);
+        const name=learningLanguage==='en'?textbookChapterTitle(document,'en'):(document.chapter_name||document.title);
         const key=document.chapter_code||name||('chapter-'+document.document_id);
         grouped.set(key,{code:key,name,lessons:[]});
       });
     return Array.from(grouped.values());
-  },[trackBrowse,studentDocuments,locale]);
+  },[trackBrowse,studentDocuments,locale,learningLanguage]);
 
   async function loadLesson(id:number) {
     try {
       const started=await fetch('/api/v1/learning/lessons/'+id+'/start',{method:'POST'});
       if(!started.ok) throw new Error('lesson progress');
-      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+(locale==='english'?'en':'hi')).then(r=>{
+      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage).then(r=>{
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
@@ -325,7 +325,7 @@ export default function LearnClient() {
         const selectedSubject=searchParams.get('subjectCode');
         if(!requestedId && selectedSubject){
           if(selectedSubject!=='maths' && selectedSubject!=='science') throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
-          const selectedLanguage=locale==='english'?'en':'hi';
+          const selectedLanguage=learningLanguage;
           const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage);
           const listBody=await listResponse.json();
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
@@ -347,7 +347,7 @@ export default function LearnClient() {
           if(rec.ok&&rb.available&&rb.lesson) targetId=Number(rb.lesson.id);
         }
         if(!targetId) throw new Error(tx('अभी कोई recommended lesson नहीं मिला।','No recommended lesson is available yet.'));
-        const selectedLanguage=locale==='english'?'en':'hi';
+        const selectedLanguage=learningLanguage;
         const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
@@ -369,11 +369,11 @@ export default function LearnClient() {
   },[router,searchParams]);
 
   // Switching languages refreshes presentation only; it must not restart progress or a learning session.
-  const lastContentLocale=useRef(locale);
+  const lastContentLocale=useRef(learningLanguage);
   useEffect(()=>{
-    if(lastContentLocale.current===locale)return;
-    lastContentLocale.current=locale;
-    const language=locale==='english'?'en':'hi';
+    if(lastContentLocale.current===learningLanguage)return;
+    lastContentLocale.current=learningLanguage;
+    const language=learningLanguage;
     let cancelled=false;
     async function refreshLanguage(){
       try{
@@ -410,7 +410,7 @@ export default function LearnClient() {
     }
     void refreshLanguage();
     return()=>{cancelled=true;};
-  },[locale,lesson?.id,lesson?.class_code,lesson?.subject_code,trackBrowse?.classCode,trackBrowse?.subjectCode]);
+  },[learningLanguage,lesson?.id,lesson?.class_code,lesson?.subject_code,trackBrowse?.classCode,trackBrowse?.subjectCode]);
 
   // Fetch the selected language edition independently: changing locale must not restart
   // the lesson, reset the session, or issue a second progress-start request.
@@ -422,7 +422,7 @@ export default function LearnClient() {
       return;
     }
     let cancelled=false;
-    const preferredLanguage=locale==='english'?'en':'hi';
+    const preferredLanguage=learningLanguage;
     const fallbackLanguage=preferredLanguage==='en'?'hi':'en';
     setDocumentsLoaded(false);
     setStudentDocuments([]);
@@ -458,7 +458,7 @@ export default function LearnClient() {
       })
       .finally(()=>{if(!cancelled)setDocumentsLoaded(true);});
     return()=>{cancelled=true;};
-  },[locale,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
+  },[learningLanguage,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
 
   useEffect(()=>{
     return ()=>{

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
@@ -36,7 +36,7 @@ type Certificate = {
 
 export default function StudentCertificatesPage() {
   const router = useRouter();
-  const { locale } = useLocale();
+  const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [eligibleAttempts, setEligibleAttempts] = useState<any[]>([]);
@@ -45,16 +45,10 @@ export default function StudentCertificatesPage() {
   const [achievementType, setAchievementType] = useState<'SUBJECT_COMPLETION' | 'ASSESSMENT_PASS'>('SUBJECT_COMPLETION');
   const [subjectCode, setSubjectCode] = useState('');
   const [attemptId, setAttemptId] = useState('');
-  const [language, setLanguage] = useState(locale === 'english' ? 'en' : 'hi');
+  const language = certificateLanguage;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
-  const languageManuallyChosen = useRef(false);
-
-  useEffect(() => {
-    if (!languageManuallyChosen.current) setLanguage(locale === 'english' ? 'en' : 'hi');
-  }, [locale]);
-
   const refresh = useCallback(async () => {
     setError('');
     try {
@@ -190,7 +184,7 @@ export default function StudentCertificatesPage() {
             </label>
             <label className={styles.field}>
               <span>Certificate language</span>
-              <select value={language} onChange={(event) => { languageManuallyChosen.current = true; setLanguage(event.target.value); }}>
+              <select value={language} onChange={(event) => setCertificateLanguage(event.target.value as 'hi' | 'en')}>
                 <option value="hi">हिन्दी (Hindi)</option>
                 <option value="en">English</option>
               </select>

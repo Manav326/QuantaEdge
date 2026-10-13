@@ -43,8 +43,8 @@ async function api(url: string, init: RequestInit = {}) {
 export default function TextbooksClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { locale } = useLocale();
-  const requestedLanguage = locale === 'english' ? 'en' : 'hi';
+  const { locale, learningLanguage } = useLocale();
+  const requestedLanguage = learningLanguage;
   const requestedSubjectCode = searchParams.get('subjectCode') || '';
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
