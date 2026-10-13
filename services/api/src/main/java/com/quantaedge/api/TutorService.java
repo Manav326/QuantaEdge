@@ -132,8 +132,11 @@ public class TutorService {
       %s
       """.formatted(json(lesson),blocks,mastery,qctx,json(history),mode,normalized);
 
-    jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
+    // Do not persist a user turn until the provider has returned a usable answer.
+    // Otherwise a timeout/provider outage leaves a ghost user message in history,
+    // while the UI correctly treats the send as failed and offers a retry.
     TutorReply reply=provider.generate(instructions,input);
+    jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
     jdbc.update("""
       insert into tutor_message(session_id,role,mode,message,model,provider_response_id,input_tokens,output_tokens)
       values(?,'ASSISTANT',?,?,?,?,?,?)
