@@ -16,22 +16,43 @@ const androidApp = read('../../android/app/src/main/java/com/quantaedge/android/
 const androidNavigationContract = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentNavigationContract.kt');
 const androidNavigationTests = read('../../android/app/src/test/java/com/quantaedge/android/ui/StudentNavigationContractTest.kt');
 
- // Parent/student logins now issue workspace-specific cookies. The route guard must
- // recognise both access and refresh cookies or it will redirect a successful login
- // back to the login page before SessionBoundary can validate the account.
-const learnerCookieGuardStart = sessionProxy.indexOf('const LEARNER_SESSION_COOKIE_NAMES = [');
-const learnerCookieGuardEnd = sessionProxy.indexOf('] as const;', learnerCookieGuardStart);
-assert.ok(learnerCookieGuardStart >= 0 && learnerCookieGuardEnd > learnerCookieGuardStart, 'The proxy must define one explicit set of recognised learner session cookies.');
-const learnerCookieGuard = sessionProxy.slice(learnerCookieGuardStart, learnerCookieGuardEnd);
-for (const cookieName of [
-  'QE_LEARN_SESSION', 'QE_LEARN_REFRESH',
-  'QE_PARENT_SESSION', 'QE_PARENT_REFRESH',
-  'QE_STUDENT_SESSION', 'QE_STUDENT_REFRESH'
-]) {
-  assert.ok(learnerCookieGuard.includes(cookieName), `The web route guard must recognise ${cookieName}.`);
+// Parent and Student sessions are separate identities. The proxy may only use
+// the matching workspace cookie as a routing hint; the API/client guard validates identity.
+const sessionBoundary = read('../app/components/SessionBoundary.tsx');
+const sessionLanding = read('../app/session/page.tsx');
+const studentLogin = read('../app/login/student/page.tsx');
+const parentLogin = read('../app/login/page.tsx');
+
+for (const cookieName of ['QE_PARENT_SESSION', 'QE_PARENT_REFRESH']) {
+  assert.ok(sessionProxy.includes(cookieName), `Parent route guard must recognise ${cookieName}.`);
 }
-assert.ok(sessionProxy.includes('if (publicEntry && learnerSession)'), 'Existing learner sessions must route through server-verified workspace resolution.');
-assert.ok(sessionProxy.includes('(studentRoute || parentRoute) && !learnerSession && !legacySession'), 'Protected learner routes must admit new scoped cookies and keep redirecting visitors with no session hint.');
+for (const cookieName of ['QE_STUDENT_SESSION', 'QE_STUDENT_REFRESH']) {
+  assert.ok(sessionProxy.includes(cookieName), `Student route guard must recognise ${cookieName}.`);
+}
+assert.ok(sessionProxy.includes("if (studentRoute && !hasWorkspaceSessionHint(request, 'STUDENT'))"),
+  'Student routes must check Student-scoped cookies, not any learner cookie.');
+assert.ok(sessionProxy.includes("if (parentRoute && !hasWorkspaceSessionHint(request, 'PARENT'))"),
+  'Parent routes must check Parent-scoped cookies, not any learner cookie.');
+assert.ok(!sessionProxy.includes('if (publicEntry && learnerSession)'),
+  'A Parent cookie must not hijack the Student login route before the user can sign in.');
+
+for (const [label, source] of [['SessionBoundary', sessionBoundary], ['session landing', sessionLanding]]) {
+  assert.ok(source.includes("session.role === 'STUDENT'"), `${label} must verify the Student role explicitly.`);
+  assert.ok(source.includes("session.role === 'PARENT'") || source.includes("identity.role === 'PARENT'"),
+    `${label} must verify the Parent role explicitly.`);
+  assert.ok(source.includes("workspace === 'STUDENT'") || source.includes("session.workspace === 'STUDENT'"),
+    `${label} must verify the Student workspace explicitly.`);
+  assert.ok(source.includes("workspace === 'PARENT'") || source.includes("session.workspace === 'PARENT'"),
+    `${label} must verify the Parent workspace explicitly.`);
+}
+assert.ok(studentLogin.includes("body.role !== 'STUDENT'") && studentLogin.includes("body.workspace !== 'STUDENT'"),
+  'Student login must reject any response that does not confirm a Student-scoped session.');
+assert.ok(studentLogin.includes("window.location.replace('/student')"),
+  'Student login must perform a full navigation after scoped cookies are issued.');
+assert.ok(parentLogin.includes("body.role !== 'PARENT'") && parentLogin.includes("body.workspace !== 'PARENT'"),
+  'Parent login must reject any response that does not confirm a Parent-scoped session.');
+assert.ok(parentLogin.includes("window.location.replace('/parent')"),
+  'Parent login must perform a full navigation after scoped cookies are issued.');
 
 // Route inventory and pure navigation functions must be exhaustive over AppRoute.
 // Kotlin's exhaustive enum when-expressions also fail compilation when a new route is not categorized.
