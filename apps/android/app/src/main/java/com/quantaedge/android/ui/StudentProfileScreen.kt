@@ -53,7 +53,6 @@ fun StudentProfileScreen(
     onSave: (JSONObject) -> Unit,
     onUploadPhoto: (String) -> Unit,
     onRemovePhoto: () -> Unit,
-    onToggleLanguage: () -> Unit,
     onLogout: () -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -161,13 +160,8 @@ fun StudentProfileScreen(
         }, enabled = !busy && displayName.trim().length >= 2, modifier = Modifier.fillMaxWidth()) {
             Text(t("Save profile", "प्रोफ़ाइल सुरक्षित करें"))
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            Button(onClick = onToggleLanguage, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(if (language == "hi") "EN" else "हिंदी")
-            }
-            TextButton(onClick = onLogout, enabled = !busy, modifier = Modifier.weight(1f)) {
-                Text(t("Sign out", "साइन आउट"))
-            }
+        TextButton(onClick = onLogout, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(t("Sign out", "साइन आउट"))
         }
         Text(t("Learning materials stay inside the app. Protected downloads remain encrypted in private storage and do not offer sharing/export.",
             "पढ़ाई की सामग्री ऐप के अंदर उपलब्ध होती है। संरक्षित डाउनलोड encrypted private storage में रहते हैं और share/export विकल्प नहीं देते।"),
