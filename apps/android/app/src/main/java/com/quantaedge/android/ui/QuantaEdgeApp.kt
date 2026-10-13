@@ -1264,14 +1264,14 @@ fun QuantaEdgeApp() {
             if (busy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             if (error.isNotBlank()) {
                 Text(
-                    text = error,
+                    text = localizedUiText(error),
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
             if (status.isNotBlank()) {
                 Text(
-                    text = status,
+                    text = localizedUiText(status),
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
                 )
