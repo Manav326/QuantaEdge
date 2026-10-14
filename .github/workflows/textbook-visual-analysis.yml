@@ -82,6 +82,8 @@ jobs:
           [[ "$MAX_ASSETS" =~ ^[1-9][0-9]*$ ]] && (( MAX_ASSETS <= 10000 )) || { echo "max_assets must be 1..10000"; exit 2; }
           [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 
       - name: Pull the exact whole-book PDF from the class-wise GHCR cache
         env:
@@ -207,8 +209,6 @@ jobs:
             if (( batch_processed == 0 )); then break; fi
           done
 
-          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
-          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 
       - name: Package full-resolution assets and previews
         shell: bash
