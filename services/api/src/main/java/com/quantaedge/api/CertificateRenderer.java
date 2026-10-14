@@ -50,10 +50,10 @@ public class CertificateRenderer {
   private static final Color NAVY = new Color(0x152038);
   private static final Color ORANGE = new Color(0xF97316);
   private static final Color DEEP_ORANGE = new Color(0xC2410C);
-  private static final Color GOLD = new Color(0xC39A4B);
+  private static final Color GOLD = new Color(0xE6E9F0);
   private static final Color INK = new Color(0x263247);
   private static final Color MUTED = new Color(0x647084);
-  private static final Color PAPER = new Color(0xFFFCF5);
+  private static final Color PAPER = new Color(0xF7F8FC);
   private static final Color PALE = new Color(0xF3F5F8);
 
   @Value("${app.public.base.url:http://localhost:3000}")

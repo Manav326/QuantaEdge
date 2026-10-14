@@ -546,6 +546,28 @@ public class CertificateController {
    * Prior artifacts are archived in the existing revision ledger; certificate ID and issue date
    * are deliberately preserved. This uses existing tables and adds no schema migration.
    */
+  private Map<String, Object> loadCertificateArtifactRow(long certificateId, Long studentId) {
+    String sql = """
+        SELECT c.id,c.certificate_number,c.status,c.achievement_type,c.class_code,
+               c.subject_id,s.code AS subject_code,s.display_name AS subject_name,
+               c.template_id,c.language,c.recipient_name,c.achievement_title,c.achievement_summary,
+               c.achievement_snapshot::text AS achievement_snapshot_json,c.issued_at,c.artifact_version,
+               c.assessment_attempt_id,c.pdf_storage_key,c.png_storage_key,c.pdf_sha256,c.png_sha256,
+               c.pdf_size_bytes,c.png_size_bytes
+        FROM student_certificate c
+        LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        WHERE c.id=?
+        """;
+    Object[] args;
+    if (studentId != null) {
+      sql += " AND c.student_id=?";
+      args = new Object[]{certificateId, studentId};
+    } else {
+      args = new Object[]{certificateId};
+    }
+    return queryOptional(sql + " FOR UPDATE OF c", args);
+  }
+
   private Map<String, Object> correctCertificateArtifact(Map<String, Object> certificate) {
     if (!"ISSUED".equals(certificate.get("status")) || number(certificate.get("artifact_version")) >= 3) return certificate;
     long id = number(certificate.get("id"));
