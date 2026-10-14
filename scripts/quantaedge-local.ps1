@@ -44,11 +44,57 @@ if (-not [string]::IsNullOrWhiteSpace($env:APP_CORS_ALLOWED_ORIGINS)) {
 }
 $env:APP_CORS_ALLOWED_ORIGINS = ($localCorsOrigins | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique) -join ","
 
-# Windows PowerShell 5.1 compatible port defaults.
+# Windows PowerShell 5.1 compatible host port defaults.
+# Probe the host binding before Docker starts so a busy local API port does not
+# make the entire GHCR startup fail. The selected port is passed to Compose via
+# the process environment, which takes precedence over values in .env.
+function Test-HostPortAvailable {
+  param([Parameter(Mandatory = $true)][int]$Port)
+
+  $listener = $null
+  try {
+    $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, $Port)
+    $listener.Start()
+    return $true
+  } catch {
+    return $false
+  } finally {
+    if ($null -ne $listener) {
+      $listener.Stop()
+    }
+  }
+}
+
 $apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
 $webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
+
+if ($Action -in @("up", "ai", "rebuild", "clean-build", "reset")) {
+  $preferredApiPort = 0
+  if (-not [int]::TryParse([string]$apiPort, [ref]$preferredApiPort) -or $preferredApiPort -lt 1 -or $preferredApiPort -gt 65535) {
+    throw "API_PORT must be an integer from 1 to 65535; received '$apiPort'."
+  }
+
+  if (-not (Test-HostPortAvailable -Port $preferredApiPort)) {
+    $selectedApiPort = $null
+    $lastCandidatePort = [Math]::Min(65535, $preferredApiPort + 20)
+    for ($candidatePort = $preferredApiPort + 1; $candidatePort -le $lastCandidatePort; $candidatePort++) {
+      if (Test-HostPortAvailable -Port $candidatePort) {
+        $selectedApiPort = $candidatePort
+        break
+      }
+    }
+
+    if ($null -eq $selectedApiPort) {
+      throw "API host port $preferredApiPort is occupied, and no free port was found in the next 20 ports. Stop the conflicting process or set API_PORT to a free port."
+    }
+
+    $apiPort = [string]$selectedApiPort
+    $env:API_PORT = $apiPort
+    Write-Warning "API host port $preferredApiPort is already in use. QuantaEdge will use port $apiPort for this run (http://localhost:$apiPort). To keep this choice, set API_PORT=$apiPort in .env. The existing process was not stopped."
+  }
+}
 
 # Default is GHCR-pull mode; -BuildLocal uses only the normal local Compose file.
 $script:ComposeFiles = if ($BuildLocal) {
