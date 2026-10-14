@@ -30,9 +30,11 @@ Implementation commits on `main`:
 - `255d3a92` — page readiness states and partial-extraction reporting
 - `43762520` — readable tutor source/page context
 - `1b3c78e9` — tutor textbook retrieval tests
+- `4ca8521a` / `3216290d` — support whole-book ingestion assets and preserve chapter ranges
+- `bd917fad` — admin UI controls to queue extraction and inspect progress
 - `f1cad587` / `a5dab569` — input validation and accurate source-approval wording
 
-Latest validation workflow is running; do not claim the code is verified until its conclusion is successful. The tracker and tutor documentation are intentionally committed to the repository so work can resume at the next unchecked task. No book has been extracted in the live database from this implementation yet. Extraction statuses are READY, LOW_TEXT, OCR_REQUIRED, and FAILED; only READY pages can ground tutor responses. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
+Latest validation workflow is running; do not claim the code is verified until its conclusion is successful. The tracker and tutor documentation are intentionally committed to the repository so work can resume at the next unchecked task. The source-ingestion admin screen now exposes the extraction action for approved complete-book assets. No book has been extracted in the live database from this implementation yet. Extraction statuses are READY, LOW_TEXT, OCR_REQUIRED, and FAILED; only READY pages can ground tutor responses. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
 
 ## Guardrails
 - Existing whole-book GHCR/cache flow remains the input source; do not introduce chapter-download fallback when whole-book download is required.
