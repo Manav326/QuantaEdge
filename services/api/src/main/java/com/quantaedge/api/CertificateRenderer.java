@@ -223,7 +223,7 @@ public class CertificateRenderer {
   private void drawContent(Graphics2D g, String template, boolean hindi, String recipient, String title,
       String summary, String number, OffsetDateTime issuedAt, CertificateDetails details, boolean sample) {
     if (recipient == null || recipient.isBlank()) throw new IllegalArgumentException("A real recipient name is required.");
-    CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null) : details;
+    CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null,null) : details;
     BufferedImage brandIcon = brandIcon();
     g.drawImage(brandIcon, 132, 95, 88, 88, null);
     int wordmarkCenterX = drawBrandWordmark(g, 2320, 150, 58);
