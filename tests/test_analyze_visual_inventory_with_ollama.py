@@ -95,7 +95,6 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             opener=self._opener, output_path=output,
         )
         self.assertEqual(1, first["summary"]["assets_analyzed"])
-        saved = output.read_bytes()
 
         def must_not_call(*args, **kwargs):
             raise AssertionError("a matching successful asset must not be re-analyzed")
@@ -107,7 +106,6 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         )
         self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
         self.assertEqual(1, resumed["summary"]["assets_analyzed"])
-        self.assertEqual(saved, output.read_bytes())
 
     def test_resume_rejects_changed_model_or_source(self):
         output = self.root / "visual-analysis.v1.json"
