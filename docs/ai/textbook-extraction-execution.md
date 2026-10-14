@@ -125,3 +125,15 @@ Implementation commits:
 
 - [x] Strengthen runner resumability: process batches of 10, commit all generated inventory/analysis/assets/previews to main after each batch, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
 - [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
+
+## Reusable class-wise extraction contract (2026-10-15)
+
+The existing extractor and GHCR registry preparation scripts are the standard reusable implementation; do not create a new extraction script for each class, subject, language, or book. Use the single workflow `.github/workflows/textbook-extraction-pilot.yml` with the `class_no` input (6, 7, or 8). Each run pulls both Hindi and English class-wise GHCR images, prepares complete-book PDFs, and reuses the same resumable page-level extractor. Original PDFs remain in GHCR; Actions artifacts contain extracted JSONL/manifests/reports.
+
+- Canonical page output: `pilot-output/extracted/class-N/{hindi,english}/pages/<asset-sha256>.jsonl` with a sibling `.manifest.json`.
+- The validator `scripts/validate_textbook_extraction_artifacts.py` verifies the registry index, exact source-book hashes, full contiguous page coverage, subject/language provenance, complete-book scope and extraction status before an artifact is accepted.
+- Class 7 and Class 8 Maths require at least two distinct complete Maths source-book IDs per language (Part 1 and Part 2). A missing part, incomplete/partial book, missing page, mismatched hash or extraction failure fails the workflow instead of reporting a complete class.
+- Tests live in `tests/test_validate_textbook_extraction_artifacts.py`; they cover two-part Maths enforcement and missing-page detection. Extend these reusable tests rather than creating per-class scripts.
+- All outputs are extraction-only drafts. Passing validation does not approve, generate, or publish lessons/questions.
+
+To run a class, open the [reusable extraction workflow](https://github.com/Manav326/QuantaEdge/actions/workflows/textbook-extraction-pilot.yml), choose **Run workflow**, select class 6, 7 or 8, and start it. A successful run's artifact is the handoff for the existing artifact-mirroring step; the mirror workflow should be generalized before relying on it to commit Classes 7–8 outputs automatically. Do not claim those classes are extracted until the run and artifact verification succeed.
