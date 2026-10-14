@@ -121,3 +121,7 @@ Implementation commits:
 
 - [x] Add a restore script, scripts/pull_textbook_visual_bundle.ps1, that reads the committed bundle index, pulls the exact versioned GHCR package, verifies SHA-256, and restores the complete asset bundle after a repository pull.
 - [ ] Confirm the first workflow run on the actual existing GHCR source-book image; no real-book vision results or successful workflow run are claimed until that run completes.
+
+
+- [x] Strengthen runner resumability: process batches of 10, commit inventory/analysis checkpoints to main after each batch, and mirror the small analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
+- [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
