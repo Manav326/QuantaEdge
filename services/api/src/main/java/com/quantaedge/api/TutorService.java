@@ -171,7 +171,7 @@ public class TutorService {
   static boolean isGenericTutorGreeting(String role,String message){
     if(!"ASSISTANT".equalsIgnoreCase(role)||message==null||message.length()>220)return false;
     String normalized=message.toLowerCase(Locale.ROOT)
-        .replaceAll("[^\\p{L}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+        .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
     return normalized.matches("^(hello|hi|hey|namaste)? ?(how can (i|we) help you( today)?|how may i help you( today)?|what can i help you with)( .*)?$")
         || normalized.startsWith("hello how can we help you today quantaedge tutor")
         || normalized.equals("namaste main aapki kya madad kar sakta hoon")
