@@ -89,10 +89,14 @@ class CertificateControllerArtifactCorrectionTest {
     assertTrue(java.nio.file.Files.exists(tempDir.resolve(oldPdf.storageKey())));
     assertTrue(java.nio.file.Files.exists(tempDir.resolve(oldPng.storageKey())));
 
+    ArgumentCaptor<CertificateRenderer.CertificateDetails> detailsCaptor =
+        ArgumentCaptor.forClass(CertificateRenderer.CertificateDetails.class);
     verify(renderer).render(eq("CLASSIC"), eq("hi"), eq("Test Learner"),
         eq("कक्षा 6 · विज्ञान"),
-        org.mockito.ArgumentMatchers.contains("Perfect test"),
-        eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), any(CertificateRenderer.CertificateDetails.class), eq(false));
+        eq("प्राप्तांक 90 / 100 (90.00%)।"),
+        eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), detailsCaptor.capture(), eq(false));
+    assertEquals("Perfect test", detailsCaptor.getValue().assessmentName(),
+        "The actual assessment title must be supplied as its own certificate field.");
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).update(sql.capture(), any(Object[].class));
@@ -103,7 +107,7 @@ class CertificateControllerArtifactCorrectionTest {
         value.contains("ARTIFACT_CORRECTED")),
         "A correction event must be recorded in the certificate audit.");
     assertTrue(sql.getAllValues().stream().anyMatch(value ->
-        value.contains("SET achievement_title") && value.contains("artifact_version=2")),
+        value.contains("SET achievement_snapshot") && value.contains("artifact_version=3")),
         "The corrected metadata and artifact version must become current.");
   }
 }
