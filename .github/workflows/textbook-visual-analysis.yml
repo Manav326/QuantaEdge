@@ -114,7 +114,7 @@ jobs:
 
       - name: Build inventory and persist resumable vision batches
         env:
-          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
@@ -133,7 +133,7 @@ jobs:
             --output-dir "$out"
           if [[ -f "$checkpoint" ]]; then cp "$checkpoint" "$out/visual-analysis.v1.json"; fi
 
-          package="ghcr.io/\${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
+          package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           total_limit="$MAX_ASSETS"
           processed_total=0
           batch_size=10
@@ -143,7 +143,7 @@ jobs:
             if (( remaining < batch )); then batch="$remaining"; fi
             args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews)
             if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
-            python scripts/analyze_visual_inventory_with_ollama.py "\${args[@]}"
+            python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
             batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$out/visual-analysis.v1.json")"
 
             # Commit each batch before proceeding. A cancelled runner only repeats the
