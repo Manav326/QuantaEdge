@@ -12,7 +12,7 @@ public class TutorController {
 
   @PostMapping("/sessions")
   public Map<String,Object> start(@RequestAttribute(value="authContext",required=false) AuthContext context,@RequestBody Map<String,Object> body){
-    return tutor.startSession(context,Long.parseLong(String.valueOf(body.get("lessonId"))));
+    return tutor.startSession(context,Long.parseLong(String.valueOf(body.get("lessonId"))),Boolean.parseBoolean(String.valueOf(body.getOrDefault("newChat",false))));
   }
 
   @GetMapping("/sessions/{sessionId}/messages")
