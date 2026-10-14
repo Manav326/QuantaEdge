@@ -1,0 +1,8 @@
+# Reuse Ollama already running on the host; this overlay does not download a second model.
+services:
+  api:
+    environment:
+      APP_AI_TUTOR_ENABLED: "true"
+      OPENAI_API_KEY: "local-ollama"
+      APP_AI_TUTOR_MODEL: "${QUANTAEDGE_OLLAMA_MODEL:?QUANTAEDGE_OLLAMA_MODEL must identify an installed local model}"
+      OPENAI_API_BASE_URL: "http://host.docker.internal:11434"
