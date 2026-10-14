@@ -154,7 +154,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     </div>;
   }
   if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><LocaleText hinglish="AI tutor" english="AI tutor" /></strong><p><LocaleText hinglish="अगर कहीं अटकें, तो इसी lesson के context में hint, explanation, example या step-by-step help लें।" english="If you get stuck, ask for a hint, explanation, example, or step-by-step help in the context of this lesson." /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><LocaleText hinglish="Tutor खोलें →" english="Open tutor →" /></button></div></div>;
-  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card"><span className="concept-kicker"><LocaleText hinglish="Recap" english="Recap" /></span>{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
+  if (block.block_type==='SUMMARY' || block.block_type==='RECAP') return <div className="concept-card">{data.points?.map((x:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={x}/></span></div>)}</div>;
   return null;
 }
 
@@ -239,6 +239,7 @@ export default function LearnClient() {
   const [studentDocuments,setStudentDocuments]=useState<StudentDocument[]>([]);
   const [documentsLoaded,setDocumentsLoaded]=useState(false);
   const [openChapter,setOpenChapter]=useState('');
+  const [lastOpenedLessonId,setLastOpenedLessonId]=useState<number|null>(null);
   const initializedChapterScope=useRef('');
   const [help,setHelp]=useState('none');
   const [tutorOpen,setTutorOpen]=useState(false);
@@ -304,6 +305,7 @@ export default function LearnClient() {
         return r.json();
       }) as Detail;
       setLesson(detail);
+      localStorage.setItem('qe:student:last-open-lesson:'+detail.class_code+':'+detail.subject_code,String(detail.id));
       setMcqAttempted(Object.fromEntries(detail.questions
         .filter(question=>question.question_type==='MCQ'&&question.attempted)
         .map(question=>[question.id,true])));
@@ -357,6 +359,7 @@ export default function LearnClient() {
         const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
+          localStorage.setItem('qe:student:last-open-lesson:'+d.class_code+':'+d.subject_code,String(d.id));
           setStudentDocuments([]);setTrackBrowse(null);setLesson(d);
           setMcqAttempted(Object.fromEntries(d.questions
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
@@ -481,6 +484,12 @@ export default function LearnClient() {
   },[trackBrowse?.classCode,trackBrowse?.subjectCode,documentsLoaded,chapterStorageScope,trackGroups]);
 
   useEffect(()=>{
+    if(!trackBrowse||!chapterStorageScope){setLastOpenedLessonId(null);return;}
+    const remembered=Number(localStorage.getItem('qe:student:last-open-lesson:'+chapterStorageScope)||0);
+    setLastOpenedLessonId(trackBrowse.lessons.some(item=>Number(item.id)===remembered)?remembered:null);
+  },[trackBrowse?.classCode,trackBrowse?.subjectCode,trackBrowse?.lessons,chapterStorageScope]);
+
+  useEffect(()=>{
     if(!trackBrowse||!documentsLoaded||!chapterStorageScope||initializedChapterScope.current!==chapterStorageScope)return;
     const key='qe:student:learn-scroll:'+chapterStorageScope;
     const raw=localStorage.getItem(key);
@@ -504,11 +513,15 @@ export default function LearnClient() {
     }));
   },[lesson?.id]);
 
-  function rememberTrackPosition(chapterCode?:string){
+  function rememberTrackPosition(chapterCode?:string,lessonId?:number){
     if(!trackBrowse)return;
     if(chapterCode){
       setOpenChapter(chapterCode);
       localStorage.setItem('qe:student:open-chapter:'+chapterStorageScope,chapterCode);
+    }
+    if(lessonId){
+      localStorage.setItem('qe:student:last-open-lesson:'+chapterStorageScope,String(lessonId));
+      setLastOpenedLessonId(lessonId);
     }
     localStorage.setItem('qe:student:learn-scroll:'+chapterStorageScope,String(window.scrollY));
   }
@@ -519,12 +532,14 @@ export default function LearnClient() {
     if(lesson)localStorage.setItem('qe:student:lesson-scroll:'+lesson.id,String(window.scrollY));
   }
 
+  const lastOpenedLesson=trackBrowse?.lessons.find(item=>Number(item.id)===lastOpenedLessonId);
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
       <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
       <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
       <p className="lesson-intro"><LocaleText hinglish="किसी chapter को खोलकर उसके topics और PDF देखें। आपका आखिरी खुला chapter याद रखा जाएगा।" english="Open a chapter to see its topics and PDF. Your last open chapter is remembered." /></p>
+      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
@@ -572,7 +587,7 @@ export default function LearnClient() {
               const bestPercent=Number(item.practice_best_percent||0);
               const activeAnswered=Math.max(0,Number(item.practice_active_answered_count||0));
               const activeQuestionCount=Math.max(0,Number(item.practice_active_question_count||0));
-              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id}>
+              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
                 <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
                 <span className="qe-student-topic-copy"><strong>{item.title}</strong>
                   <small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित microtopic" english="min · published microtopic" /></small>

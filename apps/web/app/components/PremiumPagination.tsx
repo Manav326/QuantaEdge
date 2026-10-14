@@ -1,6 +1,7 @@
 'use client';
 
 import type { CSSProperties } from 'react';
+import { useLocale } from './LanguageProvider';
 
 export type PremiumPaginationProps = {
   page: number;
@@ -49,6 +50,9 @@ export default function PremiumPagination({
   itemLabel = 'records',
   pageSizeOptions = [10, 20, 30, 50],
 }: PremiumPaginationProps) {
+  const { locale } = useLocale();
+  const t = (english: string, hindi: string) => locale === 'english' ? english : hindi;
+  const number = (value: number) => value.toLocaleString(locale === 'english' ? 'en-IN' : 'hi-IN');
   const safeTotal = Math.max(0, Number(total) || 0);
   const safeSize = Math.max(1, Number(pageSize) || 10);
   const pageCount = Math.max(1, Math.ceil(safeTotal / safeSize));
@@ -108,20 +112,22 @@ export default function PremiumPagination({
   });
   const disabledButton: CSSProperties = { ...buttonBase, color: '#aab2c0', background: palette.soft, cursor: 'not-allowed' };
 
+  if (safeTotal <= 10) return null;
+
   return (
-    <nav aria-label={'Pagination for ' + itemLabel} style={shell}>
+    <nav aria-label={t('Pagination for ', 'पृष्ठांकन: ') + itemLabel} style={shell}>
       <div style={{ display: 'grid', gap: 3, minWidth: 160 }}>
         <strong aria-live="polite" style={{ fontSize: 12, fontWeight: 800, letterSpacing: '-.1px' }}>
-          {safeTotal === 0 ? 'No ' + itemLabel : 'Showing ' + first.toLocaleString() + '–' + last.toLocaleString() + ' of ' + safeTotal.toLocaleString()}
+          {safeTotal === 0 ? t('No ', 'कोई ') + itemLabel : t('Showing ', 'दिखाए जा रहे हैं ') + number(first) + '–' + number(last) + t(' of ', ' में से ') + number(safeTotal)}
         </strong>
-        <span style={mutedText}>{safeTotal === 1 ? '1 item' : safeTotal.toLocaleString() + ' ' + itemLabel}</span>
+        <span style={mutedText}>{safeTotal === 1 ? t('1 item', '1 आइटम') : number(safeTotal) + ' ' + itemLabel}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap', marginLeft: 'auto' }}>
         <div style={tinyLabel}>
-          ROWS PER PAGE
+          {t('ROWS PER PAGE', 'प्रति पृष्ठ पंक्तियाँ')}
           <select
-            aria-label="Rows per page"
+            aria-label={t('Rows per page', 'प्रति पृष्ठ पंक्तियाँ')}
             value={safeSize}
             disabled={loading}
             onChange={event => onPageSizeChange(Number(event.target.value))}
@@ -134,12 +140,12 @@ export default function PremiumPagination({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, flexWrap: 'wrap' }}>
           <button
             type="button"
-            aria-label="Previous page"
-            title="Previous page"
+            aria-label={t('Previous page', 'पिछला पृष्ठ')}
+            title={t('Previous page', 'पिछला पृष्ठ')}
             disabled={loading || safePage <= 0}
             onClick={() => onPageChange(Math.max(0, safePage - 1))}
             style={loading || safePage <= 0 ? disabledButton : buttonBase}
-          >‹ <span style={{ fontSize: 11 }}>Previous</span></button>
+          >‹ <span style={{ fontSize: 11 }}>{t('Previous', 'पिछला')}</span></button>
 
           {pages.map((entry, index) => typeof entry === 'number'
             ? <button
@@ -156,12 +162,12 @@ export default function PremiumPagination({
 
           <button
             type="button"
-            aria-label="Next page"
-            title="Next page"
+            aria-label={t('Next page', 'अगला पृष्ठ')}
+            title={t('Next page', 'अगला पृष्ठ')}
             disabled={loading || safePage >= pageCount - 1}
             onClick={() => onPageChange(Math.min(pageCount - 1, safePage + 1))}
             style={loading || safePage >= pageCount - 1 ? disabledButton : buttonBase}
-          ><span style={{ fontSize: 11 }}>Next</span> ›</button>
+          ><span style={{ fontSize: 11 }}>{t('Next', 'अगला')}</span> ›</button>
         </div>
       </div>
     </nav>

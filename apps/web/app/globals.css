@@ -1289,3 +1289,14 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
  .tutor-messages{padding-top:5px;padding-bottom:5px}
  .tutor-input{padding-top:4px;padding-bottom:5px}
 }
+
+
+/* Clear subject labels and metric explanations on the student progress screen. */
+.qe-progress-card-help{display:block;margin-top:6px;color:#667085;font-size:11px;font-weight:450;line-height:1.55}
+.qe-progress-concept-copy{display:grid;gap:7px;min-width:0}
+.qe-progress-concept-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qe-progress-subject-tag{display:inline-flex;align-items:center;min-height:23px;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:800;line-height:1.25;border:1px solid transparent}
+.qe-progress-subject-tag--maths{background:#fff0df;color:#96500f;border-color:#f4d2a9}
+.qe-progress-subject-tag--science{background:#e7f6ee;color:#176044;border-color:#bde7d0}
+.qe-progress-subject-tag--other{background:#edf1f7;color:#48566e;border-color:#d7deea}
+.qe-progress-concept-meta small{font-size:11px;color:#748095}
