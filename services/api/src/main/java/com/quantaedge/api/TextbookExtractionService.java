@@ -286,7 +286,7 @@ public class TextbookExtractionService {
 
   private String normalizeText(String value) {
     if (value == null) return "";
-    return value.replace('\u0000', ' ').replaceAll("[\\t\\x0B\\f\\r]+", " ")
+    return value.replace((char) 0, ' ').replaceAll("[\\t\\x0B\\f\\r]+", " ")
         .replaceAll(" *\\n *", "\n").replaceAll("\\n{3,}", "\n\n").trim();
   }
 
