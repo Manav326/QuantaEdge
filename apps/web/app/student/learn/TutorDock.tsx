@@ -186,9 +186,10 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   currentQuestionId?: number;
 }) {
   const { locale, learningLanguage, languageReady } = useLocale();
-  // Either language selector can explicitly request English; the tutor never mixes the two.
-  const english = locale === 'english' || learningLanguage === 'en';
-  const responseLanguage = english ? 'en' : 'hi';
+  // Keep interface language and answer language distinct: every UI label follows
+  // the app-language selector, while the explanation follows the selected learning language.
+  const english = locale === 'english';
+  const responseLanguage = english || learningLanguage === 'en' ? 'en' : 'hi';
   const languageRef = useRef({ english, responseLanguage });
   languageRef.current = { english, responseLanguage };
   const labels = english ? englishModeLabels : hindiModeLabels;
@@ -207,6 +208,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   const endRef = useRef<HTMLDivElement | null>(null);
 
   const [minimized, setMinimized] = useState(false);
+  const [retryAttempt, setRetryAttempt] = useState(0);
   const [frame, setFrame] = useState<PanelFrame | null>(null);
   const [bubblePosition, setBubblePosition] = useState<Point | null>(null);
   const panelRef = useRef<HTMLElement | null>(null);
@@ -288,7 +290,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       }
     })();
     return () => { cancelled = true; };
-  }, [open, lessonId, languageReady]);
+  }, [open, lessonId, languageReady, retryAttempt]);
 
   useEffect(() => {
     if (!open || !languageReady) return;
@@ -314,7 +316,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [messages, busy]);
 
-  useEffect(() => { setError(''); }, [english]);
+  useEffect(() => { setError(''); }, [english, responseLanguage]);
 
   function beginPanelMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (window.innerWidth <= 700 || event.button !== 0 || (event.target as HTMLElement).closest('button')) return;
@@ -535,7 +537,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         <div className="tutor-heading-copy">
           <span className="tutor-eyebrow">QUANTAEDGE TUTOR</span>
           <strong>{english ? 'Learn with a little help' : 'सीखें, सही मदद के साथ'}</strong>
-          <span className="tutor-head-status"><i aria-hidden="true" />{english ? 'Lesson-aware · Replies in English' : 'पाठ के अनुसार · हिन्दी में जवाब'}</span>
+          <span className="tutor-head-status"><i aria-hidden="true" />{responseLanguage === 'en' ? (english ? 'Lesson-aware · Replies in English' : 'पाठ के अनुसार · English में जवाब') : (english ? 'Lesson-aware · Replies in Hindi' : 'पाठ के अनुसार · हिन्दी में जवाब')}</span>
         </div>
       </div>
       <div className="tutor-head-controls">
@@ -551,7 +553,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
             <span className="tutor-icon" aria-hidden="true">✦</span>
             <h3>{english ? 'Tutor is temporarily unavailable' : 'ट्यूटर अभी उपलब्ध नहीं है'}</h3>
             <p>{error || (english ? 'Please try again in a moment.' : 'कृपया थोड़ी देर बाद फिर प्रयास करें।')}</p>
-            <button type="button" className="tutor-retry" onClick={() => { setAvailable(null); setError(''); setSessionId(null); }}>{english ? 'Retry connection' : 'फिर से जोड़ें'}</button>
+            <button type="button" className="tutor-retry" onClick={() => { setAvailable(null); setError(''); setSessionId(null); setRetryAttempt(value => value + 1); }}>{english ? 'Retry connection' : 'फिर से जोड़ें'}</button>
           </div>
         : <>
             <div className="tutor-modes" aria-label={english ? 'Tutor help mode' : 'ट्यूटर सहायता का तरीका'}>
@@ -595,7 +597,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
             </form>
             <div className="tutor-footnote">
               <span>{english ? 'Lesson content is the source of truth.' : 'पाठ की सामग्री ही मूल स्रोत है।'}</span>
-              <span>{english ? 'Responding in English' : 'हिन्दी में उत्तर'}</span>
+              <span>{responseLanguage === 'en' ? (english ? 'Responding in English' : 'English में जवाब') : (english ? 'Responding in Hindi' : 'हिन्दी में जवाब')}</span>
             </div>
             <div className="tutor-resize-guide">
               <span>{english ? 'Drag header to move · resize from corner' : 'खिसकाने के लिए शीर्षक खींचें · कोने से आकार बदलें'}</span>
