@@ -87,5 +87,42 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             }, endpoint="http://127.0.0.1:11434", model="vision", opener=self._opener)
 
 
+    def test_resume_skips_successful_matching_asset_checkpoint(self):
+        output = self.root / "visual-analysis.v1.json"
+        first = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        self.assertEqual(1, first["summary"]["assets_analyzed"])
+        saved = output.read_bytes()
+
+        def must_not_call(*args, **kwargs):
+            raise AssertionError("a matching successful asset must not be re-analyzed")
+
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=must_not_call, output_path=output, resume=True,
+        )
+        self.assertEqual(1, resumed["summary"]["assets_skipped_from_checkpoint"])
+        self.assertEqual(1, resumed["summary"]["assets_analyzed"])
+        self.assertEqual(saved, output.read_bytes())
+
+    def test_resume_rejects_changed_model_or_source(self):
+        output = self.root / "visual-analysis.v1.json"
+        run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=self._opener, output_path=output,
+        )
+        with self.assertRaisesRegex(ValueError, "model or prompt version changed"):
+            run_analysis(
+                self.inventory_path, endpoint="http://127.0.0.1:11434",
+                model="another-model", max_assets=1, include_page_previews=True,
+                output_path=output, resume=True,
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
