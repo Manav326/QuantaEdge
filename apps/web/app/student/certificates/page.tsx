@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
 
@@ -34,6 +34,7 @@ type Certificate = {
 
 export default function StudentCertificatesPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -48,6 +49,11 @@ export default function StudentCertificatesPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [previewFormat, setPreviewFormat] = useState<'pdf' | 'png'>('pdf');
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState('');
+  const [downloadBusy, setDownloadBusy] = useState(false);
   const refresh = useCallback(async () => {
     setError('');
     try {
@@ -136,14 +142,105 @@ export default function StudentCertificatesPage() {
     () => releasedAttempts.find((attempt: any) => String(attempt.attempt_id) === attemptId),
     [releasedAttempts, attemptId],
   );
+  const requestedCertificateId = Number(searchParams.get('certificateId') || 0);
+  const requestedCertificate = certificates.find(certificate => certificate.id === requestedCertificateId);
+
+  useEffect(() => {
+    if (!requestedCertificateId) {
+      setPreviewUrl('');
+      setPreviewError('');
+      setPreviewLoading(false);
+      return;
+    }
+    if (!requestedCertificate) {
+      setPreviewUrl('');
+      setPreviewLoading(false);
+      return;
+    }
+    if (requestedCertificate.status !== 'ISSUED') {
+      setPreviewUrl('');
+      setPreviewError(t('This certificate is revoked or is not available to view.','यह प्रमाणपत्र निरस्त है या देखने के लिए उपलब्ध नहीं है।'));
+      setPreviewLoading(false);
+      return;
+    }
+    let active = true;
+    let objectUrl = '';
+    setPreviewUrl('');
+    setPreviewError('');
+    setPreviewLoading(true);
+    const loadPreview = async () => {
+      try {
+        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?format=' + previewFormat, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+        });
+        if (response.status === 401 || response.status === 403) {
+          router.replace('/login/student');
+          return;
+        }
+        if (!response.ok) {
+          const raw = await response.text();
+          let body: any = {};
+          try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
+          throw new Error(body.message || body.detail || body.error || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
+        }
+        const blob = await response.blob();
+        if (!active) return;
+        objectUrl = URL.createObjectURL(blob);
+        setPreviewUrl(objectUrl);
+      } catch (e: any) {
+        if (active) setPreviewError(e?.message || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
+      } finally {
+        if (active) setPreviewLoading(false);
+      }
+    };
+    void loadPreview();
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [requestedCertificateId, requestedCertificate, previewFormat, router, locale]);
+
+  async function downloadSelectedCertificate() {
+    if (!requestedCertificate || requestedCertificate.status !== 'ISSUED' || downloadBusy) return;
+    setDownloadBusy(true);
+    setPreviewError('');
+    try {
+      const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?format=' + previewFormat, {
+        cache: 'no-store',
+        credentials: 'same-origin',
+      });
+      if (response.status === 401 || response.status === 403) {
+        router.replace('/login/student');
+        return;
+      }
+      if (!response.ok) {
+        const raw = await response.text();
+        let body: any = {};
+        try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
+        throw new Error(body.message || body.detail || body.error || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
+      }
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'QuantaEdge-' + requestedCertificate.certificate_number + '.' + previewFormat;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e: any) {
+      setPreviewError(e?.message || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
+    } finally {
+      setDownloadBusy(false);
+    }
+  }
 
   async function issueCertificate() {
     if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
         && Number.isSafeInteger(Number(selectedAssessment.certificate_id))) {
       setError('');
       setNotice(t('This assessment already has an issued certificate. Opening the existing certificate.','इस टेस्ट का प्रमाणपत्र पहले ही जारी हो चुका है। मौजूदा प्रमाणपत्र खोला जा रहा है।'));
-      window.open('/api/v1/students/me/certificates/' + Number(selectedAssessment.certificate_id) + '/view?format=pdf',
-        '_blank', 'noopener,noreferrer');
+      router.push('/student/certificates?certificateId=' + Number(selectedAssessment.certificate_id));
       return;
     }
     if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED') {
@@ -189,6 +286,32 @@ export default function StudentCertificatesPage() {
 
         {error && <div className={styles.error} role="alert">{error}</div>}
         {notice && <div className={styles.notice} role="status">{notice}</div>}
+
+        {requestedCertificateId > 0 && <section className={styles.panel} aria-label={t('Certificate viewer','प्रमाणपत्र व्यूअर')}>
+          <div className={styles.sectionHead}>
+            <div><span className={styles.eyebrow}>{t('CERTIFICATE VIEWER','प्रमाणपत्र व्यूअर')}</span><h2>{requestedCertificate?.achievement_title || t('Certificate','प्रमाणपत्र')}</h2></div>
+            <button type="button" className="button button-light" onClick={() => router.push('/student/certificates')}>{t('All certificates','सभी प्रमाणपत्र')}</button>
+          </div>
+          {!profile ? <div className={styles.viewerLoading}>{t('Loading your certificate…','आपका प्रमाणपत्र लोड हो रहा है…')}</div>
+            : !requestedCertificate ? <div className={styles.empty}><strong>{t('Certificate not found','प्रमाणपत्र नहीं मिला')}</strong><p>{t('This certificate is not available in your account.','यह प्रमाणपत्र आपके खाते में उपलब्ध नहीं है।')}</p></div>
+            : requestedCertificate.status !== 'ISSUED' ? <div className={styles.error}>{t('This certificate has been revoked and cannot be displayed as valid proof.','यह प्रमाणपत्र निरस्त है और मान्य प्रमाण के रूप में नहीं दिखाया जा सकता।')}</div>
+            : <>
+              <div className={styles.viewerToolbar}>
+                <div className={styles.formatChoices} role="group" aria-label={t('Certificate format','प्रमाणपत्र का फ़ॉर्मैट')}>
+                  <button type="button" aria-pressed={previewFormat === 'pdf'} className={previewFormat === 'pdf' ? styles.formatButton + ' ' + styles.formatButtonActive : styles.formatButton} onClick={() => setPreviewFormat('pdf')}>PDF</button>
+                  <button type="button" aria-pressed={previewFormat === 'png'} className={previewFormat === 'png' ? styles.formatButton + ' ' + styles.formatButtonActive : styles.formatButton} onClick={() => setPreviewFormat('png')}>PNG</button>
+                </div>
+                <button type="button" className="button button-dark" disabled={downloadBusy || previewLoading} onClick={() => void downloadSelectedCertificate()}>
+                  {downloadBusy ? t('Preparing download…','डाउनलोड तैयार हो रहा है…') : t('Download selected format','चुना गया फ़ॉर्मैट डाउनलोड करें') + ' (' + previewFormat.toUpperCase() + ')'}
+                </button>
+              </div>
+              {previewError && <div className={styles.error} role="alert">{previewError}</div>}
+              {previewLoading ? <div className={styles.viewerLoading}>{t('Preparing certificate preview…','प्रमाणपत्र का पूर्वावलोकन तैयार हो रहा है…')}</div>
+                : previewUrl && previewFormat === 'pdf' ? <iframe className={styles.certificatePdfPreview} src={previewUrl} title={t('Certificate PDF preview','प्रमाणपत्र PDF पूर्वावलोकन')} />
+                : previewUrl && previewFormat === 'png' ? <div className={styles.certificateImageStage}><img className={styles.certificateImagePreview} src={previewUrl} alt={t('Issued certificate preview','जारी प्रमाणपत्र का पूर्वावलोकन')} /></div>
+                : null}
+            </>}
+        </section>}
 
         <section className={styles.panel}>
           <div className={styles.sectionHead}>
@@ -320,12 +443,10 @@ export default function StudentCertificatesPage() {
                     <span>{certificate.certificate_number} · {certificate.template_id}</span>
                     <small>{t('Issued','जारी')}: {new Date(certificate.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')} · {certificate.language === 'hi' ? t('Hindi','हिन्दी') : 'English'}</small>
                   </div>
-                  <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status}</span>
+                  <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? t('Issued','जारी') : t('Revoked','निरस्त')}</span>
                   <div className={styles.downloads}>
                     {certificate.status === 'ISSUED' ? <>
-                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/view?format=pdf'} target="_blank" rel="noreferrer">{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</a>
-                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=pdf'}>{t('Download PDF','PDF डाउनलोड करें')}</a>
-                      <a href={'/api/v1/students/me/certificates/' + certificate.id + '/download?format=png'}>{t('Download PNG','PNG डाउनलोड करें')}</a>
+                      <Link href={'/student/certificates?certificateId=' + certificate.id}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
                     </> : <small>{t('Revoked · contact support if you believe this is an error.','निरस्त · इसे गलत मानते हैं तो सहायता टीम से संपर्क करें।')}</small>}
                     <Link href={'/certificate/verify?code=' + encodeURIComponent(certificate.certificate_number)} target="_blank">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</Link>
                   </div>

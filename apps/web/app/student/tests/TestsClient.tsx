@@ -236,15 +236,18 @@ export default function TestsClient(){
   const assessmentTypeLabel=(kind?:string)=>kind==='TOPIC_END'?t('Topic-end test','टॉपिक-एंड टेस्ट'):kind==='CHAPTER_END'?t('Chapter-end test','अध्याय-एंड टेस्ट'):t('Admin-created test','एडमिन द्वारा बनाया गया टेस्ट');
   const certificateEligibilityMessage=(reason?:string|null)=>{
     switch(reason){
-      case 'ADMIN_CREATED_TEST_ONLY':return 'Only admin-created tests qualify; generated topic/chapter tests and practice are excluded.';
-      case 'RESULT_NOT_RELEASED':return 'Certificate unlocks after the final result is released.';
-      case 'SUBJECT_TRACK_NOT_ACTIVE':return 'An active enrollment in this subject and current class is required.';
-      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return 'A released, passing admin-created test is enough for a test certificate; refresh the result list to retry eligibility.';
-      case 'SUBJECT_COMPLETION_REQUIRED':return 'Test certificates no longer require completing every published lesson. Refresh results and retry eligibility.';
-      case 'PASS_THRESHOLD_NOT_MET':return 'The result is below the '+String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80)+'% certificate threshold.';
-      case 'INVALID_SCORE':return 'This result has no valid maximum score.';
-      case 'CERTIFICATE_REVOKED':return 'This certificate has been revoked; contact an administrator.';
-      default:return 'Certificate eligibility is unavailable. Refresh results to check again.';
+      case 'ADMIN_CREATED_TEST_ONLY':return '';
+      case 'RESULT_NOT_RELEASED':return t('Certificate unlocks after the final result is released.','अंतिम परिणाम जारी होने के बाद प्रमाणपत्र उपलब्ध होगा।');
+      case 'SUBJECT_TRACK_NOT_ACTIVE':return t('An active enrollment in this subject and current class is required.','इस कक्षा और विषय में सक्रिय नामांकन आवश्यक है।');
+      case 'PUBLISHED_LESSONS_NOT_AVAILABLE':return t('A released, passing admin-created test is enough for a test certificate; refresh results to retry eligibility.','टेस्ट प्रमाणपत्र के लिए जारी पास admin-created टेस्ट पर्याप्त है; पात्रता दोबारा जाँचने के लिए परिणाम रिफ्रेश करें।');
+      case 'SUBJECT_COMPLETION_REQUIRED':return t('Test certificates do not require completing every published lesson. Refresh results and retry eligibility.','टेस्ट प्रमाणपत्र के लिए सभी प्रकाशित पाठ पूरे करना ज़रूरी नहीं है। परिणाम रिफ्रेश करके पात्रता दोबारा जाँचें।');
+      case 'PASS_THRESHOLD_NOT_MET':{
+        const threshold=String(Object.values(certificateEligibility).find(item=>item.pass_threshold_percent)?.pass_threshold_percent||80);
+        return t('The result is below the '+threshold+'% certificate threshold.','परिणाम प्रमाणपत्र की '+threshold+'% सीमा से कम है।');
+      }
+      case 'INVALID_SCORE':return t('This result has no valid maximum score.','इस परिणाम का अधिकतम स्कोर मान्य नहीं है।');
+      case 'CERTIFICATE_REVOKED':return t('This certificate has been revoked; contact an administrator.','यह प्रमाणपत्र निरस्त है; एडमिन से संपर्क करें।');
+      default:return t('Certificate eligibility is unavailable. Refresh results to check again.','प्रमाणपत्र की पात्रता उपलब्ध नहीं है। दोबारा जाँचने के लिए परिणाम रिफ्रेश करें।');
     }
   };
 
@@ -472,7 +475,7 @@ export default function TestsClient(){
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume attempt','प्रयास फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button><button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>{resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume test','टेस्ट फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
@@ -508,9 +511,9 @@ export default function TestsClient(){
                      </button>
                      {certificate?.certificate_status==='ISSUED'&&certificateId>0?(
                        <div className={styles.certificateActionLinks}>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</a>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>{t('PDF','PDF')}</a>
-                         <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>{t('PNG','PNG')}</a>
+                         <Link href={'/student/certificates?certificateId='+certificateId}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
+                         
+                         
                          <a href={'/certificate/verify?code='+encodeURIComponent(certificate?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                        </div>
                      ):certificate?.certificate_status==='REVOKED'?(
@@ -531,7 +534,7 @@ export default function TestsClient(){
                  })}
                    <button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading}
                      onClick={()=>void openLeaderboard({assessment_id:result.assessment_id,title:result.assessment_title})}>
-                     <span aria-hidden="true">♛</span> Leaderboard
+                     <span aria-hidden="true">♛</span> {t('Leaderboard','लीडरबोर्ड')}
                    </button>
                  </div>
                </div>
@@ -578,9 +581,9 @@ export default function TestsClient(){
               </div>
               {cert?.certificate_status==='ISSUED'&&certificateId>0?(
                 <div className={styles.certificateActionLinks}>
-                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/view?format=pdf'} target="_blank" rel="noreferrer">{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</a>
-                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=pdf'}>Download PDF</a>
-                  <a href={'/api/v1/students/me/certificates/'+certificateId+'/download?format=png'}>Download PNG</a>
+                  <Link href={'/student/certificates?certificateId='+certificateId}>{t('View certificate ↗','प्रमाणपत्र देखें ↗')}</Link>
+                  
+                  
                   <a href={'/certificate/verify?code='+encodeURIComponent(cert?.certificate_number||'')} target="_blank" rel="noreferrer">{t('Verify status ↗','स्थिति सत्यापित करें ↗')}</a>
                 </div>
               ):cert?.certificate_status==='REVOKED'?(
@@ -595,7 +598,7 @@ export default function TestsClient(){
                   {issuingCertificateAttemptId===Number(attempt?.attempt_id)?'Issuing…':'Issue certificate'}
                 </button>
               ):(
-                <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>
+                {cert?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'&&<small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>}
               )}
             </section>;
           })()}
