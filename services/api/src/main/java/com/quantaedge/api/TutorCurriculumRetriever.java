@@ -104,19 +104,19 @@ public class TutorCurriculumRetriever {
     if (query.isBlank()) return "";
     if (query.length() > 400) query = query.substring(0, 400);
     List<Map<String, Object>> pages = jdbc.queryForList("""
-      select a.title as asset_title,
-             coalesce(nullif(d.source_title,''),a.title) as source_title,
-             coalesce(d.edition,'edition not recorded') as edition,
+      select coalesce(nullif(sb.source_title,''),nullif(d.source_title,''),a.title) as source_title,
+             coalesce(nullif(sb.edition,''),d.edition,'edition not recorded') as edition,
+             coalesce(sb.source_url,d.source_url,'source URL not recorded') as source_url,
              p.page_no,coalesce(ch.display_name,'chapter not mapped') as chapter_title,
-             left(p.extracted_text,2200) as excerpt,
-             case when p.chapter_id=current_lesson.chapter_id then 1 else 0 end as current_chapter
+             left(p.extracted_text,2200) as excerpt
       from tutor_session ts
       join lesson current_lesson on current_lesson.id=ts.lesson_id
       join curriculum_chapter current_chapter on current_chapter.id=current_lesson.chapter_id
       join curriculum_subject s on s.id=current_chapter.subject_id
       join textbook_extracted_page p on p.subject_id=current_chapter.subject_id
         and p.class_id=s.class_id and p.language=?
-      join learning_pdf_asset a on a.id=p.pdf_asset_id and a.review_status='APPROVED'
+      left join learning_pdf_asset a on a.id=p.pdf_asset_id
+      left join textbook_source_book sb on sb.id=p.source_book_id
       left join learning_document d on d.id=p.learning_document_id
       left join curriculum_chapter ch on ch.id=p.chapter_id
       where ts.id=? and ts.ended_at is null
@@ -124,11 +124,14 @@ public class TutorCurriculumRetriever {
         and p.extraction_method in ('PDF_TEXT','OCR')
         and length(trim(p.extracted_text))>=35
         and (
-          (d.id is not null and d.status='PUBLISHED')
-          or exists (
-            select 1 from learning_book_intake i
-            where i.pdf_asset_id=a.id and i.status='REVIEWED'
-          )
+          (sb.id is not null and sb.status='APPROVED')
+          or (a.id is not null and a.review_status='APPROVED' and (
+            (d.id is not null and d.status='PUBLISHED')
+            or exists (
+              select 1 from learning_book_intake i
+              where i.pdf_asset_id=a.id and i.status='REVIEWED'
+            )
+          ))
         )
         and to_tsvector('simple',coalesce(p.extracted_text,'')) @@ plainto_tsquery('simple',?)
       order by case when p.chapter_id=current_lesson.chapter_id then 0 else 1 end,
@@ -143,6 +146,7 @@ public class TutorCurriculumRetriever {
       if (excerpt.isBlank()) continue;
       context.append("- Source: ").append(row.get("source_title"))
           .append("; edition: ").append(row.get("edition"))
+          .append("; source URL: ").append(row.get("source_url"))
           .append("; chapter: ").append(row.get("chapter_title"))
           .append("; PDF page: ").append(row.get("page_no")).append("\n  Content: ")
           .append(excerpt).append("\n");
