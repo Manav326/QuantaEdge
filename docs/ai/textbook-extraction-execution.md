@@ -3,7 +3,7 @@
 This file is the durable checkpoint for the NCERT/SCERT extraction work. Continue from the first unchecked item when a conversation ends; do not restart at planning or repeat completed work. Keep implementation on `main` only (no branches or PRs), and update this tracker in the same commit as meaningful milestones.
 
 ## Goal
-One reusable, provenance-preserving source of truth for whole-book PDF ingestion, page extraction, chapter mapping, Hindi/English alignment, question/lesson generation, and live AI Tutor retrieval for QuantaEdge classes 6–8 Maths and Science.
+One reusable, provenance-preserving source of truth for whole-book PDF ingestion, page extraction, visual asset extraction, chapter mapping, Hindi/English alignment, multimodal lesson/question generation, and live AI Tutor retrieval for QuantaEdge classes 6–8 Maths and Science.
 
 ## Execution status
 
@@ -18,12 +18,21 @@ One reusable, provenance-preserving source of truth for whole-book PDF ingestion
 - [ ] Run `scripts/quantaedge-class6-tutor-pilot.ps1` from the user's authorized local environment: dry-run first, then import as draft, and approve only after inspecting the source summary. Verify live tutor retrieval/citations. The four committed manifests and page JSONL files were independently audited on 2026-10-14: SHA-256 values and contiguous page numbering matched (1,252 pages; 1,221 TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW and 31 LOW_TEXT_REVIEW; no integrity issues). The API import/approval requires a local admin session and cannot be executed by a CI runner.
 - [x] Add a draft-only bridge from committed GHCR page manifests/JSONL into the existing question-generation schema. It requires a source-bound editor-reviewed chapter map using canonical curriculum codes, re-verifies full-book page continuity and metadata hashes, and blocks whole chapters containing LOW_TEXT/OCR_REQUIRED/empty pages while allowing clean chapters through.
 - [x] Enable existing question generation against an in-house Ollama/OpenAI-compatible endpoint on exact localhost/loopback without a hosted API key or external-processing confirmation; hosted endpoints still require HTTPS, an explicit consent flag, and a key. All generated bundles remain drafts.
+- [x] Document the multimodal extraction and lesson-authoring contract in [multimodal-lesson-authoring-pipeline.md](multimodal-lesson-authoring-pipeline.md): page/crop visual inventory, provenance and rights gates, typed lesson blocks, trusted interactive registry, accessible fallbacks, and staged acceptance criteria. This is a design contract; implementation is not yet complete.
+- [ ] Phase A — visual inventory: extract embedded images and render page/crop previews; record asset hashes, page coordinates, captions/context, confidence, rights/provenance and review state; test against the four-book Class 6 pilot without breaking text import.
+- [ ] Phase B — typed lesson blocks: define and validate a versioned lesson document schema; add draft import/preview/render support for text, equations, examples, images/diagrams, tables/charts, checks and recap while keeping existing lessons backward-compatible.
+- [ ] Phase C — trusted interactive component library: start with deterministic Maths manipulatives (number line/place value, fractions, geometry, simple graph explorer), then a reviewed Science animation. Never execute AI-generated JavaScript/HTML.
+- [ ] Phase D — AI-assisted multimodal authoring: generate lesson blueprints and original visual/animation briefs from mapped, quality-approved sources; produce draft-only assets/blocks; run structural, factual, bilingual, accessibility and rights checks before editor approval.
 - [ ] Run the local Class 6 loop end to end: import/approve verified source records, create reviewed chapter maps, generate candidates using Ollama, promote reviewed content, import it as draft into Content Studio, and verify Tutor retrieval/citations.
-- [ ] Align Hindi and English editions/contextual translations while preserving formulas, tables, diagrams, and scientific/mathematical terms; record translation status and source relationship.
-- [ ] After the imported Class 6 pilot is verified end to end, scale extraction to Classes 7–8 Maths and Science books.
+- [ ] Align Hindi and English editions/contextual translations while preserving formulas, tables, diagrams, visual labels and scientific/mathematical terms; record translation status and source relationship.
+- [ ] After the Class 6 pipeline and multimodal student experience are verified end to end, scale extraction/authoring to Classes 7–8 Maths and Science books.
 - [ ] Update this tracker with commit SHAs, workflow result, and the exact next unchecked task after each work session.
 
-## Current checkpoint (2026-10-14)
+## Current checkpoint (2026-10-15)
+
+The multimodal implementation requirements are now durable in the repository. Start with **Phase A: visual inventory**, not animation generation. Text extraction, source-page hashes and review-gated question-generation infrastructure exist; image/crop extraction, typed multimodal lesson rendering, interactive blocks, and their editor approval workflow remain unimplemented. Do not describe QuantaEdge as having automatic multimodal lesson generation until the phase acceptance criteria pass.
+
+## Existing implementation checkpoint (2026-10-14)
 
 Implementation commits on `main`:
 - `43f7b8fc` — durable tracker (this file)
@@ -44,6 +53,7 @@ Implementation commits on `main`:
 - `999f95e1` / `a94826a2` / `d7977dd3` — safe local importer for extracted page JSONL
 - `ed0023dc` / `a0920c60` — Spring Boot 4 Jackson 3 compatibility and passing API verification
 - `e4b3be32` / `d095913d` / `f50f9897` — exact subject filtering and extraction/importer tests
+- `98796de9` — multimodal lesson-authoring pipeline design contract
 
 Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/QuantaEdge/actions/runs/38579506350 and produced artifact ID `11902717615` (available until 2027-01-12). The API verification job passed at commit `a0920c604086a03ead0a075ef3dde6cd58e0f880`; the aggregate workflow was still finishing the API image build at the last status check. The tracker and tutor documentation are intentionally committed to the repository so work can resume at the next unchecked task. The source-ingestion admin screen now exposes the extraction action for approved complete-book assets. The GHCR runner extracted real NCERT Class 6 books: English *Ganita Prakash* (412 pages), English *Curiosity* (272), Hindi *Ganita Prakash (Hindi)* (304), and Hindi *Jigyasa* (264), each labelled Reprint 2026–27. The 1,252 extracted page records are in the private 90-day Actions artifact, not yet imported into the live QuantaEdge database. The new import API stores page text without copying the original large PDFs into PostgreSQL. Extraction statuses are READY, LOW_TEXT, OCR_REQUIRED, and FAILED; only READY pages can ground tutor responses. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
 
@@ -53,13 +63,13 @@ A GitHub Actions workflow (`.github/workflows/commit-class6-extraction-artifact.
 
 ## GHCR extraction to question-generation bridge
 
-Run `scripts/build_extraction_bundle_from_ghcr_pages.py` to convert one committed manifest and sibling page JSONL into the existing `DRAFT_EXTRACTION_ONLY` bundle schema. The command requires a human-reviewed chapter-map JSON bound to that exact source `book_id` and SHA-256. Chapter codes must exist in the canonical Class 6–8 curriculum target matrix. Start from `docs/ai/ghcr-extraction-chapter-map-template.json`; leave it in draft status until the source book's contents and PDF page ranges have actually been checked. Chapters touching low-text, OCR-required, failed, or empty pages are reported and skipped; clean mapped chapters can proceed. The adapter does not publish content.
+Run `scripts/build_extraction_bundle_from_ghcr_pages.py` to convert one committed manifest and sibling page JSONL into the existing `DRAFT_EXTRACTION_ONLY` bundle schema. The command requires a human-reviewed chapter-map JSON bound to that exact source `book_id` and SHA-256. Chapter codes must exist in the canonical Class 6–8 curriculum target matrix. Start from `docs/ai/ghcr-extraction-chapter-map-template.json`; leave it in draft status until the source book's contents and PDF page ranges have actually been checked. Chapters touching low-text, OCR-required, failed, or empty pages are reported and skipped. The adapter does not publish content.
 
 For local generation, set `QUANTAEDGE_QUESTION_API_BASE_URL=http://localhost:11434/v1` and `QUANTAEDGE_QUESTION_MODEL` to the model tag already pulled into Ollama, then pass `--generate` to `scripts/generate_questions_from_extraction.py`. Exact loopback endpoints do not require `OPENAI_API_KEY` or `--confirm-external-processing`; a hosted endpoint still requires HTTPS, explicit confirmation, and a key. Candidate lessons/questions remain drafts and continue through the existing human review and Content Studio gates.
 
 ## Immediate Class 6 tutor pilot command
 
-`powershell -ExecutionPolicy Bypass -File .\scripts\quantaedge-class6-tutor-pilot.ps1` runs the safe dry-run by default. `-Mode ImportDraft` sends the four validated book manifests and page files to the local admin API as draft source records. Set `QUANTAEDGE_ADMIN_SESSION` to the authenticated `QE_SESSION` cookie value in the user's terminal first; never paste it into chat. After reviewing the displayed official URLs, editions, page counts and SHA prefixes, `-Mode ImportAndApprove` requires the exact confirmation `APPROVE CLASS 6 SOURCES` before it imports and approves those four source records. The script uses the artifacts already committed to `main`; it does not download books, overwrite local caches, import lessons, or publish student content. `LOW_TEXT` pages remain excluded from Tutor retrieval.
+`powershell -ExecutionPolicy Bypass -File .\\scripts\\quantaedge-class6-tutor-pilot.ps1` runs the safe dry-run by default. `-Mode ImportDraft` sends the four validated book manifests and page files to the local admin API as draft source records. Set `QUANTAEDGE_ADMIN_SESSION` to the authenticated `QE_SESSION` cookie value in the user's terminal first; never paste it into chat. After reviewing the displayed official URLs, editions, page counts and SHA prefixes, `-Mode ImportAndApprove` requires the exact confirmation `APPROVE CLASS 6 SOURCES` before it imports and approves those four source records. The script uses artifacts already committed to `main`; it does not download books, overwrite local caches, import lessons, or publish student content. `LOW_TEXT` pages remain excluded from Tutor retrieval.
 
 ## Guardrails
 - Existing whole-book GHCR/cache flow remains the input source; do not introduce chapter-download fallback when whole-book download is required.
