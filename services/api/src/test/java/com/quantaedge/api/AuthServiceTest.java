@@ -355,6 +355,8 @@ class AuthServiceTest {
     String passwordHash = new BCryptPasswordEncoder(12).encode("StudentPass!2026");
     when(jdbc.queryForList(contains("from user_account u"), eq("+917070107483"), eq("aarav07")))
         .thenReturn(List.of(Map.of("student_id", 81L, "password_hash", passwordHash)));
+    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class),
+        anyString(), eq("STUDENT"))).thenReturn(0L);
     when(jdbc.queryForObject("select display_name from student where id=?", String.class, 81L))
         .thenReturn("Aarav");
 
