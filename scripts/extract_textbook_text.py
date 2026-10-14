@@ -87,7 +87,7 @@ def _matches_filters(source: dict[str, Any], class_no: int | None,
     if language and source_language not in {language.casefold(), {"hindi": "hi", "english": "en"}.get(language.casefold(), language.casefold())}:
         return False
     def canonical_subject(value: str) -> str:
-        normalized = re.sub(r"[^\\w\\u0900-\\u097f]+", " ", value.casefold()).strip()
+        normalized = re.sub(r"[^\w\u0900-\u097f]+", " ", value.casefold()).strip()
         if normalized in {"math", "maths", "mathematics", "गणित"}:
             return "maths"
         if normalized in {"science", "विज्ञान"}:
