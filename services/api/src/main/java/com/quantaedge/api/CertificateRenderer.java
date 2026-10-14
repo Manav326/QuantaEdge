@@ -233,16 +233,6 @@ public class CertificateRenderer {
     g.setColor(GOLD); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
 
     CertificateWording wording = lockedWording(hindi ? "hi" : "en");
-    g.setColor(NAVY);
-    drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
-        WIDTH / 2, 400, WIDTH - 420);
-    g.setColor(MUTED);
-    drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
-        WIDTH / 2, 472, WIDTH - 520);
-    g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, 588, WIDTH - 480);
-    g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 620, WIDTH / 2 + 350, 620);
-    g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, 682, WIDTH - 520);
-
     String assessmentName = d.assessmentName() == null || d.assessmentName().isBlank() ? title : d.assessmentName();
     if (assessmentName == null || assessmentName.isBlank()) throw new IllegalArgumentException("A real assessment title is required.");
     int titleSize = 54;
@@ -252,14 +242,34 @@ public class CertificateRenderer {
       if (lines.size() <= 3 || titleSize <= 34) break;
       titleSize -= 4;
     } while (true);
+
+    // Vertically center the award copy in the open band between the header and the
+    // certificate-details footer. Longer assessment titles move the block upward to
+    // preserve balanced whitespace without colliding with the footer.
+    int headingY = lines.size() <= 1 ? 528 : 518 - (Math.min(lines.size(), 3) - 2) * 31;
     g.setColor(NAVY);
-    int titleY = 756;
+    drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
+        WIDTH / 2, headingY, WIDTH - 420);
+    g.setColor(MUTED);
+    drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
+        WIDTH / 2, headingY + 72, WIDTH - 520);
+    int recipientY = headingY + 188;
+    g.setColor(NAVY);
+    drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, recipientY, WIDTH - 480);
+    g.setColor(ORANGE);
+    g.setStroke(new BasicStroke(5));
+    g.drawLine(WIDTH / 2 - 350, recipientY + 32, WIDTH / 2 + 350, recipientY + 32);
+    g.setColor(MUTED);
+    drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, recipientY + 94, WIDTH - 520);
+
+    g.setColor(NAVY);
+    int titleY = headingY + 356;
     int titleStep = titleSize + 7;
     for (String line : lines) {
       drawCentered(g, font(hindi, Font.BOLD, titleSize), line, WIDTH / 2, titleY, WIDTH - 560);
       titleY += titleStep;
     }
-    int completionY = Math.max(titleY + 1, 842);
+    int completionY = Math.max(titleY + 1, headingY + 458);
     g.setColor(INK);
     drawCentered(g, font(hindi, Font.PLAIN, 30), wording.completion(),
         WIDTH / 2, completionY, WIDTH - 560);
