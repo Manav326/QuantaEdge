@@ -205,6 +205,8 @@ def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bo
         "book_id": source.get("book_id"),
         "title": source.get("title"),
         "source_title": source.get("source_title"),
+        "source_url": source.get("source_url"),
+        "edition": source.get("edition"),
         "subject": source.get("subject"),
         "class": source.get("class"),
         "language": source.get("language"),
