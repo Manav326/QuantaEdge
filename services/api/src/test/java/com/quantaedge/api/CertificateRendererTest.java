@@ -142,6 +142,24 @@ class CertificateRendererTest {
   }
 
   @Test
+  void sampleCertificatesShowAnExamIdPlaceholderInBothLanguages() {
+    for (String language : List.of("en", "hi")) {
+      String title = "hi".equals(language) ? "कक्षा 6 · गणित" : "Class 6 · Mathematics";
+      String recipient = "hi".equals(language) ? "नमूना विद्यार्थी" : "Sample Student";
+      String summary = "hi".equals(language)
+          ? "केवल डिज़ाइन पूर्वावलोकन।" : "Design preview only.";
+      var defaultSample = renderer.render("CLASSIC", language, recipient, title, summary,
+          "QE-2026-000000000000", issuedAt, true);
+      var explicitPlaceholder = renderer.render("CLASSIC", language, recipient, title, summary,
+          "QE-2026-000000000000", issuedAt,
+          new CertificateRenderer.CertificateDetails(null, null, null, null, null, null, null, title, "[ID]"),
+          true);
+      assertArrayEquals(explicitPlaceholder.png(), defaultSample.png(),
+          "Sample certificates should display the same [ID] placeholder in " + language + ".");
+    }
+  }
+
+  @Test
   void lockedEnglishAndHindiWordingIsExactAndCompanyNameNeverLocalizes() {
     var english = CertificateRenderer.lockedWording("en");
     assertEquals("CERTIFICATE OF ACHIEVEMENT", english.title());
