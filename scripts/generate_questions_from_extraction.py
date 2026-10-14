@@ -827,6 +827,7 @@ def main() -> int:
             "chapters": len(plan) + len(completed),
             "chapters_pending": len(plan),
             "chapters_already_completed": len(completed),
+            "chapters_blocked_for_source_quality": extraction.get("extraction", {}).get("quality_blocked_chapters", []),
             "planned_model_requests": total_calls,
             "max_model_http_requests": args.max_api_calls,
             "question_selection_mode": "CURRICULUM_TARGETS" if args.use_curriculum_targets else "BALANCED_EXPERIMENTAL_MIX",

@@ -1,0 +1,17 @@
+{
+  "book_id": "REPLACE_WITH_EXACT_MANIFEST_BOOK_ID",
+  "source_sha256": "REPLACE_WITH_64_CHARACTER_ORIGINAL_BOOK_SHA256",
+  "review_status": "DRAFT_REQUIRES_EDITOR_REVIEW",
+  "reviewer": "",
+  "reviewed_at": "",
+  "class_code": "6",
+  "subject_code": "maths",
+  "chapters": [
+    {
+      "code": "knowing-numbers",
+      "title": "REPLACE_WITH_CHAPTER_TITLE_IN_THIS_BOOK_LANGUAGE",
+      "page_start": 1,
+      "page_end": 12
+    }
+  ]
+}

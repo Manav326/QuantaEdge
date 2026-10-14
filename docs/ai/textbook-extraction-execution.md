@@ -16,7 +16,9 @@ One reusable, provenance-preserving source of truth for whole-book PDF ingestion
 - [x] Add a draft-only import path for extracted GHCR page manifests, source-URL/hash validation, an explicit source-approval endpoint, and a CLI importer that defaults to dry-run.
 - [x] Add focused importer tests, exact class/language/subject/scope filtering, source/PDF SHA-256 checks, and review-gated API import/approval. API verification passed on commit `a0920c60`; the final GHCR API image publish was still running at the last check.
 - [ ] Run `scripts/quantaedge-class6-tutor-pilot.ps1` from the user's authorized local environment: dry-run first, then import as draft, and approve only after inspecting the source summary. Verify live tutor retrieval/citations. The four committed manifests and page JSONL files were independently audited on 2026-10-14: SHA-256 values and contiguous page numbering matched (1,252 pages; 1,221 TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW and 31 LOW_TEXT_REVIEW; no integrity issues). The API import/approval requires a local admin session and cannot be executed by a CI runner.
-- [ ] Connect extracted passages to lesson/question generation with provenance links and review gates; validate generated answers before publication.
+- [x] Add a draft-only bridge from committed GHCR page manifests/JSONL into the existing question-generation schema. It requires a source-bound editor-reviewed chapter map using canonical curriculum codes, re-verifies full-book page continuity and metadata hashes, and blocks whole chapters containing LOW_TEXT/OCR_REQUIRED/empty pages while allowing clean chapters through.
+- [x] Enable existing question generation against an in-house Ollama/OpenAI-compatible endpoint on exact localhost/loopback without a hosted API key or external-processing confirmation; hosted endpoints still require HTTPS, an explicit consent flag, and a key. All generated bundles remain drafts.
+- [ ] Run the local Class 6 loop end to end: import/approve verified source records, create reviewed chapter maps, generate candidates using Ollama, promote reviewed content, import it as draft into Content Studio, and verify Tutor retrieval/citations.
 - [ ] Align Hindi and English editions/contextual translations while preserving formulas, tables, diagrams, and scientific/mathematical terms; record translation status and source relationship.
 - [ ] After the imported Class 6 pilot is verified end to end, scale extraction to Classes 7–8 Maths and Science books.
 - [ ] Update this tracker with commit SHAs, workflow result, and the exact next unchecked task after each work session.
@@ -48,6 +50,12 @@ Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/Quan
 ## Repository artifact mirror
 
 A GitHub Actions workflow (`.github/workflows/commit-class6-extraction-artifact.yml`) mirrors the verified Class 6 extraction artifact into `data/textbook-extractions/class-6/` on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
+
+## GHCR extraction to question-generation bridge
+
+Run `scripts/build_extraction_bundle_from_ghcr_pages.py` to convert one committed manifest and sibling page JSONL into the existing `DRAFT_EXTRACTION_ONLY` bundle schema. The command requires a human-reviewed chapter-map JSON bound to that exact source `book_id` and SHA-256. Chapter codes must exist in the canonical Class 6–8 curriculum target matrix. Start from `docs/ai/ghcr-extraction-chapter-map-template.json`; leave it in draft status until the source book's contents and PDF page ranges have actually been checked. Chapters touching low-text, OCR-required, failed, or empty pages are reported and skipped; clean mapped chapters can proceed. The adapter does not publish content.
+
+For local generation, set `QUANTAEDGE_QUESTION_API_BASE_URL=http://localhost:11434/v1` and `QUANTAEDGE_QUESTION_MODEL` to the model tag already pulled into Ollama, then pass `--generate` to `scripts/generate_questions_from_extraction.py`. Exact loopback endpoints do not require `OPENAI_API_KEY` or `--confirm-external-processing`; a hosted endpoint still requires HTTPS, explicit confirmation, and a key. Candidate lessons/questions remain drafts and continue through the existing human review and Content Studio gates.
 
 ## Immediate Class 6 tutor pilot command
 
