@@ -455,4 +455,16 @@ class AuthServiceTest {
     verify(jdbc).update(contains("insert into otp_challenge"), eq(mobile), eq("PASSWORD_RESET"), anyString());
   }
 
+  @Test
+  void parentPasswordLoginStopsAfterFiveRecentFailuresBeforeLookingUpTheAccount() {
+    AuthService auth = new AuthService(jdbc, true, 168, false, 60, "");
+    when(jdbc.queryForObject(contains("select count(*) from account_login_failure"), eq(Long.class),
+        anyString(), eq("PARENT"))).thenReturn(5L);
+
+    SecurityException error = assertThrows(SecurityException.class,
+        () -> auth.loginParent("7070107483", "wrong-password"));
+
+    assertTrue(error.getMessage().contains("15 minutes"));
+  }
+
 }

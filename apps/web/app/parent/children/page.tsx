@@ -16,6 +16,7 @@ type Child = {
   track_codes?:string;
   login_username?:string|null;
 };
+type ChildProfileDraft = {displayName:string;classCode:string;language:string};
 type Account = { parentName:string; activeChildren:number; maxChildren:number; remainingSlots:number };
 type Draft = {displayName:string;classCode:string;language:string;username:string;password:string;trackCodes:string[]};
 type CredentialDraft = {username:string;password:string};
@@ -37,10 +38,14 @@ export default function ParentChildrenPage(){
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
   const [trackDrafts,setTrackDrafts]=useState<Record<number,string[]>>({});
+  const [profileDrafts,setProfileDrafts]=useState<Record<number,ChildProfileDraft>>({});
   const [credentialDrafts,setCredentialDrafts]=useState<Record<number,CredentialDraft>>({});
+  const [archivedChildren,setArchivedChildren]=useState<Child[]>([]);
+  const [creationRequestId,setCreationRequestId]=useState('');
   const [consent,setConsent]=useState(false);
   const [busy,setBusy]=useState(false);
   const [busyTrack,setBusyTrack]=useState<number|null>(null);
+  const [busyProfile,setBusyProfile]=useState<number|null>(null);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
 
@@ -50,15 +55,22 @@ export default function ParentChildrenPage(){
     if(!meResponse.ok){router.replace('/login');return;}
     let me=await readJson(meResponse);
     if(me.role!=='PARENT'&&me.role!=='ADMIN'){router.replace('/login');return;}
-    const [accountResponse,childrenResponse]=await Promise.all([
-      fetch('/api/v1/guardians/account'),fetch('/api/v1/guardians/children')
+    const [accountResponse,childrenResponse,archivedResponse]=await Promise.all([
+      fetch('/api/v1/guardians/account'),fetch('/api/v1/guardians/children'),
+      fetch('/api/v1/guardians/children/archived')
     ]);
     const accountBody=await readJson(accountResponse);
     const childrenBody=await readJson(childrenResponse);
+    const archivedBody=await readJson(archivedResponse);
     if(!accountResponse.ok)throw new Error(accountBody.message||'Unable to load parent account.');
     if(!childrenResponse.ok)throw new Error(childrenBody.message||'Unable to load child profiles.');
+    if(!archivedResponse.ok)throw new Error(archivedBody.message||'Unable to load archived profiles.');
     setAccount(accountBody);
     setChildren(childrenBody);
+    setArchivedChildren(archivedBody);
+    setProfileDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
+      child.id,{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'}
+    ])));
     setTrackDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
       child.id,(child.track_codes||'').split(',').filter(Boolean)
     ])));
@@ -80,13 +92,15 @@ export default function ParentChildrenPage(){
   async function createChild(){
     setError('');setNotice('');setBusy(true);
     try{
+      const requestId=creationRequestId||crypto.randomUUID();
+      if(!creationRequestId)setCreationRequestId(requestId);
       const response=await fetch('/api/v1/guardians/children',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({...draft,consentAccepted:consent})
+        body:JSON.stringify({...draft,consentAccepted:consent,requestId})
       });
       const body=await readJson(response);
       if(!response.ok)throw new Error(body.message||'Unable to create the student profile.');
-      setDraft(emptyDraft);setConsent(false);
+      setDraft(emptyDraft);setConsent(false);setCreationRequestId('');
       const successMessage=tx('Student profile बन गया है और login details save हो गई हैं। अब बच्चा आपके बनाए username और password से sign in कर सकता है।','Student profile and login details are saved. Your child can now sign in with the username and password you created.');
       setNotice(successMessage);
       try{
@@ -97,6 +111,28 @@ export default function ParentChildrenPage(){
       }
     }catch(e:any){setError(e.message||'Unable to create student profile.');}
     finally{setBusy(false);}
+  }
+
+  function updateChildDraft(child:Child,patch:Partial<ChildProfileDraft>){
+    setProfileDrafts(current=>{
+      const existing=current[child.id]||{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'};
+      return {...current,[child.id]:{...existing,...patch}};
+    });
+  }
+
+  async function saveChildProfile(child:Child){
+    setError('');setNotice('');setBusyProfile(child.id);
+    try{
+      const profile=profileDrafts[child.id]||{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'};
+      const response=await fetch('/api/v1/guardians/children/'+child.id+'/profile',{
+        method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(profile)
+      });
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.message||'Unable to update the child profile.');
+      await load();
+      setNotice(tx('Student profile की details save हो गई हैं; पुरानी learning history सुरक्षित है.','Student profile details have been saved; previous learning history is preserved.'));
+    }catch(e:any){setError(e.message||'Unable to update the child profile.');}
+    finally{setBusyProfile(null);}
   }
 
   async function saveCredentials(child:Child){
@@ -126,6 +162,26 @@ export default function ParentChildrenPage(){
       setNotice(tx(`${child.display_name} के learning subjects save हो गए हैं।`,`Learning subjects for ${child.display_name} have been saved.`));
     }catch(e:any){setError(e.message||'Unable to update tracks.');}
     finally{setBusyTrack(null);}
+  }
+
+  async function restoreChild(child:Child){
+    if(!window.confirm(tx(
+      'मैं authorised guardian हूँ और इस profile को restore करने व current guardian consent देने की पुष्टि करता/करती हूँ।',
+      'I confirm that I am an authorised guardian and consent to restoring this profile.'
+    )))return;
+    setError('');setNotice('');
+    try{
+      const response=await fetch('/api/v1/guardians/children/'+child.id+'/restore',{
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({consentAccepted:true})
+      });
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.message||'Unable to restore the profile.');
+      await load();
+      setNotice(tx(
+        child.display_name+' का profile restore हो गया है। Security के लिए student login credentials फिर से set करें।',
+        child.display_name+'’s profile has been restored. Set the student login credentials again for security.'
+      ));
+    }catch(e:any){setError(e.message||'Unable to restore profile.');}
   }
 
   async function archiveChild(child:Child){
@@ -159,10 +215,26 @@ export default function ParentChildrenPage(){
           {children.map(child=><article className="parent-child-card" key={child.id}>
             <div className="parent-child-overview">
               <div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div>
-              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · <LocaleText hinglish="हिन्दी माध्यम" english="Hindi medium" /></p>
+              <div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board} · {tx('पढ़ाई की भाषा: '+((child.language||'hi')==='en'?'English':'हिन्दी'),'Learning content: '+((child.language||'hi')==='en'?'English':'Hindi'))}</p>
                 <div className="track-pill-row">{(trackDrafts[child.id]||[]).map(code=><span className="track-pill" key={code}>{code==='maths'?'गणित':'विज्ञान'}</span>)}</div>
               </div>
               <button type="button" className="parent-archive-button" onClick={()=>archiveChild(child)}><LocaleText hinglish="Profile archive करें" english="Archive profile" /></button>
+            </div>
+            <div className="parent-child-credentials parent-profile-editor">
+              <div className="parent-credentials-heading"><strong><LocaleText hinglish="Profile details" english="Profile details" /></strong><small><LocaleText hinglish="नाम और learning language update करें। Class बदलने पर केवल अगली class में promotion होगा; पुरानी progress और assessments बने रहेंगे।" english="Update the name and learning language. Class changes allow only the next-grade promotion; prior progress and assessments are retained." /></small></div>
+              <div className="parent-child-form">
+                <label><LocaleText hinglish="बच्चे का नाम" english="Child’s name" /><input value={profileDrafts[child.id]?.displayName??child.display_name} maxLength={120} onChange={e=>updateChildDraft(child,{displayName:e.target.value})} /></label>
+                <label><LocaleText hinglish="Class" english="Class" /><select value={profileDrafts[child.id]?.classCode??String(child.class_code)} onChange={e=>updateChildDraft(child,{classCode:e.target.value})}>
+                  <option value={String(child.class_code)}>Class {child.class_code}</option>
+                  {child.class_code==='6'&&<option value="7">Promote to Class 7</option>}
+                  {child.class_code==='7'&&<option value="8">Promote to Class 8</option>}
+                </select></label>
+                <label><LocaleText hinglish="Learning language" english="Learning language" /><select value={profileDrafts[child.id]?.language??child.language??'hi'} onChange={e=>updateChildDraft(child,{language:e.target.value})}>
+                  <option value="hi">हिन्दी (Hindi)</option><option value="en">English</option>
+                </select></label>
+              </div>
+              <button type="button" className="button button-light button-small" disabled={busyProfile===child.id||(profileDrafts[child.id]?.displayName??child.display_name).trim().length<2}
+                onClick={()=>void saveChildProfile(child)}>{busyProfile===child.id?<LocaleText hinglish="Save हो रहा है…" english="Saving…" />:<LocaleText hinglish="Profile save करें" english="Save profile" />}</button>
             </div>
             <div className="parent-child-credentials">
               <div className="parent-credentials-heading"><strong><LocaleText hinglish="Student login details" english="Student login details" /></strong><small><LocaleText hinglish="Step 1: यहाँ username और password set करें। Step 2: ये details बच्चे के साथ share करें। Student Login पर आपका registered mobile number, username और password use होगा।" english="Step 1: Set a username and password here. Step 2: Share these details with your child. Student Login uses your registered mobile number, the username, and the password." /></small></div>
@@ -191,6 +263,14 @@ export default function ParentChildrenPage(){
         </div>}
       </section>
 
+      {archivedChildren.length>0&&<section className="parent-manage-panel">
+        <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="ARCHIVED PROFILES" english="ARCHIVED PROFILES" /></span><h2><LocaleText hinglish="Archived children" english="Archived children" /></h2><p><LocaleText hinglish="Learning history सुरक्षित है। Restore करने पर fresh consent देना और login credentials फिर से set करना होगा।" english="Learning history is retained. Restoring requires fresh consent and student login credentials to be set again." /></p></div></div>
+        <div className="parent-child-list">{archivedChildren.map(child=><article className="parent-child-card" key={'archived-'+child.id}>
+          <div className="parent-child-overview"><div className="parent-child-avatar">{child.display_name.trim().slice(0,1)||'S'}</div><div className="parent-child-name"><h3>{child.display_name}</h3><p>Class {child.class_code} · {child.board}</p></div>
+            <button type="button" className="button button-light button-small" onClick={()=>void restoreChild(child)}><LocaleText hinglish="Restore profile" english="Restore profile" /></button></div>
+        </article>)}</div>
+      </section>}
+
       <section className="parent-manage-panel">
         <div className="parent-manage-panel-head"><div><span className="eyebrow"><LocaleText hinglish="ADD A CHILD" english="ADD A CHILD" /></span><h2><LocaleText hinglish="नया student profile" english="New student profile" /></h2><p><LocaleText hinglish="बच्चे का profile और login एक साथ बनाएँ। Form पूरा करके username और password set करने के बाद ही बच्चा sign in कर पाएगा।" english="Create your child’s profile and login together. Your child can sign in once you complete the form and set a username and password." /></p></div></div>
         {(account?.remainingSlots??0)<=0
@@ -198,6 +278,7 @@ export default function ParentChildrenPage(){
           : <div className="parent-child-form">
             <label><LocaleText hinglish="बच्चे का नाम" english="Child’s name" /><input value={draft.displayName} onChange={e=>setDraft({...draft,displayName:e.target.value})} placeholder={tx('बच्चे का नाम डालें','Enter child’s name')} autoComplete="off"/></label>
             <label><LocaleText hinglish="Class" english="Class" /><select value={draft.classCode} onChange={e=>setDraft({...draft,classCode:e.target.value})}><option value="6"><LocaleText hinglish="Class 6" english="Class 6" /></option><option value="7"><LocaleText hinglish="Class 7" english="Class 7" /></option><option value="8"><LocaleText hinglish="Class 8" english="Class 8" /></option></select></label>
+            <label><LocaleText hinglish="Learning language" english="Learning language" /><select value={draft.language} onChange={e=>setDraft({...draft,language:e.target.value})}><option value="hi">हिन्दी (Hindi)</option><option value="en">English</option></select></label>
             <label><LocaleText hinglish="Student username" english="Student username" /><input value={draft.username} onChange={e=>setDraft({...draft,username:e.target.value.toLowerCase().replace(/[^a-z0-9._-]/g,'').slice(0,32)})} placeholder={tx('जैसे aarav07','e.g. aarav07')} autoComplete="off"/></label>
             <label><LocaleText hinglish="Student password" english="Student password" /><input type="password" value={draft.password} onChange={e=>setDraft({...draft,password:e.target.value})} placeholder={tx('कम से कम 8 characters','At least 8 characters')} autoComplete="new-password"/></label>
             <fieldset className="parent-track-fieldset"><legend><LocaleText hinglish="Subjects चुनें" english="Choose subjects" /></legend>{trackOptions.map(option=><label key={option.code}><input type="checkbox" checked={draft.trackCodes.includes(option.code)} onChange={e=>setDraft({...draft,trackCodes:e.target.checked?[...draft.trackCodes,option.code]:draft.trackCodes.filter(code=>code!==option.code)})}/><span>{locale==='english'?(option.code==='maths'?'Mathematics':'Science'):option.label}</span></label>)}</fieldset>

@@ -3,6 +3,7 @@ package com.quantaedge.api;
 import java.util.List;
 import java.util.Map;
 import java.util.Base64;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.http.CacheControl;
@@ -187,6 +188,58 @@ public class GuardianController {
       """,context.userId());
   }
 
+  @GetMapping("/children/archived")
+  public List<Map<String,Object>> archivedChildren(
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    return jdbc.queryForList("""
+      select st.id,st.public_id,st.display_name,st.class_code,cc.display_name as class_name,st.board,st.language,
+             gs.relationship,gs.consent_status
+      from guardian_student gs join student st on st.id=gs.student_id
+      left join curriculum_class cc on cc.code=st.class_code
+      where gs.guardian_user_id=? and gs.active=false and gs.consent_status='REVOKED'
+        and st.environment='PRODUCTION'
+      order by gs.revoked_at desc nulls last,gs.id desc
+      """,context.userId());
+  }
+
+  @PostMapping("/children/{studentId}/restore")
+  @Transactional
+  public Map<String,Object> restoreChild(@PathVariable long studentId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    if(!Boolean.TRUE.equals(body.get("consentAccepted")))
+      throw new SecurityException("Fresh guardian consent is required to restore a child profile.");
+    long guardianId=context.userId();
+    List<Map<String,Object>> parentRows=jdbc.queryForList(
+        "select id from user_account where id=? and active=true and role in ('PARENT','ADMIN') for update",guardianId);
+    if(parentRows.isEmpty()) throw new SecurityException("Active parent account required.");
+    Long activeChildren=jdbc.queryForObject("""
+      select count(distinct st.id) from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+        and st.active=true and st.environment='PRODUCTION'
+      """,Long.class,guardianId);
+    if(activeChildren!=null && activeChildren>=Math.max(1,maxChildrenPerParent))
+      throw new IllegalStateException("Your account has reached its active child profile limit.");
+    List<Map<String,Object>> archived=jdbc.queryForList("""
+      select st.id from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and gs.student_id=? and gs.active=false
+        and gs.consent_status='REVOKED' and st.environment='PRODUCTION'
+      for update of gs,st
+      """,guardianId,studentId);
+    if(archived.isEmpty()) throw new SecurityException("Archived child profile not found for this parent.");
+    jdbc.update("""
+      update guardian_student set active=true,consent_status='CONSENTED',consented_at=now(),revoked_at=null,
+        consent_version=?,consent_source='PARENT_PORTAL',consented_by=?
+      where guardian_user_id=? and student_id=? and active=false and consent_status='REVOKED'
+      """,AuthService.GUARDIAN_CONSENT_VERSION,guardianId,guardianId,studentId);
+    jdbc.update("update student set active=true,profile_updated_at=now() where id=? and environment='PRODUCTION'",studentId);
+    auth.auditChildEvent(guardianId,studentId,"CONSENT_ACCEPTED","{\"consent\":\"affirmative-restore\",\"source\":\"PARENT_PORTAL\"}");
+    auth.auditChildEvent(guardianId,studentId,"CHILD_RESTORED","{\"credentialsRequireReset\":true}");
+    return Map.of("restored",true,"studentId",studentId,"credentialsRequireReset",true);
+  }
+
   @DeleteMapping("/children/{studentId}")
   @Transactional
   public Map<String,Object> archiveChild(@PathVariable long studentId,
@@ -195,17 +248,19 @@ public class GuardianController {
     Boolean allowed=jdbc.queryForObject("""
       select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED')
       """,Boolean.class,context.userId(),studentId);
-    if(!allowed) throw new SecurityException("Child access denied");
-    jdbc.update("update guardian_student set active=false,consent_status='REVOKED' where guardian_user_id=? and student_id=?",context.userId(),studentId);
+    if(!Boolean.TRUE.equals(allowed)) throw new SecurityException("Child access denied");
+    auth.auditChildEvent(context.userId(),studentId,"CONSENT_REVOKED","{\"source\":\"PARENT_PORTAL\",\"reason\":\"CHILD_ARCHIVED\"}");
+    auth.auditChildEvent(context.userId(),studentId,"CHILD_ARCHIVED","{\"learningHistory\":\"retained\"}");
+    jdbc.update("update guardian_student set active=false,consent_status='REVOKED',revoked_at=now() where guardian_user_id=? and student_id=?",context.userId(),studentId);
     jdbc.update("update student_login_credential set active=false,updated_at=now() where guardian_user_id=? and student_id=?",context.userId(),studentId);
     Boolean anotherGuardian=jdbc.queryForObject("""
       select exists(select 1 from guardian_student where student_id=? and active=true and consent_status='CONSENTED')
       """,Boolean.class,studentId);
-    if(!anotherGuardian){
+    if(!Boolean.TRUE.equals(anotherGuardian)){
       jdbc.update("update student set active=false where id=? and environment='PRODUCTION'",studentId);
-      jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
     }
-    return Map.of("archived",true,"studentId",studentId,"studentDisabled",!anotherGuardian);
+    jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
+    return Map.of("archived",true,"studentId",studentId,"studentDisabled",!Boolean.TRUE.equals(anotherGuardian));
   }
 
   @GetMapping("/children/{studentId}/report")
@@ -225,21 +280,64 @@ public class GuardianController {
   }
 
   @PostMapping("/children")
+  @Transactional
   public Map<String,Object> createChild(@RequestAttribute(value="authContext",required=false) AuthContext context,
       @RequestBody Map<String,Object> body){
     context=authorization.requireParent(context);
+    UUID requestKey;
+    String requestedKey=String.valueOf(body.getOrDefault("requestId","")).trim();
+    try {
+      requestKey=requestedKey.isBlank()?UUID.randomUUID():UUID.fromString(requestedKey);
+    } catch(IllegalArgumentException ex) {
+      throw new IllegalArgumentException("Invalid profile-creation request identifier. Refresh the page and try again.");
+    }
+    List<Map<String,Object>> parentRows=jdbc.queryForList(
+        "select id from user_account where id=? and active=true and role in ('PARENT','ADMIN') for update",context.userId());
+    if(parentRows.isEmpty()) throw new SecurityException("Active parent account required.");
+    List<Map<String,Object>> prior=jdbc.queryForList("""
+      select st.id,gs.active,gs.consent_status
+      from guardian_child_creation_request req
+      join student st on st.id=req.student_id
+      join guardian_student gs on gs.guardian_user_id=req.guardian_user_id and gs.student_id=st.id
+      where req.guardian_user_id=? and req.request_key=?
+      """,context.userId(),requestKey);
+    if(!prior.isEmpty()) {
+      Map<String,Object> priorRow=prior.getFirst();
+      if(!Boolean.TRUE.equals(priorRow.get("active")) || !"CONSENTED".equals(String.valueOf(priorRow.get("consent_status"))))
+        throw new IllegalStateException("This creation request already succeeded but the profile was later archived. Reload your profiles before retrying.");
+      return childProfileResponse(((Number)priorRow.get("id")).longValue());
+    }
     boolean consentAccepted=Boolean.TRUE.equals(body.get("consentAccepted"));
     AuthContext child=auth.createChild(context.userId(),String.valueOf(body.getOrDefault("displayName","")),
         String.valueOf(body.getOrDefault("classCode","7")),String.valueOf(body.getOrDefault("language","hi")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")),
         consentAccepted,
         body.get("trackCodes") instanceof List<?> values ? values.stream().map(String::valueOf).toList() : List.of("maths","science"));
+    jdbc.update("insert into guardian_child_creation_request(guardian_user_id,request_key,student_id) values (?,?,?)",
+        context.userId(),requestKey,child.studentId());
+    return childProfileResponse(child.studentId());
+  }
+
+  private Map<String,Object> childProfileResponse(long studentId) {
     return jdbc.queryForMap("""
       select st.id,st.public_id,st.display_name,st.class_code,st.board,st.language,
         coalesce((select string_agg(s.code,',' order by s.sort_order) from student_track_enrollment ste
           join curriculum_subject s on s.id=ste.subject_id where ste.student_id=st.id and ste.status='ACTIVE'),'') as track_codes
       from student st where st.id=?
-      """,child.studentId());
+      """,studentId);
+  }
+
+  @PutMapping("/children/{studentId}/profile")
+  @Transactional
+  public Map<String,Object> updateChildProfile(@PathVariable long studentId,
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    auth.updateChildProfile(context.userId(),studentId,
+        String.valueOf(body.getOrDefault("displayName","")),
+        String.valueOf(body.getOrDefault("classCode","")),
+        String.valueOf(body.getOrDefault("language","")));
+    return childProfileResponse(studentId);
   }
 
   @PutMapping("/children/{studentId}/credentials")
@@ -266,6 +364,8 @@ public class GuardianController {
     List<String> tracks=body.get("trackCodes") instanceof List<?> values
         ? values.stream().map(String::valueOf).toList() : List.of();
     List<String> activeTracks=auth.updateStudentTracks(studentId,tracks);
+    auth.auditChildEvent(context.userId(),studentId,"TRACKS_UPDATED",
+        "{\"trackCodes\":\""+String.join(",",activeTracks)+"\"}");
     return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
   }
 }

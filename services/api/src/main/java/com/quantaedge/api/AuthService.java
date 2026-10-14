@@ -33,6 +33,8 @@ public class AuthService {
   public static final String HRMS_COOKIE = "QE_HRMS_SESSION";
   public static final String HRMS_REFRESH_COOKIE = "QE_HRMS_REFRESH";
   public static final String WORKSPACE_HEADER = "X-QE-Workspace";
+  public static final String GUARDIAN_CONSENT_VERSION = "guardian-consent-v1";
+  private static final int MAX_PASSWORD_LOGIN_FAILURES = 5;
 
   public static String normalizeWorkspace(String value) {
     if (value == null) return null;
@@ -484,22 +486,53 @@ public class AuthService {
     }
   }
 
+  private String passwordAttemptKey(String authType,String identifier) {
+    return hash(authType+"|"+(identifier==null?"":identifier.trim().toLowerCase(java.util.Locale.ROOT)));
+  }
+
+  private void assertPasswordLoginAllowed(String authType,String identifier) {
+    Long failures=jdbc.queryForObject("""
+      select count(*) from account_login_failure
+      where principal_hash=? and auth_type=? and attempted_at > now() - interval '15 minutes'
+      """,Long.class,passwordAttemptKey(authType,identifier),authType);
+    if(failures!=null && failures>=MAX_PASSWORD_LOGIN_FAILURES)
+      throw new SecurityException("Too many sign-in attempts. Please try again in 15 minutes.");
+  }
+
+  private void recordPasswordLoginFailure(String authType,String identifier) {
+    jdbc.update("delete from account_login_failure where attempted_at < now() - interval '24 hours'");
+    jdbc.update("insert into account_login_failure(principal_hash,auth_type) values (?,?)",
+        passwordAttemptKey(authType,identifier),authType);
+  }
+
+  private void clearPasswordLoginFailures(String authType,String identifier) {
+    jdbc.update("delete from account_login_failure where principal_hash=? and auth_type=?",
+        passwordAttemptKey(authType,identifier),authType);
+  }
+
   /** Password-based parent login. OTP is not required for returning parent sessions. */
   public AuthContext loginParent(String mobile,String password) {
     String normalized=normalizeMobile(mobile);
     if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
       throw new IllegalArgumentException("Enter a valid 10-digit parent mobile number.");
     if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your password.");
+    assertPasswordLoginAllowed("PARENT",normalized);
     List<Map<String,Object>> rows=jdbc.queryForList(
         "select id,password_hash from user_account where mobile_e164=? and active=true and role='PARENT'",
         normalized);
-    if(rows.isEmpty()) throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    if(rows.isEmpty()) {
+      recordPasswordLoginFailure("PARENT",normalized);
+      throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    }
     Map<String,Object> row=rows.getFirst();
     Object storedValue=row.get("password_hash");
     if(storedValue==null || String.valueOf(storedValue).isBlank())
       throw new IllegalStateException("A password has not been set for this account. Use Forgot password to set one.");
-    if(!passwordEncoder.matches(password,String.valueOf(storedValue)))
+    if(!passwordEncoder.matches(password,String.valueOf(storedValue))) {
+      recordPasswordLoginFailure("PARENT",normalized);
       throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    }
+    clearPasswordLoginFailures("PARENT",normalized);
     return contextForUser(((Number)row.get("id")).longValue());
   }
 
@@ -510,6 +543,8 @@ public class AuthService {
       throw new IllegalArgumentException("Enter a valid 10-digit parent mobile number.");
     String cleanUsername=validateUsername(username);
     if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your student password.");
+    String attemptIdentity=normalized+"|"+cleanUsername;
+    assertPasswordLoginAllowed("STUDENT",attemptIdentity);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select c.student_id,c.password_hash
       from user_account u
@@ -520,11 +555,17 @@ public class AuthService {
         and lower(c.username)=? and gs.active=true and gs.consent_status='CONSENTED'
         and st.active=true and st.environment='PRODUCTION'
       """,normalized,cleanUsername);
-    if(rows.isEmpty()) throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
+    if(rows.isEmpty()) {
+      recordPasswordLoginFailure("STUDENT",attemptIdentity);
+      throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
+    }
     Map<String,Object> row=rows.getFirst();
     String stored=String.valueOf(row.get("password_hash"));
-    if(!passwordEncoder.matches(password,stored))
+    if(!passwordEncoder.matches(password,stored)) {
+      recordPasswordLoginFailure("STUDENT",attemptIdentity);
       throw new IllegalArgumentException("Parent mobile, student username or password is incorrect.");
+    }
+    clearPasswordLoginFailures("STUDENT",attemptIdentity);
     return contextForStudent(null,((Number)row.get("student_id")).longValue());
   }
 
@@ -544,6 +585,7 @@ public class AuthService {
       // Credential rotation invalidates every already-issued student access/refresh token,
       // without revoking the parent's separate session.
       jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null", studentId);
+      auditChildEvent(parentUserId,studentId,"CREDENTIALS_CHANGED","{\"credential\":\"student-login\"}");
     } catch(DuplicateKeyException ex) {
       throw new IllegalArgumentException("That username is already used by another child on this parent account. Choose a different username.");
     }
@@ -593,8 +635,9 @@ public class AuthService {
     if(name==null || name.trim().length()<2 || name.trim().length()>120)
       throw new IllegalArgumentException("Student name must be between 2 and 120 characters");
     if(classCode==null || classCode.isBlank()) throw new IllegalArgumentException("Class selection is required");
-    if(!"hi".equalsIgnoreCase(language))
-      throw new IllegalArgumentException("Only Hindi student profiles are currently supported");
+    String cleanLanguage=language==null?"":language.trim().toLowerCase(java.util.Locale.ROOT);
+    if(!List.of("hi","en").contains(cleanLanguage))
+      throw new IllegalArgumentException("Learning language must be Hindi ('hi') or English ('en').");
     if(pin==null || pin.length()<4 || pin.length()>8 || pin.chars().anyMatch(ch -> !Character.isDigit(ch)))
       throw new IllegalArgumentException("Student access PIN must be 4-8 digits");
     String board;
@@ -607,13 +650,99 @@ public class AuthService {
     Long id=jdbc.queryForObject("""
       insert into student(public_id,display_name,class_code,board,language,environment,access_pin_hash,access_pin_set_at)
       values (?,?,?,?,?,'PRODUCTION',?,now()) returning id
-      """,Long.class,UUID.randomUUID(),name.trim(),classCode,board,language,hash(pin));
+      """,Long.class,UUID.randomUUID(),name.trim(),classCode,board,cleanLanguage,hash(pin));
     jdbc.update("""
-      insert into guardian_student(guardian_user_id,student_id,relationship,consent_status)
-      values (?,?,'PARENT','CONSENTED')
-      """,userId,id);
+      insert into guardian_student
+        (guardian_user_id,student_id,relationship,consent_status,consent_version,consent_source,consented_by)
+      values (?,?,'PARENT','CONSENTED',?,'PARENT_PORTAL',?)
+      """,userId,id,GUARDIAN_CONSENT_VERSION,userId);
+    recordGuardianStudentEvent(userId,id,"CONSENT_ACCEPTED",GUARDIAN_CONSENT_VERSION,
+        null,classCode,"{\"consent\":\"affirmative-checkbox\",\"source\":\"PARENT_PORTAL\"}");
     applyStudentTracks(id,classCode,trackCodes);
     return contextForStudent(userId,id);
+  }
+
+  @Transactional
+  public void updateChildProfile(long parentUserId,long studentId,String displayName,String classCode,String language) {
+    requireParent(parentUserId);
+    String name=displayName==null?"":displayName.trim();
+    if(name.length()<2 || name.length()>120 || name.chars().anyMatch(Character::isISOControl))
+      throw new IllegalArgumentException("Student name must be between 2 and 120 characters.");
+    String nextClass=classCode==null?"":classCode.trim();
+    if(nextClass.isBlank()) throw new IllegalArgumentException("Choose a class.");
+    String nextLanguage=language==null?"":language.trim().toLowerCase(java.util.Locale.ROOT);
+    if(!List.of("hi","en").contains(nextLanguage))
+      throw new IllegalArgumentException("Choose Hindi or English as the learning-content language.");
+
+    Map<String,Object> current;
+    try {
+      current=jdbc.queryForMap("""
+        select st.class_code,gs.consent_version
+        from guardian_student gs join student st on st.id=gs.student_id
+        where gs.guardian_user_id=? and gs.student_id=? and gs.active=true
+          and gs.consent_status='CONSENTED' and st.active=true and st.environment='PRODUCTION'
+        for update of st
+        """,parentUserId,studentId);
+    } catch(EmptyResultDataAccessException ex) {
+      throw new SecurityException("Child access denied");
+    }
+    String oldClass=String.valueOf(current.get("class_code"));
+    boolean classChanged=!oldClass.equals(nextClass);
+    if(classChanged && !(("6".equals(oldClass) && "7".equals(nextClass))
+        || ("7".equals(oldClass) && "8".equals(nextClass)))) {
+      throw new IllegalArgumentException("Class promotion must follow the supported path: Class 6 → 7 → 8. Previous learning records are preserved.");
+    }
+    Map<String,Object> targetClass;
+    try {
+      targetClass=jdbc.queryForMap(
+          "select code,board from curriculum_class where code=? and active=true",nextClass);
+    } catch(EmptyResultDataAccessException ex) {
+      throw new IllegalArgumentException("This class is not currently available.");
+    }
+    String board=String.valueOf(targetClass.get("board"));
+    if(board.isBlank() || "null".equalsIgnoreCase(board))
+      throw new IllegalArgumentException("This class is not currently available.");
+
+    if(classChanged) {
+      List<String> activeTracks=jdbc.queryForList("""
+        select s.code from student_track_enrollment ste
+        join curriculum_subject s on s.id=ste.subject_id
+        where ste.student_id=? and ste.status='ACTIVE' order by s.sort_order
+        """,String.class,studentId);
+      if(activeTracks.isEmpty())
+        throw new IllegalStateException("Select at least one learning subject before promoting this profile.");
+      applyStudentTracks(studentId,nextClass,activeTracks);
+    }
+    int changed=jdbc.update("""
+      update student set display_name=?,class_code=?,board=?,language=?,profile_updated_at=now()
+      where id=? and active=true and environment='PRODUCTION'
+      """,name,nextClass,board,nextLanguage,studentId);
+    if(changed!=1) throw new SecurityException("Active student profile not found.");
+    String version=current.get("consent_version")==null?"legacy-unversioned":String.valueOf(current.get("consent_version"));
+    recordGuardianStudentEvent(parentUserId,studentId,classChanged?"CLASS_PROMOTED":"PROFILE_UPDATED",
+        version,oldClass,nextClass,"{\"fields\":[\"displayName\",\"classCode\",\"language\"]}");
+  }
+
+  /** Append-only child lifecycle audit; never pass credentials or other secrets in details. */
+  void auditChildEvent(long guardianUserId,long studentId,String eventType,String details) {
+    Map<String,Object> row=jdbc.queryForMap("""
+      select gs.consent_version,st.class_code
+      from guardian_student gs join student st on st.id=gs.student_id
+      where gs.guardian_user_id=? and gs.student_id=?
+      """,guardianUserId,studentId);
+    String version=row.get("consent_version")==null?"legacy-unversioned":String.valueOf(row.get("consent_version"));
+    String currentClass=row.get("class_code")==null?null:String.valueOf(row.get("class_code"));
+    recordGuardianStudentEvent(guardianUserId,studentId,eventType,version,currentClass,currentClass,
+        details==null?"{}":details);
+  }
+
+  private void recordGuardianStudentEvent(long guardianUserId,long studentId,String eventType,String consentVersion,
+      String oldClassCode,String newClassCode,String details) {
+    jdbc.update("""
+      insert into guardian_student_audit
+        (guardian_user_id,student_id,event_type,consent_version,actor_user_id,old_class_code,new_class_code,details)
+      values (?,?,?,?,?,?,?,?::jsonb)
+      """,guardianUserId,studentId,eventType,consentVersion,guardianUserId,oldClassCode,newClassCode,details);
   }
 
   @Transactional

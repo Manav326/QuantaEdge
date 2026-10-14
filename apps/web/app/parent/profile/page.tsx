@@ -95,7 +95,7 @@ async function prepareProfilePhoto(file: File): Promise<string> {
 
 export default function ParentProfilePage() {
   const router = useRouter();
-  const { locale } = useLocale();
+  const { locale, setLocale } = useLocale();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
@@ -225,6 +225,8 @@ export default function ParentProfilePage() {
         preferredLanguage: body.preferred_language || 'English',
         profileImageDataUrl: '',
       });
+      if (body.preferred_language === 'English') setLocale('english');
+      else if (body.preferred_language === 'Hindi' || body.preferred_language === 'Hindi & English') setLocale('hindi');
       setNotice(tx('आपकी parent profile save हो गई है।','Your parent profile has been saved.'));
       window.dispatchEvent(new Event('qe:profile-updated'));
       setPhotoName('');

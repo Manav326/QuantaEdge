@@ -28,6 +28,7 @@ function normalizedLanguage(value: unknown): LearningLanguage | null {
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isStudentRoute = pathname?.startsWith('/student') ?? false;
+  const isParentRoute = pathname?.startsWith('/parent') ?? false;
   const [locale, setLocaleState] = useState<Locale>('hindi');
   const [learningLanguage, setLearningLanguageState] = useState<LearningLanguage>('hi');
   const [certificateLanguage, setCertificateLanguageState] = useState<LearningLanguage>('hi');
@@ -120,6 +121,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       .catch(() => undefined);
     return () => { active = false; };
   }, [isStudentRoute, applyLearningLanguage]);
+
+  useEffect(() => {
+    if (!isParentRoute || isStudentRoute) return;
+    let active = true;
+    fetch('/api/v1/guardians/profile', { cache: 'no-store', credentials: 'same-origin' })
+      .then(response => response.ok ? response.json() : null)
+      .then(profile => {
+        if (!active || !profile) return;
+        const preference = String(profile.preferred_language || '');
+        if (preference === 'English') applyLocale('english', true);
+        else if (preference === 'Hindi' || preference === 'Hindi & English') applyLocale('hindi', true);
+      })
+      .catch(() => undefined);
+    return () => { active = false; };
+  }, [isParentRoute, isStudentRoute, applyLocale]);
 
   const value = useMemo(() => ({
     locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage
