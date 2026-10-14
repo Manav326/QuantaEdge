@@ -80,6 +80,11 @@ public class TextbookExtractionService {
 
   @Async("sourceIngestionExecutor")
   public void start(long assetId) {
+    Integer claimed = jdbc.update("""
+      update textbook_extraction_job set status='RUNNING',started_at=now(),updated_at=now()
+      where pdf_asset_id=? and status='PENDING'
+      """, assetId);
+    if (claimed == null || claimed != 1) return;
     processNow(assetId);
   }
 
