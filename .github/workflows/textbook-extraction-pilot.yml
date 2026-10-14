@@ -115,10 +115,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quantaedge-textbook-extraction-pilot-${{ inputs.class_no || 'class-6' }}-${{ github.run_id }}
+          name: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '6' }}-${{ github.run_id }}
           path: |
             pilot-output/extracted/
             pilot-output/reports/
+            pilot-output/cache/class-*/hindi/index.json
+            pilot-output/cache/class-*/english/index.json
           if-no-files-found: warn
           retention-days: 90
           compression-level: 6
