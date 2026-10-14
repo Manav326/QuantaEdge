@@ -53,15 +53,19 @@ def extraction_bundle(language, text, edition="2025–26 reprint"):
             "title": "Bihar Board Mathematics",
             "url": "https://scert.bihar.gov.in/eresources/sample",
             "edition": edition,
-            "pdf_page_count": 1,
+            "pdf_page_count": 2,
             "pdf_sha256": "a" * 64,
         },
-        "chapter_map": [{"code": code, "title": chapter_title, "page_start": 1, "page_end": 1}],
+        "chapter_map": [{"code": code, "title": chapter_title, "page_start": 2, "page_end": 2}],
         "extraction": {"requires_human_review": True},
-        "pages": [{"page_number": 1, "chapter_code": code, "text": (
-            ("मुद्रण संस्करण 2025-26। " if language in {"hi", "hindi"} else "Printed edition 2025-26. ")
-            + text
-        )}],
+        "pages": [
+            {
+                "page_number": 1,
+                "chapter_code": None,
+                "text": "मुद्रण संस्करण 2025-26। " if language in {"hi", "hindi"} else "Printed edition 2025-26.",
+            },
+            {"page_number": 2, "chapter_code": code, "text": text},
+        ],
     }
 
 
