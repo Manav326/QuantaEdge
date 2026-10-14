@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 import { useEffect, useRef, useState } from 'react';
 import styles from './Verify.module.css';
 
@@ -130,7 +130,7 @@ export default function CertificateVerifyPage() {
   return (
     <main className="app-shell">
       <section className={styles.page}>
-        <Link href="/" className={styles.brand}>QuantaEdge <span>Certificate verification</span></Link>
+        <QuantaEdgeBrand href="/" variant="header" className={styles.brandLockup} />
         <div className={styles.card}>
           <span className={styles.kicker}>AUTHENTICITY CHECK</span>
           <h1>Verify a certificate</h1>

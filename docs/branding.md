@@ -35,3 +35,12 @@ The shared web lockup is implemented in `apps/web/app/components/QuantaEdgeBrand
 - Shared web/admin accents: warm orange for brand highlights, deep orange for small text and controls, navy for structure, and neutral semantic success/error colours.
 
 The logo should never be stretched. At narrow mobile widths use the compact size variant while retaining the tagline where the layout can accommodate it.
+
+
+## Certificate renderer asset
+
+The API renderer packages a byte-for-byte mirror of `apps/web/public/branding/quantaedge-wordmark.png`
+at `services/api/src/main/resources/branding/quantaedge-wordmark.png` so PDF/PNG generation does not
+depend on a live HTTP request to the website. This is an asset mirror, not a second logo design. Whenever
+the canonical wordmark changes, replace the API resource with the exact same file. The certificate
+renderer uses the brand palette documented above, and the company name and tagline remain unchanged in every language.

@@ -43,13 +43,13 @@ class CertificateRendererTest {
       var image = ImageIO.read(new ByteArrayInputStream(rendered.png()));
       assertEquals(2480, image.getWidth());
       assertEquals(1754, image.getHeight());
-      var qrCrop = image.getSubimage(2480 - 390, 1754 - 455, 250, 250);
+      var qrCrop = image.getSubimage(1550, 1270, 160, 160);
       String decodedUrl = new MultiFormatReader().decode(
           new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(qrCrop)))).getText();
       assertEquals("http://localhost:3000/certificate/verify?code=QE-2026-ABCDEF1234567890", decodedUrl,
           "QR must open the official verification page for the exact certificate");
 
-      var barcodeCrop = image.getSubimage(2480 - 660, 1754 - 160, 520, 60);
+      var barcodeCrop = image.getSubimage(1740, 1324, 480, 54);
       String decodedBarcode = new MultiFormatReader().decode(
           new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(barcodeCrop)))).getText();
       assertEquals("QE-2026-ABCDEF1234567890", decodedBarcode,
@@ -62,6 +62,20 @@ class CertificateRendererTest {
         assertEquals(841.89f, document.getPage(0).getMediaBox().getWidth(), 0.1f);
       }
     }
+  }
+
+  @Test
+  void allTemplateIdsResolveToTheSameDesignAndCanonicalBrandIsPackaged() throws Exception {
+    var first = renderer.render("CLASSIC", "en", "Real Student", "Real Assessment",
+        "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false).png();
+    var second = renderer.render("MODERN", "en", "Real Student", "Real Assessment",
+        "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false).png();
+    var third = renderer.render("ACADEMIC", "en", "Real Student", "Real Assessment",
+        "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false).png();
+    assertArrayEquals(first, second);
+    assertArrayEquals(first, third);
+    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null,
+        "Canonical QuantaEdge wordmark must be included in the API artifact.");
   }
 
   @Test

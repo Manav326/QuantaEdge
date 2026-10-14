@@ -5,11 +5,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
+import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 
 const TEMPLATES = [
-  { id: 'CLASSIC', name: 'Classic', description: 'Formal navy and gold frame' },
-  { id: 'MODERN', name: 'Modern', description: 'Clean navy layout with orange accents' },
-  { id: 'ACADEMIC', name: 'Academic', description: 'Academic green and gold frame' },
+  { id: 'CLASSIC', name: 'QuantaEdge Academic', description: 'The approved QuantaEdge certificate design' },
 ];
 
 function localizedTrackName(code: string | undefined, name: string | undefined, language: string) {
@@ -133,9 +132,10 @@ export default function StudentCertificatesPage() {
       <section className={styles.page}>
         <header className={styles.header}>
           <div>
-            <span className={styles.kicker}>QUANTAEDGE · {t('ACHIEVEMENTS','उपलब्धियाँ')}</span>
+            <QuantaEdgeBrand href={null} variant="compact" className={styles.brandLockup} />
+            <span className={styles.kicker}>{t('ACHIEVEMENTS','उपलब्धियाँ')}</span>
             <h1>{t('Certificates','प्रमाणपत्र')}</h1>
-            <p>{t('Choose a design, verify your achievement, and download your certificate as PDF or PNG.','डिज़ाइन चुनें, उपलब्धि की पात्रता जाँचें और प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
+            <p>{t('Your approved QuantaEdge certificate design is used for every language. Verify your achievement and download the certificate as PDF or PNG.','हर भाषा में स्वीकृत QuantaEdge प्रमाणपत्र डिज़ाइन का उपयोग होता है। अपनी उपलब्धि सत्यापित करें और प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
           </div>
           <Link href="/student/progress" className="button button-light">← {t('Learning progress','पढ़ाई की प्रगति')}</Link>
         </header>
@@ -145,8 +145,8 @@ export default function StudentCertificatesPage() {
 
         <section className={styles.panel}>
           <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>01 · {t('DESIGN','डिज़ाइन')}</span><h2>{t('Choose your certificate style','प्रमाणपत्र का डिज़ाइन चुनें')}</h2></div>
-            <span className={styles.meta}>{t('3 designs · PDF + PNG','3 डिज़ाइन · PDF + PNG')}</span>
+            <div><span className={styles.eyebrow}>01 · {t('DESIGN','डिज़ाइन')}</span><h2>{t('Approved certificate design','स्वीकृत प्रमाणपत्र डिज़ाइन')}</h2></div>
+            <span className={styles.meta}>{t('One approved design · PDF + PNG','एक स्वीकृत डिज़ाइन · PDF + PNG')}</span>
           </div>
           <div className={styles.templateGrid}>
             {TEMPLATES.map((template) => (
