@@ -33,6 +33,13 @@ const hindiModeLabels: Record<Mode, string> = {
   STEP_BY_STEP: 'चरण-दर-चरण',
   CHECK_MY_WORK: 'मेरी जाँच करें',
 };
+const modeIcons: Record<Mode, string> = {
+  HINT: '💡',
+  EXPLAIN: '☷',
+  EXAMPLE: '▦',
+  STEP_BY_STEP: '1→2',
+  CHECK_MY_WORK: '✓',
+};
 
 async function readBody(response: Response): Promise<ApiBody> {
   const raw = await response.text();
@@ -530,13 +537,21 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       }}
     >
       <span className="tutor-minimized-mark" aria-hidden="true">✦</span>
-      <span className="tutor-minimized-dot" aria-hidden="true" />
     </button>;
   }
 
   if (!languageReady) {
-    return <section className="tutor-dock open tutor-language-loading" aria-label="QUANTAEDGE TUTOR">
-      <div className="tutor-head"><div className="tutor-brand-mark" aria-hidden="true">✦</div><strong>QUANTAEDGE TUTOR</strong></div>
+    return <section className="tutor-dock open tutor-language-loading" aria-label="AI tutor">
+      <div className="tutor-head tutor-head--compact">
+        <div className="tutor-head-main">
+          <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
+          <strong className="tutor-head-title">{english ? 'Your tutor' : 'आपका ट्यूटर'}</strong>
+          <span className="tutor-ai-badge" aria-label="AI tutor"><span aria-hidden="true">✦</span><small>AI</small></span>
+        </div>
+        <div className="tutor-head-controls">
+          <button type="button" className="tutor-control-btn tutor-close" aria-label={english ? 'Close tutor' : 'ट्यूटर बंद करें'} title={english ? 'Close' : 'बंद करें'} onClick={onClose}>×</button>
+        </div>
+      </div>
       <div className="tutor-language-loading-body"><span className="tutor-spinner" aria-hidden="true" /></div>
     </section>;
   }
@@ -557,12 +572,9 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       onPointerCancel={endPanelMove}
     >
       <div className="tutor-head-main">
-        <span className="tutor-brand-mark" aria-hidden="true">✦</span>
-        <div className="tutor-heading-copy">
-          <span className="tutor-eyebrow">QUANTAEDGE TUTOR</span>
-          <strong>{english ? 'Learn with a little help' : 'सीखें, सही मदद के साथ'}</strong>
-          <span className="tutor-head-status"><i aria-hidden="true" />{responseLanguage === 'en' ? (english ? 'Lesson-aware · Replies in English' : 'पाठ के अनुसार · English में जवाब') : (english ? 'Lesson-aware · Replies in Hindi' : 'पाठ के अनुसार · हिन्दी में जवाब')}</span>
-        </div>
+        <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
+        <strong className="tutor-head-title">{english ? 'Your tutor' : 'आपका ट्यूटर'}</strong>
+        <span className="tutor-ai-badge" aria-label="AI tutor" title={english ? 'AI tutor' : 'AI ट्यूटर'}><span aria-hidden="true">✦</span><small>AI</small></span>
       </div>
       <div className="tutor-head-controls">
         <button type="button" className="tutor-control-btn" aria-label={english ? 'Minimize tutor' : 'ट्यूटर छोटा करें'} title={english ? 'Minimize' : 'छोटा करें'} onClick={() => setMinimized(true)}>−</button>
@@ -582,7 +594,18 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         : <>
             <div className="tutor-modes" aria-label={english ? 'Tutor help mode' : 'ट्यूटर सहायता का तरीका'}>
               {(Object.keys(labels) as Mode[]).map(currentMode =>
-                <button type="button" key={currentMode} className={mode === currentMode ? 'selected' : ''} aria-pressed={mode === currentMode} onClick={() => setMode(currentMode)}>{labels[currentMode]}</button>
+                <button
+                  type="button"
+                  key={currentMode}
+                  className={mode === currentMode ? 'selected' : ''}
+                  aria-label={labels[currentMode]}
+                  aria-pressed={mode === currentMode}
+                  title={labels[currentMode]}
+                  onClick={() => setMode(currentMode)}
+                >
+                  <span className="tutor-mode-icon" aria-hidden="true">{modeIcons[currentMode]}</span>
+                  <span className="tutor-mode-tooltip" role="tooltip">{labels[currentMode]}</span>
+                </button>
               )}
             </div>
             <div className="tutor-messages" aria-live="polite" aria-relevant="additions text">
@@ -590,9 +613,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
                 {loadingOlder ? (english ? 'Loading older messages…' : 'पुराने संदेश लोड हो रहे हैं…') : (english ? '↑ Load older messages' : '↑ पुराने संदेश लोड करें')}
               </button>}
               {messages.length === 0 && <div className="tutor-welcome">
-                <span className="tutor-welcome-mark" aria-hidden="true">✦</span>
-                <strong>{english ? 'I’ll help you with this lesson.' : 'मैं इसी पाठ के संदर्भ में आपकी मदद करूँगा।'}</strong>
-                <p>{english ? 'Start with a hint. Choose Explain or Step-by-step if you need more help.' : 'पहले संकेत से शुरू करें। ज़रूरत हो तो समझाएँ या चरण-दर-चरण चुनें।'}</p>
+                <strong>{english ? 'Ask me about this lesson.' : 'इस पाठ के बारे में पूछें।'}</strong>
               </div>}
               {messages.map((item, index) => <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || index}>
                 <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
@@ -613,44 +634,36 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
                   placeholder={english ? 'Ask about this lesson…' : 'इस पाठ के बारे में पूछें…'}
                   aria-label={english ? 'Your message to the tutor' : 'ट्यूटर के लिए आपका संदेश'}
                 />
-                <span className="tutor-composer-hint">{english ? 'Enter to send · Shift+Enter for a new line' : 'भेजने के लिए Enter · नई पंक्ति के लिए Shift+Enter'}</span>
               </label>
-              <button className="tutor-send" type="submit" disabled={!input.trim() || busy || available !== true} aria-label={english ? 'Send message' : 'संदेश भेजें'}>
-                <span aria-hidden="true">↑</span><span>{english ? 'Send' : 'भेजें'}</span>
+              <button className="tutor-send" type="submit" disabled={!input.trim() || busy || available !== true} aria-label={english ? 'Send message' : 'संदेश भेजें'} title={english ? 'Send' : 'भेजें'}>
+                <span aria-hidden="true">{busy ? '…' : '↑'}</span>
               </button>
             </form>
-            <div className="tutor-footnote">
-              <span>{english ? 'Lesson content is the source of truth.' : 'पाठ की सामग्री ही मूल स्रोत है।'}</span>
-              <span>{responseLanguage === 'en' ? (english ? 'Responding in English' : 'English में जवाब') : (english ? 'Responding in Hindi' : 'हिन्दी में जवाब')}</span>
-            </div>
-            <div className="tutor-resize-guide">
-              <span>{english ? 'Drag header to move · resize from corner' : 'खिसकाने के लिए शीर्षक खींचें · कोने से आकार बदलें'}</span>
-              <button
-                className="tutor-resize-grip"
-                type="button"
-                aria-label={english ? 'Resize tutor window' : 'ट्यूटर विंडो का आकार बदलें'}
-                title={english ? 'Drag to resize' : 'आकार बदलने के लिए खींचें'}
-                onPointerDown={beginPanelResize}
-                onPointerMove={resizePanel}
-                onPointerUp={endPanelResize}
-                onPointerCancel={endPanelResize}
-                onKeyDown={event => {
-                  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
-                  const rect = panelRef.current?.getBoundingClientRect();
-                  if (!frame && !rect) return;
-                  event.preventDefault();
-                  const base = frame || { left: rect!.left, top: rect!.top, width: rect!.width, height: rect!.height };
-                  const delta = event.shiftKey ? 40 : 16;
-                  const maxWidth = Math.max(320, window.innerWidth - base.left - 8);
-                  const maxHeight = Math.max(360, window.innerHeight - base.top - 8);
-                  setFrame({
-                    ...base,
-                    width: Math.max(320, Math.min(maxWidth, base.width + (event.key === 'ArrowRight' ? delta : event.key === 'ArrowLeft' ? -delta : 0))),
-                    height: Math.max(360, Math.min(maxHeight, base.height + (event.key === 'ArrowDown' ? delta : event.key === 'ArrowUp' ? -delta : 0))),
-                  });
-                }}
-              ><span aria-hidden="true">⌟</span></button>
-            </div>
           </>}
+    {!mobileViewport && <button
+      className="tutor-resize-grip"
+      type="button"
+      aria-label={english ? 'Resize tutor window' : 'ट्यूटर विंडो का आकार बदलें'}
+      title={english ? 'Resize window' : 'विंडो का आकार बदलें'}
+      onPointerDown={beginPanelResize}
+      onPointerMove={resizePanel}
+      onPointerUp={endPanelResize}
+      onPointerCancel={endPanelResize}
+      onKeyDown={event => {
+        if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+        const rect = panelRef.current?.getBoundingClientRect();
+        if (!frame && !rect) return;
+        event.preventDefault();
+        const base = frame || { left: rect!.left, top: rect!.top, width: rect!.width, height: rect!.height };
+        const delta = event.shiftKey ? 40 : 16;
+        const maxWidth = Math.max(320, window.innerWidth - base.left - 8);
+        const maxHeight = Math.max(360, window.innerHeight - base.top - 8);
+        setFrame({
+          ...base,
+          width: Math.max(320, Math.min(maxWidth, base.width + (event.key === 'ArrowRight' ? delta : event.key === 'ArrowLeft' ? -delta : 0))),
+          height: Math.max(360, Math.min(maxHeight, base.height + (event.key === 'ArrowDown' ? delta : event.key === 'ArrowUp' ? -delta : 0))),
+        });
+      }}
+    ><span aria-hidden="true">⌟</span></button>}
   </section>;
 }

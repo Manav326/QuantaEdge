@@ -643,7 +643,9 @@ export default function LearnClient() {
         {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
       </section>}
 
-      <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')}>✦ <span><LocaleText hinglish="AI Tutor" english="AI Tutor" /></span></button>
+      {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')} title={tx('AI tutor खोलें','Open AI tutor')}>
+        <span className="tutor-launch-icon" aria-hidden="true">✦</span>
+      </button>}
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />
 
       <div className="lesson-next">
