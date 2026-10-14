@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HealthController {
-  private final OpenAiTutorClient tutor;
+  private final TutorProviderRouter tutor;
   private final boolean demoSeed;
   private final String adminMobiles;
 
-  public HealthController(OpenAiTutorClient tutor,
+  public HealthController(TutorProviderRouter tutor,
       @Value("${app.demo-seed:false}") boolean demoSeed,
       @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
     this.tutor=tutor;
