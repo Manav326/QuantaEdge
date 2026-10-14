@@ -40,9 +40,15 @@ The API uses explicit settings instead of choosing an API protocol from a URL:
 
 The local Compose overlays set the local Ollama endpoint as primary and keep hosted fallback off unless `APP_AI_TUTOR_FALLBACK_ENABLED=true` is explicitly configured. No hosted API key is needed for local-only inference.
 
-## Context, authorization, and analytics
+## Context, retrieval, authorization, and analytics
 
 The service restricts inference to active students with active enrollment in the lesson's subject, published lesson content, and approved questions from that same lesson. It uses current-language lesson/chapter/subject metadata and approved translations when their source content has not changed. Question options are included where relevant, while answer keys and solutions are stripped from lesson blocks before they are sent to the model.
+
+For additional grounding, `TutorCurriculumRetriever` performs a bounded lexical retrieval over active blocks from other published lessons in the same chapter. It prefers matching published Hindi/English block translations when their source hash is current, ranks candidates by term overlap, and includes at most four short passages in the prompt. Retrieved text remains untrusted educational content and is never allowed to override tutor instructions. This is curriculum-content retrieval, **not yet retrieval over the full SCERT/NCERT PDF corpus**.
+
+The current `learning_pdf_asset` / `learning_document` library stores PDF bytes and document/page metadata, but does not provide a searchable extracted-page-text index to the tutor. The existing PDF extraction and textbook-cache workflows do not yet connect a searchable page-text store to live inference. Full textbook RAG therefore remains a follow-up: persist reviewed extracted page text with document/language/chapter/page/source provenance, then retrieve from that index with the same access and prompt-safety rules. Do not extract hundreds of PDF pages synchronously on each student question.
+
+Tutor session creation reuses a recent active session by default. The web tutor now sends `newChat: true` for the explicit New Chat control, which creates a fresh session without deleting earlier conversation history. Resume/reopen continues to use the existing-session behavior.
 
 Provider calls occur outside the database transaction. After a usable reply, the API atomically records the learner message and assistant reply with actual provider/model labels and available token usage. Admin tutor analytics expose reply counts and token totals by provider/model.
 
