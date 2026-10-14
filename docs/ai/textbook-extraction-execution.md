@@ -117,3 +117,7 @@ Implementation commits:
 - e64e2d4e — GitHub-hosted visual pipeline workflow.
 - deaa053a — resumed runs continue to the next unprocessed assets.
 - 32a50abd — execution guide for resumable analysis.
+
+
+- [x] Add a restore script, scripts/pull_textbook_visual_bundle.ps1, that reads the committed bundle index, pulls the exact versioned GHCR package, verifies SHA-256, and restores the complete asset bundle after a repository pull.
+- [ ] Confirm the first workflow run on the actual existing GHCR source-book image; no real-book vision results or successful workflow run are claimed until that run completes.
