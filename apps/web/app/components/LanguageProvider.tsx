@@ -12,6 +12,8 @@ type LocaleContextValue = {
   setLearningLanguage: (language: LearningLanguage) => void;
   certificateLanguage: LearningLanguage;
   setCertificateLanguage: (language: LearningLanguage) => void;
+  /** True after stored preferences and (for students) the account language are resolved. */
+  languageReady: boolean;
 };
 const STORAGE_KEY = 'qe-locale';
 const LEARNING_STORAGE_KEY = 'qe-learning-language';
@@ -79,7 +81,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     applyCertificateLanguage(next, true);
   }, [applyCertificateLanguage]);
 
+  const [languageReady, setLanguageReady] = useState(false);
+
+  // Resolve the persisted UI/content preferences before language-sensitive tools
+  // are allowed to create requests. On student pages, the account preference is
+  // authoritative, so wait for it (or a failed/offline request) before marking ready.
   useEffect(() => {
+    let active = true;
+    setLanguageReady(false);
     try {
       const saved = window.localStorage.getItem(STORAGE_KEY);
       if (saved === 'hinglish') applyLocale('hindi', true);
@@ -103,24 +112,29 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     };
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, [applyLocale, applyLearningLanguage, applyCertificateLanguage]);
 
-  // The account preference is authoritative when online; local storage remains a
-  // quick startup fallback and lets the chosen language remain available offline.
-  useEffect(() => {
-    if (!isStudentRoute) return;
-    let active = true;
-    fetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' })
-      .then(response => response.ok ? response.json() : null)
-      .then(profile => {
-        if (!active || !profile) return;
-        const savedLanguage = normalizedLanguage(profile.learningLanguage ?? profile.learning_language ?? profile.language);
-        if (savedLanguage) applyLearningLanguage(savedLanguage, true);
-      })
-      .catch(() => undefined);
-    return () => { active = false; };
-  }, [isStudentRoute, applyLearningLanguage]);
+    const resolveLanguage = async () => {
+      if (isStudentRoute) {
+        try {
+          const response = await fetch('/api/v1/students/me/profile', { cache: 'no-store', credentials: 'same-origin' });
+          const profile = response.ok ? await response.json() : null;
+          if (active && profile) {
+            const savedLanguage = normalizedLanguage(profile.learningLanguage ?? profile.learning_language ?? profile.language);
+            if (savedLanguage) applyLearningLanguage(savedLanguage, true);
+          }
+        } catch {
+          // The resolved local preference remains the offline fallback.
+        }
+      }
+      if (active) setLanguageReady(true);
+    };
+    void resolveLanguage();
+
+    return () => {
+      active = false;
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [applyLocale, applyLearningLanguage, applyCertificateLanguage, isStudentRoute]);
 
   useEffect(() => {
     if (!isParentRoute || isStudentRoute) return;
@@ -138,8 +152,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [isParentRoute, isStudentRoute, applyLocale]);
 
   const value = useMemo(() => ({
-    locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage
-  }), [locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage]);
+    locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage, languageReady
+  }), [locale, setLocale, learningLanguage, setLearningLanguage, certificateLanguage, setCertificateLanguage, languageReady]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 
