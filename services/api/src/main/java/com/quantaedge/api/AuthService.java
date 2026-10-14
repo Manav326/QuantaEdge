@@ -500,9 +500,14 @@ public class AuthService {
   }
 
   private void recordPasswordLoginFailure(String authType,String identifier) {
-    jdbc.update("delete from account_login_failure where attempted_at < now() - interval '24 hours'");
+    String principalHash=passwordAttemptKey(authType,identifier);
+    // The composite index keeps cleanup scoped to this principal instead of scanning the full table.
+    jdbc.update("""
+      delete from account_login_failure
+      where principal_hash=? and auth_type=? and attempted_at < now() - interval '24 hours'
+      """,principalHash,authType);
     jdbc.update("insert into account_login_failure(principal_hash,auth_type) values (?,?)",
-        passwordAttemptKey(authType,identifier),authType);
+        principalHash,authType);
   }
 
   private void clearPasswordLoginFailures(String authType,String identifier) {
