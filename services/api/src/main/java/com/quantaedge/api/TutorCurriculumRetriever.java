@@ -93,7 +93,7 @@ public class TutorCurriculumRetriever {
     String textbookPages = retrieveTextbookPages(sessionId, language, learnerMessage, currentTopic);
     if (!textbookPages.isBlank()) {
       if (result.length() > 0) result.append("\n");
-      result.append("REVIEWED TEXTBOOK PAGE EXCERPTS (source/page metadata follows):\n")
+      result.append("APPROVED-SOURCE TEXTBOOK PAGE EXCERPTS (source/page metadata follows):\n")
           .append(textbookPages);
     }
     return result.toString();
