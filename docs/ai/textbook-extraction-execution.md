@@ -11,10 +11,11 @@ One reusable, provenance-preserving source of truth for whole-book PDF ingestion
 - [x] Add asynchronous, idempotent extraction worker: stream source PDF to a temporary file, extract embedded text, OCR low-text/scanned pages within the current 250-page OCR budget, save page-level progress, and retry failed/unresolved pages/books.
 - [x] Add authorized admin endpoints to queue extraction and inspect status/progress; extraction requires CONTENT_EDIT and an approved asset with class/subject/language intake metadata.
 - [x] Add source-aware search to tutor retrieval, filtered by class/subject/language and prioritizing the active chapter; preserve source title, edition, chapter, and PDF page metadata. CI/runtime verification remains pending.
-- [x] Connect extracted-page retrieval to the existing tutor grounding context. [ ] Add focused tests for source filtering, language filtering, ranking, missing pages, and prompt provenance.
+- [x] Connect extracted-page retrieval to the existing tutor grounding context.
+- [ ] Add focused tests for source filtering, language filtering, ranking, missing pages, and prompt provenance; run the final API/web CI; then pilot one approved Maths and one Science book with available Hindi/English editions and verify extracted page quality, chapter mapping, and live tutor citations.
 - [ ] Connect extracted passages to lesson/question generation with provenance links and review gates; validate generated answers before publication.
 - [ ] Align Hindi and English editions/contextual translations while preserving formulas, tables, diagrams, and scientific/mathematical terms; record translation status and source relationship.
-- [ ] Run the API/web CI and extraction tests on `main`; pilot one Maths and one Science book in both available languages, inspect OCR quality/chapter boundaries, then scale to all class 6–8 books.
+- [ ] After the pilot is verified, scale extraction to the remaining authorized class 6–8 Maths and Science books.
 - [ ] Update this tracker with commit SHAs, workflow result, and the exact next unchecked task after each work session.
 
 ## Current checkpoint (2026-10-14)
