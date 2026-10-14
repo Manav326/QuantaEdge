@@ -246,7 +246,7 @@ public class CertificateRenderer {
     // Vertically center the award copy in the open band between the header and the
     // certificate-details footer. Longer assessment titles move the block upward to
     // preserve balanced whitespace without colliding with the footer.
-    int headingY = lines.size() <= 1 ? 528 : 518 - (Math.min(lines.size(), 3) - 2) * 31;
+    int headingY = lines.size() <= 1 ? 528 : 518 - (lines.size() - 2) * 31;
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
         WIDTH / 2, headingY, WIDTH - 420);
