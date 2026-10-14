@@ -194,6 +194,7 @@ def run_analysis(
 
     selected: list[dict[str, Any]] = []
     seen: set[str] = set()
+    skipped_from_checkpoint = 0
     for asset in assets:
         if not isinstance(asset, dict) or asset.get("kind") not in {"embedded_image", "page_preview"}:
             continue
@@ -203,26 +204,27 @@ def run_analysis(
         if not asset_id or asset_id in seen:
             continue
         seen.add(str(asset_id))
-        selected.append(asset)
-        if len(selected) >= max_assets:
-            break
+        existing = previous.get(str(asset_id), {})
+        if (
+            existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and existing.get("asset_sha256") == asset.get("asset_sha256")
+            and existing.get("model") == model
+            and existing.get("prompt_version") == PROMPT_VERSION
+        ):
+            skipped_from_checkpoint += 1
+            continue
+        if len(selected) < max_assets:
+            selected.append(asset)
 
     results_by_id = dict(previous)
 
     def checkpoint() -> dict[str, Any]:
         ordered_results = list(results_by_id.values())
         summary = {
-            "assets_selected": len(selected),
+            "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_analyzed": sum(1 for item in ordered_results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW" and item.get("model") == model and item.get("prompt_version") == PROMPT_VERSION),
             "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
-            "assets_skipped_from_checkpoint": sum(
-                1 for asset in selected
-                if (str(asset.get("asset_id")) in results_by_id
-                    and results_by_id[str(asset.get("asset_id"))].get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
-                    and results_by_id[str(asset.get("asset_id"))].get("asset_sha256") == asset.get("asset_sha256")
-                    and results_by_id[str(asset.get("asset_id"))].get("model") == model
-                    and results_by_id[str(asset.get("asset_id"))].get("prompt_version") == PROMPT_VERSION)
-            ),
+"assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "publication_allowed": False,
         }
         result = {
