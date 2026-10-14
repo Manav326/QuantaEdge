@@ -43,6 +43,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.quantaedge.android.R
 import org.json.JSONObject
 
 private data class TutorModeUi(val key: String, val icon: String, val english: String, val hindi: String)
