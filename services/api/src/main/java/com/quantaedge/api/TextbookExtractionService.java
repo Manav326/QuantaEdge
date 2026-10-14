@@ -1,17 +1,27 @@
 package com.quantaedge.api;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -328,6 +338,172 @@ public class TextbookExtractionService {
       """, assetId, documentId, ingestionJobId, classId, subjectId, chapterId, language,
       page, hash, text, method, quality, error);
   }
+
+  @Transactional
+  public Map<String, Object> importGhcrBook(MultipartFile manifestFile, MultipartFile pagesFile,
+      long staffId) throws IOException {
+    if (manifestFile == null || pagesFile == null || manifestFile.isEmpty() || pagesFile.isEmpty()) {
+      throw new IllegalArgumentException("Both the extraction manifest and page-text JSONL are required.");
+    }
+    if (manifestFile.getSize() > 2 * 1024 * 1024 || pagesFile.getSize() > 50L * 1024 * 1024) {
+      throw new IllegalArgumentException("Manifest must be <=2 MiB and extracted page text <=50 MiB.");
+    }
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode manifest = mapper.readTree(manifestFile.getInputStream());
+    if (!"DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW".equals(manifest.path("content_state").asText())) {
+      throw new IllegalArgumentException("This is not a draft-only QuantaEdge extraction manifest.");
+    }
+    if (!"SUBJECT_BOOK".equalsIgnoreCase(manifest.path("scope").asText())) {
+      throw new IllegalArgumentException("Only complete-book page extractions can be imported through this endpoint.");
+    }
+    String bookId = manifest.path("book_id").asText("").trim();
+    String sourceTitle = manifest.path("source_title").asText(manifest.path("title").asText("")).trim();
+    String sourceUrl = manifest.path("source_url").asText("").trim();
+    String edition = manifest.path("edition").asText("edition not recorded").trim();
+    String sourceHash = manifest.path("original_book_sha256").asText("").toLowerCase(Locale.ROOT);
+    int classNo = extractClassNumber(manifest);
+    String language = normalizeLanguage(manifest.path("language").asText(""));
+    String subjectName = manifest.path("subject").asText("").trim();
+    int expectedPages = manifest.path("page_count").asInt(0);
+    if (bookId.isBlank() || sourceTitle.isBlank() || !sourceHash.matches("[0-9a-f]{64}")
+        || expectedPages < 1 || expectedPages > 2000) {
+      throw new IllegalArgumentException("The manifest is missing a valid book ID, title, source hash, or page count.");
+    }
+    validateOfficialSourceUrl(sourceUrl);
+    String subjectCode;
+    String subjectLower = subjectName.toLowerCase(Locale.ROOT);
+    if (subjectLower.contains("math") || subjectName.contains("गणित")) subjectCode = "maths";
+    else if (subjectLower.contains("science") || subjectName.contains("विज्ञान")) subjectCode = "science";
+    else throw new IllegalArgumentException("Only Maths and Science source books can be imported into this pilot.");
+    List<Map<String, Object>> scopeRows = jdbc.queryForList("""
+      select c.id as class_id,s.id as subject_id
+      from curriculum_class c join curriculum_subject s on s.class_id=c.id
+      where c.code=? and s.code=? and c.active=true and s.active=true
+      """, String.valueOf(classNo), subjectCode);
+    if (scopeRows.isEmpty()) {
+      throw new IllegalArgumentException("No active QuantaEdge curriculum track matches this class and subject.");
+    }
+    long classId = ((Number) scopeRows.getFirst().get("class_id")).longValue();
+    long subjectId = ((Number) scopeRows.getFirst().get("subject_id")).longValue();
+
+    List<ExtractedPageInput> pages = new ArrayList<>();
+    Set<Integer> pageNumbers = new HashSet<>();
+    try (BufferedReader reader = new BufferedReader(
+        new InputStreamReader(pagesFile.getInputStream(), StandardCharsets.UTF_8))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        if (line.isBlank()) continue;
+        JsonNode row = mapper.readTree(line);
+        String rowBookId = row.path("book_id").asText("");
+        String rowHash = row.path("original_book_sha256").asText("").toLowerCase(Locale.ROOT);
+        String rowLanguage = normalizeLanguage(row.path("language").asText(""));
+        int pageNo = row.path("source_book_page_number").asInt(0);
+        String text = row.path("text").asText("");
+        String reviewStatus = row.path("review_status").asText("");
+        if (!bookId.equals(rowBookId) || !sourceHash.equals(rowHash) || !language.equals(rowLanguage)
+            || !subjectName.equalsIgnoreCase(row.path("subject").asText(""))
+            || !text.equals(text.stripTrailing()) || text.length() > 100_000
+            || pageNo < 1 || pageNo > expectedPages || !pageNumbers.add(pageNo)) {
+          throw new IllegalArgumentException("Extracted page metadata is inconsistent or contains duplicate/invalid page numbers.");
+        }
+        String quality = switch (reviewStatus) {
+          case "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW" -> "READY";
+          case "LOW_TEXT_REVIEW", "NO_DEVANAGARI_REVIEW" -> "LOW_TEXT";
+          case "NO_EXTRACTABLE_TEXT_REVIEW" -> "OCR_REQUIRED";
+          default -> throw new IllegalArgumentException("Unknown page quality state in extraction output.");
+        };
+        String method = text.isBlank() ? "EMPTY" : "PDF_TEXT";
+        pages.add(new ExtractedPageInput(pageNo, text, method, quality));
+        if (pages.size() > expectedPages) {
+          throw new IllegalArgumentException("The JSONL contains more pages than the source manifest.");
+        }
+      }
+    }
+    if (pages.size() != expectedPages) {
+      throw new IllegalArgumentException("Expected " + expectedPages + " extracted page records but received " + pages.size() + ".");
+    }
+    for (int page = 1; page <= expectedPages; page++) {
+      if (!pageNumbers.contains(page)) {
+        throw new IllegalArgumentException("The extracted page set has a gap at source PDF page " + page + ".");
+      }
+    }
+
+    Long sourceBookId = jdbc.queryForObject("""
+      insert into textbook_source_book(registry_book_id,source_sha256,source_title,source_url,edition,
+        class_id,subject_id,language,total_pages,status,imported_pages,imported_by_staff_id,
+        imported_at,updated_at)
+      values(?,?,?,?,?,?,?,?,?,'DRAFT',?,?,now(),now())
+      on conflict(registry_book_id,source_sha256,language) do update set
+        source_title=excluded.source_title,source_url=excluded.source_url,edition=excluded.edition,
+        class_id=excluded.class_id,subject_id=excluded.subject_id,total_pages=excluded.total_pages,
+        imported_pages=excluded.imported_pages,imported_by_staff_id=excluded.imported_by_staff_id,
+        imported_at=now(),updated_at=now(),
+        status=case when textbook_source_book.status='APPROVED' then 'APPROVED' else 'DRAFT' end
+      returning id
+      """, Long.class, bookId, sourceHash, sourceTitle, sourceUrl,
+      edition.isBlank() ? "edition not recorded" : edition, classId, subjectId, language,
+      expectedPages, pages.size(), staffId);
+    for (ExtractedPageInput page : pages) {
+      jdbc.update("""
+        insert into textbook_extracted_page(pdf_asset_id,source_book_id,learning_document_id,
+          source_ingestion_job_id,class_id,subject_id,chapter_id,language,page_no,source_sha256,
+          extracted_text,extraction_method,quality_status,extraction_error,extracted_at,updated_at)
+        values(null,?,null,null,?,?,null,?,?,?,?,?,?,null,now(),now())
+        on conflict (source_book_id,page_no) where source_book_id is not null do update set
+          class_id=excluded.class_id,subject_id=excluded.subject_id,language=excluded.language,
+          source_sha256=excluded.source_sha256,extracted_text=excluded.extracted_text,
+          extraction_method=excluded.extraction_method,quality_status=excluded.quality_status,
+          extraction_error=null,extracted_at=now(),updated_at=now()
+        """, sourceBookId, classId, subjectId, language, page.pageNo(), sourceHash,
+        page.text(), page.method(), page.quality());
+    }
+    return Map.of("sourceBookId", sourceBookId, "bookId", bookId, "classNo", classNo,
+        "subject", subjectCode, "language", language, "pagesImported", pages.size(),
+        "status", "DRAFT", "message", "Imported as draft; explicitly approve the source before tutor retrieval.");
+  }
+
+  @Transactional
+  public Map<String, Object> approveGhcrBook(long sourceBookId, long staffId) {
+    int changed = jdbc.update("""
+      update textbook_source_book set status='APPROVED',approved_by_staff_id=?,approved_at=now(),updated_at=now()
+      where id=? and status<>'ARCHIVED'
+      """, staffId, sourceBookId);
+    if (changed != 1) throw new IllegalArgumentException("The GHCR source book was not found or is archived.");
+    return jdbc.queryForMap("""
+      select id as "sourceBookId",registry_book_id as "bookId",source_title as "title",
+        class_id as "classId",subject_id as "subjectId",language,total_pages as "totalPages",
+        imported_pages as "importedPages",status,approved_at as "approvedAt"
+      from textbook_source_book where id=?
+      """, sourceBookId);
+  }
+
+  private int extractClassNumber(JsonNode manifest) {
+    String value = manifest.path("class").asText("");
+    if (value.isBlank()) value = manifest.path("classes").toString();
+    java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(?<!\\\\d)(6|7|8)(?!\\\\d)").matcher(value);
+    if (!matcher.find()) throw new IllegalArgumentException("The source book is not tagged for QuantaEdge Class 6, 7, or 8.");
+    return Integer.parseInt(matcher.group(1));
+  }
+
+  private void validateOfficialSourceUrl(String value) {
+    try {
+      URI uri = URI.create(value);
+      String host = uri.getHost() == null ? "" : uri.getHost().toLowerCase(Locale.ROOT);
+      boolean official = host.equals("ncert.nic.in") || host.endsWith(".ncert.nic.in")
+          || host.equals("ncert.ncert.org.in") || host.endsWith(".ncert.ncert.org.in")
+          || host.equals("scert.bihar.gov.in") || host.endsWith(".scert.bihar.gov.in")
+          || host.equals("bstbpc.gov.in") || host.endsWith(".bstbpc.gov.in");
+      if (!"https".equalsIgnoreCase(uri.getScheme()) || !official || uri.getUserInfo() != null) {
+        throw new IllegalArgumentException("Only official HTTPS NCERT/SCERT source URLs are accepted.");
+      }
+    } catch (RuntimeException ex) {
+      if (ex instanceof IllegalArgumentException && ex.getMessage() != null
+          && ex.getMessage().startsWith("Only official")) throw ex;
+      throw new IllegalArgumentException("The official source URL is missing or invalid.");
+    }
+  }
+
+  private record ExtractedPageInput(int pageNo, String text, String method, String quality) {}
 
   private String normalizeLanguage(String value) {
     String normalized = value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
