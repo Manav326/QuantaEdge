@@ -122,5 +122,36 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
             )
 
 
+    def test_same_runner_run_skips_failed_asset_to_reach_next_batch(self):
+        inventory = json.loads(self.inventory_path.read_text(encoding="utf-8"))
+        second_path = self.root / "page-0002.jpg"
+        second_path.write_bytes(b"second fake image")
+        inventory["assets"].append({
+            "asset_id": "asset-2", "kind": "page_preview", "source_book_id": "book-c6-science",
+            "source_pdf_sha256": "a" * 64, "source_pdf_page_number": 2,
+            "asset_path": second_path.name, "asset_sha256": hashlib.sha256(second_path.read_bytes()).hexdigest(),
+            "media_type": "image/jpeg", "page_text_context": "Rainfall",
+        })
+        self.inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+        output = self.root / "visual-analysis.v1.json"
+
+        def fail(*args, **kwargs):
+            raise RuntimeError("temporary model failure")
+
+        first = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=fail, output_path=output, run_id="run-123",
+        )
+        self.assertEqual(1, first["summary"]["assets_processed_this_run"])
+        resumed = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=fail, output_path=output, resume=True, run_id="run-123",
+        )
+        self.assertEqual(1, resumed["summary"]["assets_processed_this_run"])
+        self.assertEqual({"asset-1", "asset-2"}, {item["asset_id"] for item in resumed["results"]})
+
+
 if __name__ == "__main__":
     unittest.main()
