@@ -99,8 +99,8 @@ foreach ($file in $manifestFiles) {
     }
     $officialHosts = @("ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in")
     $hostAllowed = $false
-    foreach ($host in $officialHosts) {
-        if ($uri.Host -eq $host -or $uri.Host.EndsWith("." + $host, [StringComparison]::OrdinalIgnoreCase)) {
+    foreach ($officialHost in $officialHosts) {
+        if ($uri.Host -eq $officialHost -or $uri.Host.EndsWith("." + $officialHost, [StringComparison]::OrdinalIgnoreCase)) {
             $hostAllowed = $true
             break
         }
