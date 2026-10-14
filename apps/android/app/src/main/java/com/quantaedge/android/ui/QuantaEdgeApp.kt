@@ -2488,7 +2488,8 @@ private fun LessonScreen(
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
     onPractice: () -> Unit,
-    onTutor: () -> Unit
+    onTutor: () -> Unit,
+    onTutorQuestion: (Long) -> Unit
 ) {
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
@@ -2522,7 +2523,8 @@ private fun LessonScreen(
                         saving = busy,
                         feedback = feedbacks[id],
                         status = if (question.optBoolean("answered") || answerLocks[id] == true)
-                            "उत्तर सुरक्षित है।" else null
+                            "उत्तर सुरक्षित है।" else null,
+                        onTutorHelp = { onTutorQuestion(question.longAny("id", "questionId", "question_id")) }
                     )
                 }
             }
