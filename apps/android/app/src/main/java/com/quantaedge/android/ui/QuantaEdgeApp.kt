@@ -813,7 +813,8 @@ fun QuantaEdgeApp() {
         runTask {
             val lessonId = lesson.longAny("id", "lesson_id")
             if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
-            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions", JSONObject().put("lessonId", lessonId))
+            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
             tutorAvailable = tutorSession.optBoolean("available")
             tutorMessages = if (tutorAvailable) {
                 ApiClient.getObject("/api/v1/tutor/sessions/" + tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
@@ -828,7 +829,8 @@ fun QuantaEdgeApp() {
         runTask {
             val sessionId = tutorSession.longAny("sessionId", "session_id")
             ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
-                JSONObject().put("message", message).put("mode", mode).put("questionId", 0))
+                JSONObject().put("message", message).put("mode", mode).put("questionId", 0)
+                    .put("language", learningContentLanguage))
             tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
                 .optJSONArray("items").objectItems()
         }
@@ -1512,14 +1514,14 @@ fun QuantaEdgeApp() {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (signedIn && landscapeLayout) NavigationRail {
+            if (signedIn && landscapeLayout && route != AppRoute.TUTOR) NavigationRail {
                 navItems.forEach { item ->
                     NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
                 }
             }
             Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
-            if (route != AppRoute.LOGIN) {
+            if (route != AppRoute.LOGIN && route != AppRoute.TUTOR) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -1994,7 +1996,8 @@ fun QuantaEdgeApp() {
                         messages = tutorMessages,
                         busy = busy,
                         error = error,
-                        onSend = ::sendTutorMessage
+                        onSend = ::sendTutorMessage,
+                        onClose = { route = AppRoute.LESSON }
                     )
                     AppRoute.CLASSES -> LearningClassesScreen(
                         subject = currentSubject,
@@ -2017,7 +2020,7 @@ fun QuantaEdgeApp() {
                 }
                 }
             }
-            if (signedIn && !landscapeLayout) NavigationBar {
+            if (signedIn && !landscapeLayout && route != AppRoute.TUTOR) NavigationBar {
                 navItems.forEach { item ->
                     NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) })
