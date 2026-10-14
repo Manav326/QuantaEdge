@@ -71,6 +71,7 @@ jobs:
           [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
           [[ "$MAX_ASSETS" =~ ^[1-9][0-9]*$ ]] && (( MAX_ASSETS <= 10000 )) || { echo "max_assets must be 1..10000"; exit 2; }
           [[ "$SOURCE_IMAGE" == ghcr.io/* ]] || { echo "source_image must be a GHCR image"; exit 2; }
+          [[ "$PDF_PATH" == /* && "$MANIFEST_PATH" == /* ]] || { echo "pdf_path and manifest_path must be absolute paths inside the source image"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
 
       - name: Log in to GHCR and fetch the original book package
@@ -86,18 +87,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/quantaedge-source"
           docker cp "$container_id:$PDF_PATH" "$RUNNER_TEMP/quantaedge-source/source.pdf"
           docker cp "$container_id:$MANIFEST_PATH" "$RUNNER_TEMP/quantaedge-source/source.manifest.json"
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          manifest_path = Path(__import__("os").environ["RUNNER_TEMP"]) / "quantaedge-source" / "source.manifest.json"
-          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-          page_name = manifest.get("text_jsonl")
-          if not isinstance(page_name, str) or not page_name or Path(page_name).name != page_name:
-              raise SystemExit("Source manifest must name its sibling page JSONL with a safe filename in text_jsonl.")
-          import subprocess
-          container_id = subprocess.check_output(["docker", "ps", "-aq", "--latest"], text=True).strip()
-          subprocess.run(["docker", "cp", f"{container_id}:{__import__('os').environ['MANIFEST_PATH'].rsplit('/',1)[0]}/{page_name}", str(manifest_path.parent / page_name)], check=True)
-          PY
+          page_name="$(python -c 'import json; print(json.load(open("'"$RUNNER_TEMP"'/quantaedge-source/source.manifest.json", encoding="utf-8"))["text_jsonl"])')"
+          [[ "$page_name" != */* && "$page_name" == *.jsonl ]] || { echo "Manifest text_jsonl must be a safe sibling .jsonl filename"; exit 2; }
+          manifest_dir="\${MANIFEST_PATH%/*}"
+          docker cp "$container_id:$manifest_dir/$page_name" "$RUNNER_TEMP/quantaedge-source/$page_name"
           echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source" >> "$GITHUB_ENV"
 
       - name: Set up Ollama model cache
