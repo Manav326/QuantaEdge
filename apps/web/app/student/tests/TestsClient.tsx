@@ -598,7 +598,9 @@ export default function TestsClient(){
                   {issuingCertificateAttemptId===Number(attempt?.attempt_id)?'Issuing…':'Issue certificate'}
                 </button>
               ):(
-                {cert?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'&&<small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>}
+                cert?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'
+                  ? <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(cert?.eligibility_reason)}</small>
+                  : null
               )}
             </section>;
           })()}
