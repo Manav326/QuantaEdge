@@ -85,7 +85,7 @@ jobs:
                       science.add(book_id)
                   else:
                       raise SystemExit(f"{language}: unsupported subject in {path.name}: {subject}")
-                  if not re.search(rf"(?<!\\d){grade}(?!\\d)", str(data.get("class") or "")):
+                  if not re.search(rf"(?<!\d){grade}(?!\d)", str(data.get("class") or "")):
                       raise SystemExit(f"{book_id}: class metadata mismatch")
                   if str(data.get("language") or "").casefold() not in ({language, "en"} if language == "english" else {language, "hi"}):
                       raise SystemExit(f"{book_id}: language metadata mismatch")
@@ -118,7 +118,7 @@ jobs:
                   raise SystemExit(f"Class {grade} {language}: both Maths part books must be separate source books")
               print(f"VERIFIED class={grade} language={language} maths_books={len(maths)} science_books={len(science)}")
 
-          artifact_root = Path(sys.argv[1]).parent.parent.parent
+          artifact_root = root.parent.parent
           # Source root is extracted/class-N; reports are siblings of extracted/.
           report_dir = artifact_root / "reports"
           target = Path("data/textbook-extractions")
@@ -136,7 +136,7 @@ jobs:
               "Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.\n",
               encoding="utf-8")
           (target / f"class-{grade}" / "MIRROR-SOURCE.txt").write_text(
-              f"Mirrored class {grade} from workflow run {sys.argv[3]}\n", encoding="utf-8")
+              f"Mirrored class {grade} from workflow run {__import__(\"os\").environ.get(\"SOURCE_RUN_ID\", \"unknown\")}\n", encoding="utf-8")
           PY
 
       - name: Commit extracted text to main
