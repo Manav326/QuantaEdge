@@ -180,13 +180,15 @@ export default function TextbooksClient() {
       code, name: rows[0]?.subject_name || code, rows,
     }));
   }, [visibleDocuments]);
+  const displaySubjectName = (code: string, fallback: string) => {
+    const normalized = String(code || '').toLowerCase();
+    if (['maths', 'math', 'mathematics'].includes(normalized)) return locale === 'english' ? 'Mathematics' : 'गणित';
+    if (normalized === 'science') return locale === 'english' ? 'Science' : 'विज्ञान';
+    return fallback;
+  };
   const subjectLabel = selected
-    ? (locale === 'english'
-        ? (selected.subject_code === 'maths' ? 'Mathematics' : selected.subject_code === 'science' ? 'Science' : selected.subject_name)
-        : selected.subject_name)
+    ? displaySubjectName(selected.subject_code, selected.subject_name || selected.subject_code)
     : t('Textbook','पाठ्यपुस्तक');
-  const displaySubjectName = (code: string, fallback: string) =>
-    locale === 'english' ? (code === 'maths' ? 'Mathematics' : code === 'science' ? 'Science' : fallback) : fallback;
   const displayChapterTitle = (item: LearningDocument, english: boolean) => {
     if (english && item.scope === 'CHAPTER_PDF') {
       const match = item.title.match(/Chapter\s+\d+\s*:\s*(.+)$/i);
@@ -402,15 +404,16 @@ export default function TextbooksClient() {
                 />
               </div>
             );
+            const displayName = displaySubjectName(code, name);
             const metadataDocument = book || rows[0];
             const metadataParts = String(metadataDocument?.title || '').split('|').map(part => part.trim()).filter(Boolean);
             const publisherLabel = metadataParts.length > 1 ? metadataParts[0] : String(metadataDocument?.edition || '').trim();
             const bookLanguageLabel = (metadataDocument?.language || learningLanguage) === 'en' ? t('English','अंग्रेज़ी') : t('Hindi','हिन्दी');
             const bookKindLabel = hasBookParts ? t('Book parts','पुस्तक के भाग') : book ? t('Complete book','पूरी पुस्तक') : t('Chapter PDFs','अध्याय PDF');
             const bookTitle = hasBookParts
-              ? (locale === 'english' ? name + ' textbook parts' : name + ' की पाठ्यपुस्तक के भाग')
-              : book ? (locale === 'english' ? name + ' textbook' : name + ' की पाठ्यपुस्तक')
-                : (locale === 'english' ? name + ' chapter collection' : name + ' के अध्याय');
+              ? (locale === 'english' ? displayName + ' textbook parts' : displayName + ' की पाठ्यपुस्तक के भाग')
+               : book ? (locale === 'english' ? displayName + ' textbook' : displayName + ' की पाठ्यपुस्तक')
+                : (locale === 'english' ? displayName + ' chapter collection' : displayName + ' के अध्याय');
             const partLabel = (part: number) => {
               if (locale !== 'english') return 'भाग ' + part;
               const roman = ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[part];
@@ -433,7 +436,7 @@ export default function TextbooksClient() {
                     <span className="qe-book-meta-tags">
                       {publisherLabel && <span className="qe-book-meta-tag qe-book-meta-tag--source">{publisherLabel}</span>}
                       <span className="qe-book-meta-tag qe-book-meta-tag--class">{t('Class ','कक्षा ')}{rows[0]?.class_code}</span>
-                      <span className="qe-book-meta-tag qe-book-meta-tag--subject">{name}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--subject">{displayName}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--language">{bookLanguageLabel}</span>
                       <span className="qe-book-meta-tag qe-book-meta-tag--type">{bookKindLabel}</span>
                     </span>
