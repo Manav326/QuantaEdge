@@ -95,6 +95,8 @@ class TextbookTextExtractionTests(unittest.TestCase):
         self.assertFalse(_matches_filters(source, 7, "hindi", ["Math"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 6, "english", ["Math"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 6, "hindi", ["Science"], "SUBJECT_BOOK"))
+        social = {"class": 6, "subject": "Social Science", "language": "hindi", "scope": "SUBJECT_BOOK"}
+        self.assertFalse(_matches_filters(social, 6, "hindi", ["Science"], "SUBJECT_BOOK"))
         self.assertFalse(_matches_filters(source, 6, "hindi", ["Math"], "CHAPTER_PDF"))
 
 
