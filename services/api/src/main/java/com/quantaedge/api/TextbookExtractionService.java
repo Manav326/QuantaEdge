@@ -35,15 +35,27 @@ public class TextbookExtractionService {
 
   public Map<String, Object> queue(long assetId, long staffId) {
     List<Map<String, Object>> sources = jdbc.queryForList("""
-      select a.id,a.sha256,a.review_status,i.class_id,i.subject_id,i.language
+      select a.id,a.sha256,a.review_status,
+        coalesce(i.class_id,
+          (select s.class_id from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
+           where j.book_asset_id=a.id order by j.id desc limit 1),
+          (select s.class_id from learning_document d join curriculum_subject s on s.id=d.subject_id
+           where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as class_id,
+        coalesce(i.subject_id,
+          (select j.subject_id from source_ingestion_job j where j.book_asset_id=a.id order by j.id desc limit 1),
+          (select d.subject_id from learning_document d where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as subject_id,
+        coalesce(i.language,
+          (select j.language from source_ingestion_job j where j.book_asset_id=a.id order by j.id desc limit 1),
+          (select d.language from learning_document d where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as language
       from learning_pdf_asset a
-      join learning_book_intake i on i.pdf_asset_id=a.id
+      left join learning_book_intake i on i.pdf_asset_id=a.id
       where a.id=?
       """, assetId);
-    if (sources.isEmpty()) {
+    if (sources.isEmpty()) throw new IllegalArgumentException("The PDF asset was not found.");
+    Map<String, Object> source = sources.getFirst();
+    if (source.get("subject_id") == null || source.get("language") == null) {
       throw new IllegalArgumentException("Classify this PDF with its class, subject, and language before extraction.");
     }
-    Map<String, Object> source = sources.getFirst();
     if (!"APPROVED".equals(String.valueOf(source.get("review_status")))) {
       throw new IllegalArgumentException("Approve the source PDF before extracting it.");
     }
@@ -92,11 +104,25 @@ public class TextbookExtractionService {
     Path pdfPath = null;
     try {
       List<Map<String, Object>> rows = jdbc.queryForList("""
-        select a.sha256,a.page_count,i.class_id,i.subject_id,i.language
-        from learning_pdf_asset a join learning_book_intake i on i.pdf_asset_id=a.id
+        select a.sha256,a.page_count,
+          coalesce(i.class_id,
+            (select s.class_id from source_ingestion_job j join curriculum_subject s on s.id=j.subject_id
+             where j.book_asset_id=a.id order by j.id desc limit 1),
+            (select s.class_id from learning_document d join curriculum_subject s on s.id=d.subject_id
+             where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as class_id,
+          coalesce(i.subject_id,
+            (select j.subject_id from source_ingestion_job j where j.book_asset_id=a.id order by j.id desc limit 1),
+            (select d.subject_id from learning_document d where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as subject_id,
+          coalesce(i.language,
+            (select j.language from source_ingestion_job j where j.book_asset_id=a.id order by j.id desc limit 1),
+            (select d.language from learning_document d where d.pdf_asset_id=a.id and d.status<>'ARCHIVED' order by d.id desc limit 1)) as language
+        from learning_pdf_asset a left join learning_book_intake i on i.pdf_asset_id=a.id
         where a.id=? and a.review_status='APPROVED'
         """, assetId);
-      if (rows.isEmpty()) throw new IllegalArgumentException("The approved PDF or its class/subject/language classification is missing.");
+      if (rows.isEmpty() || rows.getFirst().get("subject_id") == null
+          || rows.getFirst().get("language") == null) {
+        throw new IllegalArgumentException("The approved PDF or its class/subject/language classification is missing.");
+      }
       Map<String, Object> source = rows.getFirst();
       String hash = String.valueOf(source.get("sha256"));
       String language = normalizeLanguage(String.valueOf(source.get("language")));
