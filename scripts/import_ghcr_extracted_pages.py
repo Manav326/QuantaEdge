@@ -50,8 +50,13 @@ def validate_pair(manifest_path: Path) -> tuple[dict[str, Any], Path]:
         raise FileNotFoundError(f"{manifest_path}: page JSONL is missing: {pages_path}")
     if manifest_path.stat().st_size > MAX_MANIFEST_BYTES or pages_path.stat().st_size > MAX_PAGES_BYTES:
         raise ValueError(f"{manifest_path}: manifest or page JSONL exceeds the import limit.")
-    if not manifest.get("book_id") or not manifest.get("source_url") or not (manifest.get("source_sha256") or manifest.get("original_book_sha256")):
-        raise ValueError(f"{manifest_path}: book ID, official source URL and source hash are required.")
+    source_hash = str(manifest.get("original_book_sha256") or manifest.get("source_sha256") or "").lower()
+    asset_hash = str(manifest.get("asset_pdf_sha256") or "").lower()
+    if (not manifest.get("book_id") or not manifest.get("source_url")
+            or len(source_hash) != 64 or len(asset_hash) != 64
+            or any(ch not in "0123456789abcdef" for ch in source_hash + asset_hash)
+            or source_hash != asset_hash):
+        raise ValueError(f"{manifest_path}: book ID, official source URL and matching source/PDF hashes are required.")
     return manifest, pages_path
 
 
