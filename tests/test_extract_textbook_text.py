@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pymupdf
 
-from scripts.extract_textbook_text import process_bundle, page_status
+from scripts.extract_textbook_text import process_bundle, page_status, _matches_filters
 
 
 class TextbookTextExtractionTests(unittest.TestCase):
@@ -78,9 +78,24 @@ class TextbookTextExtractionTests(unittest.TestCase):
             process_bundle(self.bundle_path, self.pdf_dir, self.output_dir)
 
     def test_page_status_flags_missing_or_short_text_for_review(self):
-        self.assertEqual("NO_EXTRACTABLE_TEXT_REVIEW", page_status("  \n "))
-        self.assertEqual("LOW_TEXT_REVIEW", page_status("हिंदी"))
-        self.assertEqual("NO_DEVANAGARI_REVIEW", page_status("A sufficiently long English-only extracted text."))
+        self.assertEqual("NO_EXTRACTABLE_TEXT_REVIEW", page_status("  \n ", "hindi"))
+        self.assertEqual("LOW_TEXT_REVIEW", page_status("हिंदी", "hindi"))
+        self.assertEqual("NO_DEVANAGARI_REVIEW", page_status("A sufficiently long English-only extracted text.", "hindi"))
+
+
+    def test_english_pages_are_not_misclassified_for_lacking_devanagari(self):
+        self.assertEqual(
+            "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW",
+            page_status("A sufficiently long English-only extracted text.", "english"),
+        )
+
+    def test_class_language_subject_and_scope_filters(self):
+        source = {"class": 6, "subject": "Mathematics", "language": "hindi", "scope": "SUBJECT_BOOK"}
+        self.assertTrue(_matches_filters(source, 6, "hindi", ["Math", "Science"], "SUBJECT_BOOK"))
+        self.assertFalse(_matches_filters(source, 7, "hindi", ["Math"], "SUBJECT_BOOK"))
+        self.assertFalse(_matches_filters(source, 6, "english", ["Math"], "SUBJECT_BOOK"))
+        self.assertFalse(_matches_filters(source, 6, "hindi", ["Science"], "SUBJECT_BOOK"))
+        self.assertFalse(_matches_filters(source, 6, "hindi", ["Math"], "CHAPTER_PDF"))
 
 
 if __name__ == "__main__":
