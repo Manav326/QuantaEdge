@@ -1119,6 +1119,11 @@ fun QuantaEdgeApp() {
     fun openStudentProfile() {
         runTask {
             studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+            studentProfile.textAny("language", "learningLanguage", "learning_language")
+                .trim().lowercase().takeIf { it == "hi" || it == "en" }?.let { savedLanguage ->
+                    learningLanguage = savedLanguage
+                    preferences.edit().putString("contentLanguage", savedLanguage).apply()
+                }
             route = AppRoute.PROFILE
         }
     }
@@ -1127,6 +1132,11 @@ fun QuantaEdgeApp() {
         runTask {
             val profile = ApiClient.putObject("/api/v1/students/me/profile", body)
             studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
+            studentProfile.textAny("language", "learningLanguage", "learning_language")
+                .trim().lowercase().takeIf { it == "hi" || it == "en" }?.let { savedLanguage ->
+                    learningLanguage = savedLanguage
+                    preferences.edit().putString("contentLanguage", savedLanguage).apply()
+                }
             auth = JSONObject(auth.toString()).put("displayName", profile.textAny("display_name", "displayName"))
             status = "छात्र प्रोफ़ाइल सुरक्षित हो गई।"
             route = AppRoute.PROFILE
