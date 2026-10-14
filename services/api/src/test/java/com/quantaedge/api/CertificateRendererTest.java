@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -76,6 +77,20 @@ class CertificateRendererTest {
     assertArrayEquals(first, third);
     assertTrue(getClass().getResource("/branding/quantaedge-icon.png") != null,
         "The canonical QuantaEdge Q mark must be included in the API artifact.");
+  }
+
+  @Test
+  void certificateFrameDoesNotRenderTheOldOrangeCornerDots() throws Exception {
+    var rendered = renderer.render("CLASSIC", "en", "Test Learner", "Class 6 · Mathematics",
+        "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false);
+    var image = ImageIO.read(new ByteArrayInputStream(rendered.png()));
+    int formerBottomLeftDot = image.getRGB(155, 1588);
+    int formerBottomRightDot = image.getRGB(2325, 1588);
+    int orange = new Color(0xF97316).getRGB();
+    org.junit.jupiter.api.Assertions.assertNotEquals(orange, formerBottomLeftDot,
+        "The old bottom-left decorative dot must not return.");
+    org.junit.jupiter.api.Assertions.assertNotEquals(orange, formerBottomRightDot,
+        "The old bottom-right decorative dot must not return.");
   }
 
   @Test

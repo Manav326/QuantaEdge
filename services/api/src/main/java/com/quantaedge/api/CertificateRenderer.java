@@ -52,7 +52,7 @@ public class CertificateRenderer {
   private static final Color NAVY = new Color(0x152038);
   private static final Color ORANGE = new Color(0xF97316);
   private static final Color DEEP_ORANGE = new Color(0xC2410C);
-  private static final Color GOLD = new Color(0xE6E9F0);
+  private static final Color GOLD = new Color(0xC6A56B);
   private static final Color INK = new Color(0x263247);
   private static final Color MUTED = new Color(0x647084);
   private static final Color PAPER = new Color(0xF7F8FC);
@@ -192,13 +192,11 @@ public class CertificateRenderer {
 
   private void drawClassic(Graphics2D g) {
     g.setColor(PAPER); g.fillRect(0, 0, WIDTH, HEIGHT);
-    g.setColor(NAVY); g.setStroke(new BasicStroke(18)); g.drawRect(35, 35, WIDTH - 70, HEIGHT - 70);
-    g.setColor(GOLD); g.setStroke(new BasicStroke(5)); g.drawRect(62, 62, WIDTH - 124, HEIGHT - 124);
-    g.setStroke(new BasicStroke(2)); g.drawLine(390, HEIGHT - 544, WIDTH - 390, HEIGHT - 544);
-    g.setColor(ORANGE);
-    for (int x : new int[]{155, WIDTH - 155}) {
-      g.fillOval(x - 14, 150, 28, 28); g.fillOval(x - 14, HEIGHT - 180, 28, 28);
-    }
+    // Layered navy, gold, and fine inset rules create a restrained formal certificate frame.
+    g.setColor(NAVY); g.setStroke(new BasicStroke(16)); g.drawRect(34, 34, WIDTH - 68, HEIGHT - 68);
+    g.setColor(GOLD); g.setStroke(new BasicStroke(4)); g.drawRect(62, 62, WIDTH - 124, HEIGHT - 124);
+    g.setColor(new Color(0xD9E0E8)); g.setStroke(new BasicStroke(1.5f));
+    g.drawRect(82, 82, WIDTH - 164, HEIGHT - 164);
   }
 
   private void drawModern(Graphics2D g) {
@@ -237,13 +235,13 @@ public class CertificateRenderer {
     CertificateWording wording = lockedWording(hindi ? "hi" : "en");
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
-        WIDTH / 2, 372, WIDTH - 420);
+        WIDTH / 2, 400, WIDTH - 420);
     g.setColor(MUTED);
     drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
-        WIDTH / 2, 440, WIDTH - 520);
-    g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, 555, WIDTH - 480);
-    g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 588, WIDTH / 2 + 350, 588);
-    g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, 642, WIDTH - 520);
+        WIDTH / 2, 472, WIDTH - 520);
+    g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, 588, WIDTH - 480);
+    g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 620, WIDTH / 2 + 350, 588);
+    g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, 682, WIDTH - 520);
 
     String assessmentName = d.assessmentName() == null || d.assessmentName().isBlank() ? title : d.assessmentName();
     if (assessmentName == null || assessmentName.isBlank()) throw new IllegalArgumentException("A real assessment title is required.");
@@ -255,13 +253,13 @@ public class CertificateRenderer {
       titleSize -= 4;
     } while (true);
     g.setColor(NAVY);
-    int titleY = 716;
+    int titleY = 756;
     int titleStep = titleSize + 7;
     for (String line : lines) {
       drawCentered(g, font(hindi, Font.BOLD, titleSize), line, WIDTH / 2, titleY, WIDTH - 560);
       titleY += titleStep;
     }
-    int completionY = Math.max(titleY + 1, 790);
+    int completionY = Math.max(titleY + 1, 842);
     g.setColor(INK);
     drawCentered(g, font(hindi, Font.PLAIN, 30), wording.completion(),
         WIDTH / 2, completionY, WIDTH - 560);
@@ -271,7 +269,7 @@ public class CertificateRenderer {
     if (d.classCode() != null && !d.classCode().isBlank()) fields.add((hindi ? "कक्षा: " : "Class: ") + d.classCode());
     if (d.score() != null && !d.score().isBlank()) fields.add((hindi ? "अंक: " : "Score: ") + d.score());
     if (d.result() != null && !d.result().isBlank()) fields.add((hindi ? "परिणाम: " : "Result: ") + d.result());
-    int detailY = Math.min(1008, Math.max(930, completionY + 78));
+    int detailY = Math.min(1090, Math.max(980, completionY + 72));
     int detailRows = 0;
     if (!fields.isEmpty()) {
       if (fields.size() >= 3) {
@@ -297,7 +295,7 @@ public class CertificateRenderer {
     }
     if (d.assessmentDate() != null && !d.assessmentDate().isBlank()) {
       g.setColor(MUTED);
-      int dateY = Math.min(1142, detailY + Math.max(detailRows, 1) * 42 + 28);
+      int dateY = Math.min(1160, detailY + Math.max(detailRows, 1) * 42 + 28);
       drawCentered(g, font(hindi, Font.PLAIN, 22),
           (hindi ? "मूल्यांकन दिनांक: " : "Assessment Date: ") + formatDate(d.assessmentDate(), hindi),
           WIDTH / 2, dateY, WIDTH - 600);

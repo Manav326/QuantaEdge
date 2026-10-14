@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
-import QuantaEdgeBrand from '../../components/QuantaEdgeBrand';
 
 const TEMPLATES = [
   { id: 'CLASSIC', name: 'QuantaEdge Academic', description: 'The approved QuantaEdge certificate design' },
@@ -67,20 +66,54 @@ export default function StudentCertificatesPage() {
       if (!progressResponse.ok) throw new Error(progress.message || t('Unable to load your learning progress.','आपकी पढ़ाई की प्रगति लोड नहीं हो सकी।'));
       if (!certificateResponse.ok) throw new Error(certs.message || t('Unable to load your certificates.','आपके प्रमाणपत्र लोड नहीं हो सके।'));
       if (!eligibleResponse.ok) throw new Error(eligible.message || t('Unable to load eligible assessment results.','पात्र टेस्ट परिणाम लोड नहीं हो सके।'));
-      setProfile(progress);
-      setCertificates(Array.isArray(certs.items) ? certs.items : []);
-      setEligibleAttempts(Array.isArray(eligible.items) ? eligible.items : []);
-      setPassThreshold(Number(eligible.passThresholdPercent || 80));
       const curriculum = Array.isArray(progress.curriculum) ? progress.curriculum : [];
-      if (!curriculum.some((item: any) => item.subject_code === subjectCode)) {
-        setSubjectCode(String(curriculum[0]?.subject_code || ''));
+      const eligibleItems = Array.isArray(eligible.items) ? eligible.items : [];
+      const tracksByCode = new Map<string, any>();
+      curriculum.forEach((track: any) => {
+        const code = String(track.subject_code || '').trim().toLowerCase();
+        if (code) tracksByCode.set(code, track);
+      });
+      // Certificate eligibility is an independent server query over active student tracks.
+      // Use it when the dashboard metrics payload omits its curriculum list.
+      eligibleItems.forEach((attempt: any) => {
+        const code = String(attempt.subject_code || '').trim().toLowerCase();
+        if (code && !tracksByCode.has(code)) {
+          tracksByCode.set(code, {
+            class_code: attempt.class_code,
+            subject_code: code,
+            subject_name: attempt.subject_name,
+            completed: null,
+            lessons: null,
+          });
+        }
+      });
+      const availableTracks = Array.from(tracksByCode.values());
+      setProfile({ ...progress, curriculum: availableTracks });
+      setCertificates(Array.isArray(certs.items) ? certs.items : []);
+      setEligibleAttempts(eligibleItems);
+      setPassThreshold(Number(eligible.passThresholdPercent || 80));
+      if (!availableTracks.some((item: any) => String(item.subject_code || '').toLowerCase() === subjectCode.toLowerCase())) {
+        setSubjectCode(String(availableTracks[0]?.subject_code || ''));
       }
     } catch (e: any) {
       setError(e?.message || t('Unable to load certificates.','प्रमाणपत्र लोड नहीं हो सके।'));
     }
   }, [router, subjectCode, locale]);
 
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    void refresh();
+    const refreshWhenVisible = () => {
+      if (!document.hidden) void refresh();
+    };
+    window.addEventListener('focus', refreshWhenVisible);
+    window.addEventListener('pageshow', refreshWhenVisible);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+    return () => {
+      window.removeEventListener('focus', refreshWhenVisible);
+      window.removeEventListener('pageshow', refreshWhenVisible);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
+    };
+  }, [refresh]);
 
   const tracks = useMemo(() => Array.isArray(profile?.curriculum) ? profile.curriculum : [], [profile]);
   const releasedAttempts = useMemo(() => eligibleAttempts, [eligibleAttempts]);
@@ -132,7 +165,6 @@ export default function StudentCertificatesPage() {
       <section className={styles.page}>
         <header className={styles.header}>
           <div>
-            <QuantaEdgeBrand href={null} variant="compact" className={styles.brandLockup} />
             <span className={styles.kicker}>{t('ACHIEVEMENTS','उपलब्धियाँ')}</span>
             <h1>{t('Certificates','प्रमाणपत्र')}</h1>
             <p>{t('Your approved QuantaEdge certificate design is used for every language. Verify your achievement and download the certificate as PDF or PNG.','हर भाषा में स्वीकृत QuantaEdge प्रमाणपत्र डिज़ाइन का उपयोग होता है। अपनी उपलब्धि सत्यापित करें और प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
@@ -167,7 +199,6 @@ export default function StudentCertificatesPage() {
               </div>
             ))}
           </div>
-          <p className={styles.help}>{t('Sample previews are clearly marked “SAMPLE / NOT VALID”. They are design examples, not issued certificates.','नमूने पर “SAMPLE / NOT VALID” लिखा है। ये डिज़ाइन उदाहरण हैं, जारी किए गए प्रमाणपत्र नहीं।')}</p>
         </section>
 
         <section className={styles.panel}>
@@ -202,7 +233,7 @@ export default function StudentCertificatesPage() {
                   {!tracks.length && <option value="">{t('No active subject track available','कोई सक्रिय विषय ट्रैक उपलब्ध नहीं')}</option>}
                   {tracks.map((track: any) => (
                     <option key={track.subject_code} value={track.subject_code}>
-                      {localizedTrackName(track.subject_code, track.subject_name, language)} · {Number(track.completed || 0)} / {Number(track.lessons || 0)} {t('lessons complete','पाठ पूरे')}
+                      {localizedTrackName(track.subject_code, track.subject_name, language)}{track.completed != null && track.lessons != null ? ` · ${Number(track.completed)} / ${Number(track.lessons)} ${t('lessons complete','पाठ पूरे')}` : ''}
                     </option>
                   ))}
                 </select>
