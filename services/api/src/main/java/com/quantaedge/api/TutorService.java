@@ -81,6 +81,7 @@ public class TutorService {
       where l.id=(select lesson_id from tutor_session where id=?) and l.active=true and l.status='PUBLISHED'
       """,sessionId);
 
+    String currentTopic = firstNonBlank(lesson.get("title"), lesson.get("chapter_name"), "this lesson");
     String qctx="";
     if(questionId>0){
       var q=jdbc.queryForList("""
@@ -88,7 +89,11 @@ public class TutorService {
         from question q
         where q.id=? and q.lesson_id=(select lesson_id from tutor_session where id=?) and q.active=true
         """,questionId,sessionId);
-      if(!q.isEmpty())qctx=json(q.getFirst());
+      if(!q.isEmpty()){
+        Map<String,Object> question = q.getFirst();
+        qctx=json(question);
+        currentTopic=firstNonBlank(question.get("subtopic"),question.get("topic"),currentTopic);
+      }
     }
 
     List<Map<String,Object>> rawBlocks=jdbc.queryForList("""
@@ -116,7 +121,9 @@ public class TutorService {
     String instructions="""
       You are QuantaEdge Tutor, a patient teacher for a Bihar Board learner in Classes 6-8.
       Follow this response-language requirement exactly: %s
-      Use the supplied lesson context first for curriculum-specific questions. For general school-science
+      Use the supplied lesson context first for curriculum-specific questions. When asked for the name of
+      the current topic or lesson, use the lesson title and, when present, the current question's topic/subtopic;
+      never ask which lesson the learner means when this context is already supplied. For general school-science
       questions not covered by it, give an accurate, age-appropriate explanation without inventing
       SCERT, textbook, Bihar Board, exam-year, marks, or provenance claims.
       Be concise and child-friendly. Teach reasoning rather than answer dumping.
@@ -146,26 +153,84 @@ public class TutorService {
       %s
       """.formatted(json(lesson),blocks,mastery,qctx,json(history),mode,normalized);
 
-    // Do not persist a user turn until the provider has returned a usable answer.
-    // Otherwise a timeout/provider outage leaves a ghost user message in history,
-    // while the UI correctly treats the send as failed and offers a retry.
-    TutorReply reply=provider.generate(instructions,input);
-    // Small local models occasionally return customer-service greetings instead of teaching.
-    // Retry once with an explicit correction; never persist or surface the canned greeting.
-    if(isGenericTutorGreeting("ASSISTANT",reply.text())){
-      String correction=instructions+"\n\nCRITICAL CORRECTION: Your previous output was a generic greeting, not an answer. Do not greet or offer help. Answer the LEARNER MESSAGE directly in the required response language.";
-      reply=provider.generate(correction,input);
-    }
-    if(isGenericTutorGreeting("ASSISTANT",reply.text())){
-      throw new TutorProviderException("Tutor did not generate a lesson-specific answer");
+    // Exact context questions should be answered from the lesson record, not left to a
+    // small model that may ignore context and ask which lesson the learner means.
+    boolean contextOnlyAnswer=isCurrentTopicNameQuestion(normalized);
+    TutorReply reply;
+    if(contextOnlyAnswer){
+      reply=new TutorReply(currentTopicAnswer(responseLanguage,currentTopic,
+          String.valueOf(lesson.getOrDefault("chapter_name","")),
+          String.valueOf(lesson.getOrDefault("subject_name",""))),null,0,0);
+    }else{
+      // Do not persist a user turn until the provider has returned a usable answer.
+      // Otherwise a timeout/provider outage leaves a ghost user message in history,
+      // while the UI correctly treats the send as failed and offers a retry.
+      reply=provider.generate(instructions,input);
+      // Small local models occasionally return customer-service greetings instead of teaching.
+      // Retry once with an explicit correction; never persist or surface the canned greeting.
+      if(isGenericTutorGreeting("ASSISTANT",reply.text())){
+        String correction=instructions+"\n\nCRITICAL CORRECTION: Your previous output was a generic greeting, not an answer. Do not greet or offer help. Answer the LEARNER MESSAGE directly in the required response language.";
+        reply=provider.generate(correction,input);
+      }
+      if(isGenericTutorGreeting("ASSISTANT",reply.text())){
+        throw new TutorProviderException("Tutor did not generate a lesson-specific answer");
+      }
     }
     jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
     jdbc.update("""
       insert into tutor_message(session_id,role,mode,message,model,provider_response_id,input_tokens,output_tokens)
       values(?,'ASSISTANT',?,?,?,?,?,?)
-      """,sessionId,mode,reply.text(),provider.model(),reply.providerResponseId(),reply.inputTokens(),reply.outputTokens());
+      """,sessionId,mode,reply.text(),contextOnlyAnswer?"LESSON_CONTEXT":provider.model(),reply.providerResponseId(),reply.inputTokens(),reply.outputTokens());
     jdbc.update("update tutor_session set last_message_at=now() where id=?",sessionId);
     return Map.of("message",reply.text(),"mode",mode);
+  }
+
+  static boolean isCurrentTopicNameQuestion(String message){
+    if(message==null||message.isBlank()||message.length()>160)return false;
+    String normalized=message.toLowerCase(Locale.ROOT)
+        .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+    return normalized.matches("^what is (?:the )?(?:name|title) of (?:this|the current|our current) (?:topic|lesson|chapter)$")
+        || normalized.matches("^what s (?:the )?(?:name|title) of (?:this|the current|our current) (?:topic|lesson|chapter)$")
+        || normalized.matches("^what is (?:this|the current|our current) (?:topic|lesson|chapter) called$")
+        || normalized.matches("^what (?:topic|lesson|chapter) (?:are we studying|are we learning)(?: now)?$")
+        || normalized.matches("^which (?:topic|lesson|chapter) (?:is this|are we studying)(?: now)?$")
+        || normalized.matches("^(?:name of this|this) (?:topic|lesson|chapter)(?: name)?$")
+        || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम क्या है$")
+        || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम बताइए$")
+        || normalized.matches("^(?:अभी )?(?:हम )?कौन सा (?:टॉपिक|विषय|पाठ|अध्याय) (?:पढ़ रहे हैं|पढ़ रहे है|सीख रहे हैं)$");
+  }
+
+  static String currentTopicAnswer(String language,String topic,String chapter,String subject){
+    String safeTopic=firstNonBlank(topic,chapter,"current lesson");
+    String safeChapter=firstNonBlank(chapter,safeTopic);
+    String safeSubject=subject==null||subject.equalsIgnoreCase("null")?"":subject.trim();
+    if("en".equalsIgnoreCase(language)){
+      String answer="The topic we’re studying is “"+safeTopic+"”.";
+      if(!safeChapter.isBlank()&&!safeChapter.equalsIgnoreCase(safeTopic))
+        answer+=" It belongs to the chapter “"+safeChapter+"”";
+      else if(!safeChapter.isBlank())
+        answer+=" This is the current chapter";
+      if(!safeSubject.isBlank())answer+=(answer.endsWith(".")?" It is part of ":" in ")+safeSubject;
+      if(!answer.endsWith("."))answer+=".";
+      return answer;
+    }
+    String answer="अभी हम “"+safeTopic+"” पढ़ रहे हैं।";
+    if(!safeChapter.isBlank()&&!safeChapter.equals(safeTopic))
+      answer+=" यह “"+safeChapter+"” अध्याय का हिस्सा है";
+    else if(!safeChapter.isBlank())
+      answer+=" यही वर्तमान अध्याय है";
+    if(!safeSubject.isBlank())answer+=(answer.endsWith("।")?" यह ":" और यह ")+safeSubject+" विषय में है";
+    if(!answer.endsWith("।"))answer+="।";
+    return answer;
+  }
+
+  private static String firstNonBlank(Object... values){
+    for(Object value:values){
+      if(value==null)continue;
+      String text=String.valueOf(value).trim();
+      if(!text.isBlank()&&!text.equalsIgnoreCase("null"))return text;
+    }
+    return "";
   }
 
   static boolean isGenericTutorGreeting(String role,String message){
