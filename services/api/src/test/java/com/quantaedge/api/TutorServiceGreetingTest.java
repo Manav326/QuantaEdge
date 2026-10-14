@@ -45,6 +45,19 @@ class TutorServiceGreetingTest {
   }
 
   @Test
+  void recognizesTheContextlessLessonClarificationDeflection() {
+    assertTrue(TutorService.isGenericTutorGreeting(
+        "ASSISTANT",
+        "Hi there! Can you tell me which lesson you're referring to right now please? I'll be happy to guide you through the information given before checking back in with you."));
+  }
+
+  @Test
+  void preservesAUsefulClarifyingQuestionAboutTheLearnersConfusion() {
+    assertFalse(TutorService.isGenericTutorGreeting(
+        "ASSISTANT", "Which step felt confusing? I can explain that part another way."));
+  }
+
+  @Test
   void recognizesTheEquivalentGenericHindiGreeting() {
     assertTrue(TutorService.isGenericTutorGreeting(
         "ASSISTANT", "नमस्ते, मैं आपकी कैसे मदद कर सकता हूँ?"));

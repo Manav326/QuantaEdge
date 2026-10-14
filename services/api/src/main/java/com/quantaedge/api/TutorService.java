@@ -239,6 +239,9 @@ public class TutorService {
         .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
     return normalized.matches("^(hello|hi|hey|namaste)? ?(how can (i|we) help you( today)?|how may i help you( today)?|what can i help you with)( .*)?$")
         || normalized.startsWith("hello how can we help you today quantaedge tutor")
+        || normalized.contains("can you tell me which lesson you re referring to")
+        || normalized.contains("which lesson are you referring to")
+        || normalized.contains("which lesson you re referring to")
         || normalized.equals("namaste main aapki kya madad kar sakta hoon")
         || normalized.equals("namaste main aapki kya madad kar sakta hun")
         || normalized.startsWith("नमस्ते मैं आपकी कैसे मदद");
