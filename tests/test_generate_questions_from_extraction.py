@@ -146,9 +146,10 @@ class QuestionGenerationSchemaTests(unittest.TestCase):
 
     def test_hindi_source_requires_explicit_language_and_devanagari_text(self):
         hindi_text = "यह गणित की पुस्तक है जिसमें भिन्नों के उदाहरण और समान भागों का वर्णन है। विद्यार्थियों को अभ्यास कराया जाता है।"
-        curriculum, _, chapters = validate_extraction(extraction_bundle("hi", hindi_text))
+        curriculum, source, chapters = validate_extraction(extraction_bundle("hi", hindi_text))
         self.assertEqual("hi", curriculum["language"])
         self.assertEqual("ch1", chapters[0]["code"])
+        self.assertIn("संस्करण 2025-26", source["printed_imprint"])
 
     def test_english_only_source_cannot_be_labelled_as_hindi(self):
         english_text = "This mathematics textbook explains fractions and equal parts with examples for students."

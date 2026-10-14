@@ -150,6 +150,15 @@ def validate_extraction(bundle: Any) -> tuple[dict[str, Any], dict[str, Any], li
     printed_years = re.findall(r"\b(?:19|20)\d{2}\b", printed_imprint)
     if printed_years and not any(year in edition for year in printed_years):
         fail("source.edition does not match the dated printed edition/reprint imprint in the extracted source pages.")
+    declared_imprint = str(source.get("printed_imprint") or "").strip()
+    if declared_imprint and declared_imprint != printed_imprint:
+        declared_years = re.findall(r"\b(?:19|20)\d{2}\b", declared_imprint)
+        if not declared_years or not any(year in printed_imprint for year in declared_years):
+            fail("source.printed_imprint does not match the actual extracted PDF imprint.")
+    # Propagate the independently detected front-matter imprint downstream to the candidate,
+    # so the human-reviewed import step can verify provenance without manual retyping.
+    source = dict(source)
+    source["printed_imprint"] = printed_imprint
 
     ranges = sorted(
         (meta["page_start"], meta["page_end"], meta["code"]) for meta in chapter_by_code.values()
@@ -519,6 +528,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
     language_name = "English" if str(curriculum.get("language", "hi")).strip().lower() in {"en", "english"} else "Hindi"
     source_record = {
         "title": source["title"], "url": source["url"], "edition": source["edition"],
+        "printed_imprint": source["printed_imprint"],
         "publication_year": source.get("publication_year"), "pdf_page_count": source["pdf_page_count"],
         "pdf_sha256": source["pdf_sha256"],
     }
