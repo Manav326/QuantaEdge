@@ -4,6 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 ACTION="up"
+ACTION_SET=false
 BUILD_LOCAL=false
 IMAGE_TAG="${QUANTAEDGE_IMAGE_TAG:-latest}"
 
@@ -23,11 +24,12 @@ while (($#)); do
       shift 2
       ;;
     up|ai|rebuild|clean-build|down|reset|logs|ps)
-      if [[ "$ACTION" != "up" ]]; then
+      if [[ "$ACTION_SET" == true ]]; then
         echo "Only one action may be supplied." >&2
         exit 2
       fi
       ACTION="$1"
+      ACTION_SET=true
       shift
       ;;
     *)
