@@ -258,8 +258,11 @@ export default function LearnClient() {
   const learningBlocks=useMemo(
     ()=>orderedBlocks.filter(block=>block.block_type!=='SUMMARY'&&block.block_type!=='RECAP'),
     [orderedBlocks]);
-  const recapBlocks=useMemo(
-    ()=>orderedBlocks.filter(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP'),
+  // Prefer the dedicated RECAP block; use SUMMARY only for older lessons that lack one.
+  // Rendering both types produced duplicate recap cards for lessons carrying both blocks.
+  const recapBlock=useMemo(
+    ()=>orderedBlocks.find(block=>block.block_type==='RECAP')
+      ?? orderedBlocks.find(block=>block.block_type==='SUMMARY'),
     [orderedBlocks]);
   const lessonMcqs=useMemo(
     ()=>lesson?.questions.filter(question=>question.question_type==='MCQ')??[],
@@ -650,12 +653,12 @@ export default function LearnClient() {
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 
-      {recapBlocks.length>0&&<section className="lesson-recap" aria-label={tx('पाठ का दोहराव','Lesson recap')}>
+      {recapBlock&&<section className="lesson-recap" aria-label={tx('पाठ का दोहराव','Lesson recap')}>
         <div className="content-heading">
           <h2><LocaleText hinglish="अब दोहराएँ" english="Recap" /></h2>
           <span><LocaleText hinglish="मुख्य बातें" english="Key takeaways" /></span>
         </div>
-        {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
+        <Block key={recapBlock.id} block={recapBlock} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>
       </section>}
 
       {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={tx('AI tutor खोलें','Open AI tutor')} title={tx('AI tutor खोलें','Open AI tutor')}>
