@@ -140,7 +140,7 @@ On first start, Docker downloads the Ollama runtime and the small `qwen2.5:0.5b`
 
 GitHub Actions validates the API, runs content-import safeguards, and builds/publishes immutable SHA-tagged images to GHCR on main. A separate workflow is manual-dispatch only; no deployment was performed as part of the current content audit.
 
-The production compose configuration disables the local preview seed. The AI tutor is disabled until it is intentionally configured with real credentials.
+The production compose configuration disables the local preview seed and the AI tutor by default. When enabled, tutor inference is routed to the private in-house model first through `APP_AI_TUTOR_PRIMARY_*` settings. The optional hosted API fallback remains disabled unless `APP_AI_TUTOR_FALLBACK_ENABLED=true` is explicitly set and its key is supplied through deployment secrets. Production must point the primary URL at an inference service on a private, reachable network; the production Compose stack does not provision model weights or inference capacity itself. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md).
 
 ## Market-readiness boundary
 

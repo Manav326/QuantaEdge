@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HealthController {
-  private final OpenAiTutorClient tutor;
+  private final TutorProviderRouter tutor;
   private final boolean demoSeed;
   private final String adminMobiles;
 
-  public HealthController(OpenAiTutorClient tutor,
+  public HealthController(TutorProviderRouter tutor,
       @Value("${app.demo-seed:false}") boolean demoSeed,
       @Value("${app.auth.admin-mobiles:}") String adminMobiles) {
     this.tutor=tutor;
@@ -38,6 +38,7 @@ public class HealthController {
     result.put("version","0.1.0");
     result.put("aiTutorEnabled",tutor.isEnabled());
     result.put("aiTutorConfigured",tutor.isConfigured());
+    result.put("aiTutorAvailable",tutor.isAvailable());
     result.put("adminConfigured",adminConfigured);
     result.put("otpConfigured",otpConfigured);
     if(!healthy) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);

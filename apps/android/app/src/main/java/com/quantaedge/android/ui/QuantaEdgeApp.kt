@@ -155,6 +155,7 @@ fun QuantaEdgeApp() {
     var documentImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
     var tutorSession by remember { mutableStateOf(JSONObject()) }
     var tutorMessages by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var tutorQuestionId by rememberSaveable { mutableStateOf(0L) }
     var tutorAvailable by remember { mutableStateOf(false) }
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -803,11 +804,13 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun openTutor() {
+    fun openTutorWithQuestion(questionId: Long) {
+        tutorQuestionId = questionId
         runTask {
             val lessonId = lesson.longAny("id", "lesson_id")
             if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
-            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions", JSONObject().put("lessonId", lessonId))
+            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
             tutorAvailable = tutorSession.optBoolean("available")
             tutorMessages = if (tutorAvailable) {
                 ApiClient.getObject("/api/v1/tutor/sessions/" + tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
@@ -818,11 +821,14 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun openTutor() = openTutorWithQuestion(0L)
+
     fun sendTutorMessage(message: String, mode: String) {
         runTask {
             val sessionId = tutorSession.longAny("sessionId", "session_id")
             ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
-                JSONObject().put("message", message).put("mode", mode).put("questionId", 0))
+                JSONObject().put("message", message).put("mode", mode)
+                    .put("questionId", tutorQuestionId).put("language", learningContentLanguage))
             tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
                 .optJSONArray("items").objectItems()
         }
@@ -1765,7 +1771,8 @@ fun QuantaEdgeApp() {
                         },
                         onAnswer = ::saveLessonAnswer,
                         onPractice = ::startPractice,
-                        onTutor = ::openTutor
+                        onTutor = ::openTutor,
+                        onTutorQuestion = { questionId -> openTutorWithQuestion(questionId) }
                     )
                     AppRoute.PRACTICE -> PracticeScreen(
                         practice = practice,
@@ -2481,7 +2488,8 @@ private fun LessonScreen(
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
     onPractice: () -> Unit,
-    onTutor: () -> Unit
+    onTutor: () -> Unit,
+    onTutorQuestion: (Long) -> Unit
 ) {
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
@@ -2515,7 +2523,8 @@ private fun LessonScreen(
                         saving = busy,
                         feedback = feedbacks[id],
                         status = if (question.optBoolean("answered") || answerLocks[id] == true)
-                            "उत्तर सुरक्षित है।" else null
+                            "उत्तर सुरक्षित है।" else null,
+                        onTutorHelp = { onTutorQuestion(question.longAny("id", "questionId", "question_id")) }
                     )
                 }
             }

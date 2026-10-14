@@ -110,7 +110,9 @@ export default function AdminHome(){
         {label:'Learner messages',value:tutorAnalytics.summary?.user_messages_30d??'—'},
         {label:'Tutor replies',value:tutorAnalytics.summary?.assistant_messages_30d??'—'},
         {label:'Output tokens',value:tutorAnalytics.summary?.output_tokens_30d??'—'}
-      ].map((stat,i)=><article key={stat.label}><span className="admin-metric-index">0{i+1}</span><small>{stat.label}</small><strong>{String(stat.value)}</strong></article>)}</div></section>}
+      ].map((stat,i)=><article key={stat.label}><span className="admin-metric-index">0{i+1}</span><small>{stat.label}</small><strong>{String(stat.value)}</strong></article>)}</div>
+        {Array.isArray(tutorAnalytics.providers)&&tutorAnalytics.providers.length>0&&<div className="admin-learning-metrics" style={{marginTop:16}}>{tutorAnalytics.providers.map((provider:AnyRow,i:number)=><article key={String(provider.model)}><span className="admin-metric-index">P{i+1}</span><small>{String(provider.model)}</small><strong>{String(provider.replies)} replies</strong><small>{String(provider.input_tokens)} input · {String(provider.output_tokens)} output tokens</small></article>)}</div>}
+      </section>}
 
       <div className="admin-section-title admin-governance-title" id="governance"><div><span className="admin-kicker">QUALITY CONTROL</span><h2>Content governance</h2></div><Link href="/translations" className="admin-inline-link">Review Hindi ↔ English translations <span>→</span></Link></div>
       <div className="admin-grid admin-governance-grid">

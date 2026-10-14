@@ -4,9 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 
 type TutorMessage={id?:number;role:'USER'|'ASSISTANT';mode?:string;message:string};
 type Mode='HINT'|'EXPLAIN'|'EXAMPLE'|'STEP_BY_STEP'|'CHECK_MY_WORK';
-const labels:Record<Mode,string>={HINT:'Hint',EXPLAIN:'समझाएँ',EXAMPLE:'उदाहरण',STEP_BY_STEP:'Step-by-step',CHECK_MY_WORK:'मेरी जाँच करें'};
+const labels:Record<'hi'|'en',Record<Mode,string>>={
+  hi:{HINT:'संकेत',EXPLAIN:'समझाएँ',EXAMPLE:'उदाहरण',STEP_BY_STEP:'चरण-दर-चरण',CHECK_MY_WORK:'मेरी जाँच करें'},
+  en:{HINT:'Hint',EXPLAIN:'Explain',EXAMPLE:'Example',STEP_BY_STEP:'Step by step',CHECK_MY_WORK:'Check my work'}
+};
 
-export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{lessonId:number;open:boolean;onClose:()=>void;currentQuestionId?:number}){
+export default function TutorDock({lessonId,open,onClose,currentQuestionId,language}:{lessonId:number;open:boolean;onClose:()=>void;currentQuestionId?:number;language:'hi'|'en'}){
   const [sessionId,setSessionId]=useState<number|null>(null);
   const [available,setAvailable]=useState<boolean|null>(null);
   const [messages,setMessages]=useState<TutorMessage[]>([]);
@@ -31,7 +34,7 @@ export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{les
     setError('');
     (async()=>{
       try{
-        const r=await fetch('/api/v1/tutor/sessions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lessonId})});
+        const r=await fetch('/api/v1/tutor/sessions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lessonId,language})});
         const b=await r.json();
         if(cancelled)return;
         if(!r.ok){setAvailable(false);setError(b.message||'Tutor unavailable');return;}
@@ -70,7 +73,7 @@ export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{les
     try{
       const r=await fetch('/api/v1/tutor/sessions/'+sessionId+'/messages',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({message,mode,questionId:currentQuestionId||0})
+        body:JSON.stringify({message,mode,questionId:currentQuestionId||0,language})
       });
       const b=await r.json();
       if(!r.ok)throw new Error(b.message||'Tutor request failed');
@@ -81,23 +84,23 @@ export default function TutorDock({lessonId,open,onClose,currentQuestionId}:{les
 
   return <div className={'tutor-dock '+(open?'open':'')} aria-hidden={!open}>
     <div className="tutor-head">
-      <div><span className="eyebrow">QUANTAEDGE TUTOR</span><strong>अटकें तो पूछें</strong></div>
-      <button aria-label="Tutor बंद करें" className="tutor-close" onClick={onClose}>×</button>
+      <div><span className="eyebrow">QUANTAEDGE TUTOR</span><strong>{language==='en'?'Ask when you are stuck':'अटकें तो पूछें'}</strong></div>
+      <button aria-label={language==='en'?'Close tutor':'Tutor बंद करें'} className="tutor-close" onClick={onClose}>×</button>
     </div>
-    {available===false ? <div className="tutor-unavailable"><span className="tutor-icon">✦</span><h3>Tutor अभी उपलब्ध नहीं है</h3><p>{error||'AI tutor configuration की जरूरत है।'}</p></div> :
-      <><div className="tutor-modes">{(Object.keys(labels) as Mode[]).map(m=><button type="button" key={m} className={mode===m?'selected':''} onClick={()=>setMode(m)}>{labels[m]}</button>)}</div>
+    {available===false ? <div className="tutor-unavailable"><span className="tutor-icon">✦</span><h3>{language==='en'?'Tutor is currently unavailable':'Tutor अभी उपलब्ध नहीं है'}</h3><p>{error||(language==='en'?'AI tutor configuration is required.':'AI tutor configuration की जरूरत है।')}</p></div> :
+      <><div className="tutor-modes">{(Object.keys(labels) as Mode[]).map(m=><button type="button" key={m} className={mode===m?'selected':''} onClick={()=>setMode(m)}>{labels[language][m]}</button>)}</div>
       <div className="tutor-messages">
-        {hasOlderMessages&&<button type="button" className="tutor-load-older" disabled={loadingOlder} onClick={()=>void loadOlderMessages()} style={{display:'block',margin:'0 auto 12px',padding:'7px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff',cursor:loadingOlder?'wait':'pointer'}}>{loadingOlder?'Loading older messages…':'↑ Load older messages'}</button>}
-        {messages.length===0&&<div className="tutor-welcome"><span className="tutor-icon">✦</span><strong>मैं इसी lesson के context में मदद करूँगा।</strong><p>पहले hint से शुरू करें। जरूरत हो तो explanation या step-by-step चुनें।</p></div>}
+        {hasOlderMessages&&<button type="button" className="tutor-load-older" disabled={loadingOlder} onClick={()=>void loadOlderMessages()} style={{display:'block',margin:'0 auto 12px',padding:'7px 12px',borderRadius:10,border:'1px solid #d8dce5',background:'#fff',cursor:loadingOlder?'wait':'pointer'}}>{loadingOlder?(language==='en'?'Loading older messages…':'पुराने संदेश लोड हो रहे हैं…'):(language==='en'?'↑ Load older messages':'↑ पुराने संदेश देखें')}</button>}
+        {messages.length===0&&<div className="tutor-welcome"><span className="tutor-icon">✦</span><strong>{language==='en'?'I will help using this lesson context.':'मैं इसी lesson के context में मदद करूँगा।'}</strong><p>{language==='en'?'Start with a hint, then choose an explanation or step-by-step help.':'पहले संकेत से शुरू करें। जरूरत हो तो explanation या चरण-दर-चरण मदद चुनें।'}</p></div>}
         {messages.map((m,i)=><div className={'tutor-message '+m.role.toLowerCase()} key={m.id||i}><span className="tutor-role">{m.role==='ASSISTANT'?'Tutor':'आप'}</span><p>{m.message}</p></div>)}
-        {busy&&<div className="tutor-message assistant"><span className="tutor-role">Tutor</span><p>सोच रहा हूँ…</p></div>}
+        {busy&&<div className="tutor-message assistant"><span className="tutor-role">Tutor</span><p>{language==='en'?'Thinking…':'सोच रहा हूँ…'}</p></div>}
         <div ref={endRef}/>
       </div>
       {error&&<div className="tutor-error">{error}</div>}
       <div className="tutor-input">
-        <textarea value={input} maxLength={1200} onChange={e=>setInput(e.target.value.slice(0,1200))} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}} placeholder="आप कहाँ अटके हैं?"/>
-        <button className="button button-dark" disabled={!input.trim()||busy||available!==true} onClick={send}>पूछें →</button>
+        <textarea value={input} maxLength={1200} onChange={e=>setInput(e.target.value.slice(0,1200))} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}} placeholder={language==='en'?'Where are you stuck?':'आप कहाँ अटके हैं?'}/>
+        <button className="button button-dark" disabled={!input.trim()||busy||available!==true} onClick={send}>{language==='en'?'Ask →':'पूछें →'}</button>
       </div>
-      <small className="tutor-note">Lesson content source of truth है; बिना provenance के official claim नहीं किया जाएगा।</small></>}
+      <small className="tutor-note">{language==='en'?'Reviewed lesson content is the source of truth; the tutor will not invent official claims.':'Lesson content source of truth है; बिना प्रमाण के official claim नहीं किया जाएगा।'}</small></>}
   </div>;
 }

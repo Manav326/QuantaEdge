@@ -7,10 +7,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
 public class OpenAiTutorClient {
   private final ObjectMapper mapper;
   private final HttpClient http;
@@ -19,31 +16,60 @@ public class OpenAiTutorClient {
   private final String model;
   private final String baseUrl;
   private final int maxOutputTokens;
+  private final String apiMode;
 
-  public OpenAiTutorClient(
-      ObjectMapper mapper,
-      @Value("${app.ai-tutor.enabled:false}") boolean enabled,
-      @Value("${app.ai-tutor.api-key:}") String apiKey,
-      @Value("${app.ai-tutor.model:gpt-5.6-luna}") String model,
-      @Value("${app.ai-tutor.base-url:https://api.openai.com}") String baseUrl,
-      @Value("${app.ai-tutor.max-output-tokens:500}") int maxOutputTokens) {
+  /** Compatibility constructor for existing tests and callers. New wiring should pass apiMode explicitly. */
+  public OpenAiTutorClient(ObjectMapper mapper, boolean enabled, String apiKey, String model,
+      String baseUrl, int maxOutputTokens) {
+    this(mapper, enabled, apiKey, model, baseUrl, maxOutputTokens, inferApiMode(baseUrl));
+  }
+
+  public OpenAiTutorClient(ObjectMapper mapper, boolean enabled, String apiKey, String model,
+      String baseUrl, int maxOutputTokens, String apiMode) {
     this.mapper=mapper; this.enabled=enabled; this.apiKey=apiKey; this.model=model;
-    this.baseUrl=baseUrl.replaceAll("/+$",""); this.maxOutputTokens=maxOutputTokens;
+    this.baseUrl=baseUrl==null?"":baseUrl.replaceAll("/+$","");
+    this.maxOutputTokens=maxOutputTokens;
+    this.apiMode=normalizeApiMode(apiMode);
     this.http=HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(8)).build();
   }
 
-  private boolean isOllama(){
-    return baseUrl.contains("ollama") || baseUrl.matches(".*:11434$");
+  private static String inferApiMode(String baseUrl) {
+    String url=baseUrl==null?"":baseUrl.toLowerCase(java.util.Locale.ROOT);
+    return url.contains("ollama") || url.matches(".*:11434(?:/.*)?$")
+        ? "CHAT_COMPLETIONS" : "RESPONSES";
+  }
+
+  private static String normalizeApiMode(String raw) {
+    String mode=raw==null?"":raw.trim().toUpperCase(java.util.Locale.ROOT).replace('-', '_');
+    if (!"CHAT_COMPLETIONS".equals(mode) && !"RESPONSES".equals(mode)) {
+      throw new IllegalArgumentException("Tutor API mode must be CHAT_COMPLETIONS or RESPONSES");
+    }
+    return mode;
   }
 
   public boolean isEnabled(){return enabled;}
-  public boolean isConfigured(){return enabled && apiKey!=null && !apiKey.isBlank();}
+  public boolean isConfigured(){return enabled && apiKey!=null && !apiKey.isBlank() && !baseUrl.isBlank();}
   public String model(){return model;}
+
+  /** Lightweight OpenAI-compatible readiness probe; it never sends learner content. */
+  public boolean isReachable(){
+    if(!isConfigured()) return false;
+    try{
+      HttpRequest req=HttpRequest.newBuilder()
+          .uri(URI.create(baseUrl+"/v1/models"))
+          .timeout(Duration.ofSeconds(2))
+          .header("Authorization","Bearer "+apiKey)
+          .header("Accept","application/json")
+          .GET().build();
+      HttpResponse<Void> response=http.send(req,HttpResponse.BodyHandlers.discarding());
+      return response.statusCode()/100==2;
+    }catch(Exception ignored){return false;}
+  }
 
   public TutorReply generate(String instructions,String input){
     if(!isConfigured()) throw new TutorUnavailableException("AI tutor is not configured");
     try{
-      boolean chatCompletions = isOllama();
+      boolean chatCompletions = "CHAT_COMPLETIONS".equals(apiMode);
       var root=mapper.createObjectNode();
       root.put("model",model);
       if(chatCompletions) {
@@ -88,7 +114,7 @@ public class OpenAiTutorClient {
       int inputTokens=chatCompletions?usage.path("prompt_tokens").asInt(-1):usage.path("input_tokens").asInt(-1);
       int outputTokens=chatCompletions?usage.path("completion_tokens").asInt(-1):usage.path("output_tokens").asInt(-1);
       return new TutorReply(text.trim(),body.path("id").asText(null),
-          inputTokens<0?null:inputTokens,outputTokens<0?null:outputTokens);
+          inputTokens<0?null:inputTokens,outputTokens<0?null:outputTokens,model);
     }catch(TutorUnavailableException|TutorProviderException e){throw e;}
     catch(Exception e){throw new TutorProviderException("Tutor provider request failed",e);}
   }
