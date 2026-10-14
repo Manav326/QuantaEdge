@@ -216,7 +216,7 @@ public class TextbookExtractionService {
     } catch (Exception ex) {
       Files.deleteIfExists(path);
       if (ex instanceof IOException io) throw io;
-      throw ex;
+      throw new IOException("Unable to prepare the PDF for extraction.", ex);
     }
   }
 
