@@ -248,7 +248,9 @@ public class CertificateRenderer {
     // Assessment certificates reserve a row for the canonical exam ID below the
     // title. When a title wraps, raise the copy block so the added row keeps clear
     // spacing from completion details. Other certificate types retain their layout.
-    boolean hasExamId = d.examId() != null && !d.examId().isBlank();
+    String examId = d.examId();
+    if (sample && (examId == null || examId.isBlank())) examId = "[ID]";
+    boolean hasExamId = examId != null && !examId.isBlank();
     int headingY = hasExamId
         ? (lines.size() <= 1 ? 528 : 480 - (lines.size() - 2) * 60)
         : (lines.size() <= 1 ? 528 : 518 - (lines.size() - 2) * 31);
@@ -279,7 +281,7 @@ public class CertificateRenderer {
       int examIdY = titleY - titleStep + 38;
       g.setColor(MUTED);
       drawCentered(g, font(hindi, Font.BOLD, 23),
-          (hindi ? "परीक्षा पहचान संख्या: " : "Exam ID: ") + d.examId(),
+          (hindi ? "परीक्षा पहचान संख्या: " : "Exam ID: ") + examId,
           WIDTH / 2, examIdY, WIDTH - 600);
       completionY = Math.max(examIdY + 48, headingY + 458);
     }
