@@ -144,7 +144,7 @@ public class TextbookExtractionService {
             text = normalizeText(stripper.getText(document));
             if (text.length() >= MIN_EMBEDDED_TEXT_CHARS) {
               method = "PDF_TEXT";
-              quality = "REVIEW";
+              quality = "READY";
             } else if (ocrAvailable && attemptedOcr < MAX_OCR_PAGES_PER_JOB) {
               attemptedOcr++;
               String ocrText = normalizeText(ocr.extractPageText(document, page - 1, language));
@@ -184,13 +184,23 @@ public class TextbookExtractionService {
               pageErrors.isEmpty() ? null : String.join("; ", pageErrors), assetId, hash);
           }
         }
-        String status = failed > 0 || processed < pages ? "PARTIAL" : "COMPLETE";
+        Long unresolvedPages = jdbc.queryForObject("""
+          select count(*) from textbook_extracted_page
+          where pdf_asset_id=? and source_sha256=? and quality_status<>'READY'
+          """, Long.class, assetId, hash);
+        boolean partial = failed > 0 || processed < pages || (unresolvedPages != null && unresolvedPages > 0);
+        String status = partial ? "PARTIAL" : "COMPLETE";
+        String summary = pageErrors.isEmpty() ? null : String.join("; ", pageErrors);
+        if (unresolvedPages != null && unresolvedPages > 0) {
+          String unresolvedSummary = unresolvedPages + " page(s) still need OCR or quality review.";
+          summary = summary == null ? unresolvedSummary : summary + "; " + unresolvedSummary;
+        }
         jdbc.update("""
           update textbook_extraction_job set status=?,total_pages=?,processed_pages=?,extracted_pages=?,
             ocr_pages=?,failed_pages=?,last_error=?,finished_at=now(),updated_at=now()
           where pdf_asset_id=? and source_sha256=?
           """, status, pages, processed, extracted, ocrCount, failed,
-          pageErrors.isEmpty() ? null : String.join("; ", pageErrors), assetId, hash);
+          summary, assetId, hash);
       }
     } catch (Exception ex) {
       String message = safeMessage(ex);
@@ -241,7 +251,7 @@ public class TextbookExtractionService {
     Integer count = jdbc.queryForObject("""
       select count(*) from textbook_extracted_page
       where pdf_asset_id=? and source_sha256=? and page_no=?
-        and quality_status in ('REVIEW','LOW_TEXT') and extraction_method in ('PDF_TEXT','OCR')
+        and quality_status in ('READY','LOW_TEXT') and extraction_method in ('PDF_TEXT','OCR')
       """, Integer.class, assetId, hash, page);
     return count != null && count > 0;
   }
