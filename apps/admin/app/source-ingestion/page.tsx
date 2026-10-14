@@ -40,6 +40,10 @@ type Candidate = {
   page_start: number; page_end: number; status: string; pdf_asset_id?: number; pdf_title?: string;
   pdf_page_count?: number; pdf_review_status?: string; pdf_sha256?: string; review_notes?: string;
 };
+type ExtractionStatus = {
+  status: string; total_pages?: number; processed_pages?: number; extracted_pages?: number;
+  ocr_pages?: number; failed_pages?: number; last_error?: string | null;
+};
 type Job = {
   job_id: number; source_id: number; source_title: string; source_url: string; final_pdf_url?: string;
   cache_medium?: string | null; cache_book_id?: string | null; cache_sha256?: string | null;
@@ -109,6 +113,7 @@ export default function SourceIngestionPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [extractionStatus, setExtractionStatus] = useState<ExtractionStatus | null>(null);
 
   const tracksByClass = useMemo(() => [...new Map(tracks.map(t => [t.class_code, t])).values()], [tracks]);
   const subjects = useMemo(() => [...new Map(tracks.filter(t => t.class_code === classCode).map(t => [t.subject_code, t])).values()], [tracks, classCode]);
@@ -180,6 +185,11 @@ export default function SourceIngestionPage() {
   const loadJob = useCallback(async (id: number) => {
     const item = normalizeJob(await api('/api/v1/admin/source-ingestion/jobs/' + id));
     setJob(item);
+    if (item.book_asset_id) {
+      try {
+        setExtractionStatus(await api('/api/v1/admin/textbook-extraction/assets/' + item.book_asset_id));
+      } catch { setExtractionStatus(null); }
+    } else setExtractionStatus(null);
     setSelectedSource(String(item.source_id));
     setSourceTitle(item.source_title || '');
     setSourceUrl(item.source_url || '');
@@ -304,6 +314,31 @@ export default function SourceIngestionPage() {
     } catch (e) { setError(e instanceof Error ? e.message : 'Refresh failed.'); }
     finally { setBusy(false); }
   }
+  async function queueTextbookExtraction() {
+    if (!job?.book_asset_id) { setError('This ingestion job has no stored complete-book PDF asset to extract.'); return; }
+    setBusy(true); setError(''); setNotice('');
+    try {
+      const response = await api('/api/v1/admin/textbook-extraction/assets/' + job.book_asset_id, {
+        method: 'POST', body: JSON.stringify({}),
+      });
+      setExtractionStatus(response.job as ExtractionStatus);
+      setNotice('Text extraction queued for the complete book. It runs in the background; use Refresh extraction status to follow progress.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Text extraction could not be queued.');
+    } finally { setBusy(false); }
+  }
+
+  async function refreshTextbookExtraction() {
+    if (!job?.book_asset_id) return;
+    setBusy(true); setError('');
+    try {
+      setExtractionStatus(await api('/api/v1/admin/textbook-extraction/assets/' + job.book_asset_id));
+      setNotice('Text extraction status refreshed.');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Text extraction status could not be loaded.');
+    } finally { setBusy(false); }
+  }
+
 
   function updateMapping(key: string, patch: Partial<(typeof mapping)[number]>) {
     setMapping(old => old.map(row => row.key === key ? { ...row, ...patch } : row));
@@ -729,7 +764,28 @@ export default function SourceIngestionPage() {
             </div>
           </div>}
         </>}
-        {job.status === 'APPROVED' && <div className={styles.approvedNote}>Approved. The complete book and chapter PDFs are now in the textbook library as drafts. Use Admin → Textbook library to publish the resources when they are ready for students.</div>}
+        {job.status === 'APPROVED' && <>
+          <div className={styles.approvedNote}>Approved. The complete book and chapter PDFs are now in the textbook library as drafts. Use Admin → Textbook library to publish the resources when they are ready for students.</div>
+          {job.book_asset_id && <div className={styles.metadataReview}>
+            <div><b>Searchable textbook text</b>
+              <p>Extract page text from this approved complete book so the AI Tutor can retrieve relevant source passages. Extraction does not publish lessons or questions.</p>
+              {extractionStatus && <p role="status" aria-live="polite">
+                Status: <b>{extractionStatus.status}</b>
+                {typeof extractionStatus.total_pages === 'number' ? ' · ' + extractionStatus.processed_pages + '/' + extractionStatus.total_pages + ' pages processed' : ''}
+                {typeof extractionStatus.extracted_pages === 'number' ? ' · ' + extractionStatus.extracted_pages + ' pages with text' : ''}
+                {typeof extractionStatus.ocr_pages === 'number' ? ' · ' + extractionStatus.ocr_pages + ' OCR pages' : ''}
+                {typeof extractionStatus.failed_pages === 'number' ? ' · ' + extractionStatus.failed_pages + ' failed pages' : ''}
+              </p>}
+              {extractionStatus?.last_error && <p className={styles.jobError}>{extractionStatus.last_error}</p>}
+            </div>
+            <div className={styles.chapterActions}>
+              <button className={styles.primary} type="button" disabled={busy || ['PENDING','RUNNING'].includes(extractionStatus?.status || '')} onClick={() => void queueTextbookExtraction()}>
+                {extractionStatus?.status === 'COMPLETE' ? 'Recheck / re-extract book' : 'Extract searchable text'}
+              </button>
+              <button className={styles.secondary} type="button" disabled={busy || !extractionStatus} onClick={() => void refreshTextbookExtraction()}>Refresh extraction status</button>
+            </div>
+          </div>}
+        </>}
         {job.status === 'REJECTED' && <div className={styles.empty}>This ingestion was rejected and its pending PDF assets remain hidden from the reusable library.</div>}
       </section>}
     </section>
