@@ -1,0 +1,16 @@
+# Local runtime override: use the published GHCR application images.
+# The base docker-compose.yml remains responsible for local-dev environment,
+# ports, demo seed, database/cache volumes, and service dependencies.
+services:
+  api:
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-api:${QUANTAEDGE_IMAGE_TAG:-latest}
+    pull_policy: always
+  web:
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-web:${QUANTAEDGE_IMAGE_TAG:-latest}
+    pull_policy: always
+  admin:
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-admin:${QUANTAEDGE_IMAGE_TAG:-latest}
+    pull_policy: always
+  people:
+    image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-people:${QUANTAEDGE_IMAGE_TAG:-latest}
+    pull_policy: always
