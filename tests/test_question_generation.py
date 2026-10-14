@@ -39,8 +39,8 @@ def sample_extraction():
         "extraction": {"student_delivery_allowed": False, "requires_human_review": True},
         "pages": [
             {"page_number": 1, "chapter_code": None, "chapter_title": None, "text": "मुद्रण संस्करण 2025-26।"},
-            {"page_number": 2, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "चर और अचर पदों वाले व्यंजक।"},
-            {"page_number": 3, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "उदाहरण: x + 3 में x चर है और 3 अचर पद है।"},
+            {"page_number": 2, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "चर और अचर पदों वाले व्यंजकों में अक्षर, संख्या और गणितीय क्रियाएँ होती हैं।"},
+            {"page_number": 3, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "उदाहरण: x + 3 में x चर है और 3 अचर पद है। व्यंजक का मान निकालने के लिए चर के स्थान पर दिया गया मान रखें और फिर गणना करें।"},
         ],
     }
 
