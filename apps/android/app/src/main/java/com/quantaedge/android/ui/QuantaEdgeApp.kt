@@ -1621,7 +1621,7 @@ fun QuantaEdgeApp() {
                             }
                         }
                     }
-remove old Android header selector                }
+                }
                 HorizontalDivider()
                 // Secondary links stay text-first within their group; no feature route becomes a new primary icon.
                 if (signedIn && !parentRole) {
