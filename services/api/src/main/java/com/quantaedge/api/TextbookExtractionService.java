@@ -289,13 +289,15 @@ public class TextbookExtractionService {
     List<Map<String, Object>> mapped = jdbc.queryForList("""
       select id,chapter_id from learning_document
       where pdf_asset_id=? and language=? and status<>'ARCHIVED' and page_start<=? and page_end>=?
-      order by case when status='PUBLISHED' then 0 else 1 end,id desc limit 1
+      order by case when chapter_id is not null then 0 else 1 end,
+        case when status='PUBLISHED' then 0 else 1 end,id desc limit 1
       """, assetId, language, page, page);
     if (!mapped.isEmpty()) {
       documentId = ((Number) mapped.getFirst().get("id")).longValue();
       chapterId = mapped.getFirst().get("chapter_id") == null
           ? null : ((Number) mapped.getFirst().get("chapter_id")).longValue();
-    } else {
+    }
+    if (chapterId == null) {
       List<Map<String, Object>> intakeRange = jdbc.queryForList("""
         select (r->>'chapter_id')::bigint as chapter_id
         from learning_book_intake i
