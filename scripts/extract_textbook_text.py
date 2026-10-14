@@ -76,7 +76,7 @@ def _class_matches(source: dict[str, Any], class_no: int | None) -> bool:
     if class_no is None:
         return True
     values = [source.get("class"), *(source.get("classes") or [])]
-    return any(re.search(rf"(?<!\\d){class_no}(?!\\d)", str(value or "")) for value in values)
+    return any(re.search(rf"(?<!\d){class_no}(?!\d)", str(value or "")) for value in values)
 
 
 def _matches_filters(source: dict[str, Any], class_no: int | None,
