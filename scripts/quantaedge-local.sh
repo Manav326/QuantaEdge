@@ -142,7 +142,12 @@ ensure_api_port_available() {
   # Repeated startup is allowed when QuantaEdge API already owns this exact port.
   existing_api_id="$(compose ps -q api 2>/dev/null | head -n 1 || true)"
   if [[ -n "$existing_api_id" ]]; then
-    existing_host_port="$(docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$existing_api_id" 2>/dev/null || true)"
+    # Avoid nested Go-template indexing: Windows/PowerShell callers can strip
+    # inner quotes from "8080/tcp". Decode Docker's JSON and look up the port key.
+    existing_host_port="$(
+      docker inspect --format '{{json .NetworkSettings.Ports}}' "$existing_api_id" 2>/dev/null |
+        python3 -c 'import json,sys; ports=json.load(sys.stdin); bindings=ports.get(sys.argv[1] + "/tcp") or []; print(bindings[0].get("HostPort", "") if bindings else "")' "$preferred" 2>/dev/null || true
+    )"
     if [[ "$existing_host_port" == "$preferred" ]]; then
       return 0
     fi
