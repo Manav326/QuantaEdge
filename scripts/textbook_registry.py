@@ -2157,8 +2157,8 @@ def _pdf_ranges_from_toc(document: Any, index_item: dict[str, Any]) -> tuple[lis
     return ranges, method
 
 
-def prepare_library(registry_dir: Path, output_dir: Path) -> dict[str, Any]:
-    """Create <=50 MiB PDF assets and SHA-verified bundles for the existing private library importer."""
+def prepare_library(registry_dir: Path, output_dir: Path, extraction_only: bool = False) -> dict[str, Any]:
+    """Prepare SHA-verified PDF bundles for library import or full-book extraction."""
     try:
         import fitz
     except ImportError as exc:
@@ -2196,12 +2196,14 @@ def prepare_library(registry_dir: Path, output_dir: Path) -> dict[str, Any]:
         filename = (slug[:75] + "--" + suffix[:100] + ".pdf")[:220]
         destination = pdf_dir / filename
         if chapter_title is None:
-            if source_pdf.stat().st_size > max_library_bytes:
+            if source_pdf.stat().st_size > max_library_bytes and not extraction_only:
                 report["whole_books_over_library_limit"].append({
                     "book_id": item.get("book_id"), "title": title,
                     "bytes": source_pdf.stat().st_size, "reason": "The current PostgreSQL PDF library has a 50 MiB file limit.",
                 })
                 return
+            # Extraction-only pilots may process the complete original book locally even
+            # when it is too large for the API PDF library. It is never uploaded here.
             shutil.copyfile(source_pdf, destination)
             pages = int(item.get("page_count") or page_end)
         else:
@@ -2314,6 +2316,8 @@ def main(argv: list[str] | None = None) -> int:
     prepare = sub.add_parser("prepare-library", help="Split cached books into draft assets for the existing PDF library importer")
     prepare.add_argument("--registry-dir", required=True, type=Path)
     prepare.add_argument("--output-dir", required=True, type=Path)
+    prepare.add_argument("--extraction-only", action="store_true",
+                         help="Allow complete-book PDFs over 50 MiB for local extraction; never upload them.")
     args = parser.parse_args(argv)
     try:
         if args.command == "discover":
@@ -2323,7 +2327,7 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(entries, ensure_ascii=False, indent=2))
             return 0
         if args.command == "prepare-library":
-            report = prepare_library(args.registry_dir, args.output_dir)
+            report = prepare_library(args.registry_dir, args.output_dir, extraction_only=args.extraction_only)
             return 1 if report["failures"] else 0
         if args.command == "publish" and args.class_wise:
             final_report = publish_classwise(
