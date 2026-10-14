@@ -79,3 +79,16 @@ For local generation, set `QUANTAEDGE_QUESTION_API_BASE_URL=http://localhost:114
 - A successful extraction is not approval to publish.
 - Keep original PDFs and exact edition/language/source metadata.
 - Never claim the full textbook corpus is available to the tutor until the end-to-end retrieval test demonstrates it.
+
+## Optional visual inventory: first implementation stage
+
+The additive-only Phase A tool is now implemented at `scripts/extract_visual_asset_inventory.py` (commit `bf1f84db895818888b206141d5b8e34383a7825f`). It reads the existing whole-book PDF and source manifest, verifies the PDF SHA-256 and page count, optionally reads existing page JSONL context without changing it, extracts embedded images, renders per-page JPEG previews (including evidence for vector diagrams), and writes a separate `quantaedge.visual-inventory.v1` sidecar. It does not alter the text extraction bundle/import contract or publish assets. Every item remains `CANDIDATE` / `SOURCE_REFERENCE_ONLY`; VLM analysis is still `NOT_ANALYZED`.
+
+Regression tests are in `tests/test_extract_visual_asset_inventory.py`. The existing content-import workflow's Python unittest discovery covers this file and installs PyMuPDF. Before running the tool on the four-book pilot, test it on one exact original PDF + matching manifest in a local authenticated environment. Keep the derived media output private/local; do not commit page previews or extracted images to Git by default.
+
+Next Phase A tasks:
+- Run the tool on one Class 6 Maths book and inspect embedded images plus page previews, especially vector diagrams and low-text pages.
+- Confirm output size/runtime and review the generated manifest for correct book/page/hash/coordinate provenance.
+- Add a separately gated VLM caption/classification stage only after choosing a model and evaluating output quality; do not label any asset semantically understood before that stage runs.
+- Only after these checks consider a multi-book run and later draft-block integration.
+
