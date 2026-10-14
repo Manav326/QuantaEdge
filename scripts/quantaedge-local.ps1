@@ -9,11 +9,16 @@ param(
   # Default uses published GHCR images. Set this switch to build from the checked-out source.
   [switch]$BuildLocal,
 
+  # Explicitly run an isolated Docker Ollama instead of reusing a host model.
+  [switch]$DockerOllama,
+
   # Used only when pulling published GHCR images.
   [string]$ImageTag = "latest"
 )
 
 $ErrorActionPreference = "Stop"
+$script:AiMode = ""
+$script:AiModel = ""
 Set-Location (Join-Path $PSScriptRoot "..")
 
 if ($Action -in @("sync", "down", "reset", "logs", "ps") -and $Service -ne "all") {
@@ -143,6 +148,45 @@ function Invoke-AiCompose {
   }
 }
 
+function Invoke-HostAiCompose {
+  param([Parameter(Mandatory = $true)][string[]]$ComposeArgs)
+
+  $dockerArgs = @("-f", "docker-compose.yml")
+  if (-not $BuildLocal) {
+    $dockerArgs += @("-f", "docker-compose.ghcr.yml")
+  }
+  $dockerArgs += @("-f", "docker-compose.ai-host.yml") + $ComposeArgs
+  & docker compose @dockerArgs
+  $exitCode = $LASTEXITCODE
+  if ($exitCode -ne 0) {
+    throw "Host Ollama Compose command failed (exit code $exitCode). Inspect with: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai-host.yml logs --tail=200 api redis"
+  }
+}
+
+function Get-LocalOllamaModel {
+  try {
+    $tags = Invoke-RestMethod -Uri "http://127.0.0.1:11434/api/tags" -TimeoutSec 4 -ErrorAction Stop
+  } catch {
+    throw "Could not reach the existing Ollama API at http://127.0.0.1:11434/api/tags. Start Ollama and confirm 'ollama list' works. This avoids silently downloading a second model. To use the separate Docker-based Qwen model instead, add -DockerOllama to the ai action."
+  }
+
+  $availableModels = @($tags.models | ForEach-Object { [string]$_.name } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+  if ($availableModels.Count -eq 0) {
+    throw "Local Ollama is responding but has no installed models. Check 'ollama list', or rerun the ai action with -DockerOllama for the separate Qwen model."
+  }
+
+  if (-not [string]::IsNullOrWhiteSpace($env:QUANTAEDGE_OLLAMA_MODEL)) {
+    if ($availableModels -notcontains $env:QUANTAEDGE_OLLAMA_MODEL) {
+      throw "QUANTAEDGE_OLLAMA_MODEL='$($env:QUANTAEDGE_OLLAMA_MODEL)' is not in the local Ollama model list: $($availableModels -join ', ')."
+    }
+    return $env:QUANTAEDGE_OLLAMA_MODEL
+  }
+
+  $llamaModel = @($availableModels | Where-Object { $_ -match '(?i)^llama' } | Select-Object -First 1)
+  if ($llamaModel.Count -gt 0) { return [string]$llamaModel[0] }
+  return [string]$availableModels[0]
+}
+
 function Get-TargetArgs {
   if ($Service -eq "all") { return @() }
   return @($Service)
@@ -179,11 +223,22 @@ switch ($Action) {
     }
   }
   "ai" {
-    # Starts the normal stack plus a private-network Ollama model; existing volumes are preserved.
-    # Cache-first: explicitly run the sync action when you want newer GHCR images.
-    if ($BuildLocal) { Invoke-AiCompose @("build", "--parallel") }
-    Ensure-ApiPortAvailable
-    Invoke-AiCompose @("up", "-d", "--no-build", "--remove-orphans")
+    if ($DockerOllama) {
+      # Explicit fallback: a separate Docker Ollama pulls qwen2.5:0.5b into its named volume.
+      if ($BuildLocal) { Invoke-AiCompose @("build", "--parallel") }
+      Ensure-ApiPortAvailable
+      Invoke-AiCompose @("up", "-d", "--no-build", "--remove-orphans")
+      $script:AiMode = "docker"
+      $script:AiModel = "qwen2.5:0.5b"
+    } else {
+      # Default: reuse a model already installed in host Ollama; do not download a duplicate.
+      $script:AiModel = Get-LocalOllamaModel
+      $env:QUANTAEDGE_OLLAMA_MODEL = $script:AiModel
+      if ($BuildLocal) { Invoke-HostAiCompose @("build", "--parallel") }
+      Ensure-ApiPortAvailable
+      Invoke-HostAiCompose @("up", "-d", "--no-build", "--remove-orphans")
+      $script:AiMode = "host"
+    }
   }
   "rebuild" {
     if ($BuildLocal) {
@@ -248,9 +303,15 @@ for ($i = 0; $i -lt $healthAttempts; $i++) {
       Write-Host "Image source: GHCR ($($env:QUANTAEDGE_GHCR_OWNER)/quantaedge-*:$ImageTag)."
     }
     if ($Action -eq "ai") {
-      Write-Host "AI tutor mode: Ollama / qwen2.5:0.5b (first launch may take several minutes)."
-      Write-Host "Open a published lesson and select the tutor dock. The model is a local MVP and may make mistakes."
-      Write-Host "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
+      if ($script:AiMode -eq "host") {
+        Write-Host "AI tutor mode: existing host Ollama model '$($script:AiModel)' via host.docker.internal:11434."
+        Write-Host "If tutor requests fail with connection refused, see docs/ai/local-ai-tutor.md. Do not expose port 11434 to untrusted networks."
+        Write-Host "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai-host.yml logs --tail=200 api"
+      } else {
+        Write-Host "AI tutor mode: separate Docker Ollama / qwen2.5:0.5b (first model pull may take several minutes)."
+        Write-Host "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init redis api"
+      }
+      Write-Host "Open a published lesson and select the tutor dock. Local model answers still require teacher review."
     }
     exit 0
   } catch {
