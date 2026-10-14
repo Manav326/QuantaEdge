@@ -64,14 +64,17 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-val brandWordmark = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-wordmark.png")
+val brandIcon = rootProject.layout.projectDirectory.file("../web/public/branding/quantaedge-icon.png")
 tasks.register<Copy>("syncQuantaEdgeBranding") {
-    from(brandWordmark)
+    from(brandIcon)
     into(generatedBrandingRes.map { it.dir("drawable-nodpi") })
-    rename { "quantaedge_wordmark.png" }
+    rename { "quantaedge_icon.png" }
     doFirst {
-        check(brandWordmark.asFile.exists()) {
-            "QuantaEdge Android branding asset is missing at " + brandWordmark.asFile.absolutePath
+        check(brandIcon.asFile.isFile) {
+            "QuantaEdge canonical Android branding icon is missing at " + brandIcon.asFile.absolutePath
+        }
+        check(javax.imageio.ImageIO.read(brandIcon.asFile) != null) {
+            "QuantaEdge canonical branding icon is not a decodable image: " + brandIcon.asFile.absolutePath
         }
     }
 }
