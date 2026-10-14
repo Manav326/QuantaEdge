@@ -50,9 +50,7 @@ function responseError(response: Response, body: ApiBody, english: boolean, fall
 }
 
 function requestError(english: boolean, fallbackEn: string, fallbackHi: string): string {
-  return english
-    ? 'Could not reach the AI tutor. Check your connection and try again.'
-    : 'AI ट्यूटर से संपर्क नहीं हो पाया। अपना कनेक्शन जाँचकर फिर प्रयास करें।';
+  return english ? fallbackEn : fallbackHi;
 }
 
 export default function TutorDock({ lessonId, open, onClose, currentQuestionId }: {
