@@ -804,8 +804,6 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun openTutor() = openTutorWithQuestion(0L)
-
     fun openTutorWithQuestion(questionId: Long) {
         tutorQuestionId = questionId
         runTask {
@@ -822,6 +820,8 @@ fun QuantaEdgeApp() {
             if (!tutorAvailable) status = "AI Tutor अभी configured नहीं है। यह setting backend पर enable होने पर उपलब्ध होगा।"
         }
     }
+
+    fun openTutor() = openTutorWithQuestion(0L)
 
     fun sendTutorMessage(message: String, mode: String) {
         runTask {
