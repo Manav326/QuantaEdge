@@ -1,0 +1,234 @@
+name: Resumable textbook visual extraction and analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      book_slug:
+        description: Stable short identifier, e.g. class6-curiosity-en
+        required: true
+        type: string
+      source_image:
+        description: Existing GHCR source-book image containing the original PDF and its matching manifest/page JSONL
+        required: true
+        type: string
+      pdf_path:
+        description: Absolute path to the PDF inside the source image
+        required: true
+        type: string
+      manifest_path:
+        description: Absolute path to the matching manifest inside the source image
+        required: true
+        type: string
+      model:
+        description: Ollama vision model tag
+        required: true
+        default: qwen2.5vl:3b
+        type: string
+      max_assets:
+        description: Maximum candidate assets to process in this run (raise to continue through a larger book)
+        required: true
+        default: "100"
+        type: string
+      restart_analysis:
+        description: Discard the previous analysis checkpoint and intentionally start over
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: textbook-visual-analysis-${{ inputs.book_slug }}
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    name: Extract and analyze textbook visuals
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      BOOK_SLUG: ${{ inputs.book_slug }}
+      SOURCE_IMAGE: ${{ inputs.source_image }}
+      PDF_PATH: ${{ inputs.pdf_path }}
+      MANIFEST_PATH: ${{ inputs.manifest_path }}
+      VISION_MODEL: ${{ inputs.model }}
+      MAX_ASSETS: ${{ inputs.max_assets }}
+      RESTART_ANALYSIS: ${{ inputs.restart_analysis }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Validate inputs and install Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
+          [[ "$MAX_ASSETS" =~ ^[1-9][0-9]*$ ]] && (( MAX_ASSETS <= 10000 )) || { echo "max_assets must be 1..10000"; exit 2; }
+          [[ "$SOURCE_IMAGE" == ghcr.io/* ]] || { echo "source_image must be a GHCR image"; exit 2; }
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+
+      - name: Log in to GHCR and fetch the original book package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker pull "$SOURCE_IMAGE"
+          container_id="$(docker create "$SOURCE_IMAGE")"
+          trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT
+          mkdir -p "$RUNNER_TEMP/quantaedge-source"
+          docker cp "$container_id:$PDF_PATH" "$RUNNER_TEMP/quantaedge-source/source.pdf"
+          docker cp "$container_id:$MANIFEST_PATH" "$RUNNER_TEMP/quantaedge-source/source.manifest.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest_path = Path(__import__("os").environ["RUNNER_TEMP"]) / "quantaedge-source" / "source.manifest.json"
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          page_name = manifest.get("text_jsonl")
+          if not isinstance(page_name, str) or not page_name or Path(page_name).name != page_name:
+              raise SystemExit("Source manifest must name its sibling page JSONL with a safe filename in text_jsonl.")
+          import subprocess
+          container_id = subprocess.check_output(["docker", "ps", "-aq", "--latest"], text=True).strip()
+          subprocess.run(["docker", "cp", f"{container_id}:{__import__('os').environ['MANIFEST_PATH'].rsplit('/',1)[0]}/{page_name}", str(manifest_path.parent / page_name)], check=True)
+          PY
+          echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source" >> "$GITHUB_ENV"
+
+      - name: Set up Ollama model cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama
+          key: ollama-model-${{ inputs.model }}
+
+      - name: Start Ollama and ensure the vision model is available
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://ollama.com/install.sh | sh
+          (ollama serve > "$RUNNER_TEMP/ollama.log" 2>&1 &)
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:11434/api/tags >/dev/null || { cat "$RUNNER_TEMP/ollama.log"; exit 1; }
+          ollama pull "$VISION_MODEL"
+
+      - name: Build source-bound visual inventory and restore analysis checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="data/textbook-visuals/$BOOK_SLUG"
+          mkdir -p "$out"
+          checkpoint="$RUNNER_TEMP/previous-visual-analysis.v1.json"
+          if [[ "$RESTART_ANALYSIS" != "true" && -f "$out/visual-analysis.v1.json" ]]; then
+            cp "$out/visual-analysis.v1.json" "$checkpoint"
+          fi
+          rm -rf "$out"
+          mkdir -p "$out"
+          python scripts/extract_visual_asset_inventory.py \
+            --pdf "$SOURCE_DIR/source.pdf" \
+            --manifest "$SOURCE_DIR/source.manifest.json" \
+            --output-dir "$out"
+          if [[ -f "$checkpoint" ]]; then cp "$checkpoint" "$out/visual-analysis.v1.json"; fi
+          args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$MAX_ASSETS" --include-page-previews)
+          if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
+          python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
+
+      - name: Package full-resolution assets and previews
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/quantaedge-visual-bundle"
+          cp -R "data/textbook-visuals/$BOOK_SLUG/." "$RUNNER_TEMP/quantaedge-visual-bundle/"
+          tar -C "$RUNNER_TEMP" -czf "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz" quantaedge-visual-bundle
+          sha256sum "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz" | tee "$RUNNER_TEMP/$BOOK_SLUG-bundle.sha256"
+
+      - name: Publish versioned and stable visual bundles to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/oras-project/oras/main/install.sh | VERSION=1.2.0 sh
+          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
+          version_tag="class6-$BOOK_SLUG-run-$GITHUB_RUN_ID"
+          oras push "$package:$version_tag" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          oras push "$package:class6-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          echo "VISUAL_PACKAGE=$package" >> "$GITHUB_ENV"
+          echo "VISUAL_VERSION_TAG=$version_tag" >> "$GITHUB_ENV"
+          echo "VISUAL_SHA256=$(cut -d' ' -f1 "$RUNNER_TEMP/$BOOK_SLUG-bundle.sha256")" >> "$GITHUB_ENV"
+
+      - name: Update repository checkpoint and GHCR index
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="data/textbook-visuals/$BOOK_SLUG"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root = Path(os.environ["GITHUB_WORKSPACE"])
+          slug = os.environ["BOOK_SLUG"]
+          out = root / "data" / "textbook-visuals" / slug
+          package = os.environ["VISUAL_PACKAGE"]
+          tag = os.environ["VISUAL_VERSION_TAG"]
+          digest = os.environ["VISUAL_SHA256"]
+          inventory = json.loads((out / "visual-inventory.v1.json").read_text(encoding="utf-8"))
+          analysis = json.loads((out / "visual-analysis.v1.json").read_text(encoding="utf-8"))
+          index = {
+              "schema_version": "quantaedge.textbook-visual-bundle-index.v1",
+              "book_slug": slug,
+              "source_book_id": inventory["source"]["book_id"],
+              "source_pdf_sha256": inventory["source"]["pdf_sha256"],
+              "visual_inventory_schema": inventory["schema_version"],
+              "analysis_schema": analysis["schema_version"],
+              "analysis_model": analysis["model"],
+              "analysis_prompt_version": analysis["prompt_version"],
+              "analysis_summary": analysis["summary"],
+              "ghcr_package": package,
+              "version_tag": tag,
+              "stable_tag": f"class6-{slug}-latest",
+              "bundle_tar_sha256": digest,
+              "publication_allowed": False,
+              "review_required": True,
+          }
+          (out / "bundle-index.v1.json").write_text(json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$out/visual-inventory.v1.json" "$out/visual-analysis.v1.json" "$out/bundle-index.v1.json"
+          git diff --cached --quiet || git commit -m "Checkpoint textbook visual analysis: $BOOK_SLUG"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Upload run summary
+        if: always()
+        run: |
+          {
+            echo "## Textbook visual analysis"
+            echo "- Book slug: `$BOOK_SLUG`"
+            echo "- Source image: `$SOURCE_IMAGE`"
+            echo "- Model: `$VISION_MODEL`"
+            echo "- Visual bundle: `${VISUAL_PACKAGE:-not-published}`"
+            echo "- Version tag: `${VISUAL_VERSION_TAG:-not-published}`"
+            echo "- Bundle SHA-256: `${VISUAL_SHA256:-not-published}`"
+            if [[ -f "data/textbook-visuals/$BOOK_SLUG/visual-analysis.v1.json" ]]; then
+              python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path("data/textbook-visuals") / os.environ["BOOK_SLUG"] / "visual-analysis.v1.json"
+          d = json.loads(p.read_text(encoding="utf-8"))
+          print(f"- Analyzed: {d['summary']['assets_analyzed']}")
+          print(f"- Failed: {d['summary']['assets_failed']}")
+          print(f"- Skipped from checkpoint: {d['summary']['assets_skipped_from_checkpoint']}")
+          PY
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
