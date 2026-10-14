@@ -7,17 +7,27 @@ on:
         description: Stable short identifier, e.g. class6-curiosity-en
         required: true
         type: string
-      source_image:
-        description: Existing GHCR source-book image containing the original PDF and its matching manifest/page JSONL
+      class_no:
+        description: Bihar Board class number
         required: true
-        type: string
-      pdf_path:
-        description: Absolute path to the PDF inside the source image
+        default: "6"
+        type: choice
+        options:
+          - "6"
+          - "7"
+          - "8"
+      language:
+        description: Book language and matching class-wise GHCR image
         required: true
-        type: string
-      manifest_path:
-        description: Absolute path to the matching manifest inside the source image
+        default: english
+        type: choice
+        options:
+          - english
+          - hindi
+      book_id:
+        description: Exact book ID from the committed source manifest, e.g. ncert-c6-english-fecu1
         required: true
+        default: ncert-c6-english-fecu1
         type: string
       model:
         description: Ollama vision model tag
@@ -50,9 +60,9 @@ jobs:
     timeout-minutes: 360
     env:
       BOOK_SLUG: ${{ inputs.book_slug }}
-      SOURCE_IMAGE: ${{ inputs.source_image }}
-      PDF_PATH: ${{ inputs.pdf_path }}
-      MANIFEST_PATH: ${{ inputs.manifest_path }}
+      CLASS_NO: ${{ inputs.class_no }}
+      LANGUAGE: ${{ inputs.language }}
+      BOOK_ID: ${{ inputs.book_id }}
       VISION_MODEL: ${{ inputs.model }}
       MAX_ASSETS: ${{ inputs.max_assets }}
       RESTART_ANALYSIS: ${{ inputs.restart_analysis }}
@@ -70,29 +80,62 @@ jobs:
           set -euo pipefail
           [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
           [[ "$MAX_ASSETS" =~ ^[1-9][0-9]*$ ]] && (( MAX_ASSETS <= 10000 )) || { echo "max_assets must be 1..10000"; exit 2; }
-          [[ "$SOURCE_IMAGE" == ghcr.io/* ]] || { echo "source_image must be a GHCR image"; exit 2; }
-          [[ "$PDF_PATH" == /* && "$MANIFEST_PATH" == /* ]] || { echo "pdf_path and manifest_path must be absolute paths inside the source image"; exit 2; }
+          [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
 
-      - name: Log in to GHCR and fetch the original book package
+      - name: Pull the exact whole-book PDF from the class-wise GHCR cache
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
+          SOURCE_IMAGE="ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest"
           echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           docker pull "$SOURCE_IMAGE"
-          container_id="$(docker create "$SOURCE_IMAGE")"
+          container_id="$(docker create "$SOURCE_IMAGE" /__quantaedge_cache_inspection_only)"
           trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT
           mkdir -p "$RUNNER_TEMP/quantaedge-source"
-          docker cp "$container_id:$PDF_PATH" "$RUNNER_TEMP/quantaedge-source/source.pdf"
-          docker cp "$container_id:$MANIFEST_PATH" "$RUNNER_TEMP/quantaedge-source/source.manifest.json"
-          page_name="$(python -c 'import json,os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "quantaedge-source/source.manifest.json"), encoding="utf-8"))["text_jsonl"])')"
-          [[ "$page_name" != */* && "$page_name" == *.jsonl ]] || { echo "Manifest text_jsonl must be a safe sibling .jsonl filename"; exit 2; }
-          manifest_dir="${MANIFEST_PATH%/*}"
-          docker cp "$container_id:$manifest_dir/$page_name" "$RUNNER_TEMP/quantaedge-source/$page_name"
+          docker cp "$container_id:/index.json" "$RUNNER_TEMP/quantaedge-source/index.json"
+          docker cp "$container_id:/books/$BOOK_ID.pdf" "$RUNNER_TEMP/quantaedge-source/source.pdf"
+          python - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          root = Path(os.environ["GITHUB_WORKSPACE"])
+          source_dir = Path(os.environ["RUNNER_TEMP"]) / "quantaedge-source"
+          book_id = os.environ["BOOK_ID"]
+          class_no = os.environ["CLASS_NO"]
+          language = os.environ["LANGUAGE"]
+          index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
+          entries = [item for item in index.get("books", []) if item.get("book_id") == book_id]
+          if len(entries) != 1 or entries[0].get("file") != f"books/{book_id}.pdf":
+              raise SystemExit("The selected whole book is not present in the GHCR index.")
+          manifest_dir = root / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
+          matches = []
+          for path in manifest_dir.glob("*.manifest.json"):
+              try:
+                  item = json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  continue
+              if item.get("book_id") == book_id:
+                  matches.append((path, item))
+          if len(matches) != 1:
+              raise SystemExit(f"Expected one committed source manifest for {book_id}; found {len(matches)}.")
+          manifest_path, manifest = matches[0]
+          expected_hash = str(entries[0].get("sha256", "")).lower()
+          actual_manifest_hash = str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
+          if not expected_hash or actual_manifest_hash != expected_hash:
+              raise SystemExit("The GHCR index PDF hash does not match the committed source manifest.")
+          page_name = manifest.get("text_jsonl")
+          if not isinstance(page_name, str) or not page_name or Path(page_name).name != page_name or not page_name.endswith(".jsonl"):
+              raise SystemExit("The source manifest has an unsafe sibling page JSONL name.")
+          page_path = manifest_path.parent / page_name
+          if not page_path.is_file():
+              raise SystemExit(f"Committed sibling page JSONL is missing: {page_path}")
+          shutil.copy2(manifest_path, source_dir / "source.manifest.json")
+          shutil.copy2(page_path, source_dir / page_name)
+          print(json.dumps({"book_id": book_id, "ghcr_image": os.environ.get("SOURCE_IMAGE", ""), "manifest": str(manifest_path), "pdf_sha256": expected_hash}, indent=2))
+          PY
           echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source" >> "$GITHUB_ENV"
-
       - name: Set up Ollama model cache
         uses: actions/cache@v4
         with:
@@ -239,7 +282,8 @@ jobs:
           {
             echo "## Textbook visual analysis"
             echo "- Book slug: `$BOOK_SLUG`"
-            echo "- Source image: `$SOURCE_IMAGE`"
+            echo "- Source image: `ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest`"
+            echo "- Book ID: `$BOOK_ID`"
             echo "- Model: `$VISION_MODEL`"
             echo "- Visual bundle: `${VISUAL_PACKAGE:-not-published}`"
             echo "- Version tag: `${VISUAL_VERSION_TAG:-not-published}`"
