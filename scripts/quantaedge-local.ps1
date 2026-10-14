@@ -50,9 +50,7 @@ if (-not [string]::IsNullOrWhiteSpace($env:APP_CORS_ALLOWED_ORIGINS)) {
 $env:APP_CORS_ALLOWED_ORIGINS = ($localCorsOrigins | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique) -join ","
 
 # Windows PowerShell 5.1 compatible host port defaults.
-# Probe the host binding before Docker starts so a busy local API port does not
-# make the entire GHCR startup fail. The selected port is passed to Compose via
-# the process environment, which takes precedence over values in .env.
+# QuantaEdge owns its configured API port. Fail clearly if it is occupied; never silently move the API.
 function Test-HostPortAvailable {
   param([Parameter(Mandatory = $true)][int]$Port)
 
@@ -70,7 +68,8 @@ function Test-HostPortAvailable {
   }
 }
 
-$script:apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
+$script:apiPort = "8080"
+$env:API_PORT = $script:apiPort
 $webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
