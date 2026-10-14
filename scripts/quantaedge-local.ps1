@@ -70,7 +70,7 @@ function Test-HostPortAvailable {
   }
 }
 
-$apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
+$script:apiPort = if ([string]::IsNullOrWhiteSpace($env:API_PORT)) { "8080" } else { $env:API_PORT }
 $webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $env:WEB_PORT }
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
@@ -110,7 +110,7 @@ function Ensure-ApiPortAvailable {
 
     $script:apiPort = [string]$selectedApiPort
     $env:API_PORT = $script:apiPort
-    Write-Warning "API host port $preferredApiPort is already in use. QuantaEdge will use port $apiPort for this run (http://localhost:$script:apiPort). To keep this choice, set API_PORT=$script:apiPort in .env. The existing process was not stopped."
+    Write-Warning "API host port $preferredApiPort is unavailable. QuantaEdge will use port $script:apiPort for this run (http://localhost:$script:apiPort). To keep this choice, set API_PORT=$script:apiPort in .env. The existing process was not stopped."
   }
 }
 
@@ -291,8 +291,8 @@ Write-Host "Waiting for API health..."
 $healthAttempts = if ($Action -eq "ai") { 180 } else { 30 }
 for ($i = 0; $i -lt $healthAttempts; $i++) {
   try {
-    Invoke-WebRequest -UseBasicParsing "http://localhost:$apiPort/actuator/health" | Out-Null
-    Write-Host "API:    http://localhost:$apiPort/actuator/health"
+    Invoke-WebRequest -UseBasicParsing "http://localhost:$script:apiPort/actuator/health" | Out-Null
+    Write-Host "API:    http://localhost:$script:apiPort/actuator/health"
     Write-Host "Web:    http://localhost:$webPort"
     Write-Host "Admin:  http://localhost:$adminPort"
     Write-Host "People: http://localhost:$peoplePort"
