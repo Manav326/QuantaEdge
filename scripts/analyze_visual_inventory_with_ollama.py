@@ -224,7 +224,7 @@ def run_analysis(
             "assets_selected": len(selected) + skipped_from_checkpoint,
             "assets_analyzed": sum(1 for item in ordered_results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW" and item.get("model") == model and item.get("prompt_version") == PROMPT_VERSION),
             "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
-"assets_skipped_from_checkpoint": skipped_from_checkpoint,
+            "assets_skipped_from_checkpoint": skipped_from_checkpoint,
             "publication_allowed": False,
         }
         result = {
