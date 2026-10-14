@@ -153,6 +153,9 @@ def analyze_one(
     }
 
 
+PROMPT_VERSION = "visual-analysis-prompt-v2"
+
+
 def run_analysis(
     inventory_path: Path,
     *,
@@ -162,6 +165,8 @@ def run_analysis(
     include_page_previews: bool,
     timeout: int = 180,
     opener=urllib.request.urlopen,
+    output_path: Path | None = None,
+    resume: bool = False,
 ) -> dict[str, Any]:
     if not inventory_path.is_file():
         raise FileNotFoundError(f"Inventory not found: {inventory_path}")
@@ -173,8 +178,22 @@ def run_analysis(
     if not isinstance(source, dict) or not isinstance(assets, list):
         raise ValueError("Visual inventory is missing source or assets.")
     inventory_dir = inventory_path.parent
-    selected = []
-    seen = set()
+
+    previous: dict[str, dict[str, Any]] = {}
+    if resume and output_path and output_path.is_file():
+        saved = json.loads(output_path.read_text(encoding="utf-8"))
+        if not isinstance(saved, dict) or saved.get("schema_version") != "quantaedge.visual-analysis.v1":
+            raise ValueError("Cannot resume: existing analysis checkpoint has an unknown schema.")
+        if saved.get("source_book_id") != source.get("book_id") or saved.get("source_pdf_sha256") != source.get("pdf_sha256"):
+            raise ValueError("Cannot resume: checkpoint source book/PDF hash does not match this inventory.")
+        if saved.get("model") != model or saved.get("prompt_version") != PROMPT_VERSION:
+            raise ValueError("Cannot resume: model or prompt version changed. Use a new output directory or --overwrite.")
+        for item in saved.get("results", []):
+            if isinstance(item, dict) and item.get("asset_id"):
+                previous[str(item["asset_id"])] = item
+
+    selected: list[dict[str, Any]] = []
+    seen: set[str] = set()
     for asset in assets:
         if not isinstance(asset, dict) or asset.get("kind") not in {"embedded_image", "page_preview"}:
             continue
@@ -183,67 +202,114 @@ def run_analysis(
         asset_id = asset.get("asset_id")
         if not asset_id or asset_id in seen:
             continue
-        seen.add(asset_id)
+        seen.add(str(asset_id))
         selected.append(asset)
         if len(selected) >= max_assets:
             break
-    results = []
+
+    results_by_id = dict(previous)
+
+    def checkpoint() -> dict[str, Any]:
+        ordered_results = list(results_by_id.values())
+        summary = {
+            "assets_selected": len(selected),
+            "assets_analyzed": sum(1 for item in ordered_results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW" and item.get("model") == model and item.get("prompt_version") == PROMPT_VERSION),
+            "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
+            "assets_skipped_from_checkpoint": sum(
+                1 for asset in selected
+                if (str(asset.get("asset_id")) in results_by_id
+                    and results_by_id[str(asset.get("asset_id"))].get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+                    and results_by_id[str(asset.get("asset_id"))].get("asset_sha256") == asset.get("asset_sha256")
+                    and results_by_id[str(asset.get("asset_id"))].get("model") == model
+                    and results_by_id[str(asset.get("asset_id"))].get("prompt_version") == PROMPT_VERSION)
+            ),
+            "publication_allowed": False,
+        }
+        result = {
+            "schema_version": "quantaedge.visual-analysis.v1",
+            "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
+            "source_inventory": inventory_path.name,
+            "source_book_id": source.get("book_id"),
+            "source_pdf_sha256": source.get("pdf_sha256"),
+            "model_provider": "ollama_local",
+            "model": model,
+            "prompt_version": PROMPT_VERSION,
+            "summary": summary,
+            "results": ordered_results,
+        }
+        if output_path:
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = output_path.with_suffix(output_path.suffix + ".tmp")
+            temporary.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+            temporary.replace(output_path)
+        return result
+
+    # Persist the initial state and every result, so runner interruption loses at most
+    # the currently executing asset. Successful assets are reused only when their
+    # content hash, model tag and prompt version still match; errors are retried.
+    result = checkpoint()
     for asset in selected:
+        asset_id = str(asset["asset_id"])
+        existing = results_by_id.get(asset_id, {})
+        if (
+            existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
+            and existing.get("asset_sha256") == asset.get("asset_sha256")
+            and existing.get("model") == model
+            and existing.get("prompt_version") == PROMPT_VERSION
+        ):
+            continue
         try:
-            results.append(analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, opener=opener))
+            item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, opener=opener)
+            item["prompt_version"] = PROMPT_VERSION
+            item["checkpointed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            results_by_id[asset_id] = item
         except Exception as exc:
-            results.append({
+            results_by_id[asset_id] = {
                 "asset_id": asset.get("asset_id"),
+                "asset_sha256": asset.get("asset_sha256"),
                 "source_book_id": source.get("book_id"),
+                "source_pdf_sha256": source.get("pdf_sha256"),
                 "source_pdf_page_number": asset.get("source_pdf_page_number"),
                 "asset_path": asset.get("asset_path"),
+                "model_provider": "ollama_local",
+                "model": model,
+                "prompt_version": PROMPT_VERSION,
                 "analysis_status": "ANALYSIS_ERROR",
                 "error": str(exc)[:500],
                 "human_review_required": True,
                 "publication_allowed": False,
-            })
-    return {
-        "schema_version": "quantaedge.visual-analysis.v1",
-        "analysis_status": "DRAFT_VISION_ANALYSIS_ONLY",
-        "source_inventory": inventory_path.name,
-        "source_book_id": source.get("book_id"),
-        "source_pdf_sha256": source.get("pdf_sha256"),
-        "model_provider": "ollama_local",
-        "model": model,
-        "summary": {
-            "assets_selected": len(selected),
-            "assets_analyzed": sum(1 for item in results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"),
-            "assets_failed": sum(1 for item in results if item.get("analysis_status") == "ANALYSIS_ERROR"),
-            "publication_allowed": False,
-        },
-        "results": results,
-    }
-
+            }
+        result = checkpoint()
+    return result
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inventory", required=True, type=Path, help="Path to visual-inventory.v1.json.")
     parser.add_argument("--model", required=True, help="An already-installed Ollama vision model tag.")
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434", help="Local Ollama endpoint.")
-    parser.add_argument("--max-assets", type=int, default=5, help="Maximum candidates to analyze (default: 5).")
+    parser.add_argument("--max-assets", type=int, default=5, help="Maximum candidate assets in this run (default: 5).")
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
     parser.add_argument("--timeout", type=int, default=180)
-    parser.add_argument("--overwrite", action="store_true", help="Replace an existing visual-analysis.v1.json sidecar.")
+    parser.add_argument("--resume", action="store_true", help="Resume from the existing output checkpoint and retry failed assets.")
+    parser.add_argument("--overwrite", action="store_true", help="Discard an existing checkpoint and start a fresh analysis.")
     args = parser.parse_args()
     output_path = args.inventory.parent / "visual-analysis.v1.json"
     try:
-        if args.max_assets < 1 or args.max_assets > 100:
-            raise ValueError("--max-assets must be between 1 and 100.")
+        if args.max_assets < 1 or args.max_assets > 10000:
+            raise ValueError("--max-assets must be between 1 and 10000.")
         if args.timeout < 10 or args.timeout > 900:
             raise ValueError("--timeout must be between 10 and 900 seconds.")
-        if output_path.exists() and not args.overwrite:
-            raise FileExistsError(f"Refusing to overwrite {output_path}; pass --overwrite explicitly.")
+        if output_path.exists() and not (args.resume or args.overwrite):
+            raise FileExistsError(f"Refusing to overwrite {output_path}; pass --resume to continue or --overwrite to restart.")
+        if args.resume and args.overwrite:
+            raise ValueError("Choose only one of --resume or --overwrite.")
+        if args.overwrite:
+            output_path.unlink(missing_ok=True)
         result = run_analysis(
             args.inventory, endpoint=args.endpoint, model=args.model,
             max_assets=args.max_assets, include_page_previews=args.include_page_previews,
-            timeout=args.timeout,
+            timeout=args.timeout, output_path=output_path, resume=args.resume,
         )
-        output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"Visual analysis stopped safely: {exc}", file=sys.stderr)
         return 2
