@@ -36,6 +36,8 @@ public class TutorService {
 
   public Map<String,Object> messages(AuthContext context,long sessionId,Integer limit,Long beforeId){
     context=authorization.requireStudent(context);ensureSessionOwner(context.studentId(),sessionId);
+    Long sessionLessonId=jdbc.queryForObject("select lesson_id from tutor_session where id=?",Long.class,sessionId);
+    ensureLessonAccess(context.studentId(),sessionLessonId);
     int rowLimit=Math.max(1,Math.min(limit==null?30:limit,100));
     String beforeFilter=beforeId==null?"":" and id < ?";
     List<Object> args=new ArrayList<>();args.add(sessionId);if(beforeId!=null)args.add(beforeId);args.add(rowLimit+1);
@@ -132,7 +134,8 @@ public class TutorService {
         where q.id=? and q.lesson_id=(select lesson_id from tutor_session where id=?)
           and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
         """,tutorLanguage,questionId,sessionId);
-      if(!q.isEmpty())qctx=json(q.getFirst());
+      if(q.isEmpty())throw new SecurityException("Tutor question access denied");
+      qctx=json(q.getFirst());
     }
 
     List<Map<String,Object>> rawBlocks=jdbc.queryForList("""
