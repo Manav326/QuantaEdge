@@ -88,7 +88,25 @@ function Ensure-ApiPortAvailable {
   $existingApiIds = & docker compose @composePsArgs 2>$null
   if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($existingApiIds -join ""))) {
     $existingApiId = ($existingApiIds | Select-Object -First 1).Trim()
-    $existingHostPort = & docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $existingApiId 2>$null
+    # Avoid nested Go-template indexing here: PowerShell's native argument
+    # quoting can strip the inner quotes from "8080/tcp", breaking the template.
+    # Read Docker's JSON output and resolve the port key as a PowerShell property.
+    $existingHostPort = ""
+    try {
+      $portsJson = & docker inspect --format '{{json .NetworkSettings.Ports}}' $existingApiId 2>$null
+      if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($portsJson -join ""))) {
+        $ports = (($portsJson -join "`n") | ConvertFrom-Json)
+        $apiBindingsProperty = $ports.PSObject.Properties["$preferredApiPort/tcp"]
+        if ($null -ne $apiBindingsProperty -and $null -ne $apiBindingsProperty.Value) {
+          $apiBindings = @($apiBindingsProperty.Value)
+          if ($apiBindings.Count -gt 0) {
+            $existingHostPort = [string]$apiBindings[0].HostPort
+          }
+        }
+      }
+    } catch {
+      $existingHostPort = ""
+    }
     $existingHostPortNumber = 0
     if ([int]::TryParse([string]$existingHostPort, [ref]$existingHostPortNumber) -and $existingHostPortNumber -eq $preferredApiPort) {
       return
