@@ -473,6 +473,51 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     } finally { setLoadingOlder(false); }
   }
 
+  async function startNewChat() {
+    if (busy || sendInFlightRef.current || !languageReady) return;
+    sendInFlightRef.current = true;
+    setBusy(true);
+    setError('');
+    try {
+      const response = await fetch('/api/v1/tutor/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ lessonId, language: languageRef.current.responseLanguage, newChat: true }),
+      });
+      const body = await readBody(response);
+      const nextSessionId = Number(body.sessionId);
+      if (!response.ok || !Number.isFinite(nextSessionId) || nextSessionId <= 0) {
+        const current = languageRef.current;
+        setError(responseError(response, body, current.english,
+          'Could not start a new chat. Please try again.',
+          'नई चैट शुरू नहीं हो सकी। कृपया फिर प्रयास करें।'));
+        return;
+      }
+      setSessionId(nextSessionId);
+      setAvailable(Boolean(body.available));
+      setMessages([]);
+      setHasOlderMessages(false);
+      setOlderBeforeId(null);
+      setInput('');
+      setMode('HINT');
+      if (!body.available) {
+        const current = languageRef.current;
+        setError(current.english
+          ? 'A new chat was created, but the tutor is currently unavailable.'
+          : 'नई चैट बन गई है, लेकिन ट्यूटर अभी उपलब्ध नहीं है।');
+      }
+    } catch {
+      const current = languageRef.current;
+      setError(requestError(current.english,
+        'Could not start a new chat. Check your connection and retry.',
+        'नई चैट शुरू नहीं हो सकी। कनेक्शन जाँचकर फिर प्रयास करें।'));
+    } finally {
+      sendInFlightRef.current = false;
+      setBusy(false);
+    }
+  }
+
   async function send() {
     if (!input.trim() || !sessionId || busy || available !== true || sendInFlightRef.current) return;
     // State updates are asynchronous; this ref prevents Enter + click / rapid clicks
@@ -591,6 +636,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         <span className="tutor-ai-badge" aria-label="AI tutor" title={english ? 'AI tutor' : 'AI ट्यूटर'}><span aria-hidden="true">✦</span><small>AI</small></span>
       </div>
       <div className="tutor-head-controls">
+        <button type="button" className="tutor-control-btn" aria-label={english ? 'Start a new chat' : 'नई चैट शुरू करें'} title={english ? 'New chat' : 'नई चैट'} disabled={busy || available !== true} onClick={() => void startNewChat()}>＋</button>
         <button type="button" className="tutor-control-btn" aria-label={english ? 'Minimize tutor' : 'ट्यूटर छोटा करें'} title={english ? 'Minimize' : 'छोटा करें'} onClick={() => setMinimized(true)}>−</button>
         <button type="button" className="tutor-control-btn tutor-close" aria-label={english ? 'Close tutor' : 'ट्यूटर बंद करें'} title={english ? 'Close' : 'बंद करें'} onClick={onClose}>×</button>
       </div>
