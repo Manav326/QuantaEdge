@@ -32,3 +32,14 @@ Each result is a draft with source book, PDF hash, page number, asset hash, mode
 ```powershell
 python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 ```
+
+
+## GitHub-hosted execution (no local Ollama required)
+
+Workflow: [textbook-visual-analysis.yml](../../.github/workflows/textbook-visual-analysis.yml). Run it from **Actions → Resumable textbook visual extraction and analysis → Run workflow**. Supply the exact existing GHCR source-book image and the absolute paths of the original PDF and its matching manifest inside that image. The manifest's sibling page JSONL is copied automatically. Use a stable book_slug for the book across reruns.
+
+The workflow downloads the source from GHCR, verifies it through the existing inventory script, runs Ollama vision analysis on the GitHub runner, executes focused regression tests, publishes a full asset/preview bundle to GHCR under a run-specific tag and a stable per-book tag, then commits only the small inventory, analysis checkpoint and bundle index to main.
+
+The output index is under data/textbook-visuals/<book_slug>/bundle-index.v1.json. Full image binaries/page previews are kept in GHCR to avoid oversized Git history; the repository contains the resumable JSON checkpoint and exact package/tag/checksum pointer. Pull main, then authenticate to GHCR and pull the package tag from the index to restore the complete visual bundle.
+
+The runner caches Ollama model files when GitHub's cache service retains them. Analysis checkpoints are persisted to main after each run and each completed asset is atomically checkpointed during processing. Keep the same book slug and model to resume; use restart_analysis=true only when deliberately discarding the checkpoint. If a run is interrupted before it can commit the latest checkpoint, its last committed checkpoint is restored and only the in-flight asset may need repeating.
