@@ -163,7 +163,7 @@ Use the local script so the selected GHCR/local build mode is preserved:
 .\scripts\quantaedge-local.ps1 ai -BuildLocal
 ```
 
-On first start, Docker downloads the Ollama runtime and the small `qwen2.5:0.5b` model. Then open `http://localhost:3000/student`, sign in to the local preview student, and open a published lesson to use the tutor. The model is stored in a persistent Docker volume. First startup needs internet and additional disk/RAM; this small general-purpose model is an MVP, not a teacher-validated or fine-tuned model. It may make mistakes and must not be presented as official SCERT/NCERT content. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md) for limitations and shutdown instructions.
+By default, the script detects and reuses a model already installed in host Ollama; it does not download a second model. It prefers a model named `llama*`, or uses the first model reported by `http://127.0.0.1:11434/api/tags`. To intentionally use a separate Docker Ollama and the small `qwen2.5:0.5b` model, run `.\scripts\quantaedge-local.ps1 ai -DockerOllama` (Bash: `bash scripts/quantaedge-local.sh ai --docker-ollama`). Host Ollama must be reachable from the API container at `host.docker.internal:11434`; do not expose the unauthenticated Ollama port to the LAN or internet. Local model answers may be wrong and are not verified SCERT/NCERT content. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md) for network considerations and limitations.
 
 
 ## Local image sync behavior
