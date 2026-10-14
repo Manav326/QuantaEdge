@@ -18,6 +18,7 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
                 "book_id": "ncert-c6-english-fegp1",
                 "source_url": "https://ncert.nic.in/textbook.php?ln=en",
                 "original_book_sha256": "b" * 64,
+                "asset_pdf_sha256": "b" * 64,
                 "text_jsonl": pages_name,
                 "completed_pages": 1,
             }), encoding="utf-8")
