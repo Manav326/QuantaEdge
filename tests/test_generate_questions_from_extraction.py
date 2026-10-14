@@ -6,6 +6,7 @@ from pathlib import Path
 from scripts.generate_questions_from_extraction import (
     SUPPORTED_TYPES,
     load_curriculum_question_targets,
+    validate_extraction,
     validate_model_output,
 )
 
@@ -39,6 +40,48 @@ def question(question_type, **overrides):
     }
     value.update(overrides)
     return value
+
+
+def extraction_bundle(language, text, edition="2025–26 reprint"):
+    code = "ch1"
+    chapter_title = "भिन्नों का परिचय" if language in {"hi", "hindi"} else "Introduction to fractions"
+    return {
+        "schema_version": 1,
+        "bundle_status": "DRAFT_EXTRACTION_ONLY",
+        "curriculum": {"class_code": "6", "subject_code": "maths", "language": language},
+        "source": {
+            "title": "Bihar Board Mathematics",
+            "url": "https://scert.bihar.gov.in/eresources/sample",
+            "edition": edition,
+            "pdf_page_count": 1,
+            "pdf_sha256": "a" * 64,
+        },
+        "chapter_map": [{"code": code, "title": chapter_title, "page_start": 1, "page_end": 1}],
+        "extraction": {"requires_human_review": True},
+        "pages": [{"page_number": 1, "chapter_code": code, "text": (
+            ("मुद्रण संस्करण 2025-26। " if language in {"hi", "hindi"} else "Printed edition 2025-26. ")
+            + text
+        )}],
+    }
+
+
+def hindi_lesson_result():
+    data = lesson_result(question(
+        "MATCH",
+        prompt="भिन्न को उसके सही अर्थ से मिलाइए।",
+        explanation="एक आधा चार बराबर भागों में से दो भागों को दर्शाता है। इसे मिलान करने से पहले दृश्य की जाँच करें।",
+        topic="भिन्न", subtopic="समान भाग", skill="प्रतिनिधित्व का मिलान",
+    ))
+    data.update({
+        "lesson_title": "दैनिक जीवन में भिन्न",
+        "lesson_summary": "भिन्न किसी पूर्ण वस्तु के बराबर भागों को दर्शाती है।",
+        "lesson_explanation": "जब किसी वस्तु को बराबर भागों में बाँटा जाता है, तब चुने गए भागों को भिन्न से दिखाते हैं।",
+        "worked_example": "एक रोटी के चार बराबर टुकड़े करें। दो टुकड़े दो चौथाई हैं।",
+        "guided_practice": "शिक्षक के साथ पाँच बराबर टुकड़ों में से तीन टुकड़े गिनें।",
+        "independent_practice": "छह बराबर भागों में से एक भाग की भिन्न लिखें।",
+        "recap": "हर नीचे बराबर भागों की संख्या और अंश चुने गए भागों की संख्या बताता है।",
+    })
+    return data
 
 
 class QuestionGenerationSchemaTests(unittest.TestCase):
@@ -96,6 +139,36 @@ class QuestionGenerationSchemaTests(unittest.TestCase):
         del data["recap"]
         with self.assertRaisesRegex(ValueError, "recap"):
             validate_model_output(data, ["MATCH"], self.chunk)
+
+    def test_hindi_source_requires_explicit_language_and_devanagari_text(self):
+        hindi_text = "यह गणित की पुस्तक है जिसमें भिन्नों के उदाहरण और समान भागों का वर्णन है। विद्यार्थियों को अभ्यास कराया जाता है।"
+        curriculum, _, chapters = validate_extraction(extraction_bundle("hi", hindi_text))
+        self.assertEqual("hi", curriculum["language"])
+        self.assertEqual("ch1", chapters[0]["code"])
+
+    def test_english_only_source_cannot_be_labelled_as_hindi(self):
+        english_text = "This mathematics textbook explains fractions and equal parts with examples for students."
+        with self.assertRaisesRegex(ValueError, "source-language check failed"):
+            validate_extraction(extraction_bundle("hi", english_text))
+
+    def test_placeholder_source_edition_is_rejected_even_when_phrase_is_not_exact_match(self):
+        text = "This mathematics textbook explains fractions and equal parts with examples for students."
+        bundle = extraction_bundle("en", text, "Current official catalogue; retain printed reprint year from the source PDF")
+        with self.assertRaisesRegex(ValueError, "actual printed textbook edition"):
+            validate_extraction(bundle)
+
+    def test_model_cannot_return_english_draft_for_hindi_medium(self):
+        with self.assertRaisesRegex(ValueError, "Model output language check failed"):
+            validate_model_output(lesson_result(question("MATCH")), ["MATCH"], self.chunk, "hi")
+
+    def test_model_cannot_return_hindi_draft_for_english_medium(self):
+        with self.assertRaisesRegex(ValueError, "Model output language check failed"):
+            validate_model_output(hindi_lesson_result(), ["MATCH"], self.chunk, "en")
+
+    def test_hindi_model_output_passes_the_language_gate(self):
+        result = validate_model_output(hindi_lesson_result(), ["MATCH"], self.chunk, "hi")
+        self.assertEqual("MATCH", result["questions"][0]["question_type"])
+
 
 
 if __name__ == "__main__":

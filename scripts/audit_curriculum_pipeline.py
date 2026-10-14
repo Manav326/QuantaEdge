@@ -5,6 +5,15 @@ import argparse,csv,hashlib,json,os,re
 from pathlib import Path,PurePosixPath
 from urllib.error import HTTPError,URLError
 from urllib.request import Request,urlopen
+from urllib.parse import urlparse
+try:
+ from scripts.textbook_registry import detect_printed_edition
+except ModuleNotFoundError:
+ from textbook_registry import detect_printed_edition
+try:
+ from scripts.content_pipeline_validation import is_placeholder_edition, language_script_problem, normalize_medium
+except ModuleNotFoundError:
+ from content_pipeline_validation import is_placeholder_edition, language_script_problem, normalize_medium
 TYPES={"MCQ","TRUE_FALSE","INPUT","MATCH","ORDER","ASSERTION_REASON","CASE_BASED","SHORT_ANSWER","LONG_ANSWER","NUMERICAL","DIAGRAM","MAP","SOURCE_BASED"}
 AUTO={"MCQ","TRUE_FALSE","INPUT","NUMERICAL"}
 LANG={"hi":"hindi","hindi":"hindi","en":"english","english":"english"}
@@ -32,18 +41,60 @@ def load_targets(path):
    rows.append(x)
  return rows,issues
 
-def audit_book(root,e,page_check=True):
+def parse_class_number(value):
+ if isinstance(value,int) and not isinstance(value,bool):return str(value) if value in {6,7,8} else None
+ text=str(value or "").strip().casefold()
+ if text in {"vi","class vi"}:return "6"
+ if text in {"vii","class vii"}:return "7"
+ if text in {"viii","class viii"}:return "8"
+ m=re.fullmatch(r"(?:class\s*)?([678])",text)
+ return m.group(1) if m else None
+
+def entry_identity_issues(e,expected_class,expected_language):
+ bad=[]
+ if not isinstance(e,dict):return [issue("BLOCKER","registry","ENTRY_INVALID","Book index entry must be object.")]
+ bid=str(e.get("book_id") or e.get("id") or "unknown")
+ medium=normalize_medium(e.get("medium")) or normalize_medium(e.get("language"))
+ if medium is None:
+  bad.append(issue("BLOCKER","registry","BOOK_MEDIUM_METADATA_MISSING","Book entry does not declare an unambiguous Hindi or English medium.",book_id=bid,medium=e.get("medium"),language=e.get("language")))
+ elif expected_language and medium!=expected_language:
+  bad.append(issue("BLOCKER","registry","BOOK_MEDIUM_MISMATCH","Book metadata medium does not match the isolated GHCR image medium.",book_id=bid,expected=expected_language,actual=medium))
+ declared_registry_class=parse_class_number(e.get("registry_class"))
+ class_values=set()
+ for key in ("classes","class","class_no","class_code"):
+  raw=e.get(key)
+  values=raw if isinstance(raw,list) else [raw]
+  class_values.update(filter(None,(parse_class_number(v) for v in values)))
+ if declared_registry_class is not None:
+  class_values.add(declared_registry_class)
+ if not class_values:
+  bad.append(issue("BLOCKER","registry","BOOK_CLASS_METADATA_MISSING","Book entry does not declare a verifiable class scope.",book_id=bid))
+ elif expected_class and str(expected_class) not in class_values:
+  bad.append(issue("BLOCKER","registry","BOOK_CLASS_SCOPE_MISMATCH","Book metadata does not include the class of the isolated GHCR image.",book_id=bid,expected=str(expected_class),declared=sorted(class_values)))
+ return bad
+
+def official_https_source(value):
+ try:
+  parsed=urlparse(str(value or "").strip())
+  host=(parsed.hostname or "").casefold().rstrip(".")
+  allowed={"ncert.nic.in","ncert.ncert.org.in","scert.bihar.gov.in","bstbpc.gov.in"}
+  return parsed.scheme=="https" and parsed.username is None and parsed.password is None and any(host==domain or host.endswith("."+domain) for domain in allowed)
+ except ValueError:
+  return False
+
+def audit_book(root,e,page_check=True,expected_class=None,expected_language=None):
  bad=[]
  if not isinstance(e,dict):return None,[issue("BLOCKER","registry","ENTRY_INVALID","Book index entry must be object.")]
  bid=str(e.get("book_id") or e.get("id") or "unknown");cov=e.get("content_availability");cov=cov if isinstance(cov,dict) else {}
+ bad.extend(entry_identity_issues(e,expected_class,expected_language))
  file=str(e.get("file") or "").strip()
  if not file:
   status=str(cov.get("status") or "").lower()
-  return {"book_id":bid,"title":str(e.get("title") or ""),"subject":str(e.get("subject") or ""),"status":status or "missing","valid_pdf":False},[issue("BLOCKER" if status!="unavailable" else "WARNING","registry","BOOK_FILE_MISSING","No whole-book PDF indexed.",book_id=bid,missing_chapters=cov.get("missing_chapters",[]))]
+  return {"book_id":bid,"title":str(e.get("title") or ""),"subject":str(e.get("subject") or ""),"status":status or "missing","valid_pdf":False,"audit_status":"blocked"},bad+[issue("BLOCKER" if status!="unavailable" else "WARNING","registry","BOOK_FILE_MISSING","No whole-book PDF indexed.",book_id=bid,missing_chapters=cov.get("missing_chapters",[]))]
  rel=PurePosixPath(file.replace("\\","/"))
- if rel.is_absolute() or any(p in {"",".",".."} for p in rel.parts):return None,[issue("BLOCKER","registry","UNSAFE_PATH","Unsafe manifest file path.",book_id=bid,file=file)]
+ if rel.is_absolute() or any(p in {"",".",".."} for p in rel.parts):return None,bad+[issue("BLOCKER","registry","UNSAFE_PATH","Unsafe manifest file path.",book_id=bid,file=file)]
  path=root.joinpath(*rel.parts)
- if not path.is_file():return None,[issue("BLOCKER","registry","PDF_NOT_FOUND","Indexed PDF absent from pulled image.",book_id=bid,file=file)]
+ if not path.is_file():return None,bad+[issue("BLOCKER","registry","PDF_NOT_FOUND","Indexed PDF absent from pulled image.",book_id=bid,file=file)]
  size=path.stat().st_size
  if isinstance(e.get("bytes"),int) and e["bytes"]!=size:bad.append(issue("BLOCKER","registry","SIZE_MISMATCH","File size differs from manifest.",book_id=bid))
  with path.open("rb") as f:sig=f.read(5)==b"%PDF-"
@@ -51,26 +102,44 @@ def audit_book(root,e,page_check=True):
  actual=sha(path);expected=str(e.get("sha256") or "").lower()
  if not re.fullmatch(r"[0-9a-f]{64}",expected):bad.append(issue("BLOCKER","registry","SHA_MISSING","Manifest lacks SHA-256.",book_id=bid))
  elif actual!=expected:bad.append(issue("BLOCKER","registry","SHA_MISMATCH","PDF differs from manifest checksum.",book_id=bid,expected=expected,actual=actual))
- pages=None
+ pages=None;sampled_text=""
  if page_check:
   try:
    import pymupdf
    with pymupdf.open(path) as pdf:
     pages=len(pdf)
     if pdf.needs_pass or pages<1:bad.append(issue("BLOCKER","registry","PDF_UNREADABLE","PDF is encrypted or empty.",book_id=bid))
-  except ImportError:bad.append(issue("WARNING","registry","PYMUPDF_MISSING","Install PyMuPDF to check actual page count.",book_id=bid))
+    else:
+     # Include opening pages for edition imprints and evenly spaced pages for language sampling.
+     count=min(10,pages)
+     indices=sorted(set(range(min(15,pages))) | {round(i*(pages-1)/max(1,count-1)) for i in range(count)})
+     sampled_text="\n".join((pdf[i].get_text("text") or "") for i in indices)
+  except ImportError:bad.append(issue("BLOCKER","registry","PYMUPDF_MISSING","Install PyMuPDF to verify page count and source medium.",book_id=bid))
   except Exception as ex:bad.append(issue("BLOCKER","registry","PDF_UNREADABLE","Cannot parse PDF.",book_id=bid,error=str(ex)))
+ if expected_language and pages is not None and pages>0:
+  lang_problem=language_script_problem(sampled_text,expected_language)
+  if lang_problem:bad.append(issue("BLOCKER","registry","PDF_MEDIUM_TEXT_MISMATCH","The actual PDF text does not sufficiently support the declared isolated medium.",book_id=bid,expected_language=expected_language,detail=lang_problem))
  if isinstance(e.get("page_count"),int) and pages is not None and pages!=e["page_count"]:bad.append(issue("BLOCKER","registry","PAGE_COUNT_MISMATCH","Actual page count differs from manifest.",book_id=bid,expected=e["page_count"],actual=pages))
- edition=str(e.get("edition") or "").strip().lower()
- if edition in {"","unknown","unverified","current","n/a","not specified"}:bad.append(issue("BLOCKER","registry","EDITION_UNVERIFIED","Actual source edition/session is not recorded.",book_id=bid,edition=edition))
+ edition=str(e.get("edition") or "").strip()
+ if is_placeholder_edition(edition):bad.append(issue("BLOCKER","registry","EDITION_UNVERIFIED","Actual printed edition/reprint year is missing or still marked for verification.",book_id=bid,edition=edition))
+ if page_check and pages is not None and pages > 0:
+  printed_imprint=detect_printed_edition(sampled_text)
+  if not printed_imprint:
+   bad.append(issue("BLOCKER","registry","EDITION_PRINTED_IMPRINT_NOT_FOUND","No dated edition/reprint imprint was found in the first pages and sampled actual PDF text.",book_id=bid))
+  else:
+   printed_years=re.findall(r"\b(?:19|20)\d{2}\b",printed_imprint)
+   if printed_years and not any(year in edition for year in printed_years):
+    bad.append(issue("BLOCKER","registry","EDITION_IMPRINT_MISMATCH","Manifest edition does not contain the year printed on the PDF imprint.",book_id=bid,edition=edition,printed_imprint=printed_imprint))
  source_url=str(e.get("source_url") or e.get("catalog_entry_url") or "")
- if not source_url.startswith("https://"):bad.append(issue("BLOCKER","registry","SOURCE_URL_MISSING","Official HTTPS source URL is missing.",book_id=bid))
+ if not official_https_source(source_url):bad.append(issue("BLOCKER","registry","SOURCE_URL_MISSING","Official NCERT/SCERT HTTPS source URL is missing or untrusted.",book_id=bid,source_url=source_url))
  declared=str(cov.get("status") or "").lower();method=str(e.get("download_method") or "").lower()
  if declared in {"partial","unavailable"} or "partial" in method:
   status="partial";bad.append(issue("BLOCKER","registry","PARTIAL_BOOK_NOT_COMPLETE","Partial asset cannot satisfy whole-book coverage.",book_id=bid,missing_chapters=cov.get("missing_chapters",[])))
  elif declared=="complete":status="complete"
- else:status="provisional";bad.append(issue("WARNING","registry","COMPLETENESS_UNCONFIRMED","Manifest does not attest whole-book completeness.",book_id=bid))
- return {"book_id":bid,"title":str(e.get("title") or ""),"subject":str(e.get("subject") or ""),"edition":str(e.get("edition") or ""),"source_url":str(e.get("source_url") or e.get("catalog_entry_url") or ""),"file":file,"bytes":size,"sha256_matches":actual==expected,"manifest_page_count":e.get("page_count"),"actual_page_count":pages,"status":status,"valid_pdf":sig},bad
+ else:status="provisional";bad.append(issue("BLOCKER","registry","COMPLETENESS_UNCONFIRMED","Manifest does not attest whole-book completeness.",book_id=bid))
+ record={"book_id":bid,"title":str(e.get("title") or ""),"subject":str(e.get("subject") or ""),"edition":edition,"source_url":source_url,"file":file,"bytes":size,"sha256_matches":actual==expected,"manifest_page_count":e.get("page_count"),"actual_page_count":pages,"status":status,"valid_pdf":sig}
+ record["audit_status"]="blocked" if any(x.get("severity")=="BLOCKER" for x in bad) else "ok"
+ return record,bad
 
 def audit_registry(root,grades,languages):
  out=[];bad=[];tracks={}
@@ -82,16 +151,24 @@ def audit_registry(root,grades,languages):
    except (OSError,json.JSONDecodeError) as ex:bad.append(issue("BLOCKER","registry","REGISTRY_INDEX_INVALID","Cannot parse index.json.",path=str(ip),error=str(ex)));out.append(image);continue
    if not isinstance(index,dict) or not isinstance(index.get("books"),list):bad.append(issue("BLOCKER","registry","REGISTRY_SCHEMA_INVALID","index.json must contain books array.",path=str(ip)));out.append(image);continue
    image["registry"]=index.get("registry");image["book_entries"]=len(index["books"])
+   seen_ids=set()
    for entry in index["books"]:
-    record,found=audit_book(folder,entry);bad.extend(found)
+    if isinstance(entry,dict):
+     book_id=str(entry.get("book_id") or entry.get("id") or "")
+     if book_id and book_id in seen_ids:
+      bad.append(issue("BLOCKER","registry","BOOK_ID_DUPLICATE","Registry contains duplicate book identifiers.",book_id=book_id,class_code=grade,language=lang))
+     seen_ids.add(book_id)
+    record,found=audit_book(folder,entry,expected_class=grade,expected_language=lang);bad.extend(found)
     if record is None:continue
     image["books"].append(record);image[record["status"]]=image.get(record["status"],0)+1
     subject_text=str(record.get("subject") or "").lower()
     subject="maths" if any(t in subject_text for t in ("math","ganit","गणित")) else ("science" if any(t in subject_text for t in ("science","vigyan","विज्ञान")) else None)
-    if subject:
-     key=f"{grade}:{subject}:{lang}";tr=tracks.setdefault(key,{"class_code":grade,"subject_code":subject,"language":lang,"complete_book_ids":[],"partial_book_ids":[],"provisional_book_ids":[]})
-     col={"complete":"complete_book_ids","partial":"partial_book_ids","provisional":"provisional_book_ids"}.get(record["status"])
-     if col:tr[col].append(record["book_id"])
+    if not subject:
+     bad.append(issue("BLOCKER","registry","BOOK_SUBJECT_UNRECOGNIZED","Book subject cannot be mapped to the supported Maths/Science tracks.",book_id=record["book_id"],subject=record.get("subject"),class_code=grade,language=lang))
+     continue
+    key=f"{grade}:{subject}:{lang}";tr=tracks.setdefault(key,{"class_code":grade,"subject_code":subject,"language":lang,"complete_book_ids":[],"partial_book_ids":[],"provisional_book_ids":[]})
+    col={"complete":"complete_book_ids","partial":"partial_book_ids","provisional":"provisional_book_ids"}.get(record["status"])
+    if col and record.get("audit_status")=="ok":tr[col].append(record["book_id"])
    out.append(image)
  for grade in grades:
   for lang in languages:
@@ -106,10 +183,10 @@ def audit_extraction(b,path):
  c=b.get("curriculum") if isinstance(b.get("curriculum"),dict) else {};grade=str(c.get("class_code",""));sub=str(c.get("subject_code","")).lower();lang=LANG.get(str(c.get("language","")).lower())
  if grade not in {"6","7","8"} or sub not in {"maths","science"} or not lang:bad.append(issue("BLOCKER","extraction","TRACK_INVALID","Class/subject/language invalid.",path=str(path),curriculum=c))
  src=b.get("source") if isinstance(b.get("source"),dict) else {};n=src.get("pdf_page_count");hs=str(src.get("pdf_sha256") or "").lower()
- edition=str(src.get("edition") or "").strip().lower()
- if edition in {"","unknown","unverified","current","n/a","not specified"}:bad.append(issue("BLOCKER","extraction","EDITION_UNVERIFIED","Actual source edition/session is missing.",path=str(path)))
+ edition=str(src.get("edition") or "").strip()
+ if is_placeholder_edition(edition):bad.append(issue("BLOCKER","extraction","EDITION_UNVERIFIED","Actual printed source edition/reprint year is missing or still marked for verification.",path=str(path),edition=edition))
  source_url=str(src.get("url") or "")
- if not source_url.startswith("https://"):bad.append(issue("BLOCKER","extraction","SOURCE_URL_MISSING","Official source URL is missing.",path=str(path)))
+ if not official_https_source(source_url):bad.append(issue("BLOCKER","extraction","SOURCE_URL_MISSING","Official NCERT/SCERT HTTPS source URL is missing or untrusted.",path=str(path),source_url=source_url))
  if not isinstance(n,int) or n<1:bad.append(issue("BLOCKER","extraction","PAGE_COUNT_INVALID","Source PDF page count invalid.",path=str(path)));n=0
  if not re.fullmatch(r"[0-9a-f]{64}",hs):bad.append(issue("BLOCKER","extraction","SOURCE_HASH_INVALID","Source SHA-256 invalid.",path=str(path)))
  chapters=b.get("chapter_map")
@@ -136,6 +213,17 @@ def audit_extraction(b,path):
  if missing:bad.append(issue("BLOCKER","extraction","PAGE_COVERAGE_GAP","Extraction missing PDF pages.",path=str(path),count=len(missing),pages=missing[:50]))
  unmap=[num for num,p in seen.items() if p.get("chapter_code") is None]
  if unmap:bad.append(issue("WARNING","extraction","PAGES_UNMAPPED","Review unmapped pages as front/back matter or omissions.",path=str(path),count=len(unmap),pages=unmap[:50]))
+ mapped_text="\n".join(str(page.get("text") or "") for _,page in sorted(seen.items()) if page.get("chapter_code") is not None)
+ language_problem=language_script_problem(mapped_text,lang)
+ if language_problem:bad.append(issue("BLOCKER","extraction","EXTRACTION_LANGUAGE_MISMATCH","Extracted page text does not sufficiently support the declared Hindi/English medium.",path=str(path),language=lang,detail=language_problem))
+ first_pages_text="\n".join(str(seen[num].get("text") or "") for num in sorted(seen)[:15])
+ printed_imprint=detect_printed_edition(first_pages_text)
+ if not printed_imprint:
+  bad.append(issue("BLOCKER","extraction","EDITION_PRINTED_IMPRINT_NOT_FOUND","No dated edition/reprint imprint was found in the first 15 extracted source pages.",path=str(path)))
+ else:
+  printed_years=re.findall(r"\b(?:19|20)\d{2}\b",printed_imprint)
+  if printed_years and not any(year in edition for year in printed_years):
+   bad.append(issue("BLOCKER","extraction","EDITION_IMPRINT_MISMATCH","Declared extraction edition does not contain the year printed on the first source pages.",path=str(path),edition=edition,printed_imprint=printed_imprint))
  if (b.get("extraction") or {}).get("requires_human_review") is not True:bad.append(issue("BLOCKER","extraction","HUMAN_REVIEW_MISSING","Extraction lacks human review flag.",path=str(path)))
  return {"path":str(path),"class_code":grade,"subject_code":sub,"language":lang,"pdf_sha256":hs,"pdf_page_count":n,"chapter_codes":sorted(codes),"mapped_pages":sum(p.get("chapter_code") is not None for p in seen.values()),"unmapped_pages":len(unmap),"empty_text_pages":sum(not str(p.get("text") or "").strip() for p in seen.values())},bad
 

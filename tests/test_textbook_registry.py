@@ -13,6 +13,7 @@ from scripts.textbook_registry import (
     MAX_ZIP_BYTES,
     _extract_oci_cache_rootfs,
     download_ncert_merged,
+    _is_complete_whole_book_entry,
     host_allowed,
     parse_ncert_catalog,
     parse_scert_classes,
@@ -98,8 +99,8 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertIn("विज्ञान", item["subject"])
         self.assertEqual("https://scert.bihar.gov.in/public/uploads/eresources/vigyan-bhag-1.pdf", item["pdf_url"])
 
-    def test_scert_detail_parser_splits_bilingual_entry_into_two_class_medium_records(self):
-        from scripts.textbook_registry import parse_scert_detail
+    def test_scert_single_bilingual_pdf_is_blocked_for_both_isolated_medium_registries(self):
+        from scripts.textbook_registry import _download_full_book, parse_scert_detail
 
         html_page = """
         <html><body>
@@ -113,7 +114,63 @@ class TextbookRegistryTests(unittest.TestCase):
         """
         items = parse_scert_detail("https://scert.bihar.gov.in/eresources/math-1700000000", html_page)
         self.assertEqual(["english", "hindi"], sorted(item["medium"] for item in items))
-        self.assertTrue(all(item["classes"] == [6, 7, 8] for item in items))
+        for item in items:
+            self.assertEqual("unavailable", item["content_availability"]["status"])
+            self.assertIn("Separate language-specific whole-book PDFs", item["content_availability"]["note"])
+            with tempfile.TemporaryDirectory() as temp:
+                with self.assertRaisesRegex(ValueError, "Separate language-specific whole-book PDFs"):
+                    _download_full_book(item, Path(temp) / "must-not-download.pdf")
+                self.assertFalse((Path(temp) / "must-not-download.pdf").exists())
+
+    def test_scert_pdf_text_must_match_declared_medium(self):
+        import fitz
+        from scripts.textbook_registry import download_scert_pdf
+
+        document = fitz.open()
+        page = document.new_page()
+        page.insert_text((72, 72), "This is a sufficiently long English textbook passage explaining science concepts and examples for students.")
+        payload = document.tobytes()
+        document.close()
+        book = {
+            "title": "Example Science", "subject": "Science", "medium": "hindi",
+            "pdf_url": "https://scert.bihar.gov.in/public/uploads/example.pdf",
+        }
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "wrong-medium.pdf"
+            def fake_get_url(url, target=None, limit=None, attempts=1):
+                target.write_bytes(payload)
+                return target
+            with patch("scripts.textbook_registry.get_url", side_effect=fake_get_url):
+                with self.assertRaisesRegex(ValueError, "failed its declared-medium text check"):
+                    download_scert_pdf(book, destination)
+            self.assertFalse(destination.exists())
+            self.assertEqual("unavailable", book["content_availability"]["status"])
+
+    def test_scert_pdf_without_printed_edition_is_rejected(self):
+        import fitz
+        from scripts.textbook_registry import download_scert_pdf
+
+        document = fitz.open()
+        page = document.new_page()
+        page.insert_text((72, 72), "This is a complete English science lesson with examples, definitions, practice exercises, and explanations for students.")
+        payload = document.tobytes()
+        document.close()
+        book = {
+            "title": "Example Science", "subject": "Science", "medium": "english",
+            "pdf_url": "https://scert.bihar.gov.in/public/uploads/example.pdf",
+        }
+        with tempfile.TemporaryDirectory() as temp:
+            destination = Path(temp) / "no-edition.pdf"
+
+            def fake_get_url(url, target=None, limit=None, attempts=1):
+                target.write_bytes(payload)
+                return target
+
+            with patch("scripts.textbook_registry.get_url", side_effect=fake_get_url):
+                with self.assertRaisesRegex(ValueError, "dated printed edition/reprint imprint"):
+                    download_scert_pdf(book, destination)
+            self.assertFalse(destination.exists())
+            self.assertEqual("unavailable", book["content_availability"]["status"])
 
     def test_scert_class_detection_handles_roman_and_numeric(self):
         self.assertEqual([6, 7, 8], parse_scert_classes("Class : CLASS VI, ,CLASS VII, ,CLASS VIII,"))
@@ -223,6 +280,59 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertIsNone(MAX_BOOK_BYTES)
         self.assertIsNone(MAX_ZIP_BYTES)
 
+    def test_detect_printed_edition_uses_only_a_dated_imprint(self):
+        from scripts.textbook_registry import detect_printed_edition
+        self.assertIn("Reprint 2025-26", detect_printed_edition(
+            "NCERT\nReprint 2025-26, Phalguna 1947\nMathematics textbook"
+        ))
+        self.assertIsNone(detect_printed_edition(
+            "Current official catalogue; retain printed reprint year from the source PDF"
+        ))
+
+    def test_ncert_pdf_text_must_match_declared_medium(self):
+        import io
+        import zipfile
+        import fitz
+        from scripts.textbook_registry import download_ncert_merged
+
+        def make_pdf(label):
+            document = fitz.open()
+            page = document.new_page()
+            page.insert_text((72, 72), label)
+            payload = document.tobytes()
+            document.close()
+            return payload
+
+        bundle = io.BytesIO()
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("fegp101.pdf", make_pdf(
+                "Chapter one is an English mathematics passage with enough readable words to check medium."
+            ))
+            archive.writestr("fegp102.pdf", make_pdf(
+                "Chapter two is an English mathematics passage with examples and worked exercises for students."
+            ))
+        requested = []
+
+        def fake_get_url(url, destination=None, limit=None, attempts=4):
+            requested.append(url)
+            destination.write_bytes(bundle.getvalue())
+            return destination
+
+        book = {
+            "book_id": "ncert-c6-hindi-fegp1", "code": "fegp1", "chapter_count": 2,
+            "title": "Ganita Prakash", "medium": "hindi", "source_type": "NCERT",
+            "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+        }
+        with tempfile.TemporaryDirectory() as temp, patch(
+            "scripts.textbook_registry.get_url", side_effect=fake_get_url
+        ):
+            destination = Path(temp) / "wrong-medium.pdf"
+            with self.assertRaisesRegex(RuntimeError, "complete official NCERT whole-book bundle"):
+                download_ncert_merged(book, destination)
+            self.assertFalse(destination.exists())
+        self.assertTrue(all(url.endswith(".zip") for url in requested))
+        self.assertEqual("unavailable", book["content_availability"]["status"])
+
     def test_complete_ncert_bundle_merges_all_chapters_without_individual_downloads(self):
         import io
         import zipfile
@@ -239,9 +349,9 @@ class TextbookRegistryTests(unittest.TestCase):
 
         bundle = io.BytesIO()
         with zipfile.ZipFile(bundle, "w") as archive:
-            archive.writestr("fegp1ps.pdf", make_pdf("book preliminaries"))
-            archive.writestr("fegp101.pdf", make_pdf("chapter 1"))
-            archive.writestr("fegp102.pdf", make_pdf("chapter 2"))
+            archive.writestr("fegp1ps.pdf", make_pdf("Book preliminaries. Printed edition 2024-25. NCERT mathematics textbook in English."))
+            archive.writestr("fegp101.pdf", make_pdf("Chapter 1 explains important mathematics concepts in English with examples for learners."))
+            archive.writestr("fegp102.pdf", make_pdf("Chapter 2 continues the English mathematics lesson with guided practice and examples."))
         requested = []
 
         def fake_get_url(url, destination=None, limit=None, attempts=4):
@@ -262,6 +372,7 @@ class TextbookRegistryTests(unittest.TestCase):
             self.assertTrue(destination.is_file())
             self.assertTrue(digest)
             self.assertEqual("complete", book["content_availability"]["status"])
+            self.assertIn("Printed edition 2024-25", book["edition"])
             self.assertEqual([1, 2], book["content_availability"]["available_chapters"])
             self.assertEqual([], book["content_availability"]["missing_chapters"])
             self.assertIn("all expected chapters validated", method.lower())
@@ -288,9 +399,10 @@ class TextbookRegistryTests(unittest.TestCase):
 
         bundle = io.BytesIO()
         with zipfile.ZipFile(bundle, "w") as archive:
-            archive.writestr("fegp101.pdf", make_pdf("section one"))
-            archive.writestr("fegp111.pdf", make_pdf("section two"))
-            archive.writestr("fegp131.pdf", make_pdf("section three"))
+            archive.writestr("fegp1ps.pdf", make_pdf("NCERT mathematics textbook in English. Printed edition 2024-25."))
+            archive.writestr("fegp101.pdf", make_pdf("Chapter one is an English mathematics section with a sufficiently long text passage for language verification."))
+            archive.writestr("fegp111.pdf", make_pdf("Chapter two is an English mathematics section with detailed explanation and worked examples."))
+            archive.writestr("fegp131.pdf", make_pdf("Chapter three is an English mathematics section with review activities for students."))
         requested = []
 
         def fake_get_url(url, destination=None, limit=None, attempts=4):
@@ -314,11 +426,47 @@ class TextbookRegistryTests(unittest.TestCase):
             self.assertEqual([1, 2, 3], book["content_availability"]["available_chapters"])
             self.assertEqual(["Chapter 1", "Chapter 2", "Chapter 3"], [row[1] for row in toc])
             with fitz.open(destination) as merged:
-                self.assertEqual(3, len(merged))
+                self.assertEqual(4, len(merged))
         self.assertEqual(1, len(requested))
         self.assertTrue(requested[0].endswith("fegp1dd.zip"))
 
-    def test_incomplete_ncert_bundle_recovers_available_chapters_and_marks_gaps(self):
+    def test_ncert_whole_book_without_printed_edition_is_rejected(self):
+        import io
+        import zipfile
+        import fitz
+        from scripts.textbook_registry import download_ncert_merged
+
+        document = fitz.open()
+        page = document.new_page()
+        page.insert_text((72, 72), "This complete English mathematics chapter explains examples, methods, and practice for students.")
+        payload = document.tobytes()
+        document.close()
+        bundle = io.BytesIO()
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("fegp101.pdf", payload)
+        requested = []
+
+        def fake_get_url(url, destination=None, limit=None, attempts=1):
+            requested.append(url)
+            destination.write_bytes(bundle.getvalue())
+            return destination
+
+        book = {
+            "book_id": "ncert-c6-english-fegp1", "code": "fegp1", "chapter_count": 1,
+            "title": "Example textbook", "medium": "english",
+            "bundle_url": "https://ncert.nic.in/textbook/pdf/fegp1dd.zip",
+        }
+        with tempfile.TemporaryDirectory() as temp, patch(
+            "scripts.textbook_registry.get_url", side_effect=fake_get_url
+        ):
+            destination = Path(temp) / "unverified-edition.pdf"
+            with self.assertRaisesRegex(RuntimeError, "complete official NCERT whole-book bundle"):
+                download_ncert_merged(book, destination)
+            self.assertFalse(destination.exists())
+        self.assertTrue(all(url.endswith(".zip") for url in requested))
+        self.assertEqual("unavailable", book["content_availability"]["status"])
+
+    def test_incomplete_ncert_bundle_fails_closed_without_individual_chapter_downloads(self):
         import io
         import zipfile
         import fitz
@@ -334,7 +482,7 @@ class TextbookRegistryTests(unittest.TestCase):
 
         bundle = io.BytesIO()
         with zipfile.ZipFile(bundle, "w") as archive:
-            archive.writestr("fegp101.pdf", make_pdf("Chapter 1 in whole-book bundle"))
+            archive.writestr("fegp101.pdf", make_pdf("Chapter 1 in an incomplete bundle"))
         requested = []
 
         def fake_get_url(url, destination=None, limit=None, attempts=4):
@@ -342,10 +490,7 @@ class TextbookRegistryTests(unittest.TestCase):
             if url.endswith("fegp1dd.zip"):
                 destination.write_bytes(bundle.getvalue())
                 return destination
-            if url.endswith("fegp102.pdf"):
-                destination.write_bytes(make_pdf("Chapter 2 standalone PDF"))
-                return destination
-            raise FileNotFoundError(url)
+            raise AssertionError("The downloader must never request individual chapter PDFs: " + url)
 
         book = {
             "book_id": "ncert-c6-english-fegp1", "code": "fegp1", "chapter_count": 3,
@@ -356,18 +501,12 @@ class TextbookRegistryTests(unittest.TestCase):
             "scripts.textbook_registry.get_url", side_effect=fake_get_url
         ):
             destination = Path(temp) / "partial-book.pdf"
-            digest, pages, toc, method = download_ncert_merged(book, destination)
-            self.assertTrue(destination.is_file())
-            self.assertTrue(digest)
-            self.assertEqual("partial", book["content_availability"]["status"])
-            self.assertEqual([1, 2], book["content_availability"]["available_chapters"])
-            self.assertEqual([3], book["content_availability"]["missing_chapters"])
-            self.assertIn("Chapter 3", book["content_availability"]["missing_chapter_labels"])
-            self.assertIn("PARTIAL", method)
-            self.assertTrue(any(url.endswith("fegp102.pdf") for url in requested))
-            with fitz.open(destination) as merged:
-                self.assertEqual(2, len(merged))
-            self.assertEqual(["Chapter 1", "Chapter 2"], [row[1] for row in toc])
+            with self.assertRaisesRegex(RuntimeError, "complete official NCERT whole-book bundle"):
+                download_ncert_merged(book, destination)
+            self.assertFalse(destination.exists(), "No partial/synthetic book may be retained.")
+        self.assertTrue(all(url.endswith(".zip") for url in requested))
+        self.assertEqual("unavailable", book["content_availability"]["status"])
+        self.assertEqual([1, 2, 3], book["content_availability"]["missing_chapters"])
 
     def test_ncert_book_with_no_retrievable_chapters_is_described_for_retry(self):
         from scripts.textbook_registry import download_ncert_merged
@@ -379,12 +518,11 @@ class TextbookRegistryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp, patch(
             "scripts.textbook_registry.get_url", side_effect=FileNotFoundError("source unavailable")
         ):
-            with self.assertRaisesRegex(RuntimeError, "No usable NCERT chapter PDFs"):
+            with self.assertRaisesRegex(RuntimeError, "complete official NCERT whole-book bundle"):
                 download_ncert_merged(book, Path(temp) / "missing.pdf")
         self.assertEqual("unavailable", book["content_availability"]["status"])
         self.assertEqual([1, 2], book["content_availability"]["missing_chapters"])
 
-    @staticmethod
     @staticmethod
     def make_registry_book(book_id, medium="hindi"):
         return {
@@ -397,7 +535,10 @@ class TextbookRegistryTests(unittest.TestCase):
             "language": "Hindi" if medium == "hindi" else "English",
             "title": "Textbook " + book_id,
             "subject": "Mathematics",
-            "edition": "Official listing",
+            "edition": "Printed edition 2025-26",
+            "content_availability": {
+                "status": "complete", "expected_chapters": [], "available_chapters": [], "missing_chapters": [],
+            },
             "source_url": "https://scert.bihar.gov.in/eresources/sample",
             "catalog_entry_url": "https://scert.bihar.gov.in/eresources/sample",
             "pdf_url": "https://scert.bihar.gov.in/public/uploads/eresources/sample.pdf",
@@ -406,7 +547,29 @@ class TextbookRegistryTests(unittest.TestCase):
             "chapter_count": None,
         }
 
-    def test_legacy_partial_book_is_retried_and_published_with_gap_metadata(self):
+    def test_cached_book_requires_complete_status_verified_edition_official_source_and_medium(self):
+        valid = self.make_registry_book("valid-cached-book")
+        self.assertTrue(_is_complete_whole_book_entry(valid))
+        invalid_cases = []
+        bad_edition = dict(valid, edition="UNVERIFIED: record the printed edition")
+        invalid_cases.append(bad_edition)
+        bad_source = dict(valid, source_url="https://books.example.invalid/textbook.pdf")
+        invalid_cases.append(bad_source)
+        bad_medium = dict(valid, medium="both", language="Hindi English")
+        invalid_cases.append(bad_medium)
+        missing_coverage = dict(valid)
+        missing_coverage.pop("content_availability")
+        invalid_cases.append(missing_coverage)
+        partial = dict(valid, content_availability={
+            "status": "complete", "expected_chapters": [1, 2],
+            "available_chapters": [1], "missing_chapters": [2],
+        })
+        invalid_cases.append(partial)
+        for entry in invalid_cases:
+            with self.subTest(entry=entry):
+                self.assertFalse(_is_complete_whole_book_entry(entry))
+
+    def test_legacy_partial_book_is_removed_and_never_republished(self):
         book = self.make_registry_book("partial-existing")
         old_pdf = b"%PDF-1.4\nold incomplete book\n"
         old_coverage = {
@@ -425,9 +588,9 @@ class TextbookRegistryTests(unittest.TestCase):
         }
         attempts = []
 
-        def recover_partial_book(item, destination):
+        def pretend_partial_download(item, destination):
             attempts.append(item["book_id"])
-            payload = b"%PDF-1.4\nrecovered partial book\n"
+            payload = b"%PDF-1.4\\nrecovered but still partial\\n"
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(payload)
             item["content_availability"] = {
@@ -442,8 +605,8 @@ class TextbookRegistryTests(unittest.TestCase):
         def fake_push(_image, _exists, _books, _files, index, _context, **kwargs):
             captured_indexes.append((index, kwargs))
 
-        with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \
-             patch("scripts.textbook_registry._download_full_book", side_effect=recover_partial_book), \
+        with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \\
+             patch("scripts.textbook_registry._download_full_book", side_effect=pretend_partial_download), \\
              patch("scripts.textbook_registry.push_batch", side_effect=fake_push):
             report = publish_language(
                 "hindi", "ghcr.io/example/quantaedge-textbooks-class-6-hindi:latest",
@@ -453,16 +616,13 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(["partial-existing"], attempts)
         self.assertEqual([], report["already_cached"])
         self.assertEqual(1, report["pending_at_start"])
-        self.assertEqual(1, report["partial_book_count"])
-        self.assertEqual("partial-existing", report["partial_books"][0]["book_id"])
-        self.assertEqual([2], report["partial_books"][0]["content_availability"]["missing_chapters"])
-        self.assertFalse(report["failed_after_retries"])
-        self.assertTrue(any(
-            any(item.get("book_id") == "partial-existing"
-                and item.get("content_availability", {}).get("status") == "partial"
-                for item in index.get("books", []))
+        self.assertEqual(0, report["partial_book_count"])
+        self.assertTrue(any(row["book_id"] == "partial-existing" for row in report["failed_after_retries"]))
+        self.assertTrue(captured_indexes, "Removing the legacy partial asset must be persisted to the image.")
+        self.assertTrue(all(
+            all(item.get("book_id") != "partial-existing" for item in index.get("books", []))
             for index, kwargs in captured_indexes
-        ))
+        ), "The partial book must never be written back to the active books list.")
 
     def test_existing_registry_is_checked_first_and_new_books_push_as_one_batch(self):
         cached = self.make_registry_book("already-cached")

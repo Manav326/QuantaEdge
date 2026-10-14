@@ -21,6 +21,20 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.content_pipeline_validation import (
+        is_placeholder_edition, language_script_problem, normalize_medium,
+    )
+except ModuleNotFoundError:
+    # Also support direct execution as: python scripts/generate_questions_from_extraction.py
+    from content_pipeline_validation import (
+        is_placeholder_edition, language_script_problem, normalize_medium,
+    )
+try:
+    from scripts.textbook_registry import detect_printed_edition
+except ModuleNotFoundError:
+    from textbook_registry import detect_printed_edition
+
 SUPPORTED_TYPES = {"MCQ", "TRUE_FALSE", "INPUT", "NUMERICAL", "MATCH", "ORDER", "ASSERTION_REASON", "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "DIAGRAM", "MAP", "SOURCE_BASED"}
 MAX_MODEL_ATTEMPTS = 5
 RETRYABLE_HTTP_STATUSES = frozenset({408, 425, 429, 500, 502, 503, 504})
@@ -28,7 +42,6 @@ MAX_MODEL_RETRY_DELAY_SECONDS = 30
 DIFFICULTIES = {"EASY", "MEDIUM", "HARD"}
 CODE_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 SHA_RE = re.compile(r"[0-9a-fA-F]{64}")
-PLACEHOLDER_EDITIONS = {"", "unknown", "unverified", "current", "n/a", "not specified"}
 
 
 def fail(message: str) -> None:
@@ -52,18 +65,30 @@ def validate_extraction(bundle: Any) -> tuple[dict[str, Any], dict[str, Any], li
         fail("Extraction bundle has no curriculum metadata.")
     class_code = str(curriculum.get("class_code", "")).strip()
     subject_code = str(curriculum.get("subject_code", "")).strip()
+    medium = normalize_medium(curriculum.get("language"))
     if class_code not in {"6", "7", "8"} or subject_code not in {"maths", "science"}:
         fail("This configured pipeline supports Bihar Board Classes 6–8 Maths/Science only.")
+    if medium is None:
+        fail("curriculum.language must explicitly identify Hindi (hi) or English (en).")
+    normalized_curriculum = dict(curriculum)
+    normalized_curriculum["language"] = "hi" if medium == "hindi" else "en"
 
     source = bundle.get("source")
     if not isinstance(source, dict):
         fail("Extraction bundle has no source metadata.")
     required_text(source.get("title"), "source.title", 300)
-    if not required_text(source.get("url"), "source.url", 2000).startswith("https://"):
-        fail("source.url must be HTTPS.")
+    source_url = required_text(source.get("url"), "source.url", 2000)
+    from urllib.parse import urlparse
+    parsed_source_url = urlparse(source_url)
+    official_hosts = {"ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in"}
+    source_host = (parsed_source_url.hostname or "").casefold().rstrip(".")
+    if parsed_source_url.scheme != "https" or not any(
+        source_host == host or source_host.endswith("." + host) for host in official_hosts
+    ):
+        fail("source.url must be an official NCERT, Bihar SCERT, or Bihar textbook-corporation HTTPS URL.")
     edition = required_text(source.get("edition"), "source.edition", 160)
-    if edition.casefold() in PLACEHOLDER_EDITIONS:
-        fail("Record the actual textbook edition/session before generating questions.")
+    if is_placeholder_edition(edition):
+        fail("Record the actual printed textbook edition/reprint year from the PDF before generating questions.")
     page_count = source.get("pdf_page_count")
     if not isinstance(page_count, int) or page_count < 1:
         fail("source.pdf_page_count must be a positive integer.")
@@ -111,12 +136,42 @@ def validate_extraction(bundle: Any) -> tuple[dict[str, Any], dict[str, Any], li
             grouped[code].append({"page_number": number, "text": page_text.strip()})
 
     work = []
+    expected_pdf_pages = set(range(1, page_count + 1))
+    if seen != expected_pdf_pages:
+        missing_pages = sorted(expected_pdf_pages - seen)
+        fail(f"Extraction is missing PDF pages {missing_pages[:30]}; rerun full-book extraction before generation.")
+    first_pages_text = "\n".join(
+        str(page.get("text") or "") for page in sorted(pages, key=lambda item: item["page_number"])
+        if page["page_number"] <= 15
+    )
+    printed_imprint = detect_printed_edition(first_pages_text)
+    if not printed_imprint:
+        fail("No dated printed edition/reprint imprint was found in the first 15 extracted source pages.")
+    printed_years = re.findall(r"\b(?:19|20)\d{2}\b", printed_imprint)
+    if printed_years and not any(year in edition for year in printed_years):
+        fail("source.edition does not match the dated printed edition/reprint imprint in the extracted source pages.")
+
+    ranges = sorted(
+        (meta["page_start"], meta["page_end"], meta["code"]) for meta in chapter_by_code.values()
+    )
+    for previous, current in zip(ranges, ranges[1:]):
+        if current[0] <= previous[1]:
+            fail(f"Chapter map ranges overlap: {previous[2]} and {current[2]}.")
     for index, meta in enumerate(chapter_by_code.values(), start=1):
         chapter_pages = sorted(grouped[meta["code"]], key=lambda page: page["page_number"])
         if not chapter_pages:
             fail(f"Chapter {meta['code']} has no extractable text; recheck the page map or rerun extraction with --ocr.")
+        expected_chapter_pages = set(range(meta["page_start"], meta["page_end"] + 1))
+        actual_chapter_pages = {page["page_number"] for page in chapter_pages}
+        if actual_chapter_pages != expected_chapter_pages:
+            missing_chapter_pages = sorted(expected_chapter_pages - actual_chapter_pages)
+            fail(f"Chapter {meta['code']} extraction has missing/misassigned pages: {missing_chapter_pages[:30]}.")
+        chapter_text = "\n".join(page["text"] for page in chapter_pages)
+        language_problem = language_script_problem(chapter_text, normalized_curriculum["language"])
+        if language_problem:
+            fail(f"Chapter {meta['code']} source-language check failed: {language_problem}")
         work.append({**meta, "sort_order": index, "pages": chapter_pages})
-    return curriculum, source, work
+    return normalized_curriculum, source, work
 
 
 def finish_chunk(pieces: list[dict[str, Any]]) -> dict[str, Any]:
@@ -306,7 +361,7 @@ def call_model(
 
 
 def validate_model_output(result: dict[str, Any], expected_types: list[str],
-                          chunk: dict[str, Any]) -> dict[str, Any]:
+                          chunk: dict[str, Any], language: Any = "en") -> dict[str, Any]:
     if result.get("insufficient_source") is True:
         fail("Model marked source excerpt insufficient. Improve extraction/OCR or manually review the chapter.")
     title = required_text(result.get("lesson_title"), "lesson_title", 240)
@@ -389,6 +444,18 @@ def validate_model_output(result: dict[str, Any], expected_types: list[str],
         })
     if sorted(q["question_type"] for q in checked) != sorted(expected_types):
         fail("Model did not follow the exact requested question-type quota; no candidate bundle was saved.")
+    medium = normalize_medium(language)
+    if medium is None:
+        fail("The target output language must be explicitly Hindi (hi) or English (en).")
+    student_text = "\n".join([
+        title, summary, explanation, worked_example, guided_practice, independent_practice, recap,
+        *[q["prompt"] + "\n" + q["explanation"] + "\n"
+          + "\n".join(str(option.get("label", "")) for option in q["options"])
+          for q in checked],
+    ])
+    language_problem = language_script_problem(student_text, medium)
+    if language_problem:
+        fail("Model output language check failed; no candidate bundle was saved. " + language_problem)
     return {"lesson_title": title, "lesson_summary": summary, "lesson_explanation": explanation,
             "worked_example": worked_example, "guided_practice": guided_practice,
             "independent_practice": independent_practice, "recap": recap, "questions": checked}
@@ -785,7 +852,7 @@ def main() -> int:
                     attempt_counter=attempts_used,
                 )
                 api_requests_used += attempts_used[0]
-                checked = validate_model_output(model_output, expected_types, chunk)
+                checked = validate_model_output(model_output, expected_types, chunk, curriculum.get("language"))
                 for question in checked["questions"]:
                     fingerprint = re.sub(r"\W+", "", question["prompt"].casefold())
                     if fingerprint in seen_prompts:

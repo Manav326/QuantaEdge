@@ -18,6 +18,19 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+try:
+    from scripts.content_pipeline_validation import (
+        is_placeholder_edition, language_script_problem, normalize_medium,
+    )
+except ModuleNotFoundError:
+    from content_pipeline_validation import (
+        is_placeholder_edition, language_script_problem, normalize_medium,
+    )
+try:
+    from scripts.textbook_registry import detect_printed_edition
+except ModuleNotFoundError:
+    from textbook_registry import detect_printed_edition
+
 QUESTION_TYPES = {
     "MCQ", "TRUE_FALSE", "INPUT", "MATCH", "ORDER", "ASSERTION_REASON",
     "CASE_BASED", "SHORT_ANSWER", "LONG_ANSWER", "NUMERICAL", "DIAGRAM", "MAP", "SOURCE_BASED",
@@ -72,19 +85,34 @@ def validate_bundle(bundle: Any) -> dict[str, Any]:
         raise ValueError("curriculum metadata is required.")
     class_code = str(curriculum.get("class_code", "")).strip()
     subject_code = str(curriculum.get("subject_code", "")).strip()
+    medium = normalize_medium(curriculum.get("language"))
     if class_code not in {"6", "7", "8"} or subject_code not in {"maths", "science"}:
         raise ValueError("Only Bihar Board Class 6–8 Maths and Science tracks are supported.")
+    if medium is None:
+        raise ValueError("curriculum.language must explicitly identify Hindi (hi) or English (en).")
 
     source = bundle.get("source")
     if not isinstance(source, dict):
         raise ValueError("source metadata is required.")
     require_text(source.get("title"), "source.title", 300)
     source_url = require_text(source.get("url"), "source.url", 2000)
-    if not source_url.startswith("https://"):
-        raise ValueError("source.url must use HTTPS.")
+    from urllib.parse import urlparse
+    parsed_source_url = urlparse(source_url)
+    official_hosts = {"ncert.nic.in", "ncert.ncert.org.in", "scert.bihar.gov.in", "bstbpc.gov.in"}
+    source_host = (parsed_source_url.hostname or "").casefold().rstrip(".")
+    if parsed_source_url.scheme != "https" or not any(
+        source_host == host or source_host.endswith("." + host) for host in official_hosts
+    ):
+        raise ValueError("source.url must be an official NCERT, Bihar SCERT, or Bihar textbook-corporation HTTPS URL.")
     edition = require_text(source.get("edition"), "source.edition", 160)
-    if edition.lower() in {"unknown", "unverified", "current", "n/a"}:
-        raise ValueError("Record the edition/session from the actual downloaded source; do not use a placeholder.")
+    if is_placeholder_edition(edition):
+        raise ValueError("Record the actual printed textbook edition/reprint year from the reviewed source PDF; do not use a placeholder.")
+    printed_imprint = require_text(source.get("printed_imprint"), "source.printed_imprint", 300)
+    if not detect_printed_edition(printed_imprint):
+        raise ValueError("source.printed_imprint must quote a dated edition/reprint line from the reviewed PDF.")
+    printed_years = re.findall(r"\b(?:19|20)\d{2}\b", printed_imprint)
+    if printed_years and not any(year in edition for year in printed_years):
+        raise ValueError("source.edition does not match source.printed_imprint.")
     if not isinstance(source.get("pdf_page_count"), int) or source["pdf_page_count"] < 1:
         raise ValueError("source.pdf_page_count must be a positive integer.")
     if not isinstance(source.get("pdf_sha256"), str) or not SHA_RE.fullmatch(source["pdf_sha256"]):
@@ -180,7 +208,42 @@ def validate_bundle(bundle: Any) -> dict[str, Any]:
                 raise ValueError(f"{lesson_code} NUMERICAL questions need answer_payload kind NUMERIC and a value.")
             if qtype not in STUDENT_GRADABLE_TYPES and answer:
                 raise ValueError(f"{lesson_code} {qtype} is not yet supported for automatic grading; leave answer_payload empty and keep the item as a reviewed draft.")
+    # Do not allow a reviewer to accidentally publish an English-only bundle to Hindi
+    # or a Hindi/mixed-script bundle to English. This catches obvious medium mismatches;
+    # editorial review is still required for semantics, subject alignment, and correctness.
+    text_fragments: list[str] = []
+    for lesson in lessons:
+        text_fragments.append(str(lesson.get("title") or ""))
+        text_fragments.append(str(lesson.get("summary") or ""))
+        for block in lesson.get("blocks", []):
+            content = block.get("content", {})
+            if isinstance(content, dict):
+                text_fragments.extend(_collect_text(content))
+        for question in lesson.get("questions", []):
+            text_fragments.append(str(question.get("prompt") or ""))
+            text_fragments.append(str(question.get("explanation") or ""))
+            text_fragments.extend(_collect_text(question.get("options", [])))
+            text_fragments.extend(_collect_text(question.get("answer_payload", {})))
+    language_problem = language_script_problem("\n".join(text_fragments), medium)
+    if language_problem:
+        raise ValueError("Authored content language check failed; bundle remains unimported. " + language_problem)
     return bundle
+
+
+def _collect_text(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, dict):
+        collected: list[str] = []
+        for child in value.values():
+            collected.extend(_collect_text(child))
+        return collected
+    if isinstance(value, list):
+        collected = []
+        for child in value:
+            collected.extend(_collect_text(child))
+        return collected
+    return []
 
 
 def make_request_payloads(bundle: dict[str, Any], chapter_id: int | None = None) -> list[dict[str, Any]]:

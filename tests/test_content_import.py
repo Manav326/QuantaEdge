@@ -20,6 +20,7 @@ def valid_bundle():
             "title": "SCERT Bihar Class 7 Mathematics",
             "url": "https://scert.bihar.gov.in/textbooks",
             "edition": "2025-26 verified PDF edition",
+            "printed_imprint": "Printed edition 2025-26",
             "publication_year": 2025,
             "pdf_page_count": 100,
             "pdf_sha256": "a" * 64,
@@ -106,6 +107,41 @@ class ReviewedContentImportTests(unittest.TestCase):
         bundle = valid_bundle()
         bundle["source"]["edition"] = "unknown"
         with self.assertRaisesRegex(ValueError, "do not use a placeholder"):
+            MODULE.validate_bundle(bundle)
+
+    def test_printed_imprint_is_required_and_must_match_the_edition(self):
+        bundle = valid_bundle()
+        bundle["source"].pop("printed_imprint")
+        with self.assertRaisesRegex(ValueError, "source.printed_imprint"):
+            MODULE.validate_bundle(bundle)
+        bundle = valid_bundle()
+        bundle["source"]["printed_imprint"] = "Reprint 2024-25"
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            MODULE.validate_bundle(bundle)
+
+    def test_unverified_edition_phrase_is_rejected(self):
+        bundle = valid_bundle()
+        bundle["source"]["edition"] = "Current official catalogue; retain printed reprint year from the source PDF"
+        with self.assertRaisesRegex(ValueError, "do not use a placeholder"):
+            MODULE.validate_bundle(bundle)
+
+    def test_english_only_content_cannot_be_imported_to_hindi_medium(self):
+        bundle = valid_bundle()
+        bundle["lessons"][0]["title"] = "Understand algebraic expressions"
+        bundle["lessons"][0]["summary"] = "An original summary about variable expressions and their use."
+        bundle["lessons"][0]["blocks"][0]["content"] = {
+            "heading": "What is an expression?",
+            "body": "An expression combines numbers, variables and operations to represent a mathematical value."
+        }
+        bundle["lessons"][0]["questions"][0]["prompt"] = "If x equals 2, what is the value of x plus 3?"
+        bundle["lessons"][0]["questions"][0]["explanation"] = "Replace x with 2, then calculate 2 plus 3 to get 5."
+        with self.assertRaisesRegex(ValueError, "Authored content language check failed"):
+            MODULE.validate_bundle(bundle)
+
+    def test_hindi_content_cannot_be_imported_to_english_medium(self):
+        bundle = valid_bundle()
+        bundle["curriculum"]["language"] = "en"
+        with self.assertRaisesRegex(ValueError, "Authored content language check failed"):
             MODULE.validate_bundle(bundle)
 
     def test_page_ranges_must_be_explicit_and_inside_the_chapter(self):
