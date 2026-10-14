@@ -26,8 +26,13 @@ Implementation commits on `main`:
 - `5599e12c` — admin queue/status API
 - `f3d7fc00` — tutor retrieval integration
 - `14e97c65` — asynchronous dispatch, retry, and duplicate-worker safeguards
+- `3cd5812b` — chunked PDF byte streaming for large books
+- `255d3a92` — page readiness states and partial-extraction reporting
+- `43762520` — readable tutor source/page context
+- `1b3c78e9` — tutor textbook retrieval tests
+- `f1cad587` / `a5dab569` — input validation and accurate source-approval wording
 
-Latest validation workflow is running; do not claim the code is verified until its conclusion is successful. No book has been extracted in the live database from this implementation yet. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
+Latest validation workflow is running; do not claim the code is verified until its conclusion is successful. The tracker and tutor documentation are intentionally committed to the repository so work can resume at the next unchecked task. No book has been extracted in the live database from this implementation yet. Extraction statuses are READY, LOW_TEXT, OCR_REQUIRED, and FAILED; only READY pages can ground tutor responses. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
 
 ## Guardrails
 - Existing whole-book GHCR/cache flow remains the input source; do not introduce chapter-download fallback when whole-book download is required.
