@@ -45,6 +45,10 @@ Implementation commits on `main`:
 
 Corrected GHCR extraction workflow succeeded at https://github.com/Manav326/QuantaEdge/actions/runs/38579506350 and produced artifact ID `11902717615` (available until 2027-01-12). The API verification job passed at commit `a0920c604086a03ead0a075ef3dde6cd58e0f880`; the aggregate workflow was still finishing the API image build at the last status check. The tracker and tutor documentation are intentionally committed to the repository so work can resume at the next unchecked task. The source-ingestion admin screen now exposes the extraction action for approved complete-book assets. The GHCR runner extracted real NCERT Class 6 books: English *Ganita Prakash* (412 pages), English *Curiosity* (272), Hindi *Ganita Prakash (Hindi)* (304), and Hindi *Jigyasa* (264), each labelled Reprint 2026–27. The 1,252 extracted page records are in the private 90-day Actions artifact, not yet imported into the live QuantaEdge database. The new import API stores page text without copying the original large PDFs into PostgreSQL. Extraction statuses are READY, LOW_TEXT, OCR_REQUIRED, and FAILED; only READY pages can ground tutor responses. After CI passes, the next task is a real approved-book pilot and runtime SQL validation, then tests and generation/translation integration.
 
+## Repository artifact mirror
+
+A GitHub Actions workflow (`.github/workflows/commit-class6-extraction-artifact.yml`) mirrors the verified Class 6 extraction artifact into `data/textbook-extractions/class-6/` on `main`, so a normal `git pull` retrieves the page JSONL and manifests without a manual artifact download. The mirror contains extracted text and reports only; original PDFs remain in GHCR. These files are extraction-only and are not approved or published lesson content.
+
 ## Guardrails
 - Existing whole-book GHCR/cache flow remains the input source; do not introduce chapter-download fallback when whole-book download is required.
 - Extraction is asynchronous and never happens in a student request.
