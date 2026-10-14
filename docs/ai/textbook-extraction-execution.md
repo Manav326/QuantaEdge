@@ -101,3 +101,19 @@ Next Phase A tasks:
 - The script sends an image plus page-text context to the local Ollama `/api/chat` endpoint. It records summary, type, visible text, concepts, context relation and limitations with source page/hash/model provenance.
 - **Not yet validated on a real book or a real installed vision model.** User/local step: create an inventory for one book, run `ollama list`, select a vision-capable installed model tag, and run a five-asset sample. Review captions/labels before increasing sample size or setting any default.
 - After local evaluation, decide whether to add OCR/figure cropping and then a reviewed visual-to-lesson adapter. Do not connect this draft sidecar to student delivery yet.
+
+
+## GitHub-hosted visual pipeline checkpoint (2026-10-15)
+
+- [x] Add per-asset resumable vision analysis. The analyzer atomically checkpoints every completed asset; successful entries are reused only when source asset SHA-256, model tag and prompt version match. Failed assets are retried. Subsequent runs process the next pending assets rather than redoing completed work.
+- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to fetch the original PDF and matching manifest/page JSONL from a specified existing GHCR source-book image, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and commit checkpoint/index JSON to main.
+- [x] Store a stable bundle index in data/textbook-visuals/<book_slug>/bundle-index.v1.json; it records source PDF hash, model/prompt version, GHCR package/tags and bundle SHA-256.
+- [ ] Run the workflow on one exact Class 6 source image, inspect visual accuracy and runtime, and confirm GHCR publication plus the repository checkpoint commit. The source image name and the internal PDF/manifest paths must match the existing GHCR package; do not guess them.
+- [ ] Review the sample captions and visible text, then run the next batch using the same book slug/model. Only after review should visual results be adapted into Content Studio lesson drafts.
+
+Implementation commits:
+- 448ba2fa — atomic per-asset checkpoints and resume support.
+- 587d3ea9 — resume regression tests.
+- e64e2d4e — GitHub-hosted visual pipeline workflow.
+- deaa053a — resumed runs continue to the next unprocessed assets.
+- 32a50abd — execution guide for resumable analysis.
