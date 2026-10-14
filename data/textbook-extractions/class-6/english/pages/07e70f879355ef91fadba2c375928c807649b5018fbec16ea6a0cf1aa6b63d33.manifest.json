@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-14T14:20:52.285704+00:00",
+  "bundle_file": "ncert-c6-english-fegp1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c6-english-fegp1--whole-book.pdf",
+  "asset_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+  "original_book_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+  "book_id": "ncert-c6-english-fegp1",
+  "title": "Ganita Prakash",
+  "source_title": "Ganita Prakash",
+  "source_url": "https://ncert.nic.in/textbook.php?fegp1=0-10",
+  "edition": "Reprint 2026-27",
+  "subject": "Mathematics",
+  "class": "6",
+  "language": "english",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 412,
+  "completed_pages": 412,
+  "pages_newly_extracted": 412,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 400,
+    "LOW_TEXT_REVIEW": 12
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33.jsonl",
+  "published": false
+}

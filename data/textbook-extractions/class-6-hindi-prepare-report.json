@@ -1,0 +1,12 @@
+{
+  "registry": "pilot-output/cache/class-6/hindi",
+  "output_dir": "pilot-output/prepared/class-6/hindi",
+  "books_seen": 6,
+  "pdfs_created": 83,
+  "bundles_created": 83,
+  "partial_books": [],
+  "whole_books_over_library_limit": [],
+  "no_verified_chapter_boundaries": [],
+  "too_large_chapter_assets": [],
+  "failures": []
+}

@@ -1,0 +1,19 @@
+{
+  "scope": {
+    "class_no": 6,
+    "language": "hindi",
+    "subjects": [
+      "Mathematics",
+      "Maths",
+      "Science"
+    ],
+    "asset_scope": "SUBJECT_BOOK",
+    "book_ids": []
+  },
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "assets_processed": 2,
+  "pages_processed": 568,
+  "pages_newly_extracted": 568,
+  "failures": [],
+  "publication": "NOT_PUBLISHED; extracted text is draft material requiring content review"
+}
