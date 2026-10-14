@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -23,6 +24,8 @@ class StudentCredentialRotationTest {
         .thenReturn(List.of("PARENT"));
     when(jdbc.queryForObject(contains("select exists(select 1 from guardian_student"),
         eq(Boolean.class), eq(9L), eq(22L))).thenReturn(true);
+    when(jdbc.queryForMap(contains("select gs.consent_version,st.class_code"), eq(9L), eq(22L)))
+        .thenReturn(Map.of("consent_version", "guardian-consent-v1", "class_code", "7"));
 
     auth.setChildCredentials(9L, 22L, "child22", "a-strong-student-password");
 
