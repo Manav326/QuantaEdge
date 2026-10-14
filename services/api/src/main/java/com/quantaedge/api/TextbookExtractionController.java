@@ -30,6 +30,7 @@ public class TextbookExtractionController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requirePermission(context, "CONTENT_EDIT");
     Map<String, Object> job = extraction.queue(assetId, context.staffId());
+    if ("PENDING".equals(String.valueOf(job.get("status")))) extraction.start(assetId);
     staffAudit.recordAction(context, "/api/v1/admin/textbook-extraction/assets/" + assetId,
         "Queued asynchronous page-level extraction for an approved textbook PDF; no content was published.");
     return Map.of("queued", true, "job", job);
