@@ -27,6 +27,6 @@ public class TutorController {
     return tutor.send(context,sessionId,String.valueOf(body.getOrDefault("message","")),
         String.valueOf(body.getOrDefault("mode","HINT")),
         body.get("questionId")==null?0L:Long.parseLong(String.valueOf(body.get("questionId"))),
-        String.valueOf(body.getOrDefault("language","hi")));
+        body.get("language")==null?"hi":String.valueOf(body.get("language")));
   }
 }

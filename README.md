@@ -178,7 +178,7 @@ Bash: `bash scripts/quantaedge-local.sh up`, `bash scripts/quantaedge-local.sh s
 
 GitHub Actions validates the API, runs content-import safeguards, and builds/publishes immutable SHA-tagged images to GHCR on main. A separate workflow is manual-dispatch only; no deployment was performed as part of the current content audit.
 
-The production compose configuration disables the local preview seed. The AI tutor is disabled until it is intentionally configured with real credentials.
+The production compose configuration disables the local preview seed and AI tutor by default. When enabled, tutor inference uses the configured private in-house provider first. A hosted API fallback is disabled unless `APP_AI_TUTOR_FALLBACK_ENABLED=true` is explicitly set and `OPENAI_API_KEY` is supplied through secret storage. Production must point `APP_AI_TUTOR_PRIMARY_BASE_URL` at a private, reachable inference endpoint; the production Compose stack does not provision model weights or inference capacity. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md).
 
 ## Market-readiness boundary
 

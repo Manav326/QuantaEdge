@@ -111,7 +111,8 @@ fun QuestionCard(
     saving: Boolean,
     feedback: String? = null,
     status: String? = null,
-    submitLabel: String = "उत्तर सुरक्षित करें"
+    submitLabel: String = "उत्तर सुरक्षित करें",
+    onTutorHelp: (() -> Unit)? = null
 ) {
     val options = jsonArrayValue(question.opt("options")).objectItems()
     val prompt = question.textAny("prompt", "question", "title").ifBlank { "प्रश्न" }
@@ -285,6 +286,11 @@ fun QuestionCard(
             if (!status.isNullOrBlank()) LearningMathText(localizedUiText(status), style = MaterialTheme.typography.bodyMedium)
             if (!feedback.isNullOrBlank()) {
                 LearningMathText(feedback, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
+            }
+            if (onTutorHelp != null) {
+                TextButton(onClick = onTutorHelp, enabled = !saving, modifier = Modifier.fillMaxWidth()) {
+                    Text(localizedUiText("Tutor से मदद लें"))
+                }
             }
             if (!locked) {
                 Button(

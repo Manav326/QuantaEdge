@@ -48,14 +48,24 @@ app:
     max-children-per-parent: ${APP_AUTH_MAX_CHILDREN_PER_PARENT:3}
   ai-tutor:
     enabled: ${APP_AI_TUTOR_ENABLED:false}
-    api-key: ${OPENAI_API_KEY:}
-    model: ${APP_AI_TUTOR_MODEL:gpt-5.6-luna}
-    base-url: ${OPENAI_API_BASE_URL:https://api.openai.com}
     max-output-tokens: ${APP_AI_TUTOR_MAX_OUTPUT_TOKENS:500}
     max-message-chars: ${APP_AI_TUTOR_MAX_MESSAGE_CHARS:1200}
     max-messages-per-10m: ${APP_AI_TUTOR_MAX_MESSAGES_PER_10M:20}
     max-messages-per-day: ${APP_AI_TUTOR_MAX_MESSAGES_PER_DAY:100}
     history-messages: ${APP_AI_TUTOR_HISTORY_MESSAGES:10}
+    primary:
+      api-key: ${APP_AI_TUTOR_PRIMARY_API_KEY:local-inference}
+      model: ${APP_AI_TUTOR_PRIMARY_MODEL:qwen2.5:0.5b}
+      base-url: ${APP_AI_TUTOR_PRIMARY_BASE_URL:http://ollama:11434}
+      api-mode: ${APP_AI_TUTOR_PRIMARY_API_MODE:CHAT_COMPLETIONS}
+    fallback:
+      enabled: ${APP_AI_TUTOR_FALLBACK_ENABLED:false}
+      api-key: ${OPENAI_API_KEY:}
+      model: ${APP_AI_TUTOR_FALLBACK_MODEL:gpt-5.6-luna}
+      base-url: ${APP_AI_TUTOR_FALLBACK_BASE_URL:https://api.openai.com}
+      api-mode: ${APP_AI_TUTOR_FALLBACK_API_MODE:RESPONSES}
+    min-output-chars: ${APP_AI_TUTOR_MIN_OUTPUT_CHARS:8}
+
   google-meet:
     client-id: ${GOOGLE_MEET_CLIENT_ID:}
     client-secret: ${GOOGLE_MEET_CLIENT_SECRET:}

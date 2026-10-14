@@ -619,7 +619,7 @@ export default function LearnClient() {
       </div>}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 
-      {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+      {learningBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
       {help !== 'none' && <div className="feedback"><b>{help.replaceAll('_',' ')} <LocaleText hinglish="सहायता" english="help" /></b><span><LocaleText hinglish="पहले concept को अपने words में समझें, फिर example देखकर दोबारा try करें।" english="Explain the concept in your own words, then review the example and try again." /></span></div>}
 
       <div className="content-heading"><h2><LocaleText hinglish="अब MCQ से जाँचें" english="Check your understanding with MCQs" /></h2><span>{attemptedMcqs} / {lessonMcqs.length} <LocaleText hinglish="attempt किए" english="attempted" /></span></div>
@@ -640,10 +640,10 @@ export default function LearnClient() {
           <h2><LocaleText hinglish="अब दोहराएँ" english="Recap" /></h2>
           <span><LocaleText hinglish="मुख्य बातें" english="Key takeaways" /></span>
         </div>
-        {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>setTutorOpen(true)}/>)}
+        {recapBlocks.map(block=><Block key={block.id} block={block} onTutorOpen={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}}/>)}
       </section>}
 
-      {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>setTutorOpen(true)} aria-label={tx('AI tutor खोलें','Open AI tutor')} title={tx('AI tutor खोलें','Open AI tutor')}>
+      {!tutorOpen && <button type="button" className="tutor-launch" onClick={()=>{setTutorQuestionId(undefined);setTutorOpen(true);}} aria-label={tx('AI tutor खोलें','Open AI tutor')} title={tx('AI tutor खोलें','Open AI tutor')}>
         <span className="tutor-launch-icon" aria-hidden="true">✦</span>
       </button>}
       <TutorDock lessonId={lesson.id} open={tutorOpen} onClose={()=>setTutorOpen(false)} currentQuestionId={tutorQuestionId} />

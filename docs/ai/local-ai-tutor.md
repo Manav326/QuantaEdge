@@ -1,43 +1,55 @@
-# Run the QuantaEdge AI tutor locally without an API key
+# QuantaEdge AI tutor: local inference and provider routing
 
-The default `ai` action reuses a model already installed in Ollama on the host. It does **not** download a second model/runtime. The existing authenticated QuantaEdge tutor API still handles student authorization, rate limits, and conversation persistence.
+QuantaEdge's API remains the only route from web/Android to model inference. Clients never select provider endpoints directly. The API authorizes the student and lesson, assembles localized curriculum context, applies usage limits, and persists complete turns only after a usable reply.
 
-## Default: reuse your existing local model
+## Local development
 
-Start Ollama on the host and confirm `ollama list` shows at least one installed model. From the repository root, run:
+The `ai` action reuses a model already installed in host Ollama:
 
 ```powershell
 .\scripts\quantaedge-local.ps1 ai
 ```
 
-The script reads `http://127.0.0.1:11434/api/tags`, prefers an installed model whose name starts with `llama`, and otherwise chooses the first installed model. To select another installed model, set `$env:QUANTAEDGE_OLLAMA_MODEL` to its exact name before running the script.
+The script detects a local model (preferring `llama*`) and configures the API to use `http://host.docker.internal:11434`. On Bash:
 
-The API container calls `http://host.docker.internal:11434`. Docker Desktop provides this host name so containers can reach services on the host. Ollama commonly binds to `127.0.0.1:11434` by default; depending on the machine's networking setup, a container may not be able to reach a loopback-only listener. If tutor requests fail with connection refused, adjust Ollama's bind address only after considering firewall restrictions. Ollama's API has no built-in authentication: do not expose port 11434 to your LAN or the public internet. See the [Ollama server configuration FAQ](https://github.com/ollama/ollama/blob/main/docs/faq.mdx) and [Docker Desktop host networking guide](https://docs.docker.com/desktop/features/networking/networking-how-tos/).
+```bash
+bash scripts/quantaedge-local.sh ai
+```
 
-## Optional: run a separate Docker Ollama
-
-Use this only when you intentionally want a separate Ollama runtime and the small Qwen model:
+To intentionally run a separate Docker Ollama with `qwen2.5:0.5b`:
 
 ```powershell
 .\scripts\quantaedge-local.ps1 ai -DockerOllama
 ```
 
-Bash:
-
 ```bash
 bash scripts/quantaedge-local.sh ai --docker-ollama
 ```
 
-This option downloads the Ollama runtime if missing and pulls `qwen2.5:0.5b` into the persistent `quantaedge_ollama` volume. Failed model pulls are retried up to five times. It is separate from any model installed on the host.
+The Docker option uses the persistent `quantaedge_ollama` volume and retries failed model pulls up to five times. Never use `docker compose down -v` unless you intentionally want to delete local database/model volumes.
 
-## Normal mode and stopping
+## Provider order and optional fallback
 
-The ordinary `up` action leaves the tutor disabled unless an AI configuration is explicitly set. The student site and other features can still run; tutor requests are unavailable in normal mode.
+The API uses explicit settings instead of choosing an API protocol from a URL:
 
-Open `http://localhost:3000/student`, sign in to the local preview student, open a **published** lesson, and select the tutor dock after `ai` starts successfully. Only published lessons are eligible; a lesson with no published teaching content cannot open the tutor.
+- `APP_AI_TUTOR_PRIMARY_BASE_URL`, `APP_AI_TUTOR_PRIMARY_API_KEY`, `APP_AI_TUTOR_PRIMARY_MODEL`, and `APP_AI_TUTOR_PRIMARY_API_MODE` configure the in-house endpoint.
+- `APP_AI_TUTOR_PRIMARY_API_MODE` must be `CHAT_COMPLETIONS` for Ollama-compatible endpoints or `RESPONSES` for the OpenAI Responses API.
+- `APP_AI_TUTOR_FALLBACK_ENABLED=false` is the default. If an owner explicitly opts in with `true`, and configures `OPENAI_API_KEY`, the hosted fallback may be used only if the primary provider fails or its response fails the conservative structural/language checks.
+- `APP_AI_TUTOR_FALLBACK_BASE_URL`, `APP_AI_TUTOR_FALLBACK_MODEL`, and `APP_AI_TUTOR_FALLBACK_API_MODE` configure that fallback.
+- `APP_AI_TUTOR_MIN_OUTPUT_CHARS` sets a minimum response-length signal. It does not prove the answer is relevant or correct.
 
-Use `.\scripts\quantaedge-local.ps1 down` to stop the application stack. Do not use `reset` or `docker compose down -v` unless you intentionally want to delete local database/cache volumes. The fallback model's named volume is persistent.
+The local Compose overlays set the local Ollama endpoint as primary and keep hosted fallback off unless `APP_AI_TUTOR_FALLBACK_ENABLED=true` is explicitly configured. No hosted API key is needed for local-only inference.
 
-## Limitations
+## Context, authorization, and analytics
 
-Local model answers can be incorrect and are not verified SCERT/NCERT content; they require teacher review. The tutor uses lesson metadata, sanitized lesson blocks, selected question context, limited mastery context, and recent tutor conversation assembled by the existing tutor service. For production, use a suitably provisioned model service or an approved hosted provider; never commit API keys to Git.
+The service restricts inference to active students with active enrollment in the lesson's subject, published lesson content, and approved questions from that same lesson. It uses current-language lesson/chapter/subject metadata and approved translations when their source content has not changed. Question options are included where relevant, while answer keys and solutions are stripped from lesson blocks before they are sent to the model.
+
+Provider calls occur outside the database transaction. After a usable reply, the API atomically records the learner message and assistant reply with actual provider/model labels and available token usage. Admin tutor analytics expose reply counts and token totals by provider/model.
+
+## Readiness and limitations
+
+Tutor availability checks a lightweight provider model-list endpoint and caches the result briefly; it does not send student prompts during health probes. A provider may still fail after a successful readiness check.
+
+The quality gate catches some unusable output and strong response-language mismatches. It cannot reliably detect factual mistakes, irrelevant but fluent answers, or incorrect mathematics. Both in-house and hosted answers still require teacher-reviewed evaluation against real Bihar Board/SCERT/NCERT learning objectives before production rollout.
+
+The production Compose stack does not launch an inference service. Configure `APP_AI_TUTOR_PRIMARY_BASE_URL` to a private, reachable, appropriately provisioned in-house inference endpoint. Do not expose Ollama's unauthenticated port to the public internet. Keep keys in deployment secrets and never commit them to Git.
