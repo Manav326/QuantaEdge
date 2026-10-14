@@ -19,7 +19,7 @@ class PipelineAuditTests(unittest.TestCase):
    self.assertIn("EDITION_PRINTED_IMPRINT_NOT_FOUND",{x["code"] for x in b})
  def test_registry_placeholder_edition_phrases_are_blockers(self):
   with tempfile.TemporaryDirectory() as d:
-   p=Path(d)/"b.pdf";raw=b"%PDF-1.4\\nfixture\\n";p.write_bytes(raw)
+   p=Path(d)/"b.pdf";raw=b"%PDF-1.4\nfixture\n";p.write_bytes(raw)
    _,issues=audit_book(Path(d),{"file":"b.pdf","bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"edition":"Current official catalogue; retain printed reprint year from the source PDF","source_url":"https://scert.bihar.gov.in/eresources","content_availability":{"status":"complete"}},False)
    self.assertIn("EDITION_UNVERIFIED",{x["code"] for x in issues})
 

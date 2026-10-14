@@ -590,7 +590,7 @@ class TextbookRegistryTests(unittest.TestCase):
 
         def pretend_partial_download(item, destination):
             attempts.append(item["book_id"])
-            payload = b"%PDF-1.4\\nrecovered but still partial\\n"
+            payload = b"%PDF-1.4\nrecovered but still partial\n"
             destination.parent.mkdir(parents=True, exist_ok=True)
             destination.write_bytes(payload)
             item["content_availability"] = {
@@ -605,8 +605,8 @@ class TextbookRegistryTests(unittest.TestCase):
         def fake_push(_image, _exists, _books, _files, index, _context, **kwargs):
             captured_indexes.append((index, kwargs))
 
-        with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \\
-             patch("scripts.textbook_registry._download_full_book", side_effect=pretend_partial_download), \\
+        with patch("scripts.textbook_registry.pull_index", return_value=(True, existing_index)), \
+             patch("scripts.textbook_registry._download_full_book", side_effect=pretend_partial_download), \
              patch("scripts.textbook_registry.push_batch", side_effect=fake_push):
             report = publish_language(
                 "hindi", "ghcr.io/example/quantaedge-textbooks-class-6-hindi:latest",
