@@ -238,7 +238,7 @@ class TextbookRegistryTests(unittest.TestCase):
         self.assertEqual(1, report["catalog_entries"])
         self.assertEqual(["book-six"], report["cached_book_ids"])
 
-    def test_existing_legacy_book_is_migrated_without_a_source_download_and_checkpointed(self):
+    def test_unverified_legacy_book_is_excluded_and_migration_checkpointed(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             legacy_root = root / "legacy-hindi"
@@ -253,7 +253,7 @@ class TextbookRegistryTests(unittest.TestCase):
             }
             legacy_index = {"books": [entry], "download_status": {}}
             target_index = {
-                "schema_version": 1, "books": [{**entry, "classes": ["6"], "registry_class": 6}],
+                "schema_version": 1, "books": [],
                 "download_status": {}, "legacy_migration_complete": True,
             }
             with patch("scripts.textbook_registry.pull_index", side_effect=[
@@ -270,10 +270,12 @@ class TextbookRegistryTests(unittest.TestCase):
                     "ghcr.io/example/quantaedge-textbooks", 6, "hindi",
                     lambda _language: self.fail("completed migration must not reload legacy"), root)
 
-            self.assertEqual(1, first["migrated_from_legacy"])
+            self.assertEqual(0, first["migrated_from_legacy"])
+            self.assertEqual(["old-book"], first["rejected_incomplete_legacy"])
             self.assertEqual(0, second["migrated_from_legacy"])
             self.assertTrue(second["migration_skipped"])
             self.assertEqual(1, push.call_count)
+            self.assertFalse(any(item.get("book_id") == "old-book" for item in target_index["books"]))
             extract.assert_not_called()
 
     def test_textbook_binary_size_is_not_artificially_capped(self):

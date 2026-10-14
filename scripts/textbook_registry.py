@@ -617,7 +617,7 @@ def download_ncert_merged(book: dict[str, Any], destination: Path) -> tuple[str,
                 source_errors.append(bundle_url + ": " + str(exc))
                 archive_path.unlink(missing_ok=True)
 
-    raise unavailable("No complete, readable official NCERT whole-book bundle was available after checking the official bundle mirrors. "
+    raise unavailable("No complete official NCERT whole-book bundle was available after checking the official bundle mirrors. "
                        + " | ".join(source_errors[-4:]))
 
 def _download_scert_pdf_impl(book: dict[str, Any], destination: Path) -> tuple[str, int, list[list[Any]], str]:
