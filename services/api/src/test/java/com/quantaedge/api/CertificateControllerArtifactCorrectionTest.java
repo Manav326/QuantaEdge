@@ -45,6 +45,7 @@ class CertificateControllerArtifactCorrectionTest {
     legacy.put("achievement_type", "ASSESSMENT_PASS");
     legacy.put("class_code", "6");
     legacy.put("subject_id", 5L);
+    legacy.put("assessment_attempt_id", 9001L);
     legacy.put("subject_code", "science");
     legacy.put("subject_name", "Science");
     legacy.put("template_id", "CLASSIC");
