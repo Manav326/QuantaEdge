@@ -6,9 +6,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpTimeoutException;
 import java.time.Duration;
 
 public class OpenAiTutorClient {
+  // A cold local Ollama model can spend most of the first request loading weights.
+  // Keep this longer than the model-load + prompt-evaluation time on CPU-only machines.
+  private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(120);
   private final ObjectMapper mapper;
   private final HttpClient http;
   private final boolean enabled;
@@ -88,7 +92,7 @@ public class OpenAiTutorClient {
 
       HttpRequest req=HttpRequest.newBuilder()
           .uri(URI.create(baseUrl+(chatCompletions?"/v1/chat/completions":"/v1/responses")))
-          .timeout(Duration.ofSeconds(30))
+          .timeout(REQUEST_TIMEOUT)
           .header("Authorization","Bearer "+apiKey)
           .header("Content-Type","application/json")
           .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(root)))
@@ -115,6 +119,8 @@ public class OpenAiTutorClient {
       int outputTokens=chatCompletions?usage.path("completion_tokens").asInt(-1):usage.path("output_tokens").asInt(-1);
       return new TutorReply(text.trim(),body.path("id").asText(null),
           inputTokens<0?null:inputTokens,outputTokens<0?null:outputTokens,model);
+    }catch(HttpTimeoutException e){
+      throw new TutorProviderException("Tutor inference timed out after "+REQUEST_TIMEOUT.toSeconds()+" seconds",e);
     }catch(TutorUnavailableException|TutorProviderException e){throw e;}
     catch(Exception e){throw new TutorProviderException("Tutor provider request failed",e);}
   }
