@@ -12,7 +12,7 @@ on:
       source_run_id:
         description: "Successful textbook extraction workflow run ID"
         type: string
-        default: "38579506350"
+        default: ""
         required: true
 
 permissions:
@@ -42,9 +42,6 @@ jobs:
         run: |
           set -euo pipefail
           artifact_name="quantaedge-textbook-extraction-pilot-class-${CLASS_NO}-${SOURCE_RUN_ID}"
-          if [ "${SOURCE_RUN_ID}" = "38579506350" ] && [ "${CLASS_NO}" = "6" ]; then
-            artifact_name="quantaedge-textbook-extraction-pilot-class-6-38579506350"
-          fi
           echo "Downloading ${artifact_name} from run ${SOURCE_RUN_ID}"
           gh run download "${SOURCE_RUN_ID}" \
             --repo "${GITHUB_REPOSITORY}" \
