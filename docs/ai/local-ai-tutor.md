@@ -28,7 +28,7 @@ Then start the ordinary stack with `.scripts\quantaedge-local.ps1 up`. Do not us
 
 - No external API key is required for the private model.
 - The API routes to the private Ollama-compatible chat-completions endpoint first; the configured hosted API fallback is disabled unless explicitly turned on.
-- If fallback is enabled, it is used only after the private provider fails or the response fails the configured structural quality gate. The gate checks for unusable output; it cannot prove academic correctness.
+- If fallback is enabled, it is used only after the private provider fails or the response fails conservative quality checks for unusable output or a strong mismatch with the selected Hindi/English language. These checks cannot prove academic correctness; semantic quality requires teacher-reviewed evaluation.
 - The model receives the selected language, translated lesson and chapter metadata where a reviewed translation exists, sanitized lesson blocks, approved question context and recent tutor conversation.
 - Tutor session authorization checks the learner's active class and subject enrollment as well as publication status; usage limits remain in force.
 
