@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("up", "ai", "rebuild", "clean-build", "down", "reset", "logs", "ps")]
+  [ValidateSet("up", "sync", "ai", "rebuild", "clean-build", "down", "reset", "logs", "ps")]
   [string]$Action = "up",
 
   # Use "all" for the first start. Select one application for routine iteration.
@@ -16,11 +16,11 @@ param(
 $ErrorActionPreference = "Stop"
 Set-Location (Join-Path $PSScriptRoot "..")
 
-if ($Action -in @("down", "reset", "logs", "ps") -and $Service -ne "all") {
+if ($Action -in @("sync", "down", "reset", "logs", "ps") -and $Service -ne "all") {
   throw "-Service is supported for up/rebuild/clean-build only. '$Action' operates on the full Compose project."
 }
 if ($Action -eq "clean-build" -and -not $BuildLocal) {
-  throw "'clean-build' is local-source only. Re-run with -BuildLocal, or use 'up' to pull GHCR images."
+  throw "'clean-build' is local-source only. Re-run with -BuildLocal."
 }
 if ([string]::IsNullOrWhiteSpace($ImageTag)) {
   throw "-ImageTag cannot be empty."
@@ -70,10 +70,23 @@ $webPort = if ([string]::IsNullOrWhiteSpace($env:WEB_PORT)) { "3000" } else { $e
 $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else { $env:ADMIN_PORT }
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
 
-if ($Action -in @("up", "ai", "rebuild", "clean-build", "reset")) {
+function Ensure-ApiPortAvailable {
+  # If this project already has a running API, reuse its actual host-port mapping.
+  $composePsArgs = @($script:ComposeFiles) + @("ps", "-q", "api")
+  $existingApiIds = & docker compose @composePsArgs 2>$null
+  if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($existingApiIds -join ""))) {
+    $existingApiId = ($existingApiIds | Select-Object -First 1).Trim()
+    $existingHostPort = & docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $existingApiId 2>$null
+    $existingHostPortNumber = 0
+    if ([int]::TryParse([string]$existingHostPort, [ref]$existingHostPortNumber) -and $existingHostPortNumber -ge 1 -and $existingHostPortNumber -le 65535) {
+      $script:apiPort = [string]$existingHostPortNumber
+      $env:API_PORT = $script:apiPort
+      return
+    }
+  }
   $preferredApiPort = 0
-  if (-not [int]::TryParse([string]$apiPort, [ref]$preferredApiPort) -or $preferredApiPort -lt 1 -or $preferredApiPort -gt 65535) {
-    throw "API_PORT must be an integer from 1 to 65535; received '$apiPort'."
+  if (-not [int]::TryParse([string]$script:apiPort, [ref]$preferredApiPort) -or $preferredApiPort -lt 1 -or $preferredApiPort -gt 65535) {
+    throw "API_PORT must be an integer from 1 to 65535; received '$script:apiPort'."
   }
 
   if (-not (Test-HostPortAvailable -Port $preferredApiPort)) {
@@ -90,13 +103,14 @@ if ($Action -in @("up", "ai", "rebuild", "clean-build", "reset")) {
       throw "API host port $preferredApiPort is occupied, and no free port was found in the next 20 ports. Stop the conflicting process or set API_PORT to a free port."
     }
 
-    $apiPort = [string]$selectedApiPort
-    $env:API_PORT = $apiPort
-    Write-Warning "API host port $preferredApiPort is already in use. QuantaEdge will use port $apiPort for this run (http://localhost:$apiPort). To keep this choice, set API_PORT=$apiPort in .env. The existing process was not stopped."
+    $script:apiPort = [string]$selectedApiPort
+    $env:API_PORT = $script:apiPort
+    Write-Warning "API host port $preferredApiPort is already in use. QuantaEdge will use port $apiPort for this run (http://localhost:$script:apiPort). To keep this choice, set API_PORT=$script:apiPort in .env. The existing process was not stopped."
   }
 }
 
-# Default is GHCR-pull mode; -BuildLocal uses only the normal local Compose file.
+
+# Default is GHCR cache-first mode; -BuildLocal uses only the normal local Compose file.
 $script:ComposeFiles = if ($BuildLocal) {
   @("-f", "docker-compose.yml")
 } else {
@@ -125,7 +139,7 @@ function Invoke-AiCompose {
   & docker compose @dockerArgs
   $exitCode = $LASTEXITCODE
   if ($exitCode -ne 0) {
-    throw "AI tutor Compose command failed (exit code $exitCode). Check Docker Desktop and available disk/RAM, then inspect with: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
+    throw "AI tutor Compose command failed (exit code $exitCode). inspect the actual failures with: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init redis api"
   }
 }
 
@@ -135,40 +149,47 @@ function Get-TargetArgs {
 }
 
 function Sync-PublishedImages {
-  # Pull all images so a first-time local start also has healthy database/cache dependencies.
-  Invoke-Compose @("pull")
+  # Explicit sync refreshes application images only. Missing DB/cache images are fetched on first startup.
+  Invoke-Compose @("pull", "api", "web", "admin", "people")
 }
 
 $targetArgs = @(Get-TargetArgs)
 
 switch ($Action) {
+  "sync" {
+    if ($BuildLocal) { throw "'sync' updates GHCR images and cannot be combined with -BuildLocal." }
+    Sync-PublishedImages
+    Write-Host "Published QuantaEdge application images synced. Run the up action to start them."
+    exit 0
+  }
   "up" {
     if ($BuildLocal) {
       if ($Service -eq "all") {
-        Invoke-Compose @("up", "-d", "--build", "--remove-orphans")
+        Invoke-Compose @("build", "--parallel")
+        Ensure-ApiPortAvailable
+        Invoke-Compose @("up", "-d", "--no-build", "--remove-orphans")
       } else {
         Invoke-Compose (@("build", "--parallel") + $targetArgs)
+        Ensure-ApiPortAvailable
         Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
       }
     } else {
-      Sync-PublishedImages
+      Ensure-ApiPortAvailable
       Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
     }
   }
   "ai" {
     # Starts the normal stack plus a private-network Ollama model; existing volumes are preserved.
-    if (-not $BuildLocal) { Sync-PublishedImages }
-    $aiUpArgs = if ($BuildLocal) {
-      @("up", "-d", "--build", "--remove-orphans")
-    } else {
-      @("up", "-d", "--no-build", "--remove-orphans")
-    }
-    Invoke-AiCompose $aiUpArgs
+    # Cache-first: explicitly run the sync action when you want newer GHCR images.
+    if ($BuildLocal) { Invoke-AiCompose @("build", "--parallel") }
+    Ensure-ApiPortAvailable
+    Invoke-AiCompose @("up", "-d", "--no-build", "--remove-orphans")
   }
   "rebuild" {
     if ($BuildLocal) {
       # Cached local rebuild; --no-cache is reserved for clean-build.
       Invoke-Compose (@("build", "--parallel") + $targetArgs)
+      Ensure-ApiPortAvailable
       Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
     } else {
       Sync-PublishedImages
@@ -177,6 +198,7 @@ switch ($Action) {
   }
   "clean-build" {
     Invoke-Compose (@("build", "--no-cache", "--parallel") + $targetArgs)
+    Ensure-ApiPortAvailable
     Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
   }
   "down" {
@@ -185,6 +207,7 @@ switch ($Action) {
   }
   "reset" {
     # WARNING: this intentionally deletes local database/cache volumes.
+    Ensure-ApiPortAvailable
     Invoke-Compose @("down", "-v", "--remove-orphans")
     if ($BuildLocal) {
       Invoke-Compose @("up", "-d", "--build", "--remove-orphans")
