@@ -90,12 +90,13 @@ export default function ProgressPage(){
         </div>
         {masteryDetails.length ? masteryDetails.map((m:any)=>{
           const subjectCode=String(m.subject_code||'').toLowerCase();
+          const masteryPercent=safePercent(m.mastery_percent);
           const subjectTagClass=subjectCode==='maths'||subjectCode==='mathematics'?'qe-progress-subject-tag--maths':subjectCode==='science'?'qe-progress-subject-tag--science':'qe-progress-subject-tag--other';
           return <div className="topic-line" key={m.concept_id ?? m.concept_title}>
             <div className="qe-progress-concept-copy"><b>{m.concept_title || t('Concept','अवधारणा')}</b>
               <div className="qe-progress-concept-meta"><span className={'qe-progress-subject-tag '+subjectTagClass}>{subjectCode==='maths'||subjectCode==='mathematics'?t('Mathematics','गणित'):subjectCode==='science'?t('Science','विज्ञान'):(m.subject_name||t('Subject','विषय'))}</span><small>{m.chapter_name || '—'}</small></div>
             </div>
-            <span className={safePercent(m.mastery_percent)!==null&&safePercent(m.mastery_percent)>=50?'good':''}>{displayPercent(safePercent(m.mastery_percent))} · {displayCount(safeCount(m.attempts))} <LocaleText hinglish="जवाब दर्ज" english="responses recorded" /></span>
+            <span className={masteryPercent!==null&&masteryPercent>=50?'good':''}>{displayPercent(masteryPercent)} · {displayCount(safeCount(m.attempts))} <LocaleText hinglish="जवाब दर्ज" english="responses recorded" /></span>
           </div>;
         }) : <div className="topic-line"><span><LocaleText hinglish={Number(mastery.concepts||0)>0?"आपके दर्ज किए गए सभी concepts की mastery कम-से-कम 80% है।":"अभी concept results दर्ज नहीं हैं।"} english={Number(mastery.concepts||0)>0?"All recorded concepts have at least 80% mastery.":"No concept results have been recorded yet."} /></span></div>}
       </div>
