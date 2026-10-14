@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.sql.SQLException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +12,6 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -151,7 +147,7 @@ public class TextbookExtractionService {
               if (ocrText.length() >= MIN_EMBEDDED_TEXT_CHARS) {
                 text = ocrText;
                 method = "OCR";
-                quality = "REVIEW";
+                quality = "READY";
                 ocrCount++;
               } else {
                 text = ocrText;
