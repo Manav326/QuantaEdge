@@ -51,6 +51,21 @@ public class OpenAiTutorClient {
   public boolean isConfigured(){return enabled && apiKey!=null && !apiKey.isBlank() && !baseUrl.isBlank();}
   public String model(){return model;}
 
+  /** Lightweight OpenAI-compatible readiness probe; it never sends learner content. */
+  public boolean isReachable(){
+    if(!isConfigured()) return false;
+    try{
+      HttpRequest req=HttpRequest.newBuilder()
+          .uri(URI.create(baseUrl+"/v1/models"))
+          .timeout(Duration.ofSeconds(2))
+          .header("Authorization","Bearer "+apiKey)
+          .header("Accept","application/json")
+          .GET().build();
+      HttpResponse<Void> response=http.send(req,HttpResponse.BodyHandlers.discarding());
+      return response.statusCode()/100==2;
+    }catch(Exception ignored){return false;}
+  }
+
   public TutorReply generate(String instructions,String input){
     if(!isConfigured()) throw new TutorUnavailableException("AI tutor is not configured");
     try{
