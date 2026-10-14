@@ -49,6 +49,11 @@ export default function TextbooksClient() {
   const requestedSubjectCode = searchParams.get('subjectCode') || '';
   const documentId = Number(searchParams.get('documentId') || 0);
   const readerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    document.body.classList.toggle('qe-reading-mode', documentId > 0);
+    return () => document.body.classList.remove('qe-reading-mode');
+  }, [documentId]);
   const [documents, setDocuments] = useState<LearningDocument[]>([]);
   const [documentsLanguage, setDocumentsLanguage] = useState<'hi' | 'en' | null>(null);
   const [selected, setSelected] = useState<LearningDocument | null>(null);

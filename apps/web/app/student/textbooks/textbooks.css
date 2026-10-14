@@ -402,6 +402,15 @@
 .qe-book-meta-tag--type{background:#f2edff;color:#6941a5;border-color:#ded2fb}
 
 /* Reading mode: one compact header, the page itself, and a slim control footer. */
+body.qe-reading-mode{overflow:hidden!important}
+body.qe-reading-mode .qe-workspace-layout{display:block!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
+body.qe-reading-mode .qe-workspace-sidebar,
+body.qe-reading-mode .qe-workspace-topbar,
+body.qe-reading-mode .qe-workspace-mobile-nav,
+body.qe-reading-mode .qe-workspace-mobile-subnav,
+body.qe-reading-mode .qe-workspace-mobile-nav-backdrop{display:none!important}
+body.qe-reading-mode .qe-workspace-content{display:block!important;width:100%!important;height:100vh!important;height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
+body.qe-reading-mode .qe-textbook-shell--reader{width:100vw!important;height:100vh!important;height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
 .qe-textbook-shell--reader{height:calc(100dvh - 72px);min-height:0;padding:0 8px 5px;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;background:#f7f8fb}
 .qe-document-reader{order:0;display:flex;flex:1 1 auto;flex-direction:column;gap:0;width:100%;max-width:none;height:100%;min-height:0;padding:0;overflow:hidden;box-sizing:border-box}
 .qe-document-reader .qe-reader-heading{order:0;display:flex;align-items:center;gap:10px;flex:0 0 auto;min-height:40px;max-height:46px;padding:4px 9px;border-bottom:1px solid #e1e5ed;background:#fff}

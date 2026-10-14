@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
@@ -32,7 +32,7 @@ type Certificate = {
   revoked_at?: string;
 };
 
-export default function StudentCertificatesPage() {
+function StudentCertificatesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
@@ -458,4 +458,13 @@ export default function StudentCertificatesPage() {
       </section>
     </main>
   );
+}
+
+export default function StudentCertificatesPage() {
+  const { locale } = useLocale();
+  return <Suspense fallback={<main className="app-shell"><section className={styles.page}><div className={styles.panel}>
+    <div className={styles.viewerLoading}>{locale === 'english' ? 'Loading certificates…' : 'प्रमाणपत्र लोड हो रहे हैं…'}</div>
+  </div></section></main>}>
+    <StudentCertificatesContent />
+  </Suspense>;
 }

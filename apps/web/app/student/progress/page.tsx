@@ -106,16 +106,16 @@ export default function ProgressPage(){
           <div><b>{item.assessment_title || assessmentTypeLabel(item.assessment_type)}</b><small>{assessmentTypeLabel(item.assessment_type)} · {item.subject_name || '—'}{item.chapter_name?' · '+item.chapter_name:''}</small></div>
           <div className="student-test-result">
             <span className={item.status==='RELEASED'?'good':''}>{item.status==='RELEASED'?String(item.final_score??'—')+' / '+String(item.max_score??'—'):assessmentStatusLabel(item.status)}</span>
-            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?certificateId='+certificate.id}><LocaleText hinglish="प्रमाणपत्र देखें ↗" english="View certificate ↗" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked">Certificate revoked</small>:eligibility?.eligible?(
+            {certificate?.status==='ISSUED'?<div className="student-certificate-actions"><Link href={'/student/certificates?certificateId='+certificate.id}><LocaleText hinglish="प्रमाणपत्र देखें ↗" english="View certificate ↗" /></Link></div>:certificate?.status==='REVOKED'?<small className="parent-certificate-revoked"><LocaleText hinglish="प्रमाणपत्र निरस्त" english="Certificate revoked" /></small>:eligibility?.eligible?(
               <button type="button" className="student-cert-issue" disabled={issuingAttemptId!==null} onClick={()=>void issueResultCertificate(Number(item.attempt_id))}>
-                {issuingAttemptId===Number(item.attempt_id)?'Issuing…':'Issue certificate'}
+                {issuingAttemptId===Number(item.attempt_id)?t('Issuing…','जारी हो रहा है…'):t('Issue certificate','प्रमाणपत्र जारी करें')}
               </button>
             ):item.status==='RELEASED'&&eligibility?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'?<small className="student-cert-hint">{({
               SUBJECT_COMPLETION_REQUIRED:t('Complete all published lessons in this subject to unlock the certificate.','प्रमाणपत्र पाने के लिए इस विषय के सभी प्रकाशित पाठ पूरे करें।'),
               PASS_THRESHOLD_NOT_MET:t('The released score is below the certificate threshold.','जारी स्कोर प्रमाणपत्र की निर्धारित सीमा से कम है।'),
               PUBLISHED_LESSONS_NOT_AVAILABLE:t('Published lessons are not available for this subject yet.','इस विषय के प्रकाशित पाठ अभी उपलब्ध नहीं हैं।'),
               SUBJECT_TRACK_NOT_ACTIVE:t('An active subject enrollment is required.','इस विषय में सक्रिय नामांकन आवश्यक है।'),
-              CERTIFICATE_REVOKED:t('This certificate has been revoked.','यह प्रमाणपत्र निरस्त कर दिया गया है।')            } as Record<string,string>)[String(eligibility?.eligibility_reason)]||'Certificate eligibility could not be checked; open results to retry.'}</small>:null}
+              CERTIFICATE_REVOKED:t('This certificate has been revoked.','यह प्रमाणपत्र निरस्त कर दिया गया है।')            } as Record<string,string>)[String(eligibility?.eligibility_reason)]||t('Certificate eligibility could not be checked; open results to retry.','प्रमाणपत्र की पात्रता जाँची नहीं जा सकी; फिर जाँचने के लिए परिणाम खोलें।')}</small>:null}
           </div>
         </div>;
       }):<div className="topic-line"><span><LocaleText hinglish="Test attempt शुरू करने पर उसका status और result यहाँ दिखेगा।" english="Your test status and result will appear here after you start an attempt." /></span></div>}</div>

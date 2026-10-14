@@ -525,7 +525,7 @@ export default function TestsClient(){
                        <button type="button" className={styles.certificateIssueButton}
                          disabled={issuingCertificateAttemptId!==null}
                          onClick={()=>void issueCertificateForAttempt(attemptId)}>
-                         {issuingCertificateAttemptId===attemptId?'Issuing…':'Issue certificate'}
+                         {issuingCertificateAttemptId===attemptId?t('Issuing…','जारी हो रहा है…'):t('Issue certificate','प्रमाणपत्र जारी करें')}
                        </button>
                      ):(
                        <small className={styles.certificateEligibilityHint}>{certificateEligibilityMessage(certificate?.eligibility_reason)}</small>
@@ -595,7 +595,7 @@ export default function TestsClient(){
                 <button type="button" className={styles.certificateIssueButton}
                   disabled={issuingCertificateAttemptId!==null}
                   onClick={()=>void issueCertificateForAttempt(Number(attempt?.attempt_id))}>
-                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?'Issuing…':'Issue certificate'}
+                  {issuingCertificateAttemptId===Number(attempt?.attempt_id)?t('Issuing…','जारी हो रहा है…'):t('Issue certificate','प्रमाणपत्र जारी करें')}
                 </button>
               ):(
                 cert?.eligibility_reason!=='ADMIN_CREATED_TEST_ONLY'
