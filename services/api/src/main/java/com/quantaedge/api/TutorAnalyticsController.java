@@ -24,6 +24,14 @@ public class TutorAnalyticsController {
       from tutor_message tm join tutor_session ts on ts.id=tm.session_id
       """));
     result.put("modes",jdbc.queryForList("select coalesce(mode,'UNKNOWN') as mode,count(*) as messages from tutor_message where role='USER' and created_at>=now()-interval '30 days' group by mode order by messages desc"));
+    result.put("providers",jdbc.queryForList("""
+      select coalesce(model,'unknown') as model,count(*) as replies,
+             coalesce(sum(input_tokens),0) as input_tokens,
+             coalesce(sum(output_tokens),0) as output_tokens
+      from tutor_message
+      where role='ASSISTANT' and created_at>=now()-interval '30 days'
+      group by model order by replies desc,model
+      """));
     return result;
   }
 }
