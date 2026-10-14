@@ -35,6 +35,8 @@ The execution checklist for the complete-book → chapter → original learning 
 
 Run offline target validation with `python scripts/audit_curriculum_pipeline.py --skip-registry --strict`. After pulling the real class/language GHCR images, run the strict asset audit and retain its JSON report. The audit is read-only and does not publish content or change the database schema.
 
+**Current Class 6 textbook-to-Tutor pilot:** after `git pull`, run `powershell -ExecutionPolicy Bypass -File .\scripts\quantaedge-class6-tutor-pilot.ps1` for a read-only dry-run using the extracted page artifacts already committed to `main`. To import source pages as draft records into a running local API, set `QUANTAEDGE_ADMIN_SESSION` to your local authenticated `QE_SESSION` cookie value in that terminal, then use `-Mode ImportDraft`. To approve the four source records after inspecting their official URLs, edition labels, page counts and SHA prefixes, use `-Mode ImportAndApprove` and enter the exact confirmation phrase. Never paste the session cookie into chat. This does not publish lessons or questions.
+
 ## Curriculum and content status
 
 The canonical curriculum outline contains 102 chapter rows across the six Class 6–8 Mathematics and Science tracks. Student pages and API requests are scoped to the authenticated student's class and the selected subject. The admin Content Studio lists chapters and lessons by class, subject, status and search; content can be created as draft, edited, reviewed and published/unpublished through authenticated admin access.
