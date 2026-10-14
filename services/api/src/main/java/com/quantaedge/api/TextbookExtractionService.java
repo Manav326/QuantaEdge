@@ -361,11 +361,13 @@ public class TextbookExtractionService {
     String sourceUrl = manifest.path("source_url").asText("").trim();
     String edition = manifest.path("edition").asText("edition not recorded").trim();
     String sourceHash = manifest.path("original_book_sha256").asText("").toLowerCase(Locale.ROOT);
+    String assetHash = manifest.path("asset_pdf_sha256").asText("").toLowerCase(Locale.ROOT);
     int classNo = extractClassNumber(manifest);
     String language = normalizeLanguage(manifest.path("language").asText(""));
     String subjectName = manifest.path("subject").asText("").trim();
     int expectedPages = manifest.path("page_count").asInt(0);
     if (bookId.isBlank() || sourceTitle.isBlank() || !sourceHash.matches("[0-9a-f]{64}")
+        || !assetHash.matches("[0-9a-f]{64}") || !sourceHash.equals(assetHash)
         || expectedPages < 1 || expectedPages > 2000) {
       throw new IllegalArgumentException("The manifest is missing a valid book ID, title, source hash, or page count.");
     }
