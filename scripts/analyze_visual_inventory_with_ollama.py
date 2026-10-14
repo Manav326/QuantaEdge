@@ -217,11 +217,13 @@ def run_analysis(
             selected.append(asset)
 
     results_by_id = dict(previous)
+    processed_this_run = 0
 
     def checkpoint() -> dict[str, Any]:
         ordered_results = list(results_by_id.values())
         summary = {
             "assets_selected": len(selected) + skipped_from_checkpoint,
+            "assets_processed_this_run": processed_this_run,
             "assets_analyzed": sum(1 for item in ordered_results if item.get("analysis_status") == "DRAFT_REQUIRES_REVIEW" and item.get("model") == model and item.get("prompt_version") == PROMPT_VERSION),
             "assets_failed": sum(1 for item in ordered_results if item.get("analysis_status") == "ANALYSIS_ERROR"),
             "assets_skipped_from_checkpoint": skipped_from_checkpoint,
@@ -281,6 +283,7 @@ def run_analysis(
                 "human_review_required": True,
                 "publication_allowed": False,
             }
+        processed_this_run += 1
         result = checkpoint()
     return result
 
