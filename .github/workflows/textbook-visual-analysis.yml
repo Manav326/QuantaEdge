@@ -87,9 +87,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/quantaedge-source"
           docker cp "$container_id:$PDF_PATH" "$RUNNER_TEMP/quantaedge-source/source.pdf"
           docker cp "$container_id:$MANIFEST_PATH" "$RUNNER_TEMP/quantaedge-source/source.manifest.json"
-          page_name="$(python -c 'import json; print(json.load(open("'"$RUNNER_TEMP"'/quantaedge-source/source.manifest.json", encoding="utf-8"))["text_jsonl"])')"
+          page_name="$(python -c 'import json,os; print(json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "quantaedge-source/source.manifest.json"), encoding="utf-8"))["text_jsonl"])')"
           [[ "$page_name" != */* && "$page_name" == *.jsonl ]] || { echo "Manifest text_jsonl must be a safe sibling .jsonl filename"; exit 2; }
-          manifest_dir="\${MANIFEST_PATH%/*}"
+          manifest_dir="${MANIFEST_PATH%/*}"
           docker cp "$container_id:$manifest_dir/$page_name" "$RUNNER_TEMP/quantaedge-source/$page_name"
           echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source" >> "$GITHUB_ENV"
 
