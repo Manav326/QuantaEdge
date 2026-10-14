@@ -92,8 +92,8 @@ public class TutorCurriculumRetriever {
     }
     String textbookPages = retrieveTextbookPages(sessionId, language, learnerMessage, currentTopic);
     if (!textbookPages.isBlank()) {
-      if (result.length() > 0) result.append("\\n");
-      result.append("REVIEWED TEXTBOOK PAGE EXCERPTS (source/page metadata follows):\\n")
+      if (result.length() > 0) result.append("\n");
+      result.append("REVIEWED TEXTBOOK PAGE EXCERPTS (source/page metadata follows):\n")
           .append(textbookPages);
     }
     return result.toString();
@@ -144,8 +144,8 @@ public class TutorCurriculumRetriever {
       context.append("- Source: ").append(row.get("source_title"))
           .append("; edition: ").append(row.get("edition"))
           .append("; chapter: ").append(row.get("chapter_title"))
-          .append("; PDF page: ").append(row.get("page_no")).append("\\n  Content: ")
-          .append(excerpt).append("\\n");
+          .append("; PDF page: ").append(row.get("page_no")).append("\n  Content: ")
+          .append(excerpt).append("\n");
     }
     return context.toString();
   }
