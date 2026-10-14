@@ -1,6 +1,6 @@
 # Run the QuantaEdge AI tutor locally without an API key
 
-This optional Compose override runs a small local Ollama model and connects the existing authenticated tutor API to it. It does not modify the database schema or replace the existing hosted-provider configuration.
+This optional Compose override runs a small local Ollama model as the primary tutor. The API fallback remains disabled by default and can only be used by setting `APP_AI_TUTOR_FALLBACK_ENABLED=true` and supplying a secret API key. Both web and Android use the same server-side provider router; clients never choose providers directly.
 
 ## Start
 
@@ -26,10 +26,11 @@ Then start the ordinary stack with `.scripts\quantaedge-local.ps1 up`. Do not us
 
 ## What this enables
 
-- No OpenAI API key is required for this local model mode.
-- The API uses Ollama's OpenAI-compatible chat-completions endpoint; hosted OpenAI Responses API behavior remains unchanged.
-- The model receives only the lesson metadata, sanitized lesson blocks, selected question context, limited mastery context, and recent tutor conversation assembled by the existing tutor service.
-- Existing student authorization and rate limits remain in force.
+- No external API key is required for the private model.
+- The API routes to the private Ollama-compatible chat-completions endpoint first; the configured hosted API fallback is disabled unless explicitly turned on.
+- If fallback is enabled, it is used only after the private provider fails or the response fails the configured structural quality gate. The gate checks for unusable output; it cannot prove academic correctness.
+- The model receives the selected language, translated lesson and chapter metadata where a reviewed translation exists, sanitized lesson blocks, approved question context and recent tutor conversation.
+- Tutor session authorization checks the learner's active class and subject enrollment as well as publication status; usage limits remain in force.
 
 ## Important limitations
 
@@ -37,4 +38,6 @@ Then start the ordinary stack with `.scripts\quantaedge-local.ps1 up`. Do not us
 - A small general-purpose model can make mistakes. Do not represent its answers as verified SCERT/NCERT content. Existing lesson content is the source of truth; curriculum and bilingual quality still require evaluation and teacher review.
 - Only published lessons are eligible. If the lesson has no published content, the tutor cannot be opened for it.
 - Do not expose Ollama's port publicly. In this Compose setup it is available only on the internal Docker network.
-- To enable the tutor in production, deploy a suitably provisioned model service or configure an approved hosted provider through secret environment variables. Never commit API keys to Git.
+- In production, deploy the in-house inference service on a private network and set `APP_AI_TUTOR_PRIMARY_BASE_URL`, `APP_AI_TUTOR_PRIMARY_MODEL`, and `APP_AI_TUTOR_PRIMARY_API_MODE` to match it. The production Compose stack does not start a model server automatically; `http://ollama:11434` works only when that service exists on the same Docker network.
+- Keep `APP_AI_TUTOR_FALLBACK_ENABLED=false` for in-house-only operation. To opt in to the API fallback, explicitly set the flag to `true` and store `OPENAI_API_KEY` in deployment secrets. It is never automatically enabled merely because a key exists.
+- Never commit API keys to Git. Validate semantic quality with teacher-reviewed curriculum evaluation sets before production rollout.
