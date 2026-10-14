@@ -16,7 +16,8 @@ type DragStart = { pointerId: number; startX: number; startY: number; left: numb
 type Point = { left: number; top: number };
 type MessageBlock =
   | { kind: 'paragraph' | 'heading' | 'equation' | 'code'; text: string; level?: number; language?: string }
-  | { kind: 'ordered' | 'unordered'; text: string; items: string[] };
+  | { kind: 'ordered' | 'unordered'; text: string; items: string[] }
+  | { kind: 'table'; text: string; headers: string[]; rows: string[][] };
 
 const englishModeLabels: Record<Mode, string> = {
   HINT: 'Hint',
@@ -121,6 +122,22 @@ function parseMessageBlocks(message: string): MessageBlock[] {
       }
       continue;
     }
+    const nextLine = index + 1 < lines.length ? lines[index + 1].trim() : '';
+    const isTableSeparator = /^\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?$/.test(nextLine);
+    if (trimmed.includes('|') && isTableSeparator) {
+      flushParagraph(); flushList();
+      const cells = (line: string) => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => cell.trim());
+      const headers = cells(trimmed);
+      const rows: string[][] = [];
+      index += 2;
+      while (index < lines.length && lines[index].trim() && lines[index].includes('|')) {
+        rows.push(cells(lines[index]));
+        index += 1;
+      }
+      blocks.push({ kind: 'table', text: '', headers, rows });
+      index -= 1;
+      continue;
+    }
     const heading = trimmed.match(/^(#{1,3})\s+(.+)$/);
     if (heading) {
       flushParagraph(); flushList();
@@ -169,6 +186,9 @@ function TutorMessageBody({ message, english }: { message: string; english: bool
       if (block.kind === 'ordered' || block.kind === 'unordered') {
         const List = block.kind === 'ordered' ? 'ol' : 'ul';
         return <List className="tutor-message-list" key={index}>{block.items.map((item, itemIndex) => <li key={itemIndex}>{renderInlineText(item, english)}</li>)}</List>;
+      }
+      if (block.kind === 'table') {
+        return <div className="tutor-table-wrap" key={index}><table className="tutor-table"><thead><tr>{block.headers.map((cell, cellIndex) => <th scope="col" key={cellIndex}>{renderInlineText(cell, english)}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex}>{block.headers.map((_, cellIndex) => <td key={cellIndex}>{renderInlineText(row[cellIndex] || '', english)}</td>)}</tr>)}</tbody></table></div>;
       }
       if (block.kind === 'equation') {
         return <div className="tutor-equation" role="math" aria-label={english ? 'Math expression' : 'गणितीय व्यंजक'} key={index}>{block.text}</div>;
@@ -611,15 +631,18 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
                 onPointerUp={endPanelResize}
                 onPointerCancel={endPanelResize}
                 onKeyDown={event => {
-                  if (!frame || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+                  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) return;
+                  const rect = panelRef.current?.getBoundingClientRect();
+                  if (!frame && !rect) return;
                   event.preventDefault();
+                  const base = frame || { left: rect!.left, top: rect!.top, width: rect!.width, height: rect!.height };
                   const delta = event.shiftKey ? 40 : 16;
-                  const maxWidth = Math.max(320, window.innerWidth - frame.left - 8);
-                  const maxHeight = Math.max(360, window.innerHeight - frame.top - 8);
+                  const maxWidth = Math.max(320, window.innerWidth - base.left - 8);
+                  const maxHeight = Math.max(360, window.innerHeight - base.top - 8);
                   setFrame({
-                    ...frame,
-                    width: Math.max(320, Math.min(maxWidth, frame.width + (event.key === 'ArrowRight' ? delta : event.key === 'ArrowLeft' ? -delta : 0))),
-                    height: Math.max(360, Math.min(maxHeight, frame.height + (event.key === 'ArrowDown' ? delta : event.key === 'ArrowUp' ? -delta : 0))),
+                    ...base,
+                    width: Math.max(320, Math.min(maxWidth, base.width + (event.key === 'ArrowRight' ? delta : event.key === 'ArrowLeft' ? -delta : 0))),
+                    height: Math.max(360, Math.min(maxHeight, base.height + (event.key === 'ArrowDown' ? delta : event.key === 'ArrowUp' ? -delta : 0))),
                   });
                 }}
               ><span aria-hidden="true">⌟</span></button>
