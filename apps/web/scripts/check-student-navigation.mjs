@@ -154,8 +154,8 @@ assert.deepEqual(androidStudentGroupIds, ['today', 'learn', 'practice', 'progres
 const androidParentGroupIds = [...androidApp.matchAll(/AppNavItem\("(family|children|profile)"/g)].map((match) => match[1]);
 assert.deepEqual(androidParentGroupIds, ['family', 'children', 'profile'], 'Android parent navigation must keep its three role-specific destinations.');
 assert.ok(androidApp.includes('LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE'), 'Android navigation must derive placement from device orientation.');
-assert.ok(androidApp.includes('if (signedIn && landscapeLayout) NavigationRail'), 'Android landscape must use the left navigation rail.');
-assert.ok(androidApp.includes('if (signedIn && !landscapeLayout) NavigationBar'), 'Android portrait must use the bottom navigation bar.');
+assert.ok(androidApp.includes('if (signedIn && landscapeLayout && route != AppRoute.TUTOR) NavigationRail'), 'Android landscape must use the left navigation rail outside the full-screen tutor.');
+assert.ok(androidApp.includes('if (signedIn && !landscapeLayout && route != AppRoute.TUTOR) NavigationBar'), 'Android portrait must use the bottom navigation bar outside the full-screen tutor.');
 assert.ok(!androidApp.includes('screenWidthDp >= 600'), 'Screen width must not choose Android primary navigation placement.');
 // Testable, non-Compose route ownership: all detailed Android destinations map to one of the shared five groups.
 for (const routeGroup of [
