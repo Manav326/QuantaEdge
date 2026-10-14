@@ -167,6 +167,7 @@ def run_analysis(
     opener=urllib.request.urlopen,
     output_path: Path | None = None,
     resume: bool = False,
+    run_id: str | None = None,
 ) -> dict[str, Any]:
     if not inventory_path.is_file():
         raise FileNotFoundError(f"Inventory not found: {inventory_path}")
@@ -212,6 +213,10 @@ def run_analysis(
             and existing.get("prompt_version") == PROMPT_VERSION
         ):
             skipped_from_checkpoint += 1
+            continue
+        # Within a single GitHub run, don't retry a failed asset in every batch.
+        # A later workflow run has a different run_id and will retry it.
+        if run_id and existing.get("analysis_status") == "ANALYSIS_ERROR" and existing.get("run_id") == run_id:
             continue
         if len(selected) < max_assets:
             selected.append(asset)
@@ -265,6 +270,8 @@ def run_analysis(
         try:
             item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, opener=opener)
             item["prompt_version"] = PROMPT_VERSION
+            if run_id:
+                item["run_id"] = run_id
             item["checkpointed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             results_by_id[asset_id] = item
         except Exception as exc:
@@ -278,6 +285,7 @@ def run_analysis(
                 "model_provider": "ollama_local",
                 "model": model,
                 "prompt_version": PROMPT_VERSION,
+                "run_id": run_id,
                 "analysis_status": "ANALYSIS_ERROR",
                 "error": str(exc)[:500],
                 "human_review_required": True,
@@ -296,6 +304,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--resume", action="store_true", help="Resume from the existing output checkpoint and retry failed assets.")
+    parser.add_argument("--run-id", help="Optional runner-run identifier; failed assets are not retried repeatedly within that run.")
     parser.add_argument("--overwrite", action="store_true", help="Discard an existing checkpoint and start a fresh analysis.")
     args = parser.parse_args()
     output_path = args.inventory.parent / "visual-analysis.v1.json"
@@ -313,7 +322,7 @@ def main(argv: list[str] | None = None) -> int:
         result = run_analysis(
             args.inventory, endpoint=args.endpoint, model=args.model,
             max_assets=args.max_assets, include_page_previews=args.include_page_previews,
-            timeout=args.timeout, output_path=output_path, resume=args.resume,
+            timeout=args.timeout, output_path=output_path, resume=args.resume, run_id=args.run_id,
         )
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"Visual analysis stopped safely: {exc}", file=sys.stderr)
