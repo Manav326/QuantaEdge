@@ -6,6 +6,19 @@ QuantaEdge must not treat a textbook as plain text. The source-ingestion pipelin
 
 This document is an implementation contract, not a claim that multimodal authoring is already complete.
 
+## Compatibility and additive-only implementation (mandatory)
+
+This work extends the existing product. It must not replace, rewrite, or regress the current text-only lesson, question/test, Content Studio, textbook extraction/import, or Tutor workflows.
+
+- Keep the current extraction bundle fields and existing import contract unchanged. Add optional, versioned fields such as `visual_assets`; older bundles that omit them must continue to validate and import.
+- Keep existing lesson records and renderer behavior unchanged. Add typed multimodal blocks as an optional extension using a backwards-compatible adapter/default; a lesson with no such blocks must render as it does now.
+- Reuse the existing chapter IDs, source-book records, review/publish permissions and Content Studio lifecycle. Do not create parallel curriculum or publishing systems.
+- Store large media assets separately and reference them by stable IDs/checksums; do not move existing lesson text or source PDFs into a new storage model.
+- Add database migrations only when needed, using additive nullable columns/new tables and safe defaults. Never rename/drop existing columns, rewrite legacy lesson records, or make new asset fields mandatory for old records.
+- Gate new rendering behind the presence of a valid approved block. If a block is unsupported, missing or invalid, fail safely and preserve the rest of the lesson; do not break the whole lesson.
+- Add regression tests proving legacy text-only extraction bundles import, legacy lessons render, and existing question/test/Tutor routes retain their current behavior.
+- Roll out in small stages: visual inventory first, then an opt-in draft block format, then student rendering, then interactive components. Do not turn on multimodal generation or publication globally until each stage passes tests and is reviewed.
+
 ## Target flow
 
 ```text
