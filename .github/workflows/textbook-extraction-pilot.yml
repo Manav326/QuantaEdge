@@ -8,6 +8,8 @@ on:
       - "scripts/textbook_registry.py"
       - "scripts/extract_textbook_text.py"
       - "scripts/import_ghcr_extracted_pages.py"
+      - "scripts/validate_textbook_extraction_artifacts.py"
+      - "tests/test_validate_textbook_extraction_artifacts.py"
       - "tests/test_extract_textbook_text.py"
       - "tests/test_import_ghcr_extracted_pages.py"
   workflow_dispatch:
@@ -49,6 +51,9 @@ jobs:
 
       - name: Test safe GHCR page importer
         run: python -m unittest discover -s tests -p 'test_import_ghcr_extracted_pages.py' -v
+
+      - name: Test whole-book extraction integrity and two-part Maths rules
+        run: python -m unittest discover -s tests -p 'test_validate_textbook_extraction_artifacts.py' -v
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
@@ -93,6 +98,13 @@ jobs:
               --subject Maths \
               --subject Science \
               --scope SUBJECT_BOOK
+            echo "::endgroup::"
+            echo "::group::Validate complete-book manifests, hashes, page continuity, and required Maths parts"
+            python scripts/validate_textbook_extraction_artifacts.py \
+              --registry-index "${registry_dir}/index.json" \
+              --extraction-dir "${extracted_dir}" \
+              --class-no "${class_no}" \
+              --language "${medium}"
             echo "::endgroup::"
             mkdir -p pilot-output/reports
             cp "${prepared_dir}/prepare-report.json" "pilot-output/reports/class-${class_no}-${medium}-prepare-report.json"
