@@ -8,7 +8,7 @@ class PipelineAuditTests(unittest.TestCase):
  def test_valid_complete_pdf_hash(self):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d)/"b.pdf";raw=b"%PDF-1.4\nfixture\n";p.write_bytes(raw)
-   r,b=audit_book(Path(d),{"file":"b.pdf","bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"content_availability":{"status":"complete"}},False)
+   r,b=audit_book(Path(d),{"file":"b.pdf","bytes":len(raw),"sha256":hashlib.sha256(raw).hexdigest(),"edition":"2025-26","source_url":"https://scert.bihar.gov.in/textbooks","content_availability":{"status":"complete"}},False)
    self.assertEqual("complete",r["status"]);self.assertTrue(r["sha256_matches"]);self.assertFalse(any(x["severity"]=="BLOCKER" for x in b))
  def test_partial_book_fails(self):
   with tempfile.TemporaryDirectory() as d:
@@ -22,7 +22,7 @@ class PipelineAuditTests(unittest.TestCase):
    _,b=audit_book(Path(d),{"file":"../secret.pdf"},False);self.assertIn("UNSAFE_PATH",{x["code"] for x in b})
  def test_missing_registry_reports_both_media(self):
   with tempfile.TemporaryDirectory() as d:
-   r,b=audit_registry(Path(d),["6"],["hindi","english"],False);self.assertEqual(2,len(r["images"]))
+   r,b=audit_registry(Path(d),["6"],["hindi","english"]);self.assertEqual(2,len(r["images"]))
    codes={x["code"] for x in b};self.assertIn("REGISTRY_INDEX_MISSING",codes);self.assertIn("TRACK_BOOK_COVERAGE_MISSING",codes)
  def test_page_gap_and_overlap(self):
   bundle={"schema_version":1,"bundle_status":"DRAFT_EXTRACTION_ONLY","curriculum":{"class_code":"6","subject_code":"maths","language":"hi"},"source":{"pdf_page_count":3,"pdf_sha256":"a"*64},"chapter_map":[{"code":"a","title":"A","page_start":1,"page_end":2},{"code":"b","title":"B","page_start":2,"page_end":3}],"extraction":{"requires_human_review":True},"pages":[{"page_number":1,"chapter_code":"a","text":"one"},{"page_number":3,"chapter_code":"b","text":"three"}]}

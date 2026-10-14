@@ -69,6 +69,10 @@ def sample_model_output():
         "lesson_title": "चर का मान रखकर व्यंजक हल करें",
         "lesson_summary": "चर का मान रखकर बीजीय व्यंजक का मान निकालें।",
         "lesson_explanation": "किसी व्यंजक में चर के स्थान पर दिया गया मान रखने के बाद गणना की जाती है।",
+        "worked_example": "उदाहरण: x = 2 होने पर x + 3 = 2 + 3 = 5।",
+        "guided_practice": "अब x = 4 रखें और x + 3 का मान निकालें।",
+        "independent_practice": "x = 5 होने पर x + 3 का मान स्वयं निकालें।",
+        "recap": "चर का मान रखने के बाद व्यंजक की गणना करें।",
         "questions": [sample_question()],
     }
 
