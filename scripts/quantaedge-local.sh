@@ -52,6 +52,8 @@ if [[ "$ACTION" == "clean-build" && "$BUILD_LOCAL" != true ]]; then
 fi
 
 export APP_DEMO_SEED="${APP_DEMO_SEED:-true}"
+# QuantaEdge owns API port 8080; do not let a stale shell/.env override it.
+export API_PORT=8080
 export QUANTAEDGE_GHCR_OWNER="$(printf '%s' "${QUANTAEDGE_GHCR_OWNER:-manav326}" | tr '[:upper:]' '[:lower:]')"
 export QUANTAEDGE_IMAGE_TAG="$IMAGE_TAG"
 
@@ -128,7 +130,7 @@ pull_published_images() {
 }
 
 ensure_api_port_available() {
-  local preferred="${API_PORT:-8080}" existing_api_id existing_host_port
+  local preferred="8080" existing_api_id existing_host_port
   if [[ ! "$preferred" =~ ^[0-9]+$ ]] || (( preferred < 1 || preferred > 65535 )); then
     echo "API_PORT must be an integer from 1 to 65535; received '$preferred'." >&2
     return 2
