@@ -6,6 +6,9 @@ cd "$(dirname "$0")/.."
 ACTION="up"
 ACTION_SET=false
 BUILD_LOCAL=false
+DOCKER_OLLAMA=false
+AI_MODE=""
+AI_MODEL=""
 IMAGE_TAG="${QUANTAEDGE_IMAGE_TAG:-latest}"
 
 # Flags can appear before or after the action.
@@ -13,6 +16,10 @@ while (($#)); do
   case "$1" in
     --local|--build-local)
       BUILD_LOCAL=true
+      shift
+      ;;
+    --docker-ollama)
+      DOCKER_OLLAMA=true
       shift
       ;;
     --tag)
@@ -33,7 +40,7 @@ while (($#)); do
       shift
       ;;
     *)
-      echo "Usage: bash scripts/quantaedge-local.sh [--local] [--tag TAG] [up|sync|ai|rebuild|clean-build|down|reset|logs|ps]" >&2
+      echo "Usage: bash scripts/quantaedge-local.sh [--local] [--docker-ollama] [--tag TAG] [up|sync|ai|rebuild|clean-build|down|reset|logs|ps]" >&2
       exit 2
       ;;
   esac
@@ -72,6 +79,47 @@ ai_compose() {
   fi
   args+=(-f docker-compose.ai.yml)
   docker compose "${args[@]}" "$@"
+}
+
+host_ai_compose() {
+  local args=(-f docker-compose.yml)
+  if [[ "$BUILD_LOCAL" != true ]]; then
+    args+=(-f docker-compose.ghcr.yml)
+  fi
+  args+=(-f docker-compose.ai-host.yml)
+  docker compose "\${args[@]}" "$@"
+}
+
+detect_local_ollama_model() {
+  python3 - <<'PYMODEL'
+import json
+import os
+import sys
+import urllib.request
+
+url = "http://127.0.0.1:11434/api/tags"
+try:
+    with urllib.request.urlopen(url, timeout=4) as response:
+        payload = json.load(response)
+except Exception as exc:
+    print("Cannot reach host Ollama at http://127.0.0.1:11434/api/tags. Start Ollama and confirm 'ollama list' works. To use the separate Docker model instead, pass --docker-ollama. Details: " + str(exc), file=sys.stderr)
+    sys.exit(2)
+
+models = [item.get("name", "") for item in payload.get("models", []) if item.get("name")]
+if not models:
+    print("Host Ollama has no installed models. Check 'ollama list', or pass --docker-ollama for the separate Qwen model.", file=sys.stderr)
+    sys.exit(2)
+
+requested = os.environ.get("QUANTAEDGE_OLLAMA_MODEL", "").strip()
+if requested:
+    if requested not in models:
+        print("QUANTAEDGE_OLLAMA_MODEL=%r is not installed. Available models: %s" % (requested, ", ".join(models)), file=sys.stderr)
+        sys.exit(2)
+    print(requested)
+else:
+    preferred = next((name for name in models if name.lower().startswith("llama")), models[0])
+    print(preferred)
+PYMODEL
 }
 
 pull_published_images() {
@@ -138,11 +186,20 @@ case "$ACTION" in
     fi
     ;;
   ai)
-    # Local Ollama tutor overlay; database and model volumes are preserved.
-    # Cache-first: explicitly run the sync action when you want newer GHCR images.
-    if [[ "$BUILD_LOCAL" == true ]]; then ai_compose build --parallel; fi
-    ensure_api_port_available
-    ai_compose up -d --no-build --remove-orphans
+    if [[ "$DOCKER_OLLAMA" == true ]]; then
+      if [[ "$BUILD_LOCAL" == true ]]; then ai_compose build --parallel; fi
+      ensure_api_port_available
+      ai_compose up -d --no-build --remove-orphans
+      AI_MODE="docker"
+      AI_MODEL="qwen2.5:0.5b"
+    else
+      AI_MODEL="$(detect_local_ollama_model)"
+      export QUANTAEDGE_OLLAMA_MODEL="$AI_MODEL"
+      if [[ "$BUILD_LOCAL" == true ]]; then host_ai_compose build --parallel; fi
+      ensure_api_port_available
+      host_ai_compose up -d --no-build --remove-orphans
+      AI_MODE="host"
+    fi
     ;;
   rebuild)
     if [[ "$BUILD_LOCAL" == true ]]; then
@@ -206,9 +263,15 @@ for i in $(seq 1 30); do
       echo "Image source: GHCR (${QUANTAEDGE_GHCR_OWNER}/quantaedge-*:$IMAGE_TAG)."
     fi
     if [[ "$ACTION" == "ai" ]]; then
-      echo "AI tutor mode: Ollama / qwen2.5:0.5b (first launch may take several minutes)."
-      echo "Open a published lesson and select the tutor dock. The model is a local MVP and may make mistakes."
-      echo "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init api"
+      if [[ "$AI_MODE" == "host" ]]; then
+        echo "AI tutor mode: existing host Ollama model '$AI_MODEL' via host.docker.internal:11434."
+        echo "If tutor requests fail with connection refused, see docs/ai/local-ai-tutor.md. Do not expose port 11434 to untrusted networks."
+        echo "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai-host.yml logs --tail=200 api"
+      else
+        echo "AI tutor mode: separate Docker Ollama / qwen2.5:0.5b (first model pull may take several minutes)."
+        echo "AI tutor logs: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init redis api"
+      fi
+      echo "Open a published lesson and select the tutor dock. Local model answers still require teacher review."
     fi
     exit 0
   fi
