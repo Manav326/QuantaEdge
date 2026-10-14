@@ -626,10 +626,33 @@ FROM published;
 """
 
 
+LANGUAGE_REVIEW_TEXT_KEYS = {
+    "display_name", "title", "summary", "description", "heading", "subheading",
+    "body", "html", "content", "keypoints", "keypoint", "prompt", "explanation",
+    "label", "topic", "subtopic", "skill", "tags", "problem", "steps", "answer",
+    "points", "caption", "alt", "question", "text", "instruction", "hint", "note",
+    "feedback", "solution_text", "transcript",
+}
+
+def collect_translation_review_text(value, parent_key=""):
+    """Collect likely student-facing text while ignoring IDs, formulas, URLs and structure."""
+    if isinstance(value, dict):
+        pieces = []
+        for key, child in value.items():
+            normalized = re.sub(r"[^a-z0-9_]", "", str(key).lower())
+            pieces.extend(collect_translation_review_text(child, normalized))
+        return pieces
+    if isinstance(value, list):
+        pieces = []
+        for child in value:
+            pieces.extend(collect_translation_review_text(child, parent_key))
+        return pieces
+    if isinstance(value, str) and parent_key in LANGUAGE_REVIEW_TEXT_KEYS:
+        return [value]
+    return []
+
 def audit_published_translation_scripts(rows):
     """Flag likely wrong-script records for human review; this is not a translation-quality proof."""
-    from collections import Counter
-
     by_track = {}
     candidates = []
     checked = 0
@@ -637,7 +660,7 @@ def audit_published_translation_scripts(rows):
         language = str(row.get("language") or "")
         if language not in ALLOWED_LANGUAGES:
             continue
-        text = " ".join(collect_student_text(row.get("translated_content")))
+        text = " ".join(collect_translation_review_text(row.get("translated_content")) )
         letters = [char for char in text if char.isalpha()]
         if not letters:
             continue
