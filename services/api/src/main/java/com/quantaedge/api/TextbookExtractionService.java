@@ -402,7 +402,7 @@ public class TextbookExtractionService {
         String reviewStatus = row.path("review_status").asText("");
         if (!bookId.equals(rowBookId) || !sourceHash.equals(rowHash) || !language.equals(rowLanguage)
             || !subjectName.equalsIgnoreCase(row.path("subject").asText(""))
-            || !text.equals(text.stripTrailing()) || text.length() > 100_000
+            || text.length() > 100_000
             || pageNo < 1 || pageNo > expectedPages || !pageNumbers.add(pageNo)) {
           throw new IllegalArgumentException("Extracted page metadata is inconsistent or contains duplicate/invalid page numbers.");
         }
