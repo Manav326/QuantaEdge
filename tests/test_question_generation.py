@@ -32,14 +32,15 @@ def sample_extraction():
             "url": "https://scert.bihar.gov.in/textbooks",
             "edition": "2025-26 verified edition",
             "publication_year": 2025,
-            "pdf_page_count": 2,
+            "pdf_page_count": 3,
             "pdf_sha256": "a" * 64,
         },
-        "chapter_map": [{"code": "algebraic-expressions", "title": "बीजीय व्यंजक", "page_start": 1, "page_end": 2}],
+        "chapter_map": [{"code": "algebraic-expressions", "title": "बीजीय व्यंजक", "page_start": 2, "page_end": 3}],
         "extraction": {"student_delivery_allowed": False, "requires_human_review": True},
         "pages": [
-            {"page_number": 1, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "चर और अचर पदों वाले व्यंजक।"},
-            {"page_number": 2, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "उदाहरण: x + 3 में x चर है और 3 अचर पद है।"},
+            {"page_number": 1, "chapter_code": None, "chapter_title": None, "text": "मुद्रण संस्करण 2025-26।"},
+            {"page_number": 2, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "चर और अचर पदों वाले व्यंजक।"},
+            {"page_number": 3, "chapter_code": "algebraic-expressions", "chapter_title": "बीजीय व्यंजक", "text": "उदाहरण: x + 3 में x चर है और 3 अचर पद है।"},
         ],
     }
 
@@ -81,9 +82,10 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_valid_extraction_is_grouped_by_chapter(self):
         curriculum, source, chapters = GEN.validate_extraction(sample_extraction())
         self.assertEqual("7", curriculum["class_code"])
-        self.assertEqual(2, source["pdf_page_count"])
+        self.assertEqual(3, source["pdf_page_count"])
         self.assertEqual("algebraic-expressions", chapters[0]["code"])
-        self.assertEqual([1, 2], [p["page_number"] for p in chapters[0]["pages"]])
+        self.assertEqual([2, 3], [p["page_number"] for p in chapters[0]["pages"]])
+        self.assertIn("संस्करण 2025-26", source["printed_imprint"])
 
     def test_model_call_retries_transient_rate_limit_and_honors_retry_after(self):
         response_content = json.dumps(sample_model_output(), ensure_ascii=False)
@@ -126,8 +128,8 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_resume_candidate_requires_matching_source_and_review_gate(self):
         curriculum, source, chapters = GEN.validate_extraction(sample_extraction())
         chapter = chapters[0]
-        chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "excerpt"}
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk, "hi")
         candidate = GEN.build_candidate_bundle(curriculum, source, chapter, [(chunk, checked)], "test-model")
 
         self.assertEqual(1, GEN.validate_resume_candidate(
@@ -147,19 +149,19 @@ class QuestionGenerationTests(unittest.TestCase):
     def test_unknown_edition_is_rejected(self):
         bundle = sample_extraction()
         bundle["source"]["edition"] = "unknown"
-        with self.assertRaisesRegex(ValueError, "actual textbook edition"):
+        with self.assertRaisesRegex(ValueError, "actual printed textbook edition"):
             GEN.validate_extraction(bundle)
 
     def test_invalid_page_map_is_rejected(self):
         bundle = sample_extraction()
-        bundle["chapter_map"][0]["page_end"] = 3
+        bundle["chapter_map"][0]["page_end"] = 4
         with self.assertRaisesRegex(ValueError, "Invalid page range"):
             GEN.validate_extraction(bundle)
 
     def test_chapter_without_extractable_text_is_rejected(self):
         bundle = sample_extraction()
-        bundle["pages"][0]["text"] = ""
         bundle["pages"][1]["text"] = ""
+        bundle["pages"][2]["text"] = ""
         with self.assertRaisesRegex(ValueError, "no extractable text"):
             GEN.validate_extraction(bundle)
 
@@ -193,8 +195,8 @@ class QuestionGenerationTests(unittest.TestCase):
         self.assertEqual(20, allocation[-1][0]["page_end"])
 
     def test_valid_generated_mcq_passes_checks(self):
-        chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "excerpt"}
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk, "hi")
         self.assertEqual("B", checked["questions"][0]["answer_payload"]["value"])
 
     def test_mcq_must_have_exactly_one_answer_matching_key(self):
@@ -223,7 +225,7 @@ class QuestionGenerationTests(unittest.TestCase):
         output = sample_model_output()
         q = output["questions"][0]
         q.update(question_type="INPUT", options=[], answer_payload={"kind": "TEXT", "value": "5"})
-        checked = GEN.validate_model_output(output, ["INPUT"], chunk)
+        checked = GEN.validate_model_output(output, ["INPUT"], chunk, "hi")
         self.assertEqual("TEXT", checked["questions"][0]["answer_payload"]["kind"])
         q.update(question_type="NUMERICAL", answer_payload={"kind": "NUMERIC", "value": "5"})
         with self.assertRaisesRegex(ValueError, "finite numeric"):
@@ -242,8 +244,8 @@ class QuestionGenerationTests(unittest.TestCase):
 
     def test_candidate_bundle_is_never_auto_approved(self):
         _, source, chapters = GEN.validate_extraction(sample_extraction())
-        chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "excerpt"}
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk, "hi")
         bundle = GEN.build_candidate_bundle(
             sample_extraction()["curriculum"], source, chapters[0], [(chunk, checked)], "test-model"
         )
@@ -255,8 +257,8 @@ class QuestionGenerationTests(unittest.TestCase):
 
     def test_review_gate_requires_all_five_confirmations(self):
         _, source, chapters = GEN.validate_extraction(sample_extraction())
-        chunk = {"page_numbers": [1, 2], "page_start": 1, "page_end": 2, "text": "excerpt"}
-        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk)
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "excerpt"}
+        checked = GEN.validate_model_output(sample_model_output(), ["MCQ"], chunk, "hi")
         candidate = GEN.build_candidate_bundle(
             sample_extraction()["curriculum"], source, chapters[0], [(chunk, checked)], "test-model"
         )
