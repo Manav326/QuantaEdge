@@ -106,7 +106,7 @@ Next Phase A tasks:
 ## GitHub-hosted visual pipeline checkpoint (2026-10-15)
 
 - [x] Add per-asset resumable vision analysis. The analyzer atomically checkpoints every completed asset; successful entries are reused only when source asset SHA-256, model tag and prompt version match. Failed assets are retried. Subsequent runs process the next pending assets rather than redoing completed work.
-- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to derive the class-wise GHCR image, fetch the whole-book PDF by book ID, and locate the matching committed manifest/page JSONL by book ID and SHA-256, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and commit checkpoint/index JSON to main.
+- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to derive the class-wise GHCR image, fetch the whole-book PDF by book ID, and locate the matching committed manifest/page JSONL by book ID and SHA-256, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and mirror generated binaries, previews, inventory, checkpoint and index to main.
 - [x] Store a stable bundle index in data/textbook-visuals/<book_slug>/bundle-index.v1.json; it records source PDF hash, model/prompt version, GHCR package/tags and bundle SHA-256.
 - [ ] Run the workflow on one exact Class 6 source image, inspect visual accuracy and runtime, and confirm GHCR publication plus the repository checkpoint commit. The workflow defaults to the existing Class 6 English Curiosity book and automatically resolves its class-wise GHCR image and source paths.
 - [ ] Review the sample captions and visible text, then run the next batch using the same book slug/model. Only after review should visual results be adapted into Content Studio lesson drafts.
@@ -123,5 +123,5 @@ Implementation commits:
 - [ ] Confirm the first workflow run on the actual existing GHCR source-book image; no real-book vision results or successful workflow run are claimed until that run completes.
 
 
-- [x] Strengthen runner resumability: process batches of 10, commit inventory/analysis checkpoints to main after each batch, and mirror the small analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
+- [x] Strengthen runner resumability: process batches of 10, commit all generated inventory/analysis/assets/previews to main after each batch, and mirror the analysis checkpoint to a stable GHCR checkpoint tag. Same-run failures do not starve later assets; the next workflow run retries failed assets.
 - [ ] Validate the new workflow end-to-end. GitHub connector status output has not yet confirmed a successful Actions run for these commits.
