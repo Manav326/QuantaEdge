@@ -1,7 +1,7 @@
 package com.quantaedge.api;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -207,24 +207,33 @@ public class TextbookExtractionService {
 
   private Path streamPdfToTempFile(long assetId) throws IOException {
     Path path = Files.createTempFile("quantaedge-textbook-", ".pdf");
+    final int chunkSize = 1024 * 1024;
     try {
-      jdbc.query("select pdf_bytes from learning_pdf_asset where id=?",
-          (ResultSetExtractor<Void>) rs -> {
-            if (!rs.next()) throw new SQLException("PDF asset was not found.");
-            try (InputStream input = rs.getBinaryStream(1)) {
-              if (input == null) throw new SQLException("PDF asset has no stored bytes.");
-              Files.copy(input, path, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException ex) {
-              throw new SQLException("Unable to stream PDF bytes to a temporary file.", ex);
-            }
-            return null;
-          }, assetId);
-      if (Files.size(path) < 5) throw new IOException("Stored PDF bytes are empty or invalid.");
+      Long size = jdbc.queryForObject(
+          "select octet_length(pdf_bytes)::bigint from learning_pdf_asset where id=?", Long.class, assetId);
+      if (size == null || size < 5 || size > 524288000L) {
+        throw new IOException("Stored PDF bytes are empty, missing, or exceed the 500 MiB asset limit.");
+      }
+      try (OutputStream output = Files.newOutputStream(path)) {
+        long offset = 1;
+        while (offset <= size) {
+          int length = (int) Math.min(chunkSize, size - offset + 1);
+          byte[] chunk = jdbc.queryForObject("""
+            select substring(pdf_bytes from ? for ?) from learning_pdf_asset where id=?
+            """, byte[].class, Math.toIntExact(offset), length, assetId);
+          if (chunk == null || chunk.length == 0) {
+            throw new IOException("The stored PDF could not be read completely.");
+          }
+          output.write(chunk);
+          offset += chunk.length;
+        }
+      }
+      if (Files.size(path) != size) throw new IOException("The streamed PDF size does not match its stored size.");
       return path;
     } catch (Exception ex) {
       Files.deleteIfExists(path);
       if (ex instanceof IOException io) throw io;
-      throw new IOException("Unable to prepare the PDF for extraction.", ex);
+      throw new IOException("Unable to stream PDF bytes to a temporary file.", ex);
     }
   }
 
