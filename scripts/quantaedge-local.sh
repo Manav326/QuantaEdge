@@ -128,20 +128,24 @@ pull_published_images() {
 }
 
 ensure_api_port_available() {
-  local preferred="${API_PORT:-8080}" candidate existing_api_id existing_host_port
+  local preferred="${API_PORT:-8080}" existing_api_id existing_host_port
   if [[ ! "$preferred" =~ ^[0-9]+$ ]] || (( preferred < 1 || preferred > 65535 )); then
     echo "API_PORT must be an integer from 1 to 65535; received '$preferred'." >&2
     return 2
   fi
-  # Reuse an already-running QuantaEdge API mapping on repeated invocations.
+
+  # Pin Compose to the port checked here, rather than silently accepting a .env override.
+  export API_PORT="$preferred"
+
+  # Repeated startup is allowed when QuantaEdge API already owns this exact port.
   existing_api_id="$(compose ps -q api 2>/dev/null | head -n 1 || true)"
   if [[ -n "$existing_api_id" ]]; then
     existing_host_port="$(docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$existing_api_id" 2>/dev/null || true)"
-    if [[ "$existing_host_port" =~ ^[0-9]+$ ]] && (( existing_host_port >= 1 && existing_host_port <= 65535 )); then
-      export API_PORT="$existing_host_port"
+    if [[ "$existing_host_port" == "$preferred" ]]; then
       return 0
     fi
   fi
+
   if python3 - "$preferred" <<'PYPORT' >/dev/null 2>&1
 import socket, sys
 s = socket.socket()
@@ -151,20 +155,9 @@ PYPORT
   then
     return 0
   fi
-  for ((candidate=preferred+1; candidate<=preferred+20 && candidate<=65535; candidate++)); do
-    if python3 - "$candidate" <<'PYPORT' >/dev/null 2>&1
-import socket, sys
-s = socket.socket()
-try: s.bind(("0.0.0.0", int(sys.argv[1])))
-finally: s.close()
-PYPORT
-    then
-      export API_PORT="$candidate"
-      echo "WARNING: API port $preferred is unavailable; using $API_PORT for this run. Existing process was not stopped." >&2
-      return 0
-    fi
-  done
-  echo "API port $preferred is unavailable and no free port was found in the next 20 ports. Set API_PORT to a free port." >&2
+
+  echo "QuantaEdge requires API host port $preferred and will not switch to another port." >&2
+  echo "Port $preferred is occupied, reserved, or unavailable. Identify and stop/disable the conflicting service, then retry." >&2
   return 1
 }
 
