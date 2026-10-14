@@ -7,7 +7,9 @@ on:
       - ".github/workflows/textbook-extraction-pilot.yml"
       - "scripts/textbook_registry.py"
       - "scripts/extract_textbook_text.py"
+      - "scripts/import_ghcr_extracted_pages.py"
       - "tests/test_extract_textbook_text.py"
+      - "tests/test_import_ghcr_extracted_pages.py"
   workflow_dispatch:
     inputs:
       class_no:
@@ -44,6 +46,9 @@ jobs:
 
       - name: Test extraction filters and checkpointing
         run: python -m unittest discover -s tests -p 'test_extract_textbook_text.py' -v
+
+      - name: Test safe GHCR page importer
+        run: python -m unittest discover -s tests -p 'test_import_ghcr_extracted_pages.py' -v
 
       - name: Log in to GHCR
         uses: docker/login-action@v3
