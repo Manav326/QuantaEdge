@@ -94,7 +94,7 @@ The default is to pull the published application images from GHCR and run them l
 Linux / macOS / Git Bash / WSL:
 
 ```bash
-# Pull latest published app images, then start locally
+# Start from cached images; Compose fetches them only when missing
 bash scripts/quantaedge-local.sh up
 
 # Build app images from the current checkout instead
@@ -106,7 +106,7 @@ bash scripts/quantaedge-local.sh up --local
 Windows PowerShell:
 
 ```powershell
-# Pull latest published app images, then start locally
+# Start from cached images; Compose fetches them only when missing
 .\scripts\quantaedge-local.ps1 up
 
 # Build app images from the current checkout instead
@@ -164,6 +164,15 @@ Use the local script so the selected GHCR/local build mode is preserved:
 ```
 
 On first start, Docker downloads the Ollama runtime and the small `qwen2.5:0.5b` model. Then open `http://localhost:3000/student`, sign in to the local preview student, and open a published lesson to use the tutor. The model is stored in a persistent Docker volume. First startup needs internet and additional disk/RAM; this small general-purpose model is an MVP, not a teacher-validated or fine-tuned model. It may make mistakes and must not be presented as official SCERT/NCERT content. See [docs/ai/local-ai-tutor.md](docs/ai/local-ai-tutor.md) for limitations and shutdown instructions.
+
+
+## Local image sync behavior
+
+Normal `up` is cache-first. It reuses local GHCR images and only fetches missing images; it does not check whether a newer `latest` exists. Run `sync` to explicitly refresh the QuantaEdge API, web, admin, and people images, then run `up`. Docker reuses unchanged layers. `rebuild` in GHCR mode syncs and restarts. The explicit sync does not repeatedly pull Postgres or Redis images.
+
+PowerShell: `.\scripts\quantaedge-local.ps1 up`, `.\scripts\quantaedge-local.ps1 sync`, then `.\scripts\quantaedge-local.ps1 up`.
+
+Bash: `bash scripts/quantaedge-local.sh up`, `bash scripts/quantaedge-local.sh sync`, then `bash scripts/quantaedge-local.sh up`.
 
 ## Production deployment shape
 
