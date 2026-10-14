@@ -38,7 +38,7 @@ def stable_id(*parts: str) -> str:
     return hashlib.sha256(raw).hexdigest()[:24]
 
 
-def load_page_context(manifest: dict[str, Any], manifest_path: Path, page_count: int) -> dict[int, dict[str, Any]]:
+def load_page_context(manifest: dict[str, Any], manifest_path: Path, page_count: int, source_hash: str) -> dict[int, dict[str, Any]]:
     """Read the already-produced page JSONL when available; never rewrite it."""
     filename = manifest.get("text_jsonl")
     if not isinstance(filename, str) or not filename.strip():
@@ -64,6 +64,9 @@ def load_page_context(manifest: dict[str, Any], manifest_path: Path, page_count:
                 raise ValueError(f"Invalid or duplicate source page number in text JSONL line {line_no}.")
             if row.get("book_id") and row["book_id"] != manifest.get("book_id"):
                 raise ValueError(f"Book ID mismatch in text JSONL line {line_no}.")
+            row_source_hash = str(row.get("original_book_sha256") or row.get("source_pdf_sha256") or "").lower()
+            if row_source_hash and row_source_hash != source_hash:
+                raise ValueError(f"Source PDF SHA-256 mismatch in text JSONL line {line_no}.")
             text = row.get("text", "")
             if not isinstance(text, str):
                 raise ValueError(f"Page text must be a string in text JSONL line {line_no}.")
@@ -122,7 +125,7 @@ def build_inventory(
         page_count = len(doc)
         if not isinstance(expected_pages, int) or expected_pages != page_count:
             raise ValueError(f"PDF page count ({page_count}) does not match manifest.page_count ({expected_pages!r}).")
-        contexts = load_page_context(manifest, manifest_path, page_count)
+        contexts = load_page_context(manifest, manifest_path, page_count, actual_hash)
         output_dir.mkdir(parents=True, exist_ok=True)
         asset_dir = output_dir / "assets"
         asset_dir.mkdir(parents=True, exist_ok=True)
@@ -171,7 +174,7 @@ def build_inventory(
                             "byte_count": byte_count,
                             "width": int(width) if width else None,
                             "height": int(height) if height else None,
-                            "nearby_text_context": context.get("context_text", "")[:600],
+                            "page_text_context": context.get("context_text", "")[:600],
                             "text_quality_status": context.get("text_quality_status", "UNKNOWN"),
                             "extraction_method": "PYMUPDF_EMBEDDED_IMAGE",
                             "vision_status": "NOT_ANALYZED",
@@ -217,7 +220,7 @@ def build_inventory(
                     "byte_count": len(preview_bytes),
                     "width": pix.width,
                     "height": pix.height,
-                    "nearby_text_context": context.get("context_text", "")[:600],
+                    "page_text_context": context.get("context_text", "")[:600],
                     "text_quality_status": context.get("text_quality_status", "UNKNOWN"),
                     "extraction_method": "PYMUPDF_PAGE_RENDER",
                     "vision_status": "NOT_ANALYZED",
