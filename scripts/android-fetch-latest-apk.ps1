@@ -19,6 +19,7 @@ Set-Location $repoRoot
 $script:LogPath = Join-Path $repoRoot "artifacts\android-install-history.log"
 $targetDir = Join-Path $repoRoot "artifacts"
 $targetApk = Join-Path $targetDir "quantaedge-latest.apk"
+$cacheMetadataPath = Join-Path $targetDir "quantaedge-latest.apk.json"
 $tempDir = Join-Path $env:TEMP ("quantaedge-apk-" + [guid]::NewGuid().ToString("N"))
 
 function Write-Status([string]$Message, [string]$Color = "Gray") {
@@ -102,71 +103,174 @@ try {
     }
     Write-Status ("Current GitHub {0} commit: {1}" -f $Branch, $headSha) "Green"
 
-    Write-Status "Finding a successful Actions run for this exact commit..." "Cyan"
-    $runsRaw = & gh run list --repo $Repository --branch $Branch --limit 100 --json databaseId,workflowName,createdAt,headSha,status,conclusion 2>&1
-    $runsExitCode = $LASTEXITCODE
-    if ($runsExitCode -ne 0) { throw "Could not query GitHub Actions runs: $($runsRaw -join ' ')" }
-
-    # PowerShell can enumerate native-command output and JSON arrays in the pipeline.
-    # Join the complete JSON document first so each workflow run stays a separate object.
-    $runsJson = (@($runsRaw) | ForEach-Object { [string]$_ }) -join [Environment]::NewLine
-    try {
-        $parsedRuns = ConvertFrom-Json -InputObject $runsJson
-        $runs = @($parsedRuns)
-    } catch {
-        throw "GitHub CLI returned invalid workflow-run JSON. Response: $runsJson"
-    }
-    $candidates = @($runs | Where-Object {
-        $_.headSha -eq $headSha -and $_.status -eq "completed" -and $_.conclusion -eq "success"
-    } | Sort-Object createdAt -Descending)
-
-    if ($candidates.Count -eq 0) {
-        throw "There is no successful GitHub Actions run for the current $Branch commit $headSha. To avoid installing a stale APK, this script will not use an older build. Check Actions and rerun/fix the Android build, then run this script again."
-    }
-
+    # Reuse only an APK proven to belong to this exact repository/branch/commit.
+    # The sidecar records the SHA-256 and size so a stale or altered APK is never silently reused.
+    Write-Status "Checking for a verified cached APK for this exact commit..." "Cyan"
     $downloadedApk = $null
     $sourceRun = $null
-    foreach ($run in $candidates) {
-        $runDir = Join-Path $tempDir ([string]$run.databaseId)
-        $null = New-Item -ItemType Directory -Path $runDir -Force
-        Write-Status ("Checking run {0}: {1} ({2})" -f $run.databaseId, $run.workflowName, $run.createdAt) "Cyan"
-        # Never download all artifacts: Buildx emits *.dockerbuild cache artifacts that
-        # are not APK ZIPs and make broad downloads fail. Require the dedicated APK artifact.
-        $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
-        $downloadOutput = @(& gh @ghArgs 2>&1)
-        $downloadExit = $LASTEXITCODE
-        if ($downloadExit -eq 0) {
-            $matches = @(Get-ChildItem -LiteralPath $runDir -Filter "*.apk" -File -Recurse -ErrorAction SilentlyContinue |
-                Where-Object { $_.Length -gt 1MB -and $_.Name -notmatch '(?i)(unaligned|androidTest|test-)' } |
-                Sort-Object Length -Descending)
-            if ($matches.Count -gt 0) {
-                $downloadedApk = $matches[0]
-                $sourceRun = $run
-                break
+    $cacheHit = $false
+    $targetApkExists = Test-Path -LiteralPath $targetApk -PathType Leaf
+    $metadataExists = Test-Path -LiteralPath $cacheMetadataPath -PathType Leaf
+
+    if ($targetApkExists -and $metadataExists) {
+        try {
+            $cacheMetadata = Get-Content -LiteralPath $cacheMetadataPath -Raw | ConvertFrom-Json
+            $cachedFile = Get-Item -LiteralPath $targetApk
+            $cachedHash = (Get-FileHash -LiteralPath $targetApk -Algorithm SHA256).Hash
+            $cacheSizeMatches = $null -ne $cacheMetadata.sizeBytes -and ([long]$cacheMetadata.sizeBytes -eq [long]$cachedFile.Length)
+            $cacheMatches = (
+                $cacheMetadata.repository -eq $Repository -and
+                $cacheMetadata.branch -eq $Branch -and
+                $cacheMetadata.artifactName -eq $ArtifactName -and
+                $cacheMetadata.headSha -eq $headSha -and
+                $cachedFile.Length -gt 1MB -and
+                $cacheSizeMatches -and
+                $cacheMetadata.sha256 -eq $cachedHash
+            )
+
+            if ($cacheMatches) {
+                $sourceRun = [PSCustomObject]@{
+                    databaseId = [string]$cacheMetadata.runId
+                    workflowName = [string]$cacheMetadata.workflowName
+                    headSha = [string]$cacheMetadata.headSha
+                }
+                $cacheHit = $true
+                Write-Status ("Verified cached APK matches current commit {0}; skipping GitHub artifact download." -f $headSha) "Green"
+                Write-Status ("Cached APK: {0}; size: {1:N2} MB; SHA-256 verified." -f $targetApk, ($cachedFile.Length / 1MB)) "Green"
+            } else {
+                Write-Status "Cached APK or metadata does not match the current commit or failed integrity checks; a fresh artifact is required." "Yellow"
             }
-            Write-Status "This successful run had downloadable artifacts, but no plausible APK was found." "Yellow"
-        } else {
-            Write-Status ("No matching APK artifact in run {0}: {1}" -f $run.databaseId, ($downloadOutput -join ' ')) "Yellow"
+        } catch {
+            Write-Status ("Could not verify APK cache metadata; a fresh artifact is required. Details: {0}" -f $_.Exception.Message) "Yellow"
         }
+    } elseif ($targetApkExists -and -not $metadataExists -and (Test-Path -LiteralPath $script:LogPath -PathType Leaf)) {
+        # One-time migration for APKs downloaded by earlier versions of this script,
+        # which logged their source commit but did not yet write a metadata sidecar.
+        $cachedFile = Get-Item -LiteralPath $targetApk
+        $lastBuildRecord = Select-String -LiteralPath $script:LogPath -Pattern 'Build commit:\s+([0-9a-f]{40});\s+Actions run:\s+(\d+);\s+workflow:\s+(.+?);\s+size:' |
+            Select-Object -Last 1
+        if ($cachedFile.Length -gt 1MB -and $lastBuildRecord -and $lastBuildRecord.Line -match 'Build commit:\s+([0-9a-f]{40});\s+Actions run:\s+(\d+);\s+workflow:\s+(.+?);\s+size:') {
+            $legacyCommit = $matches[1]
+            $legacyRunId = $matches[2]
+            $legacyWorkflow = $matches[3]
+            if ($legacyCommit -eq $headSha) {
+                $legacyHash = (Get-FileHash -LiteralPath $targetApk -Algorithm SHA256).Hash
+                $sourceRun = [PSCustomObject]@{
+                    databaseId = $legacyRunId
+                    workflowName = $legacyWorkflow
+                    headSha = $legacyCommit
+                }
+                $legacyMetadata = [ordered]@{
+                    repository = $Repository
+                    branch = $Branch
+                    headSha = $legacyCommit
+                    artifactName = $ArtifactName
+                    runId = $legacyRunId
+                    workflowName = $legacyWorkflow
+                    downloadedAtUtc = [DateTime]::UtcNow.ToString("o")
+                    sizeBytes = [long]$cachedFile.Length
+                    sha256 = $legacyHash
+                }
+                $metadataTempPath = "$cacheMetadataPath.tmp"
+                $legacyMetadata | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $metadataTempPath -Encoding UTF8
+                Move-Item -LiteralPath $metadataTempPath -Destination $cacheMetadataPath -Force
+                $cacheHit = $true
+                Write-Status ("Adopted the existing APK recorded for current commit {0}; added cache-integrity metadata and skipped download." -f $headSha) "Green"
+            } else {
+                Write-Status ("Existing APK belongs to previously recorded commit {0}, not current commit {1}; downloading current build." -f $legacyCommit, $headSha) "Yellow"
+            }
+        } else {
+            Write-Status "Existing APK has no trustworthy source-commit record; downloading the current build once to establish provenance." "Yellow"
+        }
+    } else {
+        Write-Status "No verified cached APK exists for this commit; checking GitHub Actions." "Cyan"
     }
 
-    if (-not $downloadedApk) {
-        throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The Android build workflow must build and upload the installable APK with actions/upload-artifact using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
-    }
+    if (-not $cacheHit) {
+        Write-Status "Finding a successful Actions run for this exact commit..." "Cyan"
+        $runsRaw = & gh run list --repo $Repository --branch $Branch --limit 100 --json databaseId,workflowName,createdAt,headSha,status,conclusion 2>&1
+        $runsExitCode = $LASTEXITCODE
+        if ($runsExitCode -ne 0) { throw "Could not query GitHub Actions runs: $($runsRaw -join ' ')" }
 
-    # Validate the ZIP-extracted file looks like a real APK before replacing the last known file.
-    if ($downloadedApk.Length -lt 1MB) { throw "Downloaded APK is unexpectedly small; refusing to replace the saved APK." }
-    $stagedApk = Join-Path $targetDir "quantaedge-latest.staged.apk"
-    Copy-Item -LiteralPath $downloadedApk.FullName -Destination $stagedApk -Force
-    if (-not (Test-Path $stagedApk) -or (Get-Item $stagedApk).Length -ne $downloadedApk.Length) {
-        Remove-Item $stagedApk -Force -ErrorAction SilentlyContinue
-        throw "APK staging verification failed. The previously saved APK was not changed."
+        # Join the full JSON output so every Actions run remains a separate object.
+        $runsJson = (@($runsRaw) | ForEach-Object { [string]$_ }) -join [Environment]::NewLine
+        try {
+            $parsedRuns = ConvertFrom-Json -InputObject $runsJson
+            $runs = @($parsedRuns)
+        } catch {
+            throw "GitHub CLI returned invalid workflow-run JSON. Response: $runsJson"
+        }
+        $candidates = @($runs | Where-Object {
+            $_.headSha -eq $headSha -and $_.status -eq "completed" -and $_.conclusion -eq "success"
+        } | Sort-Object createdAt -Descending)
+
+        if ($candidates.Count -eq 0) {
+            throw "There is no successful GitHub Actions run for the current $Branch commit $headSha. To avoid installing a stale APK, this script will not use an older build. Check Actions and rerun/fix the Android build, then run this script again."
+        }
+
+        $downloadedApk = $null
+        $sourceRun = $null
+        foreach ($run in $candidates) {
+            $runDir = Join-Path $tempDir ([string]$run.databaseId)
+            $null = New-Item -ItemType Directory -Path $runDir -Force
+            Write-Status ("Checking run {0}: {1} ({2})" -f $run.databaseId, $run.workflowName, $run.createdAt) "Cyan"
+            # Download only the APK artifact; broad downloads also include Buildx *.dockerbuild artifacts.
+            $ghArgs = @("run", "download", [string]$run.databaseId, "--repo", $Repository, "--name", $ArtifactName, "--dir", $runDir)
+            $downloadOutput = @(& gh @ghArgs 2>&1)
+            $downloadExit = $LASTEXITCODE
+            if ($downloadExit -eq 0) {
+                $matches = @(Get-ChildItem -LiteralPath $runDir -Filter "*.apk" -File -Recurse -ErrorAction SilentlyContinue |
+                    Where-Object { $_.Length -gt 1MB -and $_.Name -notmatch '(?i)(unaligned|androidTest|test-)' } |
+                    Sort-Object Length -Descending)
+                if ($matches.Count -gt 0) {
+                    $downloadedApk = $matches[0]
+                    $sourceRun = $run
+                    break
+                }
+                Write-Status "This successful run had downloadable artifacts, but no plausible APK was found." "Yellow"
+            } else {
+                Write-Status ("No matching APK artifact in run {0}: {1}" -f $run.databaseId, ($downloadOutput -join ' ')) "Yellow"
+            }
+        }
+
+        if (-not $downloadedApk) {
+            throw "No APK artifact named '$ArtifactName' was found in successful Actions runs for current commit $headSha. The Android workflow must upload the installable APK using this exact name. Docker *.dockerbuild cache artifacts are intentionally ignored."
+        }
+
+        # Stage first; retain the previous APK until the new artifact passes basic validation.
+        if ($downloadedApk.Length -lt 1MB) { throw "Downloaded APK is unexpectedly small; refusing to replace the saved APK." }
+        $stagedApk = Join-Path $targetDir "quantaedge-latest.staged.apk"
+        Copy-Item -LiteralPath $downloadedApk.FullName -Destination $stagedApk -Force
+        if (-not (Test-Path -LiteralPath $stagedApk -PathType Leaf) -or (Get-Item -LiteralPath $stagedApk).Length -ne $downloadedApk.Length) {
+            Remove-Item -LiteralPath $stagedApk -Force -ErrorAction SilentlyContinue
+            throw "APK staging verification failed. The previously saved APK was not changed."
+        }
+
+        $apkHash = (Get-FileHash -LiteralPath $stagedApk -Algorithm SHA256).Hash
+        $apkSizeBytes = [long](Get-Item -LiteralPath $stagedApk).Length
+        $newMetadata = [ordered]@{
+            repository = $Repository
+            branch = $Branch
+            headSha = [string]$sourceRun.headSha
+            artifactName = $ArtifactName
+            runId = [string]$sourceRun.databaseId
+            workflowName = [string]$sourceRun.workflowName
+            downloadedAtUtc = [DateTime]::UtcNow.ToString("o")
+            sizeBytes = $apkSizeBytes
+            sha256 = $apkHash
+        }
+        $metadataTempPath = "$cacheMetadataPath.tmp"
+        $newMetadata | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath $metadataTempPath -Encoding UTF8
+
+        Move-Item -LiteralPath $stagedApk -Destination $targetApk -Force
+        Move-Item -LiteralPath $metadataTempPath -Destination $cacheMetadataPath -Force
+        Write-Status ("APK downloaded, validated, and cached: {0}" -f $targetApk) "Green"
+    } else {
+        Write-Status "Using the already downloaded APK; moving directly to ADB device detection and installation." "Green"
     }
-    Move-Item -LiteralPath $stagedApk -Destination $targetApk -Force
 
     $sourceRunId = [string]$sourceRun.databaseId
-    Write-Status ("APK downloaded and verified: {0}" -f $targetApk) "Green"
-    Write-Status ("Build commit: {0}; Actions run: {1}; workflow: {2}; size: {3:N2} MB" -f $sourceRun.headSha, $sourceRunId, $sourceRun.workflowName, ((Get-Item $targetApk).Length / 1MB)) "Green"
+    Write-Status ("Build commit: {0}; Actions run: {1}; workflow: {2}; size: {3:N2} MB" -f $sourceRun.headSha, $sourceRunId, $sourceRun.workflowName, ((Get-Item -LiteralPath $targetApk).Length / 1MB)) "Green"
 
     Write-Status "Checking connected ADB devices (USB or wireless debugging)..." "Cyan"
     $devices = @(Get-UsableDevices $adbPath)
