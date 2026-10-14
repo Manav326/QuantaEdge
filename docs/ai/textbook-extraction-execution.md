@@ -106,9 +106,9 @@ Next Phase A tasks:
 ## GitHub-hosted visual pipeline checkpoint (2026-10-15)
 
 - [x] Add per-asset resumable vision analysis. The analyzer atomically checkpoints every completed asset; successful entries are reused only when source asset SHA-256, model tag and prompt version match. Failed assets are retried. Subsequent runs process the next pending assets rather than redoing completed work.
-- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to fetch the original PDF and matching manifest/page JSONL from a specified existing GHCR source-book image, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and commit checkpoint/index JSON to main.
+- [x] Add workflow .github/workflows/textbook-visual-analysis.yml to derive the class-wise GHCR image, fetch the whole-book PDF by book ID, and locate the matching committed manifest/page JSONL by book ID and SHA-256, build the additive visual inventory, run Ollama on the GitHub runner, execute focused tests, publish a run-versioned and stable per-book GHCR bundle, and commit checkpoint/index JSON to main.
 - [x] Store a stable bundle index in data/textbook-visuals/<book_slug>/bundle-index.v1.json; it records source PDF hash, model/prompt version, GHCR package/tags and bundle SHA-256.
-- [ ] Run the workflow on one exact Class 6 source image, inspect visual accuracy and runtime, and confirm GHCR publication plus the repository checkpoint commit. The source image name and the internal PDF/manifest paths must match the existing GHCR package; do not guess them.
+- [ ] Run the workflow on one exact Class 6 source image, inspect visual accuracy and runtime, and confirm GHCR publication plus the repository checkpoint commit. The workflow defaults to the existing Class 6 English Curiosity book and automatically resolves its class-wise GHCR image and source paths.
 - [ ] Review the sample captions and visible text, then run the next batch using the same book slug/model. Only after review should visual results be adapted into Content Studio lesson drafts.
 
 Implementation commits:
