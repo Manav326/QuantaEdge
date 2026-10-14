@@ -86,8 +86,17 @@ def _matches_filters(source: dict[str, Any], class_no: int | None,
     source_language = str(source.get("language") or "").strip().casefold()
     if language and source_language not in {language.casefold(), {"hindi": "hi", "english": "en"}.get(language.casefold(), language.casefold())}:
         return False
-    source_subject = str(source.get("subject") or "").casefold()
-    if subjects and not any(term.casefold() in source_subject for term in subjects):
+    def canonical_subject(value: str) -> str:
+        normalized = re.sub(r"[^\\w\\u0900-\\u097f]+", " ", value.casefold()).strip()
+        if normalized in {"math", "maths", "mathematics", "गणित"}:
+            return "maths"
+        if normalized in {"science", "विज्ञान"}:
+            return "science"
+        if normalized in {"social science", "social sciences", "समाजिक विज्ञान", "सामाजिक विज्ञान"}:
+            return "social science"
+        return normalized
+    source_subject = canonical_subject(str(source.get("subject") or ""))
+    if subjects and source_subject not in {canonical_subject(term) for term in subjects}:
         return False
     source_scope = str(source.get("scope") or "SUBJECT_BOOK").upper()
     if scope and source_scope != scope.upper():
