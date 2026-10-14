@@ -163,7 +163,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -sSfL https://raw.githubusercontent.com/oras-project/oras/main/install.sh | VERSION=1.2.0 sh
+          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" -o "$oras_archive"
+          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
+          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           out="data/textbook-visuals/$BOOK_SLUG"
           checkpoint="$RUNNER_TEMP/previous-visual-analysis.v1.json"
@@ -225,7 +228,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -sSfL https://raw.githubusercontent.com/oras-project/oras/main/install.sh | VERSION=1.2.0 sh
+          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" -o "$oras_archive"
+          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
+          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           version_tag="class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
@@ -281,14 +287,14 @@ jobs:
         if: always()
         run: |
           {
-            echo "## Textbook visual analysis"
-            echo "- Book slug: `$BOOK_SLUG`"
-            echo "- Source image: `ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest`"
-            echo "- Book ID: `$BOOK_ID`"
-            echo "- Model: `$VISION_MODEL`"
-            echo "- Visual bundle: `${VISUAL_PACKAGE:-not-published}`"
-            echo "- Version tag: `${VISUAL_VERSION_TAG:-not-published}`"
-            echo "- Bundle SHA-256: `${VISUAL_SHA256:-not-published}`"
+            printf '%s\n' '## Textbook visual analysis'
+            printf '%s\n' "- Book slug: `$BOOK_SLUG`"
+            printf '%s\n' "- Source image: `ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest`"
+            printf '%s\n' "- Book ID: `$BOOK_ID`"
+            printf '%s\n' "- Model: `$VISION_MODEL`"
+            printf '%s\n' "- Visual bundle: `${VISUAL_PACKAGE:-not-published}`"
+            printf '%s\n' "- Version tag: `${VISUAL_VERSION_TAG:-not-published}`"
+            printf '%s\n' "- Bundle SHA-256: `${VISUAL_SHA256:-not-published}`"
             if [[ -f "data/textbook-visuals/$BOOK_SLUG/visual-analysis.v1.json" ]]; then
               python - <<'PY'
           import json, os
