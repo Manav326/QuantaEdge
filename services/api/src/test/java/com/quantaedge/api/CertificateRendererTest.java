@@ -74,8 +74,8 @@ class CertificateRendererTest {
         "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false).png();
     assertArrayEquals(first, second);
     assertArrayEquals(first, third);
-    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null,
-        "Canonical QuantaEdge wordmark must be included in the API artifact.");
+    assertTrue(getClass().getResource("/branding/quantaedge-icon.png") != null,
+        "The canonical QuantaEdge Q mark must be included in the API artifact.");
   }
 
   @Test
@@ -93,6 +93,22 @@ class CertificateRendererTest {
     var sampleImage = ImageIO.read(new ByteArrayInputStream(previewPng));
     assertEquals(1240, sampleImage.getWidth());
     assertEquals(877, sampleImage.getHeight());
+  }
+
+  @Test
+  void lockedEnglishAndHindiWordingIsExactAndCompanyNameNeverLocalizes() {
+    var english = CertificateRenderer.lockedWording("en");
+    assertEquals("CERTIFICATE OF ACHIEVEMENT", english.title());
+    assertEquals("This certificate is awarded to", english.introduction());
+    assertEquals("for", english.connector());
+    assertEquals("successfully completing the assessment.", english.completion());
+
+    var hindi = CertificateRenderer.lockedWording("hi");
+    assertEquals("उपलब्धि प्रमाणपत्र", hindi.title());
+    assertEquals("यह प्रमाणपत्र", hindi.introduction());
+    assertEquals("को", hindi.connector());
+    assertEquals("सफलतापूर्वक पूर्ण करने के लिए प्रदान किया जाता है।", hindi.completion());
+    assertEquals("QuantaEdge", CertificateRenderer.BRAND_NAME, "The brand name must remain unchanged across languages.");
   }
 
   @Test

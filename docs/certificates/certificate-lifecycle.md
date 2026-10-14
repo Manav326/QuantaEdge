@@ -2,11 +2,14 @@
 
 The end-to-end audit and repair checklist is maintained in [certificate-lifecycle-audit-workflow.md](./certificate-lifecycle-audit-workflow.md). The student test-result screen, certificate picker, stored artifact, and public verifier must remain consistent across that workflow.
 
-## Implemented templates
+## Locked production design
 
-- **CLASSIC** — navy and gold formal double-border layout.
-- **MODERN** — navy header/footer with QuantaEdge orange accents.
-- **ACADEMIC** — green academic frame with gold detailing.
+The live certificate uses one approved landscape design in English or Hindi. The student-facing selector offers `CLASSIC`; legacy `MODERN` and `ACADEMIC` IDs remain accepted for backward compatibility but render the same locked design. Only certificate-language wording changes. The locked English body is `CERTIFICATE OF ACHIEVEMENT`, `This certificate is awarded to`, the real recipient name, `for`, the actual assessment/achievement title, and `successfully completing the assessment.`. The locked Hindi body is `उपलब्धि प्रमाणपत्र`, `यह प्रमाणपत्र`, the real recipient name, `को`, the actual assessment/achievement title, and `सफलतापूर्वक पूर्ण करने के लिए प्रदान किया जाता है।`. The brand remains `QuantaEdge` and the tagline remains `Smarter Decisions. Greater Growth.` in all languages. The API mirrors the canonical Q-mark icon and renders the same brand name and palette; it must not translate the company name or create separate language-specific marks.
+
+## Compatible template identifiers
+
+- **CLASSIC** is the approved live template.
+- **MODERN** and **ACADEMIC** are accepted as legacy identifiers so older issued records remain readable, but render the same locked production design.
 
 Each issued certificate includes a scannable QR code that opens the public verification page for its exact certificate ID and a separate Code 128 linear barcode encoding the same certificate number. The prominent achievement line includes the class and subject track for both subject-completion and assessment-pass certificates; assessment title and score are shown as the supporting achievement details. The human-readable certificate number can also be entered on the public verification page. The URL is built from `APP_PUBLIC_BASE_URL`, never from an untrusted request Host header. Production uses `https://qe.thinkwithsujeet.in` as the canonical public HTTPS origin by default in `docker-compose.prod.yml`. Operators can explicitly override `APP_PUBLIC_BASE_URL` in the production environment if the canonical domain changes. If the value is missing or invalid, certificate issuance fails closed rather than embedding a broken localhost QR. Sample previews deliberately omit verification QR codes and remain visibly marked as samples.
 

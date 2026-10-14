@@ -75,7 +75,7 @@ class CertificateControllerArtifactCorrectionTest {
     });
     when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
     when(renderer.render(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
-        any(OffsetDateTime.class), eq(false)))
+        any(OffsetDateTime.class), any(CertificateRenderer.CertificateDetails.class), eq(false)))
         .thenReturn(new CertificateRenderer.RenderedCertificate(new byte[] {9, 8, 7}, new byte[] {6, 5, 4}));
 
     CertificateController controller = new CertificateController(
@@ -92,7 +92,7 @@ class CertificateControllerArtifactCorrectionTest {
     verify(renderer).render(eq("CLASSIC"), eq("hi"), eq("Test Learner"),
         eq("कक्षा 6 · विज्ञान"),
         org.mockito.ArgumentMatchers.contains("Perfect test"),
-        eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), eq(false));
+        eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), any(CertificateRenderer.CertificateDetails.class), eq(false));
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).update(sql.capture(), any(Object[].class));

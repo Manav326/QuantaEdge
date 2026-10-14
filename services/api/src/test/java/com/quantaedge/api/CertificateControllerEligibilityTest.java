@@ -184,7 +184,7 @@ class CertificateControllerEligibilityTest {
     when(jdbc.queryForMap(anyString(), any(Object[].class))).thenReturn(progress);
     when(jdbc.queryForObject(anyString(), eq(Long.class), any(Object[].class))).thenReturn(3007L);
     when(renderer.render(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(),
-        any(java.time.OffsetDateTime.class), eq(false)))
+        any(java.time.OffsetDateTime.class), any(CertificateRenderer.CertificateDetails.class), eq(false)))
         .thenReturn(new CertificateRenderer.RenderedCertificate(new byte[] {1, 2, 3}, new byte[] {4, 5, 6}));
 
     Map<String, Object> issued = controller.issueCertificate(
@@ -195,7 +195,7 @@ class CertificateControllerEligibilityTest {
     verify(renderer).render(eq("CLASSIC"), eq("en"), eq("Test Learner"),
         eq("Class 6 · Science"),
         org.mockito.ArgumentMatchers.contains("Perfect admin-created test"),
-        anyString(), any(java.time.OffsetDateTime.class), eq(false));
+        anyString(), any(java.time.OffsetDateTime.class), any(CertificateRenderer.CertificateDetails.class), eq(false));
   }
 
   @Test

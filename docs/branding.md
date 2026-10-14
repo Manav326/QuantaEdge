@@ -14,16 +14,11 @@
 The identity follows the practical approach used for mPay: one recognizable mark, a simple wordmark, a short tagline, and consistent placement. QuantaEdge's own Q mark, colours, typography and language are tailored to its AI-powered learning platform.
 
 ## Canonical assets
-Both Next.js applications carry matching assets because they build independently:
-- `apps/web/public/branding/quantaedge-logo.png` — full approved logo lockup including its tagline, retained as the standalone/export asset.
-- `apps/web/public/branding/quantaedge-wordmark.png` — transparent high-resolution Q + QuantaEdge artwork without the baked-in tagline; used in live UI lockups.
-- `apps/web/public/branding/quantaedge-icon.png` — square Q mark for browser and Apple icons and tiny icon-only placements.
-- Matching copies are available under `apps/admin/public/branding/`.
+The approved square Q mark is the canonical, byte-identical asset at `apps/web/public/branding/quantaedge-icon.png`; it is the shared live mark and the API renderer mirrors that exact file. The standalone `quantaedge-logo.png` and `quantaedge-wordmark.png` are legacy/export assets. The current wordmark PNG does not have a complete PNG data stream, so do not use it for live rendering or treat it as a trustworthy input until a valid approved export replaces it. Matching branding assets are copied into the separately built admin and People Operations applications.
 
 ## Rendering rule
-The full lockup PNG includes its tagline in the bitmap. Displaying that entire image at compact navigation widths made the tagline too small to read. The live UI now composes the **transparent wordmark PNG + real HTML tagline** as one vertical lockup, preserving the generated artwork's exact typography and keeping the tagline crisp and readable. The Q-only icon remains reserved for browser tabs, touch icons and compact loading/interaction marks.
+The live learner-site lockup is implemented by `apps/web/app/components/QuantaEdgeBrand.tsx`: it pairs the approved Q mark with the unchanged `QuantaEdge` wordmark in the canonical navy/orange palette and the readable HTML tagline. This remains the same in every language; never translate or transliterate the company name/tagline, and never create language-specific logo variants. All certificate languages use the same company name, mark, tagline, and brand colours.
 
-The shared web lockup is implemented in `apps/web/app/components/QuantaEdgeBrand.tsx`; the staff/admin shell uses equivalent accessible markup to accommodate its dark sidebar and responsive sign-in layout. Keep both PNG assets unchanged and do not recreate the wordmark from font glyphs.
 
 ## Placement map
 - Public landing navigation and footer: full responsive lockup.
@@ -39,8 +34,9 @@ The logo should never be stretched. At narrow mobile widths use the compact size
 
 ## Certificate renderer asset
 
-The API renderer packages a byte-for-byte mirror of `apps/web/public/branding/quantaedge-wordmark.png`
-at `services/api/src/main/resources/branding/quantaedge-wordmark.png` so PDF/PNG generation does not
-depend on a live HTTP request to the website. This is an asset mirror, not a second logo design. Whenever
-the canonical wordmark changes, replace the API resource with the exact same file. The certificate
-renderer uses the brand palette documented above, and the company name and tagline remain unchanged in every language.
+The API renderer packages a byte-for-byte mirror of `apps/web/public/branding/quantaedge-icon.png`
+at `services/api/src/main/resources/branding/quantaedge-icon.png`, so PDF/PNG generation does not depend
+on a live HTTP request to the website. It uses the same canonical Q mark, `QuantaEdge` name, tagline,
+navy and orange as the learner-site lockup. The company name and tagline remain unchanged in every
+language. If a valid approved wordmark export is supplied later, it can replace the live-text lockup
+only as a coordinated central-brand update, not as an independent certificate restyle.

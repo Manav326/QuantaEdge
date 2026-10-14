@@ -1060,3 +1060,23 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .qe-workspace-mobile-subnav[hidden]{display:none!important}
 
 .qe-workspace-mobile-nav-backdrop{position:fixed;inset:0;z-index:90;border:0;background:rgba(21,32,56,.12);cursor:default}
+
+/* Canonical QuantaEdge lockup: official Q mark + unchanged live-text wordmark. */
+.qe-brand__lockup{display:flex;align-items:center;gap:8px;max-width:100%;min-width:0}
+.qe-brand__icon{display:block;width:38px;height:38px;flex:0 0 auto;object-fit:contain}
+.qe-brand__copy{display:flex;flex-direction:column;gap:3px;min-width:0;max-width:100%}
+.qe-brand__name{display:flex;align-items:baseline;white-space:nowrap;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;font-size:24px;font-weight:800;line-height:1;letter-spacing:-.04em}
+.qe-brand__name-quant{color:var(--qe-brand-navy,#152038)}
+.qe-brand__name-edge{color:var(--qe-brand-orange,#F97316)}
+.qe-brand--compact .qe-brand__icon{width:29px;height:29px}
+.qe-brand--compact .qe-brand__name{font-size:18px;letter-spacing:-.035em}
+.qe-brand--footer .qe-brand__icon{width:34px;height:34px}
+.qe-brand--footer .qe-brand__name{font-size:21px}
+.qe-brand--auth .qe-brand__icon{width:42px;height:42px}
+.qe-brand--auth .qe-brand__name{font-size:26px}
+.qe-workspace-topbar-brand .qe-brand__icon{width:30px;height:30px}
+.qe-workspace-topbar-brand .qe-brand__name{font-size:19px}
+.qe-workspace-sidebar-brand .qe-brand__icon{width:30px;height:30px}
+.qe-workspace-sidebar-brand .qe-brand__name{font-size:19px}
+@media(max-width:980px){.qe-brand--header .qe-brand__icon{width:31px;height:31px}.qe-brand--header .qe-brand__name{font-size:20px}.qe-brand--header .qe-brand__tagline{font-size:8.1px}}
+@media(max-width:560px){.qe-brand--header .qe-brand__icon{width:25px;height:25px}.qe-brand--header .qe-brand__name{font-size:17px}.qe-brand--header .qe-brand__lockup{gap:6px}.qe-brand--header .qe-brand__tagline{font-size:7.2px;white-space:normal}}

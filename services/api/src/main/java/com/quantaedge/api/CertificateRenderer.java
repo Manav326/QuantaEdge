@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CertificateRenderer {
+  public static final String BRAND_NAME = "QuantaEdge";
   public static final List<String> TEMPLATE_IDS = List.of("CLASSIC", "MODERN", "ACADEMIC");
   private static final int WIDTH = 2480;
   private static final int HEIGHT = 1754;
@@ -63,7 +64,17 @@ public class CertificateRenderer {
   public record RenderedCertificate(byte[] pdf, byte[] png) {}
   public record CertificateDetails(String subjectName, String classCode, String score, String result,
       String assessmentDate, String signatoryName, String signatoryRole, String assessmentName) {}
-  private volatile BufferedImage cachedWordmark;
+  public record CertificateWording(String title, String introduction, String connector, String completion) {}
+
+  public static CertificateWording lockedWording(String language) {
+    if ("hi".equalsIgnoreCase(language)) {
+      return new CertificateWording("उपलब्धि प्रमाणपत्र", "यह प्रमाणपत्र", "को",
+          "सफलतापूर्वक पूर्ण करने के लिए प्रदान किया जाता है।");
+    }
+    return new CertificateWording("CERTIFICATE OF ACHIEVEMENT", "This certificate is awarded to", "for",
+        "successfully completing the assessment.");
+  }
+  private volatile BufferedImage cachedBrandIcon;
 
   public RenderedCertificate render(String templateId, String language, String recipientName,
       String achievementTitle, String achievementSummary, String certificateNumber,
@@ -215,37 +226,44 @@ public class CertificateRenderer {
       String summary, String number, OffsetDateTime issuedAt, CertificateDetails details, boolean sample) {
     if (recipient == null || recipient.isBlank()) throw new IllegalArgumentException("A real recipient name is required.");
     CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null) : details;
-    BufferedImage logo = wordmark();
-    int logoWidth = 480, logoHeight = Math.round(logoWidth * logo.getHeight() / (float) logo.getWidth());
-    g.drawImage(logo, 130, 105, logoWidth, logoHeight, null);
+    BufferedImage brandIcon = brandIcon();
+    g.drawImage(brandIcon, 132, 95, 88, 88, null);
+    drawBrandWordmark(g, 2320, 150, 58);
     g.setColor(MUTED);
-    drawCentered(g, font(false, Font.BOLD, 20), "Smarter Decisions. Greater Growth.",
-        130 + logoWidth / 2, 105 + logoHeight + 27, logoWidth + 30);
-    g.setColor(DEEP_ORANGE);
-    drawCentered(g, font(hindi, Font.BOLD, 18), hindi ? "आधिकारिक शैक्षणिक प्रमाणपत्र" : "OFFICIAL ACADEMIC CERTIFICATE",
-        WIDTH - 420, 198, 560);
+    drawCentered(g, font(false, Font.BOLD, 19), "Smarter Decisions. Greater Growth.",
+        2070, 192, 500);
     g.setColor(GOLD); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
 
+    CertificateWording wording = lockedWording(hindi ? "hi" : "en");
     g.setColor(NAVY);
-    drawCentered(g, font(hindi, Font.BOLD, 69), hindi ? "उपलब्धि प्रमाणपत्र" : "CERTIFICATE OF ACHIEVEMENT",
+    drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
         WIDTH / 2, 372, WIDTH - 420);
     g.setColor(MUTED);
-    drawCentered(g, font(hindi, Font.PLAIN, 35), hindi ? "यह प्रमाणपत्र" : "This certificate is awarded to",
+    drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
         WIDTH / 2, 440, WIDTH - 520);
     g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, 555, WIDTH - 480);
     g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 588, WIDTH / 2 + 350, 588);
-    g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), hindi ? "को" : "for", WIDTH / 2, 642, WIDTH - 520);
+    g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, 642, WIDTH - 520);
 
     String assessmentName = d.assessmentName() == null || d.assessmentName().isBlank() ? title : d.assessmentName();
     if (assessmentName == null || assessmentName.isBlank()) throw new IllegalArgumentException("A real assessment title is required.");
+    int titleSize = 54;
+    List<String> lines;
+    do {
+      lines = wrap(g, font(hindi, Font.BOLD, titleSize), assessmentName, WIDTH - 560);
+      if (lines.size() <= 3 || titleSize <= 34) break;
+      titleSize -= 4;
+    } while (true);
     g.setColor(NAVY);
-    List<String> lines = wrap(g, font(hindi, Font.BOLD, 54), assessmentName, WIDTH - 560);
     int titleY = 716;
-    for (String line : lines) { drawCentered(g, font(hindi, Font.BOLD, 54), line, WIDTH / 2, titleY, WIDTH - 560); titleY += 61; }
+    int titleStep = titleSize + 7;
+    for (String line : lines) {
+      drawCentered(g, font(hindi, Font.BOLD, titleSize), line, WIDTH / 2, titleY, WIDTH - 560);
+      titleY += titleStep;
+    }
     int completionY = Math.max(titleY + 1, 790);
     g.setColor(INK);
-    drawCentered(g, font(hindi, Font.PLAIN, 30),
-        hindi ? "सफलतापूर्वक पूर्ण करने के लिए प्रदान किया जाता है।" : "successfully completing the assessment.",
+    drawCentered(g, font(hindi, Font.PLAIN, 30), wording.completion(),
         WIDTH / 2, completionY, WIDTH - 560);
 
     List<String> fields = new ArrayList<>();
@@ -253,33 +271,50 @@ public class CertificateRenderer {
     if (d.classCode() != null && !d.classCode().isBlank()) fields.add((hindi ? "कक्षा: " : "Class: ") + d.classCode());
     if (d.score() != null && !d.score().isBlank()) fields.add((hindi ? "अंक: " : "Score: ") + d.score());
     if (d.result() != null && !d.result().isBlank()) fields.add((hindi ? "परिणाम: " : "Result: ") + d.result());
+    int detailY = Math.min(1008, Math.max(930, completionY + 78));
+    int detailRows = 0;
     if (!fields.isEmpty()) {
-      int cw = (WIDTH - 360) / fields.size();
-      for (int i = 0; i < fields.size(); i++) {
-        g.setColor(i % 2 == 0 ? NAVY : INK);
-        drawCentered(g, font(hindi, Font.BOLD, fields.size() > 3 ? 21 : 23),
-            fields.get(i), 180 + cw * i + cw / 2, Math.min(1080, Math.max(930, completionY + 90)), cw - 30);
+      if (fields.size() >= 3) {
+        int columnWidth = (WIDTH - 600) / 2;
+        for (int i = 0; i < fields.size(); i++) {
+          int row = i / 2;
+          int center = fields.size() % 2 == 1 && i == fields.size() - 1
+              ? WIDTH / 2 : 300 + (i % 2) * columnWidth + columnWidth / 2;
+          g.setColor(i % 2 == 0 ? NAVY : INK);
+          drawCentered(g, font(hindi, Font.BOLD, 23), fields.get(i), center,
+              detailY + row * 42, fields.size() % 2 == 1 && i == fields.size() - 1 ? WIDTH - 600 : columnWidth - 30);
+          detailRows = Math.max(detailRows, row + 1);
+        }
+      } else {
+        int columnWidth = (WIDTH - 600) / Math.max(fields.size(), 1);
+        for (int i = 0; i < fields.size(); i++) {
+          g.setColor(i % 2 == 0 ? NAVY : INK);
+          drawCentered(g, font(hindi, Font.BOLD, 23), fields.get(i),
+              300 + i * columnWidth + columnWidth / 2, detailY, columnWidth - 30);
+        }
+        detailRows = 1;
       }
     }
     if (d.assessmentDate() != null && !d.assessmentDate().isBlank()) {
       g.setColor(MUTED);
+      int dateY = Math.min(1142, detailY + Math.max(detailRows, 1) * 42 + 28);
       drawCentered(g, font(hindi, Font.PLAIN, 22),
           (hindi ? "मूल्यांकन दिनांक: " : "Assessment Date: ") + formatDate(d.assessmentDate(), hindi),
-          WIDTH / 2, Math.min(1135, Math.max(984, completionY + 144)), WIDTH - 600);
+          WIDTH / 2, dateY, WIDTH - 600);
     }
 
     g.setColor(new Color(0xD9D0BC)); g.setStroke(new BasicStroke(2)); g.drawLine(125, 1210, WIDTH - 125, 1210);
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(false, Font.BOLD, 19), "ASSESSMENT CREATOR", 420, 1257, 540);
+    g.setColor(DEEP_ORANGE); drawCentered(g, font(false, Font.BOLD, 19), hindi ? "अधिकृत हस्ताक्षर" : "AUTHORIZED BY", 420, 1257, 540);
     if (d.signatoryName() != null && !d.signatoryName().isBlank()) {
       g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 25), d.signatoryName(), 420, 1308, 540);
       if (d.signatoryRole() != null && !d.signatoryRole().isBlank()) {
-        g.setColor(MUTED); drawCentered(g, font(false, Font.PLAIN, 18),
-            "Assessment creator · " + d.signatoryRole().replace('_', ' '), 420, 1345, 540);
+        g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 18),
+            (hindi ? "परीक्षा निर्माता · " : "Test creator · ") + d.signatoryRole().replace('_', ' '), 420, 1345, 540);
       }
     } else {
-      g.setColor(NAVY); drawCentered(g, font(false, Font.BOLD, 24), "DIGITALLY ISSUED", 420, 1310, 540);
+      g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 24), hindi ? "डिजिटल रूप से जारी" : "DIGITALLY ISSUED", 420, 1310, 540);
     }
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(false, Font.BOLD, 19), "CERTIFICATE DETAILS", 1080, 1257, 560);
+    g.setColor(DEEP_ORANGE); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "प्रमाणपत्र विवरण" : "CERTIFICATE DETAILS", 1080, 1257, 560);
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 22),
         (hindi ? "प्रमाणपत्र संख्या: " : "Certificate No.: ") + (sample ? (hindi ? "नमूना — कोई ID नहीं" : "SAMPLE — NO CERTIFICATE ID") : number),
@@ -288,7 +323,7 @@ public class CertificateRenderer {
     drawCentered(g, font(hindi, Font.PLAIN, 21),
         (hindi ? "जारी दिनांक: " : "Issue Date: ") + (sample ? (hindi ? "नमूना पूर्वावलोकन" : "Preview only") : formatDate(issuedAt.toString(), hindi)),
         1080, 1350, 650);
-    g.setColor(DEEP_ORANGE); drawCentered(g, font(false, Font.BOLD, 19), "VERIFICATION", 1930, 1257, 800);
+    g.setColor(DEEP_ORANGE); drawCentered(g, font(hindi, Font.BOLD, 19), hindi ? "सत्यापन" : "VERIFICATION", 1930, 1257, 800);
     if (!sample) {
       drawCentered(g, font(hindi, Font.BOLD, 15), hindi ? "प्रमाणपत्र बारकोड" : "CERTIFICATE BARCODE", 1980, 1311, 500);
       g.setColor(MUTED); drawCentered(g, font(false, Font.BOLD, 14), number, 1980, 1400, 500);
@@ -296,24 +331,37 @@ public class CertificateRenderer {
     } else {
       g.setColor(MUTED); drawCentered(g, font(false, Font.BOLD, 17), "SAMPLE • NOT VALID", 1930, 1320, 800);
     }
-    int smallWidth = 170, smallHeight = Math.round(smallWidth * logo.getHeight() / (float) logo.getWidth());
-    g.drawImage(logo, WIDTH / 2 - smallWidth / 2, 1485, smallWidth, smallHeight, null);
     g.setColor(MUTED);
-    drawCentered(g, font(hindi, Font.BOLD, 16), hindi ? "आधिकारिक रूप से जारी" : "OFFICIALLY ISSUED BY", WIDTH / 2, 1545, 520);
+    drawCentered(g, font(false, Font.BOLD, 18), "OFFICIALLY ISSUED BY QUANTAEDGE", WIDTH / 2, 1545, 720);
   }
 
-  private BufferedImage wordmark() {
-    BufferedImage image = cachedWordmark;
+  private BufferedImage brandIcon() {
+    BufferedImage image = cachedBrandIcon;
     if (image != null) return image;
     synchronized (this) {
-      image = cachedWordmark; if (image != null) return image;
-      try (InputStream input = getClass().getResourceAsStream("/branding/quantaedge-wordmark.png")) {
-        if (input == null) throw new IllegalStateException("Canonical QuantaEdge wordmark resource is missing.");
+      image = cachedBrandIcon;
+      if (image != null) return image;
+      try (InputStream input = getClass().getResourceAsStream("/branding/quantaedge-icon.png")) {
+        if (input == null) throw new IllegalStateException("Canonical QuantaEdge icon resource is missing.");
         image = ImageIO.read(input);
-        if (image == null) throw new IllegalStateException("Canonical QuantaEdge wordmark is not a readable PNG.");
-        cachedWordmark = image; return image;
-      } catch (IOException ex) { throw new IllegalStateException("Could not load canonical QuantaEdge wordmark.", ex); }
+        if (image == null) throw new IllegalStateException("Canonical QuantaEdge icon is not a readable PNG.");
+        cachedBrandIcon = image;
+        return image;
+      } catch (IOException ex) {
+        throw new IllegalStateException("Could not load canonical QuantaEdge icon.", ex);
+      }
     }
+  }
+
+  private void drawBrandWordmark(Graphics2D g, int rightX, int baseline, int size) {
+    Font font = font(false, Font.BOLD, size);
+    TextLayout quanta = new TextLayout(BRAND_NAME.substring(0, 6), font, g.getFontRenderContext());
+    TextLayout edge = new TextLayout(BRAND_NAME.substring(6), font, g.getFontRenderContext());
+    float startX = (float) (rightX - quanta.getAdvance() - edge.getAdvance());
+    g.setColor(NAVY);
+    quanta.draw(g, startX, baseline);
+    g.setColor(ORANGE);
+    edge.draw(g, startX + quanta.getAdvance(), baseline);
   }
 
   private String formatDate(String raw, boolean hindi) {
