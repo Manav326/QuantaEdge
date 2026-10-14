@@ -203,7 +203,7 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
             # Mirror the small durable checkpoint to GHCR after the repository commit.
-            oras push "$package:class6-$BOOK_SLUG-checkpoint" "$out/visual-analysis.v1.json:application/json"
+            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$out/visual-analysis.v1.json:application/json"
 
             processed_total=$((processed_total + batch_processed))
             if (( batch_processed == 0 )); then break; fi
@@ -228,9 +228,9 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/oras-project/oras/main/install.sh | VERSION=1.2.0 sh
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
-          version_tag="class6-$BOOK_SLUG-run-$GITHUB_RUN_ID"
+          version_tag="class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
           oras push "$package:$version_tag" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
-          oras push "$package:class6-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
           echo "VISUAL_PACKAGE=$package" >> "$GITHUB_ENV"
           echo "VISUAL_VERSION_TAG=$version_tag" >> "$GITHUB_ENV"
           echo "VISUAL_SHA256=$(cut -d' ' -f1 "$RUNNER_TEMP/$BOOK_SLUG-bundle.sha256")" >> "$GITHUB_ENV"
@@ -263,7 +263,7 @@ jobs:
               "analysis_summary": analysis["summary"],
               "ghcr_package": package,
               "version_tag": tag,
-              "stable_tag": f"class6-{slug}-latest",
+              "stable_tag": f"class{os.environ['CLASS_NO']}-{slug}-latest",
               "bundle_tar_sha256": digest,
               "publication_allowed": False,
               "review_required": True,
