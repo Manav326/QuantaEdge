@@ -26,6 +26,7 @@ public class TutorController {
   public Map<String,Object> send(@RequestAttribute(value="authContext",required=false) AuthContext context,@PathVariable long sessionId,@RequestBody Map<String,Object> body){
     return tutor.send(context,sessionId,String.valueOf(body.getOrDefault("message","")),
         String.valueOf(body.getOrDefault("mode","HINT")),
-        body.get("questionId")==null?0L:Long.parseLong(String.valueOf(body.get("questionId"))));
+        body.get("questionId")==null?0L:Long.parseLong(String.valueOf(body.get("questionId"))),
+        body.get("language")==null?"hi":String.valueOf(body.get("language")));
   }
 }
