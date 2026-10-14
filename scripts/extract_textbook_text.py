@@ -60,15 +60,39 @@ def load_checkpoints(path: Path, asset_sha256: str, page_count: int) -> dict[int
     return records
 
 
-def page_status(text: str) -> str:
+def page_status(text: str, language: str) -> str:
     compact = "".join(text.split())
     if not compact:
         return "NO_EXTRACTABLE_TEXT_REVIEW"
     if len(compact) < MIN_REVIEW_CHARS:
         return "LOW_TEXT_REVIEW"
-    if not DEVANAGARI.search(compact):
+    medium = language.strip().lower()
+    if medium in {"hi", "hindi"} and not DEVANAGARI.search(compact):
         return "NO_DEVANAGARI_REVIEW"
     return "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW"
+
+
+def _class_matches(source: dict[str, Any], class_no: int | None) -> bool:
+    if class_no is None:
+        return True
+    values = [source.get("class"), *(source.get("classes") or [])]
+    return any(re.search(rf"(?<!\\d){class_no}(?!\\d)", str(value or "")) for value in values)
+
+
+def _matches_filters(source: dict[str, Any], class_no: int | None,
+                     language: str | None, subjects: list[str], scope: str | None) -> bool:
+    if not _class_matches(source, class_no):
+        return False
+    source_language = str(source.get("language") or "").strip().casefold()
+    if language and source_language not in {language.casefold(), {"hindi": "hi", "english": "en"}.get(language.casefold(), language.casefold())}:
+        return False
+    source_subject = str(source.get("subject") or "").casefold()
+    if subjects and not any(term.casefold() in source_subject for term in subjects):
+        return False
+    source_scope = str(source.get("scope") or "SUBJECT_BOOK").upper()
+    if scope and source_scope != scope.upper():
+        return False
+    return True
 
 
 def write_record(handle: Any, record: dict[str, Any]) -> None:
@@ -161,7 +185,7 @@ def process_bundle(bundle_path: Path, pdf_dir: Path, output_dir: Path, force: bo
                     "devanagari_char_count": devanagari_count,
                     "has_extractable_text": bool(compact),
                     "has_devanagari": devanagari_count > 0,
-                    "review_status": page_status(text),
+                    "review_status": page_status(text, str(source.get("language") or "")),
                 }
                 write_record(handle, record)
                 checkpoints[page_index] = record
@@ -206,6 +230,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--book-id", action="append", default=[], help="Limit to an exact book_id; may be repeated.")
     parser.add_argument("--force", action="store_true", help="Re-extract pages even if valid checkpoints exist.")
+    parser.add_argument("--class-no", type=int, choices=range(6, 13), help="Filter to a specific class.")
+    parser.add_argument("--language", choices=("hindi", "english"), help="Filter to one book language.")
+    parser.add_argument("--subject", action="append", default=[], help="Case-insensitive subject-name substring; repeatable.")
+    parser.add_argument("--scope", choices=("SUBJECT_BOOK", "CHAPTER_PDF"), help="Filter complete books or chapter assets.")
     args = parser.parse_args(argv)
     for label, path in (("bundle directory", args.bundle_dir), ("PDF directory", args.pdf_dir)):
         if not path.is_dir():
@@ -219,10 +247,11 @@ def main(argv: list[str] | None = None) -> int:
     failures: list[dict[str, str]] = []
     for bundle_path in bundles:
         try:
-            if args.book_id:
-                metadata = read_json(bundle_path).get("source", {})
-                if metadata.get("book_id") not in args.book_id:
-                    continue
+            metadata = read_json(bundle_path).get("source", {})
+            if args.book_id and metadata.get("book_id") not in args.book_id:
+                continue
+            if not _matches_filters(metadata, args.class_no, args.language, args.subject, args.scope):
+                continue
             result = process_bundle(bundle_path, args.pdf_dir, args.output_dir, args.force)
             results.append(result)
             print(f"OK {result['subject']} | {result['title']} | pages={result['completed_pages']} "
@@ -231,7 +260,7 @@ def main(argv: list[str] | None = None) -> int:
             failures.append({"bundle": bundle_path.name, "error": str(exc)})
             print(f"ERROR {bundle_path.name}: {exc}", file=sys.stderr)
     report = {
-        "scope": "Class 6 Hindi Mathematics and Science unless filtered by --book-id",
+        "scope": {"class_no": args.class_no, "language": args.language, "subjects": args.subject, "asset_scope": args.scope, "book_ids": args.book_id},
         "extractor_version": EXTRACTOR_VERSION,
         "assets_processed": len(results),
         "pages_processed": sum(item["completed_pages"] for item in results),
