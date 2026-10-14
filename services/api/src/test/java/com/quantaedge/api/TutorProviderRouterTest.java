@@ -149,6 +149,23 @@ class TutorProviderRouterTest {
   }
 
   @Test
+  void fallsBackWhenPrivateResponseStronglyMismatchesRequestedLanguage() throws Exception {
+    AtomicInteger primaryRequests=new AtomicInteger();
+    AtomicInteger fallbackRequests=new AtomicInteger();
+    HttpServer primary=server(200,chatReply("चलिए इस सवाल को ध्यान से समझते हैं और फिर इसे चरणों में हल करते हैं।"),primaryRequests);
+    HttpServer fallback=server(200,apiReply("Let's identify what the question asks, then solve it one step at a time."),fallbackRequests);
+    try {
+      TutorProviderRouter router=new TutorProviderRouter(new ObjectMapper(),
+          properties(primary.getAddress().getPort(),fallback.getAddress().getPort(),true,8));
+      TutorReply reply=router.generate("Respond in English.","RESPONSE LANGUAGE: en\\nLEARNER MESSAGE: explain this concept");
+      assertEquals("Let's identify what the question asks, then solve it one step at a time.",reply.text());
+      assertEquals("api-fallback/fallback-test-model",reply.model());
+      assertEquals(1,primaryRequests.get());
+      assertEquals(1,fallbackRequests.get());
+    } finally { primary.stop(0); fallback.stop(0); }
+  }
+
+  @Test
   void usesPrivateModelResponseWhenFallbackIsDisabledEvenIfStructuralGateWouldRejectIt() throws Exception {
     AtomicInteger primaryRequests=new AtomicInteger();
     AtomicInteger fallbackRequests=new AtomicInteger();
