@@ -179,7 +179,7 @@ export default function TextbooksClient() {
     ? (locale === 'english'
         ? (selected.subject_code === 'maths' ? 'Mathematics' : selected.subject_code === 'science' ? 'Science' : selected.subject_name)
         : selected.subject_name)
-    : 'TEXTBOOK';
+    : t('Textbook','पाठ्यपुस्तक');
   const displaySubjectName = (code: string, fallback: string) =>
     locale === 'english' ? (code === 'maths' ? 'Mathematics' : code === 'science' ? 'Science' : fallback) : fallback;
   const displayChapterTitle = (item: LearningDocument, english: boolean) => {
@@ -189,9 +189,24 @@ export default function TextbooksClient() {
     }
     return item.chapter_name || item.title;
   };
+  const readerTitle = (item: LearningDocument) => {
+    if (item.scope === 'CHAPTER_PDF') return displayChapterTitle(item, learningLanguage === 'en');
+    if (item.book_part) {
+      const roman = ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[Number(item.book_part)];
+      return locale === 'english' ? 'Part ' + (roman || item.book_part) : 'भाग ' + item.book_part;
+    }
+    return t('Complete subject book','पूरी विषय-पुस्तक');
+  };
+  const chapterNumberLabel = (item: LearningDocument) => {
+    const englishMatch = String(item.title || '').match(/Chapter\s+(\d+)\s*:/i);
+    if (englishMatch?.[1]) return t('Chapter '+englishMatch[1],'अध्याय '+englishMatch[1]);
+    const hindiMatch = String(item.title || '').match(/अध्याय\s*(\d+)\s*[:.:-]/i);
+    if (hindiMatch?.[1]) return t('Chapter '+hindiMatch[1],'अध्याय '+hindiMatch[1]);
+    return '';
+  };
   const rawReturnTo = searchParams.get('returnTo') || '';
   const returnTarget = rawReturnTo.startsWith('/') && !rawReturnTo.startsWith('//') ? rawReturnTo : '/student/textbooks';
-  const returnLabel = returnTarget.startsWith('/student/learn') ? 'Back to subject' : returnTarget === '/student' ? 'Back to today' : 'Textbook library';
+  const returnLabel = returnTarget.startsWith('/student/learn') ? t('Back to subject','विषय पर वापस जाएँ') : returnTarget === '/student' ? t('Back to today','आज के पाठ पर वापस जाएँ') : t('Textbook library','पाठ्यपुस्तक लाइब्रेरी');
 
   useEffect(() => {
     if (loading || subjectGroups.length === 0) return;
@@ -330,7 +345,7 @@ export default function TextbooksClient() {
     setPageError('');
   }, [selected?.document_id, currentPage]);
 
-  return <main className="app-shell qe-textbook-shell">
+  return <main className={'app-shell qe-textbook-shell' + (documentId ? ' qe-textbook-shell--reader' : '')}>
 
     {!documentId ? <section className="qe-textbook-library">
       {error && <div className="qe-textbook-error" role="alert">{error}</div>}
@@ -339,7 +354,7 @@ export default function TextbooksClient() {
         <div className="qe-textbook-library-toolbar">
           <div className="qe-textbook-governance-copy">
             <span className="qe-textbook-eyebrow">{t('RESOURCE GOVERNANCE','संसाधन प्रबंधन')}</span>
-            <h2 id="qe-textbook-governance-title">{t('Book and chapter assignments','पुस्तक और अध्याय असाइनमेंट')}</h2>
+            <h2 id="qe-textbook-governance-title">{t('Books and chapters','पुस्तकें और अध्याय')}</h2>
             <p>{t('Browse only the published resources available for your enrolled class and subjects.','यहाँ अपनी कक्षा और विषयों के लिए उपलब्ध प्रकाशित संसाधन देखें।')}</p>
           </div>
           <div className="qe-textbook-filter-wrap">
@@ -361,14 +376,15 @@ export default function TextbooksClient() {
             const subjectBooks = rows.filter(item => item.scope === 'SUBJECT_BOOK').slice().sort((a,b) =>
               Number(a.book_part || 0) - Number(b.book_part || 0));
             const hasBookParts = subjectBooks.some(item => Number(item.book_part || 0) > 0);
-            const chapterBooks = rows.filter(item => item.scope === 'CHAPTER_PDF').slice().sort((a,b)=>
-              String(a.chapter_code||a.chapter_name||a.title).localeCompare(String(b.chapter_code||b.chapter_name||b.title),undefined,{numeric:true,sensitivity:'base'}));
+            // The API returns chapter PDFs in curriculum teaching order. Alphabetically
+            // sorting chapter codes/slugs can break the book's official chapter sequence.
+            const chapterBooks = rows.filter(item => item.scope === 'CHAPTER_PDF');
             const book = subjectBooks[0];
             const expanded = expandedSubject === code;
             const chapterPageCount = Math.max(1, Math.ceil(chapterBooks.length / chapterPageSize));
             const chapterPage = Math.max(1, Math.min(chapterPageBySubject[code] || 1, chapterPageCount));
             const visibleChapterBooks = chapterBooks.slice((chapterPage - 1) * chapterPageSize, chapterPage * chapterPageSize);
-            const showChapterPagination = chapterPageCount > 1;
+            const showChapterPagination = chapterBooks.length > 10 && chapterPageCount > 1;
             const renderChapterPagination = (position: 'top' | 'bottom') => (
               <div className={'qe-textbook-pagination qe-textbook-pagination--' + position}>
                 <PremiumPagination
@@ -381,9 +397,15 @@ export default function TextbooksClient() {
                 />
               </div>
             );
+            const metadataDocument = book || rows[0];
+            const metadataParts = String(metadataDocument?.title || '').split('|').map(part => part.trim()).filter(Boolean);
+            const publisherLabel = metadataParts.length > 1 ? metadataParts[0] : String(metadataDocument?.edition || '').trim();
+            const bookLanguageLabel = (metadataDocument?.language || learningLanguage) === 'en' ? t('English','अंग्रेज़ी') : t('Hindi','हिन्दी');
+            const bookKindLabel = hasBookParts ? t('Book parts','पुस्तक के भाग') : book ? t('Complete book','पूरी पुस्तक') : t('Chapter PDFs','अध्याय PDF');
             const bookTitle = hasBookParts
-              ? (locale === 'english' ? name + ' · NCERT textbook parts' : name + ' · पाठ्यपुस्तक के भाग')
-              : (book?.title || (name + ' · Chapter PDFs'));
+              ? (locale === 'english' ? name + ' textbook parts' : name + ' की पाठ्यपुस्तक के भाग')
+              : book ? (locale === 'english' ? name + ' textbook' : name + ' की पाठ्यपुस्तक')
+                : (locale === 'english' ? name + ' chapter collection' : name + ' के अध्याय');
             const partLabel = (part: number) => {
               if (locale !== 'english') return 'भाग ' + part;
               const roman = ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[part];
@@ -402,7 +424,16 @@ export default function TextbooksClient() {
               <div className="qe-textbook-book-row">
                 <button type="button" className="qe-textbook-book-toggle" aria-expanded={expanded} onClick={toggle} aria-controls={'qe-textbook-chapters-' + code}>
                   <span className="qe-library-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-                  <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong><small>{t('Class ','कक्षा ')}{rows[0]?.class_code} · {name} · {hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' ' + t('available','उपलब्ध') : book ? book.page_count + ' ' + t('pages','पृष्ठ') : t('Chapter reading collection','अध्याय पढ़ने का संग्रह')}</small></span>
+                  <span className="qe-textbook-book-copy"><strong>{bookTitle}</strong>
+                    <span className="qe-book-meta-tags">
+                      {publisherLabel && <span className="qe-book-meta-tag qe-book-meta-tag--source">{publisherLabel}</span>}
+                      <span className="qe-book-meta-tag qe-book-meta-tag--class">{t('Class ','कक्षा ')}{rows[0]?.class_code}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--subject">{name}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--language">{bookLanguageLabel}</span>
+                      <span className="qe-book-meta-tag qe-book-meta-tag--type">{bookKindLabel}</span>
+                    </span>
+                    <small>{hasBookParts ? subjectBooks.filter(item => Number(item.book_part || 0) > 0).map(item => partLabel(Number(item.book_part))).join(' & ') + ' ' + t('available','उपलब्ध') : book ? book.page_count + ' ' + t('pages','पृष्ठ') : t('Published chapter PDFs','प्रकाशित अध्याय PDF')}</small>
+                  </span>
                   <span className="qe-textbook-chapter-count">{chapterBooks.length} {t('chapter PDF','अध्याय PDF')}{chapterBooks.length===1?'':t('s','')}</span>
                   <span className="qe-textbook-book-chevron">{expanded?'−':'+'}</span>
                 </button>
@@ -421,7 +452,7 @@ export default function TextbooksClient() {
                   <div className="qe-textbook-chapter-list">{visibleChapterBooks.map((item,index)=><button type="button" className="qe-textbook-chapter-row" key={item.document_id} onClick={()=>openDocument(item.document_id,code)}>
                     <span className="qe-textbook-chapter-index">{String((chapterPage - 1) * chapterPageSize + index + 1).padStart(2,'0')}</span>
                     <span className="qe-library-mini-pdf">PDF</span>
-                    <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, learningLanguage === 'en')}</strong><small>{item.title}{item.chapter_code?' · '+item.chapter_code:''}</small></span>
+                    <span className="qe-textbook-chapter-copy"><strong>{displayChapterTitle(item, learningLanguage === 'en')}</strong><small>{chapterNumberLabel(item) || t('Published chapter PDF','प्रकाशित अध्याय PDF')}</small></span>
                     <span className="qe-textbook-chapter-pages">{item.page_count} {t('pages','पृष्ठ')}</span>
                     <span className="qe-textbook-chapter-open">↗</span>
                   </button>)}</div>
@@ -433,17 +464,17 @@ export default function TextbooksClient() {
         </div>}
       <div className="qe-textbook-privacy-note"><span>▣</span><p><b>{t('Private reading mode.','निजी पठन मोड।')}</b> {t('The viewer does not provide a PDF download or print button. To deliver pages securely, QuantaEdge checks your account and subject access before rendering each page.','रीडर में PDF डाउनलोड या प्रिंट बटन नहीं है। पृष्ठ सुरक्षित रूप से दिखाने के लिए QuantaEdge हर पृष्ठ रेंडर करने से पहले आपके खाते और विषय की अनुमति जाँचता है।')}</p></div>
     </section> : <section className="qe-document-reader" ref={readerRef}>
-      <div className="qe-reader-heading"><div className="qe-reader-breadcrumb"><button type="button" onClick={returnToLibrary}>← {returnLabel}</button><span>/</span><span>{selected?.scope === 'SUBJECT_BOOK' && selected.book_part ? (locale === 'english' ? 'Part ' + ({1:'I',2:'II',3:'III',4:'IV',5:'V',6:'VI',7:'VII',8:'VIII',9:'IX'} as Record<number,string>)[Number(selected.book_part)] : 'भाग ' + selected.book_part) : selected?.scope === 'SUBJECT_BOOK' ? t('Complete subject book','पूरी विषय-पुस्तक') : selected ? displayChapterTitle(selected, learningLanguage === 'en') : 'Chapter PDF'}</span></div>
-        <div className="qe-reader-title-row"><div><span className="qe-textbook-eyebrow">{selected?.scope === 'SUBJECT_BOOK' ? t('SUBJECT TEXTBOOK','विषय पाठ्यपुस्तक') : t('CHAPTER READING','अध्याय पठन')} · {subjectLabel.toUpperCase()}</span><h1>{selected ? (selected.scope === 'CHAPTER_PDF' ? displayChapterTitle(selected, learningLanguage === 'en') : selected.title) : t('Loading textbook…','पाठ्यपुस्तक लोड हो रही है…')}</h1><p>{selected?.scope === 'CHAPTER_PDF' && selected ? displayChapterTitle(selected, learningLanguage === 'en') + ' · ' : ''}{selected?.edition || t('View-only online reader','केवल ऑनलाइन रीडर')}</p></div>
-          {selected && <div className="qe-reader-progress"><strong>{progressPercent}%</strong><span>read</span><div><i style={{width: progressPercent + '%'}}/></div></div>}
-        </div>
+      <div className="qe-reader-heading">
+        <button type="button" className="qe-reader-heading-back" onClick={returnToLibrary} aria-label={returnLabel}>←</button>
+        <strong className="qe-reader-heading-title">{selected ? subjectLabel + ' · ' + readerTitle(selected) : t('Loading textbook…','पाठ्यपुस्तक लोड हो रही है…')}</strong>
+        {selected && <span className="qe-reader-page-indicator">{t('Page ','पृष्ठ ')}{currentPage}/{pageCount}</span>}
       </div>
 
       {error ? <div className="qe-textbook-error" role="alert">{error}<button type="button" onClick={returnToLibrary}>{t('Back to library','लाइब्रेरी पर वापस जाएँ')}</button></div>
         : !selected ? <div className="qe-textbook-loading"><span className="qe-reader-spinner"/> {t('Preparing the secure reader…','सुरक्षित रीडर तैयार हो रहा है…')}</div>
         : <>
           <div className="qe-reader-toolbar" role="toolbar" aria-label={t('Textbook viewer controls','पाठ्यपुस्तक व्यूअर नियंत्रण')}>
-            <div className="qe-reader-page-controls"><button type="button" aria-label={t('Previous page','पिछला पृष्ठ')} disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button><label><span>{t('Page','पृष्ठ')}</span><input type="number" min="1" max={pageCount} value={currentPage} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value)) setCurrentPage(Math.max(1, Math.min(pageCount, value))); }} onBlur={() => setCurrentPage(p => Math.max(1, Math.min(pageCount, p)))}/><span>{t('of','में से')} {pageCount}</span></label><button type="button" aria-label={t('Next page','अगला पृष्ठ')} disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>›</button></div>
+            <div className="qe-reader-page-controls"><button type="button" aria-label={t('Previous page','पिछला पृष्ठ')} disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</button><label><span>{t('Page','पृष्ठ')}</span><input type="number" aria-label={t('Current page','वर्तमान पृष्ठ')} min="1" max={pageCount} value={currentPage} onChange={e => { const value = Number(e.target.value); if (Number.isFinite(value)) setCurrentPage(Math.max(1, Math.min(pageCount, value))); }} onBlur={() => setCurrentPage(p => Math.max(1, Math.min(pageCount, p)))}/><span>{t('of','में से')} {pageCount}</span></label><button type="button" aria-label={t('Next page','अगला पृष्ठ')} disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>›</button></div>
             <div className="qe-reader-toolbar-divider"/>
             <div className="qe-reader-zoom"><button type="button" aria-label={t('Zoom out','ज़ूम कम करें')} disabled={zoom <= 60} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.max(60, z - 10));}}>−</button><span>{fitPage ? t('Fit page','पृष्ठ में फ़िट') : fitWidth ? t('Fit width','चौड़ाई में फ़िट') : zoom + '%'}</span><button type="button" aria-label={t('Zoom in','ज़ूम बढ़ाएँ')} disabled={zoom >= 160} onClick={() => {setFitPage(false);setFitWidth(false);setZoom(z => Math.min(160, z + 10));}}>＋</button></div>
             <button type="button" className={'qe-reader-tool-button' + (fitPage ? ' selected' : '')} onClick={() => {setFitPage(true);setFitWidth(false);}}>{t('Fit page','पृष्ठ में फ़िट')}</button>
@@ -454,8 +485,7 @@ export default function TextbooksClient() {
 
           <div className={'qe-reader-workspace' + (thumbnailsOpen ? ' with-thumbnails' : '')}>
             {thumbnailsOpen && <aside className="qe-reader-thumbnails" aria-label={t('Page thumbnails','पृष्ठ थंबनेल')}><div className="qe-reader-thumbs-head"><b>{t('Pages','पृष्ठ')}</b><small>{pageCount} {t('total','कुल')}</small></div><div className="qe-reader-thumb-list">{thumbnails.map(number => <button type="button" key={number} className={number === currentPage ? 'active' : ''} onClick={() => {setCurrentPage(number);setPageError('');}}><img src={'/api/v1/learning/documents/' + selected.document_id + '/pages/' + number + '?rendition=thumbnail'} alt="" loading="lazy" decoding="async" draggable={false}/><span>{t('Page','पृष्ठ')} {number}</span></button>)}</div><div className="qe-reader-thumbs-foot">{t('Showing pages','पृष्ठ दिखाए जा रहे हैं')} {thumbnails[0] || 0}–{thumbnails[thumbnails.length - 1] || 0}</div></aside>}
-            <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className="qe-reader-canvas-top"><span><i/> {t('Secured page rendering','सुरक्षित पृष्ठ रेंडरिंग')}</span><span>{currentPage} / {pageCount}</span></div>
-              <div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '') + (fitPage ? ' fit-page' : '')} key={selected.document_id + '-' + currentPage}>
+            <div className="qe-reader-page-stage" onContextMenu={e => e.preventDefault()}><div className={'qe-reader-page-viewport' + (fitWidth ? ' fit-width' : '') + (fitPage ? ' fit-page' : '')} key={selected.document_id + '-' + currentPage}>
                 {imageLoading && <div className="qe-reader-image-loading"><span className="qe-reader-spinner"/> {t('Rendering page','पृष्ठ रेंडर हो रहा है')} {currentPage}…</div>}
                 <AuthenticatedPageImage
                   className="qe-reader-page-image"
@@ -467,11 +497,8 @@ export default function TextbooksClient() {
                 />
                 {pageError && <div className="qe-reader-page-error" role="alert">{pageError}<button type="button" onClick={() => { setPageError(''); setImageLoading(true); setPageRetry(value => value + 1); }}>{t('Retry page','पृष्ठ फिर लोड करें')}</button></div>}
               </div>
-              <div className="qe-reader-canvas-bottom"><span>{t('Private textbook viewer · Page','निजी पाठ्यपुस्तक व्यूअर · पृष्ठ')} {currentPage}</span><span>{t('Use ← → or Page Up / Page Down to navigate','नेविगेट करने के लिए ← → या Page Up / Page Down इस्तेमाल करें')}</span></div>
             </div>
           </div>
-          <div className="qe-reader-bottom-nav"><button type="button" disabled={currentPage <= 1} onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>← {t('Previous page','पिछला पृष्ठ')}</button><span>{t('Page','पृष्ठ')} {currentPage} {t('of','में से')} {pageCount}</span><button type="button" disabled={currentPage >= pageCount} onClick={() => setCurrentPage(p => Math.min(pageCount, p + 1))}>{t('Next page →','अगला पृष्ठ →')}</button></div>
-          <p className="qe-reader-viewonly-note">{t('View-only mode · Original PDF downloads are not provided. This can deter casual downloading but cannot fully prevent screenshots or capture of displayed pages.','केवल देखने का मोड · मूल PDF डाउनलोड उपलब्ध नहीं हैं। इससे सामान्य डाउनलोड कम हो सकते हैं, लेकिन दिखाई गई सामग्री के स्क्रीनशॉट या कैप्चर को पूरी तरह नहीं रोका जा सकता।')}</p>
         </>}
     </section>}
   </main>;
