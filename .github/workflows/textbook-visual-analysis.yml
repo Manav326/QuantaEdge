@@ -112,12 +112,15 @@ jobs:
           curl -fsS http://127.0.0.1:11434/api/tags >/dev/null || { cat "$RUNNER_TEMP/ollama.log"; exit 1; }
           ollama pull "$VISION_MODEL"
 
-      - name: Build source-bound visual inventory and restore analysis checkpoint
+      - name: Build inventory and persist resumable vision batches
+        env:
+          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/oras-project/oras/main/install.sh | VERSION=1.2.0 sh
+          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           out="data/textbook-visuals/$BOOK_SLUG"
-          mkdir -p "$out"
           checkpoint="$RUNNER_TEMP/previous-visual-analysis.v1.json"
           if [[ "$RESTART_ANALYSIS" != "true" && -f "$out/visual-analysis.v1.json" ]]; then
             cp "$out/visual-analysis.v1.json" "$checkpoint"
@@ -129,9 +132,37 @@ jobs:
             --manifest "$SOURCE_DIR/source.manifest.json" \
             --output-dir "$out"
           if [[ -f "$checkpoint" ]]; then cp "$checkpoint" "$out/visual-analysis.v1.json"; fi
-          args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$MAX_ASSETS" --include-page-previews)
-          if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
-          python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
+
+          package="ghcr.io/\${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
+          total_limit="$MAX_ASSETS"
+          processed_total=0
+          batch_size=10
+          while (( processed_total < total_limit )); do
+            remaining=$((total_limit - processed_total))
+            batch="$batch_size"
+            if (( remaining < batch )); then batch="$remaining"; fi
+            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews)
+            if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
+            python scripts/analyze_visual_inventory_with_ollama.py "\${args[@]}"
+            batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$out/visual-analysis.v1.json")"
+
+            # Commit each batch before proceeding. A cancelled runner only repeats the
+            # currently active batch, not the book or already committed analysis.
+            git pull --rebase origin main
+            git add "$out/visual-inventory.v1.json" "$out/visual-analysis.v1.json"
+            if ! git diff --cached --quiet; then
+              git config user.name "github-actions[bot]"
+              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+              git commit -m "Checkpoint textbook visual analysis batch: $BOOK_SLUG"
+              git push origin HEAD:main
+            fi
+            # Mirror the small durable checkpoint to GHCR after the repository commit.
+            oras push "$package:class6-$BOOK_SLUG-checkpoint" "$out/visual-analysis.v1.json:application/json"
+
+            processed_total=$((processed_total + batch_processed))
+            if (( batch_processed == 0 )); then break; fi
+          done
+
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
 
