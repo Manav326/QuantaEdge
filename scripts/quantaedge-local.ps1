@@ -76,44 +76,46 @@ $adminPort = if ([string]::IsNullOrWhiteSpace($env:ADMIN_PORT)) { "3001" } else 
 $peoplePort = if ([string]::IsNullOrWhiteSpace($env:PEOPLE_PORT)) { "3002" } else { $env:PEOPLE_PORT }
 
 function Ensure-ApiPortAvailable {
-  # If this project already has a running API, reuse its actual host-port mapping.
+  $preferredApiPort = 0
+  if (-not [int]::TryParse([string]$script:apiPort, [ref]$preferredApiPort) -or $preferredApiPort -lt 1 -or $preferredApiPort -gt 65535) {
+    throw "API_PORT must be an integer from 1 to 65535; received '$script:apiPort'."
+  }
+
+  # Pin Compose interpolation to the port checked here, overriding .env if needed.
+  $env:API_PORT = [string]$preferredApiPort
+
+  # Repeated startup is allowed when QuantaEdge API already owns this exact port.
   $composePsArgs = @($script:ComposeFiles) + @("ps", "-q", "api")
   $existingApiIds = & docker compose @composePsArgs 2>$null
   if ($LASTEXITCODE -eq 0 -and -not [string]::IsNullOrWhiteSpace(($existingApiIds -join ""))) {
     $existingApiId = ($existingApiIds | Select-Object -First 1).Trim()
     $existingHostPort = & docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $existingApiId 2>$null
     $existingHostPortNumber = 0
-    if ([int]::TryParse([string]$existingHostPort, [ref]$existingHostPortNumber) -and $existingHostPortNumber -ge 1 -and $existingHostPortNumber -le 65535) {
-      $script:apiPort = [string]$existingHostPortNumber
-      $env:API_PORT = $script:apiPort
+    if ([int]::TryParse([string]$existingHostPort, [ref]$existingHostPortNumber) -and $existingHostPortNumber -eq $preferredApiPort) {
       return
     }
   }
-  $preferredApiPort = 0
-  if (-not [int]::TryParse([string]$script:apiPort, [ref]$preferredApiPort) -or $preferredApiPort -lt 1 -or $preferredApiPort -gt 65535) {
-    throw "API_PORT must be an integer from 1 to 65535; received '$script:apiPort'."
-  }
 
   if (-not (Test-HostPortAvailable -Port $preferredApiPort)) {
-    $selectedApiPort = $null
-    $lastCandidatePort = [Math]::Min(65535, $preferredApiPort + 20)
-    for ($candidatePort = $preferredApiPort + 1; $candidatePort -le $lastCandidatePort; $candidatePort++) {
-      if (Test-HostPortAvailable -Port $candidatePort) {
-        $selectedApiPort = $candidatePort
-        break
+    $ownerDetails = @()
+    try {
+      $listeners = @(Get-NetTCPConnection -State Listen -LocalPort $preferredApiPort -ErrorAction Stop)
+      foreach ($listener in $listeners) {
+        $processInfo = Get-Process -Id $listener.OwningProcess -ErrorAction SilentlyContinue
+        if ($null -ne $processInfo) {
+          $ownerDetails += "$($processInfo.ProcessName) (PID $($listener.OwningProcess))"
+        } else {
+          $ownerDetails += "PID $($listener.OwningProcess)"
+        }
       }
+    } catch {
+      # Windows can reserve/exclude a port without exposing a listener.
     }
 
-    if ($null -eq $selectedApiPort) {
-      throw "API host port $preferredApiPort is occupied, and no free port was found in the next 20 ports. Stop the conflicting process or set API_PORT to a free port."
-    }
-
-    $script:apiPort = [string]$selectedApiPort
-    $env:API_PORT = $script:apiPort
-    Write-Warning "API host port $preferredApiPort is unavailable. QuantaEdge will use port $script:apiPort for this run (http://localhost:$script:apiPort). To keep this choice, set API_PORT=$script:apiPort in .env. The existing process was not stopped."
+    $ownerText = if ($ownerDetails.Count -gt 0) { ($ownerDetails | Select-Object -Unique) -join ", " } else { "another process or a Windows-reserved port" }
+    throw "QuantaEdge requires API host port $preferredApiPort and will not switch to another port. It is unavailable because of $ownerText. Stop/disable the conflicting service, then retry."
   }
 }
-
 
 # Default is GHCR cache-first mode; -BuildLocal uses only the normal local Compose file.
 $script:ComposeFiles = if ($BuildLocal) {
