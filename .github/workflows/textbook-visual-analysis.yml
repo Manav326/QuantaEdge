@@ -85,7 +85,7 @@ jobs:
 
       - name: Pull the exact whole-book PDF from the class-wise GHCR cache
         env:
-          GH_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
           set -euo pipefail
@@ -133,7 +133,7 @@ jobs:
               raise SystemExit(f"Committed sibling page JSONL is missing: {page_path}")
           shutil.copy2(manifest_path, source_dir / "source.manifest.json")
           shutil.copy2(page_path, source_dir / page_name)
-          print(json.dumps({"book_id": book_id, "ghcr_image": os.environ.get("SOURCE_IMAGE", ""), "manifest": str(manifest_path), "pdf_sha256": expected_hash}, indent=2))
+          print(json.dumps({"book_id": book_id, "ghcr_image": f"ghcr.io/manav326/quantaedge-textbooks-class-{class_no}-{language}:latest", "manifest": str(manifest_path), "pdf_sha256": expected_hash}, indent=2))
           PY
           echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source" >> "$GITHUB_ENV"
       - name: Set up Ollama model cache
