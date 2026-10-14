@@ -1,6 +1,6 @@
-import hashlib,tempfile,unittest
+import hashlib,json,tempfile,unittest
 from pathlib import Path
-from scripts.audit_curriculum_pipeline import audit_book,audit_extraction,audit_registry,LANG,summary,reconcile_coverage,entry_identity_issues
+from scripts.audit_curriculum_pipeline import audit_book,audit_extraction,audit_registry,audit_dir,candidate_page_range,LANG,summary,reconcile_coverage,entry_identity_issues
 
 class PipelineAuditTests(unittest.TestCase):
  def test_language_aliases(self):
@@ -63,6 +63,66 @@ class PipelineAuditTests(unittest.TestCase):
   self.assertIn("BILINGUAL_CHAPTER_COVERAGE_GAP",codes)
   self.assertIn("BILINGUAL_CANDIDATE_COVERAGE_GAP",codes)
   self.assertIn("BILINGUAL_QUESTION_TARGET_GAPS",codes)
+
+ def test_candidate_page_range_parser_is_strict(self):
+  self.assertEqual((2,5),candidate_page_range("PDF pages 2-5",10))
+  self.assertIsNone(candidate_page_range("PDF pages 0-5",10))
+  self.assertIsNone(candidate_page_range("PDF pages 2-11",10))
+  self.assertIsNone(candidate_page_range("chapters 2-5",10))
+
+ def _valid_hindi_candidate(self):
+  text="यह बीजीय व्यंजक अक्षरों, संख्याओं और गणितीय क्रियाओं से बनते हैं। " * 4
+  types=["EXPLANATION","WORKED_EXAMPLE","GUIDED_PRACTICE","INDEPENDENT_PRACTICE","RECAP"]
+  return {
+   "schema_version":1,"bundle_status":"AI_GENERATED_DRAFT",
+   "generated_by":{"method":"ai-question-generation","model":"test","question_count":1,"source_pdf_sha256":"a"*64,"auto_publish":False},
+   "curriculum":{"class_code":"6","subject_code":"maths","language":"hi"},
+   "source":{"title":"गणित","url":"https://ncert.nic.in/textbook/pdf/example.pdf","edition":"2025-26 edition","printed_imprint":"Printed edition 2025-26","pdf_page_count":4,"pdf_sha256":"a"*64},
+   "chapter":{"code":"algebraic-expressions","display_name":"बीजीय व्यंजक","source_pages":"PDF pages 2-3"},
+   "lessons":[{
+    "title":"बीजीय व्यंजक","summary":text,"source_pages":"PDF pages 2-3",
+    "blocks":[{"block_type":kind,"active":True,"content":{"heading":"बीजीय व्यंजक","body":text}} for kind in types],
+    "questions":[{"question_type":"MCQ","prompt":text,"explanation":text,"options":[{"label":"एक"},{"label":"दो"}],"answer_payload":{"correct_option":1},"source_page_numbers":[2]}]
+   }]
+  }
+
+ def test_candidate_audit_accepts_verified_source_and_citation_ranges(self):
+  with tempfile.TemporaryDirectory() as d:
+   Path(d,"candidate.json").write_text(json.dumps(self._valid_hindi_candidate(),ensure_ascii=False),encoding="utf-8")
+   result,issues=audit_dir(Path(d),"candidate")
+   self.assertEqual(1,result["count"])
+   self.assertFalse([item for item in issues if item["severity"]=="BLOCKER"])
+
+ def test_candidate_audit_blocks_wrong_language_and_citation_outside_chapter(self):
+  bundle=self._valid_hindi_candidate()
+  bundle["curriculum"]["language"]="en"
+  bundle["lessons"][0]["questions"][0]["source_page_numbers"]=[4]
+  with tempfile.TemporaryDirectory() as d:
+   Path(d,"candidate.json").write_text(json.dumps(bundle,ensure_ascii=False),encoding="utf-8")
+   _,issues=audit_dir(Path(d),"candidate")
+   codes={item["code"] for item in issues}
+   self.assertIn("CANDIDATE_LANGUAGE_MISMATCH",codes)
+   self.assertIn("QUESTION_CITATION_OUTSIDE_CHAPTER",codes)
+
+ def test_complete_flag_with_missing_chapters_is_rejected(self):
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d)/"b.pdf";p.write_bytes(b"%PDF-1.4\\n")
+   record,issues=audit_book(Path(d),{"file":"b.pdf","sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"edition":"2025-26","source_url":"https://scert.bihar.gov.in/textbooks","content_availability":{"status":"complete","expected_chapters":[1,2],"available_chapters":[1],"missing_chapters":[]}},False)
+   self.assertEqual("partial",record["status"])
+   self.assertIn("PARTIAL_BOOK_NOT_COMPLETE",{item["code"] for item in issues})
+
+ def test_out_of_scope_official_subject_is_warning_not_track_blocker(self):
+  from unittest.mock import patch
+  with tempfile.TemporaryDirectory() as d:
+   index=Path(d)/"class-6"/"hindi"/"index.json"
+   index.parent.mkdir(parents=True)
+   index.write_text(json.dumps({"books":[{"book_id":"english-book"}]}),encoding="utf-8")
+   fake={"book_id":"english-book","title":"English","subject":"English","status":"complete","audit_status":"ok"}
+   with patch("scripts.audit_curriculum_pipeline.audit_book",return_value=(fake,[])):
+    _,issues=audit_registry(Path(d),["6"],["hindi"])
+   out=[item for item in issues if item["code"]=="BOOK_SUBJECT_OUT_OF_SCOPE"]
+   self.assertEqual(1,len(out))
+   self.assertEqual("WARNING",out[0]["severity"])
 
  def test_planned_not_actual_count(self):
   r=summary([{"class_code":"6","subject_code":"maths","chapter_code":"a","question_type":"MCQ","minimum_target_count":5,"actual_active_approved_count":2,"target_eligible":True}])

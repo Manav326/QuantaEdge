@@ -78,7 +78,7 @@ def official_https_source(value):
   parsed=urlparse(str(value or "").strip())
   host=(parsed.hostname or "").casefold().rstrip(".")
   allowed={"ncert.nic.in","ncert.ncert.org.in","scert.bihar.gov.in","bstbpc.gov.in"}
-  return parsed.scheme=="https" and parsed.username is None and parsed.password is None and any(host==domain or host.endswith("."+domain) for domain in allowed)
+  return parsed.scheme=="https" and parsed.username is None and parsed.password is None and parsed.port in (None,443) and any(host==domain or host.endswith("."+domain) for domain in allowed)
  except ValueError:
   return False
 
@@ -133,10 +133,18 @@ def audit_book(root,e,page_check=True,expected_class=None,expected_language=None
  source_url=str(e.get("source_url") or e.get("catalog_entry_url") or "")
  if not official_https_source(source_url):bad.append(issue("BLOCKER","registry","SOURCE_URL_MISSING","Official NCERT/SCERT HTTPS source URL is missing or untrusted.",book_id=bid,source_url=source_url))
  declared=str(cov.get("status") or "").lower();method=str(e.get("download_method") or "").lower()
- if declared in {"partial","unavailable"} or "partial" in method:
-  status="partial";bad.append(issue("BLOCKER","registry","PARTIAL_BOOK_NOT_COMPLETE","Partial asset cannot satisfy whole-book coverage.",book_id=bid,missing_chapters=cov.get("missing_chapters",[])))
+ expected_chapters=cov.get("expected_chapters")
+ available_chapters=cov.get("available_chapters")
+ missing_chapters=cov.get("missing_chapters")
+ completeness_conflict=bool(missing_chapters)
+ if isinstance(expected_chapters,list) and expected_chapters:
+  completeness_conflict = completeness_conflict or not isinstance(available_chapters,list) or set(expected_chapters)!=set(available_chapters)
+ if declared in {"partial","unavailable"} or "partial" in method or completeness_conflict:
+  status="partial";bad.append(issue("BLOCKER","registry","PARTIAL_BOOK_NOT_COMPLETE","Partial/conflicting asset metadata cannot satisfy whole-book coverage.",book_id=bid,missing_chapters=missing_chapters or []))
  elif declared=="complete":status="complete"
  else:status="provisional";bad.append(issue("BLOCKER","registry","COMPLETENESS_UNCONFIRMED","Manifest does not attest whole-book completeness.",book_id=bid))
+ if page_check and pages is not None and pages > 0 and not isinstance(e.get("page_count"),int):
+  bad.append(issue("BLOCKER","registry","PAGE_COUNT_MISSING","Manifest must attest the verified whole-book PDF page count.",book_id=bid))
  record={"book_id":bid,"title":str(e.get("title") or ""),"subject":str(e.get("subject") or ""),"edition":edition,"source_url":source_url,"file":file,"bytes":size,"sha256_matches":actual==expected,"manifest_page_count":e.get("page_count"),"actual_page_count":pages,"status":status,"valid_pdf":sig}
  record["audit_status"]="blocked" if any(x.get("severity")=="BLOCKER" for x in bad) else "ok"
  return record,bad
@@ -164,7 +172,7 @@ def audit_registry(root,grades,languages):
     subject_text=str(record.get("subject") or "").lower()
     subject="maths" if any(t in subject_text for t in ("math","ganit","गणित")) else ("science" if any(t in subject_text for t in ("science","vigyan","विज्ञान")) else None)
     if not subject:
-     bad.append(issue("BLOCKER","registry","BOOK_SUBJECT_UNRECOGNIZED","Book subject cannot be mapped to the supported Maths/Science tracks.",book_id=record["book_id"],subject=record.get("subject"),class_code=grade,language=lang))
+     bad.append(issue("WARNING","registry","BOOK_SUBJECT_OUT_OF_SCOPE","Official book is outside the current Maths/Science tracks and is not counted toward their coverage.",book_id=record["book_id"],subject=record.get("subject"),class_code=grade,language=lang))
      continue
     key=f"{grade}:{subject}:{lang}";tr=tracks.setdefault(key,{"class_code":grade,"subject_code":subject,"language":lang,"complete_book_ids":[],"partial_book_ids":[],"provisional_book_ids":[]})
     col={"complete":"complete_book_ids","partial":"partial_book_ids","provisional":"provisional_book_ids"}.get(record["status"])
@@ -227,6 +235,36 @@ def audit_extraction(b,path):
  if (b.get("extraction") or {}).get("requires_human_review") is not True:bad.append(issue("BLOCKER","extraction","HUMAN_REVIEW_MISSING","Extraction lacks human review flag.",path=str(path)))
  return {"path":str(path),"class_code":grade,"subject_code":sub,"language":lang,"pdf_sha256":hs,"pdf_page_count":n,"chapter_codes":sorted(codes),"mapped_pages":sum(p.get("chapter_code") is not None for p in seen.values()),"unmapped_pages":len(unmap),"empty_text_pages":sum(not str(p.get("text") or "").strip() for p in seen.values())},bad
 
+STUDENT_TEXT_FIELDS = {
+ "title","summary","heading","body","text","prompt","explanation","label","topic","subtopic",
+ "skill","description","display_name","caption","alt_text","instructions","question_text",
+}
+
+
+def collect_student_text(value):
+ parts=[]
+ if isinstance(value,dict):
+  for key,child in value.items():
+   if key in STUDENT_TEXT_FIELDS and isinstance(child,str):
+    parts.append(child)
+   elif isinstance(child,(dict,list)):
+    parts.extend(collect_student_text(child))
+ elif isinstance(value,list):
+  for child in value:
+   if isinstance(child,(dict,list)):
+    parts.extend(collect_student_text(child))
+ return parts
+
+
+def candidate_page_range(value,page_count=None):
+ match=re.fullmatch(r"\s*(?:PDF\s+)?pages?\s+(\d+)\s*[-–]\s*(\d+)\s*",str(value or ""),flags=re.I)
+ if not match:return None
+ start,end=int(match.group(1)),int(match.group(2))
+ if start<1 or end<start or (isinstance(page_count,int) and page_count>0 and end>page_count):return None
+ return start,end
+
+
+
 def audit_dir(folder,kind):
  stage="extraction" if kind=="extraction" else "question_generation"
  if folder is None:return {"configured":False,"count":0,"items":[]},[]
@@ -243,11 +281,40 @@ def audit_dir(folder,kind):
   c=b.get("curriculum") if isinstance(b.get("curriculum"),dict) else {};ch=b.get("chapter") if isinstance(b.get("chapter"),dict) else {};src=b.get("source") if isinstance(b.get("source"),dict) else {}
   grade=str(c.get("class_code",""));sub=str(c.get("subject_code","")).lower();lang=LANG.get(str(c.get("language","")).lower());code=str(ch.get("code") or "")
   if grade not in {"6","7","8"} or sub not in {"maths","science"} or not lang or not code:bad.append(issue("BLOCKER",stage,"IDENTITY_INVALID","Candidate track identity invalid.",path=str(p)));continue
+  source_url=str(src.get("url") or "")
+  if not official_https_source(source_url):bad.append(issue("BLOCKER",stage,"SOURCE_URL_MISSING","Candidate must carry an official trusted HTTPS source URL.",path=str(p),source_url=source_url))
+  edition=str(src.get("edition") or "").strip()
+  if is_placeholder_edition(edition):bad.append(issue("BLOCKER",stage,"EDITION_UNVERIFIED","Candidate source edition is missing or unverified.",path=str(p),edition=edition))
+  printed_imprint=str(src.get("printed_imprint") or "").strip()
+  if not detect_printed_edition(printed_imprint):bad.append(issue("BLOCKER",stage,"EDITION_PRINTED_IMPRINT_NOT_FOUND","Candidate must preserve the dated imprint verified from the source PDF.",path=str(p)))
+  else:
+   digits=str.maketrans("०१२३४५६७८९","0123456789")
+   printed_years=re.findall(r"\b(?:19|20)\d{2}\b",printed_imprint.translate(digits))
+   normalized_edition=edition.translate(digits)
+   if printed_years and not any(year in normalized_edition for year in printed_years):
+    bad.append(issue("BLOCKER",stage,"EDITION_IMPRINT_MISMATCH","Candidate source edition does not agree with the printed imprint.",path=str(p),edition=edition,printed_imprint=printed_imprint))
+  page_count=src.get("pdf_page_count")
+  if not isinstance(page_count,int) or page_count<1:bad.append(issue("BLOCKER",stage,"SOURCE_PAGE_COUNT_INVALID","Candidate source PDF page count must be a positive integer.",path=str(p)))
+  source_hash=str(src.get("pdf_sha256") or "").lower()
+  if not re.fullmatch(r"[0-9a-f]{64}",source_hash):bad.append(issue("BLOCKER",stage,"SOURCE_HASH_INVALID","Candidate source PDF SHA-256 is invalid.",path=str(p)))
+  meta=b.get("generated_by") if isinstance(b.get("generated_by"),dict) else {}
+  if source_hash and str(meta.get("source_pdf_sha256") or "").lower()!=source_hash:
+   bad.append(issue("BLOCKER",stage,"SOURCE_HASH_MISMATCH","Generation metadata refers to a different source PDF hash.",path=str(p)))
+  chapter_range=candidate_page_range(ch.get("source_pages"),page_count if isinstance(page_count,int) else None)
+  if chapter_range is None:bad.append(issue("BLOCKER",stage,"CHAPTER_SOURCE_RANGE_INVALID","Candidate chapter source page range is invalid or outside its source PDF.",path=str(p),source_pages=ch.get("source_pages")))
+  student_text="\n".join([str(ch.get("display_name") or ""),*collect_student_text(b.get("lessons") if isinstance(b.get("lessons"),list) else [])])
+  student_problem=language_script_problem(student_text,lang)
+  if student_problem:bad.append(issue("BLOCKER",stage,"CANDIDATE_LANGUAGE_MISMATCH","Candidate student-facing text does not sufficiently support its declared Hindi/English medium.",path=str(p),language=lang,detail=student_problem))
   lessons=b.get("lessons")
   if not isinstance(lessons,list) or not lessons:bad.append(issue("BLOCKER",stage,"LESSONS_MISSING","Candidate has no lesson.",path=str(p)));continue
   counts={};total=0
   for lesson in lessons:
    if not isinstance(lesson,dict):bad.append(issue("BLOCKER",stage,"LESSON_INVALID","Lesson row malformed.",path=str(p)));continue
+   lesson_range=candidate_page_range(lesson.get("source_pages"),page_count if isinstance(page_count,int) else None)
+   if lesson_range is None:
+    bad.append(issue("BLOCKER",stage,"LESSON_SOURCE_RANGE_INVALID","Candidate lesson source page range is invalid or outside its source PDF.",path=str(p),source_pages=lesson.get("source_pages")))
+   elif chapter_range and (lesson_range[0]<chapter_range[0] or lesson_range[1]>chapter_range[1]):
+    bad.append(issue("BLOCKER",stage,"LESSON_SOURCE_RANGE_OUTSIDE_CHAPTER","Candidate lesson sources extend beyond the chapter source range.",path=str(p),lesson_pages=lesson_range,chapter_pages=chapter_range))
    blocks=lesson.get("blocks",[]) if isinstance(lesson.get("blocks",[]),list) else []
    block_types=set()
    for block in blocks:
@@ -263,7 +330,12 @@ def audit_dir(folder,kind):
     if not isinstance(q,dict):bad.append(issue("BLOCKER",stage,"QUESTION_INVALID","Question malformed.",path=str(p)));continue
     typ=str(q.get("question_type") or "").upper();counts[typ]=counts.get(typ,0)+1;ref=q.get("source_page_numbers");pc=src.get("pdf_page_count")
     if typ not in TYPES or not str(q.get("prompt") or "").strip():bad.append(issue("BLOCKER",stage,"QUESTION_INVALID","Question type/prompt invalid.",path=str(p),type=typ))
-    if not isinstance(ref,list) or not ref or any(not isinstance(x,int) or x<1 or (isinstance(pc,int) and x>pc) for x in ref):bad.append(issue("BLOCKER",stage,"QUESTION_CITATION_INVALID","Question missing valid source-page citation.",path=str(p),type=typ))
+    if not isinstance(ref,list) or not ref or any(not isinstance(x,int) or x<1 or (isinstance(pc,int) and x>pc) for x in ref):
+     bad.append(issue("BLOCKER",stage,"QUESTION_CITATION_INVALID","Question missing valid source-page citation.",path=str(p),type=typ))
+    elif chapter_range and any(x<chapter_range[0] or x>chapter_range[1] for x in ref):
+     bad.append(issue("BLOCKER",stage,"QUESTION_CITATION_OUTSIDE_CHAPTER","Question cites pages outside its declared chapter source range.",path=str(p),type=typ,citations=ref,chapter_pages=chapter_range))
+    if isinstance(ref,list) and ref and lesson_range and any(isinstance(x,int) and (x<lesson_range[0] or x>lesson_range[1]) for x in ref):
+     bad.append(issue("BLOCKER",stage,"QUESTION_CITATION_OUTSIDE_LESSON","Question cites pages outside its lesson source range.",path=str(p),type=typ,citations=ref,lesson_pages=lesson_range))
     if typ not in AUTO and q.get("answer_payload",{}):bad.append(issue("BLOCKER",stage,"REVIEW_ONLY_AUTO_ANSWER","Review-only type has automatic answer payload.",path=str(p),type=typ))
   meta=b.get("generated_by") if isinstance(b.get("generated_by"),dict) else {}
   if b.get("bundle_status")=="AI_GENERATED_DRAFT" and meta.get("auto_publish") is not False:bad.append(issue("BLOCKER",stage,"AUTO_PUBLISH_NOT_DISABLED","AI draft does not explicitly disable auto-publication.",path=str(p)))
