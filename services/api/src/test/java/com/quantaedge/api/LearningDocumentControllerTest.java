@@ -66,11 +66,11 @@ class LearningDocumentControllerTest {
 
     assertTrue(rows.isEmpty());
     verify(jdbc).queryForList(
-        contains("d.status='PUBLISHED'"), eq(7L), eq("hi"), eq(""), eq(""));
+        contains("d.status='PUBLISHED'"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("ste.status='ACTIVE'"), eq(7L), eq("hi"), eq(""), eq(""));
+        contains("ste.status='ACTIVE'"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
     verify(jdbc).queryForList(
-        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq("hi"), eq(""), eq(""));
+        contains("(ch.id is not null and ch.active=true)"), eq(7L), eq("hi"), eq("hi"), eq(""), eq(""));
   }
 
   @Test
@@ -81,9 +81,21 @@ class LearningDocumentControllerTest {
 
     assertTrue(controller.studentDocumentCatalog("science", "english", student).isEmpty());
 
-    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("en"), eq("science"), eq("science"));
   }
 
+  @Test
+  void englishChapterMetadataCanBeUsedWhileTheAvailablePdfIsHindi() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class)))
+        .thenReturn(List.of());
+
+    assertTrue(controller.studentDocumentCatalog("science", "hi", "en", student).isEmpty());
+
+    verify(jdbc).queryForList(contains("d.language=?"), eq(7L), eq("en"), eq("hi"), eq("science"), eq("science"));
+    verify(jdbc).queryForList(contains("coalesce(ct.display_name,ch.display_name) as chapter_name"),
+        eq(7L), eq("en"), eq("hi"), eq("science"), eq("science"));
+  }
   @Test
   void studentCatalogRejectsUnsupportedLanguageBeforeQueryingDocuments() {
     when(authorization.requireStudent(student)).thenReturn(student);

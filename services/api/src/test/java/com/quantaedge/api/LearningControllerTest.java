@@ -90,7 +90,9 @@ class LearningControllerTest {
     when(jdbc.queryForList(contains("select l.id,l.code,coalesce(lt.title,l.title) as title"), any(Object[].class)))
         .thenReturn(List.of(Map.of(
             "id", 42L, "class_code", "7", "subject_code", "maths",
-            "chapter_code", "algebraic-expressions", "title", "Expressions")));
+            "chapter_code", "algebraic-expressions", "title", "Expressions",
+            "class_translated", true, "lesson_translated", true, "chapter_translated", true,
+            "subject_translated", true, "objective_translated", true)));
     when(jdbc.queryForList(contains("strip_answer_keys(coalesce(bt.content,b.content))::text as content"), eq("hi"), eq(42L))).thenReturn(List.of());
     when(jdbc.queryForList(contains("select q.id,q.question_type"), any(Object[].class))).thenReturn(List.of());
 
@@ -100,6 +102,9 @@ class LearningControllerTest {
     verify(jdbc).queryForList(contains("order by b.sequence_no,b.id"), eq("hi"), eq(42L));
     assertTrue(lesson.containsKey("blocks"));
     assertTrue(lesson.containsKey("questions"));
+    assertEquals(true, lesson.get("translation_complete"));
+    assertEquals(List.of(), lesson.get("translation_gaps"));
+    assertEquals(0L, ((Map<?,?>) lesson.get("translation_coverage")).get("blocks_published"));
   }
 
   @Test

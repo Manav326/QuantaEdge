@@ -166,7 +166,7 @@ WITH sources AS (
   SELECT 'curriculum_class'::text AS entity_type, c.id::bigint AS entity_id,
          md5(jsonb_build_object('display_name',c.display_name)::text) AS source_hash,
          jsonb_build_object('display_name',c.display_name) AS source_content,
-         jsonb_build_object('class_code',c.code,'class_name',c.display_name) AS context
+         jsonb_build_object('class_code',c.code,'class_name',c.display_name,'class_active',c.active) AS context
   FROM curriculum_class c
   WHERE c.code IN ({classes})
 
@@ -183,7 +183,7 @@ WITH sources AS (
   SELECT 'curriculum_subject',s.id,
          md5(jsonb_build_object('display_name',s.display_name)::text),
          jsonb_build_object('display_name',s.display_name),
-         jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',s.display_name)
+         jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',s.display_name,'class_active',c.active,'subject_active',s.active)
   FROM curriculum_subject s JOIN curriculum_class c ON c.id=s.class_id
   WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND s.active=true
 
@@ -191,7 +191,9 @@ WITH sources AS (
   SELECT 'curriculum_chapter',ch.id,
          md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text),
          jsonb_build_object('display_name',ch.display_name,'description',ch.description),
-         jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name)
+         jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
+                            'class_active',c.active,'subject_active',s.active,
+                            'chapter_active',ch.active,'chapter_status',ch.content_status)
   FROM curriculum_chapter ch JOIN curriculum_subject s ON s.id=ch.subject_id
   JOIN curriculum_class c ON c.id=s.class_id
   WHERE c.code IN ({classes}) AND s.code IN ({subjects}) {chapter_filter}
@@ -201,7 +203,8 @@ WITH sources AS (
          md5(jsonb_build_object('title',o.title,'description',o.description)::text),
          jsonb_build_object('title',o.title,'description',o.description),
          jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
-                            'lesson_title',o.title)
+                            'lesson_title',o.title,'class_active',c.active,'subject_active',s.active,
+                            'chapter_active',ch.active,'chapter_status',ch.content_status,'objective_active',o.active)
   FROM learning_objective o JOIN curriculum_chapter ch ON ch.id=o.chapter_id
   JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
   WHERE c.code IN ({classes}) AND s.code IN ({subjects}) {chapter_filter}{objective_filter}
@@ -211,7 +214,9 @@ WITH sources AS (
          md5(jsonb_build_object('title',l.title,'summary',l.summary)::text),
          jsonb_build_object('title',l.title,'summary',l.summary),
          jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
-                            'lesson_title',l.title)
+                            'lesson_title',l.title,'class_active',c.active,'subject_active',s.active,
+                            'chapter_active',ch.active,'chapter_status',ch.content_status,
+                            'lesson_active',l.active,'lesson_status',l.status)
   FROM lesson l JOIN curriculum_chapter ch ON ch.id=l.chapter_id
   JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
   WHERE c.code IN ({classes}) AND s.code IN ({subjects}) {lesson_filter}{current_chapter_filter}
@@ -219,7 +224,10 @@ WITH sources AS (
   UNION ALL
   SELECT 'lesson_block',b.id, md5(b.content::text), jsonb_build_object('content',b.content),
          jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
-                            'lesson_title',l.title,'block_type',b.block_type)
+                            'lesson_title',l.title,'block_type',b.block_type,
+                            'class_active',c.active,'subject_active',s.active,
+                            'chapter_active',ch.active,'chapter_status',ch.content_status,
+                            'lesson_active',l.active,'lesson_status',l.status,'block_active',b.active)
   FROM lesson_block b JOIN lesson l ON l.id=b.lesson_id
   JOIN curriculum_chapter ch ON ch.id=l.chapter_id
   JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
@@ -236,7 +244,11 @@ WITH sources AS (
            FROM question_option qo WHERE qo.question_id=q.id
          ),'[]'::jsonb),'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags),
          jsonb_build_object('class_code',c.code,'subject_code',s.code,'chapter_name',ch.display_name,
-                            'lesson_title',l.title,'question_type',q.question_type)
+                            'lesson_title',l.title,'question_type',q.question_type,
+                            'class_active',c.active,'subject_active',s.active,
+                            'chapter_active',ch.active,'chapter_status',ch.content_status,
+                            'lesson_active',l.active,'lesson_status',l.status,
+                            'question_active',q.active,'question_status',q.review_status)
   FROM question q JOIN lesson l ON l.id=q.lesson_id
   JOIN curriculum_chapter ch ON ch.id=l.chapter_id
   JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
@@ -338,6 +350,341 @@ LEFT JOIN LATERAL (
   WHERE x.entity_type=s.entity_type AND x.entity_id=s.entity_id AND x.source_hash=s.source_hash
 ) e ON true;
 """
+
+def student_flow_source_is_deliverable(source):
+    """Match the active/published gates used by the Class 6-8 Learn API."""
+    entity_type = str(source.get("entity_type") or "")
+    context = source.get("context") or {}
+    if context.get("class_active") is False:
+        return False
+    if entity_type in {"curriculum_class"}:
+        return True
+    if entity_type in {"curriculum_subject"}:
+        return context.get("subject_active") is not False
+    if entity_type in {"curriculum_chapter"}:
+        return (context.get("subject_active") is not False
+                and context.get("chapter_active") is True
+                and str(context.get("chapter_status") or "").upper() == "PUBLISHED")
+    if entity_type in {"learning_objective"}:
+        return (context.get("subject_active") is not False
+                and context.get("chapter_active") is True
+                and str(context.get("chapter_status") or "").upper() == "PUBLISHED"
+                and context.get("objective_active") is True)
+    if entity_type == "lesson":
+        return (context.get("subject_active") is not False
+                and context.get("chapter_active") is True
+                and str(context.get("chapter_status") or "").upper() == "PUBLISHED"
+                and context.get("lesson_active") is True
+                and str(context.get("lesson_status") or "").upper() == "PUBLISHED")
+    if entity_type == "lesson_block":
+        return (context.get("subject_active") is not False
+                and context.get("chapter_active") is True
+                and str(context.get("chapter_status") or "").upper() == "PUBLISHED"
+                and context.get("lesson_active") is True
+                and str(context.get("lesson_status") or "").upper() == "PUBLISHED"
+                and context.get("block_active") is True)
+    if entity_type == "question":
+        return (context.get("subject_active") is not False
+                and context.get("chapter_active") is True
+                and str(context.get("chapter_status") or "").upper() == "PUBLISHED"
+                and context.get("lesson_active") is True
+                and str(context.get("lesson_status") or "").upper() == "PUBLISHED"
+                and context.get("question_active") is True
+                and str(context.get("question_status") or "").upper() in {"APPROVED", "PUBLISHED"})
+    return False
+
+
+def summarize_published_translation_coverage(sources, languages, subjects, class_codes=None):
+    """Count current-source PUBLISHED translations by Class × subject × locale.
+
+    This mirrors student delivery: DRAFT, IN_REVIEW and APPROVED records are not delivered.
+    A current published revision remains deliverable while a newer draft is being edited.
+    Textbook PDFs are excluded and must be audited separately.
+    """
+    core_types = (
+        "curriculum_class", "curriculum_subject", "curriculum_chapter",
+        "learning_objective", "lesson", "lesson_block", "question",
+    )
+    tracks = {}
+
+    def ensure_track(class_code, subject_code, language):
+        key = (class_code, subject_code, language)
+        return tracks.setdefault(key, {
+            "class_code": class_code, "subject_code": subject_code,
+            "language": language, "entities": {},
+        })
+
+    deliverable_source_count = 0
+    for source in sources:
+        context = source.get("context") or {}
+        if not student_flow_source_is_deliverable(source):
+            continue
+        deliverable_source_count += 1
+        class_code = str(context.get("class_code") or "")
+        entity_type = str(source.get("entity_type") or "")
+        source_subject = str(context.get("subject_code") or "")
+        if class_code not in ALLOWED_CLASSES:
+            continue
+        if entity_type == "curriculum_class" and not source_subject:
+            target_subjects = subjects
+        elif source_subject in subjects:
+            target_subjects = [source_subject]
+        else:
+            continue
+
+        entries = source.get("existing") or []
+        for subject_code in target_subjects:
+            for language in languages:
+                same = [entry for entry in entries
+                        if entry.get("language") == language
+                        and entry.get("source_hash") == source.get("source_hash")]
+                statuses = [str(entry.get("translation_status") or "").upper() for entry in same]
+                if "PUBLISHED" in statuses:
+                    status = "PUBLISHED"
+                elif same:
+                    status = str(max(same, key=lambda row: int(row.get("version_no") or 0))
+                                 .get("translation_status") or "UNKNOWN").upper()
+                else:
+                    status = "MISSING"
+
+                track = ensure_track(class_code, subject_code, language)
+                counts = track["entities"].setdefault(entity_type, {
+                    "source_entities": 0, "published_current": 0, "missing_current": 0,
+                    "draft": 0, "in_review": 0, "approved_not_published": 0, "rejected": 0, "other": 0,
+                })
+                counts["source_entities"] += 1
+                if status == "PUBLISHED":
+                    counts["published_current"] += 1
+                elif status == "MISSING":
+                    counts["missing_current"] += 1
+                elif status == "DRAFT":
+                    counts["draft"] += 1
+                elif status == "IN_REVIEW":
+                    counts["in_review"] += 1
+                elif status == "APPROVED":
+                    counts["approved_not_published"] += 1
+                elif status == "REJECTED":
+                    counts["rejected"] += 1
+                else:
+                    counts["other"] += 1
+
+    requested_classes = list(class_codes or sorted({str(row.get("context", {}).get("class_code") or "") for row in sources}))
+    requested_classes = [code for code in requested_classes if code in ALLOWED_CLASSES]
+    for class_code in requested_classes:
+        for subject_code in subjects:
+            for language in languages:
+                ensure_track(class_code, subject_code, language)
+
+    required_content_types = ("curriculum_class", "curriculum_subject", "curriculum_chapter", "lesson", "lesson_block", "question")
+    per_track = []
+    for key in sorted(tracks):
+        track = tracks[key]
+        incomplete = []
+        entities = {}
+        for entity_type, counts in sorted(track["entities"].items()):
+            total = counts["source_entities"]
+            published = counts["published_current"]
+            entities[entity_type] = {
+                **counts,
+                "published_percent": round(100.0 * published / total, 1) if total else None,
+                "fully_published": bool(total) and published == total,
+            }
+            if entity_type in core_types and total and published != total:
+                incomplete.append(entity_type)
+        missing_content_types = [
+            entity_type for entity_type in required_content_types
+            if not track["entities"].get(entity_type)
+            or track["entities"][entity_type]["source_entities"] == 0
+        ]
+        for entity_type in missing_content_types:
+            if entity_type not in incomplete:
+                incomplete.append(entity_type)
+        track["entities"] = entities
+        track["core_entity_types_incomplete"] = incomplete
+        track["required_content_types_missing"] = missing_content_types
+        track["structured_content_fully_published"] = not incomplete
+        per_track.append(track)
+
+    by_key = {(row["class_code"], row["subject_code"], row["language"]): row for row in per_track}
+    bilingual = []
+    for class_code in requested_classes:
+        for subject_code in subjects:
+            hindi = by_key.get((class_code, subject_code, "hi"))
+            english = by_key.get((class_code, subject_code, "en"))
+            if hindi is None and english is None:
+                continue
+            hi_ready = bool(hindi and hindi["structured_content_fully_published"])
+            en_ready = bool(english and english["structured_content_fully_published"])
+            bilingual.append({
+                "class_code": class_code, "subject_code": subject_code,
+                "hindi_structured_complete": hi_ready,
+                "english_structured_complete": en_ready,
+                "structured_bilingual_ready": hi_ready and en_ready,
+                "note": "Structured database content only; published textbook PDFs are audited separately.",
+            })
+    return {
+        "requested_classes": requested_classes,
+        "per_class_subject_language": per_track,
+        "bilingual_readiness_by_track": bilingual,
+        "core_entity_types": list(core_types),
+        "student_flow_eligible_source_entities": deliverable_source_count,
+        "pdfs_included": False,
+        "delivery_rule": "Only current-source PUBLISHED translations count as student-visible.",
+    }
+
+
+def make_published_learn_translation_audit_sql(class_codes, subject_codes, languages):
+    """Read only published, current-source structured translations that Learn actually serves."""
+    classes = ",".join(sql_literal(value) for value in class_codes)
+    subjects = ",".join(sql_literal(value) for value in subject_codes)
+    locales = ",".join(sql_literal(value) for value in languages)
+    return f"""
+WITH published AS (
+  SELECT c.code::text AS class_code,s.code::text AS subject_code,t.language::text AS language,
+         'curriculum_class'::text AS entity_type,c.id::bigint AS entity_id,
+         jsonb_build_object('display_name',t.display_name) AS translated_content
+  FROM curriculum_class_translation t JOIN curriculum_class c ON c.id=t.class_id
+  JOIN curriculum_subject s ON s.class_id=c.id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object('display_name',c.display_name)::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'curriculum_subject',s.id,
+         jsonb_build_object('display_name',t.display_name)
+  FROM curriculum_subject_translation t JOIN curriculum_subject s ON s.id=t.subject_id
+  JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object('display_name',s.display_name)::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'curriculum_chapter',ch.id,
+         jsonb_build_object('display_name',t.display_name,'description',t.description)
+  FROM curriculum_chapter_translation t JOIN curriculum_chapter ch ON ch.id=t.chapter_id
+  JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND ch.active=true AND ch.content_status='PUBLISHED'
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'learning_objective',o.id,
+         jsonb_build_object('title',t.title,'description',t.description)
+  FROM learning_objective_translation t JOIN learning_objective o ON o.id=t.objective_id
+  JOIN curriculum_chapter ch ON ch.id=o.chapter_id
+  JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND ch.active=true AND ch.content_status='PUBLISHED' AND o.active=true
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object('title',o.title,'description',o.description)::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'lesson',l.id,
+         jsonb_build_object('title',t.title,'summary',t.summary)
+  FROM lesson_translation t JOIN lesson l ON l.id=t.lesson_id
+  JOIN curriculum_chapter ch ON ch.id=l.chapter_id
+  JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND ch.active=true AND ch.content_status='PUBLISHED' AND l.active=true AND l.status='PUBLISHED'
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object('title',l.title,'summary',l.summary)::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'lesson_block',b.id,
+         jsonb_build_object('content',t.content)
+  FROM lesson_block_translation t JOIN lesson_block b ON b.id=t.block_id
+  JOIN lesson l ON l.id=b.lesson_id JOIN curriculum_chapter ch ON ch.id=l.chapter_id
+  JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND ch.active=true AND ch.content_status='PUBLISHED' AND l.active=true AND l.status='PUBLISHED'
+    AND b.active=true AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(b.content::text)
+
+  UNION ALL
+  SELECT c.code,s.code,t.language,'question',q.id,
+         jsonb_build_object('prompt',t.prompt,'explanation',t.explanation,'options',t.options,
+                            'topic',t.topic,'subtopic',t.subtopic,'skill',t.skill,'tags',t.tags)
+  FROM question_translation t JOIN question q ON q.id=t.question_id
+  JOIN lesson l ON l.id=q.lesson_id JOIN curriculum_chapter ch ON ch.id=l.chapter_id
+  JOIN curriculum_subject s ON s.id=ch.subject_id JOIN curriculum_class c ON c.id=s.class_id
+  WHERE c.code IN ({classes}) AND s.code IN ({subjects}) AND c.active=true AND s.active=true
+    AND ch.active=true AND ch.content_status='PUBLISHED' AND l.active=true AND l.status='PUBLISHED'
+    AND q.active=true AND q.review_status IN ('APPROVED','PUBLISHED')
+    AND t.language IN ({locales}) AND t.translation_status='PUBLISHED'
+    AND t.source_hash::text=md5(jsonb_build_object(
+      'prompt',q.prompt,'explanation',q.explanation,
+      'options',coalesce((select jsonb_agg(jsonb_build_object('key',qo.option_key,'label',qo.label)
+        order by qo.sort_order) from question_option qo where qo.question_id=q.id),'[]'::jsonb),
+      'topic',q.topic,'subtopic',q.subtopic,'skill',q.skill,'tags',q.tags)::text)
+)
+SELECT COALESCE(jsonb_agg(jsonb_build_object(
+  'class_code',class_code,'subject_code',subject_code,'language',language,
+  'entity_type',entity_type,'entity_id',entity_id,'translated_content',translated_content
+) ORDER BY class_code,subject_code,language,entity_type,entity_id),'[]'::jsonb)::text
+FROM published;
+"""
+
+
+def audit_published_translation_scripts(rows):
+    """Flag likely wrong-script records for human review; this is not a translation-quality proof."""
+    from collections import Counter
+
+    by_track = {}
+    candidates = []
+    checked = 0
+    for row in rows:
+        language = str(row.get("language") or "")
+        if language not in ALLOWED_LANGUAGES:
+            continue
+        text = " ".join(collect_student_text(row.get("translated_content")))
+        letters = [char for char in text if char.isalpha()]
+        if not letters:
+            continue
+        checked += 1
+        devanagari = sum(1 for char in letters if 0x0900 <= ord(char) <= 0x097F)
+        latin = sum(1 for char in letters if ("a" <= char.lower() <= "z"))
+        ratio = devanagari / len(letters)
+        issue = None
+        if language == "en" and len(letters) >= 10 and devanagari >= 3 and ratio >= 0.10:
+            issue = "DEVANAGARI_TEXT_IN_ENGLISH"
+        elif language == "hi" and len(letters) >= 40 and ratio < 0.20:
+            issue = "LOW_DEVANAGARI_SHARE_IN_HINDI"
+        key = (str(row.get("class_code") or ""), str(row.get("subject_code") or ""), language)
+        track = by_track.setdefault(key, {
+            "class_code": key[0], "subject_code": key[1], "language": language,
+            "published_translations_checked": 0, "script_review_candidates": 0,
+            "by_entity_type": {},
+        })
+        track["published_translations_checked"] += 1
+        counts = track["by_entity_type"].setdefault(row.get("entity_type", "unknown"), {
+            "checked": 0, "review_candidates": 0,
+        })
+        counts["checked"] += 1
+        if issue:
+            track["script_review_candidates"] += 1
+            counts["review_candidates"] += 1
+            candidates.append({
+                "class_code": key[0],
+                "subject_code": key[1],
+                "language": language,
+                "entity_type": row.get("entity_type"),
+                "entity_id": row.get("entity_id"),
+                "issue": issue,
+                "alphabetic_characters": len(letters),
+                "devanagari_characters": devanagari,
+                "latin_characters": latin,
+                "devanagari_percent": round(ratio * 100.0, 1),
+            })
+    return {
+        "method": "script heuristic; candidates require human review",
+        "published_translations_checked": checked,
+        "script_review_candidate_count": len(candidates),
+        "by_class_subject_language": [by_track[key] for key in sorted(by_track)],
+        "review_candidates": candidates,
+        "limitation": "A script heuristic can miss bad translations and flag legitimate loanwords or bilingual terminology. It does not assess semantic, mathematical, or scientific correctness.",
+    }
+
 
 def psql(sql: str, *, readonly: bool = False, timeout: int = 180) -> str:
     shell = 'psql -X -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Atq'
@@ -684,6 +1031,7 @@ def main() -> int:
         drafts_path = output_dir / f"translation-drafts-{timestamp}.jsonl"
         summary_path = output_dir / f"translation-summary-{timestamp}.json"
         errors_path = output_dir / f"translation-errors-{timestamp}.jsonl"
+        script_review_path = output_dir / f"published-translation-script-review-{timestamp}.jsonl"
 
         raw = psql(make_source_sql(classes, subjects, args.include_archived), readonly=True, timeout=300)
         sources = json.loads(raw or "[]")
@@ -705,6 +1053,7 @@ def main() -> int:
                 version = max((int(e.get("version_no") or 0) for e in same_revision), default=0) + 1
                 todo.append((row, language, version))
 
+        coverage = summarize_published_translation_coverage(sources, languages, subjects, classes)
         audit = {
             "created_at": dt.datetime.now(dt.timezone.utc).isoformat(),
             "classes": classes,
@@ -717,15 +1066,30 @@ def main() -> int:
             "source_entities_total": len(sources),
             "source_entities_by_type": dict(sorted(type_counts.items())),
             "existing_translation_rows_by_language_status": dict(sorted(existing_counts.items())),
+            "published_translation_coverage": coverage,
             "translation_tasks_pending": len(todo),
             "mode": "audit-only" if args.audit_only else ("apply-draft" if args.apply else "generate-report-only"),
             "translations_published": 0,
             "note": "Generated translations remain DRAFT and are not visible to students until separately reviewed and published.",
         }
         if args.audit_only:
+            published_raw = psql(
+                make_published_learn_translation_audit_sql(classes, subjects, languages),
+                readonly=True, timeout=300,
+            )
+            published_rows = json.loads(published_raw or "[]")
+            script_report = audit_published_translation_scripts(published_rows)
+            script_candidates = script_report.pop("review_candidates")
+            with script_review_path.open("w", encoding="utf-8") as candidates_file:
+                for candidate in script_candidates:
+                    candidates_file.write(json.dumps(candidate, ensure_ascii=False) + "\n")
+            script_report["review_candidates_file"] = str(script_review_path)
+            script_report["pdfs_included"] = False
+            audit["published_translation_script_review"] = script_report
             summary_path.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             print(json.dumps(audit, ensure_ascii=False, indent=2))
             print(f"Audit report: {summary_path}")
+            print(f"Script-review candidates: {script_review_path}")
             return 0
 
         if args.max_items:

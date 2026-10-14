@@ -46,9 +46,15 @@ After the V51 migration and student delivery/CMS changes are deployed, use Pytho
 
    The importer writes only new DRAFT questions. It skips an existing stable identity or an exact content-and-answer duplicate, but does not collapse two questions merely because their prompts happen to match. Reused source IDs are namespaced by class, subject and chapter. The report lists new questions and duplicates skipped. Mapping-preflight failure means no writes; after a later network error, rerunning is safe.
 
-2. **Run a read-only inventory of structured records in the local database:**
+2. **Run a read-only inventory and bilingual-delivery audit of the local database:**
 
        & "D:\Tools\Python312\python.exe" .\scripts\translate_quantaedge_content.py --audit-only
+
+   The summary now reports Class × subject × language coverage for the student-facing Learn path by entity type: curriculum labels, chapters, objectives, lessons, teaching blocks, and approved questions. Only a current-source `PUBLISHED` translation counts as delivered; `DRAFT`, `IN_REVIEW`, `APPROVED` and stale-source rows do not count. It explicitly marks tracks missing lesson/block/question content, so an empty track cannot pass a bilingual completeness check.
+
+   The same read-only run checks published text for likely wrong-script leakage (for example, Devanagari in English or long Latin-only text in a Hindi translation) and writes candidate entity IDs to `published-translation-script-review-<timestamp>.jsonl`. This is a triage heuristic only: it cannot verify meaning, scientific accuracy, mathematical correctness, or natural writing, and every flagged record needs a human decision.
+
+   PDF editions are reported separately and are not counted as translated structured Learn content. The Learn UI may still surface a fallback-medium PDF if no selected-language edition exists; its actual language is now labeled. A translated chapter title is no longer overwritten by fallback PDF metadata.
 
 3. **Generate and insert a representative 40-task pilot as DRAFT translations** across Hindi, English, and the main content types. This lets staff review the exact generated text inside the Language review panel and avoids paying to generate the same pilot twice. The script reads OPENAI_API_KEY, OPENAI_API_BASE_URL, and the model from the root .env file when present. Ensure OPENAI_API_KEY plus either OPENAI_TRANSLATION_MODEL or APP_AI_TUTOR_MODEL are configured:
 

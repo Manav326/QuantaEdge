@@ -461,17 +461,20 @@ public class LearningDocumentController {
   public List<Map<String, Object>> studentDocumentCatalog(
       @RequestParam(required = false) String subjectCode,
       @RequestParam(defaultValue = "hi") String language,
+      @RequestParam(required = false) String displayLanguage,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     String subjectFilter = subjectCode == null ? "" : subjectCode.trim();
     String languageFilter = normalizeDocumentLanguage(language);
+    String chapterDisplayLanguage = normalizeDocumentLanguage(displayLanguage == null ? language : displayLanguage);
     return jdbc.queryForList("""
       select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
              d.page_end-d.page_start+1 as page_count,
              s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,
-             ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
+             ch.id as chapter_id,ch.code as chapter_code,coalesce(ct.display_name,ch.display_name) as chapter_name,
+             (ct.id is not null) as chapter_translated,
              coalesce(p.last_page,1) as last_page,p.last_opened_at
       from learning_document d
       join learning_pdf_asset a on a.id=d.pdf_asset_id
@@ -480,6 +483,13 @@ public class LearningDocumentController {
       join student st on st.id=? and st.active=true and st.class_code=c.code
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
+      left join lateral (
+        select t.id,t.display_name
+        from curriculum_chapter_translation t
+        where t.chapter_id=ch.id and t.language=? and t.translation_status='PUBLISHED'
+          and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
+        order by t.version_no desc,t.id desc limit 1
+      ) ct on true
       left join student_learning_document_progress p
         on p.learning_document_id=d.id and p.student_id=st.id
       where d.status='PUBLISHED'
@@ -489,9 +499,13 @@ public class LearningDocumentController {
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
-      """, context.studentId(), languageFilter, subjectFilter, subjectFilter);
+      """, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter);
   }
 
+  /** Source-compatible overload for existing Java callers; HTTP requests use the annotated handler above. */
+  public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, AuthContext context) {
+    return studentDocumentCatalog(subjectCode, language, null, context);
+  }
   @GetMapping("/learning/documents/{documentId}")
   public Map<String, Object> studentDocument(
       @PathVariable long documentId,

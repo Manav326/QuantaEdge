@@ -13,6 +13,7 @@ import TutorDock from './TutorDock';
 type Lesson = {
   id:number; code:string; title:string; summary:string; estimated_minutes:number;
   chapter_name:string; subject_name:string; subject_code:string; chapter_code:string;
+  lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
   mcq_count?:number; mcq_answered_count?:number;
   practice_completed_attempts?:number; practice_best_correct_count?:number|null;
   practice_best_graded_count?:number|null; practice_best_percent?:number|null;
@@ -21,7 +22,7 @@ type Lesson = {
 type TrackBrowse = {
   classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
 };
-type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;edition?:string|null;language?:'hi'|'en'};
+type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;chapter_translated?:boolean;edition?:string|null;language?:'hi'|'en'};
 
 function textbookChapterTitle(item: StudentDocument, language: 'hi' | 'en') {
   if (language === 'en') {
@@ -44,6 +45,8 @@ type Detail = Lesson & {
   translation_complete?:boolean;
   lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
   class_translated?:boolean; objective_translated?:boolean;
+  translation_gaps?:string[];
+  translation_coverage?:{blocks_total:number;blocks_published:number;questions_total:number;questions_published:number;class?:boolean;lesson?:boolean;chapter?:boolean;subject?:boolean;objective?:boolean};
 };
 
 function parse<T=any>(value:string):T {
@@ -289,10 +292,11 @@ export default function LearnClient() {
         );
         if(existing){
           if(document.chapter_code&&existing.code===existing.name)existing.code=document.chapter_code;
-          if(learningLanguage==='en')existing.name=textbookChapterTitle(document,'en');
+          // The lesson list is already localized for the selected learning language.
+          // A fallback PDF must never overwrite that canonical translated chapter title.
           return;
         }
-        const name=learningLanguage==='en'?textbookChapterTitle(document,'en'):(document.chapter_name||document.title);
+        const name=textbookChapterTitle(document,learningLanguage);
         const key=document.chapter_code||name||('chapter-'+document.document_id);
         grouped.set(key,{code:key,name,lessons:[]});
       });
@@ -436,7 +440,7 @@ export default function LearnClient() {
     // Show the chosen language first, but do not hide a chapter when its only
     // published PDF is available in the other language.
     const loadLanguage=(language:string):Promise<StudentDocument[]> =>
-      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language,{cache:'no-store'})
+      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage,{cache:'no-store'})
         .then(async response=>response.ok?response.json():[])
         .then(body=>Array.isArray(body)?body as StudentDocument[]:[])
         .catch(()=>[]);
@@ -535,6 +539,20 @@ export default function LearnClient() {
     if(lesson)localStorage.setItem('qe:student:lesson-scroll:'+lesson.id,String(window.scrollY));
   }
 
+  function translationGapText(gap: string) {
+    const coverage=lesson?.translation_coverage;
+    switch(gap){
+      case 'class_name': return tx('कक्षा का नाम','Class name');
+      case 'lesson_title_summary': return tx('पाठ का शीर्षक/सारांश','Lesson title/summary');
+      case 'chapter_name': return tx('अध्याय का नाम','Chapter name');
+      case 'subject_name': return tx('विषय का नाम','Subject name');
+      case 'objective_title': return tx('सीखने का उद्देश्य','Learning objective');
+      case 'lesson_blocks': { const missing=Math.max(0,Number(coverage?.blocks_total||0)-Number(coverage?.blocks_published||0)); return tx(missing+' शिक्षण भाग',''+missing+' teaching block(s)'); }
+      case 'questions': { const missing=Math.max(0,Number(coverage?.questions_total||0)-Number(coverage?.questions_published||0)); return tx(missing+' प्रश्न',''+missing+' question(s)'); }
+      default: return gap.replaceAll('_',' ');
+    }
+  }
+
   const lastOpenedLesson=trackBrowse?.lessons.find(item=>Number(item.id)===lastOpenedLessonId);
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
@@ -546,7 +564,7 @@ export default function LearnClient() {
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-          <span className="qe-student-pdf-copy"><span><LocaleText hinglish="पूरी subject book" english="Complete subject textbook" /></span><strong>{item.title}</strong><small>{item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
+          <span className="qe-student-pdf-copy"><span><LocaleText hinglish="पूरी subject book" english="Complete subject textbook" /></span><strong>{item.title}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} pages · {item.edition||tx('ऑनलाइन पढ़ें','Read online')}</small></span>
           <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
         </Link>
       )}
@@ -575,7 +593,7 @@ export default function LearnClient() {
           </button>
           {chapterDocuments.map(item=><Link key={item.document_id} className="qe-student-pdf-link qe-chapter-pdf-row" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(group.code)}>
             <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
-            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.page_count} {tx('पृष्ठ','pages')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
+            <span className="qe-student-pdf-copy"><strong>{item.title||item.chapter_name||tx('Chapter PDF','Chapter PDF')}</strong><small>{item.language==='en'?tx('English edition','English edition'):tx('Hindi edition','Hindi edition')} · {item.page_count} {tx('पृष्ठ','pages')} · {textbookChapterTitle(item, learningLanguage)}</small></span>
             <span className="qe-student-pdf-action"><LocaleText hinglish="PDF खोलें" english="Open PDF" /> ↗</span>
           </Link>)}
           {expanded&&<div className="qe-student-chapter-content">
@@ -629,11 +647,12 @@ export default function LearnClient() {
       <h1>{lesson.title}</h1>
       <p className="lesson-intro">{lesson.summary}</p>
       {!lesson.translation_complete&&<div className="feedback" role="status">
-        <span><LocaleText hinglish="भाषा समीक्षा" english="Language coverage" /></span>
+        <span><LocaleText hinglish="भाषा कवरेज अधूरा है" english="Language coverage is incomplete" /></span>
         <span><LocaleText
-          hinglish="इस पाठ के कुछ हिस्सों की चुनी हुई भाषा में समीक्षा-स्वीकृत सामग्री अभी उपलब्ध नहीं है। जहाँ अनुवाद नहीं है, वहाँ मूल सामग्री दिखाई दे सकती है।"
-          english="Some parts of this lesson do not yet have reviewed content in the selected language. Original-language text may appear where a translation is not available."
+          hinglish="इस चुनी हुई भाषा के कुछ हिस्सों का वर्तमान अनुवाद अभी प्रकाशित नहीं है। नीचे दिए गए भागों में मूल भाषा का पाठ दिखाई दे सकता है।"
+          english="Current translations for some parts are not published in the selected learning language. Original-language text may appear in the areas listed below."
         /></span>
+        {!!lesson.translation_gaps?.length&&<small>{lesson.translation_gaps.map(translationGapText).join(" · ")}</small>}
       </div>}
       <div className="feedback"><span><LocaleText hinglish="Learning path" english="Learning path" /></span><span><LocaleText hinglish={learnerPathLabel(orderedBlocks,lessonMcqs.length).hinglish} english={learnerPathLabel(orderedBlocks,lessonMcqs.length).english} /></span></div>
 

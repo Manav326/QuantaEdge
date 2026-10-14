@@ -124,6 +124,126 @@ class TranslationShapeTests(unittest.TestCase):
         self.assertEqual(result["heading"], "विषय")
 
 
+class TranslationCoverageTests(unittest.TestCase):
+    def test_coverage_counts_only_current_source_published_records_as_delivered(self):
+        sources = [
+            {
+                "entity_type": "curriculum_class", "entity_id": 6, "source_hash": "class6",
+                "context": {"class_code": "6", "class_active": True},
+                "existing": [
+                    {"language": "hi", "source_hash": "class6", "version_no": 1, "translation_status": "PUBLISHED"},
+                    {"language": "en", "source_hash": "class6", "version_no": 2, "translation_status": "DRAFT"},
+                ],
+            },
+            {
+                "entity_type": "curriculum_subject", "entity_id": 10, "source_hash": "maths6",
+                "context": {"class_code": "6", "subject_code": "maths", "class_active": True, "subject_active": True},
+                "existing": [
+                    {"language": lang, "source_hash": "maths6", "version_no": 1, "translation_status": "PUBLISHED"}
+                    for lang in ("hi", "en")
+                ],
+            },
+            {
+                "entity_type": "lesson", "entity_id": 100, "source_hash": "lesson100",
+                "context": {"class_code": "6", "subject_code": "maths", "class_active": True, "subject_active": True, "chapter_active": True, "chapter_status": "PUBLISHED", "lesson_active": True, "lesson_status": "PUBLISHED"},
+                "existing": [
+                    {"language": "hi", "source_hash": "lesson100", "version_no": 1, "translation_status": "PUBLISHED"},
+                    {"language": "en", "source_hash": "lesson100", "version_no": 1, "translation_status": "APPROVED"},
+                ],
+            },
+            {
+                "entity_type": "lesson_block", "entity_id": 200, "source_hash": "block200",
+                "context": {"class_code": "6", "subject_code": "maths", "class_active": True, "subject_active": True, "chapter_active": True, "chapter_status": "PUBLISHED", "lesson_active": True, "lesson_status": "PUBLISHED", "block_active": True},
+                "existing": [
+                    {"language": lang, "source_hash": "block200", "version_no": 1, "translation_status": "PUBLISHED"}
+                    for lang in ("hi", "en")
+                ],
+            },
+            {
+                "entity_type": "question", "entity_id": 300, "source_hash": "question300",
+                "context": {"class_code": "6", "subject_code": "maths", "class_active": True, "subject_active": True, "chapter_active": True, "chapter_status": "PUBLISHED", "lesson_active": True, "lesson_status": "PUBLISHED", "question_active": True, "question_status": "APPROVED"},
+                "existing": [
+                    {"language": "hi", "source_hash": "question300", "version_no": 1, "translation_status": "PUBLISHED"},
+                    {"language": "en", "source_hash": "old-stale-hash", "version_no": 1, "translation_status": "PUBLISHED"},
+                ],
+            },
+        ]
+
+        report = pipeline.summarize_published_translation_coverage(sources, ["hi", "en"], ["maths", "science"])
+        tracks = {
+            (row["class_code"], row["subject_code"], row["language"]): row
+            for row in report["per_class_subject_language"]
+        }
+        english_maths = tracks[("6", "maths", "en")]
+        self.assertFalse(english_maths["structured_content_fully_published"])
+        self.assertIn("curriculum_class", english_maths["core_entity_types_incomplete"])
+        self.assertIn("lesson", english_maths["core_entity_types_incomplete"])
+        self.assertIn("question", english_maths["core_entity_types_incomplete"])
+        self.assertEqual(english_maths["entities"]["lesson"]["approved_not_published"], 1)
+        self.assertEqual(english_maths["entities"]["question"]["missing_current"], 1)
+        self.assertEqual(english_maths["entities"]["question"]["published_current"], 0)
+        self.assertFalse(next(
+            row for row in report["bilingual_readiness_by_track"]
+            if row["class_code"] == "6" and row["subject_code"] == "maths"
+        )["structured_bilingual_ready"])
+
+    def test_current_publication_remains_deliverable_while_newer_draft_is_edited(self):
+        source = {
+            "entity_type": "lesson", "entity_id": 101, "source_hash": "current",
+            "context": {"class_code": "7", "subject_code": "science", "class_active": True, "subject_active": True, "chapter_active": True, "chapter_status": "PUBLISHED", "lesson_active": True, "lesson_status": "PUBLISHED"},
+            "existing": [
+                {"language": "en", "source_hash": "current", "version_no": 1, "translation_status": "PUBLISHED"},
+                {"language": "en", "source_hash": "current", "version_no": 2, "translation_status": "DRAFT"},
+            ],
+        }
+        report = pipeline.summarize_published_translation_coverage([source], ["en"], ["science"])
+        track = report["per_class_subject_language"][0]
+        self.assertEqual(track["entities"]["lesson"]["published_current"], 1)
+        self.assertEqual(track["entities"]["lesson"]["draft"], 0)
+        self.assertIn("lesson", track["entities"])
+        self.assertFalse(track["structured_content_fully_published"])
+        self.assertIn("lesson_block", track["required_content_types_missing"])
+
+
+class PublishedTranslationScriptAuditTests(unittest.TestCase):
+    def test_flags_hindi_script_leaking_into_published_english_translation(self):
+        report = pipeline.audit_published_translation_scripts([{
+            "class_code": "6", "subject_code": "maths", "language": "en",
+            "entity_type": "lesson_block", "entity_id": 42,
+            "translated_content": {"content": {"body": "यह संख्या one quarter है"}},
+        }])
+        self.assertEqual(report["script_review_candidate_count"], 1)
+        self.assertEqual(report["review_candidates"][0]["issue"], "DEVANAGARI_TEXT_IN_ENGLISH")
+
+    def test_flags_latin_only_long_hindi_translation_as_candidate(self):
+        report = pipeline.audit_published_translation_scripts([{
+            "class_code": "8", "subject_code": "science", "language": "hi",
+            "entity_type": "lesson", "entity_id": 55,
+            "translated_content": {"summary": "This is a very long translated lesson written in English words with enough alphabetic characters to trigger a likely language mismatch."},
+        }])
+        self.assertEqual(report["script_review_candidate_count"], 1)
+        self.assertEqual(report["review_candidates"][0]["issue"], "LOW_DEVANAGARI_SHARE_IN_HINDI")
+
+    def test_natural_hindi_and_english_translations_are_not_flagged(self):
+        report = pipeline.audit_published_translation_scripts([
+            {"class_code": "6", "subject_code": "maths", "language": "hi",
+             "entity_type": "lesson_block", "entity_id": 1,
+             "translated_content": {"content": {"body": "यह भिन्न दो बराबर भागों में से एक भाग को दर्शाती है।"}}},
+            {"class_code": "7", "subject_code": "science", "language": "en",
+             "entity_type": "lesson_block", "entity_id": 2,
+             "translated_content": {"content": {"body": "A fraction represents one of two equal parts of a whole."}}},
+        ])
+        self.assertEqual(report["script_review_candidate_count"], 0)
+
+    def test_script_audit_query_only_reads_current_published_learn_translations(self):
+        sql = pipeline.make_published_learn_translation_audit_sql(["6"], ["maths"], ["en", "hi"])
+        self.assertIn("t.translation_status='PUBLISHED'", sql)
+        self.assertIn("t.source_hash::text=md5", sql)
+        self.assertIn("q.review_status IN ('APPROVED','PUBLISHED')", sql)
+        self.assertIn("b.active=true", sql)
+        self.assertNotIn("translation_status='DRAFT'", sql)
+
+
 class TranslationSqlTests(unittest.TestCase):
     def test_source_inventory_covers_student_and_media_content(self):
         sql = pipeline.make_source_sql(["6", "7", "8"], ["maths", "science"], False)

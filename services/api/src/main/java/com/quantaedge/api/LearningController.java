@@ -39,7 +39,7 @@ public class LearningController {
              (lt.id is not null) as lesson_translated,
              (st.id is not null) as subject_translated,
              (ct.id is not null) as chapter_translated,
-             (ot.id is not null) as objective_translated,
+             (o.id is null or ot.id is not null) as objective_translated,
              coalesce(mcq.mcq_count,0) as mcq_count,
              coalesce(mcq.mcq_answered_count,0) as mcq_answered_count,
              coalesce(practice_count.completed_attempt_count,0) as practice_completed_attempts,
@@ -227,13 +227,29 @@ public class LearningController {
     List<Map<String,Object>> questions=publicQuestions(lessonId,context.studentId(),language);
     result.put("blocks",blocks);
     result.put("questions",questions);
-    boolean translationComplete=Boolean.TRUE.equals(result.get("lesson_translated"))
-        && Boolean.TRUE.equals(result.get("chapter_translated"))
-        && Boolean.TRUE.equals(result.get("subject_translated"))
-        && Boolean.TRUE.equals(result.get("objective_translated"))
-        && blocks.stream().allMatch(block -> Boolean.TRUE.equals(block.get("translated")))
-        && questions.stream().allMatch(question -> Boolean.TRUE.equals(question.get("translated")));
-    result.put("translation_complete",translationComplete);
+    long translatedBlocks=blocks.stream().filter(block -> Boolean.TRUE.equals(block.get("translated"))).count();
+    long translatedQuestions=questions.stream().filter(question -> Boolean.TRUE.equals(question.get("translated"))).count();
+    List<String> translationGaps=new java.util.ArrayList<>();
+    if(!Boolean.TRUE.equals(result.get("class_translated")))translationGaps.add("class_name");
+    if(!Boolean.TRUE.equals(result.get("lesson_translated")))translationGaps.add("lesson_title_summary");
+    if(!Boolean.TRUE.equals(result.get("chapter_translated")))translationGaps.add("chapter_name");
+    if(!Boolean.TRUE.equals(result.get("subject_translated")))translationGaps.add("subject_name");
+    if(!Boolean.TRUE.equals(result.get("objective_translated")))translationGaps.add("objective_title");
+    if(translatedBlocks<blocks.size())translationGaps.add("lesson_blocks");
+    if(translatedQuestions<questions.size())translationGaps.add("questions");
+    Map<String,Object> translationCoverage=new LinkedHashMap<>();
+    translationCoverage.put("class",Boolean.TRUE.equals(result.get("class_translated")));
+    translationCoverage.put("lesson",Boolean.TRUE.equals(result.get("lesson_translated")));
+    translationCoverage.put("chapter",Boolean.TRUE.equals(result.get("chapter_translated")));
+    translationCoverage.put("subject",Boolean.TRUE.equals(result.get("subject_translated")));
+    translationCoverage.put("objective",Boolean.TRUE.equals(result.get("objective_translated")));
+    translationCoverage.put("blocks_total",blocks.size());
+    translationCoverage.put("blocks_published",translatedBlocks);
+    translationCoverage.put("questions_total",questions.size());
+    translationCoverage.put("questions_published",translatedQuestions);
+    result.put("translation_coverage",translationCoverage);
+    result.put("translation_gaps",translationGaps);
+    result.put("translation_complete",translationGaps.isEmpty());
     return result;
   }
 
