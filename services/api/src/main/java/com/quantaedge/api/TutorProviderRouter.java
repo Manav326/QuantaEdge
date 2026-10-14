@@ -15,6 +15,9 @@ public class TutorProviderRouter {
   private final boolean tutorEnabled;
   private final boolean fallbackEnabled;
   private final int minOutputChars;
+  private static final long READINESS_CACHE_NANOS=10_000_000_000L;
+  private volatile long readinessCheckedAtNanos;
+  private volatile boolean readinessValue;
 
   public TutorProviderRouter(ObjectMapper mapper, Environment env) {
     this.tutorEnabled=env.getProperty("app.ai-tutor.enabled", Boolean.class, false);
@@ -50,6 +53,25 @@ public class TutorProviderRouter {
   /** True means at least one explicitly enabled provider has complete configuration, not live health. */
   public boolean isConfigured() {
     return primary.isConfigured() || canUseFallback();
+  }
+
+  /** Cached liveness probe only; no student prompt or learner data is sent during readiness checks. */
+  public boolean isAvailable() {
+    if (!tutorEnabled) return false;
+    long now=System.nanoTime();
+    if (readinessCheckedAtNanos!=0L && now-readinessCheckedAtNanos<READINESS_CACHE_NANOS) {
+      return readinessValue;
+    }
+    synchronized (this) {
+      now=System.nanoTime();
+      if (readinessCheckedAtNanos==0L || now-readinessCheckedAtNanos>=READINESS_CACHE_NANOS) {
+        boolean available=primary.isReachable();
+        if (!available && canUseFallback()) available=fallback.isReachable();
+        readinessValue=available;
+        readinessCheckedAtNanos=System.nanoTime();
+      }
+      return readinessValue;
+    }
   }
 
   /** Retained for source compatibility; persisted replies use the provider actually selected. */
