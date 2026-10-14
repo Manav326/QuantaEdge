@@ -64,7 +64,6 @@ public class TextbookExtractionService {
         ocr_pages,failed_pages,last_error,requested_at,started_at,finished_at,updated_at
       from textbook_extraction_job where pdf_asset_id=?
       """, assetId);
-    if ("PENDING".equals(String.valueOf(job.get("status")))) process(assetId);
     return job;
   }
 
@@ -80,7 +79,11 @@ public class TextbookExtractionService {
   }
 
   @Async("sourceIngestionExecutor")
-  public void process(long assetId) {
+  public void start(long assetId) {
+    processNow(assetId);
+  }
+
+  private void processNow(long assetId) {
     Path pdfPath = null;
     try {
       List<Map<String, Object>> rows = jdbc.queryForList("""
@@ -223,7 +226,8 @@ public class TextbookExtractionService {
   private boolean pageAlreadyExtracted(long assetId, String hash, int page) {
     Integer count = jdbc.queryForObject("""
       select count(*) from textbook_extracted_page
-      where pdf_asset_id=? and source_sha256=? and page_no=? and extraction_method<>'FAILED'
+      where pdf_asset_id=? and source_sha256=? and page_no=?
+        and quality_status in ('REVIEW','LOW_TEXT') and extraction_method in ('PDF_TEXT','OCR')
       """, Integer.class, assetId, hash, page);
     return count != null && count > 0;
   }
