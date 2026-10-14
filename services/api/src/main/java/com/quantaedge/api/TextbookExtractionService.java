@@ -480,7 +480,7 @@ public class TextbookExtractionService {
   private int extractClassNumber(JsonNode manifest) {
     String value = manifest.path("class").asText("");
     if (value.isBlank()) value = manifest.path("classes").toString();
-    java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(?<!\\\\d)(6|7|8)(?!\\\\d)").matcher(value);
+    java.util.regex.Matcher matcher = java.util.regex.Pattern.compile("(?<!\\d)(6|7|8)(?!\\d)").matcher(value);
     if (!matcher.find()) throw new IllegalArgumentException("The source book is not tagged for QuantaEdge Class 6, 7, or 8.");
     return Integer.parseInt(matcher.group(1));
   }
