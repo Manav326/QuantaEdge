@@ -240,7 +240,7 @@ public class CertificateRenderer {
     drawCentered(g, font(hindi, Font.PLAIN, 35), wording.introduction(),
         WIDTH / 2, 472, WIDTH - 520);
     g.setColor(NAVY); drawCentered(g, font(hindi, Font.BOLD, 82), recipient.trim(), WIDTH / 2, 588, WIDTH - 480);
-    g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 620, WIDTH / 2 + 350, 588);
+    g.setColor(ORANGE); g.setStroke(new BasicStroke(5)); g.drawLine(WIDTH / 2 - 350, 620, WIDTH / 2 + 350, 620);
     g.setColor(MUTED); drawCentered(g, font(hindi, Font.PLAIN, 34), wording.connector(), WIDTH / 2, 682, WIDTH - 520);
 
     String assessmentName = d.assessmentName() == null || d.assessmentName().isBlank() ? title : d.assessmentName();
