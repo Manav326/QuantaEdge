@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Generate original, review-only question candidates from a SCERT extraction bundle.
 
-By default this prints an offline plan. Actual model calls require --generate and
---confirm-external-processing. Uses only the Python standard library and an
-OpenAI-compatible chat-completions API.
+By default this prints an offline plan. Actual model calls require --generate.
+Loopback in-house endpoints (for example, Ollama on localhost) do not require a
+cloud API key or external-processing confirmation. Non-loopback providers require
+both. Uses only the Python standard library and an OpenAI-compatible chat API.
 """
 from __future__ import annotations
 
@@ -16,6 +17,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -286,6 +288,31 @@ Source PDF excerpt page range: {chunk['page_start']}-{chunk['page_end']}.
 """
 
 
+def is_loopback_model_url(base_url: str) -> bool:
+    """Only an exact loopback hostname can bypass hosted-provider consent/key checks."""
+    try:
+        parsed = urllib.parse.urlparse(base_url.strip())
+        return (
+            parsed.scheme in {"http", "https"}
+            and parsed.hostname in {"localhost", "127.0.0.1", "::1"}
+            and parsed.username is None
+            and parsed.password is None
+        )
+    except ValueError:
+        return False
+
+
+def model_request_headers(api_key: str) -> dict[str, str]:
+    """Do not send a fabricated bearer token to local inference servers."""
+    headers = {
+        "Content-Type": "application/json; charset=utf-8",
+        "Accept": "application/json",
+    }
+    if api_key.strip():
+        headers["Authorization"] = "Bearer " + api_key.strip()
+    return headers
+
+
 def model_endpoint(base_url: str) -> str:
     base = base_url.rstrip("/")
     if base.endswith("/chat/completions"):
@@ -317,7 +344,7 @@ def call_model(
     }
     request = urllib.request.Request(
         model_endpoint(base_url), data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), method="POST",
-        headers={"Authorization": "Bearer " + api_key, "Content-Type": "application/json; charset=utf-8", "Accept": "application/json"},
+        headers=model_request_headers(api_key),
     )
     raw: str | None = None
     for attempt in range(max_attempts):
@@ -827,15 +854,24 @@ def main() -> int:
                 "model_api_requests_used": 0,
             }, ensure_ascii=False, indent=2))
             return 0
-        if not args.confirm_external_processing:
-            raise ValueError("Generation sends extracted text to the configured model provider. Review data/privacy requirements, then pass --confirm-external-processing.")
-        api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY is required for --generate.")
         if not args.model.strip():
             raise ValueError("Set QUANTAEDGE_QUESTION_MODEL or pass --model to select a configured model.")
-        if not (args.api_base_url.startswith("https://") or args.api_base_url.startswith("http://localhost") or args.api_base_url.startswith("http://127.0.0.1")):
-            raise ValueError("Use HTTPS for non-local model API URLs.")
+        api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+        local_endpoint = is_loopback_model_url(args.api_base_url)
+        parsed_endpoint = urllib.parse.urlparse(args.api_base_url)
+        if local_endpoint:
+            # Local Ollama / OpenAI-compatible inference runs on the user's machine.
+            # Do not require external-processing consent or a hosted API key.
+            pass
+        else:
+            if parsed_endpoint.scheme != "https" or not parsed_endpoint.hostname:
+                raise ValueError("Use HTTPS for non-loopback model endpoints; plain HTTP is permitted only for exact localhost/loopback hosts.")
+            if not args.confirm_external_processing:
+                raise ValueError("This endpoint is not loopback. Review data/privacy requirements, then pass --confirm-external-processing before sending source text.")
+            if not api_key:
+                raise ValueError("OPENAI_API_KEY is required for a non-loopback model provider.")
+        if parsed_endpoint.username is not None or parsed_endpoint.password is not None:
+            raise ValueError("Do not embed credentials in the model API URL.")
 
         args.output_dir.mkdir(parents=True, exist_ok=True)
         generated = []

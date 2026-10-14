@@ -5,6 +5,8 @@ from pathlib import Path
 
 from scripts.generate_questions_from_extraction import (
     SUPPORTED_TYPES,
+    is_loopback_model_url,
+    model_request_headers,
     load_curriculum_question_targets,
     validate_extraction,
     validate_model_output,
@@ -112,6 +114,26 @@ class QuestionGenerationSchemaTests(unittest.TestCase):
             )
         self.assertEqual(["MCQ", "MCQ", "MCQ"], result["alpha"])
         self.assertEqual([], result["beta"])
+
+    def test_loopback_in_house_model_endpoint_needs_no_cloud_key_or_external_consent(self):
+        self.assertTrue(is_loopback_model_url("http://localhost:11434"))
+        self.assertTrue(is_loopback_model_url("http://127.0.0.1:11434/v1"))
+        self.assertTrue(is_loopback_model_url("http://[::1]:11434/v1"))
+
+    def test_only_exact_loopback_hosts_are_treated_as_local(self):
+        self.assertFalse(is_loopback_model_url("http://localhost.attacker.example"))
+        self.assertFalse(is_loopback_model_url("http://127.0.0.1.attacker.example"))
+        self.assertFalse(is_loopback_model_url("http://192.168.1.20:11434"))
+        self.assertFalse(is_loopback_model_url("https://api.example.com"))
+        self.assertFalse(is_loopback_model_url("http://user:pass@localhost:11434"))
+
+    def test_local_model_request_omits_fabricated_authorization_header(self):
+        headers = model_request_headers("")
+        self.assertNotIn("Authorization", headers)
+        self.assertEqual("application/json; charset=utf-8", headers["Content-Type"])
+
+    def test_configured_hosted_model_key_is_sent_as_bearer(self):
+        self.assertEqual("Bearer test-key", model_request_headers(" test-key ")["Authorization"])
 
     def test_generator_declares_all_curriculum_types(self):
         self.assertTrue({
