@@ -62,82 +62,25 @@ jobs:
           test -d "${source_root}/english/pages"
           test -d "${source_root}/hindi/pages"
 
-          python - "${source_root}" "${CLASS_NO}" <<'PY'
-          import json, re, sys
-          from pathlib import Path
-          root = Path(sys.argv[1])
-          grade = int(sys.argv[2])
-          for language in ("english", "hindi"):
-              directory = root / language / "pages"
-              manifests = {}
-              maths = set()
-              science = set()
-              for path in directory.glob("*.manifest.json"):
-                  data = json.loads(path.read_text(encoding="utf-8"))
-                  book_id = str(data.get("book_id") or "")
-                  if not book_id or book_id in manifests:
-                      raise SystemExit(f"{language}: missing/duplicate book ID in {path.name}")
-                  manifests[book_id] = data
-                  subject = str(data.get("subject") or "").casefold()
-                  if "math" in subject or "गणित" in subject:
-                      maths.add(book_id)
-                  elif "science" in subject or "विज्ञान" in subject:
-                      science.add(book_id)
-                  else:
-                      raise SystemExit(f"{language}: unsupported subject in {path.name}: {subject}")
-                  if not re.search(rf"(?<!\d){grade}(?!\d)", str(data.get("class") or "")):
-                      raise SystemExit(f"{book_id}: class metadata mismatch")
-                  if str(data.get("language") or "").casefold() not in ({language, "en"} if language == "english" else {language, "hi"}):
-                      raise SystemExit(f"{book_id}: language metadata mismatch")
-                  if data.get("scope") != "SUBJECT_BOOK" or data.get("content_state") != "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW":
-                      raise SystemExit(f"{book_id}: artifact is not a whole-book draft extraction")
-                  count = data.get("page_count")
-                  if not isinstance(count, int) or count < 1 or data.get("completed_pages") != count:
-                      raise SystemExit(f"{book_id}: extraction incomplete")
-                  name = data.get("text_jsonl")
-                  if not isinstance(name, str) or Path(name).name != name:
-                      raise SystemExit(f"{book_id}: invalid JSONL name")
-                  page_file = directory / name
-                  if not page_file.is_file():
-                      raise SystemExit(f"{book_id}: page JSONL missing")
-                  pages = set()
-                  with page_file.open(encoding="utf-8") as handle:
-                      for line_no, line in enumerate(handle, 1):
-                          if not line.strip():
-                              continue
-                          row = json.loads(line)
-                          number = row.get("source_book_page_number")
-                          if row.get("book_id") != book_id or not isinstance(number, int) or not 1 <= number <= count or number in pages:
-                              raise SystemExit(f"{book_id}: invalid page record at line {line_no}")
-                          pages.add(number)
-                  if pages != set(range(1, count + 1)):
-                      raise SystemExit(f"{book_id}: incomplete page sequence")
-              if not maths or not science:
-                  raise SystemExit(f"Class {grade} {language}: Maths and Science books are both required")
-              if grade in (7, 8) and len(maths) < 2:
-                  raise SystemExit(f"Class {grade} {language}: both Maths part books must be separate source books")
-              print(f"VERIFIED class={grade} language={language} maths_books={len(maths)} science_books={len(science)}")
+          for medium in english hindi; do
+            python scripts/validate_textbook_extraction_artifacts.py \
+              --registry-index "${artifact_root}/cache/class-${CLASS_NO}/${medium}/index.json" \
+              --extraction-dir "${source_root}/${medium}" \
+              --class-no "${CLASS_NO}" \
+              --language "${medium}"
+          done
 
-          artifact_root = root.parent.parent
-          # Source root is extracted/class-N; reports are siblings of extracted/.
-          report_dir = artifact_root / "reports"
-          target = Path("data/textbook-extractions")
-          target.mkdir(parents=True, exist_ok=True)
-          (target / f"class-{grade}").parent.mkdir(parents=True, exist_ok=True)
-          import shutil
-          shutil.rmtree(target / f"class-{grade}", ignore_errors=True)
-          shutil.copytree(root, target / f"class-{grade}")
-          (target / "reports").mkdir(exist_ok=True)
-          if report_dir.is_dir():
-              for report in report_dir.glob("*.json"):
-                  shutil.copy2(report, target / "reports" / report.name)
-          (target / "README.md").write_text(
-              "# Textbook extraction artifacts\n\n"
-              "Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.\n",
-              encoding="utf-8")
-          (target / f"class-{grade}" / "MIRROR-SOURCE.txt").write_text(
-              f"Mirrored class {grade} from workflow run {__import__(\"os\").environ.get(\"SOURCE_RUN_ID\", \"unknown\")}\n", encoding="utf-8")
-          PY
+          mkdir -p data/textbook-extractions
+          rm -rf "data/textbook-extractions/class-${CLASS_NO}"
+          cp -R "${source_root}" "data/textbook-extractions/class-${CLASS_NO}"
+          mkdir -p data/textbook-extractions/reports
+          cp "${artifact_root}/reports/"*.json data/textbook-extractions/reports/ 2>/dev/null || true
+          cat > data/textbook-extractions/README.md <<'EOF'
+          # Textbook extraction artifacts
+
+          Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.
+          EOF
+          printf 'Mirrored class %s from workflow run %s\n' "${CLASS_NO}" "${SOURCE_RUN_ID}" > "data/textbook-extractions/class-${CLASS_NO}/MIRROR-SOURCE.txt"
 
       - name: Commit extracted text to main
         env:
