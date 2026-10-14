@@ -68,6 +68,7 @@ export default function StudentCertificatesPage() {
       if (!eligibleResponse.ok) throw new Error(eligible.message || t('Unable to load eligible assessment results.','पात्र टेस्ट परिणाम लोड नहीं हो सके।'));
       const curriculum = Array.isArray(progress.curriculum) ? progress.curriculum : [];
       const eligibleItems = Array.isArray(eligible.items) ? eligible.items : [];
+      const certificateItems = Array.isArray(certs.items) ? certs.items : [];
       const tracksByCode = new Map<string, any>();
       curriculum.forEach((track: any) => {
         const code = String(track.subject_code || '').trim().toLowerCase();
@@ -87,9 +88,23 @@ export default function StudentCertificatesPage() {
           });
         }
       });
+      // Already-issued records are a final fallback, so prior achievements stay discoverable
+      // even if learning-progress metrics temporarily omit the current curriculum.
+      certificateItems.forEach((certificate: Certificate) => {
+        const code = String(certificate.subject_code || '').trim().toLowerCase();
+        if (code && !tracksByCode.has(code)) {
+          tracksByCode.set(code, {
+            class_code: certificate.class_code,
+            subject_code: code,
+            subject_name: certificate.subject_name || certificate.achievement_title,
+            completed: null,
+            lessons: null,
+          });
+        }
+      });
       const availableTracks = Array.from(tracksByCode.values());
       setProfile({ ...progress, curriculum: availableTracks });
-      setCertificates(Array.isArray(certs.items) ? certs.items : []);
+      setCertificates(certificateItems);
       setEligibleAttempts(eligibleItems);
       setPassThreshold(Number(eligible.passThresholdPercent || 80));
       if (!availableTracks.some((item: any) => String(item.subject_code || '').toLowerCase() === subjectCode.toLowerCase())) {
