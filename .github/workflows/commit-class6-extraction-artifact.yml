@@ -1,0 +1,79 @@
+name: Commit verified Class 6 textbook extraction artifact
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/ai/textbook-extraction-execution.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: commit-class6-extraction-artifact
+  cancel-in-progress: false
+
+jobs:
+  commit-extraction:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Download existing verified extraction artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 38579506350 \
+            --repo "${GITHUB_REPOSITORY}" \
+            --name "quantaedge-textbook-extraction-pilot-class-6-38579506350" \
+            --dir "${RUNNER_TEMP}/quantaedge-class6-artifact"
+
+      - name: Copy page manifests and extracted text into repository
+        run: |
+          set -euo pipefail
+          source_root="${RUNNER_TEMP}/quantaedge-class6-artifact/extracted/class-6"
+          test -d "${source_root}/english/pages"
+          test -d "${source_root}/hindi/pages"
+          mkdir -p data/textbook-extractions
+          rm -rf data/textbook-extractions/class-6
+          cp -R "${source_root}" data/textbook-extractions/class-6
+          cp "${RUNNER_TEMP}/quantaedge-class6-artifact/reports/"*.json data/textbook-extractions/ || true
+          cat > data/textbook-extractions/README.md <<'EOF'
+          # Textbook extraction artifacts
+
+          Class 6 extracted page text and manifests from the verified GHCR-backed whole-book extraction pilot.
+          These are source extraction artifacts, **not approved/published lesson content**. Page text must be
+          mapped to chapters and reviewed before generating/importing learning material. Original PDFs remain in GHCR.
+
+          Source workflow run: https://github.com/Manav326/QuantaEdge/actions/runs/38579506350
+          Source artifact ID: 11902717615
+          EOF
+
+      - name: Verify expected artifact files
+        run: |
+          set -euo pipefail
+          count="$(find data/textbook-extractions/class-6 -type f -name '*.jsonl' | wc -l)"
+          manifests="$(find data/textbook-extractions/class-6 -type f -name '*.manifest.json' | wc -l)"
+          test "$count" -eq 4
+          test "$manifests" -eq 4
+          find data/textbook-extractions/class-6 -type f -printf '%s %p\n' | sort -n
+
+      - name: Commit extracted text to main
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/textbook-extractions
+          if git diff --cached --quiet; then
+            echo "Extraction artifacts already match main; no commit required."
+            exit 0
+          fi
+          git commit -m "Add verified Class 6 textbook extraction artifacts"
+          git push origin HEAD:main
