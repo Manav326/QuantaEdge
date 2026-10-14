@@ -139,7 +139,7 @@ function Invoke-AiCompose {
   & docker compose @dockerArgs
   $exitCode = $LASTEXITCODE
   if ($exitCode -ne 0) {
-    throw "AI tutor Compose command failed (exit code $exitCode). inspect the actual failures with: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init redis api"
+    throw "AI tutor Compose command failed (exit code $exitCode). Inspect the actual failures with: docker compose -f docker-compose.yml -f docker-compose.ghcr.yml -f docker-compose.ai.yml logs --tail=200 ollama ollama-model-init redis api"
   }
 }
 
@@ -193,6 +193,7 @@ switch ($Action) {
       Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
     } else {
       Sync-PublishedImages
+      Ensure-ApiPortAvailable
       Invoke-Compose (@("up", "-d", "--no-build", "--remove-orphans") + $targetArgs)
     }
   }
@@ -210,9 +211,12 @@ switch ($Action) {
     Ensure-ApiPortAvailable
     Invoke-Compose @("down", "-v", "--remove-orphans")
     if ($BuildLocal) {
-      Invoke-Compose @("up", "-d", "--build", "--remove-orphans")
+      Invoke-Compose @("build", "--parallel")
+      Ensure-ApiPortAvailable
+      Invoke-Compose @("up", "-d", "--no-build", "--remove-orphans")
     } else {
       Sync-PublishedImages
+      Ensure-ApiPortAvailable
       Invoke-Compose @("up", "-d", "--no-build", "--remove-orphans")
     }
   }
