@@ -87,7 +87,7 @@ host_ai_compose() {
     args+=(-f docker-compose.ghcr.yml)
   fi
   args+=(-f docker-compose.ai-host.yml)
-  docker compose "\${args[@]}" "$@"
+  docker compose "${args[@]}" "$@"
 }
 
 detect_local_ollama_model() {
