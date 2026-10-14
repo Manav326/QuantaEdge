@@ -23,7 +23,7 @@ while (($#)); do
       IMAGE_TAG="$2"
       shift 2
       ;;
-    up|ai|rebuild|clean-build|down|reset|logs|ps)
+    up|sync|ai|rebuild|clean-build|down|reset|logs|ps)
       if [[ "$ACTION_SET" == true ]]; then
         echo "Only one action may be supplied." >&2
         exit 2
@@ -40,7 +40,7 @@ while (($#)); do
 done
 
 if [[ "$ACTION" == "clean-build" && "$BUILD_LOCAL" != true ]]; then
-  echo "'clean-build' is local-source only. Re-run with --local, or use 'up' to pull GHCR images." >&2
+  echo "'clean-build' is local-source only. Re-run with --local." >&2
   exit 2
 fi
 
@@ -75,39 +75,89 @@ ai_compose() {
 }
 
 pull_published_images() {
-  # Pull all images so first-time startup also has database/cache dependencies.
-  compose pull
+  # Explicit sync refreshes app images only; base images are fetched only when missing.
+  compose pull api web admin people
+}
+
+ensure_api_port_available() {
+  local preferred="${API_PORT:-8080}" candidate existing_api_id existing_host_port
+  if [[ ! "$preferred" =~ ^[0-9]+$ ]] || (( preferred < 1 || preferred > 65535 )); then
+    echo "API_PORT must be an integer from 1 to 65535; received '$preferred'." >&2
+    return 2
+  fi
+  # Reuse an already-running QuantaEdge API mapping on repeated invocations.
+  existing_api_id="$(compose ps -q api 2>/dev/null | head -n 1 || true)"
+  if [[ -n "$existing_api_id" ]]; then
+    existing_host_port="$(docker inspect --format '{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' "$existing_api_id" 2>/dev/null || true)"
+    if [[ "$existing_host_port" =~ ^[0-9]+$ ]] && (( existing_host_port >= 1 && existing_host_port <= 65535 )); then
+      export API_PORT="$existing_host_port"
+      return 0
+    fi
+  fi
+  if python3 - "$preferred" <<'PYPORT' >/dev/null 2>&1
+import socket, sys
+s = socket.socket()
+try: s.bind(("0.0.0.0", int(sys.argv[1])))
+finally: s.close()
+PYPORT
+  then
+    return 0
+  fi
+  for ((candidate=preferred+1; candidate<=preferred+20 && candidate<=65535; candidate++)); do
+    if python3 - "$candidate" <<'PYPORT' >/dev/null 2>&1
+import socket, sys
+s = socket.socket()
+try: s.bind(("0.0.0.0", int(sys.argv[1])))
+finally: s.close()
+PYPORT
+    then
+      export API_PORT="$candidate"
+      echo "WARNING: API port $preferred is unavailable; using $API_PORT for this run. Existing process was not stopped." >&2
+      return 0
+    fi
+  done
+  echo "API port $preferred is unavailable and no free port was found in the next 20 ports. Set API_PORT to a free port." >&2
+  return 1
 }
 
 case "$ACTION" in
+  sync)
+    if [[ "$BUILD_LOCAL" == true ]]; then echo "'sync' cannot be combined with --local." >&2; exit 2; fi
+    pull_published_images
+    echo "Published QuantaEdge application images synced. Run: bash scripts/quantaedge-local.sh up"
+    exit 0
+    ;;
   up)
     if [[ "$BUILD_LOCAL" == true ]]; then
-      compose up -d --build --remove-orphans
+      compose build --parallel
+      ensure_api_port_available
+      compose up -d --no-build --remove-orphans
     else
-      pull_published_images
+      ensure_api_port_available
       compose up -d --no-build --remove-orphans
     fi
     ;;
   ai)
     # Local Ollama tutor overlay; database and model volumes are preserved.
-    if [[ "$BUILD_LOCAL" != true ]]; then
-      pull_published_images
-      ai_compose up -d --no-build --remove-orphans
-    else
-      ai_compose up -d --build --remove-orphans
-    fi
+    # Cache-first: explicitly run the sync action when you want newer GHCR images.
+    if [[ "$BUILD_LOCAL" == true ]]; then ai_compose build --parallel; fi
+    ensure_api_port_available
+    ai_compose up -d --no-build --remove-orphans
     ;;
   rebuild)
     if [[ "$BUILD_LOCAL" == true ]]; then
       compose build --parallel
+      ensure_api_port_available
       compose up -d --no-build --remove-orphans
     else
       pull_published_images
+      ensure_api_port_available
       compose up -d --no-build --remove-orphans
     fi
     ;;
   clean-build)
     compose build --no-cache --parallel
+    ensure_api_port_available
     compose up -d --no-build --remove-orphans
     ;;
   down)
@@ -116,6 +166,7 @@ case "$ACTION" in
     ;;
   reset)
     # WARNING: this intentionally deletes local database/cache volumes.
+    ensure_api_port_available
     compose down -v --remove-orphans
     if [[ "$BUILD_LOCAL" == true ]]; then
       compose up -d --build --remove-orphans
