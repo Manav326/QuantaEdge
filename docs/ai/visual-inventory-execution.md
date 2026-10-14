@@ -33,8 +33,10 @@ python scripts/extract_visual_asset_inventory.py `
   --output-dir "D:\QuantaEdge\visual-inventory\class-6-curiosity"
 ```
 
-Replace the illustrative local paths with the exact PDF and manifest paths on your
-machine. The manifest must match the PDF hash and page count. The command refuses to
+The paths above are illustrative: use the exact original PDF downloaded from GHCR and
+the matching extraction manifest already committed under `data/textbook-extractions/class-6/`.
+Keep the manifest and its sibling page JSONL together. The manifest must match the PDF
+hash and page count. The JSONL source hash is checked too when present. The command refuses to
 overwrite an existing inventory unless `--overwrite` is passed. Use `--no-page-previews`
 only when you deliberately want embedded images alone; vector diagrams will then not
 have page-preview evidence.
@@ -47,7 +49,7 @@ media to the source-code repository by default.
 ## Test
 
 ```powershell
-python -m unittest tests.test_extract_visual_asset_inventory -v
+python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
 ```
 
 The tests use a tiny synthetic PDF and check hash binding, per-page scan records,
