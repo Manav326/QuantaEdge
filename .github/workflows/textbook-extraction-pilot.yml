@@ -89,14 +89,19 @@ jobs:
               --subject Science \
               --scope SUBJECT_BOOK
             echo "::endgroup::"
+            mkdir -p pilot-output/reports
+            cp "${prepared_dir}/prepare-report.json" "pilot-output/reports/class-${class_no}-${medium}-prepare-report.json"
+            cp "${extracted_dir}/extraction-report.json" "pilot-output/reports/class-${class_no}-${medium}-extraction-report.json"
           done
 
-      - name: Publish extraction report as a review artifact
+      - name: Publish extracted text and reports (not source PDFs)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbook-extraction-pilot-${{ inputs.class_no || 'class-6' }}-${{ github.run_id }}
-          path: pilot-output/
+          path: |
+            pilot-output/extracted/
+            pilot-output/reports/
           if-no-files-found: warn
           retention-days: 90
           compression-level: 6
