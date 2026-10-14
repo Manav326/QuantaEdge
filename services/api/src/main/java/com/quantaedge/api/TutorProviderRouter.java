@@ -12,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class TutorProviderRouter {
   private final OpenAiTutorClient primary;
   private final OpenAiTutorClient fallback;
+  private final boolean tutorEnabled;
   private final boolean fallbackEnabled;
   private final int minOutputChars;
 
   public TutorProviderRouter(ObjectMapper mapper, Environment env) {
-    boolean tutorEnabled=env.getProperty("app.ai-tutor.enabled", Boolean.class, false);
+    this.tutorEnabled=env.getProperty("app.ai-tutor.enabled", Boolean.class, false);
+    boolean tutorEnabled=this.tutorEnabled;
     int maxOutputTokens=env.getProperty("app.ai-tutor.max-output-tokens", Integer.class, 500);
     this.minOutputChars=Math.max(1,env.getProperty("app.ai-tutor.min-output-chars", Integer.class, 8));
 
@@ -39,6 +41,10 @@ public class TutorProviderRouter {
         env.getProperty("app.ai-tutor.fallback.base-url", "https://api.openai.com"),
         maxOutputTokens,
         env.getProperty("app.ai-tutor.fallback.api-mode", "RESPONSES"));
+  }
+
+  public boolean isEnabled() {
+    return tutorEnabled;
   }
 
   /** True means at least one explicitly enabled provider has complete configuration, not live health. */
