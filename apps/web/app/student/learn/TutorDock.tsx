@@ -228,6 +228,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   const endRef = useRef<HTMLDivElement | null>(null);
 
   const [minimized, setMinimized] = useState(false);
+  const [mobileViewport, setMobileViewport] = useState(false);
   const [retryAttempt, setRetryAttempt] = useState(0);
   const [frame, setFrame] = useState<PanelFrame | null>(null);
   const [bubblePosition, setBubblePosition] = useState<Point | null>(null);
@@ -315,7 +316,9 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   useEffect(() => {
     if (!open || !languageReady) return;
     const onResize = () => {
-      if (window.innerWidth <= 700) { setFrame(null); return; }
+      const isMobile = window.innerWidth <= 700;
+      setMobileViewport(isMobile);
+      if (isMobile) { setFrame(null); return; }
       setFrame(current => {
         if (!current) return current;
         const width = Math.min(current.width, Math.max(320, window.innerWidth - 16));
@@ -327,6 +330,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         };
       });
     };
+    onResize();
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, [open, languageReady]);
@@ -541,7 +545,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     ref={panelRef}
     className="tutor-dock open"
     role="dialog"
-    aria-modal={typeof window !== 'undefined' && window.innerWidth <= 700 ? 'true' : undefined}
+    aria-modal={mobileViewport ? true : undefined}
     aria-label="QUANTAEDGE TUTOR"
     style={panelStyle}
   >
