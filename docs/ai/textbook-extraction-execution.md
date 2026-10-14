@@ -89,6 +89,15 @@ Regression tests are in `tests/test_extract_visual_asset_inventory.py`. The exis
 Next Phase A tasks:
 - Run the tool on one Class 6 Maths book and inspect embedded images plus page previews, especially vector diagrams and low-text pages.
 - Confirm output size/runtime and review the generated manifest for correct book/page/hash/coordinate provenance.
-- Add a separately gated VLM caption/classification stage only after choosing a model and evaluating output quality; do not label any asset semantically understood before that stage runs.
+- The optional VLM stage is now implemented at `scripts/analyze_visual_inventory_with_ollama.py` (commit `3679a87d3f426c144a52758ad6c2fffdd97f07c3`). It uses a user-selected, already-installed local Ollama vision model, accepts only loopback HTTP, validates asset hashes, writes a separate `quantaedge.visual-analysis.v1` sidecar, and leaves source inventory/text/import data untouched. Results remain drafts and never publish automatically. Run the new tests and a five-asset local evaluation before selecting a default model; no model is assumed installed and no model pull is triggered by the script.
 - Only after these checks consider a multi-book run and later draft-block integration.
 
+
+
+## Optional local VLM evaluation stage
+
+- Script: `scripts/analyze_visual_inventory_with_ollama.py`; guide: `docs/ai/visual-analysis-execution.md`.
+- Regression tests: `tests/test_analyze_visual_inventory_with_ollama.py`; CI's existing unittest discovery includes it.
+- The script sends an image plus page-text context to the local Ollama `/api/chat` endpoint. It records summary, type, visible text, concepts, context relation and limitations with source page/hash/model provenance.
+- **Not yet validated on a real book or a real installed vision model.** User/local step: create an inventory for one book, run `ollama list`, select a vision-capable installed model tag, and run a five-asset sample. Review captions/labels before increasing sample size or setting any default.
+- After local evaluation, decide whether to add OCR/figure cropping and then a reviewed visual-to-lesson adapter. Do not connect this draft sidecar to student delivery yet.
