@@ -43,3 +43,15 @@ The workflow downloads the source from GHCR, verifies it through the existing in
 The output index is under data/textbook-visuals/<book_slug>/bundle-index.v1.json. Full image binaries/page previews are kept in GHCR to avoid oversized Git history; the repository contains the resumable JSON checkpoint and exact package/tag/checksum pointer. Pull main, then authenticate to GHCR and pull the package tag from the index to restore the complete visual bundle.
 
 The runner caches Ollama model files when GitHub's cache service retains them. Analysis checkpoints are persisted to main after each run and each completed asset is atomically checkpointed during processing. Keep the same book slug and model to resume; use restart_analysis=true only when deliberately discarding the checkpoint. If a run is interrupted before it can commit the latest checkpoint, its last committed checkpoint is restored and only the in-flight asset may need repeating.
+
+
+## Restore a complete bundle after Git pull
+
+After the first successful workflow run, the small index/checkpoint is committed to main. To restore all binaries and previews from the exact versioned GHCR package:
+
+```powershell
+oras login ghcr.io
+powershell -ExecutionPolicy Bypass -File .\\scripts\\pull_textbook_visual_bundle.ps1 -BookSlug class6-curiosity-en
+```
+
+Replace the slug with the exact one used for the workflow run. The script reads the committed index, pulls the immutable package tag, verifies the tarball SHA-256, checks required sidecars, and restores the bundle under visual-bundles/<book_slug>. It refuses an unindexed or checksum-mismatched package. Since full-resolution media is kept in GHCR rather than Git history, a repository pull plus GHCR authentication and this restore command is the supported reproducible setup.
