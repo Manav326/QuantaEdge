@@ -11,11 +11,14 @@ public class TutorService {
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final TutorProviderRouter provider;
+  private final TutorConversationWriter conversationWriter;
   private final ObjectMapper mapper;
   private final int maxMessageChars,maxMessagesPer10m,maxMessagesPerDay,historyMessages;
 
-  public TutorService(JdbcTemplate jdbc,AuthorizationService authorization,TutorProviderRouter provider,ObjectMapper mapper,Environment env){
-    this.jdbc=jdbc;this.authorization=authorization;this.provider=provider;this.mapper=mapper;
+  public TutorService(JdbcTemplate jdbc,AuthorizationService authorization,TutorProviderRouter provider,
+      TutorConversationWriter conversationWriter,ObjectMapper mapper,Environment env){
+    this.jdbc=jdbc;this.authorization=authorization;this.provider=provider;
+    this.conversationWriter=conversationWriter;this.mapper=mapper;
     this.maxMessageChars=env.getProperty("app.ai-tutor.max-message-chars",Integer.class,1200);
     this.maxMessagesPer10m=env.getProperty("app.ai-tutor.max-messages-per-10m",Integer.class,20);
     this.maxMessagesPerDay=env.getProperty("app.ai-tutor.max-messages-per-day",Integer.class,100);
@@ -193,16 +196,9 @@ public class TutorService {
       %s
       """.formatted(tutorLanguage,json(lesson),blocks,mastery,qctx,json(history),mode,normalized);
 
-    // Do not persist a user turn until the provider has returned a usable answer.
-    // Otherwise a timeout/provider outage leaves a ghost user message in history,
-    // while the UI correctly treats the send as failed and offers a retry.
+    // Keep inference outside a DB transaction; persist both sides atomically only after a usable reply.
     TutorReply reply=provider.generate(instructions,input);
-    jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
-    jdbc.update("""
-      insert into tutor_message(session_id,role,mode,message,model,provider_response_id,input_tokens,output_tokens)
-      values(?,'ASSISTANT',?,?,?,?,?,?)
-      """,sessionId,mode,reply.text(),reply.model(),reply.providerResponseId(),reply.inputTokens(),reply.outputTokens());
-    jdbc.update("update tutor_session set last_message_at=now() where id=?",sessionId);
+    conversationWriter.persistTurn(sessionId,mode,normalized,reply);
     return Map.of("message",reply.text(),"mode",mode);
   }
 
