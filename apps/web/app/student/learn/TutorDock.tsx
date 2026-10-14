@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
 
-type TutorMessage = { id?: number; role: 'USER' | 'ASSISTANT'; mode?: string; message: string };
+type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string };
 type Mode = 'HINT' | 'EXPLAIN' | 'EXAMPLE' | 'STEP_BY_STEP' | 'CHECK_MY_WORK';
 type ApiBody = Record<string, unknown>;
 type PanelFrame = { left: number; top: number; width: number; height: number };
@@ -56,10 +56,15 @@ async function readBody(response: Response): Promise<ApiBody> {
 function responseError(response: Response, body: ApiBody, english: boolean, fallbackEn: string, fallbackHi: string): string {
   const code = typeof body.error === 'string' ? body.error : '';
   const message = typeof body.message === 'string' ? body.message.toLowerCase() : '';
+  if (code === 'TUTOR_PROVIDER_ERROR' || response.status === 502) {
+    return english
+      ? 'The tutor could not generate a reliable reply this time. Your question is back in the input so you can retry.'
+      : 'ट्यूटर इस बार सही उत्तर नहीं बना सका। आपका प्रश्न इनपुट में वापस है; आप फिर प्रयास कर सकते हैं।';
+  }
   if (response.status >= 500 || typeof body.rawText === 'string') {
     return english
-      ? 'The AI tutor is temporarily unavailable. Please try again in a moment.'
-      : 'AI ट्यूटर अभी उपलब्ध नहीं है। कृपया थोड़ी देर बाद फिर प्रयास करें।';
+      ? 'The AI tutor service had a temporary error. Your question is back in the input so you can retry.'
+      : 'AI ट्यूटर सेवा में अस्थायी समस्या आई। आपका प्रश्न इनपुट में वापस है; आप फिर प्रयास कर सकते हैं।';
   }
   if (response.status === 401 || code === 'UNAUTHENTICATED') {
     return english ? 'Your session may have expired. Please sign in again.' : 'आपका सत्र समाप्त हो गया हो सकता है। कृपया फिर से लॉग इन करें।';
@@ -232,6 +237,8 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const sendInFlightRef = useRef(false);
+  const pendingMessageCounterRef = useRef(0);
   const endRef = useRef<HTMLDivElement | null>(null);
 
   const [minimized, setMinimized] = useState(false);
@@ -467,13 +474,17 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   }
 
   async function send() {
-    if (!input.trim() || !sessionId || busy || available !== true) return;
+    if (!input.trim() || !sessionId || busy || available !== true || sendInFlightRef.current) return;
+    // State updates are asynchronous; this ref prevents Enter + click / rapid clicks
+    // from starting parallel requests for the same composer value.
+    sendInFlightRef.current = true;
     const message = input.trim();
     const selectedMode = mode;
+    const optimisticMessageId = 'pending-' + (++pendingMessageCounterRef.current);
     setInput('');
     setBusy(true);
     setError('');
-    setMessages(current => [...current, { role: 'USER', mode: selectedMode, message }]);
+    setMessages(current => [...current, { clientId: optimisticMessageId, role: 'USER', mode: selectedMode, message }]);
     try {
       const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages', {
         method: 'POST',
@@ -484,7 +495,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       const body = await readBody(response);
       const current = languageRef.current;
       if (!response.ok) {
-        setMessages(currentMessages => currentMessages.slice(0, -1));
+        setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
         setInput(message);
         setError(responseError(response, body, current.english,
           'The tutor could not answer. Please try again.',
@@ -492,7 +503,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         return;
       }
       if (typeof body.message !== 'string' || !body.message.trim()) {
-        setMessages(currentMessages => currentMessages.slice(0, -1));
+        setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
         setInput(message);
         setError(current.english
           ? 'The tutor returned an empty answer. Please try again.'
@@ -501,13 +512,16 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       }
       setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string }]);
     } catch {
-      setMessages(currentMessages => currentMessages.slice(0, -1));
+      setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
       setInput(message);
       const current = languageRef.current;
       setError(requestError(current.english,
         'Could not reach the tutor. Your message is ready to retry.',
         'ट्यूटर से संपर्क नहीं हो पाया। आपका संदेश फिर भेजने के लिए तैयार है।'));
-    } finally { setBusy(false); }
+    } finally {
+      sendInFlightRef.current = false;
+      setBusy(false);
+    }
   }
 
   if (!open) return null;
@@ -615,7 +629,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
               {messages.length === 0 && <div className="tutor-welcome">
                 <strong>{english ? 'Ask me about this lesson.' : 'इस पाठ के बारे में पूछें।'}</strong>
               </div>}
-              {messages.map((item, index) => <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || index}>
+              {messages.map((item, index) => <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || item.clientId || index}>
                 <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
                 <TutorMessageBody message={item.message} english={english} />
               </article>)}

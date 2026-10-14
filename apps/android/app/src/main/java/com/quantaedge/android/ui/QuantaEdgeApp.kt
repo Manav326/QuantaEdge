@@ -158,6 +158,7 @@ fun QuantaEdgeApp() {
     var tutorSession by remember { mutableStateOf(JSONObject()) }
     var tutorMessages by remember { mutableStateOf(emptyList<JSONObject>()) }
     var tutorAvailable by remember { mutableStateOf(false) }
+    var tutorSendInFlight by remember { mutableStateOf(false) }
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
@@ -826,13 +827,20 @@ fun QuantaEdgeApp() {
     }
 
     fun sendTutorMessage(message: String, mode: String) {
+        if (busy || tutorSendInFlight || message.isBlank()) return
+        // Set before launching the coroutine so rapid taps cannot enqueue parallel sends.
+        tutorSendInFlight = true
         runTask {
-            val sessionId = tutorSession.longAny("sessionId", "session_id")
-            ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
-                JSONObject().put("message", message).put("mode", mode).put("questionId", 0)
-                    .put("language", learningContentLanguage))
-            tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
-                .optJSONArray("items").objectItems()
+            try {
+                val sessionId = tutorSession.longAny("sessionId", "session_id")
+                ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
+                    JSONObject().put("message", message).put("mode", mode).put("questionId", 0)
+                        .put("language", learningContentLanguage))
+                tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                    .optJSONArray("items").objectItems()
+            } finally {
+                tutorSendInFlight = false
+            }
         }
     }
 

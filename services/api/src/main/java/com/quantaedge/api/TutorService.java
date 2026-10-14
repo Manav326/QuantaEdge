@@ -44,8 +44,11 @@ public class TutorService {
       " order by id desc limit ?",args.toArray());
     boolean hasMore=rows.size()>rowLimit;
     if(hasMore)rows.remove(rows.size()-1);
+    // Keep the paging cursor based on database rows before filtering, so a page made
+    // only of a hidden canned greeting can still be paged past. Audit rows stay intact.
+    Long nextBeforeId=rows.isEmpty()?null:((Number)rows.getLast().get("id")).longValue();
+    rows.removeIf(row -> isGenericTutorGreeting(String.valueOf(row.get("role")),String.valueOf(row.get("message"))));
     Collections.reverse(rows);
-    Long nextBeforeId=rows.isEmpty()?null:((Number)rows.getFirst().get("id")).longValue();
     Map<String,Object> result=new LinkedHashMap<>();
     result.put("items",rows);result.put("hasMore",hasMore);result.put("nextBeforeId",nextBeforeId);
     result.put("limit",rowLimit);
@@ -103,6 +106,7 @@ public class TutorService {
       """,context.studentId(),sessionId));
 
     List<Map<String,Object>> history=jdbc.queryForList("select role,mode,message from tutor_message where session_id=? order by created_at desc,id desc limit ?",sessionId,historyMessages);
+    history.removeIf(row -> isGenericTutorGreeting(String.valueOf(row.get("role")),String.valueOf(row.get("message"))));
     Collections.reverse(history);
 
     String responseLanguage = "en".equalsIgnoreCase(language) || "english".equalsIgnoreCase(language) ? "en" : "hi";
@@ -114,6 +118,11 @@ public class TutorService {
       Follow this response-language requirement exactly: %s
       Stay inside the supplied lesson context. Never invent SCERT, textbook, Bihar Board, exam-year, marks, or provenance claims.
       Be concise and child-friendly. Teach reasoning rather than answer dumping.
+      Never open with a greeting, a generic offer to help, or customer-support wording.
+      Never say "Hello! How can we help you today?" or address the learner as "QuantaEdge Tutor".
+      Answer the learner's actual question directly in the first sentence. If the question asks about
+      repeating a science experiment, explain that repeated trials help reveal consistency and reduce
+      random variation; they do not automatically remove systematic error.
       HINT: give only the next useful clue and do not reveal the final answer.
       EXPLAIN: explain the lesson idea clearly. EXAMPLE: make a small analogous example, not a claimed textbook question.
       STEP_BY_STEP: teach the solution process. CHECK_MY_WORK: inspect the learner work and identify the first incorrect step.
@@ -140,6 +149,15 @@ public class TutorService {
     // Otherwise a timeout/provider outage leaves a ghost user message in history,
     // while the UI correctly treats the send as failed and offers a retry.
     TutorReply reply=provider.generate(instructions,input);
+    // Small local models occasionally return customer-service greetings instead of teaching.
+    // Retry once with an explicit correction; never persist or surface the canned greeting.
+    if(isGenericTutorGreeting("ASSISTANT",reply.text())){
+      String correction=instructions+"\n\nCRITICAL CORRECTION: Your previous output was a generic greeting, not an answer. Do not greet or offer help. Answer the LEARNER MESSAGE directly in the required response language.";
+      reply=provider.generate(correction,input);
+    }
+    if(isGenericTutorGreeting("ASSISTANT",reply.text())){
+      throw new TutorProviderException("Tutor did not generate a lesson-specific answer");
+    }
     jdbc.update("insert into tutor_message(session_id,role,mode,message) values(?,'USER',?,?)",sessionId,mode,normalized);
     jdbc.update("""
       insert into tutor_message(session_id,role,mode,message,model,provider_response_id,input_tokens,output_tokens)
@@ -147,6 +165,17 @@ public class TutorService {
       """,sessionId,mode,reply.text(),provider.model(),reply.providerResponseId(),reply.inputTokens(),reply.outputTokens());
     jdbc.update("update tutor_session set last_message_at=now() where id=?",sessionId);
     return Map.of("message",reply.text(),"mode",mode);
+  }
+
+  static boolean isGenericTutorGreeting(String role,String message){
+    if(!"ASSISTANT".equalsIgnoreCase(role)||message==null||message.length()>220)return false;
+    String normalized=message.toLowerCase(Locale.ROOT)
+        .replaceAll("[^\\p{L}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+    return normalized.matches("^(hello|hi|hey|namaste)? ?(how can (i|we) help you( today)?|how may i help you( today)?|what can i help you with)( .*)?$")
+        || normalized.startsWith("hello how can we help you today quantaedge tutor")
+        || normalized.equals("namaste main aapki kya madad kar sakta hoon")
+        || normalized.equals("namaste main aapki kya madad kar sakta hun")
+        || normalized.startsWith("नमस्ते मैं आपकी कैसे मदद");
   }
 
   private void ensureSessionOwner(long studentId,long sessionId){
