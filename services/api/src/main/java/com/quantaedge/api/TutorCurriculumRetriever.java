@@ -120,7 +120,7 @@ public class TutorCurriculumRetriever {
       left join learning_document d on d.id=p.learning_document_id
       left join curriculum_chapter ch on ch.id=p.chapter_id
       where ts.id=? and ts.ended_at is null
-        and p.quality_status='REVIEW'
+        and p.quality_status='READY'
         and p.extraction_method in ('PDF_TEXT','OCR')
         and length(trim(p.extracted_text))>=35
         and (
