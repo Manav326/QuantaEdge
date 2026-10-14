@@ -33,7 +33,7 @@ while (($#)); do
       shift
       ;;
     *)
-      echo "Usage: bash scripts/quantaedge-local.sh [--local] [--tag TAG] [up|ai|rebuild|clean-build|down|reset|logs|ps]" >&2
+      echo "Usage: bash scripts/quantaedge-local.sh [--local] [--tag TAG] [up|sync|ai|rebuild|clean-build|down|reset|logs|ps]" >&2
       exit 2
       ;;
   esac
@@ -169,9 +169,12 @@ case "$ACTION" in
     ensure_api_port_available
     compose down -v --remove-orphans
     if [[ "$BUILD_LOCAL" == true ]]; then
-      compose up -d --build --remove-orphans
+      compose build --parallel
+      ensure_api_port_available
+      compose up -d --no-build --remove-orphans
     else
       pull_published_images
+      ensure_api_port_available
       compose up -d --no-build --remove-orphans
     fi
     ;;
