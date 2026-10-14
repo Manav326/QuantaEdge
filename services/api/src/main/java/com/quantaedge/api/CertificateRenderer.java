@@ -226,10 +226,12 @@ public class CertificateRenderer {
     CertificateDetails d = details == null ? new CertificateDetails(null,null,null,null,null,null,null,null) : details;
     BufferedImage brandIcon = brandIcon();
     g.drawImage(brandIcon, 132, 95, 88, 88, null);
-    drawBrandWordmark(g, 2320, 150, 58);
+    int wordmarkCenterX = drawBrandWordmark(g, 2320, 150, 58);
     g.setColor(MUTED);
+    // Keep the tagline centered beneath the wordmark; preserve its baseline and
+    // the divider's position so the shifted text remains clear of the frame.
     drawCentered(g, font(false, Font.BOLD, 19), "Smarter Decisions. Greater Growth.",
-        2070, 192, 500);
+        wordmarkCenterX, 192, 500);
     g.setColor(GOLD); g.setStroke(new BasicStroke(3)); g.drawLine(125, 260, WIDTH - 125, 260);
 
     CertificateWording wording = lockedWording(hindi ? "hi" : "en");
@@ -361,15 +363,17 @@ public class CertificateRenderer {
     }
   }
 
-  private void drawBrandWordmark(Graphics2D g, int rightX, int baseline, int size) {
+  private int drawBrandWordmark(Graphics2D g, int rightX, int baseline, int size) {
     Font font = font(false, Font.BOLD, size);
     TextLayout quanta = new TextLayout(BRAND_NAME.substring(0, 6), font, g.getFontRenderContext());
     TextLayout edge = new TextLayout(BRAND_NAME.substring(6), font, g.getFontRenderContext());
-    float startX = (float) (rightX - quanta.getAdvance() - edge.getAdvance());
+    float totalAdvance = quanta.getAdvance() + edge.getAdvance();
+    float startX = (float) (rightX - totalAdvance);
     g.setColor(NAVY);
     quanta.draw(g, startX, baseline);
     g.setColor(ORANGE);
     edge.draw(g, startX + quanta.getAdvance(), baseline);
+    return Math.round(startX + totalAdvance / 2.0f);
   }
 
   private String formatDate(String raw, boolean hindi) {
