@@ -356,7 +356,7 @@ public class CertificateController {
     snapshot.put("classCode", classCode);
     snapshot.put("subjectCode", subjectCode);
     snapshot.put("subjectName", subjectName);
-    snapshot.put("artifactVersion", 3);
+    snapshot.put("artifactVersion", 4);
     snapshot.put("publishedLessonsAtIssue", total);
     snapshot.put("completedLessonsAtIssue", completed);
     return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", classCode,
@@ -369,7 +369,7 @@ public class CertificateController {
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
                cc.code AS class_code,s.id AS subject_id,s.code AS subject_code,s.display_name AS subject_name,
-               a.title AS assessment_title,a.assessment_type,a.is_generated,
+               a.id AS assessment_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.id AS assessment_attempt_id,att.final_score,att.max_score,att.released_at,
                att.started_at AS assessment_date,creator.display_name AS assessment_creator_name,
                creator.role AS assessment_creator_role
@@ -429,6 +429,7 @@ public class CertificateController {
     Map<String, Object> snapshot = new LinkedHashMap<>();
     snapshot.put("rule", "RELEASED_ADMIN_CREATED_ASSESSMENT_AT_OR_ABOVE_PASS_THRESHOLD");
     snapshot.put("assessmentAttemptId", attemptId);
+    snapshot.put("assessmentId", achievement.get("assessment_id"));
     snapshot.put("assessmentTitle", assessmentTitle);
     snapshot.put("assessmentDate", clean(achievement.get("assessment_date")));
     snapshot.put("assessmentCreatorName", clean(achievement.get("assessment_creator_name")));
@@ -440,7 +441,7 @@ public class CertificateController {
     snapshot.put("maxScore", maxScore);
     snapshot.put("scorePercent", percent);
     snapshot.put("passThresholdPercent", minimumPassPercent);
-    snapshot.put("artifactVersion", 3);
+    snapshot.put("artifactVersion", 4);
     return createIssuedCertificate(studentId, key, "ASSESSMENT_PASS", classCode,
         ((Number) achievement.get("subject_id")).longValue(), attemptId, template, language,
         String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
@@ -449,7 +450,7 @@ public class CertificateController {
   private Map<String, Object> createIssuedCertificate(long studentId, String achievementKey,
       String achievementType, String classCode, long subjectId, Long attemptId, String template,
       String language, String recipient, String title, String summary, Map<String, Object> snapshot) {
-    snapshot.putIfAbsent("artifactVersion", 3);
+    snapshot.putIfAbsent("artifactVersion", 4);
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
@@ -467,7 +468,7 @@ public class CertificateController {
             assessment_attempt_id,template_id,language,recipient_name,achievement_title,
             achievement_summary,achievement_snapshot,artifact_version,status,issued_at,pdf_storage_key,png_storage_key,
             pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,3,'ISSUED',?,?,?,?,?,?,?)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,4,'ISSUED',?,?,?,?,?,?,?)
           """,
           certificateNumber, studentId, achievementKey, achievementType, classCode, subjectId,
           attemptId, template, language, safeText(recipient, 120), safeText(title, 240),
@@ -569,7 +570,7 @@ public class CertificateController {
   }
 
   private Map<String, Object> correctCertificateArtifact(Map<String, Object> certificate) {
-    if (!"ISSUED".equals(certificate.get("status")) || number(certificate.get("artifact_version")) >= 3) return certificate;
+    if (!"ISSUED".equals(certificate.get("status")) || number(certificate.get("artifact_version")) >= 4) return certificate;
     long id = number(certificate.get("id"));
     long oldVersion = number(certificate.get("artifact_version"));
     String certificateNumber = clean(certificate.get("certificate_number"));
@@ -587,7 +588,7 @@ public class CertificateController {
 
     if ("ASSESSMENT_PASS".equals(achievementType) && certificate.get("assessment_attempt_id") != null) {
       Map<String, Object> facts = queryOptional("""
-          SELECT a.title AS assessment_title,att.started_at AS assessment_date,att.final_score,att.max_score,
+          SELECT a.id AS assessment_id,a.title AS assessment_title,att.started_at AS assessment_date,att.final_score,att.max_score,
                  round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                  creator.display_name AS assessment_creator_name,creator.role AS assessment_creator_role
           FROM student_assessment_attempt att
@@ -596,6 +597,7 @@ public class CertificateController {
           WHERE att.id=?
           """, number(certificate.get("assessment_attempt_id")));
       if (facts != null) {
+        snapshot.put("assessmentId", facts.get("assessment_id"));
         snapshot.putIfAbsent("assessmentTitle", clean(facts.get("assessment_title")));
         snapshot.putIfAbsent("assessmentDate", clean(facts.get("assessment_date")));
         snapshot.putIfAbsent("finalScore", facts.get("final_score"));
@@ -608,15 +610,15 @@ public class CertificateController {
     if (title.isBlank() || title.startsWith("Assessment achievement: ") || title.startsWith("मूल्यांकन उपलब्धि: ")) {
       title = safeText((("hi".equals(language) ? "कक्षा " : "Class ") + classCode + " · " + subjectName), 240);
     }
-    snapshot.put("artifactVersion", 3);
+    snapshot.put("artifactVersion", 4);
     snapshot.put("artifactCorrection", "LOCKED_QUANTAEDGE_CERTIFICATE_DESIGN");
-    snapshot.put("artifactCorrectionReason", "Applied approved branded landscape design and locked English/Hindi wording.");
+    snapshot.put("artifactCorrectionReason", "Added the canonical exam ID beneath the assessment title while preserving the approved layout.");
     CertificateRenderer.CertificateDetails details = certificateDetails(snapshot, achievementType, language, classCode, title);
     CertificateRenderer.RenderedCertificate rendered = renderer.render(clean(certificate.get("template_id")),
         language, clean(certificate.get("recipient_name")), title, originalSummary, certificateNumber,
         toOffsetDateTime(certificate.get("issued_at")), details, false);
     CertificateArtifactStorage.StoredArtifact pdf = null, png = null;
-    String reason = "Applied approved branded landscape design and locked English/Hindi wording.";
+    String reason = "Added the canonical exam ID beneath the assessment title while preserving the approved layout.";
     try {
       pdf = storage.store(rendered.pdf(), "pdf");
       png = storage.store(rendered.png(), "png");
@@ -635,20 +637,20 @@ public class CertificateController {
           number(certificate.get("pdf_size_bytes")), number(certificate.get("png_size_bytes")), reason);
       int count = jdbc.update("""
           UPDATE student_certificate
-          SET achievement_snapshot=?::jsonb,artifact_version=3,pdf_storage_key=?,png_storage_key=?,
+          SET achievement_snapshot=?::jsonb,artifact_version=4,pdf_storage_key=?,png_storage_key=?,
               pdf_sha256=?,png_sha256=?,pdf_size_bytes=?,png_size_bytes=?
           WHERE id=? AND artifact_version=? AND status='ISSUED'
           """, json(snapshot), pdf.storageKey(), png.storageKey(), pdf.sha256(), png.sha256(),
           pdf.sizeBytes(), png.sizeBytes(), id, oldVersion);
       if (count != 1) throw new IllegalStateException("Certificate changed while its artifact was being refreshed.");
       Map<String,Object> audit = new LinkedHashMap<>();
-      audit.put("fromArtifactVersion", oldVersion); audit.put("toArtifactVersion", 3);
+      audit.put("fromArtifactVersion", oldVersion); audit.put("toArtifactVersion", 4);
       audit.put("reason", reason); audit.put("certificateNumberPreserved", certificateNumber);
       audit.put("issueDatePreserved", true);
       jdbc.update("INSERT INTO certificate_audit_log(certificate_id,actor_role,action,detail) VALUES (?,'SYSTEM','ARTIFACT_CORRECTED',?::jsonb)",
           id, json(audit));
       Map<String,Object> updated = new LinkedHashMap<>(certificate);
-      updated.put("achievement_snapshot_json", json(snapshot)); updated.put("artifact_version", 3);
+      updated.put("achievement_snapshot_json", json(snapshot)); updated.put("artifact_version", 4);
       updated.put("pdf_storage_key", pdf.storageKey()); updated.put("png_storage_key", png.storageKey());
       updated.put("pdf_sha256", pdf.sha256()); updated.put("png_sha256", png.sha256());
       updated.put("pdf_size_bytes", pdf.sizeBytes()); updated.put("png_size_bytes", png.sizeBytes());
@@ -680,8 +682,9 @@ public class CertificateController {
     String role = clean(snapshot.get("assessmentCreatorRole"));
     String assessmentName = clean(snapshot.get("assessmentTitle"));
     if (assessmentName.isBlank()) assessmentName = subject.isBlank() ? clean(title) : subject;
+    String examId = "ASSESSMENT_PASS".equals(achievementType) ? clean(snapshot.get("assessmentId")) : "";
     return new CertificateRenderer.CertificateDetails(subject, klass, score, result,
-        assessmentDate, creator, role, assessmentName);
+        assessmentDate, creator, role, assessmentName, examId);
   }
 
   private String scoreText(Object value) {

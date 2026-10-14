@@ -66,11 +66,21 @@ class CertificateControllerArtifactCorrectionTest {
     legacy.put("pdf_size_bytes", oldPdf.sizeBytes());
     legacy.put("png_size_bytes", oldPng.sizeBytes());
 
+    Map<String, Object> assessmentFacts = new LinkedHashMap<>();
+    assessmentFacts.put("assessment_id", 4107L);
+    assessmentFacts.put("assessment_title", "Perfect test");
+    assessmentFacts.put("assessment_date", issuedAt);
+    assessmentFacts.put("final_score", new java.math.BigDecimal("90"));
+    assessmentFacts.put("max_score", new java.math.BigDecimal("100"));
+    assessmentFacts.put("score_percent", new java.math.BigDecimal("90"));
+    assessmentFacts.put("assessment_creator_name", "");
+    assessmentFacts.put("assessment_creator_role", "");
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
       String sql = invocation.getArgument(0, String.class);
       if (sql.contains("FROM student_certificate c") && sql.contains("FOR UPDATE OF c")) {
         return List.of(legacy);
       }
+      if (sql.contains("FROM student_assessment_attempt att")) return List.of(assessmentFacts);
       return List.of();
     });
     when(jdbc.update(anyString(), any(Object[].class))).thenReturn(1);
@@ -97,6 +107,8 @@ class CertificateControllerArtifactCorrectionTest {
         eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), detailsCaptor.capture(), eq(false));
     assertEquals("Perfect test", detailsCaptor.getValue().assessmentName(),
         "The actual assessment title must be supplied as its own certificate field.");
+    assertEquals("4107", detailsCaptor.getValue().examId(),
+        "A legacy artifact must obtain its ID from the linked assessment record.");
 
     ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).update(sql.capture(), any(Object[].class));
@@ -107,7 +119,7 @@ class CertificateControllerArtifactCorrectionTest {
         value.contains("ARTIFACT_CORRECTED")),
         "A correction event must be recorded in the certificate audit.");
     assertTrue(sql.getAllValues().stream().anyMatch(value ->
-        value.contains("SET achievement_snapshot") && value.contains("artifact_version=3")),
+        value.contains("SET achievement_snapshot") && value.contains("artifact_version=4")),
         "The corrected metadata and artifact version must become current.");
   }
 }

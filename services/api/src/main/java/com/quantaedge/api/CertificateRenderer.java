@@ -63,7 +63,7 @@ public class CertificateRenderer {
 
   public record RenderedCertificate(byte[] pdf, byte[] png) {}
   public record CertificateDetails(String subjectName, String classCode, String score, String result,
-      String assessmentDate, String signatoryName, String signatoryRole, String assessmentName) {}
+      String assessmentDate, String signatoryName, String signatoryRole, String assessmentName, String examId) {}
   public record CertificateWording(String title, String introduction, String connector, String completion) {}
 
   public static CertificateWording lockedWording(String language) {
@@ -80,7 +80,7 @@ public class CertificateRenderer {
       String achievementTitle, String achievementSummary, String certificateNumber,
       OffsetDateTime issuedAt, boolean sample) {
     return render(templateId, language, recipientName, achievementTitle, achievementSummary,
-        certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null), sample);
+        certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null,null), sample);
   }
 
   public RenderedCertificate render(String templateId, String language, String recipientName,
@@ -117,7 +117,7 @@ public class CertificateRenderer {
     try {
       configure(g); g.scale(0.5, 0.5); drawClassic(g);
       drawContent(g, "CLASSIC", hindi, recipientName, achievementTitle, achievementSummary,
-          certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null), true);
+          certificateNumber, issuedAt, new CertificateDetails(null,null,null,null,null,null,null,null,null), true);
       drawSampleWatermark(g, hindi);
     } finally { g.dispose(); }
     try (ByteArrayOutputStream png = new ByteArrayOutputStream()) {
@@ -245,10 +245,13 @@ public class CertificateRenderer {
       titleSize -= 4;
     } while (true);
 
-    // Vertically center the award copy in the open band between the header and the
-    // certificate-details footer. Longer assessment titles move the block upward to
-    // preserve balanced whitespace without colliding with the footer.
-    int headingY = lines.size() <= 1 ? 528 : 518 - (lines.size() - 2) * 31;
+    // Assessment certificates reserve a row for the canonical exam ID below the
+    // title. When a title wraps, raise the copy block so the added row keeps clear
+    // spacing from completion details. Other certificate types retain their layout.
+    boolean hasExamId = d.examId() != null && !d.examId().isBlank();
+    int headingY = hasExamId
+        ? (lines.size() <= 1 ? 528 : 480 - (lines.size() - 2) * 60)
+        : (lines.size() <= 1 ? 528 : 518 - (lines.size() - 2) * 31);
     g.setColor(NAVY);
     drawCentered(g, font(hindi, Font.BOLD, 69), wording.title(),
         WIDTH / 2, headingY, WIDTH - 420);
@@ -272,6 +275,14 @@ public class CertificateRenderer {
       titleY += titleStep;
     }
     int completionY = Math.max(titleY + 1, headingY + 458);
+    if (hasExamId) {
+      int examIdY = titleY - titleStep + 38;
+      g.setColor(MUTED);
+      drawCentered(g, font(hindi, Font.BOLD, 23),
+          (hindi ? "परीक्षा पहचान संख्या: " : "Exam ID: ") + d.examId(),
+          WIDTH / 2, examIdY, WIDTH - 600);
+      completionY = Math.max(examIdY + 48, headingY + 458);
+    }
     g.setColor(INK);
     drawCentered(g, font(hindi, Font.PLAIN, 30), wording.completion(),
         WIDTH / 2, completionY, WIDTH - 560);

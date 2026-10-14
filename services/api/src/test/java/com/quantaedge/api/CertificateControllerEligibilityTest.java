@@ -151,6 +151,7 @@ class CertificateControllerEligibilityTest {
     attempt.put("subject_id", 5L);
     attempt.put("subject_code", "science");
     attempt.put("subject_name", "Science");
+    attempt.put("assessment_id", 4107L);
     attempt.put("assessment_title", "Perfect admin-created test");
     attempt.put("assessment_type", "ADMIN_CREATED");
     attempt.put("is_generated", false);
@@ -192,10 +193,14 @@ class CertificateControllerEligibilityTest {
 
     assertEquals("ASSESSMENT_PASS", issued.get("achievement_type"));
     assertEquals("QE-2026-ABCDEF1234567890", issued.get("certificate_number"));
+    ArgumentCaptor<CertificateRenderer.CertificateDetails> detailsCaptor =
+        ArgumentCaptor.forClass(CertificateRenderer.CertificateDetails.class);
     verify(renderer).render(eq("CLASSIC"), eq("en"), eq("Test Learner"),
         eq("Class 6 · Science"),
         org.mockito.ArgumentMatchers.contains("Perfect admin-created test"),
-        anyString(), any(java.time.OffsetDateTime.class), any(CertificateRenderer.CertificateDetails.class), eq(false));
+        anyString(), any(java.time.OffsetDateTime.class), detailsCaptor.capture(), eq(false));
+    assertEquals("4107", detailsCaptor.getValue().examId(),
+        "The certificate must show assessment.id, not the attempt ID or certificate number.");
   }
 
   @Test

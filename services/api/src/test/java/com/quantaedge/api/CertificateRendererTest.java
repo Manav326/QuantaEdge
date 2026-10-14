@@ -80,6 +80,37 @@ class CertificateRendererTest {
   }
 
   @Test
+  void examIdIsAddedBelowTheAssessmentTitleWithoutChangingHeaderOrFooter() throws Exception {
+    CertificateRenderer.CertificateDetails withoutId = new CertificateRenderer.CertificateDetails(
+        "Science", "6", "90 / 100", "Passed", "2026-10-12", null, null, "Final Exam", null);
+    CertificateRenderer.CertificateDetails withId = new CertificateRenderer.CertificateDetails(
+        "Science", "6", "90 / 100", "Passed", "2026-10-12", null, null, "Final Exam", "12345");
+    byte[] withoutPng = renderer.render("CLASSIC", "en", "Real Student", "Class 6 · Science",
+        "Summary", "QE-2026-ABCDEF1234567890", issuedAt, withoutId, false).png();
+    byte[] withPng = renderer.render("CLASSIC", "en", "Real Student", "Class 6 · Science",
+        "Summary", "QE-2026-ABCDEF1234567890", issuedAt, withId, false).png();
+    var withoutImage = ImageIO.read(new ByteArrayInputStream(withoutPng));
+    var withImage = ImageIO.read(new ByteArrayInputStream(withPng));
+
+    assertTrue(regionsEqual(withoutImage, withImage, 0, 300),
+        "The certificate header must remain pixel-identical.");
+    assertTrue(regionsEqual(withoutImage, withImage, 1500, 1754),
+        "The certificate footer must remain pixel-identical.");
+    assertTrue(!regionsEqual(withoutImage, withImage, 300, 1500),
+        "The exam ID must create a change in the certificate body.");
+  }
+
+  private boolean regionsEqual(java.awt.image.BufferedImage left,
+      java.awt.image.BufferedImage right, int startY, int endY) {
+    for (int y = startY; y < endY; y++) {
+      for (int x = 0; x < left.getWidth(); x++) {
+        if (left.getRGB(x, y) != right.getRGB(x, y)) return false;
+      }
+    }
+    return true;
+  }
+
+  @Test
   void certificateFrameDoesNotRenderTheOldOrangeCornerDots() throws Exception {
     var rendered = renderer.render("CLASSIC", "en", "Test Learner", "Class 6 · Mathematics",
         "Source data summary", "QE-2026-ABCDEF1234567890", issuedAt, false);
