@@ -4,13 +4,13 @@
 services:
   api:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-api:${QUANTAEDGE_IMAGE_TAG:-latest}
-    pull_policy: always
+    pull_policy: missing
   web:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-web:${QUANTAEDGE_IMAGE_TAG:-latest}
-    pull_policy: always
+    pull_policy: missing
   admin:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-admin:${QUANTAEDGE_IMAGE_TAG:-latest}
-    pull_policy: always
+    pull_policy: missing
   people:
     image: ghcr.io/${QUANTAEDGE_GHCR_OWNER:-manav326}/quantaedge-people:${QUANTAEDGE_IMAGE_TAG:-latest}
-    pull_policy: always
+    pull_policy: missing
