@@ -19,15 +19,22 @@ services:
     pull_policy: missing
     restart: "no"
     entrypoint: ["/bin/sh", "-c"]
-    command: >-
-      until ollama list >/dev/null 2>&1; do sleep 2; done;
-      for attempt in 1 2 3 4 5; do
-        ollama pull qwen2.5:0.5b && exit 0;
-        echo "Model pull failed; retrying if attempts remain." >&2;
-        sleep 5;
-      done;
-      echo "Failed to pull qwen2.5:0.5b after five attempts." >&2;
-      exit 2
+    # Keep the entire script as ONE command argument for /bin/sh -c.
+    # A folded scalar directly under command is split into argv elements by Compose.
+    command:
+      - |-
+        until ollama list >/dev/null 2>&1; do
+          sleep 2
+        done
+        for attempt in 1 2 3 4 5; do
+          if ollama pull qwen2.5:0.5b; then
+            exit 0
+          fi
+          echo "Model pull failed; retrying if attempts remain." >&2
+          sleep 5
+        done
+        echo "Failed to pull qwen2.5:0.5b after five attempts." >&2
+        exit 2
     environment:
       OLLAMA_HOST: http://ollama:11434
     depends_on:
