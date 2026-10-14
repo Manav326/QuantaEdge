@@ -141,7 +141,7 @@ jobs:
             remaining=$((total_limit - processed_total))
             batch="$batch_size"
             if (( remaining < batch )); then batch="$remaining"; fi
-            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews)
+            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID")
             if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
             python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
             batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$out/visual-analysis.v1.json")"
