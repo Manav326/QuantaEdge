@@ -38,6 +38,7 @@ public class HealthController {
     result.put("version","0.1.0");
     result.put("aiTutorEnabled",tutor.isEnabled());
     result.put("aiTutorConfigured",tutor.isConfigured());
+    result.put("aiTutorAvailable",tutor.isAvailable());
     result.put("adminConfigured",adminConfigured);
     result.put("otpConfigured",otpConfigured);
     if(!healthy) return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(result);
