@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { LanguageSwitcher, LearningLanguageSwitcher, useLocale } from './LanguageProvider';
+import { useLocale } from './LanguageProvider';
 import QuantaEdgeBrand from './QuantaEdgeBrand';
 import StudentAccountMenu from './StudentAccountMenu';
 import ParentAccountMenu from './ParentAccountMenu';
@@ -260,10 +260,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         <QuantaEdgeBrand href={role === 'student' ? '/student' : '/parent'} variant="compact" className="qe-workspace-topbar-brand" />
         <div className="qe-workspace-topbar-actions">
           {role === 'student'
-            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} classCode={profile?.class_code ?? '—'} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
+            ? <StudentAccountMenu displayName={profile?.display_name || 'Student'} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />
             : <ParentAccountMenu displayName={profile?.display_name || 'Parent account'} mobile={profile?.mobile_e164 || ''} profileImageUrl={profile?.profile_image_url} onLogout={() => void logout()} loggingOut={loggingOut} />}
-          {role === 'student' ? <LearningLanguageSwitcher compact /> : null}
-          <LanguageSwitcher compact />
         </div>
       </header>
       {children}

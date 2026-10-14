@@ -112,8 +112,10 @@ fun QuantaEdgeApp() {
     var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
+    var learningLanguage by rememberSaveable {
+        mutableStateOf(preferences.getString("contentLanguage", "hi")?.takeIf { it == "hi" || it == "en" } ?: "hi")
+    }
     var accountMenuExpanded by rememberSaveable { mutableStateOf(false) }
-    var languageMenuExpanded by rememberSaveable { mutableStateOf(false) }
     var headerPhotoBytes by remember { mutableStateOf<ByteArray?>(null) }
     var certificateLanguage by rememberSaveable {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
@@ -167,10 +169,8 @@ fun QuantaEdgeApp() {
     val feedbacks = remember { mutableStateMapOf<String, String>() }
     val lessonAnswerLocks = remember { mutableStateMapOf<String, Boolean>() }
     val resourceDownloadStates = remember { mutableStateMapOf<Long, ResourceDownloadUiState>() }
-    // Keep the app interface locale separate from the learner preferred content language.
-    val learningContentLanguage = studentProfile.textAny("language").trim().lowercase()
-        .takeIf { it == "hi" || it == "en" }
-        ?: (preferences.getString("contentLanguage", "hi") ?: "hi")
+    // Keep the app interface locale separate from the learner's actual content language.
+    val learningContentLanguage = learningLanguage
 
     fun persistPendingCertificate(uri: android.net.Uri?) {
         val bytes = pendingCertificateBytes
@@ -299,7 +299,13 @@ fun QuantaEdgeApp() {
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
-            // A profile language selects learning content, not the application UI.
+            // The student account preference controls learning materials, independently of app UI language.
+            val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
+                .trim().lowercase().takeIf { it == "hi" || it == "en" }
+            if (savedLearningLanguage != null) {
+                learningLanguage = savedLearningLanguage
+                preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
+            }
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
             route = AppRoute.STUDENT_HOME
         } else {
@@ -1364,7 +1370,6 @@ fun QuantaEdgeApp() {
         val next = if (nextLanguage == "en") "en" else "hi"
         language = next
         preferences.edit().putString("language", next).apply()
-        languageMenuExpanded = false
         error = ""
         status = ""
     }
@@ -1372,6 +1377,30 @@ fun QuantaEdgeApp() {
     fun toggleLanguage() {
         // Interface locale switches immediately; learning content preference is saved separately.
         setLanguage(if (language == "hi") "en" else "hi")
+    }
+
+    fun setLearningContentLanguage(nextLanguage: String) {
+        val next = if (nextLanguage == "en") "en" else "hi"
+        if (learningLanguage == next) {
+            accountMenuExpanded = false
+            return
+        }
+        val previous = learningLanguage
+        learningLanguage = next
+        preferences.edit().putString("contentLanguage", next).apply()
+        studentProfile = JSONObject(studentProfile.toString()).put("language", next)
+        accountMenuExpanded = false
+        runTask {
+            try {
+                ApiClient.patchObject("/api/v1/students/me/language", JSONObject().put("language", next))
+                status = if (language == "hi") "पढ़ाई की भाषा अपडेट हो गई।" else "Learning content language updated."
+            } catch (exception: Exception) {
+                learningLanguage = previous
+                preferences.edit().putString("contentLanguage", previous).apply()
+                studentProfile = JSONObject(studentProfile.toString()).put("language", previous)
+                throw exception
+            }
+        }
     }
 
     fun goBack() {
@@ -1520,8 +1549,59 @@ fun QuantaEdgeApp() {
                             }
                             DropdownMenu(
                                 expanded = accountMenuExpanded,
-                                onDismissRequest = { accountMenuExpanded = false }
+                                onDismissRequest = { accountMenuExpanded = false },
+                                modifier = Modifier.widthIn(min = 260.dp, max = 320.dp)
                             ) {
+                                Text(
+                                    if (language == "hi") "ऐप इंटरफ़ेस की भाषा" else "App interface language",
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    if (language == "hi") "केवल मेन्यू, बटन और नेविगेशन बदलता है — पाठों की भाषा नहीं।"
+                                    else "Changes menus, buttons and navigation only — not lesson language.",
+                                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                DropdownMenuItem(
+                                    text = { Text((if (language == "hi") "✓ " else "") + "हिन्दी (Hindi)") },
+                                    onClick = { setLanguage("hi") },
+                                    enabled = !busy
+                                )
+                                DropdownMenuItem(
+                                    text = { Text((if (language == "en") "✓ " else "") + "English") },
+                                    onClick = { setLanguage("en") },
+                                    enabled = !busy
+                                )
+                                if (!parentRole) {
+                                    HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
+                                    Text(
+                                        if (language == "hi") "पढ़ाई की सामग्री की भाषा" else "Learning content language",
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 7.dp),
+                                        style = MaterialTheme.typography.labelLarge,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        if (language == "hi") "पाठ, प्रश्न, किताबें और AI Tutor के जवाब बदलता है।"
+                                        else "Changes lessons, questions, books and AI Tutor replies.",
+                                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 0.dp),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text((if (learningLanguage == "hi") "✓ " else "") + "हिन्दी (Hindi)") },
+                                        onClick = { setLearningContentLanguage("hi") },
+                                        enabled = !busy
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text((if (learningLanguage == "en") "✓ " else "") + "English") },
+                                        onClick = { setLearningContentLanguage("en") },
+                                        enabled = !busy
+                                    )
+                                }
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
                                 DropdownMenuItem(
                                     text = { Text(if (language == "hi") "प्रोफ़ाइल और सेटिंग" else "Profile & settings") },
                                     onClick = {
@@ -1541,29 +1621,7 @@ fun QuantaEdgeApp() {
                             }
                         }
                     }
-                    if (route !in setOf(AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)) {
-                        Box {
-                            TextButton(onClick = { languageMenuExpanded = true }, enabled = !busy) {
-                                Text(if (language == "hi") "हिन्दी ▾" else "English ▾")
-                            }
-                            DropdownMenu(
-                                expanded = languageMenuExpanded,
-                                onDismissRequest = { languageMenuExpanded = false }
-                            ) {
-                                DropdownMenuItem(
-                                    text = { Text((if (language == "hi") "✓ " else "") + "हिन्दी") },
-                                    onClick = { setLanguage("hi") },
-                                    enabled = !busy && language != "hi"
-                                )
-                                DropdownMenuItem(
-                                    text = { Text((if (language == "en") "✓ " else "") + "English") },
-                                    onClick = { setLanguage("en") },
-                                    enabled = !busy && language != "en"
-                                )
-                            }
-                        }
-                    }
-                }
+remove old Android header selector                }
                 HorizontalDivider()
                 // Secondary links stay text-first within their group; no feature route becomes a new primary icon.
                 if (signedIn && !parentRole) {

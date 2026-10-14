@@ -139,10 +139,21 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isParentRoute || isStudentRoute) return;
     let active = true;
+    const localLocaleIsSet = () => {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY);
+        return saved === 'hindi' || saved === 'english';
+      } catch {
+        return false;
+      }
+    };
+    // An explicit interface-language choice on this device must not be overwritten
+    // by the parent's older profile preference during navigation or reload.
+    if (localLocaleIsSet()) return;
     fetch('/api/v1/guardians/profile', { cache: 'no-store', credentials: 'same-origin' })
       .then(response => response.ok ? response.json() : null)
       .then(profile => {
-        if (!active || !profile) return;
+        if (!active || !profile || localLocaleIsSet()) return;
         const preference = String(profile.preferred_language || '');
         if (preference === 'English') applyLocale('english', true);
         else if (preference === 'Hindi' || preference === 'Hindi & English') applyLocale('hindi', true);
@@ -168,40 +179,46 @@ export function LocaleText({ hinglish, english }: { hinglish: string; english: s
   return <>{locale === 'english' ? english : hinglish}</>;
 }
 
-export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+export function LanguageSwitcher({ compact = false, menu = false }: { compact?: boolean; menu?: boolean }) {
   const { locale, setLocale } = useLocale();
   return (
-    <label className={'qe-language-switcher' + (compact ? ' is-compact' : '')}>
+    <label className={'qe-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">文</span>
-      <span className="qe-language-switcher__label">भाषा / Language</span>
-      <select
-        value={locale}
-        onChange={event => setLocale(event.target.value as Locale)}
-        aria-label="भाषा चुनें / Choose app interface language"
-      >
+      <span className="qe-language-switcher__label">
+        {locale === 'english' ? 'App interface language' : 'ऐप इंटरफ़ेस की भाषा'}
+      </span>
+      <select value={locale} onChange={event => setLocale(event.target.value as Locale)}
+        aria-label={locale === 'english' ? 'App interface language' : 'ऐप इंटरफ़ेस की भाषा'}>
         <option value="hindi">हिन्दी (Hindi)</option>
         <option value="english">English</option>
       </select>
+      <small className="qe-language-switcher__help">
+        {locale === 'english'
+          ? 'Changes menus, buttons and navigation only — not lesson language.'
+          : 'केवल मेन्यू, बटन और नेविगेशन बदलता है — पाठों की भाषा नहीं।'}
+      </small>
     </label>
   );
 }
 
-export function LearningLanguageSwitcher({ compact = false }: { compact?: boolean }) {
+export function LearningLanguageSwitcher({ compact = false, menu = false }: { compact?: boolean; menu?: boolean }) {
   const { locale, learningLanguage, setLearningLanguage } = useLocale();
   return (
-    <label className={'qe-language-switcher qe-learning-language-switcher' + (compact ? ' is-compact' : '')}>
+    <label className={'qe-language-switcher qe-learning-language-switcher' + (compact ? ' is-compact' : '') + (menu ? ' qe-language-switcher--menu-setting' : '')}>
       <span aria-hidden="true">📚</span>
       <span className="qe-language-switcher__label">
-        {locale === 'english' ? 'Learning language' : 'पढ़ाई की भाषा'}
+        {locale === 'english' ? 'Learning content language' : 'पढ़ाई की सामग्री की भाषा'}
       </span>
-      <select
-        value={learningLanguage}
-        onChange={event => setLearningLanguage(event.target.value as LearningLanguage)}
-        aria-label={locale === 'english' ? 'Choose learning content language' : 'पढ़ाई की सामग्री की भाषा चुनें'}
-      >
+      <select value={learningLanguage} onChange={event => setLearningLanguage(event.target.value as LearningLanguage)}
+        aria-label={locale === 'english' ? 'Learning content language' : 'पढ़ाई की सामग्री की भाषा'}>
         <option value="hi">हिन्दी (Hindi)</option>
         <option value="en">English</option>
       </select>
+      <small className="qe-language-switcher__help">
+        {locale === 'english'
+          ? 'Changes lessons, questions, books and AI Tutor replies.'
+          : 'पाठ, प्रश्न, किताबें और AI Tutor के जवाब बदलता है।'}
+      </small>
     </label>
   );
 }

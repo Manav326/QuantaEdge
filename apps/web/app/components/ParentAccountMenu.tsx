@@ -1,6 +1,6 @@
 'use client';
 
-import { LocaleText } from './LanguageProvider';
+import { LanguageSwitcher, LocaleText } from './LanguageProvider';
 import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
@@ -65,16 +65,16 @@ export default function ParentAccountMenu({
         aria-controls="parent-account-menu"
         onClick={() => setOpen(value => !value)}
       >
-        <span className="parent-account__trigger-copy">
-          <strong>{displayName}</strong>
-          <small><LocaleText hinglish="Parent account" english="Parent account" /></small>
-        </span>
         <span className="parent-account__avatar"><AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/parent-avatar.svg" alt="" width={44} height={44} /></span>
         <svg className={`parent-account__chevron${open ? ' is-open' : ''}`} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
       </button>
 
       {open && (
         <div className="parent-account__menu" id="parent-account-menu" aria-label="Parent account options">
+          <div className="qe-account-language-settings parent-account__language-settings">
+            <LanguageSwitcher menu />
+          </div>
+          <div className="parent-account__divider" />
           <Link href="/parent/profile" className="parent-account__item" onClick={closeMenu}>
             <span className="parent-account__icon"><ParentMenuIcon /></span>
             <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>

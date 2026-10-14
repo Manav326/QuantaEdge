@@ -1,6 +1,6 @@
 'use client';
 
-import { LocaleText } from './LanguageProvider';
+import { LanguageSwitcher, LearningLanguageSwitcher, LocaleText } from './LanguageProvider';
 import AuthenticatedProfileImage from './AuthenticatedProfileImage';
 
 import Link from 'next/link';
@@ -8,7 +8,6 @@ import { useEffect, useRef, useState } from 'react';
 
 type StudentAccountMenuProps = {
   displayName: string;
-  classCode: string | number;
   profileImageUrl?: string | null;
   onLogout: () => void;
   loggingOut: boolean;
@@ -19,7 +18,7 @@ function MenuIcon() {
   return <svg {...common}><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19.4 15 .1.1a1.8 1.8 0 0 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 0 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 0 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3h-.2a1.8 1.8 0 0 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 0 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 0 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 0 1 2.5 2.5l.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 0 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z"/></svg>;
 }
 
-export default function StudentAccountMenu({ displayName, classCode, profileImageUrl, onLogout, loggingOut }: StudentAccountMenuProps) {
+export default function StudentAccountMenu({ displayName, profileImageUrl, onLogout, loggingOut }: StudentAccountMenuProps) {
   const accountRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -59,10 +58,6 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
         aria-controls="student-account-menu"
         onClick={() => { setOpen(value => !value); }}
       >
-        <span className="student-account-trigger__copy">
-          <strong>{displayName}</strong>
-          <small>Class {classCode}</small>
-        </span>
         <span className="student-avatar">
           <AuthenticatedProfileImage src={profileImageUrl} fallbackSrc="/branding/student-avatar.svg" alt="" width={44} height={44} />
         </span>
@@ -71,6 +66,11 @@ export default function StudentAccountMenu({ displayName, classCode, profileImag
 
       {open && (
         <div className="student-account-menu" id="student-account-menu" aria-label="Student account options">
+          <div className="qe-account-language-settings student-account-menu__language-settings">
+            <LanguageSwitcher menu />
+            <LearningLanguageSwitcher menu />
+          </div>
+          <div className="student-account-menu__divider" />
           <Link href="/student/profile" className="student-account-menu__item" onClick={closeMenu}>
             <span className="student-account-menu__icon"><MenuIcon /></span>
             <span><strong><LocaleText hinglish="सेटिंग्स" english="Settings" /></strong><small><LocaleText hinglish="Profile और personal details" english="Profile and personal details" /></small></span>
