@@ -34,12 +34,16 @@ public class TextbookExtractionService {
   }
 
   public Map<String, Object> queue(long assetId, long staffId) {
-    Map<String, Object> source = jdbc.queryForMap("""
+    List<Map<String, Object>> sources = jdbc.queryForList("""
       select a.id,a.sha256,a.review_status,i.class_id,i.subject_id,i.language
       from learning_pdf_asset a
       join learning_book_intake i on i.pdf_asset_id=a.id
       where a.id=?
       """, assetId);
+    if (sources.isEmpty()) {
+      throw new IllegalArgumentException("Classify this PDF with its class, subject, and language before extraction.");
+    }
+    Map<String, Object> source = sources.getFirst();
     if (!"APPROVED".equals(String.valueOf(source.get("review_status")))) {
       throw new IllegalArgumentException("Approve the source PDF before extracting it.");
     }
