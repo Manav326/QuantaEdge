@@ -19,6 +19,9 @@ on:
       - "docs/product/curriculum-question-targets.csv"
       - ".github/workflows/curriculum-pipeline-audit.yml"
       - ".github/workflows/textbook-cache.yml"
+  workflow_run:
+    workflows: ["QuantaEdge Textbook Cache"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       pull_live_registry:
@@ -34,6 +37,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   offline:
+    if: github.event_name != 'workflow_run'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +58,7 @@ jobs:
       - name: Run offline tooling audit (does not claim live content completeness)
         run: python scripts/audit_curriculum_pipeline.py --skip-registry --strict
   live-registry:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.pull_live_registry)
+    if: github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && inputs.pull_live_registry)
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
