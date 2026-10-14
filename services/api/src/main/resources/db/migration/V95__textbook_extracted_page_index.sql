@@ -36,8 +36,8 @@ create table textbook_extracted_page (
   extracted_text text not null default '',
   extraction_method varchar(16) not null
     check (extraction_method in ('PDF_TEXT','OCR','EMPTY','FAILED')),
-  quality_status varchar(20) not null default 'REVIEW'
-    check (quality_status in ('REVIEW','LOW_TEXT','OCR_REQUIRED','FAILED')),
+  quality_status varchar(20) not null default 'OCR_REQUIRED'
+    check (quality_status in ('READY','LOW_TEXT','OCR_REQUIRED','FAILED')),
   extraction_error varchar(1200),
   extracted_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
