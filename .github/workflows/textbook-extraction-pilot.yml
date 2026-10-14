@@ -1,17 +1,6 @@
 name: QuantaEdge GHCR Textbook Extraction Pilot
 
 on:
-  push:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/textbook-extraction-pilot.yml"
-      - "scripts/textbook_registry.py"
-      - "scripts/extract_textbook_text.py"
-      - "scripts/import_ghcr_extracted_pages.py"
-      - "scripts/validate_textbook_extraction_artifacts.py"
-      - "tests/test_validate_textbook_extraction_artifacts.py"
-      - "tests/test_extract_textbook_text.py"
-      - "tests/test_import_ghcr_extracted_pages.py"
   workflow_dispatch:
     inputs:
       class_no:
