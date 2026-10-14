@@ -1,6 +1,6 @@
-# Optional local vision analysis for visual inventories
+# Resumable vision analysis for textbook visual inventories
 
-The second stage uses an **already-installed local Ollama vision-language model** to describe and classify a small set of candidates. The model tag is an explicit argument; this repository does not assume that any particular vision model is installed or silently download one. No remote endpoint or cloud fallback is used.
+The analyzer uses Ollama's native `/api/chat` endpoint and supports both a local Ollama service and a runner-managed Ollama service. The model tag is explicit. The GitHub Actions workflow provisions the configured model on the runner; it does not require Ollama to be installed on the user's computer. No hosted API fallback is used.
 
 ## Run a small evaluation
 
@@ -16,10 +16,10 @@ Choose a vision model tag that is actually present in that output, then run a fi
 python scripts/analyze_visual_inventory_with_ollama.py `
   --inventory "D:\QuantaEdge\visual-inventory\class-6-curiosity\visual-inventory.v1.json" `
   --model "YOUR_INSTALLED_VISION_MODEL_TAG" `
-  --max-assets 5
+  --max-assets 100 --include-page-previews
 ```
 
-Replace the model placeholder with the exact installed tag. The tool uses local Ollama's `/api/chat` endpoint and sends the image plus available page text. The first version only accepts loopback HTTP endpoints. It creates `visual-analysis.v1.json` beside the inventory and does not change the source inventory.
+Replace the model placeholder with the exact installed tag. The tool uses local Ollama's `/api/chat` endpoint and sends the image plus available page text. The endpoint is restricted to loopback HTTP for safety. On GitHub Actions, start Ollama on the runner and use `http://127.0.0.1:11434`. It creates `visual-analysis.v1.json` beside the inventory and does not change the source inventory.
 
 Use `--include-page-previews` to include full-page images; otherwise the tool analyzes extracted embedded images only. If the PDF page contains vector art and no embedded image, a page preview can be analyzed by opting in. Start with five assets, inspect whether descriptions and labels are faithful, then decide whether to increase the sample.
 
