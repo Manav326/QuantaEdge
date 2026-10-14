@@ -206,10 +206,10 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   currentQuestionId?: number;
 }) {
   const { locale, learningLanguage, languageReady } = useLocale();
-  // Keep interface language and answer language distinct: every UI label follows
-  // the app-language selector, while the explanation follows the selected learning language.
+  // Keep the two header selectors independent:
+  // app UI labels follow locale; lesson content and tutor answers follow learningLanguage.
   const english = locale === 'english';
-  const responseLanguage = english || learningLanguage === 'en' ? 'en' : 'hi';
+  const responseLanguage = learningLanguage;
   const languageRef = useRef({ english, responseLanguage });
   languageRef.current = { english, responseLanguage };
   const labels = english ? englishModeLabels : hindiModeLabels;
