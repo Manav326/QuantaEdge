@@ -1078,7 +1078,8 @@ fun QuantaEdgeApp() {
             .put("created_at", System.currentTimeMillis())
         tutorMessages = previousMessages + optimisticMessage
         tutorSendInFlight = true
-        runTask {
+        error = ""
+        scope.launch {
             try {
                 try {
                     ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
@@ -2450,7 +2451,7 @@ fun QuantaEdgeApp() {
                         messages = tutorMessages,
                         hasOlderMessages = tutorHasOlderMessages,
                         loadingOlderMessages = tutorLoadingOlderMessages,
-                        busy = busy,
+                        busy = tutorSendInFlight,
                         error = error,
                         onSend = ::sendTutorMessage,
                         onLoadOlder = ::loadOlderTutorMessages,
