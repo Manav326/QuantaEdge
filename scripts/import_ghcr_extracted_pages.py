@@ -65,7 +65,7 @@ def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -
     request = urllib.request.Request(
         url, data=body, method="POST",
         headers={
-            "Cookie": "QE_STAFF_SESSION=" + cookie,
+            "Cookie": "QE_STAFF_SESSION=" + cookie + "; QE_SESSION=" + cookie,
             "X-QE-Workspace": "EDUCATION_ADMIN",
             "Content-Type": "multipart/form-data; boundary=" + boundary,
             "Accept": "application/json",
@@ -89,7 +89,7 @@ def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -
 def post_approve(url: str, cookie: str) -> dict[str, Any]:
     request = urllib.request.Request(
         url, data=b"", method="POST",
-        headers={"Cookie": "QE_STAFF_SESSION=" + cookie,
+        headers={"Cookie": "QE_STAFF_SESSION=" + cookie + "; QE_SESSION=" + cookie,
             "X-QE-Workspace": "EDUCATION_ADMIN", "Accept": "application/json"},
     )
     try:
