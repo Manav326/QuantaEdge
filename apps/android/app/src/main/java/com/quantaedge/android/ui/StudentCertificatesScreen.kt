@@ -418,6 +418,7 @@ fun StudentCertificatesScreen(
                     if (certificateLanguage == "en") Button(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
                     else OutlinedButton(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
                 }
+                Text(if (language == "hi") "उपलब्धि का प्रकार" else "Achievement type")
                 Box(Modifier.fillMaxWidth()) {
                     OutlinedButton(onClick = { achievementMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
                         Text(
@@ -461,6 +462,7 @@ fun StudentCertificatesScreen(
                         if (language == "hi") "कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है।" else "No active subject track available.",
                         color = MaterialTheme.colorScheme.secondary
                     )
+                    Text(if (language == "hi") "विषय ट्रैक" else "Subject track")
                     Box(Modifier.fillMaxWidth()) {
                         OutlinedButton(onClick = { subjectMenuExpanded = true }, enabled = !loading && subjectTracks.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
                             Text(trackLabel(selectedTrack), modifier = Modifier.weight(1f), maxLines = 2)
@@ -501,6 +503,7 @@ fun StudentCertificatesScreen(
                         if (language == "hi") "कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।" else "No eligible released admin-created test results.",
                         color = MaterialTheme.colorScheme.secondary
                     )
+                    Text(if (language == "hi") "जारी टेस्ट परिणाम" else "Released assessment result")
                     Box(Modifier.fillMaxWidth()) {
                         OutlinedButton(onClick = { assessmentMenuExpanded = true }, enabled = !loading && eligibleAssessments.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
                             Text(assessmentLabel(selectedAssessment), modifier = Modifier.weight(1f), maxLines = 2)
