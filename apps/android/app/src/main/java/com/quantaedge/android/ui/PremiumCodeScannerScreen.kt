@@ -247,10 +247,7 @@ fun PremiumCodeScannerScreen(
             layoutModifier.then(if (landscape) Modifier.verticalScroll(rememberScrollState()) else Modifier),
             verticalArrangement = Arrangement.spacedBy(if (landscape) 8.dp else 13.dp)
         ) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Surface(color = Color.White, shape = RoundedCornerShape(18.dp), tonalElevation = 2.dp) {
-                    QuantaEdgeBrand(Modifier.padding(horizontal = 10.dp, vertical = 5.dp), compact = true)
-                }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                 Surface(color = ScanPanel, shape = CircleShape) {
                     TextButton(onClick = onBack, modifier = Modifier.size(46.dp), contentPadding = PaddingValues(0.dp)) {
                         Text("×", color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Light)

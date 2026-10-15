@@ -5,6 +5,7 @@ import com.quantaedge.android.BuildConfig
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -65,10 +68,12 @@ fun StudentCertificatesScreen(
     var certificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var eligibleAssessments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var subjectTracks by remember { mutableStateOf(emptyList<JSONObject>()) }
-    var template by remember { mutableStateOf("CLASSIC") }
+    var selectedTrackKey by remember { mutableStateOf("") }
     var selectedAchievement by remember { mutableStateOf("SUBJECT_COMPLETION") }
-    var subjectCode by remember { mutableStateOf("") }
     var selectedAttemptId by remember { mutableStateOf("") }
+    var achievementMenuExpanded by remember { mutableStateOf(false) }
+    var subjectMenuExpanded by remember { mutableStateOf(false) }
+    var assessmentMenuExpanded by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
     var loading by remember { mutableStateOf(true) }
     var error by remember { mutableStateOf("") }
@@ -108,10 +113,10 @@ fun StudentCertificatesScreen(
         loading = true
         error = ""
         try {
-            val profile = ApiClient.getObject("/api/v1/students/me")
-            subjectTracks = profile.optJSONArray("curriculum").toObjectList()
-            if (subjectTracks.none { it.optString("subject_code") == subjectCode }) {
-                subjectCode = subjectTracks.firstOrNull()?.optString("subject_code").orEmpty()
+            val trackResponse = ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks")
+            subjectTracks = trackResponse.optJSONArray("items").toObjectList()
+            if (subjectTracks.none { it.optString("track_key") == selectedTrackKey }) {
+                selectedTrackKey = subjectTracks.firstOrNull()?.optString("track_key").orEmpty()
             }
             val issued = ApiClient.getObject("/api/v1/students/me/certificates")
             certificates = issued.optJSONArray("items").toObjectList()
@@ -244,19 +249,38 @@ fun StudentCertificatesScreen(
             try {
                 val body = JSONObject()
                     .put("achievementType", selectedAchievement)
-                    .put("templateId", template)
+                    .put("templateId", "CLASSIC")
                     .put("language", certificateLanguage)
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
-                    body.put("subjectCode", subjectCode)
+                    val selectedTrack = subjectTracks.firstOrNull {
+                        it.optString("track_key") == selectedTrackKey
+                    } ?: throw IOException(
+                        if (language == "hi") "पहले विषय ट्रैक चुनें।" else "Choose a subject track first."
+                    )
+                    body.put("subjectCode", selectedTrack.optString("subject_code"))
+                    val courseId = selectedTrack.optLongValue("course_id", "courseId", "program_id", "programId")
+                    if (courseId > 0L) body.put("courseId", courseId)
                 } else {
                     val attemptId = selectedAttemptId.toLongOrNull()
-                        ?: throw IOException("पहले eligible released test चुनें।")
+                        ?: throw IOException(
+                            if (language == "hi") "पहले पात्र जारी टेस्ट चुनें।"
+                            else "Choose an eligible released test first."
+                        )
                     body.put("assessmentAttemptId", attemptId)
+                    val selectedAttempt = eligibleAssessments.firstOrNull {
+                        it.optLongValue("attempt_id", "attemptId", "id") == attemptId
+                    }
+                    val courseId = selectedAttempt?.optLongValue("course_id", "courseId", "program_id", "programId") ?: 0L
+                    if (courseId > 0L) body.put("courseId", courseId)
                 }
                 val issued = withContext(Dispatchers.IO) {
                     ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
                 }
-                notice = "Certificate issue हो गया: " + issued.optString("certificate_number", issued.optString("certificateNumber", "जारी"))
+                notice = if (language == "hi") {
+                    "प्रमाणपत्र जारी हो गया: " + issued.optString("certificate_number", issued.optString("certificateNumber", "जारी"))
+                } else {
+                    "Certificate issued: " + issued.optString("certificate_number", issued.optString("certificateNumber", "Issued"))
+                }
                 reload()
             } catch (e: Exception) {
                 error = e.message ?: "Certificate जारी नहीं हो सका।"
@@ -371,99 +395,146 @@ fun StudentCertificatesScreen(
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error)
         if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.primary)
         Card(modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text(if (language == "hi") "नई उपलब्धि का प्रमाणपत्र" else "Issue an achievement certificate", style = MaterialTheme.typography.titleMedium)
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(
+                    if (language == "hi") "उपलब्धि प्रमाणपत्र जारी करें" else "Issue an achievement certificate",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    if (language == "hi") "प्रमाणपत्र सेटिंग्स" else "Certificate settings",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
                 Text(if (language == "hi") "प्रमाणपत्र की भाषा" else "Certificate language")
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (certificateLanguage == "hi") Button(onClick = { onCertificateLanguageChange("hi") }) {
-                        Text("हिन्दी")
-                    } else OutlinedButton(onClick = { onCertificateLanguageChange("hi") }) {
-                        Text("हिन्दी")
+                    if (certificateLanguage == "hi") Button(onClick = { onCertificateLanguageChange("hi") }) { Text("हिन्दी") }
+                    else OutlinedButton(onClick = { onCertificateLanguageChange("hi") }) { Text("हिन्दी") }
+                    if (certificateLanguage == "en") Button(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
+                    else OutlinedButton(onClick = { onCertificateLanguageChange("en") }) { Text("English") }
+                }
+                Box(Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { achievementMenuExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            if (selectedAchievement == "SUBJECT_COMPLETION") {
+                                if (language == "hi") "विषय की पढ़ाई पूरी" else "Subject completion"
+                            } else if (language == "hi") "टेस्ट में पास" else "Assessment pass",
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text("▾")
                     }
-                    if (certificateLanguage == "en") Button(onClick = { onCertificateLanguageChange("en") }) {
-                        Text("English")
-                    } else OutlinedButton(onClick = { onCertificateLanguageChange("en") }) {
-                        Text("English")
+                    DropdownMenu(expanded = achievementMenuExpanded, onDismissRequest = { achievementMenuExpanded = false }) {
+                        DropdownMenuItem(text = { Text(if (language == "hi") "विषय की पढ़ाई पूरी" else "Subject completion") }, onClick = {
+                            selectedAchievement = "SUBJECT_COMPLETION"; achievementMenuExpanded = false
+                        })
+                        DropdownMenuItem(text = { Text(if (language == "hi") "टेस्ट में पास" else "Assessment pass") }, onClick = {
+                            selectedAchievement = "ASSESSMENT_PASS"; assessmentMenuExpanded = false; achievementMenuExpanded = false
+                        })
                     }
                 }
-                Text(if (language == "hi") "डिज़ाइन चुनें" else "Choose a design")
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("CLASSIC", "MODERN", "ACADEMIC").forEach { id ->
-                        if (template == id) Button(onClick = { template = id }) { Text(id) }
-                        else OutlinedButton(onClick = { template = id }) { Text(id) }
-                    }
-                }
-                Text(if (language == "hi") "उपलब्धि का प्रकार" else "Achievement type")
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (selectedAchievement == "SUBJECT_COMPLETION") Button(onClick = { selectedAchievement = "SUBJECT_COMPLETION" }) { Text(if (language == "hi") "विषय पूर्ण" else "Subject completion") }
-                    else OutlinedButton(onClick = { selectedAchievement = "SUBJECT_COMPLETION" }) { Text(if (language == "hi") "विषय पूर्ण" else "Subject completion") }
-                    if (selectedAchievement == "ASSESSMENT_PASS") Button(onClick = { selectedAchievement = "ASSESSMENT_PASS" }) { Text(if (language == "hi") "टेस्ट पास" else "Assessment pass") }
-                    else OutlinedButton(onClick = { selectedAchievement = "ASSESSMENT_PASS" }) { Text(if (language == "hi") "टेस्ट पास" else "Assessment pass") }
-                }
+
+                Text(
+                    if (language == "hi") "उपलब्धि का विवरण" else "Achievement details",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
                 if (selectedAchievement == "SUBJECT_COMPLETION") {
-                    if (subjectTracks.isEmpty()) {
-                        Text(
-                            if (language == "hi") "आपकी कक्षा में कोई सक्रिय subject track उपलब्ध नहीं है।"
-                            else "No active subject track is available for your current class.",
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    } else {
-                        Text(if (language == "hi") "विषय ट्रैक चुनें" else "Choose subject track")
-                        subjectTracks.forEach { track ->
-                            val code = track.optString("subject_code")
-                            val name = localizedCertificateSubject(code, track.optString("subject_name"), language)
-                            val selectedLabel = if (language == "hi") "चुना गया" else "Selected"
-                            val label = name + " · " + track.optInt("completed") + " / " + track.optInt("lessons") +
-                                (if (language == "hi") " पाठ पूरे" else " lessons complete")
-                            if (subjectCode == code) Button(onClick = { subjectCode = code }, modifier = Modifier.fillMaxWidth()) { Text("$label · $selectedLabel") }
-                            else OutlinedButton(onClick = { subjectCode = code }, modifier = Modifier.fillMaxWidth()) { Text(label) }
+                    val selectedTrack = subjectTracks.firstOrNull { it.optString("track_key") == selectedTrackKey }
+                    fun trackLabel(track: JSONObject?): String {
+                        if (track == null) return if (language == "hi") "विषय ट्रैक चुनें" else "Choose a subject track"
+                        val courseId = track.optLongValue("course_id", "courseId", "program_id", "programId")
+                        val scopeLabel = if (courseId > 0L) track.optString("course_name").ifBlank {
+                            if (language == "hi") "कोर्स" else "Course"
+                        } else (if (language == "hi") "कक्षा " else "Class ") + track.optString("class_code")
+                        val subject = localizedCertificateSubject(track.optString("subject_code"), track.optString("subject_name"), language)
+                        val completed = track.optInt("completed")
+                        val lessons = track.optInt("lessons")
+                        val progressLabel = if (lessons > 0) "$completed / $lessons" + if (language == "hi") " पाठ पूरे" else " lessons complete" else ""
+                        return listOf(scopeLabel, subject, progressLabel).filter { it.isNotBlank() }.joinToString(" · ")
+                    }
+                    if (subjectTracks.isEmpty()) Text(
+                        if (language == "hi") "कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है।" else "No active subject track available.",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Box(Modifier.fillMaxWidth()) {
+                        OutlinedButton(onClick = { subjectMenuExpanded = true }, enabled = !loading && subjectTracks.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
+                            Text(trackLabel(selectedTrack), modifier = Modifier.weight(1f), maxLines = 2)
+                            Text("▾")
+                        }
+                        DropdownMenu(expanded = subjectMenuExpanded, onDismissRequest = { subjectMenuExpanded = false }) {
+                            subjectTracks.forEach { track ->
+                                DropdownMenuItem(text = { Text(trackLabel(track), maxLines = 2) }, onClick = {
+                                    selectedTrackKey = track.optString("track_key"); subjectMenuExpanded = false
+                                })
+                            }
                         }
                     }
+                    Text(
+                        if (language == "hi") "इस सक्रिय ट्रैक के सभी प्रकाशित पाठ पूरे करें।" else "Complete all published lessons in this active track.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
+                    )
                 } else {
-                    if (eligibleAssessments.isEmpty()) {
-                        Text(
-                            if (language == "hi") "कोई पात्र result नहीं मिला। Test certificate के लिए admin-created test का result RELEASED होना चाहिए, pass mark पूरा होना चाहिए और subject enrollment active होना चाहिए। सभी lessons पूरे करना ज़रूरी नहीं है। किसी specific test की वजह जानने के लिए उसका result खोलें।"
-                            else "No eligible result found. A test certificate requires a released result from an admin-created test, a passing score and an active subject enrollment; completing every lesson is not required. Open a specific test result to see its eligibility reason.",
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    } else {
-                        Text(if (language == "hi") "पात्र test चुनें" else "Select an eligible test")
-                        eligibleAssessments.forEach { item ->
-                            val id = item.optLongValue("attempt_id", "attemptId", "id").toString()
-                            val certificateStatus = item.optString("certificate_status")
-                            val trackName = localizedCertificateSubject(
-                                item.optString("subject_code"), item.optString("subject_name"), language)
-                            val classCode = item.optString("class_code")
-                            val trackLabel = (if (language == "hi") "कक्षा " else "Class ") +
-                                classCode + " · " + trackName
-                            val title = trackLabel + " — " +
-                                item.optString("assessment_title", item.optString("title", "Assessment")) +
-                                " · " + item.optString("final_score", item.optString("score", "—")) +
-                                "/" + item.optString("max_score", "—") +
-                                when (certificateStatus) {
-                                    "ISSUED" -> if (language == "hi") " · प्रमाणपत्र जारी है" else " · Certificate already issued"
-                                    "REVOKED" -> if (language == "hi") " · प्रमाणपत्र निरस्त" else " · Certificate revoked"
-                                    else -> ""
-                                }
-                            if (selectedAttemptId == id) Button(onClick = { selectedAttemptId = id }, modifier = Modifier.fillMaxWidth()) { Text(title) }
-                            else OutlinedButton(onClick = { selectedAttemptId = id }, modifier = Modifier.fillMaxWidth()) { Text(title) }
+                    val selectedAssessment = eligibleAssessments.firstOrNull {
+                        it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                    }
+                    fun assessmentLabel(item: JSONObject?): String {
+                        if (item == null) return if (language == "hi") "पात्र जारी टेस्ट चुनें" else "Choose an eligible released test"
+                        val trackName = localizedCertificateSubject(item.optString("subject_code"), item.optString("subject_name"), language)
+                        val courseId = item.optLongValue("course_id", "courseId", "program_id", "programId")
+                        val scopeLabel = if (courseId > 0L) item.optString("course_name") else
+                            (if (language == "hi") "कक्षा " else "Class ") + item.optString("class_code")
+                        val score = item.optString("final_score", item.optString("score", "—")) + "/" + item.optString("max_score", "—")
+                        val status = when (item.optString("certificate_status")) {
+                            "ISSUED" -> if (language == "hi") "प्रमाणपत्र जारी" else "Certificate issued"
+                            "REVOKED" -> if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
+                            else -> ""
+                        }
+                        return listOf(scopeLabel, trackName, item.optString("assessment_title", item.optString("title", "Assessment")), score, status)
+                            .filter { it.isNotBlank() }.joinToString(" · ")
+                    }
+                    if (eligibleAssessments.isEmpty()) Text(
+                        if (language == "hi") "कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।" else "No eligible released admin-created test results.",
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Box(Modifier.fillMaxWidth()) {
+                        OutlinedButton(onClick = { assessmentMenuExpanded = true }, enabled = !loading && eligibleAssessments.isNotEmpty(), modifier = Modifier.fillMaxWidth()) {
+                            Text(assessmentLabel(selectedAssessment), modifier = Modifier.weight(1f), maxLines = 2)
+                            Text("▾")
+                        }
+                        DropdownMenu(expanded = assessmentMenuExpanded, onDismissRequest = { assessmentMenuExpanded = false }) {
+                            eligibleAssessments.forEach { item ->
+                                DropdownMenuItem(text = { Text(assessmentLabel(item), maxLines = 3) }, onClick = {
+                                    selectedAttemptId = item.optLongValue("attempt_id", "attemptId", "id").toString()
+                                    assessmentMenuExpanded = false
+                                })
+                            }
                         }
                     }
+                    Text(
+                        if (language == "hi") "पास अंक वाले केवल जारी Admin-created टेस्ट पात्र हैं।"
+                        else "Only released admin-created tests with passing scores qualify.",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary
+                    )
                 }
+
                 val selectedCertificateStatus = eligibleAssessments.firstOrNull {
                     it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
                 }?.optString("certificate_status").orEmpty()
-                Button(onClick = { issueCertificate() }, enabled = !busy && !loading &&
-                    (if (selectedAchievement == "SUBJECT_COMPLETION") {
-                        subjectTracks.any { it.optString("subject_code") == subjectCode }
-                    } else {
-                        selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"
-                    })) {
-                    Text(if (busy) "…" else if (selectedCertificateStatus == "ISSUED") {
-                        if (language == "hi") "मौजूदा प्रमाणपत्र खोलें" else "Open existing certificate"
-                    } else if (selectedCertificateStatus == "REVOKED") {
-                        if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
-                    } else if (language == "hi") "पात्रता जाँचें और जारी करें" else "Verify eligibility & issue")
+                Button(
+                    onClick = { issueCertificate() },
+                    enabled = !busy && !loading && (
+                        if (selectedAchievement == "SUBJECT_COMPLETION") subjectTracks.any { it.optString("track_key") == selectedTrackKey }
+                        else selectedAttemptId.isNotBlank() && selectedCertificateStatus != "REVOKED"
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        if (busy) { if (language == "hi") "जाँच हो रही है…" else "Checking eligibility…" }
+                        else if (selectedCertificateStatus == "ISSUED" && selectedAchievement == "ASSESSMENT_PASS") {
+                            if (language == "hi") "मौजूदा प्रमाणपत्र खोलें" else "Open existing certificate"
+                        } else if (selectedCertificateStatus == "REVOKED" && selectedAchievement == "ASSESSMENT_PASS") {
+                            if (language == "hi") "प्रमाणपत्र निरस्त" else "Certificate revoked"
+                        } else if (language == "hi") "पात्रता जाँचें और जारी करें" else "Verify eligibility & issue"
+                    )
                 }
             }
         }

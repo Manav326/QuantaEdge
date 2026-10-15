@@ -37,6 +37,29 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void subjectTrackOptionsComeFromActiveEnrollmentsAndIncludeCourseIdentity() {
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("track_key", "COURSE:12:mathematics");
+    row.put("class_code", "6");
+    row.put("subject_code", "mathematics");
+    row.put("subject_name", "Mathematics");
+    row.put("course_id", 12L);
+    row.put("course_name", "Sample course");
+    row.put("lessons", 8L);
+    row.put("completed", 4L);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
+
+    Map<String, Object> response = controller.subjectTracks(student);
+
+    assertEquals(List.of(row), response.get("items"));
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(), any(Object[].class));
+    assertTrue(sql.getValue().contains("student_track_enrollment"));
+    assertTrue(sql.getValue().contains("curriculum_subject"));
+    assertTrue(sql.getValue().contains("student_program_enrollment"));
+  }
+
+  @Test
   void qualifyingAdminCreatedTestCanEarnCertificateWithIncompleteLessonsAndPerfectScore() {
     when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(attemptRow(
         "ADMIN_CREATED", false, "RELEASED", "100", "100", 6L, 0L, true, null)));
