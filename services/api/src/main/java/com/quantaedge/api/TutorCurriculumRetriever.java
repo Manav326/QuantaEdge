@@ -21,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TutorCurriculumRetriever {
   private static final int MAX_CANDIDATES = 160;
-  private static final int MAX_RESULTS = 4;
-  private static final int MAX_CONTEXT_CHARS = 4200;
+  private static final int MAX_RESULTS = 2;
+  private static final int MAX_CONTEXT_CHARS = 1000;
   private static final Pattern TOKEN_SPLIT = Pattern.compile("[^\\p{L}\\p{M}\\p{N}]+");
 
   private final JdbcTemplate jdbc;
@@ -80,8 +80,8 @@ public class TutorCurriculumRetriever {
       if (added >= MAX_RESULTS || result.length() >= MAX_CONTEXT_CHARS) break;
       String excerpt = block.content().trim();
       int remaining = MAX_CONTEXT_CHARS - result.length();
-      if (excerpt.length() > Math.min(1800, remaining)) {
-        excerpt = excerpt.substring(0, Math.max(0, Math.min(1800, remaining)));
+      if (excerpt.length() > Math.min(450, remaining)) {
+        excerpt = excerpt.substring(0, Math.max(0, Math.min(450, remaining)));
       }
       if (excerpt.isBlank()) continue;
       result.append("- Source: published QuantaEdge lesson \"")
@@ -108,7 +108,7 @@ public class TutorCurriculumRetriever {
              coalesce(nullif(sb.edition,''),d.edition,'edition not recorded') as edition,
              coalesce(sb.source_url,d.source_url,'source URL not recorded') as source_url,
              p.page_no,coalesce(ch.display_name,'chapter not mapped') as chapter_title,
-             left(p.extracted_text,2200) as excerpt
+             left(p.extracted_text,650) as excerpt
       from tutor_session ts
       join lesson current_lesson on current_lesson.id=ts.lesson_id
       join curriculum_chapter current_chapter on current_chapter.id=current_lesson.chapter_id
@@ -137,11 +137,11 @@ public class TutorCurriculumRetriever {
       order by case when p.chapter_id=current_lesson.chapter_id then 0 else 1 end,
         ts_rank_cd(to_tsvector('simple',coalesce(p.extracted_text,'')),plainto_tsquery('simple',?)) desc,
         p.page_no
-      limit 3
+      limit 1
       """, language, sessionId, query, query);
     StringBuilder context = new StringBuilder();
     for (Map<String, Object> row : pages) {
-      if (context.length() >= 5200) break;
+      if (context.length() >= 800) break;
       String excerpt = String.valueOf(row.getOrDefault("excerpt", "")).trim();
       if (excerpt.isBlank()) continue;
       context.append("- Source: ").append(row.get("source_title"))
