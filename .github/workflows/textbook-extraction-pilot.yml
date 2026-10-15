@@ -15,7 +15,8 @@ permissions:
   packages: read
 
 concurrency:
-  group: quantaedge-textbook-extraction-pilot
+  # Allow Class 7 and Class 8 to extract in parallel, while preventing duplicate runs for the same class.
+  group: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '6' }}
   cancel-in-progress: false
 
 jobs:
