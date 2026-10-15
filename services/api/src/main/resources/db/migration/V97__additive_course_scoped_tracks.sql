@@ -86,6 +86,28 @@ WHERE p.code = 'NAVODAYA_BATCH' AND p.curriculum_version = 'NCERT-2026-27'
 ON CONFLICT (program_id, subject_id) DO UPDATE
 SET is_required = EXCLUDED.is_required, sort_order = EXCLUDED.sort_order;
 
+-- Separate course chapter records copied from the existing Class 6 canonical map.
+-- All are DRAFT with page ranges unverified; the existing PDF splitter/review pipeline remains authoritative.
+INSERT INTO curriculum_chapter(
+  subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
+  curriculum_source,curriculum_source_url,curriculum_source_edition,curriculum_source_pages,
+  curriculum_source_verified
+)
+SELECT course_subject.id, source_chapter.code, source_chapter.display_name, source_chapter.description,
+       source_chapter.sort_order, coalesce(source_chapter.teaching_order,source_chapter.sort_order),
+       true, 'DRAFT', source_chapter.curriculum_source, source_chapter.curriculum_source_url,
+       source_chapter.curriculum_source_edition, NULL, false
+FROM curriculum_class c
+JOIN curriculum_subject legacy_subject ON legacy_subject.class_id=c.id
+  AND legacy_subject.program_id IS NULL AND legacy_subject.active=true
+JOIN curriculum_chapter source_chapter ON source_chapter.subject_id=legacy_subject.id
+JOIN curriculum_program p ON p.class_id=c.id AND p.code='NAVODAYA_BATCH'
+  AND p.curriculum_version='NCERT-2026-27' AND p.status='ACTIVE'
+JOIN curriculum_subject course_subject ON course_subject.program_id=p.id
+  AND course_subject.class_id=c.id AND course_subject.code=legacy_subject.code AND course_subject.active=true
+WHERE c.code='6' AND c.active=true AND source_chapter.active=true
+ON CONFLICT(subject_id,code) DO NOTHING;
+
 INSERT INTO app_metadata(key,value)
 VALUES ('schema','additive-course-scoped-curriculum-v97')
 ON CONFLICT(key) DO UPDATE SET value=excluded.value;

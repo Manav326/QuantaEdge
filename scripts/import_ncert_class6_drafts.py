@@ -83,6 +83,7 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="Write content as DRAFT using the authenticated Admin API")
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--subject", choices=("maths", "science"), help="Limit this run to one subject")
+    parser.add_argument("--program-code", default="", help="Optional active program code; imports separate course-scoped drafts.")
     args = parser.parse_args()
     session = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "")
     if args.apply and not session:
@@ -100,10 +101,15 @@ def main() -> int:
         if args.subject:
             bundles = [(p, b) for p, b in bundles if b.get("curriculum", {}).get("subject_code") == args.subject]
         api = AdminApi(args.api_url, session) if args.apply else None
-        cache: dict[tuple[str, str], list[dict[str, Any]]] = {}
+        cache: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
         for source_path, original in bundles:
             try:
                 bundle = make_codes_unique(original)
+                if args.program_code.strip():
+                    program_code = args.program_code.strip().upper()
+                    if not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL":
+                        raise ValueError("--program-code must identify an active additional course.")
+                    bundle["curriculum"]["program_code"] = program_code
                 # NCERT is canonical for this requested content rollout; allow a new NCERT chapter code.
                 validate_site_bundle(bundle, allow_noncanonical_chapter=True)
                 if not args.apply:
@@ -113,17 +119,22 @@ def main() -> int:
                     continue
 
                 curriculum = bundle["curriculum"]
-                key = (str(curriculum["class_code"]), str(curriculum["subject_code"]))
+                program_code = str(curriculum.get("program_code") or "").strip().upper()
+                key = (str(curriculum["class_code"]), str(curriculum["subject_code"]), program_code)
                 if key not in cache:
                     from urllib.parse import urlencode
-                    query = urlencode({"classCode": key[0], "subjectCode": key[1], "status": "ALL"})
+                    query_args = {"classCode": key[0], "subjectCode": key[1], "status": "ALL"}
+                    if program_code:
+                        query_args["programCode"] = program_code
+                    query = urlencode(query_args)
                     rows = api.request("GET", "/api/v1/admin/content?" + query)  # type: ignore[union-attr]
                     if not isinstance(rows, list):
                         raise RuntimeError("Admin content catalogue returned an unexpected response.")
                     cache[key] = rows
 
                 code = bundle["chapter"]["code"]
-                matching = [r for r in cache[key] if str(r.get("chapter_code", "")).strip() == code]
+                matching = [r for r in cache[key] if str(r.get("chapter_code", "")).strip() == code
+                            and str(r.get("program_code") or "").strip().upper() == program_code]
                 attach = bool(matching)
                 if matching:
                     present_lessons = {

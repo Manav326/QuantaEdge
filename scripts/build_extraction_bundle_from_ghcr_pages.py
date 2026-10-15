@@ -315,9 +315,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target-csv", type=Path, default=Path("docs/product/curriculum-question-targets.csv"))
     parser.add_argument("--output", required=True, type=Path, help="New draft-only extraction JSON; never overwritten by default.")
     parser.add_argument("--overwrite", action="store_true", help="Explicitly replace the selected output file.")
+    parser.add_argument("--program-code", default="", help="Optional course scope, e.g. NAVODAYA_BATCH; omitted means the standard class curriculum.")
     args = parser.parse_args()
     try:
         bundle = build_bundle(args.manifest, args.chapter_map, args.target_csv)
+        program_code = args.program_code.strip().upper()
+        if program_code:
+            if not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL":
+                raise ValueError("--program-code must identify an active additional course, not GENERAL.")
+            bundle["curriculum"]["program_code"] = program_code
         if args.output.exists() and not args.overwrite:
             raise FileExistsError(f"Refusing to overwrite existing output: {args.output}. Use a new versioned path or pass --overwrite.")
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -332,6 +338,7 @@ def main(argv: list[str] | None = None) -> int:
         "book_id": bundle["source"]["book_id"],
         "class": bundle["curriculum"]["class_code"],
         "subject": bundle["curriculum"]["subject_code"],
+        "program_code": bundle["curriculum"].get("program_code"),
         "language": bundle["curriculum"]["language"],
         "pages": bundle["source"]["pdf_page_count"],
         "ready_mapped_chapters": len(bundle["chapter_map"]),

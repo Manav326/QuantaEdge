@@ -90,6 +90,9 @@ def validate_bundle(bundle: Any) -> dict[str, Any]:
         raise ValueError("Only Bihar Board Class 6–8 Maths and Science tracks are supported.")
     if medium is None:
         raise ValueError("curriculum.language must explicitly identify Hindi (hi) or English (en).")
+    program_code = str(curriculum.get("program_code") or "").strip().upper()
+    if program_code and (not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL"):
+        raise ValueError("curriculum.program_code must identify an additional course such as NAVODAYA_BATCH.")
 
     source = bundle.get("source")
     if not isinstance(source, dict):
@@ -258,6 +261,7 @@ def make_request_payloads(bundle: dict[str, Any], chapter_id: int | None = None)
         "body": {
             "classCode": str(curriculum["class_code"]),
             "subjectCode": curriculum["subject_code"],
+            **({"programCode": str(curriculum.get("program_code")).strip().upper()} if curriculum.get("program_code") else {}),
             "code": chapter["code"],
             "displayName": chapter["display_name"],
             "description": chapter.get("description", ""),
@@ -393,7 +397,11 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
     if not session:
         raise ValueError("QUANTAEDGE_ADMIN_SESSION is required when using --apply.")
     api = AdminApi(base_url, session)
-    params = urllib.parse.urlencode({"classCode": curriculum["class_code"], "subjectCode": curriculum["subject_code"]})
+    query_params = {"classCode": curriculum["class_code"], "subjectCode": curriculum["subject_code"]}
+    program_code = str(curriculum.get("program_code") or "").strip().upper()
+    if program_code:
+        query_params["programCode"] = program_code
+    params = urllib.parse.urlencode(query_params)
     rows = api.request("GET", "/api/v1/admin/content?" + params)
     if not isinstance(rows, list):
         raise RuntimeError("Admin content API did not return a content list.")
@@ -402,6 +410,7 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str, dry_run: boo
         if row.get("chapter_code") == chapter["code"]
         and str(row.get("class_code")) == str(curriculum["class_code"])
         and row.get("subject_code") == curriculum["subject_code"]
+        and str(row.get("program_code") or "").strip().upper() == program_code
     ]
     lesson_codes = {lesson["code"] for lesson in bundle["lessons"]}
     existing_lesson_codes = {row.get("lesson_code") for row in rows if row.get("lesson_code")}

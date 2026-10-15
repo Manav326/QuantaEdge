@@ -67,6 +67,9 @@ def validate_site_bundle(bundle: Any, allow_noncanonical_chapter: bool = False) 
         raise ValueError("Only supported Bihar Board Classes 6–8 Maths/Science tracks may be imported.")
     if language not in {"hi", "en"}:
         raise ValueError("curriculum.language must be hi or en.")
+    program_code = str(curriculum.get("program_code") or "").strip().upper()
+    if program_code and (not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL"):
+        raise ValueError("curriculum.program_code must identify an additional course such as NAVODAYA_BATCH.")
 
     chapter = bundle.get("chapter")
     if not isinstance(chapter, dict):
@@ -413,17 +416,22 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
     curriculum = bundle["curriculum"]
     chapter = bundle["chapter"]
     source_title, source_url = _candidate_source(bundle)
-    query = urllib.parse.urlencode({
+    query_params = {
         "classCode": curriculum["class_code"],
         "subjectCode": curriculum["subject_code"],
         "status": "ALL",
-    })
+    }
+    program_code = str(curriculum.get("program_code") or "").strip().upper()
+    if program_code:
+        query_params["programCode"] = program_code
+    query = urllib.parse.urlencode(query_params)
     rows = api.request("GET", "/api/v1/admin/content?" + query)
     if not isinstance(rows, list):
         raise RuntimeError("Admin content catalogue did not return a list.")
     matches: dict[int, dict[str, Any]] = {}
     for row in rows:
-        if str(row.get("chapter_code", "")).strip() == chapter["code"]:
+        if (str(row.get("chapter_code", "")).strip() == chapter["code"]
+                and str(row.get("program_code") or "").strip().upper() == program_code):
             try:
                 matches[int(row["chapter_id"])] = row
             except (KeyError, TypeError, ValueError):
@@ -444,6 +452,7 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         chapter_payload = {
             "classCode": curriculum["class_code"],
             "subjectCode": curriculum["subject_code"],
+            **({"programCode": program_code} if program_code else {}),
             "code": chapter["code"],
             "displayName": chapter["display_name"],
             "description": str(chapter.get("description", ""))[:500],
