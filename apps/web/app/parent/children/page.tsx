@@ -38,6 +38,8 @@ export default function ParentChildrenPage(){
   const [children,setChildren]=useState<Child[]>([]);
   const [draft,setDraft]=useState<Draft>(emptyDraft);
   const [trackDrafts,setTrackDrafts]=useState<Record<number,string[]>>({});
+  const [childPrograms,setChildPrograms]=useState<Record<number,any[]>>({});
+  const [busyCourse,setBusyCourse]=useState<string>('');
   const [profileDrafts,setProfileDrafts]=useState<Record<number,ChildProfileDraft>>({});
   const [credentialDrafts,setCredentialDrafts]=useState<Record<number,CredentialDraft>>({});
   const [archivedChildren,setArchivedChildren]=useState<Child[]>([]);
@@ -68,6 +70,14 @@ export default function ParentChildrenPage(){
     setAccount(accountBody);
     setChildren(childrenBody);
     setArchivedChildren(archivedBody);
+    const programLists=await Promise.all(childrenBody.map(async(child:Child)=>{
+      try{
+        const response=await fetch('/api/v1/guardians/children/'+child.id+'/programs',{credentials:'same-origin',cache:'no-store'});
+        const body=await readJson(response);
+        return [child.id,response.ok&&Array.isArray(body)?body:[]] as const;
+      }catch{return [child.id,[]] as const;}
+    }));
+    setChildPrograms(Object.fromEntries(programLists));
     setProfileDrafts(Object.fromEntries(childrenBody.map((child:Child)=>[
       child.id,{displayName:child.display_name,classCode:String(child.class_code),language:child.language||'hi'}
     ])));
@@ -147,6 +157,21 @@ export default function ParentChildrenPage(){
       await load();
       setNotice(tx('Login details '+child.display_name+' के लिए save हो गई हैं। Username और password बच्चे के साथ safely share करें.','Login details for '+child.display_name+' have been saved. Share the username and password with your child securely.'));
     }catch(e:any){setError(e.message||'Unable to save student login details.');}
+  }
+
+  async function assignCourse(child:Child,course:any){
+    const key=child.id+':'+course.id;
+    setError('');setNotice('');setBusyCourse(key);
+    try{
+      const response=await fetch('/api/v1/guardians/children/'+child.id+'/programs/'+course.id+'/enroll',{
+        method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
+      });
+      const body=await readJson(response);
+      if(!response.ok)throw new Error(body.message||'Unable to assign this course.');
+      await load();
+      setNotice(tx(course.display_name+' बच्चे के learning track में जोड़ दिया गया है.',course.display_name+' has been added to the child’s learning tracks.'));
+    }catch(e:any){setError(e.message||'Unable to assign this course.');}
+    finally{setBusyCourse('');}
   }
 
   async function saveTracks(child:Child){
@@ -258,6 +283,20 @@ export default function ParentChildrenPage(){
               </label>)}</div>
               <button className="button button-dark button-small" disabled={busyTrack===child.id||(trackDrafts[child.id]||[]).length===0}
                 onClick={()=>saveTracks(child)}>{busyTrack===child.id?<LocaleText hinglish="Save हो रहा है…" english="Saving…" />:<LocaleText hinglish="Subjects save करें" english="Save subjects" />}</button>
+            </div>
+            <div className="parent-track-editor qe-child-course-editor">
+              <div><strong><LocaleText hinglish="Independent courses" english="Independent courses" /></strong><small><LocaleText hinglish="किसी course को इस बच्चे के account में assign करें। इससे पुराने class subjects या learning history replace नहीं होंगे।" english="Assign a course to this child’s account without replacing class subjects or existing learning history." /></small></div>
+              {(childPrograms[child.id]||[]).length===0
+                ? <p className="eyebrow"><LocaleText hinglish="अभी कोई independent course उपलब्ध नहीं है।" english="No independent courses are available yet." /></p>
+                : <div className="parent-course-options">{(childPrograms[child.id]||[]).map((course:any)=>(
+                  <div className="parent-course-option" key={course.id}>
+                    <div><strong>{course.display_name}</strong><small>{course.public_id||course.code} · {course.curriculum_version}</small>
+                      <small>{(course.subjects||[]).map((subject:any)=>subject.subject_name+' ('+Number(subject.lessons||0)+' lessons)').join(' · ')}</small></div>
+                    {course.is_enrolled||course.enrolled
+                      ? <span className="track-pill"><LocaleText hinglish="Assigned" english="Assigned" /></span>
+                      : <button type="button" className="button button-light button-small" disabled={busyCourse!==''} onClick={()=>void assignCourse(child,course)}>{busyCourse===child.id+':'+course.id?<LocaleText hinglish="Assign हो रहा है…" english="Assigning…" />:<LocaleText hinglish="Assign course" english="Assign course" />}</button>}
+                  </div>
+                ))}</div>}
             </div>
           </article>)}
         </div>}
