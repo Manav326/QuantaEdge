@@ -154,7 +154,12 @@ public class LearningMetricsService {
 
     // Activity minutes and session counts are intentionally learner-wide; individual learning,
     // mastery and assessment metrics above are scoped to the selected program.
-    result.put("sessionStats",jdbc.queryForMap("""
+    result.put("sessionStats",sessionStatsFor(studentId));
+    return result;
+  }
+
+  Map<String,Object> sessionStatsFor(long studentId) {
+    return jdbc.queryForMap("""
       select
         ((select count(*) from learning_session ls where ls.student_id=? and ls.started_at>=now()-interval '30 days')
          +(select count(*) from student_practice_session ps where ps.student_id=? and ps.status='COMPLETED' and ps.created_at>=now()-interval '30 days')
@@ -169,8 +174,7 @@ public class LearningMetricsService {
          +(select coalesce(sum(least(240,greatest(0,ceil(extract(epoch from (att.submitted_at-att.started_at))/60)::int))),0)
            from student_assessment_attempt att where att.student_id=? and att.status in ('AWAITING_REVIEW','GRADED','RELEASED')
              and att.submitted_at is not null and att.started_at>=now()-interval '30 days')) as minutes_30d
-      """,studentId,studentId,studentId,studentId,studentId,studentId,studentId,studentId));
-    return result;
+      """,studentId,studentId,studentId,studentId,studentId,studentId,studentId,studentId);
   }
 
   private Object[] scopedArgs(Long programId,Object... args) {
