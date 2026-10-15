@@ -1,9 +1,12 @@
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
-from scripts.import_ghcr_extracted_pages import multipart_body, validate_pair
+from scripts.import_ghcr_extracted_pages import (
+    multipart_body, post_approve, post_multipart, validate_pair,
+)
 
 
 class GhcrExtractedPagesImportTests(unittest.TestCase):
@@ -42,6 +45,35 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
         self.assertIn(b'name="manifest"; filename="book.manifest.json"', body)
         self.assertIn(b'name="pages"; filename="book.jsonl"', body)
         self.assertIn(boundary.encode("ascii"), body)
+
+
+    def test_api_requests_use_workspace_scoped_staff_session(self):
+        with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.read.return_value = b'{"sourceBookId": 12}'
+            post_multipart(
+                "http://localhost:8080/api/v1/admin/textbook-extraction/ghcr-books",
+                "test-staff-access-token",
+                [("manifest", "book.manifest.json", b'{"book_id":"book-a"}')],
+            )
+            request = urlopen.call_args.args[0]
+            self.assertEqual(
+                "QE_STAFF_SESSION=test-staff-access-token",
+                request.get_header("Cookie"),
+            )
+            self.assertEqual("EDUCATION_ADMIN", request.get_header("X-qe-workspace"))
+
+        with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
+            urlopen.return_value.read.return_value = b'{"approved": true}'
+            post_approve(
+                "http://localhost:8080/api/v1/admin/textbook-extraction/ghcr-books/12/approve",
+                "test-staff-access-token",
+            )
+            request = urlopen.call_args.args[0]
+            self.assertEqual(
+                "QE_STAFF_SESSION=test-staff-access-token",
+                request.get_header("Cookie"),
+            )
+            self.assertEqual("EDUCATION_ADMIN", request.get_header("X-qe-workspace"))
 
 
 if __name__ == "__main__":

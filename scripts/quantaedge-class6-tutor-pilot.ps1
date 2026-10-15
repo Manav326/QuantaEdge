@@ -163,7 +163,7 @@ Write-Host "The source PDFs remain in GHCR; this command imports only extracted 
 
 if ($Mode -ne "DryRun") {
     if (-not $env:QUANTAEDGE_ADMIN_SESSION) {
-        throw "Set QUANTAEDGE_ADMIN_SESSION to the value of your authenticated QE_SESSION cookie before importing. Do not paste it into this chat."
+        throw "Set QUANTAEDGE_ADMIN_SESSION to the value of your authenticated QE_STAFF_SESSION cookie from the Education Admin portal before importing. Do not paste it into this chat."
     }
     try {
         $health = Invoke-RestMethod -Uri ($ApiBaseUrl.TrimEnd("/") + "/actuator/health") -TimeoutSec 8

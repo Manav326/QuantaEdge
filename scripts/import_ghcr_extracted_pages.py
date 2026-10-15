@@ -65,7 +65,8 @@ def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -
     request = urllib.request.Request(
         url, data=body, method="POST",
         headers={
-            "Cookie": "QE_SESSION=" + cookie,
+            "Cookie": "QE_STAFF_SESSION=" + cookie,
+            "X-QE-Workspace": "EDUCATION_ADMIN",
             "Content-Type": "multipart/form-data; boundary=" + boundary,
             "Accept": "application/json",
         },
@@ -88,7 +89,8 @@ def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -
 def post_approve(url: str, cookie: str) -> dict[str, Any]:
     request = urllib.request.Request(
         url, data=b"", method="POST",
-        headers={"Cookie": "QE_SESSION=" + cookie, "Accept": "application/json"},
+        headers={"Cookie": "QE_STAFF_SESSION=" + cookie,
+            "X-QE-Workspace": "EDUCATION_ADMIN", "Accept": "application/json"},
     )
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
@@ -120,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Use HTTPS for non-local API URLs.")
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
     if args.apply and not cookie:
-        parser.error("Set QUANTAEDGE_ADMIN_SESSION to an authenticated QE_SESSION cookie value before --apply.")
+        parser.error("Set QUANTAEDGE_ADMIN_SESSION to the QE_STAFF_SESSION cookie value from a signed-in Education Admin session before --apply.")
     manifests = sorted(root.rglob("*.manifest.json"))
     if not manifests:
         parser.error(f"No *.manifest.json files found under {root}")
