@@ -959,7 +959,7 @@ fun QuantaEdgeApp() {
                 val older = olderPage.optJSONArray("items").objectItems()
                 tutorMessages = (older + tutorMessages).distinctBy { item ->
                     item.opt("id")?.toString()?.takeIf { it.isNotBlank() && it != "null" }
-                        ?: (item.textAny("role") + "|" + item.textAny("message") + "|" + tutorTimestampLabel(item))
+                        ?: (item.textAny("role") + "|" + item.textAny("message") + "|" + item.optString("created_at"))
                 }
                 tutorHasOlderMessages = olderPage.optBoolean("hasMore")
                 tutorOlderBeforeId = olderPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
