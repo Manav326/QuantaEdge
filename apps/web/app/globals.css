@@ -1300,3 +1300,18 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .qe-progress-subject-tag--science{background:#e7f6ee;color:#176044;border-color:#bde7d0}
 .qe-progress-subject-tag--other{background:#edf1f7;color:#48566e;border-color:#d7deea}
 .qe-progress-concept-meta small{font-size:11px;color:#748095}
+
+/* Source-aware, accessible textbook visual rendering */
+.qe-lesson-media-card{min-width:0}
+.qe-lesson-visual-kind{display:inline-flex;align-self:flex-start;border:1px solid #dbe5f4;background:#eff5ff;color:#35547f;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:750;margin:3px 0 8px}
+.qe-lesson-visual-open{display:block;border:0;padding:0;width:100%;background:#f7f9fc;border-radius:12px;cursor:zoom-in;overflow:hidden}
+.qe-lesson-visual-open:focus-visible{outline:3px solid var(--qe-brand-orange,#f97316);outline-offset:3px}
+.lesson-visual-media{display:block;width:100%;max-height:480px;object-fit:contain;background:#f7f9fc;border-radius:12px}
+.qe-lesson-source-attribution{display:grid;gap:4px;border-top:1px solid var(--line,#e6e9f0);padding-top:10px;margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted,#69738a);overflow-wrap:anywhere}
+.qe-lesson-source-attribution span:first-child{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.qe-lesson-source-attribution a{justify-self:start;color:var(--qe-brand-orange-deep,#c2410c);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.qe-visual-lightbox{position:fixed;inset:0;z-index:1000;background:rgba(10,16,29,.92);display:flex;align-items:center;justify-content:center;padding:56px 22px 28px;box-sizing:border-box}
+.qe-visual-lightbox img,.qe-visual-lightbox video{max-width:100%;max-height:100%;object-fit:contain;border-radius:10px;background:#fff}
+.qe-visual-lightbox p{position:absolute;bottom:8px;left:22px;right:22px;text-align:center;color:#fff;font-size:13px}
+.qe-visual-lightbox-close{position:absolute;top:14px;right:18px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.12);color:white;font-size:28px;width:42px;height:42px;cursor:pointer}
+@media(max-width:640px){.lesson-visual-media{max-height:360px}.qe-visual-lightbox{padding:50px 10px 24px}.qe-visual-lightbox p{left:10px;right:10px}}

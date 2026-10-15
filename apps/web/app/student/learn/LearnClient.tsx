@@ -123,7 +123,21 @@ function safeRichHtml(value:string) {
   return html;
 }
 
+const VISUAL_KIND_LABELS:Record<string,{en:string;hi:string}>={
+ PHOTO:{en:'Photo',hi:'फ़ोटो'},ILLUSTRATION:{en:'Illustration',hi:'चित्रण'},
+ DIAGRAM:{en:'Diagram',hi:'आरेख'},CHART:{en:'Chart / graph',hi:'चार्ट / ग्राफ़'},
+ TABLE:{en:'Table / comparison',hi:'तालिका / तुलना'},INFOGRAPHIC:{en:'Infographic',hi:'सूचनात्मक चित्र'},
+ SEQUENCE:{en:'Sequence / process',hi:'क्रम / प्रक्रिया'},
+ TEXTBOOK_FIGURE:{en:'Learning visual',hi:'सीखने का चित्र'},UNCLASSIFIED:{en:'Learning visual',hi:'सीखने का चित्र'}
+};
+function visualKindLabel(kind:string, locale:string){
+ const item=VISUAL_KIND_LABELS[String(kind||'TEXTBOOK_FIGURE').toUpperCase()]||VISUAL_KIND_LABELS.TEXTBOOK_FIGURE;
+ return locale==='english'?item.en:item.hi;
+}
 function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpen:()=>void}) {
+  const { locale } = useLocale();
+  const [visualZoomOpen,setVisualZoomOpen]=useState(false);
+
   const data=parse<any>(block.content);
   if (block.block_type==='EXPLANATION' || block.block_type==='PREREQUISITE') return <div className="concept-card">
     <span className="concept-kicker">{data.heading ?? data.title ?? (block.block_type==='PREREQUISITE'?<LocaleText hinglish="पहले से क्या जानते हैं?" english="What you already know" />:<LocaleText hinglish="समझें" english="Understand" />)}</span>
@@ -144,16 +158,29 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     const youtube=/youtube\.com\/watch\?/i.test(url)||/youtu\.be\//i.test(url);
     let embed=url;
     if(youtube){try{const parsedUrl=new URL(url);const id=parsedUrl.hostname.includes('youtu.be')?parsedUrl.pathname.slice(1):parsedUrl.searchParams.get('v')||'';if(id)embed='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)}catch{}}
-    return <div className="concept-card"><span className="concept-kicker">{data.title ?? (block.block_type==='AUDIO'?<LocaleText hinglish="सुनकर समझें" english="Listen and learn" />:block.block_type==='VIDEO'?<LocaleText hinglish="देखकर समझें" english="Watch and learn" />:<LocaleText hinglish="Visual" english="Visual" />)}</span>
-      {data.description && <p>{data.description}</p>}
-      {url && ['IMAGE','DIAGRAM','ANIMATION'].includes(block.block_type) && <img className="lesson-visual-media" src={url} alt={String(data.alt||data.title||'Learning visual')}/>}
-      {url && block.block_type==='VIDEO' && directVideo && <video className="lesson-visual-video" controls preload="metadata" src={url}/>}
-      {url && block.block_type==='VIDEO' && youtube && <div className="lesson-visual-embed"><iframe src={embed} title={String(data.title||'Lesson video')} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>}
+    const isVisual=['IMAGE','DIAGRAM','ANIMATION'].includes(block.block_type);
+    const languageKey=locale==='english'?'en':'hi';
+    const localized=(key:string)=>String((locale==='english'?data[key]:data[key+'_hi'])||data[key]||'');
+    const title=localized('title')||(block.block_type==='AUDIO'?(locale==='english'?'Listen and learn':'सुनकर समझें'):block.block_type==='VIDEO'?(locale==='english'?'Watch and learn':'देखकर समझें'):(locale==='english'?'Learning visual':'सीखने का चित्र'));
+    const description=localized('description');
+    const alt=String((locale==='english'?data.alt:data.alt_hi)||data.alt||title||'Learning visual');
+    const caption=localized('caption');
+    const visualKind=visualKindLabel(String(data.visual_kind|| (block.block_type==='DIAGRAM'?'DIAGRAM':'TEXTBOOK_FIGURE')),locale);
+    return <div className="concept-card qe-lesson-media-card">
+      <span className="concept-kicker">{title}</span>
+      {isVisual&&<span className="qe-lesson-visual-kind">{visualKind}</span>}
+      {description && <p>{description}</p>}
+      {url && isVisual && directVideo && <video className="lesson-visual-video" controls preload="metadata" playsInline src={url}/>}
+      {url && isVisual && !directVideo && <button type="button" className="qe-lesson-visual-open" onClick={()=>setVisualZoomOpen(true)} aria-label={locale==='english'?'Expand learning visual':'चित्र बड़ा करके देखें'}><img className="lesson-visual-media" src={url} alt={alt} loading="lazy"/></button>}
+      {url && block.block_type==='VIDEO' && directVideo && <video className="lesson-visual-video" controls preload="metadata" playsInline src={url}/>}
+      {url && block.block_type==='VIDEO' && youtube && <div className="lesson-visual-embed"><iframe src={embed} title={title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></div>}
       {url && block.block_type==='AUDIO' && <audio className="lesson-visual-audio" controls preload="metadata" src={url}/>}
       {url && block.block_type==='VIDEO' && !directVideo && !youtube && <a href={url} target="_blank" rel="noreferrer" className="button button-small"><LocaleText hinglish="Video देखें ↗" english="Watch video ↗" /></a>}
       {url && block.block_type==='AUDIO' && <a href={url} target="_blank" rel="noreferrer" className="text-link"><LocaleText hinglish="Audio खोलें ↗" english="Open audio ↗" /></a>}
-      {!url && <div className="feedback"><span>◈</span><span>{data.description ?? data.alt ?? <LocaleText hinglish="इस concept का labelled visual देखें।" english="View a labelled visual for this concept." />}</span></div>}
-      {data.caption && <p className="lesson-media-caption">{data.caption}</p>}
+      {!url && <div className="feedback"><span>◈</span><span>{description||alt||(locale==='english'?'No visual asset is available yet.':'अभी कोई चित्र उपलब्ध नहीं है।')}</span></div>}
+      {caption && <p className="lesson-media-caption">{caption}</p>}
+      {data.source_candidate_id && <div className="qe-lesson-source-attribution"><span>{locale==='english'?'Source reference':'स्रोत संदर्भ'}</span><span>{String(data.source_book_title||data.source_book_id||'Textbook')} · {locale==='english'?'PDF page':'PDF पृष्ठ'} {String(data.source_pdf_page_number||'—')}{data.source_edition?' · '+String(data.source_edition):''}</span>{data.source_page_url&&<a href={String(data.source_page_url)} target="_blank" rel="noreferrer">{locale==='english'?'View source page ↗':'स्रोत पृष्ठ देखें ↗'}</a>}</div>}
+      {visualZoomOpen&&isVisual&&<div className="qe-visual-lightbox" role="dialog" aria-modal="true" aria-label={title} onKeyDown={event=>{if(event.key==='Escape')setVisualZoomOpen(false)}}><button type="button" className="qe-visual-lightbox-close" onClick={()=>setVisualZoomOpen(false)} aria-label={locale==='english'?'Close visual':'चित्र बंद करें'}>×</button>{directVideo?<video controls autoPlay playsInline src={url}/>:<img src={url} alt={alt}/ >}{caption&&<p>{caption}</p>}</div>}
     </div>;
   }
   if (block.block_type==='AI_HELP') return <div className="ai-help"><div className="ai-icon">✦</div><div><strong><LocaleText hinglish="AI tutor" english="AI tutor" /></strong><p><LocaleText hinglish="अगर कहीं अटकें, तो इसी lesson के context में hint, explanation, example या step-by-step help लें।" english="If you get stuck, ask for a hint, explanation, example, or step-by-step help in the context of this lesson." /></p><button type="button" className="button button-dark button-small" onClick={onTutorOpen}><LocaleText hinglish="Tutor खोलें →" english="Open tutor →" /></button></div></div>;
