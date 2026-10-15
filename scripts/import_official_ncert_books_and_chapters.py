@@ -316,7 +316,12 @@ def read_chapters(
     progress: Callable[[str], None] | None = None,
     program_code: str = "",
     grades: tuple[str, ...] = CLASSES,
+    course_id: int | None = None,
 ) -> dict[tuple[str, str], list[dict[str, Any]]]:
+    if course_id is not None and course_id < 1:
+        raise ValueError("course_id must be a positive stable numeric course ID.")
+    if course_id is not None and program_code:
+        raise ValueError("Use course_id or program_code, not both.")
     result: dict[tuple[str, str], list[dict[str, Any]]] = {}
     tracks = [(grade, subject) for grade in grades for subject in SUBJECTS]
     for track_index, (grade, subject) in enumerate(tracks, 1):
@@ -326,7 +331,9 @@ def read_chapters(
                 f"{label_subject(subject)} chapters from the Admin API."
             )
         query_args = {"classCode": grade, "subjectCode": subject}
-        if program_code:
+        if course_id is not None:
+            query_args["courseId"] = str(course_id)
+        elif program_code:
             query_args["programCode"] = program_code
         query = urlencode(query_args)
         # Use the real, permission-protected Admin content route. It includes current
@@ -753,7 +760,12 @@ def query_assignments(
     tracks: set[tuple[str, str]],
     progress: Callable[[str], None] | None = None,
     program_code: str = "",
+    course_id: int | None = None,
 ) -> tuple[dict[tuple[str, str, str, str, int | None, int | None, str], set[str]], dict[str, dict[str, Any]]]:
+    if course_id is not None and course_id < 1:
+        raise ValueError("course_id must be a positive stable numeric course ID.")
+    if course_id is not None and program_code:
+        raise ValueError("Use course_id or program_code, not both.")
     hashes_by_slot: dict[tuple[str, str, str, str, int | None, int | None, str], set[str]] = {}
     assignment_by_slot_hash: dict[str, dict[str, Any]] = {}
     ordered_tracks = sorted(tracks)
@@ -764,7 +776,9 @@ def query_assignments(
                 f"{label_subject(subject)} for already-assigned PDFs."
             )
         query_args = {"classCode": grade, "subjectCode": subject, "status": "ALL"}
-        if program_code:
+        if course_id is not None:
+            query_args["courseId"] = str(course_id)
+        elif program_code:
             query_args["programCode"] = program_code
         query = urlencode(query_args)
         rows = api_call(base, cookie, "/api/v1/admin/learning-documents?" + query)
@@ -778,7 +792,7 @@ def query_assignments(
                 str(row.get("language")), str(row.get("scope")),
                 int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
                 int(row["book_part"]) if row.get("book_part") is not None else None,
-                str(row.get("program_code") or "").strip().upper(),
+                course_scope_token(row),
             )
             digest = str(row.get("sha256") or "").lower()
             if digest:
@@ -1238,13 +1252,27 @@ def create_import_plan(
     return records, warnings
 
 
+def course_scope_token(row: dict[str, Any]) -> str:
+    """Use immutable numeric course identity where available; display names and codes may change."""
+    raw_course_id = row.get("course_id", row.get("courseId"))
+    if raw_course_id is not None and str(raw_course_id).strip():
+        try:
+            numeric_id = int(raw_course_id)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Course identity must be a positive numeric course ID.") from exc
+        if numeric_id < 1:
+            raise ValueError("Course identity must be a positive numeric course ID.")
+        return "course:" + str(numeric_id)
+    return str(row.get("program_code") or "").strip().upper()
+
+
 def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None, int | None, str]:
     return (
         str(row["class_code"]), str(row["subject_code"]),
         "en" if row["language"] == "english" else "hi",
         str(row["scope"]), int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
         int(row["book_part"]) if row.get("book_part") is not None else None,
-        str(row.get("program_code") or "").strip().upper(),
+        course_scope_token(row),
     )
 
 def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
@@ -1262,7 +1290,7 @@ def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str
         str(row.get("chapter_id") if row.get("chapter_id") is not None else ""),
         str(row.get("book_part") if row.get("book_part") is not None else ""),
         str(row.get("sha256") or "").lower(),
-        str(row.get("program_code") or "").strip().upper(),
+        course_scope_token(row),
     )
 
 def sync_report_record(report: dict[str, Any], row: dict[str, Any]) -> None:
@@ -1441,6 +1469,25 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
         raise ValueError("Resume requires an --apply checkpoint; a dry-run report cannot be resumed.")
     if not isinstance(report.get("files"), list) or not report["files"]:
         raise ValueError("The checkpoint has no planned resource rows to resume.")
+    try:
+        course_id = int(report.get("course_id")) if report.get("course_id") not in (None, "", 0, "0") else None
+    except (TypeError, ValueError) as exc:
+        raise ValueError("The checkpoint has an invalid numeric course ID.") from exc
+    if course_id is not None and course_id < 1:
+        raise ValueError("The checkpoint has an invalid numeric course ID.")
+    program_code = str(report.get("program_code") or "").strip().upper()
+    if course_id is not None and program_code:
+        raise ValueError("The checkpoint mixes numeric course ID and program code; refusing resume.")
+    requested_course_id = int(getattr(args, "course_id", 0) or 0) or None
+    requested_program_code = str(getattr(args, "program_code", "") or "").strip().upper()
+    if requested_course_id != course_id or requested_program_code != program_code:
+        raise ValueError("Course scope does not match this checkpoint. Resume with its original --course-id or --program-code.")
+    checkpoint_grades = tuple(str(g) for g in (report.get("source_grades") or (("6",) if program_code == "NAVODAYA_BATCH" else CLASSES)))
+    requested_grades = tuple(str(g) for g in (getattr(args, "grades", None) or ()))
+    if requested_grades and requested_grades != checkpoint_grades:
+        raise ValueError("Source --grades selection does not match this checkpoint.")
+    if course_id is not None and not requested_grades:
+        raise ValueError("Resuming a course-scoped import requires the original explicit --grades selection.")
     if set(report.get("languages_requested") or []) != set(args.languages):
         raise ValueError(
             "The --languages selection does not match this checkpoint. "
@@ -1509,7 +1556,7 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
     assets_by_sha = query_library_assets(base, cookie)
     hashes_by_slot, assignment_by_slot_hash = query_assignments(
         base, cookie, tracks, progress=report_progress,
-        program_code=program_code,
+        program_code=program_code, course_id=course_id,
     )
 
     # Reconstruct prepared PDF paths and verify every remaining file before the first resumed write.
@@ -1631,7 +1678,8 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
             "scope": row["scope"],
             "classCode": row["class_code"],
             "subjectCode": row["subject_code"],
-            **({"programCode": row["program_code"]} if row.get("program_code") else {}),
+            **({"courseId": int(row["course_id"])} if row.get("course_id") else
+               ({"programCode": row["program_code"]} if row.get("program_code") else {})),
             "language": "en" if row["language"] == "english" else "hi",
             "chapterId": row.get("chapter_id"),
             "bookPart": row.get("book_part"),
@@ -1695,12 +1743,24 @@ def run(args: argparse.Namespace) -> int:
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
     program_code = str(getattr(args, "program_code", "") or "").strip().upper()
+    course_id_value = int(getattr(args, "course_id", 0) or 0)
+    course_id = course_id_value if course_id_value > 0 else None
+    if course_id_value < 0:
+        raise ValueError("--course-id must be positive when supplied.")
+    if course_id is not None and program_code:
+        raise ValueError("Use --course-id or --program-code, not both.")
     if program_code and program_code != "NAVODAYA_BATCH":
-        raise ValueError("--program-code currently supports NAVODAYA_BATCH only; the default class 6-8 import is unchanged.")
-    grades = ("6",) if program_code else CLASSES
+        raise ValueError("--program-code currently supports NAVODAYA_BATCH only for backwards compatibility. Use --course-id for generic course scope.")
+    explicit_grades = tuple(str(g) for g in (getattr(args, "grades", None) or ()))
+    if course_id is not None and not explicit_grades:
+        raise ValueError("A course ID is independent of source grade. Select the source textbook level explicitly with --grades (for example, --grades 6).")
+    if explicit_grades and (len(set(explicit_grades)) != len(explicit_grades) or any(g not in CLASSES for g in explicit_grades)):
+        raise ValueError("--grades must be a unique selection from 6, 7, and 8.")
+    grades = explicit_grades or (("6",) if program_code == "NAVODAYA_BATCH" else CLASSES)
     report_progress(
         f"Starting NCERT import in {'APPLY' if args.apply else 'DRY-RUN'} mode; "
-        f"course scope={program_code or 'standard curriculum'}; progress will be printed as each phase completes."
+        f"scope={('course ID '+str(course_id)) if course_id is not None else (program_code or 'standard curriculum')}; "
+        f"source curriculum grades={', '.join(grades)}; progress will be printed as each phase completes."
     )
     report_progress("Phase 1/6: checking required source filenames and selected languages.")
     validate_input_book_presence(books_dir, tuple(args.languages), grades=grades)
@@ -1717,16 +1777,19 @@ def run(args: argparse.Namespace) -> int:
     report_progress(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
     report_progress("Phase 3/6: loading the active Class 6–8 Maths/Science curriculum.")
     chapters_by_track = read_chapters(base, cookie, progress=report_progress,
-                                      program_code=program_code, grades=grades)
+                                      program_code=program_code, grades=grades, course_id=course_id)
     report_progress("Phase 4/6: inspecting PDFs, validating chapter starts, and preparing local chapter extracts.")
     records, warnings = create_import_plan(
         root, chapters_by_track, max_bytes,
         books_dir=books_dir, languages=tuple(args.languages),
         progress=report_progress, grades=grades,
     )
-    if program_code:
+    if program_code or course_id is not None:
         for row in records:
-            row["program_code"] = program_code
+            if course_id is not None:
+                row["course_id"] = course_id
+            else:
+                row["program_code"] = program_code
     source_slot_count = len({
         (row["class_code"], row["subject_code"], row["language"])
         for row in records
@@ -1742,7 +1805,7 @@ def run(args: argparse.Namespace) -> int:
     report_progress(f"PDF library read complete: {len(approved_assets)} checksum-indexed assets found.")
     hashes_by_slot, _assignment_by_slot_hash = query_assignments(
         base, cookie, tracks, progress=report_progress,
-        program_code=program_code,
+        program_code=program_code, course_id=course_id,
     )
 
     report_progress(f"Checking duplicate assignments for {len(records)} planned PDF resources.")
@@ -1771,7 +1834,9 @@ def run(args: argparse.Namespace) -> int:
         "root": str(root),
         "input_books_directory": str(books_dir),
         "api_url": base,
+        "course_id": course_id,
         "program_code": program_code or None,
+        "source_grades": list(grades),
         "authenticated_role": role,
         "permissions_required": ["CONTENT_EDIT"],
         "publish_permission_required_later": "CONTENT_PUBLISH",
@@ -1845,6 +1910,8 @@ def run(args: argparse.Namespace) -> int:
             "scope": row["scope"],
             "classCode": row["class_code"],
             "subjectCode": row["subject_code"],
+            **({"courseId": int(row["course_id"])} if row.get("course_id") else
+               ({"programCode": row["program_code"]} if row.get("program_code") else {})),
             "language": "en" if row["language"] == "english" else "hi",
             "chapterId": row.get("chapter_id"),
             "bookPart": row.get("book_part"),
@@ -1904,7 +1971,11 @@ def main() -> int:
         help="Required explicit source-language selection, e.g. --languages english or --languages english hindi.",
     )
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
-    parser.add_argument("--program-code", default="", help="Optional separate curriculum; currently NAVODAYA_BATCH (Class 6 only).")
+    parser.add_argument("--course-id", type=int, default=0,
+                        help="Stable numeric ID of an independent course; requires explicit source --grades and never restricts learner eligibility.")
+    parser.add_argument("--grades", nargs="+", choices=CLASSES, default=None,
+                        help="Source curriculum grade(s) for textbooks being split; independent of course identity.")
+    parser.add_argument("--program-code", default="", help="Backward-compatible course-code scope. Prefer --course-id for stable identity.")
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
     parser.add_argument("--resume-report", default="", help="Resume an interrupted --apply run from its main checkpoint JSON; skips source scanning and chapter extraction.")
