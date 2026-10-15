@@ -48,12 +48,20 @@ public class PracticeController {
              count(distinct q.id) as question_count,
              coalesce(jsonb_agg(distinct q.question_type order by q.question_type),'[]'::jsonb)::text as question_types
       from student st
-      join curriculum_class c on c.code=st.class_code and c.active=true
+      join curriculum_class c on c.active=true
       join curriculum_subject s on s.class_id=c.id and s.active=true
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       join question q on q.lesson_id=l.id and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
       where st.id=? and st.active=true
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
         and exists(select 1 from student_track_enrollment ste
                    where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
       group by ch.id,ch.code,ch.display_name,s.code,s.display_name,
@@ -102,10 +110,18 @@ public class PracticeController {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and s.active=true and c.active=true
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """,context.studentId(),lessonId);
     if(lessonRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Lesson not found or unavailable.");
 
@@ -276,8 +292,16 @@ public class PracticeController {
       join curriculum_chapter ch on ch.id=l.chapter_id and ch.active=true and ch.content_status='PUBLISHED'
       join curriculum_subject s on s.id=ch.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       where ch.id=? and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
         and exists(select 1 from student_track_enrollment ste
                    where ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE')
         and q.question_type in (__TYPE_PLACEHOLDERS__)

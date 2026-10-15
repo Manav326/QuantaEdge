@@ -42,6 +42,7 @@ public class RecommendationController {
       ) test_result on true
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true
+        and s.program_id is null
         and c.code=(select class_code from student where id=?)
       group by l.id,ch.id,s.id,p.status,test_result.percent
       having coalesce(p.status,'NOT_STARTED') <> 'COMPLETED'

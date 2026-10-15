@@ -21,35 +21,53 @@ public class LearningController {
   }
 
   @GetMapping("/lessons")
-  public List<Map<String,Object>> lessons(@RequestParam String classCode,@RequestParam String subjectCode,
+  public List<Map<String,Object>> lessons(@RequestParam(required=false) String classCode,
+      @RequestParam String subjectCode,
       @RequestParam(required=false,defaultValue="hi") String language,
+      @RequestParam(required=false) Long courseId,
       @RequestParam(required=false) String programCode,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     language=normalizeLanguage(language);
-    if (!"maths".equals(subjectCode) && !"science".equals(subjectCode)) throw new IllegalArgumentException("Unknown subject track");
-    String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
-    if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
+    String normalizedSubject=subjectCode==null?"":subjectCode.trim().toLowerCase(Locale.ROOT);
+    if(!normalizedSubject.matches("[a-z0-9][a-z0-9_-]{0,39}")) throw new IllegalArgumentException("Unknown subject track");
 
-    Long programId = null;
-    if (programCode != null && !programCode.isBlank()) {
-      List<Map<String,Object>> scopedProgram = jdbc.queryForList("""
-        select p.id
-        from curriculum_program p
-        join curriculum_class c on c.id=p.class_id and c.active=true
-        join student st on st.id=? and st.active=true and st.class_code=c.code
-        join student_program_enrollment spe on spe.student_id=st.id
-          and spe.program_id=p.id and spe.status='ACTIVE'
-        where upper(p.code)=upper(?) and c.code=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        """, context.studentId(), programCode.trim(), classCode);
-      if (scopedProgram.isEmpty()) throw new SecurityException("Course enrolment required.");
-      programId = ((Number)scopedProgram.getFirst().get("id")).longValue();
+    Long programId=null;
+    if(courseId!=null || (programCode!=null && !programCode.isBlank())) {
+      List<Map<String,Object>> scopedPrograms;
+      if(courseId!=null) {
+        scopedPrograms=jdbc.queryForList("""
+          select p.id from curriculum_program p
+          join student_program_enrollment spe on spe.program_id=p.id
+            and spe.student_id=? and spe.status='ACTIVE'
+          where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+          """,context.studentId(),courseId);
+      } else {
+        scopedPrograms=jdbc.queryForList("""
+          select p.id from curriculum_program p
+          join student_program_enrollment spe on spe.program_id=p.id
+            and spe.student_id=? and spe.status='ACTIVE'
+          where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
+          order by p.id
+          """,context.studentId(),programCode.trim());
+      }
+      if(scopedPrograms.size()!=1) throw new SecurityException(scopedPrograms.isEmpty()
+          ? "Active enrolment in this course is required."
+          : "This course code is ambiguous; use its numeric course ID.");
+      programId=((Number)scopedPrograms.getFirst().get("id")).longValue();
+    } else {
+      if(!"maths".equals(normalizedSubject) && !"science".equals(normalizedSubject))
+        throw new IllegalArgumentException("Unknown legacy subject track");
+      String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
+      if(classCode==null || classCode.isBlank()) classCode=enrolledClass;
+      else if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
     }
-    return lessonsForScope(classCode,subjectCode,language,programId,context);
+    return lessonsForScope(classCode,normalizedSubject,language,programId,context);
   }
 
   private List<Map<String,Object>> lessonsForScope(String classCode,String subjectCode,String language,
       Long programId,AuthContext context) {
+    String classScope = programId == null ? "c.code=?" : "true";
     String programScope = programId == null
         ? "s.program_id IS NULL"
         : "s.program_id=? AND EXISTS (SELECT 1 FROM curriculum_program_subject cps WHERE cps.program_id=? AND cps.subject_id=s.id)";
@@ -157,17 +175,17 @@ public class LearningController {
         order by ps.created_at desc,ps.id desc
         limit 1
       ) active_practice on true
-      where c.code=? and s.code=? and c.active=true and s.active=true
+      where __CLASS_SCOPE__ and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
         and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """.replace("__PROGRAM_SCOPE__",programScope);
+      """.replace("__CLASS_SCOPE__",classScope).replace("__PROGRAM_SCOPE__",programScope);
     if (programId == null) {
       // Preserve the exact legacy query call shape used by existing consumers and tests.
       return jdbc.queryForList(sql, context.studentId(), language, language, language, language, classCode, subjectCode);
     }
     return jdbc.queryForList(sql, context.studentId(), language, language, language, language,
-        classCode, subjectCode, programId, programId);
+        subjectCode, programId, programId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
@@ -240,12 +258,14 @@ public class LearningController {
       ) ot on true
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
-        and c.code=(select class_code from student where id=?)
-        and (s.program_id is null or exists(
-          select 1 from student_program_enrollment spe join curriculum_program ep on ep.id=spe.program_id
-          where spe.student_id=ste.student_id and spe.program_id=s.program_id
-            and spe.status='ACTIVE' and ep.status='ACTIVE'
-        ))
+        and (
+          (s.program_id is null and c.code=(select class_code from student where id=? and active=true))
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=ste.student_id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """,context.studentId(),context.studentId(),language,language,language,language,language,lessonId,context.studentId());
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
@@ -442,12 +462,15 @@ public class LearningController {
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
-        and c.active=true and s.active=true and c.code=st.class_code
-        and (s.program_id is null or exists(
-          select 1 from student_program_enrollment spe
-          join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-          where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
-        ))
+        and c.active=true and s.active=true
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """,Long.class,studentId,lessonId);
     if(count==null||count==0) throw new SecurityException("Lesson access denied");
   }

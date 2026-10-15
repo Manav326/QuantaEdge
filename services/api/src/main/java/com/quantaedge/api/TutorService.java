@@ -327,10 +327,17 @@ public class TutorService {
       join curriculum_subject s on s.id=ch.subject_id join curriculum_class c on c.id=s.class_id
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
-        and c.code=(select class_code from student where id=? and active=true)
         and exists(select 1 from student_track_enrollment ste
                    where ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE')
-      """,Long.class,lessonId,studentId,studentId);
+        and (
+          (s.program_id is null and c.code=(select class_code from student where id=? and active=true))
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+            where spe.student_id=? and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
+      """,Long.class,lessonId,studentId,studentId,studentId);
     if(count==null||count==0)throw new SecurityException("Tutor lesson access denied");
   }
 

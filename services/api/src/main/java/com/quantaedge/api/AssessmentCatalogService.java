@@ -114,7 +114,7 @@ public class AssessmentCatalogService {
       select l.id as lesson_id,l.title as lesson_title,l.chapter_id,ch.display_name as chapter_name,
              s.id as subject_id,s.display_name as subject_name
       from curriculum_class c
-      join curriculum_subject s on s.class_id=c.id and s.active=true
+      join curriculum_subject s on s.class_id=c.id and s.active=true and s.program_id is null
       join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       where c.code=? and c.active=true
