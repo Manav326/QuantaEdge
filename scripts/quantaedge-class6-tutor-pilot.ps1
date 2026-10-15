@@ -162,17 +162,90 @@ Write-Host "Pages flagged for low text: $(($records | Measure-Object -Property L
 Write-Host "The source PDFs remain in GHCR; this command imports only extracted page text and metadata."
 
 if ($Mode -ne "DryRun") {
-    if (-not $env:QUANTAEDGE_ADMIN_SESSION) {
-        throw "Set QUANTAEDGE_ADMIN_SESSION to the value of your authenticated QE_STAFF_SESSION cookie from the Education Admin portal before importing. Do not paste it into this chat."
+    # Prompt inside the running script so pasted command blocks cannot be consumed as cookie input.
+    # Staff access tokens are short-lived; request a fresh one for every write-mode invocation.
+    Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+    $secureSession = Read-Host "Paste current QE_STAFF_SESSION from Education Admin (input hidden)" -AsSecureString
+    $sessionPointer = [IntPtr]::Zero
+    try {
+        $sessionPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSession)
+        $sessionValue = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($sessionPointer)
+        if ($sessionValue -notmatch '^[A-Za-z0-9_-]{43}
+
+if ($Mode -eq "ImportAndApprove") {
+    Write-Host ""
+    Write-Host "Source approval is a separate, audited action. Review each URL, edition, page count, and SHA prefix above."
+    Write-Host "LOW_TEXT pages remain excluded from AI Tutor retrieval by the API quality filter."
+    $confirmation = Read-Host "Type APPROVE CLASS 6 SOURCES to import and approve these four source books"
+    if ($confirmation -cne "APPROVE CLASS 6 SOURCES") {
+        Write-Host "Cancelled. No API changes were made."
+        exit 0
     }
+}
+
+$arguments = @()
+$arguments += $PythonPrefix
+$arguments += @($Importer, "--extracted-root", $ExtractionRoot, "--api-base-url", $ApiBaseUrl)
+if ($Mode -ne "DryRun") { $arguments += "--apply" }
+if ($Mode -eq "ImportAndApprove") { $arguments += "--approve" }
+
+Write-Host ""
+Write-Host "Running existing QuantaEdge import pipeline in mode: $Mode"
+& $PythonExe @arguments
+$importExitCode = $LASTEXITCODE
+if ($Mode -ne "DryRun") {
+    Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+}
+if ($importExitCode -ne 0) {
+    throw "Textbook import pipeline failed with exit code $importExitCode. Fix the reported error before retrying."
+}
+) {
+            throw "Cookie format is invalid. Copy the complete Value for QE_STAFF_SESSION, not QE_STAFF_REFRESH, and rerun."
+        }
+        $env:QUANTAEDGE_ADMIN_SESSION = $sessionValue
+    } finally {
+        if ($sessionPointer -ne [IntPtr]::Zero) {
+            [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($sessionPointer)
+        }
+        Remove-Variable secureSession, sessionValue, sessionPointer -ErrorAction SilentlyContinue
+    }
+
     try {
         $health = Invoke-RestMethod -Uri ($ApiBaseUrl.TrimEnd("/") + "/actuator/health") -TimeoutSec 8
         if ([string]$health.status -ne "UP") {
             throw "API health is not UP."
         }
     } catch {
+        Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
         throw "QuantaEdge API is not healthy at $ApiBaseUrl. Start the local stack first, then retry. Details: $($_.Exception.Message)"
     }
+
+    $sessionHeaders = @{
+        Cookie = "QE_STAFF_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
+        "X-QE-Workspace" = "EDUCATION_ADMIN"
+        Accept = "application/json"
+    }
+    try {
+        $sessionCheck = Invoke-RestMethod -Method Get -Uri ($ApiBaseUrl.TrimEnd("/") + "/api/v1/auth/me") -Headers $sessionHeaders -TimeoutSec 10
+    } catch {
+        $statusCode = $null
+        if ($_.Exception.Response -and $_.Exception.Response.StatusCode) {
+            $statusCode = [int]$_.Exception.Response.StatusCode
+        }
+        Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+        throw "Education Admin rejected the session (HTTP $statusCode). Sign in again, copy the current QE_STAFF_SESSION Value, and rerun. No textbook import was attempted."
+    }
+
+    if ($sessionCheck.authenticated -ne $true -or $sessionCheck.workspace -ne "EDUCATION_ADMIN") {
+        Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+        throw "Session is not authenticated in EDUCATION_ADMIN workspace. No textbook import was attempted."
+    }
+    if ($sessionCheck.role -ne "ADMIN" -and @($sessionCheck.permissions) -notcontains "CONTENT_EDIT") {
+        Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+        throw "Authenticated staff account lacks CONTENT_EDIT permission. No textbook import was attempted."
+    }
+
+    Write-Host "Education Admin session verified; continuing with the selected import mode."
 }
 
 if ($Mode -eq "ImportAndApprove") {
