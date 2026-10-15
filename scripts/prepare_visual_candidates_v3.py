@@ -361,13 +361,20 @@ def prepare_candidates(
             if source_path is None:
                 missing_assets += 1
                 continue
+            declared_hash = str(asset.get("asset_sha256") or "").lower()
+            actual_hash = sha256_file(source_path)
+            if declared_hash and declared_hash != actual_hash:
+                raise ValueError(f"Page preview SHA-256 mismatch for {asset.get('asset_path')!r}.")
             # Prefer one page-preview record per page, retaining the first stable entry.
             page_assets.setdefault(page_number, asset)
         elif kind in SUPPORTED_EMBEDDED_KINDS:
             if source_path is None:
                 missing_assets += 1
                 continue
-            digest = str(asset.get("asset_sha256") or sha256_file(source_path)).lower()
+            digest = sha256_file(source_path)
+            declared_hash = str(asset.get("asset_sha256") or "").lower()
+            if declared_hash and declared_hash != digest:
+                raise ValueError(f"Embedded image SHA-256 mismatch for {asset.get('asset_path')!r}.")
             embedded_groups[digest].append(asset)
 
     pdf = fitz.open(pdf_path)
