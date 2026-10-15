@@ -623,23 +623,34 @@ public class AssessmentController {
   @GetMapping("/learning/assessments")
   public Map<String,Object> studentAssessmentCatalog(
       @RequestParam(required = false) String subjectCode,
+      @RequestParam(required = false) Long courseId,
       @RequestParam(required = false, defaultValue = "hi") String language,
       @RequestParam(defaultValue="24") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     language = normalizeLanguage(language);
-    // Generated assessments are refreshed by content-publication and question-review events;
-    // this catalogue read only lists the durable definitions and never regenerates question banks.
     String subjectFilter = safeText(subjectCode, 40);
+    if(courseId!=null) {
+      Long active=jdbc.queryForObject("""
+        select count(*) from student_program_enrollment spe
+        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+        where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
+        """,Long.class,context.studentId(),courseId);
+      if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
+    }
     int rowLimit=Math.max(1,Math.min(limit==null?24:limit,60));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-    List<Map<String,Object>> items=jdbc.queryForList("""
+    String courseScope=courseId==null
+        ? "s.program_id is null and c.code=st.class_code"
+        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String sql="""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
-             c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
+             c.code as class_code,p.id as course_id,p.code as course_code,p.display_name as course_name,
+             ch.id as chapter_id,ch.code as chapter_code,coalesce(max(ct.display_name),ch.display_name) as chapter_name,
              count(distinct aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score,
              (select count(*) from student_assessment_attempt att
               where att.assessment_id=a.id and att.student_id=st.id and att.status<>'ABANDONED') as attempts_used,
@@ -654,7 +665,8 @@ public class AssessmentController {
               order by att.started_at desc,att.id desc limit 1) as in_progress_offline_mode
       from assessment a join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      left join curriculum_program p on p.id=s.program_id
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
@@ -682,6 +694,7 @@ public class AssessmentController {
                  and resumable.status='IN_PROGRESS'
              ))
         and (?='' or s.code=?)
+        and __COURSE_SCOPE__
         and (
           exists(select 1 from student_assessment_attempt resumable
                  where resumable.assessment_id=a.id and resumable.student_id=st.id
@@ -690,14 +703,22 @@ public class AssessmentController {
             """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL + """
           )
         )
-      group by a.id,s.code,s.display_name,c.code,ch.id,ch.code,ch.display_name,st.id
+      group by a.id,s.code,s.display_name,c.code,p.id,p.code,p.display_name,ch.id,ch.code,ch.display_name,st.id
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
       limit ? offset ?
-      """, context.studentId(), language, language, language, subjectFilter, subjectFilter, rowLimit+1, rowOffset);
+      """.replace("__COURSE_SCOPE__",courseScope);
+    List<Object> args=new ArrayList<>(List.of(context.studentId(),language,language,language,subjectFilter,subjectFilter));
+    if(courseId!=null)args.add(courseId);
+    args.add(rowLimit+1);args.add(rowOffset);
+    List<Map<String,Object>> items=jdbc.queryForList(sql,args.toArray());
     boolean hasMore=items.size()>rowLimit;
     if(hasMore)items.remove(items.size()-1);
     return Map.of("items",items,"hasMore",hasMore,"limit",rowLimit,"offset",rowOffset);
+  }
+
+  public Map<String,Object> studentAssessmentCatalog(String subjectCode,String language,Integer limit,Integer offset,AuthContext context) {
+    return studentAssessmentCatalog(subjectCode,null,language,limit,offset,context);
   }
 
   @GetMapping("/learning/assessments/{assessmentId}/leaderboard")
@@ -716,11 +737,17 @@ public class AssessmentController {
       from assessment a
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id
         and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       where a.id=?
+        and ((s.program_id is null and st.class_code=c.code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          )))
         and (a.status='PUBLISHED' or exists(
           select 1 from student_assessment_attempt resumable
           where resumable.assessment_id=a.id and resumable.student_id=st.id
@@ -874,7 +901,7 @@ public class AssessmentController {
              count(aq.id) as question_count,coalesce(sum(aq.max_marks),0) as max_score
       from assessment a join curriculum_subject s on s.id=a.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
       left join assessment_question aq on aq.assessment_id=a.id
@@ -896,12 +923,19 @@ public class AssessmentController {
           and t.source_hash::text=md5(jsonb_build_object('display_name',ch.display_name,'description',ch.description)::text)
         order by t.version_no desc,t.id desc limit 1
       ) ct on true
-      where a.id=? and (
-        a.status='PUBLISHED'
-        or exists(select 1 from student_assessment_attempt resumable
-                  where resumable.assessment_id=a.id and resumable.student_id=st.id
-                    and resumable.status='IN_PROGRESS')
-      )
+      where a.id=?
+        and ((s.program_id is null and st.class_code=c.code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          )))
+        and (
+          a.status='PUBLISHED'
+          or exists(select 1 from student_assessment_attempt resumable
+                    where resumable.assessment_id=a.id and resumable.student_id=st.id
+                      and resumable.status='IN_PROGRESS')
+        )
       group by a.id,s.id,s.code,s.display_name,c.code,ch.id,ch.display_name
       """, context.studentId(), language, language, language, assessmentId);
     if (assessmentRows.isEmpty()) throw notFound("Available assessment", assessmentId);
@@ -935,10 +969,17 @@ public class AssessmentController {
       from assessment a
       join curriculum_subject s on s.id=a.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=a.chapter_id
-      where a.id=? and a.status='PUBLISHED' and
+      where a.id=?
+        and ((s.program_id is null and st.class_code=c.code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          )))
+        and a.status='PUBLISHED' and
       """ + STUDENT_ASSESSMENT_ELIGIBILITY_SQL, context.studentId(), assessmentId);
     if (eligibleForNewAttempt.isEmpty()) {
       throw conflict("Complete the required published lesson content before starting this test.");
@@ -1268,18 +1309,26 @@ public class AssessmentController {
   @GetMapping("/learning/assessment-results")
   public Map<String,Object> studentResults(
       @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestParam(required = false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context=authorization.requireStudent(context);
     language=normalizeLanguage(language);
+    if(courseId!=null) {
+      Long active=jdbc.queryForObject("""
+        select count(*) from student_program_enrollment spe
+        join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+        where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
+        """,Long.class,context.studentId(),courseId);
+      if(active==null || active==0) throw new SecurityException("Active enrolment in this course is required.");
+    }
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
-
-    // One list row represents one assessment. Include only its three most recent
-    // released attempts, ordered newest first, and calculate the best score within
-    // that same three-attempt window.
-    List<Map<String,Object>> rows=jdbc.queryForList("""
+    String resultScope=courseId==null
+        ? "s.program_id is null and c.code=st.class_code"
+        : "s.program_id=? and exists(select 1 from student_program_enrollment spe join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' where spe.student_id=att.student_id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String sql="""
       with ranked as (
         select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
                att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,a.is_generated,
@@ -1302,8 +1351,11 @@ public class AssessmentController {
         from student_assessment_attempt att
         join assessment a on a.id=att.assessment_id
         join curriculum_subject s on s.id=a.subject_id
+        join curriculum_class c on c.id=s.class_id
+        join student st on st.id=att.student_id and st.active=true
         left join curriculum_chapter ch on ch.id=a.chapter_id
         where att.student_id=? and att.status='RELEASED'
+          and __RESULT_SCOPE__
       ),
       grouped_attempts as (
         select assessment_id,
@@ -1332,8 +1384,11 @@ public class AssessmentController {
       where latest.recency_rank=1
       order by latest.released_at desc,latest.attempt_id desc
       limit ? offset ?
-      """,language,language,language,context.studentId(),rowLimit,rowOffset);
-
+      """.replace("__RESULT_SCOPE__",resultScope);
+    List<Object> args=new ArrayList<>(List.of(language,language,language,context.studentId()));
+    if(courseId!=null)args.add(courseId);
+    args.add(rowLimit);args.add(rowOffset);
+    List<Map<String,Object>> rows=jdbc.queryForList(sql,args.toArray());
     List<Map<String,Object>> items=new ArrayList<>();
     for(Map<String,Object> row:rows){
       Map<String,Object> item=new LinkedHashMap<>(row);
@@ -1341,12 +1396,24 @@ public class AssessmentController {
       item.put("attempts",attemptsJson==null?List.of():parseValue(String.valueOf(attemptsJson)));
       items.add(item);
     }
-    Long total=jdbc.queryForObject("""
-      select count(distinct assessment_id)
-      from student_assessment_attempt
-      where student_id=? and status='RELEASED'
-      """,Long.class,context.studentId());
+    String totalSql="""
+      select count(distinct att.assessment_id)
+      from student_assessment_attempt att
+      join assessment a on a.id=att.assessment_id
+      join curriculum_subject s on s.id=a.subject_id
+      join curriculum_class c on c.id=s.class_id
+      join student st on st.id=att.student_id and st.active=true
+      where att.student_id=? and att.status='RELEASED'
+        and __RESULT_SCOPE__
+      """.replace("__RESULT_SCOPE__",resultScope);
+    Object[] totalArgs=courseId==null
+        ? new Object[]{context.studentId()} : new Object[]{context.studentId(),courseId};
+    Long total=jdbc.queryForObject(totalSql,Long.class,totalArgs);
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
+  }
+
+  public Map<String,Object> studentResults(String language,Integer limit,Integer offset,AuthContext context) {
+    return studentResults(language,null,limit,offset,context);
   }
 
   // ---------- Shared private helpers ----------
