@@ -134,6 +134,7 @@ fun QuantaEdgeApp() {
     var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
     var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var accountLifecycle by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -1207,6 +1208,79 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun openAccountLifecycle() {
+        runTask {
+            ApiClient.setWorkspace("STUDENT")
+            accountLifecycle = ApiClient.getObject("/api/v1/account/me/lifecycle")
+            route = AppRoute.ACCOUNT_LIFECYCLE
+        }
+    }
+
+    fun refreshAccountLifecycle() {
+        runTask {
+            accountLifecycle = ApiClient.getObject("/api/v1/account/me/lifecycle")
+        }
+    }
+
+    fun requestAdultVerificationReview() {
+        runTask {
+            ApiClient.postObject("/api/v1/account/me/adult-verification-request",
+                JSONObject().put("consentAccepted", true))
+            accountLifecycle = ApiClient.getObject("/api/v1/account/me/lifecycle")
+            status = if (language == "hi") "सत्यापन अनुरोध भेज दिया गया।" else "Verification request sent."
+        }
+    }
+
+    fun requestLearnerConversionOtp(mobile: String, onRequested: (String?) -> Unit) {
+        runTask {
+            val response = ApiClient.postObject("/api/v1/auth/learner-transition/request-otp",
+                JSONObject().put("mobile", mobile.trim()).put("consentAccepted", true))
+            val devCode = response.optString("devCode").takeIf { it.isNotBlank() && it != "null" }
+            onRequested(devCode)
+            status = if (language == "hi") "OTP भेज दिया गया।" else "OTP requested."
+        }
+    }
+
+    fun completeLearnerConversion(mobile: String, otp: String, password: String) {
+        runTask {
+            ApiClient.postObject("/api/v1/auth/verify-otp",
+                JSONObject().put("mobile", mobile.trim()).put("otp", otp.trim())
+                    .put("purpose", "LEARNER_TRANSITION").put("password", password))
+            refreshUser()
+            status = if (language == "hi") "Independent learner account तैयार है।" else "Independent learner account is ready."
+        }
+    }
+
+    fun requestParentEligibilityReview() {
+        runTask {
+            ApiClient.postObject("/api/v1/account/me/parent-eligibility-request",
+                JSONObject().put("consentAccepted", true))
+            accountLifecycle = ApiClient.getObject("/api/v1/account/me/lifecycle")
+            status = if (language == "hi") "Parent eligibility अनुरोध भेज दिया गया।" else "Parent eligibility request sent."
+        }
+    }
+
+    fun transitionToParentAccount() {
+        runTask {
+            ApiClient.postObject("/api/v1/account/me/transition-to-parent",
+                JSONObject().put("confirmParentTransition", true))
+            ApiClient.clearSession()
+            AppRoute.values().forEach { savedRoute ->
+                saveableStateHolder.removeState(stateOwnerKey + ":" + savedRoute.name)
+                saveableStateHolder.removeState("anonymous:" + savedRoute.name)
+            }
+            auth = JSONObject()
+            studentProfile = JSONObject()
+            studentPrograms = emptyList()
+            courseProgress = emptyMap()
+            studentTextbookDocuments = emptyList()
+            accountLifecycle = JSONObject()
+            route = AppRoute.WELCOME
+            loginMode = "PARENT"
+            status = if (language == "hi") "अब अपने parent account से sign in करें।" else "Sign in to your parent account."
+        }
+    }
+
     fun saveStudentProfile(body: JSONObject) {
         runTask {
             val profile = ApiClient.putObject("/api/v1/students/me/profile", body)
@@ -1454,6 +1528,7 @@ fun QuantaEdgeApp() {
             studentPrograms = emptyList()
             courseProgress = emptyMap()
             studentTextbookDocuments = emptyList()
+            accountLifecycle = JSONObject()
             recommendation = JSONObject()
             parentAccount = JSONObject()
             parentChildren = emptyList()
@@ -1553,6 +1628,7 @@ fun QuantaEdgeApp() {
             AppRoute.LOGIN -> AppRoute.WELCOME
             AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
+            AppRoute.ACCOUNT_LIFECYCLE -> AppRoute.PROFILE
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
             AppRoute.ASSESSMENT_RESULTS -> when (resultsReturnRoute) {
@@ -2123,7 +2199,21 @@ fun QuantaEdgeApp() {
                         onSave = ::saveStudentProfile,
                         onUploadPhoto = ::saveStudentPhoto,
                         onRemovePhoto = ::removeStudentPhoto,
+                        onAccountLifecycle = ::openAccountLifecycle,
                         onLogout = ::logout
+                    )
+                    AppRoute.ACCOUNT_LIFECYCLE -> AccountLifecycleScreen(
+                        data = accountLifecycle,
+                        language = language,
+                        busy = busy,
+                        error = error,
+                        status = status,
+                        onRefresh = ::refreshAccountLifecycle,
+                        onRequestAdultReview = ::requestAdultVerificationReview,
+                        onRequestConversionOtp = ::requestLearnerConversionOtp,
+                        onCompleteConversion = ::completeLearnerConversion,
+                        onRequestParentReview = ::requestParentEligibilityReview,
+                        onTransitionToParent = ::transitionToParentAccount
                     )
                     AppRoute.PROGRESS -> StudentProgressScreen(
                         data = progressData,
