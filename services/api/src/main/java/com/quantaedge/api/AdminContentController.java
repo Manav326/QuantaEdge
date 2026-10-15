@@ -70,7 +70,7 @@ public class AdminContentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorize(token, context, "CONTENT_VIEW");
     return jdbc.queryForList("""
-      select p.id,p.id as course_id,p.code,p.display_name,p.curriculum_version,c.code as curriculum_class_code
+      select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,p.curriculum_version,c.code as curriculum_class_code
       from curriculum_program p
       left join curriculum_class c on c.id=p.class_id and c.active=true
       where p.status='ACTIVE' and p.code<>'GENERAL'
@@ -90,7 +90,7 @@ public class AdminContentController {
     authorize(token, context, "CONTENT_VIEW");
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.display_name as class_name,
-             p.id as course_id,p.code as program_code,p.display_name as program_name,
+             p.id as course_id,p.public_id as course_public_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code, s.display_name as subject_name,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
