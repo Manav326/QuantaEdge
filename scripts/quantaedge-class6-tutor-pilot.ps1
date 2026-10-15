@@ -2,11 +2,13 @@
 param(
     [ValidateSet("DryRun", "ImportDraft", "ImportAndApprove")]
     [string]$Mode = "DryRun",
-    [string]$ApiBaseUrl = "http://localhost:8080"
+    [string]$ApiBaseUrl = "http://localhost:8080",
+    [string]$AdminProxyBaseUrl = "http://localhost:3001"
 )
 
 $ErrorActionPreference = "Stop"
 if ($env:QUANTAEDGE_API_BASE_URL) { $ApiBaseUrl = $env:QUANTAEDGE_API_BASE_URL }
+if ($env:QUANTAEDGE_ADMIN_PROXY_URL) { $AdminProxyBaseUrl = $env:QUANTAEDGE_ADMIN_PROXY_URL }
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 $ExtractionRoot = Join-Path $RepoRoot "data\textbook-extractions\class-6"
@@ -150,7 +152,8 @@ if ($missingIds.Count -gt 0 -or $unexpectedIds.Count -gt 0 -or
 Write-Host ""
 Write-Host "QuantaEdge Class 6 GHCR extraction pilot"
 Write-Host "Repository artifacts: $ExtractionRoot"
-Write-Host "API: $ApiBaseUrl"
+Write-Host "API health endpoint: $ApiBaseUrl"
+Write-Host "Admin API proxy for authenticated requests: $AdminProxyBaseUrl"
 Write-Host ""
 Write-Host "Verified source manifest summary:"
 $records |
@@ -164,13 +167,13 @@ Write-Host "The source PDFs remain in GHCR; this command imports only extracted 
 if ($Mode -ne "DryRun") {
     # Prompt in the running script; do not paste a command block into the cookie prompt.
     Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-    $secureSession = Read-Host "Paste the active ACCESS cookie Value from QE_SESSION (preferred) or QE_STAFF_SESSION (input hidden)" -AsSecureString
+    $secureSession = Read-Host "Paste the current Education Admin ACCESS cookie Value (QE_SESSION or QE_STAFF_SESSION; not a refresh cookie; input hidden)" -AsSecureString
     $sessionPointer = [IntPtr]::Zero
     try {
         $sessionPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSession)
         $sessionValue = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($sessionPointer)
         if ($sessionValue.Length -ne 43) {
-            throw "Cookie length is invalid. Copy the full QE_SESSION or QE_STAFF_SESSION access-cookie Value, not a refresh cookie, and rerun."
+            throw "Cookie length is invalid. Copy the full Value of QE_SESSION or QE_STAFF_SESSION, not a refresh cookie, and rerun."
         }
         $env:QUANTAEDGE_ADMIN_SESSION = $sessionValue
     } finally {
@@ -190,25 +193,27 @@ if ($Mode -ne "DryRun") {
         throw "QuantaEdge API is not healthy at $ApiBaseUrl. Start the local stack first, then retry. Details: $($_.Exception.Message)"
     }
 
+    # Match the successful browser flow: ask the Admin reverse proxy to forward the legacy access-cookie,
+    # and do not force X-QE-Workspace. The API validates the stored identity and its actual workspace.
     $sessionHeaders = @{
-        Cookie = "QE_STAFF_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION); QE_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
-        "X-QE-Workspace" = "EDUCATION_ADMIN"
+        Cookie = "QE_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
         Accept = "application/json"
     }
     try {
-        $sessionCheck = Invoke-RestMethod -Method Get -Uri ($ApiBaseUrl.TrimEnd("/") + "/api/v1/auth/me") -Headers $sessionHeaders -TimeoutSec 10
+        $sessionCheck = Invoke-RestMethod -Method Get -Uri ($AdminProxyBaseUrl.TrimEnd("/") + "/api/v1/auth/me") -Headers $sessionHeaders -TimeoutSec 10
     } catch {
         $statusCode = $null
         if ($_.Exception.Response -and $_.Exception.Response.StatusCode) {
             $statusCode = [int]$_.Exception.Response.StatusCode
         }
         Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-        throw "Education Admin rejected this access cookie (HTTP $statusCode). Sign in again, copy the current QE_SESSION access-cookie Value first (not QE_REFRESH); if QE_SESSION is absent, use QE_STAFF_SESSION. No textbook import was attempted."
+        throw "The Education Admin proxy rejected this access cookie (HTTP $statusCode). Sign in again and copy the current access-cookie Value from the logged-in Admin portal. No textbook import was attempted."
     }
 
-    if ($sessionCheck.authenticated -ne $true -or $sessionCheck.workspace -ne "EDUCATION_ADMIN") {
+    $educationStaffWorkspace = @("STAFF", "EDUCATION_ADMIN") -contains [string]$sessionCheck.workspace
+    if ($sessionCheck.authenticated -ne $true -or [int]$sessionCheck.staffId -le 0 -or -not $educationStaffWorkspace) {
         Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-        throw "Session is not authenticated in EDUCATION_ADMIN workspace. No textbook import was attempted."
+        throw "Session is not an authenticated Education Admin staff identity. HRMS/learner sessions are not accepted. No textbook import was attempted."
     }
     if ($sessionCheck.role -ne "ADMIN" -and @($sessionCheck.permissions) -notcontains "CONTENT_EDIT") {
         Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
@@ -231,7 +236,7 @@ if ($Mode -eq "ImportAndApprove") {
 
 $arguments = @()
 $arguments += $PythonPrefix
-$arguments += @($Importer, "--extracted-root", $ExtractionRoot, "--api-base-url", $ApiBaseUrl)
+$arguments += @($Importer, "--extracted-root", $ExtractionRoot, "--api-base-url", $AdminProxyBaseUrl)
 if ($Mode -ne "DryRun") { $arguments += "--apply" }
 if ($Mode -eq "ImportAndApprove") { $arguments += "--approve" }
 
