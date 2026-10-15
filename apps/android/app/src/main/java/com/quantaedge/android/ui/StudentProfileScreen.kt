@@ -97,6 +97,8 @@ fun StudentProfileScreen(
         }
         Text(t("Class", "कक्षा") + " " + profile.textAny("class_code", "classCode") + " • " + profile.textAny("board"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+        Text(t("User ID", "यूज़र ID") + ": " + profile.textAny("public_user_id", "publicUserId"),
+            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },
             label = { Text(t("Name", "नाम")) }, singleLine = true, enabled = !busy, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = city, onValueChange = { city = it.take(100) },
