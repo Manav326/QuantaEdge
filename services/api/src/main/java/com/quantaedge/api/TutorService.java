@@ -232,12 +232,15 @@ public class TutorService {
     // Exact context questions should be answered from the lesson record, not left to
     // a small model that may ignore context and ask which lesson the learner means.
     boolean contextOnlyAnswer=isCurrentTopicNameQuestion(normalized);
+    String directMetaAnswer=currentTutorMetaAnswer(responseLanguage,normalized,currentTopic);
     TutorReply reply;
     if(contextOnlyAnswer){
       reply=new TutorReply(currentTopicAnswer(responseLanguage,currentTopic,
           String.valueOf(lesson.getOrDefault("chapter_name","")),
           String.valueOf(lesson.getOrDefault("subject_name",""))),null,0,0)
           .withModelLabel("LESSON_CONTEXT");
+    }else if(directMetaAnswer!=null){
+      reply=new TutorReply(directMetaAnswer,null,0,0).withModelLabel("LESSON_CONTEXT");
     }else{
       // Provider inference happens outside a database transaction.
       reply=provider.generate(instructions,input);
@@ -268,6 +271,26 @@ public class TutorService {
         || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम क्या है$")
         || normalized.matches("^इस (?:टॉपिक|विषय|पाठ|अध्याय) का नाम बताइए$")
         || normalized.matches("^(?:अभी )?(?:हम )?कौन सा (?:टॉपिक|विषय|पाठ|अध्याय) (?:पढ़ रहे हैं|पढ़ रहे है|सीख रहे हैं)$");
+  }
+
+  static String currentTutorMetaAnswer(String language, String message, String topic) {
+    if (message == null || message.isBlank() || message.length() > 160) return null;
+    String normalized = message.toLowerCase(Locale.ROOT)
+        .replaceAll("[^\\p{L}\\p{M}\\p{N}]+", " ").trim().replaceAll("\\s+", " ");
+    boolean asksLanguage = normalized.matches("^(are you responding in english or hindi|are you responding in hindi or english|are you answering in english or hindi|which language are you responding in|what language are you responding in)$")
+        || normalized.matches("^(क्या आप अंग्रेज़ी या हिंदी में जवाब दे रहे हैं|क्या आप हिंदी या अंग्रेज़ी में जवाब दे रहे हैं|आप किस भाषा में जवाब दे रहे हैं)$");
+    if (asksLanguage) {
+      return "en".equalsIgnoreCase(language)
+          ? "I’m responding in English right now. You can switch to Hindi using the language selector."
+          : "मैं अभी हिन्दी में उत्तर दे रहा हूँ। आप भाषा चयनक से English चुन सकते हैं।";
+    }
+    boolean identifiesTutor = normalized.matches("^(you are (the )?quantaedge (ai )?tutor|you re (the )?quantaedge (ai )?tutor|who are you)$")
+        || normalized.matches("^(आप क्वांटाएज एआई ट्यूटर हैं|तुम क्वांटाएज एआई ट्यूटर हो|आप कौन हैं)$");
+    if (!identifiesTutor) return null;
+    String safeTopic = firstNonBlank(topic, "this lesson");
+    return "en".equalsIgnoreCase(language)
+        ? "Yes, I’m QuantaEdge’s AI tutor. We’re studying “" + safeTopic + "”. Ask me a question about this lesson."
+        : "हाँ, मैं QuantaEdge AI Tutor हूँ। अभी हम “" + safeTopic + "” पढ़ रहे हैं। इस पाठ से जुड़ा प्रश्न पूछें।";
   }
 
   static String currentTopicAnswer(String language,String topic,String chapter,String subject){
