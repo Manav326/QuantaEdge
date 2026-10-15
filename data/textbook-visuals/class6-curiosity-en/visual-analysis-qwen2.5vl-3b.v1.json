@@ -10,7 +10,7 @@
   "summary": {
     "assets_selected": 83,
     "assets_processed_this_run": 10,
-    "assets_analyzed": 73,
+    "assets_analyzed": 76,
     "assets_failed": 27,
     "assets_skipped_from_checkpoint": 73,
     "publication_allowed": false
@@ -699,7 +699,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -788,9 +788,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "HTTP Error 400: Bad Request",
+      "error": "Ollama HTTP 400: {\"error\":\"request (4353 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -804,9 +804,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "HTTP Error 400: Bad Request",
+      "error": "Ollama HTTP 400: {\"error\":\"request (4294 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -820,9 +820,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "timed out",
+      "error": "visual_type is not in the supported classification set.",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -932,9 +932,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "HTTP Error 400: Bad Request",
+      "error": "Ollama HTTP 400: {\"error\":\"request (4392 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -948,9 +948,9 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
-      "error": "HTTP Error 400: Bad Request",
+      "error": "Ollama HTTP 400: {\"error\":\"request (4333 tokens) exceeds the available context size (4096 tokens), try increasing it\"}",
       "human_review_required": true,
       "publication_allowed": false
     },
@@ -964,7 +964,7 @@
       "model_provider": "ollama_local",
       "model": "qwen2.5vl:3b",
       "prompt_version": "visual-analysis-prompt-v2",
-      "run_id": "38655150087",
+      "run_id": "38672043506",
       "analysis_status": "ANALYSIS_ERROR",
       "error": "timed out",
       "human_review_required": true,
@@ -2610,6 +2610,91 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38655150087",
       "checkpointed_at": "2026-10-15T01:51:06Z"
+    },
+    {
+      "asset_id": "91da3f994f8ee4121ab428f2",
+      "asset_sha256": "7fd35ce77fb54e64bfad44dc0ef102f227771cc520c7184b9282af97c5ca3261",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/7fd35ce77fb54e64bfad44dc0ef102f227771cc520c7184b9282af97c5ca3261.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a person holding a book, with a background of a cityscape.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "book",
+          "person",
+          "cityscape"
+        ],
+        "context_relation": "The illustration likely represents the theme of education or learning, given the presence of a book.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the person holding it."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38672043506",
+      "checkpointed_at": "2026-10-15T03:10:14Z"
+    },
+    {
+      "asset_id": "71c30426d718e22aee4c300e",
+      "asset_sha256": "7fd35ce77fb54e64bfad44dc0ef102f227771cc520c7184b9282af97c5ca3261",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/7fd35ce77fb54e64bfad44dc0ef102f227771cc520c7184b9282af97c5ca3261.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A colorful illustration of a tree with leaves and branches.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The illustration is likely related to a topic in English literature or nature.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38672043506",
+      "checkpointed_at": "2026-10-15T03:10:23Z"
+    },
+    {
+      "asset_id": "916b30994018839857e86ab9",
+      "asset_sha256": "5d91919251038dccab64522db8d14b0a0669b473f751f5e194b9315179e45bcb",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/5d91919251038dccab64522db8d14b0a0669b473f751f5e194b9315179e45bcb.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light to dark shades of orange.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page from a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38672043506",
+      "checkpointed_at": "2026-10-15T03:11:29Z"
     }
   ]
 }
