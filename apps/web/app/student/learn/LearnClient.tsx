@@ -163,6 +163,7 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
 
 function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;onResult:(id:number,result:any)=>void;onTutorOpen:(id:number)=>void}) {
   const { locale, learningLanguage } = useLocale();
+  const searchParams = useSearchParams();
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const [value,setValue]=useState('');
   const [busy,setBusy]=useState(false);
