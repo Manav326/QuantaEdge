@@ -31,8 +31,7 @@ internal object StudentNavigationContract {
         // Keep them explicit so adding a new AppRoute requires an intentional ownership decision.
         AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET,
         AppRoute.PARENT_HOME, AppRoute.PARENT_REPORT, AppRoute.PARENT_PROFILE,
-        AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED,
-        AppRoute.ACCOUNT_LIFECYCLE -> "today"
+        AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED -> "today"
     }
 
     fun parentGroupForRoute(destination: AppRoute, selectedParentGroup: String): String = when (destination) {
