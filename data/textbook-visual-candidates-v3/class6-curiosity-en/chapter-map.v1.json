@@ -1,0 +1,101 @@
+{
+  "schema_version": "quantaedge.visual-chapter-map.v1",
+  "source_book_id": "ncert-c6-english-fecu1",
+  "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+  "source_title": "Curiosity",
+  "source_edition": "Reprint 2026-27",
+  "source_pdf_page_with_contents": 17,
+  "page_number_mapping": {
+    "method": "source PDF page = printed page + 18",
+    "anchor": "Chapter 1 starts at source PDF page 19 while the contents lists printed page 1"
+  },
+  "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+  "human_review_required": true,
+  "publication_allowed": false,
+  "chapters": [
+    {
+      "chapter_number": 1,
+      "chapter_title": "The Wonderful World of Science",
+      "printed_page_start": 1,
+      "source_pdf_page_start": 19,
+      "source_pdf_page_end": 26
+    },
+    {
+      "chapter_number": 2,
+      "chapter_title": "Diversity in the Living World",
+      "printed_page_start": 9,
+      "source_pdf_page_start": 27,
+      "source_pdf_page_end": 52
+    },
+    {
+      "chapter_number": 3,
+      "chapter_title": "Mindful Eating: A Path to a Healthy Body",
+      "printed_page_start": 35,
+      "source_pdf_page_start": 53,
+      "source_pdf_page_end": 78
+    },
+    {
+      "chapter_number": 4,
+      "chapter_title": "Exploring Magnets",
+      "printed_page_start": 61,
+      "source_pdf_page_start": 79,
+      "source_pdf_page_end": 96
+    },
+    {
+      "chapter_number": 5,
+      "chapter_title": "Measurement of Length and Motion",
+      "printed_page_start": 79,
+      "source_pdf_page_start": 97,
+      "source_pdf_page_end": 118
+    },
+    {
+      "chapter_number": 6,
+      "chapter_title": "Materials Around Us",
+      "printed_page_start": 101,
+      "source_pdf_page_start": 119,
+      "source_pdf_page_end": 140
+    },
+    {
+      "chapter_number": 7,
+      "chapter_title": "Temperature and its Measurement",
+      "printed_page_start": 123,
+      "source_pdf_page_start": 141,
+      "source_pdf_page_end": 160
+    },
+    {
+      "chapter_number": 8,
+      "chapter_title": "A Journey through States of Water",
+      "printed_page_start": 143,
+      "source_pdf_page_start": 161,
+      "source_pdf_page_end": 180
+    },
+    {
+      "chapter_number": 9,
+      "chapter_title": "Methods of Separation in Everyday Life",
+      "printed_page_start": 163,
+      "source_pdf_page_start": 181,
+      "source_pdf_page_end": 200
+    },
+    {
+      "chapter_number": 10,
+      "chapter_title": "Living Creatures: Exploring their Characteristics",
+      "printed_page_start": 183,
+      "source_pdf_page_start": 201,
+      "source_pdf_page_end": 224
+    },
+    {
+      "chapter_number": 11,
+      "chapter_title": "Nature’s Treasures",
+      "printed_page_start": 207,
+      "source_pdf_page_start": 225,
+      "source_pdf_page_end": 248
+    },
+    {
+      "chapter_number": 12,
+      "chapter_title": "Beyond Earth",
+      "printed_page_start": 231,
+      "source_pdf_page_start": 249,
+      "source_pdf_page_end": 272
+    }
+  ]
+}

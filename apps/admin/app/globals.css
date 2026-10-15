@@ -919,3 +919,7 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-visual-source-caption{font-size:10px;line-height:1.5;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;margin-top:8px}
 @media(max-width:1200px){.qe-visual-library-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:720px){.qe-visual-library-grid{grid-template-columns:1fr}.qe-visual-provenance{grid-template-columns:1fr}.qe-visual-thumb{height:200px}}
+
+.qe-visual-chapter-suggestion{margin:6px 0;padding:7px 8px;border-radius:8px;background:#f4f7fc;border:1px solid #e0e7f1}
+.qe-visual-chapter-suggestion b{display:block;font-size:10px;line-height:1.4;color:#435978}
+.qe-visual-chapter-suggestion small{display:block;font-size:10px;line-height:1.4;margin-top:3px;color:#69738a}

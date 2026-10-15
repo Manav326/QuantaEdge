@@ -39,7 +39,7 @@ def safe_file(root: Path, relative: Any) -> Path:
     return candidate
 
 
-def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: str) -> dict[str, Any]:
+def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: str, chapter_map_path: Path | None = None) -> dict[str, Any]:
     if not SLUG_RE.fullmatch(book_slug):
         raise ValueError("book_slug must be lowercase letters, numbers, dots or hyphens.")
     pack = json.loads(pack_path.read_text(encoding="utf-8"))
@@ -50,6 +50,19 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
     source = pack.get("source")
     if not isinstance(source, dict) or not SHA_RE.fullmatch(str(source.get("pdf_sha256", "")).lower()):
         raise ValueError("Candidate pack must contain a source PDF SHA-256.")
+    chapter_map = None
+    if chapter_map_path is not None:
+        chapter_map = json.loads(chapter_map_path.read_text(encoding="utf-8"))
+        if not isinstance(chapter_map, dict) or chapter_map.get("schema_version") != "quantaedge.visual-chapter-map.v1":
+            raise ValueError("Chapter map must use quantaedge.visual-chapter-map.v1.")
+        if (chapter_map.get("source_book_id") != source.get("book_id")
+                or str(chapter_map.get("source_pdf_sha256", "")).lower() != str(source.get("pdf_sha256", "")).lower()):
+            raise ValueError("Chapter map source book ID or whole-book PDF SHA-256 does not match the candidate pack.")
+        if chapter_map.get("publication_allowed") is not False or chapter_map.get("human_review_required") is not True:
+            raise ValueError("Chapter-map suggestions must remain review-only.")
+        if not isinstance(chapter_map.get("chapters"), list):
+            raise ValueError("Chapter map must contain a chapters array.")
+    chapter_ranges = chapter_map.get("chapters", []) if chapter_map else []
     candidates = pack.get("candidates")
     if not isinstance(candidates, list) or not candidates:
         raise ValueError("Candidate pack must contain at least one candidate.")
@@ -99,7 +112,15 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
         if bbox is not None and (not isinstance(bbox, list) or len(bbox) != 4
                                  or any(not isinstance(v, (int, float)) for v in bbox)):
             raise ValueError(f"Invalid source bounding box for {candidate_id}.")
+        suggested_chapter = next((chapter for chapter in chapter_ranges
+                                  if isinstance(chapter, dict)
+                                  and isinstance(chapter.get("source_pdf_page_start"), int)
+                                  and isinstance(chapter.get("source_pdf_page_end"), int)
+                                  and chapter["source_pdf_page_start"] <= page <= chapter["source_pdf_page_end"]), None)
         records.append({
+            "suggested_chapter_number": suggested_chapter.get("chapter_number") if suggested_chapter else None,
+            "suggested_chapter_title": suggested_chapter.get("chapter_title") if suggested_chapter else None,
+            "chapter_map_review_status": chapter_map.get("mapping_status") if chapter_map else None,
             "candidate_id": candidate_id,
             "candidate_kind": row.get("candidate_kind"),
             "source_book_id": row.get("source_book_id"),
@@ -151,9 +172,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--book-slug", required=True)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--chapter-map", type=Path, help="Optional source-hash-matched, review-only chapter-to-page map.")
     args = parser.parse_args(argv)
     try:
-        result = build_catalog(args.candidate_pack, args.candidate_root, args.repo_root, args.book_slug)
+        result = build_catalog(args.candidate_pack, args.candidate_root, args.repo_root, args.book_slug, args.chapter_map)
         if args.output.exists():
             previous = json.loads(args.output.read_text(encoding="utf-8"))
             if previous.get("source", {}).get("pdf_sha256") != result["source"]["pdf_sha256"]:

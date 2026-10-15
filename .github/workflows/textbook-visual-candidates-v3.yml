@@ -217,12 +217,16 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p apps/admin/public/content/visual-candidates
+          chapter_map_args=()
+          chapter_map_path="data/textbook-visual-candidates-v3/$BOOK_SLUG/chapter-map.v1.json"
+          if [[ -f "$chapter_map_path" ]]; then chapter_map_args=(--chapter-map "$chapter_map_path"); fi
           python scripts/build_visual_lesson_attachment_manifest.py \\
             --candidate-pack "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG/candidates.v3.json" \\
             --candidate-root "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG" \\
             --repo-root "$GITHUB_WORKSPACE" \\
             --book-slug "$BOOK_SLUG" \\
-            --output "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json"
+            --output "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" \\
+            "${chapter_map_args[@]}"
 
       - name: Install ORAS and authenticate to GHCR
         env:

@@ -58,6 +58,25 @@ class BuildVisualLessonAttachmentManifestTests(unittest.TestCase):
                          "candidates").is_dir())
         self.assertEqual(hashlib.sha256(b"figure bytes").hexdigest(), item["display_sha256"])
 
+    def test_attaches_review_only_chapter_suggestion_from_matching_page_map(self):
+        chapter_map_path = self.root / "chapter-map.v1.json"
+        chapter_map_path.write_text(json.dumps({
+            "schema_version": "quantaedge.visual-chapter-map.v1",
+            "source_book_id": "ncert-c6-english-fecu1",
+            "source_pdf_sha256": "a" * 64,
+            "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+            "human_review_required": True,
+            "publication_allowed": False,
+            "chapters": [{"chapter_number": 1, "chapter_title": "Introduction",
+                          "source_pdf_page_start": 1, "source_pdf_page_end": 3}],
+        }), encoding="utf-8")
+        result = build_catalog(self.pack_path, self.pack_root, self.repo, "class6-curiosity-en", chapter_map_path)
+        row = result["candidates"][0]
+        self.assertEqual(1, row["suggested_chapter_number"])
+        self.assertEqual("Introduction", row["suggested_chapter_title"])
+        self.assertEqual("TOC_DERIVED_NEEDS_HUMAN_REVIEW", row["chapter_map_review_status"])
+        self.assertFalse(row["publication_allowed"])
+
     def test_rejects_source_hash_mismatch(self):
         value = json.loads(self.pack_path.read_text(encoding="utf-8"))
         value["candidates"][0]["source_pdf_sha256"] = "c" * 64
