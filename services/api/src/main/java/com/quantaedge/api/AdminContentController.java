@@ -1434,8 +1434,7 @@ public class AdminContentController {
           boolean unchangedApproved=prior.stream().map(row->readBlockContent(row.get("content")))
               .anyMatch(previous->Objects.equals(previous,content)
                   &&"APPROVED".equalsIgnoreCase(String.valueOf(previous.get("visual_review_status")))
-                  &&("LICENSE_CONFIRMED".equalsIgnoreCase(String.valueOf(previous.get("rights_status")))
-                     ||"GENERATED_ORIGINAL".equalsIgnoreCase(String.valueOf(previous.get("rights_status")))));
+                  &&"LICENSE_CONFIRMED".equalsIgnoreCase(String.valueOf(previous.get("rights_status"))));
           if(!unchangedApproved) throw badRequest("Only a content reviewer can approve a textbook visual or confirm its publication rights.");
         } else if(requestsReviewSensitiveState) {
           content.put("visual_reviewed_at",java.time.Instant.now().toString());
