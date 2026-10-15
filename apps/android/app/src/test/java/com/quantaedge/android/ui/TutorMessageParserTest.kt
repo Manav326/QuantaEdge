@@ -35,28 +35,12 @@ class TutorMessageParserTest {
 
     @Test
     fun keepsAdjacentParagraphTextAndInlineMarkersReadable() {
-        val inlineMath = '
-        assertEquals(1, blocks.size)
-        assertEquals("paragraph", blocks[0].kind)
-        assertTrue(blocks[0].text.contains("**Remember:**"))
-        assertTrue(blocks[0].text.contains("`x`"))
-        assertTrue(blocks[0].text.contains(inlineMath))
-    }
-}
- + "a+b" + '
-        assertEquals(1, blocks.size)
-        assertEquals("paragraph", blocks[0].kind)
-        assertTrue(blocks[0].text.contains("**Remember:**"))
-        assertTrue(blocks[0].text.contains("`x`"))
-        assertTrue(blocks[0].text.contains("$a+b$"))
-    }
-}
-
+        val inlineMath = '$' + "a+b" + '$'
         val blocks = parseTutorMessageBlocks("**Remember:** use `x` and " + inlineMath + " carefully.\nContinue the explanation.")
         assertEquals(1, blocks.size)
         assertEquals("paragraph", blocks[0].kind)
         assertTrue(blocks[0].text.contains("**Remember:**"))
         assertTrue(blocks[0].text.contains("`x`"))
-        assertTrue(blocks[0].text.contains("$a+b$"))
+        assertTrue(blocks[0].text.contains(inlineMath))
     }
 }
