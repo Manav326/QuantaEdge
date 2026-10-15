@@ -46,7 +46,7 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
                 page.insert_image(fitz.Rect(60, 110, 390, 330), filename=str(self.image_path))
             text_rows.append({
                 "book_id": "ncert-c6-english-fecu1",
-                "source_pdf_page_number": page_number,
+                "source_book_page_number": page_number,
                 "source_pdf_sha256": "",
                 "text": page_text,
                 "review_status": "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW",
