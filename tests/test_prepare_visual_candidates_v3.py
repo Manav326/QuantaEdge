@@ -94,7 +94,7 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
             render_page_previews=False,
         )
         self.assertEqual("existing_text_jsonl", inventory["text_context_source"])
-        self.assertEqual(16, inventory["source"]["page_count"])
+        self.assertEqual(16, inventory["source"]["pdf_page_count"])
 
     def test_prepares_source_bound_candidates_across_page_strata(self):
         pack = prepare_candidates(
