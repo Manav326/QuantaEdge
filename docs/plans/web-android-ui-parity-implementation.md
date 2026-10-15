@@ -56,8 +56,8 @@
 | CERT-01 | Certificate centre and eligibility | Done — canonical issued-certificate lookup on main | CI build + real-account/browser/device E2E pending |
 | CERT-02 | Certificate preview / PDF / PNG download | Done — artifact retrieval/download path on main | CI build + real-account/browser/device E2E pending |
 | CERT-03 | QR / barcode / manual ID verification | Done — verifier + Android scanner code on main | CI build + real-account/browser/device E2E pending |
-| TEXT-01 | Book/chapter discovery | Done — catalogue hierarchy/shortcuts on main | CI build + real-account/browser/device E2E pending |
-| TEXT-02 | Secure reader controls | Done — Android reader zoom/fit controls on main | CI build + real-account/browser/device E2E pending |
+| TEXT-01 | Book/chapter discovery | Done — complete books/book parts first, expandable chapter PDFs in API order, and 10/20/30/50 pagination on main | CI build + real-account/browser/device E2E pending |
+| TEXT-02 | Secure reader controls | Done — Android page jump, previous/next, zoom, fit page/width, rendered thumbnails, fullscreen and page retry on main | CI build + real-account/browser/device E2E pending |
 | TEXT-03 | Offline textbook downloads | Done — Android protected offline add-on on main | CI build + real-account/browser/device E2E pending |
 | CLASS-01 | Live/recorded class listing | Done — API-backed class/recording catalogue on main | CI build + real-account/browser/device E2E pending |
 | CLASS-02 | Meeting join / leave and attendance | Done — server attendance join/leave on main | CI build + real-account/browser/device E2E pending |
@@ -93,6 +93,8 @@ Implementation partials still open:
 | LEARN-04 | Android uses the existing tutor APIs for new-chat creation and cursor-based older-message retrieval, preserves scroll position when older messages are prepended, and reconciles slow-model network errors against persisted history for up to the web-equivalent recovery window. UI content language remains separate from app-interface language. | `637599910ce19f9ecce86c993f437dd2738f849c`; recovery: `e3a7bb2cc07d6a1fb0762fd7c768f45b9d467d22`; scroll: `ec07c2f42efec745bedb950490234551b53433b7` |
 | LEARN-04 | Added a structured tutor response renderer and unit tests for headings, lists, tables, code fences, equations and inline markers. | `4655dee01ead32e5f3b18f62b42f902c67bf45df`; tests: `0d699b60cb95a4445292a85534f03508dcb99279` |
 | LANG-01 | Added bilingual labels for tutor controls and connected a localization coverage check to Android CI. Runtime translation and accessibility QA remain required. | `1863a403b4c9c6f45969a3d7eef9ebe39f220010`; CI check: `8a061466a85f8e2f787e8de0ba3c7252f3424ce6` |
+| TEXT-02 | Protected Android reader gains fullscreen, fit width, page thumbnails, forced page retry and safe cache eviction; source PDF export/share remains blocked. | `ff12d697b7d861c9559f5182fb820b03fd95c1d1`; build fix + nav contract: `abc6486e9e9c888387755b1eae420c20d0bf746f` |
+| TEXT-01 | Android resource library groups complete subject books/book parts before expandable chapter PDFs; preserves API curriculum order and adds 10/20/30/50 chapter pagination and retry/empty states. | Pending batch commit |
 
 These changes preserve the existing guardian restore endpoint and payload. The API still validates consent and controls account restoration; the client does not grant permissions or restore a profile locally.
 
@@ -135,7 +137,7 @@ The source matrix's 30 E2E scenarios are retained here as a durable run log. The
 
 ## CI / manual verification boundary
 
-The last confirmed main CI run before the consent/localization updates was [run 38746130991](https://github.com/Manav326/QuantaEdge/actions/runs/38746130991) on commit `213b8916bfb2e42bc2a3eeda99b23a984f15930f` (success). The three commits listed above are newer; wait for their own CI run to pass before treating the changes as CI-verified. CI cannot by itself prove logged-in account behavior, actual certificate downloads, scanner camera permissions, device rotation, accessibility, or cross-platform data parity.
+The most recent green baseline before the current library hierarchy change is [run 38753976983](https://github.com/Manav326/QuantaEdge/actions/runs/38753976983) on commit `abc6486e9e9c888387755b1eae420c20d0bf746f` (success: Android build/tests, web navigation contract, API verification and image builds). The library hierarchy change below needs its own CI pass. CI cannot by itself prove real account entitlement, actual saved files, camera permission handling, device rotation, accessibility, or cross-platform data parity.
 
 ## Core constraints
 

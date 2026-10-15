@@ -2425,8 +2425,10 @@ fun QuantaEdgeApp() {
                     AppRoute.RESOURCES -> ResourcesScreen(
                         documents = documents,
                         subject = currentSubject,
+                        language = language,
                         store = resourceStore,
                         busy = busy,
+                        error = error,
                         downloadStatus = status,
                         downloadStates = resourceDownloadStates.toMap(),
                         onSubject = ::openResources,
@@ -4135,8 +4137,10 @@ private fun ResultsScreen(
 private fun ResourcesScreen(
     documents: List<JSONObject>,
     subject: String,
+    language: String,
     store: ProtectedResourceStore,
     busy: Boolean,
+    error: String,
     downloadStatus: String,
     downloadStates: Map<Long, ResourceDownloadUiState>,
     onSubject: (String) -> Unit,
@@ -4145,84 +4149,282 @@ private fun ResourcesScreen(
     onRemoveOffline: (JSONObject) -> Unit,
     onRefresh: () -> Unit
 ) {
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pendingRemoval by remember { mutableStateOf<JSONObject?>(null) }
-    val compact = LocalConfiguration.current.screenWidthDp < 390
+    var chaptersExpanded by rememberSaveable(subject) { mutableStateOf(true) }
+    var chapterPage by rememberSaveable(subject) { mutableStateOf(1) }
+    var chapterPageSize by rememberSaveable(subject) { mutableStateOf(10) }
+
+    val subjectBooks = documents
+        .filter { it.textAny("scope").equals("SUBJECT_BOOK", true) }
+        .sortedWith(compareBy<JSONObject> { it.optInt("book_part", 0) }.thenBy { it.optLongAny("document_id", "id") })
+    // Keep the API's curriculum teaching order; do not alphabetically sort chapter codes.
+    val chapterBooks = documents.filter {
+        it.textAny("scope").equals("CHAPTER_PDF", true) ||
+            it.textAny("chapter_name", "chapterName").isNotBlank()
+    }
+    val otherResources = documents.filter { doc ->
+        !doc.textAny("scope").equals("SUBJECT_BOOK", true) &&
+            !doc.textAny("scope").equals("CHAPTER_PDF", true) &&
+            doc.textAny("chapter_name", "chapterName").isBlank()
+    }
+    val chapterPageCount = ((chapterBooks.size + chapterPageSize - 1) / chapterPageSize).coerceAtLeast(1)
+    val safeChapterPage = chapterPage.coerceIn(1, chapterPageCount)
+    val visibleChapters = chapterBooks.drop((safeChapterPage - 1) * chapterPageSize).take(chapterPageSize)
+
     if (pendingRemoval != null) {
         AlertDialog(
             onDismissRequest = { pendingRemoval = null },
-            title = { Text(localizedUiText("Offline copy हटाएँ?")) },
-            text = { Text(localizedUiText("This only removes encrypted page copies kept on this device. The published resource remains on the server and can be downloaded again later.")) },
+            title = { Text(t("Remove offline copy?", "Offline copy हटाएँ?")) },
+            text = { Text(t(
+                "This only removes encrypted page copies kept on this device. The published resource remains on the server and can be downloaded again later.",
+                "इससे केवल इस डिवाइस पर रखी encrypted page copies हटेंगी। प्रकाशित सामग्री server पर बनी रहेगी और बाद में फिर डाउनलोड की जा सकती है।"
+            )) },
             confirmButton = {
                 Button(onClick = {
                     val selected = pendingRemoval
                     pendingRemoval = null
                     if (selected != null) onRemoveOffline(selected)
-                }, enabled = !busy) { Text(localizedUiText("Offline copy हटाएँ")) }
+                }, enabled = !busy) { Text(t("Remove offline copy", "Offline copy हटाएँ")) }
             },
             dismissButton = {
-                TextButton(onClick = { pendingRemoval = null }, enabled = !busy) { Text(localizedUiText("रद्द करें")) }
+                TextButton(onClick = { pendingRemoval = null }, enabled = !busy) { Text(t("Cancel", "रद्द करें")) }
             }
         )
     }
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(localizedUiText("Textbook Library"), style = MaterialTheme.typography.headlineSmall)
-        Text(localizedUiText("सामग्री ऐप के अंदर पढ़ें। ऑफ़लाइन डाउनलोड पब्लिक Downloads या दूसरी ऐप में उपलब्ध नहीं होगा।"),
-            style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-        if (compact) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
-                else TextButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("गणित")) }
-                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
-                else TextButton(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("विज्ञान")) }
+
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 14.dp, vertical = 10.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(t("Textbook library", "पाठ्यपुस्तक लाइब्रेरी"), style = MaterialTheme.typography.headlineSmall)
+                Text(t("Subject → complete book/parts → chapter PDFs", "विषय → पूरी पुस्तक/भाग → अध्याय PDF"),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
-            TextButton(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("रिफ्रेश")) }
-        } else {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-                else TextButton(onClick = { onSubject("maths") }, enabled = !busy) { Text(localizedUiText("गणित")) }
-                if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-                else TextButton(onClick = { onSubject("science") }, enabled = !busy) { Text(localizedUiText("विज्ञान")) }
-                TextButton(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("रिफ्रेश")) }
+            TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Refresh", "रिफ्रेश")) }
+        }
+        Text(
+            t("Read protected learning content inside QuantaEdge. Offline copies are encrypted and remain private to this account on this device.",
+                "संरक्षित सामग्री QuantaEdge ऐप में पढ़ें। Offline copies encrypted रहती हैं और इस डिवाइस पर इसी खाते के लिए निजी रहती हैं।"),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(6.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            if (subject == "maths") Button(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                Text(t("Mathematics", "गणित"))
+            } else OutlinedButton(onClick = { onSubject("maths") }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                Text(t("Mathematics", "गणित"))
+            }
+            if (subject == "science") Button(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                Text(t("Science", "विज्ञान"))
+            } else OutlinedButton(onClick = { onSubject("science") }, enabled = !busy, modifier = Modifier.weight(1f)) {
+                Text(t("Science", "विज्ञान"))
             }
         }
-        if (documents.isEmpty() && !busy) EmptyState("संसाधन उपलब्ध नहीं", "इस भाषा और विषय के लिए डाउनलोड की अनुमति वाले प्रकाशित संसाधन दिखाई देंगे।")
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 8.dp)) {
-            items(documents) { doc ->
-                val id = doc.optLongAny("document_id", "id")
-                val count = doc.optInt("page_count",
-                    (doc.optInt("page_end", 1) - doc.optInt("page_start", 1) + 1).coerceAtLeast(1))
-                val cached = store.cachedPageCount(id, count)
-                val downloadState = downloadStates[id]
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(doc.textAny("title").ifBlank { "पुस्तक संसाधन" }, style = MaterialTheme.typography.titleMedium)
-                        Text(doc.textAny("chapter_name", "book_part", "scope"), style = MaterialTheme.typography.bodySmall)
-                        Text(count.toString() + " पृष्ठ • ऑफ़लाइन: " + cached + " / " + count, style = MaterialTheme.typography.bodySmall)
-                        if (downloadState != null) {
-                            Text(localizedUiText(downloadState.label), style = MaterialTheme.typography.bodySmall,
-                                color = if (downloadState.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
-                            if (downloadState.progress != null && downloadState.active) {
-                                LinearProgressIndicator(progress = { downloadState.progress }, modifier = Modifier.fillMaxWidth())
+
+        if (busy && documents.isEmpty()) {
+            Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    CircularProgressIndicator()
+                    Text(t("Loading your textbook library…", "आपकी पाठ्यपुस्तक लाइब्रेरी लोड हो रही है…"))
+                }
+            }
+        } else if (documents.isEmpty() && error.isNotBlank()) {
+            Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+                    Button(onClick = onRefresh, enabled = !busy) { Text(t("Retry", "फिर प्रयास करें")) }
+                }
+            }
+        } else if (documents.isEmpty()) {
+            Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                EmptyState(
+                    t("No published textbooks yet", "अभी कोई प्रकाशित पाठ्यपुस्तक नहीं"),
+                    t("Published books and chapter PDFs for this subject and learning language will appear here.",
+                        "इस विषय और चुनी गई पढ़ाई की भाषा के लिए प्रकाशित पुस्तकें और अध्याय PDF यहाँ दिखेंगे।")
+                )
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(9.dp),
+                modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 7.dp)
+            ) {
+                if (subjectBooks.isNotEmpty()) {
+                    item(key = "subject-book-heading") {
+                        Text(t("Complete book and book parts", "पूरी पुस्तक और पुस्तक के भाग"),
+                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    }
+                    items(subjectBooks, key = { "book-" + it.optLongAny("document_id", "id") }) { doc ->
+                        ResourceDocumentCard(
+                            doc = doc, store = store, busy = busy, language = language,
+                            downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                            onOpen = onOpen, onDownload = onDownload,
+                            onRemoveOffline = { pendingRemoval = it }
+                        )
+                    }
+                }
+
+                if (chapterBooks.isNotEmpty()) {
+                    item(key = "chapter-pdf-heading") {
+                        Card(modifier = Modifier.fillMaxWidth(), onClick = { chaptersExpanded = !chaptersExpanded }) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 13.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                    Text(t("Chapter PDFs", "अध्याय PDF"), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                                    Text(
+                                        chapterBooks.size.toString() + " " + t("published chapter resources", "प्रकाशित अध्याय संसाधन"),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Text(if (chaptersExpanded) "−" else "+", style = MaterialTheme.typography.titleLarge)
                             }
                         }
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("पढ़ें")) }
-                            TextButton(onClick = { onDownload(doc) }, enabled = !busy && downloadState?.active != true,
-                                modifier = Modifier.weight(1f)) {
-                                Text(localizedUiText(if (cached == count) "फिर डाउनलोड" else "ऑफ़लाइन डाउनलोड"))
+                    }
+                    if (chaptersExpanded) {
+                        item(key = "chapter-pagination-top") {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(t("Rows", "पंक्तियाँ"), style = MaterialTheme.typography.labelMedium)
+                                listOf(10, 20, 30, 50).forEach { size ->
+                                    if (chapterPageSize == size) Button(
+                                        onClick = { chapterPageSize = size; chapterPage = 1 },
+                                        enabled = !busy,
+                                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                                    ) { Text(size.toString()) }
+                                    else TextButton(
+                                        onClick = { chapterPageSize = size; chapterPage = 1 },
+                                        enabled = !busy,
+                                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+                                    ) { Text(size.toString()) }
+                                }
                             }
                         }
-                        if (cached > 0) {
-                            TextButton(onClick = { pendingRemoval = doc }, enabled = !busy,
-                                modifier = Modifier.fillMaxWidth()) {
-                                Text(localizedUiText("Downloaded copy हटाएँ"), color = MaterialTheme.colorScheme.error)
+                        items(visibleChapters, key = { "chapter-" + it.optLongAny("document_id", "id") }) { doc ->
+                            val index = chapterBooks.indexOfFirst { it.optLongAny("document_id", "id") == doc.optLongAny("document_id", "id") } + 1
+                            ResourceDocumentCard(
+                                doc = doc, store = store, busy = busy, language = language,
+                                downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                                onOpen = onOpen, onDownload = onDownload,
+                                onRemoveOffline = { pendingRemoval = it }, chapterIndex = index
+                            )
+                        }
+                        item(key = "chapter-pagination-bottom") {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(t("Page $safeChapterPage of $chapterPageCount", "पृष्ठ $safeChapterPage / $chapterPageCount"),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Spacer(Modifier.weight(1f))
+                                TextButton(onClick = { chapterPage = (safeChapterPage - 1).coerceAtLeast(1) }, enabled = !busy && safeChapterPage > 1) {
+                                    Text(t("Previous", "पिछला"))
+                                }
+                                TextButton(onClick = { chapterPage = (safeChapterPage + 1).coerceAtMost(chapterPageCount) }, enabled = !busy && safeChapterPage < chapterPageCount) {
+                                    Text(t("Next", "अगला"))
+                                }
                             }
                         }
                     }
                 }
+
+                if (otherResources.isNotEmpty()) {
+                    item(key = "other-resource-heading") {
+                        Text(t("Other learning resources", "अन्य पढ़ाई के संसाधन"),
+                            style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                    }
+                    items(otherResources, key = { "other-" + it.optLongAny("document_id", "id") }) { doc ->
+                        ResourceDocumentCard(
+                            doc = doc, store = store, busy = busy, language = language,
+                            downloadState = downloadStates[doc.optLongAny("document_id", "id")],
+                            onOpen = onOpen, onDownload = onDownload,
+                            onRemoveOffline = { pendingRemoval = it }
+                        )
+                    }
+                }
             }
         }
-        if (downloadStatus.isNotBlank()) Text(localizedUiText(downloadStatus), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 8.dp))
+
+        if (error.isNotBlank() && documents.isNotEmpty()) {
+            Text(error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(top = 4.dp))
+        }
+        if (downloadStatus.isNotBlank()) {
+            Text(downloadStatus, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp),
+                color = MaterialTheme.colorScheme.secondary, maxLines = 3)
+        }
+    }
+}
+
+@Composable
+private fun ResourceDocumentCard(
+    doc: JSONObject,
+    store: ProtectedResourceStore,
+    busy: Boolean,
+    language: String,
+    downloadState: ResourceDownloadUiState?,
+    onOpen: (JSONObject) -> Unit,
+    onDownload: (JSONObject) -> Unit,
+    onRemoveOffline: (JSONObject) -> Unit,
+    chapterIndex: Int? = null
+) {
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
+    val id = doc.optLongAny("document_id", "id")
+    val count = doc.optInt("page_count",
+        (doc.optInt("page_end", 1) - doc.optInt("page_start", 1) + 1).coerceAtLeast(1))
+    val cached = store.cachedPageCount(id, count)
+    val scope = doc.textAny("scope").uppercase()
+    val part = doc.optInt("book_part", 0)
+    val title = when {
+        scope == "SUBJECT_BOOK" && part > 0 -> t("Part $part", "भाग $part") + " · " + doc.textAny("title")
+        scope == "SUBJECT_BOOK" -> doc.textAny("title").ifBlank { t("Complete subject book", "पूरी विषय-पुस्तक") }
+        else -> doc.textAny("chapter_name", "chapterName").ifBlank { doc.textAny("title").ifBlank { t("Learning resource", "पढ़ाई का संसाधन") } }
+    }
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(13.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text((chapterIndex?.let { "$it. " } ?: "") + title,
+                        style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    val meta = listOfNotNull(
+                        doc.textAny("edition").takeIf { it.isNotBlank() },
+                        doc.textAny("class_code", "classCode").takeIf { it.isNotBlank() }?.let { t("Class $it", "कक्षा $it") },
+                        doc.textAny("language").takeIf { it.isNotBlank() }?.let {
+                            if (it.equals("en", true)) t("English", "अंग्रेज़ी") else t("Hindi", "हिन्दी")
+                        }
+                    ).joinToString(" · ")
+                    if (meta.isNotBlank()) Text(meta, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(t("$count pages", "$count पृष्ठ") + " · " + t("Offline", "Offline") + ": $cached / $count",
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                if (downloadState?.active == true) CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+            }
+            if (downloadState != null) {
+                Text(downloadState.label, style = MaterialTheme.typography.bodySmall,
+                    color = if (downloadState.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)
+                if (downloadState.progress != null && downloadState.active) {
+                    LinearProgressIndicator(progress = { downloadState.progress }, modifier = Modifier.fillMaxWidth())
+                }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = { onOpen(doc) }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(t("Read", "पढ़ें")) }
+                TextButton(onClick = { onDownload(doc) }, enabled = !busy && downloadState?.active != true,
+                    modifier = Modifier.weight(1f)) {
+                    Text(t(if (cached == count) "Download again" else "Download offline",
+                        if (cached == count) "फिर डाउनलोड करें" else "Offline डाउनलोड"))
+                }
+            }
+            if (cached > 0) TextButton(onClick = { onRemoveOffline(doc) }, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                Text(t("Remove offline copy", "Offline copy हटाएँ"), color = MaterialTheme.colorScheme.error)
+            }
+        }
     }
 }
 
