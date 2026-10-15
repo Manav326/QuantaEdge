@@ -9,6 +9,7 @@ CATALOG_PATH = ROOT / "apps/admin/public/content/visual-candidates" / f"{BOOK_SL
 PACK_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "candidates.v3.json"
 CHAPTER_MAP_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "chapter-map.v1.json"
 INDEX_PATH = ROOT / "apps/admin/public/content/visual-candidates/index.v1.json"
+CONTRACT_PATH = ROOT / "docs/ai/visual-render-contract.v1.json"
 RAW_PREFIX = "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"
 
 
@@ -19,6 +20,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         cls.pack = json.loads(PACK_PATH.read_text(encoding="utf-8"))
         cls.chapter_map = json.loads(CHAPTER_MAP_PATH.read_text(encoding="utf-8"))
         cls.index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
+        cls.contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
 
     def test_committed_catalog_tracks_its_exact_candidate_pack_and_tracked_assets(self):
         self.assertEqual("quantaedge.visual-attachment-catalog.v3", self.catalog["schema_version"])
@@ -82,6 +84,31 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn("visualCatalogMatchesLesson(targetRow,visualCatalog)", source)
         self.assertIn("!visualCatalogMatchesTarget", source)
         self.assertIn("Choose a lesson in the matching class and subject.", source)
+
+    def test_renderers_follow_the_shared_visual_contract(self):
+        expected_kinds = {item["id"] for item in self.contract["visual_kinds"]}
+        web = (ROOT / "apps/web/app/student/learn/LearnClient.tsx").read_text(encoding="utf-8")
+        android = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt").read_text(encoding="utf-8")
+        admin = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+
+        for kind in expected_kinds - {"UNCLASSIFIED"}:
+            with self.subTest(kind=kind):
+                self.assertIn(kind, web)
+                self.assertIn(kind, android)
+        for required in ("alt_hi", "caption_hi", "source_book_title", "source_pdf_page_number",
+                         "source_page_url", "qe-visual-lightbox", "qe-lesson-source-attribution"):
+            with self.subTest(web_field=required):
+                self.assertIn(required, web)
+        for required in ('data.textAny("alt_hi")', 'data.textAny("caption_hi")',
+                         'sourcePageUrl', 'LessonPlayableMedia', 'LessonAnimatedImage',
+                         'AnimatedImageDrawable', 'Dialog'):
+            with self.subTest(android_feature=required):
+                self.assertIn(required, android)
+        for required in ("LEARNER VISUAL PREVIEW", "caption_hi", "alt_hi", "Source provenance"):
+            with self.subTest(admin_feature=required):
+                self.assertIn(required, admin)
+        self.assertIn("Android 9", self.contract["visual_kinds"][-1]["presentation"] if self.contract["visual_kinds"][-1]["id"] == "SEQUENCE" else
+                      next(item["presentation"] for item in self.contract["visual_kinds"] if item["id"] == "SEQUENCE"))
 
     def test_api_requires_bilingual_accessibility_and_paired_translations(self):
         source = (ROOT / "services/api/src/main/java/com/quantaedge/api/AdminContentController.java").read_text(encoding="utf-8")
