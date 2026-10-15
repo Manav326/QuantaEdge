@@ -1315,3 +1315,12 @@ a.subject-pdf-status{color:#a64117;font-weight:750}
 .qe-visual-lightbox p{position:absolute;bottom:8px;left:22px;right:22px;text-align:center;color:#fff;font-size:13px}
 .qe-visual-lightbox-close{position:absolute;top:14px;right:18px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(255,255,255,.12);color:white;font-size:28px;width:42px;height:42px;cursor:pointer}
 @media(max-width:640px){.lesson-visual-media{max-height:360px}.qe-visual-lightbox{padding:50px 10px 24px}.qe-visual-lightbox p{left:10px;right:10px}}
+
+
+
+/* AI tutor: make the fixed learning language and WhatsApp-style timestamps explicit. */
+.tutor-language-indicator{display:inline-flex;align-items:center;flex:0 0 auto;max-width:135px;padding:4px 7px;border:1px solid #46536a;border-radius:999px;background:#222d40;color:#e7edf7;font-size:9px;font-weight:750;line-height:1.2;white-space:nowrap}
+.tutor-head-main{flex-wrap:wrap}
+.tutor-message-time{align-self:flex-end;margin-top:1px;color:#8a93a2;font-size:9px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.tutor-message.user .tutor-message-time{color:#9b735d}
+@media(max-width:390px){.tutor-language-indicator{max-width:110px;padding:3px 5px;font-size:8px}.tutor-head-main{column-gap:6px;row-gap:4px}}
