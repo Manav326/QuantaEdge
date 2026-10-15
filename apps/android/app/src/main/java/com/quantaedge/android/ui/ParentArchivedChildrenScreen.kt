@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -30,13 +32,36 @@ fun ParentArchivedChildrenScreen(
     onRestore: (JSONObject) -> Unit
 ) {
     var selected by remember { mutableStateOf<JSONObject?>(null) }
+    var consentAccepted by remember(selected?.optLong("id") ?: 0L) { mutableStateOf(false) }
     selected?.let { child ->
         AlertDialog(
             onDismissRequest = { if (!busy) selected = null },
             title = { Text(localizedUiText("Restore profile?")) },
-            text = { Text(localizedUiText("Fresh consent is required. Old login credentials will be disabled; learning history stays intact.")) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(localizedUiText("Fresh consent is required. Old login credentials will be disabled; learning history stays intact."))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = consentAccepted,
+                            onCheckedChange = { consentAccepted = it },
+                            enabled = !busy
+                        )
+                        Text(
+                            localizedUiText("I confirm fresh guardian consent to restore this profile."),
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
+            },
             confirmButton = {
-                Button(onClick = { selected = null; onRestore(child) }, enabled = !busy) {
+                Button(
+                    onClick = { selected = null; onRestore(child) },
+                    enabled = !busy && consentAccepted
+                ) {
                     Text(localizedUiText("Confirm restore"))
                 }
             },
