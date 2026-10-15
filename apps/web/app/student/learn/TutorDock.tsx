@@ -580,7 +580,11 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       const body = await readBody(response);
       const current = languageRef.current;
       if (!response.ok) {
-        if (response.status >= 500 || typeof body.rawText === 'string') {
+        // Explicit API errors mean inference has already failed; only wait for history
+        // when a gateway/network failure may have hidden a still-running request.
+        const definitiveTutorFailure = body.error === 'TUTOR_PROVIDER_ERROR'
+          || body.error === 'TUTOR_UNAVAILABLE';
+        if (!definitiveTutorFailure && (response.status >= 500 || typeof body.rawText === 'string')) {
           const recovered = await recoverPersistedTutorTurn(sessionId, message);
           if (recovered) {
             setMessages(recovered);
