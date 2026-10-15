@@ -89,7 +89,7 @@ public class AdminContentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorize(token, context, "CONTENT_VIEW");
     StringBuilder sql = new StringBuilder("""
-      select c.code as class_code, c.display_name as class_name,
+      select c.code as class_code, c.public_id as class_public_id, c.display_name as class_name,
              p.id as course_id,p.public_id as course_public_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code, s.display_name as subject_name,
              ch.id as chapter_id, ch.code as chapter_code,
