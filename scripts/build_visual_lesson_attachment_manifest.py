@@ -141,10 +141,13 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
             "human_review_required": True,
         })
 
+    catalog_source = dict(source)
+    catalog_source["title"] = str(source.get("title") or pack.get("source_title") or (chapter_map.get("source_title") if chapter_map else None) or book_slug)
+
     return {
         "schema_version": "quantaedge.visual-attachment-catalog.v3",
         "book_slug": book_slug,
-        "source": source,
+        "source": catalog_source,
         "summary": {
             "candidate_count": len(records),
             "copied_static_assets": len(copied),
