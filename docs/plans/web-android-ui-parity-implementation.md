@@ -152,3 +152,12 @@ The latest complete green workflow is [run 38765080366](https://github.com/Manav
 - Student and Parent sessions stay separate. No impersonation or client-only authorization.
 - App UI language, learning-content language and certificate language stay independent.
 - Retain encrypted account-scoped offline storage and server-side grading; never expose protected textbook PDF export/print merely for parity.
+
+
+## Durable Excel tracker
+
+The canonical planning workbook is [QuantaEdge_UI_Parity_Progress_2026-10-15.xlsx](QuantaEdge_UI_Parity_Progress_2026-10-15.xlsx), stored beside this plan. It exists to preserve page-by-page web ↔ Android behaviour decisions, record which implementation changes are on `main`, and provide a resumable QA log across work sessions.
+
+**Status meaning:** green in the workbook's Decision Matrix means implementation is recorded on `main`; it is not proof that the corresponding end-to-end journey passed. Use the separate QA Checklist to record real-account, browser and device evidence. Do not mark an E2E case passed from source inspection or CI alone.
+
+**Resume rule:** read the workbook and this plan first, continue from the next incomplete QA Checklist case, update the appropriate row only after the relevant implementation or test evidence exists, and record commit/CI references. Preserve backend-authoritative behaviour and prefer additive changes unless explicitly approved.
