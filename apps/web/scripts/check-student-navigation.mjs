@@ -75,6 +75,7 @@ assert.ok(androidNavigationContract.includes('listOf("today", "learn", "practice
 assert.ok(androidNavigationContract.includes('listOf("family", "children", "profile")'), 'Android contract must own the three parent group IDs.');
 
 const androidCertificates = read('../../android/app/src/main/java/com/quantaedge/android/ui/StudentCertificatesScreen.kt');
+const androidScanner = read('../../android/app/src/main/java/com/quantaedge/android/ui/PremiumCodeScannerScreen.kt');
 
 const arrayStart = layout.indexOf('const studentNavGroups: StudentNavGroup[] = [');
 const arrayEnd = layout.indexOf('\nconst parentItems: Item[] = [', arrayStart);
@@ -192,6 +193,8 @@ for (const protectedCapability of [
   'ProtectedResourceStore(context, resourceOwner)',
   'ProtectedResourceDownloadWorker.enqueue(context, resourceOwner, id)'
 ]) assert.ok(androidApp.includes(protectedCapability), `Android-only capability must remain: ${protectedCapability}`);
-assert.ok(androidCertificates.includes('GmsBarcodeScanning.getClient(activity).startScan()'), 'Native certificate QR/barcode scanning must remain available.');
+assert.ok(androidCertificates.includes('PremiumCodeScannerScreen(') && androidCertificates.includes('parseQuantaEdgeCertificateQr(rawValue, BuildConfig.DEBUG)'), 'The certificate centre must route scans through the branded scanner and validate scanned payloads.');
+assert.ok(androidScanner.includes('BarcodeScanning.getClient(scannerOptions(mode))') && androidScanner.includes('CameraSelector.DEFAULT_BACK_CAMERA'), 'The native scanner must analyse live camera frames with ML Kit.');
+assert.ok(androidScanner.includes('ScannerMode.QR_ONLY') && androidScanner.includes('ScannerMode.BARCODE_ONLY'), 'The scanner must retain explicit QR-only and linear-barcode modes.');
 
 console.log('Navigation/language contract passed: five student groups, three parent destinations, orientation, independent language preferences, and Android-only offline/security features.');
