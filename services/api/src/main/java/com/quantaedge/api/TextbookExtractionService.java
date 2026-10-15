@@ -341,7 +341,7 @@ public class TextbookExtractionService {
 
   @Transactional
   public Map<String, Object> importGhcrBook(MultipartFile manifestFile, MultipartFile pagesFile,
-      long staffId) throws IOException {
+      Long staffId) throws IOException {
     if (manifestFile == null || pagesFile == null || manifestFile.isEmpty() || pagesFile.isEmpty()) {
       throw new IllegalArgumentException("Both the extraction manifest and page-text JSONL are required.");
     }
