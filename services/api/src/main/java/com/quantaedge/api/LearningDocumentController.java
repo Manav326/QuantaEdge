@@ -190,6 +190,7 @@ public class LearningDocumentController {
       @RequestParam(required=false) String status,@RequestParam(required=false) String classCodes,
       @RequestParam(required=false) String subjectCodes,@RequestParam(required=false) String statuses,
       @RequestParam(required=false) String languages,@RequestParam(required=false) String scopes,
+      @RequestParam(required=false) String programCode,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireContentView(context);
@@ -209,8 +210,13 @@ public class LearningDocumentController {
       join curriculum_subject s on s.id=d.subject_id
       join curriculum_class c on c.id=s.class_id
       left join curriculum_chapter ch on ch.id=d.chapter_id
+      left join curriculum_program p on p.id=s.program_id
       """;
     StringBuilder where=new StringBuilder(" where 1=1");List<Object> filterArgs=new ArrayList<>();
+    if (programCode != null && !programCode.isBlank()) {
+      where.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
+      filterArgs.add(programCode.trim());
+    }
     appendDocumentFilter(where,filterArgs,"c.code",classFilter);
     appendDocumentFilter(where,filterArgs,"s.code",subjectFilter);
     appendDocumentFilter(where,filterArgs,"d.status",statusFilter);
@@ -221,7 +227,8 @@ public class LearningDocumentController {
       select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
              d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
-             c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
+             c.code as class_code,c.display_name as class_name,p.code as program_code,p.display_name as program_name,
+             s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              ch.active as chapter_active,ch.content_status as chapter_content_status,a.review_status as asset_review_status
       """;

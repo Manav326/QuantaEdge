@@ -314,16 +314,21 @@ def read_chapters(
     base: str,
     cookie: str,
     progress: Callable[[str], None] | None = None,
+    program_code: str = "",
+    grades: tuple[str, ...] = CLASSES,
 ) -> dict[tuple[str, str], list[dict[str, Any]]]:
     result: dict[tuple[str, str], list[dict[str, Any]]] = {}
-    tracks = [(grade, subject) for grade in CLASSES for subject in SUBJECTS]
+    tracks = [(grade, subject) for grade in grades for subject in SUBJECTS]
     for track_index, (grade, subject) in enumerate(tracks, 1):
         if progress:
             progress(
                 f"[Curriculum {track_index}/{len(tracks)}] Fetching active Class {grade} "
                 f"{label_subject(subject)} chapters from the Admin API."
             )
-        query = urlencode({"classCode": grade, "subjectCode": subject})
+        query_args = {"classCode": grade, "subjectCode": subject}
+        if program_code:
+            query_args["programCode"] = program_code
+        query = urlencode(query_args)
         # Use the real, permission-protected Admin content route. It includes current
         # canonical chapter IDs/codes and may repeat chapters once for each lesson.
         rows = api_call(base, cookie, "/api/v1/admin/content?" + query)
@@ -747,8 +752,9 @@ def query_assignments(
     cookie: str,
     tracks: set[tuple[str, str]],
     progress: Callable[[str], None] | None = None,
-) -> tuple[dict[tuple[str, str, str, str, int | None, int | None], set[str]], dict[str, dict[str, Any]]]:
-    hashes_by_slot: dict[tuple[str, str, str, str, int | None, int | None], set[str]] = {}
+    program_code: str = "",
+) -> tuple[dict[tuple[str, str, str, str, int | None, int | None, str], set[str]], dict[str, dict[str, Any]]]:
+    hashes_by_slot: dict[tuple[str, str, str, str, int | None, int | None, str], set[str]] = {}
     assignment_by_slot_hash: dict[str, dict[str, Any]] = {}
     ordered_tracks = sorted(tracks)
     for track_index, (grade, subject) in enumerate(ordered_tracks, 1):
@@ -757,7 +763,10 @@ def query_assignments(
                 f"[Existing assignments {track_index}/{len(ordered_tracks)}] Checking Class {grade} "
                 f"{label_subject(subject)} for already-assigned PDFs."
             )
-        query = urlencode({"classCode": grade, "subjectCode": subject, "status": "ALL"})
+        query_args = {"classCode": grade, "subjectCode": subject, "status": "ALL"}
+        if program_code:
+            query_args["programCode"] = program_code
+        query = urlencode(query_args)
         rows = api_call(base, cookie, "/api/v1/admin/learning-documents?" + query)
         if not isinstance(rows, list):
             raise RuntimeError(f"Assignment list response is invalid for Class {grade}/{subject}.")
@@ -769,6 +778,7 @@ def query_assignments(
                 str(row.get("language")), str(row.get("scope")),
                 int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
                 int(row["book_part"]) if row.get("book_part") is not None else None,
+                str(row.get("program_code") or "").strip().upper(),
             )
             digest = str(row.get("sha256") or "").lower()
             if digest:
@@ -784,7 +794,9 @@ def part_book_filename(grade: str, subject: str, language: str, part: int) -> st
     )
 
 
-def validate_input_book_presence(books_dir: Path, languages: tuple[str, ...]) -> None:
+def validate_input_book_presence(
+    books_dir: Path, languages: tuple[str, ...], grades: tuple[str, ...] = CLASSES
+) -> None:
     """Fail early unless every selected class/subject/language slot has complete source input."""
     if not books_dir.is_dir():
         raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
@@ -793,8 +805,10 @@ def validate_input_book_presence(books_dir: Path, languages: tuple[str, ...]) ->
     if len(set(languages)) != len(languages):
         raise ValueError(f"Duplicate language selection: {languages!r}.")
 
+    if not grades or any(grade not in CLASSES for grade in grades) or len(set(grades)) != len(grades):
+        raise ValueError(f"Unsupported or duplicate class selection: {grades!r}.")
     missing: list[str] = []
-    for grade in CLASSES:
+    for grade in grades:
         for subject in SUBJECTS:
             for language in languages:
                 canonical = books_dir / book_filename(grade, subject, language)
@@ -955,6 +969,7 @@ def create_import_plan(
     books_dir: Path | None = None,
     languages: tuple[str, ...] = LANGUAGES,
     progress: Callable[[str], None] | None = None,
+    grades: tuple[str, ...] = CLASSES,
 ) -> tuple[list[dict[str, Any]], list[str]]:
     """Validate requested source-book languages and prepare splits under the work root."""
     if not languages or any(language not in LANGUAGES for language in languages):
@@ -969,10 +984,10 @@ def create_import_plan(
     chapter_source_records: list[dict[str, Any]] = []
     warnings: list[str] = []
     missing: list[str] = []
-    total_input_slots = len(CLASSES) * len(SUBJECTS) * len(languages)
+    total_input_slots = len(grades) * len(SUBJECTS) * len(languages)
     slot_index = 0
 
-    for grade in CLASSES:
+    for grade in grades:
         for subject in SUBJECTS:
             for language in languages:
                 slot_index += 1
@@ -1223,12 +1238,13 @@ def create_import_plan(
     return records, warnings
 
 
-def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None, int | None]:
+def slot_key(row: dict[str, Any]) -> tuple[str, str, str, str, int | None, int | None, str]:
     return (
         str(row["class_code"]), str(row["subject_code"]),
         "en" if row["language"] == "english" else "hi",
         str(row["scope"]), int(row["chapter_id"]) if row.get("chapter_id") is not None else None,
         int(row["book_part"]) if row.get("book_part") is not None else None,
+        str(row.get("program_code") or "").strip().upper(),
     )
 
 def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
@@ -1236,7 +1252,7 @@ def make_report_record(row: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in row.items() if key not in hidden}
 
 
-def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str, str]:
+def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str, str, str, str, str]:
     return (
         str(row.get("class_code") or ""),
         str(row.get("subject_code") or ""),
@@ -1246,6 +1262,7 @@ def report_record_identity(row: dict[str, Any]) -> tuple[str, str, str, str, str
         str(row.get("chapter_id") if row.get("chapter_id") is not None else ""),
         str(row.get("book_part") if row.get("book_part") is not None else ""),
         str(row.get("sha256") or "").lower(),
+        str(row.get("program_code") or "").strip().upper(),
     )
 
 def sync_report_record(report: dict[str, Any], row: dict[str, Any]) -> None:
@@ -1491,7 +1508,8 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
     report_progress("Checking the existing asset library and assignment slots; no PDF text scanning is performed.")
     assets_by_sha = query_library_assets(base, cookie)
     hashes_by_slot, assignment_by_slot_hash = query_assignments(
-        base, cookie, tracks, progress=report_progress
+        base, cookie, tracks, progress=report_progress,
+        program_code=program_code,
     )
 
     # Reconstruct prepared PDF paths and verify every remaining file before the first resumed write.
@@ -1613,6 +1631,7 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
             "scope": row["scope"],
             "classCode": row["class_code"],
             "subjectCode": row["subject_code"],
+            **({"programCode": row["program_code"]} if row.get("program_code") else {}),
             "language": "en" if row["language"] == "english" else "hi",
             "chapterId": row.get("chapter_id"),
             "bookPart": row.get("book_part"),
@@ -1675,12 +1694,16 @@ def run(args: argparse.Namespace) -> int:
         raise FileNotFoundError(
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
+    program_code = str(getattr(args, "program_code", "") or "").strip().upper()
+    if program_code and program_code != "NAVODAYA_BATCH":
+        raise ValueError("--program-code currently supports NAVODAYA_BATCH only; the default class 6-8 import is unchanged.")
+    grades = ("6",) if program_code else CLASSES
     report_progress(
         f"Starting NCERT import in {'APPLY' if args.apply else 'DRY-RUN'} mode; "
-        "progress will be printed as each phase completes."
+        f"course scope={program_code or 'standard curriculum'}; progress will be printed as each phase completes."
     )
     report_progress("Phase 1/6: checking required source filenames and selected languages.")
-    validate_input_book_presence(books_dir, tuple(args.languages))
+    validate_input_book_presence(books_dir, tuple(args.languages), grades=grades)
     report_progress(f"Source folder verified: {books_dir}")
     report_progress(f"Languages selected: {', '.join(args.languages)}")
     base = args.api_url.rstrip("/")
@@ -1693,13 +1716,17 @@ def run(args: argparse.Namespace) -> int:
     report_progress(f"Staff session verified: role={role or 'unknown'}; CONTENT_EDIT confirmed.")
     report_progress(f"Maximum size per uploaded PDF: {max_bytes // (1024 * 1024)} MiB.")
     report_progress("Phase 3/6: loading the active Class 6–8 Maths/Science curriculum.")
-    chapters_by_track = read_chapters(base, cookie, progress=report_progress)
+    chapters_by_track = read_chapters(base, cookie, progress=report_progress,
+                                      program_code=program_code, grades=grades)
     report_progress("Phase 4/6: inspecting PDFs, validating chapter starts, and preparing local chapter extracts.")
     records, warnings = create_import_plan(
         root, chapters_by_track, max_bytes,
         books_dir=books_dir, languages=tuple(args.languages),
-        progress=report_progress,
+        progress=report_progress, grades=grades,
     )
+    if program_code:
+        for row in records:
+            row["program_code"] = program_code
     source_slot_count = len({
         (row["class_code"], row["subject_code"], row["language"])
         for row in records
@@ -1714,7 +1741,8 @@ def run(args: argparse.Namespace) -> int:
     approved_assets = query_library_assets(base, cookie)
     report_progress(f"PDF library read complete: {len(approved_assets)} checksum-indexed assets found.")
     hashes_by_slot, _assignment_by_slot_hash = query_assignments(
-        base, cookie, tracks, progress=report_progress
+        base, cookie, tracks, progress=report_progress,
+        program_code=program_code,
     )
 
     report_progress(f"Checking duplicate assignments for {len(records)} planned PDF resources.")
@@ -1743,10 +1771,11 @@ def run(args: argparse.Namespace) -> int:
         "root": str(root),
         "input_books_directory": str(books_dir),
         "api_url": base,
+        "program_code": program_code or None,
         "authenticated_role": role,
         "permissions_required": ["CONTENT_EDIT"],
         "publish_permission_required_later": "CONTENT_PUBLISH",
-        "input_books_expected": len(CLASSES) * len(SUBJECTS) * len(args.languages),
+        "input_books_expected": len(grades) * len(SUBJECTS) * len(args.languages),
         "languages_requested": list(args.languages),
         "input_books_validated": source_slot_count,
         "chapter_splits_created_locally": sum(1 for row in records if row["scope"] == "CHAPTER_PDF"),
@@ -1875,6 +1904,7 @@ def main() -> int:
         help="Required explicit source-language selection, e.g. --languages english or --languages english hindi.",
     )
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
+    parser.add_argument("--program-code", default="", help="Optional separate curriculum; currently NAVODAYA_BATCH (Class 6 only).")
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
     parser.add_argument("--resume-report", default="", help="Resume an interrupted --apply run from its main checkpoint JSON; skips source scanning and chapter extraction.")
