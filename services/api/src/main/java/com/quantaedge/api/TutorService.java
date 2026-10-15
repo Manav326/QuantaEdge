@@ -403,7 +403,7 @@ public class TutorService {
     if (node.isObject()) {
       var object = (tools.jackson.databind.node.ObjectNode) node;
       List<String> names = new ArrayList<>();
-      node.fieldNames().forEachRemaining(names::add);
+      node.properties().forEach(entry -> names.add(entry.getKey()));
       for (String name : names) {
         tools.jackson.databind.JsonNode child = object.get(name);
         if (child == null) continue;
