@@ -31,6 +31,7 @@ export default function StudentAccountLifecyclePage(){
   const [otp,setOtp]=useState('');
   const [password,setPassword]=useState('');
   const [devCode,setDevCode]=useState('');
+  const [otpRequested,setOtpRequested]=useState(false);
   const [busy,setBusy]=useState(false);
   const [error,setError]=useState('');
   const [notice,setNotice]=useState('');
@@ -69,6 +70,7 @@ export default function StudentAccountLifecyclePage(){
         body:JSON.stringify({mobile,consentAccepted:true})
       }));
       setDevCode(String(body.devCode||''));
+      setOtpRequested(true);
       setNotice(en?'Verification code requested. It expires in five minutes.':'सत्यापन कोड माँगा गया है। यह पाँच मिनट में expire होगा।');
     });
   }
@@ -135,7 +137,7 @@ export default function StudentAccountLifecyclePage(){
             <label><LocaleText hinglish="आपका mobile number" english="Your mobile number" /><input inputMode="tel" autoComplete="tel" value={mobile} onChange={e=>setMobile(e.target.value)} placeholder="10-digit Indian mobile" /></label>
             {adultCurrent&&<button type="button" className="button button-light button-small" disabled={busy||mobile.replace(/\D/g,'').length<10} onClick={requestConversionOtp}><LocaleText hinglish="OTP भेजें" english="Send OTP" /></button>}
             {devCode&&<p className="feedback" role="status">{en?'Development OTP: ':'Development OTP: '}{devCode}</p>}
-            {devCode!==''||notice.toLowerCase().includes('verification code')||notice.includes('सत्यापन कोड')?<><label><LocaleText hinglish="OTP" english="OTP" /><input inputMode="numeric" autoComplete="one-time-code" value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} /></label><label><LocaleText hinglish="नया password (कम से कम 8 characters)" english="New password (at least 8 characters)" /><input type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} /></label><button type="button" className="button button-dark" disabled={busy||otp.trim().length<6||password.length<8} onClick={completeConversion}><LocaleText hinglish="Independent account बनाएँ" english="Create independent account" /></button></>:null}
+            {otpRequested?<><label><LocaleText hinglish="OTP" english="OTP" /><input inputMode="numeric" autoComplete="one-time-code" value={otp} onChange={e=>setOtp(e.target.value)} maxLength={6} /></label><label><LocaleText hinglish="नया password (कम से कम 8 characters)" english="New password (at least 8 characters)" /><input type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} /></label><button type="button" className="button button-dark" disabled={busy||otp.trim().length<6||password.length<8} onClick={completeConversion}><LocaleText hinglish="Independent account बनाएँ" english="Create independent account" /></button></>:null}
           </div>
         </article>}
         {linked&&role==='LEARNER'&&<article className="app-task">
