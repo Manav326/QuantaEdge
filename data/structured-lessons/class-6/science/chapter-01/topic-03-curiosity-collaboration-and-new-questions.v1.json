@@ -1,0 +1,1185 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch01-topic03-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive draft content artifact; does not alter existing lesson data or application code."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Only a distinguishing label for ordinary Class 6 curriculum content, not Navodaya entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 1,
+    "title_by_locale": {
+      "en": "The Wonderful World of Science",
+      "hi": "विज्ञान का अनूठा संसार"
+    },
+    "chapter_scope_status": "CHAPTER_BOUNDARIES_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 3,
+    "topic_id": "c6-sci-ch01-t03",
+    "title_by_locale": {
+      "en": "Curiosity, Collaboration and New Questions",
+      "hi": "जिज्ञासा, सहयोग और नए प्रश्न"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          25,
+          26
+        ],
+        "printed_pages": [
+          7,
+          8
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Continue asking why and wondering about the world",
+      "Questions can remain unanswered for now and learning continues over time",
+      "People can discuss questions and work together to explore them",
+      "Learners may record a question and describe how they would begin exploring it",
+      "Curiosity, listening, observation and willingness to keep learning"
+    ],
+    "excluded_scope": [
+      "Detailed scientific-method sequence already covered in Topic 2",
+      "Subject-specific explanations belonging to other Class 6 chapters",
+      "Claims that every question has an immediate or certain answer",
+      "Navodaya entrance-exam preparation"
+    ],
+    "source_text_rule": "Explanations and practice are newly authored, chapter-specific learning aids, not verbatim NCERT text or NCERT's assessment questions.",
+    "bilingual_parity_rule": "Every student-visible string has English and Hindi values; stable content IDs, answer keys, scoring and learning demand remain the same across locales.",
+    "language_runtime_rule": "One global app language selection governs the full experience. Switching language preserves question and response state; this contract is specified but app runtime is not implemented.",
+    "visual_rule": "The question-sharing map is an original structured visual, not an existing textbook image. It remains a draft until visual and accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch01-t03-lo1",
+      "statement_by_locale": {
+        "en": "Explain why it is normal for some questions to remain unanswered while learning continues.",
+        "hi": "समझाएँ कि सीखते रहने के दौरान कुछ प्रश्नों का अनुत्तरित रहना सामान्य है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t03-lo2",
+      "statement_by_locale": {
+        "en": "Describe how discussing a question with others can support exploration and learning.",
+        "hi": "बताएँ कि दूसरों के साथ प्रश्न पर चर्चा करने से खोज और सीखने में कैसे मदद मिल सकती है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch01-t03-lo3",
+      "statement_by_locale": {
+        "en": "Turn curiosity into a clear question and a reasonable next step for exploring it.",
+        "hi": "जिज्ञासा को एक स्पष्ट प्रश्न और उसकी खोज के लिए उचित अगले कदम में बदलें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c1-en-p25-26",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        25,
+        26
+      ],
+      "printed_pages": [
+        7,
+        8
+      ],
+      "source_context": [
+        "PDF p.25 / printed p.7: Activity 1.3 invites learners to ask why about something and write how they might attempt to find an answer; the chapter says scientists often work in teams and friends can help with questions; not every answer will be found in Grade 6.",
+        "PDF p.26 / printed p.8: encouragement to continue exploring, asking questions and staying curious."
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "extraction_quality_note": "The raw extracted text in this section has interleaved page furniture and text order; visually reconcile before source-completeness approval."
+    },
+    {
+      "source_ref_id": "src-c1-hi-jigyasa-chapter1",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "note": "Hindi source book is identified; exact Chapter 1 source page alignment remains to be verified."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch01-t03",
+    "title_by_locale": {
+      "en": "Keep Asking and Learn Together",
+      "hi": "प्रश्न पूछते रहें और साथ सीखें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch01-t03-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "source_refs": [
+          "src-c1-en-p25-26",
+          "src-c1-hi-jigyasa-chapter1"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "It is okay not to know yet",
+            "paragraphs": [
+              "The world is full of questions. You may think of something you want to understand but not know the answer immediately. That does not mean you have failed; it means there is something more to explore.",
+              "Write the question clearly so you can return to it. You might learn something from an observation, a discussion, a book or another suitable source later. New information can also lead to a better question."
+            ],
+            "callout": "You do not have to know everything today. Keep your question, stay curious and keep learning."
+          },
+          "hi": {
+            "heading": "अभी उत्तर न जानना भी ठीक है",
+            "paragraphs": [
+              "दुनिया में बहुत-से प्रश्न हैं। आपके मन में किसी बात को समझने की इच्छा हो सकती है, लेकिन उसका उत्तर तुरंत न मिले। इसका अर्थ यह नहीं कि आप असफल हुए; इसका अर्थ है कि अभी और खोज की जा सकती है।",
+              "प्रश्न को स्पष्ट रूप से लिख लें ताकि आप बाद में उस पर लौट सकें। आगे चलकर अवलोकन, चर्चा, पुस्तक या किसी उपयुक्त स्रोत से कुछ सीख सकते हैं। नई जानकारी से बेहतर प्रश्न भी बन सकता है।"
+            ],
+            "callout": "आज ही सब कुछ जानना ज़रूरी नहीं है। अपने प्रश्न को सँभालकर रखें, जिज्ञासु बने रहें और सीखते रहें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2"
+        ],
+        "source_refs": [
+          "src-c1-en-p25-26",
+          "src-c1-hi-jigyasa-chapter1"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Learning with others",
+            "paragraphs": [
+              "People do not have to explore every question alone. Sharing a question with a classmate, listening to another person's idea and discussing what each person noticed can help everyone think more clearly.",
+              "Working together does not mean accepting the first idea automatically. Ask each other what was observed, what is still unknown and what reasonable next step could help. Different people may suggest different questions, and a respectful discussion helps the group decide what to explore."
+            ],
+            "key_point": "Teamwork helps us share observations and ideas; evidence and careful thinking still matter."
+          },
+          "hi": {
+            "heading": "दूसरों के साथ सीखना",
+            "paragraphs": [
+              "हर प्रश्न की खोज अकेले करना ज़रूरी नहीं है। किसी सहपाठी के साथ अपना प्रश्न साझा करना, दूसरे के विचार को सुनना और यह चर्चा करना कि किसने क्या देखा—सभी को अधिक स्पष्ट ढंग से सोचने में मदद कर सकता है।",
+              "मिलकर काम करने का अर्थ यह नहीं है कि पहले विचार को बिना जाँच के स्वीकार कर लिया जाए। एक-दूसरे से पूछें कि क्या देखा गया, अभी क्या अज्ञात है और आगे कौन-सा उचित कदम मदद कर सकता है। अलग-अलग लोग अलग प्रश्न सुझा सकते हैं; सम्मानपूर्वक चर्चा से समूह तय कर सकता है कि आगे क्या खोजें।"
+            ],
+            "key_point": "सहयोग से अवलोकन और विचार साझा होते हैं; प्रमाण और सावधानीपूर्वक सोच फिर भी महत्त्वपूर्ण हैं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1",
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch01-t03-curiosity-collaboration-map",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original, language-switchable diagram showing how an unanswered question can be written down, shared, discussed and explored, leading to learning and possibly a new question. This should not imply that all questions are answered immediately or that discussion alone proves a claim.",
+        "diagram_data": {
+          "layout": "circular_map",
+          "nodes": [
+            {
+              "id": "wonder",
+              "label_by_locale": {
+                "en": "Wonder",
+                "hi": "जिज्ञासा"
+              }
+            },
+            {
+              "id": "write",
+              "label_by_locale": {
+                "en": "Write the question",
+                "hi": "प्रश्न लिखें"
+              }
+            },
+            {
+              "id": "share",
+              "label_by_locale": {
+                "en": "Share it",
+                "hi": "प्रश्न साझा करें"
+              }
+            },
+            {
+              "id": "discuss",
+              "label_by_locale": {
+                "en": "Listen and discuss",
+                "hi": "सुनें और चर्चा करें"
+              }
+            },
+            {
+              "id": "explore",
+              "label_by_locale": {
+                "en": "Choose a next step",
+                "hi": "अगला कदम चुनें"
+              }
+            },
+            {
+              "id": "learn",
+              "label_by_locale": {
+                "en": "Learn or form a new question",
+                "hi": "सीखें या नया प्रश्न बनाएँ"
+              }
+            }
+          ],
+          "edges": [
+            {
+              "from": "wonder",
+              "to": "write"
+            },
+            {
+              "from": "write",
+              "to": "share"
+            },
+            {
+              "from": "share",
+              "to": "discuss"
+            },
+            {
+              "from": "discuss",
+              "to": "explore"
+            },
+            {
+              "from": "explore",
+              "to": "learn"
+            },
+            {
+              "from": "learn",
+              "to": "wonder",
+              "edge_label_by_locale": {
+                "en": "Curiosity continues",
+                "hi": "जिज्ञासा जारी रहती है"
+              }
+            }
+          ]
+        },
+        "alt_by_locale": {
+          "en": "A cycle connecting curiosity, writing a question, sharing it, listening and discussing, choosing a next step, and learning or forming another question.",
+          "hi": "एक चक्र जिसमें जिज्ञासा, प्रश्न लिखना, साझा करना, सुनना और चर्चा करना, अगला कदम चुनना तथा सीखना या नया प्रश्न बनाना शामिल हैं।"
+        },
+        "caption_by_locale": {
+          "en": "An original concept diagram for collaborative learning. It shows a possible path, not a guarantee that every question will receive an immediate answer.",
+          "hi": "सहयोग से सीखने का एक मौलिक विचार-चित्र। यह एक संभावित मार्ग दिखाता है, यह गारंटी नहीं कि हर प्रश्न का उत्तर तुरंत मिल जाएगा।"
+        },
+        "provenance": {
+          "kind": "GENERATED_ORIGINAL",
+          "source_refs": [
+            "src-c1-en-p25-26",
+            "src-c1-hi-jigyasa-chapter1"
+          ],
+          "source_text_quoted": false
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-b04",
+        "type": "activity",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "activity_kind": "question_circle",
+        "review_status": "NEEDS_REVIEW",
+        "instructions_by_locale": {
+          "en": [
+            "Each learner writes one question about something noticed in their surroundings.",
+            "Share the question with a partner. The partner listens and says what they understood before giving an idea.",
+            "Together, name what is known, what is still unknown and one safe next step for exploring it.",
+            "Keep questions that cannot be answered now in a question notebook for later."
+          ],
+          "hi": [
+            "हर विद्यार्थी अपने आसपास देखी गई किसी बात के बारे में एक प्रश्न लिखे।",
+            "प्रश्न साथी के साथ साझा करें। कोई विचार देने से पहले साथी ध्यान से सुने और बताए कि उसने क्या समझा।",
+            "मिलकर तय करें कि क्या ज्ञात है, क्या अभी अज्ञात है और उसकी खोज के लिए एक सुरक्षित अगला कदम क्या हो सकता है।",
+            "जिन प्रश्नों का उत्तर अभी नहीं मिल सकता, उन्हें बाद के लिए प्रश्न-पुस्तिका में लिखकर रखें।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "my_question",
+            "label_by_locale": {
+              "en": "My question",
+              "hi": "मेरा प्रश्न"
+            }
+          },
+          {
+            "id": "partner_idea",
+            "label_by_locale": {
+              "en": "An idea from my partner",
+              "hi": "मेरे साथी का विचार"
+            }
+          },
+          {
+            "id": "known",
+            "label_by_locale": {
+              "en": "What we know",
+              "hi": "हम क्या जानते हैं"
+            }
+          },
+          {
+            "id": "unknown",
+            "label_by_locale": {
+              "en": "What we still do not know",
+              "hi": "हम अभी क्या नहीं जानते"
+            }
+          },
+          {
+            "id": "next_step",
+            "label_by_locale": {
+              "en": "One safe next step",
+              "hi": "एक सुरक्षित अगला कदम"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "A good discussion makes space for listening. It separates what is already observed from what is still a question and suggests a reasonable next step.",
+          "hi": "अच्छी चर्चा में ध्यान से सुनने की जगह होती है। यह पहले से देखी गई बातों और अभी प्रश्न के रूप में मौजूद बातों को अलग करती है तथा अगला उचित कदम सुझाती है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1",
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Some questions take time; not knowing the answer immediately is part of learning.",
+              "Writing a question helps you remember it and return to it.",
+              "Listening and discussing with others can help generate ideas and useful next steps.",
+              "Keep observations, questions and ideas distinct; an idea is not automatically a proven fact.",
+              "Curiosity continues as we learn more."
+            ],
+            "vocabulary": [
+              {
+                "term": "Curiosity",
+                "meaning": "A wish to know or understand more."
+              },
+              {
+                "term": "Discussion",
+                "meaning": "Sharing and considering ideas by listening to one another."
+              },
+              {
+                "term": "Question notebook",
+                "meaning": "A place to record questions for later exploration."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "कुछ प्रश्नों के उत्तर मिलने में समय लगता है; तुरंत उत्तर न जानना भी सीखने का हिस्सा है।",
+              "प्रश्न लिखने से उसे याद रखना और बाद में उस पर लौटना आसान होता है।",
+              "दूसरों को सुनने और चर्चा करने से नए विचार तथा उपयोगी अगले कदम मिल सकते हैं।",
+              "अवलोकन, प्रश्न और विचार को अलग-अलग रखें; कोई विचार अपने आप प्रमाणित तथ्य नहीं बन जाता।",
+              "सीखते रहने पर जिज्ञासा आगे बढ़ती रहती है।"
+            ],
+            "vocabulary": [
+              {
+                "term": "जिज्ञासा",
+                "meaning": "और जानने या समझने की इच्छा।"
+              },
+              {
+                "term": "चर्चा",
+                "meaning": "एक-दूसरे को सुनकर विचार साझा करना और उन पर विचार करना।"
+              },
+              {
+                "term": "प्रश्न-पुस्तिका",
+                "meaning": "प्रश्नों को लिखकर बाद में खोजने के लिए रखने की जगह।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch01-t03",
+    "title_by_locale": {
+      "en": "Practise Curiosity and Collaboration",
+      "hi": "जिज्ञासा और सहयोग का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice grounded in the specific scope of Chapter 1 Topic 3, not verbatim NCERT assessment content.",
+      "hi": "अध्याय 1 के विषय 3 की निर्धारित सीमा पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; यह NCERT के मूल मूल्यांकन प्रश्नों का शब्दशः रूप नहीं है।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch01-t03-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What is a sensible response when you have a question but do not know its answer yet?",
+          "hi": "जब आपके मन में कोई प्रश्न हो लेकिन उसका उत्तर अभी न पता हो, तो कौन-सा कदम उचित है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Stop being curious",
+              "hi": "जिज्ञासा करना बंद कर दें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Write it down and look for a reasonable way to explore it later",
+              "hi": "प्रश्न लिख लें और बाद में उसकी खोज का उचित तरीका सोचें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Pretend to know the answer",
+              "hi": "ऐसा दिखाएँ कि उत्तर पता है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Accept the first idea without thinking",
+              "hi": "बिना सोचे पहला विचार स्वीकार कर लें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Keeping the question lets you return to it as you learn more.",
+          "hi": "सही। प्रश्न लिखकर रखने से आप अधिक सीखने के बाद उस पर फिर लौट सकते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Which actions can help a group explore a question respectfully? Select all that apply.",
+          "hi": "किसी समूह को सम्मानपूर्वक प्रश्न की खोज करने में कौन-से कदम मदद कर सकते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Listen to each person's idea",
+              "hi": "हर व्यक्ति के विचार को सुनना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Separate what was observed from what is still unknown",
+              "hi": "जो देखा गया है उसे अभी अज्ञात बातों से अलग करना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Choose a reasonable next step together",
+              "hi": "मिलकर उचित अगला कदम चुनना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Laugh at any question that seems simple",
+              "hi": "सरल लगने वाले प्रश्न पर हँसना"
+            }
+          },
+          {
+            "id": "e",
+            "text_by_locale": {
+              "en": "Treat every suggestion as a proven fact",
+              "hi": "हर सुझाव को प्रमाणित तथ्य मान लेना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Listening, distinguishing what is known and unknown, and choosing a next step can support learning. Respectful discussion does not mean every suggestion is already proven.",
+          "hi": "ध्यान से सुनना, ज्ञात और अज्ञात बातों में अंतर करना तथा अगला कदम चुनना सीखने में मदद करता है। सम्मानपूर्वक चर्चा का अर्थ यह नहीं कि हर सुझाव पहले से प्रमाणित है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Not knowing the answer to a question immediately means that learning has failed.",
+          "hi": "किसी प्रश्न का उत्तर तुरंत न जानने का अर्थ है कि सीखना असफल हो गया।"
+        },
+        "correct_answer": false,
+        "feedback_by_locale": {
+          "en": "False. Some questions need time, more observations or further learning.",
+          "hi": "गलत। कुछ प्रश्नों के लिए समय, अधिक अवलोकन या आगे सीखने की आवश्यकता होती है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each helpful learning action with what it supports.",
+          "hi": "सीखने में मदद करने वाले हर कदम को उसके लाभ से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "write",
+            "label_by_locale": {
+              "en": "Write down a question",
+              "hi": "प्रश्न लिखकर रखें"
+            }
+          },
+          {
+            "id": "listen",
+            "label_by_locale": {
+              "en": "Listen to a classmate",
+              "hi": "सहपाठी की बात सुनें"
+            }
+          },
+          {
+            "id": "compare",
+            "label_by_locale": {
+              "en": "Compare what is known and unknown",
+              "hi": "ज्ञात और अज्ञात बातों की तुलना करें"
+            }
+          },
+          {
+            "id": "choose",
+            "label_by_locale": {
+              "en": "Choose a safe next step together",
+              "hi": "मिलकर सुरक्षित अगला कदम चुनें"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "remember",
+            "label_by_locale": {
+              "en": "Return to the question later",
+              "hi": "बाद में प्रश्न पर फिर लौटें"
+            }
+          },
+          {
+            "id": "understand",
+            "label_by_locale": {
+              "en": "Understand another person's idea",
+              "hi": "दूसरे व्यक्ति का विचार समझें"
+            }
+          },
+          {
+            "id": "clarify",
+            "label_by_locale": {
+              "en": "Notice what still needs exploring",
+              "hi": "पहचानें कि अभी किस बात की खोज बाकी है"
+            }
+          },
+          {
+            "id": "progress",
+            "label_by_locale": {
+              "en": "Plan how to begin exploring",
+              "hi": "खोज शुरू करने की योजना बनाएँ"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "write",
+            "right_id": "remember"
+          },
+          {
+            "left_id": "listen",
+            "right_id": "understand"
+          },
+          {
+            "left_id": "compare",
+            "right_id": "clarify"
+          },
+          {
+            "left_id": "choose",
+            "right_id": "progress"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "These actions keep questions available for later, make room for others' ideas and help the group choose what to do next.",
+          "hi": "इन कदमों से प्रश्न बाद के लिए सुरक्षित रहते हैं, दूसरों के विचार सुनने का अवसर मिलता है और समूह अगला कदम चुन पाता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Writing a question down helps us return to it ______.",
+          "hi": "प्रश्न लिखकर रखने से हम उस पर ______ फिर लौट सकते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "later",
+            "in the future",
+            "at a later time"
+          ],
+          "hi": [
+            "बाद में",
+            "आगे चलकर",
+            "फिर से"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not remove meaningful Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "Correct idea: later. A written question can be revisited as you learn more.",
+          "hi": "सही विचार है: बाद में। लिखे हुए प्रश्न पर अधिक सीखने के बाद फिर विचार किया जा सकता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "visual_asset_ref": "c6-sci-ch01-t03-curiosity-collaboration-map",
+        "prompt_by_locale": {
+          "en": "In the concept diagram, which action follows sharing the question?",
+          "hi": "विचार-चित्र में प्रश्न साझा करने के बाद कौन-सा कदम आता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Listen and discuss",
+              "hi": "सुनना और चर्चा करना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Pretend the question does not exist",
+              "hi": "ऐसा मानना कि प्रश्न है ही नहीं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Stop learning forever",
+              "hi": "सीखना हमेशा के लिए बंद कर देना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Accept any idea without listening",
+              "hi": "बिना सुने किसी भी विचार को मान लेना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The diagram encourages listening and discussion before choosing a reasonable next step.",
+          "hi": "सही। चित्र उचित अगला कदम चुनने से पहले सुनने और चर्चा करने पर ज़ोर देता है।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The referenced diagram is structured draft content, not a reviewed student visual yet.",
+            "hi": "संदर्भित चित्र संरचित मसौदा सामग्री है; अभी विद्यार्थी के लिए दृश्य-रूप में इसकी समीक्षा नहीं हुई है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Give one reason why talking about a question with a classmate may help, and one thing the group should do before accepting an idea.",
+          "hi": "एक कारण बताएँ कि सहपाठी के साथ प्रश्न पर चर्चा करना क्यों उपयोगी हो सकता है, और विचार स्वीकार करने से पहले समूह को कौन-सा एक काम करना चाहिए।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Sharing can introduce another viewpoint or help clarify the question.",
+              "The group should consider observations/evidence or what is still unknown instead of accepting an idea automatically."
+            ],
+            "sample_answer": "A classmate may suggest another way to think about the question. Before accepting the idea, the group should discuss what was observed and what evidence is available."
+          },
+          "hi": {
+            "key_points": [
+              "विचार साझा करने से दूसरा दृष्टिकोण मिल सकता है या प्रश्न स्पष्ट हो सकता है।",
+              "विचार को बिना सोचे मानने के बजाय समूह को अवलोकन/प्रमाण या अभी अज्ञात बातों पर विचार करना चाहिए।"
+            ],
+            "sample_answer": "सहपाठी प्रश्न को समझने का दूसरा तरीका सुझा सकता है। विचार स्वीकार करने से पहले समूह को देखी गई बातों और उपलब्ध प्रमाण पर चर्चा करनी चाहिए।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: gives a relevant benefit of discussion/listening.",
+              "1 point: states a suitable check, observation, evidence review or comparison of known/unknown information."
+            ],
+            "hi": [
+              "1 अंक: चर्चा या ध्यान से सुनने का उचित लाभ बताता है।",
+              "1 अंक: उचित जाँच, अवलोकन, प्रमाण पर विचार या ज्ञात/अज्ञात बातों की तुलना बताता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch01-t03-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch01-t03-lo2",
+          "c6-sci-ch01-t03-lo3"
+        ],
+        "scenario_by_locale": {
+          "en": "A learner has a question that no one in the group can answer right now. One classmate suggests writing it down; another wants to guess and say it is definitely true.",
+          "hi": "एक विद्यार्थी के मन में ऐसा प्रश्न है जिसका उत्तर समूह में किसी को अभी नहीं पता। एक सहपाठी उसे लिख लेने का सुझाव देता है; दूसरा अनुमान लगाकर उसे निश्चित रूप से सही बताना चाहता है।"
+        },
+        "prompt_by_locale": {
+          "en": "What is the most useful response?",
+          "hi": "सबसे उपयोगी कदम क्या होगा?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Choose a random answer and never revisit it",
+              "hi": "कोई भी उत्तर चुन लें और उस पर फिर कभी विचार न करें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Write down the question, listen to ideas and decide on a suitable next step",
+              "hi": "प्रश्न लिखें, विचार सुनें और उचित अगला कदम तय करें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Laugh at the learner for asking",
+              "hi": "प्रश्न पूछने के लिए विद्यार्थी का मज़ाक उड़ाएँ"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Treat the guess as proven without checking",
+              "hi": "बिना जाँच किए अनुमान को प्रमाणित मान लें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Keep the question, discuss respectfully and choose a useful next step. An unanswered question can remain open while learning continues.",
+          "hi": "सही। प्रश्न लिखकर रखें, सम्मानपूर्वक चर्चा करें और उपयोगी अगला कदम चुनें। उत्तर न मिला हो तो भी प्रश्न खुला रह सकता है और सीखना जारी रह सकता है।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch01-t03-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_rendering_registry_linked": true,
+    "question_components_implemented": false,
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi Chapter 1 page mapping and paragraph-level source reconciliation remain pending.",
+      "English source extraction for PDF pp.25-26 has extraction-order issues that need comparison with the rendered source pages.",
+      "The original structured diagram is not yet rendered and reviewed; q06 must remain blocked from student rendering until visual validation passes.",
+      "The lesson data is draft authored content and is not verified as exhaustive or word-for-word textbook content.",
+      "Web/Android question components and app-wide runtime language switching are specified but not implemented."
+    ],
+    "generated_question_types": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch01-t03-q08"
+        ]
+      }
+    ]
+  },
+  "next_steps": [
+    "Verify the Hindi Chapter 1 page boundary and source wording against Jigyasa.",
+    "Visually reconcile English Chapter 1 source pages 19-26 and the candidate visuals against authored topic scopes.",
+    "Run machine checks for schema, locale completeness, option/answer integrity, matching pairs, rubric scoring and registry references.",
+    "Review all three topics for repeated content, gaps and strict Chapter 1 scope.",
+    "Begin the source and visual completeness audit for Chapter 2 only after the production index makes the current Chapter 1 blockers visible; do not mark Chapter 1 complete yet."
+  ]
+}
