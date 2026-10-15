@@ -87,7 +87,7 @@ if (exact.size === 0) {
 }
 
 // Acronyms and standalone navigation glyphs are intentionally language-neutral.
-const neutralTokens = new Set(['OTP', 'PDF', 'PNG', '←', '↑', '↓']);
+const neutralTokens = new Set(['AI', 'OTP', 'PDF', 'PNG', '←', '↑', '↓']);
 
 for (const file of walk(uiRoot)) {
   scannedFiles += 1;
@@ -117,7 +117,7 @@ for (const file of walk(uiRoot)) {
 // Self-named language options and opaque issued/sample identifiers are intentionally language-neutral.
 let checkedDirectText = 0;
 const languageNameLabels = new Set(['English', 'हिन्दी', 'हिंदी']);
-const directTextNeutralTokens = new Set(['OTP', 'PDF', 'PNG', 'QR', 'URL', 'ID', 'OK', '←', '↑', '↓', '·', '✓', '×', '—']);
+const directTextNeutralTokens = new Set(['AI', 'OTP', 'PDF', 'PNG', 'QR', 'URL', 'ID', 'OK', '←', '↑', '↓', '·', '✓', '×', '—']);
 for (const file of walk(uiRoot)) {
   const source = readFileSync(file, 'utf8');
   const token = 'Text(';
