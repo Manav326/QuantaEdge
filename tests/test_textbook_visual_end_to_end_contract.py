@@ -128,6 +128,9 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
     def test_admin_prevents_attaching_a_source_to_an_unrelated_subject(self):
         source = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
         self.assertIn("function visualSourceMatchesLesson", source)
+        self.assertIn("विज्ञान", source)
+        self.assertIn("गणित", source)
+        self.assertIn("normalize('NFKC')", source)
         self.assertIn("function visualCatalogMatchesLesson", source)
         self.assertIn("index.v1.json", source)
         self.assertNotIn("class6-curiosity-en.v3.json", source)
