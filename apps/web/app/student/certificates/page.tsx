@@ -59,40 +59,53 @@ function StudentCertificatesContent() {
   const [downloadBusy, setDownloadBusy] = useState(false);
   const refresh = useCallback(async () => {
     setError('');
-    try {
-      const [progressResponse, certificateResponse, eligibleResponse, trackResponse] = await Promise.all([
-        fetch('/api/v1/students/me', { cache: 'no-store', credentials: 'same-origin' }),
-        fetch('/api/v1/students/me/certificates', { cache: 'no-store', credentials: 'same-origin' }),
-        fetch('/api/v1/students/me/certificates/eligible-assessments', { cache: 'no-store', credentials: 'same-origin' }),
-        fetch('/api/v1/students/me/certificates/subject-tracks', { cache: 'no-store', credentials: 'same-origin' }),
-      ]);
-      if ([401, 403].includes(progressResponse.status) || [401, 403].includes(certificateResponse.status) || [401, 403].includes(eligibleResponse.status) || [401, 403].includes(trackResponse.status)) {
-        router.replace('/login/student');
-        return;
+    const requestJson = async (path: string) => {
+      const response = await fetch(path, {
+        cache: 'no-store',
+        credentials: 'same-origin',
+        headers: { 'X-QE-Workspace': 'STUDENT' },
+      });
+      const body: any = await response.json().catch(() => ({}));
+      if ([401, 403].includes(response.status)) {
+        throw Object.assign(new Error(body.detail || body.message || body.error || 'Student sign-in is required.'), { auth: true });
       }
-      const progress = await progressResponse.json().catch(() => ({}));
-      const certs = await certificateResponse.json().catch(() => ({}));
-      const eligible = await eligibleResponse.json().catch(() => ({}));
-      const trackPayload = await trackResponse.json().catch(() => ({}));
-      if (!progressResponse.ok) throw new Error(progress.message || t('Unable to load your learning progress.','आपकी पढ़ाई की प्रगति लोड नहीं हो सकी।'));
-      if (!certificateResponse.ok) throw new Error(certs.message || t('Unable to load your certificates.','आपके प्रमाणपत्र लोड नहीं हो सके।'));
-      if (!eligibleResponse.ok) throw new Error(eligible.message || t('Unable to load eligible assessment results.','पात्र टेस्ट परिणाम लोड नहीं हो सके।'));
-      if (!trackResponse.ok) throw new Error(trackPayload.message || t('Unable to load active subject tracks.','सक्रिय विषय ट्रैक लोड नहीं हो सके।'));
-      const eligibleItems = Array.isArray(eligible.items) ? eligible.items : [];
-      const certificateItems = Array.isArray(certs.items) ? certs.items : [];
-      const availableTracks = Array.isArray(trackPayload.items) ? trackPayload.items : [];
-      setProfile({ ...progress, curriculum: availableTracks });
-      setCertificates(certificateItems);
-      setEligibleAttempts(eligibleItems);
-      setPassThreshold(Number(eligible.passThresholdPercent || 80));
-      setSelectedTrackKey(current =>
-        availableTracks.some((item: any) => item.track_key === current)
-          ? current
-          : String(availableTracks[0]?.track_key || '')
-      );
-    } catch (e: any) {
-      setError(e?.message || t('Unable to load certificates.','प्रमाणपत्र लोड नहीं हो सके।'));
+      if (!response.ok) {
+        throw new Error(body.detail || body.message || body.error || ('Request failed (' + response.status + ').'));
+      }
+      return body;
+    };
+    const results = await Promise.allSettled([
+      requestJson('/api/v1/students/me'),
+      requestJson('/api/v1/students/me/certificates'),
+      requestJson('/api/v1/students/me/certificates/eligible-assessments'),
+      requestJson('/api/v1/students/me/certificates/subject-tracks'),
+    ]);
+    if (results.some(result => result.status === 'rejected' && (result.reason as any)?.auth)) {
+      router.replace('/login/student');
+      return;
     }
+    const [progressResult, certificateResult, eligibleResult, trackResult] = results;
+    const progress = progressResult.status === 'fulfilled' ? progressResult.value : {};
+    const certs = certificateResult.status === 'fulfilled' ? certificateResult.value : {};
+    const eligible = eligibleResult.status === 'fulfilled' ? eligibleResult.value : {};
+    const trackPayload = trackResult.status === 'fulfilled' ? trackResult.value : {};
+    const availableTracks = Array.isArray(trackPayload.items) ? trackPayload.items : [];
+    // Keep selectors and stored certificate records available if a separate endpoint fails.
+    setProfile({ ...progress, curriculum: availableTracks });
+    if (certificateResult.status === 'fulfilled') setCertificates(Array.isArray(certs.items) ? certs.items : []);
+    if (eligibleResult.status === 'fulfilled') {
+      setEligibleAttempts(Array.isArray(eligible.items) ? eligible.items : []);
+      setPassThreshold(Number(eligible.passThresholdPercent || 80));
+    }
+    if (trackResult.status === 'fulfilled') {
+      setSelectedTrackKey(current => availableTracks.some((item: any) => item.track_key === current)
+        ? current : String(availableTracks[0]?.track_key || ''));
+    }
+    const failure = certificateResult.status === 'rejected' ? certificateResult.reason
+      : trackResult.status === 'rejected' ? trackResult.reason
+      : eligibleResult.status === 'rejected' ? eligibleResult.reason
+      : progressResult.status === 'rejected' ? progressResult.reason : null;
+    setError(failure?.message || '');
   }, [router, locale]);
 
   useEffect(() => {
@@ -151,6 +164,7 @@ function StudentCertificatesContent() {
         const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId + '/view?format=' + previewFormat, {
           cache: 'no-store',
           credentials: 'same-origin',
+          headers: { 'X-QE-Workspace': 'STUDENT' },
         });
         if (response.status === 401 || response.status === 403) {
           router.replace('/login/student');
@@ -187,6 +201,7 @@ function StudentCertificatesContent() {
       const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificate.id + '/download?format=' + previewFormat, {
         cache: 'no-store',
         credentials: 'same-origin',
+        headers: { 'X-QE-Workspace': 'STUDENT' },
       });
       if (response.status === 401 || response.status === 403) {
         router.replace('/login/student');
@@ -241,12 +256,12 @@ function StudentCertificatesContent() {
       }
       const response = await fetch('/api/v1/students/me/certificates/issue', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
         credentials: 'same-origin',
         body: JSON.stringify(body),
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.message || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
+      if (!response.ok) throw new Error(result.detail || result.message || result.error || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
       setNotice(t('Your certificate is ready. Both PDF and PNG are available below.','आपका प्रमाणपत्र तैयार है। नीचे PDF और PNG दोनों उपलब्ध हैं।'));
       await refresh();
     } catch (e: any) {

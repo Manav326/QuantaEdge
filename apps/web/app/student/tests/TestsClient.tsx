@@ -59,6 +59,7 @@ type LeaderboardData = {
 
 async function api(url:string,init:RequestInit={}) {
   const headers=new Headers(init.headers||{});
+  headers.set('X-QE-Workspace','STUDENT');
   if(init.body)headers.set('Content-Type','application/json');
   const response=await fetch(url,{...init,headers,credentials:'same-origin',cache:'no-store'});
   const raw=await response.text();let body:any={};
@@ -266,7 +267,7 @@ export default function TestsClient(){
         body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:certificateLanguage,...(courseId!==null?{courseId}:{})})
       });
       const body=await response.json().catch(()=>({}));
-      if(!response.ok)throw new Error(body.message||body.detail||body.error||'Certificate could not be issued.');
+      if(!response.ok)throw new Error(body.detail||body.message||body.error||'Certificate could not be issued.');
       setNotice(t('Certificate issued successfully. View or download it from this result.','प्रमाणपत्र सफलतापूर्वक जारी हुआ। इसे इसी परिणाम से देखें या डाउनलोड करें।'));
       await loadOverview();
       await refreshCertificateEligibilityForAttempts([attemptId]);

@@ -151,8 +151,10 @@ object ApiClient {
                 if (!result.isSuccessful) {
                     val message = try {
                         val parsed = JSONObject(bytes.toString(StandardCharsets.UTF_8))
-                        parsed.optString("message").ifBlank {
-                            parsed.optString("error").ifBlank { "Request failed (" + result.code + ")." }
+                        parsed.optString("detail").ifBlank {
+                            parsed.optString("message").ifBlank {
+                                parsed.optString("error").ifBlank { "Request failed (" + result.code + ")." }
+                            }
                         }
                     } catch (_: JSONException) {
                         bytes.toString(StandardCharsets.UTF_8).take(500)
