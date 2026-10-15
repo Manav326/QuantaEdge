@@ -14,10 +14,10 @@ type VisualSourceMatch={subject:string};
 function visualSourceMatchesLesson(row:Row|undefined,source:VisualSourceMatch|undefined):boolean {
  if(!row||!source)return false;
  const subjectKey=(value:string|undefined|null)=>{
-  const key=String(value??'').trim().toLocaleLowerCase().replace(/[^a-z0-9]+/g,'');
-  if(['math','maths','mathematics'].includes(key))return 'mathematics';
-  if(['sci','science'].includes(key))return 'science';
-  return key;
+  const raw=String(value??'').trim().toLocaleLowerCase().normalize('NFKC');
+  if(raw.includes('विज्ञान')||raw.includes('science')||raw.includes('vigyan'))return 'science';
+  if(raw.includes('गणित')||raw.includes('math')||raw.includes('ganit'))return 'mathematics';
+  return raw.replace(/[^a-z0-9]+/g,'');
  };
  const sourceSubject=subjectKey(source.subject);
  const lessonSubjects=[subjectKey(row.subject_name),subjectKey(row.subject_code)];
