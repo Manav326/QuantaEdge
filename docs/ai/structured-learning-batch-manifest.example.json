@@ -1,0 +1,23 @@
+{
+  "schema": "quantaedge.structured-learning-batch-import.v1",
+  "batch": {
+    "program_code": "NAVODAYA_BATCH",
+    "source_class_code": "6",
+    "publish_status": "DRAFT",
+    "auto_publish": false
+  },
+  "bundles": [
+    {
+      "path": "drafts/maths-fractions-en.json",
+      "language": "en",
+      "chapter_code": "fractions",
+      "schema": "quantaedge.site-content-authoring-draft.v1"
+    },
+    {
+      "path": "drafts/maths-fractions-hi.json",
+      "language": "hi",
+      "chapter_code": "fractions",
+      "schema": "quantaedge.site-content-authoring-draft.v1"
+    }
+  ]
+}
