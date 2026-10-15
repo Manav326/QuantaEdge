@@ -6,14 +6,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useLocale } from '../../components/LanguageProvider';
 import styles from './Certificates.module.css';
 
-const TEMPLATES = [
-  { id: 'CLASSIC', name: 'QuantaEdge Academic', description: 'The approved QuantaEdge certificate design' },
-];
-
 function localizedTrackName(code: string | undefined, name: string | undefined, language: string) {
-  const normalized = String(code || '').trim().toLowerCase();
-  if (['maths', 'math', 'mathematics'].includes(normalized)) return language === 'hi' ? 'गणित' : 'Mathematics';
-  if (normalized === 'science') return language === 'hi' ? 'विज्ञान' : 'Science';
+  const normalized = String(code || name || '').trim().toLowerCase().replace(/[ -]+/g, '_');
+  const translations: Record<string, [string, string]> = {
+    maths: ['Mathematics', 'गणित'], math: ['Mathematics', 'गणित'], mathematics: ['Mathematics', 'गणित'],
+    science: ['Science', 'विज्ञान'],
+    english: ['English', 'अंग्रेज़ी'], hindi: ['Hindi', 'हिन्दी'],
+    social_science: ['Social Science', 'सामाजिक विज्ञान'], social_studies: ['Social Science', 'सामाजिक विज्ञान'],
+    sanskrit: ['Sanskrit', 'संस्कृत'],
+    computer_science: ['Computer Science', 'कंप्यूटर विज्ञान'], computer: ['Computer Science', 'कंप्यूटर विज्ञान'],
+  };
+  const translated = translations[normalized];
+  if (translated) return language === 'hi' ? translated[1] : translated[0];
   return name || code || '';
 }
 
@@ -40,9 +44,8 @@ function StudentCertificatesContent() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [eligibleAttempts, setEligibleAttempts] = useState<any[]>([]);
   const [passThreshold, setPassThreshold] = useState(80);
-  const [selectedTemplate, setSelectedTemplate] = useState('CLASSIC');
   const [achievementType, setAchievementType] = useState<'SUBJECT_COMPLETION' | 'ASSESSMENT_PASS'>('SUBJECT_COMPLETION');
-  const [subjectCode, setSubjectCode] = useState('');
+  const [selectedTrackKey, setSelectedTrackKey] = useState('');
   const [attemptId, setAttemptId] = useState('');
   const language = certificateLanguage;
   const t = (english: string, hindi: string) => locale === 'english' ? english : hindi;
@@ -57,69 +60,40 @@ function StudentCertificatesContent() {
   const refresh = useCallback(async () => {
     setError('');
     try {
-      const [progressResponse, certificateResponse, eligibleResponse] = await Promise.all([
+      const [progressResponse, certificateResponse, eligibleResponse, trackResponse] = await Promise.all([
         fetch('/api/v1/students/me', { cache: 'no-store', credentials: 'same-origin' }),
         fetch('/api/v1/students/me/certificates', { cache: 'no-store', credentials: 'same-origin' }),
         fetch('/api/v1/students/me/certificates/eligible-assessments', { cache: 'no-store', credentials: 'same-origin' }),
+        fetch('/api/v1/students/me/certificates/subject-tracks', { cache: 'no-store', credentials: 'same-origin' }),
       ]);
-      if ([401, 403].includes(progressResponse.status) || [401, 403].includes(certificateResponse.status) || [401, 403].includes(eligibleResponse.status)) {
+      if ([401, 403].includes(progressResponse.status) || [401, 403].includes(certificateResponse.status) || [401, 403].includes(eligibleResponse.status) || [401, 403].includes(trackResponse.status)) {
         router.replace('/login/student');
         return;
       }
       const progress = await progressResponse.json().catch(() => ({}));
       const certs = await certificateResponse.json().catch(() => ({}));
       const eligible = await eligibleResponse.json().catch(() => ({}));
+      const trackPayload = await trackResponse.json().catch(() => ({}));
       if (!progressResponse.ok) throw new Error(progress.message || t('Unable to load your learning progress.','आपकी पढ़ाई की प्रगति लोड नहीं हो सकी।'));
       if (!certificateResponse.ok) throw new Error(certs.message || t('Unable to load your certificates.','आपके प्रमाणपत्र लोड नहीं हो सके।'));
       if (!eligibleResponse.ok) throw new Error(eligible.message || t('Unable to load eligible assessment results.','पात्र टेस्ट परिणाम लोड नहीं हो सके।'));
-      const curriculum = Array.isArray(progress.curriculum) ? progress.curriculum : [];
+      if (!trackResponse.ok) throw new Error(trackPayload.message || t('Unable to load active subject tracks.','सक्रिय विषय ट्रैक लोड नहीं हो सके।'));
       const eligibleItems = Array.isArray(eligible.items) ? eligible.items : [];
       const certificateItems = Array.isArray(certs.items) ? certs.items : [];
-      const tracksByCode = new Map<string, any>();
-      curriculum.forEach((track: any) => {
-        const code = String(track.subject_code || '').trim().toLowerCase();
-        if (code) tracksByCode.set(code, track);
-      });
-      // Certificate eligibility is an independent server query over active student tracks.
-      // Use it when the dashboard metrics payload omits its curriculum list.
-      eligibleItems.forEach((attempt: any) => {
-        const code = String(attempt.subject_code || '').trim().toLowerCase();
-        if (code && !tracksByCode.has(code)) {
-          tracksByCode.set(code, {
-            class_code: attempt.class_code,
-            subject_code: code,
-            subject_name: attempt.subject_name,
-            completed: null,
-            lessons: null,
-          });
-        }
-      });
-      // Already-issued records are a final fallback, so prior achievements stay discoverable
-      // even if learning-progress metrics temporarily omit the current curriculum.
-      certificateItems.forEach((certificate: Certificate) => {
-        const code = String(certificate.subject_code || '').trim().toLowerCase();
-        if (code && !tracksByCode.has(code)) {
-          tracksByCode.set(code, {
-            class_code: certificate.class_code,
-            subject_code: code,
-            subject_name: certificate.subject_name || certificate.achievement_title,
-            completed: null,
-            lessons: null,
-          });
-        }
-      });
-      const availableTracks = Array.from(tracksByCode.values());
+      const availableTracks = Array.isArray(trackPayload.items) ? trackPayload.items : [];
       setProfile({ ...progress, curriculum: availableTracks });
       setCertificates(certificateItems);
       setEligibleAttempts(eligibleItems);
       setPassThreshold(Number(eligible.passThresholdPercent || 80));
-      if (!availableTracks.some((item: any) => String(item.subject_code || '').toLowerCase() === subjectCode.toLowerCase())) {
-        setSubjectCode(String(availableTracks[0]?.subject_code || ''));
-      }
+      setSelectedTrackKey(current =>
+        availableTracks.some((item: any) => item.track_key === current)
+          ? current
+          : String(availableTracks[0]?.track_key || '')
+      );
     } catch (e: any) {
       setError(e?.message || t('Unable to load certificates.','प्रमाणपत्र लोड नहीं हो सके।'));
     }
-  }, [router, subjectCode, locale]);
+  }, [router, locale]);
 
   useEffect(() => {
     void refresh();
@@ -137,6 +111,10 @@ function StudentCertificatesContent() {
   }, [refresh]);
 
   const tracks = useMemo(() => Array.isArray(profile?.curriculum) ? profile.curriculum : [], [profile]);
+  const selectedTrack = useMemo(
+    () => tracks.find((track: any) => track.track_key === selectedTrackKey),
+    [tracks, selectedTrackKey],
+  );
   const releasedAttempts = useMemo(() => eligibleAttempts, [eligibleAttempts]);
   const selectedAssessment = useMemo(
     () => releasedAttempts.find((attempt: any) => String(attempt.attempt_id) === attemptId),
@@ -252,9 +230,15 @@ function StudentCertificatesContent() {
     setError('');
     setNotice('');
     try {
-      const body: Record<string, unknown> = { achievementType, templateId: selectedTemplate, language };
-      if (achievementType === 'SUBJECT_COMPLETION') body.subjectCode = subjectCode;
-      else body.assessmentAttemptId = Number(attemptId);
+      const body: Record<string, unknown> = { achievementType, templateId: 'CLASSIC', language };
+      if (achievementType === 'SUBJECT_COMPLETION') {
+        if (!selectedTrack) throw new Error(t('Choose an active subject track.','एक सक्रिय विषय ट्रैक चुनें।'));
+        body.subjectCode = selectedTrack.subject_code;
+        if (Number(selectedTrack.course_id) > 0) body.courseId = Number(selectedTrack.course_id);
+      } else {
+        body.assessmentAttemptId = Number(attemptId);
+        if (Number(selectedAssessment?.course_id) > 0) body.courseId = Number(selectedAssessment.course_id);
+      }
       const response = await fetch('/api/v1/students/me/certificates/issue', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -279,7 +263,7 @@ function StudentCertificatesContent() {
           <div>
             <span className={styles.kicker}>{t('ACHIEVEMENTS','उपलब्धियाँ')}</span>
             <h1>{t('Certificates','प्रमाणपत्र')}</h1>
-            <p>{t('Your approved QuantaEdge certificate design is used for every language. Verify your achievement and download the certificate as PDF or PNG.','हर भाषा में स्वीकृत QuantaEdge प्रमाणपत्र डिज़ाइन का उपयोग होता है। अपनी उपलब्धि सत्यापित करें और प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
+            <p>{t('Earn verified certificates and download PDF or PNG.','पात्रता की पुष्टि के बाद प्रमाणपत्र PDF या PNG में डाउनलोड करें।')}</p>
           </div>
           <Link href="/student/progress" className="button button-light">← {t('Learning progress','पढ़ाई की प्रगति')}</Link>
         </header>
@@ -315,107 +299,98 @@ function StudentCertificatesContent() {
 
         <section className={styles.panel}>
           <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>01 · {t('DESIGN','डिज़ाइन')}</span><h2>{t('Approved certificate design','स्वीकृत प्रमाणपत्र डिज़ाइन')}</h2></div>
-            <span className={styles.meta}>{t('One approved design · PDF + PNG','एक स्वीकृत डिज़ाइन · PDF + PNG')}</span>
+            <div><span className={styles.eyebrow}>01 · {t('CERTIFICATE','प्रमाणपत्र')}</span><h2>{t('Issue an achievement certificate','उपलब्धि प्रमाणपत्र जारी करें')}</h2></div>
+            <span className={styles.meta}>{t('Standard design applied automatically','मानक डिज़ाइन अपने-आप लागू होगा')}</span>
           </div>
-          <div className={styles.templateGrid}>
-            {TEMPLATES.map((template) => (
-              <div key={template.id} className={styles.templateCardWrap}>
-                <button type="button"
-                  className={styles.templateCard + (selectedTemplate === template.id ? ' ' + styles.selected : '')}
-                  onClick={() => setSelectedTemplate(template.id)}
-                  aria-pressed={selectedTemplate === template.id}>
-                  <img className={styles.preview}
-                    src={'/api/v1/certificates/samples/' + template.id + '?format=png&language=' + language}
-                    alt={template.name + ' certificate design preview, marked as sample'} />
-                  <span className={styles.templateName}>{template.name}</span>
-                  <span className={styles.templateDescription}>{template.description}</span>
-                </button>
-                <a className={styles.previewLink}
-                  href={'/api/v1/certificates/samples/' + template.id + '?format=pdf&language=' + language}
-                  target="_blank" rel="noreferrer">{t('Open sample PDF ↗','नमूना PDF खोलें ↗')}</a>
-              </div>
-            ))}
-          </div>
-        </section>
 
-        <section className={styles.panel}>
-          <div className={styles.sectionHead}>
-            <div><span className={styles.eyebrow}>02 · {t('ELIGIBILITY','पात्रता')}</span><h2>{t('Request an earned certificate','पात्रता के अनुसार प्रमाणपत्र माँगें')}</h2></div>
-            <span className={styles.meta}>{t('Verified learning records','सत्यापित पढ़ाई के रिकॉर्ड')}</span>
+          <div className={styles.formGroup}>
+            <h3 className={styles.groupTitle}>{t('Certificate settings','प्रमाणपत्र सेटिंग्स')}</h3>
+            <div className={styles.formGrid}>
+              <label className={styles.field}>
+                <span>{t('Achievement type','उपलब्धि का प्रकार')}</span>
+                <select value={achievementType} onChange={(event) => setAchievementType(event.target.value as any)}>
+                  <option value="SUBJECT_COMPLETION">{t('Subject learning completion','विषय की पढ़ाई पूरी')}</option>
+                  <option value="ASSESSMENT_PASS">{t('Assessment result','टेस्ट परिणाम')} ({passThreshold}% {t('or higher','या अधिक')})</option>
+                </select>
+              </label>
+              <label className={styles.field}>
+                <span>{t('Certificate language','प्रमाणपत्र की भाषा')}</span>
+                <select value={language} onChange={(event) => setCertificateLanguage(event.target.value as 'hi' | 'en')}>
+                  <option value="hi">हिन्दी (Hindi)</option>
+                  <option value="en">English</option>
+                </select>
+              </label>
+            </div>
           </div>
-          <div className={styles.formGrid}>
-            <label className={styles.field}>
-              <span>{t('Achievement type','उपलब्धि का प्रकार')}</span>
-              <select value={achievementType} onChange={(event) => setAchievementType(event.target.value as any)}>
-                <option value="SUBJECT_COMPLETION">{t('Subject learning completion','विषय की पढ़ाई पूरी')}</option>
-                <option value="ASSESSMENT_PASS">{t('Assessment result','टेस्ट परिणाम')} ({passThreshold}% {t('or higher','या अधिक')})</option>
-              </select>
-            </label>
-            <label className={styles.field}>
-              <span>{t('Certificate language','प्रमाणपत्र की भाषा')}</span>
-              <select value={language} onChange={(event) => setCertificateLanguage(event.target.value as 'hi' | 'en')}>
-                <option value="hi">हिन्दी (Hindi)</option>
-                <option value="en">English</option>
-              </select>
-              <small className={styles.help}>
-                {locale !== 'english'
-                  ? 'यह प्रमाणपत्र की भाषा, कक्षा/विषय शीर्षक और विवरण चुनता है। परीक्षा का मूल नाम उसी भाषा में रहेगा जिसमें वह बनाया गया था।'
-                  : 'This controls certificate language, class/subject heading, and explanatory text. Assessment titles remain in the language in which they were authored.'}
-              </small>
-            </label>
-            {achievementType === 'SUBJECT_COMPLETION' ? (
-              <label className={styles.field}>
-                <span>{t('Subject track','विषय ट्रैक')}</span>
-                <select value={subjectCode} onChange={(event) => setSubjectCode(event.target.value)}>
-                  {!tracks.length && <option value="">{t('No active subject track available','कोई सक्रिय विषय ट्रैक उपलब्ध नहीं')}</option>}
-                  {tracks.map((track: any) => (
-                    <option key={track.subject_code} value={track.subject_code}>
-                      {localizedTrackName(track.subject_code, track.subject_name, language)}{track.completed != null && track.lessons != null ? ` · ${Number(track.completed)} / ${Number(track.lessons)} ${t('lessons complete','पाठ पूरे')}` : ''}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ) : (
-              <label className={styles.field}>
-                <span>{t('Released assessment result','जारी किया गया टेस्ट परिणाम')}</span>
-                <select value={attemptId} onChange={(event) => setAttemptId(event.target.value)}>
-                  <option value="">{t('Choose a qualifying released result','पात्र जारी परिणाम चुनें')}</option>
-                  {releasedAttempts.map((attempt: any) => (
-                    <option key={attempt.attempt_id} value={attempt.attempt_id}>
-                      {t('Class ','कक्षा ')}{attempt.class_code} · {localizedTrackName(attempt.subject_code, attempt.subject_name, language)} — {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
-                      {attempt.certificate_status === 'ISSUED' ? ' · ' + t('Certificate already issued','प्रमाणपत्र जारी हो चुका है') : ''}
-                      {attempt.certificate_status === 'REVOKED' ? ' · ' + t('Certificate revoked','प्रमाणपत्र निरस्त') : ''}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
+
+          <div className={styles.formGroup}>
+            <h3 className={styles.groupTitle}>{t('Achievement details','उपलब्धि का विवरण')}</h3>
+            <div className={styles.formGridSingle}>
+              {achievementType === 'SUBJECT_COMPLETION' ? (
+                <label className={styles.field}>
+                  <span>{t('Subject track','विषय ट्रैक')}</span>
+                  <select value={selectedTrackKey} onChange={(event) => setSelectedTrackKey(event.target.value)} disabled={!tracks.length}>
+                    <option value="">{tracks.length ? t('Choose a subject track','विषय ट्रैक चुनें') : t('No active subject track available','कोई सक्रिय विषय ट्रैक उपलब्ध नहीं है')}</option>
+                    {tracks.map((track: any) => {
+                      const scopeLabel = Number(track.course_id) > 0 && track.course_name
+                        ? String(track.course_name)
+                        : t('Class ','कक्षा ') + track.class_code;
+                      return (
+                        <option key={track.track_key} value={track.track_key}>
+                          {scopeLabel} · {localizedTrackName(track.subject_code, track.subject_name, language)}
+                          {track.completed != null && track.lessons != null
+                            ? ` · ${Number(track.completed)} / ${Number(track.lessons)} ${t('lessons complete','पाठ पूरे')}`
+                            : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+              ) : (
+                <label className={styles.field}>
+                  <span>{t('Released assessment result','जारी टेस्ट परिणाम')}</span>
+                  <select value={attemptId} onChange={(event) => setAttemptId(event.target.value)}>
+                    <option value="">{t('Choose an eligible released result','पात्र जारी परिणाम चुनें')}</option>
+                    {releasedAttempts.map((attempt: any) => {
+                      const scopeLabel = Number(attempt.course_id) > 0 && attempt.course_name
+                        ? String(attempt.course_name)
+                        : t('Class ','कक्षा ') + attempt.class_code;
+                      return (
+                        <option key={attempt.attempt_id} value={attempt.attempt_id}>
+                          {scopeLabel} · {localizedTrackName(attempt.subject_code, attempt.subject_name, language)} — {attempt.assessment_title} · {attempt.final_score} / {attempt.max_score}
+                          {attempt.certificate_status === 'ISSUED' ? ' · ' + t('Certificate already issued','प्रमाणपत्र पहले से जारी है') : ''}
+                          {attempt.certificate_status === 'REVOKED' ? ' · ' + t('Certificate revoked','प्रमाणपत्र निरस्त') : ''}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </label>
+              )}
+            </div>
             {achievementType === 'ASSESSMENT_PASS' && releasedAttempts.length === 0 && (
               <p className={styles.help}>
-                {locale === 'english'
-                  ? `No qualifying released assessment results were found. The result must be released, meet the ${passThreshold}% threshold, belong to an active subject track, and come from an admin-created test (not a generated or practice test).`
-                  : `कोई पात्र जारी टेस्ट परिणाम नहीं मिला। परिणाम जारी होना चाहिए, ${passThreshold}% की सीमा पूरी करनी चाहिए, सक्रिय विषय ट्रैक से संबंधित होना चाहिए और एडमिन द्वारा बनाया गया टेस्ट होना चाहिए (generated या practice test नहीं)।`}
-                {' '}<Link href="/student/tests">{t('Check your test results','अपने टेस्ट परिणाम देखें')}</Link>. {t('A certificate issued from the test-result screen should remain listed here after refresh.','टेस्ट परिणाम स्क्रीन से जारी प्रमाणपत्र रिफ्रेश करने के बाद भी यहाँ दिखना चाहिए।')}
+                {t('No eligible released admin-created test results.','कोई पात्र जारी Admin-created टेस्ट परिणाम नहीं मिला।')}
+                {' '}<Link href="/student/tests">{t('Check your test results','अपने टेस्ट परिणाम देखें')}</Link>
               </p>
             )}
             {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED' && (
-              <p className={styles.help}>{t('A certificate has already been issued for this result. You can open the existing certificate; a duplicate will not be created.','इस परिणाम का प्रमाणपत्र पहले ही जारी हो चुका है। मौजूदा प्रमाणपत्र खोला जा सकता है; दूसरा प्रमाणपत्र नहीं बनेगा।')}</p>
+              <p className={styles.help}>{t('Certificate already issued for this result; open it below.','इस परिणाम का प्रमाणपत्र पहले से जारी है; नीचे खोलें।')}</p>
             )}
             {achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED' && (
-              <p className={styles.error}>{t('The existing certificate is revoked. It cannot be replaced automatically.','मौजूदा प्रमाणपत्र निरस्त है। इसे अपने-आप बदला नहीं जा सकता।')}</p>
+              <p className={styles.error}>{t('This certificate was revoked and cannot be reissued.','यह प्रमाणपत्र निरस्त है और दोबारा जारी नहीं होगा।')}</p>
             )}
           </div>
+
           <div className={styles.rule}>
-            <strong>{t('Eligibility rule','पात्रता नियम')}</strong>
+            <strong>{t('Eligibility','पात्रता')}</strong>
             {achievementType === 'SUBJECT_COMPLETION'
-              ? t('All currently published lessons in your active subject track must be completed. The server checks your actual progress records.','आपके सक्रिय विषय ट्रैक के सभी प्रकाशित पाठ पूरे होने चाहिए। सर्वर आपके वास्तविक प्रगति रिकॉर्ड की जाँच करता है।')
-              : t(`Only an admin-created, non-generated assessment can qualify (not practice, topic-end or chapter-end tests). The result must be released, meet the ${passThreshold}% pass threshold, and belong to an active subject track. Completing every published lesson is not required for an assessment-pass certificate.`,`केवल एडमिन द्वारा बनाया गया non-generated टेस्ट पात्र हो सकता है (practice, topic-end या chapter-end टेस्ट नहीं)। परिणाम जारी होना चाहिए, ${passThreshold}% की पास सीमा पूरी करनी चाहिए और सक्रिय विषय ट्रैक से संबंधित होना चाहिए। टेस्ट पास प्रमाणपत्र के लिए सभी प्रकाशित पाठ पूरे करना आवश्यक नहीं है।`)}
+              ? t('Complete all published lessons in this active subject track.','इस सक्रिय विषय ट्रैक के सभी प्रकाशित पाठ पूरे करें।')
+              : t(`Pass a released admin-created test at ${passThreshold}% or higher.`,`जारी Admin-created टेस्ट में कम-से-कम ${passThreshold}% अंक प्राप्त करें।`)}
           </div>
           <button className="button button-dark" type="button"
             onClick={() => void issueCertificate()}
             disabled={busy
-              || (achievementType === 'SUBJECT_COMPLETION' && (!subjectCode || !tracks.some((track: any) => track.subject_code === subjectCode)))
+              || (achievementType === 'SUBJECT_COMPLETION' && (!selectedTrackKey || !selectedTrack))
               || (achievementType === 'ASSESSMENT_PASS' && (!attemptId || !selectedAssessment || selectedAssessment?.certificate_status === 'REVOKED'))}>
             {busy ? t('Verifying achievement…','उपलब्धि की पुष्टि हो रही है…') : achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
               ? t('Open existing certificate','मौजूदा प्रमाणपत्र खोलें')
