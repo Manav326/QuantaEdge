@@ -19,7 +19,7 @@ type ParentProfileDraft = {
   profileImageDataUrl: string;
 };
 
-type ParentIdentity = { mobile: string; profileImageUrl: string | null };
+type ParentIdentity = { mobile: string; publicUserId: string; profileImageUrl: string | null };
 
 const emptyProfile: ParentProfileDraft = {
   displayName: '',
@@ -99,7 +99,7 @@ export default function ParentProfilePage() {
   const tx = (hinglish: string, english: string) => locale === 'english' ? english : hinglish;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ParentProfileDraft>(emptyProfile);
-  const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', profileImageUrl: null });
+  const [identity, setIdentity] = useState<ParentIdentity>({ mobile: '', publicUserId: '', profileImageUrl: null });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
@@ -141,7 +141,7 @@ export default function ParentProfilePage() {
         if (!response.ok) throw new Error(body.message || 'Unable to load the parent profile.');
         if (!active) return;
         const url = body.profile_image_url || null;
-        setIdentity({ mobile: body.mobile_e164 || '', profileImageUrl: url });
+        setIdentity({ mobile: body.mobile_e164 || '', publicUserId: body.public_user_id || body.publicUserId || '', profileImageUrl: url });
         setDraft({
           displayName: body.display_name || '',
           email: body.email || '',
@@ -214,7 +214,7 @@ export default function ParentProfilePage() {
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
       const url = body.profile_image_url || null;
-      setIdentity({ mobile: body.mobile_e164 || '', profileImageUrl: url });
+      setIdentity({ mobile: body.mobile_e164 || '', publicUserId: body.public_user_id || body.publicUserId || '', profileImageUrl: url });
       setDraft({
         displayName: body.display_name || '',
         email: body.email || '',
@@ -310,6 +310,7 @@ export default function ParentProfilePage() {
                 <label className="parent-profile-field parent-profile-field--wide"><LocaleText hinglish="पूरा नाम" english="Full name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={tx('अपना नाम डालें','Enter your name')} autoComplete="name" /></label>
                 <label className="parent-profile-field"><LocaleText hinglish="Email address" english="Email address" /> <span className="parent-profile-field__optional"><LocaleText hinglish="Optional" english="Optional" /></span><input type="email" maxLength={254} value={draft.email} onChange={e => setDraft({ ...draft, email: e.target.value })} placeholder="you@example.com" autoComplete="email" /></label>
                 <label className="parent-profile-field"><LocaleText hinglish="Mobile number" english="Mobile number" /><input value={identity.mobile} readOnly aria-readonly="true"/><small><LocaleText hinglish="OTP sign-in के लिए use होता है। इसे बदलने के लिए support से contact करें।" english="Used for OTP sign-in. Contact support if you need to change it." /></small></label>
+                <label className="parent-profile-field"><LocaleText hinglish="आपका User ID" english="Your user ID" /><input value={identity.publicUserId} readOnly aria-readonly="true" /><small><LocaleText hinglish="यह 12 अक्षरों का स्थायी ID है। इसे बदला नहीं जा सकता।" english="This 12-character ID is permanent and cannot be changed." /></small></label>
                 <label className="parent-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={tx('जैसे Patna','e.g. Patna')} autoComplete="address-level2" /></label>
                 <label className="parent-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={tx('जैसे Bihar','e.g. Bihar')} autoComplete="address-level1" /></label>
               </div>
