@@ -1,7 +1,9 @@
 package com.quantaedge.android.ui
 
 import android.graphics.BitmapFactory
+import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -108,7 +110,8 @@ fun QuantaEdgeApp() {
     val resourceStore = remember(resourceOwner) { ProtectedResourceStore(context, resourceOwner) }
     val offlineAssessmentStore = remember(resourceOwner) { OfflineAssessmentStore(context, resourceOwner) }
 
-    var route by rememberSaveable { mutableStateOf(AppRoute.LOGIN) }
+    var route by rememberSaveable { mutableStateOf(AppRoute.WELCOME) }
+    var loginMode by rememberSaveable { mutableStateOf("STUDENT") }
     var lessonReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var resultsReturnRoute by rememberSaveable { mutableStateOf(AppRoute.STUDENT_HOME) }
     var language by rememberSaveable { mutableStateOf(preferences.getString("language", "hi") ?: "hi") }
@@ -127,6 +130,7 @@ fun QuantaEdgeApp() {
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var archivedChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentReport by remember { mutableStateOf(JSONObject()) }
     var parentCertificates by remember { mutableStateOf(emptyList<JSONObject>()) }
     var parentProfile by remember { mutableStateOf(JSONObject()) }
@@ -327,7 +331,7 @@ fun QuantaEdgeApp() {
             try {
                 refreshUser()
             } catch (exception: Exception) {
-                route = AppRoute.LOGIN
+                route = AppRoute.WELCOME
                 if (exception !is ApiFailure || (exception.statusCode != 401 && exception.statusCode != 403)) {
                     reportError(exception)
                 }
@@ -373,7 +377,11 @@ fun QuantaEdgeApp() {
                 .put("purpose", purpose).put("password", password)
             if (purpose == "SIGNUP") body.put("displayName", displayName.trim())
             ApiClient.postObject("/api/v1/auth/verify-otp", body)
-            status = if (purpose == "SIGNUP") "अभिभावक खाता बन गया।" else "पासवर्ड अपडेट हो गया।"
+            status = when (purpose) {
+                "SIGNUP" -> if (language == "hi") "अभिभावक खाता बन गया।" else "Parent account created."
+                "PASSWORD_RESET" -> if (language == "hi") "पासवर्ड अपडेट हो गया।" else "Password updated."
+                else -> if (language == "hi") "OTP से साइन इन सफल रहा।" else "Signed in with OTP."
+            }
             refreshUser()
             AppRoute.values().forEach { savedRoute ->
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
@@ -1263,14 +1271,14 @@ fun QuantaEdgeApp() {
         error = ""
     }
 
-    fun createChild(name: String, classCode: String, username: String, password: String, tracks: List<String>, consent: Boolean) {
+    fun createChild(name: String, classCode: String, childLanguage: String, username: String, password: String, tracks: List<String>, consent: Boolean) {
         runTask {
             if (tracks.isEmpty()) throw IOException("कम-से-कम एक विषय चुनें।")
             ApiClient.postObject("/api/v1/guardians/children",
                 JSONObject()
                     .put("displayName", name.trim())
                     .put("classCode", classCode)
-                    .put("language", "hi")
+                    .put("language", childLanguage)
                     .put("username", username.trim())
                     .put("password", password)
                     .put("trackCodes", JSONArray(tracks))
@@ -1282,10 +1290,49 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun openArchivedChildren() {
+        runTask {
+            archivedChildren = ApiClient.getArray("/api/v1/guardians/children/archived").objectItems()
+            parentSection = "children"
+            route = AppRoute.PARENT_CHILD_ARCHIVED
+        }
+    }
+
+    fun restoreArchivedChild(child: JSONObject) {
+        runTask {
+            val id = child.longAny("id")
+            if (id <= 0L) throw IOException("Archived profile ID is missing.")
+            ApiClient.postObject("/api/v1/guardians/children/" + id + "/restore",
+                JSONObject().put("consentAccepted", true))
+            parentAccount = ApiClient.getObject("/api/v1/guardians/account")
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            archivedChildren = ApiClient.getArray("/api/v1/guardians/children/archived").objectItems()
+            parentSection = "children"
+            status = if (language == "hi") "प्रोफ़ाइल restore हो गई। नया student login सेट करें।"
+                else "Profile restored. Set new student login credentials."
+            route = AppRoute.PARENT_HOME
+        }
+    }
+
     fun openManageChild(child: JSONObject) {
         selectedChild = JSONObject(child.toString())
         route = AppRoute.PARENT_CHILD_MANAGE
         error = ""
+    }
+
+    fun saveChildProfile(displayName: String, classCode: String, childLanguage: String) {
+        runTask {
+            val id = selectedChild.longAny("id")
+            if (id <= 0L) throw IOException("Student profile ID is missing.")
+            if (displayName.trim().length !in 2..120) throw IOException("Enter a valid student name.")
+            if (childLanguage !in setOf("hi", "en")) throw IOException("Choose Hindi or English.")
+            ApiClient.putObject("/api/v1/guardians/children/" + id + "/profile",
+                JSONObject().put("displayName", displayName.trim())
+                    .put("classCode", classCode).put("language", childLanguage))
+            parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
+            selectedChild = parentChildren.firstOrNull { it.longAny("id") == id } ?: selectedChild
+            status = if (language == "hi") "छात्र प्रोफ़ाइल सुरक्षित हो गई।" else "Student profile saved."
+        }
     }
 
     fun saveChildCredentials(username: String, password: String) {
@@ -1353,6 +1400,7 @@ fun QuantaEdgeApp() {
             recommendation = JSONObject()
             parentAccount = JSONObject()
             parentChildren = emptyList()
+            archivedChildren = emptyList()
             parentReport = JSONObject()
             parentCertificates = emptyList()
             parentProfile = JSONObject()
@@ -1387,9 +1435,19 @@ fun QuantaEdgeApp() {
             lessonAnswerLocks.clear()
             resourceDownloadStates.clear()
             currentSubject = "maths"
-            route = AppRoute.LOGIN
+            route = AppRoute.WELCOME
+            loginMode = "STUDENT"
             error = ""
             status = "आप सुरक्षित रूप से साइन आउट हो गए।"
+        }
+    }
+
+    fun openPublicPage(path: String) {
+        val safePath = if (path == "/privacy" || path == "/terms") path else "/"
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://qe.thinkwithsujeet.in" + safePath)))
+        }.onFailure {
+            error = if (language == "hi") "पेज नहीं खुल सका।" else "Page could not be opened."
         }
     }
 
@@ -1433,7 +1491,9 @@ fun QuantaEdgeApp() {
     fun goBack() {
         route = when (route) {
             AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME -> route
-            AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
+            AppRoute.WELCOME -> AppRoute.WELCOME
+            AppRoute.LOGIN -> AppRoute.WELCOME
+            AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET -> AppRoute.LOGIN
             AppRoute.CERTIFICATES, AppRoute.LEADERBOARD -> AppRoute.STUDENT_HOME
             AppRoute.SUBJECT_LESSONS, AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS,
             AppRoute.RESOURCES, AppRoute.PROFILE, AppRoute.PROGRESS -> if (auth.textAny("role").contains("PARENT", true)) AppRoute.PARENT_HOME else AppRoute.STUDENT_HOME
@@ -1462,7 +1522,7 @@ fun QuantaEdgeApp() {
     )
     val role = auth.textAny("role")
     val parentRole = role.contains("PARENT", true) || role.contains("GUARDIAN", true)
-    val signedIn = role.isNotBlank() && route !in setOf(AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
+    val signedIn = role.isNotBlank() && route !in setOf(AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET)
     val headerPhotoUrl = if (parentRole) {
         parentProfile.textAny("profile_image_url", "profileImageUrl")
             .ifBlank { parentAccount.textAny("profile_image_url", "profileImageUrl") }
@@ -1523,7 +1583,7 @@ fun QuantaEdgeApp() {
             "library" -> { lastStudentNavGroup = key; openResources(currentSubject) }
         }
     }
-    BackHandler(enabled = signedIn) {
+    BackHandler(enabled = signedIn || route == AppRoute.LOGIN) {
         if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) goBack()
     }
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -1734,12 +1794,23 @@ fun QuantaEdgeApp() {
                 Box(modifier = Modifier.widthIn(max = 1120.dp).fillMaxWidth().fillMaxHeight()) {
                 saveableStateHolder.SaveableStateProvider("$stateOwnerKey:${route.name}") {
                 when (route) {
+                    AppRoute.WELCOME -> WelcomeScreen(
+                        language = language,
+                        onToggleLanguage = ::toggleLanguage,
+                        onStudentLogin = { loginMode = "STUDENT"; error = ""; status = ""; route = AppRoute.LOGIN },
+                        onParentLogin = { loginMode = "PARENT"; error = ""; status = ""; route = AppRoute.LOGIN },
+                        onPrivacy = { openPublicPage("/privacy") },
+                        onTerms = { openPublicPage("/terms") }
+                    )
                     AppRoute.LOGIN -> LoginScreen(
                         language = language,
+                        initialMode = loginMode,
                         onToggleLanguage = ::toggleLanguage,
                         busy = busy,
                         error = error,
                         onSignIn = ::signIn,
+                        onRequestOtp = { number, callback -> requestParentOtp("LOGIN", number, callback) },
+                        onVerifyOtp = { number, otp -> verifyParentOtp("LOGIN", number, "", otp, "") },
                         onSignup = { route = AppRoute.PARENT_SIGNUP },
                         onResetPassword = { route = AppRoute.PARENT_RESET }
                     )
@@ -1794,6 +1865,7 @@ fun QuantaEdgeApp() {
                         onReport = ::openParentReport,
                         onManageChild = ::openManageChild,
                         onAddChild = ::openCreateChild,
+                        onArchivedProfiles = ::openArchivedChildren,
                         onProfile = ::openParentProfile,
                         onLogout = ::logout,
                         maxChildren = parentAccount.optInt("maxChildren", 3)
@@ -1825,9 +1897,15 @@ fun QuantaEdgeApp() {
                     AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
                         child = selectedChild,
                         busy = busy,
+                        onSaveProfile = ::saveChildProfile,
                         onSaveCredentials = ::saveChildCredentials,
                         onSaveTracks = ::saveChildTracks,
                         onArchive = ::archiveSelectedChild
+                    )
+                    AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
+                        children = archivedChildren,
+                        busy = busy,
+                        onRestore = ::restoreArchivedChild
                     )
                     AppRoute.SUBJECT_LESSONS -> LessonListScreen(
                         subject = currentSubject,
@@ -2052,75 +2130,111 @@ fun QuantaEdgeApp() {
 @Composable
 private fun LoginScreen(
     language: String,
+    initialMode: String,
     onToggleLanguage: () -> Unit,
     busy: Boolean,
     error: String,
     onSignIn: (String, String, String, String, String) -> Unit,
+    onRequestOtp: (String, (String?) -> Unit) -> Unit,
+    onVerifyOtp: (String, String) -> Unit,
     onSignup: () -> Unit,
     onResetPassword: () -> Unit
 ) {
-    var mode by rememberSaveable { mutableStateOf("STUDENT") }
+    var mode by rememberSaveable(initialMode) { mutableStateOf(initialMode) }
     var mobile by rememberSaveable { mutableStateOf("") }
     var parentMobile by rememberSaveable { mutableStateOf("") }
     var username by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var parentLoginMethod by rememberSaveable(initialMode) { mutableStateOf("PASSWORD") }
+    var otp by rememberSaveable { mutableStateOf("") }
+    var otpRequested by rememberSaveable { mutableStateOf(false) }
+    var devCode by rememberSaveable { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 22.dp),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 20.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         QuantaEdgeBrand(modifier = Modifier.fillMaxWidth(), compact = false, centered = true)
-        Spacer(modifier = Modifier.height(12.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onToggleLanguage, enabled = !busy) { Text(if (language == "hi") "EN" else "हिंदी") }
         }
-        Text(if (language == "hi") "सीखना शुरू करें" else "Start learning",
-            style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(top = 22.dp, bottom = 16.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(if (language == "hi") "साइन इन करें" else "Sign in",
+            style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 6.dp)) {
             if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
             else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
-            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text(if (language=="hi") "अभिभावक" else "Parent") }
-            else TextButton(onClick = { mode = "PARENT" }, enabled = !busy) { Text(if (language=="hi") "अभिभावक" else "Parent") }
+            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text("Parent") }
+            else TextButton(onClick = { mode = "PARENT"; parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text("Parent") }
         }
         if (mode == "PARENT") {
-            OutlinedTextField(value = mobile, onValueChange = { mobile = it }, label = { Text(if(language=="hi") "अभिभावक का मोबाइल" else "Parent mobile number") },
-                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
+                if (parentLoginMethod == "PASSWORD") Button(onClick = { parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if (language == "hi") "पासवर्ड" else "Password") }
+                else OutlinedButton(onClick = { parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(if (language == "hi") "पासवर्ड" else "Password") }
+                if (parentLoginMethod == "OTP") Button(onClick = { parentLoginMethod = "OTP" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("OTP") }
+                else OutlinedButton(onClick = { parentLoginMethod = "OTP"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text("OTP") }
+            }
+            OutlinedTextField(value = mobile, onValueChange = { mobile = it.filter(Char::isDigit).take(10); otpRequested = false; otp = ""; devCode = "" },
+                label = { Text(if(language=="hi") "Parent mobile (10 अंक)" else "Parent mobile (10 digits)") },
+                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            if (parentLoginMethod == "PASSWORD") {
+                OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text(if(language=="hi") "पासवर्ड" else "Password") },
+                    singleLine = true, visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                Button(onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
+                    enabled = !busy && mobile.length == 10 && password.isNotBlank(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Text(if (busy) if (language=="hi") "साइन इन हो रहा है…" else "Signing in…" else if (language=="hi") "साइन इन करें" else "Sign in")
+                }
+            } else if (otpRequested) {
+                OutlinedTextField(value = otp, onValueChange = { otp = it.filter(Char::isDigit).take(6) },
+                    label = { Text(if (language == "hi") "OTP (6 अंक)" else "OTP (6 digits)") },
+                    singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+                if (devCode.isNotBlank()) Text("Development OTP: " + devCode,
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                Button(onClick = { onVerifyOtp(mobile, otp) }, enabled = !busy && otp.length == 6,
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Text(if (language == "hi") "OTP से साइन इन करें" else "Sign in with OTP")
+                }
+                TextButton(onClick = { otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) {
+                    Text(if (language == "hi") "दूसरा OTP माँगें" else "Request another OTP")
+                }
+            } else {
+                Button(onClick = { onRequestOtp(mobile) { code -> otpRequested = true; devCode = code.orEmpty() } },
+                    enabled = !busy && mobile.length == 10, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Text(if (language == "hi") "OTP भेजें" else "Send OTP")
+                }
+            }
         } else {
-            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it }, label = { Text(if(language=="hi") "अभिभावक का पंजीकृत मोबाइल" else "Registered parent mobile") },
-                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
-            OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text(if(language=="hi") "छात्र यूज़रनेम" else "Student username") },
-                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
-        }
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text(if(language=="hi") "पासवर्ड" else "Password") },
-            singleLine = true, visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(top = 10.dp))
-        Button(
-            onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
-            enabled = !busy && password.isNotBlank() &&
-                (if (mode == "PARENT") mobile.isNotBlank() else parentMobile.isNotBlank() && username.isNotBlank()),
-            modifier = Modifier.fillMaxWidth().padding(top = 18.dp)
-        ) {
-            Text(if (language=="hi") { if(busy) "साइन इन हो रहा है…" else "साइन इन करें" } else { if(busy) "Signing in…" else "Sign in" })
+            OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it.filter(Char::isDigit).take(10) },
+                label = { Text(if(language=="hi") "Parent mobile (10 digits)" else "Registered parent mobile (10 digits)") },
+                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            OutlinedTextField(value = username, onValueChange = { username = it.trim().take(32) },
+                label = { Text("Student username") }, singleLine = true,
+                modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            OutlinedTextField(value = password, onValueChange = { password = it },
+                label = { Text(if(language=="hi") "पासवर्ड" else "Password") },
+                singleLine = true, visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            Button(onClick = { onSignIn(mode, mobile, parentMobile, username, password) },
+                enabled = !busy && parentMobile.length == 10 && username.isNotBlank() && password.isNotBlank(),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Text(if (busy) if (language=="hi") "साइन इन हो रहा है…" else "Signing in…" else if (language=="hi") "साइन इन करें" else "Sign in")
+            }
         }
         if (mode == "PARENT") {
-            TextButton(onClick = onSignup, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                Text(if(language=="hi") "नया अभिभावक खाता बनाएँ" else "Create parent account")
-            }
-            TextButton(onClick = onResetPassword, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
-                Text(if(language=="hi") "पासवर्ड भूल गए?" else "Forgot password?")
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                TextButton(onClick = onSignup, enabled = !busy) { Text(if(language=="hi") "Create account" else "Create account") }
+                TextButton(onClick = onResetPassword, enabled = !busy) { Text(if(language=="hi") "Forgot password?" else "Forgot password?") }
             }
         }
-        Text(
-            if(language=="hi") "अपने अभिभावक द्वारा बनाए गए छात्र खाते या मौजूदा अभिभावक खाते से साइन इन करें。" else "Students use parent-created login details. Parents use their own account.",
-            modifier = Modifier.padding(top = 14.dp),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
-        )
+        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 5.dp))
+        Text(if(language=="hi") "Parent और student accounts अलग हैं।" else "Parent and student accounts are separate.",
+            modifier = Modifier.padding(top = 6.dp), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.secondary)
     }
 }
-
 @Composable
 private fun ParentOtpFlowScreen(
     language: String,
@@ -3190,8 +3304,18 @@ private fun AssessmentAttemptScreen(
                 val answerId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
                 (answers[answerId] ?: item.textAny("answer")).isNotBlank()
             }
+            Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                questions.forEachIndexed { index, item ->
+                    val answerId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
+                    val hasAnswer = (answers[answerId] ?: item.textAny("answer")).isNotBlank()
+                    val label = (if (hasAnswer) "✓ " else "") + (index + 1)
+                    if (index == safeQuestionIndex) Button(onClick = { currentQuestionIndex = index }) { Text(label) }
+                    else OutlinedButton(onClick = { currentQuestionIndex = index }) { Text(label) }
+                }
+            }
             Column(
-                modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Row(
@@ -3631,14 +3755,25 @@ private fun DocumentReaderScreen(
     onPage: (Int) -> Unit,
     onDownload: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(document.textAny("title").ifBlank { "पुस्तक" }, style = MaterialTheme.typography.titleLarge)
-        Text(localizedUiText("पृष्ठ ") + page + " / " + pageCount + " • सुरक्षित ऑफ़लाइन प्रतियाँ: " + cachedCount,
+    var pageInput by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(page.toString()) }
+    LaunchedEffect(page) { pageInput = page.toString() }
+    val requestedPage = pageInput.toIntOrNull()
+    val validPage = requestedPage != null && requestedPage in 1..pageCount
+    Column(modifier = Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        Text(document.textAny("title").ifBlank { "पुस्तक" }, style = MaterialTheme.typography.titleMedium)
+        Text(localizedUiText("पृष्ठ ") + page + " / " + pageCount + " • Offline: " + cachedCount,
             style = MaterialTheme.typography.bodySmall)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            OutlinedTextField(value = pageInput, onValueChange = { pageInput = it.filter(Char::isDigit).take(6) },
+                label = { Text(localizedUiText("पृष्ठ संख्या")) }, singleLine = true, modifier = Modifier.weight(1f))
+            Button(onClick = { if (validPage) onPage(requestedPage!!) }, enabled = !busy && validPage) {
+                Text(localizedUiText("जाएँ"))
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
             TextButton(onClick = { onPage(page - 1) }, enabled = !busy && page > 1) { Text(localizedUiText("← पिछला")) }
             Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text(localizedUiText("ऑफ़लाइन डाउनलोड")) }
+            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text(localizedUiText("Offline")) }
             Spacer(modifier = Modifier.weight(1f))
             TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text(localizedUiText("अगला →")) }
         }
@@ -3667,6 +3802,7 @@ private fun ParentHomeScreen(
     onReport: (JSONObject) -> Unit,
     onManageChild: (JSONObject) -> Unit,
     onAddChild: () -> Unit,
+    onArchivedProfiles: () -> Unit,
     onProfile: () -> Unit,
     onLogout: () -> Unit,
     maxChildren: Int
@@ -3702,8 +3838,13 @@ private fun ParentHomeScreen(
             }
         }
         Button(onClick = onAddChild, enabled = !busy && children.size < maxChildren,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)) {
             Text(if (language == "hi") "नया छात्र प्रोफ़ाइल बनाएँ" else "Create child profile")
+        }
+        if (section == "children") {
+            TextButton(onClick = onArchivedProfiles, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                Text(if (language == "hi") "Archived profiles / Restore" else "Archived profiles / Restore")
+            }
         }
         if (children.isEmpty()) EmptyState(
             if (language == "hi") "कोई सक्रिय छात्र प्रोफ़ाइल नहीं" else "No active child profiles",
