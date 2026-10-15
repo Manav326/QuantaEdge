@@ -122,7 +122,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("Use HTTPS for non-local API URLs.")
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
     if args.apply and not cookie:
-        parser.error("Set QUANTAEDGE_ADMIN_SESSION to the QE_STAFF_SESSION cookie value from a signed-in Education Admin session before --apply.")
+        parser.error("Set QUANTAEDGE_ADMIN_SESSION to the active access-cookie value from a signed-in Education Admin session (QE_SESSION preferred, otherwise QE_STAFF_SESSION) before --apply.")
     manifests = sorted(root.rglob("*.manifest.json"))
     if not manifests:
         parser.error(f"No *.manifest.json files found under {root}")
