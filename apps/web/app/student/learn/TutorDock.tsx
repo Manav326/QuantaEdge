@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
 
-type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string; created_at?: string; createdAt?: string };
+type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string; created_at?: string | number; createdAt?: string | number };
 type Mode = 'HINT' | 'EXPLAIN' | 'EXAMPLE' | 'STEP_BY_STEP' | 'CHECK_MY_WORK';
 type ApiBody = Record<string, unknown>;
 type PanelFrame = { left: number; top: number; width: number; height: number };
@@ -41,9 +41,9 @@ const modeIcons: Record<Mode, string> = {
   CHECK_MY_WORK: '✓',
 };
 
-function formatTutorTimestamp(value?: string): string {
+function formatTutorTimestamp(value?: string | number): string {
   if (!value) return '';
-  const date = new Date(value);
+  const date = typeof value === 'number' ? new Date(value) : new Date(value);
   if (!Number.isFinite(date.getTime())) return '';
   const now = new Date();
   const sameDay = date.getFullYear() === now.getFullYear()
@@ -287,7 +287,8 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
   const [olderBeforeId, setOlderBeforeId] = useState<number | null>(null);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const preserveScrollRef = useRef(false);
-  const [mode, setMode] = useState<Mode>('HINT');
+  // Free-form tutor chat should explain by default; Hint remains available as an explicit mode.
+  const [mode, setMode] = useState<Mode>('EXPLAIN');
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -554,7 +555,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       setHasOlderMessages(false);
       setOlderBeforeId(null);
       setInput('');
-      setMode('HINT');
+      setMode('EXPLAIN');
       if (!body.available) {
         const current = languageRef.current;
         setError(current.english
@@ -755,7 +756,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
                 return <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || item.clientId || index}>
                   <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
                   <TutorMessageBody message={item.message} english={english} />
-                  {timestamp && <time className="tutor-message-time" dateTime={timestamp}>{formatTutorTimestamp(timestamp)}</time>}
+                  {timestamp && <time className="tutor-message-time" dateTime={typeof timestamp === 'number' ? new Date(timestamp).toISOString() : timestamp}>{formatTutorTimestamp(timestamp)}</time>}
                 </article>;
               })}
               {busy && <article className="tutor-message assistant tutor-thinking"><span className="tutor-role">{english ? 'Tutor' : 'ट्यूटर'}</span><p>{english ? 'Thinking…' : 'सोच रहा हूँ…'} <span className="tutor-thinking-dots" aria-hidden="true"><i /><i /><i /></span></p></article>}
