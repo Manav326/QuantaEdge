@@ -1317,6 +1317,45 @@ def sync_report_record(report: dict[str, Any], row: dict[str, Any]) -> None:
     files.append(make_report_record(row))
 
 
+PREFLIGHT_PLAN_FIELDS = (
+    "class_code", "subject_code", "language", "scope", "chapter_code", "chapter_id",
+    "book_part", "course_id", "program_code", "filename", "parent_book_filename",
+    "sha256", "parent_book_sha256", "page_count", "size_bytes", "source_page_start",
+    "source_page_end", "chapter_order", "title", "source_title", "source_url", "edition",
+    "edition_detected", "chapter_name", "mapping_note", "merged_from_parts",
+    "source_bytes_preserved", "input_source_files",
+)
+
+
+def preflight_plan_fingerprint(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Only stable source/curriculum fields participate; timestamps and write status do not."""
+    selected = [{field: row.get(field) for field in PREFLIGHT_PLAN_FIELDS} for row in rows]
+    return sorted(selected, key=lambda row: json.dumps(row, sort_keys=True, ensure_ascii=False))
+
+
+def verify_matching_preflight(path: Path, current_report: dict[str, Any], course_id: int) -> None:
+    """Fail closed before API writes when the reviewed preflight plan is stale or different."""
+    expected = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(expected, dict):
+        raise ValueError("Reviewed preflight report must be a JSON object.")
+    if (expected.get("schema") != "quantaedge.official-ncert-book-chapter-import-report.v1"
+            or expected.get("result") != "PREFLIGHT_OK" or expected.get("mode") != "dry_run"):
+        raise ValueError("Reviewed report must be a successful dry-run PREFLIGHT_OK report.")
+    if int(expected.get("course_id") or 0) != course_id or expected.get("program_code"):
+        raise ValueError("Reviewed preflight report must match this stable numeric course ID and contain no program-code fallback.")
+    if expected.get("errors"):
+        raise ValueError("Reviewed preflight report contains errors.")
+    expected_rows = expected.get("files")
+    current_rows = current_report.get("files")
+    if not isinstance(expected_rows, list) or not isinstance(current_rows, list):
+        raise ValueError("Reviewed/current reports must both contain a files array.")
+    if preflight_plan_fingerprint(expected_rows) != preflight_plan_fingerprint(current_rows):
+        raise ValueError(
+            "Current PDF source, chapter ID/code, edition, checksum, or page-range plan differs from the reviewed preflight report. "
+            "No application-data writes were made. Run a new dry run and review it again."
+        )
+
+
 def write_report(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -1756,6 +1795,10 @@ def run(args: argparse.Namespace) -> int:
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
     program_code = str(getattr(args, "program_code", "") or "").strip().upper()
+    if args.require_matching_preflight and not args.apply:
+        raise ValueError("--require-matching-preflight requires --apply.")
+    if args.require_matching_preflight and (not args.course_id or program_code):
+        raise ValueError("--require-matching-preflight requires --course-id and cannot be combined with --program-code.")
     course_id_value = int(getattr(args, "course_id", 0) or 0)
     course_id = course_id_value if course_id_value > 0 else None
     if course_id_value < 0:
@@ -1879,6 +1922,12 @@ def run(args: argparse.Namespace) -> int:
         ],
         "credentials_recorded": False,
     }
+    if args.require_matching_preflight:
+        reviewed_path = Path(args.require_matching_preflight).expanduser()
+        if not reviewed_path.is_absolute():
+            reviewed_path = root / reviewed_path
+        verify_matching_preflight(reviewed_path, report, int(course_id))
+
     if not args.apply:
         report_progress("Phase 6/6: writing the dry-run audit report; no PDF uploads or assignment writes.")
         write_report(report_path, report)
@@ -1992,6 +2041,7 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="Upload all validated books/splits and create DRAFT assignments; default only creates a report/splits.")
     parser.add_argument("--report", default="", help="Optional audit report path.")
     parser.add_argument("--resume-report", default="", help="Resume an interrupted --apply run from its main checkpoint JSON; skips source scanning and chapter extraction.")
+    parser.add_argument("--require-matching-preflight", default="", help="For --apply, require the current plan to match a previously reviewed successful dry-run report; abort before any API write otherwise.")
     args = parser.parse_args()
     try:
         if args.resume_report:

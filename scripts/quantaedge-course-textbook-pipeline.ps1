@@ -9,7 +9,9 @@ param(
 
     [string]$ApiUrl = $(if ($env:QUANTAEDGE_API_BASE_URL) { $env:QUANTAEDGE_API_BASE_URL } else { "http://localhost:8080" }),
 
-    [string]$WorkDirectory = ""
+    [string]$WorkDirectory = "",
+
+    [string]$ReviewedPreflightReport = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -53,6 +55,22 @@ if (-not $PythonExe) { throw "Python 3.10+ was not found. Expected python.exe on
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { throw "Docker CLI is required to reuse the existing GHCR textbook cache." }
 foreach ($required in @($SyncScript, $PdfImporter, $PageImporter, $MapBuilder)) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "Required existing pipeline file is missing: $required" }
+}
+$ReviewedReportPath = ""
+if ($Mode -eq "ApplyDrafts") {
+    if ([string]::IsNullOrWhiteSpace($ReviewedPreflightReport)) {
+        throw "ApplyDrafts requires -ReviewedPreflightReport pointing to the successful preflight JSON you reviewed."
+    }
+    $ReviewedReportPath = if ([IO.Path]::IsPathRooted($ReviewedPreflightReport)) {
+        $ReviewedPreflightReport
+    } else {
+        Join-Path $RepoRoot $ReviewedPreflightReport
+    }
+    if (-not (Test-Path -LiteralPath $ReviewedReportPath -PathType Leaf)) {
+        throw "Reviewed preflight report not found: $ReviewedReportPath"
+    }
+} elseif (-not [string]::IsNullOrWhiteSpace($ReviewedPreflightReport)) {
+    throw "-ReviewedPreflightReport is only valid with -Mode ApplyDrafts."
 }
 
 $PythonDirectory = Split-Path -Parent $PythonExe
@@ -163,15 +181,17 @@ try {
     )
     if ($Mode -eq "ApplyDrafts") {
         Write-Host ""
-        Write-Host "APPLY MODE: the existing importer will create DRAFT PDF library assets and DRAFT document assignments only."
+        Write-Host "APPLY MODE: the existing importer will compare its freshly rebuilt plan with your reviewed preflight report before the first API write."
+        Write-Host "The importer will create DRAFT PDF library assets and DRAFT document assignments only."
         Write-Host "The GHCR page importer will create DRAFT source-book/page records only."
         Write-Host "No source book is approved and no lesson, question, test or course content is published."
+        Write-Host "Reviewed preflight report: $ReviewedReportPath"
         $confirmation = Read-Host "Type CREATE DRAFT ASSIGNMENTS to continue"
         if ($confirmation -cne "CREATE DRAFT ASSIGNMENTS") {
             Write-Host "Cancelled. No API writes were requested."
             return
         }
-        $splitArgs += "--apply"
+        $splitArgs += @("--apply", "--require-matching-preflight", $ReviewedReportPath)
     }
 
     Write-Host "Step 4/5: running the existing title-verified PDF splitter and import pipeline."

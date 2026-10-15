@@ -49,3 +49,32 @@ python .\scripts\build_chapter_map_review_candidates.py --manifest <BOOK.manifes
 Repeat for each of the four books. The helper does not parse PDFs or infer boundaries: it copies the verified source-page ranges and course chapter IDs from the existing splitter report, and verifies the numeric course ID, book hash, and every page identity in the source JSONL. It emits `DRAFT_REQUIRES_EDITOR_REVIEW`, blank reviewer/date fields, and `student_delivery_allowed=false`. Inspect the exact original PDF for every range and title. Only after that human check, save a separate reviewed copy with `review_status=EDITOR_REVIEWED`, a real reviewer, and a `YYYY-MM-DD` review date; never edit a candidate to appear reviewed without performing that review.
 
 Course chapter PDFs produced by the existing splitter are now stored in `private-review/ncert-book-splits/course-<NUMERIC_COURSE_ID>`. The legacy output path is unchanged, and separate course IDs have separate split directories, preventing same-named chapters from overwriting one another.
+
+
+## Recommended course pipeline command
+
+Get the course's numeric ID from the same API/database you will use for the import. The Education Admin endpoint is `GET /api/v1/admin/content/programs`; the SQL equivalent for the seeded Navodaya record is:
+
+```sql
+SELECT id, code, display_name, curriculum_version
+FROM curriculum_program
+WHERE code = 'NAVODAYA_BATCH' AND status = 'ACTIVE';
+```
+
+Run a no-write preflight from PowerShell at the repository root:
+
+```powershell
+.\\scripts\\quantaedge-course-textbook-pipeline.ps1 -CourseId <NUMERIC_COURSE_ID> -Mode Preflight
+```
+
+The wrapper reuses `quantaedge-textbook-sync.ps1`, the existing GHCR cache, `import_official_ncert_books_and_chapters.py`, `import_ghcr_extracted_pages.py`, and the source-bound map helper. It verifies GHCR and manifest SHA-256 values, copies source PDFs byte-for-byte into a review workspace, validates all 1,252 page records, runs the existing splitter, and creates four map candidates. It leaves API data unchanged in Preflight mode. The staff session is requested securely when it is not already present in `QUANTAEDGE_ADMIN_SESSION`.
+
+Open the reported JSON splitter report and review the chapter source-page ranges before applying. Then use the *same reviewed report* as the apply gate:
+
+```powershell
+.\\scripts\\quantaedge-course-textbook-pipeline.ps1 -CourseId <NUMERIC_COURSE_ID> -Mode ApplyDrafts -ReviewedPreflightReport "<PATH_PRINTED_BY_PREFLIGHT>"
+```
+
+Before writing anything, the PDF importer recomputes its plan and compares course ID, source checksums, chapter IDs/codes, language, edition, and exact page ranges against the reviewed preflight report. It stops before the first API write if any of those fields changed. If content or source changed, run a new Preflight and review it again. Apply mode only creates DRAFT PDF assets/document assignments and DRAFT extracted source-book/page records; it does not approve sources, publish textbook documents, or publish lessons/questions.
+
+The script writes course split PDFs to `private-review/ncert-book-splits/course-<NUMERIC_COURSE_ID>` and timestamped chapter-map candidates below `private-review/course-content/course-<NUMERIC_COURSE_ID>/chapter-map-candidates`. Keep those candidates separate from reviewed maps. Every chapter map must be checked against the exact PDF before it is copied and marked `EDITOR_REVIEWED`.

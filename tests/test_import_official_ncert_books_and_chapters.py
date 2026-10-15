@@ -70,6 +70,52 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         result = importer.dedupe_live_chapters(rows, "6", "maths")
         self.assertEqual([601, 602], [row["chapter_id"] for row in result])
 
+    def test_reviewed_preflight_must_match_current_course_and_page_ranges(self):
+        from copy import deepcopy
+        import json
+
+        course_id = 1234
+        rows = [
+            {
+                "class_code": "6", "subject_code": "maths", "language": "english",
+                "scope": "CHAPTER_PDF", "chapter_code": "patterns-in-mathematics",
+                "chapter_id": 9001, "course_id": course_id,
+                "sha256": "a" * 64, "parent_book_sha256": "b" * 64,
+                "source_page_start": 3, "source_page_end": 21, "edition": "Reprint 2026-27",
+            }
+        ]
+        expected = {
+            "schema": "quantaedge.official-ncert-book-chapter-import-report.v1",
+            "result": "PREFLIGHT_OK", "mode": "dry_run", "course_id": course_id,
+            "program_code": None, "errors": [], "files": deepcopy(rows),
+        }
+        report_path = self.root / "reviewed-preflight.json"
+        report_path.write_text(json.dumps(expected), encoding="utf-8")
+        current = {"mode": "apply", "course_id": course_id, "files": deepcopy(rows)}
+        importer.verify_matching_preflight(report_path, current, course_id)
+        changed = deepcopy(rows)
+        changed[0]["source_page_end"] = 22
+        current["files"] = changed
+        with self.assertRaisesRegex(ValueError, "differs from the reviewed preflight"):
+            importer.verify_matching_preflight(report_path, current, course_id)
+
+    def test_reviewed_preflight_rejects_wrong_course_or_incomplete_review(self):
+        import json
+
+        report_path = self.root / "reviewed-preflight.json"
+        report_path.write_text(json.dumps({
+            "schema": "quantaedge.official-ncert-book-chapter-import-report.v1",
+            "result": "PREFLIGHT_OK", "mode": "dry_run", "course_id": 1234,
+            "program_code": None, "errors": [], "files": [],
+        }), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "stable numeric course ID"):
+            importer.verify_matching_preflight(report_path, {"files": []}, 5678)
+        data = json.loads(report_path.read_text(encoding="utf-8"))
+        data["result"] = "COMPLETED"
+        report_path.write_text(json.dumps(data), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "successful dry-run"):
+            importer.verify_matching_preflight(report_path, {"files": []}, 1234)
+
     def test_course_split_output_directory_isolated_from_legacy_and_other_courses(self):
         legacy = importer.split_output_dir(self.root)
         course_a = importer.split_output_dir(self.root, 1234)
