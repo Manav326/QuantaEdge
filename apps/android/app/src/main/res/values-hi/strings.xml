@@ -328,4 +328,10 @@
     <string name="qe_audit_status_student_photo_removed">प्रोफ़ाइल फ़ोटो हटा दी गई।</string>
     <string name="qe_audit_status_certificate_issued_progress">प्रमाणपत्र जारी हो गया। अब इस परिणाम से PDF या PNG सेव करें।</string>
     <string name="qe_audit_status_development_otp">स्थानीय विकास OTP: </string>
+    <string name="qe_role_learner">विद्यार्थी</string>
+    <string name="qe_legal_privacy">गोपनीयता</string>
+    <string name="qe_legal_terms">नियम और शर्तें</string>
+    <string name="qe_resource_chapter_pdfs">अध्याय PDF</string>
+    <string name="qe_resource_book_pdf">पुस्तक PDF · </string>
+    <string name="qe_resource_pages">पृष्ठ</string>
 </resources>

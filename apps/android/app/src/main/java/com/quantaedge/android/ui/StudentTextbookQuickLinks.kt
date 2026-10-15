@@ -49,8 +49,8 @@ fun StudentTextbookQuickLinks(
                             if (hi) "विज्ञान" else "Science"
                         }, style = MaterialTheme.typography.titleSmall)
                         Text(
-                            if (book != null) (if (hi) "Book PDF · " else "Book PDF · ") + book.optInt("page_count") + " pages"
-                            else "$chapters chapter PDFs",
+                            if (book != null) localizedUiText("Book PDF · ") + book.optInt("page_count") + " " + localizedUiText("pages")
+                            else "$chapters " + localizedUiText("chapter PDFs"),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.secondary
                         )
@@ -65,7 +65,7 @@ fun StudentTextbookQuickLinks(
                         }
                         if (book != null && chapters > 0) {
                             TextButton(onClick = { onBrowseSubject(code) }, enabled = !busy) {
-                                Text("$chapters " + if (hi) "chapter PDFs" else "chapter PDFs")
+                                Text("$chapters " + localizedUiText("chapter PDFs"))
                             }
                         }
                     }

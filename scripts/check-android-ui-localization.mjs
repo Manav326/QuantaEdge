@@ -112,6 +112,38 @@ for (const file of walk(uiRoot)) {
   }
 }
 
+// Catch visible Compose labels that bypass the shared mapping entirely (for example,
+// Text("Privacy")). Existing per-screen t(...) and explicit language branches remain valid.
+// Self-named language options and opaque issued/sample identifiers are intentionally language-neutral.
+let checkedDirectText = 0;
+const languageNameLabels = new Set(['English', 'हिन्दी', 'हिंदी']);
+const directTextNeutralTokens = new Set(['OTP', 'PDF', 'PNG', 'QR', 'URL', 'ID', 'OK', '←', '↑', '↓', '·', '✓', '×', '—']);
+for (const file of walk(uiRoot)) {
+  const source = readFileSync(file, 'utf8');
+  const token = 'Text(';
+  let cursor = 0;
+  while ((cursor = source.indexOf(token, cursor)) >= 0) {
+    if (/[A-Za-z0-9_]/.test(source[cursor - 1] || '')) {
+      cursor += token.length;
+      continue;
+    }
+    const argsStart = cursor + token.length;
+    cursor = argsStart;
+    const literal = readKotlinStringArgument(source, argsStart);
+    if (!literal) continue;
+    checkedDirectText += 1;
+
+    const raw = literal.value.trim();
+    const visible = stripKotlinInterpolation(raw).trim();
+    if (!hasUiLetters(visible)) continue;
+    if (directTextNeutralTokens.has(raw) || languageNameLabels.has(raw)) continue;
+    if (/^[A-Z][A-Z0-9_-]{8,}$/.test(raw)) continue; // certificate/reference IDs, not UI copy
+
+    failures.push(relative(root, file) + ': direct Text("' + raw +
+      '") bypasses the bilingual UI mapping; use localizedUiText(...), string resources, or an explicit bilingual branch.');
+  }
+}
+
 // Also audit literal EmptyState title/help pairs. These pass through localizedUiText at runtime,
 // so checking them catches blankly untranslated empty states before they ship.
 let checkedStaticEmptyStates = 0;
@@ -149,4 +181,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Android localization contract passed: ' + checkedPhrases + ' literal localizedUiText call(s) and ' + checkedStaticEmptyStates + ' literal EmptyState title/detail pair(s) checked across ' + scannedFiles + ' screen file(s), using ' + phraseLines.length + ' shared bilingual phrase(s).');
+console.log('Android localization contract passed: ' + checkedPhrases + ' mapped localizedUiText call(s), ' + checkedDirectText + ' direct Compose Text literal(s) audited, and ' + checkedStaticEmptyStates + ' EmptyState title/detail pair(s) checked across ' + scannedFiles + ' screen file(s), using ' + phraseLines.length + ' shared bilingual phrase(s).');

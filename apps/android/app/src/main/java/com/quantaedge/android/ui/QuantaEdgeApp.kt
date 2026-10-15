@@ -2596,10 +2596,10 @@ private fun LoginScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp)) {
             if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
             else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
-            if (mode == "LEARNER") Button(onClick = { mode = "LEARNER" }, enabled = !busy) { Text("Learner") }
-            else TextButton(onClick = { mode = "LEARNER"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text("Learner") }
-            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text("Parent") }
-            else TextButton(onClick = { mode = "PARENT"; parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text("Parent") }
+            if (mode == "LEARNER") Button(onClick = { mode = "LEARNER" }, enabled = !busy) { Text(localizedUiText("Learner")) }
+            else TextButton(onClick = { mode = "LEARNER"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text(localizedUiText("Learner")) }
+            if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text(localizedUiText("Parent")) }
+            else TextButton(onClick = { mode = "PARENT"; parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text(localizedUiText("Parent")) }
         }
         if (mode == "PARENT") {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
@@ -2624,7 +2624,7 @@ private fun LoginScreen(
                 OutlinedTextField(value = otp, onValueChange = { otp = it.filter(Char::isDigit).take(6) },
                     label = { Text(if (language == "hi") "OTP (6 अंक)" else "OTP (6 digits)") },
                     singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
-                if (devCode.isNotBlank()) Text("Development OTP: " + devCode,
+                if (devCode.isNotBlank()) Text(localizedUiText("Development OTP: ") + devCode,
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
                 Button(onClick = { onVerifyOtp(mobile, otp) }, enabled = !busy && otp.length == 6,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
@@ -2656,7 +2656,7 @@ private fun LoginScreen(
                 label = { Text(if(language=="hi") "Parent mobile (10 digits)" else "Registered parent mobile (10 digits)") },
                 singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
             OutlinedTextField(value = username, onValueChange = { username = it.trim().take(32) },
-                label = { Text("Student username") }, singleLine = true,
+                label = { Text(localizedUiText("Student username")) }, singleLine = true,
                 modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
             OutlinedTextField(value = password, onValueChange = { password = it },
                 label = { Text(if(language=="hi") "पासवर्ड" else "Password") },

@@ -328,4 +328,10 @@
     <string name="qe_audit_status_student_photo_removed">Profile photo removed.</string>
     <string name="qe_audit_status_certificate_issued_progress">Certificate issued. You can now save its PDF or PNG from this result.</string>
     <string name="qe_audit_status_development_otp">Development OTP: </string>
+    <string name="qe_role_learner">Learner</string>
+    <string name="qe_legal_privacy">Privacy</string>
+    <string name="qe_legal_terms">Terms</string>
+    <string name="qe_resource_chapter_pdfs">chapter PDFs</string>
+    <string name="qe_resource_book_pdf">Book PDF · </string>
+    <string name="qe_resource_pages">pages</string>
 </resources>

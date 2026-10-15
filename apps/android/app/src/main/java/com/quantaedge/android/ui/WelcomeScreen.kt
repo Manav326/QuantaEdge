@@ -62,8 +62,8 @@ fun WelcomeScreen(
             }
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(18.dp), verticalAlignment = Alignment.CenterVertically) {
-                TextButton(onClick = onPrivacy) { Text("Privacy") }
-                TextButton(onClick = onTerms) { Text("Terms") }
+                TextButton(onClick = onPrivacy) { Text(localizedUiText("Privacy")) }
+                TextButton(onClick = onTerms) { Text(localizedUiText("Terms")) }
             }
         }
     }

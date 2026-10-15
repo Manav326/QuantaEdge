@@ -11,6 +11,12 @@ internal val LocalQuantaLanguage = staticCompositionLocalOf { "hi" }
 
 private data class UiPhrase(val key: String, val english: String, val hindi: String)
 private val uiPhrases = listOf(
+    UiPhrase("resource_pages", "pages", "पृष्ठ"),
+    UiPhrase("resource_book_pdf", "Book PDF · ", "पुस्तक PDF · "),
+    UiPhrase("resource_chapter_pdfs", "chapter PDFs", "अध्याय PDF"),
+    UiPhrase("legal_terms", "Terms", "नियम और शर्तें"),
+    UiPhrase("legal_privacy", "Privacy", "गोपनीयता"),
+    UiPhrase("role_learner", "Learner", "विद्यार्थी"),
     UiPhrase("nav_home", "Home", "होम"),
     UiPhrase("nav_learn", "Learn", "सीखें"),
     UiPhrase("nav_tests", "Tests", "टेस्ट"),
