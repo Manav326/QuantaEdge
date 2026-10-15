@@ -28,7 +28,7 @@ public class GuardianController {
     context=authorization.requireParent(context);
     long activeChildren=jdbc.queryForObject("""
       select count(distinct st.id) from guardian_student gs join student st on st.id=gs.student_id
-      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL'
         and st.active=true and st.environment='PRODUCTION'
       """,Long.class,context.userId());
     int limit=Math.max(1,maxChildrenPerParent);
@@ -183,7 +183,7 @@ public class GuardianController {
       from guardian_student gs join student st on st.id=gs.student_id
       left join curriculum_class cc on cc.code=st.class_code
       left join student_login_credential slc on slc.guardian_user_id=gs.guardian_user_id and slc.student_id=st.id and slc.active=true
-      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL'
         and st.active=true and st.environment='PRODUCTION' order by st.created_at
       """,context.userId());
   }
@@ -217,7 +217,7 @@ public class GuardianController {
     if(parentRows.isEmpty()) throw new SecurityException("Active parent account required.");
     Long activeChildren=jdbc.queryForObject("""
       select count(distinct st.id) from guardian_student gs join student st on st.id=gs.student_id
-      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED'
+      where gs.guardian_user_id=? and gs.active=true and gs.consent_status='CONSENTED' and gs.access_level='FULL'
         and st.active=true and st.environment='PRODUCTION'
       """,Long.class,guardianId);
     if(activeChildren!=null && activeChildren>=Math.max(1,maxChildrenPerParent))
@@ -267,7 +267,7 @@ public class GuardianController {
   public Map<String,Object> report(@PathVariable long studentId,@RequestAttribute(value="authContext",required=false) AuthContext context){
     context=authorization.requireParent(context);
     Boolean allowed=jdbc.queryForObject("""
-      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED')
+      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL')
       """,Boolean.class,context.userId(),studentId);
     if(!allowed) throw new SecurityException("Child access denied");
     Map<String,Object> child=jdbc.queryForMap("""

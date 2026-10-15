@@ -188,8 +188,11 @@ public class AuthService {
         throw new IllegalArgumentException("No active parent account found for this mobile number. If the account is suspended, contact support.");
     }
 
-    // Keep real OTP delivery rate-limited. Local QA can opt out only when the fixed demo OTP
-    // is enabled, avoiding repeated-login test lockouts without weakening production delivery.
+    return deliverOtp(normalized,purpose,null);
+  }
+
+  /** OTP delivery shared by public sign-in and authenticated learner account conversion. */
+  private String deliverOtp(String normalized,String purpose,Long studentId) {
     if (!(demoSeed && allowRepeatedDemoOtp)) {
       long recent=jdbc.queryForObject(
           "select count(*) from otp_challenge where mobile_e164=? and requested_at > now() - (? * interval '1 second')",
@@ -200,15 +203,12 @@ public class AuthService {
           Long.class,normalized);
       if(hourly>=5) throw new IllegalStateException("Too many OTP requests. Please try again later.");
     }
-
     String otp=demoSeed ? "123456" : String.format("%06d",random.nextInt(1_000_000));
-
     if(!demoSeed) {
       String providerUrl=System.getenv("APP_OTP_PROVIDER_URL");
       String providerToken=System.getenv("APP_OTP_PROVIDER_TOKEN");
-      if(providerUrl==null || providerUrl.isBlank() || providerToken==null || providerToken.isBlank()) {
+      if(providerUrl==null || providerUrl.isBlank() || providerToken==null || providerToken.isBlank())
         throw new IllegalStateException("OTP provider is not configured");
-      }
       try {
         var client=java.net.http.HttpClient.newHttpClient();
         var payload="{\"to\":\"" + normalized + "\",\"otp\":\"" + otp + "\",\"purpose\":\"" + purpose + "\"}";
@@ -218,17 +218,33 @@ public class AuthService {
             .POST(java.net.http.HttpRequest.BodyPublishers.ofString(payload)).build();
         var response=client.send(request,java.net.http.HttpResponse.BodyHandlers.discarding());
         if(response.statusCode()/100!=2) throw new IllegalStateException("OTP provider rejected request");
-      } catch(Exception ex) {
-        throw new IllegalStateException("Unable to deliver OTP");
-      }
+      } catch(Exception ex) { throw new IllegalStateException("Unable to deliver OTP"); }
     }
-
     jdbc.update("""
-      insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at)
-      values (?,?,?,now()+interval '5 minutes')
-      """,normalized,purpose,hash(otp));
-
+      insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,student_id)
+      values (?,?,?,now()+interval '5 minutes',?)
+      """,normalized,purpose,hash(otp),studentId);
     return demoSeed ? otp : null;
+  }
+
+  /** Only a staff-verified adult can request the independent-account conversion OTP. */
+  public String requestStudentTransitionOtp(long studentId,String mobile) {
+    String normalized=normalizeMobile(mobile);
+    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
+      throw new IllegalArgumentException("Enter a valid Indian mobile number.");
+    Long eligible=jdbc.queryForObject("""
+      select count(*) from student st
+      join student_adult_verification av on av.student_id=st.id
+      where st.id=? and st.active=true and st.environment='PRODUCTION'
+        and st.user_account_id is null and av.status='VERIFIED' and av.expires_at>now()
+      """,Long.class,studentId);
+    if(eligible==null || eligible==0)
+      throw new SecurityException("Verified adult eligibility is required before independent account conversion.");
+    Boolean accountExists=jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized);
+    if(Boolean.TRUE.equals(accountExists))
+      throw new IllegalStateException("This mobile number is already associated with an account. Use a different verified mobile number.");
+    return deliverOtp(normalized,"LEARNER_TRANSITION",studentId);
   }
 
   @Transactional
@@ -244,15 +260,15 @@ public class AuthService {
   @Transactional
   public AuthContext verifyOtp(String mobile,String otp,String purpose,String displayName,boolean firstAccess,String newPassword) {
     String normalized=normalizeMobile(mobile);
-    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose))
+    if(!"LOGIN".equals(purpose) && !"SIGNUP".equals(purpose) && !"STAFF_LOGIN".equals(purpose) && !"PASSWORD_RESET".equals(purpose) && !"LEARNER_TRANSITION".equals(purpose))
       throw new IllegalArgumentException("Invalid OTP purpose");
     if("SIGNUP".equals(purpose) && (displayName==null || displayName.trim().length()<2 || displayName.trim().length()>120))
       throw new IllegalArgumentException("Parent name must be between 2 and 120 characters");
-    if("SIGNUP".equals(purpose) || "PASSWORD_RESET".equals(purpose))
+    if("SIGNUP".equals(purpose) || "PASSWORD_RESET".equals(purpose) || "LEARNER_TRANSITION".equals(purpose))
       validatePassword(newPassword, 8, "Password");
 
     var rows=jdbc.queryForList("""
-      select id,code_hash,attempts,expires_at,purpose
+      select id,code_hash,attempts,expires_at,purpose,student_id
       from otp_challenge
       where mobile_e164=? and purpose=? and consumed_at is null
       order by requested_at desc limit 1
@@ -314,6 +330,12 @@ public class AuthService {
       return contextForStaff(staffId);
     }
 
+    if ("LEARNER_TRANSITION".equals(purpose)) {
+      if (row.get("student_id")==null) throw new SecurityException("Learner transition OTP is not linked to a student.");
+      return completeIndependentLearnerTransition(normalized,
+          ((Number)row.get("student_id")).longValue(),newPassword,((Number)row.get("id")).longValue());
+    }
+
     if ("PASSWORD_RESET".equals(purpose)) {
       List<Map<String,Object>> parentRows=jdbc.queryForList(
           "select id from user_account where mobile_e164=? and active=true and role='PARENT'", normalized);
@@ -361,6 +383,47 @@ public class AuthService {
     return contextForUser(userId);
   }
 
+
+  private AuthContext completeIndependentLearnerTransition(String normalized,long studentId,String password,long otpId) {
+    List<Map<String,Object>> students=jdbc.queryForList("""
+      select id,display_name,user_account_id from student
+      where id=? and active=true and environment='PRODUCTION' for update
+      """,studentId);
+    if(students.isEmpty()) throw new SecurityException("Active production learner not found.");
+    Map<String,Object> student=students.getFirst();
+    if(student.get("user_account_id")!=null)
+      throw new IllegalStateException("This learner already has an independent account.");
+    Long adultVerified=jdbc.queryForObject("""
+      select count(*) from student_adult_verification
+      where student_id=? and status='VERIFIED' and expires_at>now()
+      """,Long.class,studentId);
+    if(adultVerified==null || adultVerified==0)
+      throw new SecurityException("Verified adult eligibility is required before conversion.");
+    Boolean accountExists=jdbc.queryForObject(
+        "select exists(select 1 from user_account where mobile_e164=?)",Boolean.class,normalized);
+    if(Boolean.TRUE.equals(accountExists))
+      throw new IllegalStateException("This mobile number is already associated with an account.");
+    String displayName=String.valueOf(student.get("display_name"));
+    Long userId=jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
+      values (?,?,?,'LEARNER',?) returning id
+      """,Long.class,UUID.randomUUID(),normalized,displayName,passwordEncoder.encode(password));
+    int linked=jdbc.update("update student set user_account_id=? where id=? and user_account_id is null",userId,studentId);
+    if(linked!=1) throw new IllegalStateException("Learner account link changed during conversion; retry sign-in.");
+    int limited=jdbc.update("""
+      update guardian_student set access_level='LIMITED'
+      where student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL'
+      """,studentId);
+    jdbc.update("update student_login_credential set active=false,updated_at=now() where student_id=?",studentId);
+    jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
+    jdbc.update("update otp_challenge set consumed_at=now() where id=?",otpId);
+    jdbc.update("""
+      insert into account_lifecycle_audit(event_type,student_id,user_id,actor_student_id,old_role,new_role,details)
+      values ('STUDENT_BECAME_INDEPENDENT',?,?,?,'STUDENT','LEARNER',
+        jsonb_build_object('guardianRelationshipsPreserved',true,'guardianAccessLimited',?))
+      """,studentId,userId,studentId,limited);
+    return contextForStudent(null,studentId);
+  }
 
   /** Username/password login for the isolated HRMS workspace. */
   @Transactional(noRollbackFor = {IllegalArgumentException.class, ResponseStatusException.class})
@@ -539,6 +602,33 @@ public class AuthService {
     }
     clearPasswordLoginFailures("PARENT",normalized);
     return contextForUser(((Number)row.get("id")).longValue());
+  }
+
+  /** Independent learners use their own verified mobile and password; history remains on the linked student row. */
+  public AuthContext loginIndependentLearner(String mobile,String password) {
+    String normalized=normalizeMobile(mobile);
+    if(!(normalized.startsWith("+91") && normalized.length()==13 && normalized.substring(3).chars().allMatch(Character::isDigit)))
+      throw new IllegalArgumentException("Enter a valid Indian mobile number.");
+    if(password==null || password.isBlank()) throw new IllegalArgumentException("Enter your password.");
+    assertPasswordLoginAllowed("LEARNER",normalized);
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select u.password_hash,st.id as student_id
+      from user_account u
+      join student st on st.user_account_id=u.id and st.active=true and st.environment='PRODUCTION'
+      where u.mobile_e164=? and u.active=true and u.role in ('LEARNER','PARENT')
+      """,normalized);
+    if(rows.isEmpty()) {
+      recordPasswordLoginFailure("LEARNER",normalized);
+      throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    }
+    Map<String,Object> row=rows.getFirst();
+    String stored=row.get("password_hash")==null?"":String.valueOf(row.get("password_hash"));
+    if(stored.isBlank() || !passwordEncoder.matches(password,stored)) {
+      recordPasswordLoginFailure("LEARNER",normalized);
+      throw new IllegalArgumentException("Mobile number or password is incorrect.");
+    }
+    clearPasswordLoginFailures("LEARNER",normalized);
+    return contextForStudent(null,((Number)row.get("student_id")).longValue());
   }
 
   /** Student credentials are scoped to the parent mobile; direct student login never receives parent-account access. */
@@ -1035,7 +1125,7 @@ public class AuthService {
 
   public boolean hasGuardianAccess(long userId,long studentId) {
     return jdbc.queryForObject("""
-      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED')
+      select exists(select 1 from guardian_student where guardian_user_id=? and student_id=? and active=true and consent_status='CONSENTED' and access_level='FULL')
       """,Boolean.class,userId,studentId);
   }
 

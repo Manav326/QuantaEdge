@@ -39,6 +39,21 @@ public class AuthController {
     return result;
   }
 
+  @PostMapping("/learner-transition/request-otp")
+  public Map<String,Object> requestLearnerTransitionOtp(
+      @RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    if(context==null || !context.isStudent() || context.studentId()==null)
+      throw new SecurityException("An authenticated student session is required.");
+    if(!Boolean.TRUE.equals(body.get("consentAccepted")))
+      throw new SecurityException("Explicit confirmation is required to request independent account conversion.");
+    String devCode=auth.requestStudentTransitionOtp(context.studentId(),String.valueOf(body.getOrDefault("mobile","")));
+    var result=new LinkedHashMap<String,Object>();
+    result.put("accepted",true); result.put("expiresInSeconds",300);
+    if(devCode!=null) result.put("devCode",devCode);
+    return result;
+  }
+
   @PostMapping("/verify-otp")
   public ResponseEntity<Map<String,Object>> verifyOtp(
       @RequestBody Map<String,Object> body,
@@ -110,6 +125,13 @@ public class AuthController {
     AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
     return withCookie(auth.issueSession(context, "STUDENT"), "STUDENT");
+  }
+
+  @PostMapping("/learner-login")
+  public ResponseEntity<Map<String,Object>> learnerLogin(@RequestBody Map<String,Object> body) {
+    AuthContext context=auth.loginIndependentLearner(String.valueOf(body.getOrDefault("mobile","")),
+        String.valueOf(body.getOrDefault("password","")));
+    return withCookie(auth.issueSession(context,"STUDENT"),"STUDENT");
   }
 
   @PostMapping("/preview-login")
