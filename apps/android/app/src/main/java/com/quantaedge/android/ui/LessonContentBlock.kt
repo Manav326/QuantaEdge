@@ -2,6 +2,11 @@ package com.quantaedge.android.ui
 
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.graphics.drawable.AnimatedImageDrawable
+import android.os.Build
+import android.widget.ImageView
+import java.nio.ByteBuffer
 import android.net.Uri
 import android.text.Html
 import androidx.compose.foundation.Image
@@ -129,15 +134,21 @@ fun LessonContentBlock(
                     if (visualKind.isNotBlank()) Text(visualKindLabel(visualKind, language),
                         style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                     if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
-                    val animationVideo = type == "ANIMATION" && url.substringBefore("?").lowercase()
-                        .let { it.endsWith(".mp4") || it.endsWith(".webm") || it.endsWith(".ogg") }
+                    val mediaPath = url.substringBefore("?").lowercase()
+                    val animationVideo = type == "ANIMATION" &&
+                        (mediaPath.endsWith(".mp4") || mediaPath.endsWith(".webm") || mediaPath.endsWith(".ogg"))
+                    val animatedImage = mediaPath.endsWith(".gif") || mediaPath.endsWith(".webp")
                     if (url.isNotBlank() && animationVideo) {
                         LessonPlayableMedia(url = url, audioOnly = false, language = language)
                     } else if (url.isNotBlank()) {
                         val alt = (if (language == "hi") data.textAny("alt_hi") else "").ifBlank {
                             data.textAny("alt").ifBlank { title }
                         }
-                        LessonImage(url = url, alt = alt)
+                        if (animatedImage && Build.VERSION.SDK_INT >= 28) {
+                            LessonAnimatedImage(url = url, alt = alt)
+                        } else {
+                            LessonImage(url = url, alt = alt)
+                        }
                     } else {
                         Text((if (language == "hi") data.textAny("alt_hi") else "").ifBlank {
                             data.textAny("alt").ifBlank {
@@ -214,6 +225,94 @@ fun LessonContentBlock(
                     if (fallback.isNotBlank()) LearningMathText(fallback, style = MaterialTheme.typography.bodyLarge)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun LessonAnimatedImage(url: String, alt: String) {
+    var animated by remember(url) { mutableStateOf<AnimatedImageDrawable?>(null) }
+    var loadFailed by remember(url) { mutableStateOf(false) }
+    var expanded by remember(url) { mutableStateOf(false) }
+
+    LaunchedEffect(url) {
+        loadFailed = false
+        animated = null
+        val result = withContext(Dispatchers.IO) {
+            runCatching {
+                if (Build.VERSION.SDK_INT < 28) throw IllegalStateException("Animated images need Android 9 or newer")
+                val bytes = ApiClient.getMediaBytes(url)
+                if (bytes.isEmpty() || bytes.size > MAX_MEDIA_BYTES) throw IllegalStateException("Image size is invalid")
+                val drawable = ImageDecoder.decodeDrawable(ImageDecoder.createSource(ByteBuffer.wrap(bytes))) { decoder, info, _ ->
+                    val maxSide = maxOf(info.size.width, info.size.height)
+                    if (maxSide > MAX_IMAGE_DIMENSION) {
+                        val scale = MAX_IMAGE_DIMENSION.toFloat() / maxSide.toFloat()
+                        decoder.setTargetSize(
+                            maxOf(1, (info.size.width * scale).toInt()),
+                            maxOf(1, (info.size.height * scale).toInt())
+                        )
+                    }
+                }
+                drawable as? AnimatedImageDrawable ?: throw IllegalStateException("Image is not animated")
+            }
+        }
+        animated = result.getOrNull()
+        loadFailed = result.isFailure
+    }
+
+    val drawable = animated
+    if (drawable != null) {
+        DisposableEffect(drawable) {
+            drawable.repeatCount = AnimatedImageDrawable.REPEAT_INFINITE
+            drawable.start()
+            onDispose { drawable.stop() }
+        }
+        AndroidView(
+            factory = { viewContext ->
+                ImageView(viewContext).apply {
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    adjustViewBounds = true
+                    contentDescription = alt
+                }
+            },
+            update = { view ->
+                view.contentDescription = alt
+                if (view.drawable !== drawable) view.setImageDrawable(drawable)
+            },
+            modifier = Modifier.fillMaxWidth().height(220.dp).clickable { expanded = true }
+        )
+        if (expanded) {
+            Dialog(onDismissRequest = { expanded = false }) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(alt, style = MaterialTheme.typography.titleSmall)
+                        AndroidView(
+                            factory = { viewContext ->
+                                ImageView(viewContext).apply {
+                                    scaleType = ImageView.ScaleType.FIT_CENTER
+                                    adjustViewBounds = true
+                                    contentDescription = alt
+                                }
+                            },
+                            update = { view ->
+                                view.contentDescription = alt
+                                if (view.drawable !== drawable) view.setImageDrawable(drawable)
+                            },
+                            modifier = Modifier.fillMaxWidth().height(480.dp)
+                        )
+                        TextButton(onClick = { expanded = false }, modifier = Modifier.align(Alignment.End)) {
+                            Text(localizedUiText("Close"))
+                        }
+                    }
+                }
+            }
+        }
+    } else if (loadFailed) {
+        LessonImage(url = url, alt = alt)
+    } else {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+            Text(localizedUiText("Visual लोड हो रहा है…"), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
