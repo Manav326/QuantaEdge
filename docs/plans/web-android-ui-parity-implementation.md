@@ -86,7 +86,7 @@ Implementation partials still open:
 | Item | Change | Commit |
 |---|---|---|
 | LANG-01 | Completed the visible-string sweep for fixed Compose text: role choice, development OTP prefix, student username, Privacy/Terms and textbook count/page labels now use bilingual mappings/resources. Added a CI guard against direct untranslated Compose Text literals; the first run exposed the neutral AI badge, which was allow-listed in the follow-up checker fix. | `631312bdfa4956dd31250c7f32eb07051a0deee2`; checker fix `266e79ff7c343d03d69152d65a9264647a536798` |
-| UI-01 | Added visible loading/empty/retry behavior for the Android home course catalogue; textbook quick links no longer disappear when no PDFs are returned and offer subject-based recheck; archived profiles now distinguish loading from an actual empty result and support retry. | Current pass — see commit after review |
+| UI-01 | Added visible loading/empty/retry behavior for the Android home course catalogue; textbook quick links no longer disappear when no PDFs are returned and offer subject-based recheck; archived profiles now distinguish loading from an actual empty result and support retry. | `272de3411172fb1510ae235afdcac407e767481c` |
 | PARENT-05 | Android archived-child restore now requires the guardian to actively tick a fresh-consent checkbox before the restore action enables. | `6d50d4b3bf712e07a4a7006edfc1a322e1b0626e` |
 | PARENT-05 / LANG-01 | Added Hindi/English localization phrases for the archived-child restore explanation, explicit consent, archived list and empty state. | `fcb97bfa17cb435598edb75eb3db4f3dbaea8429` |
 | PARENT-05 | Added the Compose layout import needed by the guarded consent row. | `910a00d513818dc35f538b4de9c4cf39187bb377` |
@@ -143,7 +143,7 @@ The source matrix's 30 E2E scenarios are retained here as a durable run log. The
 
 ## CI / manual verification boundary
 
-The most recent green baseline before the current library hierarchy change is [run 38753976983](https://github.com/Manav326/QuantaEdge/actions/runs/38753976983) on commit `abc6486e9e9c888387755b1eae420c20d0bf746f` (success: Android build/tests, web navigation contract, API verification and image builds). The library hierarchy change below needs its own CI pass. CI cannot by itself prove real account entitlement, actual saved files, camera permission handling, device rotation, accessibility, or cross-platform data parity.
+The latest complete green workflow is [run 38763030311](https://github.com/Manav326/QuantaEdge/actions/runs/38763030311) on commit `272de3411172fb1510ae235afdcac407e767481c` (success: Android localization contract, Android unit tests/debug APK build and upload, web/admin/API/People Operations image builds, API verification and content-import safeguards). LANG-01 is implemented on main; browser/device E2E remains separate. CI cannot by itself prove real account entitlement, actual saved files, camera permission handling, device rotation, accessibility, or cross-platform data parity.
 
 ## Core constraints
 
