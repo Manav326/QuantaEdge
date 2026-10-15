@@ -1,0 +1,254 @@
+name: Prepare textbook visual candidates v3 (additive)
+
+on:
+  workflow_dispatch:
+    inputs:
+      book_slug:
+        description: Stable short identifier, e.g. class6-curiosity-en
+        required: true
+        type: string
+        default: class6-curiosity-en
+      class_no:
+        description: Class number for the existing whole-book GHCR cache
+        required: true
+        type: choice
+        options:
+          - "6"
+          - "7"
+          - "8"
+        default: "6"
+      language:
+        description: Language of the exact whole-book source
+        required: true
+        type: choice
+        options:
+          - english
+          - hindi
+        default: english
+      book_id:
+        description: Exact book ID in the existing source manifest
+        required: true
+        type: string
+        default: ncert-c6-english-fecu1
+      max_candidates:
+        description: Number of review candidates to prepare (1-200)
+        required: true
+        type: string
+        default: "60"
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: textbook-visual-candidates-v3-${{ inputs.book_slug }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare source-bound visual candidate pack
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      BOOK_SLUG: ${{ inputs.book_slug }}
+      CLASS_NO: ${{ inputs.class_no }}
+      LANGUAGE: ${{ inputs.language }}
+      BOOK_ID: ${{ inputs.book_id }}
+      MAX_CANDIDATES: ${{ inputs.max_candidates }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Validate inputs and run focused regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
+          [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
+          [[ "$MAX_CANDIDATES" =~ ^[0-9]+$ ]] && (( MAX_CANDIDATES >= 1 && MAX_CANDIDATES <= 200 )) || { echo "max_candidates must be 1..200"; exit 2; }
+          python --version
+          python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
+          python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
+          python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+
+      - name: Pull exact whole-book PDF and matching source context from GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_IMAGE="ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker pull "$SOURCE_IMAGE"
+          container_id="$(docker create "$SOURCE_IMAGE" /__quantaedge_cache_inspection_only)"
+          trap 'docker rm -f "$container_id" >/dev/null 2>&1 || true' EXIT
+          mkdir -p "$RUNNER_TEMP/quantaedge-source-v3"
+          docker cp "$container_id:/index.json" "$RUNNER_TEMP/quantaedge-source-v3/index.json"
+          docker cp "$container_id:/books/$BOOK_ID.pdf" "$RUNNER_TEMP/quantaedge-source-v3/source.pdf"
+          python - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+          root = Path(os.environ["GITHUB_WORKSPACE"])
+          source_dir = Path(os.environ["RUNNER_TEMP"]) / "quantaedge-source-v3"
+          book_id = os.environ["BOOK_ID"]
+          class_no = os.environ["CLASS_NO"]
+          language = os.environ["LANGUAGE"]
+          index = json.loads((source_dir / "index.json").read_text(encoding="utf-8"))
+          entries = [item for item in index.get("books", []) if item.get("book_id") == book_id]
+          if len(entries) != 1 or entries[0].get("file") != f"books/{book_id}.pdf":
+              raise SystemExit(f"The exact whole book {book_id} is not uniquely present in the GHCR index.")
+          manifest_dir = root / "data" / "textbook-extractions" / f"class-{class_no}" / language / "pages"
+          matches = []
+          for path in manifest_dir.glob("*.manifest.json"):
+              try:
+                  item = json.loads(path.read_text(encoding="utf-8"))
+              except Exception:
+                  continue
+              if item.get("book_id") == book_id:
+                  matches.append((path, item))
+          if len(matches) != 1:
+              raise SystemExit(f"Expected one committed source manifest for {book_id}; found {len(matches)}.")
+          manifest_path, manifest = matches[0]
+          expected_hash = str(entries[0].get("sha256", "")).lower()
+          actual_manifest_hash = str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
+          if not expected_hash or actual_manifest_hash != expected_hash:
+              raise SystemExit("The GHCR index PDF hash does not match the committed source manifest.")
+          page_name = manifest.get("text_jsonl")
+          if not isinstance(page_name, str) or not page_name or Path(page_name).name != page_name or not page_name.endswith(".jsonl"):
+              raise SystemExit("The source manifest has an unsafe sibling page JSONL name.")
+          page_path = manifest_path.parent / page_name
+          if not page_path.is_file():
+              raise SystemExit(f"Committed sibling page JSONL is missing: {page_path}")
+          shutil.copy2(manifest_path, source_dir / "source.manifest.json")
+          shutil.copy2(page_path, source_dir / page_name)
+          print(json.dumps({
+              "book_id": book_id,
+              "ghcr_image": f"ghcr.io/manav326/quantaedge-textbooks-class-{class_no}-{language}:latest",
+              "manifest": str(manifest_path),
+              "expected_pdf_sha256": expected_hash
+          }, indent=2))
+          PY
+          echo "SOURCE_DIR=$RUNNER_TEMP/quantaedge-source-v3" >> "$GITHUB_ENV"
+
+      - name: Extract source-bound inventory into runner temporary storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/extract_visual_asset_inventory.py \
+            --pdf "$SOURCE_DIR/source.pdf" \
+            --manifest "$SOURCE_DIR/source.manifest.json" \
+            --output-dir "$RUNNER_TEMP/visual-inventory-v3" \
+            --preview-width 1200
+
+      - name: Prepare stratified candidate pack and verify outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/prepare_visual_candidates_v3.py \
+            --inventory "$RUNNER_TEMP/visual-inventory-v3/visual-inventory.v1.json" \
+            --pdf "$SOURCE_DIR/source.pdf" \
+            --output-dir "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG" \
+            --max-candidates "$MAX_CANDIDATES" \
+            --crop-scale 2.0
+          python - "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG/candidates.v3.json" <<'PY'
+          import json, sys
+          from pathlib import Path
+          path = Path(sys.argv[1])
+          pack = json.loads(path.read_text(encoding="utf-8"))
+          if pack.get("schema_version") != "quantaedge.visual-candidate-pack.v3":
+              raise SystemExit("Unexpected candidate pack schema.")
+          if pack.get("summary", {}).get("selected_candidate_count", 0) < 1:
+              raise SystemExit("The candidate pack is empty.")
+          if pack.get("summary", {}).get("publication_allowed") is not False:
+              raise SystemExit("Candidate pack must remain non-publishable.")
+          root = path.parent
+          for candidate in pack.get("candidates", []):
+              for key in ("display_path", "source_page_preview_path"):
+                  target = (root / candidate[key]).resolve()
+                  if root.resolve() not in target.parents or not target.is_file():
+                      raise SystemExit(f"Missing/unsafe candidate preview referenced by {key}: {candidate.get('candidate_id')}")
+          print(json.dumps(pack["summary"], indent=2))
+          PY
+
+      - name: Install ORAS and authenticate to GHCR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          oras_archive="$RUNNER_TEMP/oras_1.2.0_linux_amd64.tar.gz"
+          curl --retry 5 --retry-all-errors --retry-delay 2 -fsSL \
+            "https://github.com/oras-project/oras/releases/download/v1.2.0/oras_1.2.0_linux_amd64.tar.gz" \
+            -o "$oras_archive"
+          tar -xzf "$oras_archive" -C "$RUNNER_TEMP" oras
+          sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
+          echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Publish immutable v3 candidate pack (no stable tag update)
+        id: publish_pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
+          version_tag="candidates-v3-class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
+          archive_name="$BOOK_SLUG-candidates-v3.tar.gz"
+          tar -C "$RUNNER_TEMP/visual-candidates-v3" -czf "$RUNNER_TEMP/$archive_name" "$BOOK_SLUG"
+          bundle_sha256="$(sha256sum "$RUNNER_TEMP/$archive_name" | cut -d' ' -f1)"
+          (cd "$RUNNER_TEMP" && oras push "$package:$version_tag" "$archive_name:application/gzip")
+          echo "package=$package" >> "$GITHUB_OUTPUT"
+          echo "version_tag=$version_tag" >> "$GITHUB_OUTPUT"
+          echo "bundle_sha256=$bundle_sha256" >> "$GITHUB_OUTPUT"
+          echo "Published immutable candidate pack $package:$version_tag ($bundle_sha256)."
+          echo "The stable visual bundle tag was not modified."
+
+      - name: Persist compact review manifest and index on main
+        env:
+          CANDIDATE_PACKAGE: ${{ steps.publish_pack.outputs.package }}
+          CANDIDATE_VERSION_TAG: ${{ steps.publish_pack.outputs.version_tag }}
+          CANDIDATE_BUNDLE_SHA256: ${{ steps.publish_pack.outputs.bundle_sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          pack_dir="$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG"
+          out="data/textbook-visual-candidates-v3/$BOOK_SLUG"
+          mkdir -p "$out"
+          cp "$pack_dir/candidates.v3.json" "$out/candidates.v3.json"
+          cp "$pack_dir/summary.v3.json" "$out/summary.v3.json"
+          cp "$pack_dir/contact-sheet.jpg" "$out/contact-sheet.jpg"
+          python - "$out/bundle-index.v3.json" "$pack_dir/summary.v3.json" <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          index_path = Path(sys.argv[1])
+          summary = json.loads(Path(sys.argv[2]).read_text(encoding="utf-8"))
+          summary_source = summary["source"]
+          value = {
+              "schema_version": "quantaedge.visual-candidate-bundle-index.v3",
+              "book_slug": os.environ["BOOK_SLUG"],
+              "source_book_id": os.environ["BOOK_ID"],
+              "source_pdf_sha256": summary_source["pdf_sha256"],
+              "candidate_pack_schema": summary["schema_version"],
+              "candidate_count": summary["summary"]["selected_candidate_count"],
+              "candidate_pages": summary["summary"]["selected_page_numbers"],
+              "publication_allowed": False,
+              "review_required": True,
+              "ghcr_package": os.environ["CANDIDATE_PACKAGE"],
+              "version_tag": os.environ["CANDIDATE_VERSION_TAG"],
+              "bundle_tar_sha256": os.environ["CANDIDATE_BUNDLE_SHA256"],
+              "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. The full contact sheets, source previews, image crops and original image objects are in the package."
+          }
+          index_path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps(value, indent=2))
+          PY
+          git add "$out"
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "data(ai): persist v3 textbook visual candidate manifest"
+          fi
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "Persisted the v3 candidate manifest and contact sheet. No existing v1/v2 files were changed."
