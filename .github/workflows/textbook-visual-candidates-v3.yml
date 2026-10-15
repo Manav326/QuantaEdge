@@ -9,6 +9,11 @@ on:
       - "scripts/build_visual_lesson_attachment_manifest.py"
       - "tests/test_build_visual_lesson_attachment_manifest.py"
       - "tests/test_textbook_visual_end_to_end_contract.py"
+      - "scripts/update_visual_catalog_index.py"
+      - "tests/test_update_visual_catalog_index.py"
+      - "apps/admin/public/content/visual-candidates/index.v1.json"
+      - "apps/admin/public/content/visual-candidates/*.v3.json"
+      - "data/textbook-visual-candidates-v3/**"
       - "apps/admin/app/content/page.tsx"
       - "apps/admin/public/content/visual-candidates/class6-curiosity-en.v3.json"
       - "services/api/src/main/java/com/quantaedge/api/AdminContentController.java"
@@ -78,7 +83,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
 
       - name: Compile candidate scripts
-        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py
+        run: python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
 
       - name: Test existing inventory extractor
         run: python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -90,6 +95,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
 
   prepare:
     if: github.event_name == 'workflow_dispatch'
@@ -123,6 +129,7 @@ jobs:
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
 
       - name: Pull exact whole-book PDF and matching source context from GHCR
         env:
@@ -238,6 +245,7 @@ jobs:
             --book-slug "$BOOK_SLUG" \\
             --output "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" \\
             "${chapter_map_args[@]}"
+          python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
 
       - name: Install ORAS and authenticate to GHCR
         env:
@@ -308,7 +316,8 @@ jobs:
           index_path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print(json.dumps(value, indent=2))
           PY
-          git add "$out" "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" "apps/web/public/content/visual-assets/$BOOK_SLUG"
+          python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
+          git add "$out" "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" "apps/admin/public/content/visual-candidates/index.v1.json" "apps/web/public/content/visual-assets/$BOOK_SLUG"
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
