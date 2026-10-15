@@ -280,9 +280,9 @@ jobs:
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           version_tag="class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
-          oras push "$package:$version_tag" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          (cd "$RUNNER_TEMP" && oras push "$package:$version_tag" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
           if [[ "$PUBLISH_STABLE" == "true" ]]; then
-            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+            (cd "$RUNNER_TEMP" && oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
           else
             echo "Skipping stable GHCR tag update for this diagnostic/model-comparison run."
           fi
@@ -337,13 +337,13 @@ jobs:
         run: |
           {
             printf '%s\n' '## Textbook visual analysis'
-            printf '%s\n' "- Book slug: `$BOOK_SLUG`"
-            printf '%s\n' "- Source image: `ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest`"
-            printf '%s\n' "- Book ID: `$BOOK_ID`"
-            printf '%s\n' "- Model: `$VISION_MODEL`"
-            printf '%s\n' "- Visual bundle: `${VISUAL_PACKAGE:-not-published}`"
-            printf '%s\n' "- Version tag: `${VISUAL_VERSION_TAG:-not-published}`"
-            printf '%s\n' "- Bundle SHA-256: `${VISUAL_SHA256:-not-published}`"
+            printf '%s\n' "- Book slug: $BOOK_SLUG"
+            printf '%s\n' "- Source image: ghcr.io/manav326/quantaedge-textbooks-class-$CLASS_NO-$LANGUAGE:latest"
+            printf '%s\n' "- Book ID: $BOOK_ID"
+            printf '%s\n' "- Model: $VISION_MODEL"
+            printf '%s\n' "- Visual bundle: ${VISUAL_PACKAGE:-not-published}"
+            printf '%s\n' "- Version tag: ${VISUAL_VERSION_TAG:-not-published}"
+            printf '%s\n' "- Bundle SHA-256: ${VISUAL_SHA256:-not-published}"
             if [[ -f "data/textbook-visuals/$BOOK_SLUG/visual-analysis.v1.json" ]]; then
               python - <<'PY'
           import json, os
