@@ -63,7 +63,7 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
             self.assertEqual("EDUCATION_ADMIN", request.get_header("X-qe-workspace"))
 
         with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
-            urlopen.return_value.read.return_value = b'{"approved": true}'
+            urlopen.return_value.__enter__.return_value.read.return_value = b'{"approved": true}'
             post_approve(
                 "http://localhost:8080/api/v1/admin/textbook-extraction/ghcr-books/12/approve",
                 "test-staff-access-token",
