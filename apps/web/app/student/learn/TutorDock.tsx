@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { useLocale } from '../../components/LanguageProvider';
 
-type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string };
+type TutorMessage = { id?: number; clientId?: string; role: 'USER' | 'ASSISTANT'; mode?: string; message: string; created_at?: string; createdAt?: string };
 type Mode = 'HINT' | 'EXPLAIN' | 'EXAMPLE' | 'STEP_BY_STEP' | 'CHECK_MY_WORK';
 type ApiBody = Record<string, unknown>;
 type PanelFrame = { left: number; top: number; width: number; height: number };
@@ -40,6 +40,20 @@ const modeIcons: Record<Mode, string> = {
   STEP_BY_STEP: '1→2',
   CHECK_MY_WORK: '✓',
 };
+
+function formatTutorTimestamp(value?: string): string {
+  if (!value) return '';
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return '';
+  const now = new Date();
+  const sameDay = date.getFullYear() === now.getFullYear()
+    && date.getMonth() === now.getMonth()
+    && date.getDate() === now.getDate();
+  const time = new Intl.DateTimeFormat(undefined, { hour: 'numeric', minute: '2-digit' }).format(date);
+  if (sameDay) return time;
+  const dateLabel = new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(date);
+  return dateLabel + ', ' + time;
+}
 
 async function readBody(response: Response): Promise<ApiBody> {
   const raw = await response.text();
@@ -569,7 +583,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
     setInput('');
     setBusy(true);
     setError('');
-    setMessages(current => [...current, { clientId: optimisticMessageId, role: 'USER', mode: selectedMode, message }]);
+    setMessages(current => [...current, { clientId: optimisticMessageId, role: 'USER', mode: selectedMode, message, created_at: new Date().toISOString() }]);
     try {
       const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages', {
         method: 'POST',
@@ -607,7 +621,7 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
           : 'ट्यूटर से खाली उत्तर मिला। कृपया फिर प्रयास करें।');
         return;
       }
-      setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string }]);
+      setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string, created_at: new Date().toISOString() }]);
     } catch {
       const recovered = await recoverPersistedTutorTurn(sessionId, message);
       if (recovered) {
@@ -692,6 +706,9 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
         <img className="tutor-q-mark" src="/branding/quantaedge-icon.png" alt="" />
         <strong className="tutor-head-title">{english ? 'Your tutor' : 'आपका ट्यूटर'}</strong>
         <span className="tutor-ai-badge" aria-label="AI tutor" title={english ? 'AI tutor' : 'AI ट्यूटर'}><span aria-hidden="true">✦</span><small>AI</small></span>
+        <span className="tutor-language-indicator" title="The tutor responds only in this learning language">
+          Learning: {responseLanguage === 'hi' ? 'Hindi' : 'English'}
+        </span>
       </div>
       <div className="tutor-head-controls">
         <button type="button" className="tutor-control-btn" aria-label={english ? 'Start a new chat' : 'नई चैट शुरू करें'} title={english ? 'New chat' : 'नई चैट'} disabled={busy || available !== true} onClick={() => void startNewChat()}>＋</button>
@@ -733,10 +750,14 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
               {messages.length === 0 && <div className="tutor-welcome">
                 <strong>{english ? 'Ask me about this lesson.' : 'इस पाठ के बारे में पूछें।'}</strong>
               </div>}
-              {messages.map((item, index) => <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || item.clientId || index}>
-                <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
-                <TutorMessageBody message={item.message} english={english} />
-              </article>)}
+              {messages.map((item, index) => {
+                const timestamp = item.created_at || item.createdAt;
+                return <article className={'tutor-message ' + item.role.toLowerCase()} key={item.id || item.clientId || index}>
+                  <span className="tutor-role">{item.role === 'ASSISTANT' ? (english ? 'Tutor' : 'ट्यूटर') : (english ? 'You' : 'आप')}</span>
+                  <TutorMessageBody message={item.message} english={english} />
+                  {timestamp && <time className="tutor-message-time" dateTime={timestamp}>{formatTutorTimestamp(timestamp)}</time>}
+                </article>;
+              })}
               {busy && <article className="tutor-message assistant tutor-thinking"><span className="tutor-role">{english ? 'Tutor' : 'ट्यूटर'}</span><p>{english ? 'Thinking…' : 'सोच रहा हूँ…'} <span className="tutor-thinking-dots" aria-hidden="true"><i /><i /><i /></span></p></article>}
               <div ref={endRef} />
             </div>
