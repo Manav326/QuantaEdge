@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import tempfile
 import zipfile
@@ -83,8 +84,14 @@ def main() -> int:
     parser.add_argument("--apply", action="store_true", help="Write content as DRAFT using the authenticated Admin API")
     parser.add_argument("--api-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--subject", choices=("maths", "science"), help="Limit this run to one subject")
-    parser.add_argument("--program-code", default="", help="Optional active program code; imports separate course-scoped drafts.")
+    parser.add_argument("--course-id", type=int, default=0,
+                        help="Stable numeric ID of the course to receive these draft records; independent of learner class.")
+    parser.add_argument("--program-code", default="", help="Backward-compatible active program code; prefer --course-id.")
     args = parser.parse_args()
+    if args.course_id < 0:
+        parser.error("--course-id must be positive when supplied.")
+    if args.course_id and args.program_code.strip():
+        parser.error("Use --course-id or --program-code, not both.")
     session = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "")
     if args.apply and not session:
         parser.error("--apply requires QUANTAEDGE_ADMIN_SESSION from an authenticated QuantaEdge Admin QE_SESSION cookie.")
@@ -105,7 +112,10 @@ def main() -> int:
         for source_path, original in bundles:
             try:
                 bundle = make_codes_unique(original)
-                if args.program_code.strip():
+                if args.course_id:
+                    bundle["curriculum"]["course_id"] = int(args.course_id)
+                    bundle["curriculum"].pop("program_code", None)
+                elif args.program_code.strip():
                     program_code = args.program_code.strip().upper()
                     if not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL":
                         raise ValueError("--program-code must identify an active additional course.")
@@ -120,11 +130,15 @@ def main() -> int:
 
                 curriculum = bundle["curriculum"]
                 program_code = str(curriculum.get("program_code") or "").strip().upper()
-                key = (str(curriculum["class_code"]), str(curriculum["subject_code"]), program_code)
+                course_id = int(curriculum["course_id"]) if curriculum.get("course_id") is not None else None
+                scope_key = "course:" + str(course_id) if course_id is not None else program_code
+                key = (str(curriculum["class_code"]), str(curriculum["subject_code"]), scope_key)
                 if key not in cache:
                     from urllib.parse import urlencode
                     query_args = {"classCode": key[0], "subjectCode": key[1], "status": "ALL"}
-                    if program_code:
+                    if course_id is not None:
+                        query_args["courseId"] = str(course_id)
+                    elif program_code:
                         query_args["programCode"] = program_code
                     query = urlencode(query_args)
                     rows = api.request("GET", "/api/v1/admin/content?" + query)  # type: ignore[union-attr]
@@ -134,17 +148,20 @@ def main() -> int:
 
                 code = bundle["chapter"]["code"]
                 matching = [r for r in cache[key] if str(r.get("chapter_code", "")).strip() == code
-                            and str(r.get("program_code") or "").strip().upper() == program_code]
+                            and ((int(r.get("course_id") or 0) == course_id) if course_id is not None else
+                                 (str(r.get("program_code") or "").strip().upper() == program_code))]
                 attach = bool(matching)
                 if matching:
                     present_lessons = {
                         str(r.get("lesson_code")).strip()
                         for r in cache[key] if str(r.get("chapter_code", "")).strip() == code and r.get("lesson_code")
+                        and ((int(r.get("course_id") or 0) == course_id) if course_id is not None else
+                             (str(r.get("program_code") or "").strip().upper() == program_code))
                     }
                     wanted = {str(l["code"]) for l in bundle["lessons"]}
                     if wanted.issubset(present_lessons):
                         results.append({"mode": "SKIPPED_ALREADY_PRESENT", "chapter_code": code,
-                                        "subject": key[1], "note": "All intended lesson codes already exist; inspect existing records before retrying."})
+                                        "subject": key[1], "course_id": course_id, "note": "All intended lesson codes already exist; inspect existing records before retrying."})
                         continue
                     if wanted.intersection(present_lessons):
                         raise RuntimeError("Partial lesson-code collision detected. No changes made for this chapter; inspect Admin Content Studio.")
