@@ -8,6 +8,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.Arrangement
@@ -62,6 +63,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -3837,7 +3841,9 @@ private fun DocumentReaderScreen(
     onDownload: () -> Unit
 ) {
     var pageInput by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(page.toString()) }
-    LaunchedEffect(page) { pageInput = page.toString() }
+    var zoomScale by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(1f) }
+    var imageOffset by remember(document.optLongAny("document_id", "id")) { mutableStateOf(Offset.Zero) }
+    LaunchedEffect(page) { pageInput = page.toString(); zoomScale = 1f; imageOffset = Offset.Zero }
     val requestedPage = pageInput.toIntOrNull()
     val validPage = requestedPage != null && requestedPage in 1..pageCount
     Column(modifier = Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -3859,8 +3865,26 @@ private fun DocumentReaderScreen(
             TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text(localizedUiText("अगला →")) }
         }
         if (image != null) {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()) {
+                TextButton(onClick = { zoomScale = (zoomScale - 0.25f).coerceAtLeast(1f); if (zoomScale == 1f) imageOffset = Offset.Zero },
+                    enabled = zoomScale > 1f) { Text("−") }
+                Text(zoomScale.times(100).toInt().toString() + "%", style = MaterialTheme.typography.labelMedium)
+                TextButton(onClick = { zoomScale = (zoomScale + 0.25f).coerceAtMost(4f) }, enabled = zoomScale < 4f) { Text("+") }
+                Spacer(modifier = Modifier.weight(1f))
+                TextButton(onClick = { zoomScale = 1f; imageOffset = Offset.Zero }) { Text(localizedUiText("Fit page")) }
+            }
             Image(bitmap = image, contentDescription = "पुस्तक का पृष्ठ " + page,
-                modifier = Modifier.fillMaxWidth().weight(1f), contentScale = ContentScale.Fit)
+                modifier = Modifier.fillMaxWidth().weight(1f)
+                    .pointerInput(page) {
+                        detectTransformGestures { _, pan, zoom, _ ->
+                            zoomScale = (zoomScale * zoom).coerceIn(1f, 4f)
+                            imageOffset = if (zoomScale == 1f) Offset.Zero else imageOffset + pan
+                        }
+                    }
+                    .graphicsLayer(scaleX = zoomScale, scaleY = zoomScale,
+                        translationX = imageOffset.x, translationY = imageOffset.y),
+                contentScale = ContentScale.Fit)
         } else {
             Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 if (busy) CircularProgressIndicator()
