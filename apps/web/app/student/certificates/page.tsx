@@ -16,7 +16,7 @@ function localizedTrackName(code: string | undefined, name: string | undefined, 
     sanskrit: ['Sanskrit', 'संस्कृत'],
     computer_science: ['Computer Science', 'कंप्यूटर विज्ञान'], computer: ['Computer Science', 'कंप्यूटर विज्ञान'],
   };
-  const translated = translations[normalized];
+  const translated = translations[normalized] || translations[String(name || '').trim().toLowerCase().replace(/[ -]+/g, '_')];
   if (translated) return language === 'hi' ? translated[1] : translated[0];
   return name || code || '';
 }
@@ -406,7 +406,7 @@ function StudentCertificatesContent() {
             <span className={styles.meta}>{certificates.length} {t('records','रिकॉर्ड')}</span>
           </div>
           {!certificates.length ? (
-            <div className={styles.empty}><strong>{t('No certificates yet','अभी कोई प्रमाणपत्र नहीं है')}</strong><p>{t('Earn a subject-completion certificate by completing all published lessons in an active subject track, or earn an assessment-pass certificate by passing a released, eligible admin-created test. Assessment-pass certificates do not require completing every lesson first.','सक्रिय विषय ट्रैक के सभी प्रकाशित पाठ पूरे करके subject-completion प्रमाणपत्र या जारी पात्र एडमिन टेस्ट पास करके assessment-pass प्रमाणपत्र प्राप्त करें। टेस्ट पास प्रमाणपत्र के लिए पहले सभी पाठ पूरे करना आवश्यक नहीं है।')}</p></div>
+            <div className={styles.empty}><strong>{t('No certificates yet','अभी कोई प्रमाणपत्र नहीं है')}</strong><p>{t('Complete all published lessons or pass an eligible test.','सभी प्रकाशित पाठ पूरे करें या पात्र टेस्ट पास करें।')}</p></div>
           ) : (
             <div className={styles.certificateList}>
               {certificates.map((certificate) => (
@@ -415,7 +415,7 @@ function StudentCertificatesContent() {
                   <div className={styles.certificateInfo}>
                     <strong>{certificate.achievement_title}</strong>
                     <span>{t('Class ','कक्षा ')}{certificate.class_code} · {localizedTrackName(certificate.subject_code, certificate.subject_name, certificate.language || 'en')}</span>
-                    <span>{certificate.certificate_number} · {certificate.template_id}</span>
+                    <span>{certificate.certificate_number}</span>
                     <small>{t('Issued','जारी')}: {new Date(certificate.issued_at).toLocaleDateString(locale === 'english' ? 'en-IN' : 'hi-IN')} · {certificate.language === 'hi' ? t('Hindi','हिन्दी') : 'English'}</small>
                   </div>
                   <span className={certificate.status === 'ISSUED' ? styles.valid : styles.revoked}>{certificate.status === 'ISSUED' ? t('Issued','जारी') : t('Revoked','निरस्त')}</span>

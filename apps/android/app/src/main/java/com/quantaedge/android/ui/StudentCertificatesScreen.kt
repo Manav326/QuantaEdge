@@ -47,9 +47,15 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 private fun localizedCertificateSubject(code: String, displayName: String, language: String): String {
-    return when (code.trim().lowercase()) {
-        "maths", "math", "mathematics" -> if (language == "hi") "गणित" else "Mathematics"
-        "science" -> if (language == "hi") "विज्ञान" else "Science"
+    val hindi = language == "hi"
+    return when (code.trim().lowercase().replace('-', '_').replace(' ', '_')) {
+        "maths", "math", "mathematics" -> if (hindi) "गणित" else "Mathematics"
+        "science" -> if (hindi) "विज्ञान" else "Science"
+        "english" -> if (hindi) "अंग्रेज़ी" else "English"
+        "hindi" -> if (hindi) "हिन्दी" else "Hindi"
+        "social_science", "social_studies" -> if (hindi) "सामाजिक विज्ञान" else "Social Science"
+        "sanskrit" -> if (hindi) "संस्कृत" else "Sanskrit"
+        "computer", "computer_science", "computers" -> if (hindi) "कंप्यूटर विज्ञान" else "Computer Science"
         else -> displayName.ifBlank { code }
     }
 }
@@ -448,7 +454,7 @@ fun StudentCertificatesScreen(
                         val subject = localizedCertificateSubject(track.optString("subject_code"), track.optString("subject_name"), language)
                         val completed = track.optInt("completed")
                         val lessons = track.optInt("lessons")
-                        val progressLabel = if (lessons > 0) "$completed / $lessons" + if (language == "hi") " पाठ पूरे" else " lessons complete" else ""
+                        val progressLabel = if (lessons > 0) "$completed / $lessons" + (if (language == "hi") " पाठ पूरे" else " lessons complete") else ""
                         return listOf(scopeLabel, subject, progressLabel).filter { it.isNotBlank() }.joinToString(" · ")
                     }
                     if (subjectTracks.isEmpty()) Text(
@@ -568,9 +574,7 @@ fun StudentCertificatesScreen(
                         else -> rawLanguage.uppercase()
                     }
                     Text(
-                        statusLabel + " · " +
-                            certificate.optString("template_id", certificate.optString("templateId", "CLASSIC")) + " · " +
-                            languageLabel,
+                        statusLabel + " · " + languageLabel,
                         color = if (rawStatus == "REVOKED") MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
                     )
                     if (certificate.optString("status", "ISSUED") == "ISSUED") {
