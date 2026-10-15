@@ -43,6 +43,16 @@ fun AccountLifecycleScreen(
 ) {
     val hi = language == "hi"
     fun t(en: String, hindi: String) = if (hi) hindi else en
+    fun displayStatus(value: String): String = when (value.uppercase()) {
+        "NOT_REQUESTED" -> t("Not requested", "अनुरोध नहीं किया गया")
+        "PENDING" -> t("Pending", "लंबित")
+        "APPROVED" -> t("Approved", "स्वीकृत")
+        "REJECTED" -> t("Rejected", "अस्वीकृत")
+        "EXPIRED" -> t("Expired", "समाप्त")
+        "VERIFIED" -> t("Verified", "सत्यापित")
+        "NOT_VERIFIED" -> t("Not verified", "सत्यापित नहीं")
+        else -> value.replace('_', ' ').lowercase().replaceFirstChar { it.uppercase() }
+    }
     val adultCurrent = data.optBoolean("adult_verification_current")
     val linked = data.optBoolean("independentAccountLinked")
     val role = data.optString("role")
@@ -95,7 +105,7 @@ fun AccountLifecycleScreen(
         }
 
         Text(t("Adult verification", "वयस्कता सत्यापन"), style = MaterialTheme.typography.titleMedium)
-        Text(t("Status: ", "स्थिति: ") + adultStatus + if (adultCurrent) " · " + t("Verified", "सत्यापित") else "",
+        Text(t("Status: ", "स्थिति: ") + displayStatus(adultStatus) + if (adultCurrent) " · " + t("Verified", "सत्यापित") else "",
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         if (!adultCurrent) {
             Button(onClick = onRequestAdultReview,
@@ -106,7 +116,7 @@ fun AccountLifecycleScreen(
         }
 
         if (!linked) {
-            Text(t("Independent learner account", "Independent learner account"), style = MaterialTheme.typography.titleMedium)
+            Text(t("Independent learner account", "स्वतंत्र विद्यार्थी खाता"), style = MaterialTheme.typography.titleMedium)
             Text(t("Verify your mobile and set a password after adult verification.",
                 "वयस्कता सत्यापन के बाद mobile verify करके password बनाएँ।"),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
@@ -141,8 +151,8 @@ fun AccountLifecycleScreen(
         }
 
         if (linked && role == "LEARNER") {
-            Text(t("Parent eligibility", "Parent eligibility"), style = MaterialTheme.typography.titleMedium)
-            Text(t("Status: ", "स्थिति: ") + parentStatus + if (parentCurrent) " · " + t("Approved", "स्वीकृत") else "",
+            Text(t("Parent eligibility", "अभिभावक पात्रता"), style = MaterialTheme.typography.titleMedium)
+            Text(t("Status: ", "स्थिति: ") + displayStatus(parentStatus) + if (parentCurrent) " · " + t("Approved", "स्वीकृत") else "",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             if (!parentCurrent && adultCurrent) {
                 Button(onClick = onRequestParentReview,
