@@ -154,6 +154,7 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,
                att.final_score,att.max_score,att.released_at,s.code AS subject_code,
                s.display_name AS subject_name,cc.code AS class_code,
+               s.program_id AS course_id,p.display_name AS course_name,
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                existing.id AS certificate_id,existing.certificate_number,
                existing.status AS certificate_status
@@ -161,7 +162,8 @@ public class CertificateController {
         JOIN assessment a ON a.id=att.assessment_id
         JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
-        JOIN student st ON st.id=att.student_id AND st.active=true AND st.class_code=cc.code
+        LEFT JOIN curriculum_program p ON p.id=s.program_id
+        JOIN student st ON st.id=att.student_id AND st.active=true
         LEFT JOIN student_certificate existing
           ON existing.student_id=att.student_id AND existing.assessment_attempt_id=att.id
              AND existing.achievement_type='ASSESSMENT_PASS'
@@ -169,6 +171,12 @@ public class CertificateController {
           AND att.final_score IS NOT NULL AND att.max_score>0
           AND 100.0*att.final_score/att.max_score >= ?
           AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
+          AND ((s.program_id is null and st.class_code=cc.code)
+            or (s.program_id is not null and exists(
+              SELECT 1 FROM student_program_enrollment spe
+              JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
+              WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+            )))
           AND EXISTS (
             SELECT 1 FROM student_track_enrollment ste
             WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
@@ -217,15 +225,21 @@ public class CertificateController {
         SELECT att.id AS attempt_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.status,att.final_score,att.max_score,att.released_at,s.id AS subject_id,
                s.code AS subject_code,s.display_name AS subject_name,cc.code AS class_code,
+               s.program_id AS course_id,p.display_name AS course_name,
                round(100.0*att.final_score/NULLIF(att.max_score,0),2) AS score_percent,
                EXISTS (
                  SELECT 1 FROM student_track_enrollment ste
                  JOIN student active_st ON active_st.id=ste.student_id AND active_st.active=true
                  JOIN curriculum_subject active_s ON active_s.id=ste.subject_id AND active_s.active=true
-                 JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id
-                   AND active_cc.active=true AND active_cc.code=active_st.class_code
+                 JOIN curriculum_class active_cc ON active_cc.id=active_s.class_id AND active_cc.active=true
                  WHERE ste.student_id=att.student_id AND ste.subject_id=s.id AND ste.status='ACTIVE'
                    AND active_st.id=att.student_id AND active_s.id=s.id
+                   AND ((active_s.program_id is null and active_cc.code=active_st.class_code)
+                     or (active_s.program_id is not null and exists(
+                       select 1 from student_program_enrollment active_spe
+                       join curriculum_program active_p on active_p.id=active_spe.program_id and active_p.status='ACTIVE'
+                       where active_spe.student_id=active_st.id and active_spe.program_id=active_s.program_id and active_spe.status='ACTIVE'
+                     )))
                ) AS active_subject_track,
                COALESCE(progress.total_lessons,0) AS published_lessons,
                COALESCE(progress.completed_lessons,0) AS completed_lessons,
@@ -234,6 +248,7 @@ public class CertificateController {
         JOIN assessment a ON a.id=att.assessment_id
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
+        LEFT JOIN curriculum_program p ON p.id=s.program_id
         JOIN student st ON st.id=att.student_id AND st.active=true
         LEFT JOIN LATERAL (
           SELECT COUNT(DISTINCT l.id) AS total_lessons,
