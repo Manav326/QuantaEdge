@@ -287,9 +287,9 @@ class ApplicationStartupSmokeTest {
   void sharedStudentAndParentLearningReportMetricsExecuteTheirFullQueryPath() {
     List<Long> activeStudents = jdbc.queryForList(
         "select id from student where active=true order by id limit 1", Long.class);
-    // Some isolated migration-only CI fixtures contain no student rows; the production seed
-    // exercises this call, including the shared 30-day session/minutes aggregate query.
-    if (activeStudents.isEmpty()) return;
+    // Some isolated migration-only CI fixtures contain no student rows; skip explicitly there.
+    org.junit.jupiter.api.Assumptions.assumeFalse(activeStudents.isEmpty(),
+        "An active student is required to exercise the shared learning metrics query.");
 
     Map<String,Object> metrics = learningMetrics.statsFor(activeStudents.getFirst());
     assertTrue(metrics.containsKey("lessonStats"));
