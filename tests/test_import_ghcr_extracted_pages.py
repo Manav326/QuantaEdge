@@ -47,7 +47,7 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
         self.assertIn(boundary.encode("ascii"), body)
 
 
-    def test_api_requests_send_legacy_and_scoped_staff_session_cookies(self):
+    def test_api_requests_use_legacy_session_cookie_without_workspace_override(self):
         with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
             urlopen.return_value.__enter__.return_value.read.return_value = b'{"sourceBookId": 12}'
             post_multipart(
@@ -57,10 +57,10 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
             )
             request = urlopen.call_args.args[0]
             self.assertEqual(
-                "QE_STAFF_SESSION=test-staff-access-token; QE_SESSION=test-staff-access-token",
+                "QE_SESSION=test-staff-access-token",
                 request.get_header("Cookie"),
             )
-            self.assertEqual("EDUCATION_ADMIN", request.get_header("X-qe-workspace"))
+            self.assertIsNone(request.get_header("X-qe-workspace"))
 
         with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
             urlopen.return_value.__enter__.return_value.read.return_value = b'{"approved": true}'
@@ -70,10 +70,10 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
             )
             request = urlopen.call_args.args[0]
             self.assertEqual(
-                "QE_STAFF_SESSION=test-staff-access-token; QE_SESSION=test-staff-access-token",
+                "QE_SESSION=test-staff-access-token",
                 request.get_header("Cookie"),
             )
-            self.assertEqual("EDUCATION_ADMIN", request.get_header("X-qe-workspace"))
+            self.assertIsNone(request.get_header("X-qe-workspace"))
 
 
 if __name__ == "__main__":
