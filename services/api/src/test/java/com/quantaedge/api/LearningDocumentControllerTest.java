@@ -179,7 +179,7 @@ class LearningDocumentControllerTest {
     when(authorization.hasPermission(author, "CONTENT_PUBLISH")).thenReturn(true);
     when(jdbc.queryForList(contains("from learning_document d"), any(Object[].class))).thenReturn(List.of());
 
-    Map<String,Object> response=controller.listAssignments(null,null,null,null,null,null,null,null,25,0,author);
+    Map<String,Object> response=controller.listAssignments(null,null,null,null,null,null,null,null,null,25,0,author);
     assertTrue(((List<?>)response.get("items")).isEmpty());
   }
 
