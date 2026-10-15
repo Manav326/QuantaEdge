@@ -148,3 +148,120 @@ All four manifests are marked `DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW` and `publi
 - Do **not** invoke `scripts/publish_imported_ncert_hindi_packages_once.py` for this task: it is explicitly a one-time bulk release that bypasses the ordinary per-lesson/question review workflow.
 - After any successful draft import, verify returned chapter/lesson/question IDs and read-only API/database counts. Leave all items unpublished. Human review of lesson accuracy, answer keys, bilingual text, visual provenance and use rights is a separate gate.
 
+---
+
+## Verified ZIP audit and local draft insertion — 2026-10-15
+
+This section supersedes the earlier note that the two root ZIPs had not been inspected internally. The read-only auditor, tests and workflow are now committed additively on main:
+- Auditor: scripts/audit_content_package_completeness.py
+- Tests: tests/test_audit_content_package_completeness.py
+- Workflow: .github/workflows/audit-content-package-completeness.yml
+- Successful audit run: https://github.com/Manav326/QuantaEdge/actions/runs/38748782851
+- Audit artifact ID: 11980740093 (machine-readable JSON report; 30-day retention).
+
+### Exact findings
+
+**QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip**
+- ZIP CRC/integrity: PASS; 144 archive members; 24,226,844 uncompressed bytes.
+- SHA-256: 49c0b21b6acc1693e5a5e059a2de4925b973b0bb7677526778e0d79631ecf3a7.
+- 22/22 authoring bundles pass the existing validate_site_bundle validator. Scope: Class 6, Hindi, Maths + Science; 10 Maths chapters and 12 Science chapters.
+- Totals: 286 lessons, 286 questions, 1,652 teaching blocks, zero visual/media blocks. Every bundle meets the legacy package convention of 13 lessons and 13 questions with one question per lesson.
+- Duplicate chapter/target lesson codes: none.
+- Editorial warning: the prompt “पृथ्वी का प्राकृतिक उपग्रह कौन है?” occurs twice in the Beyond Earth chapter (question IDs beyond-earth-test-input-01 and beyond-earth-test-summary-mcq). Review whether this is intentional before publication.
+- Verdict: structurally suitable for draft import, not teacher-approved/publish-ready, and not a visual-rich package. It is NCERT Class 6 Hindi Maths/Science content, not proof of full Navodaya/JNVST coverage (for example, no separate Mental Ability or Language track is included).
+
+**quantaedge-class6-hindi-pilot-input.zip**
+- ZIP integrity: PASS; 9 members; 4,380,442 uncompressed bytes.
+- SHA-256: 959d7c774bdaf807e8d21e0ad26e182ffc4baaff2af8a6bc4efc67812801c94e.
+- Contains original chapter PDFs, bundle metadata, extracted-text JSONL and manifests for Maths Chapter 7 and Science Chapter 1. It contains zero content/bundles authoring JSONs.
+- Verdict: do not pass this ZIP to the lesson importer. Use the source-page review/import workflow if those source records are needed.
+
+The audit Action passed all five auditor tests. This proves archive readability and structural compliance only; it does not prove answer correctness, media rights, JNVST syllabus coverage, that the local database is migrated, or that data has been imported.
+
+### Local procedure: audit and dry run first
+
+Open PowerShell in the repository checkout. Pull main and inspect the working tree; do not reset local changes or delete database volumes:
+
+~~~powershell
+Set-Location D:\QuantaEdge\QuantaEdge
+git pull --ff-only origin main
+git status --short --branch
+python --version
+Invoke-RestMethod http://localhost:8080/actuator/health
+~~~
+
+Run the same read-only audit locally:
+
+~~~powershell
+python scripts/audit_content_package_completeness.py --package .\QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip --package .\quantaedge-class6-hindi-pilot-input.zip --output (Join-Path $env:TEMP 'qe-content-package-completeness.json')
+~~~
+
+Then use the existing authoring importer with no --apply. This is a no-write dry run and does not require a staff session:
+
+~~~powershell
+python scripts/import_ncert_class6_drafts.py --package .\QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip --program-code NAVODAYA_BATCH
+~~~
+
+Review the full JSON output. Expected baseline: mode DRY_RUN, selected_chapters=22, failed=0, with 10 Maths and 12 Science bundles. Each bundle should report 13 lessons and 13 questions. If any bundle fails, or course scope is unclear, stop. Never use scripts/publish_imported_ncert_hindi_packages_once.py as an import shortcut; it bypasses normal lesson/question review.
+
+### Read-only local course/auth preflight before the first write
+
+Sign in to Education Admin at http://localhost:3001 as staff with content-edit permission. In PowerShell, enter the active QE_STAFF_SESSION and its matching QE_STAFF_REFRESH at secure prompts. Do not place cookie values directly in command history, files, chat or the audit output:
+
+~~~powershell
+function Set-EnvFromSecurePrompt {
+  param([string]$Name, [string]$Prompt)
+  $secure = Read-Host -Prompt $Prompt -AsSecureString
+  $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+  try {
+    [Environment]::SetEnvironmentVariable($Name, [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr), "Process")
+  } finally {
+    [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($ptr)
+  }
+}
+Set-EnvFromSecurePrompt "QUANTAEDGE_ADMIN_SESSION" "Active QE_STAFF_SESSION cookie value"
+Set-EnvFromSecurePrompt "QE_STAFF_REFRESH" "Matching QE_STAFF_REFRESH cookie value"
+
+$headers = @{
+  Cookie = "QE_STAFF_SESSION=$env:QUANTAEDGE_ADMIN_SESSION"
+  "X-QE-Workspace" = "STAFF"
+  Accept = "application/json"
+}
+$programs = Invoke-RestMethod -Uri "http://localhost:8080/api/v1/admin/content/programs" -Headers $headers
+$target = @($programs | Where-Object { $_.code -eq "NAVODAYA_BATCH" -and $_.curriculum_class_code -eq "6" })
+if ($target.Count -ne 1) { throw "Expected exactly one active Class 6 NAVODAYA_BATCH course; found $($target.Count). Stop without importing." }
+
+foreach ($subject in @("maths", "science")) {
+  $url = "http://localhost:8080/api/v1/admin/content?classCode=6&subjectCode=$subject&status=ALL&programCode=NAVODAYA_BATCH"
+  $rows = @(Invoke-RestMethod -Uri $url -Headers $headers)
+  if (@($rows | Where-Object { $_.subject_code -eq $subject }).Count -eq 0) {
+    throw "Target subject track $subject was not found for NAVODAYA_BATCH. Stop without importing."
+  }
+  Write-Host "$subject preflight rows: $($rows.Count)"
+}
+~~~
+
+These are authenticated GET requests only. If either request returns 401/403, stop and fix staff-session routing; do not start a batch. The existing importer client uses QE_STAFF_SESSION, X-QE-Workspace: STAFF, and can refresh once using the paired refresh cookie.
+
+### Apply as drafts only
+
+Only after the dry run and read-only preflight both pass, run:
+
+~~~powershell
+$reportPath = Join-Path $env:TEMP 'qe-navodaya-class6-hindi-import.json'
+$result = python scripts/import_ncert_class6_drafts.py --package .\QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip --program-code NAVODAYA_BATCH --api-url http://localhost:8080 --apply
+$exitCode = $LASTEXITCODE
+$result | Out-File -FilePath $reportPath -Encoding utf8
+$result
+if ($exitCode -ne 0) { throw "Import reported a failure. Inspect $reportPath and Content Studio before retrying; do not replay the batch blindly." }
+~~~
+
+The importer namespaces lesson codes by chapter, attaches to matching existing chapters when appropriate, skips a chapter only if every intended lesson code already exists, and refuses partial lesson-code collisions. The import is sequential, not one transaction: a later failure can leave earlier records as drafts. If any FAILED_SAFELY result appears, inspect the report and Content Studio before retrying.
+
+Expected on an empty target: 22 selected bundles, no failures, and publish_action_taken=false. Existing fully populated chapters may be skipped. Compare pre-import and post-import counts rather than assuming all 286 lessons were newly created.
+
+### Read-only verification after apply
+
+Repeat the two GET /api/v1/admin/content queries above and compare them with pre-import counts. If no equivalent draft content existed beforehand, the expected addition is 10 Maths chapters / 130 lessons / 130 questions and 12 Science chapters / 156 lessons / 156 questions (286 lessons and 286 questions combined). Confirm lesson status DRAFT and chapter status DRAFT; nothing should be published. The block_count total for these lessons should be 1,652. Resolve count mismatches against the import JSON and Content Studio; do not hand-edit database tables.
+
+Known gaps remain: this package has no visual blocks, one repeated prompt to review, Hindi only, and no evidence of full JNVST syllabus coverage. Draft insertion can stage the content for review, but do not treat it as complete student-ready multimodal material until those gaps are addressed.
