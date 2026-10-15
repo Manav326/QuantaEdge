@@ -80,11 +80,11 @@ public class StudentProgramController {
     List<Map<String,Object>> matches = jdbc.queryForList("""
       select p.id
       from curriculum_program p
-      where upper(p.code)=? and p.status='ACTIVE' and p.code<>'GENERAL'
-        and exists(select 1 from student_program_enrollment spe
+      where exists(select 1 from student_program_enrollment spe
           where spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE')
+        and upper(p.code)=? and p.status='ACTIVE' and p.code<>'GENERAL'
       order by p.id
-      """, code, context.studentId());
+      """, context.studentId(), code);
     // Resolve already-enrolled legacy-code access if unique; if not enrolled, use the unique catalogue record.
     if (matches.isEmpty()) {
       matches = jdbc.queryForList("""
