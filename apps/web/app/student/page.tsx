@@ -236,6 +236,7 @@ export default function StudentHome(){
           <Link href="/student/practice" className="app-task"><span className="task-icon">✦</span><div><strong><LocaleText hinglish="अभ्यास" english="Practice" /></strong><small><LocaleText hinglish="Answers save होंगे और mastery update होगी" english="Answers are saved and mastery is updated" /></small></div><span className="task-action">→</span></Link>
           <Link href="/student/tests" className="app-task"><span className="task-icon">✓</span><div><strong><LocaleText hinglish="Topic, chapter और अन्य tests" english="Topic, chapter and other tests" /></strong><small><LocaleText hinglish="Saved attempts, teacher review और released results" english="Saved attempts, teacher review and released results" /></small></div><span className="task-action">→</span></Link>
           <Link href="/student/progress" className="app-task"><span className="task-icon">↗</span><div><strong><LocaleText hinglish="मेरी प्रगति" english="My progress" /></strong><small><LocaleText hinglish="Lessons, mastery और test results" english="Lessons, mastery and test results" /></small></div><span className="task-action">→</span></Link>
+          <Link href="/student/account-lifecycle" className="app-task"><span className="task-icon">◉</span><div><strong><LocaleText hinglish="Account status" english="Account status" /></strong><small><LocaleText hinglish="Verification और account options" english="Verification and account options" /></small></div><span className="task-action">→</span></Link>
         </div>
       </section>
     </div>
