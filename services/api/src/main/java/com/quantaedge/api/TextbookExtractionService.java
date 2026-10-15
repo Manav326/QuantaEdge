@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.util.Locale;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -377,16 +378,32 @@ public class TextbookExtractionService {
     if (subjectLower.contains("math") || subjectName.contains("गणित")) subjectCode = "maths";
     else if (subjectLower.contains("science") || subjectName.contains("विज्ञान")) subjectCode = "science";
     else throw new IllegalArgumentException("Only Maths and Science source books can be imported into this pilot.");
-    List<Map<String, Object>> scopeRows = jdbc.queryForList("""
-      select c.id as class_id,s.id as subject_id
-      from curriculum_class c join curriculum_subject s on s.class_id=c.id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, String.valueOf(classNo), subjectCode);
+    String programCode = manifest.path("program_code").asText("").trim();
+    List<Map<String, Object>> scopeRows;
+    if (programCode.isBlank()) {
+      scopeRows = jdbc.queryForList("""
+        select c.id as class_id,s.id as subject_id,null::bigint as program_id
+        from curriculum_class c join curriculum_subject s on s.class_id=c.id
+        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
+        """, String.valueOf(classNo), subjectCode);
+    } else {
+      scopeRows = jdbc.queryForList("""
+        select c.id as class_id,s.id as subject_id,p.id as program_id
+        from curriculum_class c
+        join curriculum_program p on p.class_id=c.id and p.status='ACTIVE' and upper(p.code)=upper(?)
+        join curriculum_subject s on s.class_id=c.id and s.program_id=p.id and s.code=?
+          and s.active=true
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where c.code=? and c.active=true
+        """, programCode, subjectCode, String.valueOf(classNo));
+    }
     if (scopeRows.isEmpty()) {
-      throw new IllegalArgumentException("No active QuantaEdge curriculum track matches this class and subject.");
+      throw new IllegalArgumentException("No active curriculum track matches this class, subject, and optional course.");
     }
     long classId = ((Number) scopeRows.getFirst().get("class_id")).longValue();
     long subjectId = ((Number) scopeRows.getFirst().get("subject_id")).longValue();
+    Long programId = scopeRows.getFirst().get("program_id") == null
+        ? null : ((Number) scopeRows.getFirst().get("program_id")).longValue();
 
     List<ExtractedPageInput> pages = new ArrayList<>();
     Set<Integer> pageNumbers = new HashSet<>();
@@ -430,20 +447,34 @@ public class TextbookExtractionService {
       }
     }
 
-    Long sourceBookId = jdbc.queryForObject("""
+    String sourceBookInsert = """
       insert into textbook_source_book(registry_book_id,source_sha256,source_title,source_url,edition,
-        class_id,subject_id,language,total_pages,status,imported_pages,imported_by_staff_id,
+        class_id,subject_id,program_id,language,total_pages,status,imported_pages,imported_by_staff_id,
         imported_at,updated_at)
-      values(?,?,?,?,?,?,?,?,?,'DRAFT',?,?,now(),now())
-      on conflict(registry_book_id,source_sha256,language) do update set
-        source_title=excluded.source_title,source_url=excluded.source_url,edition=excluded.edition,
-        class_id=excluded.class_id,subject_id=excluded.subject_id,total_pages=excluded.total_pages,
-        imported_pages=excluded.imported_pages,imported_by_staff_id=excluded.imported_by_staff_id,
-        imported_at=now(),updated_at=now(),
-        status=case when textbook_source_book.status='APPROVED' then 'APPROVED' else 'DRAFT' end
-      returning id
-      """, Long.class, bookId, sourceHash, sourceTitle, sourceUrl,
-      edition.isBlank() ? "edition not recorded" : edition, classId, subjectId, language,
+      values(?,?,?,?,?,?,?,?,?,?,'DRAFT',?,?,now(),now())
+      """;
+    if (programId == null) {
+      sourceBookInsert += """
+        on conflict(registry_book_id,source_sha256,language) where program_id is null do update set
+          source_title=excluded.source_title,source_url=excluded.source_url,edition=excluded.edition,
+          class_id=excluded.class_id,subject_id=excluded.subject_id,total_pages=excluded.total_pages,
+          imported_pages=excluded.imported_pages,imported_by_staff_id=excluded.imported_by_staff_id,
+          imported_at=now(),updated_at=now(),
+          status=case when textbook_source_book.status='APPROVED' then 'APPROVED' else 'DRAFT' end
+        """;
+    } else {
+      sourceBookInsert += """
+        on conflict(program_id,registry_book_id,source_sha256,language) where program_id is not null do update set
+          source_title=excluded.source_title,source_url=excluded.source_url,edition=excluded.edition,
+          class_id=excluded.class_id,subject_id=excluded.subject_id,total_pages=excluded.total_pages,
+          imported_pages=excluded.imported_pages,imported_by_staff_id=excluded.imported_by_staff_id,
+          imported_at=now(),updated_at=now(),
+          status=case when textbook_source_book.status='APPROVED' then 'APPROVED' else 'DRAFT' end
+        """;
+    }
+    sourceBookInsert += " returning id";
+    Long sourceBookId = jdbc.queryForObject(sourceBookInsert, Long.class, bookId, sourceHash, sourceTitle, sourceUrl,
+      edition.isBlank() ? "edition not recorded" : edition, classId, subjectId, programId, language,
       expectedPages, pages.size(), staffId);
     for (ExtractedPageInput page : pages) {
       jdbc.update("""
@@ -459,9 +490,13 @@ public class TextbookExtractionService {
         """, sourceBookId, classId, subjectId, language, page.pageNo(), sourceHash,
         page.text(), page.method(), page.quality());
     }
-    return Map.of("sourceBookId", sourceBookId, "bookId", bookId, "classNo", classNo,
-        "subject", subjectCode, "language", language, "pagesImported", pages.size(),
-        "status", "DRAFT", "message", "Imported as draft; explicitly approve the source before tutor retrieval.");
+    Map<String,Object> result = new LinkedHashMap<>();
+    result.put("sourceBookId", sourceBookId); result.put("bookId", bookId); result.put("classNo", classNo);
+    result.put("subject", subjectCode); result.put("language", language); result.put("pagesImported", pages.size());
+    result.put("status", "DRAFT");
+    result.put("message", "Imported as draft; explicitly approve the source before tutor retrieval.");
+    if (programId != null) { result.put("programCode", programCode); result.put("programId", programId); }
+    return result;
   }
 
   @Transactional

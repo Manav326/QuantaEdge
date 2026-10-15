@@ -116,6 +116,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--extracted-root", required=True, type=Path,
                         help="Root directory containing class-N/medium/pages/*.manifest.json.")
     parser.add_argument("--api-base-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
+    parser.add_argument("--program-code", default="", help="Optional active program code; imports a separate course-scoped source record.")
     parser.add_argument("--apply", action="store_true", help="Actually import validated pages as draft source records.")
     parser.add_argument("--approve", action="store_true", help="Also approve each imported source book (requires --apply and a staff session).")
     parser.add_argument(
@@ -164,10 +165,14 @@ def main(argv: list[str] | None = None) -> int:
                 }, ensure_ascii=False))
                 successes += 1
                 continue
+            import_manifest = dict(manifest)
+            if args.program_code.strip():
+                import_manifest["program_code"] = args.program_code.strip().upper()
+            manifest_bytes = (json.dumps(import_manifest, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
             imported = post_multipart(
                 base + "/api/v1/admin/textbook-extraction/ghcr-books", request_cookie,
                 [
-                    ("manifest", path.name, path.read_bytes()),
+                    ("manifest", path.name, manifest_bytes),
                     ("pages", pages_path.name, pages_path.read_bytes()),
                 ],
                 admin_token=admin_token,

@@ -23,13 +23,37 @@ public class LearningController {
   @GetMapping("/lessons")
   public List<Map<String,Object>> lessons(@RequestParam String classCode,@RequestParam String subjectCode,
       @RequestParam(required=false,defaultValue="hi") String language,
+      @RequestParam(required=false) String programCode,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     context=authorization.requireStudent(context);
     language=normalizeLanguage(language);
     if (!"maths".equals(subjectCode) && !"science".equals(subjectCode)) throw new IllegalArgumentException("Unknown subject track");
     String enrolledClass=jdbc.queryForObject("select class_code from student where id=? and active=true",String.class,context.studentId());
     if(!classCode.equals(enrolledClass)) throw new SecurityException("Class access denied");
-    return jdbc.queryForList("""
+
+    Long programId = null;
+    if (programCode != null && !programCode.isBlank()) {
+      List<Map<String,Object>> scopedProgram = jdbc.queryForList("""
+        select p.id
+        from curriculum_program p
+        join curriculum_class c on c.id=p.class_id and c.active=true
+        join student st on st.id=? and st.active=true and st.class_code=c.code
+        join student_program_enrollment spe on spe.student_id=st.id
+          and spe.program_id=p.id and spe.status='ACTIVE'
+        where upper(p.code)=upper(?) and c.code=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        """, context.studentId(), programCode.trim(), classCode);
+      if (scopedProgram.isEmpty()) throw new SecurityException("Course enrolment required.");
+      programId = ((Number)scopedProgram.getFirst().get("id")).longValue();
+    }
+    return lessonsForScope(classCode,subjectCode,language,programId,context);
+  }
+
+  private List<Map<String,Object>> lessonsForScope(String classCode,String subjectCode,String language,
+      Long programId,AuthContext context) {
+    String programScope = programId == null
+        ? "s.program_id IS NULL"
+        : "s.program_id=? AND EXISTS (SELECT 1 FROM curriculum_program_subject cps WHERE cps.program_id=? AND cps.subject_id=s.id)";
+    String sql = """
       with learner as (select id from student where id=? and active=true)
       select l.id,l.code,coalesce(lt.title,l.title) as title,coalesce(lt.summary,l.summary) as summary,
              l.estimated_minutes,l.status,
@@ -135,8 +159,18 @@ public class LearningController {
       ) active_practice on true
       where c.code=? and s.code=? and c.active=true and s.active=true
         and ch.active=true and ch.content_status='PUBLISHED' and l.active=true and l.status='PUBLISHED'
+        and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
-      """,context.studentId(),language,language,language,language,classCode,subjectCode);
+      """.replace("__PROGRAM_SCOPE__",programScope);
+    List<Object> args=new java.util.ArrayList<>();
+    args.add(context.studentId());args.add(language);args.add(language);args.add(language);args.add(language);
+    args.add(classCode);args.add(subjectCode);
+    if(programId!=null){args.add(programId);args.add(programId);}
+    return jdbc.queryForList(sql,args.toArray());
+  }
+
+  public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
+    return lessonsForScope(classCode,subjectCode,language,null,authorization.requireStudent(context));
   }
 
   @PostMapping("/lessons/{lessonId}/start")
@@ -206,6 +240,11 @@ public class LearningController {
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED' and c.active=true and s.active=true
         and c.code=(select class_code from student where id=?)
+        and (s.program_id is null or exists(
+          select 1 from student_program_enrollment spe join curriculum_program ep on ep.id=spe.program_id
+          where spe.student_id=ste.student_id and spe.program_id=s.program_id
+            and spe.status='ACTIVE' and ep.status='ACTIVE'
+        ))
       """,context.studentId(),context.studentId(),language,language,language,language,language,lessonId,context.studentId());
     if(lessons.isEmpty()) throw new LessonNotFoundException(lessonId);
     Map<String,Object> result=new LinkedHashMap<>(lessons.getFirst());
