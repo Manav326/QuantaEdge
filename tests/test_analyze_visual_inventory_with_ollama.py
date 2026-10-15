@@ -152,6 +152,28 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertEqual(1, resumed["summary"]["assets_processed_this_run"])
         self.assertEqual({"asset-1", "asset-2"}, {item["asset_id"] for item in resumed["results"]})
 
+    def test_http_error_body_is_preserved_in_checkpoint_for_diagnosis(self):
+        import io
+        import urllib.error
+
+        def bad_request(*args, **kwargs):
+            raise urllib.error.HTTPError(
+                url="http://127.0.0.1:11434/api/chat",
+                code=400,
+                msg="Bad Request",
+                hdrs={},
+                fp=io.BytesIO(b'{"error":"image exceeds supported dimensions"}'),
+            )
+
+        result = run_analysis(
+            self.inventory_path, endpoint="http://127.0.0.1:11434",
+            model="qwen2.5vl:3b", max_assets=1, include_page_previews=True,
+            opener=bad_request,
+        )
+        self.assertEqual(1, result["summary"]["assets_failed"])
+        self.assertIn("Ollama HTTP 400", result["results"][0]["error"])
+        self.assertIn("image exceeds supported dimensions", result["results"][0]["error"])
+
 
 if __name__ == "__main__":
     unittest.main()
