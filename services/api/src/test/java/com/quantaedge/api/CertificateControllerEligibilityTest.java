@@ -45,6 +45,27 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void issuedCertificateListUsesAuthenticatedStudentScopeAndHasNoLiveEligibilityGate() {
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("id", 3001L);
+    row.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    row.put("achievement_type", "ASSESSMENT_PASS");
+    row.put("status", "ISSUED");
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
+
+    Map<String, Object> response = controller.myCertificates(student);
+
+    assertEquals(List.of(row), response.get("items"));
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(sql.capture(), args.capture());
+    assertTrue(sql.getValue().contains("WHERE c.student_id=?"));
+    assertTrue(sql.getValue().contains("ORDER BY c.issued_at DESC"));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("att.status='RELEASED'"));
+    assertEquals(81L, ((Number) args.getValue()[0]).longValue());
+  }
+
+  @Test
   void subjectTrackOptionsComeFromActiveEnrollmentsAndIncludeCourseIdentity() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("track_key", "COURSE:12:mathematics");
@@ -65,6 +86,16 @@ class CertificateControllerEligibilityTest {
     assertTrue(sql.getValue().contains("student_track_enrollment"));
     assertTrue(sql.getValue().contains("curriculum_subject"));
     assertTrue(sql.getValue().contains("student_program_enrollment"));
+  }
+
+  @Test
+  void issuedAssessmentCertificatesBypassLiveEligibilityInTheCertificatePicker() {
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of());
+    controller.eligibleAssessments(student);
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc).queryForList(sql.capture(), any(Object[].class));
+    assertTrue(sql.getValue().contains("existing.id IS NOT NULL"));
+    assertTrue(sql.getValue().contains("existing.status AS certificate_status"));
   }
 
   @Test
@@ -132,6 +163,43 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void reopeningIssuedAssessmentCertificateDoesNotReevaluateLiveAttemptEligibility() {
+    Map<String, Object> studentRow = new LinkedHashMap<>();
+    studentRow.put("id", 81L);
+    studentRow.put("display_name", "Test Learner");
+    studentRow.put("class_code", "6");
+    studentRow.put("language", "en");
+    Map<String, Object> keyRow = new LinkedHashMap<>();
+    keyRow.put("id", 3009L);
+    keyRow.put("status", "ISSUED");
+    Map<String, Object> publicCertificate = new LinkedHashMap<>();
+    publicCertificate.put("id", 3009L);
+    publicCertificate.put("student_id", 81L);
+    publicCertificate.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    publicCertificate.put("achievement_type", "ASSESSMENT_PASS");
+    publicCertificate.put("status", "ISSUED");
+    publicCertificate.put("achievement_title", "Class 6 · Science");
+
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
+      String sql = invocation.getArgument(0, String.class);
+      if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) return List.of(keyRow);
+      if (sql.contains("WHERE c.id=? AND c.student_id=?")) return List.of(publicCertificate);
+      if (sql.contains("FROM student_assessment_attempt att")) return List.of();
+      return List.of();
+    });
+
+    Map<String, Object> response = controller.issueCertificate(
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9009L, "CLASSIC", "en"), student);
+    assertEquals("QE-2026-ABCDEF1234567890", response.get("certificate_number"));
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    verify(jdbc, org.mockito.Mockito.atLeastOnce()).queryForList(sql.capture(), any(Object[].class));
+    org.junit.jupiter.api.Assertions.assertFalse(sql.getAllValues().stream()
+        .anyMatch(value -> value.contains("FROM student_assessment_attempt att")),
+        "Reopening an issued certificate must not depend on live eligibility filters.");
+  }
+
+  @Test
   void issuanceEndpointIndependentlyRejectsGeneratedAssessmentEvenIfClientCallsItDirectly() {
     Map<String, Object> studentRow = new LinkedHashMap<>();
     studentRow.put("id", 81L);
@@ -165,6 +233,38 @@ class CertificateControllerEligibilityTest {
 
     assertEquals(409, error.getStatusCode().value());
     assertTrue(error.getReason().contains("Only admin-created assessments"));
+  }
+
+  @Test
+  void incompleteSubjectCompletionReturnsLocalizedActionableConflict() {
+    Map<String, Object> studentRow = new LinkedHashMap<>();
+    studentRow.put("id", 81L);
+    studentRow.put("display_name", "Test Learner");
+    studentRow.put("class_code", "6");
+    studentRow.put("language", "en");
+    Map<String, Object> achievement = new LinkedHashMap<>();
+    achievement.put("recipient_name", "Test Learner");
+    achievement.put("class_code", "6");
+    achievement.put("source_class_code", "6");
+    achievement.put("subject_id", 5L);
+    achievement.put("subject_code", "science");
+    achievement.put("subject_name", "Science");
+    achievement.put("total_lessons", 8L);
+    achievement.put("completed_lessons", 3L);
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
+      String sql = invocation.getArgument(0, String.class);
+      if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) return List.of();
+      if (sql.contains("FROM student st") && sql.contains("COUNT(DISTINCT l.id)")) return List.of(achievement);
+      return List.of();
+    });
+    org.springframework.web.server.ResponseStatusException error = assertThrows(
+        org.springframework.web.server.ResponseStatusException.class,
+        () -> controller.issueCertificate(
+            new CertificateController.IssueRequest("SUBJECT_COMPLETION", "science", null, "CLASSIC", "hi"),
+            student));
+    assertEquals(409, error.getStatusCode().value());
+    assertTrue(error.getReason().contains("पहले इस विषय के सभी 8 प्रकाशित पाठ पूरे करें"));
   }
 
   @Test

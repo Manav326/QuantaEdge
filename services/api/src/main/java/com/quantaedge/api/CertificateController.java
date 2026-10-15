@@ -201,26 +201,33 @@ public class CertificateController {
                existing.status AS certificate_status
         FROM student_assessment_attempt att
         JOIN assessment a ON a.id=att.assessment_id
-        JOIN curriculum_subject s ON s.id=a.subject_id AND s.active=true
-        JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
+        JOIN curriculum_subject s ON s.id=a.subject_id
+        JOIN curriculum_class cc ON cc.id=s.class_id
         LEFT JOIN curriculum_program p ON p.id=s.program_id
         JOIN student st ON st.id=att.student_id AND st.active=true
         LEFT JOIN student_certificate existing
           ON existing.student_id=att.student_id AND existing.assessment_attempt_id=att.id
              AND existing.achievement_type='ASSESSMENT_PASS'
-        WHERE att.student_id=? AND att.status='RELEASED'
-          AND att.final_score IS NOT NULL AND att.max_score>0
-          AND 100.0*att.final_score/att.max_score >= ?
-          AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
-          AND ((s.program_id is null and st.class_code=cc.code)
-            or (s.program_id is not null and exists(
-              SELECT 1 FROM student_program_enrollment spe
-              JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
-              WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
-            )))
-          AND EXISTS (
-            SELECT 1 FROM student_track_enrollment ste
-            WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+        WHERE att.student_id=?
+          AND (
+            existing.id IS NOT NULL
+            OR (
+              att.status='RELEASED'
+              AND att.final_score IS NOT NULL AND att.max_score>0
+              AND 100.0*att.final_score/att.max_score >= ?
+              AND a.assessment_type='ADMIN_CREATED' AND a.is_generated=false
+              AND s.active=true AND cc.active=true
+              AND ((s.program_id is null and st.class_code=cc.code)
+                or (s.program_id is not null and exists(
+                  SELECT 1 FROM student_program_enrollment spe
+                  JOIN curriculum_program ep ON ep.id=spe.program_id AND ep.status='ACTIVE'
+                  WHERE spe.student_id=st.id AND spe.program_id=s.program_id AND spe.status='ACTIVE'
+                )))
+              AND EXISTS (
+                SELECT 1 FROM student_track_enrollment ste
+                WHERE ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
+              )
+            )
           )
         ORDER BY att.released_at DESC,att.id DESC
         LIMIT 100
@@ -407,20 +414,25 @@ public class CertificateController {
     if(courseId!=null)args.add(courseId);
     Map<String, Object> achievement=queryOptional(sql,args.toArray());
     if (achievement == null) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
+      throw certificateConflict(language,
           courseId==null
               ? "This subject is not an active learning track for your current class."
-              : "This subject is not an active learning track in your enrolled course.");
+              : "This subject is not an active learning track in your enrolled course.",
+          courseId==null
+              ? "यह विषय आपकी वर्तमान कक्षा का सक्रिय अध्ययन ट्रैक नहीं है।"
+              : "यह विषय आपके नामांकित कोर्स का सक्रिय अध्ययन ट्रैक नहीं है।");
     }
     long total = number(achievement.get("total_lessons"));
     long completed = number(achievement.get("completed_lessons"));
     if (total < 1) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "This subject does not have published lessons ready for certificate completion yet.");
+      throw certificateConflict(language,
+          "This subject does not have published lessons ready for certificate completion yet.",
+          "इस विषय के प्रकाशित पाठ अभी उपलब्ध नहीं हैं, इसलिए पूर्णता प्रमाणपत्र जारी नहीं हो सकता।");
     }
     if (completed != total) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "Certificate not available yet: complete all " + total + " currently published lessons in this subject first.");
+      throw certificateConflict(language,
+          "Certificate not available yet: complete all " + total + " currently published lessons in this subject first.",
+          "अभी प्रमाणपत्र उपलब्ध नहीं है। पहले इस विषय के सभी " + total + " प्रकाशित पाठ पूरे करें।");
     }
 
     boolean hindi = "hi".equals(language);
@@ -452,6 +464,12 @@ public class CertificateController {
 
   private Map<String, Object> issueAssessmentPass(long studentId, Map<String, Object> student,
       long attemptId, Long requestedCourseId, String template, String language) {
+    // Once issued, a certificate is a durable record. Reopening it must not depend on live
+    // attempt or enrollment filters. This lookup is always scoped to the authenticated student.
+    String key = "ASSESSMENT_PASS:" + attemptId;
+    Map<String, Object> existing = existingCertificate(studentId, key);
+    if (existing != null) return existingOrRejectRevoked(existing);
+
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
                cc.code AS class_code,s.id AS subject_id,s.program_id,p.display_name AS course_name,
@@ -485,10 +503,6 @@ public class CertificateController {
       throw new ResponseStatusException(HttpStatus.CONFLICT,"The selected course does not match this assessment attempt.");
     }
     if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
-    String key = "ASSESSMENT_PASS:" + attemptId;
-    Map<String, Object> existing = existingCertificate(studentId, key);
-    if (existing != null) return existingOrRejectRevoked(existing);
-
     if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
         || Boolean.TRUE.equals(achievement.get("is_generated"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -1060,6 +1074,11 @@ public class CertificateController {
         WHERE s.id=?
         GROUP BY s.id
         """, studentId, studentId, subjectId);
+  }
+
+  private ResponseStatusException certificateConflict(String language, String english, String hindi) {
+    return new ResponseStatusException(HttpStatus.CONFLICT,
+        "hi".equalsIgnoreCase(language) ? hindi : english);
   }
 
   private Map<String, Object> existingCertificate(long studentId, String key) {
