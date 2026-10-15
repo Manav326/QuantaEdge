@@ -84,6 +84,10 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn("visualCatalogMatchesLesson(targetRow,visualCatalog)", source)
         self.assertIn("!visualCatalogMatchesTarget", source)
         self.assertIn("Choose a lesson with the matching subject.", source)
+        self.assertIn("visualCandidateRelevanceScore", source)
+        self.assertIn("visualCandidateBlockRelevanceScore", source)
+        self.assertIn("source_pdf_sha256===candidate.source_pdf_sha256", source)
+        self.assertIn("strongest source-text overlap", source)
 
     def test_renderers_follow_the_shared_visual_contract(self):
         expected_kinds = {item["id"] for item in self.contract["visual_kinds"]}
@@ -118,6 +122,8 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn('content.getOrDefault("caption_hi","")', source)
         self.assertIn("Add meaningful Hindi alternative text", source)
         self.assertIn("Provide the visual caption in both English and Hindi", source)
+        self.assertIn("isGeneratedV3VisualAssetUrl", source)
+        self.assertIn("existingSourceVisualUrls.contains(submittedMediaUrl)", source)
 
 
 if __name__ == "__main__":

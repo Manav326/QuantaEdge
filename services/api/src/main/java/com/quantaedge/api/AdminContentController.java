@@ -1524,7 +1524,8 @@ public class AdminContentController {
   private static boolean isGeneratedV3VisualAssetUrl(String rawUrl) {
     String url=rawUrl==null?"":rawUrl.trim().toLowerCase(Locale.ROOT);
     return url.contains("/apps/web/public/content/visual-assets/")
-        ||url.contains("/content/visual-assets/");
+        ||url.contains("/content/visual-assets/")
+        ||url.contains("raw.githubusercontent.com/manav326/quantaedge/main/data/textbook-visuals/");
   }
 
   private boolean updateQuestions(long lessonId, Object value, AuthContext context) {
