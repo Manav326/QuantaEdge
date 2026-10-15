@@ -55,6 +55,12 @@ public class LearningMetricsService {
         and __SUBJECT_SCOPE__
       """.replace("__SUBJECT_SCOPE__",subjectScope), scopedArgs(programId,studentId)));
 
+    String curriculumClassScope = programId == null
+        ? "c.code=(select class_code from student where id=? and active=true)"
+        : "true";
+    Object[] curriculumArgs = programId == null
+        ? new Object[]{studentId,studentId,studentId}
+        : new Object[]{studentId,studentId,programId};
     result.put("curriculum",jdbc.queryForList("""
       select c.code as class_code,s.code as subject_code,s.display_name as subject_name,
              count(distinct ch.id) as chapters,count(distinct l.id) as lessons,
@@ -68,10 +74,11 @@ public class LearningMetricsService {
       left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true and ch.content_status='PUBLISHED'
       left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
-      where c.active=true and c.code=(select class_code from student where id=? and active=true)
+      where c.active=true and __CURRICULUM_CLASS_SCOPE__
         and __SUBJECT_SCOPE__
       group by c.code,s.code,s.display_name,s.sort_order order by s.sort_order
-      """.replace("__SUBJECT_SCOPE__",subjectScope), scopedArgs(programId,studentId,studentId,studentId)));
+      """.replace("__CURRICULUM_CLASS_SCOPE__",curriculumClassScope)
+         .replace("__SUBJECT_SCOPE__",subjectScope), curriculumArgs));
 
     result.put("mastery",jdbc.queryForMap("""
       select count(*) as concepts,coalesce(round(avg(m.mastery_percent),1),0) as average_mastery,

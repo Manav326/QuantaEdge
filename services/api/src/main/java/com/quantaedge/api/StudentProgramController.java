@@ -1,6 +1,5 @@
 package com.quantaedge.api;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-/** Additive program catalogue and self-enrolment; class membership is never changed. */
+/** Additive course catalogue and self-enrolment. The numeric course ID is the stable identity. */
 @RestController
 @RequestMapping("/api/v1/students/me/programs")
 public class StudentProgramController {
@@ -25,39 +24,50 @@ public class StudentProgramController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String,Object>> programs = jdbc.queryForList("""
-      select p.id,p.code,p.display_name,p.curriculum_version,p.status,c.code as class_code,
+      select p.id,p.id as course_id,p.code,p.display_name,p.curriculum_version,p.status,
         exists(select 1 from student_program_enrollment spe
           where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE') as enrolled,
         exists(select 1 from student_program_enrollment spe
           where spe.student_id=st.id and spe.program_id=p.id and spe.status='PAUSED') as paused
       from student st
-      join curriculum_class c on c.code=st.class_code and c.active=true
-      join curriculum_program p on p.class_id=c.id and p.status='ACTIVE'
+      join curriculum_program p on p.status='ACTIVE'
       where st.id=? and st.active=true and p.code<>'GENERAL'
       order by p.display_name,p.id
       """, context.studentId());
 
     for (Map<String,Object> program : programs) {
-      long programId = ((Number) program.get("id")).longValue();
+      long courseId = ((Number) program.get("id")).longValue();
       List<Map<String,Object>> subjects = jdbc.queryForList("""
-        select s.id,s.code as subject_code,s.display_name as subject_name,s.sort_order,
+        select s.id,s.code as subject_code,s.display_name as subject_name,
+          c.code as curriculum_class_code,s.sort_order,
           count(distinct ch.id) as chapters,count(distinct l.id) as lessons
         from curriculum_program_subject ps
         join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
           and s.class_id=ps.class_id and s.active=true
+        join curriculum_class c on c.id=s.class_id
         left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
           and ch.content_status='PUBLISHED'
         left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
-        where ps.program_id=? and ps.class_id=(select class_id from curriculum_program where id=?)
-        group by s.id,s.code,s.display_name,s.sort_order
+        where ps.program_id=?
+        group by s.id,s.code,s.display_name,c.code,s.sort_order
         order by ps.sort_order,s.sort_order,s.id
-        """, programId, programId);
+        """, courseId);
       program.put("subjects", subjects);
       program.put("is_enrolled", Boolean.TRUE.equals(program.get("enrolled")));
     }
     return programs;
   }
 
+  /** Stable ID route. Code and display name may change without changing enrollments. */
+  @PostMapping("/id/{courseId}/enroll")
+  @Transactional
+  public Map<String,Object> enrollById(@PathVariable long courseId,
+      @RequestAttribute(value="authContext", required=false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    return enrollProgramId(courseId, context);
+  }
+
+  /** Compatibility route for older clients. New clients should enrol using the numeric ID. */
   @PostMapping("/{programCode}/enroll")
   @Transactional
   public Map<String,Object> enroll(@PathVariable String programCode,
@@ -68,27 +78,48 @@ public class StudentProgramController {
       throw new IllegalArgumentException("Choose a valid additional course.");
     }
     List<Map<String,Object>> matches = jdbc.queryForList("""
-      select p.id,p.code,p.display_name,c.code as class_code
+      select p.id
       from curriculum_program p
-      join curriculum_class c on c.id=p.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
       where upper(p.code)=? and p.status='ACTIVE' and p.code<>'GENERAL'
-      """, context.studentId(), code);
+        and exists(select 1 from student_program_enrollment spe
+          where spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE')
+      order by p.id
+      """, code, context.studentId());
+    // Resolve already-enrolled legacy-code access if unique; if not enrolled, use the unique catalogue record.
     if (matches.isEmpty()) {
-      throw new SecurityException("This course is not available for your class or is not active.");
+      matches = jdbc.queryForList("""
+        select p.id from curriculum_program p
+        where upper(p.code)=? and p.status='ACTIVE' and p.code<>'GENERAL'
+        order by p.id
+        """, code);
     }
-    Map<String,Object> program = matches.getFirst();
-    long programId = ((Number) program.get("id")).longValue();
+    if (matches.size() != 1) {
+      throw new IllegalArgumentException(matches.isEmpty()
+          ? "This course is not available or is not active."
+          : "This course code is ambiguous; select the course using its stable numeric ID.");
+    }
+    return enrollProgramId(((Number)matches.getFirst().get("id")).longValue(), context);
+  }
+
+  private Map<String,Object> enrollProgramId(long courseId, AuthContext context) {
+    List<Map<String,Object>> matches = jdbc.queryForList("""
+      select p.id,p.code,p.display_name,p.status
+      from curriculum_program p
+      join student st on st.id=? and st.active=true
+      where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """, context.studentId(), courseId);
+    if (matches.isEmpty()) {
+      throw new SecurityException("This course is not available or is not active.");
+    }
+    Map<String,Object> course = matches.getFirst();
     List<Map<String,Object>> subjects = jdbc.queryForList("""
       select s.id,s.code
       from curriculum_program_subject ps
       join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
         and s.class_id=ps.class_id and s.active=true
       where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
-      """, programId);
-    if (subjects.isEmpty()) {
-      throw new IllegalStateException("The course has no active subject tracks yet.");
-    }
+      """, courseId);
+    if (subjects.isEmpty()) throw new IllegalStateException("The course has no active subject tracks yet.");
 
     jdbc.update("""
       insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
@@ -98,7 +129,7 @@ public class StudentProgramController {
               when student_program_enrollment.status='ACTIVE' then student_program_enrollment.enrolled_at
               else now() end,
             ended_at=null,updated_at=now()
-      """, context.studentId(), programId);
+      """, context.studentId(), courseId);
     for (Map<String,Object> subject : subjects) {
       long subjectId = ((Number) subject.get("id")).longValue();
       jdbc.update("""
@@ -109,10 +140,10 @@ public class StudentProgramController {
     }
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("enrolled", true);
-    result.put("programId", programId);
-    result.put("programCode", program.get("code"));
-    result.put("programName", program.get("display_name"));
-    result.put("classCode", program.get("class_code"));
+    result.put("courseId", courseId);
+    result.put("programId", courseId);
+    result.put("programCode", course.get("code"));
+    result.put("programName", course.get("display_name"));
     result.put("subjectCount", subjects.size());
     return result;
   }
