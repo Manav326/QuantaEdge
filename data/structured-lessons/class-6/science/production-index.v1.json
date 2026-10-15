@@ -47,10 +47,10 @@
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
     "lessons_committed": 3,
-    "last_completed_authoring_step": "Topic 3 committed: Curiosity, Collaboration and New Questions. Chapter 1 now has 24 draft questions across 3 topics: 3 each of multiple choice, multiple select, true/false, matching, fill-in-the-blank, image-observation, short-answer and scenario-based.",
+    "last_completed_authoring_step": "Generated three draft bilingual lessons for Chapter 1 with 24 questions and validated the data structure: valid JSON, no missing en/hi locale fields, no duplicate question IDs, no renderer contract mismatches, and no answer-reference errors. Source fidelity, semantic bilingual review, visual review and app implementation are still pending.",
     "current_chapter_number": 1,
     "current_topic_number": 3,
-    "next_action": "Run schema/locale/answer-key and registry-reference validation over all three Chapter 1 topic artifacts, check repeated content and strict chapter scope, and resolve source/visual blockers; then proceed with source mapping for Chapter 2 only after Chapter 1 status is clear.",
+    "next_action": "Review source-page and visual alignment for all Chapter 1 topics, replace/block unapproved visual-question assets, and conduct semantic EN/HI review before any lesson can be considered approved.",
     "question_counts_by_chapter": [
       {
         "chapter_number": 1,
@@ -70,7 +70,32 @@
         "topics_generated": 3,
         "topics_approved": 0
       }
-    ]
+    ],
+    "content_integrity_check": {
+      "status": "PASS",
+      "performed_date": "2026-10-15",
+      "scope": "Three Chapter 1 topic JSON files in GitHub main",
+      "method": "Ad hoc structural check of parsed JSON, bilingual locale values, unique question IDs, question-to-renderer contract references, answer option/pair references, question counts and index totals. This is not a committed CI test suite or human subject-matter approval.",
+      "results": {
+        "lesson_json_files_valid": 3,
+        "topics_checked": 3,
+        "questions_checked": 24,
+        "unique_question_ids": 24,
+        "learner_visible_locale_field_gaps": 0,
+        "rendering_contract_mismatches": 0,
+        "answer_reference_errors": 0,
+        "question_type_count_mismatches": 0,
+        "index_total_matches": true
+      },
+      "not_checked": [
+        "NCERT source completeness/exhaustiveness",
+        "Rendered PDF visual fidelity and reading-order issues",
+        "Hindi source page mapping and paragraph-by-paragraph fidelity",
+        "Human semantic translation and scientific correctness review",
+        "Rendered diagram correctness/accessibility and student asset approval",
+        "Runtime rendering components and language-switch behavior"
+      ]
+    }
   },
   "chapters": [
     {
@@ -126,7 +151,9 @@
             "The V3 page-preview asset is editor-only and cannot render as student visual.",
             "The topic has not passed semantic bilingual, factual, visual or practice review."
           ],
-          "blocker": "Source review pending; V3 source page preview is editor-only and must not render as student content; semantic bilingual review pending."
+          "blocker": "Source review pending; V3 source page preview is editor-only and must not render as student content; semantic bilingual review pending.",
+          "structural_validation_status": "PASS_2026-10-15",
+          "structural_validation_note": "JSON parsed; en/hi locale fields present; 8 unique question IDs; all question types linked to known registry contract; question count matches declared total. Source, semantic bilingual and visual review remain pending."
         },
         {
           "number": 2,
@@ -166,7 +193,9 @@
           },
           "blocker": "Source page mapping and extraction quality need review; original structured diagram and q06 are blocked pending visual validation.",
           "committed_at": "2026-10-15",
-          "commit_sha": "5e7f4bfa933ff4ca0f537dfcae7f4b0fc13c059a"
+          "commit_sha": "5e7f4bfa933ff4ca0f537dfcae7f4b0fc13c059a",
+          "structural_validation_status": "PASS_2026-10-15",
+          "structural_validation_note": "JSON parsed; en/hi locale fields present; 8 unique question IDs; all question types linked to known registry contract; question count matches declared total. Source, semantic bilingual and visual review remain pending."
         },
         {
           "number": 3,
@@ -206,7 +235,9 @@
           },
           "blocker": "Hindi source page mapping and English source page visual reconciliation pending; original structured diagram and q06 blocked pending visual validation.",
           "committed_at": "2026-10-15",
-          "commit_sha": "1fc141bbbfda3832a13a1336240996915bb540b4"
+          "commit_sha": "1fc141bbbfda3832a13a1336240996915bb540b4",
+          "structural_validation_status": "PASS_2026-10-15",
+          "structural_validation_note": "JSON parsed; en/hi locale fields present; 8 unique question IDs; all question types linked to known registry contract; question count matches declared total. Source, semantic bilingual and visual review remain pending."
         }
       ],
       "chapter_source_review": "NOT_COMPLETE",
@@ -323,14 +354,13 @@
     "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification."
   },
   "resume_instructions": [
-    "Read the production index first, then read question-rendering-registry.v1.md and question-rendering-registry.v1.json.",
-    "Chapter 1 currently has 3 drafted topic artifacts and 24 questions: 3 multiple-choice, 3 multiple-select, 3 true/false, 3 matching, 3 fill-in-the-blank, 3 image-observation, 3 short-answer and 3 scenario-based. All 3 topics are drafts, not approved.",
-    "Do not regenerate or overwrite topic JSON blindly. Preserve stable IDs; make additive fixes and record each subsequent commit.",
-    "Each generated question requires a registry rendering_contract_id. New types need a documented component, schema, response, grading, locale, accessibility and QA contract before use.",
-    "Every visible string in lessons/practice/shared controls is bilingual and obeys a single global app language selector. Runtime switching and state preservation are requirements recorded here, not implemented behavior.",
-    "The 3 image-observation items are blocked until their referenced visuals have been rendered/reviewed and approved for student display. The Chapter 1 English V3 page preview is editor-only.",
-    "Next: run machine validation across all 3 artifacts, review chapter-specific scope/duplication, and resolve Hindi source page mapping and English visual reconciliation. Keep Chapter 1 marked IN_PROGRESS until the content, bilingual and visual reviews pass.",
-    "After Chapter 1 is audited, begin Chapter 2 only with chapter-specific source mapping; do not label or publish draft content as complete."
+    "Start by reading this index, the question-rendering registry JSON/Markdown and all three Chapter 1 topic artifacts.",
+    "Chapter 1 has 3 draft topics and 24 draft questions: 3 of each registered type. The ad hoc structural check passed; this does not mean NCERT completeness, bilingual semantic parity or UI rendering passed.",
+    "Resolve the Chapter 1 source audit: the English extraction has reading-order artefacts; verify source pages 19-26 visually and confirm Hindi Jigyasa chapter-1 page boundaries and content alignment.",
+    "Review all three diagrams and all image-observation question visual references. Items marked blocked/non-student-renderable must remain unavailable in student rendering until an approved locale-appropriate asset is selected.",
+    "Complete semantic Hindi-English review, correct any source omissions/errors, then update per-topic statuses and cumulative counts.",
+    "Only after current Chapter 1 gaps are explicitly dispositioned should additional chapters be authored; keep each topic strictly bound to its own chapter.",
+    "For every new topic, commit the bilingual lesson on main and immediately update this index with the per-type counts, cumulative chapter totals, commit reference, review blockers and next action."
   ],
   "language_runtime_contract": {
     "contract_path": "Each lesson artifact contains language_runtime_contract; the shared app-wide string catalog and runtime behavior will require implementation later.",
