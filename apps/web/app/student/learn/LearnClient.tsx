@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import TutorDock from './TutorDock';
 
 type Lesson = {
-  id:number; code:string; title:string; summary:string; estimated_minutes:number;
+  id:number; code:string; title:string; summary:string; estimated_minutes:number; class_code:string;
   chapter_name:string; subject_name:string; subject_code:string; chapter_code:string;
   lesson_translated?:boolean; chapter_translated?:boolean; subject_translated?:boolean;
   mcq_count?:number; mcq_answered_count?:number;
