@@ -45,6 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.quantaedge.android.R
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 private data class TutorModeUi(val key: String, val icon: String, val english: String, val hindi: String)
 
@@ -56,10 +61,44 @@ private val tutorModes = listOf(
     TutorModeUi("CHECK_MY_WORK", "✓", "Check my work", "मेरी जाँच करें")
 )
 
+
+private fun tutorTimestampLabel(message: JSONObject): String {
+    val raw = listOf("created_at", "createdAt", "created-at")
+        .firstNotNullOfOrNull { key ->
+            message.opt(key)?.takeUnless { it == JSONObject.NULL || it.toString() == "null" }
+        } ?: return ""
+    val value = raw.toString().trim()
+    val millis = when (raw) {
+        is Number -> raw.toLong()
+        else -> value.toLongOrNull() ?: listOf(
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd HH:mm:ss.SSS",
+            "yyyy-MM-dd HH:mm:ss"
+        ).firstNotNullOfOrNull { pattern ->
+            runCatching {
+                SimpleDateFormat(pattern, Locale.US).apply {
+                    isLenient = false
+                    if (pattern.endsWith("'Z'")) timeZone = TimeZone.getTimeZone("UTC")
+                }.parse(value)?.time
+            }.getOrNull()
+        } ?: return ""
+    }
+    val messageDay = Calendar.getInstance().apply { timeInMillis = millis }
+    val today = Calendar.getInstance()
+    val sameDay = messageDay.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+        && messageDay.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
+    val pattern = if (sameDay) "h:mm a" else "MMM d, h:mm a"
+    return SimpleDateFormat(pattern, Locale.getDefault()).format(Date(millis))
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TutorScreen(
     lessonTitle: String,
+    learningLanguage: String,
     available: Boolean,
     messages: List<JSONObject>,
     busy: Boolean,
@@ -70,7 +109,8 @@ fun TutorScreen(
     val language = LocalQuantaLanguage.current
     fun t(en: String, hi: String) = if (language == "hi") hi else en
     var input by rememberSaveable { mutableStateOf("") }
-    var selectedMode by rememberSaveable { mutableStateOf("HINT") }
+    // Free-form chat should explain by default; Hint remains an explicit learning mode.
+    var selectedMode by rememberSaveable { mutableStateOf("EXPLAIN") }
 
     Column(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
@@ -107,6 +147,21 @@ fun TutorScreen(
                     Text("✦", fontSize = 12.sp)
                     Text("AI", fontSize = 8.sp, fontWeight = FontWeight.Black)
                 }
+            }
+            Surface(
+                shape = RoundedCornerShape(999.dp),
+                color = Color(0xFF222D40),
+                contentColor = Color(0xFFE7EDF7),
+                modifier = Modifier.padding(start = 2.dp)
+            ) {
+                Text(
+                    if (learningLanguage == "hi") t("Learning: Hindi", "पढ़ाई: हिन्दी")
+                    else t("Learning: English", "पढ़ाई: English"),
+                    modifier = Modifier.padding(horizontal = 7.dp, vertical = 5.dp),
+                    fontSize = 8.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1
+                )
             }
             Spacer(Modifier.weight(1f))
             IconButton(onClick = onClose, modifier = Modifier.size(32.dp)) {
@@ -218,6 +273,16 @@ fun TutorScreen(
                                     if (modeData != null) Text(modeData.icon, style = MaterialTheme.typography.labelSmall)
                                 }
                                 Text(item.textAny("message"), style = MaterialTheme.typography.bodyMedium)
+                                val timestamp = tutorTimestampLabel(item)
+                                if (timestamp.isNotBlank()) {
+                                    Text(
+                                        timestamp,
+                                        modifier = Modifier.align(Alignment.End),
+                                        color = if (isAssistant) MaterialTheme.colorScheme.onSurfaceVariant else Color(0xFF98694F),
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontSize = 9.sp
+                                    )
+                                }
                             }
                         }
                     }

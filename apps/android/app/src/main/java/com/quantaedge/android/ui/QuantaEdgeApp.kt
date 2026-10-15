@@ -2008,6 +2008,7 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.TUTOR -> TutorScreen(
                         lessonTitle = lesson.textAny("title"),
+                        learningLanguage = learningContentLanguage,
                         available = tutorAvailable,
                         messages = tutorMessages,
                         busy = busy,
