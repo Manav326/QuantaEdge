@@ -327,6 +327,9 @@ fun QuantaEdgeApp() {
                 }
                 awaitCancellation()
             }
+        } else {
+            // Don't retain document-specific progress after leaving the library or switching accounts.
+            if (resourceDownloadStates.isNotEmpty()) resourceDownloadStates.clear()
         }
     }
 
