@@ -127,6 +127,8 @@ fun QuantaEdgeApp() {
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
     var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
+    var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -305,6 +307,7 @@ fun QuantaEdgeApp() {
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
+            refreshStudentPrograms()
             // The student account preference controls learning materials, independently of app UI language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }
@@ -389,7 +392,32 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun openSubject(subjectCode: String) {
+    suspend fun refreshStudentPrograms() {
+        val programs = runCatching {
+            ApiClient.getArray("/api/v1/students/me/programs").objectItems()
+        }.getOrDefault(emptyList())
+        studentPrograms = programs
+        val progress = linkedMapOf<Long, JSONObject>()
+        programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }.forEach { program ->
+            val id = program.longAny("id", "course_id")
+            if (id > 0L) runCatching {
+                ApiClient.getObject("/api/v1/students/me?courseId=" + id)
+            }.getOrNull()?.let { progress[id] = it }
+        }
+        courseProgress = progress
+    }
+
+    fun enrollCourse(courseId: Long) {
+        runTask {
+            if (courseId <= 0L) throw IOException("Choose a valid course.")
+            ApiClient.postObject("/api/v1/students/me/programs/id/" + courseId + "/enroll", JSONObject())
+            refreshStudentPrograms()
+            studentProfile = ApiClient.getObject("/api/v1/students/me")
+            status = if (language == "hi") "Course join हो गया।" else "Course joined."
+        }
+    }
+
+    fun openSubject(subjectCode: String, courseId: Long = 0L) {
         currentSubject = subjectCode
         runTask {
             if (studentProfile.length() == 0) studentProfile = ApiClient.getObject("/api/v1/students/me")
@@ -399,8 +427,13 @@ fun QuantaEdgeApp() {
                 classCode = profile.textAny("class_code", "classCode")
             }
             if (classCode.isBlank()) throw IOException("आपकी कक्षा API से नहीं मिली। अपने खाते की जानकारी जाँचें।")
-            val path = "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
-                "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
+            val path = if (courseId > 0L) {
+                "/api/v1/learning/lessons?subjectCode=" + ApiClient.encodeQuery(subjectCode) +
+                    "&language=" + learningContentLanguage + "&courseId=" + courseId
+            } else {
+                "/api/v1/learning/lessons?classCode=" + ApiClient.encodeQuery(classCode) +
+                    "&subjectCode=" + ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage
+            }
             lessons = ApiClient.getArray(path).objectItems()
             route = AppRoute.SUBJECT_LESSONS
         }
@@ -1397,6 +1430,8 @@ fun QuantaEdgeApp() {
             }
             auth = JSONObject()
             studentProfile = JSONObject()
+            studentPrograms = emptyList()
+            courseProgress = emptyMap()
             recommendation = JSONObject()
             parentAccount = JSONObject()
             parentChildren = emptyList()
@@ -1836,6 +1871,10 @@ fun QuantaEdgeApp() {
                         userName = auth.textAny("displayName", "display_name"),
                         profile = studentProfile,
                         recommendation = recommendation,
+                        programs = studentPrograms,
+                        courseProgress = courseProgress,
+                        onEnrollCourse = ::enrollCourse,
+                        onOpenCourseSubject = { code, courseId -> openSubject(code, courseId) },
                         language = language,
                         busy = busy,
                         onSubject = ::openSubject,
@@ -1848,6 +1887,7 @@ fun QuantaEdgeApp() {
                         onRefresh = { runTask {
                             studentProfile = ApiClient.getObject("/api/v1/students/me")
                             recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                            refreshStudentPrograms()
                         } },
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
                         onClasses = ::openClasses
@@ -2351,7 +2391,11 @@ private fun StudentHomeScreen(
     onProgress: () -> Unit,
     onRefresh: () -> Unit,
     onOpenRecommendation: (JSONObject) -> Unit,
-    onClasses: (String) -> Unit
+    onClasses: (String) -> Unit,
+    programs: List<JSONObject>,
+    courseProgress: Map<Long, JSONObject>,
+    onEnrollCourse: (Long) -> Unit,
+    onOpenCourseSubject: (String, Long) -> Unit
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { if (language == "hi") "विद्यार्थी" else "Learner" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
