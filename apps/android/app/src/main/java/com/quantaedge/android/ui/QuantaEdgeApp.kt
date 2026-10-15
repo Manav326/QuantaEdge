@@ -35,6 +35,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LinearProgressIndicator
@@ -70,6 +71,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -173,6 +176,7 @@ fun QuantaEdgeApp() {
     var tutorAvailable by remember { mutableStateOf(false) }
     var tutorSendInFlight by remember { mutableStateOf(false) }
     var tutorConnecting by remember { mutableStateOf(false) }
+    var tutorMinimized by remember { mutableStateOf(false) }
     var tutorHasOlderMessages by remember { mutableStateOf(false) }
     var tutorOlderBeforeId by remember { mutableStateOf<Long?>(null) }
     var tutorLoadingOlderMessages by remember { mutableStateOf(false) }
@@ -917,6 +921,7 @@ fun QuantaEdgeApp() {
 
     fun openTutorWithQuestion(questionId: Long) {
         tutorQuestionId = questionId
+        tutorMinimized = false
         route = AppRoute.TUTOR
         tutorConnecting = true
         tutorAvailable = false
@@ -954,6 +959,16 @@ fun QuantaEdgeApp() {
     }
 
     fun openTutor() = openTutorWithQuestion(0L)
+
+    fun minimizeTutor() {
+        tutorMinimized = true
+        route = AppRoute.LESSON
+    }
+
+    fun restoreTutor() {
+        tutorMinimized = false
+        route = AppRoute.TUTOR
+    }
 
     fun retryTutorConnection() = openTutorWithQuestion(tutorQuestionId)
 
@@ -2244,6 +2259,8 @@ fun QuantaEdgeApp() {
                     AppRoute.LESSON -> LessonScreen(
                         lesson = lesson,
                         language = language,
+                        tutorMinimized = tutorMinimized,
+                        onRestoreTutor = ::restoreTutor,
                         answers = answers,
                         feedbacks = feedbacks,
                         answerLocks = lessonAnswerLocks,
@@ -2438,8 +2455,9 @@ fun QuantaEdgeApp() {
                         onSend = ::sendTutorMessage,
                         onLoadOlder = ::loadOlderTutorMessages,
                         onNewChat = ::startNewTutorChat,
+                        onMinimize = ::minimizeTutor,
                         onRetry = ::retryTutorConnection,
-                        onClose = { route = AppRoute.LESSON }
+                        onClose = { tutorMinimized = false; route = AppRoute.LESSON }
                     )
                     AppRoute.CLASSES -> LearningClassesScreen(
                         subject = currentSubject,
@@ -3059,6 +3077,8 @@ private fun LessonListScreen(
 private fun LessonScreen(
     lesson: JSONObject,
     language: String,
+    tutorMinimized: Boolean,
+    onRestoreTutor: () -> Unit,
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
     answerLocks: Map<String, Boolean>,
@@ -3072,7 +3092,8 @@ private fun LessonScreen(
     val lessonId = lesson.longAny("id", "lesson_id")
     val blocks = lesson.optJSONArray("blocks")?.objectItems() ?: emptyList()
     val questions = lesson.optJSONArray("questions")?.objectItems() ?: emptyList()
-    Column(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(lesson.textAny("chapter_name", "chapterName"), style = MaterialTheme.typography.labelLarge,
@@ -3118,6 +3139,20 @@ private fun LessonScreen(
             }
             TextButton(onClick = onTutor, enabled = !busy && lessonId > 0) {
                 Text(if (language == "hi") "Tutor से पूछें" else "Ask tutor")
+            }
+        }
+        }
+        if (tutorMinimized) {
+            FloatingActionButton(
+                onClick = onRestoreTutor,
+                modifier = Modifier.align(Alignment.BottomEnd).padding(end = 18.dp, bottom = 84.dp)
+                    .semantics {
+                        contentDescription = if (language == "hi") "क्वांटाएज ट्यूटर फिर खोलें" else "Restore QuantaEdge Tutor"
+                    },
+                containerColor = Color(0xFF172033),
+                contentColor = Color.White
+            ) {
+                Text("✦", fontSize = 23.sp)
             }
         }
     }
