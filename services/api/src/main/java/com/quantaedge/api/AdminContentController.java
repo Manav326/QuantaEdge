@@ -70,11 +70,11 @@ public class AdminContentController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorize(token, context, "CONTENT_VIEW");
     return jdbc.queryForList("""
-      select p.id,p.code,p.display_name,p.curriculum_version,c.code as class_code
+      select p.id,p.id as course_id,p.code,p.display_name,p.curriculum_version,c.code as curriculum_class_code
       from curriculum_program p
-      join curriculum_class c on c.id=p.class_id and c.active=true
+      left join curriculum_class c on c.id=p.class_id and c.active=true
       where p.status='ACTIVE' and p.code<>'GENERAL'
-      order by c.sort_order,p.display_name,p.code
+      order by p.display_name,p.id
       """);
   }
 
@@ -85,11 +85,12 @@ public class AdminContentController {
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
       @RequestParam(required = false) String programCode,
+      @RequestParam(required = false) Long courseId,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorize(token, context, "CONTENT_VIEW");
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.display_name as class_name,
-             p.code as program_code,p.display_name as program_name,
+             p.id as course_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code, s.display_name as subject_name,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
@@ -114,7 +115,10 @@ public class AdminContentController {
       where 1=1
       """);
     List<Object> args = new ArrayList<>();
-    if (programCode == null || programCode.isBlank()) {
+    if (courseId != null) {
+      sql.append(" and p.id=? and p.status='ACTIVE'");
+      args.add(courseId);
+    } else if (programCode == null || programCode.isBlank()) {
       sql.append(" and s.program_id is null");
     } else {
       sql.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
@@ -317,9 +321,18 @@ public class AdminContentController {
       throw badRequest("Create chapters as draft; use the separate publication action after source and lesson checks pass.");
     }
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
     String programCode = optionalText(body.get("programCode"), 60);
     List<Map<String, Object>> subjects;
-    if (programCode == null || programCode.isBlank()) {
+    if (courseId != null) {
+      subjects = jdbc.queryForList("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
+        """, courseId, classCode, subjectCode);
+    } else if (programCode == null || programCode.isBlank()) {
       subjects = jdbc.queryForList("""
         select s.id from curriculum_subject s
         join curriculum_class c on c.id=s.class_id
@@ -329,7 +342,7 @@ public class AdminContentController {
       subjects = jdbc.queryForList("""
         select s.id from curriculum_subject s
         join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.class_id=c.id and p.status='ACTIVE'
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
         join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
         where c.code=? and s.code=? and upper(p.code)=upper(?)
           and c.active=true and s.active=true
