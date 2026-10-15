@@ -46,9 +46,10 @@ class StudentNavigationContractTest {
     }
 
     @Test
-    fun welcomeAndArchivedRoutesHaveExplicitNavigationOwnership() {
+    fun welcomeArchivedAndAccountRoutesHaveExplicitNavigationOwnership() {
         assertEquals("today", StudentNavigationContract.studentGroupForRoute(AppRoute.WELCOME, "today"))
         assertEquals("children", StudentNavigationContract.parentGroupForRoute(AppRoute.PARENT_CHILD_ARCHIVED, "family"))
+        assertEquals("progress", StudentNavigationContract.studentGroupForRoute(AppRoute.ACCOUNT_LIFECYCLE, "progress"))
     }
 
     @Test
