@@ -54,6 +54,14 @@ class LearningStateServiceTest {
 
     assertTrue(sourceLessonQuery.contains("jsonb_exists(item, 'sourceLessonId')"));
     assertFalse(sourceLessonQuery.contains("item ? 'sourceLessonId'"));
+
+    // Course-scoped lessons must save progress through the active course enrolment,
+    // even when the source curriculum class differs from the learner's school class.
+    assertTrue(sql.getAllValues().stream().anyMatch(statement ->
+        statement.contains("student_program_enrollment")
+            && statement.contains("s.program_id is null and c.code=st.class_code")
+            && statement.contains("s.program_id is not null")));
+
     verify(jdbc).update(
         org.mockito.ArgumentMatchers.contains("insert into student_question_attempt"),
         any(), any(), any(), any(), any(), any(), any());
