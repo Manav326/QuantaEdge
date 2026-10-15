@@ -368,4 +368,98 @@ public class GuardianController {
         "{\"trackCodes\":\""+String.join(",",activeTracks)+"\"}");
     return Map.of("updated",true,"studentId",studentId,"trackCodes",activeTracks);
   }
+
+
+
+  /** Independent courses are assigned to a child separately from class/subject selection. */
+  @GetMapping("/children/{studentId}/programs")
+  public List<Map<String,Object>> childPrograms(@PathVariable long studentId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    requireFullGuardianChildAccess(context.userId(),studentId);
+    List<Map<String,Object>> programs=jdbc.queryForList("""
+      select p.id,p.public_id,p.code,p.display_name,p.curriculum_version,p.status,
+        exists(select 1 from student_program_enrollment spe
+          where spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE') as enrolled
+      from curriculum_program p
+      where p.status='ACTIVE' and p.code<>'GENERAL'
+      order by p.display_name,p.id
+      """,studentId);
+    for(Map<String,Object> program:programs) {
+      long courseId=((Number)program.get("id")).longValue();
+      program.put("subjects",jdbc.queryForList("""
+        select s.id,s.code as subject_code,s.display_name as subject_name,
+          c.code as curriculum_class_code,
+          count(distinct ch.id) as chapters,count(distinct l.id) as lessons
+        from curriculum_program_subject ps
+        join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+          and s.class_id=ps.class_id and s.active=true
+        join curriculum_class c on c.id=s.class_id
+        left join curriculum_chapter ch on ch.subject_id=s.id and ch.active=true
+          and ch.content_status='PUBLISHED'
+        left join lesson l on l.chapter_id=ch.id and l.active=true and l.status='PUBLISHED'
+        where ps.program_id=?
+        group by s.id,s.code,s.display_name,c.code,s.sort_order
+        order by ps.sort_order,s.sort_order,s.id
+        """,courseId));
+    }
+    return programs;
+  }
+
+  /** Idempotent parent-to-child course assignment; the child's identity and history are untouched. */
+  @PostMapping("/children/{studentId}/programs/{courseId}/enroll")
+  @Transactional
+  public Map<String,Object> enrollChildInProgram(@PathVariable long studentId,@PathVariable long courseId,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireParent(context);
+    requireFullGuardianChildAccess(context.userId(),studentId);
+    List<Map<String,Object>> courses=jdbc.queryForList("""
+      select id,public_id,code,display_name from curriculum_program
+      where id=? and status='ACTIVE' and code<>'GENERAL'
+      """,courseId);
+    if(courses.isEmpty())throw new IllegalArgumentException("This course is not available or active.");
+    List<Map<String,Object>> subjects=jdbc.queryForList("""
+      select s.id,s.code
+      from curriculum_program_subject ps
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=ps.program_id
+        and s.class_id=ps.class_id and s.active=true
+      where ps.program_id=? order by ps.sort_order,s.sort_order,s.id
+      """,courseId);
+    if(subjects.isEmpty())throw new IllegalStateException("This course has no active subject tracks yet.");
+    jdbc.update("""
+      insert into student_program_enrollment(student_id,program_id,status,enrolled_at,ended_at,created_at,updated_at)
+      values(?,?,'ACTIVE',now(),null,now(),now())
+      on conflict(student_id,program_id) do update set
+        status='ACTIVE',enrolled_at=case when student_program_enrollment.status='ACTIVE'
+          then student_program_enrollment.enrolled_at else now() end,
+        ended_at=null,updated_at=now()
+      """,studentId,courseId);
+    for(Map<String,Object> subject:subjects) {
+      jdbc.update("""
+        insert into student_track_enrollment(student_id,subject_id,status)
+        values(?,?,'ACTIVE')
+        on conflict(student_id,subject_id) do update set status='ACTIVE',updated_at=now()
+        """,studentId,((Number)subject.get("id")).longValue());
+    }
+    auth.auditChildEvent(context.userId(),studentId,"COURSE_ENROLLED",
+        "{\"courseId\":"+courseId+",\"subjectCount\":"+subjects.size()+"}");
+    Map<String,Object> result=new LinkedHashMap<>();
+    result.put("enrolled",true);result.put("studentId",studentId);result.put("courseId",courseId);
+    result.put("publicId",courses.getFirst().get("public_id"));
+    result.put("programCode",courses.getFirst().get("code"));
+    result.put("programName",courses.getFirst().get("display_name"));
+    result.put("subjectCount",subjects.size());
+    return result;
+  }
+
+  private void requireFullGuardianChildAccess(long guardianUserId,long studentId) {
+    Boolean allowed=jdbc.queryForObject("""
+      select exists(select 1 from guardian_student gs join student st on st.id=gs.student_id
+        where gs.guardian_user_id=? and gs.student_id=? and gs.active=true
+          and gs.consent_status='CONSENTED' and gs.access_level='FULL'
+          and st.active=true and st.environment='PRODUCTION')
+      """,Boolean.class,guardianUserId,studentId);
+    if(!Boolean.TRUE.equals(allowed))throw new SecurityException("Full guardian access to this child is required.");
+  }
+
 }
