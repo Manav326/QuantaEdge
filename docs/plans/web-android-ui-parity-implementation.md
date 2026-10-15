@@ -76,17 +76,17 @@
 | NATIVE-01 | Offline formal assessments | Done — protected offline formal assessment on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-02 | Camera scanner | Done — native QR/barcode scanner code on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-03 | Native save/share and protected document controls | Done — native certificate save and protected documents on main | CI build + real-account/browser/device E2E pending |
-| UI-01 | Loading, empty, error and success states | Partial — protected library, certificates, classes and leaderboard have state feedback; home course/textbook gaps and archived-child loading/empty feedback now improved; remaining API-backed pages still need audit | CI build + real-account/browser/device E2E pending |
+| UI-01 | Loading, empty, error and success states | Done — shared Android loading/error panel; HTTP 401 session-expiry recovery and 403 access-denied treatment; safe read-only retry; true-empty vs loading/fetch-failure states for course/textbook catalogues, archived profiles, progress, diagnostic and results. Major web student/parent routes audited for state feedback. | CI run 38765080366 passed; real-account/browser/device E2E pending |
 
 Implementation partials still open:
-- **UI-01:** continue the page-by-page API-state audit. Completed in the current pass: an empty/loading/retry course catalogue, explicit empty/loading textbook shortcuts with subject-based recheck, and distinct loading versus true-empty archived-child state with retry. Remaining work: ensure permission-denied, stale-session and recoverable errors/retries are consistent across remaining pages; success must follow server/file-save acknowledgement.
+Implementation code is recorded on `main` for all 62 decisions. Remaining verification is the separate real-account/browser/device E2E checklist below; do not mark an E2E row passed from source inspection or CI alone.
 
 ## Changes made in this pass
 
 | Item | Change | Commit |
 |---|---|---|
 | LANG-01 | Completed the visible-string sweep for fixed Compose text: role choice, development OTP prefix, student username, Privacy/Terms and textbook count/page labels now use bilingual mappings/resources. Added a CI guard against direct untranslated Compose Text literals; the first run exposed the neutral AI badge, which was allow-listed in the follow-up checker fix. | `631312bdfa4956dd31250c7f32eb07051a0deee2`; checker fix `266e79ff7c343d03d69152d65a9264647a536798` |
-| UI-01 | Added visible loading/empty/retry behavior for the Android home course catalogue; textbook quick links no longer disappear when no PDFs are returned and offer subject-based recheck; archived profiles now distinguish loading from an actual empty result and support retry. | `272de3411172fb1510ae235afdcac407e767481c` |
+| UI-01 | Added shared Android loading/error status with expired-session sign-in recovery, permission-denied messaging and safe read-only retry. Distinguishes catalogue request failures from true-empty data; guards loading/error states on archived profiles, diagnostic, results and progress; preserves course scope on lesson-list retry. Web student/parent route state audit completed. | `c94b622935ba8970acefcc2d931692e74f3209c6`, `ef59f6b4898fe85511a22e30d712925c270d04c2`, `4fe3d16beb05133fc0e1ecc294ec138df58e052e`, fix `f5aa0983adeb22061b7a88237a3941d311e0148b` |
 | PARENT-05 | Android archived-child restore now requires the guardian to actively tick a fresh-consent checkbox before the restore action enables. | `6d50d4b3bf712e07a4a7006edfc1a322e1b0626e` |
 | PARENT-05 / LANG-01 | Added Hindi/English localization phrases for the archived-child restore explanation, explicit consent, archived list and empty state. | `fcb97bfa17cb435598edb75eb3db4f3dbaea8429` |
 | PARENT-05 | Added the Compose layout import needed by the guarded consent row. | `910a00d513818dc35f538b4de9c4cf39187bb377` |
@@ -143,7 +143,7 @@ The source matrix's 30 E2E scenarios are retained here as a durable run log. The
 
 ## CI / manual verification boundary
 
-The latest complete green workflow is [run 38763030311](https://github.com/Manav326/QuantaEdge/actions/runs/38763030311) on commit `272de3411172fb1510ae235afdcac407e767481c` (success: Android localization contract, Android unit tests/debug APK build and upload, web/admin/API/People Operations image builds, API verification and content-import safeguards). LANG-01 is implemented on main; browser/device E2E remains separate. CI cannot by itself prove real account entitlement, actual saved files, camera permission handling, device rotation, accessibility, or cross-platform data parity.
+The latest complete green workflow is [run 38765080366](https://github.com/Manav326/QuantaEdge/actions/runs/38765080366) on commit `f5aa0983adeb22061b7a88237a3941d311e0148b` (success: Android localization contract, unit tests, debug APK build/upload, web/admin/API/People Operations image builds, API verification and content-import safeguards). LANG-01 and UI-01 are implemented on main; real-account/browser/device E2E remains pending. CI cannot by itself prove real account entitlement, actual saved files, camera permission handling, device rotation, accessibility, or cross-platform data parity.
 
 ## Core constraints
 
