@@ -1,0 +1,572 @@
+{
+  "schema_version": "quantaedge.question-rendering-registry.v1",
+  "purpose": "Canonical data-to-UI contract for rendering structured lesson practice questions. Used by content authors, UI implementers, QA and future maintainers. This contract describes required UI behavior; it does not mean the components are implemented.",
+  "status": "SPECIFIED_NOT_IMPLEMENTED",
+  "target_surfaces": [
+    "student_web",
+    "student_android"
+  ],
+  "locale_contract": {
+    "locale_source": "One global application language selection, either en or hi.",
+    "live_switch": "Changing language updates all visible question text and shared controls immediately without resetting the learner response or current question.",
+    "preserve_state": [
+      "current_question_id",
+      "selected_option_ids",
+      "selected_boolean",
+      "matching_pairs",
+      "typed_response",
+      "submission_state",
+      "score",
+      "completion_progress"
+    ],
+    "localization_required": [
+      "question type name",
+      "prompt and scenario/context",
+      "all options and matching labels",
+      "input placeholder and validation text",
+      "hints, reveal-answer explanation and feedback",
+      "correct/incorrect/partial/unanswered/pending labels",
+      "submit/retry/next/previous/show hint/show answer/review controls",
+      "rubric, sample answer, accepted answer display and status messages",
+      "image/diagram alt text and captions"
+    ],
+    "missing_translation_policy": "FAIL_VALIDATION_AND_BLOCK_APPROVAL; never silently fall back to the other language.",
+    "parity_rule": "Language changes presentation only. Question ID, option IDs, expected answers, scoring logic, rubric points and learning objective references remain identical."
+  },
+  "shared_architecture": {
+    "practice_session_component": {
+      "name": "PracticeSession",
+      "responsibility": "Own the active question index, response map keyed by stable question ID, submission/result status, score and progress. Preserve them when the locale changes."
+    },
+    "question_renderer_component": {
+      "name": "PracticeQuestionRenderer",
+      "responsibility": "Dispatch a validated question by its type to exactly one registered question component.",
+      "dispatch_key": "question.type",
+      "required_inputs": [
+        "question",
+        "locale",
+        "response",
+        "submitted",
+        "result",
+        "disabled",
+        "onResponseChange",
+        "onSubmit"
+      ],
+      "prohibited_behavior": [
+        "Do not evaluate generated HTML or scripts from lesson JSON.",
+        "Do not infer the question type from prose or translate stable IDs.",
+        "Do not show a question that references a missing, unapproved or non-student-renderable visual.",
+        "Do not use a different grading rule for English and Hindi."
+      ]
+    },
+    "required_common_states": [
+      {
+        "id": "unanswered",
+        "label_by_locale": {
+          "en": "Not answered",
+          "hi": "उत्तर नहीं दिया गया"
+        }
+      },
+      {
+        "id": "answered",
+        "label_by_locale": {
+          "en": "Answer selected",
+          "hi": "उत्तर चुना गया"
+        }
+      },
+      {
+        "id": "correct",
+        "label_by_locale": {
+          "en": "Correct",
+          "hi": "सही"
+        }
+      },
+      {
+        "id": "incorrect",
+        "label_by_locale": {
+          "en": "Incorrect",
+          "hi": "गलत"
+        }
+      },
+      {
+        "id": "partially_correct",
+        "label_by_locale": {
+          "en": "Partly correct",
+          "hi": "आंशिक रूप से सही"
+        }
+      },
+      {
+        "id": "pending_review",
+        "label_by_locale": {
+          "en": "Needs checking",
+          "hi": "जाँच आवश्यक है"
+        }
+      },
+      {
+        "id": "disabled",
+        "label_by_locale": {
+          "en": "Unavailable",
+          "hi": "उपलब्ध नहीं है"
+        }
+      }
+    ],
+    "common_accessibility": [
+      "All controls have localized accessible names, focus indicators and logical keyboard order.",
+      "Every interaction is usable with touch and keyboard; drag-only interactions are prohibited.",
+      "After submission, announce result and feedback accessibly without moving focus unexpectedly.",
+      "Use text and/or icons as well as color; do not use green/red color alone to signal correctness.",
+      "Preserve selected/typed responses when locale changes or a question is revisited."
+    ],
+    "response_storage": "Store answers using locale-neutral IDs/booleans/text and stable matching pairs. Never store a translated option label as the answer key.",
+    "scoring_storage": "Store score values and status independently from localized score/feedback text."
+  },
+  "question_types": [
+    {
+      "id": "qtype-multiple-choice.v1",
+      "type": "multiple_choice",
+      "label_by_locale": {
+        "en": "Multiple choice",
+        "hi": "बहुविकल्पीय प्रश्न"
+      },
+      "component_name": "MultipleChoiceQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Question prompt followed by a single-select vertical option group; show selection before submission and correctness/feedback after submission.",
+      "input_control": "Accessible radio group; exactly one option may be selected.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en",
+        "prompt_by_locale.hi",
+        "options[] with stable id and text_by_locale.en/hi",
+        "correct_answer_ids with exactly one ID",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "selected_option_id": "string or null"
+      },
+      "grading": {
+        "rule": "exact_option_id_match",
+        "score": "1 for the correct option, otherwise 0",
+        "partial_credit": false
+      },
+      "localized_controls": {
+        "en": {
+          "instruction": "Choose one answer",
+          "submit": "Check answer"
+        },
+        "hi": {
+          "instruction": "एक उत्तर चुनें",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "At least two unique options.",
+        "Exactly one correct_answer_ids entry.",
+        "Every option has both locale labels.",
+        "Correct ID exists in options."
+      ]
+    },
+    {
+      "id": "qtype-multiple-select.v1",
+      "type": "multiple_select",
+      "label_by_locale": {
+        "en": "Select all that apply",
+        "hi": "सभी सही विकल्प चुनें"
+      },
+      "component_name": "MultipleSelectQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Question prompt followed by a vertical checkbox group; multiple answers can be selected.",
+      "input_control": "Checkbox group; selected state is an unordered set of option IDs.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en/hi",
+        "options[] with stable IDs and bilingual labels",
+        "correct_answer_ids[] containing one or more IDs",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "selected_option_ids": [
+          "string"
+        ]
+      },
+      "grading": {
+        "rule": "exact_set_match",
+        "score": "1 only when selected IDs exactly equal the correct ID set, otherwise 0",
+        "partial_credit": false,
+        "note": "A future partial-credit change must be versioned and explicitly authored, never guessed by the renderer."
+      },
+      "localized_controls": {
+        "en": {
+          "instruction": "Select all correct answers",
+          "submit": "Check answers"
+        },
+        "hi": {
+          "instruction": "सभी सही उत्तर चुनें",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "At least two unique options.",
+        "At least one valid correct ID.",
+        "All correct IDs exist in options.",
+        "Every option is bilingual."
+      ]
+    },
+    {
+      "id": "qtype-true-false.v1",
+      "type": "true_false",
+      "label_by_locale": {
+        "en": "True or false",
+        "hi": "सही या गलत"
+      },
+      "component_name": "TrueFalseQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Statement/prompt followed by two equally prominent choices.",
+      "input_control": "Radio group or two accessible choice buttons; never use colour as the sole indicator.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en/hi",
+        "correct_answer boolean",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "selected_boolean": "true, false, or null"
+      },
+      "grading": {
+        "rule": "boolean_equality",
+        "score": "1 for equality with correct_answer, otherwise 0",
+        "partial_credit": false
+      },
+      "localized_controls": {
+        "en": {
+          "true": "True",
+          "false": "False",
+          "submit": "Check answer"
+        },
+        "hi": {
+          "true": "सही",
+          "false": "गलत",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "correct_answer must be a boolean.",
+        "Both locale prompts and feedback are non-empty."
+      ]
+    },
+    {
+      "id": "qtype-matching.v1",
+      "type": "matching",
+      "label_by_locale": {
+        "en": "Matching",
+        "hi": "मिलान करें"
+      },
+      "component_name": "MatchingQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Two clearly named columns. Each left item pairs with one right item. On narrow screens, render a stacked row per left item with an associated selection control.",
+      "input_control": "Accessible select/list choice for each left item; drag and drop may be an enhancement but can never be the only interaction.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en/hi",
+        "left_items[] with stable IDs and bilingual labels",
+        "right_items[] with stable IDs and bilingual labels",
+        "correct_pairs[]",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "pairs": [
+          {
+            "left_id": "string",
+            "right_id": "string"
+          }
+        ]
+      },
+      "grading": {
+        "rule": "pairwise_exact_match",
+        "default_score": "equal points per left item; score each pair independently",
+        "partial_credit": true,
+        "max_score": "number of left items unless question-level grading overrides it"
+      },
+      "localized_controls": {
+        "en": {
+          "left_column": "Items",
+          "right_column": "Match with",
+          "unmatched": "Choose a match"
+        },
+        "hi": {
+          "left_column": "वस्तुएँ",
+          "right_column": "सही मिलान",
+          "unmatched": "मिलान चुनें"
+        }
+      },
+      "validation": [
+        "Each item ID is unique within its column.",
+        "Every correct pair references a valid ID from each column.",
+        "Every left item has exactly one correct pair unless an explicit different rule is declared.",
+        "Column labels and all item labels are bilingual."
+      ]
+    },
+    {
+      "id": "qtype-fill-blank.v1",
+      "type": "fill_blank",
+      "label_by_locale": {
+        "en": "Fill in the blank",
+        "hi": "रिक्त स्थान भरें"
+      },
+      "component_name": "FillBlankQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Sentence/prompt with an inline or clearly adjacent text input; allow submit using a visible button and optionally Enter where appropriate.",
+      "input_control": "Single-line text input with localized accessible label and placeholder.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en/hi",
+        "accepted_answers.en[]",
+        "accepted_answers.hi[]",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "text": "string"
+      },
+      "grading": {
+        "rule": "locale_specific_accepted_answer_match",
+        "en_normalization": [
+          "Unicode NFC",
+          "trim leading/trailing whitespace",
+          "collapse repeated whitespace",
+          "case-insensitive comparison"
+        ],
+        "hi_normalization": [
+          "Unicode NFC",
+          "trim leading/trailing whitespace",
+          "collapse repeated whitespace"
+        ],
+        "prohibited_normalization": [
+          "Do not transliterate between scripts.",
+          "Do not silently translate an answer into the other language.",
+          "Do not remove meaningful diacritics/matra or rewrite a student's answer semantically."
+        ],
+        "partial_credit": false
+      },
+      "localized_controls": {
+        "en": {
+          "placeholder": "Type your answer",
+          "submit": "Check answer"
+        },
+        "hi": {
+          "placeholder": "अपना उत्तर लिखें",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "Each locale has at least one accepted answer.",
+        "Accepted answers are in the corresponding language/script.",
+        "Normalization is documented and applied consistently."
+      ]
+    },
+    {
+      "id": "qtype-image-observation.v1",
+      "type": "image_observation",
+      "label_by_locale": {
+        "en": "Observe the image",
+        "hi": "चित्र का अवलोकन करें"
+      },
+      "component_name": "ImageObservationQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Approved, locale-appropriate image/diagram above the question and response controls; zoom/open control when appropriate; caption and alt text available.",
+      "input_control": "Visual panel plus an explicitly declared answer control. For the current item, use a single-select option group matching MultipleChoiceQuestion.",
+      "required_fields": [
+        "id",
+        "type",
+        "visual_asset_ref",
+        "prompt_by_locale.en/hi",
+        "alt_by_locale.en/hi or referenced approved asset alt text",
+        "options[] and correct_answer_ids for choice-based observation, or a separately specified supported response subtype",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "selected_option_id": "string or null"
+      },
+      "grading": {
+        "rule": "reuse_declared_response_subtype_grading",
+        "score": "according to explicit response subtype",
+        "partial_credit": false
+      },
+      "visual_gate": "The visual must exist, be approved, student-renderable, rights-cleared where required, relevant to this exact topic, and localized or language-independent. Editor-only full-page source previews cannot satisfy this requirement.",
+      "localized_controls": {
+        "en": {
+          "inspect_visual": "View image",
+          "submit": "Check answer"
+        },
+        "hi": {
+          "inspect_visual": "चित्र देखें",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "Missing/review-only/unapproved asset blocks learner rendering and publication.",
+        "Alt text exists in both languages.",
+        "Any visible text embedded in the image is appropriate for the active locale.",
+        "The underlying answer control is named explicitly."
+      ]
+    },
+    {
+      "id": "qtype-short-answer.v1",
+      "type": "short_answer",
+      "label_by_locale": {
+        "en": "Short answer",
+        "hi": "संक्षिप्त उत्तर"
+      },
+      "component_name": "ShortAnswerQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "Prompt followed by an accessible multiline text area, character/length guidance if configured, and submit control. After submission show pending-review or rubric feedback as configured.",
+      "input_control": "Multiline text area; preserve text when changing language. Do not compare the response to a single exact sample sentence.",
+      "required_fields": [
+        "id",
+        "type",
+        "prompt_by_locale.en/hi",
+        "answer_guide_by_locale.en/hi with key_points and sample_answer",
+        "grading with explicit max_score and bilingual rubric"
+      ],
+      "response_shape": {
+        "text": "string"
+      },
+      "grading": {
+        "rule": "explicit_rubric",
+        "default_evaluator": "human_or_explicitly_configured_grader",
+        "score": "0..max_score",
+        "partial_credit": true,
+        "note": "Do not invent automated AI grading behavior. When no validated grader exists, store the response and show a localized pending-review state."
+      },
+      "localized_controls": {
+        "en": {
+          "placeholder": "Write one or two sentences",
+          "submit": "Submit answer",
+          "pending": "Needs checking"
+        },
+        "hi": {
+          "placeholder": "एक या दो वाक्य लिखें",
+          "submit": "उत्तर जमा करें",
+          "pending": "जाँच आवश्यक है"
+        }
+      },
+      "validation": [
+        "max_score is positive.",
+        "Rubric exists in both locales and sums to max_score or defines a valid level scheme.",
+        "Key points/sample answer exist in both locales.",
+        "No hardcoded single-string exact-match grading."
+      ]
+    },
+    {
+      "id": "qtype-scenario-based.v1",
+      "type": "scenario_based",
+      "label_by_locale": {
+        "en": "Scenario question",
+        "hi": "परिस्थिति-आधारित प्रश्न"
+      },
+      "component_name": "ScenarioQuestion",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "layout": "A distinct scenario/context card followed by a separate question prompt and an explicitly declared response control. The scenario and question must both switch with the global locale.",
+      "input_control": "Use the question's declared response subtype. Current contract version supports choice-based scenarios through a radio group.",
+      "required_fields": [
+        "id",
+        "type",
+        "scenario_by_locale.en/hi",
+        "prompt_by_locale.en/hi",
+        "response subtype fields such as options/correct_answer_ids",
+        "feedback_by_locale.en/hi"
+      ],
+      "response_shape": {
+        "selected_option_id": "string or null for choice-based scenario"
+      },
+      "grading": {
+        "rule": "reuse_declared_response_subtype_grading",
+        "current_v1_subtype": "multiple_choice",
+        "score": "1 for correct choice, otherwise 0",
+        "partial_credit": false
+      },
+      "localized_controls": {
+        "en": {
+          "scenario_heading": "Scenario",
+          "submit": "Check answer"
+        },
+        "hi": {
+          "scenario_heading": "परिस्थिति",
+          "submit": "उत्तर जाँचें"
+        }
+      },
+      "validation": [
+        "Scenario context and prompt are separate fields.",
+        "Both are present in both locales.",
+        "The subtype and grading rule are explicit.",
+        "Scenario remains within the lesson's chapter scope."
+      ]
+    }
+  ],
+  "generated_in_current_lesson": {
+    "lesson_artifact": "data/structured-lessons/class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json",
+    "counts_by_type": {
+      "multiple_choice": 1,
+      "multiple_select": 1,
+      "true_false": 1,
+      "matching": 1,
+      "fill_blank": 1,
+      "image_observation": 1,
+      "short_answer": 1,
+      "scenario_based": 1
+    },
+    "question_ids_by_type": {
+      "multiple_choice": [
+        "c6-sci-ch01-t01-q01"
+      ],
+      "multiple_select": [
+        "c6-sci-ch01-t01-q02"
+      ],
+      "true_false": [
+        "c6-sci-ch01-t01-q03"
+      ],
+      "matching": [
+        "c6-sci-ch01-t01-q04"
+      ],
+      "fill_blank": [
+        "c6-sci-ch01-t01-q05"
+      ],
+      "image_observation": [
+        "c6-sci-ch01-t01-q06"
+      ],
+      "short_answer": [
+        "c6-sci-ch01-t01-q07"
+      ],
+      "scenario_based": [
+        "c6-sci-ch01-t01-q08"
+      ]
+    },
+    "readiness": {
+      "content_data_exists": true,
+      "registry_mapping_complete": false,
+      "ui_components_implemented": false,
+      "automated_schema_validation": false,
+      "semantic_bilingual_review": false,
+      "visual_asset_review": false,
+      "topic_publishable": false
+    },
+    "known_blockers": [
+      "The image_observation question currently references a V3 English full-page preview that is editor-only and not student-renderable; replace or approve a suitable bilingual/language-independent visual before rendering/publishing that question.",
+      "The Hindi chapter-1 page mapping and paragraph-level source reconciliation remain pending.",
+      "The topic has draft question content in both languages but requires semantic translation, answer-key and scope review."
+    ]
+  },
+  "implementation_acceptance": [
+    "One shared dispatcher renders all supported types by stable question.type and fails closed on unknown types.",
+    "Each registered type has a deterministic response schema and grading path with no language-specific differences.",
+    "The exact same current lesson is renderable in English and Hindi after assets are resolved, with no mixed-language strings.",
+    "A live locale switch preserves every response and all practice-session progress.",
+    "Each type passes empty, valid, invalid, submitted-correct, submitted-incorrect and revisit states where relevant.",
+    "Keyboard/touch accessibility and narrow-screen layouts pass for all eight components.",
+    "Unapproved/missing images, missing translations, missing answers and invalid scoring rules block the affected question from student rendering and publication without crashing unrelated questions.",
+    "Existing practice/test functionality remains unaffected; registry adoption is additive."
+  ]
+}
