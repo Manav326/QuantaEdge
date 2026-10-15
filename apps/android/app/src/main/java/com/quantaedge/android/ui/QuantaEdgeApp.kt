@@ -172,6 +172,9 @@ fun QuantaEdgeApp() {
     var selectedDocument by remember { mutableStateOf(JSONObject()) }
     var documentPage by remember { mutableStateOf(1) }
     var documentImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+    var documentFullscreen by rememberSaveable { mutableStateOf(false) }
+    var documentThumbnailImages by remember { mutableStateOf(emptyMap<Int, androidx.compose.ui.graphics.ImageBitmap>()) }
+    var documentThumbnailRequests by remember { mutableStateOf(emptySet<String>()) }
     var tutorSession by remember { mutableStateOf(JSONObject()) }
     var tutorMessages by remember { mutableStateOf(emptyList<JSONObject>()) }
     var tutorQuestionId by remember { mutableStateOf(0L) }
@@ -1179,13 +1182,15 @@ fun QuantaEdgeApp() {
         }
     }
 
-    suspend fun loadPage(page: Int) {
+    suspend fun loadPage(page: Int, forceRefresh: Boolean = false) {
         val documentId = selectedDocument.optLongAny("document_id", "id")
         val pageCount = selectedDocument.optInt("page_count",
             (selectedDocument.optInt("page_end", 1) - selectedDocument.optInt("page_start", 1) + 1).coerceAtLeast(1))
         if (documentId <= 0L || page < 1 || page > pageCount) throw IOException("यह पृष्ठ उपलब्ध नहीं है।")
         documentPage = page
-        val cachedPage = resourceStore.readPage(documentId, page)
+        documentImage = null
+        if (forceRefresh) resourceStore.removePage(documentId, page)
+        val cachedPage = if (forceRefresh) null else resourceStore.readPage(documentId, page)
         val bytes = cachedPage ?: ApiClient.getBytes(
             "/api/v1/learning/documents/" + documentId + "/pages/" + page
         ).also { resourceStore.savePage(documentId, page, it) }
@@ -1199,11 +1204,52 @@ fun QuantaEdgeApp() {
     }
 
     fun openDocument(document: JSONObject) {
+        documentFullscreen = false
+        documentThumbnailImages = emptyMap()
+        documentThumbnailRequests = emptySet()
         runTask {
             selectedDocument = JSONObject(document.toString())
             documentPage = document.optInt("last_page", 1).coerceAtLeast(1)
             loadPage(documentPage)
             route = AppRoute.DOCUMENT_READER
+        }
+    }
+
+    fun retryDocumentPage() {
+        val page = documentPage
+        runTask { loadPage(page, forceRefresh = true) }
+    }
+
+    fun loadDocumentThumbnails(pages: List<Int>) {
+        val documentId = selectedDocument.optLongAny("document_id", "id")
+        val pageCount = selectedDocument.optInt("page_count",
+            (selectedDocument.optInt("page_end", 1) - selectedDocument.optInt("page_start", 1) + 1).coerceAtLeast(1))
+        if (documentId <= 0L || pageCount <= 0) return
+        val requested = pages.distinct().filter { it in 1..pageCount }
+        documentThumbnailImages = documentThumbnailImages.filterKeys { it in requested }
+        requested.forEach { pageNumber ->
+            val requestKey = "$documentId:$pageNumber"
+            if (documentThumbnailImages.containsKey(pageNumber) || requestKey in documentThumbnailRequests) return@forEach
+            documentThumbnailRequests = documentThumbnailRequests + requestKey
+            scope.launch {
+                try {
+                    val bytes = resourceStore.readPage(documentId, pageNumber)
+                        ?: ApiClient.getBytes("/api/v1/learning/documents/" + documentId + "/pages/" + pageNumber)
+                    val options = BitmapFactory.Options().apply {
+                        inSampleSize = 4
+                        inPreferredConfig = android.graphics.Bitmap.Config.RGB_565
+                    }
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
+                    if (bitmap != null && selectedDocument.optLongAny("document_id", "id") == documentId &&
+                        pageNumber in ((documentPage - 4).coerceAtLeast(1)..(documentPage + 4).coerceAtMost(pageCount))) {
+                        documentThumbnailImages = documentThumbnailImages + (pageNumber to bitmap.asImageBitmap())
+                    }
+                } catch (_: Exception) {
+                    // Keep the page-number tile available; the main reader remains the retry path.
+                } finally {
+                    documentThumbnailRequests = documentThumbnailRequests - requestKey
+                }
+            }
         }
     }
 
@@ -1849,6 +1895,7 @@ fun QuantaEdgeApp() {
             AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED -> AppRoute.PARENT_HOME
             AppRoute.DOCUMENT_READER -> AppRoute.RESOURCES
         }
+        documentFullscreen = false
         error = ""
     }
 
@@ -1920,19 +1967,23 @@ fun QuantaEdgeApp() {
         }
     }
     BackHandler(enabled = signedIn || route == AppRoute.LOGIN) {
-        if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) goBack()
+        if (route == AppRoute.DOCUMENT_READER && documentFullscreen) {
+            documentFullscreen = false
+        } else if (route !in setOf(AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME)) {
+            goBack()
+        }
     }
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
-            if (signedIn && landscapeLayout && route != AppRoute.TUTOR) NavigationRail {
+            if (signedIn && landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
                 navItems.forEach { item ->
                     NavigationRailItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) }, alwaysShowLabel = true)
                 }
             }
             Column(modifier = Modifier.weight(1f).fillMaxHeight()) {
-            if (route != AppRoute.LOGIN && route != AppRoute.TUTOR) {
+            if (route != AppRoute.LOGIN && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -2240,6 +2291,7 @@ fun QuantaEdgeApp() {
                     )
                     AppRoute.PARENT_CHILD_MANAGE -> ParentChildManageScreen(
                         child = selectedChild,
+                        language = language,
                         busy = busy,
                         onSaveProfile = ::saveChildProfile,
                         onSaveCredentials = ::saveChildCredentials,
@@ -2386,14 +2438,22 @@ fun QuantaEdgeApp() {
                         document = selectedDocument,
                         page = documentPage,
                         image = documentImage,
+                        thumbnailImages = documentThumbnailImages,
+                        loadingThumbnailPages = documentThumbnailRequests,
                         pageCount = selectedDocument.optInt("page_count",
                             (selectedDocument.optInt("page_end", 1) - selectedDocument.optInt("page_start", 1) + 1).coerceAtLeast(1)),
+                        language = language,
+                        fullscreen = documentFullscreen,
                         busy = busy,
+                        error = error,
                         cachedCount = resourceStore.cachedPageCount(
                             selectedDocument.optLongAny("document_id", "id"),
                             selectedDocument.optInt("page_count", 1)
                         ),
                         onPage = { page -> runTask { loadPage(page) } },
+                        onRequestThumbnails = ::loadDocumentThumbnails,
+                        onToggleFullscreen = { documentFullscreen = !documentFullscreen },
+                        onRetry = ::retryDocumentPage,
                         onDownload = { downloadDocument(selectedDocument) }
                     )
                     AppRoute.PROFILE -> StudentProfileScreen(
@@ -2483,7 +2543,7 @@ fun QuantaEdgeApp() {
                 }
                 }
             }
-            if (signedIn && !landscapeLayout && route != AppRoute.TUTOR) NavigationBar {
+            if (signedIn && !landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationBar {
                 navItems.forEach { item ->
                     NavigationBarItem(selected = item.key == selectedNavKey, onClick = { selectPrimaryDestination(item.key) },
                         icon = { Text(item.glyph) }, label = { Text(item.label) })
@@ -4170,64 +4230,187 @@ private fun DocumentReaderScreen(
     document: JSONObject,
     page: Int,
     image: androidx.compose.ui.graphics.ImageBitmap?,
+    thumbnailImages: Map<Int, androidx.compose.ui.graphics.ImageBitmap>,
+    loadingThumbnailPages: Set<String>,
     pageCount: Int,
+    language: String,
+    fullscreen: Boolean,
     busy: Boolean,
+    error: String,
     cachedCount: Int,
     onPage: (Int) -> Unit,
+    onRequestThumbnails: (List<Int>) -> Unit,
+    onToggleFullscreen: () -> Unit,
+    onRetry: () -> Unit,
     onDownload: () -> Unit
 ) {
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     var pageInput by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(page.toString()) }
     var zoomScale by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(1f) }
     var imageOffset by remember(document.optLongAny("document_id", "id")) { mutableStateOf(Offset.Zero) }
-    LaunchedEffect(page) { pageInput = page.toString(); zoomScale = 1f; imageOffset = Offset.Zero }
+    var fitWidth by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(false) }
+    var thumbnailsOpen by rememberSaveable(document.optLongAny("document_id", "id")) { mutableStateOf(false) }
+    LaunchedEffect(page) {
+        pageInput = page.toString()
+        zoomScale = 1f
+        imageOffset = Offset.Zero
+        fitWidth = false
+    }
     val requestedPage = pageInput.toIntOrNull()
     val validPage = requestedPage != null && requestedPage in 1..pageCount
-    Column(modifier = Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        Text(document.textAny("title").ifBlank { "पुस्तक" }, style = MaterialTheme.typography.titleMedium)
-        Text(localizedUiText("पृष्ठ ") + page + " / " + pageCount + " • Offline: " + cachedCount,
-            style = MaterialTheme.typography.bodySmall)
+    val thumbnailPages = if (pageCount <= 9) {
+        (1..pageCount.coerceAtLeast(1)).toList()
+    } else {
+        ((page - 4).coerceAtLeast(1)..(page + 4).coerceAtMost(pageCount)).toList()
+    }
+    LaunchedEffect(thumbnailsOpen, page, pageCount, document.optLongAny("document_id", "id")) {
+        if (thumbnailsOpen) onRequestThumbnails(thumbnailPages)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(if (fullscreen) 5.dp else 10.dp),
+        verticalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                Text(document.textAny("title").ifBlank { t("Textbook", "पुस्तक") },
+                    style = if (fullscreen) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
+                    maxLines = 1)
+                Text(
+                    t("Page ", "पृष्ठ ") + page + " / " + pageCount + " • " +
+                        t("Offline pages: ", "Offline पृष्ठ: ") + cachedCount,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
+            TextButton(onClick = onToggleFullscreen) {
+                Text(if (fullscreen) t("Exit full screen", "Fullscreen बंद करें") else t("Full screen", "Fullscreen"))
+            }
+        }
+
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            OutlinedTextField(value = pageInput, onValueChange = { pageInput = it.filter(Char::isDigit).take(6) },
-                label = { Text(localizedUiText("पृष्ठ संख्या")) }, singleLine = true, modifier = Modifier.weight(1f))
+            OutlinedTextField(
+                value = pageInput,
+                onValueChange = { pageInput = it.filter(Char::isDigit).take(6) },
+                label = { Text(t("Page number", "पृष्ठ संख्या")) },
+                singleLine = true,
+                modifier = Modifier.weight(1f)
+            )
             Button(onClick = { if (validPage) onPage(requestedPage!!) }, enabled = !busy && validPage) {
-                Text(localizedUiText("जाएँ"))
+                Text(t("Go", "जाएँ"))
             }
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-            TextButton(onClick = { onPage(page - 1) }, enabled = !busy && page > 1) { Text(localizedUiText("← पिछला")) }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            TextButton(onClick = { onPage(page - 1) }, enabled = !busy && page > 1) { Text(t("← Previous", "← पिछला")) }
             Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text(localizedUiText("Offline")) }
+            TextButton(onClick = { thumbnailsOpen = !thumbnailsOpen }, enabled = pageCount > 1) {
+                Text(if (thumbnailsOpen) t("Hide pages", "पृष्ठ छिपाएँ") else t("Page thumbnails", "पृष्ठ थंबनेल"))
+            }
+            TextButton(onClick = onDownload, enabled = !busy && cachedCount < pageCount) { Text(t("Offline", "Offline")) }
             Spacer(modifier = Modifier.weight(1f))
-            TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text(localizedUiText("अगला →")) }
+            TextButton(onClick = { onPage(page + 1) }, enabled = !busy && page < pageCount) { Text(t("Next →", "अगला →")) }
         }
+
+        if (thumbnailsOpen) {
+            Row(
+                modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                thumbnailPages.forEach { pageNumber ->
+                    val selected = pageNumber == page
+                    Surface(
+                        modifier = Modifier.width(72.dp).height(94.dp).clickable(enabled = !busy) { onPage(pageNumber) },
+                        shape = RoundedCornerShape(8.dp),
+                        color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                        border = androidx.compose.foundation.BorderStroke(
+                            if (selected) 2.dp else 1.dp,
+                            if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize().padding(4.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(3.dp)
+                        ) {
+                            val thumbnail = thumbnailImages[pageNumber]
+                            if (thumbnail != null) {
+                                Image(
+                                    bitmap = thumbnail,
+                                    contentDescription = t("Preview of page ", "पृष्ठ का पूर्वावलोकन ") + pageNumber,
+                                    modifier = Modifier.fillMaxWidth().weight(1f),
+                                    contentScale = ContentScale.Fit
+                                )
+                            } else {
+                                Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
+                                    if (loadingThumbnailPages.contains(document.optLongAny("document_id", "id").toString() + ":" + pageNumber)) {
+                                        CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                                    } else {
+                                        Text(t("Preview", "पूर्वावलोकन"), style = MaterialTheme.typography.labelSmall)
+                                    }
+                                }
+                            }
+                            Text(pageNumber.toString(), style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
+                        }
+                    }
+                }
+            }
+        }
+
         if (image != null) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()) {
-                TextButton(onClick = { zoomScale = (zoomScale - 0.25f).coerceAtLeast(1f); if (zoomScale == 1f) imageOffset = Offset.Zero },
-                    enabled = zoomScale > 1f) { Text("−") }
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                TextButton(
+                    onClick = { zoomScale = (zoomScale - 0.25f).coerceAtLeast(1f); fitWidth = false; if (zoomScale == 1f) imageOffset = Offset.Zero },
+                    enabled = zoomScale > 1f
+                ) { Text("−") }
                 Text(zoomScale.times(100).toInt().toString() + "%", style = MaterialTheme.typography.labelMedium)
-                TextButton(onClick = { zoomScale = (zoomScale + 0.25f).coerceAtMost(4f) }, enabled = zoomScale < 4f) { Text("+") }
+                TextButton(
+                    onClick = { zoomScale = (zoomScale + 0.25f).coerceAtMost(4f); fitWidth = false },
+                    enabled = zoomScale < 4f
+                ) { Text("+") }
+                TextButton(onClick = { zoomScale = 1f; fitWidth = false; imageOffset = Offset.Zero }) { Text(t("Fit page", "पृष्ठ में फिट करें")) }
+                TextButton(onClick = { zoomScale = 1f; fitWidth = true; imageOffset = Offset.Zero }) { Text(t("Fit width", "चौड़ाई में फिट करें")) }
                 Spacer(modifier = Modifier.weight(1f))
-                TextButton(onClick = { zoomScale = 1f; imageOffset = Offset.Zero }) { Text(localizedUiText("Fit page")) }
+                TextButton(onClick = onRetry, enabled = !busy) { Text(t("Retry page", "पृष्ठ फिर लोड करें")) }
             }
-            Image(bitmap = image, contentDescription = "पुस्तक का पृष्ठ " + page,
+            Image(
+                bitmap = image,
+                contentDescription = t("Textbook page ", "पुस्तक का पृष्ठ ") + page,
                 modifier = Modifier.fillMaxWidth().weight(1f)
                     .pointerInput(page) {
                         detectTransformGestures { _, pan, zoom, _ ->
                             zoomScale = (zoomScale * zoom).coerceIn(1f, 4f)
+                            fitWidth = false
                             imageOffset = if (zoomScale == 1f) Offset.Zero else imageOffset + pan
                         }
                     }
                     .graphicsLayer(scaleX = zoomScale, scaleY = zoomScale,
                         translationX = imageOffset.x, translationY = imageOffset.y),
-                contentScale = ContentScale.Fit)
+                contentScale = if (fitWidth) ContentScale.FillWidth else ContentScale.Fit
+            )
         } else {
             Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
-                if (busy) CircularProgressIndicator()
-                else EmptyState("पृष्ठ अभी लोड नहीं हुआ", "नेटवर्क उपलब्ध होने पर या पृष्ठ डाउनलोड होने पर फिर प्रयास करें।")
+                if (busy) {
+                    CircularProgressIndicator()
+                } else {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            if (error.isNotBlank()) error else t("This page could not be rendered.", "यह पृष्ठ नहीं दिखाया जा सका।"),
+                            color = if (error.isNotBlank()) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Button(onClick = onRetry, enabled = !busy) { Text(t("Retry page", "पृष्ठ फिर लोड करें")) }
+                    }
+                }
             }
         }
-        Text(localizedUiText("यह सामग्री केवल QuantaEdge ऐप में दिखाई जाती है; export और share विकल्प उपलब्ध नहीं हैं।"),
+
+        Text(t("Protected learning content stays inside QuantaEdge; download/export/share of the source PDF is not available.",
+            "संरक्षित पढ़ाई की सामग्री QuantaEdge में ही रहती है; मूल PDF को डाउनलोड/export/share नहीं किया जा सकता।"),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
     }
 }

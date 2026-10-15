@@ -71,6 +71,12 @@ class ProtectedResourceStore(context: Context, ownerKey: String = "guest") {
     }
 
     /** Fast cache-presence check for UI rendering; does not decrypt large page images. */
+    /** Remove one damaged page copy so retry can fetch a fresh authorized server render. */
+    fun removePage(documentId: Long, page: Int) {
+        require(documentId > 0L && page > 0)
+        File(root, pageName(documentId, page)).delete()
+    }
+
     fun hasPage(documentId: Long, page: Int): Boolean {
         val file = File(root, pageName(documentId, page))
         return file.isFile && file.length() > 28L
