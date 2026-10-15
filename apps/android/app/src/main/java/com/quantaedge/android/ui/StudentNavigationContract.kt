@@ -7,7 +7,7 @@ package com.quantaedge.android.ui
  */
 internal enum class AppRoute {
     WELCOME, LOGIN, PARENT_SIGNUP, PARENT_RESET, STUDENT_HOME, PARENT_HOME, PARENT_REPORT, PARENT_PROFILE,
-    PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, PARENT_CHILD_ARCHIVED, SUBJECT_LESSONS, LESSON, PRACTICE,
+    PARENT_CHILD_CREATE, PARENT_CHILD_MANAGE, PARENT_CHILD_ARCHIVED, ACCOUNT_LIFECYCLE, SUBJECT_LESSONS, LESSON, PRACTICE,
     DIAGNOSTIC, ASSESSMENTS, ASSESSMENT_ATTEMPT, ASSESSMENT_RESULTS, ASSESSMENT_REVIEW, RESOURCES,
     DOCUMENT_READER, PROFILE, PROGRESS, TUTOR, CLASSES, RECORDING_PLAYER, CERTIFICATES, LEADERBOARD
 }
@@ -26,12 +26,13 @@ internal object StudentNavigationContract {
         AppRoute.ASSESSMENT_RESULTS, AppRoute.ASSESSMENT_REVIEW, AppRoute.LEADERBOARD -> "practice"
         AppRoute.PROGRESS, AppRoute.CERTIFICATES -> "progress"
         AppRoute.RESOURCES, AppRoute.DOCUMENT_READER -> "library"
-        AppRoute.PROFILE -> lastStudentNavGroup.takeIf { it in studentGroupIds } ?: "today"
+        AppRoute.PROFILE, AppRoute.ACCOUNT_LIFECYCLE -> lastStudentNavGroup.takeIf { it in studentGroupIds } ?: "today"
         // Authentication and parent-only routes do not participate in student navigation.
         // Keep them explicit so adding a new AppRoute requires an intentional ownership decision.
         AppRoute.WELCOME, AppRoute.LOGIN, AppRoute.PARENT_SIGNUP, AppRoute.PARENT_RESET,
         AppRoute.PARENT_HOME, AppRoute.PARENT_REPORT, AppRoute.PARENT_PROFILE,
-        AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED -> "today"
+        AppRoute.PARENT_CHILD_CREATE, AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED,
+        AppRoute.ACCOUNT_LIFECYCLE -> "today"
     }
 
     fun parentGroupForRoute(destination: AppRoute, selectedParentGroup: String): String = when (destination) {
@@ -45,7 +46,7 @@ internal object StudentNavigationContract {
         AppRoute.SUBJECT_LESSONS, AppRoute.LESSON, AppRoute.PRACTICE, AppRoute.DIAGNOSTIC,
         AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_ATTEMPT, AppRoute.ASSESSMENT_RESULTS,
         AppRoute.ASSESSMENT_REVIEW, AppRoute.RESOURCES, AppRoute.DOCUMENT_READER,
-        AppRoute.PROFILE, AppRoute.PROGRESS, AppRoute.TUTOR, AppRoute.CLASSES,
+        AppRoute.PROFILE, AppRoute.ACCOUNT_LIFECYCLE, AppRoute.PROGRESS, AppRoute.TUTOR, AppRoute.CLASSES,
         AppRoute.RECORDING_PLAYER, AppRoute.CERTIFICATES, AppRoute.LEADERBOARD ->
             selectedParentGroup.takeIf { it in parentGroupIds } ?: "family"
     }
