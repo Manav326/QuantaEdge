@@ -23,6 +23,101 @@ public class AccountLifecycleController {
     this.staffAudit=staffAudit;
   }
 
+  @PostMapping("/account/me/adult-verification-request")
+  @Transactional
+  public Map<String,Object> requestAdultVerification(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    if(!Boolean.TRUE.equals(body.get("consentAccepted")))
+      throw new SecurityException("Explicit confirmation is required to request adult verification.");
+    long studentId=context.studentId();
+    Long linked=jdbc.queryForObject("select count(*) from student where id=? and user_account_id is not null",Long.class,studentId);
+    if(linked!=null && linked>0) throw new IllegalStateException("This learner already has an independent account.");
+    jdbc.update("""
+      insert into student_adult_verification(student_id,status,updated_at)
+      values (?,'PENDING',now())
+      on conflict(student_id) do update set status='PENDING',verification_reference_hash=null,
+        reviewed_by_staff_id=null,reviewed_at=null,expires_at=null,updated_at=now()
+      where student_adult_verification.status<>'VERIFIED' or student_adult_verification.expires_at<=now()
+      """,studentId);
+    String currentStatus=jdbc.queryForObject(
+        "select status from student_adult_verification where student_id=?",String.class,studentId);
+    if("PENDING".equals(currentStatus)) {
+      jdbc.update("""
+        insert into account_lifecycle_audit(event_type,student_id,actor_student_id,details)
+        values ('ADULT_VERIFICATION_UPDATED',?,?,jsonb_build_object('status','PENDING','source','STUDENT_REQUEST'))
+        """,studentId,studentId);
+    }
+    return Map.of("requested","PENDING".equals(currentStatus),"studentId",studentId,"status",currentStatus);
+  }
+
+  @PostMapping("/account/me/parent-eligibility-request")
+  @Transactional
+  public Map<String,Object> requestParentEligibility(@RequestBody Map<String,Object> body,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    context=authorization.requireStudent(context);
+    if(!Boolean.TRUE.equals(body.get("consentAccepted")))
+      throw new SecurityException("Explicit confirmation is required to request parent eligibility review.");
+    List<Map<String,Object>> rows=jdbc.queryForList("""
+      select st.user_account_id,u.role from student st
+      join user_account u on u.id=st.user_account_id and u.active=true
+      join student_adult_verification av on av.student_id=st.id
+        and av.status='VERIFIED' and av.expires_at>now()
+      where st.id=? and st.active=true and st.environment='PRODUCTION'
+      """,context.studentId());
+    if(rows.isEmpty() || !"LEARNER".equals(String.valueOf(rows.getFirst().get("role"))))
+      throw new SecurityException("An independent learner with current verified adult status is required.");
+    long userId=((Number)rows.getFirst().get("user_account_id")).longValue();
+    jdbc.update("""
+      insert into user_parent_eligibility(user_id,status,updated_at)
+      values (?,'PENDING',now())
+      on conflict(user_id) do update set status='PENDING',verification_reference_hash=null,
+        reviewed_by_staff_id=null,reviewed_at=null,expires_at=null,updated_at=now()
+      where user_parent_eligibility.status<>'VERIFIED' or user_parent_eligibility.expires_at<=now()
+      """,userId);
+    String currentStatus=jdbc.queryForObject(
+        "select status from user_parent_eligibility where user_id=?",String.class,userId);
+    if("PENDING".equals(currentStatus)) {
+      jdbc.update("""
+        insert into account_lifecycle_audit(event_type,student_id,user_id,actor_student_id,details)
+        values ('PARENT_ELIGIBILITY_UPDATED',?,?,?,jsonb_build_object('status','PENDING','source','LEARNER_REQUEST'))
+        """,context.studentId(),userId,context.studentId());
+    }
+    return Map.of("requested","PENDING".equals(currentStatus),"userId",userId,"status",currentStatus);
+  }
+
+  @GetMapping("/admin/account-lifecycle/adult-verifications")
+  public Map<String,Object> adultVerificationQueue(
+      @RequestParam(defaultValue="PENDING") String status,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    reviewer(context);
+    if(!List.of("PENDING","VERIFIED","REJECTED","EXPIRED").contains(status))
+      throw new IllegalArgumentException("Unsupported verification status.");
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select st.id as student_id,st.display_name,st.class_code,av.status,av.reviewed_at,av.expires_at
+      from student_adult_verification av join student st on st.id=av.student_id
+      where av.status=? order by av.updated_at,st.id
+      """,status);
+    return Map.of("items",items,"total",items.size(),"status",status);
+  }
+
+  @GetMapping("/admin/account-lifecycle/parent-eligibility")
+  public Map<String,Object> parentEligibilityQueue(
+      @RequestParam(defaultValue="PENDING") String status,
+      @RequestAttribute(value="authContext",required=false) AuthContext context) {
+    reviewer(context);
+    if(!List.of("PENDING","VERIFIED","REJECTED","EXPIRED").contains(status))
+      throw new IllegalArgumentException("Unsupported eligibility status.");
+    List<Map<String,Object>> items=jdbc.queryForList("""
+      select u.id as user_id,u.display_name,right(u.mobile_e164,4) as mobile_last_four,
+        st.id as student_id,pe.status,pe.reviewed_at,pe.expires_at
+      from user_parent_eligibility pe join user_account u on u.id=pe.user_id
+      join student st on st.user_account_id=u.id
+      where pe.status=? order by pe.updated_at,u.id
+      """,status);
+    return Map.of("items",items,"total",items.size(),"status",status);
+  }
+
   @PatchMapping("/admin/account-lifecycle/students/{studentId}/adult-verification")
   @Transactional
   public Map<String,Object> reviewAdultVerification(@PathVariable long studentId,@RequestBody Map<String,Object> body,
@@ -134,7 +229,9 @@ public class AccountLifecycleController {
     context=authorization.requireStudent(context);
     List<Map<String,Object>> rows=jdbc.queryForList("""
       select st.user_account_id,u.role,av.status as adult_verification_status,av.expires_at as adult_verification_expires_at,
-        pe.status as parent_eligibility_status,pe.expires_at as parent_eligibility_expires_at
+        (av.status='VERIFIED' and av.expires_at>now()) as adult_verification_current,
+        pe.status as parent_eligibility_status,pe.expires_at as parent_eligibility_expires_at,
+        (pe.status='VERIFIED' and pe.expires_at>now()) as parent_eligibility_current
       from student st left join user_account u on u.id=st.user_account_id
       left join student_adult_verification av on av.student_id=st.id
       left join user_parent_eligibility pe on pe.user_id=u.id
@@ -145,8 +242,8 @@ public class AccountLifecycleController {
     result.put("independentAccountLinked",result.get("user_account_id")!=null);
     result.put("canTransitionToParent",
       "LEARNER".equals(String.valueOf(result.get("role")))
-        && "VERIFIED".equals(String.valueOf(result.get("adult_verification_status")))
-        && "VERIFIED".equals(String.valueOf(result.get("parent_eligibility_status"))));
+        && Boolean.TRUE.equals(result.get("adult_verification_current"))
+        && Boolean.TRUE.equals(result.get("parent_eligibility_current")));
     return result;
   }
 
