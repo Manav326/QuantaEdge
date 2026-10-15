@@ -42,32 +42,32 @@
   ],
   "production_summary": {
     "chapters_total": 12,
-    "topics_generated": 2,
+    "topics_generated": 3,
     "topics_reviewed": 0,
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
-    "lessons_committed": 2,
-    "last_completed_authoring_step": "Topic 2 committed: The Scientific Method; 8 bilingual draft questions across the 8 registered component types. Chapter 1 now has 16 generated questions in total (2 of each type across topics 1–2).",
+    "lessons_committed": 3,
+    "last_completed_authoring_step": "Topic 3 committed: Curiosity, Collaboration and New Questions. Chapter 1 now has 24 draft questions across 3 topics: 3 each of multiple choice, multiple select, true/false, matching, fill-in-the-blank, image-observation, short-answer and scenario-based.",
     "current_chapter_number": 1,
-    "current_topic_number": 2,
-    "next_action": "Generate Chapter 1 Topic 3 (curiosity in everyday life, collaborative investigation and continuing questions) as a separate bilingual lesson; commit it and then update the index with the next per-type and cumulative counts.",
+    "current_topic_number": 3,
+    "next_action": "Run schema/locale/answer-key and registry-reference validation over all three Chapter 1 topic artifacts, check repeated content and strict chapter scope, and resolve source/visual blockers; then proceed with source mapping for Chapter 2 only after Chapter 1 status is clear.",
     "question_counts_by_chapter": [
       {
         "chapter_number": 1,
         "chapter_title_en": "The Wonderful World of Science",
-        "total_questions_generated": 16,
+        "total_questions_generated": 24,
         "counts_by_type": {
-          "multiple_choice": 2,
-          "multiple_select": 2,
-          "true_false": 2,
-          "matching": 2,
-          "fill_blank": 2,
-          "image_observation": 2,
-          "short_answer": 2,
-          "scenario_based": 2
+          "multiple_choice": 3,
+          "multiple_select": 3,
+          "true_false": 3,
+          "matching": 3,
+          "fill_blank": 3,
+          "image_observation": 3,
+          "short_answer": 3,
+          "scenario_based": 3
         },
-        "topic_count_with_questions": 2,
-        "topics_generated": 2,
+        "topic_count_with_questions": 3,
+        "topics_generated": 3,
         "topics_approved": 0
       }
     ]
@@ -125,7 +125,8 @@
             "Source reconciliation and Hindi page mapping remain pending.",
             "The V3 page-preview asset is editor-only and cannot render as student visual.",
             "The topic has not passed semantic bilingual, factual, visual or practice review."
-          ]
+          ],
+          "blocker": "Source review pending; V3 source page preview is editor-only and must not render as student content; semantic bilingual review pending."
         },
         {
           "number": 2,
@@ -163,34 +164,67 @@
             "web": false,
             "android": false
           },
-          "blocker": "Original structured diagram and q06 are not yet visually reviewed/rendered; q06 stays blocked from student rendering until review.",
+          "blocker": "Source page mapping and extraction quality need review; original structured diagram and q06 are blocked pending visual validation.",
           "committed_at": "2026-10-15",
           "commit_sha": "5e7f4bfa933ff4ca0f537dfcae7f4b0fc13c059a"
         },
         {
           "number": 3,
           "topic_id": "c6-sci-ch01-t03",
-          "title_en": "Curiosity in Everyday Life and Learning Together",
-          "title_hi": "रोज़मर्रा के जीवन में जिज्ञासा और साथ मिलकर सीखना",
-          "artifact_path": null,
-          "artifact_status": "NOT_STARTED"
+          "title_en": "Curiosity, Collaboration and New Questions",
+          "title_hi": "जिज्ञासा, सहयोग और नए प्रश्न",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-01/topic-03-curiosity-collaboration-and-new-questions.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "blocker": "Hindi source page mapping and English source page visual reconciliation pending; original structured diagram and q06 blocked pending visual validation.",
+          "committed_at": "2026-10-15",
+          "commit_sha": "1fc141bbbfda3832a13a1336240996915bb540b4"
         }
       ],
       "chapter_source_review": "NOT_COMPLETE",
       "chapter_visual_review": "NOT_COMPLETE",
       "human_approval": "NOT_REVIEWED",
-      "question_count_generated": 16,
+      "question_count_generated": 24,
       "question_type_counts_cumulative": {
-        "multiple_choice": 2,
-        "multiple_select": 2,
-        "true_false": 2,
-        "matching": 2,
-        "fill_blank": 2,
-        "image_observation": 2,
-        "short_answer": 2,
-        "scenario_based": 2
+        "multiple_choice": 3,
+        "multiple_select": 3,
+        "true_false": 3,
+        "matching": 3,
+        "fill_blank": 3,
+        "image_observation": 3,
+        "short_answer": 3,
+        "scenario_based": 3
       },
-      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED"
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "topics_generated": 3
     },
     {
       "number": 2,
@@ -290,13 +324,13 @@
   },
   "resume_instructions": [
     "Read the production index first, then read question-rendering-registry.v1.md and question-rendering-registry.v1.json.",
-    "Open the active lesson files recorded in the chapter topics. Do not regenerate or overwrite them blindly; preserve stable IDs.",
-    "Current progress: Chapter 1 has 2 topic lessons and 16 draft questions: 2 multiple-choice, 2 multiple-select, 2 true/false, 2 matching, 2 fill-blank, 2 image-observation, 2 short-answer and 2 scenario-based.",
-    "Generate each new topic as one bilingual JSON artifact with a separate Explain and Practice section; record all student-visible strings in en and hi and link each question to its rendering contract.",
-    "After every topic artifact commit to main, immediately update this index with topic status, per-type counts and cumulative chapter totals.",
-    "Do not treat generated content as source-complete, semantically approved or publishable. Resolve Hindi source page mapping, source visual reconciliation, bilingual review and component QA before approval.",
-    "For image-observation questions, do not render unapproved/source-preview visuals to students. Keep blocked until an appropriate visual has passed review.",
-    "Next planned topic: c6-sci-ch01-t03 — Curiosity in Everyday Life and Learning Together, constrained to Chapter 1 only."
+    "Chapter 1 currently has 3 drafted topic artifacts and 24 questions: 3 multiple-choice, 3 multiple-select, 3 true/false, 3 matching, 3 fill-in-the-blank, 3 image-observation, 3 short-answer and 3 scenario-based. All 3 topics are drafts, not approved.",
+    "Do not regenerate or overwrite topic JSON blindly. Preserve stable IDs; make additive fixes and record each subsequent commit.",
+    "Each generated question requires a registry rendering_contract_id. New types need a documented component, schema, response, grading, locale, accessibility and QA contract before use.",
+    "Every visible string in lessons/practice/shared controls is bilingual and obeys a single global app language selector. Runtime switching and state preservation are requirements recorded here, not implemented behavior.",
+    "The 3 image-observation items are blocked until their referenced visuals have been rendered/reviewed and approved for student display. The Chapter 1 English V3 page preview is editor-only.",
+    "Next: run machine validation across all 3 artifacts, review chapter-specific scope/duplication, and resolve Hindi source page mapping and English visual reconciliation. Keep Chapter 1 marked IN_PROGRESS until the content, bilingual and visual reviews pass.",
+    "After Chapter 1 is audited, begin Chapter 2 only with chapter-specific source mapping; do not label or publish draft content as complete."
   ],
   "language_runtime_contract": {
     "contract_path": "Each lesson artifact contains language_runtime_contract; the shared app-wide string catalog and runtime behavior will require implementation later.",
@@ -336,49 +370,49 @@
         "type": "multiple_choice",
         "component": "MultipleChoiceQuestion",
         "component_contract_id": "qtype-multiple-choice.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "multiple_select",
         "component": "MultipleSelectQuestion",
         "component_contract_id": "qtype-multiple-select.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "true_false",
         "component": "TrueFalseQuestion",
         "component_contract_id": "qtype-true-false.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "matching",
         "component": "MatchingQuestion",
         "component_contract_id": "qtype-matching.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "fill_blank",
         "component": "FillBlankQuestion",
         "component_contract_id": "qtype-fill-blank.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "image_observation",
         "component": "ImageObservationQuestion",
         "component_contract_id": "qtype-image-observation.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "short_answer",
         "component": "ShortAnswerQuestion",
         "component_contract_id": "qtype-short-answer.v1",
-        "count": 2
+        "count": 3
       },
       {
         "type": "scenario_based",
         "component": "ScenarioQuestion",
         "component_contract_id": "qtype-scenario-based.v1",
-        "count": 2
+        "count": 3
       }
     ],
     "implementation_status": {
@@ -389,9 +423,9 @@
       "automated_component_tests": false
     },
     "known_question_blockers": [
-      "Topic 1 q06 references an editor-only English source preview and is not student-renderable.",
-      "Topic 2 q06 references an original structured diagram draft that has not yet passed visual review/render validation.",
-      "Short-answer items use explicit rubrics; when no validated grader is configured, the required behavior is a localized pending-review state rather than invented automatic scores."
+      "Each topic's image_observation question currently references a generated visual draft or English source-page preview that is not yet approved/student-renderable; all three remain blocked until visual QA.",
+      "Short-answer items must show localized pending-review states when no validated grader is configured.",
+      "Question components and the global runtime language switch are specification-only and are not implemented."
     ]
   }
 }
