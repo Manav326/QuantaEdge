@@ -294,10 +294,13 @@ class ApplicationStartupSmokeTest {
       """, Integer.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from (
-        select public_id from curriculum_class
-        union all
-        select public_id from curriculum_program where public_id is not null
-      ) identities group by public_id having count(*)>1
+        select public_id from (
+          select public_id from curriculum_class
+          union all
+          select public_id from curriculum_program where public_id is not null
+        ) all_identities
+        group by public_id having count(*)>1
+      ) duplicates
       """, Integer.class));
     assertEquals(
       jdbc.queryForObject("select count(*) from curriculum_class", Integer.class),
