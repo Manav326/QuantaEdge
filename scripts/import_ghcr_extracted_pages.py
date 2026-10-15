@@ -60,16 +60,27 @@ def validate_pair(manifest_path: Path) -> tuple[dict[str, Any], Path]:
     return manifest, pages_path
 
 
-def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -> dict[str, Any]:
+def post_multipart(
+    url: str,
+    cookie: str | None,
+    parts: list[tuple[str, str, bytes]],
+    *,
+    admin_token: str | None = None,
+) -> dict[str, Any]:
     boundary, body = multipart_body(parts)
-    request = urllib.request.Request(
-        url, data=body, method="POST",
-        headers={
-            "Cookie": "QE_SESSION=" + cookie,
-            "Content-Type": "multipart/form-data; boundary=" + boundary,
-            "Accept": "application/json",
-        },
-    )
+    headers = {
+        "Content-Type": "multipart/form-data; boundary=" + boundary,
+        "Accept": "application/json",
+    }
+    if admin_token:
+        # A narrow, local-only draft import credential; never used for approval.
+        headers["X-Admin-Token"] = admin_token
+    elif cookie:
+        # Historical and scoped cookie names are accepted by AuthFilter; the API validates the token itself.
+        headers["Cookie"] = "QE_SESSION=" + cookie + "; QE_STAFF_SESSION=" + cookie
+    else:
+        raise ValueError("A local admin token or Education Admin access cookie is required.")
+    request = urllib.request.Request(url, data=body, method="POST", headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=180) as response:
             raw = response.read().decode("utf-8")
@@ -84,11 +95,10 @@ def post_multipart(url: str, cookie: str, parts: list[tuple[str, str, bytes]]) -
         raise RuntimeError("API returned an unexpected response shape.")
     return value
 
-
 def post_approve(url: str, cookie: str) -> dict[str, Any]:
     request = urllib.request.Request(
         url, data=b"", method="POST",
-        headers={"Cookie": "QE_SESSION=" + cookie, "Accept": "application/json"},
+        headers={"Cookie": "QE_SESSION=" + cookie + "; QE_STAFF_SESSION=" + cookie, "Accept": "application/json"},
     )
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
@@ -107,7 +117,12 @@ def main(argv: list[str] | None = None) -> int:
                         help="Root directory containing class-N/medium/pages/*.manifest.json.")
     parser.add_argument("--api-base-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
     parser.add_argument("--apply", action="store_true", help="Actually import validated pages as draft source records.")
-    parser.add_argument("--approve", action="store_true", help="Also approve each imported source book (requires --apply).")
+    parser.add_argument("--approve", action="store_true", help="Also approve each imported source book (requires --apply and a staff session).")
+    parser.add_argument(
+        "--auth-mode", choices=("auto", "admin-token", "cookie"),
+        default=os.environ.get("QUANTAEDGE_IMPORT_AUTH_MODE", "auto").strip().lower(),
+        help="Auto prefers local QUANTAEDGE_ADMIN_TOKEN; cookies are also supported.",
+    )
     args = parser.parse_args(argv)
     if args.approve and not args.apply:
         parser.error("--approve requires --apply.")
@@ -119,8 +134,20 @@ def main(argv: list[str] | None = None) -> int:
     if parsed.scheme != "https" and parsed.hostname not in {"localhost", "127.0.0.1", "::1"}:
         parser.error("Use HTTPS for non-local API URLs.")
     cookie = os.environ.get("QUANTAEDGE_ADMIN_SESSION", "").strip()
-    if args.apply and not cookie:
-        parser.error("Set QUANTAEDGE_ADMIN_SESSION to the active access-cookie value from a signed-in Education Admin session (QE_SESSION preferred, otherwise QE_STAFF_SESSION) before --apply.")
+    configured_admin_token = os.environ.get("QUANTAEDGE_ADMIN_TOKEN", "").strip()
+    auth_mode = args.auth_mode
+    if auth_mode == "auto":
+        auth_mode = "admin-token" if configured_admin_token else "cookie"
+    if args.apply and auth_mode == "admin-token" and not configured_admin_token:
+        parser.error("QUANTAEDGE_ADMIN_TOKEN is not configured in the environment or local .env file.")
+    if args.apply and auth_mode == "cookie" and not cookie:
+        parser.error("No Education Admin access cookie is set. Use QE_SESSION/QE_STAFF_SESSION or configure QUANTAEDGE_ADMIN_TOKEN for local draft import.")
+    if args.approve and auth_mode == "admin-token":
+        parser.error("The local admin token authorizes draft import only. Source approval requires an Education Admin staff session.")
+    if args.approve and not cookie:
+        parser.error("Source approval requires QUANTAEDGE_ADMIN_SESSION from an authenticated Education Admin staff session.")
+    admin_token = configured_admin_token if auth_mode == "admin-token" else None
+    request_cookie = cookie if auth_mode == "cookie" else None
     manifests = sorted(root.rglob("*.manifest.json"))
     if not manifests:
         parser.error(f"No *.manifest.json files found under {root}")
@@ -138,11 +165,12 @@ def main(argv: list[str] | None = None) -> int:
                 successes += 1
                 continue
             imported = post_multipart(
-                base + "/api/v1/admin/textbook-extraction/ghcr-books", cookie,
+                base + "/api/v1/admin/textbook-extraction/ghcr-books", request_cookie,
                 [
                     ("manifest", path.name, path.read_bytes()),
                     ("pages", pages_path.name, pages_path.read_bytes()),
                 ],
+                admin_token=admin_token,
             )
             if args.approve:
                 source_book_id = imported.get("sourceBookId")
@@ -157,7 +185,8 @@ def main(argv: list[str] | None = None) -> int:
             failures.append({"manifest": str(path), "error": str(exc)})
             print(f"ERROR {path}: {exc}", file=sys.stderr)
     report = {"manifests_found": len(manifests), "succeeded": successes, "failures": failures,
-              "mode": "IMPORT_AND_APPROVE" if args.approve else ("IMPORT_DRAFT" if args.apply else "DRY_RUN")}
+              "mode": "IMPORT_AND_APPROVE" if args.approve else ("IMPORT_DRAFT" if args.apply else "DRY_RUN"),
+              "auth_mode": auth_mode if args.apply else "none"}
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 1 if failures else 0
 
