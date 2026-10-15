@@ -26,6 +26,42 @@ function visualSourceMatchesLesson(row:Row|undefined,source:VisualSourceMatch|un
 function visualCatalogMatchesLesson(row:Row|undefined,catalog:VisualCatalog|null):boolean {
  return visualSourceMatchesLesson(row,catalog?.source);
 }
+const VISUAL_RELEVANCE_STOP_WORDS=new Set([
+ 'the','and','for','from','this','that','with','what','when','where','have','into','are','was','were','can','will',
+ 'you','your','our','their','they','them','its','not','but','all','any','more','most','some','such','than','then',
+ 'page','pages','book','figure','image','visual','grade','class','science','math','maths','mathematics','lesson',
+ 'का','की','के','और','यह','इस','इन','में','से','है','हैं','को','एक','पर','तक','लिए','द्वारा','भी','तो','या'
+]);
+function visualSearchTokens(value:unknown):Set<string> {
+ const pieces:string[]=[];
+ const collect=(item:unknown):void=>{
+  if(typeof item==='string'){pieces.push(item);return;}
+  if(Array.isArray(item)){item.forEach(collect);return;}
+  if(item&&typeof item==='object')Object.values(item as Record<string,unknown>).forEach(collect);
+ };
+ collect(value);
+ const tokens=(pieces.join(' ').toLocaleLowerCase().normalize('NFKC').match(/[A-Za-z0-9\u0900-\u097F]{3,}/g)||[]);
+ return new Set(tokens.filter(token=>!VISUAL_RELEVANCE_STOP_WORDS.has(token)));
+}
+function visualCandidateRelevanceScore(candidate:VisualCandidate,row:Row|undefined):number {
+ if(!row)return 0;
+ const sourceTokens=visualSearchTokens([candidate.suggested_chapter_title,candidate.page_text_context]);
+ const lessonTokens=visualSearchTokens([row.lesson_title,row.lesson_summary,row.chapter_name]);
+ let score=0;
+ for(const token of lessonTokens)if(sourceTokens.has(token))score+=token.length>=6?3:1;
+ const normalize=(value:string|undefined|null)=>String(value??'').toLocaleLowerCase().normalize('NFKC').replace(/[^a-z0-9\u0900-\u097f]+/g,' ').trim();
+ const chapter=normalize(row.chapter_name),suggestion=normalize(candidate.suggested_chapter_title);
+ if(chapter&&suggestion&&(chapter===suggestion||chapter.includes(suggestion)||suggestion.includes(chapter)))score+=1000;
+ return score;
+}
+function visualCandidateBlockRelevanceScore(candidate:VisualCandidate,block:ContentBlock):number {
+ if(!['EXPLANATION','WORKED_EXAMPLE','GUIDED_PRACTICE','INDEPENDENT_PRACTICE','CHALLENGE','HINT'].includes(block.block_type))return -1;
+ const sourceTokens=visualSearchTokens(candidate.page_text_context);
+ const blockTokens=visualSearchTokens([block.block_type,block.content]);
+ let score=0;
+ for(const token of blockTokens)if(sourceTokens.has(token))score+=token.length>=6?3:1;
+ return score;
+}
 const LEARNER_BLOCK_STAGE:Record<string,number>={
  PREREQUISITE:0,EXPLANATION:1,IMAGE:2,DIAGRAM:2,VIDEO:2,AUDIO:2,ANIMATION:2,
  WORKED_EXAMPLE:3,GUIDED_PRACTICE:4,HINT:4,INDEPENDENT_PRACTICE:5,CHALLENGE:5,
@@ -520,7 +556,7 @@ export default function ContentStudio(){
    const lessonLabel=targetRow?targetRow.subject_name:'the selected lesson';
    setError('This visual source is for '+sourceLabel+'; it does not match '+lessonLabel+'. Select a lesson with the matching subject.');return;
   }
-  const existing=blocks.findIndex(block=>block.content?.source_candidate_id===candidate.candidate_id);
+  const existing=blocks.findIndex(block=>block.content?.source_candidate_id===candidate.candidate_id&&block.content?.source_book_id===candidate.source_book_id&&block.content?.source_pdf_sha256===candidate.source_pdf_sha256);
   if(existing>=0){setActiveBlock(existing);setNotice('This candidate is already attached to this micro-topic.');return;}
   if(blocks.length>=100){setError('This lesson already has the maximum of 100 teaching blocks.');return;}
   if(!candidate.image_url){setError('This candidate has no resolvable image URL.');return;}
@@ -548,8 +584,22 @@ export default function ContentStudio(){
    publication_allowed:false,
    human_review_required:true
   }};
-  setBlocks(old=>[...old,next]);setActiveBlock(blocks.length);
-  setNotice('Added visual as a draft IMAGE block. Add its explanation and alternative text; a reviewer must classify, approve and confirm rights before publication.');
+  const scored=blocks.map((block,index)=>({index,score:visualCandidateBlockRelevanceScore(candidate,block)})).filter(item=>item.score>=0);
+  const best=scored.reduce((current,item)=>item.score>current.score?item:current,{index:-1,score:0});
+  let insertAt=best.index>=0&&best.score>0?best.index+1:-1;
+  if(insertAt<0){
+   const firstExplanation=blocks.findIndex(block=>block.block_type==='EXPLANATION');
+   if(firstExplanation>=0)insertAt=firstExplanation+1;
+   else {
+    const firstRecap=blocks.findIndex(block=>block.block_type==='SUMMARY'||block.block_type==='RECAP');
+    insertAt=firstRecap>=0?firstRecap:blocks.length;
+   }
+  }
+  setBlocks(old=>[...old.slice(0,insertAt),next,...old.slice(insertAt)].map((block,index)=>({...block,sequence_no:index+1})));
+  setActiveBlock(insertAt);
+  setNotice(best.index>=0&&best.score>0
+   ?'Added a draft visual after the lesson block with the strongest source-text overlap. Verify the placement and meaning before saving.'
+   :'Added a draft visual after the first explanation block as a placement suggestion. Verify the placement and meaning before saving.');
  }
  function updateQuestion(index:number,patch:Record<string,any>){
   const editsQuestionContent=Object.keys(patch).some(key=>!['review_status','review_notes','active','sort_order'].includes(key));
@@ -731,7 +781,7 @@ export default function ContentStudio(){
        <label className="qe-form-field qe-visual-search">Search candidate pages and context<input value={visualSearch} onChange={e=>setVisualSearch(e.target.value)} placeholder="Search topic, page text, or candidate ID"/></label>
        {visualCatalogLoading?<div className="qe-visual-empty">Loading source-bound visual candidates…</div>:visualCatalogError?<div className="qe-visual-empty">{visualCatalogError}</div>:null}
        {visualCatalog&&(()=>{
-        const candidates=visualCatalog.candidates.filter(candidate=>(candidate.candidate_id+' '+candidate.candidate_kind+' '+candidate.source_pdf_page_number+' '+candidate.suggested_chapter_title+' '+candidate.page_text_context).toLocaleLowerCase().includes(visualSearch.trim().toLocaleLowerCase()));
+        const candidates=visualCatalog.candidates.filter(candidate=>(candidate.candidate_id+' '+candidate.candidate_kind+' '+candidate.source_pdf_page_number+' '+candidate.suggested_chapter_title+' '+candidate.page_text_context).toLocaleLowerCase().includes(visualSearch.trim().toLocaleLowerCase())).slice().sort((left,right)=>visualCandidateRelevanceScore(right,visualTargetRow)-visualCandidateRelevanceScore(left,visualTargetRow));
         return <><div className="qe-visual-library-grid">{candidates.map(candidate=><article className="qe-visual-candidate-card" key={candidate.candidate_id}>
           <a className="qe-visual-thumb" href={candidate.source_page_url||candidate.image_url} target="_blank" rel="noreferrer" aria-label={'Open source page '+candidate.source_pdf_page_number}><img src={candidate.image_url} alt={'Unreviewed visual candidate from PDF page '+candidate.source_pdf_page_number} loading="lazy"/></a>
           <div className="qe-visual-candidate-copy"><span className="qe-visual-candidate-state">{candidate.candidate_kind==='page_preview'?'Source-page context only':'Needs review'} · PDF p. {candidate.source_pdf_page_number}</span><strong>{candidate.candidate_kind==='embedded_image'?'Embedded figure':'Whole-page preview'} · {candidate.candidate_id}</strong>{candidate.suggested_chapter_title?<div className="qe-visual-chapter-suggestion"><b>TOC suggestion: Ch. {candidate.suggested_chapter_number} · {candidate.suggested_chapter_title}</b><small>Verify against the actual source and selected lesson; this mapping is not approved.</small></div>:null}<p>{candidate.page_text_context||'No extracted page context available.'}</p><small>{candidate.source_asset_sha256?'Asset SHA-256 '+candidate.source_asset_sha256.slice(0,16)+'…':'Source page preview'} </small></div>
