@@ -87,9 +87,9 @@
       "Magnets, measurement, materials, temperature, states of water, separation methods, living-creature classification, natural resources or astronomy lessons from later chapters",
       "Navodaya entrance-exam preparation"
     ],
-    "bilingual_parity_rule": "English and Hindi use the same stable block IDs, learning objectives, visual IDs, practice item IDs, correct-answer IDs and intended difficulty. Language may change wording, but not learning scope, expected knowledge or grading.",
+    "bilingual_parity_rule": "English and Hindi must use the same stable block IDs, learning objectives, visual IDs, practice item IDs, correct-answer IDs and intended difficulty. Every learner-visible field across explanation, activity, practice and shared lesson controls must be mapped in both locales. The global app language switch updates the entire visible experience immediately and preserves learner state. No cross-language fallback or mixed-language screen is permitted; missing translations block approval/publication.",
     "source_text_rule": "Learning explanations and all practice questions are newly authored learning material based on the chapter, not claimed to be verbatim textbook text. Do not present generated questions as NCERT's own questions.",
-    "asset_rule": "V3 source visuals are included as review-only references until visual review and rights clearance are complete. The original generated diagram is a conceptual visual brief represented as data, not a claimed existing textbook figure."
+    "asset_rule": "V3 source visuals are provenance-linked candidates. They remain review-only until semantic fit, source fidelity, alt text, rights and approval are confirmed. Full-page source previews containing English text are editor-only references and must not appear as student-facing visuals in Hindi mode (or be treated as a localized visual in either mode)."
   },
   "learning_objectives": [
     {
@@ -211,7 +211,7 @@
           "review_status": "NEEDS_REVIEW",
           "rights_status": "SOURCE_REFERENCE_ONLY",
           "publication_allowed": false,
-          "render_policy": "AUTHOR_PREVIEW_ONLY_UNTIL_REVIEW_AND_RIGHTS_CLEARANCE",
+          "render_policy": "EDITOR_PREVIEW_ONLY_REFERENCE; NEVER_RENDER_AS_STUDENT_CONTENT_IN_EITHER_LOCALE_UNLESS_A_LANGUAGE_APPROPRIATE_VERSION_IS_CREATED_AND_APPROVED",
           "alt_by_locale": {
             "en": "A textbook page showing a desert, a coast, an underwater ocean view and a galaxy, beside text comparing scientific knowledge to a jigsaw puzzle.",
             "hi": "पाठ्यपुस्तक के एक पृष्ठ पर मरुस्थल, समुद्र-तट, समुद्र के भीतर का दृश्य और आकाशगंगा दिखाई गई हैं। साथ में वैज्ञानिक ज्ञान की तुलना जिग्सॉ पहेली से की गई है।"
@@ -220,7 +220,17 @@
             "en": "Questions can begin anywhere—from places on Earth to the wider universe. The page uses a jigsaw puzzle to show that discoveries add to our understanding.",
             "hi": "प्रश्न कहीं से भी शुरू हो सकते हैं—पृथ्वी के स्थानों से लेकर विशाल ब्रह्मांड तक। इस पृष्ठ पर पहेली का उदाहरण दिखाता है कि नई खोजें हमारी समझ में नए हिस्से जोड़ती हैं।"
           },
-          "integration_note": "This is an actual v3 source-page preview, not a mock image. It is kept as a provenance-linked reference and is not production-approved."
+          "integration_note": "This is an actual v3 source-page preview, not a mock image. It is kept as a provenance-linked reference and is not production-approved.",
+          "localization": {
+            "en": "This is an English source-page preview for provenance/review, not the final student visual.",
+            "hi": "यह अंग्रेज़ी स्रोत-पृष्ठ का पूर्वावलोकन केवल समीक्षा/स्रोत-सत्यापन के लिए है; इसे विद्यार्थी को दिखाए जाने वाले हिंदी दृश्य के रूप में न दिखाएँ।"
+          },
+          "student_renderable": false,
+          "localization_blocker": "Whole-page preview embeds English textbook text. The generated bilingual concept diagram is the student-facing visual draft until an appropriate reviewed visual is available."
+        },
+        "integration_note_by_locale": {
+          "en": "Actual V3 page preview retained for source verification only; it is not approved for student rendering.",
+          "hi": "वास्तविक V3 पृष्ठ-पूर्वावलोकन केवल स्रोत-सत्यापन के लिए रखा गया है; विद्यार्थी स्क्रीन पर दिखाने के लिए स्वीकृत नहीं है।"
         }
       },
       {
@@ -449,7 +459,6 @@
       "en": "Practise What You Learned",
       "hi": "अभ्यास करें"
     },
-    "content_origin": "AI-authored supplementary practice based only on this topic's approved scope; these are not verbatim NCERT assessment questions.",
     "question_count": 8,
     "question_types": [
       "multiple_choice",
@@ -823,7 +832,57 @@
           "hi": "सही। जिज्ञासा से स्पष्ट प्रश्न उठता है और फिर सावधानी से खोज की जाती है; अनुमान को पक्का उत्तर नहीं मान लिया जाता।"
         }
       }
-    ]
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice based only on this topic's chapter-specific scope. These are not presented as verbatim NCERT questions.",
+      "hi": "इस विषय की अध्याय-विशिष्ट सीमा के आधार पर AI द्वारा तैयार अतिरिक्त अभ्यास। इन्हें NCERT के मूल प्रश्नों के शब्दशः रूप में प्रस्तुत नहीं किया गया है।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    }
   },
   "parity_audit": {
     "shared_learning_objective_ids": true,
@@ -836,17 +895,58 @@
     "semantic_translation_review": "PENDING_HUMAN_REVIEW",
     "automated_validation": "NOT_RUN",
     "known_limitations": [
-      "Hindi extraction file exists, but its content could not be read by the current repository-file reader; Hindi page mapping and source-paragraph reconciliation remain pending.",
+      "Hindi source extraction file exists, but chapter-1 Hindi page mapping and paragraph-level reconciliation must be verified before completeness approval.",
       "The English chapter page map is TOC-derived and still requires visual verification.",
-      "V3 visuals are source-reference-only and cannot be published until review and rights clearance.",
-      "This is a data artifact only; no web or Android UI implementation has been performed."
-    ]
+      "The V3 English full-page preview is editor-only because it embeds English text; the visual-review workflow must choose a bilingual generated visual or an approved locale-appropriate source asset for student display.",
+      "The generated curiosity-loop diagram is bilingual structured data and remains a draft until visual rendering and factual/accessibility review.",
+      "The global locale contract is recorded here, but shared app strings and runtime state-preserving language switching have not been implemented."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true
   },
   "next_steps": [
     "Verify Hindi chapter-1 page boundaries against the matching Jigyasa PDF and reconcile the Hindi source text.",
-    "Visually verify the English Chapter 1 source pages and confirm all referenced objects align with the lesson.",
+    "Visually verify English Chapter 1 source pages and confirm the intended student visual does not include untranslated source-page text.",
+    "Run locale-completeness and semantic-parity validation for every learner-visible string, question, answer key, feedback, rubric and shared practice label.",
     "Review question correctness, translation equivalence and chapter-scope boundaries.",
-    "Generate topic 2: the scientific method, preserving its own chapter-specific explanation, relevant visual data and varied bilingual practice.",
+    "Generate topic 2: the scientific method, preserving its own chapter-specific explanation, relevant bilingual visual data and varied bilingual practice.",
     "Generate topic 3: curiosity and everyday scientific thinking, collaboration and continuing questions."
-  ]
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
 }
