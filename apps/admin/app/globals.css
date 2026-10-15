@@ -889,3 +889,33 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
     outline-offset: 3px;
   }
 }
+
+/* V3 textbook visual attachment library and provenance review */
+.qe-visual-library{border:1px solid var(--line);background:linear-gradient(180deg,#fff 0%,#fbfcff 100%)}
+.qe-visual-source-note{border:1px solid #dce4f1;border-radius:12px;background:#f7f9fd;padding:12px 14px;margin:14px 0}
+.qe-visual-source-note span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#4b6285}
+.qe-visual-source-note p{margin:5px 0;font-weight:700;color:var(--ink)}
+.qe-visual-source-note small,.qe-visual-candidate-copy small{display:block;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.qe-visual-search{margin-bottom:12px}
+.qe-visual-library-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.qe-visual-candidate-card{display:flex;flex-direction:column;gap:9px;min-width:0;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.qe-visual-thumb{display:block;height:150px;border-radius:9px;background:#f1f3f8;overflow:hidden}
+.qe-visual-thumb img{width:100%;height:100%;object-fit:contain;display:block}
+.qe-visual-candidate-copy{min-width:0}
+.qe-visual-candidate-copy strong{display:block;margin:5px 0;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.qe-visual-candidate-copy p{font-size:11px;line-height:1.45;color:#505b70;margin:5px 0;max-height:74px;overflow:auto;white-space:pre-wrap}
+.qe-visual-candidate-state{font-size:10px;font-weight:800;color:#8b5c17;background:#fff6e3;border-radius:999px;padding:4px 7px;display:inline-block}
+.qe-visual-library-footnote,.qe-visual-empty{font-size:12px;color:var(--muted);line-height:1.5;margin:12px 0}
+.qe-visual-provenance{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;padding:14px;border:1px solid #d5dfed;border-radius:12px;background:#f8faff;margin:12px 0}
+.qe-visual-provenance span{display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#596b87;margin-bottom:6px}
+.qe-visual-provenance b{display:block;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.qe-visual-provenance small{display:block;color:var(--muted);font-size:10px;margin-top:6px;overflow-wrap:anywhere}
+.qe-visual-provenance p{font-size:11px;line-height:1.45;color:#4e5b70;max-height:125px;overflow:auto;white-space:pre-wrap}
+.qe-visual-review-fields{display:flex;flex-direction:column;gap:10px}
+.qe-visual-review-fields label{display:grid;gap:5px;font-size:11px;font-weight:700}
+.qe-visual-review-fields select{min-width:0;width:100%;border:1px solid #d3dbea;border-radius:8px;padding:8px;background:white;color:var(--ink);font:inherit}
+.qe-visual-review-fields small{font-size:10px;line-height:1.5}
+.qe-visual-kind-pill{display:inline-flex;align-self:flex-start;border:1px solid #dbe5f4;border-radius:999px;background:#eff5ff;color:#35547f;padding:4px 8px;font-size:10px;font-weight:800;margin:6px 0}
+.qe-visual-source-caption{font-size:10px;line-height:1.5;color:var(--muted);border-top:1px solid var(--line);padding-top:9px;margin-top:8px}
+@media(max-width:1200px){.qe-visual-library-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.qe-visual-library-grid{grid-template-columns:1fr}.qe-visual-provenance{grid-template-columns:1fr}.qe-visual-thumb{height:200px}}
