@@ -223,7 +223,7 @@ class CertificateControllerEligibilityTest {
     attempt.put("released_at", null);
 
     when(jdbc.queryForList(anyString(), any(Object[].class)))
-        .thenReturn(List.of(studentRow), List.of(attempt), List.of());
+        .thenReturn(List.of(studentRow), List.of(), List.of(attempt), List.of());
 
     org.springframework.web.server.ResponseStatusException error = assertThrows(
         org.springframework.web.server.ResponseStatusException.class,
