@@ -66,6 +66,26 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void certificateDetailLookupUsesStudentScopeAndDoesNotDependOnHistoryPageLimit() {
+    Map<String, Object> row = new LinkedHashMap<>();
+    row.put("id", 3001L);
+    row.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    row.put("achievement_type", "ASSESSMENT_PASS");
+    row.put("status", "ISSUED");
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenReturn(List.of(row));
+
+    Map<String, Object> response = controller.myCertificate(3001L, student);
+
+    assertEquals(row, response);
+    ArgumentCaptor<String> sql = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<Object[]> args = ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).queryForList(sql.capture(), args.capture());
+    assertTrue(sql.getValue().contains("WHERE c.id=? AND c.student_id=?"));
+    assertEquals(3001L, ((Number) args.getValue()[0]).longValue());
+    assertEquals(81L, ((Number) args.getValue()[1]).longValue());
+  }
+
+  @Test
   void subjectTrackOptionsComeFromActiveEnrollmentsAndIncludeCourseIdentity() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("track_key", "COURSE:12:mathematics");
