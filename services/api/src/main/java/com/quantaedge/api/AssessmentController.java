@@ -98,6 +98,7 @@ public class AssessmentController {
   public Map<String,Object> questionBank(
       @RequestParam String classCode,
       @RequestParam String subjectCode,
+      @RequestParam(required = false) Long courseId,
       @RequestParam(required = false) Long chapterId,
       @RequestParam(required = false) String query,
       @RequestParam(defaultValue="40") Integer limit,
@@ -108,19 +109,23 @@ public class AssessmentController {
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     String term=safeText(query,160);
     String chapterFilter=chapterId==null?"":" and ch.id=?";
+    String courseFilter=courseId==null?"s.program_id is null":"s.program_id=?";
     String fromWhere="""
       from question q join lesson l on l.id=q.lesson_id
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
+      left join curriculum_program p on p.id=s.program_id
       where c.code=? and s.code=? and c.active=true and s.active=true
+        and __COURSE_FILTER__
         and ch.active=true and ch.content_status='PUBLISHED'
         and l.active=true and l.status='PUBLISHED'
         and q.active=true and q.review_status in ('APPROVED','PUBLISHED')
         __CHAPTER_FILTER__
         and (?='' or q.prompt ilike ? or l.title ilike ? or ch.display_name ilike ?)
-      """.replace("__CHAPTER_FILTER__",chapterFilter);
+      """.replace("__CHAPTER_FILTER__",chapterFilter).replace("__COURSE_FILTER__",courseFilter);
     List<Object> filterArgs=new ArrayList<>(List.of(classCode.trim(),subjectCode.trim()));
+    if(courseId!=null)filterArgs.add(courseId);
     if(chapterId!=null)filterArgs.add(chapterId);
     filterArgs.add(term);filterArgs.add("%"+term+"%");filterArgs.add("%"+term+"%");filterArgs.add("%"+term+"%");
     List<Object> pageArgs=new ArrayList<>(filterArgs);pageArgs.add(rowLimit);pageArgs.add(rowOffset);
@@ -128,7 +133,8 @@ public class AssessmentController {
       select q.id as question_id,q.question_type,q.prompt,q.difficulty,q.marks,q.sort_order,
              l.id as lesson_id,l.title as lesson_title,ch.id as chapter_id,
              ch.code as chapter_code,ch.display_name as chapter_name,
-             s.code as subject_code,s.display_name as subject_name,c.code as class_code
+             s.code as subject_code,s.display_name as subject_name,c.code as class_code,
+             p.id as course_id,p.code as course_code,p.display_name as course_name
       """;
     List<Map<String,Object>> items=jdbc.queryForList(selectSql+fromWhere+
       " order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id,q.sort_order,q.id limit ? offset ?",pageArgs.toArray());
@@ -141,23 +147,50 @@ public class AssessmentController {
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
+      @RequestParam(required = false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,
       @RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     requireContentView(context);
     String classFilter=safeText(classCode,30);
     String subjectFilter=safeText(subjectCode,40);
-    if(!classFilter.isBlank())assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
+    if(!classFilter.isBlank() && courseId==null)assessmentCatalog.ensureGeneratedAssessmentsForClass(classFilter);
+    if(courseId!=null) {
+      Long enrolledProgram=jdbc.queryForObject(
+          "select count(*) from curriculum_program where id=? and status='ACTIVE' and code<>'GENERAL'",
+          Long.class,courseId);
+      if(enrolledProgram==null || enrolledProgram==0) throw badRequest("Choose an active course.");
+    }
     String statusFilter=safeText(status,20).toUpperCase(Locale.ROOT);
     if(statusFilter.isEmpty())statusFilter="ALL";
     if(!Set.of("ALL","DRAFT","PUBLISHED","ARCHIVED").contains(statusFilter))throw badRequest("Choose a valid assessment status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100));
     int rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
+    String courseFilter=courseId==null?"s.program_id is null":"s.program_id=?";
+    String fromJoins="""
+      from assessment a join curriculum_subject s on s.id=a.subject_id
+      join curriculum_class c on c.id=s.class_id
+      left join curriculum_program p on p.id=s.program_id
+      left join curriculum_chapter ch on ch.id=a.chapter_id
+      """;
+    String fromWhere="""
+      where (?='' or c.code=?) and (?='' or s.code=?)
+        and __COURSE_FILTER__
+        and (?='ALL' or a.status=?)
+        and (?=true or exists(select 1 from assessment_staff_assignment asa
+          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
+      """.replace("__COURSE_FILTER__",courseFilter);
+    List<Object> filterArgs=new ArrayList<>(List.of(classFilter,classFilter,subjectFilter,subjectFilter));
+    if(courseId!=null)filterArgs.add(courseId);
+    filterArgs.addAll(List.of(statusFilter,statusFilter,context.isAdmin(),context.staffId()));
+    List<Object> pageArgs=new ArrayList<>(filterArgs);
+    pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     List<Map<String,Object>> items=jdbc.queryForList("""
       select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
+             p.id as course_id,p.code as course_code,p.display_name as course_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              (select count(*) from assessment_question aq where aq.assessment_id=a.id) as question_count,
              (select coalesce(sum(aq.max_marks),0) from assessment_question aq where aq.assessment_id=a.id) as max_score,
@@ -166,28 +199,14 @@ public class AssessmentController {
               where asa.assessment_id=a.id and asa.active=true) as assigned_grader_names,
              count(distinct att.id) filter (where att.status<>'ABANDONED') as attempt_count,
              count(distinct att.id) filter (where att.status='AWAITING_REVIEW') as review_count
-      from assessment a join curriculum_subject s on s.id=a.subject_id
-      join curriculum_class c on c.id=s.class_id
-      left join curriculum_chapter ch on ch.id=a.chapter_id
+      """+fromJoins+"""
       left join student_assessment_attempt att on att.assessment_id=a.id
-      where (?='' or c.code=?) and (?='' or s.code=?)
-        and (?='ALL' or a.status=?)
-        and (?=true or exists(select 1 from assessment_staff_assignment asa
-          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
-      group by a.id,c.code,c.display_name,s.code,s.display_name,ch.id,ch.code,ch.display_name
+      """+fromWhere+"""
+      group by a.id,c.code,c.display_name,s.code,s.display_name,p.id,p.code,p.display_name,ch.id,ch.code,ch.display_name
       order by a.created_at desc,a.id desc
       limit ? offset ?
-      """,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,
-        context.isAdmin(),context.staffId(),rowLimit,rowOffset);
-    Long total=jdbc.queryForObject("""
-      select count(distinct a.id) from assessment a
-      join curriculum_subject s on s.id=a.subject_id join curriculum_class c on c.id=s.class_id
-      left join curriculum_chapter ch on ch.id=a.chapter_id
-      where (?='' or c.code=?) and (?='' or s.code=?) and (?='ALL' or a.status=?)
-        and (?=true or exists(select 1 from assessment_staff_assignment asa
-          where asa.assessment_id=a.id and asa.staff_id=? and asa.active=true))
-      """,Long.class,classFilter,classFilter,subjectFilter,subjectFilter,statusFilter,statusFilter,
-        context.isAdmin(),context.staffId());
+      """,pageArgs.toArray());
+    Long total=jdbc.queryForObject("select count(distinct a.id) "+fromJoins+fromWhere,Long.class,filterArgs.toArray());
     return Map.of("items",items,"total",total==null?0L:total,"limit",rowLimit,"offset",rowOffset);
   }
 
@@ -201,6 +220,7 @@ public class AssessmentController {
     String description = safeText(body.get("description"), 1200);
     String classCode = requiredText(body.get("classCode"), "Class", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
     int duration = integer(body.getOrDefault("durationMinutes", 45), "Duration", 1, 240);
     int maxAttempts = integer(body.getOrDefault("maxAttempts", 1), "Attempt limit", 1, 10);
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
@@ -215,10 +235,21 @@ public class AssessmentController {
       questionIds.add(id);
     }
 
-    Long subjectId = jdbc.query("""
-      select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
+    Long subjectId;
+    if(courseId==null) {
+      subjectId = jdbc.query("""
+        select s.id from curriculum_subject s join curriculum_class c on c.id=s.class_id
+        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
+        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
+    } else {
+      subjectId = jdbc.query("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
+        """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
+    }
     if (subjectId == null) throw badRequest("Choose a valid active class and subject.");
     if (chapterId != null) {
       Long validChapter = jdbc.queryForObject("""
