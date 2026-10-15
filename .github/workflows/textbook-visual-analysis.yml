@@ -169,9 +169,11 @@ jobs:
           sudo install -m 0755 "$RUNNER_TEMP/oras" /usr/local/bin/oras
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           out="data/textbook-visuals/$BOOK_SLUG"
-          checkpoint="$RUNNER_TEMP/previous-visual-analysis.v1.json"
-          if [[ "$RESTART_ANALYSIS" != "true" && -f "$out/visual-analysis.v1.json" ]]; then
-            cp "$out/visual-analysis.v1.json" "$checkpoint"
+          safe_model="${VISION_MODEL//[^a-zA-Z0-9._-]/-}"
+          checkpoint_dir="$RUNNER_TEMP/previous-visual-analysis-checkpoints"
+          mkdir -p "$checkpoint_dir"
+          if [[ -d "$out" ]]; then
+            find "$out" -maxdepth 1 -type f -name 'visual-analysis*.v1.json' -exec cp -t "$checkpoint_dir" {} + 2>/dev/null || true
           fi
           rm -rf "$out"
           mkdir -p "$out"
@@ -179,7 +181,41 @@ jobs:
             --pdf "$SOURCE_DIR/source.pdf" \
             --manifest "$SOURCE_DIR/source.manifest.json" \
             --output-dir "$out"
-          if [[ -f "$checkpoint" ]]; then cp "$checkpoint" "$out/visual-analysis.v1.json"; fi
+          if compgen -G "$checkpoint_dir/visual-analysis*.v1.json" >/dev/null; then
+            cp "$checkpoint_dir"/visual-analysis*.v1.json "$out/"
+          fi
+
+          # Preserve the canonical checkpoint under its model-specific name before
+          # switching models. This keeps earlier successful results available.
+          python - <<'PY'
+          import json, os, re, shutil
+          from pathlib import Path
+          out = Path("data/textbook-visuals") / os.environ["BOOK_SLUG"]
+          canonical = out / "visual-analysis.v1.json"
+          if canonical.is_file():
+              data = json.loads(canonical.read_text(encoding="utf-8"))
+              previous_model = data.get("model")
+              if isinstance(previous_model, str) and previous_model:
+                  safe = re.sub(r"[^a-zA-Z0-9._-]", "-", previous_model)
+                  archived = out / f"visual-analysis-{safe}.v1.json"
+                  if previous_model != os.environ["VISION_MODEL"] and not archived.exists():
+                      shutil.copy2(canonical, archived)
+          PY
+          analysis_output="$out/visual-analysis-$safe_model.v1.json"
+          if [[ "$RESTART_ANALYSIS" == "true" ]]; then
+            rm -f "$analysis_output"
+          elif [[ ! -f "$analysis_output" && -f "$out/visual-analysis.v1.json" ]]; then
+            if python - "$out/visual-analysis.v1.json" "$VISION_MODEL" <<'PY'
+          import json, sys
+          from pathlib import Path
+          d = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          raise SystemExit(0 if d.get("model") == sys.argv[2] else 1)
+          PY
+            then
+              cp "$out/visual-analysis.v1.json" "$analysis_output"
+            fi
+          fi
+          echo "ANALYSIS_OUTPUT=$analysis_output" >> "$GITHUB_ENV"
 
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           total_limit="$MAX_ASSETS"
@@ -189,10 +225,10 @@ jobs:
             remaining=$((total_limit - processed_total))
             batch="$batch_size"
             if (( remaining < batch )); then batch="$remaining"; fi
-            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID")
-            if [[ -f "$out/visual-analysis.v1.json" ]]; then args+=(--resume); fi
+            args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID" --output "$analysis_output")
+            if [[ -f "$analysis_output" ]]; then args+=(--resume); fi
             python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
-            batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$out/visual-analysis.v1.json")"
+            batch_processed="$(python -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["summary"]["assets_processed_this_run"])' "$analysis_output")"
 
             # Commit each batch before proceeding. A cancelled runner only repeats the
             # currently active batch, not the book or already committed analysis.
@@ -217,6 +253,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Keep the conventional filename for existing consumers while retaining
+          # model-specific sidecars for safe comparisons and resumable reruns.
+          cp "$ANALYSIS_OUTPUT" "data/textbook-visuals/$BOOK_SLUG/visual-analysis.v1.json"
           mkdir -p "$RUNNER_TEMP/quantaedge-visual-bundle"
           cp -R "data/textbook-visuals/$BOOK_SLUG/." "$RUNNER_TEMP/quantaedge-visual-bundle/"
           tar -C "$RUNNER_TEMP" -czf "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz" quantaedge-visual-bundle
