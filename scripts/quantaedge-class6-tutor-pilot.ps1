@@ -162,45 +162,15 @@ Write-Host "Pages flagged for low text: $(($records | Measure-Object -Property L
 Write-Host "The source PDFs remain in GHCR; this command imports only extracted page text and metadata."
 
 if ($Mode -ne "DryRun") {
-    # Prompt inside the running script so pasted command blocks cannot be consumed as cookie input.
-    # Staff access tokens are short-lived; request a fresh one for every write-mode invocation.
+    # Prompt in the running script; do not paste a command block into the cookie prompt.
     Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
     $secureSession = Read-Host "Paste current QE_STAFF_SESSION from Education Admin (input hidden)" -AsSecureString
     $sessionPointer = [IntPtr]::Zero
     try {
         $sessionPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSession)
         $sessionValue = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($sessionPointer)
-        if ($sessionValue -notmatch '^[A-Za-z0-9_-]{43}
-
-if ($Mode -eq "ImportAndApprove") {
-    Write-Host ""
-    Write-Host "Source approval is a separate, audited action. Review each URL, edition, page count, and SHA prefix above."
-    Write-Host "LOW_TEXT pages remain excluded from AI Tutor retrieval by the API quality filter."
-    $confirmation = Read-Host "Type APPROVE CLASS 6 SOURCES to import and approve these four source books"
-    if ($confirmation -cne "APPROVE CLASS 6 SOURCES") {
-        Write-Host "Cancelled. No API changes were made."
-        exit 0
-    }
-}
-
-$arguments = @()
-$arguments += $PythonPrefix
-$arguments += @($Importer, "--extracted-root", $ExtractionRoot, "--api-base-url", $ApiBaseUrl)
-if ($Mode -ne "DryRun") { $arguments += "--apply" }
-if ($Mode -eq "ImportAndApprove") { $arguments += "--approve" }
-
-Write-Host ""
-Write-Host "Running existing QuantaEdge import pipeline in mode: $Mode"
-& $PythonExe @arguments
-$importExitCode = $LASTEXITCODE
-if ($Mode -ne "DryRun") {
-    Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-}
-if ($importExitCode -ne 0) {
-    throw "Textbook import pipeline failed with exit code $importExitCode. Fix the reported error before retrying."
-}
-) {
-            throw "Cookie format is invalid. Copy the complete Value for QE_STAFF_SESSION, not QE_STAFF_REFRESH, and rerun."
+        if ($sessionValue.Length -ne 43) {
+            throw "Cookie length is invalid. Copy the full QE_STAFF_SESSION Value, not QE_STAFF_REFRESH, and rerun."
         }
         $env:QUANTAEDGE_ADMIN_SESSION = $sessionValue
     } finally {
@@ -233,7 +203,7 @@ if ($importExitCode -ne 0) {
             $statusCode = [int]$_.Exception.Response.StatusCode
         }
         Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-        throw "Education Admin rejected the session (HTTP $statusCode). Sign in again, copy the current QE_STAFF_SESSION Value, and rerun. No textbook import was attempted."
+        throw "Education Admin rejected the session (HTTP $statusCode). Sign in again and rerun. No textbook import was attempted."
     }
 
     if ($sessionCheck.authenticated -ne $true -or $sessionCheck.workspace -ne "EDUCATION_ADMIN") {
@@ -268,6 +238,10 @@ if ($Mode -eq "ImportAndApprove") { $arguments += "--approve" }
 Write-Host ""
 Write-Host "Running existing QuantaEdge import pipeline in mode: $Mode"
 & $PythonExe @arguments
-if ($LASTEXITCODE -ne 0) {
-    throw "Textbook import pipeline failed with exit code $LASTEXITCODE. Fix the reported error before retrying."
+$importExitCode = $LASTEXITCODE
+if ($Mode -ne "DryRun") {
+    Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
+}
+if ($importExitCode -ne 0) {
+    throw "Textbook import pipeline failed with exit code $importExitCode. Fix the reported error before retrying."
 }
