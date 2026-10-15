@@ -30,11 +30,17 @@ import org.json.JSONObject
 fun ParentChildManageScreen(
     child: JSONObject,
     busy: Boolean,
+    onSaveProfile: (String, String, String) -> Unit,
     onSaveCredentials: (String, String) -> Unit,
     onSaveTracks: (List<String>) -> Unit,
     onArchive: () -> Unit
 ) {
     val childId = child.longAny("id")
+    var displayName by rememberSaveable(childId) { mutableStateOf(child.textAny("display_name", "displayName")) }
+    val existingClass = child.textAny("class_code").ifBlank { "6" }
+    var classCode by rememberSaveable(childId) { mutableStateOf(existingClass) }
+    var learningLanguage by rememberSaveable(childId) { mutableStateOf(child.textAny("language").ifBlank { "hi" }) }
+    val classChoices = listOfNotNull(existingClass, when (existingClass) { "6" -> "7"; "7" -> "8"; else -> null })
     var username by rememberSaveable(childId) { mutableStateOf(child.textAny("login_username")) }
     var password by remember(childId) { mutableStateOf("") }
     val oldTracks = child.textAny("track_codes").split(',').map { it.trim() }.filter { it.isNotBlank() }
@@ -59,11 +65,28 @@ fun ParentChildManageScreen(
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(localizedUiText("छात्र access"), style = MaterialTheme.typography.headlineSmall)
-        Text(child.textAny("display_name", "displayName"), style = MaterialTheme.typography.titleMedium)
-        Text(localizedUiText("कक्षा ") + child.textAny("class_code") + " • Consent: " + child.textAny("consent_status"),
-            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-        Text(localizedUiText("Login credentials बदलें"), style = MaterialTheme.typography.titleMedium)
+        Text(localizedUiText("Student profile"), style = MaterialTheme.typography.headlineSmall)
+        OutlinedTextField(value = displayName, onValueChange = { displayName = it.take(120) },
+            label = { Text(localizedUiText("Student name")) }, singleLine = true, enabled = !busy,
+            modifier = Modifier.fillMaxWidth())
+        Text(localizedUiText("Class"), style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            classChoices.forEach { option ->
+                if (classCode == option) Button(onClick = { classCode = option }, enabled = !busy) { Text(option) }
+                else TextButton(onClick = { classCode = option }, enabled = !busy) { Text(option) }
+            }
+        }
+        Text(localizedUiText("Learning language"), style = MaterialTheme.typography.titleSmall)
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            if (learningLanguage == "hi") Button(onClick = { learningLanguage = "hi" }, enabled = !busy) { Text("हिन्दी") }
+            else TextButton(onClick = { learningLanguage = "hi" }, enabled = !busy) { Text("हिन्दी") }
+            if (learningLanguage == "en") Button(onClick = { learningLanguage = "en" }, enabled = !busy) { Text("English") }
+            else TextButton(onClick = { learningLanguage = "en" }, enabled = !busy) { Text("English") }
+        }
+        Button(onClick = { onSaveProfile(displayName.trim(), classCode, learningLanguage) },
+            enabled = !busy && displayName.trim().length >= 2 && classCode in classChoices,
+            modifier = Modifier.fillMaxWidth()) { Text(localizedUiText("Save profile")) }
+        Text(localizedUiText("Login credentials"), style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(value = username, onValueChange = { username = it.trim().lowercase().filter { c -> c.isLetterOrDigit() || c in "._-" }.take(32) },
             label = { Text(localizedUiText("Login username")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = password, onValueChange = { password = it },
