@@ -940,7 +940,7 @@ public class AdminContentController {
       throw badRequest("A lesson cannot be published until its textbook/teacher-guide edition and page alignment are verified.");
     }
 
-    if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"));
+    if (body.containsKey("blocks")) replaceBlocks(lessonId, body.get("blocks"), context);
     boolean questionContentChanged = body.containsKey("questions") && updateQuestions(lessonId, body.get("questions"), context);
     if ("PUBLISHED".equals(status) && questionContentChanged) {
       status = "REVIEW";
@@ -1285,6 +1285,8 @@ public class AdminContentController {
         throw badRequest("Complete the "+type.replace('_',' ').toLowerCase(java.util.Locale.ROOT)+
             " teaching block or deactivate it before publishing.");
       }
+      String visualIssue=visualPublicationValidationError(type,content);
+      if(visualIssue!=null) throw badRequest(visualIssue);
       activeBlockTypes.add(type);
       if(!"AI_HELP".equals(type)) hasCoreTeachingBlock=true;
     }
@@ -1408,7 +1410,7 @@ public class AdminContentController {
     return result;
   }
 
-  private void replaceBlocks(long lessonId, Object value) {
+  private void replaceBlocks(long lessonId, Object value, AuthContext context) {
     List<Map<String, Object>> blocks = objectList(value, "blocks");
     if (blocks.isEmpty() || blocks.size() > 100) throw badRequest("A lesson must contain between 1 and 100 content blocks.");
     Set<Integer> sequences = new HashSet<>();
@@ -1417,8 +1419,30 @@ public class AdminContentController {
       if (!sequences.add(sequence)) throw badRequest("Content block sequence numbers must be unique.");
       String type = requiredText(first(block, "block_type", "blockType"), 40).toUpperCase();
       if (!BLOCK_TYPES.contains(type)) throw badRequest("Unsupported content block type: " + type);
-      if (!(block.get("content") instanceof Map<?, ?>)) throw badRequest("Each block's content must be a JSON object.");
-      toJson(block.get("content"));
+      if (!(block.get("content") instanceof Map<?, ?> rawContent)) throw badRequest("Each block's content must be a JSON object.");
+      Map<String,Object> content=new LinkedHashMap<>();
+      rawContent.forEach((key,item)->content.put(String.valueOf(key),item));
+      String candidateId=optionalText(content.get("source_candidate_id"),120);
+      if(candidateId!=null) {
+        String visualStatus=String.valueOf(content.getOrDefault("visual_review_status","NEEDS_REVIEW")).trim().toUpperCase(Locale.ROOT);
+        String rightsStatus=String.valueOf(content.getOrDefault("rights_status","SOURCE_REFERENCE_ONLY")).trim().toUpperCase(Locale.ROOT);
+        boolean requestsReviewSensitiveState="APPROVED".equals(visualStatus)||"LICENSE_CONFIRMED".equals(rightsStatus);
+        if(requestsReviewSensitiveState&&!authorization.hasPermission(context,"CONTENT_REVIEW")) {
+          List<Map<String,Object>> prior=jdbc.queryForList(
+              "select content::text as content from lesson_block where lesson_id=? and content->>'source_candidate_id'=?",
+              lessonId,candidateId);
+          boolean unchangedApproved=prior.stream().map(row->readBlockContent(row.get("content")))
+              .anyMatch(previous->Objects.equals(previous,content)
+                  &&"APPROVED".equalsIgnoreCase(String.valueOf(previous.get("visual_review_status")))
+                  &&("LICENSE_CONFIRMED".equalsIgnoreCase(String.valueOf(previous.get("rights_status")))
+                     ||"GENERATED_ORIGINAL".equalsIgnoreCase(String.valueOf(previous.get("rights_status")))));
+          if(!unchangedApproved) throw badRequest("Only a content reviewer can approve a textbook visual or confirm its publication rights.");
+        } else if(requestsReviewSensitiveState) {
+          content.put("visual_reviewed_at",java.time.Instant.now().toString());
+        }
+      }
+      block.put("content",content);
+      toJson(content);
     }
     jdbc.update("delete from lesson_block where lesson_id=?", lessonId);
     for (Map<String, Object> block : blocks) {
@@ -1430,6 +1454,38 @@ public class AdminContentController {
         requiredText(first(block, "block_type", "blockType"), 40).toUpperCase(),
         toJson(block.get("content")), booleanValue(block.get("active"), true));
     }
+  }
+
+  static String visualPublicationValidationError(String type, Map<String,Object> content) {
+    if(content==null||content.get("source_candidate_id")==null
+        ||String.valueOf(content.get("source_candidate_id")).isBlank()) return null;
+    if(!Set.of("IMAGE","DIAGRAM","ANIMATION").contains(String.valueOf(type).toUpperCase(Locale.ROOT))) {
+      return "A textbook visual candidate must use an image, diagram, or animation block.";
+    }
+    String visualKind=String.valueOf(content.getOrDefault("visual_kind","TEXTBOOK_FIGURE")).trim().toUpperCase(Locale.ROOT);
+    if(!Set.of("PHOTO","ILLUSTRATION","DIAGRAM","CHART","TABLE","INFOGRAPHIC","SEQUENCE").contains(visualKind)) {
+      return "Classify the textbook visual before publication; unclassified figures remain drafts.";
+    }
+    if(!"APPROVED".equalsIgnoreCase(String.valueOf(content.get("visual_review_status")))) {
+      return "A content reviewer must approve each textbook visual before lesson publication.";
+    }
+    String rights=String.valueOf(content.getOrDefault("rights_status","SOURCE_REFERENCE_ONLY")).trim().toUpperCase(Locale.ROOT);
+    if(!Set.of("LICENSE_CONFIRMED","GENERATED_ORIGINAL").contains(rights)) {
+      return "Confirm the rights for each source visual before lesson publication.";
+    }
+    String alt=String.valueOf(content.getOrDefault("alt","")).trim();
+    if(alt.isBlank()) return "Add meaningful alternative text for each textbook visual.";
+    String sourceBook=String.valueOf(content.getOrDefault("source_book_id","")).trim();
+    String pdfHash=String.valueOf(content.getOrDefault("source_pdf_sha256","")).trim().toLowerCase(Locale.ROOT);
+    String assetHash=String.valueOf(content.getOrDefault("source_asset_sha256","")).trim().toLowerCase(Locale.ROOT);
+    Object rawPage=content.get("source_pdf_page_number");
+    int page=rawPage instanceof Number n?n.intValue():-1;
+    if(sourceBook.isBlank()||!pdfHash.matches("[0-9a-f]{64}")||!assetHash.matches("[0-9a-f]{64}")||page<1) {
+      return "The textbook visual is missing its exact source-book, page, or SHA-256 provenance.";
+    }
+    String url=String.valueOf(content.getOrDefault("url","")).trim();
+    if(!url.matches("(?i)^https://.+")) return "The approved textbook visual must resolve to an HTTPS media URL.";
+    return null;
   }
 
   private boolean updateQuestions(long lessonId, Object value, AuthContext context) {

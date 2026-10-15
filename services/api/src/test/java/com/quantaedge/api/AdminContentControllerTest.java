@@ -132,6 +132,48 @@ class AdminContentControllerTest {
   }
 
   @Test
+  void textbookVisualPublicationRequiresClassificationRightsAltAndProvenance() {
+    Map<String,Object> candidate = new java.util.LinkedHashMap<>();
+    candidate.put("source_candidate_id", "v3-image-abcd1234");
+    candidate.put("visual_kind", "DIAGRAM");
+    candidate.put("visual_review_status", "APPROVED");
+    candidate.put("rights_status", "LICENSE_CONFIRMED");
+    candidate.put("alt", "A labelled diagram showing the parts of a flower.");
+    candidate.put("source_book_id", "ncert-c6-english-fecu1");
+    candidate.put("source_pdf_sha256", "a".repeat(64));
+    candidate.put("source_asset_sha256", "b".repeat(64));
+    candidate.put("source_pdf_page_number", 31);
+    candidate.put("url", "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/visual.jpg");
+
+    assertNull(AdminContentController.visualPublicationValidationError("IMAGE", candidate));
+
+    candidate.put("visual_review_status", "NEEDS_REVIEW");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("approve"));
+
+    candidate.put("visual_review_status", "APPROVED");
+    candidate.put("rights_status", "SOURCE_REFERENCE_ONLY");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("rights"));
+
+    candidate.put("rights_status", "LICENSE_CONFIRMED");
+    candidate.put("visual_kind", "TEXTBOOK_FIGURE");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("Classify"));
+
+    candidate.put("visual_kind", "DIAGRAM");
+    candidate.put("alt", "");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("alternative text"));
+
+    candidate.put("alt", "A labelled diagram.");
+    candidate.put("source_pdf_sha256", "bad-hash");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("provenance"));
+  }
+
+  @Test
+  void legacyMediaBlocksWithoutVisualCandidateMetadataKeepExistingRules() {
+    assertNull(AdminContentController.visualPublicationValidationError(
+        "IMAGE", Map.of("url", "https://example.com/image.png", "description", "Existing lesson image")));
+  }
+
+  @Test
   void numericAnswerKeyRequiresValidExpectedNumberAndNonNegativeTolerance() {
     assertNull(AdminContentController.numericAnswerKeyValidationError(
         Map.of("kind", "NUMERIC", "value", "10.5", "tolerance", "0.25")));
