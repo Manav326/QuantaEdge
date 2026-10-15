@@ -5,10 +5,12 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.Html
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.datasource.okhttp.OkHttpDataSource
@@ -57,7 +60,7 @@ fun LessonContentBlock(
     val data = remember(raw) {
         runCatching { JSONObject(raw) }.getOrElse { JSONObject().put("body", raw) }
     }
-    val title = data.textAny("heading", "title").ifBlank {
+    val title = (if (language == "hi") data.textAny("title_hi", "heading") else data.textAny("title", "heading")).ifBlank {
         when (type) {
             "PREREQUISITE" -> if (language == "hi") "पहले की जानकारी" else "Prior knowledge"
             "EXPLANATION" -> if (language == "hi") "समझें" else "Understand"
@@ -74,7 +77,17 @@ fun LessonContentBlock(
         }
     }
     val url = data.textAny("url").ifBlank { block.textAny("asset_url") }
-    val description = data.textAny("description", "caption")
+    val description = (if (language == "hi") data.textAny("description_hi") else "").ifBlank {
+        data.textAny("description", "caption")
+    }
+    val caption = (if (language == "hi") data.textAny("caption_hi") else "").ifBlank {
+        data.textAny("caption")
+    }
+    val visualKind = data.textAny("visual_kind").uppercase()
+    val sourceCandidateId = data.textAny("source_candidate_id")
+    val sourceBookTitle = data.textAny("source_book_title").ifBlank { data.textAny("source_book_id") }
+    val sourcePdfPage = data.textAny("source_pdf_page_number")
+    val sourcePageUrl = data.textAny("source_page_url")
     val body = data.textAny("body", "description", "problem", "prompt")
     val html = data.textAny("html")
     val points = data.optJSONArray("keyPoints")?.stringItems()
@@ -113,17 +126,45 @@ fun LessonContentBlock(
                     }
                 }
                 "IMAGE", "DIAGRAM", "ANIMATION" -> {
+                    if (visualKind.isNotBlank()) Text(visualKindLabel(visualKind, language),
+                        style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
                     if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
-                    if (url.isNotBlank()) {
-                        LessonImage(url = url, alt = data.textAny("alt").ifBlank { title })
+                    val animationVideo = type == "ANIMATION" && url.substringBefore("?").lowercase()
+                        .let { it.endsWith(".mp4") || it.endsWith(".webm") || it.endsWith(".ogg") }
+                    if (url.isNotBlank() && animationVideo) {
+                        LessonPlayableMedia(url = url, audioOnly = false, language = language)
+                    } else if (url.isNotBlank()) {
+                        val alt = (if (language == "hi") data.textAny("alt_hi") else "").ifBlank {
+                            data.textAny("alt").ifBlank { title }
+                        }
+                        LessonImage(url = url, alt = alt)
                     } else {
-                        Text(data.textAny("alt").ifBlank {
-                            if (language == "hi") "इस visual के लिए अभी asset उपलब्ध नहीं है।"
-                            else "No visual asset is available for this block yet."
+                        Text((if (language == "hi") data.textAny("alt_hi") else "").ifBlank {
+                            data.textAny("alt").ifBlank {
+                                if (language == "hi") "इस visual के लिए अभी asset उपलब्ध नहीं है।"
+                                else "No visual asset is available for this block yet."
+                            }
                         }, style = MaterialTheme.typography.bodyMedium)
                     }
-                    val caption = data.textAny("caption")
-                    if (caption.isNotBlank()) LearningMathText(caption, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    if (caption.isNotBlank()) LearningMathText(caption,
+                        style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    if (sourceCandidateId.isNotBlank()) {
+                        LearningMathText(
+                            (if (language == "hi") "स्रोत: " else "Source: ") +
+                                sourceBookTitle + " · " +
+                                (if (language == "hi") "PDF पृष्ठ " else "PDF page ") + sourcePdfPage,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                        if (sourcePageUrl.startsWith("https://")) {
+                            TextButton(onClick = {
+                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(sourcePageUrl))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                            }) {
+                                Text(if (language == "hi") "स्रोत पृष्ठ देखें ↗" else "View source page ↗")
+                            }
+                        }
+                    }
                 }
                 "VIDEO", "AUDIO" -> {
                     if (description.isNotBlank()) LearningMathText(description, style = MaterialTheme.typography.bodyMedium)
@@ -136,8 +177,22 @@ fun LessonContentBlock(
                             if (language == "hi") "मीडिया लिंक अभी उपलब्ध नहीं है।" else "The media link is not available yet."
                         }, style = MaterialTheme.typography.bodyMedium
                     )
-                    val caption = data.textAny("caption")
                     if (caption.isNotBlank()) LearningMathText(caption, style = MaterialTheme.typography.bodySmall)
+                    if (sourceCandidateId.isNotBlank()) {
+                        LearningMathText(
+                            (if (language == "hi") "स्रोत: " else "Source: ") +
+                                sourceBookTitle + " · " +
+                                (if (language == "hi") "PDF पृष्ठ " else "PDF page ") + sourcePdfPage,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                        if (sourcePageUrl.startsWith("https://")) {
+                            TextButton(onClick = {
+                                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(sourcePageUrl))
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                            }) { Text(if (language == "hi") "स्रोत पृष्ठ देखें ↗" else "View source page ↗") }
+                        }
+                    }
                 }
                 "AI_HELP" -> {
                     Text(if (language == "hi")
@@ -167,6 +222,7 @@ fun LessonContentBlock(
 private fun LessonImage(url: String, alt: String) {
     var bitmap by remember(url) { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
     var loadFailed by remember(url) { mutableStateOf(false) }
+    var expanded by remember(url) { mutableStateOf(false) }
     LaunchedEffect(url) {
         loadFailed = false
         val result = withContext(Dispatchers.IO) {
@@ -188,7 +244,22 @@ private fun LessonImage(url: String, alt: String) {
     }
     if (bitmap != null) {
         Image(bitmap = bitmap!!, contentDescription = alt,
-            modifier = Modifier.fillMaxWidth().height(220.dp), contentScale = ContentScale.Fit)
+            modifier = Modifier.fillMaxWidth().height(220.dp).clickable { expanded = true },
+            contentScale = ContentScale.Fit)
+        if (expanded) {
+            Dialog(onDismissRequest = { expanded = false }) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(alt, style = MaterialTheme.typography.titleSmall)
+                        Image(bitmap = bitmap!!, contentDescription = alt,
+                            modifier = Modifier.fillMaxWidth().height(480.dp), contentScale = ContentScale.Fit)
+                        TextButton(onClick = { expanded = false }, modifier = Modifier.align(Alignment.End)) {
+                            Text(localizedUiText("Close"))
+                        }
+                    }
+                }
+            }
+        }
     } else if (loadFailed) {
         Text(if (alt.isNotBlank()) alt else localizedUiText("Image unavailable"), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.secondary)
@@ -245,6 +316,20 @@ private fun LessonPlayableMedia(url: String, audioOnly: Boolean, language: Strin
             update = { it.player = player },
             modifier = Modifier.fillMaxWidth().height(if (audioOnly) 82.dp else 220.dp)
         )
+    }
+}
+
+private fun visualKindLabel(kind: String, language: String): String {
+    val english = language != "hi"
+    return when (kind.uppercase()) {
+        "PHOTO" -> if (english) "Photo" else "फ़ोटो"
+        "ILLUSTRATION" -> if (english) "Illustration" else "चित्रण"
+        "DIAGRAM" -> if (english) "Diagram" else "आरेख"
+        "CHART" -> if (english) "Chart / graph" else "चार्ट / ग्राफ़"
+        "TABLE" -> if (english) "Table / comparison" else "तालिका / तुलना"
+        "INFOGRAPHIC" -> if (english) "Infographic" else "सूचनात्मक चित्र"
+        "SEQUENCE" -> if (english) "Sequence / process" else "क्रम / प्रक्रिया"
+        else -> if (english) "Learning visual" else "सीखने का चित्र"
     }
 }
 
