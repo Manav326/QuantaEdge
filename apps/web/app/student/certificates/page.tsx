@@ -267,8 +267,7 @@ function StudentCertificatesContent() {
   }
 
   async function issueCertificate() {
-    if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
-        && Number.isSafeInteger(Number(selectedAssessment.certificate_id))) {
+    if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED') {
       setBusy(true);
       setError('');
       setNotice('');
@@ -326,8 +325,12 @@ function StudentCertificatesContent() {
       });
       const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.detail || result.message || result.error || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
-      setNotice(t('Your certificate is ready. Both PDF and PNG are available below.','आपका प्रमाणपत्र तैयार है। नीचे PDF और PNG दोनों उपलब्ध हैं।'));
-      await refresh();
+      const id = Number(result.id);
+      if (!Number.isSafeInteger(id) || id < 1 || result.status !== 'ISSUED') {
+        throw new Error(t('The server did not return a confirmed issued certificate. Please refresh and try again.','Server से जारी प्रमाणपत्र की पुष्टि नहीं मिली। कृपया refresh करके फिर प्रयास करें।'));
+      }
+      setNotice(t('Certificate issued. Opening the certificate viewer.','प्रमाणपत्र जारी हो गया। Certificate viewer खोला जा रहा है।'));
+      router.push('/student/certificates?certificateId=' + id);
     } catch (e: any) {
       setError(e?.message || t('Certificate could not be issued.','प्रमाणपत्र जारी नहीं हो सका।'));
     } finally {

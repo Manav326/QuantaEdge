@@ -344,12 +344,20 @@ fun StudentCertificatesScreen(
                 val issued = withContext(Dispatchers.IO) {
                     ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
                 }
-                notice = if (language == "hi") {
-                    "प्रमाणपत्र जारी हो गया: " + issued.optString("certificate_number", issued.optString("certificateNumber", "जारी"))
-                } else {
-                    "Certificate issued: " + issued.optString("certificate_number", issued.optString("certificateNumber", "Issued"))
+                val issuedId = issued.optLongValue("id", "certificate_id", "certificateId")
+                if (issuedId <= 0L || issued.optString("status") != "ISSUED") {
+                    throw IOException(
+                        if (language == "hi") "Server से जारी प्रमाणपत्र की पुष्टि नहीं मिली।"
+                        else "The server did not confirm an issued certificate."
+                    )
                 }
                 reload()
+                prepareCertificateDownload(issued, "pdf")
+                notice = if (language == "hi") {
+                    "प्रमाणपत्र जारी हो गया। PDF सुरक्षित करने के लिए स्थान चुनें।"
+                } else {
+                    "Certificate issued. Choose where to save the PDF."
+                }
             } catch (e: Exception) {
                 error = e.message ?: "Certificate जारी नहीं हो सका।"
             } finally {
