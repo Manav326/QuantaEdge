@@ -273,8 +273,16 @@ class CertificateControllerEligibilityTest {
     attempt.put("max_score", new BigDecimal("100"));
     attempt.put("released_at", null);
 
-    when(jdbc.queryForList(anyString(), any(Object[].class)))
-        .thenReturn(List.of(studentRow), List.of(), List.of(attempt), List.of());
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
+      String sql = invocation.getArgument(0, String.class);
+      if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) return List.of();
+      if (sql.contains("SELECT c.id FROM student_certificate c")
+          && sql.contains("c.assessment_attempt_id=?")
+          && sql.contains("c.achievement_type='ASSESSMENT_PASS'")) return List.of();
+      if (sql.contains("FROM student_assessment_attempt att") && sql.contains("assessment_type")) return List.of(attempt);
+      return List.of();
+    });
 
     org.springframework.web.server.ResponseStatusException error = assertThrows(
         org.springframework.web.server.ResponseStatusException.class,
@@ -398,7 +406,7 @@ class CertificateControllerEligibilityTest {
     assertTrue(sql.getValue().contains("a.is_generated=false"));
     org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("student_lesson_progress"));
     org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("p.status IS DISTINCT FROM 'COMPLETED'"));
-    assertTrue(sql.getValue().contains("LEFT JOIN student_certificate existing"));
+    assertTrue(sql.getValue().contains("LEFT JOIN LATERAL ("));
     org.junit.jupiter.api.Assertions.assertFalse(sql.getValue().contains("NOT EXISTS ("));
   }
 
