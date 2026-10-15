@@ -138,13 +138,30 @@ class AdminContentControllerTest {
     candidate.put("visual_kind", "DIAGRAM");
     candidate.put("visual_review_status", "APPROVED");
     candidate.put("rights_status", "LICENSE_CONFIRMED");
+    candidate.put("title", "Parts of a flower");
+    candidate.put("title_hi", "फूल के भाग");
     candidate.put("alt", "A labelled diagram showing the parts of a flower.");
+    candidate.put("alt_hi", "फूल के भागों को दिखाता हुआ नामांकित आरेख।");
     candidate.put("source_book_id", "ncert-c6-english-fecu1");
     candidate.put("source_pdf_sha256", "a".repeat(64));
     candidate.put("source_asset_sha256", "b".repeat(64));
     candidate.put("source_pdf_page_number", 31);
     candidate.put("url", "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/visual.jpg");
 
+    assertNull(AdminContentController.visualPublicationValidationError("IMAGE", candidate));
+
+    candidate.put("alt_hi", "");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("Hindi alternative text"));
+    candidate.put("alt_hi", "फूल के भागों को दिखाता हुआ नामांकित आरेख।");
+    candidate.put("title_hi", "");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("Hindi title"));
+    candidate.put("title_hi", "फूल के भाग");
+    candidate.put("description", "Shows the main parts of a flower.");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("description in both English and Hindi"));
+    candidate.put("description_hi", "फूल के मुख्य भाग दिखाता है।");
+    candidate.put("caption", "Figure showing flower anatomy.");
+    assertTrue(AdminContentController.visualPublicationValidationError("IMAGE", candidate).contains("caption in both English and Hindi"));
+    candidate.put("caption_hi", "फूल की संरचना दिखाने वाला चित्र।");
     assertNull(AdminContentController.visualPublicationValidationError("IMAGE", candidate));
 
     candidate.put("visual_review_status", "NEEDS_REVIEW");

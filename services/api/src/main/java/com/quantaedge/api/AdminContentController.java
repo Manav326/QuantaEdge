@@ -1474,6 +1474,18 @@ public class AdminContentController {
     }
     String alt=String.valueOf(content.getOrDefault("alt","")).trim();
     if(alt.isBlank()) return "Add meaningful alternative text for each textbook visual.";
+    String altHi=String.valueOf(content.getOrDefault("alt_hi","")).trim();
+    if(altHi.isBlank()) return "Add meaningful Hindi alternative text for each textbook visual.";
+    String title=String.valueOf(content.getOrDefault("title","")).trim();
+    if(title.isBlank()) return "Add a meaningful title for each textbook visual.";
+    String titleHi=String.valueOf(content.getOrDefault("title_hi","")).trim();
+    if(titleHi.isBlank()) return "Add a Hindi title for each textbook visual.";
+    String description=String.valueOf(content.getOrDefault("description","")).trim();
+    String descriptionHi=String.valueOf(content.getOrDefault("description_hi","")).trim();
+    if(description.isBlank()!=descriptionHi.isBlank()) return "Provide the visual description in both English and Hindi, or leave both blank.";
+    String caption=String.valueOf(content.getOrDefault("caption","")).trim();
+    String captionHi=String.valueOf(content.getOrDefault("caption_hi","")).trim();
+    if(caption.isBlank()!=captionHi.isBlank()) return "Provide the visual caption in both English and Hindi, or leave both blank.";
     String sourceBook=String.valueOf(content.getOrDefault("source_book_id","")).trim();
     String pdfHash=String.valueOf(content.getOrDefault("source_pdf_sha256","")).trim().toLowerCase(Locale.ROOT);
     String assetHash=String.valueOf(content.getOrDefault("source_asset_sha256","")).trim().toLowerCase(Locale.ROOT);
