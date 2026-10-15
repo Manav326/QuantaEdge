@@ -2551,6 +2551,15 @@ private fun StudentHomeScreen(
             }
         }
 
+        StudentCourseCatalog(
+            programs = programs,
+            courseProgress = courseProgress,
+            language = language,
+            busy = busy,
+            onEnroll = onEnrollCourse,
+            onOpenSubject = onOpenCourseSubject
+        )
+
         Text(if (language == "hi") "त्वरित पहुँच" else "Quick access",
             style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         DashboardActionRow(
