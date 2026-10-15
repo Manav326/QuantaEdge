@@ -24,7 +24,7 @@ public class StudentProgramController {
       @RequestAttribute(value="authContext", required=false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String,Object>> programs = jdbc.queryForList("""
-      select p.id,p.id as course_id,p.code,p.display_name,p.curriculum_version,p.status,
+      select p.id,p.id as course_id,p.public_id,p.public_id_prefix,p.code,p.display_name,p.curriculum_version,p.status,
         exists(select 1 from student_program_enrollment spe
           where spe.student_id=st.id and spe.program_id=p.id and spe.status='ACTIVE') as enrolled,
         exists(select 1 from student_program_enrollment spe
@@ -103,7 +103,7 @@ public class StudentProgramController {
 
   private Map<String,Object> enrollProgramId(long courseId, AuthContext context) {
     List<Map<String,Object>> matches = jdbc.queryForList("""
-      select p.id,p.code,p.display_name,p.status
+      select p.id,p.public_id,p.code,p.display_name,p.status
       from curriculum_program p
       join student st on st.id=? and st.active=true
       where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
@@ -141,6 +141,7 @@ public class StudentProgramController {
     Map<String,Object> result = new LinkedHashMap<>();
     result.put("enrolled", true);
     result.put("courseId", courseId);
+    result.put("publicId", course.get("public_id"));
     result.put("programId", courseId);
     result.put("programCode", course.get("code"));
     result.put("programName", course.get("display_name"));
