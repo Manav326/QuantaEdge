@@ -164,7 +164,8 @@
         "Exactly one correct_answer_ids entry.",
         "Every option has both locale labels.",
         "Correct ID exists in options."
-      ]
+      ],
+      "component_contract_id": "qtype-multiple-choice.v1"
     },
     {
       "id": "qtype-multiple-select.v1",
@@ -211,7 +212,8 @@
         "At least one valid correct ID.",
         "All correct IDs exist in options.",
         "Every option is bilingual."
-      ]
+      ],
+      "component_contract_id": "qtype-multiple-select.v1"
     },
     {
       "id": "qtype-true-false.v1",
@@ -254,7 +256,8 @@
       "validation": [
         "correct_answer must be a boolean.",
         "Both locale prompts and feedback are non-empty."
-      ]
+      ],
+      "component_contract_id": "qtype-true-false.v1"
     },
     {
       "id": "qtype-matching.v1",
@@ -307,7 +310,8 @@
         "Every correct pair references a valid ID from each column.",
         "Every left item has exactly one correct pair unless an explicit different rule is declared.",
         "Column labels and all item labels are bilingual."
-      ]
+      ],
+      "component_contract_id": "qtype-matching.v1"
     },
     {
       "id": "qtype-fill-blank.v1",
@@ -365,7 +369,8 @@
         "Each locale has at least one accepted answer.",
         "Accepted answers are in the corresponding language/script.",
         "Normalization is documented and applied consistently."
-      ]
+      ],
+      "component_contract_id": "qtype-fill-blank.v1"
     },
     {
       "id": "qtype-image-observation.v1",
@@ -411,7 +416,8 @@
         "Alt text exists in both languages.",
         "Any visible text embedded in the image is appropriate for the active locale.",
         "The underlying answer control is named explicitly."
-      ]
+      ],
+      "component_contract_id": "qtype-image-observation.v1"
     },
     {
       "id": "qtype-short-answer.v1",
@@ -458,7 +464,8 @@
         "Rubric exists in both locales and sums to max_score or defines a valid level scheme.",
         "Key points/sample answer exist in both locales.",
         "No hardcoded single-string exact-match grading."
-      ]
+      ],
+      "component_contract_id": "qtype-short-answer.v1"
     },
     {
       "id": "qtype-scenario-based.v1",
@@ -503,7 +510,8 @@
         "Both are present in both locales.",
         "The subtype and grading rule are explicit.",
         "Scenario remains within the lesson's chapter scope."
-      ]
+      ],
+      "component_contract_id": "qtype-scenario-based.v1"
     }
   ],
   "implementation_acceptance": [
