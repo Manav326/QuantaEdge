@@ -58,9 +58,15 @@ async function readBody(response: Response): Promise<ApiBody> {
  * already returned an HTTP 5xx/network error. Reconcile with persisted history
  * before telling the learner their question failed.
  */
+const TUTOR_RECOVERY_ATTEMPTS = 46;
+const TUTOR_RECOVERY_INTERVAL_MS = 2000;
+
 async function recoverPersistedTutorTurn(sessionId: number, userMessage: string): Promise<TutorMessage[] | null> {
-  for (let attempt = 0; attempt < 8; attempt += 1) {
-    if (attempt > 0) await new Promise(resolve => window.setTimeout(resolve, 2500));
+  // The local CPU model can take 65–90 seconds. Gateway errors can arrive before
+  // inference finishes, so keep reconciling persisted history long enough for the
+  // in-flight API request to finish instead of prematurely discarding the turn.
+  for (let attempt = 0; attempt < TUTOR_RECOVERY_ATTEMPTS; attempt += 1) {
+    if (attempt > 0) await new Promise(resolve => window.setTimeout(resolve, TUTOR_RECOVERY_INTERVAL_MS));
     try {
       const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30', {
         credentials: 'same-origin',
