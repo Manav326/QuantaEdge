@@ -75,8 +75,13 @@ def page_status(text: str, language: str) -> str:
 def _class_matches(source: dict[str, Any], class_no: int | None) -> bool:
     if class_no is None:
         return True
+    roman_classes = {"vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10, "xi": 11, "xii": 12}
     values = [source.get("class"), *(source.get("classes") or [])]
-    return any(re.search(rf"(?<!\d){class_no}(?!\d)", str(value or "")) for value in values)
+    for value in values:
+        token = str(value or "").strip().casefold()
+        if roman_classes.get(token) == class_no or re.search(rf"(?<!\d){class_no}(?!\d)", token):
+            return True
+    return False
 
 
 def _matches_filters(source: dict[str, Any], class_no: int | None,
