@@ -234,9 +234,14 @@ fun QuantaEdgeApp() {
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
 
-    // Track pending work per route so one request does not lock unrelated destinations.
-    val pendingTaskCounts = remember { mutableStateMapOf<AppRoute, Int>() }
-    val busy = (pendingTaskCounts[route] ?: 0) > 0
+    // Each route owns its own snapshot counter. Updating a background route's counter
+    // won't invalidate the currently visible route, unlike one shared SnapshotStateMap.
+    val pendingTaskCounts = remember {
+        mutableMapOf<AppRoute, androidx.compose.runtime.MutableState<Int>>()
+    }
+    fun pendingTasksFor(targetRoute: AppRoute): androidx.compose.runtime.MutableState<Int> =
+        pendingTaskCounts.getOrPut(targetRoute) { mutableStateOf(0) }
+    val busy = pendingTasksFor(route).value > 0
     var error by remember { mutableStateOf("") }
     var errorStatusCode by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("") }
@@ -353,7 +358,8 @@ fun QuantaEdgeApp() {
 
     fun runTask(action: suspend () -> Unit) {
         val ownerRoute = route
-        pendingTaskCounts[ownerRoute] = (pendingTaskCounts[ownerRoute] ?: 0) + 1
+        val routeTaskCount = pendingTasksFor(ownerRoute)
+        routeTaskCount.value += 1
         scope.launch {
             error = ""
             errorStatusCode = 0
@@ -363,9 +369,7 @@ fun QuantaEdgeApp() {
             } catch (exception: Exception) {
                 reportError(exception)
             } finally {
-                val remaining = (pendingTaskCounts[ownerRoute] ?: 1) - 1
-                if (remaining <= 0) pendingTaskCounts.remove(ownerRoute)
-                else pendingTaskCounts[ownerRoute] = remaining
+                routeTaskCount.value = (routeTaskCount.value - 1).coerceAtLeast(0)
             }
         }
     }
