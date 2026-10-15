@@ -6,6 +6,17 @@ import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+type LifecycleStatus = {
+  user_account_id?: number | null;
+  role?: string | null;
+  independentAccountLinked?: boolean;
+  adult_verification_status?: string | null;
+  adult_verification_current?: boolean;
+  parent_eligibility_status?: string | null;
+  parent_eligibility_current?: boolean;
+  canTransitionToParent?: boolean;
+};
+
 type ProfileDraft = {
   displayName: string;
   city: string;
@@ -96,6 +107,13 @@ export default function StudentProfilePage() {
   const [draft, setDraft] = useState<ProfileDraft>(emptyProfile);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [student, setStudent] = useState<{class_code: string; board: string} | null>(null);
+  const [lifecycle, setLifecycle] = useState<LifecycleStatus | null>(null);
+  const [lifecycleBusy, setLifecycleBusy] = useState(false);
+  const [lifecycleConsent, setLifecycleConsent] = useState(false);
+  const [transitionMobile, setTransitionMobile] = useState('');
+  const [transitionOtp, setTransitionOtp] = useState('');
+  const [transitionPassword, setTransitionPassword] = useState('');
+  const [transitionOtpSent, setTransitionOtpSent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [photoBusy, setPhotoBusy] = useState(false);
@@ -126,6 +144,12 @@ export default function StudentProfilePage() {
           favoriteSubject: body.favorite_subject || '',
           learningGoal: body.learning_goal || '',
         });
+        try {
+          const lifecycleResponse = await fetch('/api/v1/account/me/lifecycle');
+          if (lifecycleResponse.ok) setLifecycle(await readJson(lifecycleResponse));
+        } catch {
+          // Profile editing remains available if the lifecycle status endpoint is temporarily unavailable.
+        }
       } catch (loadError) {
         if (active) setError(loadError instanceof Error ? loadError.message : 'Unable to load your profile.');
       } finally {
@@ -135,6 +159,116 @@ export default function StudentProfilePage() {
     void loadProfile();
     return () => { active = false; };
   }, [router]);
+
+  async function refreshLifecycle() {
+    const response = await fetch('/api/v1/account/me/lifecycle');
+    const body = await readJson(response);
+    if (!response.ok) throw new Error(body.message || 'Unable to refresh account status.');
+    setLifecycle(body);
+  }
+
+  async function requestAdultVerification() {
+    setError(''); setNotice('');
+    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
+    setLifecycleBusy(true);
+    try {
+      const response = await fetch('/api/v1/account/me/adult-verification-request', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consentAccepted: true }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Unable to request adult verification.');
+      await refreshLifecycle();
+      setNotice(body.status === 'VERIFIED'
+        ? tx('आपकी adult verification पहले से verified है।','Your adult verification is already current.')
+        : tx('Adult verification review का request भेज दिया गया है।','Your adult verification review request has been submitted.'));
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : 'Unable to request adult verification.');
+    } finally { setLifecycleBusy(false); }
+  }
+
+  async function requestTransitionOtp() {
+    setError(''); setNotice('');
+    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
+    if (!transitionMobile.trim()) { setError(tx('अपना verified mobile number डालें।','Enter your mobile number.')); return; }
+    setLifecycleBusy(true);
+    try {
+      const response = await fetch('/api/v1/auth/learner-transition/request-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: transitionMobile, consentAccepted: true }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Unable to send verification code.');
+      setTransitionOtpSent(true);
+      setNotice(body.devCode
+        ? tx('Demo verification code: ','Demo verification code: ') + body.devCode
+        : tx('Verification code भेज दिया गया है।','Verification code sent.'));
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : 'Unable to send verification code.');
+    } finally { setLifecycleBusy(false); }
+  }
+
+  async function completeIndependentAccount() {
+    setError(''); setNotice('');
+    if (!transitionOtp.trim() || transitionPassword.length < 8) {
+      setError(tx('OTP डालें और कम से कम 8 characters का password चुनें।','Enter the OTP and choose a password with at least 8 characters.'));
+      return;
+    }
+    setLifecycleBusy(true);
+    try {
+      const response = await fetch('/api/v1/auth/verify-otp', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mobile: transitionMobile, otp: transitionOtp, purpose: 'LEARNER_TRANSITION',
+          password: transitionPassword, displayName: draft.displayName,
+        }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Unable to create your independent account.');
+      setTransitionOtp(''); setTransitionPassword(''); setTransitionOtpSent(false);
+      setLifecycleConsent(false);
+      await refreshLifecycle();
+      setNotice(tx('आपका independent account बन गया है। आपकी learning history और progress उसी profile पर सुरक्षित हैं।','Your independent account is ready. Your learning history and progress remain on the same learner profile.'));
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : 'Unable to create your independent account.');
+    } finally { setLifecycleBusy(false); }
+  }
+
+  async function requestParentEligibility() {
+    setError(''); setNotice('');
+    if (!lifecycleConsent) { setError(tx('आगे बढ़ने से पहले अपनी सहमति दें।','Please confirm your consent before continuing.')); return; }
+    setLifecycleBusy(true);
+    try {
+      const response = await fetch('/api/v1/account/me/parent-eligibility-request', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ consentAccepted: true }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Unable to request parent eligibility review.');
+      await refreshLifecycle();
+      setNotice(body.status === 'VERIFIED'
+        ? tx('आपकी parent eligibility पहले से verified है।','Your parent eligibility is already current.')
+        : tx('Parent eligibility review का request भेज दिया गया है।','Your parent eligibility review request has been submitted.'));
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : 'Unable to request parent eligibility review.');
+    } finally { setLifecycleBusy(false); }
+  }
+
+  async function transitionToParent() {
+    if (!window.confirm(tx('आपका account parent role में बदलेगा। आपकी learner profile और history सुरक्षित रहेंगी। जारी रखें?','Your account will switch to the parent role. Your learner profile and history will be preserved. Continue?'))) return;
+    setError(''); setNotice(''); setLifecycleBusy(true);
+    try {
+      const response = await fetch('/api/v1/account/me/transition-to-parent', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirmParentTransition: true }),
+      });
+      const body = await readJson(response);
+      if (!response.ok) throw new Error(body.message || 'Unable to transition to parent.');
+      router.replace('/login');
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : 'Unable to transition to parent.');
+    } finally { setLifecycleBusy(false); }
+  }
 
   async function handlePhotoChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -278,6 +412,58 @@ export default function StudentProfilePage() {
                 <label className="student-profile-field"><LocaleText hinglish="पसंदीदा subject" english="Favourite subject" /><select value={draft.favoriteSubject} onChange={e => setDraft({ ...draft, favoriteSubject: e.target.value })}><option value=""><LocaleText hinglish="Subject चुनें" english="Choose a subject" /></option><option value="maths"><LocaleText hinglish="गणित · Maths" english="Maths" /></option><option value="science"><LocaleText hinglish="विज्ञान · Science" english="Science" /></option><option value="both"><LocaleText hinglish="दोनों" english="Both" /></option><option value="other"><LocaleText hinglish="कोई और subject" english="Another subject" /></option><option value="not_sure"><LocaleText hinglish="अभी explore कर रहे हैं" english="Still exploring" /></option></select></label>
                 <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="मेरा learning goal" english="My learning goal" /><textarea rows={3} maxLength={300} value={draft.learningGoal} onChange={e => setDraft({ ...draft, learningGoal: e.target.value })} placeholder={tx('आप किस चीज़ में बेहतर होना चाहते हैं? जैसे, fractions solve करने में confidence बढ़ाना।','What would you like to improve? For example, build confidence in solving fractions.')} /><small>{draft.learningGoal.length}/300 characters</small></label>
               </div>
+            </section>
+
+            <section className="student-profile-card">
+              <div className="student-profile-card__intro"><span className="student-profile-card__number">04</span><div><h2><LocaleText hinglish="Account और eligibility" english="Account and eligibility" /></h2><p><LocaleText hinglish="आपकी learner identity और learning history को सुरक्षित रखते हुए account transition manage करें।" english="Manage account transitions while keeping your learner identity and learning history intact." /></p></div></div>
+              {!lifecycle?.independentAccountLinked ? (
+                <>
+                  <p><strong><LocaleText hinglish="Adult verification" english="Adult verification" />:</strong> {lifecycle?.adult_verification_status || 'NOT_REQUESTED'}</p>
+                  {lifecycle?.adult_verification_current ? (
+                    <>
+                      <p><LocaleText hinglish="आपकी age eligibility verified है। अपना mobile verify करके independent account बना सकते हैं।" english="Your adult eligibility is verified. Verify your mobile to create an independent account." /></p>
+                      {!transitionOtpSent ? (
+                        <div className="student-profile-fields">
+                          <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका mobile number" english="Your mobile number" /><input type="tel" value={transitionMobile} onChange={e=>setTransitionMobile(e.target.value)} placeholder="+91…" autoComplete="tel" /></label>
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं independent account बनाने और guardian access सीमित करने के लिए सहमत हूँ।" english="I consent to creating an independent account and limiting existing guardian access." /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestTransitionOtp}><LocaleText hinglish="Verification code भेजें" english="Send verification code" /></button>
+                        </div>
+                      ) : (
+                        <div className="student-profile-fields">
+                          <label className="student-profile-field"><LocaleText hinglish="OTP" english="OTP" /><input inputMode="numeric" autoComplete="one-time-code" value={transitionOtp} onChange={e=>setTransitionOtp(e.target.value)} /></label>
+                          <label className="student-profile-field"><LocaleText hinglish="नया password" english="New password" /><input type="password" autoComplete="new-password" minLength={8} value={transitionPassword} onChange={e=>setTransitionPassword(e.target.value)} /></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={completeIndependentAccount}><LocaleText hinglish="Independent account बनाएं" english="Create independent account" /></button>
+                        </div>
+                      )}
+                    </>
+                  ) : lifecycle?.adult_verification_status === 'PENDING' ? (
+                    <p><LocaleText hinglish="आपकी adult verification review में है। Review पूरा होने पर यहाँ status update होगा।" english="Your adult verification is under review. This status will update when the review is complete." /></p>
+                  ) : (
+                    <div className="student-profile-fields">
+                      <p><LocaleText hinglish="Independent account बनाने के लिए staff द्वारा verified-over-18 review ज़रूरी है। जन्मतिथि यहाँ store नहीं की जाती।" english="An authorized staff review confirming you are strictly over 18 is required. Your date of birth is not stored here." /></p>
+                      <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं adult verification review का अनुरोध करने के लिए सहमत हूँ।" english="I consent to requesting adult verification review." /></span></label>
+                      <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestAdultVerification}><LocaleText hinglish="Adult verification का अनुरोध करें" english="Request adult verification" /></button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p><strong><LocaleText hinglish="Account role" english="Account role" />:</strong> {lifecycle?.role || 'LEARNER'}</p>
+                  <p><strong><LocaleText hinglish="Parent eligibility" english="Parent eligibility" />:</strong> {lifecycle?.parent_eligibility_status || 'NOT_REQUESTED'}</p>
+                  {lifecycle?.canTransitionToParent ? (
+                    <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={transitionToParent}><LocaleText hinglish="Parent account में बदलें" english="Transition to parent account" /></button>
+                  ) : lifecycle?.role === 'LEARNER' && lifecycle?.adult_verification_current ? (
+                    <>
+                      {lifecycle?.parent_eligibility_status === 'PENDING' ? <p><LocaleText hinglish="Parent eligibility review pending है।" english="Parent eligibility review is pending." /></p> : (
+                        <div className="student-profile-fields">
+                          <label className="student-profile-field student-profile-field--wide"><span><input type="checkbox" checked={lifecycleConsent} onChange={e=>setLifecycleConsent(e.target.checked)} /> <LocaleText hinglish="मैं parent eligibility review का अनुरोध करने के लिए सहमत हूँ।" english="I consent to requesting parent eligibility review." /></span></label>
+                          <button type="button" className="button button-dark button-small" disabled={lifecycleBusy} onClick={requestParentEligibility}><LocaleText hinglish="Parent eligibility का अनुरोध करें" english="Request parent eligibility" /></button>
+                        </div>
+                      )}
+                    </>
+                  ) : <p><LocaleText hinglish="Parent transition के लिए current adult verification और अलग parent eligibility approval ज़रूरी है।" english="Parent transition requires current adult verification and separate parent eligibility approval." /></p>}
+                </>
+              )}
             </section>
 
             <div className="student-profile-form__footer">

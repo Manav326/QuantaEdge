@@ -8,6 +8,7 @@ export type AdminSection =
   | 'classes'
   | 'students'
   | 'parents'
+  | 'lifecycle'
   | 'staff'
   | 'translations'
   | 'certificates';
@@ -70,6 +71,7 @@ export const ADMIN_NAV_GROUPS: AdminNavGroup[] = [
     items: [
       { key: 'students', href: '/students', icon: '◉', english: 'Students', hinglish: 'Students', shortEnglish: 'Students', shortHinglish: 'Students' },
       { key: 'parents', href: '/parents', icon: '♧', english: 'Parents & families', hinglish: 'Parents & families', shortEnglish: 'Families', shortHinglish: 'Families' },
+      { key: 'lifecycle', href: '/account-lifecycle', icon: '✓', english: 'Account lifecycle', hinglish: 'Account lifecycle', shortEnglish: 'Lifecycle', shortHinglish: 'Lifecycle' },
     ],
   },
   {
@@ -89,6 +91,7 @@ export function canSeeAdminItem(item: AdminNavItem, role: string, permissions: s
   if (item.key === 'overview') return role === 'ADMIN';
   if (item.key === 'certificates') return role === 'ADMIN';
   if (item.key === 'students' || item.key === 'parents') return role === 'ADMIN';
+  if (item.key === 'lifecycle') return role === 'ADMIN' || permissions.includes('ACCOUNT_LIFECYCLE_REVIEW');
   if (item.key === 'content') return role === 'ADMIN' || permissions.includes('CONTENT_VIEW');
   if (item.key === 'translations') {
     return role === 'ADMIN'
