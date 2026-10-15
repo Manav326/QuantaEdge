@@ -187,7 +187,10 @@ internal fun parseTutorMessageBlocks(message: String): List<TutorMessageBlock> {
 }
 
 @Composable
-private fun tutorInlineText(value: String) = buildAnnotatedString {
+private fun tutorInlineText(value: String): androidx.compose.ui.text.AnnotatedString {
+    val inlineCodeBackground = MaterialTheme.colorScheme.surfaceVariant
+    val inlineMathColor = MaterialTheme.colorScheme.primary
+    return buildAnnotatedString {
     val pattern = Regex("(\\*\\*[^*]+\\*\\*|`[^`]+`|\\u0024[^\\u0024\\n]+\\u0024|\\*[^*\\n]+\\*)")
     var cursor = 0
     for (match in pattern.findAll(value)) {
@@ -197,11 +200,11 @@ private fun tutorInlineText(value: String) = buildAnnotatedString {
             token.startsWith("**") && token.endsWith("**") ->
                 withStyle(SpanStyle(fontWeight = FontWeight.Bold)) { append(token.substring(2, token.length - 2)) }
             token.startsWith("`") && token.endsWith("`") ->
-                withStyle(SpanStyle(fontFamily = FontFamily.Monospace, background = MaterialTheme.colorScheme.surfaceVariant)) {
+                withStyle(SpanStyle(fontFamily = FontFamily.Monospace, background = inlineCodeBackground)) {
                     append(token.substring(1, token.length - 1))
                 }
             token.startsWith("\u0024") && token.endsWith("\u0024") ->
-                withStyle(SpanStyle(fontFamily = FontFamily.Monospace, color = MaterialTheme.colorScheme.primary)) {
+                withStyle(SpanStyle(fontFamily = FontFamily.Monospace, color = inlineMathColor)) {
                     append(token.substring(1, token.length - 1))
                 }
             token.startsWith("*") && token.endsWith("*") ->
@@ -213,8 +216,8 @@ private fun tutorInlineText(value: String) = buildAnnotatedString {
         cursor = match.range.last + 1
     }
     append(value.substring(cursor))
+    }
 }
-
 @Composable
 private fun TutorMessageBody(message: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(7.dp)) {
