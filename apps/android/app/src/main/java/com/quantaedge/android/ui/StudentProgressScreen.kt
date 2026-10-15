@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -27,6 +28,7 @@ fun StudentProgressScreen(
     data: JSONObject,
     language: String,
     busy: Boolean,
+    loadFailed: Boolean,
     certificateEligibility: Map<Long, JSONObject>,
     onRefresh: () -> Unit,
     onIssueCertificate: (Long) -> Unit,
@@ -50,7 +52,24 @@ fun StudentProgressScreen(
                 style = MaterialTheme.typography.headlineSmall, modifier = Modifier.weight(1f))
             TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Refresh", "रिफ्रेश")) }
         }
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 6.dp)) {
+        if (busy && data.length() == 0) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator()
+                Text(t("Loading learning progress…", "सीखने की प्रगति लोड हो रही है…"))
+            }
+        } else if (loadFailed && data.length() == 0) {
+            EmptyState(
+                t("Learning progress couldn't be loaded", "सीखने की प्रगति लोड नहीं हो पाई"),
+                t("Check the error above and retry.", "ऊपर दिया गया error जाँचें और फिर प्रयास करें।")
+            )
+            Button(onClick = onRefresh, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+                Text(t("Retry", "फिर प्रयास करें"))
+            }
+        } else LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 6.dp)) {
             item {
                 if (compact) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {

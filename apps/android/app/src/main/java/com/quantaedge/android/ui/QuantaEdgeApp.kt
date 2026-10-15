@@ -134,6 +134,7 @@ fun QuantaEdgeApp() {
         mutableStateOf(preferences.getString("certificateLanguage", "hi")?.takeIf { it in setOf("hi", "en") } ?: "hi")
     }
     var currentSubject by rememberSaveable { mutableStateOf("maths") }
+    var currentCourseId by rememberSaveable { mutableStateOf(0L) }
     var lastStudentNavGroup by rememberSaveable { mutableStateOf("today") }
     var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
@@ -475,6 +476,7 @@ fun QuantaEdgeApp() {
 
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
         currentSubject = subjectCode
+        currentCourseId = courseId.coerceAtLeast(0L)
         lessons = emptyList()
         route = AppRoute.SUBJECT_LESSONS
         runTask {
@@ -1863,6 +1865,7 @@ fun QuantaEdgeApp() {
             lessonAnswerLocks.clear()
             resourceDownloadStates.clear()
             currentSubject = "maths"
+            currentCourseId = 0L
             route = AppRoute.WELCOME
             loginMode = "STUDENT"
             error = ""
@@ -1939,7 +1942,7 @@ fun QuantaEdgeApp() {
             AppRoute.PROFILE -> openStudentProfile()
             AppRoute.ACCOUNT_LIFECYCLE -> refreshAccountLifecycle()
             AppRoute.PROGRESS -> openProgress()
-            AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject)
+            AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject, currentCourseId)
             AppRoute.DIAGNOSTIC -> openDiagnostic()
             AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
             AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
@@ -2441,7 +2444,7 @@ fun QuantaEdgeApp() {
                         lessons = lessons,
                         language = language,
                         busy = busy,
-                        onRefresh = { openSubject(currentSubject) },
+                        onRefresh = { openSubject(currentSubject, currentCourseId) },
                         onOpenLesson = ::openLesson
                     )
                     AppRoute.LESSON -> LessonScreen(
@@ -2481,6 +2484,7 @@ fun QuantaEdgeApp() {
                         answers = answers,
                         feedbacks = feedbacks,
                         busy = busy,
+                        loadFailed = error.isNotBlank(),
                         onAnswerChange = { id, value -> answers[id] = value },
                         onAnswer = ::saveDiagnosticAnswer,
                         onSubmit = ::submitDiagnostic,
@@ -2529,6 +2533,7 @@ fun QuantaEdgeApp() {
                         certificateEligibility = assessmentCertificateEligibility,
                         language = language,
                         busy = busy,
+                        loadFailed = error.isNotBlank(),
                         onPageChange = ::changeResultsPage,
                         onReview = ::openAssessmentReview,
                         onIssueCertificate = ::issueCertificateForAttempt,
@@ -2618,6 +2623,7 @@ fun QuantaEdgeApp() {
                         data = progressData,
                         language = language,
                         busy = busy,
+                        loadFailed = error.isNotBlank(),
                         certificateEligibility = assessmentCertificateEligibility,
                         onRefresh = ::openProgress,
                         onIssueCertificate = ::issueCertificateForAttempt,
@@ -3369,6 +3375,7 @@ private fun PracticeScreen(
     answers: MutableMap<String, String>,
     feedbacks: MutableMap<String, String>,
     busy: Boolean,
+    loadFailed: Boolean,
     onAnswerChange: (String, String) -> Unit,
     onAnswer: (JSONObject, String) -> Unit,
     language: String,
@@ -3560,7 +3567,25 @@ private fun DiagnosticScreen(
     val attemptId = diagnostic.longAny("attemptId", "attempt_id")
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text(localizedUiText("प्रारंभिक जाँच"), style = MaterialTheme.typography.headlineSmall)
-        if (diagnostic.optBoolean("completed")) {
+        if (busy && diagnostic.length() == 0) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                CircularProgressIndicator()
+                Text(if (language == "hi") "जाँच लोड हो रही है…" else "Loading diagnostic…")
+            }
+        } else if (loadFailed && diagnostic.length() == 0) {
+            EmptyState(
+                if (language == "hi") "जाँच लोड नहीं हो पाई" else "Diagnostic couldn't be loaded",
+                if (language == "hi") "ऊपर दिया गया error जाँचें और फिर प्रयास करें।"
+                else "Check the error above and retry."
+            )
+            Button(onClick = onRefresh, enabled = !busy) {
+                Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+            }
+        } else if (diagnostic.optBoolean("completed")) {
             EmptyState("जाँच पूरी हो चुकी है", "आपकी आगे की पढ़ाई और अनुशंसाएँ सर्वर पर उपलब्ध प्रगति के अनुसार हैं।")
             Button(onClick = onRefresh, enabled = !busy) { Text(localizedUiText("स्थिति रिफ्रेश करें")) }
         } else if (!diagnostic.optBoolean("available")) {
@@ -4093,6 +4118,7 @@ private fun ResultsScreen(
     certificateEligibility: Map<Long, JSONObject>,
     language: String,
     busy: Boolean,
+    loadFailed: Boolean,
     onPageChange: (Int, Int) -> Unit,
     onReview: (Long) -> Unit,
     onIssueCertificate: (Long) -> Unit,
@@ -4112,7 +4138,21 @@ private fun ResultsScreen(
             else "Check certificate eligibility and access available downloads from each released result.",
             style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary
         )
-        if (resultItems.isEmpty() && resultTotal <= 0) {
+        if (busy && resultItems.isEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 18.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                CircularProgressIndicator()
+                Text(t("Loading results…", "परिणाम लोड हो रहे हैं…"))
+            }
+        } else if (loadFailed && resultItems.isEmpty()) {
+            EmptyState(
+                t("Results couldn't be loaded", "परिणाम लोड नहीं हो पाए"),
+                t("Check the error above and retry.", "ऊपर दिया गया error जाँचें और फिर प्रयास करें।")
+            )
+        } else if (resultItems.isEmpty() && resultTotal <= 0) {
             EmptyState("अभी कोई जारी परिणाम नहीं", "जारी किए गए मूल्यांकन परिणाम उपलब्ध होने पर वे यहाँ दिखेंगे।")
         } else {
             Row(
