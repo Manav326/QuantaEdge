@@ -192,6 +192,7 @@ fun QuantaEdgeApp() {
 
     var busy by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf("") }
+    var errorStatusCode by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("") }
     val answers = remember { mutableStateMapOf<String, String>() }
     val feedbacks = remember { mutableStateMapOf<String, String>() }
@@ -297,10 +298,20 @@ fun QuantaEdgeApp() {
     }
 
     fun reportError(exception: Exception) {
+        errorStatusCode = (exception as? ApiFailure)?.statusCode ?: 0
         error = when (exception) {
-            is ApiFailure -> exception.message
-            is IOException -> "QuantaEdge server से संपर्क नहीं हो पाया। नेटवर्क और API URL जाँचें।"
-            else -> exception.message?.takeIf { it.isNotBlank() } ?: "कुछ गलत हो गया। दोबारा प्रयास करें।"
+            is ApiFailure -> when (exception.statusCode) {
+                401 -> if (language == "hi") "आपका सत्र समाप्त हो गया है। जारी रखने के लिए फिर से साइन इन करें।"
+                    else "Your session has expired. Sign in again to continue."
+                403 -> if (language == "hi") "इस खाते को इस काम की अनुमति नहीं है।"
+                    else "This account does not have permission to access this item."
+                else -> exception.message
+            }
+            is IOException -> if (language == "hi") "QuantaEdge server से संपर्क नहीं हो पाया। नेटवर्क और API URL जाँचें।"
+                else "Couldn't reach the QuantaEdge server. Check your network and API URL."
+            else -> exception.message?.takeIf { it.isNotBlank() }
+                ?: if (language == "hi") "कुछ गलत हो गया। दोबारा प्रयास करें।"
+                else "Something went wrong. Please try again."
         }
     }
 
@@ -308,6 +319,8 @@ fun QuantaEdgeApp() {
         scope.launch {
             busy = true
             error = ""
+            errorStatusCode = 0
+            status = ""
             try {
                 action()
             } catch (exception: Exception) {
@@ -455,6 +468,8 @@ fun QuantaEdgeApp() {
 
     fun openSubject(subjectCode: String, courseId: Long = 0L) {
         currentSubject = subjectCode
+        lessons = emptyList()
+        route = AppRoute.SUBJECT_LESSONS
         runTask {
             if (studentProfile.length() == 0) studentProfile = ApiClient.getObject("/api/v1/students/me")
             var classCode = studentProfile.textAny("class_code", "classCode")
@@ -503,6 +518,8 @@ fun QuantaEdgeApp() {
     }
 
     fun openDiagnostic() {
+        diagnostic = JSONObject()
+        route = AppRoute.DIAGNOSTIC
         runTask {
             diagnostic = ApiClient.getObject("/api/v1/diagnostic")
             feedbacks.clear()
@@ -518,6 +535,7 @@ fun QuantaEdgeApp() {
         assessmentSubjectFilter = normalizedFilter
         if (normalizedFilter in setOf("maths", "science")) currentSubject = normalizedFilter
         val subjectCode = if (normalizedFilter == "ALL") "" else normalizedFilter
+        route = AppRoute.ASSESSMENTS
         runTask {
             val local = withContext(Dispatchers.IO) { offlineAssessmentStore.catalogueItems() }
                 .filter {
@@ -843,6 +861,9 @@ fun QuantaEdgeApp() {
 
     fun openClasses(subjectCode: String = currentSubject) {
         currentSubject = subjectCode
+        liveClasses = emptyList()
+        recordedClasses = emptyList()
+        route = AppRoute.CLASSES
         runTask {
             liveClasses = ApiClient.getObject(
                 "/api/v1/learning/live-classes?subjectCode=" + ApiClient.encodeQuery(subjectCode)
@@ -1121,6 +1142,8 @@ fun QuantaEdgeApp() {
     }
 
     fun openRecording(item: JSONObject) {
+        selectedRecording = JSONObject(item.toString())
+        route = AppRoute.RECORDING_PLAYER
         runTask {
             val id = item.longAny("recorded_class_id", "recordingId", "id")
             if (id <= 0L) throw IOException("Recording की पहचान नहीं मिली।")
@@ -1166,6 +1189,8 @@ fun QuantaEdgeApp() {
 
     fun openResources(subjectCode: String = currentSubject) {
         currentSubject = subjectCode
+        documents = emptyList()
+        route = AppRoute.RESOURCES
         runTask {
             val local = resourceStore.downloadedDocuments()
             val online = runCatching {
@@ -1446,6 +1471,7 @@ fun QuantaEdgeApp() {
     }
 
     fun openStudentProfile() {
+        route = AppRoute.PROFILE
         runTask {
             studentProfile = ApiClient.getObject("/api/v1/students/me/profile")
             studentProfile.textAny("language", "learningLanguage", "learning_language")
@@ -1458,6 +1484,7 @@ fun QuantaEdgeApp() {
     }
 
     fun openAccountLifecycle() {
+        route = AppRoute.ACCOUNT_LIFECYCLE
         runTask {
             ApiClient.setWorkspace("STUDENT")
             accountLifecycle = ApiClient.getObject("/api/v1/account/me/lifecycle")
@@ -1563,6 +1590,7 @@ fun QuantaEdgeApp() {
     }
 
     fun openProgress() {
+        route = AppRoute.PROGRESS
         runTask {
             progressData = ApiClient.getObject("/api/v1/students/me")
             loadProgressCertificateData(progressData)
@@ -1571,6 +1599,7 @@ fun QuantaEdgeApp() {
     }
 
         fun openParentProfile() {
+        route = AppRoute.PARENT_PROFILE
         runTask {
             parentProfile = ApiClient.getObject("/api/v1/guardians/profile")
             route = AppRoute.PARENT_PROFILE
@@ -1668,6 +1697,9 @@ fun QuantaEdgeApp() {
     }
 
     fun openArchivedChildren() {
+        parentSection = "children"
+        archivedChildren = emptyList()
+        route = AppRoute.PARENT_CHILD_ARCHIVED
         runTask {
             archivedChildren = ApiClient.getArray("/api/v1/guardians/children/archived").objectItems()
             parentSection = "children"
@@ -1869,6 +1901,49 @@ fun QuantaEdgeApp() {
             }
         }
     }
+
+    fun retryCurrentRead() {
+        error = ""
+        errorStatusCode = 0
+        when (route) {
+            AppRoute.STUDENT_HOME -> runTask {
+                studentProfile = ApiClient.getObject("/api/v1/students/me")
+                recommendation = ApiClient.getObject("/api/v1/recommendations/next")
+                refreshStudentPrograms()
+                refreshStudentTextbookDocuments()
+            }
+            AppRoute.PARENT_HOME -> refreshParentData()
+            AppRoute.PARENT_REPORT -> {
+                val childId = parentReport.optLong("_childId")
+                val child = parentChildren.firstOrNull { it.longAny("id") == childId }
+                    ?: selectedChild.takeIf { it.longAny("id") == childId }
+                if (child != null) openParentReport(child) else refreshParentData()
+            }
+            AppRoute.PARENT_PROFILE -> openParentProfile()
+            AppRoute.PARENT_CHILD_ARCHIVED -> openArchivedChildren()
+            AppRoute.PROFILE -> openStudentProfile()
+            AppRoute.ACCOUNT_LIFECYCLE -> refreshAccountLifecycle()
+            AppRoute.PROGRESS -> openProgress()
+            AppRoute.SUBJECT_LESSONS -> openSubject(currentSubject)
+            AppRoute.DIAGNOSTIC -> openDiagnostic()
+            AppRoute.ASSESSMENTS -> openAssessments(assessmentSubjectFilter)
+            AppRoute.ASSESSMENT_RESULTS -> loadAssessmentResults()
+            AppRoute.RESOURCES -> openResources(currentSubject)
+            AppRoute.DOCUMENT_READER -> retryDocumentPage()
+            AppRoute.CLASSES -> openClasses(currentSubject)
+            AppRoute.RECORDING_PLAYER -> openRecording(selectedRecording)
+            else -> Unit
+        }
+    }
+
+    fun currentRouteHasSafeReadRetry(): Boolean = route in setOf(
+        AppRoute.STUDENT_HOME, AppRoute.PARENT_HOME, AppRoute.PARENT_REPORT,
+        AppRoute.PARENT_PROFILE, AppRoute.PARENT_CHILD_ARCHIVED, AppRoute.PROFILE,
+        AppRoute.ACCOUNT_LIFECYCLE, AppRoute.PROGRESS, AppRoute.SUBJECT_LESSONS,
+        AppRoute.DIAGNOSTIC, AppRoute.ASSESSMENTS, AppRoute.ASSESSMENT_RESULTS,
+        AppRoute.RESOURCES, AppRoute.DOCUMENT_READER, AppRoute.CLASSES,
+        AppRoute.RECORDING_PLAYER
+    )
 
     fun goBack() {
         route = when (route) {
@@ -2162,13 +2237,51 @@ fun QuantaEdgeApp() {
                 }
             }
 
-            if (busy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            if (busy) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 5.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    Text(
+                        if (language == "hi") "लोड हो रहा है…" else "Loading…",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+            }
             if (error.isNotBlank()) {
-                Text(
-                    text = localizedUiText(error),
-                    color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-                )
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(text = localizedUiText(error), style = MaterialTheme.typography.bodyMedium)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (errorStatusCode == 401) {
+                                TextButton(onClick = ::logout, enabled = !busy) {
+                                    Text(if (language == "hi") "फिर से साइन इन करें" else "Sign in again")
+                                }
+                            } else if (errorStatusCode != 403 && currentRouteHasSafeReadRetry()) {
+                                TextButton(onClick = ::retryCurrentRead, enabled = !busy) {
+                                    Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+                                }
+                            }
+                            TextButton(onClick = { error = ""; errorStatusCode = 0 }, enabled = !busy) {
+                                Text(if (language == "hi") "बंद करें" else "Dismiss")
+                            }
+                        }
+                    }
+                }
             }
             if (status.isNotBlank()) {
                 Text(
