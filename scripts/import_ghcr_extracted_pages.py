@@ -98,7 +98,7 @@ def post_multipart(
 def post_approve(url: str, cookie: str) -> dict[str, Any]:
     request = urllib.request.Request(
         url, data=b"", method="POST",
-        headers={"Cookie": "QE_SESSION=" + cookie + "; QE_STAFF_SESSION=" + cookie, "Accept": "application/json"},
+        headers={"Cookie": "QE_SESSION=" + cookie, "Accept": "application/json"},
     )
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
