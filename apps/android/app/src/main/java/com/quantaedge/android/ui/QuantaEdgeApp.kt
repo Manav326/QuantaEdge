@@ -1510,7 +1510,7 @@ fun QuantaEdgeApp() {
             AppRoute.ASSESSMENT_ATTEMPT -> AppRoute.ASSESSMENTS
             AppRoute.ASSESSMENT_REVIEW -> AppRoute.ASSESSMENT_RESULTS
             AppRoute.PARENT_REPORT, AppRoute.PARENT_PROFILE, AppRoute.PARENT_CHILD_CREATE,
-            AppRoute.PARENT_CHILD_MANAGE -> AppRoute.PARENT_HOME
+            AppRoute.PARENT_CHILD_MANAGE, AppRoute.PARENT_CHILD_ARCHIVED -> AppRoute.PARENT_HOME
             AppRoute.DOCUMENT_READER -> AppRoute.RESOURCES
         }
         error = ""
