@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TutorService {
+  private static final System.Logger LOG=System.getLogger(TutorService.class.getName());
   private final JdbcTemplate jdbc;
   private final AuthorizationService authorization;
   private final TutorProviderRouter provider;
@@ -68,6 +69,7 @@ public class TutorService {
   }
 
   public Map<String,Object> send(AuthContext context,long sessionId,String message,String mode,long questionId,String language){
+    long requestStartedNanos=System.nanoTime();
     context=authorization.requireStudent(context);ensureSessionOwner(context.studentId(),sessionId);
     Long sessionLessonId=jdbc.queryForObject("select lesson_id from tutor_session where id=?",Long.class,sessionId);
     ensureLessonAccess(context.studentId(),sessionLessonId);
@@ -88,15 +90,12 @@ public class TutorService {
       """,Long.class,context.studentId());
     if(daily>=maxMessagesPerDay)throw new IllegalStateException("Daily tutor usage limit reached");
 
-    String languageGuard=languageMismatchReply(tutorLanguage,normalized);
-    if(languageGuard!=null){
-      TutorReply guarded=new TutorReply(languageGuard,null,0,0).withModelLabel("LANGUAGE_GUARD");
-      conversationWriter.persistTurn(sessionId,mode,normalized,guarded);
-      return Map.of("message",guarded.text(),"mode",mode);
-    }
-    String directAnswer=currentTutorDirectAnswer(tutorLanguage,normalized);
+    String responseLanguage=detectTutorResponseLanguage(tutorLanguage,normalized);
+    String languageReminder=buildLearningLanguageReminder(tutorLanguage,responseLanguage);
+    String directAnswer=currentTutorDirectAnswer(responseLanguage,normalized);
     if(directAnswer!=null){
-      TutorReply direct=new TutorReply(directAnswer,null,0,0).withModelLabel("TUTOR_RULES");
+      String directText=appendLanguageReminder(directAnswer,languageReminder);
+      TutorReply direct=new TutorReply(directText,null,0,0).withModelLabel("TUTOR_RULES");
       conversationWriter.persistTurn(sessionId,mode,normalized,direct);
       return Map.of("message",direct.text(),"mode",mode);
     }
@@ -203,7 +202,6 @@ public class TutorService {
           "message", compactText(String.valueOf(row.getOrDefault("message", "")), 180)));
     }
 
-    String responseLanguage = tutorLanguage;
     String languageInstruction = responseLanguage.equals("en")
         ? "Answer only in clear, age-appropriate English."
         : "केवल सरल, उम्र के अनुकूल हिन्दी में उत्तर दें।";
@@ -237,18 +235,19 @@ public class TutorService {
         %s
         MODE: %s
         QUESTION TO ANSWER NOW: %s
-        """.formatted(tutorLanguage,json(lesson),blocks,retrievedCurriculum,qctx,json(promptHistory),mode,compactText(normalized,600));
+        """.formatted(responseLanguage,json(lesson),blocks,retrievedCurriculum,qctx,json(promptHistory),mode,compactText(normalized,600));
     }else{
       input="""
         LANGUAGE: %s
         MODE: %s
         QUESTION TO ANSWER NOW: %s
-        """.formatted(tutorLanguage,mode,compactText(normalized,600));
+        """.formatted(responseLanguage,mode,compactText(normalized,600));
     }
 
     // Exact context questions should be answered from the lesson record, not left to
     // a small model that may ignore context and ask which lesson the learner means.
     String directMetaAnswer=currentTutorMetaAnswer(responseLanguage,normalized,currentTopic);
+    long inferenceMillis=0L;
     TutorReply reply;
     if(contextOnlyAnswer){
       reply=new TutorReply(currentTopicAnswer(responseLanguage,currentTopic,
@@ -260,26 +259,35 @@ public class TutorService {
     }else{
       // One inference only: retries doubled latency on CPU-only models without reliably
       // repairing poor answers. Reject malformed or language-mismatched output instead.
+      long inferenceStartedNanos=System.nanoTime();
       reply=provider.generate(instructions,input);
+      inferenceMillis=(System.nanoTime()-inferenceStartedNanos)/1_000_000L;
       if(isGenericTutorGreeting("ASSISTANT",reply.text())
-          || isMalformedTutorAnswer(reply.text(),normalized,tutorLanguage,useLessonContext,currentTopic)){
+          || isMalformedTutorAnswer(reply.text(),normalized,responseLanguage,useLessonContext,currentTopic)){
         throw new TutorProviderException("Tutor produced an irrelevant, malformed, or language-mismatched answer; please retry");
       }
     }
+    String finalText=appendLanguageReminder(reply.text(),languageReminder);
+    if(!finalText.equals(reply.text())){
+      reply=new TutorReply(finalText,reply.providerResponseId(),reply.inputTokens(),reply.outputTokens(),reply.model());
+    }
     conversationWriter.persistTurn(sessionId,mode,normalized,reply);
+    LOG.log(System.Logger.Level.INFO,
+        "Tutor turn completed: mode={0}, selectedLanguage={1}, responseLanguage={2}, lessonContext={3}, promptChars={4}, inferenceMs={5}, totalMs={6}, model={7}, outputTokens={8}",
+        new Object[]{mode,tutorLanguage,responseLanguage,useLessonContext,input.length(),inferenceMillis,
+            (System.nanoTime()-requestStartedNanos)/1_000_000L,reply.model(),reply.outputTokens()});
     return Map.of("message",reply.text(),"mode",mode);
   }
 
-  static String languageMismatchReply(String language,String message){
-    if(message==null||message.isBlank()||message.length()>1200)return null;
-    String normalizedRequest=message.toLowerCase(Locale.ROOT)
+  static String detectTutorResponseLanguage(String selectedLanguage,String message){
+    if(message==null||message.isBlank())return selectedLanguage;
+    String normalized=message.toLowerCase(Locale.ROOT)
         .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
-    boolean explicitlyRequestsHindi=normalizedRequest.matches(".*\\b(in hindi|answer in hindi|respond in hindi|reply in hindi|speak in hindi|hindi please)\\b.*");
-    boolean explicitlyRequestsEnglish=normalizedRequest.matches(".*\\b(in english|answer in english|respond in english|reply in english|speak in english|english please)\\b.*");
-    if("en".equalsIgnoreCase(language)&&explicitlyRequestsHindi)
-      return "Your learning language is currently English. Please change the learning language to Hindi before requesting a Hindi reply.";
-    if("hi".equalsIgnoreCase(language)&&explicitlyRequestsEnglish)
-      return "आपकी पढ़ाई की भाषा अभी हिन्दी है। English में उत्तर पाने के लिए पहले पढ़ाई की भाषा English करें।";
+    boolean asksHindi=normalized.matches(".*\\b(in hindi|hindi please|answer in hindi|respond in hindi|reply in hindi|speak in hindi|response can be in hindi|response be in hindi|can you (answer|respond|reply|speak) in hindi)\\b.*");
+    boolean asksEnglish=normalized.matches(".*\\b(in english|english please|answer in english|respond in english|reply in english|speak in english|response can be in english|response be in english|can you (answer|respond|reply|speak) in english)\\b.*");
+    if(asksHindi&&!asksEnglish)return "hi";
+    if(asksEnglish&&!asksHindi)return "en";
+
     long latin=0,devanagari=0,letters=0;
     for(int offset=0;offset<message.length();){
       int cp=message.codePointAt(offset);
@@ -291,14 +299,24 @@ public class TutorService {
       }
       offset+=Character.charCount(cp);
     }
-    if(letters<4)return null;
-    boolean englishInput=latin>=4 && latin/(double)letters>=0.65;
-    boolean hindiInput=devanagari>=4 && devanagari/(double)letters>=0.30;
-    if("hi".equalsIgnoreCase(language)&&englishInput)
-      return "आपकी पढ़ाई की भाषा अभी हिन्दी है। कृपया अंग्रेज़ी में प्रश्न पूछने के लिए पहले पढ़ाई की भाषा English करें। फिर मैं English में उत्तर दूँगा।";
-    if("en".equalsIgnoreCase(language)&&hindiInput)
-      return "Your learning language is currently English. Please change the learning language to Hindi before asking in Hindi; then I’ll reply in Hindi.";
-    return null;
+    if(letters<4)return selectedLanguage;
+    if(devanagari>=4 && devanagari/(double)letters>=0.25 && devanagari>latin)return "hi";
+    if(latin>=4 && latin/(double)letters>=0.65)return "en";
+    if(devanagari>latin)return "hi";
+    return selectedLanguage;
+  }
+
+  static String buildLearningLanguageReminder(String selectedLanguage,String responseLanguage){
+    if(selectedLanguage==null||responseLanguage==null||selectedLanguage.equalsIgnoreCase(responseLanguage))return "";
+    if("en".equalsIgnoreCase(responseLanguage))
+      return "Reminder: your learning language is set to Hindi. Change it to English in Learning Language settings if you want English replies by default.";
+    return "ध्यान दें: आपकी पढ़ाई की भाषा English चुनी गई है। हिन्दी में जवाब डिफ़ॉल्ट रूप से पाने के लिए Learning Language में हिन्दी चुनें।";
+  }
+
+  static String appendLanguageReminder(String answer,String reminder){
+    if(answer==null)return "";
+    if(reminder==null||reminder.isBlank())return answer;
+    return answer.trim()+"\n\n"+reminder;
   }
 
   static String currentTutorDirectAnswer(String language,String message){

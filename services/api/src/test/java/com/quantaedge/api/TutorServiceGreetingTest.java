@@ -2,6 +2,7 @@ package com.quantaedge.api;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +51,28 @@ class TutorServiceGreetingTest {
   void leavesNormalLearningQuestionsToTheModel() {
     org.junit.jupiter.api.Assertions.assertNull(TutorService.currentTutorMetaAnswer(
         "en", "Explain number patterns", "Patterns in Mathematics"));
+  }
+
+  @Test
+  void answersInTheExplicitlyRequestedLanguageWithoutBlockingTheQuestion() {
+    assertEquals("hi", TutorService.detectTutorResponseLanguage("en", "Your response can be in hindi?"));
+    assertEquals("en", TutorService.detectTutorResponseLanguage("hi", "Can you answer in English?"));
+    assertEquals("en", TutorService.detectTutorResponseLanguage("hi", "What is the difference between addition and subtraction?"));
+    assertEquals("hi", TutorService.detectTutorResponseLanguage("en", "जोड़ और घटाव में क्या अंतर है?"));
+  }
+
+  @Test
+  void addsAReminderOnlyWhenAnswerLanguageDiffersFromLearningLanguage() {
+    assertTrue(TutorService.buildLearningLanguageReminder("hi", "en").contains("learning language is set to Hindi"));
+    assertTrue(TutorService.buildLearningLanguageReminder("en", "hi").contains("पढ़ाई की भाषा English"));
+    assertTrue(TutorService.buildLearningLanguageReminder("en", "en").isEmpty());
+  }
+
+  @Test
+  void appendsTheReminderAfterTheEducationalAnswer() {
+    String answer = TutorService.appendLanguageReminder("5 + 3 = 8.", "Reminder: selected language is Hindi.");
+    assertTrue(answer.startsWith("5 + 3 = 8."));
+    assertTrue(answer.contains("Reminder: selected language is Hindi."));
   }
 
   @Test
