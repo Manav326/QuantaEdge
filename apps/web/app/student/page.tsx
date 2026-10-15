@@ -27,6 +27,7 @@ export default function StudentHome(){
   const [textbooksLoading,setTextbooksLoading]=useState(true);
   const [textbooksError,setTextbooksError]=useState('');
   const [courses,setCourses]=useState<any[]>([]);
+  const [courseProgress,setCourseProgress]=useState<Record<number,any>>({});
   const [courseBusy,setCourseBusy]=useState('');
   const [courseError,setCourseError]=useState('');
 
@@ -45,7 +46,23 @@ export default function StudentHome(){
         if(response.status===401||response.status===403){router.replace('/login/student');return;}
         const body=await response.json();
         if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
-        if(active)setCourses(Array.isArray(body)?body:[]);
+        const rows=Array.isArray(body)?body:[];
+        if(active)setCourses(rows);
+        const enrolledRows=rows.filter((course:any)=>course.is_enrolled===true);
+        const metrics=await Promise.all(enrolledRows.map(async(course:any)=>{
+          const id=Number(course.id);
+          if(!Number.isSafeInteger(id)||id<=0)return null;
+          try{
+            const progressResponse=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store'});
+            if(!progressResponse.ok)return {id,error:true};
+            return {id,data:await progressResponse.json()};
+          }catch{return {id,error:true};}
+        }));
+        if(active){
+          const next:Record<number,any>={};
+          metrics.forEach((item:any)=>{if(item&&Number.isSafeInteger(item.id))next[item.id]=item;});
+          setCourseProgress(next);
+        }
       } catch(e:any) {
         if(active)setCourseError(e.message||'Courses could not be loaded.');
       }
@@ -65,7 +82,20 @@ export default function StudentHome(){
       const refresh=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store'});
       const rows=await refresh.json();
       if(!refresh.ok)throw new Error(rows.message||rows.error||'Course was enrolled, but the catalogue could not refresh.');
-      setCourses(Array.isArray(rows)?rows:[]);
+      const courseRows=Array.isArray(rows)?rows:[];
+      setCourses(courseRows);
+      const enrolledRows=courseRows.filter((course:any)=>course.is_enrolled===true);
+      const metrics=await Promise.all(enrolledRows.map(async(course:any)=>{
+        const id=Number(course.id);
+        if(!Number.isSafeInteger(id)||id<=0)return null;
+        try{
+          const progressResponse=await fetch('/api/v1/students/me?courseId='+encodeURIComponent(String(id)),{credentials:'same-origin',cache:'no-store'});
+          return progressResponse.ok?{id,data:await progressResponse.json()}:{id,error:true};
+        }catch{return {id,error:true};}
+      }));
+      const next:Record<number,any>={};
+      metrics.forEach((item:any)=>{if(item&&Number.isSafeInteger(item.id))next[item.id]=item;});
+      setCourseProgress(next);
     }catch(e:any){setCourseError(e.message||'Course enrolment failed.');}
     finally{setCourseBusy('');}
   }
@@ -162,6 +192,26 @@ export default function StudentHome(){
                 {!course.is_enrolled?<button type="button" className="button button-dark" disabled={courseBusy!==''} onClick={()=>void enrolCourse(Number(course.id))}>{courseBusy===String(course.id)?<LocaleText hinglish="नामांकन हो रहा है…" english="Enrolling…" />:<LocaleText hinglish="Course join करें" english="Join course" />}</button>:null}
               </div>
               {course.is_enrolled&&<div className="subject-track-copy">
+                {(()=>{
+                  const metric=courseProgress[Number(course.id)];
+                  const progress=metric?.data;
+                  const lessonStats=progress?.lessonStats||{};
+                  const total=Number(lessonStats.total_lessons||0);
+                  const completed=Number(lessonStats.completed_lessons||0);
+                  const percent=Number(lessonStats.completion_percent||0);
+                  const questionStats=progress?.questionStats||{};
+                  return <div className="subject-book-link qe-course-learning-progress" role="status" aria-live="polite">
+                    <span className="subject-book-copy">
+                      <strong><LocaleText hinglish="आपकी learning progress" english="Your learning progress" /></strong>
+                      {metric?.error
+                        ? <small><LocaleText hinglish="Progress अभी load नहीं हो पाई। फिर कोशिश करें।" english="Progress could not load yet. Please try again." /></small>
+                        : total>0
+                          ? <><small>{completed} / {total} <LocaleText hinglish="published lessons पूरे" english="published lessons completed" /> · {Math.max(0,Math.min(100,percent))}%</small><small>{Number(questionStats.attempts||0)} <LocaleText hinglish="सवालों के प्रयास" english="question attempts" /></small><span className="qe-course-progress-track" aria-label={Math.max(0,Math.min(100,percent))+'% complete'}><span style={{width:Math.max(0,Math.min(100,percent))+'%'}} /></span></>
+                          : <small><LocaleText hinglish="इस course में अभी published lessons उपलब्ध नहीं हैं। Textbook उपलब्ध है; content publish होने पर यहाँ progress दिखेगी।" english="No published lessons are available in this course yet. The textbook is available; progress will appear here when lessons are published." /></small>}
+                    </span>
+                    <span className="subject-book-open"><Link href={'/student/progress?courseId='+encodeURIComponent(String(course.id))}><LocaleText hinglish="पूरी progress →" english="Full progress →" /></Link></span>
+                  </div>;
+                })()}
                 {(Array.isArray(course.subjects)?course.subjects:[]).map((subject:any)=>(
                   <Link key={subject.subject_code} href={'/student/learn?courseId='+encodeURIComponent(String(course.id))+'&subjectCode='+encodeURIComponent(String(subject.subject_code))} className="subject-book-link">
                     <span className="subject-book-copy"><strong>{subject.subject_name}</strong><small>{Number(subject.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {Number(subject.lessons||0)} <LocaleText hinglish="पाठ" english="lessons" /></small></span>
