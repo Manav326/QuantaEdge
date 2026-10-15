@@ -31,8 +31,8 @@ public class AccountLifecycleController {
     if(!Boolean.TRUE.equals(body.get("consentAccepted")))
       throw new SecurityException("Explicit confirmation is required to request adult verification.");
     long studentId=context.studentId();
-    Long linked=jdbc.queryForObject("select count(*) from student where id=? and user_account_id is not null",Long.class,studentId);
-    if(linked!=null && linked>0) throw new IllegalStateException("This learner already has an independent account.");
+    // Existing independent learners may renew expired adult verification before requesting
+    // parent eligibility. This endpoint records a review request only; it never changes roles.
     jdbc.update("""
       insert into student_adult_verification(student_id,status,updated_at)
       values (?,'PENDING',now())
