@@ -26,6 +26,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -61,6 +64,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,7 +94,11 @@ import com.quantaedge.android.data.OfflineAssessmentSyncWorker
 import androidx.work.WorkManager
 import com.quantaedge.android.data.optLongAny
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
@@ -105,7 +114,39 @@ private data class ResourceDownloadUiState(
 
 private data class AppNavItem(val key: String, val label: String, val glyph: String)
 
-
+private fun resourceDownloadUiState(work: androidx.work.WorkInfo, language: String): ResourceDownloadUiState {
+    val done = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+        work.outputData.getInt("pagesDone", work.progress.getInt("pagesDone", 0))
+    } else work.progress.getInt("pagesDone", 0)
+    val total = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
+        work.outputData.getInt("pageCount", work.progress.getInt("pageCount", 0))
+    } else work.progress.getInt("pageCount", 0)
+    val fraction = if (total > 0) (done.toFloat() / total).coerceIn(0f, 1f) else null
+    val hindi = language == "hi"
+    return when (work.state) {
+        androidx.work.WorkInfo.State.ENQUEUED,
+        androidx.work.WorkInfo.State.BLOCKED -> ResourceDownloadUiState(
+            if (hindi) "डाउनलोड कतार में है" else "Download queued", fraction, true
+        )
+        androidx.work.WorkInfo.State.RUNNING -> ResourceDownloadUiState(
+            if (hindi) {
+                if (total > 0) "डाउनलोड: $done / $total पृष्ठ" else "डाउनलोड चल रहा है"
+            } else {
+                if (total > 0) "Downloading: $done / $total pages" else "Downloading"
+            },
+            fraction, true
+        )
+        androidx.work.WorkInfo.State.SUCCEEDED -> ResourceDownloadUiState(
+            if (hindi) "डाउनलोड पूरा" else "Download complete", 1f, false
+        )
+        androidx.work.WorkInfo.State.FAILED -> ResourceDownloadUiState(
+            if (hindi) "डाउनलोड विफल — फिर प्रयास करें" else "Download failed — retry", null, false
+        )
+        androidx.work.WorkInfo.State.CANCELLED -> ResourceDownloadUiState(
+            if (hindi) "डाउनलोड रद्द" else "Download cancelled", null, false
+        )
+    }
+}
 
 @Composable
 fun QuantaEdgeApp() {
@@ -193,7 +234,14 @@ fun QuantaEdgeApp() {
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
 
-    var busy by remember { mutableStateOf(false) }
+    // Each route owns its own snapshot counter. Updating a background route's counter
+    // won't invalidate the currently visible route, unlike one shared SnapshotStateMap.
+    val pendingTaskCounts = remember {
+        mutableMapOf<AppRoute, androidx.compose.runtime.MutableState<Int>>()
+    }
+    fun pendingTasksFor(targetRoute: AppRoute): androidx.compose.runtime.MutableState<Int> =
+        pendingTaskCounts.getOrPut(targetRoute) { mutableStateOf(0) }
+    val busy = pendingTasksFor(route).value > 0
     var error by remember { mutableStateOf("") }
     var errorStatusCode by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("") }
@@ -239,64 +287,54 @@ fun QuantaEdgeApp() {
         }
     }
 
-    LaunchedEffect(route, assessmentAttempt.toString(), answers.toMap()) {
+    // SnapshotFlow observes answer changes without rebuilding the effect for every keystroke.
+    // collectLatest cancels the pending debounce when another answer arrives.
+    LaunchedEffect(route, assessmentAttempt.toString()) {
         if (route == AppRoute.ASSESSMENT_ATTEMPT &&
             assessmentAttempt.optBoolean("offlineMode") &&
             !assessmentAttempt.optBoolean("offlinePendingSync") &&
             assessmentAttempt.textAny("status") == "IN_PROGRESS") {
-            delay(300)
-            withContext(Dispatchers.IO) {
-                offlineAssessmentStore.saveAttempt(
-                    assessmentAttempt,
-                    answers.toMap(),
-                    "DRAFT"
-                )
-            }
+            snapshotFlow { answers.toMap() }
+                .distinctUntilChanged()
+                .collectLatest { draft ->
+                    delay(300)
+                    withContext(Dispatchers.IO) {
+                        offlineAssessmentStore.saveAttempt(assessmentAttempt, draft, "DRAFT")
+                    }
+                }
         }
     }
 
-    LaunchedEffect(route, resourceOwner, documents) {
+    // Observe WorkManager events instead of polling every 1.2 seconds. Each update writes only
+    // the changed document; the library screen owns reads from this state map.
+    LaunchedEffect(route, resourceOwner, documents, language) {
         if (route == AppRoute.RESOURCES) {
-            val documentIds = documents.map { it.optLongAny("document_id", "id") }.filter { it > 0L }.distinct()
-            while (true) {
-                val workByDocument = withContext(Dispatchers.IO) {
-                    documentIds.mapNotNull { documentId ->
+            val documentIds = documents.map { it.optLongAny("document_id", "id") }
+                .filter { it > 0L }.distinct()
+            coroutineScope {
+                documentIds.forEach { documentId ->
+                    launch {
                         val uniqueName = "qe-resource-" + resourceOwner.take(16) + "-" + documentId
-                        val work = runCatching {
-                            WorkManager.getInstance(context.applicationContext)
-                                .getWorkInfosForUniqueWork(uniqueName).get().lastOrNull()
-                        }.getOrNull()
-                        if (work == null) null else documentId to work
-                    }.toMap()
-                }
-                val nextStates = linkedMapOf<Long, ResourceDownloadUiState>()
-                workByDocument.forEach { (documentId, work) ->
-                    val done = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
-                        work.outputData.getInt("pagesDone", work.progress.getInt("pagesDone", 0))
-                    } else work.progress.getInt("pagesDone", 0)
-                    val total = if (work.state == androidx.work.WorkInfo.State.SUCCEEDED) {
-                        work.outputData.getInt("pageCount", work.progress.getInt("pageCount", 0))
-                    } else work.progress.getInt("pageCount", 0)
-                    val fraction = if (total > 0) (done.toFloat() / total).coerceIn(0f, 1f) else null
-                    val value = when (work.state) {
-                        androidx.work.WorkInfo.State.ENQUEUED,
-                        androidx.work.WorkInfo.State.BLOCKED -> ResourceDownloadUiState("डाउनलोड कतार में है", fraction, true)
-                        androidx.work.WorkInfo.State.RUNNING -> ResourceDownloadUiState(
-                            if (total > 0) "डाउनलोड: " + done + " / " + total + " पृष्ठ" else "डाउनलोड चल रहा है",
-                            fraction, true
-                        )
-                        androidx.work.WorkInfo.State.SUCCEEDED -> ResourceDownloadUiState("डाउनलोड पूरा", 1f, false)
-                        androidx.work.WorkInfo.State.FAILED -> ResourceDownloadUiState("डाउनलोड विफल — फिर प्रयास करें", null, false)
-                        androidx.work.WorkInfo.State.CANCELLED -> ResourceDownloadUiState("डाउनलोड रद्द", null, false)
+                        WorkManager.getInstance(context.applicationContext)
+                            .getWorkInfosForUniqueWorkFlow(uniqueName)
+                            .collectLatest { workInfos ->
+                                val work = workInfos.lastOrNull()
+                                if (work == null) {
+                                    resourceDownloadStates.remove(documentId)
+                                } else {
+                                    val next = resourceDownloadUiState(work, language)
+                                    if (resourceDownloadStates[documentId] != next) {
+                                        resourceDownloadStates[documentId] = next
+                                    }
+                                }
+                            }
                     }
-                    nextStates[documentId] = value
                 }
-                resourceDownloadStates.clear()
-                resourceDownloadStates.putAll(nextStates)
-                delay(1200)
+                awaitCancellation()
             }
         } else {
-            resourceDownloadStates.clear()
+            // Don't retain document-specific progress after leaving the library or switching accounts.
+            if (resourceDownloadStates.isNotEmpty()) resourceDownloadStates.clear()
         }
     }
 
@@ -319,8 +357,10 @@ fun QuantaEdgeApp() {
     }
 
     fun runTask(action: suspend () -> Unit) {
+        val ownerRoute = route
+        val routeTaskCount = pendingTasksFor(ownerRoute)
+        routeTaskCount.value += 1
         scope.launch {
-            busy = true
             error = ""
             errorStatusCode = 0
             status = ""
@@ -329,7 +369,7 @@ fun QuantaEdgeApp() {
             } catch (exception: Exception) {
                 reportError(exception)
             } finally {
-                busy = false
+                routeTaskCount.value = (routeTaskCount.value - 1).coerceAtLeast(0)
             }
         }
     }
@@ -2067,7 +2107,10 @@ fun QuantaEdgeApp() {
             goBack()
         }
     }
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(
+        modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
+        color = MaterialTheme.colorScheme.background
+    ) {
         CompositionLocalProvider(LocalQuantaLanguage provides language) {
         Row(modifier = Modifier.fillMaxSize()) {
             if (signedIn && landscapeLayout && route != AppRoute.TUTOR && !(route == AppRoute.DOCUMENT_READER && documentFullscreen)) NavigationRail {
@@ -2568,7 +2611,7 @@ fun QuantaEdgeApp() {
                         busy = busy,
                         error = error,
                         downloadStatus = status,
-                        downloadStates = resourceDownloadStates.toMap(),
+                        downloadStates = resourceDownloadStates,
                         onSubject = ::openResources,
                         onOpen = ::openDocument,
                         onDownload = ::downloadDocument,
@@ -4323,7 +4366,7 @@ private fun ResourcesScreen(
     busy: Boolean,
     error: String,
     downloadStatus: String,
-    downloadStates: Map<Long, ResourceDownloadUiState>,
+    downloadStates: SnapshotStateMap<Long, ResourceDownloadUiState>,
     onSubject: (String) -> Unit,
     onOpen: (JSONObject) -> Unit,
     onDownload: (JSONObject) -> Unit,

@@ -13,24 +13,50 @@ val configuredApiBaseUrl = providers.gradleProperty("quantaedgeApiBaseUrl")
     .let { if (it.endsWith("/")) it else "$it/" }
 
 val generatedBrandingRes = layout.buildDirectory.dir("generated/quantaedge-brand/res")
+val configuredVersionCode = providers.gradleProperty("quantaedgeVersionCode")
+    .orElse(providers.environmentVariable("QUANTAEDGE_VERSION_CODE"))
+    .orElse("1").get().toInt().also { require(it > 0) { "versionCode must be a positive integer." } }
+val configuredVersionName = providers.gradleProperty("quantaedgeVersionName")
+    .orElse(providers.environmentVariable("QUANTAEDGE_VERSION_NAME"))
+    .orElse("1.0.0").get().also { require(it.isNotBlank()) { "versionName must not be blank." } }
+
+val releaseKeystorePath = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+val releaseStorePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("ANDROID_KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("ANDROID_KEY_PASSWORD").orNull
+val releaseSigningConfigured = listOf(
+    releaseKeystorePath, releaseStorePassword, releaseKeyAlias, releaseKeyPassword
+).all { !it.isNullOrBlank() }
 
 android {
     sourceSets.getByName("main").res.srcDir(generatedBrandingRes)
     namespace = "com.quantaedge.android"
     compileSdk = 36
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            create("release") {
+                storeFile = file(requireNotNull(releaseKeystorePath))
+                storePassword = requireNotNull(releaseStorePassword)
+                keyAlias = requireNotNull(releaseKeyAlias)
+                keyPassword = requireNotNull(releaseKeyPassword)
+            }
+        }
+    }
     defaultConfig {
         applicationId = "com.quantaedge.android"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        targetSdk = 36
+        versionCode = configuredVersionCode
+        versionName = configuredVersionName
         buildConfigField("String", "API_BASE_URL", "\"$configuredApiBaseUrl\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug { manifestPlaceholders["allowCleartextTraffic"] = "true" }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            if (releaseSigningConfigured) signingConfig = signingConfigs.getByName("release")
             manifestPlaceholders["allowCleartextTraffic"] = "false"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -96,6 +122,20 @@ tasks.register("verifyReleaseApiConfiguration") {
         }
     }
 }
+tasks.register("verifyPlayStoreSigning") {
+    group = "verification"
+    description = "Requires the private upload key before producing a Play Store release."
+    doLast {
+        check(releaseSigningConfigured) {
+            "Release signing is not configured. Set ANDROID_KEYSTORE_PATH, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS and ANDROID_KEY_PASSWORD."
+        }
+        check(file(requireNotNull(releaseKeystorePath)).isFile) {
+            "ANDROID_KEYSTORE_PATH does not point to an existing keystore file."
+        }
+    }
+}
 tasks.configureEach {
-    if (name == "assembleRelease") dependsOn("verifyReleaseApiConfiguration")
+    if (name == "assembleRelease" || name == "bundleRelease") {
+        dependsOn("verifyReleaseApiConfiguration", "verifyPlayStoreSigning")
+    }
 }
