@@ -337,6 +337,7 @@ fun QuantaEdgeApp() {
 
     fun signIn(mode: String, mobile: String, parentMobile: String, username: String, password: String) {
         runTask {
+            ApiClient.setWorkspace(if (mode == "PARENT") "PARENT" else "STUDENT")
             if (mode == "PARENT") {
                 ApiClient.postObject("/api/v1/auth/parent-login", JSONObject()
                     .put("mobile", mobile.trim()).put("password", password))
@@ -355,6 +356,7 @@ fun QuantaEdgeApp() {
 
     fun requestParentOtp(purpose: String, mobile: String, onRequested: (String?) -> Unit) {
         runTask {
+            ApiClient.setWorkspace("PARENT")
             val response = ApiClient.postObject("/api/v1/auth/request-otp",
                 JSONObject().put("mobile", mobile.trim()).put("purpose", purpose))
             val devCode = response.optString("devCode").takeIf { it.isNotBlank() && it != "null" }
@@ -366,6 +368,7 @@ fun QuantaEdgeApp() {
 
     fun verifyParentOtp(purpose: String, mobile: String, displayName: String, otp: String, password: String) {
         runTask {
+            ApiClient.setWorkspace("PARENT")
             val body = JSONObject().put("mobile", mobile.trim()).put("otp", otp.trim())
                 .put("purpose", purpose).put("password", password)
             if (purpose == "SIGNUP") body.put("displayName", displayName.trim())

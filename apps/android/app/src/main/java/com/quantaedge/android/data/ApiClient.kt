@@ -21,6 +21,7 @@ object ApiClient {
     private val jsonType = "application/json; charset=utf-8".toMediaType()
     @Volatile private var client: OkHttpClient? = null
     @Volatile private var cookies: SecureCookieJar? = null
+    @Volatile private var activeWorkspace: String = "STUDENT"
     private val refreshLock = Any()
 
     fun initialize(context: Context) {
@@ -29,6 +30,8 @@ object ApiClient {
             if (client != null) return
             val jar = SecureCookieJar(context.applicationContext)
             cookies = jar
+            activeWorkspace = jar.workspace()
+            jar.synchronizeRecoverySnapshot()
             client = OkHttpClient.Builder().cookieJar(jar)
                 .connectTimeout(20, TimeUnit.SECONDS).readTimeout(45, TimeUnit.SECONDS)
                 .writeTimeout(45, TimeUnit.SECONDS).callTimeout(2, TimeUnit.MINUTES).build()
@@ -50,6 +53,13 @@ object ApiClient {
     suspend fun getBytes(path: String): ByteArray = request(path, "GET", null)
     fun encodeQuery(value: String): String = java.net.URLEncoder.encode(value, StandardCharsets.UTF_8.name())
     fun absoluteUrl(path: String): String = BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
+    fun setWorkspace(workspace: String) {
+        val normalized = workspace.trim().uppercase()
+        if (normalized !in setOf("PARENT", "STUDENT", "LEARNING")) return
+        activeWorkspace = normalized
+        cookies?.setWorkspace(normalized)
+    }
+    private fun currentWorkspace(): String = activeWorkspace
     fun mediaUrl(url: String): String =
         if (url.startsWith("https://", true) || url.startsWith("http://", true)) url else absoluteUrl(url)
 
@@ -67,7 +77,8 @@ object ApiClient {
                         .url(absoluteUrl("/api/v1/auth/refresh"))
                         .post("{}".toRequestBody(jsonType))
                         .header("Accept", "application/json")
-                        .header("X-QE-Workspace", "STUDENT")
+                        .header("X-QE-Workspace", currentWorkspace())
+                        .header("X-QE-Client", "ANDROID")
                         .build()
                     val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
                     if (refreshed) response.request.newBuilder().removeHeader("Cookie").build() else null
@@ -88,11 +99,15 @@ object ApiClient {
             !normalized.endsWith("/auth/verify-otp") &&
             !normalized.endsWith("/auth/parent-login") &&
             !normalized.endsWith("/auth/student-login") &&
+            !normalized.endsWith("/auth/learner-login") &&
             !normalized.endsWith("/auth/preview-login") &&
             !normalized.endsWith("/auth/logout")
     }
 
-    fun clearSession() { cookies?.clear() }
+    fun clearSession() {
+        cookies?.clear()
+        activeWorkspace = "STUDENT"
+    }
 
     private suspend fun request(path: String, method: String, body: String?): ByteArray =
         withContext(Dispatchers.IO) {
@@ -100,7 +115,10 @@ object ApiClient {
             val absoluteRequestUrl = path.startsWith("https://", true) || path.startsWith("http://", true)
             val url = if (absoluteRequestUrl) path else BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
             val builder = Request.Builder().url(url).header("Accept", "application/json, image/png")
-            if (!absoluteRequestUrl) builder.header("X-QE-Workspace", "STUDENT")
+            if (!absoluteRequestUrl) {
+                builder.header("X-QE-Workspace", currentWorkspace())
+                    .header("X-QE-Client", "ANDROID")
+            }
             val requestBody = body?.toRequestBody(jsonType)
             when (method) {
                 "GET" -> builder.get()
@@ -118,7 +136,8 @@ object ApiClient {
                         .url(BuildConfig.API_BASE_URL.trimEnd('/') + "/api/v1/auth/refresh")
                         .post("{}".toRequestBody(jsonType))
                         .header("Accept", "application/json")
-                        .header("X-QE-Workspace", "STUDENT")
+                        .header("X-QE-Workspace", currentWorkspace())
+                        .header("X-QE-Client", "ANDROID")
                         .build()
                     val refreshed = currentClient.newCall(refreshRequest).execute().use { it.isSuccessful }
                     if (!refreshed) {
