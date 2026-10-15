@@ -95,7 +95,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
             with self.subTest(kind=kind):
                 self.assertIn(kind, web)
                 self.assertIn(kind, android)
-        for required in ("alt_hi", "caption_hi", "source_book_title", "source_pdf_page_number",
+        for required in ("alt_hi", "key+'_hi'", "source_book_title", "source_pdf_page_number",
                          "source_page_url", "qe-visual-lightbox", "qe-lesson-source-attribution"):
             with self.subTest(web_field=required):
                 self.assertIn(required, web)
