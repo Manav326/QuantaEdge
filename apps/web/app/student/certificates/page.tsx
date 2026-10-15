@@ -42,6 +42,8 @@ function StudentCertificatesContent() {
   const { locale, certificateLanguage, setCertificateLanguage } = useLocale();
   const [profile, setProfile] = useState<any>(null);
   const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [directCertificate, setDirectCertificate] = useState<Certificate | null>(null);
+  const [certificateLookupLoading, setCertificateLookupLoading] = useState(false);
   const [eligibleAttempts, setEligibleAttempts] = useState<any[]>([]);
   const [passThreshold, setPassThreshold] = useState(80);
   const [achievementType, setAchievementType] = useState<'SUBJECT_COMPLETION' | 'ASSESSMENT_PASS'>('SUBJECT_COMPLETION');
@@ -134,7 +136,43 @@ function StudentCertificatesContent() {
     [releasedAttempts, attemptId],
   );
   const requestedCertificateId = Number(searchParams.get('certificateId') || 0);
-  const requestedCertificate = certificates.find(certificate => certificate.id === requestedCertificateId);
+  const requestedCertificate = certificates.find(certificate => Number(certificate.id) === requestedCertificateId)
+    || (Number(directCertificate?.id) === requestedCertificateId ? directCertificate : undefined);
+
+  // Resolve the record by ID as well as from the recent-history list. The latter is intentionally
+  // bounded, so an older issued certificate must still be openable and downloadable directly.
+  useEffect(() => {
+    if (!requestedCertificateId || !Number.isSafeInteger(requestedCertificateId) || requestedCertificateId < 1) {
+      setDirectCertificate(null);
+      setCertificateLookupLoading(false);
+      return;
+    }
+    let active = true;
+    setDirectCertificate(null);
+    setCertificateLookupLoading(true);
+    const loadRecord = async () => {
+      try {
+        const response = await fetch('/api/v1/students/me/certificates/' + requestedCertificateId, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          headers: { 'X-QE-Workspace': 'STUDENT' },
+        });
+        if (response.status === 401 || response.status === 403) {
+          router.replace('/login/student');
+          return;
+        }
+        if (!response.ok) return;
+        const body = await response.json().catch(() => null);
+        if (active && Number(body?.id) === requestedCertificateId) setDirectCertificate(body as Certificate);
+      } catch {
+        // The history list remains a fallback if a transient detail lookup fails.
+      } finally {
+        if (active) setCertificateLookupLoading(false);
+      }
+    };
+    void loadRecord();
+    return () => { active = false; };
+  }, [requestedCertificateId, router]);
 
   useEffect(() => {
     if (!requestedCertificateId) {
@@ -174,7 +212,7 @@ function StudentCertificatesContent() {
           const raw = await response.text();
           let body: any = {};
           try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-          throw new Error(body.message || body.detail || body.error || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
+          throw new Error(body.detail || body.message || body.error || t('Certificate preview could not be loaded.','प्रमाणपत्र का पूर्वावलोकन लोड नहीं हो सका।'));
         }
         const blob = await response.blob();
         if (!active) return;
@@ -211,7 +249,7 @@ function StudentCertificatesContent() {
         const raw = await response.text();
         let body: any = {};
         try { body = raw ? JSON.parse(raw) : {}; } catch { body = { message: raw }; }
-        throw new Error(body.message || body.detail || body.error || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
+        throw new Error(body.detail || body.message || body.error || t('Certificate download failed.','प्रमाणपत्र डाउनलोड नहीं हो सका।'));
       }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
@@ -291,7 +329,8 @@ function StudentCertificatesContent() {
             <div><span className={styles.eyebrow}>{t('CERTIFICATE VIEWER','प्रमाणपत्र व्यूअर')}</span><h2>{requestedCertificate?.achievement_title || t('Certificate','प्रमाणपत्र')}</h2></div>
             <button type="button" className="button button-light" onClick={() => router.push('/student/certificates')}>{t('All certificates','सभी प्रमाणपत्र')}</button>
           </div>
-          {!profile ? <div className={styles.viewerLoading}>{t('Loading your certificate…','आपका प्रमाणपत्र लोड हो रहा है…')}</div>
+          {!profile || (!requestedCertificate && certificateLookupLoading)
+            ? <div className={styles.viewerLoading}>{t('Loading your certificate…','आपका प्रमाणपत्र लोड हो रहा है…')}</div>
             : !requestedCertificate ? <div className={styles.empty}><strong>{t('Certificate not found','प्रमाणपत्र नहीं मिला')}</strong><p>{t('This certificate is not available in your account.','यह प्रमाणपत्र आपके खाते में उपलब्ध नहीं है।')}</p></div>
             : requestedCertificate.status !== 'ISSUED' ? <div className={styles.error}>{t('This certificate has been revoked and cannot be displayed as valid proof.','यह प्रमाणपत्र निरस्त है और मान्य प्रमाण के रूप में नहीं दिखाया जा सकता।')}</div>
             : <>
