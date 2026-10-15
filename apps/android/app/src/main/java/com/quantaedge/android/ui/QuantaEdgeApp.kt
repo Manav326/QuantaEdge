@@ -339,15 +339,15 @@ fun QuantaEdgeApp() {
             route = AppRoute.PARENT_HOME
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
-            refreshStudentPrograms()
-            refreshStudentTextbookDocuments()
-            // The student account preference controls learning materials, independently of app UI language.
+            // Keep content language independent from the app interface language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }
             if (savedLearningLanguage != null) {
                 learningLanguage = savedLearningLanguage
                 preferences.edit().putString("contentLanguage", savedLearningLanguage).apply()
             }
+            refreshStudentPrograms()
+            refreshStudentTextbookDocuments()
             recommendation = runCatching { ApiClient.getObject("/api/v1/recommendations/next") }.getOrDefault(JSONObject())
             route = AppRoute.STUDENT_HOME
         } else {
