@@ -53,6 +53,40 @@ async function readBody(response: Response): Promise<ApiBody> {
   }
 }
 
+/**
+ * A slow local model can finish and persist a turn after the web proxy has
+ * already returned an HTTP 5xx/network error. Reconcile with persisted history
+ * before telling the learner their question failed.
+ */
+async function recoverPersistedTutorTurn(sessionId: number, userMessage: string): Promise<TutorMessage[] | null> {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    if (attempt > 0) await new Promise(resolve => window.setTimeout(resolve, 2500));
+    try {
+      const response = await fetch('/api/v1/tutor/sessions/' + sessionId + '/messages?limit=30', {
+        credentials: 'same-origin',
+        cache: 'no-store',
+      });
+      if (!response.ok) continue;
+      const body = await readBody(response);
+      const items = Array.isArray(body.items) ? body.items as TutorMessage[] : [];
+      let matchedUserIndex = -1;
+      for (let index = items.length - 1; index >= 0; index -= 1) {
+        if (items[index].role === 'USER' && items[index].message === userMessage) {
+          matchedUserIndex = index;
+          break;
+        }
+      }
+      if (matchedUserIndex >= 0
+        && items.slice(matchedUserIndex + 1).some(item => item.role === 'ASSISTANT')) {
+        return items;
+      }
+    } catch {
+      // A temporary history-fetch failure should not replace the original tutor error.
+    }
+  }
+  return null;
+}
+
 function responseError(response: Response, body: ApiBody, english: boolean, fallbackEn: string, fallbackHi: string): string {
   const code = typeof body.error === 'string' ? body.error : '';
   const message = typeof body.message === 'string' ? body.message.toLowerCase() : '';
@@ -540,6 +574,14 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       const body = await readBody(response);
       const current = languageRef.current;
       if (!response.ok) {
+        if (response.status >= 500 || typeof body.rawText === 'string') {
+          const recovered = await recoverPersistedTutorTurn(sessionId, message);
+          if (recovered) {
+            setMessages(recovered);
+            setError('');
+            return;
+          }
+        }
         setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
         setInput(message);
         setError(responseError(response, body, current.english,
@@ -557,6 +599,12 @@ export default function TutorDock({ lessonId, open, onClose, currentQuestionId }
       }
       setMessages(currentMessages => [...currentMessages, { role: 'ASSISTANT', mode: selectedMode, message: body.message as string }]);
     } catch {
+      const recovered = await recoverPersistedTutorTurn(sessionId, message);
+      if (recovered) {
+        setMessages(recovered);
+        setError('');
+        return;
+      }
       setMessages(currentMessages => currentMessages.filter(item => item.clientId !== optimisticMessageId));
       setInput(message);
       const current = languageRef.current;
