@@ -88,6 +88,11 @@ fun AccountLifecycleScreen(
         }
         if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         if (status.isNotBlank()) Text(status, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall)
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            Checkbox(checked = consent, onCheckedChange = { consent = it }, enabled = !busy)
+            Text(t("I confirm and consent to this request.", "मैं इस अनुरोध की पुष्टि और सहमति देता/देती हूँ।"),
+                style = MaterialTheme.typography.bodySmall)
+        }
 
         Text(t("Adult verification", "वयस्कता सत्यापन"), style = MaterialTheme.typography.titleMedium)
         Text(t("Status: ", "स्थिति: ") + adultStatus + if (adultCurrent) " · " + t("Verified", "सत्यापित") else "",
@@ -155,10 +160,6 @@ fun AccountLifecycleScreen(
             }
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Checkbox(checked = consent, onCheckedChange = { consent = it }, enabled = !busy)
-            Text(t("I confirm and consent to this request.", "मैं इस अनुरोध की पुष्टि और सहमति देता/देती हूँ।"),
-                style = MaterialTheme.typography.bodySmall)
-        }
+
     }
 }
