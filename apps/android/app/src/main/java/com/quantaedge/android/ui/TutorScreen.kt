@@ -18,6 +18,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Button
@@ -350,6 +351,28 @@ fun TutorScreen(
     var input by rememberSaveable(sessionId) { mutableStateOf("") }
     var pendingInput by rememberSaveable(sessionId) { mutableStateOf("") }
     var selectedMode by rememberSaveable(sessionId) { mutableStateOf("EXPLAIN") }
+    val messageListState = rememberLazyListState()
+    var restoreAfterHistoryLoad by rememberSaveable(sessionId) { mutableStateOf(false) }
+    var messageCountBeforeHistoryLoad by rememberSaveable(sessionId) { mutableStateOf(0) }
+    var visibleIndexBeforeHistoryLoad by rememberSaveable(sessionId) { mutableStateOf(0) }
+    var visibleOffsetBeforeHistoryLoad by rememberSaveable(sessionId) { mutableStateOf(0) }
+    var previousMessageCount by rememberSaveable(sessionId) { mutableStateOf(messages.size) }
+
+    androidx.compose.runtime.LaunchedEffect(loadingOlderMessages, messages.size, sessionId) {
+        if (restoreAfterHistoryLoad && !loadingOlderMessages) {
+            if (messages.size > messageCountBeforeHistoryLoad) {
+                val newlyLoaded = messages.size - messageCountBeforeHistoryLoad
+                messageListState.scrollToItem(
+                    (visibleIndexBeforeHistoryLoad + newlyLoaded).coerceAtLeast(0),
+                    visibleOffsetBeforeHistoryLoad
+                )
+            }
+            restoreAfterHistoryLoad = false
+        } else if (!loadingOlderMessages && messages.size > previousMessageCount && messages.isNotEmpty()) {
+            messageListState.animateScrollToItem(messageListState.layoutInfo.totalItemsCount.coerceAtLeast(1) - 1)
+        }
+        previousMessageCount = messages.size
+    }
 
     androidx.compose.runtime.LaunchedEffect(busy, error, sessionId) {
         if (!busy && pendingInput.isNotBlank()) {
@@ -470,12 +493,26 @@ fun TutorScreen(
             }
 
             LazyColumn(
+                state = messageListState,
                 modifier = Modifier.weight(1f).fillMaxWidth().padding(horizontal = 9.dp, vertical = 6.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 if (hasOlderMessages) {
                     item(key = "load-older-messages") {
-                        OutlinedButton(onClick = onLoadOlder, enabled = !loadingOlderMessages, modifier = Modifier.fillMaxWidth()) {
+                        OutlinedButton(
+                            onClick = {
+                                val visible = messageListState.layoutInfo.visibleItemsInfo.firstOrNull {
+                                    it.key != "load-older-messages"
+                                }
+                                messageCountBeforeHistoryLoad = messages.size
+                                visibleIndexBeforeHistoryLoad = visible?.index ?: messageListState.firstVisibleItemIndex
+                                visibleOffsetBeforeHistoryLoad = visible?.offset ?: messageListState.firstVisibleItemScrollOffset
+                                restoreAfterHistoryLoad = true
+                                onLoadOlder()
+                            },
+                            enabled = !loadingOlderMessages,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             if (loadingOlderMessages) {
                                 CircularProgressIndicator(modifier = Modifier.size(15.dp), strokeWidth = 2.dp)
                                 Spacer(Modifier.size(8.dp))
