@@ -106,7 +106,7 @@ export default function StudentProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<ProfileDraft>(emptyProfile);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [student, setStudent] = useState<{class_code: string; board: string} | null>(null);
+  const [student, setStudent] = useState<{class_code: string; board: string; public_user_id: string} | null>(null);
   const [lifecycle, setLifecycle] = useState<LifecycleStatus | null>(null);
   const [lifecycleBusy, setLifecycleBusy] = useState(false);
   const [lifecycleConsent, setLifecycleConsent] = useState(false);
@@ -133,7 +133,7 @@ export default function StudentProfilePage() {
         const body = await readJson(response);
         if (!response.ok) throw new Error(body.message || 'Unable to load your profile.');
         if (!active) return;
-        setStudent({ class_code: String(body.class_code || ''), board: String(body.board || '') });
+        setStudent({ class_code: String(body.class_code || ''), board: String(body.board || ''), public_user_id: String(body.public_user_id || body.publicUserId || '') });
         setProfileImageUrl(body.profile_image_url || null);
         setDraft({
           displayName: body.display_name || '',
@@ -310,7 +310,7 @@ export default function StudentProfilePage() {
       });
       const body = await readJson(response);
       if (!response.ok) throw new Error(body.message || 'Your profile could not be saved.');
-      setStudent({ class_code: String(body.class_code || ''), board: String(body.board || '') });
+      setStudent({ class_code: String(body.class_code || ''), board: String(body.board || ''), public_user_id: String(body.public_user_id || body.publicUserId || '') });
       setProfileImageUrl(body.profile_image_url || null);
       setDraft({
         displayName: body.display_name || '',
@@ -397,6 +397,7 @@ export default function StudentProfilePage() {
             <section className="student-profile-card">
               <div className="student-profile-card__intro"><span className="student-profile-card__number">02</span><div><h2><LocaleText hinglish="आपके बारे में" english="About you" /></h2><p><LocaleText hinglish="अपनी basic details updated रखें।" english="Keep your basic details up to date." /></p></div></div>
               <div className="student-profile-fields">
+                <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका User ID" english="Your user ID" /><input value={student?.public_user_id || ''} readOnly aria-readonly="true" /><small><LocaleText hinglish="यह 12 अक्षरों का स्थायी ID है। इसे बदला नहीं जा सकता।" english="This 12-character ID is permanent and cannot be changed." /></small></label>
                 <label className="student-profile-field student-profile-field--wide"><LocaleText hinglish="आपका नाम" english="Your name" /><input required minLength={2} maxLength={120} value={draft.displayName} onChange={e => setDraft({ ...draft, displayName: e.target.value })} placeholder={tx('आपको किस नाम से बुलाएँ?','What should we call you?')} autoComplete="name" /></label>
                 <label className="student-profile-field"><LocaleText hinglish="शहर या town" english="City or town" /><input maxLength={100} value={draft.city} onChange={e => setDraft({ ...draft, city: e.target.value })} placeholder={tx('जैसे Patna','e.g. Patna')} autoComplete="address-level2" /></label>
                 <label className="student-profile-field"><LocaleText hinglish="State" english="State" /><input maxLength={100} value={draft.state} onChange={e => setDraft({ ...draft, state: e.target.value })} placeholder={tx('जैसे Bihar','e.g. Bihar')} autoComplete="address-level1" /></label>
