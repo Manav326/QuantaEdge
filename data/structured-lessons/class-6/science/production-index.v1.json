@@ -1,0 +1,210 @@
+{
+  "schema_version": "quantaedge.lesson-production-index.v1",
+  "purpose": "Resume-safe production ledger for bilingual, chapter-specific Class 6 Science lesson data. This tracks content authoring only; it does not imply application implementation, source completeness, approval or publication.",
+  "updated_date": "2026-10-15",
+  "target": {
+    "class": 6,
+    "subject": "Science",
+    "languages": [
+      "en",
+      "hi"
+    ],
+    "books": {
+      "en": {
+        "title": "Curiosity",
+        "book_id": "ncert-c6-english-fecu1",
+        "edition": "Reprint 2026-27",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "edition": "Reprint 2026-27",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "non_negotiable_rules": [
+    "Every authored lesson belongs to exactly one canonical chapter and one topic within that chapter.",
+    "No lesson explanation, visual, interaction, example, or practice item may teach concepts from another chapter. Incidental chapter-scope examples must not become mini-lessons on later topics.",
+    "English and Hindi are authored as a paired record from the same canonical learning objectives. Preserve identical learning-objective IDs, block IDs, asset IDs, question IDs, answer IDs, scoring logic and expected difficulty.",
+    "Every lesson contains a distinct explain section and practice section.",
+    "Practice must contain multiple question types. Each item has localized prompt/options/feedback and a bilingual answer key or rubric, with consistent grading between languages.",
+    "Generated explanations, diagrams and practice questions must be labelled as authored material, not represented as verbatim NCERT content.",
+    "Only source-derived material is grounded by the book. Original teaching diagrams must be clearly marked as generated. V3 visual candidates remain review-only until each is checked for semantic fit, alt text, provenance, rights and approval.",
+    "A lesson marked generated is not thereby source-complete, fact-checked, bilingual-approved or publishable.",
+    "After every newly generated topic lesson, commit the lesson JSON first, then immediately update this progress index with commit/path, status and exact next step.",
+    "Work on these content artifacts only unless UI implementation is separately requested. Preserve existing application data and workflows."
+  ],
+  "production_summary": {
+    "chapters_total": 12,
+    "topics_generated": 1,
+    "topics_reviewed": 0,
+    "topics_bilingual_approved": 0,
+    "topics_publishable": 0,
+    "lessons_committed": 1,
+    "last_completed_authoring_step": "Drafted topic 1 explanation, bilingual visual metadata, generated curiosity-loop diagram data, activity prompt and 8 bilingual practice items in one structured JSON.",
+    "current_chapter_number": 1,
+    "current_topic_number": 1,
+    "next_action": "Reconcile the Hindi source pages and English source visuals for topic 1, then generate topic 2 (scientific method) as a separate bilingual lesson and update this index."
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "title_en": "The Wonderful World of Science",
+      "title_hi": "विज्ञान का अनूठा संसार",
+      "state": "IN_PROGRESS",
+      "topic_plan_state": "INITIAL_PLAN_ONLY",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch01-t01",
+          "title_en": "Science Begins with Curiosity",
+          "title_hi": "विज्ञान की शुरुआत जिज्ञासा से",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "committed_at": "2026-10-15",
+          "commit_sha": "1f0f8e3c75da637c401731c4a85c652a2a1847b0"
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch01-t02",
+          "title_en": "The Scientific Method",
+          "title_hi": "वैज्ञानिक विधि",
+          "artifact_path": null,
+          "artifact_status": "NOT_STARTED"
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch01-t03",
+          "title_en": "Curiosity in Everyday Life and Learning Together",
+          "title_hi": "रोज़मर्रा के जीवन में जिज्ञासा और साथ मिलकर सीखना",
+          "artifact_path": null,
+          "artifact_status": "NOT_STARTED"
+        }
+      ],
+      "chapter_source_review": "NOT_COMPLETE",
+      "chapter_visual_review": "NOT_COMPLETE",
+      "human_approval": "NOT_REVIEWED"
+    },
+    {
+      "number": 2,
+      "title_en": "Diversity in the Living World",
+      "title_hi": "सजीव जगत में विविधता",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 3,
+      "title_en": "Mindful Eating: A Path to a Healthy Body",
+      "title_hi": "उचित आहार— स्वस्थ शरीर का आधार",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 4,
+      "title_en": "Exploring Magnets",
+      "title_hi": "चुंबकों को जानें",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 5,
+      "title_en": "Measurement of Length and Motion",
+      "title_hi": "लंबाई एवं गति का मापन",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 6,
+      "title_en": "Materials Around Us",
+      "title_hi": "हमारे आस-पास की सामग्री",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 7,
+      "title_en": "Temperature and its Measurement",
+      "title_hi": "ताप एवं उसका मापन",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 8,
+      "title_en": "A Journey through States of Water",
+      "title_hi": "जल की विविध अवस्थाओं की यात्रा",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 9,
+      "title_en": "Methods of Separation in Everyday Life",
+      "title_hi": "दैनिक जीवन में पृथक्करण विधियाँ",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 10,
+      "title_en": "Living Creatures: Exploring their Characteristics",
+      "title_hi": "सजीव-विशेषताओं का अन्वेषण",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 11,
+      "title_en": "Nature’s Treasures",
+      "title_hi": "प्रकृति की अमूल्य संपदा",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    },
+    {
+      "number": 12,
+      "title_en": "Beyond Earth",
+      "title_hi": "पृथ्वी से परे",
+      "state": "NOT_STARTED",
+      "topic_plan_state": "PENDING_SOURCE_AUDIT",
+      "topics": []
+    }
+  ],
+  "source_audit_dependencies": {
+    "english_text_extraction_audit": "docs/content-pilot-input/class-6-science-english-extraction-audit.md",
+    "english_chapter_map": "data/textbook-visual-candidates-v3/class6-curiosity-en/chapter-map.v1.json",
+    "english_visual_candidate_summary": "data/textbook-visual-candidates-v3/class6-curiosity-en/summary.v3.json",
+    "visual_render_contract": "docs/ai/visual-render-contract.v1.json",
+    "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification."
+  },
+  "resume_instructions": [
+    "Read this index first and open the exact lesson artifact recorded above.",
+    "Do not regenerate or overwrite completed lesson JSON blindly; inspect it and make additive corrections.",
+    "Continue on main; do not create an extra branch for this content-authoring stream.",
+    "For the active topic, resolve Hindi page mapping and source visual review gaps and update its status only when evidence exists.",
+    "Then generate topic 2 with a separate explain/practice structure and paired en/hi content. Commit it, then update this index immediately.",
+    "Do not mark a chapter complete until every topic has source reconciliation, visual mapping, bilingual parity and practice review."
+  ]
+}
