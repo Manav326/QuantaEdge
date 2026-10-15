@@ -44,6 +44,11 @@ on:
         required: true
         default: false
         type: boolean
+      publish_stable:
+        description: Update the stable GHCR tag (turn off for model comparisons or partial diagnostic runs)
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -66,6 +71,7 @@ jobs:
       VISION_MODEL: ${{ inputs.model }}
       MAX_ASSETS: ${{ inputs.max_assets }}
       RESTART_ANALYSIS: ${{ inputs.restart_analysis }}
+      PUBLISH_STABLE: ${{ inputs.publish_stable }}
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
@@ -275,7 +281,11 @@ jobs:
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           version_tag="class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
           oras push "$package:$version_tag" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
-          oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          if [[ "$PUBLISH_STABLE" == "true" ]]; then
+            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$RUNNER_TEMP/$BOOK_SLUG-visual-bundle.tar.gz:application/gzip"
+          else
+            echo "Skipping stable GHCR tag update for this diagnostic/model-comparison run."
+          fi
           echo "VISUAL_PACKAGE=$package" >> "$GITHUB_ENV"
           echo "VISUAL_VERSION_TAG=$version_tag" >> "$GITHUB_ENV"
           echo "VISUAL_SHA256=$(cut -d' ' -f1 "$RUNNER_TEMP/$BOOK_SLUG-bundle.sha256")" >> "$GITHUB_ENV"
@@ -308,7 +318,7 @@ jobs:
               "analysis_summary": analysis["summary"],
               "ghcr_package": package,
               "version_tag": tag,
-              "stable_tag": f"class{os.environ['CLASS_NO']}-{slug}-latest",
+              "stable_tag": f"class{os.environ['CLASS_NO']}-{slug}-latest" if os.environ.get("PUBLISH_STABLE", "true").lower() == "true" else None,
               "bundle_tar_sha256": digest,
               "publication_allowed": False,
               "review_required": True,
