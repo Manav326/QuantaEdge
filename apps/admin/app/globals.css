@@ -923,3 +923,9 @@ body.qe-session-bfcache-guard::after{content:'Verifying your secure session…';
 .qe-visual-chapter-suggestion{margin:6px 0;padding:7px 8px;border-radius:8px;background:#f4f7fc;border:1px solid #e0e7f1}
 .qe-visual-chapter-suggestion b{display:block;font-size:10px;line-height:1.4;color:#435978}
 .qe-visual-chapter-suggestion small{display:block;font-size:10px;line-height:1.4;margin-top:3px;color:#69738a}
+
+
+.qe-preview-image-zoomable{cursor:zoom-in}
+.qe-admin-visual-lightbox{position:fixed;inset:0;z-index:5000;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:12px;padding:20px;background:rgba(15,23,42,.9)}
+.qe-admin-visual-lightbox button{border:1px solid rgba(255,255,255,.45);border-radius:9px;padding:8px 14px;background:#fff;color:#172033;font:inherit;font-weight:800;cursor:pointer}
+.qe-admin-visual-lightbox img{align-self:center;max-width:94vw;max-height:82vh;object-fit:contain;border-radius:10px;background:#fff}

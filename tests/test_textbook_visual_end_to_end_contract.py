@@ -108,7 +108,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                          'AnimatedImageDrawable', 'Dialog'):
             with self.subTest(android_feature=required):
                 self.assertIn(required, android)
-        for required in ("LEARNER VISUAL PREVIEW", "caption_hi", "alt_hi", "Source provenance"):
+        for required in ("LEARNER VISUAL PREVIEW", "caption_hi", "alt_hi", "Source provenance", "qe-admin-visual-lightbox", "View source page", "फ़ोटो"):
             with self.subTest(admin_feature=required):
                 self.assertIn(required, admin)
         self.assertIn("Android 9", self.contract["visual_kinds"][-1]["presentation"] if self.contract["visual_kinds"][-1]["id"] == "SEQUENCE" else
