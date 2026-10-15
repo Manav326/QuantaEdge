@@ -59,7 +59,7 @@ def load_page_context(manifest: dict[str, Any], manifest_path: Path, page_count:
                 raise ValueError(f"Invalid JSON in existing text JSONL at line {line_no}.") from exc
             if not isinstance(row, dict):
                 raise ValueError(f"Existing text JSONL line {line_no} must be an object.")
-            number = row.get("source_book_page_number")
+            number = row.get("source_book_page_number", row.get("source_pdf_page_number"))
             if not isinstance(number, int) or not 1 <= number <= page_count or number in contexts:
                 raise ValueError(f"Invalid or duplicate source page number in text JSONL line {line_no}.")
             if row.get("book_id") and row["book_id"] != manifest.get("book_id"):

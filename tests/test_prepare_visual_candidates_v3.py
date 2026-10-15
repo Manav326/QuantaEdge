@@ -77,6 +77,25 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
             render_page_previews=True, preview_width=600,
         )
 
+    def test_accepts_source_pdf_page_number_alias_for_existing_jsonl(self):
+        rows = [
+            json.loads(line)
+            for line in (self.root / "pages.jsonl").read_text(encoding="utf-8").splitlines()
+        ]
+        for row in rows:
+            row["source_pdf_page_number"] = row.pop("source_book_page_number")
+        (self.root / "pages.jsonl").write_text(
+            "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+        alias_inventory_dir = self.root / "inventory-pdf-page-alias"
+        inventory = build_inventory(
+            self.pdf_path, self.manifest_path, alias_inventory_dir,
+            render_page_previews=False,
+        )
+        self.assertEqual("existing_text_jsonl", inventory["text_context_source"])
+        self.assertEqual(16, inventory["source"]["page_count"])
+
     def test_prepares_source_bound_candidates_across_page_strata(self):
         pack = prepare_candidates(
             self.inventory_dir / "visual-inventory.v1.json",
