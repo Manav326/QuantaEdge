@@ -564,7 +564,18 @@ internal fun parseQuantaEdgeCertificateQr(raw: String, debugBuild: Boolean): Str
         host in setOf("localhost", "127.0.0.1") &&
         (uri.port == -1 || uri.port in 1..65535)
     if ((!production && !localDevelopment) || uri.rawUserInfo != null ||
-        uri.path != "/certificate/verify" || !uri.rawFragment.isNullOrEmpty()) return null
+        !uri.rawFragment.isNullOrEmpty()) return null
+
+    // Accept both public QR links and the explicit verification API URL that can be
+    // encoded in a linear barcode. Host/scheme validation happens before either route.
+    val path = uri.path ?: return null
+    val apiPrefix = "/api/v1/certificates/verify/"
+    if (path.startsWith(apiPrefix)) {
+        if (!uri.rawQuery.isNullOrEmpty()) return null
+        val pathCode = path.removePrefix(apiPrefix).trim().uppercase()
+        return pathCode.takeIf { it.matches(Regex("QE-[0-9]{4}-[A-F0-9]{16}")) }
+    }
+    if (path != "/certificate/verify") return null
 
     val query = uri.rawQuery ?: return null
     val codes = query.split("&").mapNotNull { pair ->

@@ -22,6 +22,20 @@ class CertificateQrVerificationTest {
     }
 
     @Test
+    fun acceptsOfficialVerificationApiUrlFromACode128Barcode() {
+        assertEquals(
+            code,
+            parseQuantaEdgeCertificateQr("https://qe.thinkwithsujeet.in/api/v1/certificates/verify/$code", false)
+        )
+        assertNull(
+            parseQuantaEdgeCertificateQr("https://qe.thinkwithsujeet.in/api/v1/certificates/verify/$code/other", false)
+        )
+        assertNull(
+            parseQuantaEdgeCertificateQr("https://example.com/api/v1/certificates/verify/$code", false)
+        )
+    }
+
+    @Test
     fun acceptsLocalhostOnlyForDebugBuilds() {
         assertEquals(
             code,
