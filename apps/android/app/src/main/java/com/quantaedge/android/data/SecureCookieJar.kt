@@ -1,5 +1,6 @@
 package com.quantaedge.android.data
 
+import android.app.backup.BackupManager
 import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -17,13 +18,14 @@ import javax.crypto.spec.GCMParameterSpec
 
 /**
  * Normal cookie state is encrypted with Android Keystore. A dedicated recovery preference file
- * contains only the current student OR parent cookie pair and is the only shared-preference file
- * allowed into Android Auto Backup. Protected resources, offline attempts, and profile data remain
+ * contains only the current student OR parent refresh cookie and any still-valid access cookie.
+ * It is the only shared-preference file allowed into Android Auto Backup. Protected resources, offline attempts, and profile data remain
  * excluded. The backend revokes these credentials on explicit logout and enforces absolute expiry.
  */
 class SecureCookieJar(context: Context) : CookieJar {
     private val preferences = context.getSharedPreferences("qe_secure_cookie_state", Context.MODE_PRIVATE)
     private val recoveryPreferences = context.getSharedPreferences("qe_session_restore", Context.MODE_PRIVATE)
+    private val backupManager = BackupManager(context.applicationContext)
     private val lock = Any()
 
     @Volatile
@@ -82,6 +84,7 @@ class SecureCookieJar(context: Context) : CookieJar {
                 persistRecoverySnapshot(all, workspace)
             } else if (all.isNotEmpty() && all.none { it.expiresAt > System.currentTimeMillis() }) {
                 recoveryPreferences.edit().clear().commit()
+                backupManager.dataChanged()
             }
         }
     }
@@ -89,6 +92,7 @@ class SecureCookieJar(context: Context) : CookieJar {
     fun clear() = synchronized(lock) {
         preferences.edit().clear().commit()
         recoveryPreferences.edit().clear().commit()
+        backupManager.dataChanged()
         activeWorkspace = "STUDENT"
     }
 
@@ -144,16 +148,22 @@ class SecureCookieJar(context: Context) : CookieJar {
         val selected = cookies.filter {
             it.name in allowedNames && it.expiresAt > System.currentTimeMillis()
         }
-        val hasAccess = selected.any { it.name in setOf("QE_PARENT_SESSION", "QE_STUDENT_SESSION") }
+        // The access cookie expires quickly; the unexpired refresh cookie alone can recover a
+        // session by refreshing /auth/me after reinstall. Never delete it just because access expired.
         val hasRefresh = selected.any { it.name in setOf("QE_PARENT_REFRESH", "QE_STUDENT_REFRESH") }
-        if (!hasAccess || !hasRefresh) {
+        if (!hasRefresh) {
             recoveryPreferences.edit().clear().commit()
+            backupManager.dataChanged()
             return
         }
+        val recoveryPayload = cookieArray(selected).toString()
+        val changed = recoveryPreferences.getString(KEY_WORKSPACE, null) != workspace ||
+            recoveryPreferences.getString(KEY_RECOVERY_COOKIES, null) != recoveryPayload
         recoveryPreferences.edit()
             .putString(KEY_WORKSPACE, workspace)
-            .putString(KEY_RECOVERY_COOKIES, cookieArray(selected).toString())
+            .putString(KEY_RECOVERY_COOKIES, recoveryPayload)
             .apply()
+        if (changed) backupManager.dataChanged()
     }
 
     private fun cookieArray(cookies: List<Cookie>): JSONArray {
