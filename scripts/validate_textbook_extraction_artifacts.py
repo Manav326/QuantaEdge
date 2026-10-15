@@ -40,13 +40,18 @@ def normalize_subject(value: Any) -> str:
 
 
 def class_matches(item: dict[str, Any], grade: int) -> bool:
+    roman_classes = {"vi": 6, "vii": 7, "viii": 8, "ix": 9, "x": 10, "xi": 11, "xii": 12}
     values = [item.get("class")]
     classes = item.get("classes")
     if isinstance(classes, list):
         values.extend(classes)
     else:
         values.append(classes)
-    return any(re.search(rf"(?<!\d){grade}(?!\d)", str(value or "")) for value in values)
+    for value in values:
+        token = str(value or "").strip().casefold()
+        if roman_classes.get(token) == grade or re.search(rf"(?<!\d){grade}(?!\d)", token):
+            return True
+    return False
 
 
 def validate(registry_index: Path, extraction_dir: Path, grade: int, language: str) -> dict[str, Any]:
