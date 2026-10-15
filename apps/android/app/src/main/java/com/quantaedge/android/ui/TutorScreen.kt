@@ -343,6 +343,7 @@ fun TutorScreen(
     onSend: (String, String) -> Unit,
     onLoadOlder: () -> Unit,
     onNewChat: () -> Unit,
+    onMinimize: () -> Unit,
     onRetry: () -> Unit,
     onClose: () -> Unit
 ) {
@@ -420,6 +421,15 @@ fun TutorScreen(
             ) {
                 IconButton(onClick = onNewChat, enabled = !busy && !connecting && available, modifier = Modifier.size(35.dp)) {
                     Text("＋", color = Color.White, fontSize = 23.sp)
+                }
+            }
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = { PlainTooltip { Text(t("Minimize tutor", "ट्यूटर छोटा करें")) } },
+                state = rememberTooltipState()
+            ) {
+                IconButton(onClick = onMinimize, modifier = Modifier.size(35.dp)) {
+                    Text("−", color = Color.White, fontSize = 23.sp, lineHeight = 23.sp)
                 }
             }
             TooltipBox(
