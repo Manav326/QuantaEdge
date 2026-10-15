@@ -76,7 +76,7 @@ class BuildVisualLessonAttachmentManifestTests(unittest.TestCase):
         value = json.loads(self.pack_path.read_text(encoding="utf-8"))
         value["schema_version"] = "unknown"
         self.pack_path.write_text(json.dumps(value), encoding="utf-8")
-        with self.assertRaisesRegex(ValueError, "expected a quantaedge"):
+        with self.assertRaisesRegex(ValueError, "Expected a quantaedge"):
             build_catalog(self.pack_path, self.pack_root, self.repo, "class6-curiosity-en")
 
 

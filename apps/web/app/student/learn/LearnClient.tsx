@@ -159,7 +159,6 @@ function Block({ block, onTutorOpen }:{block:Detail['blocks'][number];onTutorOpe
     let embed=url;
     if(youtube){try{const parsedUrl=new URL(url);const id=parsedUrl.hostname.includes('youtu.be')?parsedUrl.pathname.slice(1):parsedUrl.searchParams.get('v')||'';if(id)embed='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)}catch{}}
     const isVisual=['IMAGE','DIAGRAM','ANIMATION'].includes(block.block_type);
-    const languageKey=locale==='english'?'en':'hi';
     const localized=(key:string)=>String((locale==='english'?data[key]:data[key+'_hi'])||data[key]||'');
     const title=localized('title')||(block.block_type==='AUDIO'?(locale==='english'?'Listen and learn':'सुनकर समझें'):block.block_type==='VIDEO'?(locale==='english'?'Watch and learn':'देखकर समझें'):(locale==='english'?'Learning visual':'सीखने का चित्र'));
     const description=localized('description');
