@@ -423,7 +423,7 @@ class AuthServiceTest {
     assertEquals("PARENT", tokens.context().role());
     verify(jdbc).update(contains("set token_hash=?,refresh_token_hash=?"), any(), any(), any(), any(), eq(91L));
     verify(jdbc, org.mockito.Mockito.atLeastOnce()).queryForList(
-        contains("then interval '30 minutes' else interval '4 hours' end)"), anyString());
+        contains("when s.client_type='ANDROID' and s.workspace_key in ('LEARNING','PARENT','STUDENT') then interval '30 days'"), anyString());
   }
 
 
