@@ -14,7 +14,7 @@
 
 - The manifest identifies the source as NCERT *Curiosity*, Class 6 Science, English, Reprint 2026–27.
 - The source PDF SHA-256 recorded in the manifest is `7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73`; the manifest records the same hash for the original book and extracted asset.
-- The extraction manifest reports **272/272 PDF pages processed**, 265 pages with `TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW`, and **7 pages marked `LOW_TEXT_REVIEW`**.
+- The extraction manifest reports **272/272 PDF pages processed**, 265 pages with `TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW`, and **7 pages marked `LOW_TEXT_REVIEW`**. Those seven are PDF pages **10, 18, 78, 140, 160, 200, and 224**; their extracted text is only the recurring “Reprint 2026-27” or “Notes / Reprint 2026-27” footer. These may be intentional notes/blank pages, not missing lesson text, but must be checked against rendered source pages and classified explicitly.
 - The extraction report says 684 pages were processed across two English books (Mathematics and Science). Do not mistake that combined report for the Science-only count.
 - The JSONL is a whole-book, page-addressable text extraction. Every sampled Science record has `chapter_title: null`; chapter-level text bundles are not yet produced by this artifact.
 - Page coverage and matching hashes establish file identity and page processing, **not** that every printed word, equation, table, diagram label, activity, or visual has been captured accurately.
@@ -43,7 +43,7 @@ The official NCERT contents list contains these 12 chapters. The list below is t
 ## Initial findings / defects to resolve
 
 1. **Chapter-level completeness has not yet been established.** The committed artifact contains one page stream for the whole book, not independently bounded chapter extracts. A 272-page count alone cannot prove every chapter is present or correctly split.
-2. **Seven pages are explicitly low-text review cases.** Enumerate their page numbers from the JSONL review statuses, render those pages, and compare them visually with the source PDF.
+2. **Seven pages are explicitly low-text review cases:** PDF pages 10, 18, 78, 140, 160, 200, and 224. The extracted text is only a reprint footer or notes-page footer. Verify the rendered source pages and classify each as intentional notes/blank/front matter or an extraction defect; do not count them as missing content without checking.
 3. **Reading order is suspect on image/table-heavy pages.** The sampled page records around the Solar System section interleave columns, callouts, figure captions, and body text. Do not use these raw strings directly as teaching content.
 4. **Text extraction cannot preserve all visuals.** Create a per-page visual inventory of figures, diagrams, tables, activity steps, labels, captions, and any content conveyed only by an image. Confirm every item remains available in the source page or is faithfully represented in the derived material.
 5. **Page-number semantics are ambiguous/misleading.** Rename the current field to `pdf_page_number` or store separate `pdf_page_number` and `printed_page_number`; derive printed page numbers from source evidence rather than assuming PDF index equals printed pagination.
