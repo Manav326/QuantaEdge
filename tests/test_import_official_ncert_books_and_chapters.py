@@ -661,6 +661,59 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         self.assertNotEqual(one, whole)
         self.assertNotEqual(two, whole)
 
+    def test_course_id_is_stable_scope_and_not_the_course_name(self):
+        common = {
+            "class_code": "6", "subject_code": "maths", "language": "english",
+            "scope": "SUBJECT_BOOK", "chapter_id": None, "book_part": None,
+        }
+        first = importer.slot_key({**common, "course_id": 907, "program_code": "NAVODAYA_BATCH"})
+        renamed = importer.slot_key({**common, "course_id": 907, "program_code": "RENAMED_LATER"})
+        another = importer.slot_key({**common, "course_id": 908, "program_code": "NAVODAYA_BATCH"})
+        self.assertEqual("course:907", first[-1])
+        self.assertEqual(first, renamed)
+        self.assertNotEqual(first, another)
+
+    def test_read_chapters_uses_numeric_course_id_and_explicit_source_grade(self):
+        from urllib.parse import parse_qs, urlparse
+
+        calls = []
+
+        def fake_api(base, cookie, path, **kwargs):
+            calls.append(path)
+            query = parse_qs(urlparse(path).query)
+            grade = query["classCode"][0]
+            subject = query["subjectCode"][0]
+            return [{
+                "class_code": grade, "subject_code": subject,
+                "course_id": 907, "program_code": "NAVODAYA_BATCH",
+                "chapter_id": 601 if subject == "maths" else 602,
+                "chapter_code": "sample-" + subject,
+                "chapter_name": "Sample " + subject, "chapter_active": True,
+                "chapter_sort_order": 1,
+            }]
+
+        with patch.object(importer, "api_call", side_effect=fake_api):
+            rows = importer.read_chapters(
+                "http://localhost:8080", "test-session", grades=("6",), course_id=907
+            )
+        self.assertEqual({("6", "maths"), ("6", "science")}, set(rows))
+        self.assertEqual(2, len(calls))
+        for path in calls:
+            query = parse_qs(urlparse(path).query)
+            self.assertEqual(["907"], query.get("courseId"))
+            self.assertNotIn("programCode", query)
+
+    def test_course_scope_requires_source_grade_selection(self):
+        from argparse import Namespace
+
+        args = Namespace(
+            root=str(self.root), books_dir=str(self.root), languages=["english"],
+            api_url="http://localhost:8080", course_id=907, program_code="",
+            grades=None, apply=False, report="", resume_report="",
+        )
+        with self.assertRaisesRegex(ValueError, "independent of source grade"):
+            importer.run(args)
+
     def test_complete_book_original_is_not_rewritten_by_split(self):
         source = self.make_book()
         original_hash = importer.sha256_file(source)
