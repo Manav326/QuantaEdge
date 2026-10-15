@@ -138,8 +138,10 @@ fun QuantaEdgeApp() {
     var parentSection by rememberSaveable { mutableStateOf("family") }
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var studentProgramsLoadFailed by remember { mutableStateOf(false) }
     var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
     var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
+    var studentTextbookDocumentsLoadFailed by remember { mutableStateOf(false) }
     var accountLifecycle by remember { mutableStateOf(JSONObject()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
@@ -332,9 +334,11 @@ fun QuantaEdgeApp() {
     }
 
     suspend fun refreshStudentPrograms() {
-        val programs = runCatching {
+        val response = runCatching {
             ApiClient.getArray("/api/v1/students/me/programs").objectItems()
-        }.getOrDefault(emptyList())
+        }
+        studentProgramsLoadFailed = response.isFailure
+        val programs = response.getOrDefault(emptyList())
         studentPrograms = programs
         val progress = linkedMapOf<Long, JSONObject>()
         programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }.forEach { program ->
@@ -348,14 +352,17 @@ fun QuantaEdgeApp() {
 
     suspend fun refreshStudentTextbookDocuments() {
         val loaded = mutableListOf<JSONObject>()
+        var requestFailed = false
         listOf("maths", "science").forEach { subjectCode ->
-            val rows = runCatching {
+            val response = runCatching {
                 ApiClient.getArray("/api/v1/learning/documents?subjectCode=" +
                     ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage).objectItems()
-            }.getOrDefault(emptyList())
-            loaded.addAll(rows)
+            }
+            if (response.isFailure) requestFailed = true
+            loaded.addAll(response.getOrDefault(emptyList()))
         }
         studentTextbookDocuments = loaded.distinctBy { it.optLongAny("document_id", "id") }
+        studentTextbookDocumentsLoadFailed = requestFailed && studentTextbookDocuments.isEmpty()
     }
 
     suspend fun enterSignedInHome(user: JSONObject) {
@@ -757,6 +764,7 @@ fun QuantaEdgeApp() {
             resultsReturnRoute = route
             resultsPageOffset = 0
         }
+        route = AppRoute.ASSESSMENT_RESULTS
         runTask {
             loadAssessmentResultsData()
             route = AppRoute.ASSESSMENT_RESULTS
@@ -1548,8 +1556,10 @@ fun QuantaEdgeApp() {
             auth = JSONObject()
             studentProfile = JSONObject()
             studentPrograms = emptyList()
+            studentProgramsLoadFailed = false
             courseProgress = emptyMap()
             studentTextbookDocuments = emptyList()
+            studentTextbookDocumentsLoadFailed = false
             accountLifecycle = JSONObject()
             route = AppRoute.WELCOME
             loginMode = "PARENT"
@@ -1782,6 +1792,11 @@ fun QuantaEdgeApp() {
     }
 
     fun openParentReport(child: JSONObject) {
+        val childId = child.longAny("id")
+        parentReport = JSONObject().put("_childId", childId)
+            .put("_childName", child.textAny("display_name", "displayName"))
+        parentCertificates = emptyList()
+        route = AppRoute.PARENT_REPORT
         runTask {
             val id = child.longAny("id")
             parentReport = ApiClient.getObject("/api/v1/guardians/children/" + id + "/report")
@@ -2338,10 +2353,12 @@ fun QuantaEdgeApp() {
                         profile = studentProfile,
                         recommendation = recommendation,
                         programs = studentPrograms,
+                        programsLoadFailed = studentProgramsLoadFailed,
                         courseProgress = courseProgress,
                         onEnrollCourse = ::enrollCourse,
                         onOpenCourseSubject = { code, courseId -> openSubject(code, courseId) },
                         textbookDocuments = studentTextbookDocuments,
+                        textbookDocumentsLoadFailed = studentTextbookDocumentsLoadFailed,
                         onOpenDocument = ::openDocument,
                         language = language,
                         busy = busy,
@@ -2415,6 +2432,7 @@ fun QuantaEdgeApp() {
                     AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
                         children = archivedChildren,
                         busy = busy,
+                        error = error,
                         onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
@@ -2913,10 +2931,12 @@ private fun StudentHomeScreen(
     onOpenRecommendation: (JSONObject) -> Unit,
     onClasses: (String) -> Unit,
     programs: List<JSONObject>,
+    programsLoadFailed: Boolean,
     courseProgress: Map<Long, JSONObject>,
     onEnrollCourse: (Long) -> Unit,
     onOpenCourseSubject: (String, Long) -> Unit,
     textbookDocuments: List<JSONObject>,
+    textbookDocumentsLoadFailed: Boolean,
     onOpenDocument: (JSONObject) -> Unit
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { if (language == "hi") "विद्यार्थी" else "Learner" } }
@@ -3075,6 +3095,7 @@ private fun StudentHomeScreen(
 
         StudentCourseCatalog(
             programs = programs,
+            programsLoadFailed = programsLoadFailed,
             courseProgress = courseProgress,
             language = language,
             busy = busy,
@@ -3084,10 +3105,12 @@ private fun StudentHomeScreen(
         )
         StudentTextbookQuickLinks(
             documents = textbookDocuments,
+            loadFailed = textbookDocumentsLoadFailed,
             language = language,
             busy = busy,
             onOpenDocument = onOpenDocument,
-            onBrowseSubject = onResources
+            onBrowseSubject = onResources,
+            onRefresh = onRefresh
         )
 
         Text(if (language == "hi") "त्वरित पहुँच" else "Quick access",

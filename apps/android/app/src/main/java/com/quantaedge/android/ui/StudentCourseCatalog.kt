@@ -22,6 +22,7 @@ import org.json.JSONObject
 @Composable
 fun StudentCourseCatalog(
     programs: List<JSONObject>,
+    programsLoadFailed: Boolean,
     courseProgress: Map<Long, JSONObject>,
     language: String,
     busy: Boolean,
@@ -43,11 +44,22 @@ fun StudentCourseCatalog(
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.fillMaxWidth().padding(14.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(if (hi) "अभी कोई course उपलब्ध नहीं है" else "No courses available yet",
-                            style = MaterialTheme.typography.titleSmall)
                         Text(
-                            if (hi) "प्रकाशित courses यहाँ दिखेंगे। फिर से जाँचने के लिए रिफ्रेश करें।"
-                            else "Published courses will appear here. Refresh to check again.",
+                            when {
+                                programsLoadFailed && hi -> "Courses लोड नहीं हो पाए"
+                                programsLoadFailed -> "Courses couldn't be loaded"
+                                hi -> "अभी कोई course उपलब्ध नहीं है"
+                                else -> "No courses available yet"
+                            },
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        Text(
+                            when {
+                                programsLoadFailed && hi -> "कनेक्शन जाँचें और फिर प्रयास करें।"
+                                programsLoadFailed -> "Check the connection and retry."
+                                hi -> "प्रकाशित courses यहाँ दिखेंगे। फिर से जाँचने के लिए रिफ्रेश करें।"
+                                else -> "Published courses will appear here. Refresh to check again."
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

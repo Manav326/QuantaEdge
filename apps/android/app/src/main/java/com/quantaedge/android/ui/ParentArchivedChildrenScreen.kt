@@ -30,6 +30,7 @@ import org.json.JSONObject
 fun ParentArchivedChildrenScreen(
     children: List<JSONObject>,
     busy: Boolean,
+    error: String,
     onRefresh: () -> Unit,
     onRestore: (JSONObject) -> Unit
 ) {
@@ -91,7 +92,14 @@ fun ParentArchivedChildrenScreen(
                         style = MaterialTheme.typography.bodyMedium)
                 }
             } else {
-                EmptyState("No archived profiles", "Archived children appear here.")
+                if (error.isNotBlank()) {
+                    EmptyState(
+                        t("Archived profiles couldn't be loaded", "Archived profiles लोड नहीं हो पाए"),
+                        t("Check the error above and retry.", "ऊपर दिया गया error जाँचें और फिर प्रयास करें।")
+                    )
+                } else {
+                    EmptyState("No archived profiles", "Archived children appear here.")
+                }
                 TextButton(onClick = onRefresh, enabled = !busy,
                     modifier = Modifier.fillMaxWidth()) {
                     Text(t("Retry", "फिर प्रयास करें"))

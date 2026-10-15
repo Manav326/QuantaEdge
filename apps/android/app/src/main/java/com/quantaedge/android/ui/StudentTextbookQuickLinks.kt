@@ -22,10 +22,12 @@ import org.json.JSONObject
 @Composable
 fun StudentTextbookQuickLinks(
     documents: List<JSONObject>,
+    loadFailed: Boolean,
     language: String,
     busy: Boolean,
     onOpenDocument: (JSONObject) -> Unit,
-    onBrowseSubject: (String) -> Unit
+    onBrowseSubject: (String) -> Unit,
+    onRefresh: () -> Unit
 ) {
     val hi = language == "hi"
     val subjects = listOf("maths", "science")
@@ -42,14 +44,31 @@ fun StudentTextbookQuickLinks(
                 Card(modifier = Modifier.fillMaxWidth()) {
                     Column(modifier = Modifier.fillMaxWidth().padding(12.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(if (hi) "अभी कोई textbook PDF उपलब्ध नहीं है" else "No textbook PDFs available yet",
-                            style = MaterialTheme.typography.titleSmall)
                         Text(
-                            if (hi) "विषय चुनकर किताबों और अध्यायों की उपलब्धता दोबारा जाँचें।"
-                            else "Choose a subject to check book and chapter availability again.",
+                            when {
+                                loadFailed && hi -> "किताबों की सूची लोड नहीं हो पाई"
+                                loadFailed -> "Textbook list couldn't be loaded"
+                                hi -> "अभी कोई textbook PDF उपलब्ध नहीं है"
+                                else -> "No textbook PDFs available yet"
+                            },
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                        Text(
+                            when {
+                                loadFailed && hi -> "कनेक्शन जाँचें या विषयवार library खोलें।"
+                                loadFailed -> "Check the connection or open the subject library."
+                                hi -> "विषय चुनकर किताबों और अध्यायों की उपलब्धता दोबारा जाँचें।"
+                                else -> "Choose a subject to check book and chapter availability again."
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        if (loadFailed) {
+                            OutlinedButton(onClick = onRefresh, enabled = !busy,
+                                modifier = Modifier.fillMaxWidth()) {
+                                Text(if (hi) "सूची फिर लोड करें" else "Retry textbook list")
+                            }
+                        }
                         Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { onBrowseSubject("maths") }, enabled = !busy) {

@@ -99,7 +99,7 @@ fun StudentProgressScreen(
                     sessions.optString("minutes_30d", "0") + " " + t("minutes tracked", "ट्रैक किए गए मिनट"), Modifier.fillMaxWidth())
             }
             item { Text(t("Subject progress", "विषयवार प्रगति"), style = MaterialTheme.typography.titleLarge) }
-            if (curriculum.isEmpty()) item {
+            if (curriculum.isEmpty() && !busy) item {
                 EmptyState(t("No subject progress yet", "अभी विषयवार प्रगति नहीं"),
                     t("Statistics will appear when published lessons and subject enrolments for your class are available.",
                         "आपकी कक्षा के प्रकाशित पाठ और विषय enrollment उपलब्ध होने पर आँकड़े यहाँ दिखेंगे।"))
@@ -118,7 +118,7 @@ fun StudentProgressScreen(
                 }
             }
             item { Text(t("Concepts to revisit", "जिन अवधारणाओं पर फिर काम कर सकते हैं"), style = MaterialTheme.typography.titleLarge) }
-            if (concepts.isEmpty()) item {
+            if (concepts.isEmpty() && !busy) item {
                 Text(t("No concept mastery is available yet. It will appear after practicing questions from published lessons.",
                     "अभी अवधारणाओं पर पकड़ की जानकारी उपलब्ध नहीं है। प्रकाशित पाठ के प्रश्नों का अभ्यास करने पर यह यहाँ दिखाई देगी।"),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
@@ -136,7 +136,7 @@ fun StudentProgressScreen(
                 }
             }
             item { Text(t("Recent tests", "हाल के टेस्ट"), style = MaterialTheme.typography.titleLarge) }
-            if (recentTests.isEmpty()) item {
+            if (recentTests.isEmpty() && !busy) item {
                 Text(t("No test attempts yet.", "अभी कोई टेस्ट प्रयास नहीं है。"),
                     style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
             }
