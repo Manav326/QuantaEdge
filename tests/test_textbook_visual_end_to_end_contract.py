@@ -75,7 +75,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertTrue(all(item["chapter_map_review_status"] == self.chapter_map["mapping_status"]
                             for item in self.catalog["candidates"]))
 
-    def test_admin_prevents_attaching_a_source_to_an_unrelated_class_or_subject(self):
+    def test_admin_prevents_attaching_a_source_to_an_unrelated_subject(self):
         source = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
         self.assertIn("function visualSourceMatchesLesson", source)
         self.assertIn("function visualCatalogMatchesLesson", source)
@@ -83,7 +83,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertNotIn("class6-curiosity-en.v3.json", source)
         self.assertIn("visualCatalogMatchesLesson(targetRow,visualCatalog)", source)
         self.assertIn("!visualCatalogMatchesTarget", source)
-        self.assertIn("Choose a lesson in the matching class and subject.", source)
+        self.assertIn("Choose a lesson with the matching subject.", source)
 
     def test_renderers_follow_the_shared_visual_contract(self):
         expected_kinds = {item["id"] for item in self.contract["visual_kinds"]}
