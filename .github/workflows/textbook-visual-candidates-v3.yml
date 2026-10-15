@@ -317,6 +317,8 @@ jobs:
           print(json.dumps(value, indent=2))
           PY
           python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
+          python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
+          python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
           git add "$out" "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" "apps/admin/public/content/visual-candidates/index.v1.json" "apps/web/public/content/visual-assets/$BOOK_SLUG"
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"

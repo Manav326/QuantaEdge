@@ -65,6 +65,56 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                     path = ROOT / url.removeprefix(RAW_PREFIX)
                     self.assertTrue(path.is_file(), f"{field} does not resolve to a checked-in file: {path}")
 
+    def test_every_catalog_index_pack_and_tracked_asset_agree_before_persistence(self):
+        catalog_dir = ROOT / "apps/admin/public/content/visual-candidates"
+        index_by_slug = {item["book_slug"]: item for item in self.index["catalogs"]}
+        catalog_paths = sorted(catalog_dir.glob("*.v3.json"))
+        self.assertGreater(len(catalog_paths), 0)
+        self.assertEqual({path.name.removesuffix(".v3.json") for path in catalog_paths}, set(index_by_slug))
+
+        for catalog_path in catalog_paths:
+            slug = catalog_path.name.removesuffix(".v3.json")
+            catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+            pack_path = ROOT / "data/textbook-visual-candidates-v3" / slug / "candidates.v3.json"
+            self.assertTrue(pack_path.is_file(), f"Missing persisted source candidate pack: {pack_path}")
+            pack = json.loads(pack_path.read_text(encoding="utf-8"))
+            source = catalog["source"]
+            pack_source = pack["source"]
+            entry = index_by_slug[slug]
+
+            with self.subTest(book_slug=slug):
+                self.assertEqual("quantaedge.visual-attachment-catalog.v3", catalog["schema_version"])
+                self.assertEqual("quantaedge.visual-candidate-pack.v3", pack["schema_version"])
+                self.assertEqual(source["book_id"], pack_source["book_id"])
+                self.assertEqual(source["pdf_sha256"], pack_source["pdf_sha256"])
+                self.assertEqual(source["pdf_sha256"], entry["source_pdf_sha256"])
+                self.assertEqual(source["book_id"], entry["source_book_id"])
+                self.assertEqual(len(catalog["candidates"]), len(pack["candidates"]))
+                self.assertEqual(len(catalog["candidates"]), entry["candidate_count"])
+                self.assertIs(catalog["summary"]["publication_allowed"], False)
+                self.assertIs(pack["summary"]["publication_allowed"], False)
+                source_items = {item["candidate_id"]: item for item in pack["candidates"]}
+                catalog_items = {item["candidate_id"]: item for item in catalog["candidates"]}
+                self.assertEqual(set(source_items), set(catalog_items))
+                for candidate_id, item in catalog_items.items():
+                    original = source_items[candidate_id]
+                    with self.subTest(book_slug=slug, candidate=candidate_id):
+                        self.assertEqual(source["pdf_sha256"], item["source_pdf_sha256"])
+                        self.assertEqual(original["source_asset_sha256"], item["source_asset_sha256"])
+                        self.assertIs(item["publication_allowed"], False)
+                        self.assertIs(item["human_review_required"], True)
+                        self.assertEqual("NEEDS_REVIEW", item["visual_review_status"])
+                        self.assertEqual("SOURCE_REFERENCE_ONLY", item["rights_status"])
+                        for field in ("image_url", "source_page_url"):
+                            url = item[field]
+                            self.assertTrue(url.startswith(RAW_PREFIX), f"{slug}/{candidate_id}: {field} not repository-hosted")
+                            local_file = ROOT / url.removeprefix(RAW_PREFIX)
+                            self.assertTrue(local_file.is_file(), f"{slug}/{candidate_id}: missing tracked asset {local_file}")
+
+        self.assertEqual(len(index_by_slug), self.index["summary"]["catalog_count"])
+        self.assertFalse(self.index["summary"]["publication_allowed"])
+        self.assertTrue(self.index["summary"]["review_required"])
+
     def test_chapter_suggestions_are_ordered_contiguous_and_review_only(self):
         chapters = self.chapter_map["chapters"]
         self.assertGreater(len(chapters), 0)
