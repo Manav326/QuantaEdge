@@ -130,18 +130,31 @@ For every type, test:
 - [ ] Missing translation, invalid answer key, unsupported type or non-renderable visual is blocked without crashing unrelated questions.
 - [ ] Existing practice/test routes remain unchanged; this contract is adopted additively.
 
-## Current content-to-component map
+## Current generated inventory — Chapter 1
 
-| Question ID | Type | Component contract | Content status |
-|---|---|---|---|
-| `c6-sci-ch01-t01-q01` | `multiple_choice` | `qtype-multiple-choice.v1` | Draft; review pending |
-| `c6-sci-ch01-t01-q02` | `multiple_select` | `qtype-multiple-select.v1` | Draft; review pending |
-| `c6-sci-ch01-t01-q03` | `true_false` | `qtype-true-false.v1` | Draft; review pending |
-| `c6-sci-ch01-t01-q04` | `matching` | `qtype-matching.v1` | Draft; review pending |
-| `c6-sci-ch01-t01-q05` | `fill_blank` | `qtype-fill-blank.v1` | Draft; review pending |
-| `c6-sci-ch01-t01-q06` | `image_observation` | `qtype-image-observation.v1` | Blocked from learner rendering until visual is replaced/approved |
-| `c6-sci-ch01-t01-q07` | `short_answer` | `qtype-short-answer.v1` | Draft; scoring must use explicit rubric/review |
-| `c6-sci-ch01-t01-q08` | `scenario_based` | `qtype-scenario-based.v1` | Draft; context and prompt must be separate fields |
+The current production set has three draft topics, with eight question types used once per topic. That makes **24 draft questions total**:
+
+| Question type | Renderer component | Topic 1 | Topic 2 | Topic 3 | Chapter 1 total |
+|---|---|---:|---:|---:|---:|
+| `multiple_choice` | `MultipleChoiceQuestion` | 1 | 1 | 1 | 3 |
+| `multiple_select` | `MultipleSelectQuestion` | 1 | 1 | 1 | 3 |
+| `true_false` | `TrueFalseQuestion` | 1 | 1 | 1 | 3 |
+| `matching` | `MatchingQuestion` | 1 | 1 | 1 | 3 |
+| `fill_blank` | `FillBlankQuestion` | 1 | 1 | 1 | 3 |
+| `image_observation` | `ImageObservationQuestion` | 1 | 1 | 1 | 3 |
+| `short_answer` | `ShortAnswerQuestion` | 1 | 1 | 1 | 3 |
+| `scenario_based` | `ScenarioQuestion` | 1 | 1 | 1 | 3 |
+| **Total** | — | **8** | **8** | **8** | **24** |
+
+Topic artifacts:
+
+- [Topic 1 — Science Begins with Curiosity](class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json)
+- [Topic 2 — The Scientific Method](class-6/science/chapter-01/topic-02-the-scientific-method.v1.json)
+- [Topic 3 — Curiosity, Collaboration and New Questions](class-6/science/chapter-01/topic-03-curiosity-collaboration-and-new-questions.v1.json)
+
+Question IDs follow this naming pattern: `c6-sci-ch01-t01-q01` through `c6-sci-ch01-t03-q08`. Every question has a `rendering_contract_id` linking it to its component contract. The production index is the canonical live count and should be updated after each new lesson commit.
+
+**Current state:** all 24 items are draft content. The three image-observation questions are blocked from student rendering until the referenced visual is approved and rendered as a locale-appropriate student visual. No question UI component or global language-switch runtime is implemented yet.
 
 ## Resume instructions
 
