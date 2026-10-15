@@ -26,6 +26,9 @@ export default function StudentHome(){
   const [textbookDocuments,setTextbookDocuments]=useState<StudentTextbook[]>([]);
   const [textbooksLoading,setTextbooksLoading]=useState(true);
   const [textbooksError,setTextbooksError]=useState('');
+  const [courses,setCourses]=useState<any[]>([]);
+  const [courseBusy,setCourseBusy]=useState('');
+  const [courseError,setCourseError]=useState('');
 
   useEffect(()=>{(async()=>{try{
     const r=await fetch('/api/v1/students/me'); if(r.status===401||r.status===403){router.replace('/login/student');return}
@@ -33,6 +36,38 @@ export default function StudentHome(){
     setData(b);
     const rr=await fetch('/api/v1/recommendations/next'); if(rr.ok) setRec(await rr.json());
   }catch(e:any){setError(e.message||'Student data unavailable')}})()},[router]);
+
+  useEffect(()=>{
+    let active=true;
+    (async()=>{
+      try {
+        const response=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store'});
+        if(response.status===401||response.status===403){router.replace('/login/student');return;}
+        const body=await response.json();
+        if(!response.ok) throw new Error(body.message||body.error||'Courses could not be loaded.');
+        if(active)setCourses(Array.isArray(body)?body:[]);
+      } catch(e:any) {
+        if(active)setCourseError(e.message||'Courses could not be loaded.');
+      }
+    })();
+    return ()=>{active=false;};
+  },[router]);
+
+  async function enrolCourse(programCode:string){
+    setCourseBusy(programCode);setCourseError('');
+    try{
+      const response=await fetch('/api/v1/students/me/programs/'+encodeURIComponent(programCode)+'/enroll',{
+        method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
+      });
+      const body=await response.json();
+      if(!response.ok)throw new Error(body.message||body.error||'Course enrolment failed.');
+      const refresh=await fetch('/api/v1/students/me/programs',{credentials:'same-origin',cache:'no-store'});
+      const rows=await refresh.json();
+      if(!refresh.ok)throw new Error(rows.message||rows.error||'Course was enrolled, but the catalogue could not refresh.');
+      setCourses(Array.isArray(rows)?rows:[]);
+    }catch(e:any){setCourseError(e.message||'Course enrolment failed.');}
+    finally{setCourseBusy('');}
+  }
 
   useEffect(()=>{
     let active=true;
@@ -110,6 +145,35 @@ export default function StudentHome(){
                 : <span className="subject-pdf-status">Textbook PDF not published yet</span>}
             </article>;
           })}
+        </div>
+
+        <div className="content-heading"><h2><LocaleText hinglish="आपके अतिरिक्त courses" english="Additional courses" /></h2><span><LocaleText hinglish="आपकी कक्षा के लिए" english="For your class" /></span></div>
+        {courseError&&<p role="status" className="feedback">{courseError}</p>}
+        <div className="task-list subject-tracks">
+          {courses.length===0&&!courseError?<p className="eyebrow"><LocaleText hinglish="अभी कोई अतिरिक्त course उपलब्ध नहीं है।" english="No additional courses are available yet." /></p>:courses.map((course:any)=>(
+            <article key={course.code} className="app-task subject-track-card">
+              <div className="subject-track-main">
+                <span className="task-icon">✦</span>
+                <span className="subject-track-copy"><strong>{course.display_name}</strong>
+                  <small><LocaleText hinglish="Class" english="Class" /> {course.class_code} · {course.curriculum_version}</small>
+                  <small>{course.is_enrolled?<LocaleText hinglish="नामांकन सक्रिय" english="Enrolled" />:<LocaleText hinglish="स्वतंत्र learning path" english="Independent learning path" />}</small>
+                </span>
+                {!course.is_enrolled?<button type="button" className="button button-dark" disabled={courseBusy!==''} onClick={()=>void enrolCourse(String(course.code))}>{courseBusy===course.code?<LocaleText hinglish="नामांकन हो रहा है…" english="Enrolling…" />:<LocaleText hinglish="Course join करें" english="Join course" />}</button>:null}
+              </div>
+              {course.is_enrolled&&<div className="subject-track-copy">
+                {(Array.isArray(course.subjects)?course.subjects:[]).map((subject:any)=>(
+                  <Link key={subject.subject_code} href={'/student/learn?programCode='+encodeURIComponent(String(course.code))+'&subjectCode='+encodeURIComponent(String(subject.subject_code))} className="subject-book-link">
+                    <span className="subject-book-copy"><strong>{subject.subject_name}</strong><small>{Number(subject.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {Number(subject.lessons||0)} <LocaleText hinglish="पाठ" english="lessons" /></small></span>
+                    <span className="subject-book-open"><LocaleText hinglish="पढ़ें ↗" english="Learn ↗" /></span>
+                  </Link>
+                ))}
+                <div className="subject-book-link">
+                  <span className="subject-book-copy"><strong><LocaleText hinglish="Course tools" english="Course tools" /></strong><small><LocaleText hinglish="Tests, saved results और course progress" english="Tests, saved results and course progress" /></small></span>
+                  <span className="subject-book-open"><Link href={'/student/tests?programCode='+encodeURIComponent(String(course.code))}><LocaleText hinglish="Tests" english="Tests" /></Link> · <Link href={'/student/progress?programCode='+encodeURIComponent(String(course.code))}><LocaleText hinglish="Progress" english="Progress" /></Link></span>
+                </div>
+              </div>}
+            </article>
+          ))}
         </div>
 
         <div className="content-heading"><h2><LocaleText hinglish="आज क्या करें?" english="What should you do today?" /></h2><span><LocaleText hinglish="mastery-driven" english="mastery-driven" /></span></div>

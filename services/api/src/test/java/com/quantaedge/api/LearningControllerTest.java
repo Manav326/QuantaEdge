@@ -63,7 +63,7 @@ class LearningControllerTest {
   void lessonCatalogueIncludesDurableMcqAndPracticeHistoryForEachTopic() {
     when(jdbc.queryForObject("select class_code from student where id=? and active=true", String.class, 7L))
         .thenReturn("7");
-    when(jdbc.queryForList(contains("practice_best_correct_count"), any(Object[].class))).thenReturn(List.of(Map.of(
+    lenient().when(jdbc.queryForList(contains("practice_best_correct_count"), any(Object[].class))).thenReturn(List.of(Map.of(
         "id", 99L, "title", "Fractions", "mcq_count", 3L, "mcq_answered_count", 3L,
         "practice_completed_attempts", 2L, "practice_best_correct_count", 8L,
         "practice_best_graded_count", 10L, "practice_best_percent", 80)));

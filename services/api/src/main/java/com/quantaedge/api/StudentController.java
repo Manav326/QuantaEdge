@@ -219,7 +219,7 @@ public class StudentController {
       left join student_lesson_progress p on p.lesson_id=l.id and p.student_id=?
       join student_track_enrollment ste on ste.student_id=? and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.active=true and l.status='PUBLISHED' and ch.active=true and ch.content_status='PUBLISHED'
-        and c.active=true and s.active=true
+        and c.active=true and s.active=true and s.program_id is null
         and c.code=(select class_code from student where id=?)
       order by c.sort_order,s.sort_order,coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """,studentId,studentId,studentId);

@@ -283,12 +283,23 @@ public class LearningDocumentController {
     }
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
-    Long subjectId = jdbc.query("""
-      select s.id from curriculum_subject s
-      join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
-    if (subjectId == null) throw badRequest("The selected active class and subject do not exist.");
+    String programCode = optionalText(body.get("programCode"), 60);
+    Long subjectId;
+    if (programCode == null || programCode.isBlank()) {
+      subjectId = jdbc.query("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
+        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode);
+    } else {
+      subjectId = jdbc.query("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        join curriculum_program p on p.id=s.program_id and p.class_id=c.id and p.status='ACTIVE'
+        where c.code=? and s.code=? and upper(p.code)=upper(?) and c.active=true and s.active=true
+        """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode, programCode);
+    }
+    if (subjectId == null) throw badRequest("The selected active class, course, and subject do not exist.");
     Long chapterId = optionalLong(body.get("chapterId"), "chapterId");
     Integer bookPart = body.get("bookPart") == null
         ? null : integerValue(body.get("bookPart"), "bookPart", 1, 9);
@@ -462,12 +473,29 @@ public class LearningDocumentController {
       @RequestParam(required = false) String subjectCode,
       @RequestParam(defaultValue = "hi") String language,
       @RequestParam(required = false) String displayLanguage,
+      @RequestParam(required = false) String programCode,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     String subjectFilter = subjectCode == null ? "" : subjectCode.trim();
     String languageFilter = normalizeDocumentLanguage(language);
     String chapterDisplayLanguage = normalizeDocumentLanguage(displayLanguage == null ? language : displayLanguage);
-    return jdbc.queryForList("""
+    Long programId = null;
+    if (programCode != null && !programCode.isBlank()) {
+      List<Map<String,Object>> enrolledProgram = jdbc.queryForList("""
+        select p.id
+        from curriculum_program p
+        join curriculum_class cc on cc.id=p.class_id and cc.active=true
+        join student st on st.id=? and st.active=true and st.class_code=cc.code
+        join student_program_enrollment spe on spe.student_id=st.id
+          and spe.program_id=p.id and spe.status='ACTIVE'
+        where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
+        """, context.studentId(), programCode.trim());
+      if (enrolledProgram.isEmpty()) throw new SecurityException("Active enrolment in this course is required.");
+      programId = ((Number)enrolledProgram.getFirst().get("id")).longValue();
+    }
+    String programScope = programId == null ? "s.program_id is null"
+        : "s.program_id=? and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String sql = """
       select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
              d.page_end-d.page_start+1 as page_count,
@@ -495,16 +523,24 @@ public class LearningDocumentController {
       where d.status='PUBLISHED'
         and d.language=?
         and (?='' or s.code=?)
+        and __PROGRAM_SCOPE__
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
-      """, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter);
+      """.replace("__PROGRAM_SCOPE__",programScope);
+    if (programId == null) {
+      return jdbc.queryForList(sql, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter);
+    }
+    return jdbc.queryForList(sql, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter, programId);
   }
 
-  /** Source-compatible overload for existing Java callers; HTTP requests use the annotated handler above. */
+  /** Source-compatible overloads for existing Java callers. */
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, null, context);
+    return studentDocumentCatalog(subjectCode, language, null, null, context);
+  }
+  public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, String displayLanguage, AuthContext context) {
+    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, context);
   }
   @GetMapping("/learning/documents/{documentId}")
   public Map<String, Object> studentDocument(
@@ -602,6 +638,11 @@ public class LearningDocumentController {
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
+        and (s.program_id is null or exists(
+          select 1 from student_program_enrollment spe
+          join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+          where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+        ))
       """, studentId, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());

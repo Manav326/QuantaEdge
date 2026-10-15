@@ -20,7 +20,7 @@ type Lesson = {
   practice_active_answered_count?:number|null; practice_active_question_count?:number|null;
 };
 type TrackBrowse = {
-  classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[];
+  classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[]; programCode?:string|null;
 };
 type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;chapter_translated?:boolean;edition?:string|null;language?:'hi'|'en'};
 
@@ -178,7 +178,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     setBusy(true);setAnswerError('');setResult(null);
     try {
       const language=learningLanguage;
-      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language,{
+      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language+(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
@@ -305,7 +305,7 @@ export default function LearnClient() {
 
   async function loadLesson(id:number) {
     try {
-      const started=await fetch('/api/v1/learning/lessons/'+id+'/start',{method:'POST'});
+      const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+(searchParams.get('programCode')?'?programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{method:'POST'});
       if(!started.ok) throw new Error('lesson progress');
       const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage).then(r=>{
         if(!r.ok) throw new Error('lesson');
@@ -332,10 +332,12 @@ export default function LearnClient() {
         if(!me.ok) throw new Error(student.message||tx('Student profile नहीं मिला','Student profile was not found'));
         const requestedId=Number(searchParams.get('lessonId')||0);
         const selectedSubject=searchParams.get('subjectCode');
+        const selectedProgram=searchParams.get('programCode');
+        const programQuery=selectedProgram?'&programCode='+encodeURIComponent(selectedProgram):'';
         if(!requestedId && selectedSubject){
           if(selectedSubject!=='maths' && selectedSubject!=='science') throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
           const selectedLanguage=learningLanguage;
-          const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage);
+          const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage+programQuery);
           const listBody=await listResponse.json();
           if(!listResponse.ok) throw new Error(listBody.message||'विषय की पाठ सूची नहीं खुल पाई।');
           if(cancelled)return;
@@ -344,7 +346,7 @@ export default function LearnClient() {
           const subjectName=selectedSubject==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science');
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
-          setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons});
+          setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons,programCode:selectedProgram});
           return;
         }
         setTrackBrowse(null);
@@ -357,13 +359,13 @@ export default function LearnClient() {
         }
         if(!targetId) throw new Error(tx('अभी कोई recommended lesson नहीं मिला।','No recommended lesson is available yet.'));
         const selectedLanguage=learningLanguage;
-        const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage);
+        const detail=await fetch('/api/v1/learning/lessons/'+targetId+'?language='+selectedLanguage+programQuery);
         if(!detail.ok) throw new Error('lesson');
         const d=await detail.json() as Detail;
-        const list=await fetch('/api/v1/learning/lessons?classCode='+student.class_code+'&subjectCode='+d.subject_code+'&language='+selectedLanguage).then(r=>r.json()) as Lesson[];
+        const list=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
         setLessons(list);
-        await fetch('/api/v1/learning/lessons/'+targetId+'/start',{method:'POST'});
-        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON'})});
+        await fetch('/api/v1/learning/lessons/'+targetId+'/start'+(selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''),{method:'POST'});
+        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON',programCode:selectedProgram})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
           localStorage.setItem('qe:student:last-open-lesson:'+d.class_code+':'+d.subject_code,String(d.id));
@@ -389,7 +391,8 @@ export default function LearnClient() {
       try{
         if(trackBrowse){
           const response=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(trackBrowse.classCode)
-            +'&subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language,{cache:'no-store'});
+            +'&subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language
+            +(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''),{cache:'no-store'});
           const rows=await response.json();
           if(!response.ok)throw new Error(rows?.message||'Could not refresh lesson language.');
           if(!cancelled){
@@ -401,9 +404,11 @@ export default function LearnClient() {
         }
         if(lesson){
           const [detailResponse,listResponse]=await Promise.all([
-            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language,{cache:'no-store'}),
+            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language
+              +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'}),
             fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(lesson.class_code)
-              +'&subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language,{cache:'no-store'})
+              +'&subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language
+              +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'})
           ]);
           const [detailBody,listBody]=await Promise.all([detailResponse.json(),listResponse.json()]);
           if(!detailResponse.ok)throw new Error(detailBody?.message||'Could not refresh lesson language.');
@@ -440,7 +445,8 @@ export default function LearnClient() {
     // Show the chosen language first, but do not hide a chapter when its only
     // published PDF is available in the other language.
     const loadLanguage=(language:string):Promise<StudentDocument[]> =>
-      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage,{cache:'no-store'})
+      fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage
+        +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'})
         .then(async response=>response.ok?response.json():[])
         .then(body=>Array.isArray(body)?body as StudentDocument[]:[])
         .catch(()=>[]);
@@ -533,7 +539,7 @@ export default function LearnClient() {
     localStorage.setItem('qe:student:learn-scroll:'+chapterStorageScope,String(window.scrollY));
   }
   function subjectDocumentHref(documentId:number){
-    return '/student/textbooks?documentId='+documentId+'&returnTo='+encodeURIComponent('/student/learn?subjectCode='+trackBrowse?.subjectCode);
+    return '/student/textbooks?documentId='+documentId+'&returnTo='+encodeURIComponent('/student/learn?subjectCode='+trackBrowse?.subjectCode+(trackBrowse?.programCode?'&programCode='+trackBrowse.programCode:''));
   }
   function rememberLessonPosition(){
     if(lesson)localStorage.setItem('qe:student:lesson-scroll:'+lesson.id,String(window.scrollY));
@@ -560,7 +566,7 @@ export default function LearnClient() {
       <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
       <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
       <p className="lesson-intro"><LocaleText hinglish="किसी chapter को खोलकर उसके topics और PDF देखें। आपका आखिरी खुला chapter याद रखा जाएगा।" english="Open a chapter to see its topics and PDF. Your last open chapter is remembered." /></p>
-      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
+      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
@@ -573,7 +579,7 @@ export default function LearnClient() {
         <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
         <h2><LocaleText hinglish="अभी कोई published lesson या chapter PDF available नहीं है" english="No published lessons or chapter PDFs are available yet" /></h2>
         <p><LocaleText hinglish="इस विषय की सामग्री तैयार और publish होने पर यहाँ दिखाई देगी।" english="Content will appear here when it has been prepared and published." /></p>
-        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
+        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
         <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
       </div> : trackGroups.map((group,index)=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
@@ -608,7 +614,7 @@ export default function LearnClient() {
               const bestPercent=Number(item.practice_best_percent||0);
               const activeAnswered=Math.max(0,Number(item.practice_active_answered_count||0));
               const activeQuestionCount=Math.max(0,Number(item.practice_active_question_count||0));
-              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
+              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
                 <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
                 <span className="qe-student-topic-copy"><strong>{item.title}</strong>
                   <small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित microtopic" english="min · published microtopic" /></small>
@@ -668,7 +674,7 @@ export default function LearnClient() {
         <h2><LocaleText hinglish="अब इसी micro-topic का अभ्यास करें" english="Now practise this micro-topic" /></h2>
         <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective/concept से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective and concept. You do not need to choose topics or question types." /></p>
         {canStartTopicPractice
-          ? <Link href={'/student/practice?lessonId='+lesson.id} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
+          ? <Link href={'/student/practice?lessonId='+lesson.id+(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):'')} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 

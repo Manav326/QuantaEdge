@@ -64,16 +64,32 @@ public class AdminContentController {
     this.assessmentCatalog = assessmentCatalog;
   }
 
+  @GetMapping("/programs")
+  public List<Map<String,Object>> programs(
+      @RequestHeader(value = "X-Admin-Token", required = false) String token,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    authorize(token, context, "CONTENT_VIEW");
+    return jdbc.queryForList("""
+      select p.id,p.code,p.display_name,p.curriculum_version,c.code as class_code
+      from curriculum_program p
+      join curriculum_class c on c.id=p.class_id and c.active=true
+      where p.status='ACTIVE' and p.code<>'GENERAL'
+      order by c.sort_order,p.display_name,p.code
+      """);
+  }
+
   @GetMapping
   public List<Map<String, Object>> list(
       @RequestHeader(value = "X-Admin-Token", required = false) String token,
       @RequestParam(required = false) String classCode,
       @RequestParam(required = false) String subjectCode,
       @RequestParam(required = false) String status,
+      @RequestParam(required = false) String programCode,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     authorize(token, context, "CONTENT_VIEW");
     StringBuilder sql = new StringBuilder("""
       select c.code as class_code, c.display_name as class_name,
+             p.code as program_code,p.display_name as program_name,
              s.code as subject_code, s.display_name as subject_name,
              ch.id as chapter_id, ch.code as chapter_code,
              ch.display_name as chapter_name, ch.description as chapter_description,
@@ -92,11 +108,18 @@ public class AdminContentController {
              coalesce((select max(q.sort_order) from question q where q.lesson_id=l.id),0) as max_question_sort_order
       from curriculum_class c
       join curriculum_subject s on s.class_id=c.id
+      left join curriculum_program p on p.id=s.program_id
       left join curriculum_chapter ch on ch.subject_id=s.id
       left join lesson l on l.chapter_id=ch.id
       where 1=1
       """);
     List<Object> args = new ArrayList<>();
+    if (programCode == null || programCode.isBlank()) {
+      sql.append(" and s.program_id is null");
+    } else {
+      sql.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
+      args.add(programCode.trim());
+    }
     if (classCode != null && !classCode.isBlank()) {
       sql.append(" and c.code=?");
       args.add(classCode.trim());
@@ -294,12 +317,25 @@ public class AdminContentController {
       throw badRequest("Create chapters as draft; use the separate publication action after source and lesson checks pass.");
     }
     int sortOrder = integerValue(body.getOrDefault("sortOrder", 1), 1, 10000, "sortOrder");
-    List<Map<String, Object>> subjects = jdbc.queryForList("""
-      select s.id from curriculum_subject s
-      join curriculum_class c on c.id=s.class_id
-      where c.code=? and s.code=? and c.active=true and s.active=true
-      """, classCode, subjectCode);
-    if (subjects.isEmpty()) throw badRequest("The selected class and subject track does not exist or is inactive.");
+    String programCode = optionalText(body.get("programCode"), 60);
+    List<Map<String, Object>> subjects;
+    if (programCode == null || programCode.isBlank()) {
+      subjects = jdbc.queryForList("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
+        """, classCode, subjectCode);
+    } else {
+      subjects = jdbc.queryForList("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        join curriculum_program p on p.id=s.program_id and p.class_id=c.id and p.status='ACTIVE'
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where c.code=? and s.code=? and upper(p.code)=upper(?)
+          and c.active=true and s.active=true
+        """, classCode, subjectCode, programCode);
+    }
+    if (subjects.isEmpty()) throw badRequest("The selected class, course, and subject track does not exist or is inactive.");
     long subjectId = ((Number) subjects.getFirst().get("id")).longValue();
     Long chapterId = jdbc.queryForObject("""
       insert into curriculum_chapter(subject_id,code,display_name,description,sort_order,teaching_order,active,content_status,
