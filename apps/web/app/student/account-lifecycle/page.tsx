@@ -145,7 +145,7 @@ export default function StudentAccountLifecyclePage(){
             <small>{en?'Status: ':'स्थिति: '}{data.parent_eligibility_status||'NOT_REQUESTED'}{data.parent_eligibility_current?(en?' · Current':' · मान्य'):''}</small>
             <small><LocaleText hinglish="Parent बनने के लिए current verified adult status और अलग parent eligibility approval दोनों आवश्यक हैं।" english="Becoming a parent requires current adult verification and separate parent eligibility approval." /></small>
           </div>
-          {!data.parent_eligibility_current&&<button className="button button-dark" disabled={busy||data.parent_eligibility_status==='PENDING'} onClick={requestParentReview}><LocaleText hinglish="Parent eligibility request करें" english="Request parent eligibility" /></button>}
+          {!data.parent_eligibility_current&&adultCurrent&&<button className="button button-dark" disabled={busy||data.parent_eligibility_status==='PENDING'} onClick={requestParentReview}><LocaleText hinglish="Parent eligibility request करें" english="Request parent eligibility" /></button>}
           {data.canTransitionToParent&&<button className="button button-dark" disabled={busy} onClick={transitionToParent}><LocaleText hinglish="Parent account में transition करें" english="Transition to parent account" /></button>}
         </article>}
       </>}
