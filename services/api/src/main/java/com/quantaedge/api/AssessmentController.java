@@ -1374,7 +1374,7 @@ public class AssessmentController {
         from ranked
         group by assessment_id
       )
-      select latest.attempt_id,latest.assessment_id,latest.attempt_number,latest.status,
+      select latest.attempt_id,latest.assessment_id,latest.test_id,latest.attempt_number,latest.status,
              latest.submitted_at,latest.released_at,latest.final_score,latest.max_score,
              latest.assessment_type,latest.is_generated,latest.assessment_title,latest.subject_code,latest.subject_name,
              latest.chapter_name,latest.question_count,

@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './Tests.module.css';
 
 type AssessmentCard = {
-  assessment_id:number;title:string;description?:string;duration_minutes:number;max_attempts:number;
+  assessment_id:number;test_id?:string|null;title:string;description?:string;duration_minutes:number;max_attempts:number;
   attempts_used:number;question_count:number;max_score:number;subject_code:string;subject_name:string;
   assessment_type?:string;is_generated?:boolean;chapter_name?:string|null;in_progress_attempt_id?:number|null;latest_result_attempt_id?:number|null;
 };
@@ -20,12 +20,12 @@ type AttemptQuestion = {
   correctAnswer?:{kind?:string;value?:any}|null;
 };
 type Attempt = {
-  attempt_id:number;assessment_id:number;attempt_number:number;status:string;started_at:string;deadline_at:string;
+  attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;started_at:string;deadline_at:string;
   submitted_at?:string|null;released_at?:string|null;assessment_title:string;subject_name:string;chapter_name?:string|null;
   questions:AttemptQuestion[];resultReleased:boolean;translation_complete?:boolean;final_score?:number|string|null;auto_score?:number|string|null;max_score:number|string;
 };
 type ResultAttempt = {attempt_id:number;attempt_number:number;status:string;submitted_at?:string|null;released_at?:string|null;final_score:number|string;max_score:number|string};
-type Result = {attempt_id:number;assessment_id:number;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
+type Result = {attempt_id:number;assessment_id:number;test_id?:string|null;attempt_number:number;status:string;submitted_at:string;released_at:string;final_score:number|string;max_score:number|string;best_score?:number|string;attempt_count?:number;attempts?:ResultAttempt[];assessment_title:string;assessment_type?:string;subject_name:string;chapter_name?:string|null;question_count:number};
 type CertificateEligibility = {
   attempt_id:number;eligible:boolean;eligibility_reason?:string|null;certificate_id?:number|null;
   certificate_number?:string|null;certificate_status?:string|null;pass_threshold_percent?:number|string;
@@ -481,7 +481,7 @@ export default function TestsClient(){
             const used=Number(test.attempts_used||0);
             const resultAvailable=Boolean(test.latest_result_attempt_id);
             const exhausted=!started&&used>=Number(test.max_attempts);
-            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3><p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume test','टेस्ट फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
+            return <article className={styles.testCard} key={test.assessment_id}><div className={styles.cardTop}><span className={styles.testSymbol}>✓</span><span className={styles.subjectChip}>{test.subject_code==='maths'?t('Mathematics','गणित'):t('Science','विज्ञान')}</span><span className={styles.subjectChip}>{assessmentTypeLabel(test.assessment_type)}</span></div><h3>{test.title}</h3>{test.test_id&&<small>{t('Test ID','टेस्ट ID')}: {test.test_id}</small>}<p>{test.description||test.chapter_name||test.subject_name}</p><div className={styles.cardMeta}><span>▤ {test.question_count} {t('questions','प्रश्न')}</span><span>◷ {test.duration_minutes} {t('min','मिनट')}</span><span>★ {test.max_score} {t('marks','अंक')}</span></div><div className={styles.attemptTrack}><span>{t('Attempts used','उपयोग किए गए प्रयास')}</span><b>{used} / {test.max_attempts}</b></div><div className={styles.attemptBar}><i style={{width:Math.min(100,used/Math.max(1,test.max_attempts)*100)+'%'}}/></div><div className={styles.cardActions}><button type="button" className={styles.primaryButton} disabled={busy||exhausted} onClick={()=>void openTest(test.assessment_id)}>{busy?t('Opening…','खुल रहा है…'):started?t('Resume test','टेस्ट फिर शुरू करें'):exhausted?t('Attempts used','प्रयास समाप्त'):t('Start test','टेस्ट शुरू करें')}</button>{!started&&<button type="button" className={styles.leaderboardButton} disabled={leaderboardLoading} onClick={()=>void openLeaderboard(test)}><span aria-hidden="true">♛</span> {t('Top 20 leaderboard','शीर्ष 20 लीडरबोर्ड')}</button>}{!started&&resultAvailable&&<button type="button" className={styles.resultLink} disabled={busy} onClick={()=>void openResult(Number(test.latest_result_attempt_id))}>{t('Latest result ↗','नवीनतम परिणाम ↗')}</button>}</div>{exhausted&&!resultAvailable&&<small className={styles.muted}>{t('You have used all allowed attempts.','आप सभी अनुमत प्रयास उपयोग कर चुके हैं।')}</small>}</article>;
           })}</div>}
           <PremiumPagination page={testsPage} total={testsTotal} pageSize={testsPageSize}
             onPageChange={setTestsPage} onPageSizeChange={size=>{setTestsPageSize(size);setTestsPage(0);}}
@@ -496,7 +496,7 @@ export default function TestsClient(){
              return <article key={result.assessment_id} className={styles.resultCard}>
                <span className={styles.resultIcon}>✓</span>
                <div className={styles.resultSummary}>
-                 <h3>{result.assessment_title}</h3>
+                 <h3>{result.assessment_title}</h3>{result.test_id&&<small>{t('Test ID','टेस्ट ID')}: {result.test_id}</small>}
                  <p>{assessmentTypeLabel(result.assessment_type)} · {result.subject_name}{result.chapter_name?' · '+result.chapter_name:''}</p>
                  <small>{attemptsInHistory} {t('released attempt','जारी प्रयास')}{attemptsInHistory===1?'':t('s','')} · {result.question_count} {t('questions','प्रश्न')} · {t('Latest:','नवीनतम:')} {fmtDate(result.released_at)}</small>
                </div>
@@ -552,7 +552,7 @@ export default function TestsClient(){
         </>}
       </>:<>
         <div className={styles.attemptHeader}><button className={styles.backButton} type="button" onClick={closeAttempt}>← {t('Tests & results','टेस्ट और परिणाम')}</button><span className={styles.attemptState}>{attempt.status.replaceAll('_',' ')}</span></div>
-        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1><p>{t('Attempt','प्रयास')} {attempt.attempt_number} · {attempt.questions.length} {t('questions','प्रश्न')} · {attempt.max_score} {t('marks','अंक')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{t('TIME REMAINING','शेष समय')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?t('Saving answer…','उत्तर सहेजा जा रहा है…'):t('Answers auto-save','उत्तर अपने-आप सहेजे जाते हैं')}</span></div>}</div>
+        <div className={styles.attemptTitle}><div><span className={styles.eyebrow}>{attempt.subject_name}{attempt.chapter_name?' · '+attempt.chapter_name:''}</span><h1>{attempt.assessment_title}</h1>{attempt.test_id&&<small>{t('Test ID','टेस्ट ID')}: {attempt.test_id}</small>}<p>{t('Attempt','प्रयास')} {attempt.attempt_number} · {attempt.questions.length} {t('questions','प्रश्न')} · {attempt.max_score} {t('marks','अंक')}</p></div>{attempt.status==='IN_PROGRESS'&&<div className={styles.timerBox}><small>{t('TIME REMAINING','शेष समय')}</small><b className={secondsLeft!==null&&secondsLeft<300?styles.timeWarning:''}>{secondsLeft===null?'--:--':clock(secondsLeft)}</b><span>{saving?t('Saving answer…','उत्तर सहेजा जा रहा है…'):t('Answers auto-save','उत्तर अपने-आप सहेजे जाते हैं')}</span></div>}</div>
         {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
         {attempt.translation_complete===false&&<div className={styles.languageNotice} role="status">
           <b><LocaleText hinglish="भाषा कवरेज" english="Language coverage" /></b>
