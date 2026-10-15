@@ -164,13 +164,13 @@ Write-Host "The source PDFs remain in GHCR; this command imports only extracted 
 if ($Mode -ne "DryRun") {
     # Prompt in the running script; do not paste a command block into the cookie prompt.
     Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-    $secureSession = Read-Host "Paste current QE_STAFF_SESSION from Education Admin (input hidden)" -AsSecureString
+    $secureSession = Read-Host "Paste the active ACCESS cookie Value from QE_SESSION (preferred) or QE_STAFF_SESSION (input hidden)" -AsSecureString
     $sessionPointer = [IntPtr]::Zero
     try {
         $sessionPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureSession)
         $sessionValue = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($sessionPointer)
         if ($sessionValue.Length -ne 43) {
-            throw "Cookie length is invalid. Copy the full QE_STAFF_SESSION Value, not QE_STAFF_REFRESH, and rerun."
+            throw "Cookie length is invalid. Copy the full QE_SESSION or QE_STAFF_SESSION access-cookie Value, not a refresh cookie, and rerun."
         }
         $env:QUANTAEDGE_ADMIN_SESSION = $sessionValue
     } finally {
@@ -191,7 +191,7 @@ if ($Mode -ne "DryRun") {
     }
 
     $sessionHeaders = @{
-        Cookie = "QE_STAFF_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
+        Cookie = "QE_STAFF_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION); QE_SESSION=$($env:QUANTAEDGE_ADMIN_SESSION)"
         "X-QE-Workspace" = "EDUCATION_ADMIN"
         Accept = "application/json"
     }
@@ -203,7 +203,7 @@ if ($Mode -ne "DryRun") {
             $statusCode = [int]$_.Exception.Response.StatusCode
         }
         Remove-Item Env:\QUANTAEDGE_ADMIN_SESSION -ErrorAction SilentlyContinue
-        throw "Education Admin rejected the session (HTTP $statusCode). Sign in again and rerun. No textbook import was attempted."
+        throw "Education Admin rejected this access cookie (HTTP $statusCode). Sign in again, copy the current QE_SESSION access-cookie Value first (not QE_REFRESH); if QE_SESSION is absent, use QE_STAFF_SESSION. No textbook import was attempted."
     }
 
     if ($sessionCheck.authenticated -ne $true -or $sessionCheck.workspace -ne "EDUCATION_ADMIN") {
