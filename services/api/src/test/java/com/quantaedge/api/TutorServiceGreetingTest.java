@@ -27,6 +27,32 @@ class TutorServiceGreetingTest {
   }
 
   @Test
+  void answersTutorLanguageQuestionsWithoutCallingTheModel() {
+    assertTrue(TutorService.currentTutorMetaAnswer("en",
+        "Are you responding in English or Hindi?", "Patterns in Mathematics")
+        .contains("responding in English"));
+    assertTrue(TutorService.currentTutorMetaAnswer("hi",
+        "Are you responding in English or Hindi?", "गुणा और आकृतियों में छिपे नियम")
+        .contains("हिन्दी में उत्तर"));
+  }
+
+  @Test
+  void answersTutorIdentityQuestionsWithoutCallingTheModel() {
+    assertTrue(TutorService.currentTutorMetaAnswer("en",
+        "You are QuantaEdge AI tutor", "Patterns in Mathematics")
+        .contains("QuantaEdge’s AI tutor"));
+    assertTrue(TutorService.currentTutorMetaAnswer("hi",
+        "You are QuantaEdge AI tutor", "गुणा और आकृतियों में छिपे नियम")
+        .contains("QuantaEdge AI Tutor"));
+  }
+
+  @Test
+  void leavesNormalLearningQuestionsToTheModel() {
+    org.junit.jupiter.api.Assertions.assertNull(TutorService.currentTutorMetaAnswer(
+        "en", "Explain number patterns", "Patterns in Mathematics"));
+  }
+
+  @Test
   void buildsAContextGroundedEnglishTopicAnswer() {
     assertTrue(TutorService.currentTopicAnswer("en", "Food Chains", "Getting to Know Plants", "Science")
         .contains("The topic we’re studying is “Food Chains”."));
