@@ -269,9 +269,35 @@ function StudentCertificatesContent() {
   async function issueCertificate() {
     if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'ISSUED'
         && Number.isSafeInteger(Number(selectedAssessment.certificate_id))) {
+      setBusy(true);
       setError('');
-      setNotice(t('This assessment already has an issued certificate. Opening the existing certificate.','इस टेस्ट का प्रमाणपत्र पहले ही जारी हो चुका है। मौजूदा प्रमाणपत्र खोला जा रहा है।'));
-      router.push('/student/certificates?certificateId=' + Number(selectedAssessment.certificate_id));
+      setNotice('');
+      try {
+        const body: Record<string, unknown> = {
+          achievementType: 'ASSESSMENT_PASS',
+          assessmentAttemptId: Number(attemptId),
+          templateId: 'CLASSIC',
+          language,
+        };
+        if (Number(selectedAssessment.course_id) > 0) body.courseId = Number(selectedAssessment.course_id);
+        const response = await fetch('/api/v1/students/me/certificates/issue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-QE-Workspace': 'STUDENT' },
+          credentials: 'same-origin',
+          body: JSON.stringify(body),
+        });
+        const record = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(record.detail || record.message || record.error
+          || t('Existing certificate could not be resolved.','मौजूदा प्रमाणपत्र नहीं मिल सका।'));
+        const id = Number(record.id);
+        if (!Number.isSafeInteger(id) || id < 1) throw new Error(t('Invalid certificate ID.','गलत certificate ID।'));
+        setNotice(t('Opening your existing certificate.','मौजूदा प्रमाणपत्र खोला जा रहा है।'));
+        router.push('/student/certificates?certificateId=' + id);
+      } catch (e: any) {
+        setError(e?.message || t('Existing certificate could not be resolved.','मौजूदा प्रमाणपत्र नहीं मिल सका।'));
+      } finally {
+        setBusy(false);
+      }
       return;
     }
     if (achievementType === 'ASSESSMENT_PASS' && selectedAssessment?.certificate_status === 'REVOKED') {
