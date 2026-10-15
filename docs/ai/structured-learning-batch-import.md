@@ -75,3 +75,76 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ## Current boundary
 
 This tool imports existing structured draft bundles; it does not invent lesson material or convert arbitrary schemas automatically. No Navodaya lesson content is bundled with this tool. The actual prepared batch must be supplied in the stated existing draft format before live records can be inserted.
+
+---
+
+## Repository and GHCR handoff checkpoint — 2026-10-15
+
+This section is the resume point for the next QuantaEdge coding chat. It records what was actually verified from GitHub during the resource audit. It does not replace a fresh check of `main`, Actions, the current GHCR tags, or the live API before a write.
+
+### GitHub branch and Actions
+
+- The branch is `main` only. Continue additively; do not create another branch, reset history, remove existing files, or alter unrelated user commits.
+- At the beginning of this resource audit, `main` was at `72577e9a8ac4d6b5018b8608273f7aadaf6f283d`. It advanced during the audit to `a53323a583f6a585e4740bc266e01bd9fe01bb9f` due to ongoing changes. Pull/re-check the current head before using any line numbers, hashes, or statuses recorded here.
+- The completed aggregate build at [run 38742972709](https://github.com/Manav326/QuantaEdge/actions/runs/38742972709), commit `72577e9`, was green across all 8 jobs: Detect affected components, Content import safeguards, Android APK, API verification, and Admin/People Operations/Web/API image builds.
+- At the end of this audit, the newer aggregate CI run [38745726895](https://github.com/Manav326/QuantaEdge/actions/runs/38745726895) for commit `a53323a` was still in progress. Do not call the *current* head all-green until that run has completed successfully.
+- The reusable source-cache workflow is `.github/workflows/textbook-cache.yml`. Related workflows are `.github/workflows/textbook-extraction-pilot.yml`, `.github/workflows/commit-class6-extraction-artifact.yml`, `.github/workflows/textbook-visual-analysis.yml`, and `.github/workflows/textbook-visual-candidates-v3.yml`.
+
+Verified pipeline runs:
+- [Class 6 GHCR extraction pilot — run 38579506350](https://github.com/Manav326/QuantaEdge/actions/runs/38579506350): succeeded; uploaded extraction artifact `11902717615`, retained until 2027-01-12.
+- [Resumable visual extraction and analysis — run 38672043506](https://github.com/Manav326/QuantaEdge/actions/runs/38672043506): succeeded; actual Class 6 English Science book pulled from GHCR, full visual bundle published and checkpointed.
+- [Visual candidate pack v3 — run 38688536449](https://github.com/Manav326/QuantaEdge/actions/runs/38688536449): succeeded; GHCR pull, checksum binding, tests, immutable candidate package and GitHub checkpoint all succeeded.
+- [Curriculum pipeline audit — run 38676978691](https://github.com/Manav326/QuantaEdge/actions/runs/38676978691): offline validation succeeded; the live-registry job was skipped. This is not proof that every class/medium registry image is currently available.
+
+### Real Class 6 source resources already committed under `data/`
+
+The committed source page records are **extraction/review artifacts, not finished lessons or approved Tutor evidence**. Original complete-book PDFs remain in GHCR.
+
+| Subject | Language | Book ID | Pages | Text extracted / needs content review | Low-text pages | Manifest |
+|---|---|---|---:|---:|---:|---|
+| Mathematics | English | `ncert-c6-english-fegp1` — Ganita Prakash | 412 | 400 | 12 | [manifest](../../data/textbook-extractions/class-6/english/pages/07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33.manifest.json) |
+| Science | English | `ncert-c6-english-fecu1` — Curiosity | 272 | 265 | 7 | [manifest](../../data/textbook-extractions/class-6/english/pages/7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.manifest.json) |
+| Mathematics | Hindi | `ncert-c6-hindi-fhgp1` — Ganita Prakash (Hindi) | 304 | 293 | 11 | [manifest](../../data/textbook-extractions/class-6/hindi/pages/f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f.manifest.json) |
+| Science | Hindi | `ncert-c6-hindi-fhcu1` — Jigyasa | 264 | 263 | 1 | [manifest](../../data/textbook-extractions/class-6/hindi/pages/af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec.manifest.json) |
+| **Total** | | | **1,252** | **1,221** | **31** | |
+
+All four manifests are marked `DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW` and `published=false`. The matching per-book page JSONL files are beside their manifests. The summary reports are `data/textbook-extractions/class-6/{english,hindi}/extraction-report.json`. Do not skip/relabel low-text pages as ready. The extraction Action's success is about the extraction job, not content approval or student publication.
+
+### GHCR verification and visual assets
+
+**Whole-book source used in the visual pilot**
+- Source image: `ghcr.io/manav326/quantaedge-textbooks-class-6-english:latest`.
+- Exact source book: `ncert-c6-english-fecu1` (Class 6 English Science, *Curiosity*, Reprint 2026–27).
+- Original PDF SHA-256: `7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73`.
+- The v3 candidate Action pulled the GHCR image successfully and verified its index hash against the committed source manifest before extracting candidates.
+
+**Analysis bundle**
+- GitHub index: [data/textbook-visuals/class6-curiosity-en/bundle-index.v1.json](../../data/textbook-visuals/class6-curiosity-en/bundle-index.v1.json).
+- Version tag from run 38672043506: `class6-class6-curiosity-en-run-38672043506`.
+- Stable GHCR tag: `ghcr.io/manav326/quantaedge-textbook-visuals:class6-class6-curiosity-en-latest`.
+- Bundle TAR SHA-256 recorded in the index: `6584aa817e1bbc1fa12b426e1dcfca845fb44d913706caa213b83421fda3d1af`.
+- The bundle index reports 146 selected assets, 145 analysis records, and 28 failed/error statuses. Treat analysis as **incomplete** until that counter mismatch and failures are reviewed. The index and results both set `publication_allowed=false`; results require human review.
+
+**Visual candidate v3 package**
+- GitHub pack: [data/textbook-visual-candidates-v3/class6-curiosity-en/](../../data/textbook-visual-candidates-v3/class6-curiosity-en/).
+- Package: `ghcr.io/manav326/quantaedge-textbook-visuals:candidates-v3-class6-class6-curiosity-en-run-38688536449`.
+- Candidate tar SHA-256: `4b03642acde232c968999d90320ace616f8b5f51d286ac0cb1ed961364e7465d`.
+- 60 heuristic candidates across 54 distinct source pages (24 embedded-image candidates and 36 page-preview candidates). The method is heuristic, not semantic validation. The chapter map is `TOC_DERIVED_NEEDS_HUMAN_REVIEW`; `semantic_classification_performed=false`; `publication_allowed=false`.
+- Review the contact sheet/candidates and source-page context before deciding what to attach to original teaching material. Do not automatically copy these source images to `apps/web/public/content/visual-assets` or public raw GitHub URLs; repository visibility is public, and candidate assets are not publication-cleared.
+
+### Other existing data and archives — inspect before generating anything new
+
+- `data/ai-training/datasets/manifest.json` describes 25,000 records generated by `deterministic_original_templates_v1`, status `SYNTHETIC_DRAFT_REQUIRES_TEACHER_REVIEW`. It explicitly says these are not LLM-generated, not official textbook questions, and not source-page-grounded. Do not treat this dataset as the Navodaya authored lesson bundle or as teacher-approved training data.
+- `docs/content-pilot-input/` contains `maths-chapter-7.bundle.json` and `science-chapter-1.bundle.json` plus page JSONL/manifests. These are Class 6 Hindi NCERT source-extraction pilots (`DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW`), not the structured teaching/assessment bundle expected by this importer.
+- Two ZIP files exist at the repository root: `QuantaEdge_Class6_QuantaEdge_Premium_Hindi_Package.zip` (13,932,775 bytes) and `quantaedge-class6-hindi-pilot-input.zip` (3,913,343 bytes). They were **not inspected internally during this GitHub API audit** because the connector does not return binary ZIP blobs as UTF-8. In the next session, inspect each ZIP's member listing and bundle schema from a normal local checkout before concluding that no reusable authored bundle exists. Do not assume either ZIP is Navodaya-targeted or ready to import until inspected.
+- The prior audit found no path explicitly named `navodaya` or `jnvst`. The Navodaya draft importer and tests are present at [`scripts/import_structured_learning_batch.py`](../../scripts/import_structured_learning_batch.py) and [`tests/test_structured_learning_batch_import.py`](../../tests/test_structured_learning_batch_import.py).
+
+### Current course and safe next operation
+
+- Migration `V97__additive_course_scoped_tracks.sql` seeds `NAVODAYA_BATCH` as an independent Class 6 course and creates **Maths and Science tracks only**. That setup does not prove that lesson or question content has been populated. Confirm intended course scope before importing; do not silently treat general NCERT lessons as the full JNVST exam syllabus or create extra subject tracks without a deliberate plan.
+- The live API import in the older operator runbook had previously hit HTTP 401. The user subsequently stated the issue was resolved, but this repository/Actions inspection did **not** observe a successful post-resolution live write or verify database row counts. Freshly authenticate, execute the importer's no-write dry run, then use live read-only preflight. If the current authenticated request returns 401, stop and diagnose the session/proxy rather than weakening authorization or looping writes.
+- First inspect the two root ZIPs. If one contains valid authoring bundles, run `scripts/import_structured_learning_batch.py --manifest <manifest>` without `--apply` and inspect the validation output. Only proceed to `--apply` after the exact target program, class, subject, language, bundle schema, provenance, lesson codes and asset rights are verified.
+- Imports are sequential, not one batch transaction. If one fails mid-run, completed records may remain as drafts; inspect Content Studio/API results before retrying. Never blindly replay a partial batch.
+- Do **not** invoke `scripts/publish_imported_ncert_hindi_packages_once.py` for this task: it is explicitly a one-time bulk release that bypasses the ordinary per-lesson/question review workflow.
+- After any successful draft import, verify returned chapter/lesson/question IDs and read-only API/database counts. Leave all items unpublished. Human review of lesson accuracy, answer keys, bilingual text, visual provenance and use rights is a separate gate.
+
