@@ -36,3 +36,16 @@ The four checked-in extraction manifests represent 1,252 textbook pages: English
 - Do not attach new course content to legacy lesson/question IDs.
 - Keep all generated records in DRAFT and leave approval/publishing to the existing review flow.
 - Never change source SHA-256 values to force a match. Keep the original book hash, edition, source URL, language, and page numbers in the artifact provenance.
+
+
+## Source-bound chapter-map review bridge
+
+After a successful splitter dry run, use `scripts/build_chapter_map_review_candidates.py` against the exact manifest and that run's JSON report:
+
+```powershell
+python .\scripts\build_chapter_map_review_candidates.py --manifest <BOOK.manifest.json> --split-report <COURSE_SPLIT_REPORT.json> --course-id <NUMERIC_COURSE_ID> --output <NEW_VERSIONED_MAP_CANDIDATE.json>
+```
+
+Repeat for each of the four books. The helper does not parse PDFs or infer boundaries: it copies the verified source-page ranges and course chapter IDs from the existing splitter report, and verifies the numeric course ID, book hash, and every page identity in the source JSONL. It emits `DRAFT_REQUIRES_EDITOR_REVIEW`, blank reviewer/date fields, and `student_delivery_allowed=false`. Inspect the exact original PDF for every range and title. Only after that human check, save a separate reviewed copy with `review_status=EDITOR_REVIEWED`, a real reviewer, and a `YYYY-MM-DD` review date; never edit a candidate to appear reviewed without performing that review.
+
+Course chapter PDFs produced by the existing splitter are now stored in `private-review/ncert-book-splits/course-<NUMERIC_COURSE_ID>`. The legacy output path is unchanged, and separate course IDs have separate split directories, preventing same-named chapters from overwriting one another.

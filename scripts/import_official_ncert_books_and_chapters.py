@@ -976,6 +976,16 @@ def prepare_source_book(
     }
 
 
+def split_output_dir(root: Path, course_id: int | None = None) -> Path:
+    """Keep course chapter PDFs separate from legacy and other course split artifacts."""
+    base_dir = root / "private-review" / "ncert-book-splits"
+    if course_id is None:
+        return base_dir
+    if course_id < 1:
+        raise ValueError("course_id must be a positive stable numeric course ID.")
+    return base_dir / f"course-{course_id}"
+
+
 def create_import_plan(
     root: Path,
     chapters_by_track: dict[tuple[str, str], list[dict[str, Any]]],
@@ -984,8 +994,11 @@ def create_import_plan(
     languages: tuple[str, ...] = LANGUAGES,
     progress: Callable[[str], None] | None = None,
     grades: tuple[str, ...] = CLASSES,
+    course_id: int | None = None,
 ) -> tuple[list[dict[str, Any]], list[str]]:
-    """Validate requested source-book languages and prepare splits under the work root."""
+    """Validate source books and prepare splits in an isolated legacy/course output directory."""
+    if course_id is not None and course_id < 1:
+        raise ValueError("course_id must be a positive stable numeric course ID.")
     if not languages or any(language not in LANGUAGES for language in languages):
         raise ValueError(f"Unsupported language selection: {languages!r}. Choose from {LANGUAGES}.")
     if len(set(languages)) != len(languages):
@@ -993,7 +1006,7 @@ def create_import_plan(
     books_dir = (books_dir or root).expanduser().resolve()
     if not books_dir.is_dir():
         raise FileNotFoundError(f"NCERT source-books directory does not exist: {books_dir}")
-    output_dir = root / "private-review" / "ncert-book-splits"
+    output_dir = split_output_dir(root, course_id)
     records: list[dict[str, Any]] = []
     chapter_source_records: list[dict[str, Any]] = []
     warnings: list[str] = []
@@ -1560,7 +1573,7 @@ def resume_from_checkpoint(args: argparse.Namespace) -> int:
     )
 
     # Reconstruct prepared PDF paths and verify every remaining file before the first resumed write.
-    output_dir = root / "private-review" / "ncert-book-splits"
+    output_dir = split_output_dir(root, course_id)
     for row in remaining:
         title = str(row.get("title") or row.get("filename") or "resource")
         required_fields = (
@@ -1782,7 +1795,7 @@ def run(args: argparse.Namespace) -> int:
     records, warnings = create_import_plan(
         root, chapters_by_track, max_bytes,
         books_dir=books_dir, languages=tuple(args.languages),
-        progress=report_progress, grades=grades,
+        progress=report_progress, grades=grades, course_id=course_id,
     )
     if program_code or course_id is not None:
         for row in records:

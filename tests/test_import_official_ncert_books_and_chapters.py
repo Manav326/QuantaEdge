@@ -70,6 +70,16 @@ class OfficialNcertBookChapterTests(unittest.TestCase):
         result = importer.dedupe_live_chapters(rows, "6", "maths")
         self.assertEqual([601, 602], [row["chapter_id"] for row in result])
 
+    def test_course_split_output_directory_isolated_from_legacy_and_other_courses(self):
+        legacy = importer.split_output_dir(self.root)
+        course_a = importer.split_output_dir(self.root, 1234)
+        course_b = importer.split_output_dir(self.root, 5678)
+        self.assertEqual(self.root / "private-review" / "ncert-book-splits", legacy)
+        self.assertEqual(legacy / "course-1234", course_a)
+        self.assertEqual(legacy / "course-5678", course_b)
+        self.assertNotEqual(course_a, course_b)
+        self.assertNotEqual(legacy, course_a)
+
     def test_filename_slots_are_stable(self):
         self.assertEqual(
             "NCERT_Class_6_Maths_English_BOOK.pdf",
