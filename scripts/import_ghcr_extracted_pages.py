@@ -116,7 +116,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--extracted-root", required=True, type=Path,
                         help="Root directory containing class-N/medium/pages/*.manifest.json.")
     parser.add_argument("--api-base-url", default=os.environ.get("QUANTAEDGE_API_BASE_URL", "http://localhost:8080"))
-    parser.add_argument("--program-code", default="", help="Optional active program code; imports a separate course-scoped source record.")
+    parser.add_argument("--course-id", type=int, default=0, help="Stable numeric course ID for a separate course-scoped source record.")
+    parser.add_argument("--program-code", default="", help="Compatibility fallback only; prefer --course-id.")
     parser.add_argument("--apply", action="store_true", help="Actually import validated pages as draft source records.")
     parser.add_argument("--approve", action="store_true", help="Also approve each imported source book (requires --apply and a staff session).")
     parser.add_argument(
@@ -125,6 +126,10 @@ def main(argv: list[str] | None = None) -> int:
         help="Auto prefers local QUANTAEDGE_ADMIN_TOKEN; cookies are also supported.",
     )
     args = parser.parse_args(argv)
+    if args.course_id < 0:
+        parser.error("--course-id must be positive when supplied.")
+    if args.course_id and args.program_code.strip():
+        parser.error("Use --course-id or --program-code, not both.")
     if args.approve and not args.apply:
         parser.error("--approve requires --apply.")
     root = args.extracted_root
@@ -166,7 +171,10 @@ def main(argv: list[str] | None = None) -> int:
                 successes += 1
                 continue
             import_manifest = dict(manifest)
-            if args.program_code.strip():
+            if args.course_id:
+                import_manifest["course_id"] = args.course_id
+                import_manifest.pop("program_code", None)
+            elif args.program_code.strip():
                 import_manifest["program_code"] = args.program_code.strip().upper()
             manifest_bytes = (json.dumps(import_manifest, ensure_ascii=False, separators=(",", ":")) + "\n").encode("utf-8")
             imported = post_multipart(

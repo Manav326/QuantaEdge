@@ -191,6 +191,7 @@ public class LearningDocumentController {
       @RequestParam(required=false) String subjectCodes,@RequestParam(required=false) String statuses,
       @RequestParam(required=false) String languages,@RequestParam(required=false) String scopes,
       @RequestParam(required=false) String programCode,
+      @RequestParam(required=false) Long courseId,
       @RequestParam(defaultValue="25") Integer limit,@RequestParam(defaultValue="0") Integer offset,
       @RequestAttribute(value="authContext",required=false) AuthContext context) {
     requireContentView(context);
@@ -213,7 +214,10 @@ public class LearningDocumentController {
       left join curriculum_program p on p.id=s.program_id
       """;
     StringBuilder where=new StringBuilder(" where 1=1");List<Object> filterArgs=new ArrayList<>();
-    if (programCode != null && !programCode.isBlank()) {
+    if (courseId != null) {
+      where.append(" and p.id=? and p.status='ACTIVE'");
+      filterArgs.add(courseId);
+    } else if (programCode != null && !programCode.isBlank()) {
       where.append(" and upper(p.code)=upper(?) and p.status='ACTIVE'");
       filterArgs.add(programCode.trim());
     }
@@ -227,7 +231,7 @@ public class LearningDocumentController {
       select d.id as document_id,d.pdf_asset_id,d.scope,d.book_part,d.title,d.source_title,d.source_url,d.edition,
              d.page_start,d.page_end,d.language,d.status,d.version_no,d.created_at,d.updated_at,d.published_at,
              a.original_filename,a.sha256,a.file_size_bytes,a.page_count,
-             c.code as class_code,c.display_name as class_name,p.code as program_code,p.display_name as program_name,
+             c.code as class_code,c.display_name as class_name,p.id as course_id,p.code as program_code,p.display_name as program_name,
              s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
              ch.active as chapter_active,ch.content_status as chapter_content_status,a.review_status as asset_review_status
@@ -290,9 +294,18 @@ public class LearningDocumentController {
     }
     String classCode = requiredText(body.get("classCode"), "classCode", 30);
     String subjectCode = requiredText(body.get("subjectCode"), "subjectCode", 40);
+    Long courseId = optionalLong(body.get("courseId"), "courseId");
     String programCode = optionalText(body.get("programCode"), 60);
     Long subjectId;
-    if (programCode == null || programCode.isBlank()) {
+    if (courseId != null) {
+      subjectId = jdbc.query("""
+        select s.id from curriculum_subject s
+        join curriculum_class c on c.id=s.class_id
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where p.id=? and c.code=? and s.code=? and c.active=true and s.active=true
+        """, rs -> rs.next() ? rs.getLong(1) : null, courseId, classCode, subjectCode);
+    } else if (programCode == null || programCode.isBlank()) {
       subjectId = jdbc.query("""
         select s.id from curriculum_subject s
         join curriculum_class c on c.id=s.class_id
@@ -302,7 +315,8 @@ public class LearningDocumentController {
       subjectId = jdbc.query("""
         select s.id from curriculum_subject s
         join curriculum_class c on c.id=s.class_id
-        join curriculum_program p on p.id=s.program_id and p.class_id=c.id and p.status='ACTIVE'
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE'
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
         where c.code=? and s.code=? and upper(p.code)=upper(?) and c.active=true and s.active=true
         """, rs -> rs.next() ? rs.getLong(1) : null, classCode, subjectCode, programCode);
     }
@@ -480,6 +494,7 @@ public class LearningDocumentController {
       @RequestParam(required = false) String subjectCode,
       @RequestParam(defaultValue = "hi") String language,
       @RequestParam(required = false) String displayLanguage,
+      @RequestParam(required = false) Long courseId,
       @RequestParam(required = false) String programCode,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
@@ -487,21 +502,32 @@ public class LearningDocumentController {
     String languageFilter = normalizeDocumentLanguage(language);
     String chapterDisplayLanguage = normalizeDocumentLanguage(displayLanguage == null ? language : displayLanguage);
     Long programId = null;
-    if (programCode != null && !programCode.isBlank()) {
-      List<Map<String,Object>> enrolledProgram = jdbc.queryForList("""
-        select p.id
-        from curriculum_program p
-        join curriculum_class cc on cc.id=p.class_id and cc.active=true
-        join student st on st.id=? and st.active=true and st.class_code=cc.code
-        join student_program_enrollment spe on spe.student_id=st.id
-          and spe.program_id=p.id and spe.status='ACTIVE'
-        where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
-        """, context.studentId(), programCode.trim());
-      if (enrolledProgram.isEmpty()) throw new SecurityException("Active enrolment in this course is required.");
+    if (courseId != null || (programCode != null && !programCode.isBlank())) {
+      List<Map<String,Object>> enrolledProgram;
+      if (courseId != null) {
+        enrolledProgram = jdbc.queryForList("""
+          select p.id
+          from curriculum_program p
+          join student_program_enrollment spe on spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          where p.id=? and p.status='ACTIVE' and p.code<>'GENERAL'
+          """, context.studentId(), courseId);
+      } else {
+        enrolledProgram = jdbc.queryForList("""
+          select p.id
+          from curriculum_program p
+          join student_program_enrollment spe on spe.student_id=? and spe.program_id=p.id and spe.status='ACTIVE'
+          where upper(p.code)=upper(?) and p.status='ACTIVE' and p.code<>'GENERAL'
+          order by p.id
+          """, context.studentId(), programCode.trim());
+      }
+      if (enrolledProgram.size() != 1) throw new SecurityException(enrolledProgram.isEmpty()
+          ? "Active enrolment in this course is required."
+          : "This course code is ambiguous; use its numeric course ID.");
       programId = ((Number)enrolledProgram.getFirst().get("id")).longValue();
     }
     String programScope = programId == null ? "s.program_id is null"
         : "s.program_id=? and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String learnerScope = programId == null ? "c.code=st.class_code" : "true";
     String sql = """
       select d.id as document_id,d.scope,d.book_part,d.title,d.edition,d.language,d.page_start,d.page_end,
              a.page_count as source_page_count,
@@ -515,7 +541,7 @@ public class LearningDocumentController {
       join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       left join lateral (
@@ -530,12 +556,13 @@ public class LearningDocumentController {
       where d.status='PUBLISHED'
         and d.language=?
         and (?='' or s.code=?)
+        and __LEARNER_SCOPE__
         and __PROGRAM_SCOPE__
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
       order by s.sort_order,d.language,case when d.scope='SUBJECT_BOOK' then 0 else 1 end,
                coalesce(ch.teaching_order,ch.sort_order),ch.display_name,d.id
-      """.replace("__PROGRAM_SCOPE__",programScope);
+      """.replace("__LEARNER_SCOPE__",learnerScope).replace("__PROGRAM_SCOPE__",programScope);
     if (programId == null) {
       return jdbc.queryForList(sql, context.studentId(), chapterDisplayLanguage, languageFilter, subjectFilter, subjectFilter);
     }
@@ -544,10 +571,13 @@ public class LearningDocumentController {
 
   /** Source-compatible overloads for existing Java callers. */
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, null, null, context);
+    return studentDocumentCatalog(subjectCode, language, null, null, null, context);
   }
   public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, String displayLanguage, AuthContext context) {
-    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, context);
+    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, null, context);
+  }
+  public List<Map<String, Object>> studentDocumentCatalog(String subjectCode, String language, String displayLanguage, String programCode, AuthContext context) {
+    return studentDocumentCatalog(subjectCode, language, displayLanguage, null, programCode, context);
   }
   @GetMapping("/learning/documents/{documentId}")
   public Map<String, Object> studentDocument(
@@ -639,17 +669,20 @@ public class LearningDocumentController {
       join learning_pdf_asset a on a.id=d.pdf_asset_id
       join curriculum_subject s on s.id=d.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       left join curriculum_chapter ch on ch.id=d.chapter_id
       where d.id=? and d.status='PUBLISHED'
         and a.review_status='APPROVED'
         and (d.scope='SUBJECT_BOOK' or (ch.id is not null and ch.active=true))
-        and (s.program_id is null or exists(
-          select 1 from student_program_enrollment spe
-          join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
-          where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
-        ))
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """, studentId, documentId);
     if (rows.isEmpty()) throw notFound("Learning document", documentId);
     return new LinkedHashMap<>(rows.getFirst());

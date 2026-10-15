@@ -378,24 +378,36 @@ public class TextbookExtractionService {
     if (subjectLower.contains("math") || subjectName.contains("गणित")) subjectCode = "maths";
     else if (subjectLower.contains("science") || subjectName.contains("विज्ञान")) subjectCode = "science";
     else throw new IllegalArgumentException("Only Maths and Science source books can be imported into this pilot.");
+    long requestedCourseId = manifest.path("course_id").asLong(manifest.path("program_id").asLong(0));
     String programCode = manifest.path("program_code").asText("").trim();
     List<Map<String, Object>> scopeRows;
-    if (programCode.isBlank()) {
+    if (requestedCourseId > 0) {
       scopeRows = jdbc.queryForList("""
-        select c.id as class_id,s.id as subject_id,null::bigint as program_id
+        select c.id as class_id,s.id as subject_id,p.id as program_id,
+               p.code as program_code,p.display_name as program_name
+        from curriculum_program p
+        join curriculum_subject s on s.program_id=p.id and s.code=? and s.active=true
+        join curriculum_class c on c.id=s.class_id and c.code=? and c.active=true
+        join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
+        where p.id=? and p.status='ACTIVE'
+        """, subjectCode, String.valueOf(classNo), requestedCourseId);
+    } else if (programCode.isBlank()) {
+      scopeRows = jdbc.queryForList("""
+        select c.id as class_id,s.id as subject_id,null::bigint as program_id,
+               null::varchar as program_code,null::varchar as program_name
         from curriculum_class c join curriculum_subject s on s.class_id=c.id
         where c.code=? and s.code=? and s.program_id is null and c.active=true and s.active=true
         """, String.valueOf(classNo), subjectCode);
     } else {
       scopeRows = jdbc.queryForList("""
-        select c.id as class_id,s.id as subject_id,p.id as program_id
+        select c.id as class_id,s.id as subject_id,p.id as program_id,
+               p.code as program_code,p.display_name as program_name
         from curriculum_class c
-        join curriculum_program p on p.class_id=c.id and p.status='ACTIVE' and upper(p.code)=upper(?)
-        join curriculum_subject s on s.class_id=c.id and s.program_id=p.id and s.code=?
-          and s.active=true
+        join curriculum_subject s on s.class_id=c.id and s.code=? and s.active=true
+        join curriculum_program p on p.id=s.program_id and p.status='ACTIVE' and upper(p.code)=upper(?)
         join curriculum_program_subject ps on ps.program_id=p.id and ps.class_id=c.id and ps.subject_id=s.id
         where c.code=? and c.active=true
-        """, programCode, subjectCode, String.valueOf(classNo));
+        """, subjectCode, programCode, String.valueOf(classNo));
     }
     if (scopeRows.isEmpty()) {
       throw new IllegalArgumentException("No active curriculum track matches this class, subject, and optional course.");
@@ -495,7 +507,12 @@ public class TextbookExtractionService {
     result.put("subject", subjectCode); result.put("language", language); result.put("pagesImported", pages.size());
     result.put("status", "DRAFT");
     result.put("message", "Imported as draft; explicitly approve the source before tutor retrieval.");
-    if (programId != null) { result.put("programCode", programCode); result.put("programId", programId); }
+    if (programId != null) {
+      result.put("courseId", programId);
+      result.put("programId", programId);
+      result.put("programCode", scopeRows.getFirst().get("program_code"));
+      result.put("programName", scopeRows.getFirst().get("program_name"));
+    }
     return result;
   }
 
