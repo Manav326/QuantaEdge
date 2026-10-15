@@ -40,7 +40,7 @@ fun ParentChildManageScreen(
     val existingClass = child.textAny("class_code").ifBlank { "6" }
     var classCode by rememberSaveable(childId) { mutableStateOf(existingClass) }
     var learningLanguage by rememberSaveable(childId) { mutableStateOf(child.textAny("language").ifBlank { "hi" }) }
-    val classChoices = listOfNotNull(existingClass, when (existingClass) { "6" -> "7"; "7" -> "8"; else -> null })
+    val classChoices = listOf("6", "7", "8")
     var username by rememberSaveable(childId) { mutableStateOf(child.textAny("login_username")) }
     var password by remember(childId) { mutableStateOf("") }
     val oldTracks = child.textAny("track_codes").split(',').map { it.trim() }.filter { it.isNotBlank() }
