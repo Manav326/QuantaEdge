@@ -114,7 +114,7 @@ object ApiClient {
             val currentClient = client ?: throw IOException("API client is not initialized.")
             val absoluteRequestUrl = path.startsWith("https://", true) || path.startsWith("http://", true)
             val url = if (absoluteRequestUrl) path else BuildConfig.API_BASE_URL.trimEnd('/') + "/" + path.trimStart('/')
-            val builder = Request.Builder().url(url).header("Accept", "application/json, image/png")
+            val builder = Request.Builder().url(url).header("Accept", "application/json, application/pdf, image/png, image/jpeg, image/webp")
             if (!absoluteRequestUrl) {
                 builder.header("X-QE-Workspace", currentWorkspace())
                     .header("X-QE-Client", "ANDROID")
