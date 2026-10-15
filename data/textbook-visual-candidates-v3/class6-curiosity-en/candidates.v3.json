@@ -1,0 +1,2615 @@
+{
+  "schema_version": "quantaedge.visual-candidate-pack.v3",
+  "pack_status": "CANDIDATES_FOR_HUMAN_REVIEW",
+  "source": {
+    "book_id": "ncert-c6-english-fecu1",
+    "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+    "page_count": 272,
+    "edition": "Reprint 2026-27",
+    "language": "english",
+    "subject": "Science",
+    "class": "6"
+  },
+  "selection_policy": {
+    "method": "STRATIFIED_HEURISTIC_V3",
+    "page_preview_target_fraction": 0.6,
+    "embedded_image_target_fraction": 0.4,
+    "semantic_classification_performed": false,
+    "model_used": null,
+    "notes": [
+      "Heuristic scores rank candidates; they do not determine educational correctness.",
+      "Unique embedded bytes are deduplicated for storage, while every source-page occurrence is retained.",
+      "Whole-page candidates preserve vector diagrams and surrounding textbook context.",
+      "All candidates remain unpublished and require human review."
+    ]
+  },
+  "summary": {
+    "inventory_asset_records": 2078,
+    "embedded_image_hash_groups": 1200,
+    "page_preview_records": 272,
+    "missing_inventory_asset_files": 0,
+    "selected_candidate_count": 60,
+    "selected_embedded_images": 24,
+    "selected_page_previews": 36,
+    "distinct_selected_pages": 54,
+    "selected_page_numbers": [
+      20,
+      21,
+      22,
+      23,
+      31,
+      32,
+      33,
+      41,
+      42,
+      47,
+      51,
+      57,
+      66,
+      67,
+      71,
+      82,
+      86,
+      88,
+      91,
+      93,
+      94,
+      106,
+      109,
+      112,
+      116,
+      120,
+      125,
+      135,
+      142,
+      148,
+      151,
+      159,
+      162,
+      163,
+      164,
+      171,
+      173,
+      187,
+      189,
+      191,
+      198,
+      206,
+      212,
+      218,
+      225,
+      228,
+      230,
+      235,
+      236,
+      253,
+      254,
+      255,
+      269,
+      270
+    ],
+    "publication_allowed": false
+  },
+  "candidates": [
+    {
+      "candidate_id": "v3-page-0020-fa1415dfc5",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 20,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "fa1415dfc5421983b6f0df110c603b87426ae975c739a867d79129420edffbab",
+      "source_asset_path": "page-0020.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 2 Science is like a giant and unending jigsaw puzzle. Every new discovery we make adds another piece to that puzzle. And you know the best thing about this puzzle? There is no limit to what we can discover, since every new piece of knowledge leads to more questions and more things to find out. Sometimes, we find that a piece of this puzzle has been put in the wrong place and needs to be moved. New discoveries often change our understanding of the world. As you go through this book, you will encounter interesting ideas, do some thought-provoking experiments, and see how some of what we will find out is useful in our vastness of outer space, from what is cooking in the kitchen to what is happening on the playground, some of the most groundbreaking discoveries have often come from unexpected places. A Desert A Coast An underwater view of an Ocean A Galaxy Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "28645b649bcfe373934634dd",
+          "source_pdf_page_number": 20,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "0f28e3d4c5ecb6549ba1d9fe6c0bdae2d82338700872295b997cfd62ed213bcb",
+          "asset_path": "page-0020.jpg"
+        }
+      ],
+      "heuristic_score": 16.244,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0020.jpg",
+      "display_path": "prepared/pages/page-0020.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0021-da09fd8b0e",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 21,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "da09fd8b0ee6605112d35f926280628ec6fff5a5fe21743b580776cb322c552e",
+      "source_asset_path": "page-0021.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "The Wonderful World of Science 3 daily lives. And guess what happens as we discover more and more? We start realising that these ideas are all connected. We will start off by looking at our home, planet Earth. It is the only planet we know that supports life, and it has an environment that we must protect. There is an amazing variety of life on Earth—plants and animals that have managed to survive and thrive in different regions on this planet. You might have seen a seed grow into a plant, a caterpillar transform into a beautiful butterfly and many more such observations. How do these plants and animals grow? What will we explore with the help of this book? ? Of course, to grow, we need food to eat, and especially in a large and diverse country like India, food is so fascinating. Across the country, we have different cuisines with their many tasty dishes. What are they made of? How do we find out? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "68d2ad12fd2655a46298c3d9",
+          "source_pdf_page_number": 21,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "f16fa5c75a434d960967f2ef2a5be154f57312c87aec0449f830521d0f06c124",
+          "asset_path": "page-0021.jpg"
+        }
+      ],
+      "heuristic_score": 16.289,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0021.jpg",
+      "display_path": "prepared/pages/page-0021.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-d6062c6bd2eed2b995b0",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 22,
+      "bbox_pdf_points": [
+        153.092,
+        223.762,
+        517.334,
+        430.279
+      ],
+      "source_asset_sha256": "d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c",
+      "source_asset_path": "assets/d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c.jpeg",
+      "source_asset_width": 569,
+      "source_asset_height": 323,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 4 Then again, there are so many different things around us—the paper we write on, the metal key, the plastic ruler and the rubber eraser in our box, the magnet that keeps the box closed, the clothes we wear, the cup we drink milk in and so many other things. What are they made of? Are they made of different materials? How do we separate different materials from one another? Along with food, we need water to survive. Water is such a delightful substance. Have you ever jumped in a puddle when it rained? Do you ever wonder why and how it rains? Have you noticed that water freezes and becomes ice when we cool it and boils and becomes steam when we heat it? Do you enjoy drinking cool water in the summer or showering with warm water in the winter? How do we understand hot and cold? Whether it is water, or our own body when we have fever, finding out how hot something is can be important! Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "c1fc9d1b24570a7b63f2a99e",
+          "source_pdf_page_number": 22,
+          "bbox_pdf_points": [
+            153.092,
+            223.762,
+            517.334,
+            430.279
+          ],
+          "page_text_sha256": "cce8d80f4df111c0611301d3cee445294da7372ac0016908b12e18d86963d62b",
+          "asset_path": "assets/d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c.jpeg",
+          "heuristic_score": 38.947
+        }
+      ],
+      "heuristic_score": 38.947,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0022.jpg",
+      "original_asset_path": "prepared/originals/v3-image-d6062c6bd2eed2b995b0.jpeg",
+      "original_asset_sha256": "d6062c6bd2eed2b995b028a59814c77fa55536e9f66d653f0fc6c05283f7732c",
+      "page_crop_path": "prepared/crops/v3-image-d6062c6bd2eed2b995b0.jpg",
+      "page_crop_sha256": "b39be02f0f4425034cd44c9d387ef083275311c76dc5768a365131525391a8e6",
+      "display_path": "prepared/crops/v3-image-d6062c6bd2eed2b995b0.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-image-2759d93932df53797bd7",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "bbox_pdf_points": [
+        305.591,
+        363.832,
+        507.478,
+        481.906
+      ],
+      "source_asset_sha256": "2759d93932df53797bd73e0607bdf8f96544926b4efb27d94fb2995d35b9f6b4",
+      "source_asset_path": "assets/2759d93932df53797bd73e0607bdf8f96544926b4efb27d94fb2995d35b9f6b4.jpeg",
+      "source_asset_width": 315,
+      "source_asset_height": 184,
+      "page_text_context": "The Wonderful World of Science 5 We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky! Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite your spirit of inquiry. And hopefully you will have lots of questions on your mind! Even though you may have not realised, you have already been fi nding answers to many of your questions. Suppose your pen stops writing. What would you do? You would ask yourself the question, “Why did my pen stop writing?” You might guess that the ink fi nished. You would then test this guess by opening the pen and checking the ink refi ll. If it is empty, you would know that your guess was correct. But suppose you found that the ink was not fi nished. Now what would you do? You would make another guess—perhaps the ink might have dried up. To test if this guess is correct or not, you will try something else. This is exactly how Science works! The way you tried to fi nd out why your pen stopped writing is an example of the scientiﬁ c method. Activity 1.1: Let us think and write  Write about a similar problem that you tried to solve.  What steps did you take? Science is not just about memorising facts and fi gures or doing experiments. It is about following a step-by-step process that helps us fi nd answers to our questions. So what are the steps that we can follow? How can we try to ﬁ nd answers to our questions on our own? ? empty, was he ld er ve ct Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "04912e928de154373d2c05c3",
+          "source_pdf_page_number": 23,
+          "bbox_pdf_points": [
+            305.591,
+            363.832,
+            507.478,
+            481.906
+          ],
+          "page_text_sha256": "8d9972f07e84b0d69f36a90d5d39bf21324a9d4f7261b8433c766b81b50a30ed",
+          "asset_path": "assets/2759d93932df53797bd73e0607bdf8f96544926b4efb27d94fb2995d35b9f6b4.jpeg",
+          "heuristic_score": 39.4
+        }
+      ],
+      "heuristic_score": 39.4,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0023.jpg",
+      "original_asset_path": "prepared/originals/v3-image-2759d93932df53797bd7.jpeg",
+      "original_asset_sha256": "2759d93932df53797bd73e0607bdf8f96544926b4efb27d94fb2995d35b9f6b4",
+      "page_crop_path": "prepared/crops/v3-image-2759d93932df53797bd7.jpg",
+      "page_crop_sha256": "93cd3ccfe5a51c6bc8c343c819c421e90a90fe11b33de2e862ef7f4947cb986b",
+      "display_path": "prepared/crops/v3-image-2759d93932df53797bd7.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0023-a84b5b9053",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 23,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "a84b5b9053936d6084e562d6d98084fc87040cf61530d7b27e00bd6a21fc86e3",
+      "source_asset_path": "page-0023.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "The Wonderful World of Science 5 We will have an almost unending list of questions about everything on Earth as we further explore this book. But why limit our questions to the Earth alone? We can ask questions on things beyond—the Sun, the Moon, and the millions of stars that shine in the sky! Whether you are learning about the structure of a leaf, discovering how things move, or separating the skin of a peanut seed, we hope each chapter of this book will ignite your spirit of inquiry. And hopefully you will have lots of questions on your mind! Even though you may have not realised, you have already been fi nding answers to many of your questions. Suppose your pen stops writing. What would you do? You would ask yourself the question, “Why did my pen stop writing?” You might guess that the ink fi nished. You would then test this guess by opening the pen and checking the ink refi ll. If it is empty, you would know that your guess was correct. But suppose you found that the ink was not fi nished. Now what would you do? You would make another guess—perhaps the ink might have dried up. To test if this guess is correct or not, you will try something else. This is exactly how Science works! The way you tried to fi nd out why your pen stopped writing is an example of the scientiﬁ c method. Activity 1.1: Let us think and write  Write about a similar problem that you tried to solve.  What steps did you take? Science is not just about memorising facts and fi gures or doing experiments. It is about following a step-by-step process that helps us fi nd answers to our questions. So what are the steps that we can follow? How can we try to ﬁ nd answers to our questions on our own? ? empty, was he ld er ve ct Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "264647961a857697afa5e279",
+          "source_pdf_page_number": 23,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "8d9972f07e84b0d69f36a90d5d39bf21324a9d4f7261b8433c766b81b50a30ed",
+          "asset_path": "page-0023.jpg"
+        }
+      ],
+      "heuristic_score": 22.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0023.jpg",
+      "display_path": "prepared/pages/page-0023.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-12b6ac81edcb91cd53a1",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 31,
+      "bbox_pdf_points": [
+        84.199,
+        276.537,
+        484.251,
+        593.436
+      ],
+      "source_asset_sha256": "12b6ac81edcb91cd53a1a194231323c7d3078a54b5f1db3860cc85c8943a55f3",
+      "source_asset_path": "assets/12b6ac81edcb91cd53a1a194231323c7d3078a54b5f1db3860cc85c8943a55f3.jpeg",
+      "source_asset_width": 625,
+      "source_asset_height": 495,
+      "page_text_context": "Diversity in the Living World 13 While travelling to and from school, observe your surroundings and look out for a variety of plants and animals. Add the name of any plant or animal that you have not listed before in Tables 2.1 and 2.2. Activity 2.2: Let us appreciate   Close your eyes for 30 seconds and think of one plant and one animal that you have closely observed and appreciated very much.   Now each one of you can draw the plant and animal that you thought of on the blackboard.   What are your observations about the various plants and animals that have been drawn?   How many different plants and animals did the entire class draw on the blackboard?   Do you think that there may be many more varieties of plants and animals other than those drawn on the board? The variety of plants and animals found in a particular region contributes to the biodiversity of that region. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "50c147c57e8e2e87ca99b4df",
+          "source_pdf_page_number": 31,
+          "bbox_pdf_points": [
+            84.199,
+            276.537,
+            484.251,
+            593.436
+          ],
+          "page_text_sha256": "6a0e6b1e59ecb0d7e04a0680511b3579e0c438259bea01aac7f5635324dd8702",
+          "asset_path": "assets/12b6ac81edcb91cd53a1a194231323c7d3078a54b5f1db3860cc85c8943a55f3.jpeg",
+          "heuristic_score": 48.467
+        }
+      ],
+      "heuristic_score": 48.467,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0031.jpg",
+      "original_asset_path": "prepared/originals/v3-image-12b6ac81edcb91cd53a1.jpeg",
+      "original_asset_sha256": "12b6ac81edcb91cd53a1a194231323c7d3078a54b5f1db3860cc85c8943a55f3",
+      "page_crop_path": "prepared/crops/v3-image-12b6ac81edcb91cd53a1.jpg",
+      "page_crop_sha256": "c916a63fefeb47860d2861ecbdcf302b39bc2b4901c279d6050c560478ba9e70",
+      "display_path": "prepared/crops/v3-image-12b6ac81edcb91cd53a1.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0032-4865cd1f98",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 32,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "4865cd1f9836d654949843092cfcd1a11e5f28d4066298ea780c942a47471ac1",
+      "source_asset_path": "page-0032.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 14 Each member in the biodiversity of a region has a different role to play. For example, trees provide food and shelter to some birds and other animals, animals help in spreading seeds after eating fruits, and so on. Can you think of more such examples? This shows that plants and animals are dependent on each other. 2.2 How to Group Plants and Animals? How would you arrange your books and notebooks in groups? Would arranging them in groups help you better organise your school bag? Now, let us look at the world around us. We are surrounded by a variety of plants and animals with different features about which you have learnt in section 2.1. We can group them based on similarities and differences among them. Activity 2.3: Let us group   Collect pictures of various other plants and animals. Cut their pictures from old magazines, newspapers, charts and other sources. Paste each of these pictures on a different card.   Divide your class in groups of 5–6 students each.   Pool the cards prepared by the students in your group.   Observe various features of plants and animals shown on the cards.   Recall the features of plants and animals that you have listed in Tables 2.1 and 2.2.   Group them on the basis of common features.   Share and discuss the basis of grouping you have made with other groups in your class. You will be surprised to see that the basis used by different groups may vary. What do you think are the reasons behind it? Different students might have chosen different common features for the grouping. For example, some students may have chosen the height of plants as the basis for grouping while others might have chosen presence or absence of flowers as the basis for grouping of plants (See Fig. 2.2). Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "16fe10aadecbfd315b8abde7",
+          "source_pdf_page_number": 32,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "37e85af28ff78facfa1304177ca64f0f257de4568d600f693186800cb8a37e26",
+          "asset_path": "page-0032.jpg"
+        }
+      ],
+      "heuristic_score": 26.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0032.jpg",
+      "display_path": "prepared/pages/page-0032.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0033-61845e9a14",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 33,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "61845e9a1476c26599a9ffcfa9a1ca2674846c3651e00a2ce0cf2ef05c327119",
+      "source_asset_path": "page-0033.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Diversity in the Living World 15 You may have grouped animals based on varied features, such as what they eat, where they live, what colour they are and how they move. What is the importance of grouping? Grouping makes it easier to understand and study plants and animals on the basis of their similarities and differences. You will learn more about the importance of grouping in our daily lives in the chapter, ‘Materials Around Us’. 2.2.1 How to group plants? You must have noticed that plants show variation in the features related to stems, leaves, flowers, and more. The stems of different plants vary in thickness, height, and hardness, while the leaves vary in shape, colour, size and arrangement. You might have tried grouping the plants in Activity 2.3 using one of these features. You might have also learnt in earlier classes that plants can be grouped into herbs, shrubs, and trees based on their height and types of stem. Let us study the features of plants in more detail and group them on that basis. Activity 2.4: Let us group   Let us go on a nature walk again for some more interesting observations.   Look closely at the height of different plants. Are these plants shorter than you, as tall as you, or taller than you?   Is the stem brown or green? Touch and feel the stems and try to bend them gently. Can you bend the stem easily, or is it stiff? Take care that the stems do not break.   Also, observe from where the branches of the plants arise—whether they arise close to the ground or higher up on the stem. Fill in your observations in Table 2.3. A few examples are already given. Fig. 2.2: Some possible criteria of groupings of plants and animals Presence/ absence of flowers Hard/soft stem Eating habits Place they live Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b90b1ccd2f380e4a35f9f791",
+          "source_pdf_page_number": 33,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "5e90598c51c559a4da59d16564f3afb5d44391f0e9942a6c5033b739416c0b32",
+          "asset_path": "page-0033.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0033.jpg",
+      "display_path": "prepared/pages/page-0033.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-7b9f84a5d02dce9deb99",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 41,
+      "bbox_pdf_points": [
+        33.39,
+        52.32,
+        502.4,
+        312.899
+      ],
+      "source_asset_sha256": "7b9f84a5d02dce9deb997ae2cccc709ef2a43b8184ba3a380e781f78e940cc4b",
+      "source_asset_path": "assets/7b9f84a5d02dce9deb997ae2cccc709ef2a43b8184ba3a380e781f78e940cc4b.jpeg",
+      "source_asset_width": 733,
+      "source_asset_height": 407,
+      "page_text_context": "Diversity in the Living World 23 More to know! Success Story—Save Silent Valley Movement This is a real story of a forest in the Palakkad district of Kerala. It is about preserving untouched beauty of a moist evergreen forest and its rich biodiversity. The now-famous Silent Valley was saved by a remarkable movement led by common people who were not even residing in the vicinity of the forest. The battle against the proposal of a hydroelectric dam across the Kunthipuzha river persisted for 10 years. At that time, people used all possible available means, such as widespread awareness programmes, letters to editors, articles in, newspapers, seminars, and petitions and appeals in court. The movement was successful in saving the Silent Valley. 2.3 Plants and Animals in Different Surroundings You might have observed during nature walks that different animals live in different surroundings. You have also recorded movement of animals in Table 2.5. Does the movement of these animals depend upon their surroundings? Let us consider fishes and goat as examples. Fishes live in water. They have streamlined bodies and fins for movement in water (Fig. 2.8a). Goats live in grassy areas and move with the help of legs (Fig. 2.8b). The sizes and shapes of animals also differ from one another. Fig. 2.8: Body parts used by animals for movement (b) A goat walks on the ground with the help of legs Legs (a) A fish swims in water with the help of fins Fins Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "8c99a9e1741761a4a2c7f879",
+          "source_pdf_page_number": 41,
+          "bbox_pdf_points": [
+            33.39,
+            52.32,
+            502.4,
+            312.899
+          ],
+          "page_text_sha256": "6e46c2d104484721d7a2e9553cf8cc9fac4a743dd2295005b0fc19d9306b8834",
+          "asset_path": "assets/7b9f84a5d02dce9deb997ae2cccc709ef2a43b8184ba3a380e781f78e940cc4b.jpeg",
+          "heuristic_score": 49.6
+        }
+      ],
+      "heuristic_score": 49.6,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0041.jpg",
+      "original_asset_path": "prepared/originals/v3-image-7b9f84a5d02dce9deb99.jpeg",
+      "original_asset_sha256": "7b9f84a5d02dce9deb997ae2cccc709ef2a43b8184ba3a380e781f78e940cc4b",
+      "page_crop_path": "prepared/crops/v3-image-7b9f84a5d02dce9deb99.jpg",
+      "page_crop_sha256": "02c7fc72119681cc234540a615208399ce794ee0a384b2926cd95d0a12c853b3",
+      "display_path": "prepared/crops/v3-image-7b9f84a5d02dce9deb99.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0042-810b3c5b19",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 42,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "810b3c5b19318286450b40db2363247db6f4afda6b3b8f4f53b96072769cfc85",
+      "source_asset_path": "page-0042.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 24 S. no. In the desert On mountains In the ocean In the forest Any other region 1. Camel Deodar tree Fish Lion 2. Any other 3. Activity 2.10: Let us compare and analyse   Look at Table 2.6. Recreate a similar table on the blackboard.   List the names of plants and animals you or your classmates have observed in the regions given in the table or already know about. A few examples are given. You can add more. Table 2.6: Animals and plants found in different surroundings What are your observations regarding plants and animals found in various regions? Discuss your observations with your classmates. You might observe from Table 2.6 that the plants and animals found in one kind of region are different from those found in another kind of region. Fig. 2.9: Cactus with thick and fleshy stems in a desert Fig. 2.10: A deodar tree in the mountains During a discussion in the classroom, Alex recalls that he observed cactus plants with thick and fleshy stems in the deserts of Rajasthan (Fig. 2.9). Maya shares that she saw deodar trees in the Himalayas of Himachal Pradesh (Fig. 2.10). These trees are conical in shape and have flexible and sloping branches. Notice that these two types of plants found in different regions are different Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e28b49222e0c0b8785e1a1e7",
+          "source_pdf_page_number": 42,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "2774a9e2dc8ee44b7732a5f690d3b9ff7591aaa89da36b8607969a5cd0c069ed",
+          "asset_path": "page-0042.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0042.jpg",
+      "display_path": "prepared/pages/page-0042.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-5b5518b3dd5ce880fcd2",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 47,
+      "bbox_pdf_points": [
+        9.4,
+        26.4,
+        476.4,
+        337.8
+      ],
+      "source_asset_sha256": "5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e",
+      "source_asset_path": "assets/5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e.jpeg",
+      "source_asset_width": 729,
+      "source_asset_height": 486,
+      "page_text_context": "Diversity in the Living World 29 Keywords More to know! Traditionally Protected Forests: Sacred Groves Sacred groves are undisturbed patches of forests. Their sizes may vary from quite small to very large. Sacred groves are found all over India. They are home to different kinds of plants and animals, including numerous medicinal plants. These are protected by the local community and no one is allowed to harm any animals and cut trees in these groves, or disturb the area. This way, sacred groves are a community protected treasure of biodiversity. Find out about the sacred groves in your region. Sacred grove from the Western Ghats We must protect biodiversity to ensure our planet is full of life, helping plants and animals to survive and thrive. Relate Record Observe Group Create Explore Adaptation Biodiversity Cotyledon Dicot plants Habitat Fibrous root Herbs Sacred groves Venation Monocot plants Reticulate venation Parallel venation Taproot Shrubs Amphibians Aquatic Tree Terrestrial Analyse Compare Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "2d5e8a1b28a4aafaacbedfb7",
+          "source_pdf_page_number": 47,
+          "bbox_pdf_points": [
+            9.4,
+            26.4,
+            476.4,
+            337.8
+          ],
+          "page_text_sha256": "5b07266da710dbc70757d90a37549c4fd00290b6b1a58727467768eabb7ea27c",
+          "asset_path": "assets/5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e.jpeg",
+          "heuristic_score": 45.66
+        }
+      ],
+      "heuristic_score": 45.66,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0047.jpg",
+      "original_asset_path": "prepared/originals/v3-image-5b5518b3dd5ce880fcd2.jpeg",
+      "original_asset_sha256": "5b5518b3dd5ce880fcd27f69c0026a1c217582644a3172cb61661fda20afdc1e",
+      "page_crop_path": "prepared/crops/v3-image-5b5518b3dd5ce880fcd2.jpg",
+      "page_crop_sha256": "66d56cc3f48c6d0b279def66282988154cc71409967ed43b538236caf761bcbf",
+      "display_path": "prepared/crops/v3-image-5b5518b3dd5ce880fcd2.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0051-31dcdecaf6",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 51,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "31dcdecaf6a86732a8503943af708112976d5013fcd966b0d53a60dc9895eace",
+      "source_asset_path": "page-0051.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Diversity in the Living World 33 Group Type of seed Type of root Examples A Dicot Taproot B Monocot Fibrous roots   Read about one Indian scientist or a wildlife biologist who is working towards protection of India’s biodiversity. Prepare a brief report.   Explore the contributions of Divya Mudappa, Usha Lachungpa, Ghazala Shahabuddin, Nandini Velho, Vidya Athreya, Uma Ramakrishnan and Divya Karnad towards biodiversity in India. Prepare a report of the work done by any three of them. Learning further (a) What other similarities do plants of group A have? (b) What other similarities do plants of group B have? 10. Observe the labelled part of a duck in the picture given below. What differences do you observe in the feet of the duck compared to the other birds? Which activity would the duck be able to perform using this part? (b) Pigeon (a) Duck Webbed feet 9. Based on the information in the table, find out examples of these plants for each group. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "dda5583d416cfe83f77d9f8c",
+          "source_pdf_page_number": 51,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "be2ad4c434f3dd01946da6d63ffde2b0f4cd545ef3cccf0804aee6fb75cfb154",
+          "asset_path": "page-0051.jpg"
+        }
+      ],
+      "heuristic_score": 24.867,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0051.jpg",
+      "display_path": "prepared/pages/page-0051.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-fcb4d4e5f704e1998b92",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 57,
+      "bbox_pdf_points": [
+        63.424,
+        365.861,
+        512.4,
+        632.48
+      ],
+      "source_asset_sha256": "fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2",
+      "source_asset_path": "assets/fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2.jpeg",
+      "source_asset_width": 702,
+      "source_asset_height": 417,
+      "page_text_context": "Mindful Eating: A Path to a Healthy Body 39 स्वस्थ आहार, स्वस्थ जीववन Eat Healthy, Live Healthy What are your findings from the interviews you conducted? Cooking practices, also called culinary practices, have changed over time. There is a significant difference between traditional and modern culinary practices. Earlier, most cooking was done using a chulha (Fig. 3.1a). Nowadays, most of us cook using a modern gas stove (Fig. 3.1b). Earlier, most grinding was done manually using a sil-batta (Fig. 3.1c). These days, we use an electrical grinder for ease of grinding (Fig. 3.1d). Find out what were the other ways of cooking and grinding. Why have these culinary practices changed over time? These changes may be due to factors such as technological development, improved transportation and better communication. 3.2 What are the Components of Food? Medu and Mishti visit the ‘Traditional Food Festival’ organised in their school. The theme of the festival is ‘Eat Healthy, Live Healthy’. The festival features various stalls displaying different kinds of traditional dishes. Dr Poshita, a nutritional expert, explains to students that ʻHealth is the Ultimate Wealthʼ. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e80988f6d14529e8f82215db",
+          "source_pdf_page_number": 57,
+          "bbox_pdf_points": [
+            63.424,
+            365.861,
+            512.4,
+            632.48
+          ],
+          "page_text_sha256": "7762ea6f9740f6081cebd2c2a939cfaf03dac2bbbcbd9166ec4ad23f8b8d956c",
+          "asset_path": "assets/fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2.jpeg",
+          "heuristic_score": 46.0
+        }
+      ],
+      "heuristic_score": 46.0,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0057.jpg",
+      "original_asset_path": "prepared/originals/v3-image-fcb4d4e5f704e1998b92.jpeg",
+      "original_asset_sha256": "fcb4d4e5f704e1998b9226fc934c4bea40dfa1ee3978c668808f09c1173284c2",
+      "page_crop_path": "prepared/crops/v3-image-fcb4d4e5f704e1998b92.jpg",
+      "page_crop_sha256": "a9b6389e41280bcb7ae73153ed5038a229b0438a5adb2c799c4e40b54af6bfce",
+      "display_path": "prepared/crops/v3-image-fcb4d4e5f704e1998b92.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0066-52222f433c",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 66,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "52222f433c5f685cadf6fb66fd13735749685322147ba9936b31c17b2696c0fe",
+      "source_asset_path": "page-0066.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 48 3.3 How to Test Different Components of Food? Let us find out which nutrients are present in various food items. Some nutrients like starch (a type of carbohydrate), fat and protein can be detected using fairly simple tests, while others can be detected only in a well-equipped laboratory. Let us explore how we can detect the presence of starch, fat and protein in some food items. 3.3.1 Test for starch Activity 3.5: Let us investigate   Take a small quantity of the food items such as a slice of potato, cucumber, bread, some boiled rice, boiled gram, crushed peanuts, oil, butter and crushed coconut. You can take other food items too for testing. Fig. 3.7: Testing for the presence of starch in various food items   Place a small piece of each item on a separate dish.   With the help of a dropper, put 2–3 drops of diluted iodine solution on each food item (Fig. 3.7).   Observe if there are any changes in the colour of the food items. Have they turned blue-black? Record your observations in Table 3.3. A blue-black colour indicates the presence of starch. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "cad33ddf766e551a5865ff68",
+          "source_pdf_page_number": 66,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "e9897d858957fc5dce7f2c5afbbd9a675d913eba71e4b87194abc8068ee01d4d",
+          "asset_path": "page-0066.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0066.jpg",
+      "display_path": "prepared/pages/page-0066.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0067-11a5577d49",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 67,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "11a5577d495b550866bf6b1d61490554e7f1e8b59684e40cfabaff0f7c32bf42",
+      "source_asset_path": "page-0067.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Mindful Eating: A Path to a Healthy Body 49 3.3.2 Test for fats Activity 3.6: Let us investigate   Take a small part of the food items that you tested for the presence of starch in Activity 3.5.   Place each food item on a separate piece of paper.   Wrap the paper around the food and press it. Be careful not to tear the paper.   If a food item contains a little water, allow the paper to dry. Does the paper develop an oily patch? What do you think is the reason for this patch? If oil or butter is present in the food item, it leaves an oily patch on the paper. Now, hold the paper against light. Can you see the light faintly shining through this patch? An oily patch on the paper shows that the food item contains fat. Which of these items contain fats? Record your observations in Table 3.3. 3.3.3 Test for proteins Activity 3.7: Let us investigate This activity may be demonstrated by the teacher.   Take the food items tested in previous activities.   Make a paste or powder of the food item using pestle and mortar (Fig. 3.8).   Put about half teaspoon of each food item in a separate clean test tube. Precautions • These chemicals are harmful and need to be handled with care. Do not touch any of these chemicals unless asked to do so. • If any chemical gets spilled on your body, immediately wash the affected area with water. • Do not put any of these chemicals into your mouth, or try to smell them. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "9fd26b81a384a906d715f667",
+          "source_pdf_page_number": 67,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "bcd837ac3bf0899dbed8ca1db26e755e97e09cbf0941603f613243df527796b9",
+          "asset_path": "page-0067.jpg"
+        }
+      ],
+      "heuristic_score": 26.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0067.jpg",
+      "display_path": "prepared/pages/page-0067.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-c915b88c3cf837ab09b6",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 71,
+      "bbox_pdf_points": [
+        48.837,
+        140.395,
+        458.44,
+        336.446
+      ],
+      "source_asset_sha256": "c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3",
+      "source_asset_path": "assets/c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3.jpeg",
+      "source_asset_width": 640,
+      "source_asset_height": 306,
+      "page_text_context": "Mindful Eating: A Path to a Healthy Body 53 a healthy body. Good health is essential for leading a happy life. Which of the two foods you studied in Activity 3.9 could be labelled as junk food? Fig. 3.9: Sanwa (Barnyard millet) 3.5 Millets: Nutrition-rich Cereals You may have heard of jowar, bajra, ragi, and sanwa (Fig. 3.9). These are native crops of India (Fig. 3.9). These can be easily cultivated in different climatic conditions. These highly nutritious grains are also called millets. Have you ever had food items made from these millets? Millets are small-sized grains and have been an integral part of the Indian diet for centuries. They have regained popularity due to their numerous health benefits. They are good sources of vitamins, minerals like iron and calcium, and dietary fibres as well. That is the reason they are also called nutri-cereals. They contribute significantly to a balanced diet required for the normal functioning of our body. Packaged food items must have information about the nutrients on their cover. The information should list the amount of each nutrient. Sometimes, more nutrients are added to the food during processing (fortification) to improve its nutritional quality. Iodised salt and some baby foods are examples of fortified foods. The Food Safety and Standard Authority of India (FSSAI) is a government agency that regulates food quality in India. More to know! Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "2f560d9cab67bc34b10a1efe",
+          "source_pdf_page_number": 71,
+          "bbox_pdf_points": [
+            48.837,
+            140.395,
+            458.44,
+            336.446
+          ],
+          "page_text_sha256": "b2f72b74ea8a2147f04fc75ba53ae98efa1b1fcf2b5f377fe7a16cbf481496e9",
+          "asset_path": "assets/c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3.jpeg",
+          "heuristic_score": 44.6
+        }
+      ],
+      "heuristic_score": 44.6,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0071.jpg",
+      "original_asset_path": "prepared/originals/v3-image-c915b88c3cf837ab09b6.jpeg",
+      "original_asset_sha256": "c915b88c3cf837ab09b6151dde90545bc48985961625fee5f046727fe669e0b3",
+      "page_crop_path": "prepared/crops/v3-image-c915b88c3cf837ab09b6.jpg",
+      "page_crop_sha256": "9af410141fa12b381845a605482ce876139507ae9dbde32332c57fc887d5f68c",
+      "display_path": "prepared/crops/v3-image-c915b88c3cf837ab09b6.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0082-7454fc423f",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 82,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "7454fc423f4fb78f48d2de98763f7fb9e48ffd0de92a90a79ec9fed660a27a8c",
+      "source_asset_path": "page-0082.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Was your prediction correct for all objects? Which materials stuck to the magnet? What conclusion can you draw? Through this activity, we found out that some of the objects were attracted to the magnet and stuck to it, while others were not. The materials which are attracted towards a magnet are called magnetic materials. The metal iron is a magnetic material. Nickel and cobalt are other metals that are also magnetic. Some of their combinations with other metals are also attracted towards magnets. The materials which are not attracted towards a magnet are called non-magnetic materials. Which materials listed in Table 4.1 were found to be non-magnetic? 4.2 Poles of Magnet Activity 4.2: Let us investigate   Spread some iron filings (very small pieces of iron) on a sheet of paper.   Place a bar magnet over them. Tap the paper and observe carefully what happens to the iron filings. Do you observe anything special about the way they stick to the magnet? Do the iron filings stick all over the magnet uniformly? Or do the iron filings stick more at some places? We find that maximum iron filings stick near the ends of the bar magnet, as shown in Fig. 4.4, while a very few iron filings stick at the remaining part of the magnet. Fig. 4.4: Iron filings sticking to a bar magnet Do all parts of a magnet attract magnetic materials equally? ? If we repeat this activity with magnets of other shapes, do we get the same result? Curiosity | Textbook of Science | Grade 6 64 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "9f232483ce16973cb62998c9",
+          "source_pdf_page_number": 82,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "c385905ffafe5ce6d038eed64d6f36bd6297d7c5a61a7fa5ba8337c795bb9fdb",
+          "asset_path": "page-0082.jpg"
+        }
+      ],
+      "heuristic_score": 26.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0082.jpg",
+      "display_path": "prepared/pages/page-0082.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0086-a39d863c85",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 86,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "a39d863c854fab8dee2be61560c330c502217e45ef89059d1e6ea4d373c7aefa",
+      "source_asset_path": "page-0086.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "4.4 Attraction and Repulsion between Magnets Activity 4.5: Let us experiment   Take a pair of bar magnets on which North and South poles have been marked. Mark the two bar magnets as A and B.   Place the longer side of magnet A over 5–6 round shaped pencils as shown in Fig. 4.8a.   Now bring one end of magnet B near the end of magnet A placed on the pencils. Make sure that the two magnets do not touch each other. Observe what happens.   Next, bring the other end of magnet B near the same end of magnet A (Fig. 4.8b). Does the magnet A on the pencils begin to move? Does it always move in the direction of the approaching magnet? What do these observations suggest? You will see that unlike poles of two magnets, that is, the North pole of one magnet and the South pole of another magnet, attract each other. The like poles, that is, either the North poles or the South poles of both magnets, repel each other. Magnet A Magnet B Magnet A Magnet B Fig. 4.8: Interaction between two bar magnets (a) (b) Curiosity | Textbook of Science | Grade 6 68 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e175c9c1c81ca5efad4640d1",
+          "source_pdf_page_number": 86,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "e26d34546cf14b1cf7973d0ceea00cbe18ad2614b1c21170e12386ae59911a0c",
+          "asset_path": "page-0086.jpg"
+        }
+      ],
+      "heuristic_score": 25.922,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0086.jpg",
+      "display_path": "prepared/pages/page-0086.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0088-d838cd14ee",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 88,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "d838cd14eecc85f3f89f1d76fcae628180cef71395eba460b87a9a22ff7d895e",
+      "source_asset_path": "page-0088.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "When the North pole of a magnet is brought closer to the North pole of the compass needle, it moves away as shown in Fig. 4.9a. When the South pole of the magnet is brought closer to the North pole of the compass needle, it moves closer (Fig. 4.9b). Activity 4.7: Let us investigate   Is there any effect on the deflection of compass needle due to the piece of wood? Record your observation in Table 4.2.   Repeat the process by replacing the piece of wood with a cardboard sheet, thin plastic sheet, and a thin glass sheet. Suppose we place a piece of wood between the compass needle and the magnet. Will this affect the deflection of the compass needle? Fig. 4.10: Compass needle and a magnet with a piece of wood in between Wood   Repeat the first or second part of Activity 4.6.   Without disturbing the bar magnet and magnetic compass, place a piece of wood between them, perpendicular to the table as shown in Fig. 4.10. Observe the compass needle carefully. Curiosity | Textbook of Science | Grade 6 70 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "652296630e22d52d60fdef8f",
+          "source_pdf_page_number": 88,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "f25434bec8968f158642f1ad356fb05d41315d55425763a6959b9eead3adaad4",
+          "asset_path": "page-0088.jpg"
+        }
+      ],
+      "heuristic_score": 27.478,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0088.jpg",
+      "display_path": "prepared/pages/page-0088.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-ec01bb4a3189a3392491",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 91,
+      "bbox_pdf_points": [
+        71.4,
+        16.25,
+        500.332,
+        323.535
+      ],
+      "source_asset_sha256": "ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739",
+      "source_asset_path": "assets/ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739.jpeg",
+      "source_asset_width": 670,
+      "source_asset_height": 480,
+      "page_text_context": "Keywords Attraction Conclude Non-magnetic materials Experiment Magnetic compass Bar magnet Construct Magnetic materials Investigate Observe North pole of a magnet Explore South pole of a magnet U-shaped magnet Repulsion Predict Ring magnet Record “Do not heat me or drop me or hammer me. Do not keep me near mobile phones or remote controls.” Caution Have fun, but treat magnets with care. How to keep the magnets safe? Magnet says, “Store me properly. Keep me in pairs with unlike poles on the same side. Keep a piece of wood in between. Place two pieces of soft iron across the ends.” N S S Wooden piece Iron piece More to know! N Exploring Magnets 73 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "42469dabd7011998b1e5874c",
+          "source_pdf_page_number": 91,
+          "bbox_pdf_points": [
+            71.4,
+            16.25,
+            500.332,
+            323.535
+          ],
+          "page_text_sha256": "7cc6fa7992a1190f76fd5c4ae77a6d04939de0c073b2105c9c4e2ea33a44b606",
+          "asset_path": "assets/ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739.jpeg",
+          "heuristic_score": 45.66
+        }
+      ],
+      "heuristic_score": 45.66,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0091.jpg",
+      "original_asset_path": "prepared/originals/v3-image-ec01bb4a3189a3392491.jpeg",
+      "original_asset_sha256": "ec01bb4a3189a339249178e27fffcc39475ea9f00e07bf8cc7f07edb1ed97739",
+      "page_crop_path": "prepared/crops/v3-image-ec01bb4a3189a3392491.jpg",
+      "page_crop_sha256": "5c7e4f03c15495aca58da21dfe1e970af76f4827f099f7b97fa7755bb3611e3f",
+      "display_path": "prepared/crops/v3-image-ec01bb4a3189a3392491.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0093-43fdedab19",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 93,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "43fdedab1957ba5bfcd96962b921d2d3fd1ccd001ce8fa346a12d50028767d22",
+      "source_asset_path": "page-0093.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Column I Column II N – N N – Attraction S – N – S Repulsion 4. Atharv performed an experiment in which he took a bar magnet and rolled it over a heap of steel U-clips (Fig. 4.15). According to you, which of the options given in Table 4.3 is likely to be his observation? Position A Position B Position C (i) 10 2 10 (ii) 10 10 2 (iii) 2 10 10 (iv) 10 10 10 Table 4.3: Number of pins attracted by the magnet at its various positions 3. Column I shows different positions in which one pole of a magnet is placed near that of the other. Column II indicates the resulting interaction between them for different situations. Fill in the blanks. 5. Reshma bought three identical metal bars from the market. Out of these bars, two were magnets and one was just a piece of iron. How will she identify which two amongst the three could be magnets (without using any other material)? 6. You are given a magnet which does not have the poles marked. How can you find its poles with the help of another magnet which has its poles marked? Fig. 4.15: Bar magnet and heap of steel U-clips A C B Exploring Magnets 75 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e84aa2e72791d749b8e9a2f3",
+          "source_pdf_page_number": 93,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "ada9789bdf75ccdecf08f4b99d415bc112fef7a7efce7f48608868680ae681d8",
+          "asset_path": "page-0093.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0093.jpg",
+      "display_path": "prepared/pages/page-0093.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0094-ed9930066b",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 94,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "ed9930066b957f62486826a5633d6186f533c4b00bf7f4f354255ce7ffbdf00a",
+      "source_asset_path": "page-0094.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Learning further   Using 3–4 different magnets, try to lift steel pins or U-clips and check which magnet picks up the largest number of pins. Discuss with your friends why different magnets might have picked up different numbers of pins.   Make a toy ‘Hopping Frog’ as a combined class activity with the help of your teacher. For constructing the toy, fix ring magnets in an alternate North-South fashion along the Fig. 4.17: Three bar magnets Fig. 4.16: Two ring magnets X Y 7. A bar magnet has no markings to indicate its poles. How would you find out near which end its North pole is located without using another magnet? 8. If the earth is itself a magnet, can you guess the poles of earth’s magnet by looking at the direction of the magnetic compass? 9. While a mechanic was repairing a gadget using a screw driver, the steel screws kept falling down. Suggest a way to solve the problem of the mechanic on the basis of what you have learnt in this chapter. 10. Two ring magnets X and Y are arranged as shown in Fig. 4.16. It is observed that the magnet X does not move down further. What could be the possible reason? Suggest a way to bring the magnet X in contact with magnet Y, without pushing either of the magnets. 11. Three magnets are arranged on a table in the form of the shape shown in Fig. 4.17. What is the polarity, N or S, at the ends 1, 2, 3, 4 and 6 of the magnets? Polarity of one end (5) is given for you. 1 2 3 N 4 5 6 Curiosity | Textbook of Science | Grade 6 76 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "0aed53ccf9ac59e876721adf",
+          "source_pdf_page_number": 94,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "cb472de6cd01b19a6d430be4ac70a55383c7c3faf1852afa6a0e10db0ab44db3",
+          "asset_path": "page-0094.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0094.jpg",
+      "display_path": "prepared/pages/page-0094.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-21576faade8e4f5c6d4d",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 106,
+      "bbox_pdf_points": [
+        116.609,
+        380.599,
+        521.4,
+        680.481
+      ],
+      "source_asset_sha256": "21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3",
+      "source_asset_path": "assets/21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3.jpeg",
+      "source_asset_width": 633,
+      "source_asset_height": 469,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 88 Fig. 5.10: A measuring tape Who do you think is correct? All of them are correct (Fig. 5.9). Then, why are their observations different? They are locating the distances of the school and garden from their houses. If, instead, each of them had thought of distances from a same object or point, say, the bus stand, then their observations would have been the same. When distance is stated with respect to a fixed object or point, then this point is called a reference point. A few days later, Hardeep tells his friends excitedly, “Let us all go to the playground. The sports teacher wants us to help her to draw lines with chuna powder (limestone powder) for making the Kabaddi court for the sports day.” Padma: “We will need a longer measuring tape. Let us take it from the sports room.” (Fig. 5.10) Deepa: “Let us first decide the point on the ground from which we will measure the distances to start drawing the lines. Let us call this our reference point.” (Fig. 5.11) Fig. 5.11: Drawing lines for Kabaddi court Reference Point Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "d6ca81c8376d8d8aee42f124",
+          "source_pdf_page_number": 106,
+          "bbox_pdf_points": [
+            116.609,
+            380.599,
+            521.4,
+            680.481
+          ],
+          "page_text_sha256": "ca87cc5f6312dcda3e2a4233c49d54ffc9c492530c3007539354e57649bbe289",
+          "asset_path": "assets/21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3.jpeg",
+          "heuristic_score": 47.2
+        }
+      ],
+      "heuristic_score": 47.2,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0106.jpg",
+      "original_asset_path": "prepared/originals/v3-image-21576faade8e4f5c6d4d.jpeg",
+      "original_asset_sha256": "21576faade8e4f5c6d4dcd615d81833b56d4cd03d10ce4c59a029a306a6fc0c3",
+      "page_crop_path": "prepared/crops/v3-image-21576faade8e4f5c6d4d.jpg",
+      "page_crop_sha256": "01e9c3d297b43756b5ad34181bcf8f9c4c51b52eea87291f334e29a673e4b22e",
+      "display_path": "prepared/crops/v3-image-21576faade8e4f5c6d4d.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-image-15b63668f48ccfc066f6",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 109,
+      "bbox_pdf_points": [
+        17.153,
+        38.769,
+        473.322,
+        351.989
+      ],
+      "source_asset_sha256": "15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb",
+      "source_asset_path": "assets/15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb.jpeg",
+      "source_asset_width": 714,
+      "source_asset_height": 489,
+      "page_text_context": "Measurement of Length and Motion 91 Deepa looked around her in the bus and noticed that all the passengers were seated. She looked around again after a minute and found them still occupying their seats. She wondered, ‘Are they moving?’ She concluded that the position of the passengers was not changing with time. Therefore, they were certainly at rest. However, when she looked outside, she felt they were in motion as their positions were changing with respect to things outside. The reference point is important in deciding whether an object is at rest or in motion. If Deepa considered herself (or the bus) as the reference point, then the passengers were at rest. However, if she considered any object outside the bus (say a building) as the reference point, then the passengers (and the bus) were in motion. Suppose you are travelling on a ship which is moving at a constant speed along a straight line on a calm sea. Suppose there is no window on the ship. Is there any way that you can determine whether the ship is moving or is stationary? 5.7 Types of Motion Activity 5.3: Let us explore   Take an eraser and drop it from a certain height.   Observe its motion. Does it move along a straight line? When an orange drops from the tree, does it move in a straight line? Have you seen the Republic Day parade? Recall the march-past of students during the parade. Do they move on a straight-line path? When a heavy box is pushed, it may also move along a straight line (Fig. 5.14). More to know! Think it over! Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b4d74339f7894c3a7c65728c",
+          "source_pdf_page_number": 109,
+          "bbox_pdf_points": [
+            17.153,
+            38.769,
+            473.322,
+            351.989
+          ],
+          "page_text_sha256": "213c4f26a97c12e61b3fcbe2f18c82bb5cad76862e701fade56fb02d5918dbbc",
+          "asset_path": "assets/15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb.jpeg",
+          "heuristic_score": 48.4
+        }
+      ],
+      "heuristic_score": 48.4,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0109.jpg",
+      "original_asset_path": "prepared/originals/v3-image-15b63668f48ccfc066f6.jpeg",
+      "original_asset_sha256": "15b63668f48ccfc066f6e27fb24c2c01e267464260f506f5d70c44ca798a05eb",
+      "page_crop_path": "prepared/crops/v3-image-15b63668f48ccfc066f6.jpg",
+      "page_crop_sha256": "100396fae60a3285369a6ff45c9240c6be4e27b00681e000af2e5a53b1ab50c0",
+      "display_path": "prepared/crops/v3-image-15b63668f48ccfc066f6.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0112-89c87ccf3d",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 112,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "89c87ccf3d821ae2eceef65053a119af7ba6612254f19988de67c9ca16ce0ad8",
+      "source_asset_path": "page-0112.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 94 Activity 5.6: Let us investigate   Take a thin metal strip of about 50 cm long.   Hold its one end pressed to a table. You may use a few books or a brick to hold it (Fig. 5.17).   Press the free end of the strip slightly and let it go.   Observe the motion of this end of the strip. Does it move up and down? This is also an example of oscillatory motion. Fig. 5.17: Oscillatory motion of a metal strip Activity 5.7: Let us identify   Look at the picture of a children’s park (Fig. 5.18) or visit a children’s park.   Observe different kinds of motions. Classify them as linear, circular or oscillatory motion. List them in Table 5.4. Give your justification for why you put each in a certain category. If an object repeats its path after a fixed interval of time, its motion is said to be periodic. When an object is in circular motion, it moves along the circular path again and again. An object in oscillatory motion also repeats its motion while moving to and fro. Both circular and oscillatory motion are periodic in nature. More to know! Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "621ecca847aba94a2cbd7b26",
+          "source_pdf_page_number": 112,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "cc01d8c31b1ebc44e91c4e10b3eea34bc26d43b5f3910c9c488f69cad4f13bee",
+          "asset_path": "page-0112.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0112.jpg",
+      "display_path": "prepared/pages/page-0112.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0116-9b7fedeecb",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 116,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "9b7fedeecbc9c05c9055522ad49368362220e4145e4b6fa3464ae3286f59a18e",
+      "source_asset_path": "page-0116.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 98 6. Take a tumbler or a bottle. Measure the length of the curved part of the base of glass or bottle and record it. 7. Measure the height of your friend and express it in (i) metres (ii) centimetres and (iii) millimetres. 8. You are given a coin. Estimate how many coins are required to be placed one after the other lengthwise, without leaving any gap between them, to cover the whole length of the chosen side of a notebook. Verify your estimate by measuring the same side of the notebook and the size of the coin using a 15-cm scale. 9. Give two examples each for linear, circular and oscillatory motion. 10. Observe different objects around you. It is easier to express the lengths of some objects in mm, some in cm and some in m. Make a list of three objects in each category and enter them in the Table 5.6. 11. A rollercoaster track is made in the shape shown in Fig. 5.19. A ball starts from point A and escapes through point F. Identify the types of motion of the ball on the rollercoaster and corresponding portions of the track. Fig. 5.19: Rollercoaster track A B C D E F Size Objects mm cm m Table 5.6: Sizes of objects around us Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "ae8bf28ed5606307f8b93cd4",
+          "source_pdf_page_number": 116,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "bef76817e71dce4fecd7ac52df6ba7555f808f58800e594fda40d358aa613dca",
+          "asset_path": "page-0116.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0116.jpg",
+      "display_path": "prepared/pages/page-0116.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-66876d254e821cda619d",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "bbox_pdf_points": [
+        98.4,
+        361.5,
+        554.4,
+        753.374
+      ],
+      "source_asset_sha256": "66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7",
+      "source_asset_path": "assets/66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7.jpeg",
+      "source_asset_width": 712,
+      "source_asset_height": 612,
+      "page_text_context": "102 Table 6.1: Identify materials I observe Materials they are made up of The earliest pottery found in the Indian subcontinent dates back to 7,000 to 8,000 years in the Ganga plains (Lahuradewa) and in Baluchistan (Mehrgarh). About 4000 BCE onwards, Sindhu-Sarasvatī developed techniques of wheel- turned pottery production, pigmentation, application of protective or decorative coats (called ‘slips’) of multiple colours, decorative painting, etc. These techniques became further sophisticated during the Sindhu-Sarasvatī (also known as ‘Harappan’) Civilisation (2600–1900 BCE), with a bright red surface painted with black-coloured designs displaying geometric patterns, and aquatic and terrestrial animals. The clay used for making pots, dishes, bowls and other items was carefully selected and cleaned, sieved, kneaded, turned over a wheel and finally baked in kilns (baked clay is called ‘terracotta’). Pots were used for various purposes, from cooking to storage of food grains, oil, ghee, and so on. Some very large storage jars and other pottery items are exhibited at the National Museum, New Delhi. others?” All things are made up of some materials like paper, wood, cloth, glass, metal, plastic, clay, and so on. Any substance that is used to create an object is referred to as material. Activity 6.1: Let us identify Make a list of objects you see around and also write the names of the materials they are made up of in Table 6.1. Based on everyday observations, one can conclude that objects are made up of various materials. Do you know? Curiosity | Textbook of Science | Grade 6 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "7aa188e535b735d6dc7ce9d6",
+          "source_pdf_page_number": 120,
+          "bbox_pdf_points": [
+            98.4,
+            361.5,
+            554.4,
+            753.374
+          ],
+          "page_text_sha256": "4842e80db53092afc451bbc9727f160c6cf65b6e9e4dab6bca1be0278b1a3a74",
+          "asset_path": "assets/66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7.jpeg",
+          "heuristic_score": 49.6
+        }
+      ],
+      "heuristic_score": 49.6,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0120.jpg",
+      "original_asset_path": "prepared/originals/v3-image-66876d254e821cda619d.jpeg",
+      "original_asset_sha256": "66876d254e821cda619ddcdad1e02b0c5de20e90225a4c20f2a5e7d3459291f7",
+      "page_crop_path": "prepared/crops/v3-image-66876d254e821cda619d.jpg",
+      "page_crop_sha256": "99d37e984e493b6c39861e280ef27cc6f51eb8a30e8a7b8d33ef1b6a318f0537",
+      "display_path": "prepared/crops/v3-image-66876d254e821cda619d.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0120-08e27e3eb5",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 120,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "08e27e3eb540c2c3b1072d650d3491a69915a396fb1721a2e211d1ee6ef65bf0",
+      "source_asset_path": "page-0120.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "102 Table 6.1: Identify materials I observe Materials they are made up of The earliest pottery found in the Indian subcontinent dates back to 7,000 to 8,000 years in the Ganga plains (Lahuradewa) and in Baluchistan (Mehrgarh). About 4000 BCE onwards, Sindhu-Sarasvatī developed techniques of wheel- turned pottery production, pigmentation, application of protective or decorative coats (called ‘slips’) of multiple colours, decorative painting, etc. These techniques became further sophisticated during the Sindhu-Sarasvatī (also known as ‘Harappan’) Civilisation (2600–1900 BCE), with a bright red surface painted with black-coloured designs displaying geometric patterns, and aquatic and terrestrial animals. The clay used for making pots, dishes, bowls and other items was carefully selected and cleaned, sieved, kneaded, turned over a wheel and finally baked in kilns (baked clay is called ‘terracotta’). Pots were used for various purposes, from cooking to storage of food grains, oil, ghee, and so on. Some very large storage jars and other pottery items are exhibited at the National Museum, New Delhi. others?” All things are made up of some materials like paper, wood, cloth, glass, metal, plastic, clay, and so on. Any substance that is used to create an object is referred to as material. Activity 6.1: Let us identify Make a list of objects you see around and also write the names of the materials they are made up of in Table 6.1. Based on everyday observations, one can conclude that objects are made up of various materials. Do you know? Curiosity | Textbook of Science | Grade 6 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "0636c0905f1932d239cbc427",
+          "source_pdf_page_number": 120,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "4842e80db53092afc451bbc9727f160c6cf65b6e9e4dab6bca1be0278b1a3a74",
+          "asset_path": "page-0120.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0120.jpg",
+      "display_path": "prepared/pages/page-0120.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0125-4c02b9022b",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 125,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "4c02b9022b97e0b28fa566430f00bdc30f7eafd662d0ce535f895ab86943b348",
+      "source_asset_path": "page-0125.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "107 rough or smooth), colour and other noticeable features, and record your observations in the notebook. Group the collected pieces based on their appearance. Materials that typically have shiny surfaces are said to have a lustrous appearance. Such materials with lustre are usually metals. Examples of metals include iron, copper, zinc, aluminium, gold, etc. However, some metals may lose their lustre and start to look dull or non-lustrous due to the effect of air and moisture on them. As a result, we often notice the lustre only on their freshly cut surfaces. Non-lustrous materials are those that do not have a shiny surface. Some examples of non-lustrous materials are paper, wood, rubber, jute, etc. “All that glitters is not gold” goes an old saying! Not all the materials that shine are metals. Surfaces of some materials are made shiny by polishing or coating them with thin layers of plastic, wax or any other material which makes them look shiny. These materials may not be metals. 6.3.2 Which materials are hard? When you press different objects or materials with your hands, some of them like stones, may be hard to compress, while others, like an eraser, can be easily compressed. Take a metal key and use it to scratch the surface of a piece of wood, aluminium, stone, iron, candle, chalk and any other material or object. Can some materials be scratched more easily than others? Materials which can be compressed or scratched easily are soft, while other materials which are difficult to compress or scratch are hard. However, these properties are relative in nature. For example, rubber is harder than sponge but softer than iron. Activity 6.5: Let us observe   Hold the objects given in Table 6.3 with your hands. Feel whether the objects are hard or soft. Find out the materials they are made up of. Enter your observations in Table 6.3. Are all lustrous materials metals? Materials Around Us Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e195deb36179265ad1edba40",
+          "source_pdf_page_number": 125,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "2287cec0d1d9459c279113b4b65c234393b529d9aa0defaf7d4da0103c6e8cdf",
+          "asset_path": "page-0125.jpg"
+        }
+      ],
+      "heuristic_score": 26.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0125.jpg",
+      "display_path": "prepared/pages/page-0125.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-6ccf13c579eea16b56ef",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 135,
+      "bbox_pdf_points": [
+        26.4,
+        28.338,
+        485.4,
+        446.108
+      ],
+      "source_asset_sha256": "6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2",
+      "source_asset_path": "assets/6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2.jpeg",
+      "source_asset_width": 717,
+      "source_asset_height": 653,
+      "page_text_context": "117 Keywords Opaque Non-lustrous Volume Transparent Translucent Soluble Soft Explore Classify Record Predict Observe Identify Hard Insoluble Lustrous Material Matter Mass Classification A similar classification system existed in ancient India. Ayurveda, one of the Indian medical systems, too has a system of grouping things. गुŁ मन्द हिम स्निग्ध श्‍लक्ष्ण सान्द्र मृददु स्थिराः| गुणणाः ससूक्म विशददा: विंशतिः स विपर्ययाः|| (Aṣhtanga hṛidaya Sūtra sthāna 1.18) The shloka precisely talks about the 20 properties (guṇa—ten pairs of opposite properties), which are used to describe all physical matter in Ayurveda. These properties can also be used to describe all living systems (plants, animals and humans), the environment and also food. These properties are: (i) guru (heavy)  laghu (light in weight) (ii) manda (slow)  tīkṣhṇa (quick, fast) (iii) hima (cold)  uṣhṇa (hot) (iv) snigdha (unctous)  rukṣha (dry) (v) śhlakṣhaṇa (smooth)  khara (rough) (vi) sāndra (solid)  drava (liquid) (vii) mṛidu (soft)  kaṭhina (hard) (viii) sthira (stable)  khāla (moving, unstable) (ix) sūkṣhma (subtle, small)  sthūla (big, gross) (x) viśhada (non slimy)  picchhila (slimy) Do you know? Materials Around Us Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "0b54216110787eb29dec41e5",
+          "source_pdf_page_number": 135,
+          "bbox_pdf_points": [
+            26.4,
+            28.338,
+            485.4,
+            446.108
+          ],
+          "page_text_sha256": "d0d10985923d1cf547ea07bc5a7f49e7c62ac135af3957dd6c49f83765c59298",
+          "asset_path": "assets/6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2.jpeg",
+          "heuristic_score": 47.2
+        }
+      ],
+      "heuristic_score": 47.2,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0135.jpg",
+      "original_asset_path": "prepared/originals/v3-image-6ccf13c579eea16b56ef.jpeg",
+      "original_asset_sha256": "6ccf13c579eea16b56ef654f252b557abb0b3565e5e40faba1b61c19be0633e2",
+      "page_crop_path": "prepared/crops/v3-image-6ccf13c579eea16b56ef.jpg",
+      "page_crop_sha256": "20c435813fe8d6c528df40882918d7e4bdb28ee6e88bb96226ccb46d208dcb4c",
+      "display_path": "prepared/crops/v3-image-6ccf13c579eea16b56ef.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0142-3f84c002d5",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 142,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "3f84c002d5ff2fe1dde8aec774112ffae9a05a93a4b47853f9eb62b2fc16ee4f",
+      "source_asset_path": "page-0142.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science| Grade 6 124 refrigerator. We can realise this by merely touching the two samples of water. But can we always rely upon our sense of touch? Let us find out. Activity 7.1: Let us investigate   Take three large containers and label them A, B and C, as shown in Fig. 7.1.   Pour warm water in container A, tap water in B and ice- cold water in C.   We will conduct this activity in two parts — prediction and observation.   Firstly, predict what will you feel if you — — dip your right hand in A and left hand in C and keep them there for 1–2 minutes. — — take out your hands from containers A and C, and place both hands simultaneously in B.   Write down your predictions. — — What will my right hand feel on dipping it in B? — — What will my left hand feel on dipping it in B?   Now, conduct the activity and write your observations. Fig. 7.1: Feeling hotness or coldness of water by dipping hands A B C A B C Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "24e10ab3c039e15760398786",
+          "source_pdf_page_number": 142,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "05a3594d4253ed0960031ddcff22abddd7b995a63b089f720a602e95f0c9476e",
+          "asset_path": "page-0142.jpg"
+        }
+      ],
+      "heuristic_score": 24.756,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0142.jpg",
+      "display_path": "prepared/pages/page-0142.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0148-a52e91ae83",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 148,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "a52e91ae83e0eaeec29bf9009c39c2d60b295864dcd9ec9fc1b512b0d2bf1c33",
+      "source_asset_path": "page-0148.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science| Grade 6 130 Fig.7.3(a): A laboratory thermometer Bulb 7.3.2 Laboratory thermometer There are many types of laboratory thermometers but the one that might be available in your school laboratory may look like the one shown in Fig. 7.3a. It consists of a long, narrow, uniform glass tube which is sealed. At one end of the tube is a bulb which contains a liquid. Outside the bulb, in the tube, a narrow column of liquid can be seen. There is a Celsius scale marked along the tube. The liquid column rises or falls with change in temperature. The mark of the Celsius scale with which the top level of the liquid column coincides is the temperature reading. The liquid used in the laboratory thermometer is generally alcohol (coloured red to make it easily seen) or mercury. Do you know? Activity 7.3: Let us observe Let us try to find the temperature range of a given laboratory thermometer.   Take a laboratory thermometer and observe it carefully.   Note down the following: — — What is the lowest temperature it can measure? — — What is the highest temperature it can measure? — — So, the range of this thermometer is Now look at the thermometer shown in Fig. 7.3a carefully. Can you tell its range? Its range is from –10 °C to 110 °C. Precautions to be taken while using a laboratory thermometer • Handle with care. If it hits against some hard object, it can break. • Do not hold it by the bulb. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "d5e6a0284a83586e3892edbb",
+          "source_pdf_page_number": 148,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "c907accccf4a1f5dad5b839b2d2130e69a5420160f24301f51f95a51e3fd2fde",
+          "asset_path": "page-0148.jpg"
+        }
+      ],
+      "heuristic_score": 22.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0148.jpg",
+      "display_path": "prepared/pages/page-0148.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-308972ead4a328d0c1c5",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "bbox_pdf_points": [
+        33.985,
+        20.938,
+        480.656,
+        427.515
+      ],
+      "source_asset_sha256": "308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa",
+      "source_asset_path": "assets/308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa.jpeg",
+      "source_asset_width": 698,
+      "source_asset_height": 635,
+      "page_text_context": "Temperature and its Measurement 133 Activity 7.6: Let us compare   Phiban’s Science teacher arranged the experimental setup for measuring temperature of boiling water. The temperature readings of the boiling water taken by Phiban and her classmates in Shillong are given in Table 7.2. Table 7.2: Temperature of boiling water Name Temperature of boiling water (in °C) Phiban 97.8 Shemphang 98.0 Onestar 97.9 Kloi 98.0 Bandarisha 98.1 Following two experimental setups are to be arranged by your teacher. One by one, as per your turn, go closer to the setups and observe the readings of both the thermometers. What are the temperatures of ice and boiling water? Read the temperatures of ice and boiling water again after some time. Are the temperatures same or have changed? You may have noticed that the temperature of water remains constant while it is boiling. Also, the temperature of ice remains constant while it is melting. More to do! Laboratory thermometer Laboratory thermometer Crushed ice Boiling water Burner Caution This activity should be performed strictly only under supervision of the teacher. Do not touch the experimental setups. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "c95321b155a384dc0a98988f",
+          "source_pdf_page_number": 151,
+          "bbox_pdf_points": [
+            33.985,
+            20.938,
+            480.656,
+            427.515
+          ],
+          "page_text_sha256": "55fe3e2af1b86928925ba3a88ce223fbaa4c0cd686bc1e66ec343a5dbb787d86",
+          "asset_path": "assets/308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa.jpeg",
+          "heuristic_score": 49.6
+        }
+      ],
+      "heuristic_score": 49.6,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0151.jpg",
+      "original_asset_path": "prepared/originals/v3-image-308972ead4a328d0c1c5.jpeg",
+      "original_asset_sha256": "308972ead4a328d0c1c5d25d9b2a7ab72f37a14fc49f1295b39a464c7476f1fa",
+      "page_crop_path": "prepared/crops/v3-image-308972ead4a328d0c1c5.jpg",
+      "page_crop_sha256": "22e97e62261d0a6c2564d513f10f8ad9c27ca8cf5d49725a86afc93f1515b602",
+      "display_path": "prepared/crops/v3-image-308972ead4a328d0c1c5.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0151-5372d8b4f2",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 151,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "5372d8b4f2eb49a3de8b1552c16be6e6a78cc0c7abd568f703ae3d9e007ed820",
+      "source_asset_path": "page-0151.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Temperature and its Measurement 133 Activity 7.6: Let us compare   Phiban’s Science teacher arranged the experimental setup for measuring temperature of boiling water. The temperature readings of the boiling water taken by Phiban and her classmates in Shillong are given in Table 7.2. Table 7.2: Temperature of boiling water Name Temperature of boiling water (in °C) Phiban 97.8 Shemphang 98.0 Onestar 97.9 Kloi 98.0 Bandarisha 98.1 Following two experimental setups are to be arranged by your teacher. One by one, as per your turn, go closer to the setups and observe the readings of both the thermometers. What are the temperatures of ice and boiling water? Read the temperatures of ice and boiling water again after some time. Are the temperatures same or have changed? You may have noticed that the temperature of water remains constant while it is boiling. Also, the temperature of ice remains constant while it is melting. More to do! Laboratory thermometer Laboratory thermometer Crushed ice Boiling water Burner Caution This activity should be performed strictly only under supervision of the teacher. Do not touch the experimental setups. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "ab1cd695f6ef1ff13556e694",
+          "source_pdf_page_number": 151,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "55fe3e2af1b86928925ba3a88ce223fbaa4c0cd686bc1e66ec343a5dbb787d86",
+          "asset_path": "page-0151.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0151.jpg",
+      "display_path": "prepared/pages/page-0151.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-82538a58460ab13d3438",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 159,
+      "bbox_pdf_points": [
+        83.481,
+        109.262,
+        426.839,
+        383.672
+      ],
+      "source_asset_sha256": "82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d",
+      "source_asset_path": "assets/82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d.jpeg",
+      "source_asset_width": 537,
+      "source_asset_height": 429,
+      "page_text_context": "Temperature and its Measurement 141 The temperature at the core of the Sun reaches as high as 15 million degrees Celsius. Are there objects in the sky that have even higher temperatures? There is no limit on the highest temperature that can exist. However, as per scientific understanding, there is a limit to the lowest temperature that can be achieved. It is close to –273.15 °C (0 kelvin) and is called absolute zero. More to know! Fig. 7.11: Set up to measure temperature of water and room temperature Thermometer 1 (Room thermometer) Thermometer 2 (Laboratory thermometer) Beaker Water Record your readings. Compare the readings and draw your conclusions. Repeat this for two weeks. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "04fc771a809e1e474468cae6",
+          "source_pdf_page_number": 159,
+          "bbox_pdf_points": [
+            83.481,
+            109.262,
+            426.839,
+            383.672
+          ],
+          "page_text_sha256": "9e634975a8df37c99169deb5254a0027e84a3e50949c5e1704a0fd84972013ae",
+          "asset_path": "assets/82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d.jpeg",
+          "heuristic_score": 43.487
+        }
+      ],
+      "heuristic_score": 43.487,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0159.jpg",
+      "original_asset_path": "prepared/originals/v3-image-82538a58460ab13d3438.jpeg",
+      "original_asset_sha256": "82538a58460ab13d3438f72fe82556d64755ae5b237d1e9625599b77ce05370d",
+      "page_crop_path": "prepared/crops/v3-image-82538a58460ab13d3438.jpg",
+      "page_crop_sha256": "32b80b58623228811cf4dfb337c06dd7e25cd4586c904f1b640127c5089d3ded",
+      "display_path": "prepared/crops/v3-image-82538a58460ab13d3438.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0162-46da1155c0",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 162,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "46da1155c0017352143e3a70235a34a3d6ca6ce39a1f95233ea70afa446802d5",
+      "source_asset_path": "page-0162.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 144 Activity 8.1: Let us observe   Put an ice cube in a cup, leave it on the table and observe. Ice gets converted into water. What can you conclude from the observations? Does this mean that ice and water are the same substance? Yes, ice and water are the two forms of the same substance. These forms are also called states. These different states of water show many differences in their behaviour. Water flows but ice does not. Water splashes but ice does not. 8.1 Investigating Water’s Disappearing Act It is a rainy morning. While going to school, Aavi and Thirav observe that there are a lot of water puddles in the playground. That evening, when they go to play, they are surprised to observe that some of the water in the puddles had disappeared. Have you ever noticed water in the puddles disappearing? Where does it go? Discuss with your friends. Where else have you seen water disappearing? Can you think of a possible reason why this happens? You might have observed that after washing the utensils, water left on the surface of the utensils, dries up after some time. Does the reason you thought earlier to explain water disappearance apply in this case also? Aavi wonders if water has seeped through the surface of the utensils. Thirav thinks that water does not seep through the surface of the utensils. Design an activity to investigate whose idea is correct. Activity 8.2: Let us investigate   Take a tablespoon of water on a steel plate as shown in Fig. 8.1. I think the water has been absorbed by the soil on the playground. What do you think about it? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b6bd03a2c995b149f373ec8e",
+          "source_pdf_page_number": 162,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "cbc6c19e6ff51a91c943a717a4c4afb5bc665aa5b6b0544bb0082c71ee30e101",
+          "asset_path": "page-0162.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0162.jpg",
+      "display_path": "prepared/pages/page-0162.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0163-6a7a742b53",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 163,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "6a7a742b53d9d327a0aa27c6af8a31d7c1a09c6739bf719e010e24345a3a1e67",
+      "source_asset_path": "page-0163.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "A Journey through States of Water 145   Observe whether water seeps through to the other side of the plate or not.   Keep observing this at regular intervals until the water completely disappears. What do you infer? Is this activity enough to come to the conclusion that water does not seep through a steel plate? If water does not seep through the steel plate. Then, where has the water gone? This water gets converted into gaseous state called water vapour. The water vapour is another state of water. Let us think of another observation where you notice the water disappearing. While making dosa, we sprinkle some water on the hot pan and it disappears. Where does it go? Fig. 8.1: Steel plate with a tablespoon of water The water which is sprinkled on the hot pan gets converted into steam. Steam is actually water vapour, some part of which converts into water droplets. The process of conversion of water into its vapour state is called evaporation. The process of evaporation takes place continuously, even at room temperature. Can you think of other examples of evaporation? Drying of wet clothes, mopped floor, and sweat on our body are some examples of it. Now what do you think is the reason for the disappearance of water from the puddles? Is it due to: (i) seeping of water into the ground or (ii) evaporation of water or (iii) both of these? Hand sanitiser disappears as you rub it on your hands. What happens to it? Water vapour is actually invisible but the presence of tiny droplets of water in the steam makes it visible. Do you know? Let us draw Draw a detailed sketch (with labels and caption) about what happens to the water. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "9aafc2d512540d2b5045b0d9",
+          "source_pdf_page_number": 163,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "8587e1933667ecc6ea6d271ff44ca68ad0a88802f52fb54978bc1dee9904bf19",
+          "asset_path": "page-0163.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0163.jpg",
+      "display_path": "prepared/pages/page-0163.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0164-aed76e104b",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 164,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "aed76e104b09723bcac75e1431c9a4bfbc619df1741e557734299e8a53560fc8",
+      "source_asset_path": "page-0164.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 146 8.2 Another Mystery Next day, Aavi, Thirav and their friends decide to make lemonade. During the preparation, they take cold water in a glass tumbler and add ice cubes into it. After a few minutes, they notice something exciting about the outer surface of the glass tumbler. Let us find out by conducting a similar activity ourselves. Activity 8.3: Let us experiment   Take cold water in a glass tumbler.   Add a few ice cubes into it as shown in Fig. 8.2.   \u0007Leave it undisturbed for five minutes and observe it.   \u0007Record your observations and the questions that arise in your mind in Table 8.1. You can also touch the outer surface of the glass tumbler to feel if there is any change. Fig. 8.2: A glass tumbler containing cold water and ice cubes One observation that arises in Aavi’s mind is, “There are some water droplets (tiny drops) appearing on the outer surface of the glass tumbler.” Initially, water droplets are deposited and these droplets combine together to form bigger drops. You can also try the above process with a metal container. You may be curious about where the water droplets come from. Suggest possible reasons explaining the appearance of water droplets on the outer surface of the glass tumbler. I observe I wonder Table 8.1: Record the observations and questions You may have many observations and questions here. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "42aa935de1f8ea19cbef212c",
+          "source_pdf_page_number": 164,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "f42ad457360941e864881a30552e173c1878248a891858668329b20ba4c34730",
+          "asset_path": "page-0164.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0164.jpg",
+      "display_path": "prepared/pages/page-0164.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-3fd00f8690d93e2176c7",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 171,
+      "bbox_pdf_points": [
+        92.288,
+        479.089,
+        458.149,
+        688.705
+      ],
+      "source_asset_sha256": "3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44",
+      "source_asset_path": "assets/3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44.jpeg",
+      "source_asset_width": 572,
+      "source_asset_height": 327,
+      "page_text_context": "A Journey through States of Water 153 8.5 How can Water be Evaporated Faster or Slower? In section 8.1, we have learnt about evaporation. Let us explore it more! Observe your surroundings. What are the conditions that affect how fast water evaporates? What differences do you see in evaporation on a cold day versus a hot day? Discuss with your friends. The following words may help in your discussion—fan, drying cloth, sweating, windy day, hot day, rainy day. Let us perform Activity 8.7 to investigate conditions that will affect how fast water will evaporate. Activity 8.7: Let us investigate   Take water in a small cap of a bottle (you may use sanitiser in place of water).   Take the same amount of water in a plate. The exposed area of water in the bottle cap and the plate are different.   Keep both of them near each other.   Record the time taken for the water to completely evaporate in each case in Table 8.4. What conditions did we keep the same? What did we change in this investigation? What did we measure? Let us investigate Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "9391a09b1fa7b92f58d75a38",
+          "source_pdf_page_number": 171,
+          "bbox_pdf_points": [
+            92.288,
+            479.089,
+            458.149,
+            688.705
+          ],
+          "page_text_sha256": "6bc09289b57d4f01061fa0193e351e556039a6eae1df66af2d366260775996c2",
+          "asset_path": "assets/3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44.jpeg",
+          "heuristic_score": 44.506
+        }
+      ],
+      "heuristic_score": 44.506,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0171.jpg",
+      "original_asset_path": "prepared/originals/v3-image-3fd00f8690d93e2176c7.jpeg",
+      "original_asset_sha256": "3fd00f8690d93e2176c73e481bc0d04baaeaa9b7ee061cf4ac57e44d4aea3f44",
+      "page_crop_path": "prepared/crops/v3-image-3fd00f8690d93e2176c7.jpg",
+      "page_crop_sha256": "f9f2e18f3896e4721a8c08e9b296ebbda7521701f09f5b3b3b480e7caa3f5d81",
+      "display_path": "prepared/crops/v3-image-3fd00f8690d93e2176c7.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-image-72bca6326283ed02e69d",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 173,
+      "bbox_pdf_points": [
+        70.105,
+        268.12,
+        438.6,
+        500.915
+      ],
+      "source_asset_sha256": "72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a",
+      "source_asset_path": "assets/72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a.jpeg",
+      "source_asset_width": 576,
+      "source_asset_height": 363,
+      "page_text_context": "A Journey through States of Water 155 Activity 8.8: Let us explore   Take identical caps of two bottles.   Pour equal amount of water in each of the cap.   Place one of the cap in sunlight and keep the other in shade as shown in Fig. 8.6.   Observe the two caps of bottles after every 15 minutes.   Record the time taken for the water to completely evaporate in each case.   You can also repeat this activity on a windy or a rainy day, and record your observations. Fig. 8.6: Evaporation of water in sunlight and in shade What conclusions can you draw from Activity 8.8 and other similar experiences?   Water evaporates faster from the cap kept in sunlight compared to the cap kept in shade.   It is a common observation that clothes dry faster on a hot sunny day. Do clothes dry faster or slower on a windy day? It is once again a common observation that clothes dry faster on a windy day. With the increase in the movement of air, water evaporates faster. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "6b3ce6753e38d1a4f0bc4a9a",
+          "source_pdf_page_number": 173,
+          "bbox_pdf_points": [
+            70.105,
+            268.12,
+            438.6,
+            500.915
+          ],
+          "page_text_sha256": "56448942e6978d28f2c042d3a21fa2ea287ffdf7c6b029f1ac5d15cd8c4d2651",
+          "asset_path": "assets/72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a.jpeg",
+          "heuristic_score": 43.993
+        }
+      ],
+      "heuristic_score": 43.993,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0173.jpg",
+      "original_asset_path": "prepared/originals/v3-image-72bca6326283ed02e69d.jpeg",
+      "original_asset_sha256": "72bca6326283ed02e69d80cabf45c9ce53c52c7b4d748a84ddf36c6b490f281a",
+      "page_crop_path": "prepared/crops/v3-image-72bca6326283ed02e69d.jpg",
+      "page_crop_sha256": "c2df65ceddc755bc8d4efac841c1d72b798f5ec8989be18a23bcf6c2da730ad9",
+      "display_path": "prepared/crops/v3-image-72bca6326283ed02e69d.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-image-409f954021336fc626bb",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "bbox_pdf_points": [
+        37.4,
+        34.32,
+        496.92,
+        179.4
+      ],
+      "source_asset_sha256": "409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4",
+      "source_asset_path": "assets/409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4.jpeg",
+      "source_asset_width": 718,
+      "source_asset_height": 227,
+      "page_text_context": "Caution Be careful while heating the china dish. Methods of Separation in Everyday Life 169 Fig. 9.8: Heating of china dish containing salt solution China dish Spirit lamp Wire gauze Activity 9.3: Let us investigate This activity may be demonstrated by the teacher.   Take some salt solution (prepared in Activity 9.2) in a china dish. If a china dish is not available, another suitable vessel may be used. In the traditional Indian system of holistic health and medicine called Ayurveda, the herbs or parts of plants are prescribed as remedies. These ingredients like roots, leaves, flowers or seeds of various medicinal plants are often dried in the shade. This practice facilitates the evaporation of excess water, leaving behind the important part of the medicine. It is now time for Malli and Valli to visit Dada and Dadi (paternal grandparents) residing in Puducherry, located in southern India. They are excited to meet their old neighbourhood friend, Balan. After reaching Puducherry, they start talking about the old times and do not realise that it is already evening, Dadi’s tea time.   Heat and let the water boil away as shown in Fig. 9.8.   Allow the china dish to cool down.   What do you observe? What is left in the china dish? Did you get the salt back? You can feel the presence of salt in the china dish by touching the salt with your fingers. Observe the figure. Does it answer the question? Can you name the process involved? ? Do you know? Is there any method through which I can get back both salt and water? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b9e71888ebe5b4a9e3844ecc",
+          "source_pdf_page_number": 187,
+          "bbox_pdf_points": [
+            37.4,
+            34.32,
+            496.92,
+            179.4
+          ],
+          "page_text_sha256": "1e96c8d80e0d76528af46f5285b940ea515bb60ff020d6c12f1eb13d46877fe7",
+          "asset_path": "assets/409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4.jpeg",
+          "heuristic_score": 43.0
+        }
+      ],
+      "heuristic_score": 43.0,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0187.jpg",
+      "original_asset_path": "prepared/originals/v3-image-409f954021336fc626bb.jpeg",
+      "original_asset_sha256": "409f954021336fc626bb5e1c95d0e49c916b9b722b5854a9da25b305eab844e4",
+      "page_crop_path": "prepared/crops/v3-image-409f954021336fc626bb.jpg",
+      "page_crop_sha256": "bbe02d1e3152c519573d1fcf935742388a76b1616edd6e516568f9e4884b9372",
+      "display_path": "prepared/crops/v3-image-409f954021336fc626bb.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0187-4d6ae547cf",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 187,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "4d6ae547cf4764aa7bc2fc7576714e5ac9e4751a05247a8ec702b18fc29cc664",
+      "source_asset_path": "page-0187.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Caution Be careful while heating the china dish. Methods of Separation in Everyday Life 169 Fig. 9.8: Heating of china dish containing salt solution China dish Spirit lamp Wire gauze Activity 9.3: Let us investigate This activity may be demonstrated by the teacher.   Take some salt solution (prepared in Activity 9.2) in a china dish. If a china dish is not available, another suitable vessel may be used. In the traditional Indian system of holistic health and medicine called Ayurveda, the herbs or parts of plants are prescribed as remedies. These ingredients like roots, leaves, flowers or seeds of various medicinal plants are often dried in the shade. This practice facilitates the evaporation of excess water, leaving behind the important part of the medicine. It is now time for Malli and Valli to visit Dada and Dadi (paternal grandparents) residing in Puducherry, located in southern India. They are excited to meet their old neighbourhood friend, Balan. After reaching Puducherry, they start talking about the old times and do not realise that it is already evening, Dadi’s tea time.   Heat and let the water boil away as shown in Fig. 9.8.   Allow the china dish to cool down.   What do you observe? What is left in the china dish? Did you get the salt back? You can feel the presence of salt in the china dish by touching the salt with your fingers. Observe the figure. Does it answer the question? Can you name the process involved? ? Do you know? Is there any method through which I can get back both salt and water? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b06448319db77495354684b2",
+          "source_pdf_page_number": 187,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "1e96c8d80e0d76528af46f5285b940ea515bb60ff020d6c12f1eb13d46877fe7",
+          "asset_path": "page-0187.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0187.jpg",
+      "display_path": "prepared/pages/page-0187.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0189-71407cc0eb",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 189,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "71407cc0ebfaeaf8a7caf92e62b016ab941eba370279a230bdcb9f8d38f78dcf",
+      "source_asset_path": "page-0189.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Methods of Separation in Everyday Life 171 Malli: Why should we use a piece of cloth? Dada: In a piece of cloth, there are very small holes or pores between the woven threads. These pores in the cloth can be used as a filter. People in ancient times also followed this practice. But if the water is still muddy, impurities can be separated using a filter with even smaller holes or pores. A filter paper is one such filter that has very fine pores in it. Activity 9.4: Let us experiment   Try to fold the filter paper yourself and make a cone as shown in Fig. 9.10. Fig. 9.10: Folding a filter paper to form a cone A filter paper One-fold Two-folds Cone   Place it inside a funnel kept on a conical flask and pour muddy water into it (Fig. 9.11).   What do you observe? Do the mud particles pass through the filter paper?   The water coming from the funnel will be collected in the conical flask. Fig. 9.11: Filtration Filter paper Funnel Tripod stand Conical flask Muddy water How many layers of cloth do I need to use to get clear water? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "47be2843378929e95a73e275",
+          "source_pdf_page_number": 189,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "09967b57564a3d6ad9e331f032b45d4a005a77450ff2141e515c89f483433153",
+          "asset_path": "page-0189.jpg"
+        }
+      ],
+      "heuristic_score": 23.811,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0189.jpg",
+      "display_path": "prepared/pages/page-0189.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-0723ee75b6e6f1b17bd1",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 191,
+      "bbox_pdf_points": [
+        71.4,
+        64.2,
+        438.6,
+        369.451
+      ],
+      "source_asset_sha256": "0723ee75b6e6f1b17bd149206bd6187a3e450ebd59921d55287b2d0827a25136",
+      "source_asset_path": "assets/0723ee75b6e6f1b17bd149206bd6187a3e450ebd59921d55287b2d0827a25136.jpeg",
+      "source_asset_width": 573,
+      "source_asset_height": 477,
+      "page_text_context": "Methods of Separation in Everyday Life 173 Discuss with your parents A bowl of milk in your home has gone sour. Discuss with your parents how you can use it in another way. Also, which method of separation will you use in the process? Malli and Valli take blessings from their Dada and Dadi, bid goodbye to Balan and travel to Madhya Pradesh. The train reaches Bhopal in Madhya Pradesh. The sun is rising and it is getting hot. On their way to Maasi’s (maternal aunt’s) home, they drink chhach (buttermilk) in the dhaba (roadside eatery). Malli asks the shopkeeper about the big painting, hanging on the wall of the dhaba. The shopkeeper explains that the picture shows a lady performing Churning Let us raise awareness about the issues related to river and ocean pollution by composing a poem. A few lines have been written here, add more lines— Piece of plastic in my neck, As in pain I cry, Koilas, Koilas…where are you dear? Papa fish cries and Mama fish has tears. Aware of the harm, yet they let it flow, Koilas faintly hears mother’s sorrow, Stop plastic pollution at source, Rivers are our huge resource. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "b9277f29425bcc44b87822bf",
+          "source_pdf_page_number": 191,
+          "bbox_pdf_points": [
+            71.4,
+            64.2,
+            438.6,
+            369.451
+          ],
+          "page_text_sha256": "bf93b52154ff5adbdfdb28dd88e5e15d33c4d53ab5ab301d40f48f6cf0c85d65",
+          "asset_path": "assets/0723ee75b6e6f1b17bd149206bd6187a3e450ebd59921d55287b2d0827a25136.jpeg",
+          "heuristic_score": 44.8
+        }
+      ],
+      "heuristic_score": 44.8,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0191.jpg",
+      "original_asset_path": "prepared/originals/v3-image-0723ee75b6e6f1b17bd1.jpeg",
+      "original_asset_sha256": "0723ee75b6e6f1b17bd149206bd6187a3e450ebd59921d55287b2d0827a25136",
+      "page_crop_path": "prepared/crops/v3-image-0723ee75b6e6f1b17bd1.jpg",
+      "page_crop_sha256": "8f29307664d95a7934eb2e118ee90910591c20df7d2af0741e783575691e442e",
+      "display_path": "prepared/crops/v3-image-0723ee75b6e6f1b17bd1.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0198-be3f3b9df0",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 198,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "be3f3b9df0ef0cf1e95d947bc46a272414bc8ba1246ccf19a8d90910e94245f4",
+      "source_asset_path": "page-0198.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 180 9. A mixture containing potatoes, salt and sawdust has been given to you. Outline a stepwise procedure for separating each component from this mixture. 10. Read the following story titled ‘Intelligent Leela’ and tick the most appropriate options. Provide a suitable title of your choice for the paragraph. Leela was working in the farm with her father when she realised that they left their drinking water at home. Before her father felt thirsty/hungry, she went to the nearby pond to fetch some water/grains. After obtaining some water in the container, she noticed that the water was muddy and fit/unfit for drinking. To purify the water, she kept it for some time and then she filtered/ churned the muddy water using a piece of paper/muslin cloth. Leela, then, cooled/boiled the water for about 10 minutes in a covered pan. After cooling/boiling, she filtered/churned it again and made it fit/unfit for drinking. She served this water to her father while having food, who blessed her and appreciated her efforts.   Fun with parents: We are proud of our Indian heritage. Under supervision of your elders, try to prepare some herbal remedies using various parts of plants. For example—tulsi kadha. Which methods of separation will you use while preparing herbal kadha?   Stage play: Imagine you and your friend are Malli and Valli. Write dialogues of a play presenting their entire ‘Bharat ki Yatra’, highlighting the different methods of separation of substances that they observed. Enact the play in your school assembly.   Group activity: Observe and list separation methods you employed and noticed in your surroundings throughout a week. Explain the reasons behind using these methods and compile the ones you utilised or observed the most. Compare your observations with your group members.   Be a stalwart of your community: Interview a ragpicker(s) and prepare a case study about the method(s) of separation he/she uses in his/her daily life. Encourage children of your community below the age of 14 to join a neighbourhood school. Learning further Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "39fa9c2e3349738c014eacf9",
+          "source_pdf_page_number": 198,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "8c573598e209423ed7c5d2142fa3e986b0a9326da834d2f11846ef4e7d19fee1",
+          "asset_path": "page-0198.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0198.jpg",
+      "display_path": "prepared/pages/page-0198.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0206-3589984faf",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 206,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "3589984fafd9ddda97127eef0b7e94b67311bd0df28e7c607577788a2b77c935",
+      "source_asset_path": "page-0206.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 188 food, and they grow. They also respire, reproduce, excrete, respond to stimuli, and eventually, die. Absence of any of these features indicates that they are non-living things. Now that you know how to identify a living being, fill up the remaining two columns (IV and V) of Table 10.1 and complete the activity. In which category would you place a seed—living or non- living? Why? Let us explore how a seed germinates to observe some of these essential characteristics in plants. 10.2 Essential Conditions for Germination of a Seed Have you observed a seed germinating? You might have wondered what conditions are required for germination of a seed. What conditions do you think are required for seed germination? How will you investigate whether these conditions have an effect on the germination of a seed? Let us find out by performing Activity 10.2. Activity 10.2: Let us experiment   Take four identical pots filled with garden soil. Sow four bean seeds in each pot. Now, keep these pots in the following conditions for 15 days.   Pot A: Do not water the soil. Place this pot in direct sunlight. Fig 10.1: Bean seeds exposed to different conditions (a) Pot A kept in direct sunlight, no water (b) Pot B kept in direct sunlight, excess water (c) Pot C with moist soil, kept in the dark (d) Pot D with moist soil, kept in direct sunlight Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "071ae1340ce1ef7ab5441059",
+          "source_pdf_page_number": 206,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "c703a3a612dd0c939fce0a489d77811ab3dc7bf83ded408afb3d05071ff80fa2",
+          "asset_path": "page-0206.jpg"
+        }
+      ],
+      "heuristic_score": 26.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0206.jpg",
+      "display_path": "prepared/pages/page-0206.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0212-3a313bbc4a",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 212,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "3a313bbc4ad9c94cc7541e711cb2fdbaa8e81b07e03c4bba9bf944ea299a55b3",
+      "source_asset_path": "page-0212.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 194 2. When the plant is kept inverted, the root bends and grows downwards. Also, the shoot bends and grows upwards. 3. When the plant gets sunlight only from one direction, the shoot grows in the direction of light while the root continues to grow downwards. After conducting Activity 10.3, we can conclude that shoots of plants grow upward and exhibit movement towards sunlight but roots of plants grow downwards. Jagadish Chandra Bose (1858–1937) was an Indian scientist who did some fascinating experiments with plants. He built a machine called a crescograph to record how plants respond to stimuli like light, heat, electricity and gravity. With this machine, he could measure how fast plants grow. He also showed that plants can sense and respond to stimuli. Know a scientist 10.4 Life Cycle of a Plant We have learnt about conditions required for germination and how plants grow and exhibit movement. Let us now explore the changes a plant undergoes in its whole life. Activity 10.4: Let us explore   Plant a bean seed and provide suitable conditions for its growth. Observe regularly for three months.   Record your observations in Table 10.4 as and when changes become visible.   Note the date when any change is observed. Record answers for the following questions—   How long does it take for any change to occur? Make sketches of various changes that you observe in Table 10.4.   After how many days does the first flower appear? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "75d0cd43da23da49a6b55632",
+          "source_pdf_page_number": 212,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "201da9a725d40130bb7c33d056731838ecaea7571ece672946b52e06111f3e7a",
+          "asset_path": "page-0212.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0212.jpg",
+      "display_path": "prepared/pages/page-0212.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-367336504937fa397f86",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 218,
+      "bbox_pdf_points": [
+        122.705,
+        272.408,
+        515.42,
+        496.551
+      ],
+      "source_asset_sha256": "367336504937fa397f86e397342865cbd6f474fc2d4dc8234b4c80354bb212a2",
+      "source_asset_path": "assets/367336504937fa397f86e397342865cbd6f474fc2d4dc8234b4c80354bb212a2.jpeg",
+      "source_asset_width": 613,
+      "source_asset_height": 350,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 200 without causing any disturbance. You may also go to a small water body during the rainy season with a facilitator and explore it by taking due safety precautions. You may notice a white jelly-like substance on the surface of water towards the edge of the pond (Fig. 10.7). This may also be attached to plants growing in or around the water. This jelly-like substance is actually a cluster of eggs of a frog and is known as spawn. Observe the features of all the stages of a frog shown in Fig. 10.7. How will you decide the sequence of the given stages (A, B, C, D, E, F)? Some of the stages show distinct changes in their initial and final shapes. Record these changes in Table 10.5. Fig 10.7: Different stages of a frog in a pond A B C D E F A B C D E F It is similar to ‘C’ but it has two legs. Table 10.5: Changes in different life stages of a frog Based on the observations listed in Table 10.5, draw the life cycle of a frog. Compare the figure drawn by you with Fig. 10.8. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "6bac0673903c8de01b8f266d",
+          "source_pdf_page_number": 218,
+          "bbox_pdf_points": [
+            122.705,
+            272.408,
+            515.42,
+            496.551
+          ],
+          "page_text_sha256": "bc87b6110e5e80fa6669ee201c7fc187a6cd3b1276ae4ead4cad5247de41a0a5",
+          "asset_path": "assets/367336504937fa397f86e397342865cbd6f474fc2d4dc8234b4c80354bb212a2.jpeg",
+          "heuristic_score": 45.534
+        }
+      ],
+      "heuristic_score": 45.534,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0218.jpg",
+      "original_asset_path": "prepared/originals/v3-image-367336504937fa397f86.jpeg",
+      "original_asset_sha256": "367336504937fa397f86e397342865cbd6f474fc2d4dc8234b4c80354bb212a2",
+      "page_crop_path": "prepared/crops/v3-image-367336504937fa397f86.jpg",
+      "page_crop_sha256": "b98df8c76e87cf743db8d615cecfbe79df8ff58f8d5312ac32588367051be485",
+      "display_path": "prepared/crops/v3-image-367336504937fa397f86.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0218-52316775c9",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 218,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "52316775c94a1d900aa655f33cd0043cb7f3193de301572f7537ee1a5b720549",
+      "source_asset_path": "page-0218.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 200 without causing any disturbance. You may also go to a small water body during the rainy season with a facilitator and explore it by taking due safety precautions. You may notice a white jelly-like substance on the surface of water towards the edge of the pond (Fig. 10.7). This may also be attached to plants growing in or around the water. This jelly-like substance is actually a cluster of eggs of a frog and is known as spawn. Observe the features of all the stages of a frog shown in Fig. 10.7. How will you decide the sequence of the given stages (A, B, C, D, E, F)? Some of the stages show distinct changes in their initial and final shapes. Record these changes in Table 10.5. Fig 10.7: Different stages of a frog in a pond A B C D E F A B C D E F It is similar to ‘C’ but it has two legs. Table 10.5: Changes in different life stages of a frog Based on the observations listed in Table 10.5, draw the life cycle of a frog. Compare the figure drawn by you with Fig. 10.8. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "4507dc0221eb48efed5dd452",
+          "source_pdf_page_number": 218,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "bc87b6110e5e80fa6669ee201c7fc187a6cd3b1276ae4ead4cad5247de41a0a5",
+          "asset_path": "page-0218.jpg"
+        }
+      ],
+      "heuristic_score": 25.556,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0218.jpg",
+      "display_path": "prepared/pages/page-0218.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-f654516ce6e45b70550a",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 225,
+      "bbox_pdf_points": [
+        70.281,
+        434.158,
+        436.895,
+        740.418
+      ],
+      "source_asset_sha256": "f654516ce6e45b70550aa4407311e485d1598b44eee91f514684833feb81246b",
+      "source_asset_path": "assets/f654516ce6e45b70550aa4407311e485d1598b44eee91f514684833feb81246b.jpeg",
+      "source_asset_width": 573,
+      "source_asset_height": 479,
+      "page_text_context": "Nature’s Treasures 11 Chapter School vacations are always fun for Bhoomi and Surya. This vacation, they visit their Ajji (grandmother). Ajji lives in a village on the edge of a forest in the Western Ghats. The air in the village is fresh and cooler than in the city. They can see beautiful hills, streams, and many interesting plants, animals and birds around them. One afternoon, Bhoomi and Surya ask Ajji to tell them more about the place. Ajji says, “Children, do you know that this place has several treasures of nature that enrich our lives? The pure air is refreshing and the soil is so fertile that it supports a variety of living beings. Moreover, this place gets plenty of sunlight which is useful in many ways. Different varieties of trees provide food and shelter to animals including various birds and insects. Can you think of more such treasures of nature?” A village Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "a1a6332f14dea1c76feb5b48",
+          "source_pdf_page_number": 225,
+          "bbox_pdf_points": [
+            70.281,
+            434.158,
+            436.895,
+            740.418
+          ],
+          "page_text_sha256": "ba973af1725e11e287fd67149f6da8d9b551f94ab18199c23b80888e2ea682fb",
+          "asset_path": "assets/f654516ce6e45b70550aa4407311e485d1598b44eee91f514684833feb81246b.jpeg",
+          "heuristic_score": 43.58
+        }
+      ],
+      "heuristic_score": 43.58,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0225.jpg",
+      "original_asset_path": "prepared/originals/v3-image-f654516ce6e45b70550a.jpeg",
+      "original_asset_sha256": "f654516ce6e45b70550aa4407311e485d1598b44eee91f514684833feb81246b",
+      "page_crop_path": "prepared/crops/v3-image-f654516ce6e45b70550a.jpg",
+      "page_crop_sha256": "3b9b9fba6910f48df580872426672ac462ce05f2ea1efee559e654d4502bc2b8",
+      "display_path": "prepared/crops/v3-image-f654516ce6e45b70550a.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0228-6ceea9454c",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 228,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "6ceea9454c8f39c744aa64111d49671db40ab5b2574eae59b514eb4be3d5e81b",
+      "source_asset_path": "page-0228.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 210 Activity 11.2: Let us make and decorate   Take a square paper of size 15 cm x 15 cm, a pair of scissors, an all-pin and a soft stick.   Follow the instructions shown in Fig. 11.2 to make a firki. Now, you can hold the firki in your hand and run. You can also blow air on it. What do you observe? Does the firki rotate? When you move it a little back and forth, the firki rotates. What makes a firki rotate? It is the wind that makes a firki rotate. The working of a windmill is similar to that of a firki. Wind rotates the wings of a windmill. Windmills can be used to run flour mills, to pull up water from a well, or to generate electricity. In India, there are many windmill farms. A windmill farm is an area that has a large number of windmills which use the energy of the wind to generate electricity (Fig. 11.3). Fig 11.3: A windmill farm Muppandal Wind Farm in Tamil Nadu, Jaisalmer Wind Park in Rajasthan and Brahmanvel Wind Farm in Maharashtra are some of the leading windmill farms in our country. Find out more other windmill farms in our country. More to know! Fig. 11.2: Firki 1 3 2 4 5 Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "4e8db20347e75ba4e511b315",
+          "source_pdf_page_number": 228,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "e467c4034cf1a10a37572cc9f856daf1d740c1cac3d9c34c9a921dab84d444a9",
+          "asset_path": "page-0228.jpg"
+        }
+      ],
+      "heuristic_score": 22.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0228.jpg",
+      "display_path": "prepared/pages/page-0228.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0230-d90e908381",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 230,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "d90e9083814140fb5354d8655865b96015076d8e65dc8850653fbb7b3bef1127",
+      "source_asset_path": "page-0230.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 212 and snow, or underground water is difficult to access. A very small fraction of the freshwater present in ponds, rivers, lakes and wells is easily accessible. Water is precious, that is why Ajji guides them to use it with care. Do you feel that water is being used efficiently in our daily activities? Have you observed water being wasted in your daily activities? Let us find out activities where water is wasted and how this wastage can be reduced. Activity 11.3: Let us find out Fill the Column II and Column III in Table 11.1. Table 11.1: Wastage of water in your daily activities Column I Column II Column III Activity How is water wasted? Suggest ways to reduce wastage of water. 1. Hand washing 2. Washing clothes 3. Washing utensils 4. Taking shower 5. Cooking 6. Gardening 7. Brushing teeth What conclusion can you draw from the information you gathered in the table? What can you and your family do to reduce this wastage of water? There are many ways to reduce wastage of water. For example, turning off taps when not in use and fixing water leakages. Recycling water and water harvesting also help in saving water. Our country is blessed with numerous rivers, streams and lakes. Have you ever noticed plastic bags and wrappers floating on the surface of water? We pollute freshwater Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "9ee1cbb45773a22173ff1ce0",
+          "source_pdf_page_number": 230,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "bbbbc91771c1c56e89a440123342f9d82a88ab3dc9d6a520ad26093b77449f18",
+          "asset_path": "page-0230.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0230.jpg",
+      "display_path": "prepared/pages/page-0230.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-842529f310e2c8b7cab5",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 235,
+      "bbox_pdf_points": [
+        64.0,
+        452.28,
+        516.16,
+        734.52
+      ],
+      "source_asset_sha256": "842529f310e2c8b7cab5648cf6f44e38183c5e0356e6613abdfa5c114aaed408",
+      "source_asset_path": "assets/842529f310e2c8b7cab5648cf6f44e38183c5e0356e6613abdfa5c114aaed408.jpeg",
+      "source_asset_width": 707,
+      "source_asset_height": 441,
+      "page_text_context": "Nature’s Treasures 217 Discuss with your friends and make a list of at least five products that we get from forests. Forests are a natural home for many wild animals, including birds and insects. Forests provide food and shelter to them. In nature, every animal depends on other life forms for survival. The diversity of life forms ensures food for every living being. However, over the years, the forest cover has been decreasing, mainly due to human activities like large scale cutting of trees. It takes many years to grow a new forest or restore lost forests. Therefore, we must preserve and use forests responsibly so that they get enough time to regenerate. Van Mahotsav is a week- long event celebrated across the country during the month of July. It is a forest festival during which new plants and trees are planted, and awareness about respecting forests is raised. The aim of the event is to increase the green cover. You too can plan a Van Mahotsav in your community. From ancient times, India had a tradition of respecting, protecting and preserving forests. You have already learnt about sacred groves in the chapter ‘Diversity in the Living World’. Many efforts have been made by common people to prevent the cutting of trees, and thus, saving forests. One such effort is the famous Chipko movement. It started in the early 1970s in Uttarakhand (previously part of Uttar Pradesh). Local women actively participated in this movement. They encircled and hugged the trees to protect them from being felled. Do you know? What are the consequences of cutting a large forest area? Make a presentation or do a role play, or write a story or a poem that ? shows what could happen if we continue to cut down trees in our forests. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "15635811641e153508311ac0",
+          "source_pdf_page_number": 235,
+          "bbox_pdf_points": [
+            64.0,
+            452.28,
+            516.16,
+            734.52
+          ],
+          "page_text_sha256": "ae7092c66c1f4678b5b005071e27ae0312ef0103de90b346cc36ec5d0490c779",
+          "asset_path": "assets/842529f310e2c8b7cab5648cf6f44e38183c5e0356e6613abdfa5c114aaed408.jpeg",
+          "heuristic_score": 44.8
+        }
+      ],
+      "heuristic_score": 44.8,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0235.jpg",
+      "original_asset_path": "prepared/originals/v3-image-842529f310e2c8b7cab5.jpeg",
+      "original_asset_sha256": "842529f310e2c8b7cab5648cf6f44e38183c5e0356e6613abdfa5c114aaed408",
+      "page_crop_path": "prepared/crops/v3-image-842529f310e2c8b7cab5.jpg",
+      "page_crop_sha256": "027badb3a6de34e02a67853ef650f250f18e8b853fec1075763582cf720b239b",
+      "display_path": "prepared/crops/v3-image-842529f310e2c8b7cab5.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-image-6320a99e897b57bc9208",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 236,
+      "bbox_pdf_points": [
+        53.924,
+        237.269,
+        300.197,
+        386.224
+      ],
+      "source_asset_sha256": "6320a99e897b57bc92088e03352376bd0f7cf13a31776e5ab8b48f43357ef6d9",
+      "source_asset_path": "assets/6320a99e897b57bc92088e03352376bd0f7cf13a31776e5ab8b48f43357ef6d9.jpeg",
+      "source_asset_width": 385,
+      "source_asset_height": 233,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 218 During their walk in the forests, Bhoomi and Surya notice that there are a lot of leaves on the ground and the soil feels damp. Ajji explains, “The roots of plants hold on to the soil and prevent it from being washed away. The leaves that fall from the trees decay and enrich the soil with nutrients. This soil is used by new plants and trees to grow. This is an example of recycling in nature.” Let us investigate the soil in more detail. 11.5 Soil, Rocks and Minerals Bhoomi, Surya and Ajji come back home from the forest. Bhoomi and Surya help Ajji in preparing the soil in the garden for planting some vegetables (Fig. 11.5). Ajji asks them to dig the soil gently and loosen the lumps. You have already learnt in the chapter ‘Living Creatures: Exploring their Characteristics’ that for plants to grow, the space between the soil particles not only provides sufficient air but also space for the roots to grow easily. Bhoomi and Surya could see small pebbles, the roots of plants and a few earthworms too in the soil. Do you realise that earthworms are natural agents that help in turning and loosening the soil? While Bhoomi and Surya help Ajji, let us do our own experiment by performing Activity 11.4. Activity 11.4: Let us investigate Fig. 11.5: Soil preparation for planting vegetables Caution Remember to wash your hands thoroughly after touching the soil collected from different places. Sometimes soil that has garbage carries germs that may be harmful to us.   Collect samples of soils from different areas around your home and school.   Guess what could be there in different soils.   Observe carefully each soil sample and note its colour.   Touch each soil sample and feel its texture. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "e85f3b93c13e02a618346574",
+          "source_pdf_page_number": 236,
+          "bbox_pdf_points": [
+            53.924,
+            237.269,
+            300.197,
+            386.224
+          ],
+          "page_text_sha256": "019681612678787ff78645c76f51a180ad2659053ad40e1394b8ef4d9e86de1c",
+          "asset_path": "assets/6320a99e897b57bc92088e03352376bd0f7cf13a31776e5ab8b48f43357ef6d9.jpeg",
+          "heuristic_score": 43.0
+        }
+      ],
+      "heuristic_score": 43.0,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0236.jpg",
+      "original_asset_path": "prepared/originals/v3-image-6320a99e897b57bc9208.jpeg",
+      "original_asset_sha256": "6320a99e897b57bc92088e03352376bd0f7cf13a31776e5ab8b48f43357ef6d9",
+      "page_crop_path": "prepared/crops/v3-image-6320a99e897b57bc9208.jpg",
+      "page_crop_sha256": "4e23889e1d0bd550ceb70a671b17c00858610af1dbde40eb50ff3a62f7e5536d",
+      "display_path": "prepared/crops/v3-image-6320a99e897b57bc9208.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0236-9f18991941",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 236,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "9f18991941dd14a0517b4ed4560ca1505c9e0342f6509d78253303ffc83b0ed3",
+      "source_asset_path": "page-0236.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 218 During their walk in the forests, Bhoomi and Surya notice that there are a lot of leaves on the ground and the soil feels damp. Ajji explains, “The roots of plants hold on to the soil and prevent it from being washed away. The leaves that fall from the trees decay and enrich the soil with nutrients. This soil is used by new plants and trees to grow. This is an example of recycling in nature.” Let us investigate the soil in more detail. 11.5 Soil, Rocks and Minerals Bhoomi, Surya and Ajji come back home from the forest. Bhoomi and Surya help Ajji in preparing the soil in the garden for planting some vegetables (Fig. 11.5). Ajji asks them to dig the soil gently and loosen the lumps. You have already learnt in the chapter ‘Living Creatures: Exploring their Characteristics’ that for plants to grow, the space between the soil particles not only provides sufficient air but also space for the roots to grow easily. Bhoomi and Surya could see small pebbles, the roots of plants and a few earthworms too in the soil. Do you realise that earthworms are natural agents that help in turning and loosening the soil? While Bhoomi and Surya help Ajji, let us do our own experiment by performing Activity 11.4. Activity 11.4: Let us investigate Fig. 11.5: Soil preparation for planting vegetables Caution Remember to wash your hands thoroughly after touching the soil collected from different places. Sometimes soil that has garbage carries germs that may be harmful to us.   Collect samples of soils from different areas around your home and school.   Guess what could be there in different soils.   Observe carefully each soil sample and note its colour.   Touch each soil sample and feel its texture. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "df76085c444dcd43fc8e1f15",
+          "source_pdf_page_number": 236,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "019681612678787ff78645c76f51a180ad2659053ad40e1394b8ef4d9e86de1c",
+          "asset_path": "page-0236.jpg"
+        }
+      ],
+      "heuristic_score": 28.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0236.jpg",
+      "display_path": "prepared/pages/page-0236.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-55496e5626fd106b8196",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 253,
+      "bbox_pdf_points": [
+        45.846,
+        443.869,
+        390.161,
+        726.031
+      ],
+      "source_asset_sha256": "55496e5626fd106b81968308740727a4daf1961ae430f5d2ee2b1ec284e986e4",
+      "source_asset_path": "assets/55496e5626fd106b81968308740727a4daf1961ae430f5d2ee2b1ec284e986e4.jpeg",
+      "source_asset_width": 537,
+      "source_asset_height": 441,
+      "page_text_context": "Beyond Earth 235 Two distinct patterns of stars, the Big Dipper and the Little Dipper, are shown in Fig. 12.4. The Pole Star or Polaris, which is part of the Little Dipper is also shown (Fig. 12.4). The Pole Star appears nearly stationary in the North direction. This helps to locate the North direction in the Northern hemisphere. The Big Dipper lies in the constellation Ursa Major while the Little Dipper lies in the constellation Ursa Minor. In India, the Big Dipper is known as Saptaṛiṣhi, and the Pole Star is known as Dhruva tārā. More to know! Apart from common regional stories associated with stars in the constellations, many forest dwelling communities or tribes of India also have their own stories about them. For example, the four stars in the Big Dipper that approximately form a rectangle, are viewed by tribes in Central India as the “grandmother’s cot” with the three thieves (other three stars) stealing it. Fishermen along the Konkan coast imagine the four stars as a boat, with the last three stars as the neck of the boat. Do you know? How can we identify some of these constellations in the night sky? Fig. 12.4: Big Dipper, Little Dipper and Pole Star (The lines are not seen in the sky and have been drawn only for easy identification) Pole star Big Dipper Little Dipper Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "8c7946aca1287b5b33371bab",
+          "source_pdf_page_number": 253,
+          "bbox_pdf_points": [
+            45.846,
+            443.869,
+            390.161,
+            726.031
+          ],
+          "page_text_sha256": "0b37f55a1df07078896eec76b2cf205a1d09d74efb3f3dc5d0939294d9495db1",
+          "asset_path": "assets/55496e5626fd106b81968308740727a4daf1961ae430f5d2ee2b1ec284e986e4.jpeg",
+          "heuristic_score": 47.2
+        }
+      ],
+      "heuristic_score": 47.2,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0253.jpg",
+      "original_asset_path": "prepared/originals/v3-image-55496e5626fd106b8196.jpeg",
+      "original_asset_sha256": "55496e5626fd106b81968308740727a4daf1961ae430f5d2ee2b1ec284e986e4",
+      "page_crop_path": "prepared/crops/v3-image-55496e5626fd106b8196.jpg",
+      "page_crop_sha256": "0899bd39b31e886e915edfcac54b013538a119f3356b225c2ceccbd42afb8909",
+      "display_path": "prepared/crops/v3-image-55496e5626fd106b8196.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    },
+    {
+      "candidate_id": "v3-page-0254-b277bc955c",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 254,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "b277bc955c9e1302f9f5b2ead66131fb55ef242614314f6874d8f48e6a8c7feb",
+      "source_asset_path": "page-0254.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 236 12.2 Night Sky Watching If it is a clear cloudless night, a large number of stars may be visible in the sky. If you stay in a big city, you may find that the sky is rarely clear and only a few stars are seen in the night sky. This is due to light pollution, smoke and dust. The presence of excessive artificial light at night time is referred to as light pollution. In villages or areas where there is less light pollution, a larger number of stars can be seen. Also, your house may be surrounded by tall buildings and trees, which may block your view. The night sky is best viewed from open dark areas. Light pollution is growing sharply globally. This is reducing our ability to enjoy and study objects in the night sky. Some dark sky reserves and parks have been established around the world. Light pollution in the reserves is controlled to preserve dark skies for research. There are organisations which are working to educate people about reducing light pollution. Do you know? Not all stars and constellations are visible from all places on Earth and on all nights in a year. For example, the Pole Star is not visible from the southern hemisphere of Earth. To identify a star or a constellation, you need to know how a particular constellation looks like and where to look for it in the night sky. To get familiar with the pattern of a constellation you may use images such as Fig. 12.3 and Fig. 12.4. To find out when and in which portion of the sky a star or a constellation will be visible from your location, you may take the help of sky mapping apps that can be downloaded on a mobile phone, or other online resources. Sky Map is a very handy app for identification of stars, constellations and planets from mobile phones. Stellarium is another such app. The computer version of Stellarium is free for download and has many features. More to know! Can we try to find any constellation or star of our choice on any night from our location? Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "298c8a66b7034509df6c6415",
+          "source_pdf_page_number": 254,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "7364d9c46cec998a2f1e33bc405583c0aa8cf21d9b36d1196d1601d2d24e55ec",
+          "asset_path": "page-0254.jpg"
+        }
+      ],
+      "heuristic_score": 22.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0254.jpg",
+      "display_path": "prepared/pages/page-0254.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0255-c511f6747d",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 255,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "c511f6747db9a3e744335c4dbfab20ebca91da2d1c19524b56be9e7f13c5b750",
+      "source_asset_path": "page-0255.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Beyond Earth 237 Preparation for night sky watching   Under the guidance of adults, identify a dark open area for night sky watching. This should be away from lights, tall buildings and trees.   With the help of an app, choose the date and time based upon what you plan to identify in the night sky.   Choose a night where neither the Moon nor the clouds are visible particularly for identifying the Pole Star which is not very bright.   It may be useful to have access to a mobile app with a map of the sky, or print out images of the constellations you plan to view. You may also carry a magnetic compass to find directions and a notebook to note or draw your observations.   On the particular day and time selected, go to the identified place with an adult, where the night sky watching is to be done.   After reaching there, wait for about half an hour for your eyes to get adjusted to the darkness. This will help you to see the night sky better (Fig. 12.5). Fig. 12.5: Night sky watching Caution Do not go to a dark open place at night time without adults accompanying you. You may easily identify the Big Dipper and the Pole Star in the night sky. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "1f46972f311da8d1ecd0bdda",
+          "source_pdf_page_number": 255,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "ea20c8438f6720653771ed5f5be18a1b8d8ee9b573a3cddf68f5a75464116fa0",
+          "asset_path": "page-0255.jpg"
+        }
+      ],
+      "heuristic_score": 22.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0255.jpg",
+      "display_path": "prepared/pages/page-0255.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-page-0269-d8bd9444ea",
+      "candidate_kind": "page_preview",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 269,
+      "bbox_pdf_points": [
+        0.0,
+        0.0,
+        592.8,
+        783.6
+      ],
+      "source_asset_sha256": "d8bd9444ea3a4957eccf57e8ef42f63ec43daf2f7d1651b1eb97cdefc4295b02",
+      "source_asset_path": "page-0269.jpg",
+      "source_asset_width": 1186,
+      "source_asset_height": 1568,
+      "page_text_context": "Beyond Earth 251 8. A portion of the night sky is shown in Fig. 12.14. Draw lines to connect the stars for Orion and label the star Sirius. You may refer to Fig. 12.3. Fig. 12.14 Learning further   Try to find out the names of planets in your local language. Also, find out the stories associated with stars and constellations in your region. Present these stories in a pictorial form.   If there is a planetarium or a science museum nearby, then you can visit it, especially if a night sky observation session is scheduled by them. You will get to see the Moon, the planets and the stars through a telescope. If you visit the planetarium during daytime, you can also see their models, pictures and sky shows. 9. From Earth, you can see stars fading away at dawn and appearing at dusk. During the day we do not see the stars. Explain why. 10. During a clear night, try to observe the Big Dipper 3–4 times at an interval of 2 to 3 hours. Also try to locate the Pole Star each time. Does the Big Dipper appear to move? Draw a rough sketch to illustrate this, mentioning the time in each case. 11. Think about the night sky and write a poem or a story on it. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "db83f842cc31a9becf57959b",
+          "source_pdf_page_number": 269,
+          "bbox_pdf_points": [
+            0.0,
+            0.0,
+            592.8,
+            783.6
+          ],
+          "page_text_sha256": "fb02d166d6da716b94c34a64ada8250b5ce13d519a7600447fc03b353752626c",
+          "asset_path": "page-0269.jpg"
+        }
+      ],
+      "heuristic_score": 24.0,
+      "selection_reason": "Whole-page fallback preserves vector art and surrounding context; pages are selected across page-range strata rather than by inventory order.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0269.jpg",
+      "display_path": "prepared/pages/page-0269.jpg",
+      "processing_method": "SOURCE_PDF_PAGE_RENDER; vector art and text remain visible"
+    },
+    {
+      "candidate_id": "v3-image-bd8ab804b13bd48dff66",
+      "candidate_kind": "embedded_image",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 270,
+      "bbox_pdf_points": [
+        97.753,
+        308.38,
+        566.88,
+        696.546
+      ],
+      "source_asset_sha256": "bd8ab804b13bd48dff6652a8703ef8a7475df2c08fe721bde21d4a300484354a",
+      "source_asset_path": "assets/bd8ab804b13bd48dff6652a8703ef8a7475df2c08fe721bde21d4a300484354a.jpeg",
+      "source_asset_width": 733,
+      "source_asset_height": 606,
+      "page_text_context": "Curiosity | Textbook of Science | Grade 6 252   Find out if the increasing light pollution is causing problems for humans, wildlife and the environment. Write an action that you would take at the personal level to control light pollution.   Find out the weather conditions due to which the Indian Institute of Astrophysics (IIA) found Hanle, Ladakh a suitable place to set up an observatory.   If you enjoy doing embroidery, try to embroider on a dark coloured cloth the constellations that you have seen (Fig. 12.15). Otherwise, you may use your creativity and depict constellations in multiple other ways using various art and craft ideas. Fig. 12.15: Embroidery of constellations Indian Astronomical Observatory, Hanle, is situated atop the highest peak of Digpa- ratsa-Ri mountain range in Hanle. This peak has been renamed Mount Saraswati. It has several telescopes. One of them is called the Himalayan Chandra Telescope, which has been named after the Nobel Prize winning scientist Subrahmanyan Chandrasekhar. It is an observatory at one of the highest locations in the world. The area surrounding this observatory was notified as the Hanle Dark Sky Reserve (HDSR) in December 2022. The reserve is open to the public throughout the year. Local people have been provided with small telescopes and are trained to be Astronomy More to know! Ambassadors for visitors by the Indian Institute of Astrophysics. It is expected to promote astro-tourism in the region. Reprint 2026-27",
+      "occurrences": [
+        {
+          "asset_id": "764c08794cacb3ae20889514",
+          "source_pdf_page_number": 270,
+          "bbox_pdf_points": [
+            97.753,
+            308.38,
+            566.88,
+            696.546
+          ],
+          "page_text_sha256": "60ba3b5ebbacf81e8675c1dd5374e4093c7bb2be9b0afae41b516b17a1fd023d",
+          "asset_path": "assets/bd8ab804b13bd48dff6652a8703ef8a7475df2c08fe721bde21d4a300484354a.jpeg",
+          "heuristic_score": 47.2
+        }
+      ],
+      "heuristic_score": 47.2,
+      "selection_reason": "Unique embedded-image bytes; ranked by source-page context, image dimensions and PDF placement. Selection is stratified across pages where candidates permit.",
+      "review_status": "CANDIDATE_NEEDS_HUMAN_REVIEW",
+      "publication_allowed": false,
+      "human_review_required": true,
+      "source_page_preview_path": "source-pages/page-0270.jpg",
+      "original_asset_path": "prepared/originals/v3-image-bd8ab804b13bd48dff66.jpeg",
+      "original_asset_sha256": "bd8ab804b13bd48dff6652a8703ef8a7475df2c08fe721bde21d4a300484354a",
+      "page_crop_path": "prepared/crops/v3-image-bd8ab804b13bd48dff66.jpg",
+      "page_crop_sha256": "eb0a6b4e6cb1f5f466e784ea99f4999808f3f0cc3e7f111b6edaefba246d5f4f",
+      "display_path": "prepared/crops/v3-image-bd8ab804b13bd48dff66.jpg",
+      "processing_method": "PDF_REGION_CROP_WITH_8PT_MARGIN; original embedded image retained"
+    }
+  ]
+}
