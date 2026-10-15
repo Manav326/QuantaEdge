@@ -47,7 +47,7 @@
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
     "lessons_committed": 1,
-    "last_completed_authoring_step": "Drafted topic 1 Explain and 8 bilingual multi-type practice questions; added an app-wide live-locale contract, localized practice control strings, state-preservation requirements, and blocked the English full-page preview from student rendering.",
+    "last_completed_authoring_step": "Drafted topic 1 Explain and 8 bilingual multi-type practice questions; recorded the live app-wide locale contract, state-preservation requirements, bilingual control/question-type/difficulty/status labels, and blocked the English full-page source preview from student rendering.",
     "current_chapter_number": 1,
     "current_topic_number": 1,
     "next_action": "Align the Hindi source pages and choose/approve a locale-safe student visual for topic 1, then author topic 2 (scientific method) as a separate bilingual lesson and update this index."
@@ -82,10 +82,10 @@
             "scenario_based"
           ],
           "committed_at": "2026-10-15",
-          "commit_sha": "36870ea85aa3c032b416613cdd3356bfb61a8596",
+          "commit_sha": "775a07d84b55f488534fb1037b453c072e223c9b",
           "runtime_language_switch": "CONTRACT_RECORDED_NOT_IMPLEMENTED",
           "student_renderable_v3_page_preview": false,
-          "commit_note": "Locale contract and localized practice labels added; English full-page source preview locked to editor/review use."
+          "commit_note": "Added app-wide language-switch contract, state-preservation/no-fallback rules, localized practice controls/question-type/difficulty/status labels, and blocked the English full-page preview from student rendering."
         },
         {
           "number": 2,
@@ -208,7 +208,7 @@
     "Read this index first and open the exact lesson artifact recorded above.",
     "Do not regenerate or overwrite completed lesson JSON blindly; inspect it and make additive corrections.",
     "Continue on main; do not create an extra branch for this content-authoring stream.",
-    "Apply the single global locale contract to every learner-visible string; the language switch must update all visible content while preserving active learning state. Content files specify requirements but do not implement the runtime.",
+    "Apply the single global locale contract to every learner-visible string, including question-type/status labels and shared web/Android UI. The language switch must update all visible content while preserving active learning state; data files specify requirements but do not implement runtime.",
     "For the active topic, resolve Hindi page mapping and source visual/rights gaps; do not display the English source-page preview as a student asset.",
     "Then generate topic 2 with separate Explain and Practice sections and paired en/hi content. Commit it, then update this index immediately.",
     "Do not mark a chapter complete until every topic has source reconciliation, visual mapping, bilingual parity and practice review."
