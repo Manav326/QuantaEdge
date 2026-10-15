@@ -57,7 +57,8 @@ public class AuthController {
   @PostMapping("/verify-otp")
   public ResponseEntity<Map<String,Object>> verifyOtp(
       @RequestBody Map<String,Object> body,
-      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader) {
+      @RequestHeader(value=AuthService.WORKSPACE_HEADER, required=false) String workspaceHeader,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     if ("HRMS".equals(AuthService.normalizeWorkspace(workspaceHeader))) {
       throw new SecurityException("HRMS uses username and password sign-in, not OTP.");
     }
@@ -83,7 +84,8 @@ public class AuthController {
     } else {
       workspace = "LEARNING";
     }
-    return withCookie(auth.issueSession(context, workspace), workspace);
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, workspace, androidClient), workspace, androidClient);
   }
 
   @PostMapping("/hrms-login")
@@ -114,30 +116,42 @@ public class AuthController {
   }
 
   @PostMapping("/parent-login")
-  public ResponseEntity<Map<String,Object>> parentLogin(@RequestBody Map<String,Object> body) {
+  public ResponseEntity<Map<String,Object>> parentLogin(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     AuthContext context=auth.loginParent(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueSession(context, "PARENT"), "PARENT");
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, "PARENT", androidClient), "PARENT", androidClient);
   }
 
   @PostMapping("/student-login")
-  public ResponseEntity<Map<String,Object>> studentLogin(@RequestBody Map<String,Object> body) {
+  public ResponseEntity<Map<String,Object>> studentLogin(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     AuthContext context=auth.loginStudentByParent(String.valueOf(body.getOrDefault("parentMobile","")),
         String.valueOf(body.getOrDefault("username","")),String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueSession(context, "STUDENT"), "STUDENT");
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, "STUDENT", androidClient), "STUDENT", androidClient);
   }
 
   @PostMapping("/learner-login")
-  public ResponseEntity<Map<String,Object>> learnerLogin(@RequestBody Map<String,Object> body) {
+  public ResponseEntity<Map<String,Object>> learnerLogin(
+      @RequestBody Map<String,Object> body,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     AuthContext context=auth.loginIndependentLearner(String.valueOf(body.getOrDefault("mobile","")),
         String.valueOf(body.getOrDefault("password","")));
-    return withCookie(auth.issueSession(context,"STUDENT"),"STUDENT");
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context,"STUDENT",androidClient),"STUDENT",androidClient);
   }
 
   @PostMapping("/preview-login")
-  public ResponseEntity<Map<String,Object>> previewLogin() {
+  public ResponseEntity<Map<String,Object>> previewLogin(
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader) {
     AuthContext context=auth.previewLogin();
-    return withCookie(auth.issueSession(context));
+    String workspace = AuthService.workspaceForContext(context);
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.issueSession(context, workspace, androidClient), workspace, androidClient);
   }
 
   @PostMapping("/select-student")
@@ -177,6 +191,7 @@ public class AuthController {
   @PostMapping("/refresh")
   public ResponseEntity<Map<String,Object>> refresh(
       @RequestHeader(value=AuthService.WORKSPACE_HEADER,required=false) String workspaceHeader,
+      @RequestHeader(value="X-QE-Client", required=false) String clientHeader,
       HttpServletRequest request) {
     String workspace = AuthService.normalizeWorkspace(workspaceHeader);
     if (workspace == null) {
@@ -187,7 +202,8 @@ public class AuthController {
         cookieValue(request, ("PARENT".equals(workspace) || "STUDENT".equals(workspace))
             ? AuthService.LEARNING_REFRESH_COOKIE : AuthService.REFRESH_COOKIE),
         cookieValue(request, AuthService.REFRESH_COOKIE));
-    return withCookie(auth.refreshSession(refreshToken, workspace), workspace);
+    boolean androidClient = isAndroidClient(clientHeader);
+    return withCookie(auth.refreshSession(refreshToken, workspace), workspace, androidClient);
   }
 
   @PostMapping("/logout")
@@ -242,15 +258,25 @@ public class AuthController {
   }
 
   private ResponseEntity<Map<String,Object>> withCookie(AuthService.SessionTokens tokens, String requestedWorkspace) {
+    return withCookie(tokens, requestedWorkspace, false);
+  }
+
+  private ResponseEntity<Map<String,Object>> withCookie(
+      AuthService.SessionTokens tokens, String requestedWorkspace, boolean androidClient) {
     AuthContext context=tokens.context();
     String workspace = AuthService.normalizeWorkspace(requestedWorkspace);
     if (workspace == null) workspace = AuthService.workspaceForContext(context);
+    boolean persistentLearnerSession = androidClient
+        && ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace));
+    Duration refreshLifetime = persistentLearnerSession
+        ? Duration.ofDays(auth.getLearningSessionDays())
+        : Duration.ofHours(auth.getSessionHours());
     ResponseCookie cookie=ResponseCookie.from(AuthService.sessionCookieForWorkspace(workspace),tokens.accessToken())
         .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
         .maxAge(Duration.ofMinutes(AuthService.ACCESS_TOKEN_MINUTES)).build();
     ResponseCookie refreshCookie=ResponseCookie.from(AuthService.refreshCookieForWorkspace(workspace),tokens.refreshToken())
         .httpOnly(true).secure(secureCookies).sameSite("Strict").path("/")
-        .maxAge(Duration.ofHours(auth.getSessionHours())).build();
+        .maxAge(refreshLifetime).build();
     var body = new LinkedHashMap<String,Object>();
     body.put("authenticated",true);
     body.put("publicUserId",auth.publicUserId(context));
@@ -264,6 +290,10 @@ public class AuthController {
         && auth.staffMustChangePassword(context.staffId()));
     return ResponseEntity.ok().header("Set-Cookie",cookie.toString()).header("Set-Cookie",refreshCookie.toString())
         .body(body);
+  }
+
+  private boolean isAndroidClient(String clientHeader) {
+    return clientHeader != null && "ANDROID".equalsIgnoreCase(clientHeader.trim());
   }
 
   private ResponseCookie expiredCookie(String name) {

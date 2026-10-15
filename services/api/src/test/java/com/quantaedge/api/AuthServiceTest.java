@@ -35,6 +35,22 @@ class AuthServiceTest {
   @Mock private JdbcTemplate jdbc;
 
   @Test
+  void androidLearnerSessionStoresClientTypeAndRefreshLifetimeUsesAbsoluteExpiry() {
+    AuthService auth = new AuthService(jdbc, false, 168, true, 60, "");
+    AuthContext student = new AuthContext(null, 81L, null, "STUDENT", "Test Learner", "STUDENT");
+
+    auth.issueSession(student, "STUDENT", true);
+
+    org.mockito.ArgumentCaptor<String> sql = org.mockito.ArgumentCaptor.forClass(String.class);
+    org.mockito.ArgumentCaptor<Object[]> parameters = org.mockito.ArgumentCaptor.forClass(Object[].class);
+    verify(jdbc).update(sql.capture(), parameters.capture());
+    assertTrue(sql.getValue().contains("client_type"));
+    Object[] args = parameters.getValue();
+    assertEquals("ANDROID", args[9]);
+    assertEquals(args[8], args[6], "Android refresh expiry must share the 30-day absolute expiry.");
+  }
+
+  @Test
   void localDemoOtpCanOptIntoRepeatedRequestsWithoutRateLimitQueries() throws Exception {
     String mobile = "+917070107483";
     AuthService auth = new AuthService(jdbc, true, 168, false, 60, "7070107483");

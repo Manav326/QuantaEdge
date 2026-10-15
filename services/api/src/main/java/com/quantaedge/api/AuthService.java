@@ -134,6 +134,8 @@ public class AuthService {
 
   public int getSessionHours() { return sessionHours; }
 
+  public int getLearningSessionDays() { return Math.max(1, learningAbsoluteDays); }
+
   /** True while an invited staff account has not completed its first successful sign-in. */
   public boolean isStaffFirstAccess(String mobile) {
     String normalized=normalizeMobile(mobile);
@@ -923,7 +925,10 @@ public class AuthService {
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.token_hash=? and s.revoked_at is null and s.expires_at>now()
         and s.absolute_expires_at>now()
-        and s.last_seen_at>now()-(case when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes' else interval '4 hours' end)
+        and s.last_seen_at>now()-(case
+          when s.client_type='ANDROID' and s.workspace_key in ('LEARNING','PARENT','STUDENT') then interval '30 days'
+          when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes'
+          else interval '4 hours' end)
         and (s.refresh_expires_at is null or s.refresh_expires_at>now())
         and (s.user_id is null or u.active=true)
         and (s.student_id is null or st.active=true)
@@ -959,7 +964,9 @@ public class AuthService {
     jdbc.update("""
       update auth_session set last_seen_at=now(),
         refresh_expires_at=case when refresh_token_hash is not null
-          then now()+make_interval(hours => ?) else refresh_expires_at end
+          then case when client_type='ANDROID' then absolute_expires_at
+            else now()+make_interval(hours => ?) end
+          else refresh_expires_at end
       where token_hash=? and revoked_at is null
       """,sessionHours,hash(token));
     String name=studentId!=null?String.valueOf(r.get("student_name")):
@@ -994,11 +1001,16 @@ public class AuthService {
   /** Issue short-lived access plus independently stored refresh credentials in one application scope. */
   @Transactional
   public SessionTokens issueSession(AuthContext context) {
-    return issueSession(context, workspaceForContext(context));
+    return issueSession(context, workspaceForContext(context), false);
   }
 
   @Transactional
   public SessionTokens issueSession(AuthContext context, String requestedWorkspace) {
+    return issueSession(context, requestedWorkspace, false);
+  }
+
+  @Transactional
+  public SessionTokens issueSession(AuthContext context, String requestedWorkspace, boolean androidClient) {
     if (context == null) throw new SecurityException("Authentication required.");
     String workspace = normalizeWorkspace(requestedWorkspace);
     if (workspace == null) workspace = workspaceForContext(context);
@@ -1017,9 +1029,13 @@ public class AuthService {
     }
     Instant now=Instant.now();
     String access=randomToken(), refresh=randomToken();
-    Instant absoluteExpiry = ("LEARNING".equals(workspace) || "PARENT".equals(workspace) || "STUDENT".equals(workspace))
+    boolean persistentAndroidLearner = androidClient && learnerWorkspace;
+    String clientType = persistentAndroidLearner ? "ANDROID" : "WEB";
+    Instant absoluteExpiry = learnerWorkspace
         ? now.plus(Duration.ofDays(Math.max(1, learningAbsoluteDays)))
         : now.plus(Duration.ofHours(Math.max(1, staffAbsoluteHours)));
+    Instant refreshExpiry = persistentAndroidLearner
+        ? absoluteExpiry : now.plus(Duration.ofHours(sessionHours));
     // HRMS intentionally supports one active device/session per staff identity. This
     // revocation is scoped to HRMS and never touches Education Admin or learner sessions.
     if ("HRMS".equals(workspace)) {
@@ -1034,12 +1050,12 @@ public class AuthService {
     jdbc.update("""
       insert into auth_session(
         token_hash,refresh_token_hash,user_id,student_id,staff_id,
-        expires_at,refresh_expires_at,workspace_key,absolute_expires_at)
-      values (?,?,?,?,?,?,?,?,?)
+        expires_at,refresh_expires_at,workspace_key,absolute_expires_at,client_type)
+      values (?,?,?,?,?,?,?,?,?,?)
       """,hash(access),hash(refresh),context.userId(),context.studentId(),context.staffId(),
       java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
-      java.sql.Timestamp.from(now.plus(Duration.ofHours(sessionHours))),
-      workspace, java.sql.Timestamp.from(absoluteExpiry));
+      java.sql.Timestamp.from(refreshExpiry),
+      workspace, java.sql.Timestamp.from(absoluteExpiry), clientType);
     return new SessionTokens(access,refresh,context);
   }
 
@@ -1062,7 +1078,10 @@ public class AuthService {
       left join staff_account e on e.id=s.staff_id and e.active=true
       where s.refresh_token_hash=? and s.revoked_at is null and s.refresh_expires_at>now()
         and s.absolute_expires_at>now()
-        and s.last_seen_at>now()-(case when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes' else interval '4 hours' end)
+        and s.last_seen_at>now()-(case
+          when s.client_type='ANDROID' and s.workspace_key in ('LEARNING','PARENT','STUDENT') then interval '30 days'
+          when s.workspace_key in ('HRMS','STAFF','EDUCATION_ADMIN') then interval '30 minutes'
+          else interval '4 hours' end)
         and (s.user_id is null or u.id is not null)
         and (s.student_id is null or st.id is not null)
         and (s.staff_id is null or e.id is not null)
@@ -1086,7 +1105,8 @@ public class AuthService {
     String access=randomToken(), nextRefresh=randomToken();
     Instant now=Instant.now();
     int changed=jdbc.update("""
-      update auth_session set token_hash=?,refresh_token_hash=?,expires_at=?,refresh_expires_at=?,last_seen_at=now()
+      update auth_session set token_hash=?,refresh_token_hash=?,expires_at=?,
+        refresh_expires_at=case when client_type='ANDROID' then absolute_expires_at else ? end,last_seen_at=now()
       where id=? and revoked_at is null
       """,hash(access),hash(nextRefresh),
       java.sql.Timestamp.from(now.plus(Duration.ofMinutes(ACCESS_TOKEN_MINUTES))),
