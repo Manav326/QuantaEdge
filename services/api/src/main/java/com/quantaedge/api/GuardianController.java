@@ -134,7 +134,7 @@ public class GuardianController {
 
   private Map<String,Object> parentProfile(long userId) {
     return jdbc.queryForMap("""
-      select id,public_id,display_name,mobile_e164,email,city,state,occupation,
+      select id,public_id,public_user_id,display_name,mobile_e164,email,city,state,occupation,
              organization,preferred_language,
              case when profile_image_data_url is not null then '/api/v1/guardians/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text else null end as profile_image_url,
              profile_updated_at
