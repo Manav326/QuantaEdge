@@ -644,7 +644,7 @@ public class AssessmentController {
     String courseScope=courseId==null
         ? "s.program_id is null and c.code=st.class_code"
         : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
-    String sql="""
+    String sql= ("""
       select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
@@ -707,7 +707,7 @@ public class AssessmentController {
       order by case a.assessment_type when 'TOPIC_END' then 1 when 'CHAPTER_END' then 2 else 3 end,
                coalesce(ch.teaching_order,ch.sort_order),a.published_at desc,a.id desc
       limit ? offset ?
-      """.replace("__COURSE_SCOPE__",courseScope);
+      """).replace("__COURSE_SCOPE__",courseScope);
     List<Object> args=new ArrayList<>(List.of(context.studentId(),language,language,language,subjectFilter,subjectFilter));
     if(courseId!=null)args.add(courseId);
     args.add(rowLimit+1);args.add(rowOffset);

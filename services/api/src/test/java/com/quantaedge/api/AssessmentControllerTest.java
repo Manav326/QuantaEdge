@@ -96,7 +96,7 @@ class AssessmentControllerTest {
         .thenReturn(List.of(Map.of("id", 19L)));
     when(jdbc.queryForList(contains("select id,offline_mode from student_assessment_attempt"),
         eq(19L), eq(7L))).thenReturn(List.of());
-    when(jdbc.queryForList(contains("where a.id=? and a.status='PUBLISHED' and"),
+    when(jdbc.queryForList(contains("and a.status='PUBLISHED' and"),
         eq(7L), eq(19L))).thenReturn(List.of());
 
     ResponseStatusException error = assertThrows(ResponseStatusException.class,
@@ -363,7 +363,7 @@ class AssessmentControllerTest {
         """);
     when(jdbc.queryForList(contains("with ranked as"), eq("hi"), eq("hi"), eq("hi"),
         eq(7L), eq(25), eq(0))).thenReturn(List.of(row));
-    when(jdbc.queryForObject(contains("count(distinct assessment_id)"), eq(Long.class), eq(7L)))
+    when(jdbc.queryForObject(contains("count(distinct att.assessment_id)"), eq(Long.class), eq(7L)))
         .thenReturn(1L);
 
     Map<String, Object> result = controller.studentResults("hi", 25, 0, student);

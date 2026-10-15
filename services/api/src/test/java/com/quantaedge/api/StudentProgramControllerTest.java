@@ -53,6 +53,8 @@ class StudentProgramControllerTest {
   void enrolmentUsesExistingClassIdentityAndCourseSubjects() {
     when(jdbc.queryForList(contains("upper(p.code)=?"), eq(7L), eq("NAVODAYA_BATCH")))
         .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","class_code","6")));
+    when(jdbc.queryForList(contains("where p.id=? and p.status='ACTIVE'"), eq(7L), eq(91L)))
+        .thenReturn(List.of(Map.of("id",91L,"code","NAVODAYA_BATCH","display_name","Navodaya Batch","status","ACTIVE")));
     when(jdbc.queryForList(contains("where ps.program_id=? order by"), eq(91L)))
         .thenReturn(List.of(Map.of("id",901L,"code","maths"),Map.of("id",902L,"code","science")));
     when(jdbc.update(contains("insert into student_program_enrollment"), eq(7L), eq(91L))).thenReturn(1);
