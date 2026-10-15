@@ -6,6 +6,8 @@ on:
       - ".github/workflows/textbook-visual-candidates-v3.yml"
       - "scripts/prepare_visual_candidates_v3.py"
       - "tests/test_prepare_visual_candidates_v3.py"
+      - "scripts/build_visual_lesson_attachment_manifest.py"
+      - "tests/test_build_visual_lesson_attachment_manifest.py"
       - "scripts/extract_visual_asset_inventory.py"
       - "tests/test_extract_visual_asset_inventory.py"
   workflow_dispatch:
@@ -109,6 +111,7 @@ jobs:
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
           python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
+          python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
 
       - name: Pull exact whole-book PDF and matching source context from GHCR
         env:
@@ -209,6 +212,18 @@ jobs:
           print(json.dumps(pack["summary"], indent=2))
           PY
 
+      - name: Build review-only admin attachment catalog and content-addressed media URLs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p apps/admin/public/content/visual-candidates
+          python scripts/build_visual_lesson_attachment_manifest.py \\
+            --candidate-pack "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG/candidates.v3.json" \\
+            --candidate-root "$RUNNER_TEMP/visual-candidates-v3/$BOOK_SLUG" \\
+            --repo-root "$GITHUB_WORKSPACE" \\
+            --book-slug "$BOOK_SLUG" \\
+            --output "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json"
+
       - name: Install ORAS and authenticate to GHCR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -278,7 +293,7 @@ jobs:
           index_path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           print(json.dumps(value, indent=2))
           PY
-          git add "$out"
+          git add "$out" "apps/admin/public/content/visual-candidates/$BOOK_SLUG.v3.json" "apps/web/public/content/visual-assets/$BOOK_SLUG"
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -286,4 +301,4 @@ jobs:
           fi
           git pull --rebase origin main
           git push origin HEAD:main
-          echo "Persisted the v3 candidate manifest and contact sheet. No existing v1/v2 files were changed."
+          echo "Persisted the v3 candidate manifest, contact sheet, review-only admin catalog and web-ready content-addressed visual assets. No existing v1/v2 files were changed."
