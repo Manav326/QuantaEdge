@@ -38,7 +38,7 @@
 | LEARN-01 | Subject and lesson list | Done — source on main | CI build + real-account/browser/device E2E pending |
 | LEARN-02 | Lesson blocks and media | Done — shared content renderer/API flow on main | CI build + real-account/browser/device E2E pending |
 | LEARN-03 | Inline lesson question and feedback | Done — answer-state policy/tests on main | CI build + real-account/browser/device E2E pending |
-| LEARN-04 | AI Tutor | Done — contextual tutor flow on main | CI build + real-account/browser/device E2E pending |
+| LEARN-04 | AI Tutor | Done — web-aligned tutor structure, five modes, rich responses, new chat and paged history on main | CI build + real-account/browser/device E2E pending |
 | LEARN-05 | Live classes | Done — class access/attendance flow on main | CI build + real-account/browser/device E2E pending |
 | LEARN-06 | Recorded classes / playback | Done — protected recording player on main | CI build + real-account/browser/device E2E pending |
 | PRAC-01 | Topic practice | Done — single-question practice flow on main | CI build + real-account/browser/device E2E pending |
@@ -89,6 +89,10 @@ Implementation partials still open:
 | PARENT-05 | Android archived-child restore now requires the guardian to actively tick a fresh-consent checkbox before the restore action enables. | `6d50d4b3bf712e07a4a7006edfc1a322e1b0626e` |
 | PARENT-05 / LANG-01 | Added Hindi/English localization phrases for the archived-child restore explanation, explicit consent, archived list and empty state. | `fcb97bfa17cb435598edb75eb3db4f3dbaea8429` |
 | PARENT-05 | Added the Compose layout import needed by the guarded consent row. | `910a00d513818dc35f538b4de9c4cf39187bb377` |
+| LEARN-04 | Android TutorScreen now follows the web tutor's hierarchy: branded title/AI badge, independent learning-language indicator, five icon modes with selected state, chat bubbles, timestamps, empty/connecting/unavailable/error states, retry, new chat, older history and message composer. Native screen remains full-screen on Android for the mobile form factor. | `9663381dcbbc211316e15facd7f548eac2d8f839` |
+| LEARN-04 | Android now uses the existing tutor session APIs for new-chat creation and cursor-based older-message retrieval; UI content language is sent separately from app interface language. | `637599910ce19f9ecce86c993f437dd2738f849c` |
+| LEARN-04 | Added a structured tutor response renderer and unit tests for headings, lists, tables, code fences, equations and inline markers. | `4655dee01ead32e5f3b18f62b42f902c67bf45df`; tests: `0d699b60cb95a4445292a85534f03508dcb99279` |
+| LANG-01 | Added bilingual labels for tutor controls and connected a localization coverage check to Android CI. Runtime translation and accessibility QA remain required. | `1863a403b4c9c6f45969a3d7eef9ebe39f220010`; CI check: `8a061466a85f8e2f787e8de0ba3c7252f3424ce6` |
 
 These changes preserve the existing guardian restore endpoint and payload. The API still validates consent and controls account restoration; the client does not grant permissions or restore a profile locally.
 
@@ -107,7 +111,7 @@ The source matrix's 30 E2E scenarios are retained here as a durable run log. The
 | E2E-07 | Today | Progress, recommendations and destinations | Not run in this environment — evidence required |
 | E2E-08 | Courses | Catalogue, enrolment and persistence | Not run in this environment — evidence required |
 | E2E-09 | Learning | Subject → topic → lesson ordering and return path | Not run in this environment — evidence required |
-| E2E-10 | Learning | Inline answers, language separation and contextual tutor | Not run in this environment — evidence required |
+| E2E-10 | Learning | Inline answers, language separation, tutor modes, rich responses, new chat and history | Not run in this environment — evidence required |
 | E2E-11 | Practice | Approved topic questions, retries and summary | Not run in this environment — evidence required |
 | E2E-12 | Diagnostic | Due/not-due/completed states | Not run in this environment — evidence required |
 | E2E-13 | Formal tests | Timer, question navigation, rotation and restore | Not run in this environment — evidence required |
