@@ -53,6 +53,7 @@ fun StudentProfileScreen(
     onSave: (JSONObject) -> Unit,
     onUploadPhoto: (String) -> Unit,
     onRemovePhoto: () -> Unit,
+    onAccountLifecycle: () -> Unit,
     onLogout: () -> Unit
 ) {
     fun t(en: String, hi: String) = if (language == "hi") hi else en
@@ -161,6 +162,9 @@ fun StudentProfileScreen(
                 .put("language", learningLanguage))
         }, enabled = !busy && displayName.trim().length >= 2, modifier = Modifier.fillMaxWidth()) {
             Text(t("Save profile", "प्रोफ़ाइल सुरक्षित करें"))
+        }
+        OutlinedButton(onClick = onAccountLifecycle, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
+            Text(t("Account & eligibility", "Account और eligibility"))
         }
         TextButton(onClick = onLogout, enabled = !busy, modifier = Modifier.fillMaxWidth()) {
             Text(t("Sign out", "साइन आउट"))
