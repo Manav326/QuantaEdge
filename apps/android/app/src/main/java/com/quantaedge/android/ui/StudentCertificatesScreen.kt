@@ -245,7 +245,11 @@ fun StudentCertificatesScreen(
                     .put("language", certificateLanguage)
                 val courseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
                 if (courseId > 0L) body.put("courseId", courseId)
-                val existing = ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
+                val knownId = attempt.optLongValue("certificate_id", "certificateId")
+                val canonical = if (knownId > 0L) runCatching {
+                    ApiClient.getObject("/api/v1/students/me/certificates/" + knownId)
+                }.getOrNull() else null
+                val existing = canonical ?: ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
                 prepareCertificateDownload(existing, "pdf")
                 notice = if (language == "hi") "मौजूदा प्रमाणपत्र डाउनलोड के लिए तैयार है।"
                     else "Existing certificate is ready to save."
