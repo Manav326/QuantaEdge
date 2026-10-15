@@ -68,7 +68,7 @@
 | PARENT-05 | Archive / restore child | Done — explicit fresh-consent guard added in this pass | CI build + real-account/browser/device E2E pending |
 | PARENT-06 | Parent profile and photo | Done — parent profile/photo flow on main | CI build + real-account/browser/device E2E pending |
 | STU-01 | Student profile and photo | Done — student profile/account lifecycle on main | CI build + real-account/browser/device E2E pending |
-| LANG-01 | App-interface language | Partial — full visible-string translation sweep remains | CI build + real-account/browser/device E2E pending |
+| LANG-01 | App-interface language | Partial — Android CI now checks literal localizedUiText strings and literal EmptyState title/help pairs; full visible-string sweep remains | CI build + real-account/browser/device E2E pending |
 | LANG-02 | Learning-content language | Done — independent content-language preference/request flow on main | CI build + real-account/browser/device E2E pending |
 | LANG-03 | Certificate language | Done — independent certificate language on main | CI build + real-account/browser/device E2E pending |
 | SESS-01 | Session timeout and resume | Done — server policy and client boundaries on main | CI build + real-account/browser/device E2E pending |
@@ -76,7 +76,7 @@
 | NATIVE-01 | Offline formal assessments | Done — protected offline formal assessment on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-02 | Camera scanner | Done — native QR/barcode scanner code on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-03 | Native save/share and protected document controls | Done — native certificate save and protected documents on main | CI build + real-account/browser/device E2E pending |
-| UI-01 | Loading, empty, error and success states | Partial — shared states exist; full page-by-page state audit remains | CI build + real-account/browser/device E2E pending |
+| UI-01 | Loading, empty, error and success states | Partial — protected library, certificates, classes and leaderboard now show loading/error/retry/empty feedback; remaining API-backed pages need the same page-by-page audit | CI build + real-account/browser/device E2E pending |
 
 Implementation partials still open:
 - **LANG-01:** finish a screen-by-screen audit of visible web and Android UI strings. Fix untranslated hardcoded labels, errors, dialogs and loading/empty states while keeping Hindi in Devanagari-based Hinglish.
@@ -93,6 +93,8 @@ Implementation partials still open:
 | LEARN-04 | Android uses the existing tutor APIs for new-chat creation and cursor-based older-message retrieval, preserves scroll position when older messages are prepended, and reconciles slow-model network errors against persisted history for up to the web-equivalent recovery window. UI content language remains separate from app-interface language. | `637599910ce19f9ecce86c993f437dd2738f849c`; recovery: `e3a7bb2cc07d6a1fb0762fd7c768f45b9d467d22`; scroll: `ec07c2f42efec745bedb950490234551b53433b7` |
 | LEARN-04 | Added a structured tutor response renderer and unit tests for headings, lists, tables, code fences, equations and inline markers. | `4655dee01ead32e5f3b18f62b42f902c67bf45df`; tests: `0d699b60cb95a4445292a85534f03508dcb99279` |
 | LANG-01 | Added bilingual labels for tutor controls and connected a localization coverage check to Android CI. Runtime translation and accessibility QA remain required. | `1863a403b4c9c6f45969a3d7eef9ebe39f220010`; CI check: `8a061466a85f8e2f787e8de0ba3c7252f3424ce6` |
+| LANG-01 | Extended Android localization CI to audit literal EmptyState title/detail pairs against shared Hindi/English UiPhrase mappings, in addition to localizedUiText calls. | `scripts/check-android-ui-localization.mjs` |
+| UI-01 | Added explicit loading/error/retry feedback to classes, leaderboard and certificate data flows; certificate errors now include Retry and messages respect the selected app language. | `LearningClassesScreen.kt`, `AssessmentLeaderboardScreen.kt`, `StudentCertificatesScreen.kt` |
 | CERT-01 / CERT-02 | Certificate picker/eligibility select one canonical record per attempt. Issue/reopen resolves legacy achievement keys, validates the returned issued ID/status, routes web to `?certificateId=...`, and opens Android native PDF save after successful issuance. | Backend: `6b89b1f1f80a7d96ba786d2637b07ef678d1c89a`; regression fixtures: `6e8fb2c2d5807701049333f8a7154c41d05e388c`; client flow: pending batch commit |
 | TEXT-02 | Protected Android reader gains fullscreen, fit width, page thumbnails, forced page retry and safe cache eviction; source PDF export/share remains blocked. | `ff12d697b7d861c9559f5182fb820b03fd95c1d1`; build fix + nav contract: `abc6486e9e9c888387755b1eae420c20d0bf746f` |
 | TEXT-01 | Android resource library groups complete subject books/book parts before expandable chapter PDFs; preserves API curriculum order and adds 10/20/30/50 chapter pagination and retry/empty states. | Pending batch commit |

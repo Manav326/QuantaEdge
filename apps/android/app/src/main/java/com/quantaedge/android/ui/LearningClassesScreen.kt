@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -31,6 +32,7 @@ fun LearningClassesScreen(
     liveItems: List<JSONObject>,
     recordedItems: List<JSONObject>,
     busy: Boolean,
+    error: String,
     onSubject: (String) -> Unit,
     onRefresh: () -> Unit,
     onJoin: (JSONObject) -> Unit,
@@ -54,6 +56,31 @@ fun LearningClassesScreen(
             else TextButton(onClick = { tab = "LIVE" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("Live schedule")) }
             if (tab == "RECORDED") Button(onClick = { tab = "RECORDED" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("Recordings")) }
             else TextButton(onClick = { tab = "RECORDED" }, enabled = !busy, modifier = Modifier.weight(1f)) { Text(localizedUiText("Recordings")) }
+        }
+
+        if (busy && ((tab == "LIVE" && liveItems.isEmpty()) || (tab == "RECORDED" && recordedItems.isEmpty()))) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(9.dp),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                androidx.compose.material3.CircularProgressIndicator(modifier = Modifier.size(18.dp), strokeWidth = 2.dp)
+                Text(t("Loading classes and recordings…", "Classes और recordings लोड हो रही हैं…"),
+                    style = MaterialTheme.typography.bodySmall)
+            }
+        }
+        if (error.isNotBlank()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Text(error, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = onRefresh, enabled = !busy) { Text(t("Retry", "फिर प्रयास करें")) }
+                }
+            }
         }
 
         if (tab == "LIVE") {

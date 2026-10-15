@@ -61,7 +61,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
             tests = loaded.distinctBy { it.optLongAny("assessment_id", "assessmentId", "id") }
                 .sortedBy { it.optString("title", it.optString("assessment_title")).lowercase(Locale.ROOT) }
         } catch (e: Exception) {
-            error = e.message ?: "Tests load नहीं हो सके।"
+            error = e.message ?: t("Tests could not be loaded.", "Tests load नहीं हो सके।")
         } finally {
             loadingTests = false
         }
@@ -80,7 +80,7 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
                     ApiClient.getObject("/api/v1/learning/assessments/" + id + "/leaderboard?language=" + ApiClient.encodeQuery(language))
                 }
             } catch (e: Exception) {
-                error = e.message ?: "Leaderboard लोड नहीं हो सकी।"
+                error = e.message ?: t("Leaderboard could not be loaded.", "Leaderboard लोड नहीं हो सकी।")
             } finally {
                 loadingBoard = false
             }
@@ -117,7 +117,22 @@ fun AssessmentLeaderboardScreen(language: String, onBack: () -> Unit) {
             else "Each test's ranking is provided by the server, using its authoritative score and tie-break rules.",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (error.isNotBlank()) Text(localizedUiText(error), color = MaterialTheme.colorScheme.error)
+        if (error.isNotBlank()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Text(localizedUiText(error), modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    TextButton(
+                        onClick = { selectedTest?.let(::loadLeaderboard) ?: run { refreshing += 1 } },
+                        enabled = !loadingTests && !loadingBoard
+                    ) { Text(t("Retry", "फिर प्रयास करें")) }
+                }
+            }
+        }
         if (loadingTests) CircularProgressIndicator()
         if (!loadingTests && tests.isEmpty()) Text(if (language == "hi") "अभी कोई प्रकाशित test उपलब्ध नहीं है।" else "No published tests are available.")
         tests.forEach { test ->

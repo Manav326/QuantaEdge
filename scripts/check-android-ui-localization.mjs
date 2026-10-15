@@ -40,6 +40,25 @@ function stripKotlinInterpolation(value) {
   return result;
 }
 
+function readKotlinStringArgument(source, startIndex) {
+  let index = startIndex;
+  while (/\\s/.test(source[index] || '')) index += 1;
+  if (source[index] !== '"') return null;
+  index += 1;
+  let value = '';
+  while (index < source.length) {
+    if (source[index] === '\\\\') {
+      value += source[index + 1] || '';
+      index += 2;
+      continue;
+    }
+    if (source[index] === '"') return { value, end: index + 1 };
+    value += source[index];
+    index += 1;
+  }
+  return null;
+}
+
 function hasUiLetters(value) {
   for (const character of value) {
     const code = character.codePointAt(0);
@@ -93,10 +112,41 @@ for (const file of walk(uiRoot)) {
   }
 }
 
+// Also audit literal EmptyState title/help pairs. These pass through localizedUiText at runtime,
+// so checking them catches blankly untranslated empty states before they ship.
+let checkedStaticEmptyStates = 0;
+for (const file of walk(uiRoot)) {
+  const source = readFileSync(file, 'utf8');
+  const token = 'EmptyState(';
+  let cursor = 0;
+  while ((cursor = source.indexOf(token, cursor)) >= 0) {
+    const argsStart = cursor + token.length;
+    cursor = argsStart;
+    const title = readKotlinStringArgument(source, argsStart);
+    if (!title) continue;
+    let next = title.end;
+    while (/\\s/.test(source[next] || '')) next += 1;
+    if (source[next] !== ',') continue;
+    const detail = readKotlinStringArgument(source, next + 1);
+    if (!detail) continue;
+    checkedStaticEmptyStates += 1;
+
+    for (const [field, raw] of [['title', title.value], ['detail', detail.value]]) {
+      const withoutInterpolation = stripKotlinInterpolation(raw);
+      if (!hasUiLetters(withoutInterpolation)) continue;
+      const exactMatch = exact.has(raw) || exact.has(withoutInterpolation);
+      const prefixMatch = prefixes.some(prefix => withoutInterpolation.startsWith(prefix));
+      if (!exactMatch && !prefixMatch) {
+        failures.push(relative(root, file) + ': EmptyState ' + field + ' "' + raw + '" has no Hindi/English UiPhrase mapping.');
+      }
+    }
+  }
+}
+
 if (failures.length) {
   console.error('Android localization contract failed: ' + failures.length + ' unmapped literal phrase(s) across ' + scannedFiles + ' screen file(s).');
   for (const failure of failures) console.error('- ' + failure);
   process.exit(1);
 }
 
-console.log('Android localization contract passed: ' + checkedPhrases + ' literal localizedUiText call(s) checked across ' + scannedFiles + ' screen file(s), using ' + phraseLines.length + ' shared bilingual phrase(s).');
+console.log('Android localization contract passed: ' + checkedPhrases + ' literal localizedUiText call(s) and ' + checkedStaticEmptyStates + ' literal EmptyState title/detail pair(s) checked across ' + scannedFiles + ' screen file(s), using ' + phraseLines.length + ' shared bilingual phrase(s).');

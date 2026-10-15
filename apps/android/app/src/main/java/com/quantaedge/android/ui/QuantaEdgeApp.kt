@@ -2530,6 +2530,7 @@ fun QuantaEdgeApp() {
                         liveItems = liveClasses,
                         recordedItems = recordedClasses,
                         busy = busy,
+                        error = error,
                         onSubject = ::openClasses,
                         onRefresh = { openClasses(currentSubject) },
                         onJoin = ::joinLiveClass,

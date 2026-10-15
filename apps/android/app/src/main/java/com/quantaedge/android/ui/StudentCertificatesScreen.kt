@@ -19,6 +19,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -101,11 +102,15 @@ fun StudentCertificatesScreen(
             try {
                 withContext(Dispatchers.IO) {
                     context.contentResolver.openOutputStream(uri)?.use { it.write(bytes) }
-                        ?: throw IOException("चुनी गई जगह पर certificate save नहीं हो सका।")
+                        ?: throw IOException(
+                            if (language == "hi") "चुनी गई जगह पर certificate save नहीं हो सका।"
+                            else "The certificate could not be saved to the selected location."
+                        )
                 }
-                notice = "Certificate आपके चुने हुए स्थान पर सुरक्षित कर दिया गया।"
+                notice = if (language == "hi") "Certificate आपके चुने हुए स्थान पर सुरक्षित कर दिया गया।"
+                    else "Certificate saved to your selected location."
             } catch (e: Exception) {
-                error = e.message ?: "Certificate save नहीं हो सका।"
+                error = e.message ?: if (language == "hi") "Certificate save नहीं हो सका।" else "Certificate could not be saved."
             } finally {
                 pendingBytes = null
             }
@@ -156,7 +161,8 @@ fun StudentCertificatesScreen(
                 ?: certificatesResult.exceptionOrNull()
                 ?: eligibleResult.exceptionOrNull()
             if (firstFailure != null) {
-                error = firstFailure.message ?: "Some certificate information could not be loaded."
+                error = firstFailure.message ?: if (language == "hi") "प्रमाणपत्र की जानकारी लोड नहीं हो सकी।"
+                    else "Some certificate information could not be loaded."
             }
         } finally {
             loading = false
@@ -198,11 +204,17 @@ fun StudentCertificatesScreen(
 
     suspend fun prepareCertificateDownload(certificate: JSONObject, format: String) {
         val id = certificate.optLongValue("id", "certificate_id", "certificateId")
-        if (id <= 0) throw IOException("Certificate record की पहचान नहीं मिली।")
+        if (id <= 0) throw IOException(
+            if (language == "hi") "प्रमाणपत्र रिकॉर्ड की पहचान नहीं मिली।"
+            else "Certificate record ID is missing."
+        )
         val bytes = withContext(Dispatchers.IO) {
             ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
         }
-        if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
+        if (bytes.isEmpty()) throw IOException(
+            if (language == "hi") "Server से खाली certificate file मिली।"
+            else "The server returned an empty certificate file."
+        )
         pendingBytes = bytes
         val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
             .replace(Regex("[^A-Za-z0-9_-]"), "_")
@@ -218,7 +230,8 @@ fun StudentCertificatesScreen(
             try {
                 prepareCertificateDownload(certificate, format)
             } catch (e: Exception) {
-                error = e.message ?: "Certificate download नहीं हो सका।"
+                error = e.message ?: if (language == "hi") "Certificate download नहीं हो सका।"
+                    else "Certificate download failed."
             } finally {
                 busy = false
             }
@@ -274,7 +287,10 @@ fun StudentCertificatesScreen(
                 val bytes = withContext(Dispatchers.IO) {
                     ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/view?format=pdf")
                 }
-                if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
+                if (bytes.isEmpty()) throw IOException(
+            if (language == "hi") "Server से खाली certificate file मिली।"
+            else "The server returned an empty certificate file."
+        )
                 val directory = java.io.File(context.cacheDir, "certificates")
                 if (!directory.exists() && !directory.mkdirs()) throw IOException("प्रमाणपत्र preview तैयार नहीं हो सका।")
                 val file = java.io.File(directory, "quantaedge-certificate-" + id + ".pdf")
@@ -359,7 +375,8 @@ fun StudentCertificatesScreen(
                     "Certificate issued. Choose where to save the PDF."
                 }
             } catch (e: Exception) {
-                error = e.message ?: "Certificate जारी नहीं हो सका।"
+                error = e.message ?: if (language == "hi") "Certificate जारी नहीं हो सका।"
+                    else "Certificate could not be issued."
             } finally {
                 busy = false
             }
@@ -395,6 +412,11 @@ fun StudentCertificatesScreen(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(if (language == "hi") "मेरे प्रमाणपत्र" else "My certificates", style = MaterialTheme.typography.headlineSmall)
             TextButton(onClick = onBack) { Text(if (language == "hi") "वापस" else "Back") }
+        }
+        if (loading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Text(if (language == "hi") "प्रमाणपत्र की जानकारी लोड हो रही है…" else "Loading certificate information…",
+                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -468,7 +490,21 @@ fun StudentCertificatesScreen(
             else "Certificates are issued only for verified achievements. The server verifies identity, scores and eligibility.",
             style = MaterialTheme.typography.bodyMedium
         )
-        if (error.isNotBlank()) Text(error, color = MaterialTheme.colorScheme.error)
+        if (error.isNotBlank()) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    Text(error, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall)
+                    TextButton(onClick = { scope.launch { reload() } }, enabled = !loading && !busy) {
+                        Text(if (language == "hi") "फिर प्रयास करें" else "Retry")
+                    }
+                }
+            }
+        }
         if (notice.isNotBlank()) Text(notice, color = MaterialTheme.colorScheme.primary)
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
