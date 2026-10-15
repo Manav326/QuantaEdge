@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ApplicationStartupSmokeTest {
@@ -194,5 +195,28 @@ class ApplicationStartupSmokeTest {
     assertEquals(
       jdbc.queryForObject("select count(*) from curriculum_program where code<>'GENERAL'", Integer.class),
       jdbc.queryForObject("select count(*) from public_identity_registry where entity_type='PROGRAM'", Integer.class));
+  }
+  @Test
+  @Transactional
+  void newAssessmentsReceiveCourseScopedMonotonicPublicIds() {
+    Long classSubjectId = jdbc.queryForObject("select id from curriculum_subject where program_id is null order by id limit 1", Long.class);
+    String classPublicId = jdbc.queryForObject("select c.public_id from curriculum_class c join curriculum_subject s on s.class_id=c.id where s.id=?", String.class, classSubjectId);
+    Long firstClassAssessment = jdbc.queryForObject("insert into assessment(title,subject_id,status) values(?,?,'DRAFT') returning id", Long.class, "identity-smoke-class-1", classSubjectId);
+    Long secondClassAssessment = jdbc.queryForObject("insert into assessment(title,subject_id,status) values(?,?,'DRAFT') returning id", Long.class, "identity-smoke-class-2", classSubjectId);
+    String firstClassTestId = jdbc.queryForObject("select public_id from assessment where id=?", String.class, firstClassAssessment);
+    String secondClassTestId = jdbc.queryForObject("select public_id from assessment where id=?", String.class, secondClassAssessment);
+    Long firstClassSequence = jdbc.queryForObject("select public_id_sequence from assessment where id=?", Long.class, firstClassAssessment);
+    Long secondClassSequence = jdbc.queryForObject("select public_id_sequence from assessment where id=?", Long.class, secondClassAssessment);
+    assertTrue(firstClassTestId.startsWith(classPublicId + "-"));
+    assertTrue(firstClassTestId.substring(classPublicId.length()+1).matches("[0-9]+"));
+    assertEquals(firstClassSequence + 1L, secondClassSequence);
+    assertTrue(secondClassTestId.startsWith(classPublicId + "-"));
+
+    Map<String,Object> navSubject = jdbc.queryForMap("select s.id as subject_id,p.public_id from curriculum_subject s join curriculum_program p on p.id=s.program_id where p.code='NAVODAYA_BATCH' order by s.id limit 1");
+    Long navSubjectId = ((Number) navSubject.get("subject_id")).longValue();
+    String navPublicId = String.valueOf(navSubject.get("public_id"));
+    Long navAssessmentId = jdbc.queryForObject("insert into assessment(title,subject_id,status) values(?,?,'DRAFT') returning id", Long.class, "identity-smoke-nav", navSubjectId);
+    String navTestId = jdbc.queryForObject("select public_id from assessment where id=?", String.class, navAssessmentId);
+    assertTrue(navTestId.startsWith(navPublicId + "-"));
   }
 }

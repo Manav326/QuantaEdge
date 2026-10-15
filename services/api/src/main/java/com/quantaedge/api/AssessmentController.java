@@ -186,7 +186,7 @@ public class AssessmentController {
     List<Object> pageArgs=new ArrayList<>(filterArgs);
     pageArgs.add(rowLimit);pageArgs.add(rowOffset);
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
+      select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.assessment_type,a.lesson_id,a.is_generated,a.is_current,a.generation_version,
              a.created_at,a.published_at,c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -645,7 +645,7 @@ public class AssessmentController {
         ? "s.program_id is null and c.code=st.class_code"
         : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
     String sql= ("""
-      select a.id as assessment_id,coalesce(max(at.title),a.title) as title,
+      select a.id as assessment_id,a.public_id as test_id,coalesce(max(at.title),a.title) as title,
              coalesce(max(at.description),a.description) as description,a.duration_minutes,a.max_attempts,
              a.assessment_type,a.lesson_id,a.is_generated,a.generation_version,a.offline_enabled,
              a.created_at,a.published_at,s.code as subject_code,coalesce(max(subject_tx.display_name),s.display_name) as subject_name,
@@ -1330,7 +1330,7 @@ public class AssessmentController {
         : "s.program_id=? and exists(select 1 from student_program_enrollment spe join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE' where spe.student_id=att.student_id and spe.program_id=s.program_id and spe.status='ACTIVE')";
     String sql="""
       with ranked as (
-        select att.id as attempt_id,att.assessment_id,att.attempt_number,att.status,att.submitted_at,
+        select att.id as attempt_id,att.assessment_id,a.public_id as test_id,att.attempt_number,att.status,att.submitted_at,
                att.graded_at,att.released_at,att.final_score,att.max_score,a.assessment_type,a.is_generated,
                coalesce((select t.title from assessment_translation t
                  where t.assessment_id=a.id and t.language=? and t.translation_status='PUBLISHED'
@@ -1449,7 +1449,7 @@ public class AssessmentController {
 
   private Map<String, Object> attemptDetails(long attemptId, AuthContext context, boolean staffView) {
     List<Map<String, Object>> attempts = jdbc.queryForList("""
-      select att.id as attempt_id,att.assessment_id,att.student_id,att.attempt_number,att.status,
+      select att.id as attempt_id,att.assessment_id,a.public_id as test_id,att.student_id,att.attempt_number,att.status,
              att.started_at,att.deadline_at,att.submitted_at,att.graded_at,att.released_at,
              att.auto_score,att.final_score,att.max_score,att.offline_mode,att.offline_sync_expires_at,
              att.assessment_snapshot::text as assessment_snapshot,
@@ -1541,7 +1541,7 @@ public class AssessmentController {
 
   private Map<String, Object> assessmentDetails(long id, boolean includeQuestionBankDetails) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select a.id as assessment_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
+      select a.id as assessment_id,a.public_id as test_id,a.title,a.description,a.duration_minutes,a.max_attempts,a.status,
              a.offline_enabled,a.created_at,a.published_at,s.code as subject_code,s.display_name as subject_name,
              c.code as class_code,ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name
       from assessment a join curriculum_subject s on s.id=a.subject_id
