@@ -950,6 +950,7 @@ fun QuantaEdgeApp() {
         val sessionId = tutorSession.longAny("sessionId", "session_id")
         val beforeId = tutorOlderBeforeId
         if (sessionId <= 0L || beforeId == null || !tutorHasOlderMessages || tutorLoadingOlderMessages) return
+        error = ""
         tutorLoadingOlderMessages = true
         scope.launch {
             try {
@@ -972,22 +973,82 @@ fun QuantaEdgeApp() {
         }
     }
 
+    suspend fun recoverTutorTurn(sessionId: Long, userMessage: String): JSONObject? {
+        // Keep parity with the web client's in-house model recovery: a gateway timeout can
+        // arrive before a slow model finishes and saves its reply to the tutor history.
+        for (attempt in 0 until 46) {
+            if (attempt > 0) delay(2000)
+            val page = runCatching {
+                ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+            }.getOrNull() ?: continue
+            val items = page.optJSONArray("items").objectItems()
+            var userIndex = -1
+            for (index in items.indices.reversed()) {
+                if (items[index].textAny("role").equals("USER", true) &&
+                    items[index].textAny("message") == userMessage) {
+                    userIndex = index
+                    break
+                }
+            }
+            if (userIndex >= 0 && items.drop(userIndex + 1).any {
+                    it.textAny("role").equals("ASSISTANT", true)
+                }) return page
+        }
+        return null
+    }
+
+    fun applyTutorMessagePage(page: JSONObject) {
+        tutorMessages = page.optJSONArray("items").objectItems()
+        tutorHasOlderMessages = page.optBoolean("hasMore")
+        tutorOlderBeforeId = page.opt("nextBeforeId")?.toString()?.toLongOrNull()
+        if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
+    }
+
     fun sendTutorMessage(message: String, mode: String) {
         if (busy || tutorSendInFlight || message.isBlank()) return
-        // Set before launching the coroutine so rapid taps cannot enqueue parallel sends.
+        val sessionId = tutorSession.longAny("sessionId", "session_id")
+        if (sessionId <= 0L) {
+            error = if (language == "hi") "ट्यूटर सत्र तैयार नहीं है। फिर से जोड़ें।"
+                else "The tutor session is not ready. Reconnect and try again."
+            return
+        }
+        // Render the user's turn immediately, as the web tutor does, then reconcile with
+        // persisted server history after the model responds.
+        val previousMessages = tutorMessages
+        val optimisticMessage = JSONObject()
+            .put("clientId", "pending-" + System.currentTimeMillis())
+            .put("role", "USER")
+            .put("mode", mode)
+            .put("message", message)
+            .put("created_at", System.currentTimeMillis())
+        tutorMessages = previousMessages + optimisticMessage
         tutorSendInFlight = true
         runTask {
             try {
-                val sessionId = tutorSession.longAny("sessionId", "session_id")
-                if (sessionId <= 0L) throw IOException("Tutor session is not ready. Please retry.")
-                ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
-                    JSONObject().put("message", message).put("mode", mode).put("questionId", tutorQuestionId)
-                        .put("language", learningContentLanguage))
-                val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
-                tutorMessages = latestPage.optJSONArray("items").objectItems()
-                tutorHasOlderMessages = latestPage.optBoolean("hasMore")
-                tutorOlderBeforeId = latestPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
-                if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
+                try {
+                    ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
+                        JSONObject().put("message", message).put("mode", mode).put("questionId", tutorQuestionId)
+                            .put("language", learningContentLanguage))
+                    val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                    applyTutorMessagePage(latestPage)
+                } catch (exception: Exception) {
+                    // Do not wait for a recoverable turn on a definite authorization or
+                    // validation error. Network/server failures are reconciled against history.
+                    if (exception is ApiFailure &&
+                        exception.statusCode in 400..499 &&
+                        exception.statusCode != 408 &&
+                        exception.statusCode != 429) {
+                        tutorMessages = previousMessages
+                        throw exception
+                    }
+                    val recoveredPage = recoverTutorTurn(sessionId, message)
+                    if (recoveredPage != null) {
+                        applyTutorMessagePage(recoveredPage)
+                    } else {
+                        tutorMessages = previousMessages
+                        throw exception
+                    }
+                }
             } finally {
                 tutorSendInFlight = false
             }
