@@ -1,9 +1,15 @@
 package com.quantaedge.api;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +24,47 @@ public class TextbookExtractionController {
   private final AuthorizationService authorization;
   private final StaffAuditService staffAudit;
   private final TextbookExtractionService extraction;
+  private final String adminContentToken;
+  private final String appEnvironment;
 
   public TextbookExtractionController(
       AuthorizationService authorization, StaffAuditService staffAudit,
-      TextbookExtractionService extraction) {
+      TextbookExtractionService extraction,
+      @Value("${app.admin.content-token:}") String adminContentToken,
+      @Value("${app.environment:local}") String appEnvironment) {
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.extraction = extraction;
+    this.adminContentToken = adminContentToken == null ? "" : adminContentToken;
+    this.appEnvironment = appEnvironment == null ? "local" : appEnvironment;
+  }
+
+  /**
+   * Validate the narrowly scoped local automation credential or a normal staff session.
+   * This credential is intentionally available only for draft imports in non-production environments.
+   */
+  @GetMapping("/auth-check")
+  public Map<String, Object> authCheck(
+      @RequestHeader(value = "X-Admin-Token", required = false) String suppliedToken,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    if (isValidLocalImportToken(suppliedToken)) {
+      return Map.of("authenticated", true, "authMode", "ADMIN_TOKEN", "scope", "TEXTBOOK_DRAFT_IMPORT");
+    }
+    context = authorization.requirePermission(context, "CONTENT_EDIT");
+    return Map.of("authenticated", true, "authMode", "STAFF_SESSION",
+        "workspace", context.workspace() == null ? "STAFF" : context.workspace(),
+        "staffId", context.staffId());
+  }
+
+  private boolean isValidLocalImportToken(String suppliedToken) {
+    String environment = appEnvironment.trim().toLowerCase(Locale.ROOT);
+    if (!Set.of("local", "dev", "development").contains(environment)
+        || adminContentToken.isBlank() || suppliedToken == null || suppliedToken.isBlank()) {
+      return false;
+    }
+    return MessageDigest.isEqual(
+        adminContentToken.getBytes(StandardCharsets.UTF_8),
+        suppliedToken.getBytes(StandardCharsets.UTF_8));
   }
 
   @PostMapping("/assets/{assetId}")
@@ -43,11 +83,22 @@ public class TextbookExtractionController {
   public Map<String, Object> importGhcrBook(
       @RequestPart("manifest") MultipartFile manifest,
       @RequestPart("pages") MultipartFile pages,
+      @RequestHeader(value = "X-Admin-Token", required = false) String suppliedToken,
       @RequestAttribute(value = "authContext", required = false) AuthContext context) throws java.io.IOException {
-    context = authorization.requirePermission(context, "CONTENT_EDIT");
-    Map<String, Object> imported = extraction.importGhcrBook(manifest, pages, context.staffId());
-    staffAudit.recordAction(context, "/api/v1/admin/textbook-extraction/ghcr-books",
-        "Imported complete-book extracted pages as draft; source remains unavailable to tutor until explicit approval.");
+    boolean machineToken = isValidLocalImportToken(suppliedToken);
+    Long importingStaffId = null;
+    if (!machineToken) {
+      context = authorization.requirePermission(context, "CONTENT_EDIT");
+      importingStaffId = context.staffId();
+    }
+    Map<String, Object> imported = extraction.importGhcrBook(manifest, pages, importingStaffId);
+    if (machineToken) {
+      staffAudit.recordMachineAction("/api/v1/admin/textbook-extraction/ghcr-books",
+          "Draft-only GHCR textbook import authorized by the local X-Admin-Token. Source approval and publication were not performed.");
+    } else {
+      staffAudit.recordAction(context, "/api/v1/admin/textbook-extraction/ghcr-books",
+          "Imported complete-book extracted pages as draft; source remains unavailable to tutor until explicit approval.");
+    }
     return imported;
   }
 
