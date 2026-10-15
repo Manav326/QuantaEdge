@@ -203,10 +203,12 @@ export default function StudentHome(){
                   return <div className="subject-book-link qe-course-learning-progress" role="status" aria-live="polite">
                     <span className="subject-book-copy">
                       <strong><LocaleText hinglish="आपकी learning progress" english="Your learning progress" /></strong>
-                      {metric?.error
-                        ? <small><LocaleText hinglish="Progress अभी load नहीं हो पाई। फिर कोशिश करें।" english="Progress could not load yet. Please try again." /></small>
-                        : total>0
-                          ? <><small>{completed} / {total} <LocaleText hinglish="published lessons पूरे" english="published lessons completed" /> · {Math.max(0,Math.min(100,percent))}%</small><small>{Number(questionStats.attempts||0)} <LocaleText hinglish="सवालों के प्रयास" english="question attempts" /></small><span className="qe-course-progress-track" aria-label={Math.max(0,Math.min(100,percent))+'% complete'}><span style={{width:Math.max(0,Math.min(100,percent))+'%'}} /></span></>
+                      {!metric
+                        ? <small><LocaleText hinglish="Course progress load हो रही है…" english="Loading course progress…" /></small>
+                        : metric.error
+                          ? <small><LocaleText hinglish="Progress अभी load नहीं हो पाई। फिर कोशिश करें।" english="Progress could not load yet. Please try again." /></small>
+                          : total>0
+                          ? <><small>{completed} / {total} <LocaleText hinglish="published lessons पूरे" english="published lessons completed" /> · {Math.max(0,Math.min(100,percent))}%</small><small>{Number(questionStats.attempts||0)} <LocaleText hinglish="सवालों के प्रयास" english="question attempts" /></small><span className="qe-course-progress-track" aria-label={Math.max(0,Math.min(100,percent))+'% complete'} style={{display:'block',height:'6px',background:'var(--border-color, #e5e7eb)',borderRadius:'999px',overflow:'hidden',marginTop:'8px'}}><span style={{display:'block',height:'100%',width:Math.max(0,Math.min(100,percent))+'%',background:'var(--brand-primary, #2563eb)',borderRadius:'999px'}} /></span></>
                           : <small><LocaleText hinglish="इस course में अभी published lessons उपलब्ध नहीं हैं। Textbook उपलब्ध है; content publish होने पर यहाँ progress दिखेगी।" english="No published lessons are available in this course yet. The textbook is available; progress will appear here when lessons are published." /></small>}
                     </span>
                     <span className="subject-book-open"><Link href={'/student/progress?courseId='+encodeURIComponent(String(course.id))}><LocaleText hinglish="पूरी progress →" english="Full progress →" /></Link></span>
