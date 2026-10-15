@@ -98,6 +98,15 @@ public class CertificateController {
     return Map.of("items", items);
   }
 
+  /** Loads one issued record independently of the capped history list, scoped to the signed-in student. */
+  @GetMapping("/students/me/certificates/{certificateId}")
+  public Map<String, Object> myCertificate(@PathVariable long certificateId,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    if (certificateId < 1) throw new IllegalArgumentException("Choose a valid certificate.");
+    return publicCertificateById(certificateId, context.studentId());
+  }
+
   /** Active class and course subject tracks available for earned certificates. */
   @GetMapping("/students/me/certificates/subject-tracks")
   public Map<String, Object> subjectTracks(
