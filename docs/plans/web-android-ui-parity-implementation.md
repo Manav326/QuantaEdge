@@ -68,7 +68,7 @@
 | PARENT-05 | Archive / restore child | Done — explicit fresh-consent guard added in this pass | CI build + real-account/browser/device E2E pending |
 | PARENT-06 | Parent profile and photo | Done — parent profile/photo flow on main | CI build + real-account/browser/device E2E pending |
 | STU-01 | Student profile and photo | Done — student profile/account lifecycle on main | CI build + real-account/browser/device E2E pending |
-| LANG-01 | App-interface language | Partial — Android CI now checks literal localizedUiText strings and literal EmptyState title/help pairs; full visible-string sweep remains | CI build + real-account/browser/device E2E pending |
+| LANG-01 | App-interface language | Done — bilingual labels/resources added for remaining role, login, legal and textbook shortcuts; localization contract audits direct Compose text, localizedUiText and EmptyState pairs | CI build + real-account/browser/device E2E pending |
 | LANG-02 | Learning-content language | Done — independent content-language preference/request flow on main | CI build + real-account/browser/device E2E pending |
 | LANG-03 | Certificate language | Done — independent certificate language on main | CI build + real-account/browser/device E2E pending |
 | SESS-01 | Session timeout and resume | Done — server policy and client boundaries on main | CI build + real-account/browser/device E2E pending |
@@ -76,16 +76,17 @@
 | NATIVE-01 | Offline formal assessments | Done — protected offline formal assessment on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-02 | Camera scanner | Done — native QR/barcode scanner code on main | CI build + real-account/browser/device E2E pending |
 | NATIVE-03 | Native save/share and protected document controls | Done — native certificate save and protected documents on main | CI build + real-account/browser/device E2E pending |
-| UI-01 | Loading, empty, error and success states | Partial — protected library, certificates, classes and leaderboard now show loading/error/retry/empty feedback; remaining API-backed pages need the same page-by-page audit | CI build + real-account/browser/device E2E pending |
+| UI-01 | Loading, empty, error and success states | Partial — protected library, certificates, classes and leaderboard have state feedback; home course/textbook gaps and archived-child loading/empty feedback now improved; remaining API-backed pages still need audit | CI build + real-account/browser/device E2E pending |
 
 Implementation partials still open:
-- **LANG-01:** finish a screen-by-screen audit of visible web and Android UI strings. Fix untranslated hardcoded labels, errors, dialogs and loading/empty states while keeping Hindi in Devanagari-based Hinglish.
-- **UI-01:** verify a consistent loading, empty, permission-denied, stale-session, recoverable-error/retry and confirmed-success state on every API-backed page. Success must follow server/file-save acknowledgement.
+- **UI-01:** continue the page-by-page API-state audit. Completed in the current pass: an empty/loading/retry course catalogue, explicit empty/loading textbook shortcuts with subject-based recheck, and distinct loading versus true-empty archived-child state with retry. Remaining work: ensure permission-denied, stale-session and recoverable errors/retries are consistent across remaining pages; success must follow server/file-save acknowledgement.
 
 ## Changes made in this pass
 
 | Item | Change | Commit |
 |---|---|---|
+| LANG-01 | Completed the visible-string sweep for fixed Compose text: role choice, development OTP prefix, student username, Privacy/Terms and textbook count/page labels now use bilingual mappings/resources. Added a CI guard against direct untranslated Compose Text literals; the first run exposed the neutral AI badge, which was allow-listed in the follow-up checker fix. | `631312bdfa4956dd31250c7f32eb07051a0deee2`; checker fix `266e79ff7c343d03d69152d65a9264647a536798` |
+| UI-01 | Added visible loading/empty/retry behavior for the Android home course catalogue; textbook quick links no longer disappear when no PDFs are returned and offer subject-based recheck; archived profiles now distinguish loading from an actual empty result and support retry. | Current pass — see commit after review |
 | PARENT-05 | Android archived-child restore now requires the guardian to actively tick a fresh-consent checkbox before the restore action enables. | `6d50d4b3bf712e07a4a7006edfc1a322e1b0626e` |
 | PARENT-05 / LANG-01 | Added Hindi/English localization phrases for the archived-child restore explanation, explicit consent, archived list and empty state. | `fcb97bfa17cb435598edb75eb3db4f3dbaea8429` |
 | PARENT-05 | Added the Compose layout import needed by the guarded consent row. | `910a00d513818dc35f538b4de9c4cf39187bb377` |

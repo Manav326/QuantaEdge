@@ -2302,6 +2302,7 @@ fun QuantaEdgeApp() {
                     AppRoute.PARENT_CHILD_ARCHIVED -> ParentArchivedChildrenScreen(
                         children = archivedChildren,
                         busy = busy,
+                        onRefresh = ::openArchivedChildren,
                         onRestore = ::restoreArchivedChild
                     )
                     AppRoute.SUBJECT_LESSONS -> LessonListScreen(
@@ -2965,7 +2966,8 @@ private fun StudentHomeScreen(
             language = language,
             busy = busy,
             onEnroll = onEnrollCourse,
-            onOpenSubject = onOpenCourseSubject
+            onOpenSubject = onOpenCourseSubject,
+            onRefresh = onRefresh
         )
         StudentTextbookQuickLinks(
             documents = textbookDocuments,

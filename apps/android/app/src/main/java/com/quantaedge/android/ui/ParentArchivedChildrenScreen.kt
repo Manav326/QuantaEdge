@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -29,8 +30,11 @@ import org.json.JSONObject
 fun ParentArchivedChildrenScreen(
     children: List<JSONObject>,
     busy: Boolean,
+    onRefresh: () -> Unit,
     onRestore: (JSONObject) -> Unit
 ) {
+    val language = LocalQuantaLanguage.current
+    fun t(en: String, hi: String) = if (language == "hi") hi else en
     var selected by remember { mutableStateOf<JSONObject?>(null) }
     var consentAccepted by remember(selected?.optLong("id") ?: 0L) { mutableStateOf(false) }
     selected?.let { child ->
@@ -76,7 +80,23 @@ fun ParentArchivedChildrenScreen(
         Text(localizedUiText("Restore requires fresh consent and new student login credentials."),
             style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
         if (children.isEmpty()) {
-            EmptyState(localizedUiText("No archived profiles"), localizedUiText("Archived children appear here."))
+            if (busy) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+                ) {
+                    CircularProgressIndicator()
+                    Text(t("Loading archived profiles…", "Archived profiles लोड हो रहे हैं…"),
+                        style = MaterialTheme.typography.bodyMedium)
+                }
+            } else {
+                EmptyState("No archived profiles", "Archived children appear here.")
+                TextButton(onClick = onRefresh, enabled = !busy,
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text(t("Retry", "फिर प्रयास करें"))
+                }
+            }
         } else {
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(children) { child ->
