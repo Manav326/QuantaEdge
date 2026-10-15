@@ -220,6 +220,51 @@ class ApplicationStartupSmokeTest {
     assertTrue(navTestId.startsWith(navPublicId + "-"));
   }
   @Test
+  @Transactional
+  void publicUserIdIsDatabaseGeneratedUniqueAndExactlyTwelveAlphanumericCharacters() {
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='user_account' and column_name='public_user_id')
+      """, Boolean.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from user_account
+      where length(public_user_id)<>12 or public_user_id !~ '^[A-Z0-9]{12}
+    assertTrue(jdbc.queryForObject("select to_regclass('public.student_adult_verification') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.user_parent_eligibility') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.account_lifecycle_audit') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='student' and column_name='user_account_id')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='guardian_student' and column_name='access_level')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from pg_constraint where conrelid='public.user_account'::regclass and conname='user_account_role_supported' and pg_get_constraintdef(oid) like '%LEARNER%')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from pg_trigger where tgrelid='public.user_account'::regclass and tgname='trg_protect_account_lifecycle_role_transition' and not tgisinternal)", Boolean.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from information_schema.columns where table_schema='public' and table_name='student' and column_name in ('date_of_birth','birth_date')", Integer.class));
+  }
+}
+
+      """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from (
+        select public_user_id from user_account group by public_user_id having count(*)>1
+      ) duplicates
+      """, Integer.class));
+    Long accountId = jdbc.queryForObject("""
+      insert into user_account(public_id,mobile_e164,display_name,role)
+      values (gen_random_uuid(), '+919'||lpad((floor(random()*1000000000))::bigint::text,9,'0'),
+        'public-id-smoke-test','PARENT')
+      returning id
+      """, Long.class);
+    String publicId = jdbc.queryForObject(
+      "select public_user_id from user_account where id=?", String.class, accountId);
+    assertTrue(publicId.matches("[A-Z0-9]{12}"));
+    assertEquals(1, jdbc.queryForObject(
+      "select count(*) from user_account where public_user_id=?", Integer.class, publicId));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from pg_constraint
+        where conrelid='public.user_account'::regclass
+          and conname='uq_user_account_public_user_id' and contype='u')
+      """, Boolean.class));
+  }
+
+  @Test
   void accountLifecycleSchemaRequiresVerifiedAdultAndParentEligibilityWithoutStoringDateOfBirth() {
     assertTrue(jdbc.queryForObject("select to_regclass('public.student_adult_verification') is not null", Boolean.class));
     assertTrue(jdbc.queryForObject("select to_regclass('public.user_parent_eligibility') is not null", Boolean.class));
