@@ -219,6 +219,7 @@ class ApplicationStartupSmokeTest {
     String navTestId = jdbc.queryForObject("select public_id from assessment where id=?", String.class, navAssessmentId);
     assertTrue(navTestId.startsWith(navPublicId + "-"));
   }
+
   @Test
   @Transactional
   void publicUserIdIsDatabaseGeneratedUniqueAndExactlyTwelveAlphanumericCharacters() {
@@ -228,18 +229,7 @@ class ApplicationStartupSmokeTest {
       """, Boolean.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from user_account
-      where length(public_user_id)<>12 or public_user_id !~ '^[A-Z0-9]{12}
-    assertTrue(jdbc.queryForObject("select to_regclass('public.student_adult_verification') is not null", Boolean.class));
-    assertTrue(jdbc.queryForObject("select to_regclass('public.user_parent_eligibility') is not null", Boolean.class));
-    assertTrue(jdbc.queryForObject("select to_regclass('public.account_lifecycle_audit') is not null", Boolean.class));
-    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='student' and column_name='user_account_id')", Boolean.class));
-    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='guardian_student' and column_name='access_level')", Boolean.class));
-    assertTrue(jdbc.queryForObject("select exists(select 1 from pg_constraint where conrelid='public.user_account'::regclass and conname='user_account_role_supported' and pg_get_constraintdef(oid) like '%LEARNER%')", Boolean.class));
-    assertTrue(jdbc.queryForObject("select exists(select 1 from pg_trigger where tgrelid='public.user_account'::regclass and tgname='trg_protect_account_lifecycle_role_transition' and not tgisinternal)", Boolean.class));
-    assertEquals(0, jdbc.queryForObject("select count(*) from information_schema.columns where table_schema='public' and table_name='student' and column_name in ('date_of_birth','birth_date')", Integer.class));
-  }
-}
-
+      where length(public_user_id)<>12 or public_user_id !~ '^[A-Z0-9]{12}$'
       """, Integer.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from (
