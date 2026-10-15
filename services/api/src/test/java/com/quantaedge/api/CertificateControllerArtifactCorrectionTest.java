@@ -103,7 +103,7 @@ class CertificateControllerArtifactCorrectionTest {
     ArgumentCaptor<CertificateRenderer.CertificateDetails> detailsCaptor =
         ArgumentCaptor.forClass(CertificateRenderer.CertificateDetails.class);
     verify(renderer).render(eq("CLASSIC"), eq("hi"), eq("Test Learner"),
-        eq("कक्षा 6 · विज्ञान"),
+        eq("कक्षा 6 · Science"),
         eq("प्राप्तांक 90 / 100 (90.00%)।"),
         eq("QE-2026-ABCDEF1234567890"), eq(issuedAt), detailsCaptor.capture(), eq(false));
     assertEquals("Perfect test", detailsCaptor.getValue().assessmentName(),
@@ -120,7 +120,7 @@ class CertificateControllerArtifactCorrectionTest {
         value.contains("ARTIFACT_CORRECTED")),
         "A correction event must be recorded in the certificate audit.");
     assertTrue(sql.getAllValues().stream().anyMatch(value ->
-        value.contains("SET achievement_snapshot") && value.contains("artifact_version=4")),
+        value.contains("SET achievement_title") && value.contains("artifact_version=5")),
         "The corrected metadata and artifact version must become current.");
   }
 }

@@ -784,8 +784,7 @@ public class CertificateController {
       Object percent = snapshot.get("scorePercent");
       if (percent != null) score += " (" + scoreText(percent) + "%)";
     }
-    String result = "ASSESSMENT_PASS".equals(achievementType)
-        ? (hindi ? "उत्तीर्ण" : "Passed") : (hindi ? "पूर्ण" : "Completed");
+    String result = "ASSESSMENT_PASS".equals(achievementType) ? "Passed" : "Completed";
     String assessmentDate = clean(snapshot.get("assessmentDate"));
     String creator = clean(snapshot.get("assessmentCreatorName"));
     String role = clean(snapshot.get("assessmentCreatorRole"));

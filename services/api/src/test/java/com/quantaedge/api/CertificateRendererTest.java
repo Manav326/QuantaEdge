@@ -77,15 +77,18 @@ class CertificateRendererTest {
     assertArrayEquals(first, third);
     assertTrue(getClass().getResource("/branding/quantaedge-icon.png") != null,
         "The canonical QuantaEdge Q mark must be included in the API artifact.");
-    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null,
-        "The canonical QuantaEdge wordmark artwork must be included in the API artifact.");
+    var wordmark = renderer.brandWordmarkArtwork();
+    assertEquals(java.awt.image.BufferedImage.TYPE_INT_ARGB, wordmark.getType());
+    assertTrue(wordmark.getWidth() > 100 && wordmark.getHeight() > 40,
+        "The navy/orange QuantaEdge wordmark must render as a single transparent branding image.");
   }
 
   @Test
   void footerWordingLocalizesButTheQuantaEdgeBrandUsesTheSameImage() throws Exception {
     assertEquals("OFFICIALLY ISSUED BY", CertificateRenderer.lockedFooterWording("en"));
     assertEquals("आधिकारिक रूप से जारी", CertificateRenderer.lockedFooterWording("hi"));
-    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null);
+    var wordmark = renderer.brandWordmarkArtwork();
+    assertTrue(wordmark.getWidth() > 100 && wordmark.getHeight() > 40);
   }
 
   @Test

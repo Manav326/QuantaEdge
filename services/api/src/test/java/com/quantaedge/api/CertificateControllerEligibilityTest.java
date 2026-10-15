@@ -273,6 +273,7 @@ class CertificateControllerEligibilityTest {
     row.put("achievement_type", "ASSESSMENT_PASS");
     row.put("class_code", "6");
     row.put("subject_code", "science");
+    row.put("subject_name", "Science");
     row.put("achievement_title", "Assessment achievement: Perfect admin-created test");
     row.put("issued_at", java.time.OffsetDateTime.parse("2026-10-13T12:55:00+05:30"));
     row.put("status", "ISSUED");

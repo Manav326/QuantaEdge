@@ -383,22 +383,40 @@ public class CertificateRenderer {
     }
   }
 
+  /**
+   * Compose the approved navy/orange QuantaEdge wordmark as a transparent branding image.
+   * The checked-in legacy wordmark PNG is truncated; the canonical Q mark remains the
+   * separate packaged icon loaded by brandIcon().
+   */
   private BufferedImage brandWordmark() {
     BufferedImage image = cachedBrandWordmark;
     if (image != null) return image;
     synchronized (this) {
       image = cachedBrandWordmark;
       if (image != null) return image;
-      try (InputStream input = getClass().getResourceAsStream("/branding/quantaedge-wordmark.png")) {
-        if (input == null) throw new IllegalStateException("Canonical QuantaEdge wordmark resource is missing.");
-        image = ImageIO.read(input);
-        if (image == null) throw new IllegalStateException("Canonical QuantaEdge wordmark is not a readable PNG.");
-        cachedBrandWordmark = image;
-        return image;
-      } catch (IOException ex) {
-        throw new IllegalStateException("Could not load canonical QuantaEdge wordmark.", ex);
+      Font wordmarkFont = font(false, Font.BOLD, 110);
+      java.awt.font.FontRenderContext frc = new java.awt.font.FontRenderContext(null, true, true);
+      TextLayout quanta = new TextLayout(BRAND_NAME.substring(0, 6), wordmarkFont, frc);
+      TextLayout edge = new TextLayout(BRAND_NAME.substring(6), wordmarkFont, frc);
+      int width = Math.max(1, (int) Math.ceil(quanta.getAdvance() + edge.getAdvance()) + 12);
+      image = new BufferedImage(width, 150, BufferedImage.TYPE_INT_ARGB);
+      Graphics2D wordmark = image.createGraphics();
+      try {
+        configure(wordmark);
+        wordmark.setColor(NAVY);
+        quanta.draw(wordmark, 4f, 116f);
+        wordmark.setColor(ORANGE);
+        edge.draw(wordmark, 4f + quanta.getAdvance(), 116f);
+      } finally {
+        wordmark.dispose();
       }
+      cachedBrandWordmark = image;
+      return image;
     }
+  }
+
+  BufferedImage brandWordmarkArtwork() {
+    return brandWordmark();
   }
 
   private int drawBrandWordmark(Graphics2D g, int rightX, int baseline, int size) {
