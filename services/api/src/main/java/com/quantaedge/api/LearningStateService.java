@@ -118,10 +118,17 @@ public class LearningStateService {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student st on st.id=? and st.active=true
       join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
     """,studentId,lessonId);
     if(visibility.isEmpty()) return;
 
@@ -211,10 +218,17 @@ public class LearningStateService {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student st on st.id=?
+      join student st on st.id=? and st.active=true
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
-        and c.code=st.class_code and st.active=true
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """,Long.class,studentId,lessonId);
     if(count==null||count==0) throw new SecurityException("Lesson access denied");
   }
@@ -234,12 +248,19 @@ public class LearningStateService {
       join curriculum_chapter ch on ch.id=l.chapter_id
       join curriculum_subject s on s.id=ch.subject_id
       join curriculum_class c on c.id=s.class_id
-      join student st on st.id=?
+      join student st on st.id=? and st.active=true
+      join student_track_enrollment ste on ste.student_id=st.id and ste.subject_id=s.id and ste.status='ACTIVE'
       where q.id=? and q.lesson_id=? and q.active=true
         and q.review_status in ('APPROVED','PUBLISHED')
         and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
-        and st.active=true and c.code=st.class_code
+        and (
+          (s.program_id is null and c.code=st.class_code)
+          or (s.program_id is not null and exists(
+            select 1 from student_program_enrollment spe
+            where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+          ))
+        )
       """,Long.class,studentId,questionId,lessonId);
     if(count==0) throw new SecurityException("Question access denied");
     ensurePublishedLesson(lessonId);
