@@ -9,6 +9,7 @@ This folder stores authored lesson data separately from raw textbook extraction 
 - [Question-rendering registry — human-readable guide](question-rendering-registry.v1.md) — implementation and QA guide for maintainers.
 - [Class 6 Science · Chapter 1 · Topic 1](class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json) — first bilingual lesson draft.
 - [Class 6 Science · Chapter 1 · Topic 2](class-6/science/chapter-01/topic-02-the-scientific-method.v1.json) — second bilingual lesson draft.
+- [Class 6 Science · Chapter 1 · Topic 3](class-6/science/chapter-01/topic-03-curiosity-collaboration-and-new-questions.v1.json) — third bilingual lesson draft.
 
 ## Non-negotiable production rules
 
@@ -26,7 +27,7 @@ This folder stores authored lesson data separately from raw textbook extraction 
 
 ## Current question inventory
 
-Chapter 1 currently has **16 draft practice questions** across 2 generated topics: **2 multiple-choice, 2 multiple-select, 2 true/false, 2 matching, 2 fill-in-the-blank, 2 image-observation, 2 short-answer and 2 scenario-based**. The index is the canonical rolling count and is updated after each topic commit.
+Chapter 1 currently has **24 draft practice questions** across 3 generated topics: **3 multiple-choice, 3 multiple-select, 3 true/false, 3 matching, 3 fill-in-the-blank, 3 image-observation, 3 short-answer and 3 scenario-based**. The index is the canonical rolling count and is updated after each topic commit.
 
 ## Expected lesson data
 
