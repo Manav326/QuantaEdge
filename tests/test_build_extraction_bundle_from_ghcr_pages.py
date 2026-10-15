@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.build_extraction_bundle_from_ghcr_pages import build_bundle
+from scripts.build_extraction_bundle_from_ghcr_pages import apply_course_scope, build_bundle
 
 
 class BuildExtractionBundleFromGhcrPagesTests(unittest.TestCase):
@@ -105,6 +105,25 @@ class BuildExtractionBundleFromGhcrPagesTests(unittest.TestCase):
         self.assertIsNone(bundle["pages"][2]["chapter_code"])
         self.assertEqual("whole-numbers", bundle["pages"][3]["chapter_code"])
         self.assertFalse(bundle["extraction"]["student_delivery_allowed"])
+
+    def test_numeric_course_id_is_preserved_as_course_identity(self):
+        bundle = build_bundle(self.manifest_path, self.map_path, self.targets_path)
+        result = apply_course_scope(bundle, course_id=1234)
+        self.assertEqual(1234, result["curriculum"]["course_id"])
+        self.assertNotIn("program_code", result["curriculum"])
+
+    def test_course_id_rejects_invalid_or_ambiguous_scope(self):
+        bundle = build_bundle(self.manifest_path, self.map_path, self.targets_path)
+        with self.assertRaisesRegex(ValueError, "positive stable numeric"):
+            apply_course_scope(bundle, course_id=0)
+        with self.assertRaisesRegex(ValueError, "not both"):
+            apply_course_scope(bundle, course_id=1234, program_code="NAVODAYA_BATCH")
+
+    def test_program_code_remains_a_compatibility_fallback(self):
+        bundle = build_bundle(self.manifest_path, self.map_path, self.targets_path)
+        result = apply_course_scope(bundle, program_code="navodaya_batch")
+        self.assertEqual("NAVODAYA_BATCH", result["curriculum"]["program_code"])
+        self.assertNotIn("course_id", result["curriculum"])
 
     def test_rejects_page_identity_or_hash_mismatch(self):
         self._write_fixture(bad_page_hash=True)

@@ -308,6 +308,27 @@ def build_bundle(manifest_path: Path, chapter_map_path: Path, target_csv: Path) 
     }
 
 
+def apply_course_scope(
+    bundle: dict[str, Any], course_id: int | None = None, program_code: str = ""
+) -> dict[str, Any]:
+    """Attach an optional course using immutable numeric identity; codes remain a legacy fallback."""
+    normalized_code = str(program_code or "").strip().upper()
+    if course_id is not None:
+        if course_id < 1:
+            raise ValueError("--course-id must be a positive stable numeric course ID.")
+        if normalized_code:
+            raise ValueError("Use --course-id or --program-code, not both.")
+        bundle["curriculum"]["course_id"] = course_id
+        bundle["curriculum"].pop("program_code", None)
+        return bundle
+    if normalized_code:
+        if not re.fullmatch(r"[A-Z0-9_-]{2,60}", normalized_code) or normalized_code == "GENERAL":
+            raise ValueError("--program-code must identify an active additional course, not GENERAL.")
+        bundle["curriculum"]["program_code"] = normalized_code
+        bundle["curriculum"].pop("course_id", None)
+    return bundle
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", required=True, type=Path, help="Committed GHCR extraction manifest.")
@@ -315,15 +336,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target-csv", type=Path, default=Path("docs/product/curriculum-question-targets.csv"))
     parser.add_argument("--output", required=True, type=Path, help="New draft-only extraction JSON; never overwritten by default.")
     parser.add_argument("--overwrite", action="store_true", help="Explicitly replace the selected output file.")
-    parser.add_argument("--program-code", default="", help="Optional course scope, e.g. NAVODAYA_BATCH; omitted means the standard class curriculum.")
+    parser.add_argument("--course-id", type=int, default=None, help="Stable numeric course ID; course identity is independent of source textbook grade.")
+    parser.add_argument("--program-code", default="", help="Compatibility fallback for older course-scoped bundles; prefer --course-id.")
     args = parser.parse_args()
     try:
         bundle = build_bundle(args.manifest, args.chapter_map, args.target_csv)
-        program_code = args.program_code.strip().upper()
-        if program_code:
-            if not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL":
-                raise ValueError("--program-code must identify an active additional course, not GENERAL.")
-            bundle["curriculum"]["program_code"] = program_code
+        bundle = apply_course_scope(bundle, args.course_id, args.program_code)
         if args.output.exists() and not args.overwrite:
             raise FileExistsError(f"Refusing to overwrite existing output: {args.output}. Use a new versioned path or pass --overwrite.")
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -338,6 +356,7 @@ def main(argv: list[str] | None = None) -> int:
         "book_id": bundle["source"]["book_id"],
         "class": bundle["curriculum"]["class_code"],
         "subject": bundle["curriculum"]["subject_code"],
+        "course_id": bundle["curriculum"].get("course_id"),
         "program_code": bundle["curriculum"].get("program_code"),
         "language": bundle["curriculum"]["language"],
         "pages": bundle["source"]["pdf_page_count"],
