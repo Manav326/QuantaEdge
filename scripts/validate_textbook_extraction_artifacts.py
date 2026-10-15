@@ -29,9 +29,12 @@ def normalize_language(value: Any) -> str:
 
 def normalize_subject(value: Any) -> str:
     token = re.sub(r"[^\w\u0900-\u097f]+", " ", str(value or "").casefold()).strip()
-    if token in {"math", "maths", "mathematics", "गणित"}:
+    if ("सामाजिक विज्ञान" in token or "समाजिक विज्ञान" in token
+            or re.search(r"\bsocial\s+sciences?\b", token)):
+        return "social science"
+    if token in {"math", "maths", "mathematics", "गणित"} or "गणित" in token:
         return "maths"
-    if token in {"science", "विज्ञान"}:
+    if token in {"science", "विज्ञान"} or "विज्ञान" in token or re.search(r"\bscience\b", token):
         return "science"
     return token
 
