@@ -53,6 +53,261 @@ class ApplicationStartupSmokeTest {
   }
 
   @Test
+  void publicIdentityMigrationKeepsStableNumericIdsAndUsesGloballyUniqueEightCharacterCodes() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.public_identity_registry') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.public_identity_prefix_registry') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='99' and success=true", Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from curriculum_class
+      where public_id !~ '^[A-Z]{3}[A-Z0-9]{5}
+    Map<String,Object> incoming = new java.util.LinkedHashMap<>();
+    incoming.put("question_type", "MCQ");
+    incoming.put("prompt", "कौन-सा कथन सही है?");
+    incoming.put("difficulty", "CORE");
+    incoming.put("marks", 1);
+    incoming.put("exam_format", "Topic practice");
+    incoming.put("explanation", "पहला कथन सही है।");
+    incoming.put("answer_payload", Map.of("kind", "OPTION", "value", "A"));
+    incoming.put("options", List.of(
+        Map.of("key", "A", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+
+    Map<String,Object> stored = new java.util.LinkedHashMap<>();
+    stored.put("question_type", "MCQ");
+    stored.put("prompt", "  कौन-सा   कथन सही है? ");
+    stored.put("difficulty", "CORE");
+    stored.put("marks", 1);
+    stored.put("exam_format", "Topic practice");
+    stored.put("explanation", "पहला कथन सही है।");
+    stored.put("answer_payload", "{\"value\":\"A\",\"kind\":\"OPTION\"}");
+    stored.put("options", "[{\"key\":\"A\",\"label\":\"रेखाखंड के दो अंत-बिंदु होते हैं\",\"correct\":true,\"sort_order\":1},"
+        + "{\"key\":\"B\",\"label\":\"रेखा के दो अंत-बिंदु होते हैं\",\"correct\":false,\"sort_order\":2}]");
+
+    String incomingFingerprint = adminContentController.questionContentFingerprint(incoming);
+    assertEquals(incomingFingerprint, adminContentController.questionContentFingerprint(stored));
+
+    Map<String,Object> differentChoices = new java.util.LinkedHashMap<>(incoming);
+    differentChoices.put("options", List.of(
+        Map.of("key", "A", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+    assertTrue(!incomingFingerprint.equals(adminContentController.questionContentFingerprint(differentChoices)),
+        "Same prompt with different answer options must not be treated as the same question.");
+  }
+
+  @Test
+  void cleanDatabaseMigratesPeopleOperationsFoundationWithoutCreatingFakeEmployees() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_organization') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_holiday_calendar') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='63' and success=true", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_holiday_calendar", Integer.class));
+    assertEquals(2, jdbc.queryForObject("select count(*) from staff_permission_catalog where permission_key in ('HR_HOLIDAY_VIEW','HR_HOLIDAY_MANAGE')", Integer.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='hr_organization' and column_name='working_days_per_week')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select working_days_per_week=5 from hr_organization where name='QuantaEdge'", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='62' and success=true", Integer.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_department') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_designation') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee_history') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_attendance_record') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_type') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_request') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='61' and success=true", Integer.class));
+    assertEquals(5, jdbc.queryForObject("select count(*) from hr_leave_type where active=true", Integer.class));
+    for (String permission : List.of("HR_ATTENDANCE_VIEW", "HR_ATTENDANCE_MANAGE", "HR_LEAVE_VIEW", "HR_LEAVE_MANAGE")) {
+      assertTrue(jdbc.queryForObject("select exists(select 1 from staff_permission_catalog where permission_key=?)", Boolean.class, permission));
+    }
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_attendance_record", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_leave_request", Integer.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history where version='60' and success=true
+      """, Integer.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from hr_organization where name='QuantaEdge'", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_employee", Integer.class),
+        "A clean installation must not invent employee records.");
+    assertEquals(7, jdbc.queryForObject("select count(*) from hr_employment_type where active=true", Integer.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_VIEW')
+      """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_MANAGE')
+      """, Boolean.class));
+  }
+
+  @Test
+  void cleanDatabaseMigratesAndRetainsAllSixClassSubjectTracks() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_class') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.question') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.student_track_enrollment') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version='28' and success=true
+      """, Integer.class));
+    assertEquals(6, jdbc.queryForObject("""
+      select count(*) from curriculum_class c
+      join curriculum_subject s on s.class_id=c.id
+      where c.code in ('6','7','8') and s.code in ('maths','science')
+        and s.program_id is null
+      """, Integer.class));
+    assertEquals(2, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join curriculum_program_subject ps on ps.program_id=p.id
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=p.id
+        and s.class_id=ps.class_id
+      join curriculum_class c on c.id=ps.class_id
+      where p.code='NAVODAYA_BATCH' and p.status='ACTIVE'
+        and s.code in ('maths','science') and s.active=true
+      """, Integer.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='question' and column_name='review_status')
+      """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='lesson' and column_name='alignment_source_url')
+      """, Boolean.class));
+    assertEquals(2, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version in ('10','13') and success=true
+      """, Integer.class));
+  }
+}
+
+         or left(public_id,3)<>'SCH'
+      """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from curriculum_program
+      where code<>'GENERAL' and (
+        public_id is null or public_id !~ '^[A-Z]{3}[A-Z0-9]{5}
+    Map<String,Object> incoming = new java.util.LinkedHashMap<>();
+    incoming.put("question_type", "MCQ");
+    incoming.put("prompt", "कौन-सा कथन सही है?");
+    incoming.put("difficulty", "CORE");
+    incoming.put("marks", 1);
+    incoming.put("exam_format", "Topic practice");
+    incoming.put("explanation", "पहला कथन सही है।");
+    incoming.put("answer_payload", Map.of("kind", "OPTION", "value", "A"));
+    incoming.put("options", List.of(
+        Map.of("key", "A", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+
+    Map<String,Object> stored = new java.util.LinkedHashMap<>();
+    stored.put("question_type", "MCQ");
+    stored.put("prompt", "  कौन-सा   कथन सही है? ");
+    stored.put("difficulty", "CORE");
+    stored.put("marks", 1);
+    stored.put("exam_format", "Topic practice");
+    stored.put("explanation", "पहला कथन सही है।");
+    stored.put("answer_payload", "{\"value\":\"A\",\"kind\":\"OPTION\"}");
+    stored.put("options", "[{\"key\":\"A\",\"label\":\"रेखाखंड के दो अंत-बिंदु होते हैं\",\"correct\":true,\"sort_order\":1},"
+        + "{\"key\":\"B\",\"label\":\"रेखा के दो अंत-बिंदु होते हैं\",\"correct\":false,\"sort_order\":2}]");
+
+    String incomingFingerprint = adminContentController.questionContentFingerprint(incoming);
+    assertEquals(incomingFingerprint, adminContentController.questionContentFingerprint(stored));
+
+    Map<String,Object> differentChoices = new java.util.LinkedHashMap<>(incoming);
+    differentChoices.put("options", List.of(
+        Map.of("key", "A", "label", "रेखा के दो अंत-बिंदु होते हैं", "correct", true, "sort_order", 1),
+        Map.of("key", "B", "label", "रेखाखंड के दो अंत-बिंदु होते हैं", "correct", false, "sort_order", 2)));
+    assertTrue(!incomingFingerprint.equals(adminContentController.questionContentFingerprint(differentChoices)),
+        "Same prompt with different answer options must not be treated as the same question.");
+  }
+
+  @Test
+  void cleanDatabaseMigratesPeopleOperationsFoundationWithoutCreatingFakeEmployees() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_organization') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_holiday_calendar') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='63' and success=true", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_holiday_calendar", Integer.class));
+    assertEquals(2, jdbc.queryForObject("select count(*) from staff_permission_catalog where permission_key in ('HR_HOLIDAY_VIEW','HR_HOLIDAY_MANAGE')", Integer.class));
+    assertTrue(jdbc.queryForObject("select exists(select 1 from information_schema.columns where table_schema='public' and table_name='hr_organization' and column_name='working_days_per_week')", Boolean.class));
+    assertTrue(jdbc.queryForObject("select working_days_per_week=5 from hr_organization where name='QuantaEdge'", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='62' and success=true", Integer.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_department') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_designation') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_employee_history') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_attendance_record') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_type') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.hr_leave_request') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='61' and success=true", Integer.class));
+    assertEquals(5, jdbc.queryForObject("select count(*) from hr_leave_type where active=true", Integer.class));
+    for (String permission : List.of("HR_ATTENDANCE_VIEW", "HR_ATTENDANCE_MANAGE", "HR_LEAVE_VIEW", "HR_LEAVE_MANAGE")) {
+      assertTrue(jdbc.queryForObject("select exists(select 1 from staff_permission_catalog where permission_key=?)", Boolean.class, permission));
+    }
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_attendance_record", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_leave_request", Integer.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history where version='60' and success=true
+      """, Integer.class));
+    assertEquals(1, jdbc.queryForObject("select count(*) from hr_organization where name='QuantaEdge'", Integer.class));
+    assertEquals(0, jdbc.queryForObject("select count(*) from hr_employee", Integer.class),
+        "A clean installation must not invent employee records.");
+    assertEquals(7, jdbc.queryForObject("select count(*) from hr_employment_type where active=true", Integer.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_VIEW')
+      """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from staff_permission_catalog where permission_key='HR_EMPLOYEE_MANAGE')
+      """, Boolean.class));
+  }
+
+  @Test
+  void cleanDatabaseMigratesAndRetainsAllSixClassSubjectTracks() {
+    assertTrue(jdbc.queryForObject("select to_regclass('public.curriculum_class') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.question') is not null", Boolean.class));
+    assertTrue(jdbc.queryForObject("select to_regclass('public.student_track_enrollment') is not null", Boolean.class));
+    assertEquals(1, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version='28' and success=true
+      """, Integer.class));
+    assertEquals(6, jdbc.queryForObject("""
+      select count(*) from curriculum_class c
+      join curriculum_subject s on s.class_id=c.id
+      where c.code in ('6','7','8') and s.code in ('maths','science')
+        and s.program_id is null
+      """, Integer.class));
+    assertEquals(2, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join curriculum_program_subject ps on ps.program_id=p.id
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=p.id
+        and s.class_id=ps.class_id
+      join curriculum_class c on c.id=ps.class_id
+      where p.code='NAVODAYA_BATCH' and p.status='ACTIVE'
+        and s.code in ('maths','science') and s.active=true
+      """, Integer.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='question' and column_name='review_status')
+      """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='lesson' and column_name='alignment_source_url')
+      """, Boolean.class));
+    assertEquals(2, jdbc.queryForObject("""
+      select count(*) from flyway_schema_history
+      where version in ('10','13') and success=true
+      """, Integer.class));
+  }
+}
+
+        or public_id_prefix is null or left(public_id,3)<>public_id_prefix)
+      """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from (
+        select public_id from curriculum_class
+        union all
+        select public_id from curriculum_program where public_id is not null
+      ) identities group by public_id having count(*)>1
+      """, Integer.class));
+    assertEquals(
+      jdbc.queryForObject("select count(*) from curriculum_class", Integer.class),
+      jdbc.queryForObject("select count(*) from public_identity_registry where entity_type='CLASS'", Integer.class));
+    assertEquals(
+      jdbc.queryForObject("select count(*) from curriculum_program where code<>'GENERAL'", Integer.class),
+      jdbc.queryForObject("select count(*) from public_identity_registry where entity_type='PROGRAM'", Integer.class));
+  }
+
+  @Test
   void practiceBankDeduplicationUsesFullQuestionContentNotPromptAlone() {
     Map<String,Object> incoming = new java.util.LinkedHashMap<>();
     incoming.put("question_type", "MCQ");
