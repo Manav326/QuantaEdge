@@ -506,59 +506,6 @@
       ]
     }
   ],
-  "generated_in_current_lesson": {
-    "lesson_artifact": "data/structured-lessons/class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json",
-    "counts_by_type": {
-      "multiple_choice": 1,
-      "multiple_select": 1,
-      "true_false": 1,
-      "matching": 1,
-      "fill_blank": 1,
-      "image_observation": 1,
-      "short_answer": 1,
-      "scenario_based": 1
-    },
-    "question_ids_by_type": {
-      "multiple_choice": [
-        "c6-sci-ch01-t01-q01"
-      ],
-      "multiple_select": [
-        "c6-sci-ch01-t01-q02"
-      ],
-      "true_false": [
-        "c6-sci-ch01-t01-q03"
-      ],
-      "matching": [
-        "c6-sci-ch01-t01-q04"
-      ],
-      "fill_blank": [
-        "c6-sci-ch01-t01-q05"
-      ],
-      "image_observation": [
-        "c6-sci-ch01-t01-q06"
-      ],
-      "short_answer": [
-        "c6-sci-ch01-t01-q07"
-      ],
-      "scenario_based": [
-        "c6-sci-ch01-t01-q08"
-      ]
-    },
-    "readiness": {
-      "content_data_exists": true,
-      "registry_mapping_complete": false,
-      "ui_components_implemented": false,
-      "automated_schema_validation": false,
-      "semantic_bilingual_review": false,
-      "visual_asset_review": false,
-      "topic_publishable": false
-    },
-    "known_blockers": [
-      "The image_observation question currently references a V3 English full-page preview that is editor-only and not student-renderable; replace or approve a suitable bilingual/language-independent visual before rendering/publishing that question.",
-      "The Hindi chapter-1 page mapping and paragraph-level source reconciliation remain pending.",
-      "The topic has draft question content in both languages but requires semantic translation, answer-key and scope review."
-    ]
-  },
   "implementation_acceptance": [
     "One shared dispatcher renders all supported types by stable question.type and fails closed on unknown types.",
     "Each registered type has a deterministic response schema and grading path with no language-specific differences.",
@@ -568,5 +515,95 @@
     "Keyboard/touch accessibility and narrow-screen layouts pass for all eight components.",
     "Unapproved/missing images, missing translations, missing answers and invalid scoring rules block the affected question from student rendering and publication without crashing unrelated questions.",
     "Existing practice/test functionality remains unaffected; registry adoption is additive."
-  ]
+  ],
+  "generated_in_current_lessons": {
+    "chapter": {
+      "number": 1,
+      "title_by_locale": {
+        "en": "The Wonderful World of Science",
+        "hi": "विज्ञान का अनूठा संसार"
+      },
+      "status": "DRAFTS_ONLY_SOURCE_RECONCILIATION_PENDING",
+      "topics": [
+        {
+          "topic_id": "c6-sci-ch01-t01",
+          "path": "data/structured-lessons/class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json",
+          "question_count": 8,
+          "counts_by_type": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "status": "DRAFT_GENERATED_NOT_REVIEWED"
+        },
+        {
+          "topic_id": "c6-sci-ch01-t02",
+          "path": "data/structured-lessons/class-6/science/chapter-01/topic-02-the-scientific-method.v1.json",
+          "question_count": 8,
+          "counts_by_type": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "status": "DRAFT_GENERATED_NOT_REVIEWED"
+        },
+        {
+          "topic_id": "c6-sci-ch01-t03",
+          "path": "data/structured-lessons/class-6/science/chapter-01/topic-03-curiosity-collaboration-and-new-questions.v1.json",
+          "question_count": 8,
+          "counts_by_type": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "status": "DRAFT_GENERATED_NOT_REVIEWED"
+        }
+      ],
+      "cumulative": {
+        "total_questions": 24,
+        "counts_by_type": {
+          "multiple_choice": 3,
+          "multiple_select": 3,
+          "true_false": 3,
+          "matching": 3,
+          "fill_blank": 3,
+          "image_observation": 3,
+          "short_answer": 3,
+          "scenario_based": 3
+        },
+        "bilingual_content_status": "DRAFT_PAIRED_PENDING_SEMANTIC_REVIEW",
+        "runtime_components_status": "SPECIFIED_NOT_IMPLEMENTED"
+      }
+    },
+    "readiness": {
+      "content_data_exists": true,
+      "registry_mapping_complete": true,
+      "ui_components_implemented": false,
+      "automated_schema_validation": false,
+      "semantic_bilingual_review": false,
+      "visual_asset_review": false,
+      "chapter_publishable": false
+    },
+    "known_blockers": [
+      "Each topic's image_observation question references a review-only or structured diagram draft and is blocked from student rendering pending visual QA.",
+      "Hindi Chapter 1 page mapping and source-paragraph alignment remain pending.",
+      "All three topic lessons are draft authored learning material; no semantic bilingual or human content review has been completed.",
+      "The eight UI components and app-wide live language switch are specification-only, not implemented."
+    ]
+  }
 }
