@@ -424,7 +424,7 @@ public class CertificateController {
     }
 
     boolean hindi = "hi".equals(language);
-    String subjectName = localizedSubjectName(subjectCode, achievement.get("subject_name"), language);
+    String subjectName = subjectNameAsStored(subjectCode, achievement.get("subject_name"));
     String courseName=clean(achievement.get("course_name"));
     String sourceClassCode=clean(achievement.get("source_class_code"));
     String title=courseId==null
@@ -442,7 +442,7 @@ public class CertificateController {
       snapshot.put("courseId",courseId);
       snapshot.put("courseName",courseName);
     }
-    snapshot.put("artifactVersion", 4);
+    snapshot.put("artifactVersion", 5);
     snapshot.put("publishedLessonsAtIssue", total);
     snapshot.put("completedLessonsAtIssue", completed);
     return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", sourceClassCode,
@@ -517,7 +517,7 @@ public class CertificateController {
     String assessmentTitle = String.valueOf(achievement.get("assessment_title"));
     String classCode = String.valueOf(achievement.get("class_code"));
     String subjectCode = clean(achievement.get("subject_code")).toLowerCase(Locale.ROOT);
-    String subjectName = localizedSubjectName(subjectCode, achievement.get("subject_name"), language);
+    String subjectName = subjectNameAsStored(subjectCode, achievement.get("subject_name"));
     String courseName=clean(achievement.get("course_name"));
     String title = safeText(courseId==null
         ? (hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName
@@ -545,7 +545,7 @@ public class CertificateController {
     snapshot.put("maxScore", maxScore);
     snapshot.put("scorePercent", percent);
     snapshot.put("passThresholdPercent", minimumPassPercent);
-    snapshot.put("artifactVersion", 4);
+    snapshot.put("artifactVersion", 5);
     return createIssuedCertificate(studentId, key, "ASSESSMENT_PASS", classCode,
         ((Number) achievement.get("subject_id")).longValue(), courseId, attemptId, template, language,
         String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
@@ -554,7 +554,7 @@ public class CertificateController {
   private Map<String, Object> createIssuedCertificate(long studentId, String achievementKey,
       String achievementType, String classCode, long subjectId, Long courseId, Long attemptId, String template,
       String language, String recipient, String title, String summary, Map<String, Object> snapshot) {
-    snapshot.putIfAbsent("artifactVersion", 4);
+    snapshot.putIfAbsent("artifactVersion", 5);
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
     String certificateNumber = "QE-" + issuedAt.getYear() + "-"
         + HexFormat.of().withUpperCase().formatHex(randomBytes(8));
@@ -572,7 +572,7 @@ public class CertificateController {
             assessment_attempt_id,template_id,language,recipient_name,achievement_title,
             achievement_summary,achievement_snapshot,artifact_version,status,issued_at,pdf_storage_key,png_storage_key,
             pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,4,'ISSUED',?,?,?,?,?,?,?)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,5,'ISSUED',?,?,?,?,?,?,?)
           """,
           certificateNumber, studentId, achievementKey, achievementType, classCode, subjectId, courseId,
           attemptId, template, language, safeText(recipient, 120), safeText(title, 240),
@@ -653,8 +653,8 @@ public class CertificateController {
    */
   private Map<String, Object> loadCertificateArtifactRow(long certificateId, Long studentId) {
     String sql = """
-        SELECT c.id,c.certificate_number,c.status,c.achievement_type,c.class_code,
-               c.subject_id,s.code AS subject_code,s.display_name AS subject_name,
+        SELECT c.id,c.certificate_number,c.status,c.achievement_type,c.class_code,c.program_id,
+               p.display_name AS course_name,c.subject_id,s.code AS subject_code,s.display_name AS subject_name,
                c.template_id,c.language,c.recipient_name,c.achievement_title,c.achievement_summary,
                c.achievement_snapshot::text AS achievement_snapshot_json,c.issued_at,c.artifact_version,
                c.assessment_attempt_id,c.pdf_storage_key,c.png_storage_key,c.pdf_sha256,c.png_sha256,
@@ -675,21 +675,21 @@ public class CertificateController {
   }
 
   private Map<String, Object> correctCertificateArtifact(Map<String, Object> certificate) {
-    if (!"ISSUED".equals(certificate.get("status")) || number(certificate.get("artifact_version")) >= 4) return certificate;
+    if (!"ISSUED".equals(certificate.get("status")) || number(certificate.get("artifact_version")) >= 5) return certificate;
     long id = number(certificate.get("id"));
     long oldVersion = number(certificate.get("artifact_version"));
     String certificateNumber = clean(certificate.get("certificate_number"));
     String classCode = clean(certificate.get("class_code"));
     String subjectCode = clean(certificate.get("subject_code")).toLowerCase(Locale.ROOT);
     String language = normalizeLanguage(clean(certificate.get("language")), "hi");
-    String subjectName = localizedSubjectName(subjectCode, certificate.get("subject_name"), language);
+    String subjectName = subjectNameAsStored(subjectCode, certificate.get("subject_name"));
     String achievementType = clean(certificate.get("achievement_type"));
     String title = clean(certificate.get("achievement_title"));
     String originalSummary = clean(certificate.get("achievement_summary"));
     Map<String, Object> snapshot = readSnapshot(clean(certificate.get("achievement_snapshot_json")));
     snapshot.putIfAbsent("classCode", classCode);
     snapshot.putIfAbsent("subjectCode", subjectCode);
-    snapshot.putIfAbsent("subjectName", subjectName);
+    snapshot.put("subjectName", subjectName);
 
     if ("ASSESSMENT_PASS".equals(achievementType) && certificate.get("assessment_attempt_id") != null) {
       Map<String, Object> facts = queryOptional("""
@@ -712,18 +712,22 @@ public class CertificateController {
         snapshot.putIfAbsent("assessmentCreatorRole", clean(facts.get("assessment_creator_role")));
       }
     }
-    if (title.isBlank() || title.startsWith("Assessment achievement: ") || title.startsWith("मूल्यांकन उपलब्धि: ")) {
-      title = safeText((("hi".equals(language) ? "कक्षा " : "Class ") + classCode + " · " + subjectName), 240);
+    String courseName = clean(certificate.get("course_name"));
+    boolean hasCourseName = certificate.get("program_id") != null && !courseName.isBlank();
+    if ("SUBJECT_COMPLETION".equals(achievementType) || "ASSESSMENT_PASS".equals(achievementType)
+        || title.isBlank() || title.startsWith("Assessment achievement: ") || title.startsWith("मूल्यांकन उपलब्धि: ")) {
+      title = safeText(hasCourseName ? courseName + " · " + subjectName
+          : (("hi".equals(language) ? "कक्षा " : "Class ") + classCode + " · " + subjectName), 240);
     }
-    snapshot.put("artifactVersion", 4);
-    snapshot.put("artifactCorrection", "LOCKED_QUANTAEDGE_CERTIFICATE_DESIGN");
-    snapshot.put("artifactCorrectionReason", "Added the canonical exam ID beneath the assessment title while preserving the approved layout.");
+    snapshot.put("artifactVersion", 5);
+    snapshot.put("artifactCorrection", "CERTIFICATE_RENDERER_V5");
+    snapshot.put("artifactCorrectionReason", "Re-rendered with verified Devanagari font coverage, source-preserved dynamic text, canonical branding artwork, and localized fixed wording.");
     CertificateRenderer.CertificateDetails details = certificateDetails(snapshot, achievementType, language, classCode, title);
     CertificateRenderer.RenderedCertificate rendered = renderer.render(clean(certificate.get("template_id")),
         language, clean(certificate.get("recipient_name")), title, originalSummary, certificateNumber,
         toOffsetDateTime(certificate.get("issued_at")), details, false);
     CertificateArtifactStorage.StoredArtifact pdf = null, png = null;
-    String reason = "Added the canonical exam ID beneath the assessment title while preserving the approved layout.";
+    String reason = "Re-rendered with verified Devanagari font coverage, source-preserved dynamic text, canonical branding artwork, and localized fixed wording.";
     try {
       pdf = storage.store(rendered.pdf(), "pdf");
       png = storage.store(rendered.png(), "png");
@@ -742,20 +746,20 @@ public class CertificateController {
           number(certificate.get("pdf_size_bytes")), number(certificate.get("png_size_bytes")), reason);
       int count = jdbc.update("""
           UPDATE student_certificate
-          SET achievement_snapshot=?::jsonb,artifact_version=4,pdf_storage_key=?,png_storage_key=?,
+          SET achievement_title=?,achievement_snapshot=?::jsonb,artifact_version=5,pdf_storage_key=?,png_storage_key=?,
               pdf_sha256=?,png_sha256=?,pdf_size_bytes=?,png_size_bytes=?
           WHERE id=? AND artifact_version=? AND status='ISSUED'
-          """, json(snapshot), pdf.storageKey(), png.storageKey(), pdf.sha256(), png.sha256(),
+          """, safeText(title, 240), json(snapshot), pdf.storageKey(), png.storageKey(), pdf.sha256(), png.sha256(),
           pdf.sizeBytes(), png.sizeBytes(), id, oldVersion);
       if (count != 1) throw new IllegalStateException("Certificate changed while its artifact was being refreshed.");
       Map<String,Object> audit = new LinkedHashMap<>();
-      audit.put("fromArtifactVersion", oldVersion); audit.put("toArtifactVersion", 4);
+      audit.put("fromArtifactVersion", oldVersion); audit.put("toArtifactVersion", 5);
       audit.put("reason", reason); audit.put("certificateNumberPreserved", certificateNumber);
       audit.put("issueDatePreserved", true);
       jdbc.update("INSERT INTO certificate_audit_log(certificate_id,actor_role,action,detail) VALUES (?,'SYSTEM','ARTIFACT_CORRECTED',?::jsonb)",
           id, json(audit));
       Map<String,Object> updated = new LinkedHashMap<>(certificate);
-      updated.put("achievement_snapshot_json", json(snapshot)); updated.put("artifact_version", 4);
+      updated.put("achievement_title", safeText(title, 240)); updated.put("achievement_snapshot_json", json(snapshot)); updated.put("artifact_version", 5);
       updated.put("pdf_storage_key", pdf.storageKey()); updated.put("png_storage_key", png.storageKey());
       updated.put("pdf_sha256", pdf.sha256()); updated.put("png_sha256", png.sha256());
       updated.put("pdf_size_bytes", pdf.sizeBytes()); updated.put("png_size_bytes", png.sizeBytes());
@@ -824,9 +828,12 @@ public class CertificateController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     }
     Map<String, Object> row = queryOptional("""
-        SELECT c.certificate_number,c.recipient_name,c.achievement_type,c.class_code,s.code AS subject_code,
-               s.display_name AS subject_name,c.language,c.achievement_title,c.issued_at,c.status,c.revoked_at
-        FROM student_certificate c LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        SELECT c.certificate_number,c.recipient_name,c.achievement_type,c.class_code,c.program_id,
+               p.display_name AS course_name,s.code AS subject_code,s.display_name AS subject_name,
+               c.language,c.achievement_title,c.issued_at,c.status,c.revoked_at
+        FROM student_certificate c
+        LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        LEFT JOIN curriculum_program p ON p.id=c.program_id
         WHERE c.certificate_number=?
         """, number);
     if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
@@ -839,11 +846,18 @@ public class CertificateController {
     result.put("subjectCode", row.get("subject_code"));
     String language = normalizeLanguage(clean(row.get("language")), "en");
     result.put("language", language);
-    String subjectName = localizedSubjectName(clean(row.get("subject_code")),
-        row.get("subject_name"), language);
+    String subjectName = subjectNameAsStored(clean(row.get("subject_code")),
+        row.get("subject_name"));
     result.put("subjectTrack", (("hi".equals(language) ? "कक्षा " : "Class ")
         + clean(row.get("class_code")) + " · " + subjectName));
-    result.put("achievementTitle", row.get("achievement_title"));
+    String achievementTitle = clean(row.get("achievement_title"));
+    if ("SUBJECT_COMPLETION".equals(clean(row.get("achievement_type")))
+        || "ASSESSMENT_PASS".equals(clean(row.get("achievement_type")))) {
+      String courseName = clean(row.get("course_name"));
+      achievementTitle = !courseName.isBlank() ? courseName + " · " + subjectName
+          : (("hi".equals(language) ? "कक्षा " : "Class ") + clean(row.get("class_code")) + " · " + subjectName);
+    }
+    result.put("achievementTitle", achievementTitle);
     result.put("issuedAt", row.get("issued_at"));
     result.put("status", valid ? "VALID" : "REVOKED");
     result.put("verified", valid);
@@ -1089,14 +1103,10 @@ public class CertificateController {
     return rows.isEmpty() ? null : rows.get(0);
   }
 
-  private String localizedSubjectName(String subjectCode, Object fallbackName, String language) {
-    String code = subjectCode == null ? "" : subjectCode.trim().toLowerCase(Locale.ROOT);
-    boolean hindi = "hi".equalsIgnoreCase(language);
-    return switch (code) {
-      case "maths", "math", "mathematics" -> hindi ? "गणित" : "Mathematics";
-      case "science" -> hindi ? "विज्ञान" : "Science";
-      default -> clean(fallbackName).isBlank() ? code : clean(fallbackName);
-    };
+  String subjectNameAsStored(String subjectCode, Object storedName) {
+    String code = subjectCode == null ? "" : subjectCode.trim();
+    String name = clean(storedName);
+    return name.isBlank() ? code : name;
   }
 
   private void requireActiveCourseEnrollment(long studentId,long courseId) {

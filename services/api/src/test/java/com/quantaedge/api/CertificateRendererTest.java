@@ -77,6 +77,36 @@ class CertificateRendererTest {
     assertArrayEquals(first, third);
     assertTrue(getClass().getResource("/branding/quantaedge-icon.png") != null,
         "The canonical QuantaEdge Q mark must be included in the API artifact.");
+    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null,
+        "The canonical QuantaEdge wordmark artwork must be included in the API artifact.");
+  }
+
+  @Test
+  void footerWordingLocalizesButTheQuantaEdgeBrandUsesTheSameImage() throws Exception {
+    assertEquals("OFFICIALLY ISSUED BY", CertificateRenderer.lockedFooterWording("en"));
+    assertEquals("आधिकारिक रूप से जारी", CertificateRenderer.lockedFooterWording("hi"));
+    assertTrue(getClass().getResource("/branding/quantaedge-wordmark.png") != null);
+  }
+
+  @Test
+  void mixedScriptDynamicFieldsRenderInEitherCertificateLanguageWithoutTranslatingTheirValues() throws Exception {
+    for (String language : List.of("en", "hi")) {
+      String recipient = "Sujata शर्मा";
+      String title = "Science · विज्ञान";
+      String summary = "Assessment / मूल्यांकन";
+      var details = new CertificateRenderer.CertificateDetails(
+          "Science", "6", "90 / 100", "Passed", "2026-10-12",
+          "Dr. सीमा", "TEACHER", "Final Exam / अंतिम परीक्षा", "EXAM-42");
+      var rendered = renderer.render("CLASSIC", language, recipient, title, summary,
+          "QE-2026-ABCDEF1234567890", issuedAt, details, false);
+      var image = ImageIO.read(new ByteArrayInputStream(rendered.png()));
+      assertEquals(2480, image.getWidth());
+      assertEquals(1754, image.getHeight());
+      assertEquals(-1, renderer.fontForText(new java.awt.Font("Noto Sans", java.awt.Font.PLAIN, 24), recipient)
+          .canDisplayUpTo(recipient), "Mixed Hindi/English recipient must be displayable as stored.");
+      assertEquals(-1, renderer.fontForText(new java.awt.Font("Noto Sans", java.awt.Font.PLAIN, 24), title)
+          .canDisplayUpTo(title), "Subject names must retain their original language.");
+    }
   }
 
   @Test

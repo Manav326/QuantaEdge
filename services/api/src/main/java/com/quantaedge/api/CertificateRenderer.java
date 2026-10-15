@@ -74,7 +74,12 @@ public class CertificateRenderer {
     return new CertificateWording("CERTIFICATE OF ACHIEVEMENT", "This certificate is awarded to", "for",
         "successfully completing the assessment.");
   }
+
+  static String lockedFooterWording(String language) {
+    return "hi".equalsIgnoreCase(language) ? "आधिकारिक रूप से जारी" : "OFFICIALLY ISSUED BY";
+  }
   private volatile BufferedImage cachedBrandIcon;
+  private volatile BufferedImage cachedBrandWordmark;
 
   public RenderedCertificate render(String templateId, String language, String recipientName,
       String achievementTitle, String achievementSummary, String certificateNumber,
@@ -355,7 +360,9 @@ public class CertificateRenderer {
       g.setColor(MUTED); drawCentered(g, font(false, Font.BOLD, 17), "SAMPLE • NOT VALID", 1930, 1320, 800);
     }
     g.setColor(MUTED);
-    drawCentered(g, font(false, Font.BOLD, 18), "OFFICIALLY ISSUED BY QUANTAEDGE", WIDTH / 2, 1545, 720);
+    drawCentered(g, font(hindi, Font.BOLD, 18), lockedFooterWording(hindi ? "hi" : "en"),
+        WIDTH / 2, 1525, 720);
+    drawCenteredBrandWordmark(g, WIDTH / 2, 1540, 48);
   }
 
   private BufferedImage brandIcon() {
@@ -376,17 +383,37 @@ public class CertificateRenderer {
     }
   }
 
+  private BufferedImage brandWordmark() {
+    BufferedImage image = cachedBrandWordmark;
+    if (image != null) return image;
+    synchronized (this) {
+      image = cachedBrandWordmark;
+      if (image != null) return image;
+      try (InputStream input = getClass().getResourceAsStream("/branding/quantaedge-wordmark.png")) {
+        if (input == null) throw new IllegalStateException("Canonical QuantaEdge wordmark resource is missing.");
+        image = ImageIO.read(input);
+        if (image == null) throw new IllegalStateException("Canonical QuantaEdge wordmark is not a readable PNG.");
+        cachedBrandWordmark = image;
+        return image;
+      } catch (IOException ex) {
+        throw new IllegalStateException("Could not load canonical QuantaEdge wordmark.", ex);
+      }
+    }
+  }
+
   private int drawBrandWordmark(Graphics2D g, int rightX, int baseline, int size) {
-    Font font = font(false, Font.BOLD, size);
-    TextLayout quanta = new TextLayout(BRAND_NAME.substring(0, 6), font, g.getFontRenderContext());
-    TextLayout edge = new TextLayout(BRAND_NAME.substring(6), font, g.getFontRenderContext());
-    float totalAdvance = quanta.getAdvance() + edge.getAdvance();
-    float startX = (float) (rightX - totalAdvance);
-    g.setColor(NAVY);
-    quanta.draw(g, startX, baseline);
-    g.setColor(ORANGE);
-    edge.draw(g, startX + quanta.getAdvance(), baseline);
-    return Math.round(startX + totalAdvance / 2.0f);
+    BufferedImage image = brandWordmark();
+    int height = size;
+    int width = Math.max(1, Math.round((float) image.getWidth() * height / image.getHeight()));
+    int x = rightX - width;
+    g.drawImage(image, x, baseline - height, width, height, null);
+    return x + width / 2;
+  }
+
+  private void drawCenteredBrandWordmark(Graphics2D g, int centerX, int topY, int height) {
+    BufferedImage image = brandWordmark();
+    int width = Math.max(1, Math.round((float) image.getWidth() * height / image.getHeight()));
+    g.drawImage(image, centerX - width / 2, topY, width, height, null);
   }
 
   private String formatDate(String raw, boolean hindi) {
@@ -437,12 +464,32 @@ public class CertificateRenderer {
 
   private int measuredWidth(Graphics2D g, Font font, String value) {
     if (value == null || value.isEmpty()) return 0;
-    return (int) Math.ceil(new TextLayout(value, font, g.getFontRenderContext()).getAdvance());
+    Font effective = fontForText(font, value);
+    return (int) Math.ceil(new TextLayout(value, effective, g.getFontRenderContext()).getAdvance());
+  }
+
+  Font fontForText(Font preferred, String value) {
+    if (value == null || value.isEmpty()) return preferred;
+    int style = preferred.getStyle();
+    int size = Math.max(1, Math.round(preferred.getSize2D()));
+    boolean containsDevanagari = value.codePoints()
+        .anyMatch(codePoint -> Character.UnicodeScript.of(codePoint) == Character.UnicodeScript.DEVANAGARI);
+    if (containsDevanagari) {
+      Font devanagari = new Font("Noto Sans Devanagari", style, size);
+      if ("Noto Sans Devanagari".equalsIgnoreCase(devanagari.getFamily())
+          && devanagari.canDisplayUpTo(value) < 0) {
+        return devanagari;
+      }
+    }
+    if (preferred.canDisplayUpTo(value) < 0) return preferred;
+    Font composite = new Font(Font.DIALOG, style, size);
+    if (composite.canDisplayUpTo(value) < 0) return composite;
+    throw new IllegalStateException("Installed certificate fonts cannot display every character in a certificate field.");
   }
 
   private void drawCentered(Graphics2D g, Font font, String value, int centerX, int baseline, int maxWidth) {
     if (value == null || value.isBlank()) return;
-    Font effective = font;
+    Font effective = fontForText(font, value);
     while (effective.getSize2D() > 15 && measuredWidth(g, effective, value) > maxWidth) {
       effective = effective.deriveFont(effective.getSize2D() - 2f);
     }

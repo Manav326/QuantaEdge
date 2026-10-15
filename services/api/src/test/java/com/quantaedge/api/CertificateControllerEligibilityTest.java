@@ -37,6 +37,14 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void certificateDynamicSubjectNamesRemainExactlyAsStoredInEitherLanguage() {
+    assertEquals("Science", controller.subjectNameAsStored("science", "Science"));
+    assertEquals("विज्ञान", controller.subjectNameAsStored("science", "विज्ञान"));
+    assertEquals("Mathematics · गणित", controller.subjectNameAsStored("math", "Mathematics · गणित"));
+    assertEquals("science", controller.subjectNameAsStored("science", null));
+  }
+
+  @Test
   void subjectTrackOptionsComeFromActiveEnrollmentsAndIncludeCourseIdentity() {
     Map<String, Object> row = new LinkedHashMap<>();
     row.put("track_key", "COURSE:12:mathematics");
