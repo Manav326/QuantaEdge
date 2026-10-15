@@ -261,7 +261,8 @@ public class TutorService {
       // One inference only: retries doubled latency on CPU-only models without reliably
       // repairing poor answers. Reject malformed or language-mismatched output instead.
       reply=provider.generate(instructions,input);
-      if(isMalformedTutorAnswer(reply.text(),normalized,tutorLanguage,useLessonContext,currentTopic)){
+      if(isGenericTutorGreeting("ASSISTANT",reply.text())
+          || isMalformedTutorAnswer(reply.text(),normalized,tutorLanguage,useLessonContext,currentTopic)){
         throw new TutorProviderException("Tutor produced an irrelevant, malformed, or language-mismatched answer; please retry");
       }
     }
@@ -271,6 +272,14 @@ public class TutorService {
 
   static String languageMismatchReply(String language,String message){
     if(message==null||message.isBlank()||message.length()>1200)return null;
+    String normalizedRequest=message.toLowerCase(Locale.ROOT)
+        .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+    boolean explicitlyRequestsHindi=normalizedRequest.matches(".*\\b(in hindi|answer in hindi|respond in hindi|reply in hindi|speak in hindi|hindi please)\\b.*");
+    boolean explicitlyRequestsEnglish=normalizedRequest.matches(".*\\b(in english|answer in english|respond in english|reply in english|speak in english|english please)\\b.*");
+    if("en".equalsIgnoreCase(language)&&explicitlyRequestsHindi)
+      return "Your learning language is currently English. Please change the learning language to Hindi before requesting a Hindi reply.";
+    if("hi".equalsIgnoreCase(language)&&explicitlyRequestsEnglish)
+      return "आपकी पढ़ाई की भाषा अभी हिन्दी है। English में उत्तर पाने के लिए पहले पढ़ाई की भाषा English करें।";
     long latin=0,devanagari=0,letters=0;
     for(int offset=0;offset<message.length();){
       int cp=message.codePointAt(offset);
@@ -345,6 +354,10 @@ public class TutorService {
     if(answer==null||answer.isBlank()||answer.length()>1800)return true;
     String normalized=answer.toLowerCase(Locale.ROOT)
         .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+    String normalizedQuestion=(question==null?"":question.toLowerCase(Locale.ROOT))
+        .replaceAll("[^\\p{L}\\p{M}\\p{N}]+"," ").trim().replaceAll("\\s+"," ");
+    if(!normalizedQuestion.isBlank()
+        && (normalized.equals(normalizedQuestion) || normalized.startsWith(normalizedQuestion+" ")))return true;
     if(normalized.contains("response language")||normalized.contains("recent tutor history")
         ||normalized.contains("learner message")||normalized.contains("current lesson data")
         ||normalized.contains("certainly please go ahead")||normalized.contains("hello let me assist")
