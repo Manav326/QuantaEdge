@@ -149,7 +149,7 @@ END;
 $$;
 
 CREATE TRIGGER trg_curriculum_class_public_identity
-BEFORE INSERT OR UPDATE OF public_id ON curriculum_class
+BEFORE INSERT OR UPDATE ON curriculum_class
 FOR EACH ROW EXECUTE FUNCTION protect_class_public_identity();
 
 CREATE OR REPLACE FUNCTION protect_program_public_identity()
@@ -184,7 +184,7 @@ END;
 $$;
 
 CREATE TRIGGER trg_curriculum_program_public_identity
-BEFORE INSERT OR UPDATE OF public_id, public_id_prefix ON curriculum_program
+BEFORE INSERT OR UPDATE ON curriculum_program
 FOR EACH ROW EXECUTE FUNCTION protect_program_public_identity();
 
 INSERT INTO app_metadata(key,value)
