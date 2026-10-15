@@ -337,7 +337,7 @@ fun QuantaEdgeApp() {
             parentAccount = ApiClient.getObject("/api/v1/guardians/account")
             parentChildren = ApiClient.getArray("/api/v1/guardians/children").objectItems()
             route = AppRoute.PARENT_HOME
-        } else if (role.contains("STUDENT")) {
+        } else if (role.contains("STUDENT") || role.contains("LEARNER")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
             // Keep content language independent from the app interface language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
@@ -380,6 +380,9 @@ fun QuantaEdgeApp() {
             ApiClient.setWorkspace(if (mode == "PARENT") "PARENT" else "STUDENT")
             if (mode == "PARENT") {
                 ApiClient.postObject("/api/v1/auth/parent-login", JSONObject()
+                    .put("mobile", mobile.trim()).put("password", password))
+            } else if (mode == "LEARNER") {
+                ApiClient.postObject("/api/v1/auth/learner-login", JSONObject()
                     .put("mobile", mobile.trim()).put("password", password))
             } else {
                 ApiClient.postObject("/api/v1/auth/student-login", JSONObject()
@@ -2224,9 +2227,11 @@ private fun LoginScreen(
         }
         Text(if (language == "hi") "साइन इन करें" else "Sign in",
             style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 6.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(top = 6.dp)) {
             if (mode == "STUDENT") Button(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
             else TextButton(onClick = { mode = "STUDENT" }, enabled = !busy) { Text(if (language=="hi") "छात्र" else "Student") }
+            if (mode == "LEARNER") Button(onClick = { mode = "LEARNER" }, enabled = !busy) { Text("Learner") }
+            else TextButton(onClick = { mode = "LEARNER"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text("Learner") }
             if (mode == "PARENT") Button(onClick = { mode = "PARENT" }, enabled = !busy) { Text("Parent") }
             else TextButton(onClick = { mode = "PARENT"; parentLoginMethod = "PASSWORD"; otpRequested = false; otp = ""; devCode = "" }, enabled = !busy) { Text("Parent") }
         }
@@ -2267,6 +2272,18 @@ private fun LoginScreen(
                     enabled = !busy && mobile.length == 10, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                     Text(if (language == "hi") "OTP भेजें" else "Send OTP")
                 }
+            }
+        } else if (mode == "LEARNER") {
+            OutlinedTextField(value = mobile, onValueChange = { mobile = it.filter(Char::isDigit).take(10) },
+                label = { Text(if (language == "hi") "Mobile (10 अंक)" else "Mobile (10 digits)") },
+                singleLine = true, modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            OutlinedTextField(value = password, onValueChange = { password = it },
+                label = { Text(if (language == "hi") "Password" else "Password") }, singleLine = true,
+                visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth().padding(top = 5.dp))
+            Button(onClick = { onSignIn(mode, mobile, "", "", password) },
+                enabled = !busy && mobile.length == 10 && password.isNotBlank(),
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                Text(if (busy) "Signing in…" else if (language == "hi") "साइन इन करें" else "Sign in")
             }
         } else {
             OutlinedTextField(value = parentMobile, onValueChange = { parentMobile = it.filter(Char::isDigit).take(10) },
