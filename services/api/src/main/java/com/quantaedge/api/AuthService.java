@@ -394,7 +394,7 @@ public class AuthService {
 
   private AuthContext completeIndependentLearnerTransition(String normalized,long studentId,String password,long otpId) {
     List<Map<String,Object>> students=jdbc.queryForList("""
-      select id,display_name,user_account_id from student
+      select id,display_name,user_account_id,public_user_id from student
       where id=? and active=true and environment='PRODUCTION' for update
       """,studentId);
     if(students.isEmpty()) throw new SecurityException("Active production learner not found.");
@@ -413,9 +413,10 @@ public class AuthService {
       throw new IllegalStateException("This mobile number is already associated with an account.");
     String displayName=String.valueOf(student.get("display_name"));
     Long userId=jdbc.queryForObject("""
-      insert into user_account(public_id,mobile_e164,display_name,role,password_hash)
-      values (?,?,?,'LEARNER',?) returning id
-      """,Long.class,UUID.randomUUID(),normalized,displayName,passwordEncoder.encode(password));
+      insert into user_account(public_id,public_user_id,mobile_e164,display_name,role,password_hash)
+      values (?,?,?,?, 'LEARNER',?) returning id
+      """,Long.class,UUID.randomUUID(),String.valueOf(student.get("public_user_id")),
+          normalized,displayName,passwordEncoder.encode(password));
     int linked=jdbc.update("update student set user_account_id=? where id=? and user_account_id is null",userId,studentId);
     if(linked!=1) throw new IllegalStateException("Learner account link changed during conversion; retry sign-in.");
     int limited=jdbc.update("""
@@ -1197,9 +1198,8 @@ public class AuthService {
     }
     if(context.studentId()!=null) {
       List<String> ids=jdbc.queryForList("""
-        select u.public_user_id from student st
-        join user_account u on u.id=st.user_account_id and u.active=true
-        where st.id=?
+        select st.public_user_id from student st
+        where st.id=? and st.active=true
         """,String.class,context.studentId());
       return ids.isEmpty()?null:ids.getFirst();
     }
