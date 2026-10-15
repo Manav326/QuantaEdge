@@ -248,7 +248,7 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
             # Mirror the small durable checkpoint to GHCR after the repository commit.
-            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$out/visual-analysis.v1.json:application/json"
+            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$analysis_output:application/json"
 
             processed_total=$((processed_total + batch_processed))
             if (( batch_processed == 0 )); then break; fi
