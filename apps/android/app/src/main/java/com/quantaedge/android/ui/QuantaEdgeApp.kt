@@ -298,6 +298,21 @@ fun QuantaEdgeApp() {
         }
     }
 
+    suspend fun refreshStudentPrograms() {
+        val programs = runCatching {
+            ApiClient.getArray("/api/v1/students/me/programs").objectItems()
+        }.getOrDefault(emptyList())
+        studentPrograms = programs
+        val progress = linkedMapOf<Long, JSONObject>()
+        programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }.forEach { program ->
+            val id = program.longAny("id", "course_id")
+            if (id > 0L) runCatching {
+                ApiClient.getObject("/api/v1/students/me?courseId=" + id)
+            }.getOrNull()?.let { progress[id] = it }
+        }
+        courseProgress = progress
+    }
+
     suspend fun enterSignedInHome(user: JSONObject) {
         auth = user
         val role = user.textAny("role").uppercase()
@@ -390,21 +405,6 @@ fun QuantaEdgeApp() {
                 saveableStateHolder.removeState("anonymous:${savedRoute.name}")
             }
         }
-    }
-
-    suspend fun refreshStudentPrograms() {
-        val programs = runCatching {
-            ApiClient.getArray("/api/v1/students/me/programs").objectItems()
-        }.getOrDefault(emptyList())
-        studentPrograms = programs
-        val progress = linkedMapOf<Long, JSONObject>()
-        programs.filter { it.optBoolean("is_enrolled", it.optBoolean("enrolled")) }.forEach { program ->
-            val id = program.longAny("id", "course_id")
-            if (id > 0L) runCatching {
-                ApiClient.getObject("/api/v1/students/me?courseId=" + id)
-            }.getOrNull()?.let { progress[id] = it }
-        }
-        courseProgress = progress
     }
 
     fun enrollCourse(courseId: Long) {
