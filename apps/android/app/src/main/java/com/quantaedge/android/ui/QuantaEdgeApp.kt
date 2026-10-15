@@ -129,6 +129,7 @@ fun QuantaEdgeApp() {
     var studentProfile by remember { mutableStateOf(JSONObject()) }
     var studentPrograms by remember { mutableStateOf(emptyList<JSONObject>()) }
     var courseProgress by remember { mutableStateOf<Map<Long, JSONObject>>(emptyMap()) }
+    var studentTextbookDocuments by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recommendation by remember { mutableStateOf(JSONObject()) }
     var parentAccount by remember { mutableStateOf(JSONObject()) }
     var parentChildren by remember { mutableStateOf(emptyList<JSONObject>()) }
@@ -313,6 +314,18 @@ fun QuantaEdgeApp() {
         courseProgress = progress
     }
 
+    suspend fun refreshStudentTextbookDocuments() {
+        val loaded = mutableListOf<JSONObject>()
+        listOf("maths", "science").forEach { subjectCode ->
+            val rows = runCatching {
+                ApiClient.getArray("/api/v1/learning/documents?subjectCode=" +
+                    ApiClient.encodeQuery(subjectCode) + "&language=" + learningContentLanguage).objectItems()
+            }.getOrDefault(emptyList())
+            loaded.addAll(rows)
+        }
+        studentTextbookDocuments = loaded.distinctBy { it.optLongAny("document_id", "id") }
+    }
+
     suspend fun enterSignedInHome(user: JSONObject) {
         auth = user
         val role = user.textAny("role").uppercase()
@@ -323,6 +336,7 @@ fun QuantaEdgeApp() {
         } else if (role.contains("STUDENT")) {
             studentProfile = ApiClient.getObject("/api/v1/students/me")
             refreshStudentPrograms()
+            refreshStudentTextbookDocuments()
             // The student account preference controls learning materials, independently of app UI language.
             val savedLearningLanguage = studentProfile.textAny("language", "learningLanguage", "learning_language")
                 .trim().lowercase().takeIf { it == "hi" || it == "en" }
@@ -1432,6 +1446,7 @@ fun QuantaEdgeApp() {
             studentProfile = JSONObject()
             studentPrograms = emptyList()
             courseProgress = emptyMap()
+            studentTextbookDocuments = emptyList()
             recommendation = JSONObject()
             parentAccount = JSONObject()
             parentChildren = emptyList()
@@ -1513,6 +1528,7 @@ fun QuantaEdgeApp() {
         runTask {
             try {
                 ApiClient.patchObject("/api/v1/students/me/language", JSONObject().put("language", next))
+                refreshStudentTextbookDocuments()
                 status = if (language == "hi") "पढ़ाई की भाषा अपडेट हो गई।" else "Learning content language updated."
             } catch (exception: Exception) {
                 learningLanguage = previous
@@ -1875,6 +1891,8 @@ fun QuantaEdgeApp() {
                         courseProgress = courseProgress,
                         onEnrollCourse = ::enrollCourse,
                         onOpenCourseSubject = { code, courseId -> openSubject(code, courseId) },
+                        textbookDocuments = studentTextbookDocuments,
+                        onOpenDocument = ::openDocument,
                         language = language,
                         busy = busy,
                         onSubject = ::openSubject,
@@ -1888,6 +1906,7 @@ fun QuantaEdgeApp() {
                             studentProfile = ApiClient.getObject("/api/v1/students/me")
                             recommendation = ApiClient.getObject("/api/v1/recommendations/next")
                             refreshStudentPrograms()
+                            refreshStudentTextbookDocuments()
                         } },
                         onOpenRecommendation = { recommended -> openLesson(recommended) },
                         onClasses = ::openClasses
@@ -2395,7 +2414,9 @@ private fun StudentHomeScreen(
     programs: List<JSONObject>,
     courseProgress: Map<Long, JSONObject>,
     onEnrollCourse: (Long) -> Unit,
-    onOpenCourseSubject: (String, Long) -> Unit
+    onOpenCourseSubject: (String, Long) -> Unit,
+    textbookDocuments: List<JSONObject>,
+    onOpenDocument: (JSONObject) -> Unit
 ) {
     val name = userName.ifBlank { profile.textAny("display_name", "displayName", "name").ifBlank { if (language == "hi") "विद्यार्थी" else "Learner" } }
     val className = profile.textAny("class_name", "className", "class_code", "classCode")
@@ -2558,6 +2579,13 @@ private fun StudentHomeScreen(
             busy = busy,
             onEnroll = onEnrollCourse,
             onOpenSubject = onOpenCourseSubject
+        )
+        StudentTextbookQuickLinks(
+            documents = textbookDocuments,
+            language = language,
+            busy = busy,
+            onOpenDocument = onOpenDocument,
+            onBrowseSubject = onResources
         )
 
         Text(if (language == "hi") "त्वरित पहुँच" else "Quick access",
