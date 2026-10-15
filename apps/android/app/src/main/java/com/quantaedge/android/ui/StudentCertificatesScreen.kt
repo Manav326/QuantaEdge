@@ -119,24 +119,45 @@ fun StudentCertificatesScreen(
         loading = true
         error = ""
         try {
-            val trackResponse = ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks")
-            subjectTracks = trackResponse.optJSONArray("items").toObjectList()
+            // Load each section independently: a failed progress/track request must not
+            // prevent issued certificates or the assessment picker from appearing.
+            val tracksResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates/subject-tracks")
+            }
+            val certificatesResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates")
+            }
+            val eligibleResult = runCatching {
+                ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
+            }
+
+            subjectTracks = tracksResult.getOrNull()?.optJSONArray("items").toObjectList()
+            certificates = certificatesResult.getOrNull()?.optJSONArray("items").toObjectList()
+            eligibleAssessments = eligibleResult.getOrNull()?.optJSONArray("items").toObjectList()
+
             if (subjectTracks.none { it.optString("track_key") == selectedTrackKey }) {
                 selectedTrackKey = subjectTracks.firstOrNull()?.optString("track_key").orEmpty()
             }
-            val issued = ApiClient.getObject("/api/v1/students/me/certificates")
-            certificates = issued.optJSONArray("items").toObjectList()
-            val eligible = ApiClient.getObject("/api/v1/students/me/certificates/eligible-assessments")
-            eligibleAssessments = eligible.optJSONArray("items").toObjectList()
-            val requestedAttempt = eligibleAssessments.firstOrNull { it.optLongValue("attempt_id", "attemptId", "id") == initialAssessmentAttemptId }
+            val requestedAttempt = eligibleAssessments.firstOrNull {
+                it.optLongValue("attempt_id", "attemptId", "id") == initialAssessmentAttemptId
+            }
             if (initialAssessmentAttemptId > 0L && requestedAttempt != null) {
                 selectedAchievement = "ASSESSMENT_PASS"
                 selectedAttemptId = initialAssessmentAttemptId.toString()
-            } else if (selectedAttemptId.isBlank() && eligibleAssessments.isNotEmpty()) {
-                selectedAttemptId = eligibleAssessments.first().optLongValue("attempt_id", "attemptId", "id").takeIf { it > 0 }?.toString().orEmpty()
+            } else if (eligibleAssessments.none {
+                    it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
+                }) {
+                selectedAttemptId = eligibleAssessments.firstOrNull()
+                    ?.optLongValue("attempt_id", "attemptId", "id")
+                    ?.takeIf { it > 0 }?.toString().orEmpty()
             }
-        } catch (e: Exception) {
-            error = e.message ?: "प्रमाणपत्रों की जानकारी लोड नहीं हो सकी।"
+
+            val firstFailure = tracksResult.exceptionOrNull()
+                ?: certificatesResult.exceptionOrNull()
+                ?: eligibleResult.exceptionOrNull()
+            if (firstFailure != null) {
+                error = firstFailure.message ?: "Some certificate information could not be loaded."
+            }
         } finally {
             loading = false
         }
@@ -175,25 +196,62 @@ fun StudentCertificatesScreen(
         showScanner = true
     }
 
+    suspend fun prepareCertificateDownload(certificate: JSONObject, format: String) {
+        val id = certificate.optLongValue("id", "certificate_id", "certificateId")
+        if (id <= 0) throw IOException("Certificate record की पहचान नहीं मिली।")
+        val bytes = withContext(Dispatchers.IO) {
+            ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
+        }
+        if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
+        pendingBytes = bytes
+        val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
+            .replace(Regex("[^A-Za-z0-9_-]"), "_")
+        pendingName = "quantaedge-$code.$format"
+        if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
+    }
+
     fun downloadCertificate(certificate: JSONObject, format: String) {
         scope.launch {
             busy = true
             error = ""
             notice = ""
             try {
-                val id = certificate.optLongValue("id", "certificate_id", "certificateId")
-                if (id <= 0) throw IOException("Certificate record की पहचान नहीं मिली।")
-                val bytes = withContext(Dispatchers.IO) {
-                    ApiClient.getBytes("/api/v1/students/me/certificates/" + id + "/download?format=" + format)
-                }
-                if (bytes.isEmpty()) throw IOException("Server ने खाली certificate file भेजी।")
-                pendingBytes = bytes
-                val code = certificate.optString("certificate_number", certificate.optString("certificateNumber", id.toString()))
-                    .replace(Regex("[^A-Za-z0-9_-]"), "_")
-                pendingName = "quantaedge-$code.$format"
-                if (format == "pdf") pdfLauncher.launch(pendingName) else pngLauncher.launch(pendingName)
+                prepareCertificateDownload(certificate, format)
             } catch (e: Exception) {
                 error = e.message ?: "Certificate download नहीं हो सका।"
+            } finally {
+                busy = false
+            }
+        }
+    }
+
+    fun openExistingAssessmentCertificate(attempt: JSONObject) {
+        scope.launch {
+            busy = true
+            error = ""
+            notice = ""
+            try {
+                val attemptId = attempt.optLongValue("attempt_id", "attemptId")
+                if (attemptId <= 0L) throw IOException(
+                    if (language == "hi") "टेस्ट प्रयास की पहचान नहीं मिली।"
+                    else "Assessment attempt ID is missing."
+                )
+                // Ask the API for the canonical, student-scoped issued record instead of
+                // trusting a cached picker row to carry all certificate metadata.
+                val body = JSONObject()
+                    .put("achievementType", "ASSESSMENT_PASS")
+                    .put("assessmentAttemptId", attemptId)
+                    .put("templateId", "CLASSIC")
+                    .put("language", certificateLanguage)
+                val courseId = attempt.optLongValue("course_id", "courseId", "program_id", "programId")
+                if (courseId > 0L) body.put("courseId", courseId)
+                val existing = ApiClient.postObject("/api/v1/students/me/certificates/issue", body)
+                prepareCertificateDownload(existing, "pdf")
+                notice = if (language == "hi") "मौजूदा प्रमाणपत्र डाउनलोड के लिए तैयार है।"
+                    else "Existing certificate is ready to save."
+            } catch (e: Exception) {
+                error = e.message ?: if (language == "hi") "Certificate खोला नहीं जा सका।"
+                    else "Could not open this certificate."
             } finally {
                 busy = false
             }
@@ -239,7 +297,7 @@ fun StudentCertificatesScreen(
             it.optLongValue("attempt_id", "attemptId", "id").toString() == selectedAttemptId
         }
         if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "ISSUED") {
-            downloadCertificate(selectedAttempt, "pdf")
+            openExistingAssessmentCertificate(selectedAttempt)
             return
         }
         if (selectedAchievement == "ASSESSMENT_PASS" && selectedAttempt?.optString("certificate_status") == "REVOKED") {
