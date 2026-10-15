@@ -141,6 +141,18 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
             )
         self.assertFalse(self.output_dir.exists())
 
+    def test_rejects_corrupted_inventory_asset_hash(self):
+        inventory_path = self.inventory_dir / "visual-inventory.v1.json"
+        inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+        page_preview = next(row for row in inventory["assets"] if row.get("kind") == "page_preview")
+        page_preview["asset_sha256"] = "0" * 64
+        inventory_path.write_text(json.dumps(inventory), encoding="utf-8")
+
+        with self.assertRaisesRegex(ValueError, "Page preview SHA-256 mismatch"):
+            prepare_candidates(
+                inventory_path, self.pdf_path, self.output_dir, max_candidates=5,
+            )
+
     def test_rejects_nonempty_output_directory(self):
         self.output_dir.mkdir(parents=True)
         marker = self.output_dir / "keep-me.txt"
