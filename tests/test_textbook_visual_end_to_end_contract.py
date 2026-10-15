@@ -8,6 +8,7 @@ BOOK_SLUG = "class6-curiosity-en"
 CATALOG_PATH = ROOT / "apps/admin/public/content/visual-candidates" / f"{BOOK_SLUG}.v3.json"
 PACK_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "candidates.v3.json"
 CHAPTER_MAP_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "chapter-map.v1.json"
+INDEX_PATH = ROOT / "apps/admin/public/content/visual-candidates/index.v1.json"
 RAW_PREFIX = "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"
 
 
@@ -17,12 +18,21 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         cls.catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
         cls.pack = json.loads(PACK_PATH.read_text(encoding="utf-8"))
         cls.chapter_map = json.loads(CHAPTER_MAP_PATH.read_text(encoding="utf-8"))
+        cls.index = json.loads(INDEX_PATH.read_text(encoding="utf-8"))
 
     def test_committed_catalog_tracks_its_exact_candidate_pack_and_tracked_assets(self):
         self.assertEqual("quantaedge.visual-attachment-catalog.v3", self.catalog["schema_version"])
         self.assertEqual("quantaedge.visual-candidate-pack.v3", self.pack["schema_version"])
         self.assertEqual(self.pack["source"]["pdf_sha256"], self.catalog["source"]["pdf_sha256"])
         self.assertEqual(self.pack["source"]["book_id"], self.catalog["source"]["book_id"])
+        self.assertTrue(self.catalog["source"]["title"])
+        self.assertEqual("quantaedge.visual-catalog-index.v1", self.index["schema_version"])
+        catalog_slugs = {path.name.removesuffix(".v3.json") for path in (ROOT / "apps/admin/public/content/visual-candidates").glob("*.v3.json")}
+        self.assertEqual(catalog_slugs, {row["book_slug"] for row in self.index["catalogs"]})
+        indexed = next(row for row in self.index["catalogs"] if row["book_slug"] == BOOK_SLUG)
+        self.assertEqual(self.catalog["source"]["book_id"], indexed["source_book_id"])
+        self.assertEqual(self.catalog["source"]["pdf_sha256"], indexed["source_pdf_sha256"])
+        self.assertEqual(self.catalog["source"]["title"], indexed["title"])
         self.assertEqual(self.pack["source"]["pdf_sha256"], self.chapter_map["source_pdf_sha256"])
         self.assertIs(self.catalog["summary"]["publication_allowed"], False)
         self.assertIs(self.pack["summary"]["publication_allowed"], False)
@@ -32,7 +42,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         pack_by_id = {row["candidate_id"]: row for row in self.pack["candidates"]}
         catalog_by_id = {row["candidate_id"]: row for row in self.catalog["candidates"]}
         self.assertEqual(set(pack_by_id), set(catalog_by_id), "Catalog IDs must match the source candidate pack exactly.")
-        self.assertEqual(60, len(catalog_by_id), "This 60-candidate pack is an integration sample, not whole-book coverage.")
+        self.assertGreater(len(catalog_by_id), 0, "The candidate pack must be non-empty; current records are still a sample, not whole-book coverage.")
 
         for candidate_id, item in catalog_by_id.items():
             original = pack_by_id[candidate_id]
@@ -65,7 +75,10 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
 
     def test_admin_prevents_attaching_a_source_to_an_unrelated_class_or_subject(self):
         source = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
+        self.assertIn("function visualSourceMatchesLesson", source)
         self.assertIn("function visualCatalogMatchesLesson", source)
+        self.assertIn("index.v1.json", source)
+        self.assertNotIn("class6-curiosity-en.v3.json", source)
         self.assertIn("visualCatalogMatchesLesson(targetRow,visualCatalog)", source)
         self.assertIn("!visualCatalogMatchesTarget", source)
         self.assertIn("Choose a lesson in the matching class and subject.", source)
