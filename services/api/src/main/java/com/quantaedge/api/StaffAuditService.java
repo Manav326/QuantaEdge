@@ -61,4 +61,22 @@ public class StaffAuditService {
     }
   }
 
+  /** Records local import-token usage without inventing a human staff identity. */
+  public void recordMachineAction(String requestPath, String details) {
+    try {
+      String path = requestPath == null ? "/api/v1/admin/textbook-extraction/ghcr-books" : requestPath;
+      if (path.length() > 500) path = path.substring(0, 500);
+      String summary = details == null ? "Local admin-token action" : details;
+      if (summary.length() > 2000) summary = summary.substring(0, 2000);
+      jdbc.update("""
+          insert into staff_audit_log(
+            actor_staff_id, actor_role, http_method, request_path,
+            response_status, remote_address, user_agent, details
+          ) values (null, 'ADMIN_TOKEN', 'ACTION', ?, 200, null, null, ?)
+          """, path, summary);
+    } catch (RuntimeException ex) {
+      LOGGER.error("Could not append local admin-token audit for {}", requestPath, ex);
+    }
+  }
+
 }
