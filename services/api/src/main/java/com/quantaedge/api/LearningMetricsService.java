@@ -19,7 +19,7 @@ public class LearningMetricsService {
   public Map<String,Object> statsFor(long studentId, Long programId) {
     String subjectScope = programId == null ? "s.program_id is null" : "s.program_id=?";
     Map<String,Object> result=new LinkedHashMap<>(jdbc.queryForMap("""
-      select id,public_id,display_name,class_code,board,language,
+      select id,public_id,public_user_id,display_name,class_code,board,language,
              case when profile_image_data_url is not null
                then '/api/v1/students/me/profile-photo?v=' || floor(extract(epoch from profile_updated_at)*1000)::bigint::text
                else null end as profile_image_url,
