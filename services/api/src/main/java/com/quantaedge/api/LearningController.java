@@ -162,11 +162,12 @@ public class LearningController {
         and __PROGRAM_SCOPE__
       order by coalesce(ch.teaching_order,ch.sort_order),l.sort_order,l.id
       """.replace("__PROGRAM_SCOPE__",programScope);
-    List<Object> args=new java.util.ArrayList<>();
-    args.add(context.studentId());args.add(language);args.add(language);args.add(language);args.add(language);
-    args.add(classCode);args.add(subjectCode);
-    if(programId!=null){args.add(programId);args.add(programId);}
-    return jdbc.queryForList(sql,args.toArray());
+    if (programId == null) {
+      // Preserve the exact legacy query call shape used by existing consumers and tests.
+      return jdbc.queryForList(sql, context.studentId(), language, language, language, language, classCode, subjectCode);
+    }
+    return jdbc.queryForList(sql, context.studentId(), language, language, language, language,
+        classCode, subjectCode, programId, programId);
   }
 
   public List<Map<String,Object>> lessons(String classCode,String subjectCode,String language,AuthContext context) {
@@ -442,6 +443,11 @@ public class LearningController {
       where l.id=? and l.active=true and l.status='PUBLISHED'
         and ch.active=true and ch.content_status='PUBLISHED'
         and c.active=true and s.active=true and c.code=st.class_code
+        and (s.program_id is null or exists(
+          select 1 from student_program_enrollment spe
+          join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+          where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+        ))
       """,Long.class,studentId,lessonId);
     if(count==null||count==0) throw new SecurityException("Lesson access denied");
   }

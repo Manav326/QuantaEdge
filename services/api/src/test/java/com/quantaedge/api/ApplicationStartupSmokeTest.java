@@ -140,6 +140,15 @@ class ApplicationStartupSmokeTest {
       select count(*) from curriculum_class c
       join curriculum_subject s on s.class_id=c.id
       where c.code in ('6','7','8') and s.code in ('maths','science')
+        and s.program_id is null
+      """, Integer.class));
+    assertEquals(2, jdbc.queryForObject("""
+      select count(*) from curriculum_program p
+      join curriculum_program_subject ps on ps.program_id=p.id
+      join curriculum_subject s on s.id=ps.subject_id and s.program_id=p.id
+      join curriculum_class c on c.id=p.class_id
+      where c.code='6' and p.code='NAVODAYA_BATCH' and p.status='ACTIVE'
+        and s.code in ('maths','science') and s.active=true
       """, Integer.class));
     assertTrue(jdbc.queryForObject("""
       select exists(select 1 from information_schema.columns

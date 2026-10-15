@@ -22,8 +22,29 @@ public class StudentController {
   }
 
   @GetMapping("/me")
-  public Map<String,Object> me(@RequestAttribute(value="authContext",required=false) AuthContext context){
-    context=authorization.requireStudent(context); return statsFor(context.studentId());
+  public Map<String,Object> me(
+      @RequestParam(required=false) String programCode,
+      @RequestAttribute(value="authContext",required=false) AuthContext context){
+    context=authorization.requireStudent(context);
+    if(programCode==null || programCode.isBlank()) return statsFor(context.studentId());
+    String requested=programCode.trim().toUpperCase(java.util.Locale.ROOT);
+    List<Map<String,Object>> enrolled=jdbc.queryForList("""
+      select p.id,p.code,p.display_name
+      from curriculum_program p
+      join curriculum_class c on c.id=p.class_id and c.active=true
+      join student st on st.id=? and st.active=true and st.class_code=c.code
+      join student_program_enrollment spe on spe.student_id=st.id
+        and spe.program_id=p.id and spe.status='ACTIVE'
+      where upper(p.code)=? and p.status='ACTIVE' and p.code<>'GENERAL'
+      """,context.studentId(),requested);
+    if(enrolled.isEmpty()) throw new SecurityException("Active enrolment in this course is required.");
+    Map<String,Object> program=enrolled.getFirst();
+    long programId=((Number)program.get("id")).longValue();
+    Map<String,Object> result=learningMetrics.statsFor(context.studentId(),programId);
+    result.put("programId",programId);
+    result.put("programCode",program.get("code"));
+    result.put("programName",program.get("display_name"));
+    return result;
   }
 
 
