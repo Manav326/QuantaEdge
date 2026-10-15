@@ -518,7 +518,8 @@
         "feedback_by_locale": {
           "en": "Correct. Curiosity encourages us to notice things and ask how or why they happen.",
           "hi": "सही। जिज्ञासा हमें चीज़ों पर ध्यान देने और यह पूछने के लिए प्रेरित करती है कि वे कैसे या क्यों होती हैं।"
-        }
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1"
       },
       {
         "id": "c6-sci-ch01-t01-q02",
@@ -569,7 +570,8 @@
         "feedback_by_locale": {
           "en": "Correct selections: the desert, galaxy, and coast/ocean. Observations from different surroundings can make us curious.",
           "hi": "सही विकल्प: मरुस्थल, आकाशगंगा और समुद्र-तट/समुद्र। अलग-अलग परिवेश का अवलोकन जिज्ञासा जगा सकता है।"
-        }
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1"
       },
       {
         "id": "c6-sci-ch01-t01-q03",
@@ -586,7 +588,8 @@
         "feedback_by_locale": {
           "en": "True. New discoveries can change or improve our understanding.",
           "hi": "सही। नई खोजें हमारी समझ को बदल सकती हैं या बेहतर बना सकती हैं।"
-        }
+        },
+        "rendering_contract_id": "qtype-true-false.v1"
       },
       {
         "id": "c6-sci-ch01-t01-q04",
@@ -663,6 +666,13 @@
         "feedback_by_locale": {
           "en": "Each setting can start a different line of questioning. The aim is to ask a relevant question, not to answer a later-chapter science topic here.",
           "hi": "हर दृश्य से अलग प्रकार के प्रश्न उठ सकते हैं। उद्देश्य उचित प्रश्न पूछना है, न कि इस पाठ में आगे के अध्यायों के विज्ञान-विषयों के उत्तर देना।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 3,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
         }
       },
       {
@@ -687,6 +697,28 @@
         "feedback_by_locale": {
           "en": "The word is curiosity. It motivates us to ask questions.",
           "hi": "शब्द है 'जिज्ञासा'। यही हमें प्रश्न पूछने के लिए प्रेरित करती है।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim leading/trailing whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim leading/trailing whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate the response.",
+            "Do not strip meaningful matras or diacritics."
+          ]
         }
       },
       {
@@ -738,6 +770,12 @@
         "feedback_by_locale": {
           "en": "Correct. The other options describe what can be seen; option B asks for an explanation.",
           "hi": "सही। बाकी विकल्प दिखाई देने वाली चीज़ों का वर्णन करते हैं; विकल्प B किसी बात का कारण पूछता है।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "The referenced V3 page preview is a whole English source page marked editor-only and not student-renderable. Replace it with an approved bilingual/language-independent visual before this item is rendered or published.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
         }
       },
       {
@@ -779,8 +817,11 @@
               "1 अंक: नए प्रमाण या खोज का उल्लेख।",
               "1 अंक: पुराने विचार को सुधारने या बदलने की बात।"
             ]
-          }
-        }
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1"
       },
       {
         "id": "c6-sci-ch01-t01-q08",
@@ -791,8 +832,8 @@
           "c6-sci-ch01-t01-lo2"
         ],
         "prompt_by_locale": {
-          "en": "A learner sees the desert, coast, ocean and galaxy pictures and says, “I wonder what makes these places different.” Which response best shows scientific curiosity?",
-          "hi": "एक विद्यार्थी मरुस्थल, समुद्र-तट, समुद्र और आकाशगंगा के चित्र देखकर कहता है, “मैं जानना चाहता/चाहती हूँ कि ये स्थान अलग कैसे हैं।” कौन-सा उत्तर वैज्ञानिक जिज्ञासा को सबसे अच्छी तरह दर्शाता है?"
+          "en": "Which response best shows scientific curiosity?",
+          "hi": "कौन-सा उत्तर वैज्ञानिक जिज्ञासा को सबसे अच्छी तरह दर्शाता है?"
         },
         "options": [
           {
@@ -830,6 +871,11 @@
         "feedback_by_locale": {
           "en": "Correct. Curiosity leads to a clear question, followed by careful exploration rather than a guess treated as certain.",
           "hi": "सही। जिज्ञासा से स्पष्ट प्रश्न उठता है और फिर सावधानी से खोज की जाती है; अनुमान को पक्का उत्तर नहीं मान लिया जाता।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "A learner sees the desert, coast, ocean and galaxy pictures and says, “I wonder what makes these places different.”",
+          "hi": "एक विद्यार्थी मरुस्थल, समुद्र-तट, समुद्र और आकाशगंगा के चित्र देखकर कहता है, “मैं जानना चाहता/चाहती हूँ कि ये स्थान अलग कैसे हैं।”"
         }
       }
     ],
@@ -932,7 +978,101 @@
         "not_answered": "उत्तर नहीं दिया गया",
         "pending": "अभी जाँचा नहीं गया"
       }
-    }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_IS_REPLACED_OR_APPROVED"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch01-t01-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
   },
   "parity_audit": {
     "shared_learning_objective_ids": true,
@@ -949,13 +1089,77 @@
       "The English chapter page map is TOC-derived and still requires visual verification.",
       "The V3 English full-page preview is editor-only because it embeds English text; the visual-review workflow must choose a bilingual generated visual or an approved locale-appropriate source asset for student display.",
       "The generated curiosity-loop diagram is bilingual structured data and remains a draft until visual rendering and factual/accessibility review.",
-      "The global locale contract is recorded here, but shared app strings and runtime state-preserving language switching have not been implemented."
+      "The global locale contract is recorded here, but shared app strings and runtime state-preserving language switching have not been implemented.",
+      "All eight generated question types now map to a central UI rendering contract; actual web/Android components are not implemented.",
+      "Image-observation question q06 is blocked from student rendering until its English full-page source-preview asset is replaced with a suitable reviewed visual.",
+      "Scenario-based q08 stores scenario context separately from the question prompt so UI renders both as distinct elements."
     ],
     "global_language_switch_contract_recorded": true,
     "runtime_language_switch_implemented": false,
     "source_page_preview_student_render_blocked": true,
     "question_type_and_difficulty_labels_localized": true,
-    "shared_ui_status_labels_localized_in_lesson_contract": true
+    "shared_ui_status_labels_localized_in_lesson_contract": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch01-t01-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
   },
   "next_steps": [
     "Verify Hindi chapter-1 page boundaries against the matching Jigyasa PDF and reconcile the Hindi source text.",
@@ -963,7 +1167,8 @@
     "Run locale-completeness and semantic-parity validation for every learner-visible string, question, answer key, feedback, rubric and shared practice label.",
     "Review question correctness, translation equivalence and chapter-scope boundaries.",
     "Generate topic 2: the scientific method, preserving its own chapter-specific explanation, relevant bilingual visual data and varied bilingual practice.",
-    "Generate topic 3: curiosity and everyday scientific thinking, collaboration and continuing questions."
+    "Generate topic 3: curiosity and everyday scientific thinking, collaboration and continuing questions.",
+    "Treat data/structured-lessons/question-rendering-registry.v1.json and .md as the canonical UI contract for all question types; do not implement or add types without updating both."
   ],
   "language_runtime_contract": {
     "version": "quantaedge.global-locale-content-contract.v1",
