@@ -57,7 +57,7 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
             )
             request = urlopen.call_args.args[0]
             self.assertEqual(
-                "QE_SESSION=test-staff-access-token",
+                "QE_SESSION=test-staff-access-token; QE_STAFF_SESSION=test-staff-access-token",
                 request.get_header("Cookie"),
             )
             self.assertIsNone(request.get_header("X-qe-workspace"))
@@ -74,6 +74,20 @@ class GhcrExtractedPagesImportTests(unittest.TestCase):
                 request.get_header("Cookie"),
             )
             self.assertIsNone(request.get_header("X-qe-workspace"))
+
+
+    def test_local_admin_token_is_sent_only_as_scoped_header(self):
+        with patch("scripts.import_ghcr_extracted_pages.urllib.request.urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.read.return_value = b'{"sourceBookId": 12}'
+            post_multipart(
+                "http://localhost:8080/api/v1/admin/textbook-extraction/ghcr-books",
+                None,
+                [("manifest", "book.manifest.json", b'{"book_id":"book-a"}')],
+                admin_token="test-local-admin-token",
+            )
+            request = urlopen.call_args.args[0]
+            self.assertEqual("test-local-admin-token", request.get_header("X-admin-token"))
+            self.assertIsNone(request.get_header("Cookie"))
 
 
 if __name__ == "__main__":
