@@ -1,0 +1,33 @@
+{
+  "schema_version": "quantaedge.visual-render-contract.v1",
+  "purpose": "One versioned visual metadata contract for Admin Content Studio, student web, Android, source extraction and human review.",
+  "visual_kinds": [
+    {"id":"PHOTO","label":"Photo","presentation":"responsive image with contain fit, alt text, caption and source attribution"},
+    {"id":"ILLUSTRATION","label":"Illustration","presentation":"responsive image with contain fit, alt text, caption and source attribution"},
+    {"id":"DIAGRAM","label":"Diagram","presentation":"responsive labelled figure; zoom/open affordance; alt text and source attribution"},
+    {"id":"CHART","label":"Chart / graph","presentation":"source figure image with axes/units explained in the description and meaningful alt text"},
+    {"id":"TABLE","label":"Table / comparison","presentation":"source figure image with a text equivalent or summary in the description"},
+    {"id":"INFOGRAPHIC","label":"Infographic","presentation":"responsive composite image with an explanatory caption and alt text"},
+    {"id":"SEQUENCE","label":"Sequence / process","presentation":"pauseable MP4/WebM when animated, otherwise GIF/WebP or reviewed static fallback"},
+    {"id":"TEXTBOOK_FIGURE","label":"Unclassified textbook figure","presentation":"review-only placeholder category; cannot be published"}
+  ],
+  "media_block_types": ["IMAGE","DIAGRAM","ANIMATION","VIDEO","AUDIO"],
+  "locale_fields": ["title","description","alt","caption","title_hi","description_hi","alt_hi","caption_hi"],
+  "provenance_fields": ["source_candidate_id","source_book_id","source_book_title","source_edition","source_language","source_pdf_sha256","source_pdf_page_number","source_asset_sha256","source_bbox_pdf_points","source_page_url","source_page_context"],
+  "review_fields": ["visual_review_status","rights_status","visual_reviewed_at"],
+  "review_states": ["NEEDS_REVIEW","APPROVED","REJECTED"],
+  "rights_states": ["SOURCE_REFERENCE_ONLY","LICENSE_CONFIRMED"],
+  "publication_rules": [
+    "A V3 candidate is never automatically approved or published.",
+    "A source-derived visual requires a reviewer-approved category, meaningful alt text, complete book/page/SHA-256 provenance, visual_review_status=APPROVED, and rights_status=LICENSE_CONFIRMED before its lesson can be published.",
+    "Only users with CONTENT_REVIEW may approve a candidate or confirm publication rights.",
+    "Existing lesson JSON without candidate metadata follows the existing media-block validation rules."
+  ],
+  "candidate_pipeline": {
+    "input": "immutable whole-book PDF and matching extraction manifest",
+    "output": "V3 review candidate pack, compact review-only catalog and content-addressed media preview URLs",
+    "sample_is_not_a_limit": true,
+    "matching_policy": "match page/figure to the actual course lesson concept and verify against extracted page context; never attach candidates merely because they appear in sequence",
+    "storage": "large complete candidate packages remain in GHCR; selected review previews and catalog metadata are versioned in GitHub"
+  }
+}

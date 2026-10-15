@@ -1470,7 +1470,7 @@ public class AdminContentController {
       return "A content reviewer must approve each textbook visual before lesson publication.";
     }
     String rights=String.valueOf(content.getOrDefault("rights_status","SOURCE_REFERENCE_ONLY")).trim().toUpperCase(Locale.ROOT);
-    if(!Set.of("LICENSE_CONFIRMED","GENERATED_ORIGINAL").contains(rights)) {
+    if(!"LICENSE_CONFIRMED".equals(rights)) {
       return "Confirm the rights for each source visual before lesson publication.";
     }
     String alt=String.valueOf(content.getOrDefault("alt","")).trim();
