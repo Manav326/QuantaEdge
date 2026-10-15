@@ -160,6 +160,7 @@ public class AuthController {
     String workspace = AuthService.normalizeWorkspace(workspaceHeader);
     var result=new LinkedHashMap<String,Object>();
     result.put("authenticated",true);
+    result.put("publicUserId",auth.publicUserId(context));
     result.put("role",context.role());
     result.put("studentId",context.studentId());
     result.put("userId",context.userId());
@@ -252,6 +253,7 @@ public class AuthController {
         .maxAge(Duration.ofHours(auth.getSessionHours())).build();
     var body = new LinkedHashMap<String,Object>();
     body.put("authenticated",true);
+    body.put("publicUserId",auth.publicUserId(context));
     body.put("role",context.role());
     body.put("studentId",context.studentId()==null?0:context.studentId());
     body.put("userId",context.userId()==null?0:context.userId());

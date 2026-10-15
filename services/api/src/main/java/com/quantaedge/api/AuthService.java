@@ -1186,6 +1186,26 @@ public class AuthService {
         """, String.class, staffId, permissionWorkspace, staffId, permissionWorkspace);
   }
 
+  /** Stable 12-character public identity for an account, without exposing its database key. */
+  public String publicUserId(AuthContext context) {
+    if(context==null) return null;
+    if(context.userId()!=null) {
+      List<String> ids=jdbc.queryForList(
+          "select public_user_id from user_account where id=? and active=true",
+          String.class,context.userId());
+      return ids.isEmpty()?null:ids.getFirst();
+    }
+    if(context.studentId()!=null) {
+      List<String> ids=jdbc.queryForList("""
+        select u.public_user_id from student st
+        join user_account u on u.id=st.user_account_id and u.active=true
+        where st.id=?
+        """,String.class,context.studentId());
+      return ids.isEmpty()?null:ids.getFirst();
+    }
+    return null;
+  }
+
   public AuthContext contextForStudent(Long userId,long studentId) {
     String name=jdbc.queryForObject("select display_name from student where id=?",String.class,studentId);
     return new AuthContext(userId,studentId,"STUDENT",name);
