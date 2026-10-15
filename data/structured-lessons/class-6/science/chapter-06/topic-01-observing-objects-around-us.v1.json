@@ -1,0 +1,895 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch06-t01-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 6,
+    "title_by_locale": {
+      "en": "Materials Around Us",
+      "hi": "हमारे आस-पास की सामग्री"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 1,
+    "topic_id": "c6-sci-ch06-t01",
+    "title_by_locale": {
+      "en": "Observing Objects Around Us",
+      "hi": "हमारे आस-पास की वस्तुओं का अवलोकन"
+    },
+    "source_section_ids": [
+      "6.1"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          119,
+          134
+        ],
+        "printed_pages": [
+          101,
+          116
+        ],
+        "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PDF_REVIEW_PENDING"
+      },
+      "hi": {
+        "pdf_pages": [
+          115,
+          130
+        ],
+        "printed_pages": [
+          97,
+          112
+        ],
+        "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PDF_REVIEW_PENDING"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "6.1"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from another chapter.",
+      "Claim that every material has every property or dissolves in water.",
+      "Conflating mass and volume.",
+      "Unreviewed visuals or source screenshots shown as student content.",
+      "Verbatim NCERT prose or end questions.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable IDs and equivalent objectives, answers and rubrics in en/hi. One global app language controls learner-visible content and preserves state on switching; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary learning material, not verbatim NCERT prose/questions.",
+    "asset_rule": "Visuals are drafts and image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch06-t01-lo1",
+      "statement_by_locale": {
+        "en": "Identify everyday objects and their materials.",
+        "hi": "दैनिक वस्तुओं और उनकी सामग्रियों को पहचानें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch06-t01-lo2",
+      "statement_by_locale": {
+        "en": "Recognise that objects may combine materials.",
+        "hi": "पहचानें कि वस्तुएँ कई सामग्रियों से भी बन सकती हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch06-t01-lo3",
+      "statement_by_locale": {
+        "en": "Choose materials with regard to an object's purpose.",
+        "hi": "वस्तु के उपयोग के अनुसार सामग्री चुनें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c6-t01-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        119,
+        134
+      ],
+      "printed_pages": [
+        101,
+        116
+      ],
+      "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PAGE_BOUNDARY_AND_ORDER_REVIEW_PENDING",
+      "use": "Curiosity 2026–27; reconcile rendered pages, figure numbering and tables."
+    },
+    {
+      "source_ref_id": "src-c6-t01-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        115,
+        130
+      ],
+      "printed_pages": [
+        97,
+        112
+      ],
+      "mapping_status": "PROVISIONAL_CHAPTER_RANGE_RENDERED_PAGE_BOUNDARY_AND_ORDER_REVIEW_PENDING",
+      "use": "जिज्ञासा 2026–27; मुद्रित पृष्ठक्रम, चित्र संख्या और तालिकाएँ जाँचें।"
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch06-t01",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch06-t01-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1",
+          "c6-sci-ch06-t01-lo2"
+        ],
+        "source_refs": [
+          "src-c6-t01-en",
+          "src-c6-t01-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Objects and materials",
+            "paragraphs": [
+              "Notebooks, bottles, chairs and spoons are objects. Paper, glass, wood, plastic and metal are materials used to make objects. One object may use one material or a combination.",
+              "The chapter also describes pottery made from selected clay that is cleaned, shaped and fired. Pots and bowls illustrate how materials can be prepared for particular uses."
+            ],
+            "key_point": "Identify everyday objects and their materials."
+          },
+          "hi": {
+            "heading": "वस्तुएँ और सामग्रियाँ",
+            "paragraphs": [
+              "नोटबुक, बोतल, कुर्सी और चम्मच वस्तुएँ हैं। कागज़, काँच, लकड़ी, प्लास्टिक और धातु वस्तुएँ बनाने की सामग्रियाँ हैं। कोई वस्तु एक या कई सामग्रियों से बन सकती है।",
+              "अध्याय में चुनी हुई मिट्टी को साफ करके, आकार देकर और भट्ठी में पकाकर बर्तन बनाने का भी वर्णन है। घड़े और कटोरे दिखाते हैं कि सामग्री को विशेष उपयोग के लिए तैयार किया जाता है।"
+            ],
+            "key_point": "दैनिक वस्तुओं और उनकी सामग्रियों को पहचानें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo2",
+          "c6-sci-ch06-t01-lo3"
+        ],
+        "source_refs": [
+          "src-c6-t01-en",
+          "src-c6-t01-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Fit material to purpose",
+            "paragraphs": [
+              "A tumbler should hold water; a cooking utensil must suit cooking. Materials have different properties, so the useful choice depends on what the object must do."
+            ],
+            "key_point": "Recognise that objects may combine materials."
+          },
+          "hi": {
+            "heading": "उपयोग के अनुसार सामग्री",
+            "paragraphs": [
+              "गिलास में पानी रखा जा सके; खाना पकाने का बर्तन पकाने के लिए उपयुक्त हो। सामग्रियों के गुण अलग होते हैं, इसलिए चुनाव वस्तु के उपयोग के अनुसार होता है।"
+            ],
+            "key_point": "पहचानें कि वस्तुएँ कई सामग्रियों से भी बन सकती हैं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1",
+          "c6-sci-ch06-t01-lo2",
+          "c6-sci-ch06-t01-lo3"
+        ],
+        "source_refs": [
+          "src-c6-t01-en",
+          "src-c6-t01-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create a compact original visual for Observing Objects Around Us. Localize every label using diagram_data; do not use source-page screenshots.",
+          "hi": "“हमारे आस-पास की वस्तुओं का अवलोकन” के लिए मौलिक संक्षिप्त चित्र बनाएँ। सभी लेबल diagram_data से स्थानीयकृत हों; स्रोत-पृष्ठ का स्क्रीनशॉट न लें।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch06-t01-visual-01",
+          "kind": "chapter6-topic-1",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "node1",
+              "label_by_locale": {
+                "en": "Everyday objects",
+                "hi": "दैनिक वस्तुएँ"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "node2",
+              "label_by_locale": {
+                "en": "Materials used",
+                "hi": "प्रयुक्त सामग्री"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "node3",
+              "label_by_locale": {
+                "en": "Purpose of the object",
+                "hi": "वस्तु का उपयोग"
+              },
+              "position": {
+                "order": 3
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Draft visual: Everyday objects; Materials used; Purpose of the object.",
+          "hi": "चित्र-प्रारूप: दैनिक वस्तुएँ； प्रयुक्त सामग्री； वस्तु का उपयोग।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1",
+          "c6-sci-ch06-t01-lo2"
+        ],
+        "activity_kind": "Chapter 6 activity: Observing Objects Around Us",
+        "configuration": {
+          "activity_id": "c6-sci-ch06-t01-activity-01",
+          "title_by_locale": {
+            "en": "Try it yourself",
+            "hi": "स्वयं करके देखें"
+          },
+          "instruction_by_locale": {
+            "en": "List classroom objects, name their materials and explain one material choice.",
+            "hi": "कक्षा की वस्तुओं की सूची बनाएँ, उनकी सामग्री लिखें और किसी एक सामग्री के चुनाव का कारण बताएँ।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "Observe or test",
+                "hi": "अवलोकन या परीक्षण करें"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "Record the result",
+                "hi": "परिणाम लिखें"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "Explain the property",
+                "hi": "गुण समझाएँ"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear response"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "उत्तर मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Use safe classroom materials and teacher guidance; do not damage objects or use sharp items.",
+          "hi": "सुरक्षित सामग्री और शिक्षक के निर्देश उपयोग करें; वस्तुएँ न तोड़ें और नुकीली चीज़ें न लें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1",
+          "c6-sci-ch06-t01-lo2",
+          "c6-sci-ch06-t01-lo3"
+        ],
+        "content_by_locale": {
+          "en": "Notebooks, bottles, chairs and spoons are objects. Paper, glass, wood, plastic and metal are materials used to make objects. One object may use one material or a combination. A tumbler should hold water; a cooking utensil must suit cooking. Materials have different properties, so the useful choice depends on what the object must do.",
+          "hi": "नोटबुक, बोतल, कुर्सी और चम्मच वस्तुएँ हैं। कागज़, काँच, लकड़ी, प्लास्टिक और धातु वस्तुएँ बनाने की सामग्रियाँ हैं। कोई वस्तु एक या कई सामग्रियों से बन सकती है। गिलास में पानी रखा जा सके; खाना पकाने का बर्तन पकाने के लिए उपयुक्त हो। सामग्रियों के गुण अलग होते हैं, इसलिए चुनाव वस्तु के उपयोग के अनुसार होता है।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch06-t01",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch06-t01-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1"
+        ],
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "prompt_by_locale": {
+          "en": "A drinking tumbler should use a material that can…",
+          "hi": "पानी के गिलास की सामग्री ऐसी होनी चाहिए जो…"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "hold water without leaking",
+              "hi": "पानी बिना रिसाव के रख सके"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "dissolve immediately",
+              "hi": "तुरंत घुल जाए"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "always be transparent",
+              "hi": "हमेशा पारदर्शी हो"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "have no properties",
+              "hi": "जिसका कोई गुण न हो"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Use the stated property and the evidence in this lesson.",
+          "hi": "इस पाठ में बताए गुण और प्रमाण का उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q02",
+        "type": "multiple_select",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo2"
+        ],
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "prompt_by_locale": {
+          "en": "Which are materials rather than finished objects?",
+          "hi": "कौन-से तैयार वस्तुओं के बजाय सामग्रियाँ हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Glass",
+              "hi": "काँच"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Wood",
+              "hi": "लकड़ी"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Plastic",
+              "hi": "प्लास्टिक"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Chair",
+              "hi": "कुर्सी"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Use the stated property and the evidence in this lesson.",
+          "hi": "इस पाठ में बताए गुण और प्रमाण का उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo3"
+        ],
+        "rendering_contract_id": "qtype-true-false.v1",
+        "prompt_by_locale": {
+          "en": "Every object must be made from only one material.",
+          "hi": "हर वस्तु केवल एक सामग्री से बनी होनी चाहिए।"
+        },
+        "correct_answer": false,
+        "feedback_by_locale": {
+          "en": "Compare the statement with the explanation in the lesson.",
+          "hi": "कथन की तुलना पाठ की व्याख्या से करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1"
+        ],
+        "rendering_contract_id": "qtype-matching.v1",
+        "prompt_by_locale": {
+          "en": "Match each concept or example with its description.",
+          "hi": "प्रत्येक अवधारणा या उदाहरण को उसके वर्णन से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "l1",
+            "label_by_locale": {
+              "en": "Notebook",
+              "hi": "नोटबुक"
+            }
+          },
+          {
+            "id": "l2",
+            "label_by_locale": {
+              "en": "Window pane",
+              "hi": "खिड़की का पल्ला"
+            }
+          },
+          {
+            "id": "l3",
+            "label_by_locale": {
+              "en": "Chair frame",
+              "hi": "कुर्सी का ढाँचा"
+            }
+          },
+          {
+            "id": "l4",
+            "label_by_locale": {
+              "en": "Bottle",
+              "hi": "बोतल"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "r1",
+            "label_by_locale": {
+              "en": "Paper",
+              "hi": "कागज़"
+            }
+          },
+          {
+            "id": "r2",
+            "label_by_locale": {
+              "en": "Glass",
+              "hi": "काँच"
+            }
+          },
+          {
+            "id": "r3",
+            "label_by_locale": {
+              "en": "Wood",
+              "hi": "लकड़ी"
+            }
+          },
+          {
+            "id": "r4",
+            "label_by_locale": {
+              "en": "Plastic",
+              "hi": "प्लास्टिक"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "l1",
+            "right_id": "r1"
+          },
+          {
+            "left_id": "l2",
+            "right_id": "r2"
+          },
+          {
+            "left_id": "l3",
+            "right_id": "r3"
+          },
+          {
+            "left_id": "l4",
+            "right_id": "r4"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each pair links a concept to its matching description.",
+          "hi": "हर जोड़ी में अवधारणा और उसका सही वर्णन जुड़ा है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo2"
+        ],
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "prompt_by_locale": {
+          "en": "The substance used to make an object is called a ____.",
+          "hi": "वस्तु बनाने में प्रयुक्त पदार्थ को ____ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "material"
+          ],
+          "hi": [
+            "सामग्री"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "Use the key term for this property.",
+          "hi": "इस गुण के लिए प्रमुख शब्द लिखें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo3"
+        ],
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "prompt_by_locale": {
+          "en": "What does the draft object-to-material diagram show?",
+          "hi": "वस्तु-सामग्री के प्रारूप-चित्र से क्या पता चलता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Materials are chosen for the object's use",
+              "hi": "उपयोग के अनुसार सामग्री चुनी जाती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "All objects are made of glass",
+              "hi": "सभी वस्तुएँ काँच से बनती हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Materials have no properties",
+              "hi": "सामग्रियों के कोई गुण नहीं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Only one material exists",
+              "hi": "केवल एक सामग्री होती है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch06-t01-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Original diagram is only a draft. Review source fidelity, science, bilingual labels, readability, contrast, alt text and accessibility before display.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        },
+        "feedback_by_locale": {
+          "en": "Read the diagram only after it has been reviewed and approved.",
+          "hi": "चित्र की समीक्षा और स्वीकृति के बाद ही उसका उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo1"
+        ],
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "prompt_by_locale": {
+          "en": "Give two objects and name the material or materials used to make each.",
+          "hi": "दो वस्तुओं के नाम लेकर उन्हें बनाने वाली सामग्री बताएँ।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "A window pane may be made from glass; a notebook uses paper. Some objects combine several materials."
+            ],
+            "sample_answer": "A window pane may be made from glass; a notebook uses paper. Some objects combine several materials."
+          },
+          "hi": {
+            "key_points": [
+              "खिड़की का पल्ला काँच का और नोटबुक कागज़ की हो सकती है। कुछ वस्तुएँ कई सामग्रियों से बनती हैं।"
+            ],
+            "sample_answer": "खिड़की का पल्ला काँच का और नोटबुक कागज़ की हो सकती है। कुछ वस्तुएँ कई सामग्रियों से बनती हैं।"
+          }
+        },
+        "feedback_by_locale": {
+          "en": "Include the key concept and the evidence or example requested.",
+          "hi": "प्रमुख अवधारणा तथा माँगा गया प्रमाण या उदाहरण शामिल करें।"
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the main concept.",
+              "1 point for a correct supporting explanation."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक व्याख्या के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch06-t01-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch06-t01-lo2"
+        ],
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "prompt_by_locale": {
+          "en": "A learner wants a tumbler for holding water. What should guide the material choice?",
+          "hi": "पानी रखने के लिए गिलास बनाने में सामग्री का चुनाव किस आधार पर होना चाहिए?"
+        },
+        "scenario_by_locale": {
+          "en": "Several materials could be used for the same object.",
+          "hi": "एक ही वस्तु बनाने में कई सामग्रियाँ उपयोग हो सकती हैं।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Whether it can hold water for the intended use",
+              "hi": "क्या वह उपयोग के अनुसार पानी रख सकती है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Its name alone, ignoring properties",
+              "hi": "गुण अनदेखा करके केवल नाम"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Whether it dissolves quickly",
+              "hi": "क्या वह जल्दी घुलती है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Whether all objects are made alike",
+              "hi": "क्या सभी वस्तुएँ एक जैसी बनती हैं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Choose the option that applies the lesson's property to the situation.",
+          "hi": "स्थिति पर पाठ का गुण लागू करने वाला विकल्प चुनें।"
+        }
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary questions mapped to the numbered section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त प्रश्न; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_many": "Select all that apply",
+        "true_label": "True",
+        "false_label": "False",
+        "submit": "Check answer",
+        "next": "Next question",
+        "pending_review": "Pending review"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_many": "सभी सही विकल्प चुनें",
+        "true_label": "सही",
+        "false_label": "गलत",
+        "submit": "उत्तर जाँचें",
+        "next": "अगला प्रश्न",
+        "pending_review": "समीक्षा लंबित"
+      }
+    }
+  },
+  "parity_audit": {
+    "stable_ids_across_locales": true,
+    "objectives_paired": true,
+    "question_types_each_once": true,
+    "locale_content_structurally_paired": true,
+    "semantic_human_review_status": "PENDING",
+    "source_page_reconciliation_status": "PENDING",
+    "science_accuracy_status": "PENDING",
+    "visual_accessibility_status": "PENDING",
+    "image_observation_renderable": false,
+    "notes": [
+      "Structural locale pairing does not prove semantic equivalence; human review is required.",
+      "All image-observation questions are blocked until the diagram is rendered and reviewed.",
+      "Page boundaries are provisional until compared with rendered official PDFs."
+    ]
+  },
+  "next_steps": [
+    "Compare official English and Hindi PDFs in rendered form and verify exact section/page boundaries.",
+    "Reconcile all figures, tables, activities, sidebars, keywords, summary, review questions and Learning further tasks.",
+    "Review Hindi terminology, semantic parity, scientific accuracy and visual accessibility.",
+    "Implement/test Web and Android renderer components and state-preserving language switching separately.",
+    "Keep publication disabled until review is complete."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

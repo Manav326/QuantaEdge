@@ -1,0 +1,1055 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic06-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Staged as uncommitted Git objects; no branch ref update or commit."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Regular Class 6 curriculum, not entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    }
+  },
+  "topic": {
+    "topic_number": 6,
+    "topic_id": "c6-sci-ch02-t06",
+    "title_by_locale": {
+      "en": "Habitats on Land and in Water",
+      "hi": "ज़मीन और पानी के आवास"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          45,
+          46
+        ],
+        "printed_pages": [
+          27,
+          28
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Habitat definition",
+      "Terrestrial and aquatic habitat examples",
+      "Amphibians as animals able to live in water and on land",
+      "Food, water, air and shelter as basic habitat resources"
+    ],
+    "excluded_scope": [
+      "Habitat damage, conservation projects and sacred groves (Topic 7)",
+      "Advanced ecology beyond Chapter 2"
+    ],
+    "generated_content_note": "Authored learning material, not verbatim NCERT text.",
+    "global_locale_rule": "All visible content is bilingual and controlled by the global app locale; runtime switching is not implemented here."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t06-lo1",
+      "statement_by_locale": {
+        "en": "Define habitat as the place where a plant or animal lives.",
+        "hi": "आवास को उस स्थान के रूप में परिभाषित करें जहाँ पौधा या जानवर रहता है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t06-lo2",
+      "statement_by_locale": {
+        "en": "Distinguish terrestrial, aquatic and amphibian examples using the chapter's descriptions.",
+        "hi": "अध्याय के वर्णनों के आधार पर स्थलीय, जलीय और उभयचर उदाहरणों में अंतर करें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t06-lo3",
+      "statement_by_locale": {
+        "en": "Describe resources that a habitat provides for survival.",
+        "hi": "जीवित रहने के लिए आवास द्वारा उपलब्ध संसाधनों का वर्णन करें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-habitat-p45-46",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "pdf_pages": [
+        45,
+        46
+      ],
+      "printed_pages": [
+        27,
+        28
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "source_context": [
+        "PDF page 45 defines habitat and gives sea/ocean, desert and mountain examples.",
+        "PDF page 46 describes terrestrial land habitats and aquatic water habitats, gives examples such as forests, grasslands, ponds, rivers and oceans, and describes frogs as amphibians."
+      ]
+    },
+    {
+      "source_ref_id": "src-c2-hi-habitat",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t06",
+    "title_by_locale": {
+      "en": "Where Living Things Live",
+      "hi": "जीव कहाँ रहते हैं"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t06-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo1",
+          "c6-sci-ch02-t06-lo3"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "What is a habitat?",
+            "paragraphs": [
+              "The place where a plant or animal lives is called its habitat. A habitat provides things needed for survival, including food, water, air and shelter.",
+              "In the chapter's examples, camels live in hot or cold deserts, rhododendrons grow in mountain regions, and sea turtles live in the sea or ocean. These examples connect living things with the places where they are found."
+            ],
+            "key_point": "A habitat is the place where an organism lives and finds resources needed for survival."
+          },
+          "hi": {
+            "heading": "आवास क्या है?",
+            "paragraphs": [
+              "वह स्थान जहाँ कोई पौधा या जानवर रहता है, उसका आवास कहलाता है। आवास जीवित रहने के लिए आवश्यक चीज़ें देता है, जैसे भोजन, पानी, हवा और आश्रय।",
+              "अध्याय के उदाहरणों में ऊँट गर्म या ठंडे मरुस्थल में, रोडोडेंड्रॉन पर्वतीय क्षेत्रों में और समुद्री कछुआ समुद्र में रहता है। ये उदाहरण जीवों को उनके रहने के स्थानों से जोड़ते हैं।"
+            ],
+            "key_point": "आवास वह स्थान है जहाँ कोई जीव रहता है और उसे जीवित रहने के लिए आवश्यक संसाधन मिलते हैं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Terrestrial and aquatic habitats",
+            "paragraphs": [
+              "Plants and animals living on land are described as living in terrestrial habitats. Forests, deserts, grasslands and mountains are examples.",
+              "Plants and animals living in water are described as living in aquatic habitats. Ponds, lakes, rivers and oceans are examples. Some animals, such as frogs, can live in water as well as on land; the chapter calls them amphibians."
+            ],
+            "callout": "Terrestrial: land. Aquatic: water. Amphibian: able to live on land and in water."
+          },
+          "hi": {
+            "heading": "स्थलीय और जलीय आवास",
+            "paragraphs": [
+              "ज़मीन पर रहने वाले पौधों और जानवरों को स्थलीय आवास में रहने वाला कहा जाता है। वन, मरुस्थल, घास के मैदान और पर्वत इसके उदाहरण हैं।",
+              "पानी में रहने वाले पौधों और जानवरों को जलीय आवास में रहने वाला कहा जाता है। तालाब, झील, नदियाँ और महासागर इसके उदाहरण हैं। मेंढक जैसे कुछ जानवर पानी और ज़मीन दोनों पर रह सकते हैं; अध्याय उन्हें उभयचर कहता है।"
+            ],
+            "callout": "स्थलीय: ज़मीन। जलीय: पानी। उभयचर: ज़मीन और पानी दोनों पर रह सकता है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo1",
+          "c6-sci-ch02-t06-lo2",
+          "c6-sci-ch02-t06-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t06-habitat-types-map",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original locale-switchable concept diagram. Distinguish terrestrial habitats (land), aquatic habitats (water) and amphibians able to use both. Include habitat resources; do not copy textbook artwork.",
+        "diagram_data": {
+          "types": [
+            {
+              "id": "terrestrial",
+              "label_by_locale": {
+                "en": "Terrestrial habitat",
+                "hi": "स्थलीय आवास"
+              },
+              "examples_by_locale": {
+                "en": [
+                  "Forests",
+                  "Deserts",
+                  "Grasslands",
+                  "Mountains"
+                ],
+                "hi": [
+                  "वन",
+                  "मरुस्थल",
+                  "घास के मैदान",
+                  "पर्वत"
+                ]
+              }
+            },
+            {
+              "id": "aquatic",
+              "label_by_locale": {
+                "en": "Aquatic habitat",
+                "hi": "जलीय आवास"
+              },
+              "examples_by_locale": {
+                "en": [
+                  "Ponds",
+                  "Lakes",
+                  "Rivers",
+                  "Oceans"
+                ],
+                "hi": [
+                  "तालाब",
+                  "झील",
+                  "नदियाँ",
+                  "महासागर"
+                ]
+              }
+            },
+            {
+              "id": "amphibian",
+              "label_by_locale": {
+                "en": "Amphibian",
+                "hi": "उभयचर"
+              },
+              "examples_by_locale": {
+                "en": [
+                  "Frog: land and water"
+                ],
+                "hi": [
+                  "मेंढक: ज़मीन और पानी"
+                ]
+              }
+            }
+          ],
+          "resources_by_locale": {
+            "en": [
+              "Food",
+              "Water",
+              "Air",
+              "Shelter"
+            ],
+            "hi": [
+              "भोजन",
+              "पानी",
+              "हवा",
+              "आश्रय"
+            ]
+          }
+        },
+        "alt_by_locale": {
+          "en": "An original diagram groups terrestrial habitats, aquatic habitats and amphibians able to live in both; it also lists basic resources a habitat provides.",
+          "hi": "मौलिक चित्र स्थलीय आवास, जलीय आवास और दोनों में रह सकने वाले उभयचरों को समूहित करता है; इसमें आवास द्वारा दिए जाने वाले मूल संसाधन भी सूचीबद्ध हैं।"
+        },
+        "caption_by_locale": {
+          "en": "Habitat groups are based on the environment where organisms live.",
+          "hi": "आवास-समूह उस परिवेश पर आधारित हैं जहाँ जीव रहते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-b04",
+        "type": "activity",
+        "order": 4,
+        "activity_kind": "habitat_sort",
+        "instructions_by_locale": {
+          "en": [
+            "Sort teacher-approved place cards into land or water habitats.",
+            "Sort example organisms only when the provided information supports the choice.",
+            "For each selection, state which detail supports your choice.",
+            "Mark an uncertain case as unknown instead of guessing."
+          ],
+          "hi": [
+            "शिक्षक द्वारा स्वीकृत स्थानों के कार्डों को ज़मीन या पानी के आवासों में बाँटें।",
+            "जीवों के उदाहरणों को तभी समूहित करें जब दी गई जानकारी चयन का समर्थन करती हो।",
+            "हर चयन के लिए बताई गई जानकारी लिखें जो आपके निर्णय का आधार है।",
+            "अनिश्चित स्थिति में अनुमान लगाने के बजाय अज्ञात लिखें।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "example",
+            "label_by_locale": {
+              "en": "Organism or place",
+              "hi": "जीव या स्थान"
+            }
+          },
+          {
+            "id": "habitat_type",
+            "label_by_locale": {
+              "en": "Habitat type",
+              "hi": "आवास का प्रकार"
+            }
+          },
+          {
+            "id": "reason",
+            "label_by_locale": {
+              "en": "Reason for grouping",
+              "hi": "समूह बनाने का कारण"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "Use the example's stated living place, not an unsupported guess.",
+          "hi": "बिना आधार वाले अनुमान के बजाय उदाहरण में बताए गए रहने के स्थान का उपयोग करें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo1",
+          "c6-sci-ch02-t06-lo2",
+          "c6-sci-ch02-t06-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "A habitat is where a plant or animal lives.",
+              "Terrestrial habitats are on land; examples include forests, deserts, grasslands and mountains.",
+              "Aquatic habitats are in water; examples include ponds, lakes, rivers and oceans.",
+              "Amphibians such as frogs can live on land as well as in water.",
+              "Habitats provide food, water, air, shelter and other survival needs."
+            ],
+            "vocabulary": [
+              {
+                "term": "Habitat",
+                "meaning": "The place where a plant or animal lives."
+              },
+              {
+                "term": "Terrestrial",
+                "meaning": "Related to living on land."
+              },
+              {
+                "term": "Aquatic",
+                "meaning": "Related to living in water."
+              },
+              {
+                "term": "Amphibian",
+                "meaning": "An animal that can live in water as well as on land."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "आवास वह स्थान है जहाँ पौधा या जानवर रहता है।",
+              "स्थलीय आवास ज़मीन पर होते हैं; वन, मरुस्थल, घास के मैदान और पर्वत इनके उदाहरण हैं।",
+              "जलीय आवास पानी में होते हैं; तालाब, झील, नदियाँ और महासागर इनके उदाहरण हैं।",
+              "मेंढक जैसे उभयचर ज़मीन और पानी दोनों पर रह सकते हैं।",
+              "आवास भोजन, पानी, हवा, आश्रय और जीवित रहने की अन्य आवश्यकताएँ उपलब्ध कराते हैं।"
+            ],
+            "vocabulary": [
+              {
+                "term": "आवास",
+                "meaning": "वह स्थान जहाँ पौधा या जानवर रहता है।"
+              },
+              {
+                "term": "स्थलीय",
+                "meaning": "ज़मीन पर रहने से संबंधित।"
+              },
+              {
+                "term": "जलीय",
+                "meaning": "पानी में रहने से संबंधित।"
+              },
+              {
+                "term": "उभयचर",
+                "meaning": "ऐसा जानवर जो पानी और ज़मीन दोनों पर रह सकता है।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t06",
+    "title_by_locale": {
+      "en": "Practise Habitats",
+      "hi": "आवास का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice based on this topic only; not verbatim NCERT assessment questions.",
+      "hi": "केवल इस विषय पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों का शब्दशः रूप नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t06-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What is the place where a plant or animal lives called?",
+          "hi": "पौधे या जानवर के रहने के स्थान को क्या कहते हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Habitat",
+              "hi": "आवास"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Venation",
+              "hi": "शिराविन्यास"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Cotyledon",
+              "hi": "बीजपत्र"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Movement",
+              "hi": "गति"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. A habitat is the place where a plant or animal lives.",
+          "hi": "सही। आवास वह स्थान है जहाँ कोई पौधा या जानवर रहता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which are terrestrial habitats named in the chapter? Select all that apply.",
+          "hi": "अध्याय में बताए गए स्थलीय आवासों के उदाहरण कौन-से हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Forests",
+              "hi": "वन"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Deserts",
+              "hi": "मरुस्थल"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Grasslands",
+              "hi": "घास के मैदान"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Mountains",
+              "hi": "पर्वत"
+            }
+          },
+          {
+            "id": "e",
+            "text_by_locale": {
+              "en": "Oceans",
+              "hi": "महासागर"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "feedback_by_locale": {
+          "en": "Forests, deserts, grasslands and mountains are terrestrial habitats; oceans are aquatic.",
+          "hi": "वन, मरुस्थल, घास के मैदान और पर्वत स्थलीय आवास हैं; महासागर जलीय है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A frog can live in water as well as on land, so the chapter describes it as an amphibian.",
+          "hi": "मेंढक पानी और ज़मीन दोनों पर रह सकता है, इसलिए अध्याय में उसे उभयचर कहा गया है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. The chapter uses the frog as an example of an amphibian.",
+          "hi": "सही। अध्याय में मेंढक को उभयचर का उदाहरण दिया गया है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Match the habitat term with its description.",
+          "hi": "आवास से जुड़े शब्द को उसके वर्णन से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "terrestrial",
+            "label_by_locale": {
+              "en": "Terrestrial",
+              "hi": "स्थलीय"
+            }
+          },
+          {
+            "id": "aquatic",
+            "label_by_locale": {
+              "en": "Aquatic",
+              "hi": "जलीय"
+            }
+          },
+          {
+            "id": "amphibian",
+            "label_by_locale": {
+              "en": "Amphibian",
+              "hi": "उभयचर"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "land",
+            "label_by_locale": {
+              "en": "Land environments such as forests or deserts",
+              "hi": "वन या मरुस्थल जैसे ज़मीनी परिवेश"
+            }
+          },
+          {
+            "id": "water",
+            "label_by_locale": {
+              "en": "Water environments such as ponds or oceans",
+              "hi": "तालाब या महासागर जैसे पानी के परिवेश"
+            }
+          },
+          {
+            "id": "both",
+            "label_by_locale": {
+              "en": "Can live on land as well as in water",
+              "hi": "ज़मीन और पानी दोनों पर रह सकता है"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "terrestrial",
+            "right_id": "land"
+          },
+          {
+            "left_id": "aquatic",
+            "right_id": "water"
+          },
+          {
+            "left_id": "amphibian",
+            "right_id": "both"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 3,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Terrestrial is land, aquatic is water, and amphibians can use both environments.",
+          "hi": "स्थलीय ज़मीन से, जलीय पानी से और उभयचर दोनों परिवेशों से जुड़ा है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Animals that can live in water and on land are called ______.",
+          "hi": "जो जानवर पानी और ज़मीन दोनों पर रह सकते हैं, उन्हें ______ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "amphibians",
+            "amphibian"
+          ],
+          "hi": [
+            "उभयचर"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not strip Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The expected term is amphibians.",
+          "hi": "अपेक्षित शब्द 'उभयचर' है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "According to the original habitat diagram, which is an aquatic habitat?",
+          "hi": "मौलिक आवास-चित्र के अनुसार कौन-सा जलीय आवास है?"
+        },
+        "visual_asset_ref": "c6-sci-ch02-t06-habitat-types-map",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Ocean",
+              "hi": "महासागर"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Desert",
+              "hi": "मरुस्थल"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Grassland",
+              "hi": "घास का मैदान"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Mountain",
+              "hi": "पर्वत"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Oceans are aquatic habitats; the other choices are terrestrial environments.",
+          "hi": "सही। महासागर जलीय आवास हैं; बाकी विकल्प स्थलीय परिवेश हैं।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The original bilingual diagram is draft data; render and review it before this item is shown to students.",
+            "hi": "मौलिक द्विभाषी चित्र मसौदा डेटा है; यह प्रश्न दिखाने से पहले चित्र की प्रस्तुति और समीक्षा करनी होगी।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Name one terrestrial habitat, one aquatic habitat, and one animal that can live both on land and in water.",
+          "hi": "एक स्थलीय आवास, एक जलीय आवास और ऐसा एक जानवर बताएँ जो ज़मीन तथा पानी दोनों पर रह सकता है।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Names a terrestrial habitat such as a forest, desert, grassland or mountain.",
+              "Names an aquatic habitat such as a pond, lake, river or ocean.",
+              "Names an amphibian such as a frog."
+            ],
+            "sample_answer": "A forest is terrestrial, a pond is aquatic, and a frog can live on land as well as in water."
+          },
+          "hi": {
+            "key_points": [
+              "वन, मरुस्थल, घास का मैदान या पर्वत जैसा स्थलीय आवास बताता है।",
+              "तालाब, झील, नदी या महासागर जैसा जलीय आवास बताता है।",
+              "मेंढक जैसा उभयचर बताता है।"
+            ],
+            "sample_answer": "वन स्थलीय आवास है, तालाब जलीय आवास है और मेंढक पानी तथा ज़मीन दोनों पर रह सकता है।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 3,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: valid terrestrial example.",
+              "1 point: valid aquatic example.",
+              "1 point: valid amphibian example."
+            ],
+            "hi": [
+              "1 अंक: सही स्थलीय उदाहरण।",
+              "1 अंक: सही जलीय उदाहरण।",
+              "1 अंक: सही उभयचर उदाहरण।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t06-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t06-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which grouping best follows the information given?",
+          "hi": "दी गई जानकारी के अनुसार कौन-सा वर्गीकरण सबसे उचित है?"
+        },
+        "scenario_by_locale": {
+          "en": "A class sorts cards showing a camel, a dolphin, a frog and a pigeon. The lesson describes a camel as living in a desert, a dolphin in water and a frog on both land and water.",
+          "hi": "एक कक्षा ऊँट, डॉल्फ़िन, मेंढक और कबूतर के कार्ड अलग-अलग समूहों में बाँट रही है। पाठ में ऊँट को मरुस्थल में, डॉल्फ़िन को पानी में और मेंढक को ज़मीन तथा पानी दोनों पर रहने वाला बताया गया है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Camel: terrestrial; dolphin: aquatic; frog: amphibian",
+              "hi": "ऊँट: स्थलीय; डॉल्फ़िन: जलीय; मेंढक: उभयचर"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Camel: aquatic; dolphin: terrestrial; frog: terrestrial only",
+              "hi": "ऊँट: जलीय; डॉल्फ़िन: स्थलीय; मेंढक: केवल स्थलीय"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "All examples must belong to one habitat group",
+              "hi": "सभी उदाहरण एक ही आवास-समूह में होने चाहिए"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Group them by leaf venation",
+              "hi": "पत्ती के शिराविन्यास के आधार पर समूह बनाएँ"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The classification follows the described habitats and keeps the amphibian case distinct.",
+          "hi": "सही। यह वर्गीकरण बताए गए आवासों के अनुसार है और उभयचर को अलग पहचानता है।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "preserve_response_by_question_id": true,
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t06-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_components_implemented": false,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi source-page mapping and terminology remain unverified.",
+      "English source pages need visual reconciliation.",
+      "The habitat diagram is draft data; q06 remains blocked until reviewed rendering."
+    ]
+  },
+  "next_steps": [
+    "Verify Hindi source pages and terms.",
+    "Review the original English habitat passage/illustration.",
+    "Render and approve the diagram before enabling image-observation question.",
+    "Prepare Topic 7 on habitat damage, conservation and sacred groves."
+  ]
+}

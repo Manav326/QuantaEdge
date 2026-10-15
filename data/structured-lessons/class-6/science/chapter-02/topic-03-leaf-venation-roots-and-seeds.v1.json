@@ -1,0 +1,1253 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic03-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Draft content staged as Git blobs/trees only during the active batch. No branch ref update or commit."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Regular Class 6 curriculum content only; not entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    },
+    "chapter_scope_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+  },
+  "topic": {
+    "topic_number": 3,
+    "topic_id": "c6-sci-ch02-t03",
+    "title_by_locale": {
+      "en": "Leaf Venation, Roots and Seeds",
+      "hi": "पत्तियों का शिराविन्यास, जड़ें और बीज"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          35,
+          36,
+          37,
+          38
+        ],
+        "printed_pages": [
+          17,
+          18,
+          19,
+          20
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Leaf veins and the pattern called venation",
+      "Reticulate and parallel venation as described in this chapter",
+      "Taproot and fibrous root systems",
+      "The chapter's introductory relationship between common venation and root patterns",
+      "One versus two cotyledons and the terms monocot and dicot"
+    ],
+    "excluded_scope": [
+      "Advanced plant anatomy or exceptions beyond Grade 6 scope",
+      "The later chapter topic on grouping animals",
+      "Detailed plant reproduction or seed germination",
+      "Unqualified claim that every species follows a pattern without exceptions"
+    ],
+    "source_text_rule": "Explanations and questions are original learning aids grounded in cited source pages, not verbatim NCERT text or textbook assessment items.",
+    "bilingual_parity_rule": "The en and hi versions use the same learning-objective IDs, block IDs, visual IDs, question IDs, option/answer IDs and grading demand.",
+    "language_runtime_rule": "The global app language selector controls all visible strings and switches live while preserving state. This data contract does not implement runtime behavior.",
+    "visual_rule": "The venation/root/seed comparison diagram is original structured data, not a copied textbook figure; block student rendering until reviewed."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t03-lo1",
+      "statement_by_locale": {
+        "en": "Distinguish reticulate and parallel venation by their visible patterns.",
+        "hi": "दिखाई देने वाले पैटर्न के आधार पर जालिकावत और समानांतर शिराविन्यास में अंतर करें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t03-lo2",
+      "statement_by_locale": {
+        "en": "Describe the basic difference between taproot and fibrous root systems.",
+        "hi": "मूसला जड़ और रेशेदार जड़ तंत्र के बीच मूल अंतर बताएँ।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t03-lo3",
+      "statement_by_locale": {
+        "en": "Relate cotyledon number to the introductory monocot/dicot grouping and describe the patterns presented in the chapter.",
+        "hi": "बीजपत्रों की संख्या को एकबीजपत्री/द्विबीजपत्री समूह से जोड़ें और अध्याय में बताए गए पैटर्न का वर्णन करें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-p35-38",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        35,
+        36,
+        37,
+        38
+      ],
+      "printed_pages": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "source_context": [
+        "PDF p.35 / printed p.17 describes veins, venation, reticulate and parallel patterns, using hibiscus, banana and grass leaf examples.",
+        "PDF p.36 / printed p.18 introduces taproot (one main root with side roots) and fibrous roots (a bunch of similar-sized thin roots).",
+        "PDF p.37 / printed p.19 notes the general relationship between reticulate venation and taproots, and parallel venation and fibrous roots.",
+        "PDF p.38 / printed p.20 compares chickpea and maize seeds, defines cotyledons, dicotyledons and monocotyledons, and states the common relation among seed type, venation and roots."
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "extraction_quality_note": "Tables/figures are interleaved in extracted text; visually reconcile labels, image direction and examples before approval."
+    },
+    {
+      "source_ref_id": "src-c2-hi-jigyasa-ch2-venation-roots-seeds",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT",
+      "note": "Verify Hindi term choices and examples against the matching Jigyasa source pages before claiming semantic parity."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t03",
+    "title_by_locale": {
+      "en": "Look for Patterns in Leaves, Roots and Seeds",
+      "hi": "पत्तियों, जड़ों और बीजों में पैटर्न पहचानें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t03-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1"
+        ],
+        "source_refs": [
+          "src-c2-en-p35-38",
+          "src-c2-hi-jigyasa-ch2-venation-roots-seeds"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "The pattern of veins is venation",
+            "paragraphs": [
+              "Leaves have thin lines called veins. The pattern formed by these veins is called venation. In some leaves, the veins form a net-like pattern; this is called reticulate venation. Hibiscus is the chapter's example.",
+              "In other leaves, veins run more or less side by side; this is called parallel venation. Banana and grass are the chapter's examples. Compare the pattern you can actually see rather than relying only on a plant's name."
+            ],
+            "key_point": "Net-like veins: reticulate. Veins running side by side: parallel."
+          },
+          "hi": {
+            "heading": "शिराओं के पैटर्न को शिराविन्यास कहते हैं",
+            "paragraphs": [
+              "पत्तियों में पतली रेखाएँ होती हैं जिन्हें शिराएँ कहते हैं। इन शिराओं से बनने वाले पैटर्न को शिराविन्यास कहते हैं। कुछ पत्तियों में शिराएँ जाल जैसा पैटर्न बनाती हैं; इसे जालिकावत शिराविन्यास कहते हैं। अध्याय में गुड़हल इसका उदाहरण है।",
+              "कुछ दूसरी पत्तियों में शिराएँ लगभग एक-दूसरे के समानांतर चलती हैं; इसे समानांतर शिराविन्यास कहते हैं। केले और घास की पत्तियाँ अध्याय के उदाहरण हैं। केवल पौधे के नाम पर निर्भर न रहें; वास्तविक पत्ती का पैटर्न देखें।"
+            ],
+            "key_point": "जाल जैसा पैटर्न: जालिकावत। साथ-साथ चलती शिराएँ: समानांतर।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo2"
+        ],
+        "source_refs": [
+          "src-c2-en-p35-38",
+          "src-c2-hi-jigyasa-ch2-venation-roots-seeds"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Two basic root patterns",
+            "paragraphs": [
+              "A taproot system has one main root, with smaller side roots branching from it. A fibrous root system has a bunch of thin roots of similar size growing from the base of the stem.",
+              "The chapter uses a mustard plant to illustrate a taproot and common grass to illustrate fibrous roots. Observe the structure carefully; do not dig up or damage plants unless a teacher has planned a safe, permitted activity."
+            ],
+            "callout": "Taproot: one main root with side roots. Fibrous roots: many similarly sized thin roots."
+          },
+          "hi": {
+            "heading": "जड़ों के दो मूल पैटर्न",
+            "paragraphs": [
+              "मूसला जड़ तंत्र में एक मुख्य जड़ होती है, जिससे छोटी-छोटी पार्श्व जड़ें निकलती हैं। रेशेदार जड़ तंत्र में तने के आधार से लगभग समान आकार की बहुत-सी पतली जड़ें निकलती हैं।",
+              "अध्याय में सरसों के पौधे से मूसला जड़ और सामान्य घास से रेशेदार जड़ों का उदाहरण दिया गया है। संरचना को ध्यान से देखें; शिक्षक की योजना और अनुमति के बिना पौधों को खोदें या नुकसान न पहुँचाएँ।"
+            ],
+            "callout": "मूसला जड़: एक मुख्य जड़ और पार्श्व जड़ें। रेशेदार जड़ें: लगभग समान आकार की अनेक पतली जड़ें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2",
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t03-venation-root-seed-map",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Create an original bilingual comparison: two leaf outlines for net-like vs parallel veins; two simplified root systems for taproot vs fibrous; two simple seed cutaway shapes showing two cotyledons vs one. Clear labels, high contrast, no copied NCERT illustration, avoid implying pattern guarantees without exceptions.",
+        "diagram_data": {
+          "panels": [
+            {
+              "id": "venation",
+              "title_by_locale": {
+                "en": "Leaf venation",
+                "hi": "पत्ती का शिराविन्यास"
+              },
+              "items": [
+                {
+                  "id": "reticulate",
+                  "label_by_locale": {
+                    "en": "Reticulate",
+                    "hi": "जालिकावत"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "Veins form a net-like pattern",
+                    "hi": "शिराएँ जाल जैसा पैटर्न बनाती हैं"
+                  },
+                  "example_by_locale": {
+                    "en": "Hibiscus",
+                    "hi": "गुड़हल"
+                  }
+                },
+                {
+                  "id": "parallel",
+                  "label_by_locale": {
+                    "en": "Parallel",
+                    "hi": "समानांतर"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "Veins run side by side",
+                    "hi": "शिराएँ साथ-साथ चलती हैं"
+                  },
+                  "example_by_locale": {
+                    "en": "Banana / grass",
+                    "hi": "केला / घास"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "roots",
+              "title_by_locale": {
+                "en": "Root systems",
+                "hi": "जड़ तंत्र"
+              },
+              "items": [
+                {
+                  "id": "taproot",
+                  "label_by_locale": {
+                    "en": "Taproot",
+                    "hi": "मूसला जड़"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "One main root with side roots",
+                    "hi": "एक मुख्य जड़ और पार्श्व जड़ें"
+                  },
+                  "example_by_locale": {
+                    "en": "Mustard",
+                    "hi": "सरसों"
+                  }
+                },
+                {
+                  "id": "fibrous",
+                  "label_by_locale": {
+                    "en": "Fibrous roots",
+                    "hi": "रेशेदार जड़ें"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "Many similarly sized thin roots",
+                    "hi": "लगभग समान आकार की अनेक पतली जड़ें"
+                  },
+                  "example_by_locale": {
+                    "en": "Grass",
+                    "hi": "घास"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "seeds",
+              "title_by_locale": {
+                "en": "Cotyledons in seeds",
+                "hi": "बीज में बीजपत्र"
+              },
+              "items": [
+                {
+                  "id": "dicot",
+                  "label_by_locale": {
+                    "en": "Dicot",
+                    "hi": "द्विबीजपत्री"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "Two cotyledons",
+                    "hi": "दो बीजपत्र"
+                  },
+                  "example_by_locale": {
+                    "en": "Chickpea",
+                    "hi": "चना"
+                  }
+                },
+                {
+                  "id": "monocot",
+                  "label_by_locale": {
+                    "en": "Monocot",
+                    "hi": "एकबीजपत्री"
+                  },
+                  "visual_pattern_by_locale": {
+                    "en": "One cotyledon",
+                    "hi": "एक बीजपत्र"
+                  },
+                  "example_by_locale": {
+                    "en": "Maize",
+                    "hi": "मक्का"
+                  }
+                }
+              ]
+            }
+          ],
+          "relationship_note_by_locale": {
+            "en": "The chapter presents a general pattern: dicot plants commonly have reticulate venation and taproots; monocot plants commonly have parallel venation and fibrous roots. Treat this as the introductory pattern in the lesson, not as a universal statement about every plant.",
+            "hi": "अध्याय में एक सामान्य पैटर्न बताया गया है: द्विबीजपत्री पौधों में प्रायः जालिकावत शिराविन्यास और मूसला जड़ होती है; एकबीजपत्री पौधों में प्रायः समानांतर शिराविन्यास और रेशेदार जड़ें होती हैं। इसे प्रारंभिक सामान्य पैटर्न समझें, हर पौधे पर लागू होने वाला सार्वभौमिक नियम नहीं।"
+          }
+        },
+        "alt_by_locale": {
+          "en": "An original three-panel diagram compares leaf venation, root systems and seed cotyledon number. It labels reticulate and parallel venation, taproot and fibrous roots, and dicot with two cotyledons versus monocot with one.",
+          "hi": "तीन भागों वाला मौलिक चित्र पत्ती के शिराविन्यास, जड़ तंत्र और बीजपत्रों की संख्या की तुलना करता है। इसमें जालिकावत/समानांतर शिराविन्यास, मूसला/रेशेदार जड़ें और दो बीजपत्रों वाला द्विबीजपत्री बनाम एक बीजपत्र वाला एकबीजपत्री दिखाया गया है।"
+        },
+        "caption_by_locale": {
+          "en": "These are the patterns and examples introduced in the chapter. Actual plants should still be observed carefully.",
+          "hi": "ये अध्याय में बताए गए प्रारंभिक पैटर्न और उदाहरण हैं। वास्तविक पौधों का सावधानी से अवलोकन करना फिर भी आवश्यक है।"
+        },
+        "provenance": {
+          "kind": "GENERATED_ORIGINAL",
+          "source_refs": [
+            "src-c2-en-p35-38",
+            "src-c2-hi-jigyasa-ch2-venation-roots-seeds"
+          ],
+          "source_text_quoted": false
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-b04",
+        "type": "activity",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2"
+        ],
+        "activity_kind": "safe_plant_pattern_observation",
+        "review_status": "NEEDS_REVIEW",
+        "instructions_by_locale": {
+          "en": [
+            "Observe permitted fallen leaves or plant pictures; do not damage living plants.",
+            "Sketch or describe the visible vein pattern and label it as net-like, parallel, or not yet sure.",
+            "Use a teacher-provided diagram or safe sample to compare a taproot and a fibrous root system.",
+            "Record whether the observation supports the introductory pattern in the diagram, without claiming one sample proves a universal rule."
+          ],
+          "hi": [
+            "अनुमति प्राप्त गिरी हुई पत्तियों या पौधों के चित्रों का अवलोकन करें; जीवित पौधों को नुकसान न पहुँचाएँ।",
+            "दिखाई देने वाले शिरा-पैटर्न का चित्र बनाएँ या वर्णन करें और उसे जाल जैसा, समानांतर या अभी निश्चित नहीं के रूप में लिखें।",
+            "मूसला जड़ और रेशेदार जड़ तंत्र की तुलना के लिए शिक्षक द्वारा दिए गए चित्र या सुरक्षित नमूने का उपयोग करें।",
+            "लिखें कि अवलोकन चित्र में बताए गए प्रारंभिक पैटर्न का समर्थन करता है या नहीं; एक नमूने से सार्वभौमिक नियम का दावा न करें।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "leaf_pattern",
+            "label_by_locale": {
+              "en": "Leaf vein pattern",
+              "hi": "पत्ती की शिराओं का पैटर्न"
+            }
+          },
+          {
+            "id": "root_pattern",
+            "label_by_locale": {
+              "en": "Root system observed",
+              "hi": "देखा गया जड़ तंत्र"
+            }
+          },
+          {
+            "id": "relationship",
+            "label_by_locale": {
+              "en": "What pattern did you notice?",
+              "hi": "आपने कौन-सा पैटर्न देखा?"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "Describe what you can see first. If the pattern is unclear, record that honestly instead of guessing.",
+          "hi": "पहले वही बताएँ जो दिखाई देता है। यदि पैटर्न स्पष्ट न हो, तो अनुमान लगाने के बजाय ईमानदारी से लिखें कि वह अभी स्पष्ट नहीं है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2",
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Venation is the pattern made by veins in a leaf.",
+              "Reticulate venation is net-like; parallel venation has veins running side by side.",
+              "A taproot has one main root with side roots; fibrous roots are many thin, similar-sized roots.",
+              "A cotyledon is a seed part; the chapter contrasts two cotyledons in chickpea with one in maize.",
+              "The chapter describes a general pattern linking dicot seeds with reticulate venation/taproots and monocot seeds with parallel venation/fibrous roots."
+            ],
+            "vocabulary": [
+              {
+                "term": "Venation",
+                "meaning": "The pattern formed by veins in a leaf."
+              },
+              {
+                "term": "Taproot",
+                "meaning": "A root system with one main root and smaller side roots."
+              },
+              {
+                "term": "Fibrous roots",
+                "meaning": "A group of many thin roots of similar size."
+              },
+              {
+                "term": "Cotyledon",
+                "meaning": "A seed part used in this chapter to distinguish one-cotyledon and two-cotyledon seeds."
+              },
+              {
+                "term": "Monocot / dicot",
+                "meaning": "The chapter's terms for plants with one / two cotyledons in the seed."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "पत्ती में शिराओं से बनने वाले पैटर्न को शिराविन्यास कहते हैं।",
+              "जालिकावत शिराविन्यास जाल जैसा होता है; समानांतर शिराविन्यास में शिराएँ साथ-साथ चलती हैं।",
+              "मूसला जड़ में एक मुख्य जड़ और पार्श्व जड़ें होती हैं; रेशेदार जड़ें समान आकार की अनेक पतली जड़ें होती हैं।",
+              "बीजपत्र बीज का एक भाग है; अध्याय चने के दो बीजपत्रों और मक्के के एक बीजपत्र की तुलना करता है।",
+              "अध्याय एक सामान्य पैटर्न बताता है: द्विबीजपत्री में प्रायः जालिकावत शिराविन्यास/मूसला जड़ और एकबीजपत्री में प्रायः समानांतर शिराविन्यास/रेशेदार जड़ें होती हैं।"
+            ],
+            "vocabulary": [
+              {
+                "term": "शिराविन्यास",
+                "meaning": "पत्ती में शिराओं से बनने वाला पैटर्न।"
+              },
+              {
+                "term": "मूसला जड़",
+                "meaning": "एक मुख्य जड़ तथा उससे निकलने वाली छोटी पार्श्व जड़ों वाला जड़ तंत्र।"
+              },
+              {
+                "term": "रेशेदार जड़ें",
+                "meaning": "लगभग समान आकार की अनेक पतली जड़ों का समूह।"
+              },
+              {
+                "term": "बीजपत्र",
+                "meaning": "बीज का वह भाग जिसके आधार पर इस अध्याय में एक और दो बीजपत्र वाले बीजों में अंतर बताया गया है।"
+              },
+              {
+                "term": "एकबीजपत्री / द्विबीजपत्री",
+                "meaning": "अध्याय में एक / दो बीजपत्र वाले पौधों के लिए प्रयुक्त शब्द।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t03",
+    "title_by_locale": {
+      "en": "Practise Leaves, Roots and Seeds",
+      "hi": "पत्तियों, जड़ों और बीजों का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice for this topic; not verbatim NCERT assessment questions.",
+      "hi": "इस विषय के लिए AI द्वारा तैयार अतिरिक्त अभ्यास; ये NCERT के मूल मूल्यांकन प्रश्नों के शब्दशः रूप नहीं हैं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t03-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Which leaf pattern is called reticulate venation?",
+          "hi": "पत्ती के किस पैटर्न को जालिकावत शिराविन्यास कहते हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Veins form a net-like pattern",
+              "hi": "शिराएँ जाल जैसा पैटर्न बनाती हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Veins are not visible at all",
+              "hi": "शिराएँ बिल्कुल दिखाई नहीं देतीं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "All veins run only around the edge",
+              "hi": "सभी शिराएँ केवल किनारे पर चलती हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The leaf has no veins",
+              "hi": "पत्ती में शिराएँ नहीं होतीं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Reticulate venation has a net-like vein pattern.",
+          "hi": "सही। जालिकावत शिराविन्यास में शिराएँ जाल जैसा पैटर्न बनाती हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which statements correctly describe the patterns introduced in this topic? Select all that apply.",
+          "hi": "इस विषय में बताए गए पैटर्न का सही वर्णन कौन-से कथन करते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Parallel venation has veins running side by side",
+              "hi": "समानांतर शिराविन्यास में शिराएँ साथ-साथ चलती हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A taproot system has one main root with side roots",
+              "hi": "मूसला जड़ तंत्र में एक मुख्य जड़ और पार्श्व जड़ें होती हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "A fibrous root system has many similar-sized thin roots",
+              "hi": "रेशेदार जड़ तंत्र में लगभग समान आकार की अनेक पतली जड़ें होती हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Reticulate venation means a leaf has no veins",
+              "hi": "जालिकावत शिराविन्यास का अर्थ है कि पत्ती में शिराएँ नहीं होतीं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Parallel venation, taproot and fibrous roots are described by those patterns; reticulate venation is net-like.",
+          "hi": "सही। समानांतर शिराविन्यास, मूसला जड़ और रेशेदार जड़ें बताए गए पैटर्न हैं; जालिकावत शिराविन्यास जाल जैसा होता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "The chapter compares chickpea seeds with two cotyledons and maize seeds with one cotyledon.",
+          "hi": "अध्याय में चने के दो बीजपत्र वाले बीज और मक्के के एक बीजपत्र वाले बीज की तुलना की गई है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. Chickpea is the two-cotyledon example; maize is the one-cotyledon example.",
+          "hi": "सही। चना दो बीजपत्रों का उदाहरण है और मक्का एक बीजपत्र का उदाहरण है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2",
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each term with its description.",
+          "hi": "हर शब्द को उसके वर्णन से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "reticulate",
+            "label_by_locale": {
+              "en": "Reticulate venation",
+              "hi": "जालिकावत शिराविन्यास"
+            }
+          },
+          {
+            "id": "parallel",
+            "label_by_locale": {
+              "en": "Parallel venation",
+              "hi": "समानांतर शिराविन्यास"
+            }
+          },
+          {
+            "id": "taproot",
+            "label_by_locale": {
+              "en": "Taproot",
+              "hi": "मूसला जड़"
+            }
+          },
+          {
+            "id": "fibrous",
+            "label_by_locale": {
+              "en": "Fibrous roots",
+              "hi": "रेशेदार जड़ें"
+            }
+          },
+          {
+            "id": "cotyledon",
+            "label_by_locale": {
+              "en": "Cotyledon",
+              "hi": "बीजपत्र"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "net",
+            "label_by_locale": {
+              "en": "Net-like veins",
+              "hi": "जाल जैसा शिरा-पैटर्न"
+            }
+          },
+          {
+            "id": "sidebyside",
+            "label_by_locale": {
+              "en": "Veins running side by side",
+              "hi": "साथ-साथ चलती शिराएँ"
+            }
+          },
+          {
+            "id": "main",
+            "label_by_locale": {
+              "en": "One main root and side roots",
+              "hi": "एक मुख्य जड़ और पार्श्व जड़ें"
+            }
+          },
+          {
+            "id": "many",
+            "label_by_locale": {
+              "en": "Many similar-sized thin roots",
+              "hi": "लगभग समान आकार की अनेक पतली जड़ें"
+            }
+          },
+          {
+            "id": "seedpart",
+            "label_by_locale": {
+              "en": "A part of a seed",
+              "hi": "बीज का एक भाग"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "reticulate",
+            "right_id": "net"
+          },
+          {
+            "left_id": "parallel",
+            "right_id": "sidebyside"
+          },
+          {
+            "left_id": "taproot",
+            "right_id": "main"
+          },
+          {
+            "left_id": "fibrous",
+            "right_id": "many"
+          },
+          {
+            "left_id": "cotyledon",
+            "right_id": "seedpart"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 5,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each term names a distinct leaf, root or seed feature.",
+          "hi": "हर शब्द पत्ती, जड़ या बीज की एक अलग विशेषता बताता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A seed part used to distinguish one-cotyledon and two-cotyledon seeds is a ______.",
+          "hi": "एक और दो बीजपत्र वाले बीजों में अंतर बताने के लिए उपयोग होने वाले बीज के भाग को ______ कहते हैं।"
+        },
+        "accepted_answers": {
+          "en": [
+            "cotyledon"
+          ],
+          "hi": [
+            "बीजपत्र"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not remove meaningful Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The term is cotyledon.",
+          "hi": "इस भाग को बीजपत्र कहते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2",
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "visual_asset_ref": "c6-sci-ch02-t03-venation-root-seed-map",
+        "prompt_by_locale": {
+          "en": "According to the original comparison diagram, which seed example has two cotyledons?",
+          "hi": "मौलिक तुलना-चित्र के अनुसार किस बीज के उदाहरण में दो बीजपत्र होते हैं?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Maize",
+              "hi": "मक्का"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Chickpea",
+              "hi": "चना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Grass",
+              "hi": "घास"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Banana leaf",
+              "hi": "केले की पत्ती"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Chickpea is the two-cotyledon example in the chapter.",
+          "hi": "सही। अध्याय में चना दो बीजपत्रों का उदाहरण है।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The referenced original diagram is still structured draft data, not a reviewed student visual.",
+            "hi": "संदर्भित मौलिक चित्र अभी संरचित मसौदा डेटा है, समीक्षित विद्यार्थी-दृश्य नहीं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Describe one difference between reticulate and parallel venation, and one difference between taproot and fibrous roots.",
+          "hi": "जालिकावत और समानांतर शिराविन्यास में एक अंतर तथा मूसला जड़ और रेशेदार जड़ों में एक अंतर बताएँ।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Reticulate veins form a net-like pattern; parallel veins run side by side.",
+              "A taproot has one main root with side roots; fibrous roots are many similar-sized thin roots."
+            ],
+            "sample_answer": "Reticulate venation looks net-like, while parallel venation has veins running side by side. A taproot has one main root with side roots, while fibrous roots are many thin roots of similar size."
+          },
+          "hi": {
+            "key_points": [
+              "जालिकावत शिराएँ जाल बनाती हैं; समानांतर शिराएँ साथ-साथ चलती हैं।",
+              "मूसला जड़ में एक मुख्य जड़ और पार्श्व जड़ें होती हैं; रेशेदार जड़ें लगभग समान आकार की अनेक पतली जड़ें होती हैं।"
+            ],
+            "sample_answer": "जालिकावत शिराविन्यास जाल जैसा होता है, जबकि समानांतर शिराविन्यास में शिराएँ साथ-साथ चलती हैं। मूसला जड़ में एक मुख्य जड़ और पार्श्व जड़ें होती हैं, जबकि रेशेदार जड़ें समान आकार की अनेक पतली जड़ें होती हैं।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: correctly distinguishes the two venation patterns.",
+              "1 point: correctly distinguishes the two root systems."
+            ],
+            "hi": [
+              "1 अंक: दोनों शिराविन्यास पैटर्न में सही अंतर बताता है।",
+              "1 अंक: दोनों जड़ तंत्रों में सही अंतर बताता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t03-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t03-lo1",
+          "c6-sci-ch02-t03-lo2",
+          "c6-sci-ch02-t03-lo3"
+        ],
+        "scenario_by_locale": {
+          "en": "A learner observes a plant whose leaf veins form a net-like pattern. In a permitted teacher-guided sample, its root system has one main root with smaller side roots.",
+          "hi": "एक विद्यार्थी ऐसे पौधे का अवलोकन करता है जिसकी पत्ती की शिराएँ जाल जैसा पैटर्न बनाती हैं। शिक्षक द्वारा अनुमति प्राप्त नमूने में उसकी जड़ प्रणाली में एक मुख्य जड़ और छोटी पार्श्व जड़ें हैं।"
+        },
+        "prompt_by_locale": {
+          "en": "Which description best matches the patterns observed?",
+          "hi": "देखे गए पैटर्न से कौन-सा वर्णन सबसे अधिक मेल खाता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Parallel venation and fibrous roots",
+              "hi": "समानांतर शिराविन्यास और रेशेदार जड़ें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Reticulate venation and a taproot",
+              "hi": "जालिकावत शिराविन्यास और मूसला जड़"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "No venation and no roots",
+              "hi": "कोई शिराविन्यास नहीं और जड़ें भी नहीं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Two cotyledons can be confirmed from these two observations alone",
+              "hi": "केवल इन दो अवलोकनों से दो बीजपत्र होना निश्चित रूप से सिद्ध हो जाता है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "b"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. The observed leaf is reticulate and the observed root pattern is a taproot. These features alone do not directly show the seed's cotyledon count.",
+          "hi": "सही। पत्ती में जालिकावत पैटर्न और जड़ में मूसला जड़ देखी गई है। केवल इन विशेषताओं से बीजपत्रों की संख्या सीधे दिखाई नहीं देती।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t03-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_rendering_registry_linked": true,
+    "question_components_implemented": false,
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi source page alignment and terminology have not been verified.",
+      "English source tables and figures must be reconciled visually before claiming exhaustive coverage.",
+      "The original diagram needs rendering/accessibility review; q06 is blocked from student rendering.",
+      "Explanations and practice questions are authored summaries, not exhaustive or verbatim source transcription."
+    ],
+    "generated_question_types": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch02-t03-q08"
+        ]
+      }
+    ]
+  },
+  "next_steps": [
+    "Verify the corresponding Jigyasa chapter pages and Hindi botanical terms.",
+    "Visually reconcile English source pages 35-38 against figures of venation, roots and seeds.",
+    "Render and review the original diagram; keep q06 blocked until approved.",
+    "After Chapter 2 is complete, validate all topic files together and update the single chapter-level checkpoint issue."
+  ]
+}

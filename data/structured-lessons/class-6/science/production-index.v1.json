@@ -37,20 +37,20 @@
     "Generated explanations, diagrams and practice questions are authored learning aids, not verbatim NCERT text or NCERT-provided assessment questions.",
     "V3 source images stay review-only until checked for semantic fit, source fidelity, alt text, provenance, rights and approval. Full-page source previews containing English text are editor-only and must not render as student visuals in Hindi mode.",
     "Generating a lesson does not establish source completeness, fact-checking, bilingual approval or publication eligibility.",
-    "After every newly generated topic lesson, commit the lesson JSON first, then immediately update this progress index with the latest commit/path, status and exact next action.",
+    "Do not commit each topic during active batch authoring because commits can trigger builds/actions. Stage topic JSONs as Git blobs/trees without moving branch refs; update the persistent GitHub resume issue once per completed chapter with the staged tree SHA, per-type counts, validation status and next action; create a deliberate commit only when the user-requested batch is ready.",
     "Work on content artifacts only unless UI implementation is separately requested. Preserve existing application data and workflows."
   ],
   "production_summary": {
     "chapters_total": 12,
-    "topics_generated": 3,
+    "topics_generated": 39,
     "topics_reviewed": 0,
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
-    "lessons_committed": 3,
-    "last_completed_authoring_step": "Generated three draft bilingual lessons for Chapter 1 with 24 questions and validated the data structure: valid JSON, no missing en/hi locale fields, no duplicate question IDs, no renderer contract mismatches, and no answer-reference errors. Source fidelity, semantic bilingual review, visual review and app implementation are still pending.",
-    "current_chapter_number": 1,
-    "current_topic_number": 3,
-    "next_action": "Review source-page and visual alignment for all Chapter 1 topics, replace/block unapproved visual-question assets, and conduct semantic EN/HI review before any lesson can be considered approved.",
+    "lessons_committed": 39,
+    "last_completed_authoring_step": "Chapters 2–6 are prepared for one consolidated commit: 36 bilingual draft lessons and 288 questions across those five chapters (36 per registered question type). Including earlier Chapter 1 drafts, the prepared inventory is 39 topics and 312 questions (39 per type). Source, science, Hindi semantic and visual review remain pending.",
+    "current_chapter_number": 6,
+    "current_topic_number": 9,
+    "next_action": "Map Chapter 7 from the actual numbered English and Hindi headings before choosing lesson count. Reconcile Chapters 2–6 against rendered official PDFs before approval or publishing.",
     "question_counts_by_chapter": [
       {
         "chapter_number": 1,
@@ -68,33 +68,163 @@
         },
         "topic_count_with_questions": 3,
         "topics_generated": 3,
-        "topics_approved": 0
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_EARLIER_IN_ERROR"
+      },
+      {
+        "chapter_number": 2,
+        "chapter_title_en": "Diversity in the Living World",
+        "total_questions_generated": 56,
+        "counts_by_type": {
+          "multiple_choice": 7,
+          "multiple_select": 7,
+          "true_false": 7,
+          "matching": 7,
+          "fill_blank": 7,
+          "image_observation": 7,
+          "short_answer": 7,
+          "scenario_based": 7
+        },
+        "topic_count_with_questions": 7,
+        "topics_generated": 7,
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
+      },
+      {
+        "chapter_number": 3,
+        "chapter_title_en": "Mindful Eating: A Path to a Healthy Body",
+        "total_questions_generated": 64,
+        "counts_by_type": {
+          "multiple_choice": 8,
+          "multiple_select": 8,
+          "true_false": 8,
+          "matching": 8,
+          "fill_blank": 8,
+          "image_observation": 8,
+          "short_answer": 8,
+          "scenario_based": 8
+        },
+        "topic_count_with_questions": 8,
+        "topics_generated": 8,
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
+      },
+      {
+        "chapter_number": 4,
+        "chapter_title_en": "Exploring Magnets",
+        "total_questions_generated": 40,
+        "counts_by_type": {
+          "multiple_choice": 5,
+          "multiple_select": 5,
+          "true_false": 5,
+          "matching": 5,
+          "fill_blank": 5,
+          "image_observation": 5,
+          "short_answer": 5,
+          "scenario_based": 5
+        },
+        "topic_count_with_questions": 5,
+        "topics_generated": 5,
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
+      },
+      {
+        "chapter_number": 5,
+        "chapter_title_en": "Measurement of Length and Motion",
+        "total_questions_generated": 56,
+        "counts_by_type": {
+          "multiple_choice": 7,
+          "multiple_select": 7,
+          "true_false": 7,
+          "matching": 7,
+          "fill_blank": 7,
+          "image_observation": 7,
+          "short_answer": 7,
+          "scenario_based": 7
+        },
+        "topic_count_with_questions": 7,
+        "topics_generated": 7,
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
+      },
+      {
+        "chapter_number": 6,
+        "chapter_title_en": "Materials Around Us",
+        "total_questions_generated": 72,
+        "counts_by_type": {
+          "multiple_choice": 9,
+          "multiple_select": 9,
+          "true_false": 9,
+          "matching": 9,
+          "fill_blank": 9,
+          "image_observation": 9,
+          "short_answer": 9,
+          "scenario_based": 9
+        },
+        "topic_count_with_questions": 9,
+        "topics_generated": 9,
+        "topics_approved": 0,
+        "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
       }
     ],
     "content_integrity_check": {
-      "status": "PASS",
+      "status": "PASS_WITH_REVIEW_BLOCKERS",
       "performed_date": "2026-10-15",
-      "scope": "Three Chapter 1 topic JSON files in GitHub main",
-      "method": "Ad hoc structural check of parsed JSON, bilingual locale values, unique question IDs, question-to-renderer contract references, answer option/pair references, question counts and index totals. This is not a committed CI test suite or human subject-matter approval.",
+      "scope": "Chapter 6: nine generated lesson JSONs, structurally checked before the combined Chapter 2–6 commit",
+      "method": "Parsed lesson records and checked question IDs/counts, checked en/hi prompts/feedback/options, registry renderer IDs, answer-option references, matching references and image-observation gates. Structural checks only.",
       "results": {
-        "lesson_json_files_valid": 3,
-        "topics_checked": 3,
-        "questions_checked": 24,
-        "unique_question_ids": 24,
-        "learner_visible_locale_field_gaps": 0,
-        "rendering_contract_mismatches": 0,
+        "lesson_json_files_valid": 9,
+        "topics_checked": 9,
+        "questions_checked": 72,
+        "unique_question_ids": 72,
+        "locale_gaps_in_checked_prompt_feedback_options": 0,
+        "renderer_contract_mismatches": 0,
         "answer_reference_errors": 0,
+        "matching_reference_errors": 0,
         "question_type_count_mismatches": 0,
+        "counts_by_type": {
+          "multiple_choice": 9,
+          "multiple_select": 9,
+          "true_false": 9,
+          "matching": 9,
+          "fill_blank": 9,
+          "image_observation": 9,
+          "short_answer": 9,
+          "scenario_based": 9
+        },
+        "image_observation_questions_blocked": 9,
         "index_total_matches": true
       },
       "not_checked": [
-        "NCERT source completeness/exhaustiveness",
-        "Rendered PDF visual fidelity and reading-order issues",
-        "Hindi source page mapping and paragraph-by-paragraph fidelity",
-        "Human semantic translation and scientific correctness review",
-        "Rendered diagram correctness/accessibility and student asset approval",
-        "Runtime rendering components and language-switch behavior"
+        "Rendered source completeness and visual fidelity",
+        "Exact EN/HI page boundaries and reading order",
+        "Hindi scientific terminology and semantic parity",
+        "Scientific fact-check and activity-safety review",
+        "Diagram rendering/accessibility approval",
+        "Implemented Web/Android question renderers and state-preserving global language switching"
       ]
+    },
+    "topics_staged": 0,
+    "lessons_staged": 0,
+    "batch_question_counts": {
+      "total_questions_prepared": 312,
+      "counts_by_type": {
+        "multiple_choice": 39,
+        "multiple_select": 39,
+        "true_false": 39,
+        "matching": 39,
+        "fill_blank": 39,
+        "image_observation": 39,
+        "short_answer": 39,
+        "scenario_based": 39
+      },
+      "status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+      "chapter1_storage": "COMMITTED_TO_MAIN_EARLIER_IN_ERROR",
+      "chapter2_storage": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+      "chapter3_storage": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+      "chapter4_storage": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+      "chapter5_storage": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+      "chapter6_storage": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING"
     }
   },
   "chapters": [
@@ -261,41 +391,1915 @@
       "number": 2,
       "title_en": "Diversity in the Living World",
       "title_hi": "सजीव जगत में विविधता",
-      "state": "NOT_STARTED",
-      "topic_plan_state": "PENDING_SOURCE_AUDIT",
-      "topics": []
+      "state": "IN_PROGRESS_REVIEW_PENDING",
+      "topic_plan_state": "DRAFT_AUTHORING_COMPLETE_SOURCE_REVIEW_PENDING",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch02-t01",
+          "title_en": "Noticing the Variety of Life",
+          "title_hi": "जीव-जगत की विविधता को पहचानना",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-01-noticing-the-variety-of-life.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "084fb3925ca008a01b52fc94931a0aecb069eff2",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source page mapping and English page/table/figure reconciliation pending; diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch02-t02",
+          "title_en": "Grouping Plants by Observable Features",
+          "title_hi": "दिखाई देने वाली विशेषताओं के आधार पर पौधों का समूह बनाना",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-02-grouping-plants-by-observable-features.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "120f4486b7f89dd0a3c27330290bdcedd2b0e4f2",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source mapping and English table/figure reconciliation pending; diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch02-t03",
+          "title_en": "Leaf Venation, Roots and Seeds",
+          "title_hi": "पत्तियों का शिराविन्यास, जड़ें और बीज",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-03-leaf-venation-roots-and-seeds.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "9c8258898ddb06dd888ac98ca1cd08c01b4c19df",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi terminology/page mapping and English figure/table reconciliation pending; diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 4,
+          "topic_id": "c6-sci-ch02-t04",
+          "title_en": "Grouping Animals by Movement",
+          "title_hi": "गति के आधार पर जानवरों का समूह बनाना",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-04-grouping-animals-by-movement.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "cbdf46997d3e9a2a74c3f752c22823d62cd70291",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source mapping and English table/illustration reconciliation pending; diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 5,
+          "topic_id": "c6-sci-ch02-t05",
+          "title_en": "Adaptations in Different Surroundings",
+          "title_hi": "अलग-अलग परिवेशों में अनुकूलन",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-05-adaptations-in-different-surroundings.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "033faee56887c57d0a9a1d93e80e018037fce6db",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source alignment and English visual/page reconciliation pending; original diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 6,
+          "topic_id": "c6-sci-ch02-t06",
+          "title_en": "Habitats on Land and in Water",
+          "title_hi": "ज़मीन और पानी के आवास",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-06-habitats-on-land-and-in-water.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "9f932336cef20caf5fda4539e6c8ee33700028d4",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source alignment and English passage/page review pending; habitat diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 7,
+          "topic_id": "c6-sci-ch02-t07",
+          "title_en": "Protecting Biodiversity and Sacred Groves",
+          "title_hi": "जैव-विविधता और पवित्र उपवनों की रक्षा",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-02/topic-07-protecting-biodiversity-and-sacred-groves.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "ee1aa6a08c697cf846d2d17aa1bc8e10e2d602f9",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Hindi source alignment and English page/figure reconciliation pending; diagram and image-observation question are blocked pending visual review.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        }
+      ],
+      "topics_generated": 7,
+      "question_count_generated": 56,
+      "question_type_counts_cumulative": {
+        "multiple_choice": 7,
+        "multiple_select": 7,
+        "true_false": 7,
+        "matching": 7,
+        "fill_blank": 7,
+        "image_observation": 7,
+        "short_answer": 7,
+        "scenario_based": 7
+      },
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "chapter_source_review": "NOT_COMPLETE",
+      "chapter_visual_review": "NOT_COMPLETE",
+      "human_approval": "NOT_REVIEWED",
+      "source_coverage_path": "data/structured-lessons/class-6/science/chapter-02/source-coverage.v1.json",
+      "source_coverage_status": "NUMBERED_TOPIC_MAP_DRAFT_SOURCE_INVENTORY_RECORDED_RENDERED_PDF_RECONCILIATION_PENDING"
     },
     {
       "number": 3,
       "title_en": "Mindful Eating: A Path to a Healthy Body",
-      "title_hi": "उचित आहार— स्वस्थ शरीर का आधार",
-      "state": "NOT_STARTED",
-      "topic_plan_state": "PENDING_SOURCE_AUDIT",
-      "topics": []
+      "title_hi": "उचित आहार—स्वस्थ शरीर का आधार",
+      "state": "IN_PROGRESS_REVIEW_PENDING",
+      "topic_plan_state": "DERIVED_FROM_NUMBERED_SOURCE_SECTIONS_8_TOPICS_SOURCE_REVIEW_PENDING",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch03-t01",
+          "title_en": "What Do We Eat?",
+          "title_hi": "हम क्या खाते हैं?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-01-what-do-we-eat.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "c82e7467322dbdc3649363d7a80ab2084168cf20",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              53,
+              54
+            ],
+            "hi": [
+              51,
+              52
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              35,
+              36
+            ],
+            "hi": [
+              35,
+              36
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch03-t02",
+          "title_en": "Food in Different Regions",
+          "title_hi": "विभिन्न क्षेत्रों में भोजन",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-02-food-in-different-regions.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "c522f06fd1b20dbb667ba4a1658ea1183e092b4a",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              54,
+              55
+            ],
+            "hi": [
+              52,
+              53
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              36,
+              37
+            ],
+            "hi": [
+              36,
+              37
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch03-t03",
+          "title_en": "How Cooking Practices Have Changed",
+          "title_hi": "भोजन पकाने की पद्धतियों में बदलाव",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-03-changing-cooking-practices.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "72c4bda58a8ba933b260285083d66a25e1cf6519",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              56,
+              57
+            ],
+            "hi": [
+              53,
+              55
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              38,
+              39
+            ],
+            "hi": [
+              37,
+              39
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 4,
+          "topic_id": "c6-sci-ch03-t04",
+          "title_en": "What Are the Components of Food?",
+          "title_hi": "भोजन के घटक क्या हैं?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-04-components-of-food.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "7135880b2872f75b79f3e5555e51757854b6e0be",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              57,
+              65
+            ],
+            "hi": [
+              55,
+              63
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              39,
+              47
+            ],
+            "hi": [
+              39,
+              47
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 5,
+          "topic_id": "c6-sci-ch03-t05",
+          "title_en": "How to Test Different Components of Food",
+          "title_hi": "भोजन के विभिन्न घटकों का परीक्षण",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-05-testing-components-of-food.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "590ac52646930b9d7a2405642e03fee78a257aa4",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              66,
+              68
+            ],
+            "hi": [
+              63,
+              66
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              48,
+              50
+            ],
+            "hi": [
+              47,
+              50
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 6,
+          "topic_id": "c6-sci-ch03-t06",
+          "title_en": "Balanced Diet and Food Labels",
+          "title_hi": "संतुलित आहार और खाद्य लेबल",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-06-balanced-diet-and-food-labels.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "35753f929494f3a7bf90073090b17999462be270",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              69,
+              71
+            ],
+            "hi": [
+              67,
+              69
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              51,
+              53
+            ],
+            "hi": [
+              51,
+              53
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 7,
+          "topic_id": "c6-sci-ch03-t07",
+          "title_en": "Millets: Nutrition-rich Cereals",
+          "title_hi": "मिलेट—पोषक अनाज",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-07-millets-nutrition-rich-cereals.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "7e09057bdfea4ce704029408aa5d2901ed7182d1",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              71,
+              72
+            ],
+            "hi": [
+              68,
+              69
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              53,
+              54
+            ],
+            "hi": [
+              52,
+              53
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 8,
+          "topic_id": "c6-sci-ch03-t08",
+          "title_en": "Food Miles: From Farm to Our Plate",
+          "title_hi": "खाद्य मील—खेत से हमारी थाली तक",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-08-food-miles-farm-to-plate.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_AND_HUMAN_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "faf5c9db38191dd9c2b4cfc009df7063ccb09657",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "source_pdf_pages": {
+            "en": [
+              72,
+              73
+            ],
+            "hi": [
+              69,
+              71
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              54,
+              55
+            ],
+            "hi": [
+              53,
+              55
+            ]
+          },
+          "blocker": "Rendered source reconciliation, Hindi semantic review and visual QA remain pending; image-observation question stays blocked until the diagram is reviewed.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        }
+      ],
+      "topics_generated": 8,
+      "question_count_generated": 64,
+      "question_type_counts_cumulative": {
+        "multiple_choice": 8,
+        "multiple_select": 8,
+        "true_false": 8,
+        "matching": 8,
+        "fill_blank": 8,
+        "image_observation": 8,
+        "short_answer": 8,
+        "scenario_based": 8
+      },
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "chapter_source_review": "NOT_COMPLETE_RENDERED_SOURCE_COMPARE_REQUIRED",
+      "chapter_visual_review": "NOT_COMPLETE_10_FIGURES_NEED_REVIEW",
+      "human_approval": "NOT_REVIEWED"
     },
     {
       "number": 4,
       "title_en": "Exploring Magnets",
       "title_hi": "चुंबकों को जानें",
-      "state": "NOT_STARTED",
-      "topic_plan_state": "PENDING_SOURCE_AUDIT",
-      "topics": []
+      "state": "IN_PROGRESS_REVIEW_PENDING",
+      "topic_plan_state": "DERIVED_FROM_FIVE_NUMBERED_SECTIONS_4_1_TO_4_5_SOURCE_REVIEW_PENDING",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch04-t01",
+          "title_en": "Magnetic and Non-magnetic Materials",
+          "title_hi": "चुंबकीय और अचुंबकीय पदार्थ",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-04/topic-01-magnetic-and-non-magnetic-materials.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING_VISUAL_QA",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "3141e08a7bddbd85a224092524f113a0c4dd686c",
+          "source_pdf_pages": {
+            "en": [
+              80,
+              82
+            ],
+            "hi": [
+              76,
+              78
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              62,
+              64
+            ],
+            "hi": [
+              60,
+              62
+            ]
+          },
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered EN/HI source comparison, semantic terminology review and visual QA remain pending. The image-observation item remains blocked until its visual is approved.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch04-t02",
+          "title_en": "Poles of a Magnet",
+          "title_hi": "चुंबक के ध्रुव",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-04/topic-02-poles-of-a-magnet.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING_VISUAL_QA",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "4071f421afa516a27d98af7f7fcf065fb55996c1",
+          "source_pdf_pages": {
+            "en": [
+              82,
+              83
+            ],
+            "hi": [
+              78,
+              79
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              64,
+              65
+            ],
+            "hi": [
+              62,
+              63
+            ]
+          },
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered EN/HI source comparison, semantic terminology review and visual QA remain pending. The image-observation item remains blocked until its visual is approved.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch04-t03",
+          "title_en": "Finding Directions and Making a Compass",
+          "title_hi": "दिशाएँ ज्ञात करना और दिक्सूचक बनाना",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-04/topic-03-finding-directions-and-making-a-compass.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING_VISUAL_QA",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "01d9722823085829bfb402e609d4d267890221a0",
+          "source_pdf_pages": {
+            "en": [
+              83,
+              85
+            ],
+            "hi": [
+              79,
+              81
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              65,
+              67
+            ],
+            "hi": [
+              63,
+              65
+            ]
+          },
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered EN/HI source comparison, semantic terminology review and visual QA remain pending. The image-observation item remains blocked until its visual is approved.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 4,
+          "topic_id": "c6-sci-ch04-t04",
+          "title_en": "Attraction and Repulsion between Magnets",
+          "title_hi": "चुंबकों के बीच आकर्षण और प्रतिकर्षण",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-04/topic-04-attraction-and-repulsion-between-magnets.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING_VISUAL_QA",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "4c65de7783df579adcce95249913f6f221c62495",
+          "source_pdf_pages": {
+            "en": [
+              86,
+              89
+            ],
+            "hi": [
+              82,
+              85
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              68,
+              71
+            ],
+            "hi": [
+              66,
+              69
+            ]
+          },
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered EN/HI source comparison, semantic terminology review and visual QA remain pending. The image-observation item remains blocked until its visual is approved.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 5,
+          "topic_id": "c6-sci-ch04-t05",
+          "title_en": "Fun with Magnets and Magnet Care",
+          "title_hi": "चुंबकों के साथ मनोरंजन और उनकी देखभाल",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-04/topic-05-fun-with-magnets-and-magnet-care.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING_VISUAL_QA",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "325df88d636acf6380407b02c8b921187b7bcef1",
+          "source_pdf_pages": {
+            "en": [
+              89,
+              96
+            ],
+            "hi": [
+              85,
+              92
+            ]
+          },
+          "source_printed_pages": {
+            "en": [
+              71,
+              78
+            ],
+            "hi": [
+              69,
+              76
+            ]
+          },
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered EN/HI source comparison, semantic terminology review and visual QA remain pending. The image-observation item remains blocked until its visual is approved.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        }
+      ],
+      "topics_generated": 5,
+      "question_count_generated": 40,
+      "question_type_counts_cumulative": {
+        "multiple_choice": 5,
+        "multiple_select": 5,
+        "true_false": 5,
+        "matching": 5,
+        "fill_blank": 5,
+        "image_observation": 5,
+        "short_answer": 5,
+        "scenario_based": 5
+      },
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "chapter_source_review": "PENDING_RENDERED_EN_HI_SOURCE_COMPARISON",
+      "chapter_visual_review": "PENDING_REVIEW_OF_18_NUMBERED_FIGURES_AND_GENERATED_VISUALS",
+      "human_approval": "NOT_REVIEWED"
     },
     {
       "number": 5,
       "title_en": "Measurement of Length and Motion",
       "title_hi": "लंबाई एवं गति का मापन",
-      "state": "NOT_STARTED",
-      "topic_plan_state": "PENDING_SOURCE_AUDIT",
-      "topics": []
+      "state": "IN_PROGRESS_REVIEW_PENDING",
+      "topic_plan_state": "DRAFT_AUTHORING_COMPLETE_SOURCE_REVIEW_PENDING",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch05-t01",
+          "title_en": "How Do We Measure?",
+          "title_hi": "हम कैसे मापते हैं?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-01-how-do-we-measure.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch05-t02",
+          "title_en": "Standard Units",
+          "title_hi": "मानक मात्रक",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-02-standard-units.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch05-t03",
+          "title_en": "Correct Way of Measuring Length",
+          "title_hi": "लंबाई मापने की सही विधि",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-03-correct-way-of-measuring-length.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 4,
+          "topic_id": "c6-sci-ch05-t04",
+          "title_en": "Measuring the Length of a Curved Line",
+          "title_hi": "किसी वक्र रेखा की लंबाई मापना",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-04-measuring-a-curved-line.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 5,
+          "topic_id": "c6-sci-ch05-t05",
+          "title_en": "Describing Position",
+          "title_hi": "स्थिति का निर्धारण",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-05-describing-position.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 6,
+          "topic_id": "c6-sci-ch05-t06",
+          "title_en": "Motion and Rest",
+          "title_hi": "गति और विराम",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-06-motion-and-rest.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 7,
+          "topic_id": "c6-sci-ch05-t07",
+          "title_en": "Types of Motion",
+          "title_hi": "गति के प्रकार",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-05/topic-07-types-of-motion.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "structural_validation_status": "PASS_WITH_REVIEW_BLOCKERS",
+          "blocker": "Rendered source-page reconciliation, semantic bilingual review, scientific validation and accessible visual review pending.",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        }
+      ],
+      "chapter_source_review": "NOT_COMPLETE",
+      "chapter_visual_review": "NOT_COMPLETE",
+      "human_approval": "NOT_REVIEWED",
+      "question_count_generated": 56,
+      "question_type_counts_cumulative": {
+        "multiple_choice": 7,
+        "multiple_select": 7,
+        "true_false": 7,
+        "matching": 7,
+        "fill_blank": 7,
+        "image_observation": 7,
+        "short_answer": 7,
+        "scenario_based": 7
+      },
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "topics_generated": 7,
+      "source_coverage_path": "data/structured-lessons/class-6/science/chapter-05/source-coverage.v1.json",
+      "source_coverage_status": "NUMBERED_SECTION_MAP_COMPLETE_RENDERED_SOURCE_AND_HUMAN_REVIEW_PENDING"
     },
     {
       "number": 6,
       "title_en": "Materials Around Us",
       "title_hi": "हमारे आस-पास की सामग्री",
-      "state": "NOT_STARTED",
-      "topic_plan_state": "PENDING_SOURCE_AUDIT",
-      "topics": []
+      "state": "IN_PROGRESS_REVIEW_PENDING",
+      "topic_plan_state": "DRAFT_AUTHORING_COMPLETE_SOURCE_REVIEW_PENDING",
+      "topics": [
+        {
+          "number": 1,
+          "topic_id": "c6-sci-ch06-t01",
+          "title_en": "Observing Objects Around Us",
+          "title_hi": "हमारे आस-पास की वस्तुओं का अवलोकन",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-01-observing-objects-around-us.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "35644df1a4c499579a0cce5327914f670597bd04",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 2,
+          "topic_id": "c6-sci-ch06-t02",
+          "title_en": "How to Group Materials?",
+          "title_hi": "सामग्रियों को समूहों में कैसे बाँटें?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-02-how-to-group-materials.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "31b8ef44cf0e3e91d89bda87ef116eb4d4d75786",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 3,
+          "topic_id": "c6-sci-ch06-t03",
+          "title_en": "Appearance and Lustre of Materials",
+          "title_hi": "सामग्रियों का स्वरूप और चमक",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-03-appearance-and-lustre.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "1865f56d619d248ccb8ee860dba1f2681ef9bc7e",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 4,
+          "topic_id": "c6-sci-ch06-t04",
+          "title_en": "Which Materials Are Hard?",
+          "title_hi": "कौन-सी सामग्रियाँ कठोर होती हैं?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-04-hard-and-soft-materials.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "0bbb80710172b4423b020b43e1c1404fa89427b2",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 5,
+          "topic_id": "c6-sci-ch06-t05",
+          "title_en": "Materials We Can See Through",
+          "title_hi": "जिन सामग्रियों के आर-पार देखा जा सकता है",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-05-transparent-translucent-and-opaque.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "2a775d5efe0dbeadee1204e28bd72430771f0d57",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 6,
+          "topic_id": "c6-sci-ch06-t06",
+          "title_en": "What Is Soluble in Water?",
+          "title_hi": "जल में क्या घुलनशील है?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-06-soluble-and-insoluble-materials.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "6ef78720191f82b099ff7e93b6aee27a7b718570",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 7,
+          "topic_id": "c6-sci-ch06-t07",
+          "title_en": "How Heavy or Light? Mass",
+          "title_hi": "कितना भारी या हल्का? द्रव्यमान",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-07-how-heavy-or-light-mass.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "b11ef08f3d8084296d436bc3806d1a9c19b7a9b0",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 8,
+          "topic_id": "c6-sci-ch06-t08",
+          "title_en": "Space and Volume",
+          "title_hi": "स्थान और आयतन",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-08-space-and-volume.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "2324ff83712be108e4911c80152993a79fb9a317",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        },
+        {
+          "number": 9,
+          "topic_id": "c6-sci-ch06-t09",
+          "title_en": "What Is Matter?",
+          "title_hi": "द्रव्य क्या होता है?",
+          "artifact_path": "data/structured-lessons/class-6/science/chapter-06/topic-09-what-is-matter.v1.json",
+          "artifact_status": "DRAFT_GENERATED_NOT_REVIEWED",
+          "source_reconciliation": "PENDING_RENDERED_PDF_REVIEW",
+          "bilingual_parity_review": "PENDING_HUMAN_SEMANTIC_REVIEW",
+          "visual_review": "PENDING",
+          "practice_item_count": 8,
+          "practice_types": [
+            "multiple_choice",
+            "multiple_select",
+            "true_false",
+            "matching",
+            "fill_blank",
+            "image_observation",
+            "short_answer",
+            "scenario_based"
+          ],
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "storage_status": "COMMITTED_TO_MAIN_BATCH_REVIEW_PENDING",
+          "staged_blob_sha": "81facbd1e05e828d30ecda2a02901dfa2781fb02",
+          "committed_at": "2026-10-15",
+          "commit_sha": null
+        }
+      ],
+      "chapter_source_review": "NOT_COMPLETE",
+      "chapter_visual_review": "NOT_COMPLETE",
+      "human_approval": "NOT_REVIEWED",
+      "question_count_generated": 72,
+      "question_type_counts_cumulative": {
+        "multiple_choice": 9,
+        "multiple_select": 9,
+        "true_false": 9,
+        "matching": 9,
+        "fill_blank": 9,
+        "image_observation": 9,
+        "short_answer": 9,
+        "scenario_based": 9
+      },
+      "question_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+      "topics_generated": 9,
+      "source_coverage_path": "data/structured-lessons/class-6/science/chapter-06/source-coverage.v1.json",
+      "source_coverage_status": "NUMBERED_SECTION_MAP_COMPLETE_RENDERED_SOURCE_AND_HUMAN_REVIEW_PENDING"
     },
     {
       "number": 7,
@@ -351,16 +2355,20 @@
     "english_chapter_map": "data/textbook-visual-candidates-v3/class6-curiosity-en/chapter-map.v1.json",
     "english_visual_candidate_summary": "data/textbook-visual-candidates-v3/class6-curiosity-en/summary.v3.json",
     "visual_render_contract": "docs/ai/visual-render-contract.v1.json",
-    "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification."
+    "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification.",
+    "chapter3_coverage_ledger": "data/structured-lessons/class-6/science/chapter-03/source-coverage.v1.json",
+    "hindi_chapter3_mapping": "Derived from whole-book Hindi extraction; rendered-page and semantic review still required.",
+    "chapter4_coverage_ledger": "data/structured-lessons/class-6/science/chapter-04/source-coverage.v1.json"
   },
   "resume_instructions": [
-    "Start by reading this index, the question-rendering registry JSON/Markdown and all three Chapter 1 topic artifacts.",
-    "Chapter 1 has 3 draft topics and 24 draft questions: 3 of each registered type. The ad hoc structural check passed; this does not mean NCERT completeness, bilingual semantic parity or UI rendering passed.",
-    "Resolve the Chapter 1 source audit: the English extraction has reading-order artefacts; verify source pages 19-26 visually and confirm Hindi Jigyasa chapter-1 page boundaries and content alignment.",
-    "Review all three diagrams and all image-observation question visual references. Items marked blocked/non-student-renderable must remain unavailable in student rendering until an approved locale-appropriate asset is selected.",
-    "Complete semantic Hindi-English review, correct any source omissions/errors, then update per-topic statuses and cumulative counts.",
-    "Only after current Chapter 1 gaps are explicitly dispositioned should additional chapters be authored; keep each topic strictly bound to its own chapter.",
-    "For every new topic, commit the bilingual lesson on main and immediately update this index with the per-type counts, cumulative chapter totals, commit reference, review blockers and next action."
+    "Read GitHub issue #56 first for the latest uncommitted staged tree SHA and file/blob inventory. A staged Git tree is not a branch and does not trigger a build.",
+    "Main contains three already committed Chapter 1 draft topics because of the earlier incorrect commit-per-topic workflow. Do not add new commits while the batch is still being authored.",
+    "Chapter 2 is drafted as seven staged topic JSONs (56 questions, 7 of each registered type); its index and docs are also staged at chapter-level checkpoint. Chapter 2 structural validation passed, but source/visual/human review remains pending.",
+    "Total prepared across Chapters 1-2 is 80 draft questions: 10 each of multiple choice, multiple select, true/false, matching, fill blank, image observation, short answer and scenario-based.",
+    "One global app language setting drives every student-visible string. Every lesson and question must provide en/hi fields; locale switching/state preservation is a future runtime requirement, not currently implemented.",
+    "Do not render image-observation questions with unreviewed assets. Keep them explicitly blocked until approved.",
+    "Per completed chapter, update issue #56 once with question counts, validation results, source/visual blockers and new tree SHA. Do not update it after every topic, and do not move branch refs/commit each topic.",
+    "Next: begin Chapter 3 source mapping after this Chapter 2 checkpoint is recorded. Commit only when the user explicitly asks to finalize the prepared batch."
   ],
   "language_runtime_contract": {
     "contract_path": "Each lesson artifact contains language_runtime_contract; the shared app-wide string catalog and runtime behavior will require implementation later.",
@@ -400,49 +2408,49 @@
         "type": "multiple_choice",
         "component": "MultipleChoiceQuestion",
         "component_contract_id": "qtype-multiple-choice.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "multiple_select",
         "component": "MultipleSelectQuestion",
         "component_contract_id": "qtype-multiple-select.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "true_false",
         "component": "TrueFalseQuestion",
         "component_contract_id": "qtype-true-false.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "matching",
         "component": "MatchingQuestion",
         "component_contract_id": "qtype-matching.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "fill_blank",
         "component": "FillBlankQuestion",
         "component_contract_id": "qtype-fill-blank.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "image_observation",
         "component": "ImageObservationQuestion",
         "component_contract_id": "qtype-image-observation.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "short_answer",
         "component": "ShortAnswerQuestion",
         "component_contract_id": "qtype-short-answer.v1",
-        "count": 3
+        "count": 10
       },
       {
         "type": "scenario_based",
         "component": "ScenarioQuestion",
         "component_contract_id": "qtype-scenario-based.v1",
-        "count": 3
+        "count": 10
       }
     ],
     "implementation_status": {
@@ -453,9 +2461,9 @@
       "automated_component_tests": false
     },
     "known_question_blockers": [
-      "Each topic's image_observation question currently references a generated visual draft or English source-page preview that is not yet approved/student-renderable; all three remain blocked until visual QA.",
-      "Short-answer items must show localized pending-review states when no validated grader is configured.",
-      "Question components and the global runtime language switch are specification-only and are not implemented."
+      "All ten image-observation questions currently in the prepared batch (one per topic) are blocked from student rendering until their diagrams/assets are rendered, visually reviewed, localized appropriately and approved.",
+      "Global app language switching and response-state preservation remain specification-only; actual web/Android components are not implemented.",
+      "Chapter 1 and Chapter 2 source text/visual completeness and semantic Hindi alignment remain human-review blockers."
     ]
   }
 }

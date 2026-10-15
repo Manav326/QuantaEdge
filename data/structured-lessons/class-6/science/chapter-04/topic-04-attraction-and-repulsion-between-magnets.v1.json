@@ -1,0 +1,1144 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch04-topic04-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 4,
+    "title_by_locale": {
+      "en": "Exploring Magnets",
+      "hi": "चुंबकों को जानें"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 4,
+    "topic_id": "c6-sci-ch04-t04",
+    "title_by_locale": {
+      "en": "Attraction and Repulsion between Magnets",
+      "hi": "चुंबकों के बीच आकर्षण और प्रतिकर्षण"
+    },
+    "source_section_ids": [
+      "4.4"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          86,
+          89
+        ],
+        "printed_pages": [
+          68,
+          71
+        ],
+        "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": [
+          82,
+          85
+        ],
+        "printed_pages": [
+          66,
+          69
+        ],
+        "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "4.4"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from other chapters.",
+      "Claim that all metals are magnetic.",
+      "Claim that attraction alone distinguishes a magnet from iron.",
+      "Claim that every material has identical magnetic effects.",
+      "English full-page source screenshots as Hindi student visuals.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable objective/block/visual/activity/question IDs and equivalent answers/rubrics across English and Hindi. One global app language controls all learner-visible content and preserves learner state when switched; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary material, not verbatim NCERT text/questions.",
+    "asset_rule": "Visual structures are drafts; image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch04-t04-lo1",
+      "statement_by_locale": {
+        "en": "State the rule for interactions between like and unlike poles.",
+        "hi": "समान और विपरीत ध्रुवों के बीच अंतःक्रिया का नियम बताएँ।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t04-lo2",
+      "statement_by_locale": {
+        "en": "Use repulsion to distinguish a magnet from magnetic material such as iron.",
+        "hi": "प्रतिकर्षण से चुंबक और लोहे जैसे चुंबकीय पदार्थ में अंतर करें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t04-lo3",
+      "statement_by_locale": {
+        "en": "Explain the effect of non-magnetic sheets placed between a magnet and compass.",
+        "hi": "चुंबक और दिक्सूचक के बीच रखी अचुंबकीय शीटों के प्रभाव को समझाएँ।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c4-t04-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        86,
+        89
+      ],
+      "printed_pages": [
+        68,
+        71
+      ],
+      "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "English Curiosity reprint 2026–27; coverage ledger maps figures, tables, activities and end matter."
+    },
+    {
+      "source_ref_id": "src-c4-t04-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        82,
+        85
+      ],
+      "printed_pages": [
+        66,
+        69
+      ],
+      "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "Hindi Jigyasa reprint 2026–27; OCR/layout noise requires rendered-page and semantic review."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch04-t04",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch04-t04-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1",
+          "c6-sci-ch04-t04-lo2"
+        ],
+        "source_refs": [
+          "src-c4-t04-en",
+          "src-c4-t04-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Like and unlike poles",
+            "paragraphs": [
+              "In Activity 4.5, two marked bar magnets are brought near without touching. Like poles—North-North or South-South—repel; unlike poles—North-South—attract.",
+              "Activity 4.6 uses a compass needle, which is itself a small magnet. Iron is attracted by either pole, while repulsion between like poles can identify a magnet."
+            ],
+            "key_point": "Like poles repel; unlike poles attract. Repulsion is useful for identifying a magnet."
+          },
+          "hi": {
+            "heading": "समान और विपरीत ध्रुव",
+            "paragraphs": [
+              "क्रियाकलाप 4.5 में चिह्नित दो छड़ चुंबकों को बिना छुआए पास लाया जाता है। समान ध्रुव—उत्तर-उत्तर या दक्षिण-दक्षिण—प्रतिकर्षित करते हैं; विपरीत ध्रुव—उत्तर-दक्षिण—आकर्षित करते हैं।",
+              "क्रियाकलाप 4.6 में दिक्सूचक की सुई का उपयोग होता है, जो स्वयं छोटा चुंबक है। लोहा दोनों ध्रुवों से आकर्षित होता है, जबकि समान ध्रुवों का प्रतिकर्षण चुंबक की पहचान करने में मदद करता है।"
+            ],
+            "key_point": "समान ध्रुव प्रतिकर्षित और विपरीत ध्रुव आकर्षित करते हैं। प्रतिकर्षण चुंबक की पहचान में उपयोगी है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo2",
+          "c6-sci-ch04-t04-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t04-en",
+          "src-c4-t04-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Magnetic effect through materials",
+            "paragraphs": [
+              "Activity 4.7 places wood, cardboard, plastic or glass between a magnet and compass needle. Table 4.2 records no appreciable change in deflection for the sheets tested.",
+              "This shows magnetic effect can act through the tested non-magnetic materials. It does not mean every material, thickness or arrangement will always behave identically."
+            ],
+            "key_point": "The tested sheets do not appreciably change the compass needle's deflection."
+          },
+          "hi": {
+            "heading": "पदार्थों के पार चुंबकीय प्रभाव",
+            "paragraphs": [
+              "क्रियाकलाप 4.7 में चुंबक और दिक्सूचक की सुई के बीच लकड़ी, कार्डबोर्ड, प्लास्टिक या काँच रखा जाता है। तालिका 4.2 में जाँची गई शीटों के कारण विक्षेपण में कोई विशेष बदलाव नहीं बताया गया है।",
+              "इससे पता चलता है कि जाँचे गए अचुंबकीय पदार्थों के पार चुंबकीय प्रभाव काम कर सकता है। इसका अर्थ यह नहीं कि हर पदार्थ या मोटाई में प्रभाव हमेशा समान होगा।"
+            ],
+            "key_point": "जाँची गई अचुंबकीय शीटों से सुई के विक्षेपण में विशेष बदलाव नहीं होता।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1",
+          "c6-sci-ch04-t04-lo2",
+          "c6-sci-ch04-t04-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t04-en",
+          "src-c4-t04-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create an original compact diagram for Attraction and Repulsion between Magnets; localize all labels through diagram_data and do not use full-page source screenshots.",
+          "hi": "चुंबकों के बीच आकर्षण और प्रतिकर्षण के लिए मौलिक संक्षिप्त चित्र बनाएँ; diagram_data से सभी लेबल स्थानीयकृत करें और पूरे स्रोत-पृष्ठ का स्क्रीनशॉट न लगाएँ।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch04-t04-visual-01",
+          "kind": "pole_interaction",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "nn",
+              "label_by_locale": {
+                "en": "North facing North: repel",
+                "hi": "उत्तर के सामने उत्तर: प्रतिकर्षण"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "ss",
+              "label_by_locale": {
+                "en": "South facing South: repel",
+                "hi": "दक्षिण के सामने दक्षिण: प्रतिकर्षण"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "ns",
+              "label_by_locale": {
+                "en": "North facing South: attract",
+                "hi": "उत्तर के सामने दक्षिण: आकर्षण"
+              },
+              "position": {
+                "order": 3
+              }
+            },
+            {
+              "id": "barrier",
+              "label_by_locale": {
+                "en": "Wood/cardboard/plastic/glass between magnet and compass",
+                "hi": "चुंबक और दिक्सूचक के बीच लकड़ी/कार्डबोर्ड/प्लास्टिक/काँच"
+              },
+              "position": {
+                "order": 4
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Diagram draft: North facing North: repel; South facing South: repel; North facing South: attract; Wood/cardboard/plastic/glass between magnet and compass.",
+          "hi": "चित्र-प्रारूप: उत्तर के सामने उत्तर: प्रतिकर्षण؛ दक्षिण के सामने दक्षिण: प्रतिकर्षण؛ उत्तर के सामने दक्षिण: आकर्षण؛ चुंबक और दिक्सूचक के बीच लकड़ी/कार्डबोर्ड/प्लास्टिक/काँच।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1",
+          "c6-sci-ch04-t04-lo2"
+        ],
+        "activity_kind": "Activities 4.5–4.7 — Test interactions",
+        "configuration": {
+          "activity_id": "c6-sci-ch04-t04-activity-01",
+          "title_by_locale": {
+            "en": "Activities 4.5–4.7 — Test interactions",
+            "hi": "क्रियाकलाप 4.5–4.7 — अंतःक्रिया जाँचें"
+          },
+          "instruction_by_locale": {
+            "en": "Bring marked poles near without touching and record attraction/repulsion. Then observe a compass with wood, cardboard, plastic and glass between it and a magnet.",
+            "hi": "चिह्नित ध्रुवों को बिना छुआए पास लाएँ और आकर्षण/प्रतिकर्षण लिखें। फिर चुंबक और दिक्सूचक के बीच लकड़ी, कार्डबोर्ड, प्लास्टिक तथा काँच रखकर सुई देखें।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "like",
+                "hi": "Test like poles"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "unlike",
+                "hi": "Test unlike poles"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "barrier",
+                "hi": "Test a sheet between magnet and compass"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear observation"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "अवलोकन मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Follow teacher guidance for iron filings, small objects, water and sharp needles. Do not heat, drop or hammer magnets.",
+          "hi": "लोहे के चूरे, छोटी वस्तुओं, पानी और नुकीली सुई वाले क्रियाकलाप शिक्षक की देखरेख में करें। चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1",
+          "c6-sci-ch04-t04-lo2",
+          "c6-sci-ch04-t04-lo3"
+        ],
+        "content_by_locale": {
+          "en": "Like poles repel, unlike poles attract, and repulsion helps distinguish a magnet from iron.",
+          "hi": "समान ध्रुव प्रतिकर्षित, विपरीत ध्रुव आकर्षित करते हैं और प्रतिकर्षण से चुंबक को लोहे से अलग पहचाना जा सकता है।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch04-t04",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch04-t04-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What happens when the North pole of one magnet is brought near another North pole?",
+          "hi": "जब एक चुंबक का उत्तरी ध्रुव दूसरे उत्तरी ध्रुव के पास लाया जाता है, तो क्या होता है?"
+        },
+        "feedback_by_locale": {
+          "en": "North-North are like poles, so they repel.",
+          "hi": "उत्तर-उत्तर समान ध्रुव हैं, इसलिए प्रतिकर्षण होता है।"
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "They repel",
+              "hi": "वे प्रतिकर्षित करते हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "They attract",
+              "hi": "वे आकर्षित करते हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "They lose their poles",
+              "hi": "उनके ध्रुव समाप्त हो जाते हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Nothing can be observed",
+              "hi": "कुछ देखा नहीं जा सकता"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t04-q02",
+        "type": "multiple_select",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which statements are correct? Select all that apply.",
+          "hi": "कौन-से कथन सही हैं? सभी सही विकल्प चुनें।"
+        },
+        "feedback_by_locale": {
+          "en": "Iron is attracted by either pole; like-pole repulsion is the distinguishing behaviour.",
+          "hi": "लोहा दोनों ध्रुवों से आकर्षित होता है; समान ध्रुवों का प्रतिकर्षण पहचानने योग्य व्यवहार है।"
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Unlike poles attract",
+              "hi": "विपरीत ध्रुव आकर्षित करते हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Like poles repel",
+              "hi": "समान ध्रुव प्रतिकर्षित करते हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Iron is repelled by both magnet poles",
+              "hi": "लोहा चुंबक के दोनों ध्रुवों से प्रतिकर्षित होता है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The tested sheets do not appreciably change compass deflection",
+              "hi": "जाँची गई शीटें दिक्सूचक के विक्षेपण में विशेष बदलाव नहीं करतीं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "d"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t04-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Attraction alone proves that an iron bar is a magnet.",
+          "hi": "केवल आकर्षण से सिद्ध हो जाता है कि लोहे की छड़ चुंबक है।"
+        },
+        "feedback_by_locale": {
+          "en": "Iron is attracted by either pole; repulsion is the more useful distinguishing test.",
+          "hi": "लोहा दोनों ध्रुवों से आकर्षित होता है; प्रतिकर्षण अधिक उपयोगी पहचान-जाँच है।"
+        },
+        "rendering_contract_id": "qtype-true-false.v1",
+        "correct_answer": false
+      },
+      {
+        "id": "c6-sci-ch04-t04-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each arrangement to its result.",
+          "hi": "हर व्यवस्था का परिणाम से मिलान करें।"
+        },
+        "feedback_by_locale": {
+          "en": "Pole interactions differ from the response of iron and the tested barrier sheet.",
+          "hi": "ध्रुवों की अंतःक्रिया, लोहे और जाँची गई बीच की शीट के व्यवहार से अलग है।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "left_items": [
+          {
+            "id": "nn",
+            "label_by_locale": {
+              "en": "North facing North",
+              "hi": "उत्तर के सामने उत्तर"
+            }
+          },
+          {
+            "id": "ns",
+            "label_by_locale": {
+              "en": "North facing South",
+              "hi": "उत्तर के सामने दक्षिण"
+            }
+          },
+          {
+            "id": "iron",
+            "label_by_locale": {
+              "en": "Iron near magnet pole",
+              "hi": "चुंबक के ध्रुव के पास लोहा"
+            }
+          },
+          {
+            "id": "wood",
+            "label_by_locale": {
+              "en": "Wood between magnet and compass",
+              "hi": "चुंबक-दिक्सूचक के बीच लकड़ी"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "repel",
+            "label_by_locale": {
+              "en": "Repulsion",
+              "hi": "प्रतिकर्षण"
+            }
+          },
+          {
+            "id": "attract",
+            "label_by_locale": {
+              "en": "Attraction",
+              "hi": "आकर्षण"
+            }
+          },
+          {
+            "id": "both",
+            "label_by_locale": {
+              "en": "Attracted by either pole",
+              "hi": "दोनों ध्रुवों से आकर्षित"
+            }
+          },
+          {
+            "id": "deflect",
+            "label_by_locale": {
+              "en": "No appreciable change in the test",
+              "hi": "जाँच में विशेष बदलाव नहीं"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "nn",
+            "right_id": "repel"
+          },
+          {
+            "left_id": "ns",
+            "right_id": "attract"
+          },
+          {
+            "left_id": "iron",
+            "right_id": "both"
+          },
+          {
+            "left_id": "wood",
+            "right_id": "deflect"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Like poles ____ each other; unlike poles attract.",
+          "hi": "समान ध्रुव एक-दूसरे को ____ करते हैं; विपरीत ध्रुव आकर्षित करते हैं।"
+        },
+        "feedback_by_locale": {
+          "en": "Like poles repel; unlike poles attract.",
+          "hi": "समान ध्रुव प्रतिकर्षित और विपरीत ध्रुव आकर्षित करते हैं।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "accepted_answers": {
+          "en": [
+            "repel"
+          ],
+          "hi": [
+            "प्रतिकर्षित"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A diagram shows two North poles facing, with arrows pointing apart. What is shown?",
+          "hi": "दो उत्तरी ध्रुव आमने-सामने और तीर अलग-अलग दिशा में दिखाने वाला चित्र देखें। क्या दिखाया गया है?"
+        },
+        "feedback_by_locale": {
+          "en": "Both facing poles are North poles, so they repel.",
+          "hi": "दोनों आमने-सामने वाले ध्रुव उत्तरी हैं, इसलिए प्रतिकर्षण होता है।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Repulsion between like poles",
+              "hi": "समान ध्रुवों के बीच प्रतिकर्षण"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Attraction between unlike poles",
+              "hi": "विपरीत ध्रुवों के बीच आकर्षण"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Needle magnetisation",
+              "hi": "सुई का चुंबकित होना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A non-magnetic object becoming a pole",
+              "hi": "अचुंबकीय वस्तु का ध्रुव बनना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch04-t04-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Structured visual is an unrendered draft. Review science, bilingual labels, readability, contrast, alt text and accessibility before student rendering.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Why is repulsion better than attraction alone for identifying a magnet?",
+          "hi": "चुंबक की पहचान के लिए केवल आकर्षण की तुलना में प्रतिकर्षण बेहतर क्यों है?"
+        },
+        "feedback_by_locale": {
+          "en": "The chapter highlights repulsion as the distinguishing test.",
+          "hi": "अध्याय प्रतिकर्षण को विशेष पहचान-जाँच बताता है।"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              [
+                "Iron is attracted by either pole.",
+                "लोहा दोनों ध्रुवों से आकर्षित होता है।"
+              ]
+            ],
+            "sample_answer": "An iron bar is attracted by either pole, but two magnets repel when like poles face. Repulsion helps identify a magnet."
+          },
+          "hi": {
+            "key_points": [
+              [
+                "लोहा दोनों ध्रुवों से आकर्षित होता है।"
+              ]
+            ],
+            "sample_answer": "लोहे की छड़ दोनों ध्रुवों से आकर्षित होती है, लेकिन समान ध्रुव सामने होने पर दो चुंबक प्रतिकर्षित करते हैं। प्रतिकर्षण चुंबक पहचानने में मदद करता है।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the main concept.",
+              "1 point for an accurate supporting detail."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक विवरण के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t04-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t04-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A wooden sheet is placed between a magnet and compass; the needle still deflects. What can be concluded?",
+          "hi": "चुंबक और दिक्सूचक के बीच लकड़ी रखने पर भी सुई विक्षेपित होती है। क्या निष्कर्ष है?"
+        },
+        "feedback_by_locale": {
+          "en": "The chapter reports no appreciable change for the non-magnetic sheets tested; avoid generalising to every material.",
+          "hi": "अध्याय में जाँची गई अचुंबकीय शीटों से विशेष बदलाव नहीं बताया गया; हर पदार्थ के बारे में सामान्यीकरण न करें।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "The learner is performing Activity 4.7.",
+          "hi": "विद्यार्थी क्रियाकलाप 4.7 कर रहा है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Magnetic effect can act through the tested wooden sheet.",
+              "hi": "जाँची गई लकड़ी की शीट के पार चुंबकीय प्रभाव काम कर सकता है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "The wooden sheet has become a magnet pole.",
+              "hi": "लकड़ी की शीट चुंबक का ध्रुव बन गई है।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The compass needle is not magnetic.",
+              "hi": "दिक्सूचक की सुई चुंबकीय नहीं है।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Every material always behaves identically.",
+              "hi": "हर पदार्थ हमेशा एक जैसा व्यवहार करता है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice mapped to the numbered textbook section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित पाठ्यपुस्तक अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_QA"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch04-t04-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_asset_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "STRUCTURAL_CHECK_PENDING",
+    "known_limitations": [
+      "Section page ranges are heading-derived and need rendered-PDF comparison.",
+      "Hindi OCR/layout is noisy; human terminology and semantic review is mandatory.",
+      "Diagrams are unrendered structured drafts; image questions are blocked pending visual QA.",
+      "Figures 4.1–4.18, Tables 4.1–4.3, Activities 4.1–4.7, storage/caution, keywords, summary, 11 review questions and 5 Learning further tasks are tracked in the chapter ledger."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch04-t04-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
+  },
+  "next_steps": [
+    "Compare English/Hindi source pages, boundaries and terminology against rendered official PDFs.",
+    "Review figures/tables/activities, safety/storage, summary and end matter.",
+    "Human-review science correctness, Hindi meaning parity and safety.",
+    "Render/review diagrams and alt text; keep image questions gated until approval.",
+    "Run locale/reference/renderer tests; runtime Web/Android components require separate implementation."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

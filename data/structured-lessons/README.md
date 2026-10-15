@@ -1,38 +1,57 @@
 # Structured bilingual lesson drafts
 
-This folder stores authored lesson data separately from raw textbook extraction and from application implementation.
+This folder stores AI-authored learning drafts separately from source-text extraction and application implementation.
 
 ## Start here
 
-- [Class 6 Science production index](class-6/science/production-index.v1.json) — resumable status, completed/pending topics, committed artifact paths and per-chapter/per-type question counts.
-- [Question-rendering registry — JSON contract](question-rendering-registry.v1.json) — machine-readable UI component, data fields, response shapes, grading and localization rules.
-- [Question-rendering registry — human-readable guide](question-rendering-registry.v1.md) — implementation and QA guide for maintainers.
-- [Class 6 Science · Chapter 1 · Topic 1](class-6/science/chapter-01/topic-01-science-begins-with-curiosity.v1.json) — first bilingual lesson draft.
-- [Class 6 Science · Chapter 1 · Topic 2](class-6/science/chapter-01/topic-02-the-scientific-method.v1.json) — second bilingual lesson draft.
-- [Class 6 Science · Chapter 1 · Topic 3](class-6/science/chapter-01/topic-03-curiosity-collaboration-and-new-questions.v1.json) — third bilingual lesson draft.
+- [Production index](class-6/science/production-index.v1.json) — chapter/topic inventory, per-type totals, validation and resume state.
+- [Chapter 3 source-coverage ledger](class-6/science/chapter-03/source-coverage.v1.json) — numbered sections, source pages, figures/tables/activities, special material, summary, keywords, 13 review questions and six Learning further tasks.
+- [Chapter 4 source-coverage ledger](class-6/science/chapter-04/source-coverage.v1.json) — five numbered lesson sections, EN/HI source page map, 18 numbered figures, 3 tables, 7 activities, storage/caution guidance, 11 review questions and 5 Learning further tasks.
+- [Question-rendering registry — JSON](question-rendering-registry.v1.json) and [human-readable guide](question-rendering-registry.v1.md) — data contracts for the registered question types.
+- Chapter 1 has earlier-committed drafts. Chapters 2–4 are staged as uncommitted Git objects, not on a branch.
 
 ## Non-negotiable production rules
 
-1. **Chapter-specific only.** Each lesson belongs to exactly one chapter/topic. No concept teaching, examples, activities, visuals or practice items from a different chapter. Do not expand a brief mention into a mini-lesson on another chapter.
-2. **Explain + Practice.** Every topic has a structured explanation experience and a separate practice section.
-3. **English/Hindi parity.** Author both locales together from the same learning objectives. Keep objective, block, asset and question IDs, correct-answer IDs, scoring, difficulty and learning demand aligned. Translate the complete learning experience, not only the headings.
-4. **App-wide live language setting.** One global app language selector controls all learner-visible content throughout web and Android. The learner can switch at any point. Explanations, activity instructions, diagram labels, image captions/alt text, every question and option, hints, answers, feedback, rubrics, glossary, recap, shared controls, status messages and errors must all have English and Hindi values.
-5. **Preserve state on switch.** Changing language must update the visible experience together without losing the current question, selected/typed answers, score, progress or reading position. No mixed-language screen and no silent fallback to the other locale are allowed. Missing locale values block approval/publication.
-6. **Question type must map to a UI component.** Every question includes `type` and `rendering_contract_id` from the question-rendering registry. The registry defines component name, data schema, response, grading, localization, accessibility and validation. Do not invent a new type without adding its specification and QA plan. **Registry and UI implementations are currently specifications only.**
-7. **Generated vs source text.** Generated teaching explanations, original diagrams, activities and practice items are authored learning aids. Do not present them as verbatim NCERT text or NCERT-provided assessment items.
-8. **Visual provenance.** Retain stable candidate IDs, source book/page/hash and review state. V3 candidate assets are review-only until checked for content relevance, source fidelity, accessibility, rights and approval. An English full-page preview is a review reference, not a student visual for Hindi mode. Use an appropriate bilingual/original visual for student rendering.
-9. **Status separation.** Extraction completeness, chapter mapping, asset review, source reconciliation, bilingual parity, lesson review, runtime language behavior and publication are separate statuses. Generated does not mean complete, approved or publishable.
-10. **Commit/resume every topic.** On `main`, commit one topic JSON, immediately update the production index, and record exact completed work, per-topic question-type counts, cumulative chapter totals, blockers and next action. Do not create an extra branch for this content-authoring stream.
-11. **Content only for now.** These data artifacts do not mean web/Android UI behavior has been implemented. Do not modify runtime code or existing lesson records as part of content authoring.
+1. **Source-first lesson boundaries.** Derive lesson counts from the actual numbered textbook sections and subsections; do not preselect the count. Use each chapter coverage ledger to track figures, tables, activities, special boxes, summary, keywords, review questions and Learning further tasks.
+2. **No omissions or cross-chapter teaching.** Account for the source scope or explicitly classify notes/front/back matter. A passing mention of another chapter must not become a separate lesson on it.
+3. **Explain + Practice.** Every lesson has a structured explanation and distinct practice using multiple question types.
+4. **English/Hindi parity.** Keep objective/block/visual/activity/question IDs, answer keys, grading and intended difficulty aligned. Localize all learner-visible fields, including diagram labels/alt text, instructions, options, feedback, rubrics and controls.
+5. **One global live language selector.** The app language controls all learner-visible Web and Android content. Switching must preserve question index, selected/typed answers, score, progress and reading position. No mixed-language screen or silent locale fallback; missing fields block approval.
+6. **Document every renderer.** Every question has `type` and `rendering_contract_id` from the registry. The registry specifies UI contracts but does not mean those components are implemented.
+7. **Visual gates.** Render/review diagrams for factual accuracy, locale parity, legibility, contrast, alt text and accessibility. Image-observation questions remain blocked until the visual is approved.
+8. **Draft vs approval.** Structural JSON validation is not proof of source completeness, translation correctness, scientific accuracy, human approval or publishability.
+9. **Batch staging; no topic commits.** During authoring create Git blobs/tree objects only—do not commit or move branch refs. Update issue #56 once after each complete chapter batch, not after every topic. Commit the full batch only when explicitly requested.
+10. **Resumable metadata.** Keep the updated index, README and source coverage ledgers in the same staged tree. Record the full tree SHA and next action in issue #56 at each chapter checkpoint.
 
-## Current question inventory
+## Current draft inventory
 
-Chapter 1 currently has **24 draft practice questions** across 3 generated topics: **3 multiple-choice, 3 multiple-select, 3 true/false, 3 matching, 3 fill-in-the-blank, 3 image-observation, 3 short-answer and 3 scenario-based**. The index is the canonical rolling count and is updated after each topic commit.
+| Chapter | Topics | Questions | State |
+|---|---:|---:|---|
+| 1 — The Wonderful World of Science | 3 | 24 | Earlier-committed drafts; review pending |
+| 2 — Diversity in the Living World | 7 | 56 | Committed in batch; coverage ledger included; review pending |
+| 3 — Mindful Eating: A Path to a Healthy Body | 8 | 64 | Committed in batch; coverage ledger included |
+| 4 — Exploring Magnets | 5 | 40 | Committed in batch; coverage ledger included |
+| 5 — Measurement of Length and Motion | 7 | 56 | Committed in batch; coverage ledger included |
+| 6 — Materials Around Us | 9 | 72 | Committed in batch; coverage ledger included |
+| **Total prepared** | **39** | **312** | **Draft only; not approved or publishable** |
 
-## Expected lesson data
-
-A topic artifact should include source book and edition identity, exact chapter/topic scope, included/excluded concepts, learning objectives, typed bilingual Explain blocks, relevant source/generated visual data, activities where appropriate, a distinct varied Practice set, answer keys/feedback/rubrics in both languages, registry links for every question, provenance, validation status, known limitations and next steps.
+The prepared inventory contains **39 questions of each** registered type: multiple choice, multiple select, true/false, matching, fill in the blank, image observation, short answer and scenario-based. All image-observation questions and draft diagrams for Chapters 2–6 remain blocked pending visual/accessibility approval.
 
 ## Resume procedure
 
-Read the production index first. Open the listed active topic rather than regenerating it from scratch. Read the question-rendering registry before adding question types. Resolve pending source and visual review items, run locale completeness/parity checks, then author the next chapter-specific topic. Update the lesson artifact and production index on `main` at each topic boundary.
+Read the production index and GitHub issue [#56](https://github.com/Manav326/QuantaEdge) first. Continue from the recorded staged tree/blob SHAs; do not regenerate existing drafts. Complete rendered-source, bilingual, visual and scientific reviews. Map the next chapter's numbered headings before choosing its lesson count. Do not commit unless explicitly requested to finalize.
+
+
+## Chapter 5 checkpoint (draft; review pending)
+
+- `class-6/science/chapter-05/`: 7 bilingual draft lessons (sections 5.1–5.7), 56 questions (7 per registered type), and a source-coverage ledger.
+- All image-observation questions and draft visuals are blocked until rendered and accessibility-reviewed.
+- English/Hindi PDF page boundaries, complete source coverage, semantic parity and science review remain pending. Runtime Web/Android renderer contracts and global language switching are specifications, not implementations.
+- Resume details and staged tree SHA are recorded in [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56).
+
+
+## Chapter 6 checkpoint (draft; review pending)
+
+- `class-6/science/chapter-06/`: 9 bilingual lessons derived from headings 6.1, 6.2, 6.3.1–6.3.6 and 6.4; 72 practice questions (9 per registered type), plus a source-coverage ledger.
+- The ledger inventories figures 6.1–6.8, tables 6.1–6.5, activities 6.1–6.8, both `Let us play` tasks, 10 end questions and four `Learning further` tasks. Exact page boundaries, figure/layout mapping, Hindi semantic parity and science review remain pending.
+- Commit status is recorded in [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56). Committed draft data does not mean approved or publishable.

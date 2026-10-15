@@ -1,0 +1,665 @@
+{
+  "schema_version": "quantaedge.textbook-chapter-coverage.v1",
+  "artifact_type": "chapter_source_coverage_audit",
+  "status": "TEXT_HEADING_MAP_COMPLETE_SOURCE_VISUAL_HUMAN_REVIEW_PENDING",
+  "updated_date": "2026-10-15",
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "chapter_number": 3,
+    "title_by_locale": {
+      "en": "Mindful Eating: A Path to a Healthy Body",
+      "hi": "उचित आहार—स्वस्थ शरीर का आधार"
+    },
+    "sources": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter_boundaries": {
+    "en": {
+      "start_pdf_page": 53,
+      "start_printed_page": 35,
+      "last_content_pdf_page": 77,
+      "last_printed_page": 59,
+      "next_chapter": "Exploring Magnets",
+      "next_chapter_pdf_page": 79,
+      "notes_page_pdf_page": 78,
+      "notes_page_treatment": "Classify after rendered visual check."
+    },
+    "hi": {
+      "start_pdf_page": 51,
+      "start_printed_page": 35,
+      "last_content_pdf_page": 74,
+      "last_printed_page": 58,
+      "next_chapter": "चुंबकों को जानें",
+      "next_chapter_pdf_page": 75
+    },
+    "status": "DERIVED_FROM_EXTRACTED_TEXT; RENDERED_PAGE_VERIFICATION_PENDING"
+  },
+  "topic_plan": {
+    "count": 8,
+    "method": "Derived from actual numbered headings/subheadings rather than a preset count.",
+    "section_headings": [
+      "3.1 What Do We Eat?",
+      "3.1.1 Food in different regions",
+      "3.1.2 How have cooking practices changed over time?",
+      "3.2 What are the Components of Food?",
+      "3.3 How to Test Different Components of Food?",
+      "3.3.1 Test for starch",
+      "3.3.2 Test for fats",
+      "3.3.3 Test for proteins",
+      "3.4 Balanced Diet",
+      "3.5 Millets: Nutrition-rich Cereals",
+      "3.6 Food Miles: From Farm to Our Plate"
+    ],
+    "topics": [
+      {
+        "number": 1,
+        "title_by_locale": {
+          "en": "What Do We Eat?",
+          "hi": "हम क्या खाते हैं?"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-01-what-do-we-eat.v1.json",
+        "english_pdf_pages": [
+          53,
+          54
+        ],
+        "english_printed_pages": [
+          35,
+          36
+        ],
+        "hindi_pdf_pages": [
+          51,
+          52
+        ],
+        "hindi_printed_pages": [
+          35,
+          36
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 2,
+        "title_by_locale": {
+          "en": "Food in Different Regions",
+          "hi": "विभिन्न क्षेत्रों में भोजन"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-02-food-in-different-regions.v1.json",
+        "english_pdf_pages": [
+          54,
+          55
+        ],
+        "english_printed_pages": [
+          36,
+          37
+        ],
+        "hindi_pdf_pages": [
+          52,
+          53
+        ],
+        "hindi_printed_pages": [
+          36,
+          37
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 3,
+        "title_by_locale": {
+          "en": "How Cooking Practices Have Changed",
+          "hi": "भोजन पकाने की पद्धतियों में बदलाव"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-03-changing-cooking-practices.v1.json",
+        "english_pdf_pages": [
+          56,
+          57
+        ],
+        "english_printed_pages": [
+          38,
+          39
+        ],
+        "hindi_pdf_pages": [
+          53,
+          55
+        ],
+        "hindi_printed_pages": [
+          37,
+          39
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 4,
+        "title_by_locale": {
+          "en": "What Are the Components of Food?",
+          "hi": "भोजन के घटक क्या हैं?"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-04-components-of-food.v1.json",
+        "english_pdf_pages": [
+          57,
+          65
+        ],
+        "english_printed_pages": [
+          39,
+          47
+        ],
+        "hindi_pdf_pages": [
+          55,
+          63
+        ],
+        "hindi_printed_pages": [
+          39,
+          47
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 5,
+        "title_by_locale": {
+          "en": "How to Test Different Components of Food",
+          "hi": "भोजन के विभिन्न घटकों का परीक्षण"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-05-testing-components-of-food.v1.json",
+        "english_pdf_pages": [
+          66,
+          68
+        ],
+        "english_printed_pages": [
+          48,
+          50
+        ],
+        "hindi_pdf_pages": [
+          63,
+          66
+        ],
+        "hindi_printed_pages": [
+          47,
+          50
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 6,
+        "title_by_locale": {
+          "en": "Balanced Diet and Food Labels",
+          "hi": "संतुलित आहार और खाद्य लेबल"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-06-balanced-diet-and-food-labels.v1.json",
+        "english_pdf_pages": [
+          69,
+          71
+        ],
+        "english_printed_pages": [
+          51,
+          53
+        ],
+        "hindi_pdf_pages": [
+          67,
+          69
+        ],
+        "hindi_printed_pages": [
+          51,
+          53
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 7,
+        "title_by_locale": {
+          "en": "Millets: Nutrition-rich Cereals",
+          "hi": "मिलेट—पोषक अनाज"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-07-millets-nutrition-rich-cereals.v1.json",
+        "english_pdf_pages": [
+          71,
+          72
+        ],
+        "english_printed_pages": [
+          53,
+          54
+        ],
+        "hindi_pdf_pages": [
+          68,
+          69
+        ],
+        "hindi_printed_pages": [
+          52,
+          53
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      {
+        "number": 8,
+        "title_by_locale": {
+          "en": "Food Miles: From Farm to Our Plate",
+          "hi": "खाद्य मील—खेत से हमारी थाली तक"
+        },
+        "artifact_path": "data/structured-lessons/class-6/science/chapter-03/topic-08-food-miles-farm-to-plate.v1.json",
+        "english_pdf_pages": [
+          72,
+          73
+        ],
+        "english_printed_pages": [
+          54,
+          55
+        ],
+        "hindi_pdf_pages": [
+          69,
+          71
+        ],
+        "hindi_printed_pages": [
+          53,
+          55
+        ],
+        "status": "EXTRACTED_HEADING_MAPPING_PENDING_RENDERED_SOURCE_REVIEW"
+      }
+    ]
+  },
+  "tables": [
+    {
+      "id": "table-3-1",
+      "title": "Food items consumed over a week",
+      "topic": 1,
+      "printed_page_en": 36,
+      "printed_page_hi": 36
+    },
+    {
+      "id": "table-3-2",
+      "title": "Traditional foods/crops/beverages in states",
+      "topic": 2,
+      "printed_page_en": 37,
+      "printed_page_hi": 37
+    },
+    {
+      "id": "table-3-3",
+      "title": "Nutrients in tested food samples",
+      "topic": 5,
+      "printed_page_en": 51,
+      "printed_page_hi": 50
+    }
+  ],
+  "figures": [
+    {
+      "id": "fig-3-1",
+      "title": "Change in cooking tools over time",
+      "topic": 3
+    },
+    {
+      "id": "fig-3-2",
+      "title": "Sources of carbohydrates",
+      "topic": 4
+    },
+    {
+      "id": "fig-3-3",
+      "title": "Sources of fats",
+      "topic": 4
+    },
+    {
+      "id": "fig-3-4",
+      "title": "Sources of proteins",
+      "topic": 4
+    },
+    {
+      "id": "fig-3-5",
+      "title": "Vitamin/mineral functions, sources and deficiency examples",
+      "topic": 4
+    },
+    {
+      "id": "fig-3-6",
+      "title": "Sources of different vitamins",
+      "topic": 4
+    },
+    {
+      "id": "fig-3-7",
+      "title": "Testing for starch",
+      "topic": 5
+    },
+    {
+      "id": "fig-3-8",
+      "title": "Testing for protein",
+      "topic": 5
+    },
+    {
+      "id": "fig-3-9",
+      "title": "Sanwa/barnyard millet",
+      "topic": 7
+    },
+    {
+      "id": "fig-3-10",
+      "title": "Wheat from farm to plate",
+      "topic": 8
+    }
+  ],
+  "activities": [
+    {
+      "id": "activity-3-1",
+      "summary": "Record food items across a week",
+      "topic": 1
+    },
+    {
+      "id": "activity-3-2",
+      "summary": "Explore regional food/crops and extend Table 3.2",
+      "topic": 2
+    },
+    {
+      "id": "activity-3-3",
+      "summary": "Interview older people about food and cooking changes",
+      "topic": 3
+    },
+    {
+      "id": "activity-3-4",
+      "summary": "Survey sources/functions of vitamins and minerals",
+      "topic": 4
+    },
+    {
+      "id": "activity-3-5",
+      "summary": "Starch test with iodine",
+      "topic": 5
+    },
+    {
+      "id": "activity-3-6",
+      "summary": "Fat test using paper",
+      "topic": 5
+    },
+    {
+      "id": "activity-3-7",
+      "summary": "Protein test; teacher/lab supervision",
+      "topic": 5
+    },
+    {
+      "id": "activity-3-8",
+      "summary": "Review weekly record for balanced diet",
+      "topic": 6
+    },
+    {
+      "id": "activity-3-9",
+      "summary": "Compare wafers and roasted chana nutrition labels per 100g",
+      "topic": 6
+    }
+  ],
+  "special_content": [
+    {
+      "id": "opening-sanskrit-saying",
+      "summary": "Wholesome food, moderate quantities, season/time/place",
+      "topic": 1
+    },
+    {
+      "id": "polar-bear",
+      "summary": "Stored fat supplies energy during winter sleep",
+      "topic": 4
+    },
+    {
+      "id": "edible-mushrooms",
+      "summary": "Edible mushrooms as protein sources",
+      "topic": 4
+    },
+    {
+      "id": "scurvy-case",
+      "summary": "Sailors/citrus/vitamin C deficiency example",
+      "topic": 4
+    },
+    {
+      "id": "goitre-iodine-case",
+      "summary": "Iodine deficiency/goitre and iodised salt",
+      "topic": 4
+    },
+    {
+      "id": "agariya-salt",
+      "summary": "Agariya community traditional salt farming in Gujarat",
+      "topic": 4
+    },
+    {
+      "id": "fibre-water",
+      "summary": "Roughage and water; movement of undigested food",
+      "topic": 4
+    },
+    {
+      "id": "vitamin-loss",
+      "summary": "Some vitamin loss during cooking/washing cut produce; still wash produce thoroughly",
+      "topic": 4
+    },
+    {
+      "id": "sunlight-vitamin-d",
+      "summary": "Body can produce vitamin D upon sunlight exposure",
+      "topic": 4
+    },
+    {
+      "id": "food-labels-junk-food",
+      "summary": "Packaged nutrition labels and junk-food discussion",
+      "topic": 6
+    },
+    {
+      "id": "food-waste-local-food",
+      "summary": "Food miles, local producer, transport costs/pollution and avoiding waste",
+      "topic": 8
+    }
+  ],
+  "chapter_end_matter": {
+    "keywords": [
+      "Carbohydrate",
+      "Culinary practices",
+      "Deficiency diseases",
+      "Fats",
+      "Food components",
+      "Food miles",
+      "Iodized salt",
+      "Millets",
+      "Minerals",
+      "Nutrients",
+      "Proteins",
+      "Rickets",
+      "Roughage",
+      "Scurvy",
+      "Vitamins",
+      "Analyse",
+      "Compare",
+      "Infer",
+      "Interpret",
+      "Investigate",
+      "Observe",
+      "Prediction",
+      "Survey"
+    ],
+    "summary": [
+      "Regional food diversity",
+      "Cooking practices changing over time",
+      "Food components and functions",
+      "Roughage and water",
+      "Balanced diet",
+      "Deficiency disorders",
+      "Junk food and nutrition labels",
+      "Millets",
+      "Locally grown/plant-based food",
+      "Food miles",
+      "Avoid food waste"
+    ],
+    "review_questions": {
+      "count": 13,
+      "source_status": "Inventoried; generated practice is supplementary, not verbatim copy.",
+      "items": [
+        {
+          "n": 1,
+          "focus": "Odd one out: jowar/bajra/ragi/chana; kidney beans/green gram/soya/rice",
+          "topics": [
+            4,
+            7
+          ]
+        },
+        {
+          "n": 2,
+          "focus": "Traditional versus modern culinary practices",
+          "topics": [
+            3
+          ]
+        },
+        {
+          "n": 3,
+          "focus": "Questions about food acting as medicine",
+          "topics": [
+            4,
+            6
+          ]
+        },
+        {
+          "n": 4,
+          "focus": "Delicious versus nutritious foods",
+          "topics": [
+            4,
+            6
+          ]
+        },
+        {
+          "n": 5,
+          "focus": "Limited vegetables, biscuits/noodles/white bread and constipation; dietary changes",
+          "topics": [
+            4,
+            6
+          ]
+        },
+        {
+          "n": 6,
+          "focus": "Dim-light vision, vitamin A deficiency and four suitable food sources",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 7,
+          "focus": "Canned juice, fresh juice versus fresh fruit",
+          "topics": [
+            4,
+            6
+          ]
+        },
+        {
+          "n": 8,
+          "focus": "Fracture, calcium/vitamin D and Figure 3.5",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 9,
+          "focus": "Why sugar does not turn blue-black with iodine",
+          "topics": [
+            5
+          ]
+        },
+        {
+          "n": 10,
+          "focus": "Starch is a carbohydrate but not every carbohydrate is starch; design a test",
+          "topics": [
+            5
+          ]
+        },
+        {
+          "n": 11,
+          "focus": "Iodine on socks versus saree; starch-related colour response",
+          "topics": [
+            5
+          ]
+        },
+        {
+          "n": 12,
+          "focus": "Millets as a healthy choice but not a complete sole diet",
+          "topics": [
+            6,
+            7
+          ]
+        },
+        {
+          "n": 13,
+          "focus": "Testing whether an unknown solution is iodine solution",
+          "topics": [
+            5
+          ]
+        }
+      ]
+    },
+    "learning_further": {
+      "count": 6,
+      "items": [
+        {
+          "n": 1,
+          "focus": "Read and analyse labels on at least three fortified foods",
+          "topics": [
+            6
+          ]
+        },
+        {
+          "n": 2,
+          "focus": "Apatani tapyo salt-making process and purpose",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 3,
+          "focus": "Wild foods: Maharashtra ranbhaji, Himachal edible mushrooms and local examples",
+          "topics": [
+            4,
+            7
+          ]
+        },
+        {
+          "n": 4,
+          "focus": "Survey frequent junk foods, write to principal and suggest alternatives",
+          "topics": [
+            6
+          ]
+        },
+        {
+          "n": 5,
+          "focus": "Compare requirements by age, activity and health status",
+          "topics": [
+            6
+          ]
+        },
+        {
+          "n": 6,
+          "focus": "Prepare an affordable local balanced diet chart for a 12-year-old",
+          "topics": [
+            6
+          ]
+        }
+      ]
+    }
+  },
+  "lesson_question_plan": {
+    "topics": 8,
+    "questions": 64,
+    "counts_by_type": {
+      "multiple_choice": 8,
+      "multiple_select": 8,
+      "true_false": 8,
+      "matching": 8,
+      "fill_blank": 8,
+      "image_observation": 8,
+      "short_answer": 8,
+      "scenario_based": 8
+    },
+    "all_image_observation_items_blocked_until_visual_approval": true,
+    "renderer_registry": "data/structured-lessons/question-rendering-registry.v1.json"
+  },
+  "acceptance_gates": [
+    "Render every mapped English/Hindi page and confirm boundaries; explicitly classify English PDF page 78 Notes.",
+    "Verify all 10 figures, 3 tables, 9 activities, special content and end matter in source page images.",
+    "Review Hindi OCR/semantic parity, all printed/page ranges and table values.",
+    "Review scientific/health wording and avoid self-diagnosis/prescriptive medical advice.",
+    "Render/QA original visuals and accessibility text; image questions remain gated.",
+    "Do not mark approved/publishable until human review gates pass."
+  ]
+}

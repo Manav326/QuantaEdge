@@ -1,0 +1,545 @@
+{
+  "schema_version": "quantaedge.textbook-chapter-coverage.v1",
+  "artifact_type": "chapter_source_coverage_audit",
+  "status": "NUMBERED_SECTION_MAP_COMPLETE_RENDERED_SOURCE_AND_HUMAN_REVIEW_PENDING",
+  "updated_date": "2026-10-15",
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "chapter_number": 4,
+    "title_by_locale": {
+      "en": "Exploring Magnets",
+      "hi": "चुंबकों को जानें"
+    },
+    "sources": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "boundaries": {
+    "en": {
+      "start_pdf_page": 79,
+      "start_printed_page": 61,
+      "end_pdf_page": 96,
+      "end_printed_page": 78,
+      "next_chapter_pdf_page": 97
+    },
+    "hi": {
+      "start_pdf_page": 75,
+      "start_printed_page": 59,
+      "end_pdf_page": 92,
+      "end_printed_page": 76,
+      "next_chapter_pdf_page": 93
+    },
+    "status": "EXTRACTED_TEXT_BOUNDARY_PENDING_VISUAL_CONFIRMATION"
+  },
+  "topic_rule": "Five lessons derive from the five numbered teaching sections 4.1–4.5, not a preset count. Figures/tables, activities, safety guidance and end matter are inventoried separately.",
+  "topics": [
+    {
+      "number": 1,
+      "title_by_locale": {
+        "en": "Magnetic and Non-magnetic Materials",
+        "hi": "चुंबकीय और अचुंबकीय पदार्थ"
+      },
+      "path": "data/structured-lessons/class-6/science/chapter-04/topic-01-magnetic-and-non-magnetic-materials.v1.json",
+      "section": "4.1",
+      "en_pdf_pages": [
+        80,
+        82
+      ],
+      "en_printed_pages": [
+        62,
+        64
+      ],
+      "hi_pdf_pages": [
+        76,
+        78
+      ],
+      "hi_printed_pages": [
+        60,
+        62
+      ],
+      "status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+    },
+    {
+      "number": 2,
+      "title_by_locale": {
+        "en": "Poles of a Magnet",
+        "hi": "चुंबक के ध्रुव"
+      },
+      "path": "data/structured-lessons/class-6/science/chapter-04/topic-02-poles-of-a-magnet.v1.json",
+      "section": "4.2",
+      "en_pdf_pages": [
+        82,
+        83
+      ],
+      "en_printed_pages": [
+        64,
+        65
+      ],
+      "hi_pdf_pages": [
+        78,
+        79
+      ],
+      "hi_printed_pages": [
+        62,
+        63
+      ],
+      "status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+    },
+    {
+      "number": 3,
+      "title_by_locale": {
+        "en": "Finding Directions and Making a Compass",
+        "hi": "दिशाएँ ज्ञात करना और दिक्सूचक बनाना"
+      },
+      "path": "data/structured-lessons/class-6/science/chapter-04/topic-03-finding-directions-and-making-a-compass.v1.json",
+      "section": "4.3",
+      "en_pdf_pages": [
+        83,
+        85
+      ],
+      "en_printed_pages": [
+        65,
+        67
+      ],
+      "hi_pdf_pages": [
+        79,
+        81
+      ],
+      "hi_printed_pages": [
+        63,
+        65
+      ],
+      "status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+    },
+    {
+      "number": 4,
+      "title_by_locale": {
+        "en": "Attraction and Repulsion between Magnets",
+        "hi": "चुंबकों के बीच आकर्षण और प्रतिकर्षण"
+      },
+      "path": "data/structured-lessons/class-6/science/chapter-04/topic-04-attraction-and-repulsion-between-magnets.v1.json",
+      "section": "4.4",
+      "en_pdf_pages": [
+        86,
+        89
+      ],
+      "en_printed_pages": [
+        68,
+        71
+      ],
+      "hi_pdf_pages": [
+        82,
+        85
+      ],
+      "hi_printed_pages": [
+        66,
+        69
+      ],
+      "status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+    },
+    {
+      "number": 5,
+      "title_by_locale": {
+        "en": "Fun with Magnets and Magnet Care",
+        "hi": "चुंबकों के साथ मनोरंजन और उनकी देखभाल"
+      },
+      "path": "data/structured-lessons/class-6/science/chapter-04/topic-05-fun-with-magnets-and-magnet-care.v1.json",
+      "section": "4.5",
+      "en_pdf_pages": [
+        89,
+        96
+      ],
+      "en_printed_pages": [
+        71,
+        78
+      ],
+      "hi_pdf_pages": [
+        85,
+        92
+      ],
+      "hi_printed_pages": [
+        69,
+        76
+      ],
+      "status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+    }
+  ],
+  "figures": [
+    {
+      "id": "fig-4-1",
+      "description": "Common items with attached magnets",
+      "topic": 1
+    },
+    {
+      "id": "fig-4-2",
+      "description": "Bar, U-shaped and ring magnets",
+      "topic": 1
+    },
+    {
+      "id": "fig-4-3",
+      "description": "Identifying magnetic materials",
+      "topic": 1
+    },
+    {
+      "id": "fig-4-4",
+      "description": "Iron filings near magnet poles",
+      "topic": 2
+    },
+    {
+      "id": "fig-4-5",
+      "description": "Freely suspended magnet",
+      "topic": 3
+    },
+    {
+      "id": "fig-4-6",
+      "description": "Magnetic compass",
+      "topic": 3
+    },
+    {
+      "id": "fig-4-7",
+      "description": "Magnetising an iron needle and the magnetised needle floating in water (panels a and b)",
+      "subfigures": [
+        "4.7(a)",
+        "4.7(b)"
+      ],
+      "topic": 3
+    },
+    {
+      "id": "fig-4-8",
+      "description": "Two bar magnets interacting",
+      "topic": 4
+    },
+    {
+      "id": "fig-4-9",
+      "description": "Compass needle and magnet",
+      "topic": 4
+    },
+    {
+      "id": "fig-4-10",
+      "description": "Wood sheet between magnet and compass",
+      "topic": 4
+    },
+    {
+      "id": "fig-4-11",
+      "description": "Magnetic garland",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-12",
+      "description": "Steel balls in a maze",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-13",
+      "description": "Steel paper clip in water",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-14",
+      "description": "Matchbox cars with like poles facing",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-15",
+      "description": "Bar magnet over steel pins",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-16",
+      "description": "Two ring magnets",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-17",
+      "description": "Three-magnet polarity puzzle",
+      "topic": 5
+    },
+    {
+      "id": "fig-4-18",
+      "description": "Hopping-frog toy with ring magnets",
+      "topic": 5
+    }
+  ],
+  "tables": [
+    {
+      "id": "table-4-1",
+      "description": "Materials, predictions and attraction observations",
+      "topic": 1
+    },
+    {
+      "id": "table-4-2",
+      "description": "Magnetic effect through non-magnetic sheets",
+      "topic": 4
+    },
+    {
+      "id": "table-4-3",
+      "description": "Pins attracted at different positions on a bar magnet",
+      "topic": 5
+    }
+  ],
+  "activities": [
+    {
+      "id": "activity-4-1",
+      "description": "Test objects made from different materials",
+      "topic": 1
+    },
+    {
+      "id": "activity-4-2",
+      "description": "Observe iron filings around a bar magnet",
+      "topic": 2
+    },
+    {
+      "id": "activity-4-3",
+      "description": "Suspend a magnet and compare with an iron bar",
+      "topic": 3
+    },
+    {
+      "id": "activity-4-4",
+      "description": "Magnetise a sewing needle and float it in cork",
+      "topic": 3
+    },
+    {
+      "id": "activity-4-5",
+      "description": "Test attraction/repulsion between marked bar magnets",
+      "topic": 4
+    },
+    {
+      "id": "activity-4-6",
+      "description": "Observe pole interaction using a compass needle",
+      "topic": 4
+    },
+    {
+      "id": "activity-4-7",
+      "description": "Test effects through wood, cardboard, plastic and glass",
+      "topic": 4
+    }
+  ],
+  "special_content": [
+    {
+      "id": "lodestones",
+      "description": "Natural lodestones and artificial magnets",
+      "topic": 1
+    },
+    {
+      "id": "magnetic-metals",
+      "description": "Iron, nickel and cobalt examples",
+      "topic": 1
+    },
+    {
+      "id": "storage",
+      "description": "Pairs of bar magnets, unlike poles same side, wood spacer and soft-iron end pieces",
+      "topic": 5
+    },
+    {
+      "id": "caution",
+      "description": "Do not heat/drop/hammer magnets; textbook caution mentions phones/remotes",
+      "topic": 5
+    },
+    {
+      "id": "magnet-shapes",
+      "description": "Bar, disc, cylindrical, ring and spherical shapes; poles remain paired",
+      "topic": 5
+    }
+  ],
+  "end_matter": {
+    "keywords": [
+      "Attraction",
+      "Bar magnet",
+      "Construct",
+      "Experiment",
+      "Magnetic compass",
+      "Magnetic materials",
+      "Non-magnetic materials",
+      "Explore",
+      "Investigate",
+      "North pole of a magnet",
+      "Observe",
+      "Repulsion",
+      "Predict",
+      "Record",
+      "South pole of a magnet",
+      "Ring magnet",
+      "U-shaped magnet"
+    ],
+    "summary": [
+      "Magnets have North and South poles in pairs.",
+      "Magnetic materials are attracted; non-magnetic materials are not in the described test.",
+      "A freely suspended magnet/compass needle indicates north-south.",
+      "Like poles repel; unlike poles attract."
+    ],
+    "review_questions": {
+      "count": 11,
+      "items": [
+        {
+          "n": 1,
+          "focus": "Fill blanks on pole interaction, magnetic materials, compass direction and paired poles",
+          "topics": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "n": 2,
+          "focus": "True/false on isolated poles, repulsion, filings and direction",
+          "topics": [
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "n": 3,
+          "focus": "Complete pole-interaction table",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 4,
+          "focus": "Interpret steel-pin counts along a bar magnet, Figure 4.15/Table 4.3",
+          "topics": [
+            2,
+            5
+          ]
+        },
+        {
+          "n": 5,
+          "focus": "Identify magnets and an iron bar among three bars without other material",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 6,
+          "focus": "Use a marked magnet to identify an unmarked magnet's poles",
+          "topics": [
+            4
+          ]
+        },
+        {
+          "n": 7,
+          "focus": "Find North end of an unmarked magnet without another magnet",
+          "topics": [
+            3
+          ]
+        },
+        {
+          "n": 8,
+          "focus": "Infer Earth's magnetic poles from compass direction",
+          "topics": [
+            3
+          ]
+        },
+        {
+          "n": 9,
+          "focus": "Use a magnet to keep steel screws on a screwdriver",
+          "topics": [
+            5
+          ]
+        },
+        {
+          "n": 10,
+          "focus": "Explain ring magnets not touching and bring them together without pushing",
+          "topics": [
+            4,
+            5
+          ]
+        },
+        {
+          "n": 11,
+          "focus": "Solve polarity of three magnets with one known end",
+          "topics": [
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    "learning_further": {
+      "count": 5,
+      "items": [
+        {
+          "n": 1,
+          "focus": "Compare counts of pins/U-clips lifted by different magnets",
+          "topics": [
+            1,
+            2,
+            5
+          ]
+        },
+        {
+          "n": 2,
+          "focus": "Build hopping-frog toy with ring magnets arranged alternately N/S",
+          "topics": [
+            4,
+            5
+          ]
+        },
+        {
+          "n": 3,
+          "focus": "Learn about Maglev trains/model",
+          "topics": [
+            5
+          ]
+        },
+        {
+          "n": 4,
+          "focus": "Why magnets are made in different shapes",
+          "topics": [
+            1,
+            5
+          ]
+        },
+        {
+          "n": 5,
+          "focus": "Uses of magnets in medicine",
+          "topics": [
+            5
+          ]
+        }
+      ]
+    }
+  },
+  "practice": {
+    "topics": 5,
+    "questions": 40,
+    "counts_by_type": {
+      "multiple_choice": 5,
+      "multiple_select": 5,
+      "true_false": 5,
+      "matching": 5,
+      "fill_blank": 5,
+      "image_observation": 5,
+      "short_answer": 5,
+      "scenario_based": 5
+    },
+    "all_image_observation_questions_blocked_until_visual_approval": true,
+    "renderer_registry": "data/structured-lessons/question-rendering-registry.v1.json"
+  },
+  "review_gates": [
+    "Compare English PDF pages 79–96 and Hindi pages 75–92 against rendered official PDFs.",
+    "Verify all 18 figures, 3 tables, 7 activities, storage/caution material, keywords, summary, 11 review questions and 5 Learning further tasks.",
+    "Human-review Hindi technical terminology and semantic parity.",
+    "Review scientific accuracy and activity safety; keep image items blocked until visual/accessibility QA passes.",
+    "Do not approve or publish based on structural checks alone."
+  ],
+  "figure_count": 18,
+  "table_count": 3,
+  "activity_count": 7
+}

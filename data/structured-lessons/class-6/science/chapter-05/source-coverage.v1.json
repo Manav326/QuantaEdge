@@ -1,0 +1,275 @@
+{
+  "schema_version": "quantaedge.textbook-chapter-coverage.v1",
+  "artifact_type": "chapter_source_coverage_audit",
+  "status": "NUMBERED_SECTION_MAP_COMPLETE_RENDERED_SOURCE_AND_HUMAN_REVIEW_PENDING",
+  "updated_date": "2026-10-15",
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "chapter_number": 5,
+    "title_by_locale": {
+      "en": "Measurement of Length and Motion",
+      "hi": "लंबाई एवं गति का मापन"
+    },
+    "sources": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
+        "pdf_pages": [
+          97,
+          114
+        ],
+        "printed_pages": [
+          79,
+          96
+        ]
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "url": "https://ncert.nic.in/textbook.php?fhcu1=0-12",
+        "pdf_pages": [
+          93,
+          110
+        ],
+        "printed_pages": [
+          77,
+          94
+        ]
+      }
+    }
+  },
+  "section_map": [
+    {
+      "section_id": "5.1",
+      "topic_number": 1,
+      "title_by_locale": {
+        "en": "How Do We Measure?",
+        "hi": "हम कैसे मापते हैं?"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-01-how-do-we-measure.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.2",
+      "topic_number": 2,
+      "title_by_locale": {
+        "en": "Standard Units",
+        "hi": "मानक मात्रक"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-02-standard-units.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.3",
+      "topic_number": 3,
+      "title_by_locale": {
+        "en": "Correct Way of Measuring Length",
+        "hi": "लंबाई मापने की सही विधि"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-03-correct-way-of-measuring-length.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.4",
+      "topic_number": 4,
+      "title_by_locale": {
+        "en": "Measuring the Length of a Curved Line",
+        "hi": "किसी वक्र रेखा की लंबाई मापना"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-04-measuring-a-curved-line.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.5",
+      "topic_number": 5,
+      "title_by_locale": {
+        "en": "Describing Position",
+        "hi": "स्थिति का निर्धारण"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-05-describing-position.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.6",
+      "topic_number": 6,
+      "title_by_locale": {
+        "en": "Motion and Rest",
+        "hi": "गति और विराम"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-06-motion-and-rest.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "5.7",
+      "topic_number": 7,
+      "title_by_locale": {
+        "en": "Types of Motion",
+        "hi": "गति के प्रकार"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-05/topic-07-types-of-motion.v1.json",
+      "page_mapping_status": "HEADING_FOUND_IN_ENGLISH_AND_HINDI_WEB_TEXT; RENDERED_PDF_BOUNDARY_REVIEW_PENDING"
+    }
+  ],
+  "coverage_inventory": {
+    "numbered_figures": {
+      "expected": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15",
+        "5.16",
+        "5.17",
+        "5.18",
+        "5.19",
+        "5.20",
+        "5.21",
+        "5.22",
+        "5.23"
+      ],
+      "count": 23,
+      "status": "NUMBER_SEQUENCE_FOUND_WEB_TEXT_RENDERED_PDF_CHECK_PENDING",
+      "notes": "Figures 5.1–5.23 include teaching content and Learning further; page-image coverage and labels not yet verified."
+    },
+    "tables": {
+      "expected": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7"
+      ],
+      "count": 7,
+      "status": "NUMBER_SEQUENCE_FOUND_WEB_TEXT_RENDERED_PDF_CHECK_PENDING"
+    },
+    "activities": {
+      "expected": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.4",
+        "5.5",
+        "5.6",
+        "5.7"
+      ],
+      "count": 7,
+      "status": "NUMBER_SEQUENCE_FOUND_WEB_TEXT_RENDERED_PDF_CHECK_PENDING",
+      "scope": [
+        "body-part measurement",
+        "motion/rest observations",
+        "linear motion",
+        "circular motion",
+        "oscillatory motion",
+        "vibrating metal strip",
+        "classification of park movements"
+      ]
+    },
+    "special_notes": [
+      "historical/body-part units and archaeological measuring-scale mention",
+      "inch conversion and unit-symbol conventions",
+      "tactile scale use by visually impaired learners",
+      "Think it over: determine motion on a ship without windows",
+      "periodic-motion explanation",
+      "lowercase unit symbols, no plural s, space between number and unit"
+    ],
+    "chapter_end_questions": {
+      "expected_count": 13,
+      "status": "WEB_TEXT QUESTION SEQUENCE FOUND; PDF RENDERED CHECK PENDING",
+      "coverage": [
+        "unit selection",
+        "true/false about motion and conversions",
+        "non-standard units",
+        "motion examples",
+        "reference point/distance",
+        "types of motion",
+        "rollercoaster path",
+        "materials for homemade metre scale",
+        "unit-conversion card game"
+      ]
+    },
+    "keywords_and_summary": {
+      "status": "FOUND_WEB_TEXT_RENDERED_PDF_CHECK_PENDING",
+      "keywords": [
+        "centimetre",
+        "circular motion",
+        "distance",
+        "kilometre",
+        "length",
+        "linear motion",
+        "measurement",
+        "metre",
+        "millimetre",
+        "motion",
+        "oscillatory motion",
+        "reference point",
+        "SI unit of length",
+        "classify",
+        "explore",
+        "identify",
+        "investigate",
+        "justification",
+        "observe"
+      ]
+    },
+    "learning_further": {
+      "expected_tasks": 6,
+      "status": "WEB_TEXT_TASKS_FOUND_RENDERED_PDF_CHECK_PENDING",
+      "tasks": [
+        "estimate a page's thickness with a scale-based method",
+        "measure and record fallen-leaf lengths and breadths",
+        "ask about traditional length units and research archaeological scales",
+        "design a maze with 1 cm and 2 cm line segments",
+        "record one's height periodically with adult help",
+        "estimate distance using bicycle-wheel circumference and rotation count"
+      ]
+    }
+  },
+  "lesson_and_question_coverage": {
+    "lessons_generated": 7,
+    "questions_generated": 56,
+    "question_type_counts": {
+      "multiple_choice": 7,
+      "multiple_select": 7,
+      "true_false": 7,
+      "matching": 7,
+      "fill_blank": 7,
+      "image_observation": 7,
+      "short_answer": 7,
+      "scenario_based": 7
+    },
+    "image_observation_questions_blocked": 7
+  },
+  "review_status": {
+    "rendered_english_pages": "PENDING",
+    "rendered_hindi_pages": "PENDING",
+    "exact_page_boundary_and_reading_order": "PENDING",
+    "bilingual_semantic_parity": "PENDING_HUMAN_REVIEW",
+    "scientific_accuracy_and_scope": "PENDING_HUMAN_REVIEW",
+    "visual_rendering_and_accessibility": "PENDING",
+    "runtime_renderer_implementation": "NOT_IMPLEMENTED",
+    "publication_allowed": false
+  },
+  "cautions": [
+    "This inventory identifies source elements to reconcile; it is not proof that all original material is fully taught or mapped to the correct page.",
+    "Do not display draft diagrams or image-observation questions to students until visual review.",
+    "Structural validation does not equal source completeness, approval or publishability."
+  ]
+}

@@ -1,0 +1,1162 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch04-topic05-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 4,
+    "title_by_locale": {
+      "en": "Exploring Magnets",
+      "hi": "चुंबकों को जानें"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 5,
+    "topic_id": "c6-sci-ch04-t05",
+    "title_by_locale": {
+      "en": "Fun with Magnets and Magnet Care",
+      "hi": "चुंबकों के साथ मनोरंजन और उनकी देखभाल"
+    },
+    "source_section_ids": [
+      "4.5"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          89,
+          96
+        ],
+        "printed_pages": [
+          71,
+          78
+        ],
+        "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": [
+          85,
+          92
+        ],
+        "printed_pages": [
+          69,
+          76
+        ],
+        "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "4.5"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from other chapters.",
+      "Claim that all metals are magnetic.",
+      "Claim that attraction alone distinguishes a magnet from iron.",
+      "Claim that every material has identical magnetic effects.",
+      "English full-page source screenshots as Hindi student visuals.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable objective/block/visual/activity/question IDs and equivalent answers/rubrics across English and Hindi. One global app language controls all learner-visible content and preserves learner state when switched; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary material, not verbatim NCERT text/questions.",
+    "asset_rule": "Visual structures are drafts; image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch04-t05-lo1",
+      "statement_by_locale": {
+        "en": "Explain examples where magnets move objects without direct contact.",
+        "hi": "ऐसे उदाहरण समझाएँ जिनमें चुंबक बिना सीधे छुए वस्तुओं को हिलाते हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t05-lo2",
+      "statement_by_locale": {
+        "en": "Describe safe handling and storage guidance shown in the chapter.",
+        "hi": "अध्याय में बताई चुंबकों की सुरक्षित देखभाल और भंडारण की विधि बताएँ।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t05-lo3",
+      "statement_by_locale": {
+        "en": "Connect magnet toys and examples with attraction and repulsion.",
+        "hi": "चुंबक-खिलौनों और उदाहरणों को आकर्षण तथा प्रतिकर्षण से जोड़ें।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c4-t05-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        89,
+        96
+      ],
+      "printed_pages": [
+        71,
+        78
+      ],
+      "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "English Curiosity reprint 2026–27; coverage ledger maps figures, tables, activities and end matter."
+    },
+    {
+      "source_ref_id": "src-c4-t05-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        85,
+        92
+      ],
+      "printed_pages": [
+        69,
+        76
+      ],
+      "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "Hindi Jigyasa reprint 2026–27; OCR/layout noise requires rendered-page and semantic review."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch04-t05",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch04-t05-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1",
+          "c6-sci-ch04-t05-lo2"
+        ],
+        "source_refs": [
+          "src-c4-t05-en",
+          "src-c4-t05-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Magnets at play",
+            "paragraphs": [
+              "Section 4.5 presents activities such as moving steel balls through a cardboard maze, retrieving a steel paper clip from water without wetting the magnet, and matchbox-magnet cars with like poles facing.",
+              "Figure 4.18 shows a hopping-frog toy made with ring magnets. Ring magnets are arranged with alternating North/South poles upward along a scale, and another ring magnet is attached to the frog, so their interaction makes it appear to hop."
+            ],
+            "key_point": "Magnetic interactions have practical and playful uses; relate movement to attraction or repulsion."
+          },
+          "hi": {
+            "heading": "चुंबकों के साथ रोचक गतिविधियाँ",
+            "paragraphs": [
+              "खंड 4.5 में गत्ते की भूलभुलैया में स्टील की गेंदें चलाना, चुंबक गीला किए बिना पानी से स्टील पेपर क्लिप निकालना और समान ध्रुव आमने-सामने वाले माचिस-डिब्बा चुंबकीय वाहन जैसे उदाहरण हैं।",
+              "चित्र 4.18 में वलय चुंबकों से बना फुदकता मेंढक है। स्केल के साथ वलय चुंबक बारी-बारी से इस तरह लगाए जाते हैं कि ऊपर उत्तरी-दक्षिणी ध्रुव क्रम से हों; मेंढक पर भी वलय चुंबक लगाया जाता है, जिससे वह उछलता दिखाई देता है।"
+            ],
+            "key_point": "चुंबकीय अंतःक्रियाओं के व्यावहारिक और रोचक उपयोग हैं; गति को आकर्षण या प्रतिकर्षण से जोड़ें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo2",
+          "c6-sci-ch04-t05-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t05-en",
+          "src-c4-t05-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Store and handle magnets carefully",
+            "paragraphs": [
+              "The chapter shows bar magnets stored in pairs with unlike poles on the same side, a wooden piece between them and soft-iron pieces across their ends.",
+              "The caution advises not to heat, drop or hammer magnets and says to keep them away from mobile phones or remote controls. Follow teacher directions during activities."
+            ],
+            "key_point": "Handle magnets carefully and store them using the arrangement shown in the chapter."
+          },
+          "hi": {
+            "heading": "चुंबकों को सुरक्षित रखें",
+            "paragraphs": [
+              "अध्याय में छड़ चुंबकों को जोड़े में रखने की व्यवस्था है—विपरीत ध्रुव एक ही ओर हों, बीच में लकड़ी और सिरों पर नरम लोहे के टुकड़े हों।",
+              "सावधानी में चुंबकों को गरम न करने, न गिराने, न हथौड़े से पीटने और मोबाइल फोन या रिमोट कंट्रोल से दूर रखने की बात है। गतिविधियों में शिक्षक के निर्देश मानें।"
+            ],
+            "key_point": "चुंबकों को सावधानी से संभालें और अध्याय में दिखाई गई व्यवस्था से रखें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1",
+          "c6-sci-ch04-t05-lo2",
+          "c6-sci-ch04-t05-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t05-en",
+          "src-c4-t05-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create an original compact diagram for Fun with Magnets and Magnet Care; localize all labels through diagram_data and do not use full-page source screenshots.",
+          "hi": "चुंबकों के साथ मनोरंजन और उनकी देखभाल के लिए मौलिक संक्षिप्त चित्र बनाएँ; diagram_data से सभी लेबल स्थानीयकृत करें और पूरे स्रोत-पृष्ठ का स्क्रीनशॉट न लगाएँ।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch04-t05-visual-01",
+          "kind": "magnet_applications_and_storage",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "maze",
+              "label_by_locale": {
+                "en": "Move steel balls through cardboard maze",
+                "hi": "गत्ते की भूलभुलैया में स्टील की गेंदें चलाएँ"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "water",
+              "label_by_locale": {
+                "en": "Retrieve a steel paper clip from water",
+                "hi": "पानी से स्टील पेपर क्लिप निकालें"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "cars",
+              "label_by_locale": {
+                "en": "Like poles facing: cars move apart",
+                "hi": "समान ध्रुव आमने-सामने: वाहन दूर जाते हैं"
+              },
+              "position": {
+                "order": 3
+              }
+            },
+            {
+              "id": "frog",
+              "label_by_locale": {
+                "en": "Ring magnets make hopping-frog toy",
+                "hi": "वलय चुंबकों से फुदकता मेंढक"
+              },
+              "position": {
+                "order": 4
+              }
+            },
+            {
+              "id": "storage",
+              "label_by_locale": {
+                "en": "Wood spacer and soft-iron keepers for stored bar magnets",
+                "hi": "रखे छड़ चुंबकों के बीच लकड़ी और सिरों पर नरम लोहे के टुकड़े"
+              },
+              "position": {
+                "order": 5
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Diagram draft: Move steel balls through cardboard maze; Retrieve a steel paper clip from water; Like poles facing: cars move apart; Ring magnets make hopping-frog toy; Wood spacer and soft-iron keepers for stored bar magnets.",
+          "hi": "चित्र-प्रारूप: गत्ते की भूलभुलैया में स्टील की गेंदें चलाएँ؛ पानी से स्टील पेपर क्लिप निकालें؛ समान ध्रुव आमने-सामने: वाहन दूर जाते हैं؛ वलय चुंबकों से फुदकता मेंढक؛ रखे छड़ चुंबकों के बीच लकड़ी और सिरों पर नरम लोहे के टुकड़े।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1",
+          "c6-sci-ch04-t05-lo2"
+        ],
+        "activity_kind": "Section 4.5 — Try a magnet challenge",
+        "configuration": {
+          "activity_id": "c6-sci-ch04-t05-activity-01",
+          "title_by_locale": {
+            "en": "Section 4.5 — Try a magnet challenge",
+            "hi": "खंड 4.5 — चुंबक की चुनौती आज़माएँ"
+          },
+          "instruction_by_locale": {
+            "en": "With teacher guidance, move steel balls in a cardboard maze, retrieve a paper clip from water without wetting the magnet, or observe cars with like poles facing. Explain the interaction and handle magnets carefully.",
+            "hi": "शिक्षक की देखरेख में गत्ते की भूलभुलैया में स्टील की गेंदें चलाएँ, चुंबक गीला किए बिना पानी से पेपर क्लिप निकालें या समान ध्रुव वाले वाहनों का अवलोकन करें। अंतःक्रिया समझाएँ और चुंबकों को सावधानी से संभालें।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "challenge",
+                "hi": "Choose a safe challenge"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "observe",
+                "hi": "Observe movement without touching"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "explain",
+                "hi": "Explain attraction or repulsion"
+              }
+            },
+            {
+              "id": "step-4",
+              "label_by_locale": {
+                "en": "store",
+                "hi": "Review safe storage"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear observation"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "अवलोकन मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Follow teacher guidance for iron filings, small objects, water and sharp needles. Do not heat, drop or hammer magnets.",
+          "hi": "लोहे के चूरे, छोटी वस्तुओं, पानी और नुकीली सुई वाले क्रियाकलाप शिक्षक की देखरेख में करें। चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1",
+          "c6-sci-ch04-t05-lo2",
+          "c6-sci-ch04-t05-lo3"
+        ],
+        "content_by_locale": {
+          "en": "Magnets can move some objects without touching them; do not heat, drop or hammer magnets, and store them as shown.",
+          "hi": "चुंबक कुछ वस्तुओं को बिना छुए हिला सकते हैं; उन्हें गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें और बताई व्यवस्था से रखें।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch04-t05",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch04-t05-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "How does the chapter suggest storing a pair of bar magnets?",
+          "hi": "अध्याय में छड़ चुंबकों के जोड़े को कैसे रखने की सलाह दी गई है?"
+        },
+        "feedback_by_locale": {
+          "en": "The storage diagram shows unlike poles on the same side, wood between and soft-iron pieces across the ends.",
+          "hi": "भंडारण-चित्र में विपरीत ध्रुव एक ओर, बीच में लकड़ी और सिरों पर नरम लोहे के टुकड़े दिखाए गए हैं।"
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Unlike poles on the same side, wood between and soft-iron pieces across the ends",
+              "hi": "विपरीत ध्रुव एक ओर, बीच में लकड़ी और सिरों पर नरम लोहे के टुकड़े"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Like poles together with no separator",
+              "hi": "समान ध्रुव साथ, बीच में कुछ नहीं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Heat them before storage",
+              "hi": "रखने से पहले गरम करें"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Hammer them flat",
+              "hi": "हथौड़े से पीटकर चपटा करें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t05-q02",
+        "type": "multiple_select",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which actions match the chapter's caution? Select all that apply.",
+          "hi": "कौन-से कार्य अध्याय की सावधानी से मेल खाते हैं? सभी सही विकल्प चुनें।"
+        },
+        "feedback_by_locale": {
+          "en": "The caution advises against heating, dropping or hammering magnets.",
+          "hi": "सावधानी में चुंबकों को गरम करने, गिराने या हथौड़े से पीटने से मना किया गया है।"
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Do not heat magnets",
+              "hi": "चुंबकों को गरम न करें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Do not drop magnets",
+              "hi": "चुंबकों को न गिराएँ"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Do not hammer magnets",
+              "hi": "चुंबकों को हथौड़े से न पीटें"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Strike magnets to test strength",
+              "hi": "शक्ति जाँचने के लिए चुंबकों को मारें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t05-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A magnet can move some magnetic objects without directly touching them, as in the maze activity.",
+          "hi": "भूलभुलैया गतिविधि की तरह चुंबक कुछ चुंबकीय वस्तुओं को सीधे छुए बिना हिला सकता है।"
+        },
+        "feedback_by_locale": {
+          "en": "The maze and paper-clip examples show movement without direct contact.",
+          "hi": "भूलभुलैया और पेपर क्लिप के उदाहरण बिना सीधे संपर्क के गति दिखाते हैं।"
+        },
+        "rendering_contract_id": "qtype-true-false.v1",
+        "correct_answer": true
+      },
+      {
+        "id": "c6-sci-ch04-t05-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each example with its main idea.",
+          "hi": "हर उदाहरण का मुख्य विचार से मिलान करें।"
+        },
+        "feedback_by_locale": {
+          "en": "Each example uses attraction or repulsion in a different way.",
+          "hi": "हर उदाहरण आकर्षण या प्रतिकर्षण का अलग उपयोग करता है।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "left_items": [
+          {
+            "id": "maze",
+            "label_by_locale": {
+              "en": "Steel balls in cardboard maze",
+              "hi": "गत्ते की भूलभुलैया में स्टील की गेंदें"
+            }
+          },
+          {
+            "id": "clip",
+            "label_by_locale": {
+              "en": "Steel paper clip in water",
+              "hi": "पानी में स्टील पेपर क्लिप"
+            }
+          },
+          {
+            "id": "cars",
+            "label_by_locale": {
+              "en": "Cars with like poles facing",
+              "hi": "समान ध्रुव आमने-सामने वाहन"
+            }
+          },
+          {
+            "id": "frog",
+            "label_by_locale": {
+              "en": "Hopping frog with ring magnets",
+              "hi": "वलय चुंबकों वाला फुदकता मेंढक"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "under",
+            "label_by_locale": {
+              "en": "Move magnet below the tray",
+              "hi": "ट्रे के नीचे चुंबक चलाएँ"
+            }
+          },
+          {
+            "id": "retrieve",
+            "label_by_locale": {
+              "en": "Retrieve without wetting magnet",
+              "hi": "चुंबक गीला किए बिना निकालें"
+            }
+          },
+          {
+            "id": "repel",
+            "label_by_locale": {
+              "en": "Cars move apart due to repulsion",
+              "hi": "प्रतिकर्षण से वाहन दूर जाते हैं"
+            }
+          },
+          {
+            "id": "ring",
+            "label_by_locale": {
+              "en": "Ring-magnet interaction",
+              "hi": "वलय चुंबकों की अंतःक्रिया"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "maze",
+            "right_id": "under"
+          },
+          {
+            "left_id": "clip",
+            "right_id": "retrieve"
+          },
+          {
+            "left_id": "cars",
+            "right_id": "repel"
+          },
+          {
+            "left_id": "frog",
+            "right_id": "ring"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Like poles facing each other can make the matchbox cars move ____ from each other.",
+          "hi": "समान ध्रुव आमने-सामने होने पर माचिस-डिब्बा वाहन एक-दूसरे से ____ जा सकते हैं।"
+        },
+        "feedback_by_locale": {
+          "en": "Like poles repel, so the cars move away from one another.",
+          "hi": "समान ध्रुव प्रतिकर्षित करते हैं, इसलिए वाहन एक-दूसरे से दूर जाते हैं।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "accepted_answers": {
+          "en": [
+            "away",
+            "apart"
+          ],
+          "hi": [
+            "दूर"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Two matchbox-magnet cars have like poles facing. What movement is expected?",
+          "hi": "दो माचिस-डिब्बा चुंबकीय वाहनों के समान ध्रुव आमने-सामने हैं। कैसी गति अपेक्षित है?"
+        },
+        "feedback_by_locale": {
+          "en": "Like poles repel, which can make the cars move apart.",
+          "hi": "समान ध्रुव प्रतिकर्षित करते हैं, जिससे वाहन अलग हो सकते हैं।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "They move apart due to repulsion",
+              "hi": "प्रतिकर्षण के कारण वे अलग होते हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "They must attract",
+              "hi": "वे अवश्य आकर्षित होते हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "They become non-magnetic",
+              "hi": "वे अचुंबकीय हो जाते हैं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "They cannot move without touch",
+              "hi": "छुए बिना वे नहीं हिल सकते"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch04-t05-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Structured visual is an unrendered draft. Review science, bilingual labels, readability, contrast, alt text and accessibility before student rendering.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Give two instructions for safe handling or storage of magnets from the chapter.",
+          "hi": "चुंबकों को सुरक्षित संभालने या रखने के दो निर्देश लिखें।"
+        },
+        "feedback_by_locale": {
+          "en": "The chapter gives handling cautions and storage instructions.",
+          "hi": "अध्याय में संभालने की सावधानियाँ और भंडारण निर्देश दिए गए हैं।"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              [
+                "Do not heat, drop or hammer magnets.",
+                "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
+              ]
+            ],
+            "sample_answer": "Do not heat, drop or hammer magnets. Store bar magnets in pairs with unlike poles on the same side, wood between and soft-iron pieces across the ends."
+          },
+          "hi": {
+            "key_points": [
+              [
+                "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
+              ]
+            ],
+            "sample_answer": "चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें। छड़ चुंबकों को जोड़े में रखें, विपरीत ध्रुव एक ओर हों, बीच में लकड़ी और सिरों पर नरम लोहे के टुकड़े हों।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the main concept.",
+              "1 point for an accurate supporting detail."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक विवरण के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t05-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t05-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A steel paper clip falls into water. How can it be retrieved without getting the magnet or fingers wet?",
+          "hi": "स्टील की पेपर क्लिप पानी में गिर जाती है। चुंबक या उँगलियाँ गीली किए बिना इसे कैसे निकालें?"
+        },
+        "feedback_by_locale": {
+          "en": "The chapter shows retrieving the clip with a magnet without wetting the magnet or fingers.",
+          "hi": "अध्याय में चुंबक या उँगलियों को गीला किए बिना चुंबक से क्लिप निकालने का उदाहरण है।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "The learner is applying the example in Fig. 4.13.",
+          "hi": "विद्यार्थी चित्र 4.13 के उदाहरण का उपयोग कर रहा है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Move a magnet outside or beneath the bowl to guide the clip.",
+              "hi": "क्लिप को दिशा देने के लिए कटोरे के बाहर या नीचे चुंबक चलाएँ।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Push the magnet into the water.",
+              "hi": "चुंबक को पानी में डालें।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Heat the magnet.",
+              "hi": "चुंबक गरम करें।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Use wood because it attracts the clip.",
+              "hi": "लकड़ी लें क्योंकि वह क्लिप को आकर्षित करती है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice mapped to the numbered textbook section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित पाठ्यपुस्तक अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_QA"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch04-t05-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_asset_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "STRUCTURAL_CHECK_PENDING",
+    "known_limitations": [
+      "Section page ranges are heading-derived and need rendered-PDF comparison.",
+      "Hindi OCR/layout is noisy; human terminology and semantic review is mandatory.",
+      "Diagrams are unrendered structured drafts; image questions are blocked pending visual QA.",
+      "Figures 4.1–4.18, Tables 4.1–4.3, Activities 4.1–4.7, storage/caution, keywords, summary, 11 review questions and 5 Learning further tasks are tracked in the chapter ledger."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch04-t05-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
+  },
+  "next_steps": [
+    "Compare English/Hindi source pages, boundaries and terminology against rendered official PDFs.",
+    "Review figures/tables/activities, safety/storage, summary and end matter.",
+    "Human-review science correctness, Hindi meaning parity and safety.",
+    "Render/review diagrams and alt text; keep image questions gated until approval.",
+    "Run locale/reference/renderer tests; runtime Web/Android components require separate implementation."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

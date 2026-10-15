@@ -1,0 +1,1154 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch04-topic02-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_RENDERED_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "STRUCTURALLY_PAIRED_PENDING_HUMAN_SEMANTIC_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Additive structured content draft only; no runtime code or publishing state modified."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Navodaya is only a distinguishing label for ordinary Class 6 curriculum content. This lesson is not preparation for the Navodaya entrance examination.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "source_url": "https://ncert.nic.in/textbook.php?fecu1=0-12"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "source_url": "https://ncert.nic.in/textbook.php?fhcu1=0-12"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 4,
+    "title_by_locale": {
+      "en": "Exploring Magnets",
+      "hi": "चुंबकों को जानें"
+    },
+    "chapter_scope_status": "NUMBERED_SECTION_MAP_DERIVED_PENDING_RENDERED_SOURCE_VERIFICATION"
+  },
+  "topic": {
+    "topic_number": 2,
+    "topic_id": "c6-sci-ch04-t02",
+    "title_by_locale": {
+      "en": "Poles of a Magnet",
+      "hi": "चुंबक के ध्रुव"
+    },
+    "source_section_ids": [
+      "4.2"
+    ],
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          82,
+          83
+        ],
+        "printed_pages": [
+          64,
+          65
+        ],
+        "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": [
+          78,
+          79
+        ],
+        "printed_pages": [
+          62,
+          63
+        ],
+        "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW"
+      }
+    },
+    "scope_mapping_status": "NUMBERED_SECTION_MAPPED_PENDING_HUMAN_REVIEW"
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "4.2"
+    ],
+    "excluded_scope": [
+      "Detailed teaching from other chapters.",
+      "Claim that all metals are magnetic.",
+      "Claim that attraction alone distinguishes a magnet from iron.",
+      "Claim that every material has identical magnetic effects.",
+      "English full-page source screenshots as Hindi student visuals.",
+      "Navodaya entrance-exam preparation."
+    ],
+    "bilingual_parity_rule": "Stable objective/block/visual/activity/question IDs and equivalent answers/rubrics across English and Hindi. One global app language controls all learner-visible content and preserves learner state when switched; no fallback or mixed-language screen.",
+    "source_text_rule": "AI-authored supplementary material, not verbatim NCERT text/questions.",
+    "asset_rule": "Visual structures are drafts; image-observation items are blocked until visual/accessibility review."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch04-t02-lo1",
+      "statement_by_locale": {
+        "en": "Identify the North and South poles and where iron filings gather most densely.",
+        "hi": "उत्तरी और दक्षिणी ध्रुव पहचानें तथा बताएँ कि लोहे का चूरा सबसे अधिक कहाँ इकट्ठा होता है।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t02-lo2",
+      "statement_by_locale": {
+        "en": "Explain why breaking a magnet does not produce an isolated single pole.",
+        "hi": "समझाएँ कि चुंबक तोड़ने से अकेला ध्रुव क्यों नहीं मिलता।"
+      }
+    },
+    {
+      "id": "c6-sci-ch04-t02-lo3",
+      "statement_by_locale": {
+        "en": "Use iron-filings observations to explain the paired poles of a magnet.",
+        "hi": "लोहे के चूरे के अवलोकन से चुंबक के ध्रुवों का जोड़े में होना समझाएँ।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c4-t02-en",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "pdf_pages": [
+        82,
+        83
+      ],
+      "printed_pages": [
+        64,
+        65
+      ],
+      "mapping_status": "HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "English Curiosity reprint 2026–27; coverage ledger maps figures, tables, activities and end matter."
+    },
+    {
+      "source_ref_id": "src-c4-t02-hi",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "pdf_pages": [
+        78,
+        79
+      ],
+      "printed_pages": [
+        62,
+        63
+      ],
+      "mapping_status": "HINDI_HEADING_DERIVED_PENDING_RENDERED_SOURCE_REVIEW",
+      "use": "Hindi Jigyasa reprint 2026–27; OCR/layout noise requires rendered-page and semantic review."
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch04-t02",
+    "title_by_locale": {
+      "en": "Explore the Idea",
+      "hi": "विषय को समझें"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch04-t02-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1",
+          "c6-sci-ch04-t02-lo2"
+        ],
+        "source_refs": [
+          "src-c4-t02-en",
+          "src-c4-t02-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Where are a magnet's poles?",
+            "paragraphs": [
+              "In Activity 4.2, iron filings are spread on paper and a bar magnet is placed above them. Most filings gather near the two ends; these ends are called the North pole and South pole.",
+              "The pattern shows that attraction is strongest near the poles in this activity. A magnet has two poles, and they occur as a pair."
+            ],
+            "key_point": "A bar magnet has both a North pole and a South pole."
+          },
+          "hi": {
+            "heading": "चुंबक के ध्रुव कहाँ होते हैं?",
+            "paragraphs": [
+              "क्रियाकलाप 4.2 में कागज़ पर लोहे का चूरा फैलाकर उसके ऊपर छड़ चुंबक रखा जाता है। चूरा अधिकतर दोनों सिरों के पास इकट्ठा होता है; इन्हें उत्तरी और दक्षिणी ध्रुव कहते हैं।",
+              "यह पैटर्न दिखाता है कि इस क्रियाकलाप में ध्रुवों के पास आकर्षण अधिक है। चुंबक के दो ध्रुव होते हैं और वे जोड़े में रहते हैं।"
+            ],
+            "key_point": "छड़ चुंबक में उत्तरी और दक्षिणी दोनों ध्रुव होते हैं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo2",
+          "c6-sci-ch04-t02-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t02-en",
+          "src-c4-t02-hi"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Breaking a magnet",
+            "paragraphs": [
+              "If a magnet is broken into smaller pieces, each piece has a North pole and a South pole. Repeated breaking does not create an isolated North pole or South pole.",
+              "The filings pattern does not mean the middle is not part of the magnet. It highlights that attraction is especially strong near the ends."
+            ],
+            "key_point": "Every piece of a broken magnet still has both poles."
+          },
+          "hi": {
+            "heading": "चुंबक तोड़ने पर क्या होता है?",
+            "paragraphs": [
+              "यदि चुंबक को छोटे टुकड़ों में तोड़ा जाए, तो हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं। बार-बार तोड़ने से अकेला उत्तरी या दक्षिणी ध्रुव नहीं मिलता।",
+              "चूरे का पैटर्न यह नहीं बताता कि बीच वाला भाग चुंबक का हिस्सा नहीं है। यह दिखाता है कि सिरों के पास आकर्षण अधिक होता है।"
+            ],
+            "key_point": "टूटे हुए चुंबक के हर टुकड़े में दोनों ध्रुव होते हैं।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1",
+          "c6-sci-ch04-t02-lo2",
+          "c6-sci-ch04-t02-lo3"
+        ],
+        "source_refs": [
+          "src-c4-t02-en",
+          "src-c4-t02-hi"
+        ],
+        "generated_original": true,
+        "visual_brief": {
+          "en": "Create an original compact diagram for Poles of a Magnet; localize all labels through diagram_data and do not use full-page source screenshots.",
+          "hi": "चुंबक के ध्रुव के लिए मौलिक संक्षिप्त चित्र बनाएँ; diagram_data से सभी लेबल स्थानीयकृत करें और पूरे स्रोत-पृष्ठ का स्क्रीनशॉट न लगाएँ।"
+        },
+        "diagram_data": {
+          "visual_id": "c6-sci-ch04-t02-visual-01",
+          "kind": "bar_magnet_poles",
+          "rendering_hint": "compact diagram/process/comparison",
+          "nodes": [
+            {
+              "id": "bar",
+              "label_by_locale": {
+                "en": "Bar magnet",
+                "hi": "छड़ चुंबक"
+              },
+              "position": {
+                "order": 1
+              }
+            },
+            {
+              "id": "north",
+              "label_by_locale": {
+                "en": "North pole",
+                "hi": "उत्तरी ध्रुव"
+              },
+              "position": {
+                "order": 2
+              }
+            },
+            {
+              "id": "south",
+              "label_by_locale": {
+                "en": "South pole",
+                "hi": "दक्षिणी ध्रुव"
+              },
+              "position": {
+                "order": 3
+              }
+            },
+            {
+              "id": "filings",
+              "label_by_locale": {
+                "en": "Most filings gather near both ends",
+                "hi": "अधिकतर चूरा दोनों सिरों के पास इकट्ठा होता है"
+              },
+              "position": {
+                "order": 4
+              }
+            },
+            {
+              "id": "break",
+              "label_by_locale": {
+                "en": "Each smaller piece has both poles",
+                "hi": "हर छोटे टुकड़े में दोनों ध्रुव होते हैं"
+              },
+              "position": {
+                "order": 5
+              }
+            }
+          ],
+          "student_renderable": false,
+          "review_status": "PENDING_VISUAL_QA"
+        },
+        "alt_by_locale": {
+          "en": "Diagram draft: Bar magnet; North pole; South pole; Most filings gather near both ends; Each smaller piece has both poles.",
+          "hi": "चित्र-प्रारूप: छड़ चुंबक؛ उत्तरी ध्रुव؛ दक्षिणी ध्रुव؛ अधिकतर चूरा दोनों सिरों के पास इकट्ठा होता है؛ हर छोटे टुकड़े में दोनों ध्रुव होते हैं।"
+        },
+        "caption_by_locale": {
+          "en": "Original visual draft; visual/accessibility review pending.",
+          "hi": "मौलिक चित्र-प्रारूप; दृश्य/सुलभता समीक्षा लंबित।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-b04",
+        "type": "interactive",
+        "order": 4,
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1",
+          "c6-sci-ch04-t02-lo2"
+        ],
+        "activity_kind": "Activity 4.2 — Observe iron filings",
+        "configuration": {
+          "activity_id": "c6-sci-ch04-t02-activity-01",
+          "title_by_locale": {
+            "en": "Activity 4.2 — Observe iron filings",
+            "hi": "क्रियाकलाप 4.2 — लोहे के चूरे का अवलोकन"
+          },
+          "instruction_by_locale": {
+            "en": "With teacher guidance, place iron filings on paper and bring a bar magnet near them. Observe where filings collect and draw the pattern. Avoid inhaling or scattering filings.",
+            "hi": "शिक्षक की देखरेख में कागज़ पर लोहे का चूरा रखें और छड़ चुंबक पास लाएँ। चूरा कहाँ इकट्ठा होता है देखें और पैटर्न बनाएँ। चूरे को साँस में न लें और न फैलाएँ।"
+          },
+          "steps": [
+            {
+              "id": "step-1",
+              "label_by_locale": {
+                "en": "observe",
+                "hi": "Observe both ends"
+              }
+            },
+            {
+              "id": "step-2",
+              "label_by_locale": {
+                "en": "record",
+                "hi": "Record the pattern"
+              }
+            },
+            {
+              "id": "step-3",
+              "label_by_locale": {
+                "en": "label",
+                "hi": "Label the poles"
+              }
+            }
+          ],
+          "controls_by_locale": {
+            "en": {
+              "save": "Save observation",
+              "reset": "Clear observation"
+            },
+            "hi": {
+              "save": "अवलोकन सहेजें",
+              "reset": "अवलोकन मिटाएँ"
+            }
+          },
+          "response_storage": "Store locale-neutral answer IDs or learner text; preserve across global language changes."
+        },
+        "safety_and_scope": {
+          "en": "Follow teacher guidance for iron filings, small objects, water and sharp needles. Do not heat, drop or hammer magnets.",
+          "hi": "लोहे के चूरे, छोटी वस्तुओं, पानी और नुकीली सुई वाले क्रियाकलाप शिक्षक की देखरेख में करें। चुंबकों को गरम न करें, गिराएँ नहीं या हथौड़े से न पीटें।"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1",
+          "c6-sci-ch04-t02-lo2",
+          "c6-sci-ch04-t02-lo3"
+        ],
+        "content_by_locale": {
+          "en": "A magnet has North and South poles in pairs; breaking it gives smaller magnets, not isolated poles.",
+          "hi": "चुंबक में उत्तरी और दक्षिणी ध्रुव जोड़े में होते हैं; तोड़ने पर छोटे चुंबक बनते हैं, अकेले ध्रुव नहीं।"
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch04-t02",
+    "title_by_locale": {
+      "en": "Practise What You Learned",
+      "hi": "आपने जो सीखा उसका अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "questions": [
+      {
+        "id": "c6-sci-ch04-t02-q01",
+        "type": "multiple_choice",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Where do most iron filings gather around a bar magnet in Activity 4.2?",
+          "hi": "क्रियाकलाप 4.2 में छड़ चुंबक के पास लोहे का अधिकतर चूरा कहाँ इकट्ठा होता है?"
+        },
+        "feedback_by_locale": {
+          "en": "Most filings gather near the two poles.",
+          "hi": "अधिकतर चूरा दोनों ध्रुवों के पास इकट्ठा होता है।"
+        },
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Near both ends",
+              "hi": "दोनों सिरों के पास"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Only in the middle",
+              "hi": "केवल बीच में"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Only at the paper edge",
+              "hi": "केवल कागज़ के किनारे पर"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Nowhere near the magnet",
+              "hi": "चुंबक के पास कहीं नहीं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t02-q02",
+        "type": "multiple_select",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which statements about magnetic poles are correct? Select all that apply.",
+          "hi": "चुंबकीय ध्रुवों के बारे में कौन-से कथन सही हैं? सभी सही विकल्प चुनें।"
+        },
+        "feedback_by_locale": {
+          "en": "Breaking a magnet does not produce an isolated pole.",
+          "hi": "चुंबक तोड़ने से अकेला ध्रुव नहीं मिलता।"
+        },
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A magnet has North and South poles",
+              "hi": "चुंबक में उत्तरी और दक्षिणी ध्रुव होते हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Every piece of a broken magnet has both poles",
+              "hi": "टूटे चुंबक के हर टुकड़े में दोनों ध्रुव होते हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Careful cutting can isolate a North pole",
+              "hi": "सावधानी से काटकर अकेला उत्तरी ध्रुव मिल सकता है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Poles occur in pairs",
+              "hi": "ध्रुव जोड़े में होते हैं"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "d"
+        ]
+      },
+      {
+        "id": "c6-sci-ch04-t02-q03",
+        "type": "true_false",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Breaking a magnet can produce one piece with only a North pole and another with only a South pole.",
+          "hi": "चुंबक तोड़ने से एक टुकड़े में केवल उत्तरी और दूसरे में केवल दक्षिणी ध्रुव हो सकता है।"
+        },
+        "feedback_by_locale": {
+          "en": "Every smaller piece has both poles.",
+          "hi": "हर छोटे टुकड़े में दोनों ध्रुव होते हैं।"
+        },
+        "rendering_contract_id": "qtype-true-false.v1",
+        "correct_answer": false
+      },
+      {
+        "id": "c6-sci-ch04-t02-q04",
+        "type": "matching",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Match each observation or term with its description.",
+          "hi": "हर अवलोकन या पद का विवरण से मिलान करें।"
+        },
+        "feedback_by_locale": {
+          "en": "The terms reflect the paired poles and iron-filings observation.",
+          "hi": "ये पद ध्रुवों के जोड़े और लोहे के चूरे के अवलोकन को दर्शाते हैं।"
+        },
+        "rendering_contract_id": "qtype-matching.v1",
+        "left_items": [
+          {
+            "id": "north",
+            "label_by_locale": {
+              "en": "North pole",
+              "hi": "उत्तरी ध्रुव"
+            }
+          },
+          {
+            "id": "south",
+            "label_by_locale": {
+              "en": "South pole",
+              "hi": "दक्षिणी ध्रुव"
+            }
+          },
+          {
+            "id": "filings",
+            "label_by_locale": {
+              "en": "Iron-filings pattern",
+              "hi": "लोहे के चूरे का पैटर्न"
+            }
+          },
+          {
+            "id": "broken",
+            "label_by_locale": {
+              "en": "Broken magnet piece",
+              "hi": "टूटे चुंबक का टुकड़ा"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "northend",
+            "label_by_locale": {
+              "en": "North-seeking end",
+              "hi": "उत्तर की ओर संकेत करने वाला सिरा"
+            }
+          },
+          {
+            "id": "southend",
+            "label_by_locale": {
+              "en": "South-seeking end",
+              "hi": "दक्षिण की ओर संकेत करने वाला सिरा"
+            }
+          },
+          {
+            "id": "ends",
+            "label_by_locale": {
+              "en": "Most filings gather near the ends",
+              "hi": "अधिकतर चूरा सिरों के पास"
+            }
+          },
+          {
+            "id": "both",
+            "label_by_locale": {
+              "en": "Has both poles",
+              "hi": "दोनों ध्रुव होते हैं"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "north",
+            "right_id": "northend"
+          },
+          {
+            "left_id": "south",
+            "right_id": "southend"
+          },
+          {
+            "left_id": "filings",
+            "right_id": "ends"
+          },
+          {
+            "left_id": "broken",
+            "right_id": "both"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-q05",
+        "type": "fill_blank",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A magnet always has two ____ that occur as a pair.",
+          "hi": "चुंबक में हमेशा दो ____ होते हैं, जो जोड़े में रहते हैं।"
+        },
+        "feedback_by_locale": {
+          "en": "The two poles are North and South.",
+          "hi": "दो ध्रुव उत्तरी और दक्षिणी हैं।"
+        },
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "accepted_answers": {
+          "en": [
+            "poles"
+          ],
+          "hi": [
+            "ध्रुव"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace",
+              "case-insensitive comparison"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim whitespace",
+              "collapse repeated whitespace"
+            ]
+          },
+          "never": [
+            "Do not transliterate across scripts.",
+            "Do not silently translate responses.",
+            "Do not strip meaningful matras or diacritics."
+          ]
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-q06",
+        "type": "image_observation",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "A diagram shows filings clustered near both ends of a bar magnet. What does this indicate?",
+          "hi": "छड़ चुंबक के दोनों सिरों के पास इकट्ठे चूरे का चित्र देखें। यह क्या दर्शाता है?"
+        },
+        "feedback_by_locale": {
+          "en": "The pattern highlights both poles; it does not mean the middle is absent.",
+          "hi": "पैटर्न दोनों ध्रुवों को दिखाता है; इससे बीच वाला भाग अनुपस्थित नहीं हो जाता।"
+        },
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Attraction is strongest near the poles in this activity",
+              "hi": "इस क्रियाकलाप में ध्रुवों के पास आकर्षण अधिक है"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "The magnet has only one pole",
+              "hi": "चुंबक का केवल एक ध्रुव है"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The middle is not part of the magnet",
+              "hi": "बीच वाला भाग चुंबक का हिस्सा नहीं"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Iron filings are non-magnetic",
+              "hi": "लोहे का चूरा अचुंबकीय है"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "visual_asset_ref": "c6-sci-ch04-t02-visual-01",
+        "renderability": {
+          "status": "BLOCKED_FROM_STUDENT_RENDERING",
+          "reason": "Structured visual is an unrendered draft. Review science, bilingual labels, readability, contrast, alt text and accessibility before student rendering.",
+          "required_registry_gate": "qtype-image-observation.v1.visual_gate"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-q07",
+        "type": "short_answer",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What happens to the poles when a magnet is broken into smaller pieces?",
+          "hi": "चुंबक को छोटे टुकड़ों में तोड़ने पर ध्रुवों का क्या होता है?"
+        },
+        "feedback_by_locale": {
+          "en": "Magnetic poles remain paired in smaller pieces.",
+          "hi": "छोटे टुकड़ों में भी चुंबकीय ध्रुव जोड़े में रहते हैं।"
+        },
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              [
+                "Each piece has both a North pole and a South pole.",
+                "हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं।"
+              ]
+            ],
+            "sample_answer": "Each piece becomes a smaller magnet with both poles; breaking does not isolate one pole."
+          },
+          "hi": {
+            "key_points": [
+              [
+                "हर टुकड़े में उत्तरी और दक्षिणी ध्रुव होते हैं।"
+              ]
+            ],
+            "sample_answer": "हर टुकड़ा दोनों ध्रुवों वाला छोटा चुंबक बनता है; तोड़ने से अकेला ध्रुव नहीं मिलता।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 2,
+          "rubric_by_locale": {
+            "en": [
+              "1 point for the main concept.",
+              "1 point for an accurate supporting detail."
+            ],
+            "hi": [
+              "मुख्य अवधारणा के लिए 1 अंक।",
+              "सही सहायक विवरण के लिए 1 अंक।"
+            ]
+          },
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE"
+        }
+      },
+      {
+        "id": "c6-sci-ch04-t02-q08",
+        "type": "scenario_based",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch04-t02-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "A learner sees few filings near the centre and concludes the magnet's middle is not magnetic. What is the better conclusion?",
+          "hi": "एक विद्यार्थी बीच में कम चूरा देखकर कहता है कि चुंबक का बीच वाला भाग चुंबकीय नहीं है। बेहतर निष्कर्ष क्या है?"
+        },
+        "feedback_by_locale": {
+          "en": "The pattern highlights the poles; it does not mean the magnet's middle is absent.",
+          "hi": "पैटर्न ध्रुवों को दिखाता है; इसका अर्थ नहीं कि बीच वाला भाग मौजूद नहीं।"
+        },
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "scenario_by_locale": {
+          "en": "The learner is interpreting Activity 4.2.",
+          "hi": "विद्यार्थी क्रियाकलाप 4.2 की व्याख्या कर रहा है।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Attraction is strongest near the poles; the middle is still part of the magnet.",
+              "hi": "ध्रुवों के पास आकर्षण अधिक है; बीच वाला भाग भी चुंबक का हिस्सा है।"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "The middle is a separate object.",
+              "hi": "बीच में अलग वस्तु है।"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "The magnet has no South pole.",
+              "hi": "चुंबक का दक्षिणी ध्रुव नहीं है।"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The filings pattern is unrelated to magnets.",
+              "hi": "चूरे के पैटर्न का चुंबक से संबंध नहीं है।"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ]
+      }
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice mapped to the numbered textbook section, not verbatim NCERT questions.",
+      "hi": "क्रमांकित पाठ्यपुस्तक अनुभाग पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों की शब्दशः प्रतिलिपि नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "section_title": "Practise What You Learned",
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "section_title": "आपने जो सीखा उसका अभ्यास करें",
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
+    },
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "preserve_response_by_question_id": true,
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "unknown_type_policy": "BLOCK_QUESTION_AND_REPORT_VALIDATION_ERROR",
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_FROM_STUDENT_RENDERING_UNTIL_VISUAL_QA"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch04-t02-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    },
+    "question_type_component_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "question_rendering_data_status": "EACH_QUESTION_HAS_RENDERING_CONTRACT_ID"
+  },
+  "parity_audit": {
+    "shared_learning_objective_ids": true,
+    "shared_explain_block_ids": true,
+    "shared_visual_asset_ids": true,
+    "shared_practice_question_ids": true,
+    "shared_correct_answer_ids": true,
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "STRUCTURAL_CHECK_PENDING",
+    "known_limitations": [
+      "Section page ranges are heading-derived and need rendered-PDF comparison.",
+      "Hindi OCR/layout is noisy; human terminology and semantic review is mandatory.",
+      "Diagrams are unrendered structured drafts; image questions are blocked pending visual QA.",
+      "Figures 4.1–4.18, Tables 4.1–4.3, Activities 4.1–4.7, storage/caution, keywords, summary, 11 review questions and 5 Learning further tasks are tracked in the chapter ledger."
+    ],
+    "global_language_switch_contract_recorded": true,
+    "runtime_language_switch_implemented": false,
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "question_rendering_registry_linked": true,
+    "question_type_registry_status": "SPECIFIED_NOT_IMPLEMENTED",
+    "generated_question_types_logged": [
+      {
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q01"
+        ]
+      },
+      {
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q02"
+        ]
+      },
+      {
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q03"
+        ]
+      },
+      {
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q04"
+        ]
+      },
+      {
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q05"
+        ]
+      },
+      {
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q06"
+        ]
+      },
+      {
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q07"
+        ]
+      },
+      {
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "question_ids": [
+          "c6-sci-ch04-t02-q08"
+        ]
+      }
+    ],
+    "question_components_implemented": false
+  },
+  "next_steps": [
+    "Compare English/Hindi source pages, boundaries and terminology against rendered official PDFs.",
+    "Review figures/tables/activities, safety/storage, summary and end matter.",
+    "Human-review science correctness, Hindi meaning parity and safety.",
+    "Render/review diagrams and alt text; keep image questions gated until approval.",
+    "Run locale/reference/renderer tests; runtime Web/Android components require separate implementation."
+  ],
+  "language_runtime_contract": {
+    "version": "quantaedge.global-locale-content-contract.v1",
+    "supported_locales": [
+      "en",
+      "hi"
+    ],
+    "locale_source": "The single global app language selection; lesson content must not require a separate per-section language setting.",
+    "scope": "Every student-visible content surface on web and Android, across the full lesson and practice experience, including shared UI strings and system-generated feedback.",
+    "live_switch": "Language may be changed at any time. All visible content must update together without navigating away, losing the current question, selected answers, written response, score, progress or reasonable reading position.",
+    "required_bilingual_fields": [
+      "lesson/chapter/topic titles and subtitles",
+      "all explanation headings, paragraphs, callouts and worked steps",
+      "diagram labels, labels inside generated visual assets, visual alt text and captions",
+      "activity instructions, input prompts, helper text, validation messages and formative feedback",
+      "recap, key takeaways, glossary terms and definitions",
+      "every practice prompt, context/scenario, option, matching label, hint, reveal-answer explanation, feedback, rubric, sample answer and accepted text answer",
+      "practice instructions and controls, status labels, score/progress messages, correct/incorrect/unanswered messages, retry/next/submit/review labels",
+      "loading, empty, error, unavailable-content and accessibility/assistive labels shown to the learner"
+    ],
+    "invariants": [
+      "English and Hindi have the same stable learning-objective IDs, content-block IDs, visual IDs, question IDs, correct answer IDs, grading rules and intended difficulty.",
+      "Translation can change phrasing, but not concept scope, factual meaning, answer correctness, assessment demand or feedback intent.",
+      "No content may be silently borrowed from another chapter to fill a missing translation.",
+      "No fallback to the other language is permitted for student-visible content. Missing locale data must fail validation and block approval/publication; preview must flag it visibly.",
+      "Non-linguistic identifiers, schema keys, hashes, booleans and stable IDs are locale-neutral. Any human-readable label derived from them must be localized.",
+      "A source page image containing English text is not automatically safe to display in Hindi mode. Use an approved localized equivalent or a generated text-independent visual; keep full-page source previews editor-only.",
+      "The UI's shared/global string dictionary and platform-level errors must obey the same en/hi switch. A bilingual lesson JSON by itself does not implement runtime language switching."
+    ],
+    "test_requirements": [
+      "Enumerate all learner-visible strings from lesson, practice, shared controls and error/feedback states; assert en and hi values exist and are non-empty.",
+      "Switch EN to HI and HI to EN on every lesson/practice state; verify no mixed-language screen.",
+      "Verify active question index, current/selected answers, typed answer, progress, score and reading position survive a language switch.",
+      "Compare question IDs, answer IDs, grading and rubrics across locales to prove the same assessment is delivered."
+    ],
+    "implementation_status": "CONTENT_CONTRACT_RECORDED_RUNTIME_NOT_IMPLEMENTED"
+  }
+}

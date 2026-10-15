@@ -1,0 +1,1105 @@
+{
+  "schema_version": "quantaedge.structured-lesson.v1",
+  "artifact_type": "draft_lesson",
+  "artifact_id": "qe-c6-sci-ch02-topic07-v1",
+  "workflow": {
+    "status": "DRAFT_GENERATED_NOT_REVIEWED",
+    "content_review_status": "PENDING",
+    "source_completeness_status": "PENDING_SOURCE_RECONCILIATION",
+    "visual_review_status": "PENDING",
+    "bilingual_parity_status": "MACHINE_STRUCTURED_PAIRED_PENDING_HUMAN_REVIEW",
+    "publication_allowed": false,
+    "ui_implementation_status": "NOT_IMPLEMENTED",
+    "created_date": "2026-10-15",
+    "change_policy": "Staged as uncommitted Git objects during the active batch; no branch ref update or commit."
+  },
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "project_label": "Navodaya",
+    "project_label_clarification": "Regular Class 6 curriculum, not entrance-exam preparation.",
+    "textbook_by_locale": {
+      "en": {
+        "title": "Curiosity",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-english-fecu1",
+        "pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73"
+      },
+      "hi": {
+        "title": "जिज्ञासा",
+        "edition": "Reprint 2026-27",
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec"
+      }
+    }
+  },
+  "chapter": {
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    }
+  },
+  "topic": {
+    "topic_number": 7,
+    "topic_id": "c6-sci-ch02-t07",
+    "title_by_locale": {
+      "en": "Protecting Biodiversity and Sacred Groves",
+      "hi": "जैव-विविधता और पवित्र उपवनों की रक्षा"
+    },
+    "source_page_scope": {
+      "en": {
+        "pdf_pages": [
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52
+        ],
+        "printed_pages": [
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34
+        ],
+        "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW"
+      },
+      "hi": {
+        "pdf_pages": null,
+        "printed_pages": null,
+        "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+      }
+    }
+  },
+  "content_rules": {
+    "chapter_specific_only": true,
+    "allowed_scope": [
+      "Habitat damage and loss of homes/resources",
+      "Biodiversity loss",
+      "Project Tiger, Cheetah Reintroduction Project and protected areas mentioned in chapter",
+      "Salim Ali's bird observation/documentation",
+      "Sacred groves and local community protection",
+      "Chapter-end biodiversity activities"
+    ],
+    "excluded_scope": [
+      "External current conservation statistics not in this book",
+      "Detailed policy/evolutionary/scientific material beyond source",
+      "Navodaya entrance-exam preparation"
+    ],
+    "generated_content_note": "Authored explanatory and practice material based on cited chapter pages, not verbatim NCERT text or NCERT assessment items.",
+    "global_locale_rule": "All visible content and UI labels use en/hi fields and global locale; runtime switch is not implemented in data."
+  },
+  "learning_objectives": [
+    {
+      "id": "c6-sci-ch02-t07-lo1",
+      "statement_by_locale": {
+        "en": "Explain how habitat damage can reduce resources and biodiversity.",
+        "hi": "समझाएँ कि आवास को नुकसान पहुँचने से संसाधन और जैव-विविधता कैसे घट सकते हैं।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t07-lo2",
+      "statement_by_locale": {
+        "en": "Identify conservation examples in the chapter, including sacred groves and named projects.",
+        "hi": "पवित्र उपवनों और नामित परियोजनाओं सहित अध्याय में दिए संरक्षण के उदाहरण पहचानें।"
+      }
+    },
+    {
+      "id": "c6-sci-ch02-t07-lo3",
+      "statement_by_locale": {
+        "en": "Suggest responsible, realistic ways to learn about and protect local biodiversity.",
+        "hi": "स्थानीय जैव-विविधता के बारे में जानने और उसकी रक्षा करने के जिम्मेदार, व्यावहारिक उपाय सुझाएँ।"
+      }
+    }
+  ],
+  "source_refs": [
+    {
+      "source_ref_id": "src-c2-en-conservation-p46-52",
+      "locale": "en",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "pdf_pages": [
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "printed_pages": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34
+      ],
+      "mapping_status": "TOC_DERIVED_NEEDS_HUMAN_REVIEW",
+      "source_context": [
+        "PDF p.46 / printed p.28 discusses habitat damage, loss of homes/resources and biodiversity, and examples of species affected by habitat loss/projects.",
+        "PDF p.47 / printed p.29 discusses sacred groves, community protection and biodiversity.",
+        "PDF p.48 / printed p.30 summarises chapter definitions and the connection of habitat damage with biodiversity loss.",
+        "PDF pp.49-51 / printed pp.31-33 give chapter-end questions and a learning-further prompt about Indian scientists/wildlife biologists.",
+        "PDF p.52 / printed p.34 suggests school plant labels, class biodiversity registers, learning about Project Tiger and discussing local protective actions."
+      ]
+    },
+    {
+      "source_ref_id": "src-c2-hi-jigyasa-conservation",
+      "locale": "hi",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "pdf_pages": null,
+      "printed_pages": null,
+      "mapping_status": "PENDING_HINDI_SOURCE_PAGE_ALIGNMENT"
+    }
+  ],
+  "explain": {
+    "section_id": "explain-c6-sci-ch02-t07",
+    "title_by_locale": {
+      "en": "Why Biodiversity Needs Protection",
+      "hi": "जैव-विविधता की रक्षा क्यों आवश्यक है"
+    },
+    "blocks": [
+      {
+        "id": "c6-sci-ch02-t07-b01",
+        "type": "rich_text",
+        "order": 1,
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo1",
+          "c6-sci-ch02-t07-lo3"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Why habitats matter",
+            "paragraphs": [
+              "A habitat provides living things with homes and resources such as food and water. When a habitat is damaged, plants and animals may lose places to live, food and other resources. These losses can reduce the variety of living things in a region—its biodiversity.",
+              "The chapter asks learners to notice changes in plants and animals seen by older people in their childhood compared with what is seen today. Such conversations can help identify questions about changes around us, though each claim still needs careful checking."
+            ],
+            "key_point": "Damage to habitats can remove homes and resources and can lead to biodiversity loss."
+          },
+          "hi": {
+            "heading": "आवास क्यों महत्त्वपूर्ण हैं",
+            "paragraphs": [
+              "आवास जीवों को घर और भोजन तथा पानी जैसे संसाधन देता है। जब आवास को नुकसान पहुँचता है, तो पौधे और जानवर रहने की जगह, भोजन तथा अन्य संसाधन खो सकते हैं। इससे किसी क्षेत्र के जीवों की विविधता—जैव-विविधता—कम हो सकती है।",
+              "अध्याय विद्यार्थियों को यह जानने के लिए कहता है कि बड़े लोग अपने बचपन में कौन-से पौधे और जानवर देखते थे और आज क्या देखते हैं। ऐसी बातचीत आसपास के बदलावों के बारे में प्रश्न उठाने में मदद कर सकती है, हालाँकि हर दावे की सावधानी से जाँच करना आवश्यक है।"
+            ],
+            "key_point": "आवास को नुकसान पहुँचने से घर और संसाधन खो सकते हैं तथा जैव-विविधता में कमी आ सकती है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-b02",
+        "type": "rich_text",
+        "order": 2,
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "text_by_locale": {
+          "en": {
+            "heading": "Conservation examples from the chapter",
+            "paragraphs": [
+              "The chapter describes Project Tiger as an effort initiated in 1973 to protect the declining Bengal tiger population. It also mentions the Cheetah Reintroduction Project, initiated in 2022, and protected areas for the Great Indian Bustard in Gujarat, Rajasthan and Maharashtra. These are examples of conservation efforts, not a complete list of all such work.",
+              "Salim Ali, known as the “Birdman of India”, travelled across India to observe birds and documented their routes and habitats. The chapter describes his work recording regions with high bird diversity and helping conserve them.",
+              "Sacred groves are patches of forest that remain undisturbed and are protected by local communities. They can shelter many plants and animals, including medicinal plants. Community care that prevents cutting trees or harming animals helps protect these places and their biodiversity."
+            ],
+            "callout": "Biodiversity protection can include protected habitats, conservation projects and care by local communities."
+          },
+          "hi": {
+            "heading": "अध्याय में संरक्षण के उदाहरण",
+            "paragraphs": [
+              "अध्याय में प्रोजेक्ट टाइगर को बंगाल टाइगर की घटती आबादी की रक्षा के लिए 1973 में शुरू की गई पहल बताया गया है। इसमें 2022 में शुरू हुई चीता पुनर्वास परियोजना और गुजरात, राजस्थान तथा महाराष्ट्र में ग्रेट इंडियन बस्टर्ड के लिए संरक्षित क्षेत्रों का भी उल्लेख है। ये संरक्षण के उदाहरण हैं, सभी प्रयासों की पूरी सूची नहीं।",
+              "“भारत के बर्डमैन” के रूप में प्रसिद्ध सलीम अली ने भारत भर में पक्षियों का अवलोकन किया और उनके मार्गों तथा आवासों का दस्तावेज़ीकरण किया। अध्याय में पक्षियों की अधिक विविधता वाले क्षेत्रों को दर्ज करने और उनके संरक्षण में मदद करने के उनके काम का वर्णन है।",
+              "पवित्र उपवन वन के ऐसे खंड हैं जिन्हें अपेक्षाकृत अछूता रखा जाता है और स्थानीय समुदाय सुरक्षित रखते हैं। वहाँ अनेक पौधे और जानवर, जिनमें औषधीय पौधे भी शामिल हैं, रह सकते हैं। पेड़ काटने या जानवरों को नुकसान पहुँचाने से रोकने वाली सामुदायिक देखभाल इन स्थानों और उनकी जैव-विविधता को सुरक्षित रखने में मदद करती है।"
+            ],
+            "callout": "जैव-विविधता की रक्षा में संरक्षित आवास, संरक्षण परियोजनाएँ और स्थानीय समुदाय की देखभाल शामिल हो सकती है।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-b03",
+        "type": "diagram",
+        "order": 3,
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo1",
+          "c6-sci-ch02-t07-lo2",
+          "c6-sci-ch02-t07-lo3"
+        ],
+        "generated_original": true,
+        "visual_id": "c6-sci-ch02-t07-biodiversity-protection-map",
+        "review_status": "NEEDS_REVIEW",
+        "student_renderable": false,
+        "visual_brief": "Original bilingual diagram connecting habitat -> resources/homes -> biodiversity, showing habitat damage can remove resources and conservation responses (local sacred-grove care, protected habitats, conservation projects, observation/community action). Do not reproduce the textbook figure or imply this exhausts conservation methods.",
+        "diagram_data": {
+          "flow": [
+            {
+              "id": "habitat",
+              "label_by_locale": {
+                "en": "Habitat",
+                "hi": "आवास"
+              },
+              "detail_by_locale": {
+                "en": "Homes and resources",
+                "hi": "घर और संसाधन"
+              }
+            },
+            {
+              "id": "damage",
+              "label_by_locale": {
+                "en": "Habitat damage",
+                "hi": "आवास को नुकसान"
+              },
+              "detail_by_locale": {
+                "en": "Homes/resources may be lost",
+                "hi": "घर/संसाधन खो सकते हैं"
+              }
+            },
+            {
+              "id": "risk",
+              "label_by_locale": {
+                "en": "Biodiversity loss",
+                "hi": "जैव-विविधता में कमी"
+              },
+              "detail_by_locale": {
+                "en": "Fewer kinds of living things may remain",
+                "hi": "जीवों के प्रकार कम हो सकते हैं"
+              }
+            }
+          ],
+          "responses": [
+            {
+              "id": "community",
+              "label_by_locale": {
+                "en": "Community care",
+                "hi": "सामुदायिक देखभाल"
+              },
+              "example_by_locale": {
+                "en": "Sacred groves",
+                "hi": "पवित्र उपवन"
+              }
+            },
+            {
+              "id": "projects",
+              "label_by_locale": {
+                "en": "Conservation projects",
+                "hi": "संरक्षण परियोजनाएँ"
+              },
+              "example_by_locale": {
+                "en": "Project Tiger; other chapter examples",
+                "hi": "प्रोजेक्ट टाइगर; अध्याय के अन्य उदाहरण"
+              }
+            },
+            {
+              "id": "learn",
+              "label_by_locale": {
+                "en": "Observe and learn",
+                "hi": "अवलोकन करें और सीखें"
+              },
+              "example_by_locale": {
+                "en": "Record local observations and discuss actions",
+                "hi": "स्थानीय अवलोकन दर्ज करें और उपायों पर चर्चा करें"
+              }
+            }
+          ],
+          "footer_by_locale": {
+            "en": "These examples support awareness and protection; verify local claims and follow responsible guidance.",
+            "hi": "ये उदाहरण जागरूकता और संरक्षण में मदद करते हैं; स्थानीय दावों की जाँच करें और जिम्मेदार मार्गदर्शन अपनाएँ。"
+          }
+        },
+        "alt_by_locale": {
+          "en": "An original diagram links habitat damage to loss of homes/resources and biodiversity risk, then lists local community care, conservation projects and observation as response examples.",
+          "hi": "मौलिक चित्र आवास को नुकसान से घर/संसाधन खोने और जैव-विविधता के जोखिम को जोड़ता है, फिर सामुदायिक देखभाल, संरक्षण परियोजनाएँ और अवलोकन को उपायों के उदाहरण के रूप में दिखाता है।"
+        },
+        "caption_by_locale": {
+          "en": "Protecting habitats helps protect the plants and animals that depend on them.",
+          "hi": "आवासों की रक्षा से उन पर निर्भर पौधों और जानवरों की रक्षा करने में मदद मिलती है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-b04",
+        "type": "activity",
+        "order": 4,
+        "activity_kind": "local_biodiversity_action_plan",
+        "instructions_by_locale": {
+          "en": [
+            "In your group, list one place nearby that supports plants or animals.",
+            "Record a possible risk to that place and explain which resource or living thing may be affected.",
+            "Suggest two responsible actions that students or community members could take, with teacher guidance.",
+            "Do not enter protected/unsafe areas, handle wildlife or promise a conservation result you cannot verify."
+          ],
+          "hi": [
+            "अपने समूह में पास का ऐसा एक स्थान लिखें जो पौधों या जानवरों को सहारा देता है।",
+            "उस स्थान के लिए एक संभावित जोखिम दर्ज करें और बताएँ कि कौन-सा संसाधन या जीव प्रभावित हो सकता है।",
+            "शिक्षक के मार्गदर्शन में विद्यार्थियों या समुदाय द्वारा किए जा सकने वाले दो जिम्मेदार उपाय सुझाएँ।",
+            "संरक्षित/असुरक्षित क्षेत्र में न जाएँ, वन्यजीवों को न पकड़ें और ऐसे संरक्षण-परिणाम का दावा न करें जिसकी पुष्टि न हो।"
+          ]
+        },
+        "response_fields": [
+          {
+            "id": "place",
+            "label_by_locale": {
+              "en": "Place to protect",
+              "hi": "सुरक्षा के लिए स्थान"
+            }
+          },
+          {
+            "id": "risk",
+            "label_by_locale": {
+              "en": "Possible risk",
+              "hi": "संभावित जोखिम"
+            }
+          },
+          {
+            "id": "affected",
+            "label_by_locale": {
+              "en": "What may be affected?",
+              "hi": "क्या प्रभावित हो सकता है?"
+            }
+          },
+          {
+            "id": "actions",
+            "label_by_locale": {
+              "en": "Two responsible actions",
+              "hi": "दो जिम्मेदार उपाय"
+            }
+          }
+        ],
+        "formative_feedback_by_locale": {
+          "en": "A good plan identifies a place, a plausible risk and actions that are safe and realistic.",
+          "hi": "अच्छी योजना में स्थान, संभावित जोखिम और सुरक्षित व व्यावहारिक उपाय बताए जाते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-b05",
+        "type": "recap",
+        "order": 5,
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo1",
+          "c6-sci-ch02-t07-lo2",
+          "c6-sci-ch02-t07-lo3"
+        ],
+        "content_by_locale": {
+          "en": {
+            "key_takeaways": [
+              "Habitat damage can remove homes, food and other resources and lead to biodiversity loss.",
+              "Project Tiger, the Cheetah Reintroduction Project and protected areas are conservation examples cited in the chapter.",
+              "Salim Ali documented bird diversity and habitats.",
+              "Sacred groves are forest patches protected by local communities and can support many kinds of life.",
+              "Observe, discuss and take responsible actions to protect nearby biodiversity."
+            ],
+            "vocabulary": [
+              {
+                "term": "Biodiversity",
+                "meaning": "The variety of plants and animals in a region."
+              },
+              {
+                "term": "Conservation",
+                "meaning": "Protecting living things and the places/resources they need."
+              },
+              {
+                "term": "Sacred grove",
+                "meaning": "A forest patch protected by a local community."
+              }
+            ]
+          },
+          "hi": {
+            "key_takeaways": [
+              "आवास को नुकसान पहुँचने से घर, भोजन और अन्य संसाधन खो सकते हैं तथा जैव-विविधता घट सकती है।",
+              "प्रोजेक्ट टाइगर, चीता पुनर्वास परियोजना और संरक्षित क्षेत्र अध्याय में दिए संरक्षण के उदाहरण हैं।",
+              "सलीम अली ने पक्षियों की विविधता और उनके आवासों का दस्तावेज़ीकरण किया।",
+              "पवित्र उपवन स्थानीय समुदाय द्वारा सुरक्षित वन-खंड हैं और अनेक जीवों को सहारा दे सकते हैं।",
+              "आसपास की जैव-विविधता की रक्षा के लिए अवलोकन करें, चर्चा करें और जिम्मेदार उपाय अपनाएँ।"
+            ],
+            "vocabulary": [
+              {
+                "term": "जैव-विविधता",
+                "meaning": "किसी क्षेत्र में पौधों और जानवरों की विविधता।"
+              },
+              {
+                "term": "संरक्षण",
+                "meaning": "जीवों और उनके आवश्यक स्थानों/संसाधनों की रक्षा।"
+              },
+              {
+                "term": "पवित्र उपवन",
+                "meaning": "स्थानीय समुदाय द्वारा सुरक्षित वन-खंड।"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "practice": {
+    "section_id": "practice-c6-sci-ch02-t07",
+    "title_by_locale": {
+      "en": "Practise Protecting Biodiversity",
+      "hi": "जैव-विविधता की रक्षा का अभ्यास करें"
+    },
+    "question_count": 8,
+    "question_types": [
+      "multiple_choice",
+      "multiple_select",
+      "true_false",
+      "matching",
+      "fill_blank",
+      "image_observation",
+      "short_answer",
+      "scenario_based"
+    ],
+    "content_origin_by_locale": {
+      "en": "AI-authored supplementary practice grounded in this topic; not verbatim NCERT questions.",
+      "hi": "इस विषय पर आधारित AI द्वारा तैयार अतिरिक्त अभ्यास; NCERT के मूल प्रश्नों का शब्दशः रूप नहीं।"
+    },
+    "labels_by_locale": {
+      "en": {
+        "question_progress": "Question {current} of {total}",
+        "select_one": "Choose one answer",
+        "select_all": "Select all correct answers",
+        "matching_instruction": "Match each item",
+        "type_answer": "Write your answer",
+        "submit_answer": "Check answer",
+        "show_hint": "Show hint",
+        "show_correct_answer": "Show correct answer",
+        "try_again": "Try again",
+        "next_question": "Next question",
+        "previous_question": "Previous question",
+        "explanation": "Explanation",
+        "correct": "Correct",
+        "incorrect": "Not quite",
+        "partially_correct": "Partly correct",
+        "unanswered": "Not answered",
+        "pending_review": "Needs checking",
+        "score": "Score",
+        "review_answers": "Review answers",
+        "complete": "Practice complete"
+      },
+      "hi": {
+        "question_progress": "कुल {total} में से प्रश्न {current}",
+        "select_one": "एक उत्तर चुनें",
+        "select_all": "सभी सही उत्तर चुनें",
+        "matching_instruction": "हर विकल्प का सही मिलान करें",
+        "type_answer": "अपना उत्तर लिखें",
+        "submit_answer": "उत्तर जाँचें",
+        "show_hint": "संकेत देखें",
+        "show_correct_answer": "सही उत्तर देखें",
+        "try_again": "फिर से प्रयास करें",
+        "next_question": "अगला प्रश्न",
+        "previous_question": "पिछला प्रश्न",
+        "explanation": "व्याख्या",
+        "correct": "सही",
+        "incorrect": "अभी सही नहीं",
+        "partially_correct": "आंशिक रूप से सही",
+        "unanswered": "उत्तर नहीं दिया गया",
+        "pending_review": "जाँच आवश्यक है",
+        "score": "अंक",
+        "review_answers": "उत्तर दोबारा देखें",
+        "complete": "अभ्यास पूरा हुआ"
+      }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the diagram",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Needs checking"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "जाँच आवश्यक है"
+      }
+    },
+    "questions": [
+      {
+        "id": "c6-sci-ch02-t07-q01",
+        "type": "multiple_choice",
+        "rendering_contract_id": "qtype-multiple-choice.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "What can happen when a habitat is damaged?",
+          "hi": "आवास को नुकसान पहुँचने पर क्या हो सकता है?"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Living things may lose homes, food and other resources",
+              "hi": "जीव अपने घर, भोजन और अन्य संसाधन खो सकते हैं"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Every species automatically gets more resources",
+              "hi": "हर प्रजाति को अपने-आप अधिक संसाधन मिल जाते हैं"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Biodiversity always increases",
+              "hi": "जैव-विविधता हमेशा बढ़ती है"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "The habitat has no effect on living things",
+              "hi": "आवास का जीवों पर कोई प्रभाव नहीं पड़ता"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Habitat damage can remove homes, food and other resources and may cause biodiversity loss.",
+          "hi": "सही। आवास को नुकसान पहुँचने से घर, भोजन और अन्य संसाधन खो सकते हैं तथा जैव-विविधता घट सकती है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q02",
+        "type": "multiple_select",
+        "rendering_contract_id": "qtype-multiple-select.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Which actions or places can contribute to protecting biodiversity as described in this chapter? Select all that apply.",
+          "hi": "इस अध्याय के अनुसार जैव-विविधता की रक्षा में कौन-से काम या स्थान योगदान दे सकते हैं? सभी सही विकल्प चुनें।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Protecting sacred groves through local community care",
+              "hi": "स्थानीय समुदाय की देखभाल से पवित्र उपवनों की रक्षा करना"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Avoiding unnecessary damage to plants and animals",
+              "hi": "पौधों और जानवरों को अनावश्यक नुकसान से बचाना"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Supporting projects to protect threatened wildlife and habitats",
+              "hi": "संकटग्रस्त वन्यजीवों और आवासों की रक्षा करने वाली परियोजनाओं का समर्थन करना"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Cutting all trees in a community-protected grove",
+              "hi": "समुदाय द्वारा सुरक्षित उपवन के सभी पेड़ काट देना"
+            }
+          },
+          {
+            "id": "e",
+            "text_by_locale": {
+              "en": "Recording local observations and discussing ways to protect biodiversity",
+              "hi": "स्थानीय अवलोकन दर्ज करना और जैव-विविधता बचाने के उपायों पर चर्चा करना"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a",
+          "b",
+          "c",
+          "e"
+        ],
+        "feedback_by_locale": {
+          "en": "Protection includes caring for living things and habitats, supporting conservation efforts, and learning about local biodiversity.",
+          "hi": "रक्षा में जीवों और आवासों की देखभाल, संरक्षण प्रयासों का समर्थन और स्थानीय जैव-विविधता के बारे में सीखना शामिल है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q03",
+        "type": "true_false",
+        "rendering_contract_id": "qtype-true-false.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "The chapter describes sacred groves as forest patches protected by local communities.",
+          "hi": "अध्याय में पवित्र उपवनों को स्थानीय समुदायों द्वारा सुरक्षित रखे जाने वाले वन-खंडों के रूप में बताया गया है।"
+        },
+        "correct_answer": true,
+        "feedback_by_locale": {
+          "en": "True. The chapter says local communities protect these patches and prevent harm to plants, animals and the area.",
+          "hi": "सही। अध्याय के अनुसार स्थानीय समुदाय इन वन-खंडों की रक्षा करते हैं और वहाँ पौधों, जानवरों तथा क्षेत्र को नुकसान से बचाते हैं।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q04",
+        "type": "matching",
+        "rendering_contract_id": "qtype-matching.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Match the conservation example with its role in the chapter.",
+          "hi": "संरक्षण के उदाहरण को अध्याय में बताए गए उसके कार्य से मिलाएँ।"
+        },
+        "left_items": [
+          {
+            "id": "salim",
+            "label_by_locale": {
+              "en": "Salim Ali",
+              "hi": "सलीम अली"
+            }
+          },
+          {
+            "id": "grove",
+            "label_by_locale": {
+              "en": "Sacred grove",
+              "hi": "पवित्र उपवन"
+            }
+          },
+          {
+            "id": "tiger",
+            "label_by_locale": {
+              "en": "Project Tiger",
+              "hi": "प्रोजेक्ट टाइगर"
+            }
+          },
+          {
+            "id": "habitat",
+            "label_by_locale": {
+              "en": "Habitat protection",
+              "hi": "आवास की रक्षा"
+            }
+          }
+        ],
+        "right_items": [
+          {
+            "id": "birds",
+            "label_by_locale": {
+              "en": "Observed and documented birds, their routes and habitats",
+              "hi": "पक्षियों, उनके मार्गों और आवासों का अवलोकन व दस्तावेज़ीकरण किया"
+            }
+          },
+          {
+            "id": "community",
+            "label_by_locale": {
+              "en": "A forest patch protected by the local community",
+              "hi": "स्थानीय समुदाय द्वारा सुरक्षित वन-खंड"
+            }
+          },
+          {
+            "id": "tigerpop",
+            "label_by_locale": {
+              "en": "Initiated in 1973 to protect the declining Bengal tiger population",
+              "hi": "बंगाल टाइगर की घटती आबादी की रक्षा के लिए 1973 में शुरू किया गया"
+            }
+          },
+          {
+            "id": "resources",
+            "label_by_locale": {
+              "en": "Helps retain homes and resources needed by living things",
+              "hi": "जीवों के घर और आवश्यक संसाधन बनाए रखने में मदद करती है"
+            }
+          }
+        ],
+        "correct_pairs": [
+          {
+            "left_id": "salim",
+            "right_id": "birds"
+          },
+          {
+            "left_id": "grove",
+            "right_id": "community"
+          },
+          {
+            "left_id": "tiger",
+            "right_id": "tigerpop"
+          },
+          {
+            "left_id": "habitat",
+            "right_id": "resources"
+          }
+        ],
+        "grading": {
+          "rule": "pairwise_exact_match",
+          "max_score": 4,
+          "points_per_correct_pair": 1,
+          "partial_credit": true
+        },
+        "feedback_by_locale": {
+          "en": "Each pair connects a person, place or project with the conservation role described in the source chapter.",
+          "hi": "हर जोड़ा व्यक्ति, स्थान या परियोजना को स्रोत अध्याय में बताए गए संरक्षण-कार्य से जोड़ता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q05",
+        "type": "fill_blank",
+        "rendering_contract_id": "qtype-fill-blank.v1",
+        "difficulty": "easy",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "Undisturbed forest patches protected by local communities are called sacred ______.",
+          "hi": "स्थानीय समुदायों द्वारा सुरक्षित रखे जाने वाले अपेक्षाकृत अछूते वन-खंडों को पवित्र ______ कहा जाता है।"
+        },
+        "accepted_answers": {
+          "en": [
+            "groves",
+            "sacred groves"
+          ],
+          "hi": [
+            "उपवन",
+            "पवित्र उपवन"
+          ]
+        },
+        "grading": {
+          "rule": "locale_specific_accepted_answer_match",
+          "normalize": {
+            "en": [
+              "Unicode NFC",
+              "trim/collapse whitespace",
+              "case-insensitive"
+            ],
+            "hi": [
+              "Unicode NFC",
+              "trim/collapse whitespace"
+            ]
+          },
+          "never": [
+            "No cross-script transliteration or automatic translation.",
+            "Do not strip Hindi matras."
+          ]
+        },
+        "feedback_by_locale": {
+          "en": "The term is sacred groves.",
+          "hi": "इन्हें 'पवित्र उपवन' कहा जाता है।"
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q06",
+        "type": "image_observation",
+        "rendering_contract_id": "qtype-image-observation.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo2"
+        ],
+        "prompt_by_locale": {
+          "en": "In the original conservation diagram, which example shows local community protection of a place rich in biodiversity?",
+          "hi": "मौलिक संरक्षण-चित्र में कौन-सा उदाहरण जैव-विविधता से भरपूर स्थान की स्थानीय समुदाय द्वारा रक्षा दिखाता है?"
+        },
+        "visual_asset_ref": "c6-sci-ch02-t07-biodiversity-protection-map",
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "A sacred grove",
+              "hi": "पवित्र उपवन"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "A damaged habitat with trees removed",
+              "hi": "पेड़ हटाकर क्षतिग्रस्त किया गया आवास"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "An unprotected area being disturbed",
+              "hi": "परेशान किया जा रहा असुरक्षित क्षेत्र"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "A blank checklist",
+              "hi": "खाली जाँच-सूची"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Sacred groves are forest patches protected by local communities.",
+          "hi": "सही। पवित्र उपवन ऐसे वन-खंड हैं जिन्हें स्थानीय समुदाय सुरक्षित रखते हैं।"
+        },
+        "renderability": {
+          "status": "BLOCKED_PENDING_VISUAL_REVIEW",
+          "reason_by_locale": {
+            "en": "The original bilingual diagram has not been rendered and approved yet; keep this question blocked from student display.",
+            "hi": "मौलिक द्विभाषी चित्र अभी प्रस्तुत और स्वीकृत नहीं हुआ है; इस प्रश्न को विद्यार्थी स्क्रीन पर दिखाने से रोकें।"
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q07",
+        "type": "short_answer",
+        "rendering_contract_id": "qtype-short-answer.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo1"
+        ],
+        "prompt_by_locale": {
+          "en": "Explain two ways habitat damage can affect living things or biodiversity, and name one chapter example of conservation.",
+          "hi": "समझाएँ कि आवास को नुकसान पहुँचने से जीवों या जैव-विविधता पर कौन-से दो प्रभाव पड़ सकते हैं, और संरक्षण का एक उदाहरण बताएँ।"
+        },
+        "answer_guide_by_locale": {
+          "en": {
+            "key_points": [
+              "Mentions loss of homes, food or other resources for plants/animals.",
+              "Connects habitat damage to loss of biodiversity or fewer living things in a region.",
+              "Names an example such as sacred groves, Project Tiger or habitat protection."
+            ],
+            "sample_answer": "Habitat damage can remove animals' homes and food, and it can reduce biodiversity. Sacred groves protected by local communities are one conservation example."
+          },
+          "hi": {
+            "key_points": [
+              "पौधों/जानवरों के घर, भोजन या अन्य संसाधनों के खोने का उल्लेख करता है।",
+              "आवास को नुकसान और जैव-विविधता में कमी या क्षेत्र में जीवों की संख्या/विविधता में कमी जोड़ता है।",
+              "पवित्र उपवन, प्रोजेक्ट टाइगर या आवास-संरक्षण जैसा उदाहरण देता है।"
+            ],
+            "sample_answer": "आवास को नुकसान पहुँचने से जानवरों के घर और भोजन खो सकते हैं और जैव-विविधता घट सकती है। स्थानीय समुदाय द्वारा सुरक्षित पवित्र उपवन संरक्षण का एक उदाहरण है।"
+          }
+        },
+        "grading": {
+          "mode": "rubric",
+          "max_score": 3,
+          "evaluator": "HUMAN_OR_EXPLICITLY_CONFIGURED_VALIDATED_GRADER",
+          "if_no_validated_grader": "STORE_RESPONSE_AND_SHOW_LOCALIZED_PENDING_REVIEW; DO_NOT_INVENT_AUTOMATIC_SCORE",
+          "rubric_by_locale": {
+            "en": [
+              "1 point: states a valid effect on home/food/resources.",
+              "1 point: relates damage to biodiversity loss.",
+              "1 point: names a valid chapter conservation example."
+            ],
+            "hi": [
+              "1 अंक: घर/भोजन/संसाधन पर सही प्रभाव बताता है।",
+              "1 अंक: नुकसान को जैव-विविधता में कमी से जोड़ता है।",
+              "1 अंक: अध्याय का सही संरक्षण उदाहरण देता है।"
+            ]
+          }
+        }
+      },
+      {
+        "id": "c6-sci-ch02-t07-q08",
+        "type": "scenario_based",
+        "rendering_contract_id": "qtype-scenario-based.v1",
+        "difficulty": "medium",
+        "objective_ids": [
+          "c6-sci-ch02-t07-lo3"
+        ],
+        "prompt_by_locale": {
+          "en": "Which response best follows the chapter's message about protecting biodiversity?",
+          "hi": "जैव-विविधता बचाने के बारे में अध्याय के संदेश से कौन-सी प्रतिक्रिया सबसे अच्छी तरह मेल खाती है?"
+        },
+        "scenario_by_locale": {
+          "en": "A class learns that a nearby patch of forest provides a home for many plants and animals. Some people suggest clearing it without checking what lives there.",
+          "hi": "एक कक्षा सीखती है कि पास का वन-खंड कई पौधों और जानवरों का घर है। कुछ लोग यह जाँचे बिना उसे साफ़ कर देने का सुझाव देते हैं कि वहाँ कौन-कौन से जीव रहते हैं।"
+        },
+        "options": [
+          {
+            "id": "a",
+            "text_by_locale": {
+              "en": "Record what is known, discuss the likely effects and look for a responsible way to protect biodiversity",
+              "hi": "उपलब्ध जानकारी दर्ज करें, संभावित प्रभावों पर चर्चा करें और जैव-विविधता बचाने का जिम्मेदार तरीका खोजें"
+            }
+          },
+          {
+            "id": "b",
+            "text_by_locale": {
+              "en": "Clear the whole patch immediately",
+              "hi": "पूरा वन-खंड तुरंत साफ़ कर दें"
+            }
+          },
+          {
+            "id": "c",
+            "text_by_locale": {
+              "en": "Assume habitat loss affects no living thing",
+              "hi": "मान लें कि आवास की हानि से किसी जीव पर असर नहीं पड़ता"
+            }
+          },
+          {
+            "id": "d",
+            "text_by_locale": {
+              "en": "Ignore local people and all observations",
+              "hi": "स्थानीय लोगों और सभी अवलोकनों को अनदेखा करें"
+            }
+          }
+        ],
+        "correct_answer_ids": [
+          "a"
+        ],
+        "feedback_by_locale": {
+          "en": "Correct. Understanding the habitat and its living things before acting supports responsible conservation.",
+          "hi": "सही। कार्रवाई से पहले आवास और उसमें रहने वाले जीवों को समझना जिम्मेदार संरक्षण में मदद करता है।"
+        }
+      }
+    ],
+    "question_rendering_contract": {
+      "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+      "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+      "contract_version": "quantaedge.question-rendering-registry.v1",
+      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "renderer_dispatch_key": "question.type",
+      "locale_source": "GLOBAL_APP_LANGUAGE",
+      "preserve_response_by_question_id": true,
+      "question_type_inventory": [
+        {
+          "type": "multiple_choice",
+          "rendering_contract_id": "qtype-multiple-choice.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q01"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "multiple_select",
+          "rendering_contract_id": "qtype-multiple-select.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q02"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "true_false",
+          "rendering_contract_id": "qtype-true-false.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q03"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "matching",
+          "rendering_contract_id": "qtype-matching.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q04"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "fill_blank",
+          "rendering_contract_id": "qtype-fill-blank.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q05"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "image_observation",
+          "rendering_contract_id": "qtype-image-observation.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q06"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "BLOCKED_PENDING_VISUAL_REVIEW"
+        },
+        {
+          "type": "short_answer",
+          "rendering_contract_id": "qtype-short-answer.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q07"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        },
+        {
+          "type": "scenario_based",
+          "rendering_contract_id": "qtype-scenario-based.v1",
+          "question_ids": [
+            "c6-sci-ch02-t07-q08"
+          ],
+          "count": 1,
+          "component_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "content_status": "DRAFT_REQUIRES_REVIEW"
+        }
+      ]
+    }
+  },
+  "parity_audit": {
+    "english_question_count": 8,
+    "hindi_question_count": 8,
+    "semantic_translation_review": "PENDING_HUMAN_REVIEW",
+    "automated_validation": "NOT_RUN",
+    "question_components_implemented": false,
+    "runtime_language_switch_implemented": false,
+    "visual_question_blocked_until_visual_review": true,
+    "known_limitations": [
+      "Hindi source text/page mapping remains unverified.",
+      "English source figures/text order require visual reconciliation.",
+      "The original conservation diagram is unrendered draft data and q06 is blocked.",
+      "The authored explanation does not claim full verbatim source extraction."
+    ]
+  },
+  "next_steps": [
+    "Verify the corresponding Jigyasa source range and Hindi conservation terms.",
+    "Review English PDF pp.45-52 visually, including figures and chapter-end activities.",
+    "Render/review the biodiversity protection diagram; keep q06 blocked until approval.",
+    "Validate every Chapter 2 topic together and update the issue/index once at chapter completion."
+  ]
+}

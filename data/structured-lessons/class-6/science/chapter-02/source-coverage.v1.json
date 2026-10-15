@@ -1,0 +1,200 @@
+{
+  "schema_version": "quantaedge.textbook-chapter-coverage.v1",
+  "artifact_type": "chapter_source_coverage_audit",
+  "status": "NUMBERED_TOPIC_MAP_DRAFT_SOURCE_INVENTORY_RECORDED_RENDERED_PDF_RECONCILIATION_PENDING",
+  "updated_date": "2026-10-15",
+  "curriculum": {
+    "class": 6,
+    "subject": "Science",
+    "chapter_number": 2,
+    "title_by_locale": {
+      "en": "Diversity in the Living World",
+      "hi": "सजीव जगत में विविधता"
+    },
+    "sources": {
+      "en": {
+        "book_id": "ncert-c6-english-fecu1",
+        "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+        "url": "https://ncert.nic.in/textbook.php?fecu1=0-12",
+        "pdf_pages": [],
+        "printed_pages": [],
+        "mapping_status": "PENDING_RENDERED_PAGE_VERIFICATION"
+      },
+      "hi": {
+        "book_id": "ncert-c6-hindi-fhcu1",
+        "sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+        "url": "https://ncert.nic.in/textbook.php?fhcu1=0-12",
+        "pdf_pages": [],
+        "printed_pages": [],
+        "mapping_status": "PENDING_RENDERED_PAGE_VERIFICATION"
+      }
+    }
+  },
+  "section_map": [
+    {
+      "section_id": "2.1",
+      "topic_number": 1,
+      "title_by_locale": {
+        "en": "Noticing the Variety of Life",
+        "hi": "सजीव जगत की विविधता को देखना"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-01-noticing-the-variety-of-life.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.2",
+      "topic_number": 2,
+      "title_by_locale": {
+        "en": "Grouping Plants by Observable Features",
+        "hi": "दिखाई देने वाले लक्षणों से पौधों का वर्गीकरण"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-02-grouping-plants-by-observable-features.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.3",
+      "topic_number": 3,
+      "title_by_locale": {
+        "en": "Leaf Venation, Roots and Seeds",
+        "hi": "पत्ती की शिरा-विन्यास, जड़ें और बीज"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-03-leaf-venation-roots-and-seeds.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.4",
+      "topic_number": 4,
+      "title_by_locale": {
+        "en": "Grouping Animals by Movement",
+        "hi": "गति के आधार पर जंतुओं का वर्गीकरण"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-04-grouping-animals-by-movement.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.5",
+      "topic_number": 5,
+      "title_by_locale": {
+        "en": "Adaptations in Different Surroundings",
+        "hi": "विभिन्न परिवेशों में अनुकूलन"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-05-adaptations-in-different-surroundings.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.6",
+      "topic_number": 6,
+      "title_by_locale": {
+        "en": "Habitats on Land and in Water",
+        "hi": "स्थल और जल में आवास"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-06-habitats-on-land-and-in-water.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    },
+    {
+      "section_id": "2.7",
+      "topic_number": 7,
+      "title_by_locale": {
+        "en": "Protecting Biodiversity and Sacred Groves",
+        "hi": "जैव विविधता और पवित्र उपवनों का संरक्षण"
+      },
+      "lesson_path": "data/structured-lessons/class-6/science/chapter-02/topic-07-protecting-biodiversity-and-sacred-groves.v1.json",
+      "mapping_status": "PROVISIONAL_TOPIC_MAP; EXACT_HEADING_AND_PAGE_BOUNDARY_REVIEW_PENDING"
+    }
+  ],
+  "coverage_inventory": {
+    "figures": {
+      "count": 10,
+      "expected": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10"
+      ],
+      "status": "FIGURE NUMBER INVENTORY RECORDED; RENDERED PDF/FULL-CAPTION CHECK PENDING",
+      "required_action": "Check every figure, caption and multi-panel element against rendered English and Hindi chapter pages; map to lesson blocks and original student-safe visuals."
+    },
+    "tables": {
+      "count": 3,
+      "expected": [
+        "2.1",
+        "2.2",
+        "2.3"
+      ],
+      "status": "TABLE NUMBER INVENTORY RECORDED; RENDERED PDF CHECK PENDING",
+      "required_action": "Check all table headings, values, categories and implied learner observations against both textbook versions."
+    },
+    "activities": {
+      "count": 9,
+      "expected": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9"
+      ],
+      "status": "ACTIVITY NUMBER INVENTORY RECORDED; SAFE-STEPS AND PAGE-BOUNDARY CHECK PENDING",
+      "required_action": "Reconcile every numbered activity and associated material/observation prompt in English and Hindi."
+    },
+    "sidebars_safety_and_examples": {
+      "status": "TOPIC AREAS RECORDED; RENDERED SOURCE RECONCILIATION PENDING",
+      "required_action": "Reconcile local/indigenous biodiversity examples, habitats/adaptations cases, plant/animal grouping examples and sacred-grove/conservation callouts; verify terminology and context in both languages."
+    },
+    "chapter_end_questions": {
+      "count": 13,
+      "status": "END-QUESTION COUNT RECORDED; PROMPT/OBJECTIVE MAPPING PENDING",
+      "required_action": "Map all 13 end questions to objectives without copying their wording verbatim."
+    },
+    "keywords_and_summary": {
+      "status": "INVENTORY CHECK REQUIRED",
+      "required_action": "Compare the chapter's exact summary and keyword list with lesson objectives, recaps and practice coverage in both languages."
+    },
+    "learning_further": {
+      "count": 6,
+      "status": "EXTENSION-TASK COUNT RECORDED; TASK-TO-LESSON MAPPING PENDING",
+      "required_action": "Inventory all six extension tasks in both languages and decide which belong in a lesson activity versus a chapter-level extension."
+    }
+  },
+  "lesson_and_question_coverage": {
+    "lessons_generated": 7,
+    "questions_generated": 56,
+    "question_type_counts": {
+      "multiple_choice": 7,
+      "multiple_select": 7,
+      "true_false": 7,
+      "matching": 7,
+      "fill_blank": 7,
+      "image_observation": 7,
+      "short_answer": 7,
+      "scenario_based": 7
+    },
+    "image_observation_questions_blocked": 7
+  },
+  "review_status": {
+    "rendered_english_pages": "PENDING",
+    "rendered_hindi_pages": "PENDING",
+    "exact_page_boundary_and_reading_order": "PENDING",
+    "figure_table_activity_coverage": "PENDING",
+    "bilingual_semantic_parity": "PENDING_HUMAN_REVIEW",
+    "science_accuracy": "PENDING_HUMAN_REVIEW",
+    "visual_accessibility": "PENDING",
+    "runtime_renderer_implementation": "NOT_IMPLEMENTED",
+    "publication_allowed": false
+  },
+  "cautions": [
+    "The lesson topic map remains provisional; exact numbered heading and page boundaries need rendered source comparison.",
+    "The figure/table/activity/extension counts are inventory targets to verify on the rendered official PDFs, not proof of source completeness.",
+    "Do not infer source completeness from seven lesson files or structural validation.",
+    "Reconcile the English and Hindi books, including figures and page order, before approving or publishing."
+  ]
+}
