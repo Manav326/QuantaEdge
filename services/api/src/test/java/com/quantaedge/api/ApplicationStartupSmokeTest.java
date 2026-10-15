@@ -230,6 +230,24 @@ class ApplicationStartupSmokeTest {
       select exists(select 1 from information_schema.columns
         where table_schema='public' and table_name='user_account' and column_name='public_user_id')
       """, Boolean.class));
+    assertTrue(jdbc.queryForObject("""
+      select exists(select 1 from information_schema.columns
+        where table_schema='public' and table_name='student' and column_name='public_user_id')
+      """, Boolean.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student
+      where public_user_id is null or length(public_user_id)<>12 or public_user_id !~ '^[A-Z0-9]{12}$'
+      """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from (
+        select public_user_id from student group by public_user_id having count(*)>1
+      ) duplicates
+      """, Integer.class));
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student st
+      join user_account u on u.id=st.user_account_id
+      where st.public_user_id<>u.public_user_id
+      """, Integer.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from user_account
       where length(public_user_id)<>12 or public_user_id !~ '^[A-Z0-9]{12}$'
