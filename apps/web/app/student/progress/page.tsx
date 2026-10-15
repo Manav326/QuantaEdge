@@ -12,6 +12,7 @@ export default function ProgressPage(){
   const {locale}=useLocale();
   const t=(english:string,hindi:string)=>locale==='english'?english:hindi;
   const [data,setData]=useState<any>(null); const [error,setError]=useState('');
+  const [courseId,setCourseId]=useState<number|null>(null);
   const [certificates,setCertificates]=useState<any[]>([]);
   const [certificateEligibility,setCertificateEligibility]=useState<Record<number,any>>({});
   const [issuingAttemptId,setIssuingAttemptId]=useState<number|null>(null);
@@ -48,7 +49,7 @@ export default function ProgressPage(){
     try{
       const response=await fetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi'})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:String(data?.language||'hi').toLowerCase().startsWith('en')?'en':'hi',...(courseId!==null?{courseId}:{})})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||'Certificate could not be issued.');
@@ -58,7 +59,19 @@ export default function ProgressPage(){
     finally{setIssuingAttemptId(null);}
   }
 
-  useEffect(()=>{(async()=>{const r=await fetch('/api/v1/students/me',{cache:'no-store',credentials:'same-origin'});if(r.status===401||r.status===403){router.replace('/login/student');return}const b=await r.json();if(!r.ok){setError(b.message||'Unable to load progress');return}setData(b);await refreshCertificateRecords(b)})()},[router,refreshCertificateRecords]);
+  useEffect(()=>{(async()=>{
+    const query=new URLSearchParams(window.location.search);
+    const rawCourseId=query.get('courseId')||'';
+    const rawProgramCode=query.get('programCode')||'';
+    const scopedCourseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+    setCourseId(scopedCourseId);
+    const scopeQuery=scopedCourseId!==null?'?courseId='+scopedCourseId:rawProgramCode?'?programCode='+encodeURIComponent(rawProgramCode):'';
+    const r=await fetch('/api/v1/students/me'+scopeQuery,{cache:'no-store',credentials:'same-origin'});
+    if(r.status===401||r.status===403){router.replace('/login/student');return}
+    const b=await r.json();if(!r.ok){setError(b.message||'Unable to load progress');return}
+    if(scopedCourseId===null&&b.programId)setCourseId(Number(b.programId));
+    setData(b);await refreshCertificateRecords(b)
+  })()},[router,refreshCertificateRecords]);
   if(error)return <main className="app-shell"><section className="progress-page"><div className="auth-card"><h1><LocaleText hinglish="Progress load नहीं हो पाई" english="Unable to load progress" /></h1><p>{error}</p></div></section></main>;
   if(!data)return <main className="app-shell"><section className="progress-page"><div className="eyebrow"><LocaleText hinglish="Progress load हो रही है…" english="Loading progress…" /></div></section></main>;
   const stats=data.lessonStats || {},q=data.questionStats || {};
@@ -78,7 +91,7 @@ export default function ProgressPage(){
       <div className="progress-grid"><article><span><LocaleText hinglish="पाठ (micro-topics)" english="Lessons (micro-topics)" /></span><strong>{displayCount(lessons.completed)} / {displayCount(lessons.total)}</strong><small><LocaleText hinglish="हर पाठ एक प्रकाशित micro-topic है, पूरा अध्याय नहीं।" english="Each lesson is a published micro-topic, not a whole chapter." /></small></article><article><span><LocaleText hinglish="अभ्यास की सटीकता" english="Practice accuracy" /></span><strong>{displayPercent(accuracy)}</strong><small>{displayCount(safeCount(q.attempts))} <LocaleText hinglish="उत्तर प्रयास" english="responses" /> · {displayCount(safeCount(q.graded_attempts))} <LocaleText hinglish="जाँचे गए" english="graded" /></small></article><article><span><LocaleText hinglish="Curriculum" english="Curriculum" /></span><strong>{displayPercent(lessons.percent)}</strong><small><LocaleText hinglish="प्रकाशित पाठ पूरे" english="published lessons completed" /></small></article><article><span><LocaleText hinglish="Formal tests" english="Formal tests" /></span><strong>{displayCount(safeCount(assessmentStats.released))}</strong><small>{displayCount(safeCount(assessmentStats.awaiting_review))} <LocaleText hinglish="जाँच बाकी" english="awaiting review" /> · {displayPercent(safePercent(assessmentStats.average_released_percent))} <LocaleText hinglish="जारी परिणामों का औसत" english="average released score" /></small></article></div>
       {(certificateError||certificateNotice)&&<div className={certificateError?'feedback':'parent-notice'} role={certificateError?'alert':'status'}>{certificateError||certificateNotice}</div>}
       <div className="mastery-card"><div><span><LocaleText hinglish="आपके test results" english="Your test results" /></span><strong>{displayCount(safeCount(assessmentStats.submitted))} <LocaleText hinglish="जमा" english="submitted" /> · {displayCount(safeCount(assessmentStats.released))} <LocaleText hinglish="परिणाम जारी" english="released" /></strong><small className="qe-progress-card-help"><LocaleText hinglish="जमा = टेस्ट पूरा करके भेजा गया; जारी = अंतिम परिणाम देखने के लिए उपलब्ध है।" english="Submitted means the test was finished and sent; released means the final result is available to view." /></small></div>{assessmentByType.length?assessmentByType.map((item:any)=><div className="topic-line" key={item.assessment_type}><b>{assessmentTypeLabel(item.assessment_type)}</b><span>{displayCount(safeCount(item.released))} <LocaleText hinglish="जारी" english="released" /> · {displayPercent(safePercent(item.average_released_percent))} <LocaleText hinglish="औसत" english="average" /></span></div>):<div className="topic-line"><span><LocaleText hinglish="अभी कोई formal test result नहीं है।" english="No formal test results yet." /></span></div>}</div>
-      <div className="mastery-card"><div><span><LocaleText hinglish="Curriculum coverage" english="Curriculum coverage" /></span><strong>{t('Class ','कक्षा ')}{data.class_code || '—'}</strong></div>{curriculum.length ? curriculum.map((item:any)=>{const metric=curriculumProgress(item);const label=metric.percent===null?(metric.total===0?'Not published':'—'):metric.percent+'%';return <div className="mastery-row" key={item.subject_code || item.subject_name}><span>{item.subject_name || item.subject_code || 'Subject'}</span><i><b style={{width:(metric.percent ?? 0)+'%'}}/></i><strong>{label}</strong></div>}) : <div className="topic-line"><span><LocaleText hinglish="Curriculum coverage अभी उपलब्ध नहीं है।" english="Curriculum coverage is not available yet." /></span></div>}</div>
+      <div className="mastery-card"><div><span><LocaleText hinglish="Curriculum coverage" english="Curriculum coverage" /></span><strong>{courseId!==null?(data.programName||t('Selected course','चुना गया course')):t('Class ','कक्षा ')+(data.class_code||'—')}</strong></div>{curriculum.length ? curriculum.map((item:any)=>{const metric=curriculumProgress(item);const label=metric.percent===null?(metric.total===0?'Not published':'—'):metric.percent+'%';return <div className="mastery-row" key={item.subject_code || item.subject_name}><span>{item.subject_name || item.subject_code || 'Subject'}</span><i><b style={{width:(metric.percent ?? 0)+'%'}}/></i><strong>{label}</strong></div>}) : <div className="topic-line"><span><LocaleText hinglish="Curriculum coverage अभी उपलब्ध नहीं है।" english="Curriculum coverage is not available yet." /></span></div>}</div>
       <div className="mastery-card">
         <div><span><LocaleText hinglish="अवधारणा प्रगति" english="Concept mastery" /></span><strong>{displayPercent(masteryAverage)} <LocaleText hinglish="औसत" english="average" /></strong></div>
         <div className="topic-line"><div><b><LocaleText hinglish="महारत हासिल concepts" english="Mastered concepts" /></b><small><LocaleText hinglish="80% या अधिक mastery" english="80% mastery or higher" /></small></div><span className="good">{displayCount(safeCount(mastery.mastered))}</span></div>
@@ -121,7 +134,7 @@ export default function ProgressPage(){
         </div>;
       }):<div className="topic-line"><span><LocaleText hinglish="Test attempt शुरू करने पर उसका status और result यहाँ दिखेगा।" english="Your test status and result will appear here after you start an attempt." /></span></div>}</div>
       <Link href="/student/certificates" className="button button-light"><LocaleText hinglish="अपने प्रमाणपत्र देखें →" english="View certificates →" /></Link>
-      <Link href="/student/tests" className="button button-dark"><LocaleText hinglish="सभी tests और results देखें →" english="View all tests and results →" /></Link>
-      <Link href="/student/learn" className="button button-light"><LocaleText hinglish="Recommended lesson खोलें →" english="Open recommended lesson →" /></Link>
+      <Link href={'/student/tests'+(courseId!==null?'?courseId='+courseId:'')} className="button button-dark"><LocaleText hinglish="सभी tests और results देखें →" english="View all tests and results →" /></Link>
+      <Link href={courseId!==null?'/student/learn?courseId='+courseId+'&subjectCode='+encodeURIComponent(String(curriculum[0]?.subject_code||'maths')):'/student/learn'} className="button button-light"><LocaleText hinglish="Recommended lesson खोलें →" english="Open recommended lesson →" /></Link>
     </section></main>;
 }

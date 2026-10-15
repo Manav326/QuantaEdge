@@ -53,10 +53,11 @@ export default function StudentHome(){
     return ()=>{active=false;};
   },[router]);
 
-  async function enrolCourse(programCode:string){
-    setCourseBusy(programCode);setCourseError('');
+  async function enrolCourse(courseId:number){
+    const key=String(courseId);
+    setCourseBusy(key);setCourseError('');
     try{
-      const response=await fetch('/api/v1/students/me/programs/'+encodeURIComponent(programCode)+'/enroll',{
+      const response=await fetch('/api/v1/students/me/programs/id/'+encodeURIComponent(key)+'/enroll',{
         method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:'{}'
       });
       const body=await response.json();
@@ -147,29 +148,29 @@ export default function StudentHome(){
           })}
         </div>
 
-        <div className="content-heading"><h2><LocaleText hinglish="आपके अतिरिक्त courses" english="Additional courses" /></h2><span><LocaleText hinglish="आपकी कक्षा के लिए" english="For your class" /></span></div>
+        <div className="content-heading"><h2><LocaleText hinglish="आपके courses" english="Your courses" /></h2><span><LocaleText hinglish="स्वतंत्र learning paths" english="Independent learning paths" /></span></div>
         {courseError&&<p role="status" className="feedback">{courseError}</p>}
         <div className="task-list subject-tracks">
-          {courses.length===0&&!courseError?<p className="eyebrow"><LocaleText hinglish="अभी कोई अतिरिक्त course उपलब्ध नहीं है।" english="No additional courses are available yet." /></p>:courses.map((course:any)=>(
-            <article key={course.code} className="app-task subject-track-card">
+          {courses.length===0&&!courseError?<p className="eyebrow"><LocaleText hinglish="अभी कोई course उपलब्ध नहीं है।" english="No courses are available yet." /></p>:courses.map((course:any)=>(
+            <article key={course.id} className="app-task subject-track-card">
               <div className="subject-track-main">
                 <span className="task-icon">✦</span>
                 <span className="subject-track-copy"><strong>{course.display_name}</strong>
-                  <small><LocaleText hinglish="Class" english="Class" /> {course.class_code} · {course.curriculum_version}</small>
-                  <small>{course.is_enrolled?<LocaleText hinglish="नामांकन सक्रिय" english="Enrolled" />:<LocaleText hinglish="स्वतंत्र learning path" english="Independent learning path" />}</small>
+                  <small><LocaleText hinglish="स्वतंत्र course" english="Independent course" /> · {course.curriculum_version}</small>
+                  <small>{course.is_enrolled?<LocaleText hinglish="नामांकन सक्रिय" english="Enrolled" />:<LocaleText hinglish="आपके लिए उपलब्ध" english="Available to enrol" />}</small>
                 </span>
-                {!course.is_enrolled?<button type="button" className="button button-dark" disabled={courseBusy!==''} onClick={()=>void enrolCourse(String(course.code))}>{courseBusy===course.code?<LocaleText hinglish="नामांकन हो रहा है…" english="Enrolling…" />:<LocaleText hinglish="Course join करें" english="Join course" />}</button>:null}
+                {!course.is_enrolled?<button type="button" className="button button-dark" disabled={courseBusy!==''} onClick={()=>void enrolCourse(Number(course.id))}>{courseBusy===String(course.id)?<LocaleText hinglish="नामांकन हो रहा है…" english="Enrolling…" />:<LocaleText hinglish="Course join करें" english="Join course" />}</button>:null}
               </div>
               {course.is_enrolled&&<div className="subject-track-copy">
                 {(Array.isArray(course.subjects)?course.subjects:[]).map((subject:any)=>(
-                  <Link key={subject.subject_code} href={'/student/learn?programCode='+encodeURIComponent(String(course.code))+'&subjectCode='+encodeURIComponent(String(subject.subject_code))} className="subject-book-link">
+                  <Link key={subject.subject_code} href={'/student/learn?courseId='+encodeURIComponent(String(course.id))+'&subjectCode='+encodeURIComponent(String(subject.subject_code))} className="subject-book-link">
                     <span className="subject-book-copy"><strong>{subject.subject_name}</strong><small>{Number(subject.chapters||0)} <LocaleText hinglish="अध्याय" english="chapters" /> · {Number(subject.lessons||0)} <LocaleText hinglish="पाठ" english="lessons" /></small></span>
                     <span className="subject-book-open"><LocaleText hinglish="पढ़ें ↗" english="Learn ↗" /></span>
                   </Link>
                 ))}
                 <div className="subject-book-link">
                   <span className="subject-book-copy"><strong><LocaleText hinglish="Course tools" english="Course tools" /></strong><small><LocaleText hinglish="Tests, saved results और course progress" english="Tests, saved results and course progress" /></small></span>
-                  <span className="subject-book-open"><Link href={'/student/tests?programCode='+encodeURIComponent(String(course.code))}><LocaleText hinglish="Tests" english="Tests" /></Link> · <Link href={'/student/progress?programCode='+encodeURIComponent(String(course.code))}><LocaleText hinglish="Progress" english="Progress" /></Link></span>
+                  <span className="subject-book-open"><Link href={'/student/tests?courseId='+encodeURIComponent(String(course.id))}><LocaleText hinglish="Tests" english="Tests" /></Link> · <Link href={'/student/progress?courseId='+encodeURIComponent(String(course.id))}><LocaleText hinglish="Progress" english="Progress" /></Link></span>
                 </div>
               </div>}
             </article>

@@ -20,7 +20,7 @@ type Lesson = {
   practice_active_answered_count?:number|null; practice_active_question_count?:number|null;
 };
 type TrackBrowse = {
-  classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[]; programCode?:string|null;
+  classCode:string; subjectCode:string; subjectName:string; lessons:Lesson[]; courseId?:number|null; courseName?:string|null; programCode?:string|null;
 };
 type StudentDocument = {document_id:number;scope:'SUBJECT_BOOK'|'CHAPTER_PDF';title:string;page_count:number;last_page?:number;subject_code:string;subject_name?:string;chapter_code?:string|null;chapter_name?:string|null;chapter_translated?:boolean;edition?:string|null;language?:'hi'|'en'};
 
@@ -179,7 +179,7 @@ function QuestionCard({q,index,onResult,onTutorOpen}:{q:Question;index:number;on
     setBusy(true);setAnswerError('');setResult(null);
     try {
       const language=learningLanguage;
-      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language+(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{
+      const response=await fetch('/api/v1/learning/questions/'+q.id+'/answer?language='+language+(searchParams.get('courseId')?'&courseId='+encodeURIComponent(searchParams.get('courseId')!):(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):'')),{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({answer:next})
       });
       const body=await response.json();
@@ -254,6 +254,12 @@ export default function LearnClient() {
   const [mcqAttempted,setMcqAttempted]=useState<Record<number,boolean>>({});
   const router=useRouter();
   const searchParams=useSearchParams();
+  const courseIdValue=searchParams.get('courseId')||'';
+  const selectedCourseId=/^\d+$/.test(courseIdValue)&&Number(courseIdValue)>0?Number(courseIdValue):null;
+  const selectedProgram=searchParams.get('programCode');
+  const courseQuery=selectedCourseId!==null?'&courseId='+selectedCourseId:selectedProgram?'&programCode='+encodeURIComponent(selectedProgram):'';
+  const courseStartQuery=selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):'';
+  const [courseDisplayName,setCourseDisplayName]=useState('');
 
   const currentIndex=useMemo(()=>lesson ? lessons.findIndex(x=>x.id===lesson.id) : -1,[lesson,lessons]);
   const orderedBlocks=useMemo(()=>lesson ? orderLearnerBlocks(lesson.blocks) : [],[lesson]);
@@ -306,14 +312,14 @@ export default function LearnClient() {
 
   async function loadLesson(id:number) {
     try {
-      const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+(searchParams.get('programCode')?'?programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{method:'POST'});
+      const started=await fetch('/api/v1/learning/lessons/'+id+'/start'+courseStartQuery,{method:'POST'});
       if(!started.ok) throw new Error('lesson progress');
-      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage).then(r=>{
+      const detail=await fetch('/api/v1/learning/lessons/'+id+'?language='+learningLanguage+courseQuery).then(r=>{
         if(!r.ok) throw new Error('lesson');
         return r.json();
       }) as Detail;
       setLesson(detail);
-      localStorage.setItem('qe:student:last-open-lesson:'+detail.class_code+':'+detail.subject_code,String(detail.id));
+      localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseId!==null?'course-'+selectedCourseId+':':selectedProgram?'program-'+selectedProgram+':':'')+detail.class_code+':'+detail.subject_code,String(detail.id));
       setMcqAttempted(Object.fromEntries(detail.questions
         .filter(question=>question.question_type==='MCQ'&&question.attempted)
         .map(question=>[question.id,true])));
@@ -327,16 +333,18 @@ export default function LearnClient() {
     async function load(){
       setError('');
       try{
-        const me=await fetch('/api/v1/students/me');
+        const me=await fetch('/api/v1/students/me'+(selectedCourseId!==null?'?courseId='+selectedCourseId:selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''));
         if(me.status===401||me.status===403){router.replace('/login/student');return;}
         const student=await me.json();
         if(!me.ok) throw new Error(student.message||tx('Student profile नहीं मिला','Student profile was not found'));
+        setCourseDisplayName(String(student.programName||''));
         const requestedId=Number(searchParams.get('lessonId')||0);
         const selectedSubject=searchParams.get('subjectCode');
-        const selectedProgram=searchParams.get('programCode');
-        const programQuery=selectedProgram?'&programCode='+encodeURIComponent(selectedProgram):'';
+        if(!requestedId && selectedCourseId!==null && !selectedSubject) throw new Error(tx('पहले course का subject चुनें।','Choose a subject from this course first.'));
+        const scopedCourse=selectedCourseId!==null||Boolean(selectedProgram);
+        if(!requestedId && selectedSubject && (!/^[a-z0-9][a-z0-9_-]{0,39}$/i.test(selectedSubject)||(!scopedCourse&&!['maths','science'].includes(selectedSubject)))) throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
+        const programQuery=courseQuery;
         if(!requestedId && selectedSubject){
-          if(selectedSubject!=='maths' && selectedSubject!=='science') throw new Error(tx('Subject सही नहीं है।','Invalid subject.'));
           const selectedLanguage=learningLanguage;
           const listResponse=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(selectedSubject)+'&language='+selectedLanguage+programQuery);
           const listBody=await listResponse.json();
@@ -347,7 +355,7 @@ export default function LearnClient() {
           const subjectName=selectedSubject==='maths'?tx('गणित','Mathematics'):tx('विज्ञान','Science');
           setLessons(trackLessons);setLesson(null);setSessionId(null);setSessionStarted(null);setMcqAttempted({});
           setStudentDocuments([]);
-          setTrackBrowse({classCode:String(student.class_code),subjectCode:selectedSubject,subjectName,lessons:trackLessons,programCode:selectedProgram});
+          setTrackBrowse({classCode:String(trackLessons[0]?.class_code||student.class_code),subjectCode:selectedSubject,subjectName:String(trackLessons[0]?.subject_name||subjectName),lessons:trackLessons,courseId:selectedCourseId,courseName:String(student.programName||''),programCode:selectedProgram});
           return;
         }
         setTrackBrowse(null);
@@ -365,11 +373,11 @@ export default function LearnClient() {
         const d=await detail.json() as Detail;
         const list=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(String(student.class_code))+'&subjectCode='+encodeURIComponent(d.subject_code)+'&language='+selectedLanguage+programQuery).then(r=>r.json()) as Lesson[];
         setLessons(list);
-        await fetch('/api/v1/learning/lessons/'+targetId+'/start'+(selectedProgram?'?programCode='+encodeURIComponent(selectedProgram):''),{method:'POST'});
-        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON',programCode:selectedProgram})});
+        await fetch('/api/v1/learning/lessons/'+targetId+'/start'+courseStartQuery,{method:'POST'});
+        const sr=await fetch('/api/v1/learning/sessions/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source:'LESSON',...(selectedCourseId!==null?{courseId:selectedCourseId}:{}),...(selectedProgram?{programCode:selectedProgram}:{})})});
         if(sr.ok){const sb=await sr.json();if(!cancelled){setSessionId(Number(sb.sessionId));setSessionStarted(Date.now());}}
         if(!cancelled){
-          localStorage.setItem('qe:student:last-open-lesson:'+d.class_code+':'+d.subject_code,String(d.id));
+          localStorage.setItem('qe:student:last-open-lesson:'+(selectedCourseId!==null?'course-'+selectedCourseId+':':selectedProgram?'program-'+selectedProgram+':':'')+d.class_code+':'+d.subject_code,String(d.id));
           setStudentDocuments([]);setTrackBrowse(null);setLesson(d);
           setMcqAttempted(Object.fromEntries(d.questions
             .filter(question=>question.question_type==='MCQ'&&question.attempted)
@@ -393,7 +401,7 @@ export default function LearnClient() {
         if(trackBrowse){
           const response=await fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(trackBrowse.classCode)
             +'&subjectCode='+encodeURIComponent(trackBrowse.subjectCode)+'&language='+language
-            +(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''),{cache:'no-store'});
+            +(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')),{cache:'no-store'});
           const rows=await response.json();
           if(!response.ok)throw new Error(rows?.message||'Could not refresh lesson language.');
           if(!cancelled){
@@ -405,11 +413,9 @@ export default function LearnClient() {
         }
         if(lesson){
           const [detailResponse,listResponse]=await Promise.all([
-            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language
-              +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'}),
+            fetch('/api/v1/learning/lessons/'+lesson.id+'?language='+language+courseQuery,{cache:'no-store'}),
             fetch('/api/v1/learning/lessons?classCode='+encodeURIComponent(lesson.class_code)
-              +'&subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language
-              +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'})
+              +'&subjectCode='+encodeURIComponent(lesson.subject_code)+'&language='+language+courseQuery,{cache:'no-store'})
           ]);
           const [detailBody,listBody]=await Promise.all([detailResponse.json(),listResponse.json()]);
           if(!detailResponse.ok)throw new Error(detailBody?.message||'Could not refresh lesson language.');
@@ -426,13 +432,14 @@ export default function LearnClient() {
     }
     void refreshLanguage();
     return()=>{cancelled=true;};
-  },[learningLanguage,lesson?.id,lesson?.class_code,lesson?.subject_code,trackBrowse?.classCode,trackBrowse?.subjectCode]);
+  },[learningLanguage,lesson?.id,lesson?.class_code,lesson?.subject_code,trackBrowse?.classCode,trackBrowse?.subjectCode,selectedCourseId,selectedProgram]);
 
   // Fetch the selected language edition independently: changing locale must not restart
   // the lesson, reset the session, or issue a second progress-start request.
   useEffect(()=>{
     const subjectCode=trackBrowse?.subjectCode||lesson?.subject_code||searchParams.get('subjectCode');
-    if(!subjectCode||!['maths','science'].includes(subjectCode)){
+    const scopedCourse=selectedCourseId!==null||Boolean(selectedProgram);
+    if(!subjectCode||(!scopedCourse&&!['maths','science'].includes(subjectCode))){
       setStudentDocuments([]);
       setDocumentsLoaded(false);
       return;
@@ -447,7 +454,7 @@ export default function LearnClient() {
     // published PDF is available in the other language.
     const loadLanguage=(language:string):Promise<StudentDocument[]> =>
       fetch('/api/v1/learning/documents?subjectCode='+encodeURIComponent(subjectCode)+'&language='+language+'&displayLanguage='+preferredLanguage
-        +(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):''),{cache:'no-store'})
+        +courseQuery,{cache:'no-store'})
         .then(async response=>response.ok?response.json():[])
         .then(body=>Array.isArray(body)?body as StudentDocument[]:[])
         .catch(()=>[]);
@@ -475,7 +482,7 @@ export default function LearnClient() {
       })
       .finally(()=>{if(!cancelled)setDocumentsLoaded(true);});
     return()=>{cancelled=true;};
-  },[learningLanguage,trackBrowse?.subjectCode,lesson?.subject_code,searchParams]);
+  },[learningLanguage,trackBrowse?.subjectCode,lesson?.subject_code,searchParams,selectedCourseId,selectedProgram]);
 
   useEffect(()=>{
     return ()=>{
@@ -486,7 +493,7 @@ export default function LearnClient() {
     };
   },[sessionId,sessionStarted]);
 
-  const chapterStorageScope=trackBrowse?trackBrowse.classCode+':'+trackBrowse.subjectCode:'';
+  const chapterStorageScope=trackBrowse?(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'course-'+trackBrowse.courseId+':':trackBrowse.programCode?'program-'+trackBrowse.programCode+':':'')+trackBrowse.classCode+':'+trackBrowse.subjectCode:'';
   useEffect(()=>{
     if(!trackBrowse||!documentsLoaded||!chapterStorageScope||initializedChapterScope.current===chapterStorageScope)return;
     const key='qe:student:open-chapter:'+chapterStorageScope;
@@ -540,7 +547,7 @@ export default function LearnClient() {
     localStorage.setItem('qe:student:learn-scroll:'+chapterStorageScope,String(window.scrollY));
   }
   function subjectDocumentHref(documentId:number){
-    return '/student/textbooks?documentId='+documentId+'&returnTo='+encodeURIComponent('/student/learn?subjectCode='+trackBrowse?.subjectCode+(trackBrowse?.programCode?'&programCode='+trackBrowse.programCode:''));
+    return '/student/textbooks?documentId='+documentId+'&returnTo='+encodeURIComponent('/student/learn?subjectCode='+trackBrowse?.subjectCode+(trackBrowse?.courseId!==null&&trackBrowse?.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse?.programCode?'&programCode='+trackBrowse.programCode:'')));
   }
   function rememberLessonPosition(){
     if(lesson)localStorage.setItem('qe:student:lesson-scroll:'+lesson.id,String(window.scrollY));
@@ -564,10 +571,10 @@ export default function LearnClient() {
   if(error) return <main className="lesson-page"><section className="lesson-wrap"><div className="auth-card"><h1><LocaleText hinglish="Lesson load नहीं हो पाया" english="Unable to load lesson" /></h1><p>{error}</p><Link href="/student" className="button button-dark"><LocaleText hinglish="← Student home पर" english="← Student home" /></Link></div></section></main>;
   if(trackBrowse) return <main className="lesson-page qe-subject-reading-page">
     <section className="lesson-wrap">
-      <div className="lesson-meta"><span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
-      <h1>{trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
+      <div className="lesson-meta"><span className="eyebrow">{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?(trackBrowse.courseName||courseDisplayName||tx('Course','Course'))+' · '+trackBrowse.subjectName:<><LocaleText hinglish="कक्षा" english="Class" /> {trackBrowse.classCode} · {trackBrowse.subjectName}</>}</span><span>{trackGroups.length} <LocaleText hinglish="अध्याय" english="chapters" /> · {trackBrowse.lessons.length} <LocaleText hinglish="प्रकाशित पाठ" english="published lessons" /></span></div>
+      <h1>{(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?trackBrowse.subjectName:trackBrowse.subjectCode==='maths'?<LocaleText hinglish="गणित की पढ़ाई" english="Mathematics learning" />:<LocaleText hinglish="विज्ञान की पढ़ाई" english="Science learning" />}</h1>
       <p className="lesson-intro"><LocaleText hinglish="किसी chapter को खोलकर उसके topics और PDF देखें। आपका आखिरी खुला chapter याद रखा जाएगा।" english="Open a chapter to see its topics and PDF. Your last open chapter is remembered." /></p>
-      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
+      {lastOpenedLesson&&<div className="feedback qe-last-opened-topic"><span><LocaleText hinglish="पिछला खोला गया topic" english="Last opened topic" /></span><Link href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+lastOpenedLesson.id}><strong>{lastOpenedLesson.title}</strong> · <LocaleText hinglish="जारी रखें →" english="Continue →" /></Link></div>}
       {studentDocuments.filter(item=>item.scope==='SUBJECT_BOOK'&&item.subject_code===trackBrowse.subjectCode).map(item=>
         <Link key={item.document_id} className="qe-student-pdf-link qe-subject-book-link" href={subjectDocumentHref(item.document_id)} onClick={()=>rememberTrackPosition(openChapter||trackGroups[0]?.code)}>
           <span className="qe-student-pdf-mark" aria-hidden="true"><svg viewBox="0 0 24 28"><path d="M4 1.5h10l6 6V26.5H4z"/><path d="M14 1.5v6h6M6.5 16h11M6.5 20h11"/></svg><small>PDF</small></span>
@@ -580,7 +587,7 @@ export default function LearnClient() {
         <span className="concept-kicker"><LocaleText hinglish="विषय की सामग्री" english="Subject content" /></span>
         <h2><LocaleText hinglish="अभी कोई published lesson या chapter PDF available नहीं है" english="No published lessons or chapter PDFs are available yet" /></h2>
         <p><LocaleText hinglish="इस विषय की सामग्री तैयार और publish होने पर यहाँ दिखाई देगी।" english="Content will appear here when it has been prepared and published." /></p>
-        <Link href={'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
+        <Link href={(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined)||trackBrowse.programCode?'/student':'/student/learn?subjectCode='+(trackBrowse.subjectCode==='maths'?'science':'maths')} className="button button-dark"><LocaleText hinglish="दूसरा subject देखें →" english="View another subject →" /></Link>
         <p><Link href="/student" className="text-link"><LocaleText hinglish="Student home पर वापस जाएँ" english="Return to student home" /></Link></p>
       </div> : trackGroups.map((group,index)=>{
         const chapterDocuments=studentDocuments.filter(item=>item.scope==='CHAPTER_PDF'&&(
@@ -615,7 +622,7 @@ export default function LearnClient() {
               const bestPercent=Number(item.practice_best_percent||0);
               const activeAnswered=Math.max(0,Number(item.practice_active_answered_count||0));
               const activeQuestionCount=Math.max(0,Number(item.practice_active_question_count||0));
-              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):'')+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
+              return <Link key={item.id} className={'qe-student-topic-row'+(topicComplete?' is-complete':'')} href={'/student/learn?subjectCode='+trackBrowse.subjectCode+(trackBrowse.courseId!==null&&trackBrowse.courseId!==undefined?'&courseId='+trackBrowse.courseId:(trackBrowse.programCode?'&programCode='+encodeURIComponent(trackBrowse.programCode):''))+'&lessonId='+item.id} onClick={()=>rememberTrackPosition(group.code,item.id)}>
                 <span className="qe-student-topic-index" aria-label={'Microtopic '+(topicIndex+1)}>{String(topicIndex+1).padStart(2,'0')}</span>
                 <span className="qe-student-topic-copy"><strong>{item.title}</strong>
                   <small>{item.estimated_minutes} <LocaleText hinglish="मिनट · प्रकाशित microtopic" english="min · published microtopic" /></small>
@@ -648,7 +655,7 @@ export default function LearnClient() {
   return <main className="lesson-page">
     <section className="lesson-wrap">
       <div className="lesson-meta">
-        <span className="eyebrow"><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_code==='maths'?<LocaleText hinglish="गणित" english="Mathematics" />:<LocaleText hinglish="विज्ञान" english="Science" />} · {lesson.chapter_name}</span>
+        <span className="eyebrow">{selectedCourseId!==null||selectedProgram?(courseDisplayName||tx('Course','Course'))+' · '+lesson.subject_name:<><LocaleText hinglish="कक्षा" english="Class" /> {lesson.class_code} · {lesson.subject_name}</>} · {lesson.chapter_name}</span>
         <span>Lesson {currentIndex+1} / {lessons.length}</span>
       </div>
       <h1>{lesson.title}</h1>
@@ -675,7 +682,7 @@ export default function LearnClient() {
         <h2><LocaleText hinglish="अब इसी micro-topic का अभ्यास करें" english="Now practise this micro-topic" /></h2>
         <p><LocaleText hinglish="QuantaEdge इसी lesson के learning objective/concept से जुड़े approved questions चुनेगा। आपको topics या question types चुनने की ज़रूरत नहीं है।" english="QuantaEdge selects approved questions mapped to this lesson's learning objective and concept. You do not need to choose topics or question types." /></p>
         {canStartTopicPractice
-          ? <Link href={'/student/practice?lessonId='+lesson.id+(searchParams.get('programCode')?'&programCode='+encodeURIComponent(searchParams.get('programCode')!):'')} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
+          ? <Link href={'/student/practice?lessonId='+lesson.id+courseQuery} className="button button-dark"><LocaleText hinglish="Practice शुरू करें →" english="Start topic practice →" /></Link>
           : <div className="qe-practice-gate"><button type="button" className="button button-dark" disabled><LocaleText hinglish="पहले MCQ पूरे करें" english="Finish the MCQs first" /></button><p><LocaleText hinglish={`आगे बढ़ने के लिए ${lessonMcqs.length-attemptedMcqs} सवालों के उत्तर देना बाकी है।`} english={`${lessonMcqs.length-attemptedMcqs} question(s) still need an answer before you can continue.`} /></p></div>}
       </section>
 

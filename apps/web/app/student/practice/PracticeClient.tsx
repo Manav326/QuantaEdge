@@ -71,6 +71,11 @@ export default function PracticePage(){
   const tx=(hinglish:string,english:string)=>locale==='english'?english:hinglish;
   const lessonIdRaw=searchParams.get('lessonId')||'';
   const sessionIdRaw=searchParams.get('sessionId')||'';
+  const rawCourseId=searchParams.get('courseId')||'';
+  const courseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
+  const programCode=searchParams.get('programCode');
+  const courseQuery=courseId!==null?'&courseId='+courseId:programCode?'&programCode='+encodeURIComponent(programCode):'';
+  const courseStartQuery=courseId!==null?'?courseId='+courseId:programCode?'?programCode='+encodeURIComponent(programCode):'';
   const lessonId=/^\d+$/.test(lessonIdRaw)?Number(lessonIdRaw):0;
   const requestedSessionId=/^\d+$/.test(sessionIdRaw)?Number(sessionIdRaw):0;
 
@@ -98,7 +103,7 @@ export default function PracticePage(){
         let lessonBody:LessonDetail|null=null;
         if(lessonId){
           const language=learningLanguage;
-          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId+'?language='+language,{cache:'no-store'});
+          const lessonResponse=await fetch('/api/v1/learning/lessons/'+lessonId+'?language='+language+courseQuery,{cache:'no-store'});
           const body=await readBody(lessonResponse);
           if(!lessonResponse.ok)throw new Error(body.detail||body.message||tx('Lesson उपलब्ध नहीं है।','This lesson is unavailable.'));
           lessonBody=body as LessonDetail;
@@ -226,7 +231,7 @@ export default function PracticePage(){
   </main>;
 
   if(error)return <main className="practice-page">
-    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="Practice नहीं खुल पाई" english="Practice could not be opened" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id:'/student/learn'} className="button button-dark" style={{marginTop:20}}><LocaleText hinglish="Lesson पर लौटें" english="Return to lesson" /></Link></section>
+    <section className="practice-wrap"><div className="practice-feedback practice-feedback-incorrect" role="alert"><strong><LocaleText hinglish="Practice नहीं खुल पाई" english="Practice could not be opened" /></strong><span>{error}</span></div><Link href={lesson?'/student/learn?lessonId='+lesson.id+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:20}}><LocaleText hinglish="Lesson पर लौटें" english="Return to lesson" /></Link></section>
   </main>;
 
   if(noPractice)return <main className="practice-page">
@@ -239,7 +244,7 @@ export default function PracticePage(){
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student/learn'} className="button button-dark" style={{marginTop:22}}><LocaleText hinglish="दूसरा lesson चुनें" english="Choose another lesson" /></Link>
+      <Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="button button-dark" style={{marginTop:22}}><LocaleText hinglish="दूसरा lesson चुनें" english="Choose another lesson" /></Link>
     </section>
   </main>;
 
@@ -255,7 +260,7 @@ export default function PracticePage(){
         const data=parse<any>(block.content||'{}');
         return <div className="concept-card" key={block.id}><span className="concept-kicker"><LocaleText hinglish="अब दोहराएँ · Recap" english="Recap" /></span>{data.points?.map((point:string,i:number)=><div className="feedback" key={i}><span>✓ <MathText text={point}/></span></div>)}</div>;
       })}
-      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code:'/student/learn'} className="text-link"><LocaleText hinglish="अध्याय के lessons" english="Chapter lessons" /></Link><Link href="/student/progress" className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link></div>
+      <div className="practice-footer"><Link href={lesson?'/student/learn?subjectCode='+lesson.subject_code+courseQuery:'/student/learn'+courseStartQuery} className="text-link"><LocaleText hinglish="अध्याय के lessons" english="Chapter lessons" /></Link><Link href={'/student/progress'+(courseId!==null?'?courseId='+courseId:programCode?'?programCode='+encodeURIComponent(programCode):'')} className="button button-dark"><LocaleText hinglish="Progress देखें →" english="View progress →" /></Link></div>
     </section>
   </main>;
 

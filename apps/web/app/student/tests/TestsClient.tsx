@@ -5,7 +5,7 @@ import PremiumPagination from '../../components/PremiumPagination';
 import AnswerFeedback from '../../components/AnswerFeedback';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './Tests.module.css';
 
 type AssessmentCard = {
@@ -156,6 +156,9 @@ function QuestionContent({question,response,review=false,disabled=false,onAnswer
 }
 export default function TestsClient(){
   const router=useRouter();
+  const searchParams=useSearchParams();
+  const rawCourseId=searchParams.get('courseId')||'';
+  const courseId=/^\d+$/.test(rawCourseId)&&Number(rawCourseId)>0?Number(rawCourseId):null;
   const {locale, learningLanguage, certificateLanguage}=useLocale();
   const language=learningLanguage;
   const uiLanguage=locale==='english'?'en':'hi';
@@ -199,9 +202,12 @@ export default function TestsClient(){
     try{
       const catalogParams=new URLSearchParams({language,limit:String(testsPageSize),offset:String(testsPage*testsPageSize)});
       if(subjectFilter!=='ALL')catalogParams.set('subjectCode',subjectFilter);
+      if(courseId!==null)catalogParams.set('courseId',String(courseId));
+      const resultsParams=new URLSearchParams({language,limit:String(resultsPageSize),offset:String(resultsPage*resultsPageSize)});
+      if(courseId!==null)resultsParams.set('courseId',String(courseId));
       const [catalog,studentResults]=await Promise.all([
         api('/api/v1/learning/assessments?'+catalogParams.toString()),
-        api('/api/v1/learning/assessment-results?language='+language+'&limit='+resultsPageSize+'&offset='+(resultsPage*resultsPageSize))
+        api('/api/v1/learning/assessment-results?'+resultsParams.toString())
       ]);
       const catalogItems=Array.isArray(catalog?.items)?catalog.items:(Array.isArray(catalog)?catalog:[]);
       const resultItems:Result[]=Array.isArray(studentResults?.items)?studentResults.items:(Array.isArray(studentResults)?studentResults:[]);
@@ -229,7 +235,7 @@ export default function TestsClient(){
       setCertificateEligibility(eligibilityMap);
     }catch(e:any){if(e?.auth){router.replace('/login/student');return;}setError(e instanceof Error?e.message:'Could not load your tests and results.');}
     finally{setLoading(false);}
-  },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize]);
+  },[router,language,resultsPage,resultsPageSize,subjectFilter,testsPage,testsPageSize,courseId]);
   useEffect(()=>{void loadOverview();},[loadOverview]);
   useEffect(()=>{attemptRef.current=attempt;},[attempt]);
 
@@ -257,7 +263,7 @@ export default function TestsClient(){
     try{
       const response=await fetch('/api/v1/students/me/certificates/issue',{
         method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',
-        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:certificateLanguage})
+        body:JSON.stringify({achievementType:'ASSESSMENT_PASS',assessmentAttemptId:attemptId,templateId:'CLASSIC',language:certificateLanguage,...(courseId!==null?{courseId}:{})})
       });
       const body=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error(body.message||body.detail||body.error||'Certificate could not be issued.');
@@ -469,7 +475,7 @@ export default function TestsClient(){
         {error&&<div className={styles.error} role="alert">{error}</div>}
         <div className={styles.tabs}><button type="button" className={tab==='tests'?styles.activeTab:''} onClick={()=>setTab('tests')}>{t('Available tests','उपलब्ध टेस्ट')} <span>{testsTotal}</span></button><button type="button" className={tab==='results'?styles.activeTab:''} onClick={()=>setTab('results')}>{t('My results','मेरे परिणाम')} <span>{resultsTotal}</span></button></div>
         {tab==='tests'?<>
-          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('YOUR ASSESSMENTS','आपके टेस्ट')}</span><h2>{t('Tests available to you','आपके लिए उपलब्ध टेस्ट')}</h2><p>{t('Tests are shown only for your enrolled class and subjects.','यहाँ केवल आपकी नामांकित कक्षा और विषयों के टेस्ट दिखते हैं।')}</p></div><label>{t('Subject','विषय')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{t('All subjects','सभी विषय')}</option><option value="maths">{t('Mathematics','गणित')}</option><option value="science">{t('Science','विज्ञान')}</option></select></label></div>
+          <div className={styles.toolbar}><div><span className={styles.eyebrow}>{t('YOUR ASSESSMENTS','आपके टेस्ट')}</span><h2>{t('Tests available to you','आपके लिए उपलब्ध टेस्ट')}</h2><p>{courseId!==null?t('Tests are shown for the selected course.','चुने गए course के टेस्ट यहाँ दिखते हैं।'):t('Tests are shown only for your enrolled class and subjects.','यहाँ केवल आपकी नामांकित कक्षा और विषयों के टेस्ट दिखते हैं।')}</p></div><label>{t('Subject','विषय')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setTestsPage(0)}}><option value="ALL">{t('All subjects','सभी विषय')}</option><option value="maths">{t('Mathematics','गणित')}</option><option value="science">{t('Science','विज्ञान')}</option></select></label></div>
           {loading?<div className={styles.empty}>{t('Loading your tests…','आपके टेस्ट लोड हो रहे हैं…')}</div>:filteredTests.length===0?<div className={styles.empty}><span>✓</span><b>{t('No published tests yet','अभी कोई प्रकाशित टेस्ट नहीं है')}</b><small>{t('Your teacher’s published tests will appear here.','शिक्षक द्वारा प्रकाशित टेस्ट यहाँ दिखेंगे।')}</small></div>:<div className={styles.testGrid}>{filteredTests.map(test=>{
             const started=Boolean(test.in_progress_attempt_id);
             const used=Number(test.attempts_used||0);
