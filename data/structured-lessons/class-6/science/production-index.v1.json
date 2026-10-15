@@ -47,10 +47,28 @@
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
     "lessons_committed": 1,
-    "last_completed_authoring_step": "Drafted topic 1 Explain and 8 bilingual multi-type practice questions; recorded the live app-wide locale contract, state-preservation requirements, bilingual control/question-type/difficulty/status labels, and blocked the English full-page source preview from student rendering.",
+    "last_completed_authoring_step": "Topic 1 committed: 8 bilingual draft practice questions across 8 registered question types; locale-switch contract and question component registry documented. Source, visual and semantic bilingual QA remain pending.",
     "current_chapter_number": 1,
     "current_topic_number": 1,
-    "next_action": "Align the Hindi source pages and choose/approve a locale-safe student visual for topic 1, then author topic 2 (scientific method) as a separate bilingual lesson and update this index."
+    "next_action": "Author Chapter 1 Topic 2 (The Scientific Method) as a paired English/Hindi lesson, then commit it and update this index with topic and cumulative question-type counts.",
+    "question_counts_by_chapter": [
+      {
+        "chapter_number": 1,
+        "chapter_title_en": "The Wonderful World of Science",
+        "total_questions_generated": 8,
+        "counts_by_type": {
+          "multiple_choice": 1,
+          "multiple_select": 1,
+          "true_false": 1,
+          "matching": 1,
+          "fill_blank": 1,
+          "image_observation": 1,
+          "short_answer": 1,
+          "scenario_based": 1
+        },
+        "topic_count_with_questions": 1
+      }
+    ]
   },
   "chapters": [
     {
@@ -82,10 +100,30 @@
             "scenario_based"
           ],
           "committed_at": "2026-10-15",
-          "commit_sha": "775a07d84b55f488534fb1037b453c072e223c9b",
+          "commit_sha": "4a8c55e16da31ca24d564ef881c4098bbb5c397f",
           "runtime_language_switch": "CONTRACT_RECORDED_NOT_IMPLEMENTED",
           "student_renderable_v3_page_preview": false,
-          "commit_note": "Added app-wide language-switch contract, state-preservation/no-fallback rules, localized practice controls/question-type/difficulty/status labels, and blocked the English full-page preview from student rendering."
+          "commit_note": "Added app-wide language-switch contract, state-preservation/no-fallback rules, localized practice controls/question-type/difficulty/status labels, and blocked the English full-page preview from student rendering.",
+          "question_type_counts": {
+            "multiple_choice": 1,
+            "multiple_select": 1,
+            "true_false": 1,
+            "matching": 1,
+            "fill_blank": 1,
+            "image_observation": 1,
+            "short_answer": 1,
+            "scenario_based": 1
+          },
+          "rendering_contract_status": "SPECIFIED_NOT_IMPLEMENTED",
+          "component_implementation_status": {
+            "web": false,
+            "android": false
+          },
+          "blockers": [
+            "Source reconciliation and Hindi page mapping remain pending.",
+            "The V3 page-preview asset is editor-only and cannot render as student visual.",
+            "The topic has not passed semantic bilingual, factual, visual or practice review."
+          ]
         },
         {
           "number": 2,
@@ -205,13 +243,13 @@
     "hindi_source_alignment": "Required; Hindi whole-book extraction exists but chapter/page boundaries for the authored lesson still require verification."
   },
   "resume_instructions": [
-    "Read this index first and open the exact lesson artifact recorded above.",
-    "Do not regenerate or overwrite completed lesson JSON blindly; inspect it and make additive corrections.",
-    "Continue on main; do not create an extra branch for this content-authoring stream.",
-    "Apply the single global locale contract to every learner-visible string, including question-type/status labels and shared web/Android UI. The language switch must update all visible content while preserving active learning state; data files specify requirements but do not implement runtime.",
-    "For the active topic, resolve Hindi page mapping and source visual/rights gaps; do not display the English source-page preview as a student asset.",
-    "Then generate topic 2 with separate Explain and Practice sections and paired en/hi content. Commit it, then update this index immediately.",
-    "Do not mark a chapter complete until every topic has source reconciliation, visual mapping, bilingual parity and practice review."
+    "Read this index and the question-rendering registry JSON/Markdown first.",
+    "Open the active lesson file and preserve its stable IDs; do not blindly overwrite existing generated content.",
+    "When generating a topic, record its question count by type in the lesson and immediately update this chapter ledger.",
+    "Question types must match the canonical registry. If a new type is needed, define its data shape, renderer, grading, localization, accessibility and QA contract before using it.",
+    "All visible lesson/question content is bilingual and governed by the one global app language. Runtime language switching is specified but not implemented.",
+    "After writing a topic file, commit on main, then update this index with topic counts, cumulative chapter totals, current status and next action.",
+    "Do not mark source-complete, review-approved or publishable until source reconciliation, visual/right review, bilingual semantic checks and QA have passed."
   ],
   "language_runtime_contract": {
     "contract_path": "Each lesson artifact contains language_runtime_contract; the shared app-wide string catalog and runtime behavior will require implementation later.",
@@ -236,5 +274,76 @@
       "shared web/Android controls and system errors are localized too"
     ],
     "runtime_status": "CONTRACT_RECORDED_NOT_IMPLEMENTED"
+  },
+  "question_rendering_contract": {
+    "registry_json": "data/structured-lessons/question-rendering-registry.v1.json",
+    "registry_human_readable": "data/structured-lessons/question-rendering-registry.v1.md",
+    "status": "SPECIFIED_NOT_IMPLEMENTED",
+    "rule": "Every generated question must declare rendering_contract_id matching question.type. New types require registry definition, locale fields, response shape, grading behavior, accessibility contract and QA coverage before use.",
+    "shared_components_required": [
+      "PracticeSession",
+      "PracticeQuestionRenderer"
+    ],
+    "current_generated_types": [
+      {
+        "type": "multiple_choice",
+        "component": "MultipleChoiceQuestion",
+        "component_contract_id": "qtype-multiple-choice.v1",
+        "count": 1
+      },
+      {
+        "type": "multiple_select",
+        "component": "MultipleSelectQuestion",
+        "component_contract_id": "qtype-multiple-select.v1",
+        "count": 1
+      },
+      {
+        "type": "true_false",
+        "component": "TrueFalseQuestion",
+        "component_contract_id": "qtype-true-false.v1",
+        "count": 1
+      },
+      {
+        "type": "matching",
+        "component": "MatchingQuestion",
+        "component_contract_id": "qtype-matching.v1",
+        "count": 1
+      },
+      {
+        "type": "fill_blank",
+        "component": "FillBlankQuestion",
+        "component_contract_id": "qtype-fill-blank.v1",
+        "count": 1
+      },
+      {
+        "type": "image_observation",
+        "component": "ImageObservationQuestion",
+        "component_contract_id": "qtype-image-observation.v1",
+        "count": 1
+      },
+      {
+        "type": "short_answer",
+        "component": "ShortAnswerQuestion",
+        "component_contract_id": "qtype-short-answer.v1",
+        "count": 1
+      },
+      {
+        "type": "scenario_based",
+        "component": "ScenarioQuestion",
+        "component_contract_id": "qtype-scenario-based.v1",
+        "count": 1
+      }
+    ],
+    "implementation_status": {
+      "specification_written": true,
+      "lesson_questions_mapped": true,
+      "web_components_implemented": false,
+      "android_components_implemented": false,
+      "automated_component_tests": false
+    },
+    "known_question_blockers": [
+      "Topic 1 q06 references an editor-only English source preview; not student-renderable until it has a reviewed bilingual/language-independent visual.",
+      "Topic 1 q07 requires explicit rubric/pending-review handling if no validated grader exists."
+    ]
   }
 }
