@@ -172,6 +172,10 @@ fun QuantaEdgeApp() {
     var tutorQuestionId by remember { mutableStateOf(0L) }
     var tutorAvailable by remember { mutableStateOf(false) }
     var tutorSendInFlight by remember { mutableStateOf(false) }
+    var tutorConnecting by remember { mutableStateOf(false) }
+    var tutorHasOlderMessages by remember { mutableStateOf(false) }
+    var tutorOlderBeforeId by remember { mutableStateOf<Long?>(null) }
+    var tutorLoadingOlderMessages by remember { mutableStateOf(false) }
     var liveClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var recordedClasses by remember { mutableStateOf(emptyList<JSONObject>()) }
     var selectedRecording by remember { mutableStateOf(JSONObject()) }
@@ -879,22 +883,94 @@ fun QuantaEdgeApp() {
 
     fun openTutorWithQuestion(questionId: Long) {
         tutorQuestionId = questionId
+        route = AppRoute.TUTOR
+        tutorConnecting = true
+        tutorAvailable = false
+        tutorSession = JSONObject()
+        tutorMessages = emptyList()
+        tutorHasOlderMessages = false
+        tutorOlderBeforeId = null
+        error = ""
         runTask {
-            val lessonId = lesson.longAny("id", "lesson_id")
-            if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
-            tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
-                JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
-            tutorAvailable = tutorSession.optBoolean("available")
-            tutorMessages = if (tutorAvailable) {
-                ApiClient.getObject("/api/v1/tutor/sessions/" + tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
-                    .optJSONArray("items").objectItems()
-            } else emptyList()
-            route = AppRoute.TUTOR
-            if (!tutorAvailable) status = "AI Tutor अभी configured नहीं है। यह setting backend पर enable होने पर उपलब्ध होगा।"
+            try {
+                val lessonId = lesson.longAny("id", "lesson_id")
+                if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
+                tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                    JSONObject().put("lessonId", lessonId).put("language", learningContentLanguage))
+                tutorAvailable = tutorSession.optBoolean("available")
+                if (tutorAvailable) {
+                    val initial = ApiClient.getObject("/api/v1/tutor/sessions/" +
+                        tutorSession.longAny("sessionId", "session_id") + "/messages?limit=30")
+                    tutorMessages = initial.optJSONArray("items").objectItems()
+                    tutorHasOlderMessages = initial.optBoolean("hasMore")
+                    tutorOlderBeforeId = initial.opt("nextBeforeId")?.toString()?.toLongOrNull()
+                    if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
+                } else {
+                    tutorMessages = emptyList()
+                    error = if (language == "hi") "इस पाठ के लिए AI Tutor अभी उपलब्ध नहीं है।"
+                        else "AI tutor is not enabled for this lesson yet."
+                }
+            } finally {
+                tutorConnecting = false
+            }
         }
     }
 
     fun openTutor() = openTutorWithQuestion(0L)
+
+    fun retryTutorConnection() = openTutorWithQuestion(tutorQuestionId)
+
+    fun startNewTutorChat() {
+        if (busy || tutorConnecting || tutorSendInFlight || !tutorAvailable) return
+        tutorConnecting = true
+        error = ""
+        runTask {
+            try {
+                val lessonId = lesson.longAny("id", "lesson_id")
+                if (lessonId <= 0L) throw IOException("Tutor शुरू करने के लिए पहले पाठ खोलें।")
+                tutorSession = ApiClient.postObject("/api/v1/tutor/sessions",
+                    JSONObject().put("lessonId", lessonId)
+                        .put("language", learningContentLanguage)
+                        .put("newChat", true))
+                tutorAvailable = tutorSession.optBoolean("available")
+                tutorMessages = emptyList()
+                tutorHasOlderMessages = false
+                tutorOlderBeforeId = null
+                if (!tutorAvailable) {
+                    error = if (language == "hi") "नई चैट बन गई, लेकिन AI Tutor अभी उपलब्ध नहीं है।"
+                        else "A new chat was created, but the AI tutor is currently unavailable."
+                }
+            } finally {
+                tutorConnecting = false
+            }
+        }
+    }
+
+    fun loadOlderTutorMessages() {
+        val sessionId = tutorSession.longAny("sessionId", "session_id")
+        val beforeId = tutorOlderBeforeId
+        if (sessionId <= 0L || beforeId == null || !tutorHasOlderMessages || tutorLoadingOlderMessages) return
+        tutorLoadingOlderMessages = true
+        scope.launch {
+            try {
+                val olderPage = ApiClient.getObject(
+                    "/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30&beforeId=" + beforeId
+                )
+                val older = olderPage.optJSONArray("items").objectItems()
+                tutorMessages = (older + tutorMessages).distinctBy { item ->
+                    item.opt("id")?.toString()?.takeIf { it.isNotBlank() && it != "null" }
+                        ?: (item.textAny("role") + "|" + item.textAny("message") + "|" + tutorTimestampLabel(item))
+                }
+                tutorHasOlderMessages = olderPage.optBoolean("hasMore")
+                tutorOlderBeforeId = olderPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
+                if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
+            } catch (exception: Exception) {
+                reportError(exception)
+            } finally {
+                tutorLoadingOlderMessages = false
+            }
+        }
+    }
 
     fun sendTutorMessage(message: String, mode: String) {
         if (busy || tutorSendInFlight || message.isBlank()) return
@@ -903,11 +979,15 @@ fun QuantaEdgeApp() {
         runTask {
             try {
                 val sessionId = tutorSession.longAny("sessionId", "session_id")
+                if (sessionId <= 0L) throw IOException("Tutor session is not ready. Please retry.")
                 ApiClient.postObject("/api/v1/tutor/sessions/" + sessionId + "/messages",
                     JSONObject().put("message", message).put("mode", mode).put("questionId", tutorQuestionId)
                         .put("language", learningContentLanguage))
-                tutorMessages = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
-                    .optJSONArray("items").objectItems()
+                val latestPage = ApiClient.getObject("/api/v1/tutor/sessions/" + sessionId + "/messages?limit=30")
+                tutorMessages = latestPage.optJSONArray("items").objectItems()
+                tutorHasOlderMessages = latestPage.optBoolean("hasMore")
+                tutorOlderBeforeId = latestPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
+                if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
             } finally {
                 tutorSendInFlight = false
             }
@@ -2243,11 +2323,18 @@ fun QuantaEdgeApp() {
                     AppRoute.TUTOR -> TutorScreen(
                         lessonTitle = lesson.textAny("title"),
                         learningLanguage = learningContentLanguage,
+                        sessionId = tutorSession.longAny("sessionId", "session_id"),
+                        connecting = tutorConnecting,
                         available = tutorAvailable,
                         messages = tutorMessages,
+                        hasOlderMessages = tutorHasOlderMessages,
+                        loadingOlderMessages = tutorLoadingOlderMessages,
                         busy = busy,
                         error = error,
                         onSend = ::sendTutorMessage,
+                        onLoadOlder = ::loadOlderTutorMessages,
+                        onNewChat = ::startNewTutorChat,
+                        onRetry = ::retryTutorConnection,
                         onClose = { route = AppRoute.LESSON }
                     )
                     AppRoute.CLASSES -> LearningClassesScreen(
