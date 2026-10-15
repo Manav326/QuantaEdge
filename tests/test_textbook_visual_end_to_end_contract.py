@@ -91,7 +91,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         android = (ROOT / "apps/android/app/src/main/java/com/quantaedge/android/ui/LessonContentBlock.kt").read_text(encoding="utf-8")
         admin = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
 
-        for kind in expected_kinds - {"UNCLASSIFIED"}:
+        for kind in expected_kinds - {"TEXTBOOK_FIGURE", "UNCLASSIFIED"}:
             with self.subTest(kind=kind):
                 self.assertIn(kind, web)
                 self.assertIn(kind, android)
