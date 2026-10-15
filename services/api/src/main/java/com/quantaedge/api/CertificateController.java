@@ -214,9 +214,13 @@ public class CertificateController {
         JOIN curriculum_class cc ON cc.id=s.class_id
         LEFT JOIN curriculum_program p ON p.id=s.program_id
         JOIN student st ON st.id=att.student_id AND st.active=true
-        LEFT JOIN student_certificate existing
-          ON existing.student_id=att.student_id AND existing.assessment_attempt_id=att.id
-             AND existing.achievement_type='ASSESSMENT_PASS'
+        LEFT JOIN LATERAL (
+          SELECT cert.id,cert.certificate_number,cert.status
+          FROM student_certificate cert
+          WHERE cert.student_id=att.student_id AND cert.assessment_attempt_id=att.id
+            AND cert.achievement_type='ASSESSMENT_PASS'
+          ORDER BY cert.issued_at DESC,cert.id DESC LIMIT 1
+        ) existing ON true
         WHERE att.student_id=?
           AND (
             existing.id IS NOT NULL
@@ -315,9 +319,13 @@ public class CertificateController {
           LEFT JOIN student_lesson_progress p ON p.student_id=att.student_id AND p.lesson_id=l.id
           WHERE ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         ) progress ON true
-        LEFT JOIN student_certificate cert
-          ON cert.student_id=att.student_id AND cert.assessment_attempt_id=att.id
-             AND cert.achievement_type='ASSESSMENT_PASS'
+        LEFT JOIN LATERAL (
+          SELECT stored.id,stored.certificate_number,stored.status
+          FROM student_certificate stored
+          WHERE stored.student_id=att.student_id AND stored.assessment_attempt_id=att.id
+            AND stored.achievement_type='ASSESSMENT_PASS'
+          ORDER BY stored.issued_at DESC,stored.id DESC LIMIT 1
+        ) cert ON true
         WHERE att.student_id=?
         ORDER BY att.released_at DESC NULLS LAST,att.id DESC
         """;
@@ -397,6 +405,7 @@ public class CertificateController {
         ? "SUBJECT_COMPLETION:" + classCode + ":" + subjectCode
         : "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
     Map<String, Object> existing = existingCertificate(studentId, key);
+    if (existing == null) existing = existingSubjectCompletionCertificate(studentId, classCode, subjectCode, courseId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
     String courseScope=courseId==null
@@ -477,6 +486,7 @@ public class CertificateController {
     // attempt or enrollment filters. This lookup is always scoped to the authenticated student.
     String key = "ASSESSMENT_PASS:" + attemptId;
     Map<String, Object> existing = existingCertificate(studentId, key);
+    if (existing == null) existing = existingAssessmentCertificate(studentId, attemptId);
     if (existing != null) return existingOrRejectRevoked(existing);
 
     Map<String, Object> achievement = queryOptional("""
@@ -1097,6 +1107,35 @@ public class CertificateController {
     return publicCertificateById(((Number) row.get("id")).longValue(), studentId);
   }
 
+  /** Resolve legacy subject completion by identity if its stored achievement_key used an older format. */
+  private Map<String, Object> existingSubjectCompletionCertificate(long studentId, String classCode, String subjectCode, Long courseId) {
+    String sql;
+    Object[] args;
+    if (courseId == null) {
+      sql = "SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id " +
+          "WHERE c.student_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.class_code=? " +
+          "AND c.program_id IS NULL AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
+      args = new Object[]{studentId, classCode, subjectCode};
+    } else {
+      sql = "SELECT c.id FROM student_certificate c JOIN curriculum_subject s ON s.id=c.subject_id " +
+          "WHERE c.student_id=? AND c.achievement_type='SUBJECT_COMPLETION' AND c.program_id=? " +
+          "AND s.code=? ORDER BY c.issued_at DESC,c.id DESC LIMIT 1";
+      args = new Object[]{studentId, courseId, subjectCode};
+    }
+    Map<String, Object> row = queryOptional(sql, args);
+    if (row == null) return null;
+    return publicCertificateById(number(row.get("id")), studentId);
+  }
+
+  /** Resolve legacy assessment records by student + attempt identity rather than achievement_key spelling. */
+  private Map<String, Object> existingAssessmentCertificate(long studentId, long attemptId) {
+    Map<String, Object> row = queryOptional(
+        "SELECT c.id FROM student_certificate c WHERE c.student_id=? AND c.assessment_attempt_id=? " +
+        "AND c.achievement_type='ASSESSMENT_PASS' ORDER BY c.issued_at DESC,c.id DESC LIMIT 1",
+        studentId, attemptId);
+    if (row == null) return null;
+    return publicCertificateById(number(row.get("id")), studentId);
+  }
   private Map<String, Object> existingOrRejectRevoked(Map<String, Object> certificate) {
     if ("REVOKED".equals(certificate.get("status"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,

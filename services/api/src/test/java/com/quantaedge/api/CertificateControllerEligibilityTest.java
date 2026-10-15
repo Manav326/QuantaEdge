@@ -220,6 +220,37 @@ class CertificateControllerEligibilityTest {
   }
 
   @Test
+  void reopeningLegacyAssessmentCertificateFallsBackToCanonicalAttemptIdWhenAchievementKeyDiffers() {
+    Map<String, Object> studentRow = new LinkedHashMap<>();
+    studentRow.put("id", 81L);
+    studentRow.put("display_name", "Test Learner");
+    studentRow.put("class_code", "6");
+    studentRow.put("language", "en");
+    Map<String, Object> legacyCertificateId = new LinkedHashMap<>();
+    legacyCertificateId.put("id", 3011L);
+    Map<String, Object> publicCertificate = new LinkedHashMap<>();
+    publicCertificate.put("id", 3011L);
+    publicCertificate.put("certificate_number", "QE-2026-ABCDEF1234567890");
+    publicCertificate.put("achievement_type", "ASSESSMENT_PASS");
+    publicCertificate.put("status", "ISSUED");
+
+    when(jdbc.queryForList(anyString(), any(Object[].class))).thenAnswer(invocation -> {
+      String sql = invocation.getArgument(0, String.class);
+      if (sql.contains("FROM student WHERE id=? AND active=true FOR UPDATE")) return List.of(studentRow);
+      if (sql.contains("SELECT id,status FROM student_certificate WHERE student_id=? AND achievement_key=?")) return List.of();
+      if (sql.contains("SELECT c.id FROM student_certificate c") && sql.contains("c.assessment_attempt_id=?") && sql.contains("c.achievement_type='ASSESSMENT_PASS'")) return List.of(legacyCertificateId);
+      if (sql.contains("WHERE c.id=? AND c.student_id=?")) return List.of(publicCertificate);
+      if (sql.contains("FROM student_assessment_attempt att")) throw new AssertionError("Reopening an issued record must not require current eligibility.");
+      return List.of();
+    });
+
+    Map<String, Object> response = controller.issueCertificate(
+        new CertificateController.IssueRequest("ASSESSMENT_PASS", null, 9011L, "CLASSIC", "en"), student);
+    assertEquals(3011L, ((Number) response.get("id")).longValue());
+    assertEquals("QE-2026-ABCDEF1234567890", response.get("certificate_number"));
+  }
+
+  @Test
   void issuanceEndpointIndependentlyRejectsGeneratedAssessmentEvenIfClientCallsItDirectly() {
     Map<String, Object> studentRow = new LinkedHashMap<>();
     studentRow.put("id", 81L);
