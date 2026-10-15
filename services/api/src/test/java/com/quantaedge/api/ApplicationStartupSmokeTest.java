@@ -18,6 +18,9 @@ class ApplicationStartupSmokeTest {
   private JdbcTemplate jdbc;
 
   @Autowired
+  private LearningMetricsService learningMetrics;
+
+  @Autowired
   private ContentTranslationController contentTranslationController;
 
   @Autowired
@@ -278,5 +281,25 @@ class ApplicationStartupSmokeTest {
       where spe.status='ACTIVE' and ste.id is null
       """, Integer.class));
   }
+
+
+  @Test
+  void sharedStudentAndParentLearningReportMetricsExecuteTheirFullQueryPath() {
+    List<Long> activeStudents = jdbc.queryForList(
+        "select id from student where active=true order by id limit 1", Long.class);
+    // Some isolated migration-only CI fixtures contain no student rows; the production seed
+    // exercises this call, including the shared 30-day session/minutes aggregate query.
+    if (activeStudents.isEmpty()) return;
+
+    Map<String,Object> metrics = learningMetrics.statsFor(activeStudents.getFirst());
+    assertTrue(metrics.containsKey("lessonStats"));
+    assertTrue(metrics.containsKey("questionStats"));
+    assertTrue(metrics.containsKey("sessionStats"));
+    @SuppressWarnings("unchecked")
+    Map<String,Object> sessionStats = (Map<String,Object>) metrics.get("sessionStats");
+    assertTrue(sessionStats.containsKey("minutes_30d"));
+    assertTrue(sessionStats.containsKey("sessions_30d"));
+  }
+
 
 }
