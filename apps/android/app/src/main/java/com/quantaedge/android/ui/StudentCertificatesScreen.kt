@@ -1,8 +1,5 @@
 package com.quantaedge.android.ui
 
-import android.app.Activity
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.google.android.gms.common.api.CommonStatusCodes
 import com.quantaedge.android.BuildConfig
 
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -80,6 +77,7 @@ fun StudentCertificatesScreen(
     var verification by remember { mutableStateOf<JSONObject?>(null) }
     var verificationCode by remember { mutableStateOf("") }
     var verifyingQr by remember { mutableStateOf(false) }
+    var showScanner by rememberSaveable { mutableStateOf(false) }
 
     fun writeDownloadedFile(uri: android.net.Uri?) {
         val bytes = pendingBytes
@@ -159,35 +157,10 @@ fun StudentCertificatesScreen(
     }
 
     fun scanCertificateQr() {
-        val activity = context as? Activity
-        if (activity == null) {
-            error = if (language == "hi") "कैमरा स्कैनर शुरू नहीं हो सका।" else "Could not start the QR scanner."
-            return
-        }
         error = ""
         notice = ""
         verification = null
-        verifyingQr = true
-        GmsBarcodeScanning.getClient(activity).startScan()
-            .addOnSuccessListener { barcode ->
-                val code = barcode.rawValue?.let { parseQuantaEdgeCertificateQr(it, BuildConfig.DEBUG) }
-                if (code == null) {
-                    verifyingQr = false
-                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
-                    else "This is not a valid QuantaEdge certificate QR or barcode."
-                } else {
-                    verifyScannedCertificate(code)
-                }
-            }
-            .addOnCanceledListener { verifyingQr = false }
-            .addOnFailureListener { failure ->
-                verifyingQr = false
-                error = if (failure is com.google.android.gms.common.api.ApiException &&
-                    failure.statusCode == CommonStatusCodes.CANCELED) "" else {
-                    if (language == "hi") "QR स्कैन नहीं हो सका। कृपया दोबारा कोशिश करें।"
-                    else "QR/barcode scanning failed. Please try again."
-                }
-            }
+        showScanner = true
     }
 
     fun downloadCertificate(certificate: JSONObject, format: String) {
@@ -293,6 +266,27 @@ fun StudentCertificatesScreen(
     }
 
 
+    if (showScanner) {
+        PremiumCodeScannerScreen(
+            language = language,
+            onBack = { showScanner = false },
+            onCodeScanned = { rawValue, _ ->
+                showScanner = false
+                val code = parseQuantaEdgeCertificateQr(rawValue, BuildConfig.DEBUG)
+                if (code == null) {
+                    verifyingQr = false
+                    error = if (language == "hi") "यह मान्य QuantaEdge प्रमाणपत्र QR या बारकोड नहीं है।"
+                    else "This is not a valid QuantaEdge certificate QR or barcode."
+                    notice = ""
+                } else {
+                    verificationCode = code
+                    verifyScannedCertificate(code)
+                }
+            }
+        )
+        return
+    }
+
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -303,7 +297,7 @@ fun StudentCertificatesScreen(
         }
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(if (language == "hi") "प्रमाणपत्र QR स्कैन करें" else "Scan a certificate QR",
+                Text(if (language == "hi") "प्रमाणपत्र स्कैन करें" else "Scan a certificate",
                     style = MaterialTheme.typography.titleMedium)
                 Text(if (language == "hi")
                     "किसी भी QuantaEdge प्रमाणपत्र का QR स्कैन करें। स्थिति सर्वर से जाँची जाएगी।"
