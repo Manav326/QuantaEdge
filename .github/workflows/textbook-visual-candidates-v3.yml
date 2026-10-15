@@ -81,6 +81,9 @@ jobs:
       - name: Test v3 candidate preparation
         run: python -m unittest discover -s tests -p "test_prepare_visual_candidates_v3.py" -v
 
+      - name: Test v3 visual attachment catalog and chapter map
+        run: python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
+
   prepare:
     if: github.event_name == 'workflow_dispatch'
     name: Prepare source-bound visual candidate pack
