@@ -1795,9 +1795,10 @@ def run(args: argparse.Namespace) -> int:
             f"NCERT books folder not found: {books_dir}. Create it and put the named whole-book PDFs inside."
         )
     program_code = str(getattr(args, "program_code", "") or "").strip().upper()
-    if args.require_matching_preflight and not args.apply:
+    preflight_guard = str(getattr(args, "require_matching_preflight", "") or "").strip()
+    if preflight_guard and not args.apply:
         raise ValueError("--require-matching-preflight requires --apply.")
-    if args.require_matching_preflight and (not args.course_id or program_code):
+    if preflight_guard and (not args.course_id or program_code):
         raise ValueError("--require-matching-preflight requires --course-id and cannot be combined with --program-code.")
     course_id_value = int(getattr(args, "course_id", 0) or 0)
     course_id = course_id_value if course_id_value > 0 else None
@@ -1922,8 +1923,8 @@ def run(args: argparse.Namespace) -> int:
         ],
         "credentials_recorded": False,
     }
-    if args.require_matching_preflight:
-        reviewed_path = Path(args.require_matching_preflight).expanduser()
+    if preflight_guard:
+        reviewed_path = Path(preflight_guard).expanduser()
         if not reviewed_path.is_absolute():
             reviewed_path = root / reviewed_path
         verify_matching_preflight(reviewed_path, report, int(course_id))
