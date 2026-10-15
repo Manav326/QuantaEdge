@@ -317,11 +317,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-assets", type=int, default=5, help="Maximum candidate assets in this run (default: 5).")
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
     parser.add_argument("--timeout", type=int, default=180)
+    parser.add_argument("--output", type=Path, help="Optional checkpoint path; use a model-specific path to preserve checkpoints across model comparisons.")
     parser.add_argument("--resume", action="store_true", help="Resume from the existing output checkpoint and retry failed assets.")
     parser.add_argument("--run-id", help="Optional runner-run identifier; failed assets are not retried repeatedly within that run.")
     parser.add_argument("--overwrite", action="store_true", help="Discard an existing checkpoint and start a fresh analysis.")
     args = parser.parse_args()
-    output_path = args.inventory.parent / "visual-analysis.v1.json"
+    output_path = args.output or (args.inventory.parent / "visual-analysis.v1.json")
     try:
         if args.max_assets < 1 or args.max_assets > 10000:
             raise ValueError("--max-assets must be between 1 and 10000.")
