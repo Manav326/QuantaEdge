@@ -63,13 +63,27 @@ def validate_site_bundle(bundle: Any, allow_noncanonical_chapter: bool = False) 
     class_code = str(curriculum.get("class_code", "")).strip()
     subject_code = str(curriculum.get("subject_code", "")).strip().lower()
     language = str(curriculum.get("language", "")).strip().lower()
-    if class_code not in {"6", "7", "8"} or subject_code not in {"maths", "science"}:
-        raise ValueError("Only supported Bihar Board Classes 6–8 Maths/Science tracks may be imported.")
+    try:
+        raw_course_id = curriculum.get("course_id")
+        course_id = int(raw_course_id) if raw_course_id not in (None, "", 0, "0") else None
+    except (TypeError, ValueError) as exc:
+        raise ValueError("curriculum.course_id must be a positive numeric course ID.") from exc
+    if course_id is not None and course_id < 1:
+        raise ValueError("curriculum.course_id must be a positive numeric course ID.")
+    program_code = str(curriculum.get("program_code") or "").strip().upper()
+    if course_id is not None and program_code:
+        raise ValueError("Use curriculum.course_id or curriculum.program_code, not both.")
+    if class_code not in {"6", "7", "8"}:
+        raise ValueError("curriculum.class_code is the source textbook level and must be 6, 7, or 8.")
+    if (course_id is None and not program_code and subject_code not in {"maths", "science"}) or not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,39}", subject_code):
+        raise ValueError("Standard tracks support Maths/Science; course-scoped tracks may use a lowercase subject code.")
     if language not in {"hi", "en"}:
         raise ValueError("curriculum.language must be hi or en.")
-    program_code = str(curriculum.get("program_code") or "").strip().upper()
     if program_code and (not re.fullmatch(r"[A-Z0-9_-]{2,60}", program_code) or program_code == "GENERAL"):
-        raise ValueError("curriculum.program_code must identify an additional course such as NAVODAYA_BATCH.")
+        raise ValueError("curriculum.program_code must identify an additional course.")
+    if course_id is not None:
+        curriculum["course_id"] = course_id
+        curriculum.pop("program_code", None)
 
     chapter = bundle.get("chapter")
     if not isinstance(chapter, dict):
@@ -421,8 +435,15 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         "subjectCode": curriculum["subject_code"],
         "status": "ALL",
     }
+    try:
+        raw_course_id = curriculum.get("course_id")
+        course_id = int(raw_course_id) if raw_course_id not in (None, "", 0, "0") else None
+    except (TypeError, ValueError) as exc:
+        raise ValueError("curriculum.course_id must be a positive numeric course ID.") from exc
     program_code = str(curriculum.get("program_code") or "").strip().upper()
-    if program_code:
+    if course_id is not None:
+        query_params["courseId"] = str(course_id)
+    elif program_code:
         query_params["programCode"] = program_code
     query = urllib.parse.urlencode(query_params)
     rows = api.request("GET", "/api/v1/admin/content?" + query)
@@ -430,8 +451,10 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         raise RuntimeError("Admin content catalogue did not return a list.")
     matches: dict[int, dict[str, Any]] = {}
     for row in rows:
-        if (str(row.get("chapter_code", "")).strip() == chapter["code"]
-                and str(row.get("program_code") or "").strip().upper() == program_code):
+        same_scope = (int(row.get("course_id") or 0) == course_id) if course_id is not None else (
+            str(row.get("program_code") or "").strip().upper() == program_code
+        )
+        if str(row.get("chapter_code", "")).strip() == chapter["code"] and same_scope:
             try:
                 matches[int(row["chapter_id"])] = row
             except (KeyError, TypeError, ValueError):
@@ -452,7 +475,8 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         chapter_payload = {
             "classCode": curriculum["class_code"],
             "subjectCode": curriculum["subject_code"],
-            **({"programCode": program_code} if program_code else {}),
+            **({"courseId": course_id} if course_id is not None else
+               ({"programCode": program_code} if program_code else {})),
             "code": chapter["code"],
             "displayName": chapter["display_name"],
             "description": str(chapter.get("description", ""))[:500],
@@ -474,6 +498,8 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         str(row.get("lesson_code")).strip()
         for row in rows
         if str(row.get("chapter_code", "")).strip() == chapter["code"] and row.get("lesson_code")
+        and ((int(row.get("course_id") or 0) == course_id) if course_id is not None else
+             (str(row.get("program_code") or "").strip().upper() == program_code))
     }
     collisions = sorted(planned_codes & existing_lesson_codes)
     if collisions:
@@ -522,6 +548,8 @@ def run_import(bundle: dict[str, Any], base_url: str, session: str,
         "lesson_ids": imported_lesson_ids,
         "lesson_count": len(imported_lesson_ids),
         "question_count": len(bundle["online_question_bank"]),
+        "course_id": course_id,
+        "program_code": program_code or None,
         "source_verified": False,
         "question_review_status": "DRAFT",
         "chapter_published": False if not attach_to_existing_chapter else "UNCHANGED_EXISTING_CHAPTER",
