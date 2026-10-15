@@ -124,8 +124,22 @@ def analyze_one(
         headers={"Content-Type": "application/json"},
         method="POST",
     )
-    with opener(request, timeout=timeout) as response:
-        response_data = json.loads(response.read().decode("utf-8"))
+    try:
+        with opener(request, timeout=timeout) as response:
+            response_data = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        # Ollama's response body usually explains malformed/unsupported payloads
+        # (for example, image decoding or request-size issues). Keep a bounded
+        # diagnostic in the resumable checkpoint instead of only "HTTP Error 400".
+        try:
+            detail = exc.read(4096).decode("utf-8", errors="replace").strip()
+        except Exception:
+            detail = ""
+        detail = " ".join(detail.split())[:1200]
+        message = f"Ollama HTTP {exc.code}"
+        if detail:
+            message += f": {detail}"
+        raise RuntimeError(message) from exc
     if not isinstance(response_data, dict):
         raise ValueError("Ollama returned an invalid response.")
     message = response_data.get("message")
