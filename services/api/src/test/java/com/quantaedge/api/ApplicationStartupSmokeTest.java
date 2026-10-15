@@ -265,4 +265,18 @@ class ApplicationStartupSmokeTest {
     assertTrue(jdbc.queryForObject("select exists(select 1 from pg_trigger where tgrelid='public.user_account'::regclass and tgname='trg_protect_account_lifecycle_role_transition' and not tgisinternal)", Boolean.class));
     assertEquals(0, jdbc.queryForObject("select count(*) from information_schema.columns where table_schema='public' and table_name='student' and column_name in ('date_of_birth','birth_date')", Integer.class));
   }
+
+  @Test
+  void activeCourseEnrollmentsHaveTheirSubjectTrackRowsBackfilled() {
+    assertEquals(0, jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program_subject ps on ps.program_id=spe.program_id
+      join curriculum_subject s on s.id=ps.subject_id
+        and s.program_id=spe.program_id and s.active=true
+      left join student_track_enrollment ste
+        on ste.student_id=spe.student_id and ste.subject_id=s.id
+      where spe.status='ACTIVE' and ste.id is null
+      """, Integer.class));
+  }
+
 }
