@@ -146,7 +146,7 @@ public class TutorService {
         """,tutorLanguage,questionId,sessionId);
       if(q.isEmpty())throw new SecurityException("Tutor question access denied");
       Map<String,Object> question=q.getFirst();
-      qctx=json(question);
+      qctx=compactText(json(question), 700);
       currentTopic=firstNonBlank(question.get("subtopic"),question.get("topic"),currentTopic);
     }
 
@@ -160,7 +160,7 @@ public class TutorService {
         order by t.version_no desc,t.id desc limit 1
       ) bt on true
       where b.lesson_id=(select lesson_id from tutor_session where id=?) and b.active=true
-      order by b.sequence_no limit 12
+      order by b.sequence_no limit 4
       """,tutorLanguage,sessionId);
     String blocks=json(safeBlocks(rawBlocks));
 
@@ -170,12 +170,19 @@ public class TutorService {
       select cc.title,m.mastery_percent,m.attempts
       from student_concept_mastery m join chapter_concept cc on cc.id=m.concept_id
       where m.student_id=? and cc.chapter_id=(select chapter_id from lesson where id=(select lesson_id from tutor_session where id=?))
-      order by m.mastery_percent asc nulls first limit 12
+      order by m.mastery_percent asc nulls first limit 6
       """,context.studentId(),sessionId));
 
     List<Map<String,Object>> history=jdbc.queryForList("select role,mode,message from tutor_message where session_id=? order by created_at desc,id desc limit ?",sessionId,historyMessages);
     history.removeIf(row -> isGenericTutorGreeting(String.valueOf(row.get("role")),String.valueOf(row.get("message"))));
     Collections.reverse(history);
+    List<Map<String,Object>> promptHistory = new ArrayList<>();
+    for (Map<String,Object> row : history) {
+      promptHistory.add(Map.of(
+          "role", String.valueOf(row.getOrDefault("role", "")),
+          "mode", String.valueOf(row.getOrDefault("mode", "")),
+          "message", compactText(String.valueOf(row.getOrDefault("message", "")), 180)));
+    }
 
     String responseLanguage = tutorLanguage;
     String languageInstruction = responseLanguage.equals("en")
@@ -189,7 +196,7 @@ public class TutorService {
       never ask which lesson the learner means when this context is already supplied. For general school-science
       questions not covered by it, give an accurate, age-appropriate explanation without inventing
       SCERT, textbook, Bihar Board, exam-year, marks, or provenance claims.
-      Be concise and child-friendly. Teach reasoning rather than answer dumping.
+      Be concise and child-friendly: normally use 2–4 short sentences. For STEP_BY_STEP, use at most 5 numbered steps. Teach reasoning rather than answer dumping.
       Never open with a greeting, a generic offer to help, or customer-support wording.
       Never say "Hello! How can we help you today?" or address the learner as "QuantaEdge Tutor".
       Answer the learner's actual question directly in the first sentence. For experiment-method questions,
@@ -220,7 +227,7 @@ public class TutorService {
       LEARNER MODE: %s
       LEARNER MESSAGE:
       %s
-      """.formatted(tutorLanguage,json(lesson),blocks,retrievedCurriculum,mastery,qctx,json(history),mode,normalized);
+      """.formatted(tutorLanguage,json(lesson),blocks,retrievedCurriculum,mastery,qctx,json(promptHistory),mode,compactText(normalized,600));
 
     // Exact context questions should be answered from the lesson record, not left to
     // a small model that may ignore context and ask which lesson the learner means.
@@ -353,13 +360,43 @@ public class TutorService {
           if(node.isObject()){
             for(String field:List.of("correct","correctOption","answer","answer_payload","solution","markingScheme")) ((tools.jackson.databind.node.ObjectNode)node).remove(field);
           }
+          compactJsonNode(node, 220, 6);
           safe.add(Map.of("block_type",type,"content",node));
           continue;
         }catch(Exception ignored){}
       }
-      safe.add(Map.of("block_type",type,"content",content==null?"":content));
+      safe.add(Map.of("block_type",type,"content",compactText(content==null?"":String.valueOf(content),450)));
     }
     return safe;
+  }
+
+  private static String compactText(String value, int maxChars) {
+    if (value == null || value.length() <= maxChars) return value == null ? "" : value;
+    return value.substring(0, maxChars) + "…";
+  }
+
+  private void compactJsonNode(tools.jackson.databind.JsonNode node, int maxStringChars, int maxArrayItems) {
+    if (node == null) return;
+    if (node.isObject()) {
+      var object = (tools.jackson.databind.node.ObjectNode) node;
+      List<String> names = new ArrayList<>();
+      node.fieldNames().forEachRemaining(names::add);
+      for (String name : names) {
+        tools.jackson.databind.JsonNode child = object.get(name);
+        if (child == null) continue;
+        if (child.isTextual()) {
+          object.put(name, compactText(child.asText(), maxStringChars));
+        } else if (child.isObject() || child.isArray()) {
+          compactJsonNode(child, maxStringChars, maxArrayItems);
+        }
+      }
+    } else if (node.isArray()) {
+      var array = (tools.jackson.databind.node.ArrayNode) node;
+      while (array.size() > maxArrayItems) array.remove(array.size() - 1);
+      for (int i = 0; i < array.size(); i++) {
+        compactJsonNode(array.get(i), maxStringChars, maxArrayItems);
+      }
+    }
   }
 
   private String json(Object value){
