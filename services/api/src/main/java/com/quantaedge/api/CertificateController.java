@@ -41,14 +41,16 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/api/v1")
 public class CertificateController {
   private static final String CERTIFICATE_COLUMNS = """
-      c.id,c.certificate_number,c.achievement_type,c.class_code,c.subject_id,s.code AS subject_code,
-      s.display_name AS subject_name,c.assessment_attempt_id,c.template_id,c.language,
+      c.id,c.certificate_number,c.achievement_type,c.class_code,c.subject_id,c.program_id,
+      s.code AS subject_code,s.display_name AS subject_name,p.code AS course_code,p.display_name AS course_name,
+      c.assessment_attempt_id,c.template_id,c.language,
       c.recipient_name,c.achievement_title,c.achievement_summary,c.status,c.issued_at,
       c.revoked_at,c.revocation_reason
       """;
   private static final String CERTIFICATE_JOIN = """
       FROM student_certificate c
       LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+      LEFT JOIN curriculum_program p ON p.id=c.program_id
       """;
   private static final String CERTIFICATE_NUMBER_PATTERN = "QE-[0-9]{4}-[A-F0-9]{16}";
 
@@ -61,7 +63,12 @@ public class CertificateController {
   private final SecureRandom secureRandom = new SecureRandom();
 
   public record IssueRequest(String achievementType, String subjectCode, Long assessmentAttemptId,
-      String templateId, String language) {}
+      String templateId, String language, Long courseId) {
+    public IssueRequest(String achievementType,String subjectCode,Long assessmentAttemptId,
+        String templateId,String language) {
+      this(achievementType,subjectCode,assessmentAttemptId,templateId,language,null);
+    }
+  }
 
   public CertificateController(JdbcTemplate jdbc, AuthorizationService authorization,
       CertificateRenderer renderer, CertificateArtifactStorage storage, ObjectMapper objectMapper,
@@ -290,49 +297,64 @@ public class CertificateController {
     if (studentRows.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Active student profile not found.");
     Map<String, Object> student = studentRows.get(0);
 
+    Long courseId=request.courseId();
+    if(courseId!=null && courseId<1)throw new IllegalArgumentException("Choose a valid course ID.");
     String type = clean(request.achievementType()).toUpperCase(Locale.ROOT);
     String template = CertificateRenderer.normalizeTemplate(request.templateId());
     String profileLanguage = clean(student.get("language"));
     String language = normalizeLanguage(request.language(), profileLanguage.isBlank() ? "hi" : profileLanguage);
     if ("SUBJECT_COMPLETION".equals(type)) {
       String subjectCode = clean(request.subjectCode()).toLowerCase(Locale.ROOT);
-      if (!subjectCode.matches("[a-z0-9-]{1,40}")) throw new IllegalArgumentException("Choose a valid subject track.");
-      return issueSubjectCompletion(studentId, student, subjectCode, template, language);
+      if (!subjectCode.matches("[a-z0-9_-]{1,40}")) throw new IllegalArgumentException("Choose a valid subject track.");
+      return issueSubjectCompletion(studentId, student, subjectCode, courseId, template, language);
     }
     if ("ASSESSMENT_PASS".equals(type)) {
       if (request.assessmentAttemptId() == null || request.assessmentAttemptId() < 1) {
         throw new IllegalArgumentException("Choose a released assessment result.");
       }
-      return issueAssessmentPass(studentId, student, request.assessmentAttemptId(), template, language);
+      return issueAssessmentPass(studentId, student, request.assessmentAttemptId(), courseId, template, language);
     }
     throw new IllegalArgumentException("Choose SUBJECT_COMPLETION or ASSESSMENT_PASS.");
   }
 
   private Map<String, Object> issueSubjectCompletion(long studentId, Map<String, Object> student,
-      String subjectCode, String template, String language) {
+      String subjectCode, Long courseId, String template, String language) {
     String classCode = String.valueOf(student.get("class_code"));
-    String key = "SUBJECT_COMPLETION:" + classCode + ":" + subjectCode;
+    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
+    String key = courseId==null
+        ? "SUBJECT_COMPLETION:" + classCode + ":" + subjectCode
+        : "COURSE_SUBJECT_COMPLETION:" + courseId + ":" + subjectCode;
     Map<String, Object> existing = existingCertificate(studentId, key);
     if (existing != null) return existingOrRejectRevoked(existing);
 
-    Map<String, Object> achievement = queryOptional("""
-        SELECT st.display_name AS recipient_name,st.class_code,s.id AS subject_id,s.code AS subject_code,
-               s.display_name AS subject_name,COUNT(DISTINCT l.id) AS total_lessons,
-               COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
+    String courseScope=courseId==null
+        ? "s.program_id is null and cc.code=st.class_code"
+        : "s.program_id=? and p.status='ACTIVE' and exists(select 1 from student_program_enrollment spe where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE')";
+    String sql="""
+        SELECT st.display_name AS recipient_name,st.class_code,cc.code AS source_class_code,
+               s.id AS subject_id,s.program_id,p.display_name AS course_name,
+               s.code AS subject_code,s.display_name AS subject_name,
+               COUNT(DISTINCT l.id) AS total_lessons,
+               COUNT(DISTINCT l.id) FILTER (WHERE progress.status='COMPLETED') AS completed_lessons
         FROM student st
         JOIN student_track_enrollment ste ON ste.student_id=st.id AND ste.status='ACTIVE'
         JOIN curriculum_subject s ON s.id=ste.subject_id AND s.active=true
         JOIN curriculum_class cc ON cc.id=s.class_id AND cc.active=true
-        LEFT JOIN curriculum_chapter ch
-          ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
+        LEFT JOIN curriculum_program p ON p.id=s.program_id
+        LEFT JOIN curriculum_chapter ch ON ch.subject_id=s.id AND ch.active=true AND ch.content_status='PUBLISHED'
         LEFT JOIN lesson l ON l.chapter_id=ch.id AND l.active=true AND l.status='PUBLISHED'
-        LEFT JOIN student_lesson_progress p ON p.student_id=st.id AND p.lesson_id=l.id
-        WHERE st.id=? AND st.active=true AND cc.code=st.class_code AND lower(s.code)=lower(?)
-        GROUP BY st.display_name,st.class_code,s.id,s.code,s.display_name
-        """, studentId, subjectCode);
+        LEFT JOIN student_lesson_progress progress ON progress.student_id=st.id AND progress.lesson_id=l.id
+        WHERE st.id=? AND st.active=true AND lower(s.code)=lower(?) AND __COURSE_SCOPE__
+        GROUP BY st.display_name,st.class_code,cc.code,s.id,s.program_id,p.display_name,s.code,s.display_name
+        """.replace("__COURSE_SCOPE__",courseScope);
+    List<Object> args=new ArrayList<>(List.of(studentId,subjectCode));
+    if(courseId!=null)args.add(courseId);
+    Map<String, Object> achievement=queryOptional(sql,args.toArray());
     if (achievement == null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "This subject is not an active learning track for your current class.");
+          courseId==null
+              ? "This subject is not an active learning track for your current class."
+              : "This subject is not an active learning track in your enrolled course.");
     }
     long total = number(achievement.get("total_lessons"));
     long completed = number(achievement.get("completed_lessons"));
@@ -347,28 +369,37 @@ public class CertificateController {
 
     boolean hindi = "hi".equals(language);
     String subjectName = localizedSubjectName(subjectCode, achievement.get("subject_name"), language);
-    String title = (hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName;
+    String courseName=clean(achievement.get("course_name"));
+    String sourceClassCode=clean(achievement.get("source_class_code"));
+    String title=courseId==null
+        ? (hindi ? "कक्षा " : "Class ") + sourceClassCode + " · " + subjectName
+        : safeText(courseName+" · "+subjectName,240);
     String summary = hindi
         ? "इस विषय में प्रकाशित सभी " + total + " पाठ सफलतापूर्वक पूरे किए।"
         : "Completed all " + total + " currently published lessons in this subject track.";
     Map<String, Object> snapshot = new LinkedHashMap<>();
     snapshot.put("rule", "ALL_CURRENTLY_PUBLISHED_SUBJECT_LESSONS_COMPLETED");
-    snapshot.put("classCode", classCode);
+    snapshot.put("classCode", sourceClassCode);
     snapshot.put("subjectCode", subjectCode);
     snapshot.put("subjectName", subjectName);
+    if(courseId!=null) {
+      snapshot.put("courseId",courseId);
+      snapshot.put("courseName",courseName);
+    }
     snapshot.put("artifactVersion", 4);
     snapshot.put("publishedLessonsAtIssue", total);
     snapshot.put("completedLessonsAtIssue", completed);
-    return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", classCode,
-        ((Number) achievement.get("subject_id")).longValue(), null, template, language,
+    return createIssuedCertificate(studentId, key, "SUBJECT_COMPLETION", sourceClassCode,
+        ((Number) achievement.get("subject_id")).longValue(), courseId, null, template, language,
         String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
   }
 
   private Map<String, Object> issueAssessmentPass(long studentId, Map<String, Object> student,
-      long attemptId, String template, String language) {
+      long attemptId, Long requestedCourseId, String template, String language) {
     Map<String, Object> achievement = queryOptional("""
         SELECT st.display_name AS recipient_name,st.language AS student_language,
-               cc.code AS class_code,s.id AS subject_id,s.code AS subject_code,s.display_name AS subject_name,
+               cc.code AS class_code,s.id AS subject_id,s.program_id,p.display_name AS course_name,
+               s.code AS subject_code,s.display_name AS subject_name,
                a.id AS assessment_id,a.title AS assessment_title,a.assessment_type,a.is_generated,
                att.id AS assessment_attempt_id,att.final_score,att.max_score,att.released_at,
                att.started_at AS assessment_date,creator.display_name AS assessment_creator_name,
@@ -378,18 +409,28 @@ public class CertificateController {
         LEFT JOIN staff_account creator ON creator.id=a.created_by_staff_id
         JOIN curriculum_subject s ON s.id=a.subject_id
         JOIN curriculum_class cc ON cc.id=s.class_id
-        JOIN student st ON st.id=att.student_id AND st.active=true AND st.class_code=cc.code
+        LEFT JOIN curriculum_program p ON p.id=s.program_id
+        JOIN student st ON st.id=att.student_id AND st.active=true
         WHERE st.id=? AND att.student_id=? AND att.id=? AND att.status='RELEASED'
           AND att.final_score IS NOT NULL AND att.max_score>0
+          AND ((s.program_id is null and st.class_code=cc.code)
+            or (s.program_id is not null and exists(
+              select 1 from student_program_enrollment spe
+              join curriculum_program ep on ep.id=spe.program_id and ep.status='ACTIVE'
+              where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+            )))
         """, studentId, studentId, attemptId);
     if (achievement == null) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "Only your own released, graded assessment result can earn a certificate.");
+          "Only your own released, graded assessment result from an active learning track can earn a certificate.");
     }
+    Long courseId=achievement.get("program_id")==null ? null : number(achievement.get("program_id"));
+    if(requestedCourseId!=null && !requestedCourseId.equals(courseId)) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,"The selected course does not match this assessment attempt.");
+    }
+    if(courseId!=null)requireActiveCourseEnrollment(studentId,courseId);
     String key = "ASSESSMENT_PASS:" + attemptId;
     Map<String, Object> existing = existingCertificate(studentId, key);
-    // Previously issued records remain immutable and downloadable unless revoked, even if
-    // curriculum content later changes. New issuance below must pass today's full policy.
     if (existing != null) return existingOrRejectRevoked(existing);
 
     if (!"ADMIN_CREATED".equals(clean(achievement.get("assessment_type")))
@@ -402,7 +443,9 @@ public class CertificateController {
         ((Number) achievement.get("subject_id")).longValue());
     if (!Boolean.TRUE.equals(progress.get("active_subject_track"))) {
       throw new ResponseStatusException(HttpStatus.CONFLICT,
-          "Certificate requires an active enrollment in this subject for your current class.");
+          courseId==null
+              ? "Certificate requires an active enrollment in this subject for your current class."
+              : "Certificate requires an active enrollment in this course subject.");
     }
     BigDecimal finalScore = decimal(achievement.get("final_score"));
     BigDecimal maxScore = decimal(achievement.get("max_score"));
@@ -419,9 +462,10 @@ public class CertificateController {
     String classCode = String.valueOf(achievement.get("class_code"));
     String subjectCode = clean(achievement.get("subject_code")).toLowerCase(Locale.ROOT);
     String subjectName = localizedSubjectName(subjectCode, achievement.get("subject_name"), language);
-    // The subject track is the prominent achievement title. Assessment details and marks stay
-    // together in the explanatory line, so certificates issued from either entry point agree.
-    String title = safeText((hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName, 240);
+    String courseName=clean(achievement.get("course_name"));
+    String title = safeText(courseId==null
+        ? (hindi ? "कक्षा " : "Class ") + classCode + " · " + subjectName
+        : courseName+" · "+subjectName, 240);
     String score = finalScore.stripTrailingZeros().toPlainString() + " / "
         + maxScore.stripTrailingZeros().toPlainString() + " (" + percent.toPlainString() + "%)";
     String summary = safeText((hindi ? "मूल्यांकन: " : "Assessment: ") + assessmentTitle + " — "
@@ -437,18 +481,22 @@ public class CertificateController {
     snapshot.put("classCode", classCode);
     snapshot.put("subjectCode", subjectCode);
     snapshot.put("subjectName", subjectName);
+    if(courseId!=null) {
+      snapshot.put("courseId",courseId);
+      snapshot.put("courseName",courseName);
+    }
     snapshot.put("finalScore", finalScore);
     snapshot.put("maxScore", maxScore);
     snapshot.put("scorePercent", percent);
     snapshot.put("passThresholdPercent", minimumPassPercent);
     snapshot.put("artifactVersion", 4);
     return createIssuedCertificate(studentId, key, "ASSESSMENT_PASS", classCode,
-        ((Number) achievement.get("subject_id")).longValue(), attemptId, template, language,
+        ((Number) achievement.get("subject_id")).longValue(), courseId, attemptId, template, language,
         String.valueOf(achievement.get("recipient_name")), title, summary, snapshot);
   }
 
   private Map<String, Object> createIssuedCertificate(long studentId, String achievementKey,
-      String achievementType, String classCode, long subjectId, Long attemptId, String template,
+      String achievementType, String classCode, long subjectId, Long courseId, Long attemptId, String template,
       String language, String recipient, String title, String summary, Map<String, Object> snapshot) {
     snapshot.putIfAbsent("artifactVersion", 4);
     OffsetDateTime issuedAt = OffsetDateTime.now(ZoneId.of("Asia/Kolkata"));
@@ -464,13 +512,13 @@ public class CertificateController {
       png = storage.store(rendered.png(), "png");
       jdbc.update("""
           INSERT INTO student_certificate(
-            certificate_number,student_id,achievement_key,achievement_type,class_code,subject_id,
+            certificate_number,student_id,achievement_key,achievement_type,class_code,subject_id,program_id,
             assessment_attempt_id,template_id,language,recipient_name,achievement_title,
             achievement_summary,achievement_snapshot,artifact_version,status,issued_at,pdf_storage_key,png_storage_key,
             pdf_sha256,png_sha256,pdf_size_bytes,png_size_bytes)
-          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,4,'ISSUED',?,?,?,?,?,?,?)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?::jsonb,4,'ISSUED',?,?,?,?,?,?,?)
           """,
-          certificateNumber, studentId, achievementKey, achievementType, classCode, subjectId,
+          certificateNumber, studentId, achievementKey, achievementType, classCode, subjectId, courseId,
           attemptId, template, language, safeText(recipient, 120), safeText(title, 240),
           safeText(summary, 600), json(snapshot), issuedAt, pdf.storageKey(), png.storageKey(),
           pdf.sha256(), png.sha256(), pdf.sizeBytes(), png.sizeBytes());
@@ -557,6 +605,7 @@ public class CertificateController {
                c.pdf_size_bytes,c.png_size_bytes
         FROM student_certificate c
         LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        LEFT JOIN curriculum_program p ON p.id=c.program_id
         WHERE c.id=?
         """;
     Object[] args;
@@ -923,8 +972,14 @@ public class CertificateController {
                  JOIN student_track_enrollment ste
                    ON ste.student_id=st.id AND ste.subject_id=s.id AND ste.status='ACTIVE'
                  JOIN curriculum_class cc
-                   ON cc.id=s.class_id AND cc.code=st.class_code AND cc.active=true
+                   ON cc.id=s.class_id AND cc.active=true
                  WHERE st.id=? AND st.active=true AND s.active=true
+                   AND ((s.program_id is null and cc.code=st.class_code)
+                     or (s.program_id is not null and exists(
+                       select 1 from student_program_enrollment spe
+                       join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+                       where spe.student_id=st.id and spe.program_id=s.program_id and spe.status='ACTIVE'
+                     )))
                ) AS active_subject_track,
                COUNT(DISTINCT l.id) AS total_lessons,
                COUNT(DISTINCT l.id) FILTER (WHERE p.status='COMPLETED') AS completed_lessons
@@ -966,7 +1021,8 @@ public class CertificateController {
                c.achievement_type,c.class_code,s.code AS subject_code,c.achievement_title,
                c.template_id,c.language,c.status,c.issued_at,c.revoked_at,c.revocation_reason
         FROM student_certificate c JOIN student st ON st.id=c.student_id
-        LEFT JOIN curriculum_subject s ON s.id=c.subject_id WHERE c.id=?
+        LEFT JOIN curriculum_subject s ON s.id=c.subject_id
+        LEFT JOIN curriculum_program p ON p.id=c.program_id WHERE c.id=?
         """, id);
     if (row == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Certificate not found.");
     return row;
@@ -985,6 +1041,15 @@ public class CertificateController {
       case "science" -> hindi ? "विज्ञान" : "Science";
       default -> clean(fallbackName).isBlank() ? code : clean(fallbackName);
     };
+  }
+
+  private void requireActiveCourseEnrollment(long studentId,long courseId) {
+    Long active=jdbc.queryForObject("""
+      select count(*) from student_program_enrollment spe
+      join curriculum_program p on p.id=spe.program_id and p.status='ACTIVE'
+      where spe.student_id=? and spe.program_id=? and spe.status='ACTIVE' and p.code<>'GENERAL'
+      """,Long.class,studentId,courseId);
+    if(active==null || active==0)throw new SecurityException("Active enrolment in this course is required.");
   }
 
   private String normalizeLanguage(String requested, String fallback) {
