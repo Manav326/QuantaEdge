@@ -93,12 +93,14 @@ def _matches_filters(source: dict[str, Any], class_no: int | None,
         return False
     def canonical_subject(value: str) -> str:
         normalized = re.sub(r"[^\w\u0900-\u097f]+", " ", value.casefold()).strip()
-        if normalized in {"math", "maths", "mathematics", "गणित"}:
-            return "maths"
-        if normalized in {"science", "विज्ञान"}:
-            return "science"
-        if normalized in {"social science", "social sciences", "समाजिक विज्ञान", "सामाजिक विज्ञान"}:
+        # Avoid matching Science inside Social Science; support book-title labels too.
+        if ("सामाजिक विज्ञान" in normalized or "समाजिक विज्ञान" in normalized
+                or re.search(r"\bsocial\s+sciences?\b", normalized)):
             return "social science"
+        if normalized in {"math", "maths", "mathematics", "गणित"} or "गणित" in normalized:
+            return "maths"
+        if normalized in {"science", "विज्ञान"} or "विज्ञान" in normalized or re.search(r"\bscience\b", normalized):
+            return "science"
         return normalized
     source_subject = canonical_subject(str(source.get("subject") or ""))
     if subjects and source_subject not in {canonical_subject(term) for term in subjects}:
