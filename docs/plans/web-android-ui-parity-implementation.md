@@ -1,0 +1,142 @@
+# Web–Android UI Parity Implementation Tracker
+
+**Scope:** all 62 recommended decisions in the approved `QuantaEdge_Web_Android_Behaviour_Decision_Matrix.xlsx`. The chosen recommendation is accepted for every row; platform-specific native layout is retained where approved.
+
+**Source of truth:** this tracker lives in `main` and should be updated in the same change that completes each implementation item. The Excel decision matrix remains the detailed behavior/acceptance specification. Do not mark E2E as passed from source inspection or compilation alone.
+
+## Status rules
+
+- **Done — code on main:** implementation or required contract is present on `main`; this does not mean every live account/device scenario has been manually verified.
+- **Partial:** implementation is present but the matrix requirement still needs broader coverage.
+- **Open:** no implementation found yet.
+- **E2E status:** only mark passed with a recorded test account/environment, platform, steps/result and timestamp.
+
+## Current status
+
+| ID | Page / behavior | Implementation status | Verification status |
+|---|---|---|---|
+| PUB-01 | Landing / welcome | Done — code on main | CI build + real-account/browser/device E2E pending |
+| PUB-02 | Landing / brand | Done — code on main | CI build + real-account/browser/device E2E pending |
+| PUB-03 | Landing / language | Done — code on main | CI build + real-account/browser/device E2E pending |
+| PUB-04 | Landing / legal links | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-01 | Role choice / login entry | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-02 | Student login | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-03 | Parent password login | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-04 | Parent OTP login | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-05 | Parent signup | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-06 | Forgot / reset password | Done — code on main | CI build + real-account/browser/device E2E pending |
+| AUTH-07 | Session / role routing | Done — backend/workspace contract on main | CI build + real-account/browser/device E2E pending |
+| NAV-01 | Student primary navigation | Done — source contract + tests on main | CI build + real-account/browser/device E2E pending |
+| NAV-02 | Parent primary navigation | Done — source contract + tests on main | CI build + real-account/browser/device E2E pending |
+| NAV-03 | Portrait / landscape navigation | Done — source contract + tests on main | CI build + real-account/browser/device E2E pending |
+| NAV-04 | Header / profile / language | Done — shared shell on main | CI build + real-account/browser/device E2E pending |
+| NAV-05 | Logout placement | Done — shared logout flow on main | CI build + real-account/browser/device E2E pending |
+| DASH-01 | Student home hierarchy | Done — dashboard hierarchy on main | CI build + real-account/browser/device E2E pending |
+| DASH-02 | Subject cards / chapter counts | Done — subject/resource shortcuts on main | CI build + real-account/browser/device E2E pending |
+| DASH-03 | Independent course discovery / enrolment | Done — course catalogue flow on main | CI build + real-account/browser/device E2E pending |
+| DASH-04 | Recommendation and next step | Done — recommendation flow on main | CI build + real-account/browser/device E2E pending |
+| LEARN-01 | Subject and lesson list | Done — source on main | CI build + real-account/browser/device E2E pending |
+| LEARN-02 | Lesson blocks and media | Done — shared content renderer/API flow on main | CI build + real-account/browser/device E2E pending |
+| LEARN-03 | Inline lesson question and feedback | Done — answer-state policy/tests on main | CI build + real-account/browser/device E2E pending |
+| LEARN-04 | AI Tutor | Done — contextual tutor flow on main | CI build + real-account/browser/device E2E pending |
+| LEARN-05 | Live classes | Done — class access/attendance flow on main | CI build + real-account/browser/device E2E pending |
+| LEARN-06 | Recorded classes / playback | Done — protected recording player on main | CI build + real-account/browser/device E2E pending |
+| PRAC-01 | Topic practice | Done — single-question practice flow on main | CI build + real-account/browser/device E2E pending |
+| PRAC-02 | Practice question availability | Done — topic-scoped approved practice flow on main | CI build + real-account/browser/device E2E pending |
+| PRAC-03 | Initial diagnostic | Done — diagnostic flow on main | CI build + real-account/browser/device E2E pending |
+| TEST-01 | Test catalogue and filters | Done — assessment catalogue on main | CI build + real-account/browser/device E2E pending |
+| TEST-02 | Active formal test screen | Done — question navigation on main | CI build + real-account/browser/device E2E pending |
+| TEST-03 | Answer autosave and retry | Done — answer persistence/offline state on main | CI build + real-account/browser/device E2E pending |
+| TEST-04 | Review before submitting | Done — confirmation flow on main | CI build + real-account/browser/device E2E pending |
+| TEST-05 | Test submission / timed expiry | Done — deadline/submit behavior on main | CI build + real-account/browser/device E2E pending |
+| TEST-06 | Awaiting review | Done — pending review state on main | CI build + real-account/browser/device E2E pending |
+| TEST-07 | Released test result and answer review | Done — released attempt review on main | CI build + real-account/browser/device E2E pending |
+| TEST-08 | Leaderboard | Done — leaderboard grouped with tests on main | CI build + real-account/browser/device E2E pending |
+| PROG-01 | Progress and mastery dashboard | Done — server-backed progress on main | CI build + real-account/browser/device E2E pending |
+| CERT-01 | Certificate centre and eligibility | Done — canonical issued-certificate lookup on main | CI build + real-account/browser/device E2E pending |
+| CERT-02 | Certificate preview / PDF / PNG download | Done — artifact retrieval/download path on main | CI build + real-account/browser/device E2E pending |
+| CERT-03 | QR / barcode / manual ID verification | Done — verifier + Android scanner code on main | CI build + real-account/browser/device E2E pending |
+| TEXT-01 | Book/chapter discovery | Done — catalogue hierarchy/shortcuts on main | CI build + real-account/browser/device E2E pending |
+| TEXT-02 | Secure reader controls | Done — Android reader zoom/fit controls on main | CI build + real-account/browser/device E2E pending |
+| TEXT-03 | Offline textbook downloads | Done — Android protected offline add-on on main | CI build + real-account/browser/device E2E pending |
+| CLASS-01 | Live/recorded class listing | Done — API-backed class/recording catalogue on main | CI build + real-account/browser/device E2E pending |
+| CLASS-02 | Meeting join / leave and attendance | Done — server attendance join/leave on main | CI build + real-account/browser/device E2E pending |
+| PARENT-01 | Family dashboard and child selection | Done — child-scoped report on main | CI build + real-account/browser/device E2E pending |
+| PARENT-02 | Create child profile | Done — backend-supported child creation/consent on main | CI build + real-account/browser/device E2E pending |
+| PARENT-03 | Edit child profile | Done — child profile editing on main | CI build + real-account/browser/device E2E pending |
+| PARENT-04 | Child credentials and subject tracks | Done — credentials and tracks management on main | CI build + real-account/browser/device E2E pending |
+| PARENT-05 | Archive / restore child | Done — explicit fresh-consent guard added in this pass | CI build + real-account/browser/device E2E pending |
+| PARENT-06 | Parent profile and photo | Done — parent profile/photo flow on main | CI build + real-account/browser/device E2E pending |
+| STU-01 | Student profile and photo | Done — student profile/account lifecycle on main | CI build + real-account/browser/device E2E pending |
+| LANG-01 | App-interface language | Partial — full visible-string translation sweep remains | CI build + real-account/browser/device E2E pending |
+| LANG-02 | Learning-content language | Done — independent content-language preference/request flow on main | CI build + real-account/browser/device E2E pending |
+| LANG-03 | Certificate language | Done — independent certificate language on main | CI build + real-account/browser/device E2E pending |
+| SESS-01 | Session timeout and resume | Done — server policy and client boundaries on main | CI build + real-account/browser/device E2E pending |
+| SESS-02 | Explicit logout | Done — logout/revocation flow on main | CI build + real-account/browser/device E2E pending |
+| NATIVE-01 | Offline formal assessments | Done — protected offline formal assessment on main | CI build + real-account/browser/device E2E pending |
+| NATIVE-02 | Camera scanner | Done — native QR/barcode scanner code on main | CI build + real-account/browser/device E2E pending |
+| NATIVE-03 | Native save/share and protected document controls | Done — native certificate save and protected documents on main | CI build + real-account/browser/device E2E pending |
+| UI-01 | Loading, empty, error and success states | Partial — shared states exist; full page-by-page state audit remains | CI build + real-account/browser/device E2E pending |
+
+Implementation partials still open:
+- **LANG-01:** finish a screen-by-screen audit of visible web and Android UI strings. Fix untranslated hardcoded labels, errors, dialogs and loading/empty states while keeping Hindi in Devanagari-based Hinglish.
+- **UI-01:** verify a consistent loading, empty, permission-denied, stale-session, recoverable-error/retry and confirmed-success state on every API-backed page. Success must follow server/file-save acknowledgement.
+
+## Changes made in this pass
+
+| Item | Change | Commit |
+|---|---|---|
+| PARENT-05 | Android archived-child restore now requires the guardian to actively tick a fresh-consent checkbox before the restore action enables. | `6d50d4b3bf712e07a4a7006edfc1a322e1b0626e` |
+| PARENT-05 / LANG-01 | Added Hindi/English localization phrases for the archived-child restore explanation, explicit consent, archived list and empty state. | `fcb97bfa17cb435598edb75eb3db4f3dbaea8429` |
+| PARENT-05 | Added the Compose layout import needed by the guarded consent row. | `910a00d513818dc35f538b4de9c4cf39187bb377` |
+
+These changes preserve the existing guardian restore endpoint and payload. The API still validates consent and controls account restoration; the client does not grant permissions or restore a profile locally.
+
+## End-to-end regression checklist
+
+The source matrix's 30 E2E scenarios are retained here as a durable run log. They remain not run until real browser/device/backend evidence is entered. Update this table as testing is performed.
+
+| Test ID | Journey | Scenario | Status / evidence |
+|---|---|---|---|
+| E2E-01 | Public landing | Welcome, role CTAs, language and legal links | Not run in this environment — evidence required |
+| E2E-02 | Student authentication | Valid/invalid student login and correct post-login screen | Not run in this environment — evidence required |
+| E2E-03 | Parent authentication | Password and OTP login, role/workspace confirmation | Not run in this environment — evidence required |
+| E2E-04 | Authentication | Signup/reset OTP purpose, password rules and navigation | Not run in this environment — evidence required |
+| E2E-05 | Security | Direct URL access and parent/student isolation | Not run in this environment — evidence required |
+| E2E-06 | Session | Refresh, back, reload, inactivity and explicit logout | Not run in this environment — evidence required |
+| E2E-07 | Today | Progress, recommendations and destinations | Not run in this environment — evidence required |
+| E2E-08 | Courses | Catalogue, enrolment and persistence | Not run in this environment — evidence required |
+| E2E-09 | Learning | Subject → topic → lesson ordering and return path | Not run in this environment — evidence required |
+| E2E-10 | Learning | Inline answers, language separation and contextual tutor | Not run in this environment — evidence required |
+| E2E-11 | Practice | Approved topic questions, retries and summary | Not run in this environment — evidence required |
+| E2E-12 | Diagnostic | Due/not-due/completed states | Not run in this environment — evidence required |
+| E2E-13 | Formal tests | Timer, question navigation, rotation and restore | Not run in this environment — evidence required |
+| E2E-14 | Formal tests | Submit confirmation, unanswered count, idempotency and pending state | Not run in this environment — evidence required |
+| E2E-15 | Results | Released marks, feedback and explanation | Not run in this environment — evidence required |
+| E2E-16 | Certificates | New/existing issue flow and canonical certificate ID | Not run in this environment — evidence required |
+| E2E-17 | Certificates | PDF/PNG saves and opens correctly | Not run in this environment — evidence required |
+| E2E-18 | Verification | Valid/revoked/invalid/missing ID and native scanner | Not run in this environment — evidence required |
+| E2E-19 | Textbooks | Correct book/chapter/language and reader origin | Not run in this environment — evidence required |
+| E2E-20 | Textbooks | Page jump, zoom/fit, thumbnails, fullscreen and retry | Not run in this environment — evidence required |
+| E2E-21 | Android offline | Encrypted download/read/remove and account scoping | Not run in this environment — evidence required |
+| E2E-22 | Classes | Join/leave attendance and playback resume | Not run in this environment — evidence required |
+| E2E-23 | Parent | Child creation, consent, credentials and student login | Not run in this environment — evidence required |
+| E2E-24 | Parent | Edit/archive/restore, fresh consent and credential reset | Not run in this environment — evidence required |
+| E2E-25 | Parent | Selected-child metrics and certificate scope | Not run in this environment — evidence required |
+| E2E-26 | Profile | Photo save/remove, fallback avatar and refresh persistence | Not run in this environment — evidence required |
+| E2E-27 | Language | UI/content/certificate preference combinations | Not run in this environment — evidence required |
+| E2E-28 | Responsive | Web mobile/desktop and Android portrait/landscape | Not run in this environment — evidence required |
+| E2E-29 | Logout | Server revocation, back-navigation denial and new sign-in | Not run in this environment — evidence required |
+| E2E-30 | Accessibility | Keyboard, TalkBack, touch targets, contrast and Devanagari scaling | Not run in this environment — evidence required |
+
+## CI / manual verification boundary
+
+The last confirmed main CI run before the consent/localization updates was [run 38746130991](https://github.com/Manav326/QuantaEdge/actions/runs/38746130991) on commit `213b8916bfb2e42bc2a3eeda99b23a984f15930f` (success). The three commits listed above are newer; wait for their own CI run to pass before treating the changes as CI-verified. CI cannot by itself prove logged-in account behavior, actual certificate downloads, scanner camera permissions, device rotation, accessibility, or cross-platform data parity.
+
+## Core constraints
+
+- Backend remains authoritative for role/workspace, identity, access, grading, progress, enrolment, consent, attendance, test deadline, certificate status and language-specific resource availability.
+- Web is the content-completeness/information-hierarchy reference; Android may use native Compose controls and approved Android-only offline/scanner/file actions.
+- Student and Parent sessions stay separate. No impersonation or client-only authorization.
+- App UI language, learning-content language and certificate language stay independent.
+- Retain encrypted account-scoped offline storage and server-side grading; never expose protected textbook PDF export/print merely for parity.
