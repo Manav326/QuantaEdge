@@ -881,6 +881,40 @@ fun QuantaEdgeApp() {
         }
     }
 
+    fun tutorErrorMessage(exception: Exception): String {
+        val english = language != "hi"
+        val detail = exception.message.orEmpty().lowercase()
+        return when {
+            exception is ApiFailure && exception.statusCode == 401 ->
+                if (english) "Your session may have expired. Please sign in again."
+                else "आपका सत्र समाप्त हो गया हो सकता है। कृपया फिर से लॉग इन करें।"
+            exception is ApiFailure && exception.statusCode == 403 ->
+                if (english) "You do not have access to this lesson or tutor session."
+                else "आपको इस पाठ या ट्यूटर सत्र की अनुमति नहीं है।"
+            exception is ApiFailure && exception.statusCode == 429 || "usage limit" in detail || "daily tutor" in detail ->
+                if (english) "You have reached the tutor usage limit. Please try again later."
+                else "ट्यूटर उपयोग की सीमा पूरी हो गई है। कृपया बाद में फिर प्रयास करें।"
+            "too long" in detail ->
+                if (english) "Please shorten your message and try again."
+                else "कृपया अपना संदेश छोटा करके फिर भेजें।"
+            exception is ApiFailure && exception.statusCode == 503 ->
+                if (english) "The AI tutor is not enabled right now. Please try again later."
+                else "AI ट्यूटर अभी चालू नहीं है। कृपया बाद में फिर प्रयास करें।"
+            exception is ApiFailure && exception.statusCode >= 500 ->
+                if (english) "The tutor service had a temporary error. Your message is ready to retry."
+                else "AI ट्यूटर सेवा में अस्थायी समस्या आई। आपका संदेश फिर भेजने के लिए तैयार है।"
+            detail.contains("tutor शुरू करने") ->
+                if (english) "Open a lesson before starting the tutor."
+                else "ट्यूटर शुरू करने से पहले पाठ खोलें।"
+            exception is IOException ->
+                if (english) "Could not reach the tutor. Check your connection and retry."
+                else "ट्यूटर से संपर्क नहीं हो पाया। कनेक्शन जाँचकर फिर प्रयास करें।"
+            else ->
+                if (english) "The tutor could not complete this request. Please try again."
+                else "ट्यूटर यह अनुरोध पूरा नहीं कर सका। कृपया फिर प्रयास करें।"
+        }
+    }
+
     fun openTutorWithQuestion(questionId: Long) {
         tutorQuestionId = questionId
         route = AppRoute.TUTOR
@@ -910,6 +944,9 @@ fun QuantaEdgeApp() {
                     error = if (language == "hi") "इस पाठ के लिए AI Tutor अभी उपलब्ध नहीं है।"
                         else "AI tutor is not enabled for this lesson yet."
                 }
+            } catch (exception: Exception) {
+                tutorAvailable = false
+                error = tutorErrorMessage(exception)
             } finally {
                 tutorConnecting = false
             }
@@ -940,6 +977,9 @@ fun QuantaEdgeApp() {
                     error = if (language == "hi") "नई चैट बन गई, लेकिन AI Tutor अभी उपलब्ध नहीं है।"
                         else "A new chat was created, but the AI tutor is currently unavailable."
                 }
+            } catch (exception: Exception) {
+                tutorAvailable = false
+                error = tutorErrorMessage(exception)
             } finally {
                 tutorConnecting = false
             }
@@ -966,7 +1006,7 @@ fun QuantaEdgeApp() {
                 tutorOlderBeforeId = olderPage.opt("nextBeforeId")?.toString()?.toLongOrNull()
                 if (tutorOlderBeforeId == null) tutorHasOlderMessages = false
             } catch (exception: Exception) {
-                reportError(exception)
+                error = tutorErrorMessage(exception)
             } finally {
                 tutorLoadingOlderMessages = false
             }
@@ -1049,6 +1089,9 @@ fun QuantaEdgeApp() {
                         throw exception
                     }
                 }
+            } catch (exception: Exception) {
+                tutorMessages = previousMessages
+                error = tutorErrorMessage(exception)
             } finally {
                 tutorSendInFlight = false
             }
