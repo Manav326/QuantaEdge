@@ -882,6 +882,56 @@
         "review_answers": "उत्तर दोबारा देखें",
         "complete": "अभ्यास पूरा हुआ"
       }
+    },
+    "question_type_labels_by_locale": {
+      "en": {
+        "multiple_choice": "Multiple choice",
+        "multiple_select": "Select all that apply",
+        "true_false": "True or false",
+        "matching": "Matching",
+        "fill_blank": "Fill in the blank",
+        "image_observation": "Observe the image",
+        "short_answer": "Short answer",
+        "scenario_based": "Scenario question"
+      },
+      "hi": {
+        "multiple_choice": "बहुविकल्पीय प्रश्न",
+        "multiple_select": "सभी सही विकल्प चुनें",
+        "true_false": "सही या गलत",
+        "matching": "मिलान करें",
+        "fill_blank": "रिक्त स्थान भरें",
+        "image_observation": "चित्र का अवलोकन करें",
+        "short_answer": "संक्षिप्त उत्तर",
+        "scenario_based": "परिस्थिति-आधारित प्रश्न"
+      }
+    },
+    "difficulty_labels_by_locale": {
+      "en": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Challenging"
+      },
+      "hi": {
+        "easy": "सरल",
+        "medium": "मध्यम",
+        "hard": "चुनौतीपूर्ण"
+      }
+    },
+    "answer_status_labels_by_locale": {
+      "en": {
+        "correct": "Correct",
+        "incorrect": "Incorrect",
+        "partial": "Partly correct",
+        "not_answered": "Not answered",
+        "pending": "Not checked yet"
+      },
+      "hi": {
+        "correct": "सही",
+        "incorrect": "गलत",
+        "partial": "आंशिक रूप से सही",
+        "not_answered": "उत्तर नहीं दिया गया",
+        "pending": "अभी जाँचा नहीं गया"
+      }
     }
   },
   "parity_audit": {
@@ -903,7 +953,9 @@
     ],
     "global_language_switch_contract_recorded": true,
     "runtime_language_switch_implemented": false,
-    "source_page_preview_student_render_blocked": true
+    "source_page_preview_student_render_blocked": true,
+    "question_type_and_difficulty_labels_localized": true,
+    "shared_ui_status_labels_localized_in_lesson_contract": true
   },
   "next_steps": [
     "Verify Hindi chapter-1 page boundaries against the matching Jigyasa PDF and reconcile the Hindi source text.",
