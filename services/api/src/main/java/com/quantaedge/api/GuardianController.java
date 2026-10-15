@@ -236,6 +236,8 @@ public class GuardianController {
       where guardian_user_id=? and student_id=? and active=false and consent_status='REVOKED'
       """,AuthService.GUARDIAN_CONSENT_VERSION,guardianId,guardianId,studentId);
     jdbc.update("update student set active=true,profile_updated_at=now() where id=? and environment='PRODUCTION'",studentId);
+    jdbc.update("update student_login_credential set active=false where guardian_user_id=? and student_id=?",guardianId,studentId);
+    jdbc.update("update auth_session set revoked_at=now() where student_id=? and revoked_at is null",studentId);
     auth.auditChildEvent(guardianId,studentId,"CONSENT_ACCEPTED","{\"consent\":\"affirmative-restore\",\"source\":\"PARENT_PORTAL\"}");
     auth.auditChildEvent(guardianId,studentId,"CHILD_RESTORED","{\"credentialsRequireReset\":true}");
     return Map.of("restored",true,"studentId",studentId,"credentialsRequireReset",true);
