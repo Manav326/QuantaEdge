@@ -220,10 +220,18 @@ public class AuthService {
         if(response.statusCode()/100!=2) throw new IllegalStateException("OTP provider rejected request");
       } catch(Exception ex) { throw new IllegalStateException("Unable to deliver OTP"); }
     }
-    jdbc.update("""
-      insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,student_id)
-      values (?,?,?,now()+interval '5 minutes',?)
-      """,normalized,purpose,hash(otp),studentId);
+    if(studentId==null) {
+      // Preserve the existing SQL contract for parent/staff OTP flows.
+      jdbc.update("""
+        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at)
+        values (?,?,?,now()+interval '5 minutes')
+        """,normalized,purpose,hash(otp));
+    } else {
+      jdbc.update("""
+        insert into otp_challenge(mobile_e164,purpose,code_hash,expires_at,student_id)
+        values (?,?,?,now()+interval '5 minutes',?)
+        """,normalized,purpose,hash(otp),studentId);
+    }
     return demoSeed ? otp : null;
   }
 
