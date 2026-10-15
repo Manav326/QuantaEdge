@@ -9,10 +9,12 @@ type ContentBlock={id?:number;sequence_no:number;block_type:string;content:Recor
 type Selection={type:'chapter'|'lesson';id:number};
 type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:string;source_pdf_sha256:string;source_pdf_page_number:number;suggested_chapter_number?:number|null;suggested_chapter_title?:string|null;chapter_map_review_status?:string|null;source_asset_sha256?:string|null;bbox_pdf_points?:number[]|null;page_text_context:string;image_url:string;source_page_url?:string;publication_allowed:boolean;human_review_required:boolean};
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
-function visualCatalogMatchesLesson(row:Row|undefined,catalog:VisualCatalog|null):boolean {
- if(!row||!catalog?.source)return false;
+type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
+type VisualSourceMatch={class:string;subject:string};
+function visualSourceMatchesLesson(row:Row|undefined,source:VisualSourceMatch|undefined):boolean {
+ if(!row||!source)return false;
  const digits=(value:string|undefined|null)=>String(value??'').match(/\d+/)?.[0]||'';
- const sourceClass=digits(catalog.source.class);
+ const sourceClass=digits(source.class);
  const lessonClass=digits(row.class_code)||digits(row.class_name);
  const subjectKey=(value:string|undefined|null)=>{
   const key=String(value??'').trim().toLocaleLowerCase().replace(/[^a-z0-9]+/g,'');
@@ -20,9 +22,12 @@ function visualCatalogMatchesLesson(row:Row|undefined,catalog:VisualCatalog|null
   if(['sci','science'].includes(key))return 'science';
   return key;
  };
- const sourceSubject=subjectKey(catalog.source.subject);
+ const sourceSubject=subjectKey(source.subject);
  const lessonSubjects=[subjectKey(row.subject_name),subjectKey(row.subject_code)];
  return Boolean(sourceClass&&lessonClass&&sourceClass===lessonClass&&sourceSubject&&lessonSubjects.includes(sourceSubject));
+}
+function visualCatalogMatchesLesson(row:Row|undefined,catalog:VisualCatalog|null):boolean {
+ return visualSourceMatchesLesson(row,catalog?.source);
 }
 const LEARNER_BLOCK_STAGE:Record<string,number>={
  PREREQUISITE:0,EXPLANATION:1,IMAGE:2,DIAGRAM:2,VIDEO:2,AUDIO:2,ANIMATION:2,
@@ -259,7 +264,7 @@ export default function ContentStudio(){
  const [programFilter,setProgramFilter]=useState(''),[programs,setPrograms]=useState<any[]>([]);
  const [selected,setSelected]=useState<Selection|null>(null),[detail,setDetail]=useState<any>(null),[form,setForm]=useState<any>(EMPTY);
  const [blocks,setBlocks]=useState<ContentBlock[]>([]),[questions,setQuestions]=useState<any[]>([]);
- const [visualCatalog,setVisualCatalog]=useState<VisualCatalog|null>(null),[visualCatalogLoading,setVisualCatalogLoading]=useState(false),[visualCatalogError,setVisualCatalogError]=useState(''),[visualSearch,setVisualSearch]=useState('');
+ const [visualCatalog,setVisualCatalog]=useState<VisualCatalog|null>(null),[visualCatalogIndex,setVisualCatalogIndex]=useState<VisualCatalogIndex|null>(null),[visualCatalogSlug,setVisualCatalogSlug]=useState(''),[visualCatalogOptions,setVisualCatalogOptions]=useState<VisualCatalogIndex['catalogs']>([]),[visualCatalogLoading,setVisualCatalogLoading]=useState(false),[visualCatalogError,setVisualCatalogError]=useState(''),[visualSearch,setVisualSearch]=useState('');
  const [loading,setLoading]=useState(true),[saving,setSaving]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [createType,setCreateType]=useState<'chapter'|'lesson'|null>(null);
  const [createForm,setCreateForm]=useState<any>({classCode:'6',subjectCode:'maths',chapterId:0,code:'',displayName:'',description:'',sortOrder:1,title:'',summary:'',estimatedMinutes:10});
@@ -268,14 +273,66 @@ export default function ContentStudio(){
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
  useEffect(()=>{
   let mounted=true;
-  setVisualCatalogLoading(true);
-  fetch('/content/visual-candidates/class6-curiosity-en.v3.json',{cache:'no-store'})
-   .then(async response=>{if(!response.ok)throw new Error('The V3 textbook visual catalog is not available yet.');return response.json()})
-   .then(value=>{if(!mounted)return;if(value?.schema_version!=='quantaedge.visual-attachment-catalog.v3'||!Array.isArray(value.candidates))throw new Error('The textbook visual catalog has an unsupported format.');setVisualCatalog(value as VisualCatalog);setVisualCatalogError('')})
-   .catch(error=>{if(mounted)setVisualCatalogError(error instanceof Error?error.message:'Textbook visual catalog could not be loaded.')})
+  fetch('/content/visual-candidates/index.v1.json',{cache:'no-store'})
+   .then(async response=>{if(!response.ok)throw new Error('The textbook visual catalog index is not available yet.');return response.json()})
+   .then(value=>{
+    if(!mounted)return;
+    if(value?.schema_version!=='quantaedge.visual-catalog-index.v1'||!Array.isArray(value.catalogs))throw new Error('The textbook visual catalog index has an unsupported format.');
+    setVisualCatalogIndex(value as VisualCatalogIndex);setVisualCatalogError('');
+   })
+   .catch(error=>{if(mounted)setVisualCatalogError(error instanceof Error?error.message:'Textbook visual catalog index could not be loaded.')})
    .finally(()=>{if(mounted)setVisualCatalogLoading(false)});
   return ()=>{mounted=false};
  },[]);
+ useEffect(()=>{
+  let mounted=true;
+  if(!visualCatalogIndex){
+   setVisualCatalog(null);setVisualCatalogOptions([]);setVisualCatalogLoading(true);
+   return ()=>{mounted=false};
+  }
+  if(!selected||selected.type!=='lesson'){
+   setVisualCatalog(null);setVisualCatalogOptions([]);setVisualCatalogError('');setVisualCatalogLoading(false);
+   return ()=>{mounted=false};
+  }
+  const targetRow=rows.find(row=>row.lesson_id===selected.id);
+  if(!targetRow){
+   setVisualCatalog(null);setVisualCatalogOptions([]);setVisualCatalogError('Select an existing micro-topic to browse its matching textbook visuals.');setVisualCatalogLoading(false);
+   return ()=>{mounted=false};
+  }
+  const matches=visualCatalogIndex.catalogs.filter(item=>visualSourceMatchesLesson(targetRow,item));
+  setVisualCatalogOptions(matches);
+  if(matches.length===0){
+   setVisualCatalog(null);setVisualCatalogError('No V3 textbook visual catalog matches '+targetRow.class_name+' · '+targetRow.subject_name+' yet. Add a catalog for this source book before attaching its figures.');setVisualCatalogLoading(false);
+   return ()=>{mounted=false};
+  }
+  let entry=matches.find(item=>item.book_slug===visualCatalogSlug);
+  if(!entry&&matches.length===1){
+   entry=matches[0];setVisualCatalogSlug(entry.book_slug);
+  }
+  if(!entry){
+   setVisualCatalog(null);setVisualCatalogError('More than one textbook source matches this lesson. Choose the exact book and edition before attaching a visual.');setVisualCatalogLoading(false);
+   return ()=>{mounted=false};
+  }
+  if(!entry.catalog_path.startsWith('/content/visual-candidates/')){
+   setVisualCatalog(null);setVisualCatalogError('The matching visual catalog has an invalid path.');setVisualCatalogLoading(false);
+   return ()=>{mounted=false};
+  }
+  setVisualCatalogLoading(true);setVisualCatalogError('');
+  fetch(entry.catalog_path,{cache:'no-store'})
+   .then(async response=>{if(!response.ok)throw new Error('The matching textbook visual catalog could not be loaded.');return response.json()})
+   .then(value=>{
+    if(!mounted)return;
+    if(value?.schema_version!=='quantaedge.visual-attachment-catalog.v3'||!Array.isArray(value.candidates)
+      ||value.book_slug!==entry?.book_slug||value.source?.book_id!==entry?.source_book_id
+      ||value.source?.pdf_sha256!==entry?.source_pdf_sha256
+      ||value.summary?.publication_allowed!==false||value.summary?.review_required!==true)
+      throw new Error('The selected textbook catalog does not match its checked-in index or is not review-only.');
+    setVisualCatalog(value as VisualCatalog);setVisualCatalogError('');
+   })
+   .catch(error=>{if(mounted){setVisualCatalog(null);setVisualCatalogError(error instanceof Error?error.message:'Textbook visual catalog could not be loaded.')}})
+   .finally(()=>{if(mounted)setVisualCatalogLoading(false)});
+  return ()=>{mounted=false};
+ },[selected,rows,visualCatalogIndex,visualCatalogSlug]);
  async function load(nextProgram:string=programFilter){setLoading(true);setError('');try{
   const contentUrl=nextProgram?'/api/v1/admin/content?courseId='+encodeURIComponent(nextProgram):'/api/v1/admin/content';
   const [data,questionCounts,programRows]=await Promise.all([
@@ -673,6 +730,7 @@ export default function ContentStudio(){
        <div className="qe-editor-section-title"><div><h3>Textbook visuals</h3><p>Browse V3 candidates from the whole source book and attach the relevant figure to this micro-topic. Selection never publishes it.</p></div><span className="qe-block-count">{visualCatalog?.summary?.candidate_count??0} candidates</span></div>
        <div className="qe-visual-source-note"><span>Source-bound sample</span><p>{visualCatalog?visualCatalog.source.title+' · Grade '+visualCatalog.source.class+' · '+visualCatalog.source.subject+' · '+visualCatalog.source.language+' · '+visualCatalog.source.edition:'Loading the V3 source manifest…'}</p><small>PDF SHA-256: {visualCatalog?.source?.pdf_sha256||'—'} · All candidates remain review-only.</small></div>
        {selected?.type==='lesson'&&!visualCatalogMatchesTarget?<div className="qe-visual-empty">Attach is disabled: this catalog belongs to Grade {visualCatalog?.source.class} {visualCatalog?.source.subject}; the selected lesson is {visualTargetRow?.class_name} {visualTargetRow?.subject_name}. Choose a lesson in the matching class and subject.</div>:null}
+       {visualCatalogOptions.length>1?<label className="qe-form-field">Source textbook / edition<select value={visualCatalogOptions.some(item=>item.book_slug===visualCatalogSlug)?visualCatalogSlug:''} onChange={event=>{setVisualCatalogSlug(event.target.value);setVisualCatalog(null);setVisualCatalogError('Loading the selected source textbook…')}}><option value="">Choose the exact source book…</option>{visualCatalogOptions.map(item=><option key={item.book_slug} value={item.book_slug}>{item.title} · Grade {item.class} · {item.subject} · {item.language} · {item.edition}</option>)}</select></label>:null}
        <label className="qe-form-field qe-visual-search">Search candidate pages and context<input value={visualSearch} onChange={e=>setVisualSearch(e.target.value)} placeholder="Search topic, page text, or candidate ID"/></label>
        {visualCatalogLoading?<div className="qe-visual-empty">Loading source-bound visual candidates…</div>:visualCatalogError?<div className="qe-visual-empty">{visualCatalogError}</div>:null}
        {visualCatalog&&(()=>{
