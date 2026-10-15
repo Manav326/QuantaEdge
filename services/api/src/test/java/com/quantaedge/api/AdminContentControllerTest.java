@@ -188,6 +188,9 @@ class AdminContentControllerTest {
   void legacyMediaBlocksWithoutVisualCandidateMetadataKeepExistingRules() {
     assertNull(AdminContentController.visualPublicationValidationError(
         "IMAGE", Map.of("url", "https://example.com/image.png", "description", "Existing lesson image")));
+    assertTrue(AdminContentController.visualPublicationValidationError(
+        "IMAGE", Map.of("url", "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/apps/web/public/content/visual-assets/class6-curiosity-en/candidates/figure.jpg"))
+        .contains("Preserve the source candidate metadata"));
   }
 
   @Test

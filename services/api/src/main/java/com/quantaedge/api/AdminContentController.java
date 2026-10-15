@@ -1413,6 +1413,15 @@ public class AdminContentController {
   private void replaceBlocks(long lessonId, Object value, AuthContext context) {
     List<Map<String, Object>> blocks = objectList(value, "blocks");
     if (blocks.isEmpty() || blocks.size() > 100) throw badRequest("A lesson must contain between 1 and 100 content blocks.");
+    Set<String> existingSourceVisualUrls=new HashSet<>();
+    List<Map<String,Object>> existingSourceVisuals=jdbc.queryForList(
+        "select content::text as content from lesson_block where lesson_id=? and nullif(btrim(content->>'source_candidate_id'),'') is not null",
+        lessonId);
+    for(Map<String,Object> row:existingSourceVisuals) {
+      Map<String,Object> previous=readBlockContent(row.get("content"));
+      String previousUrl=String.valueOf(previous.getOrDefault("url","")).trim();
+      if(!previousUrl.isBlank()) existingSourceVisualUrls.add(previousUrl);
+    }
     Set<Integer> sequences = new HashSet<>();
     for (Map<String, Object> block : blocks) {
       int sequence = integerValue(first(block, "sequence_no", "sequenceNo"), 1, 10000, "sequence_no");
@@ -1423,6 +1432,12 @@ public class AdminContentController {
       Map<String,Object> content=new LinkedHashMap<>();
       rawContent.forEach((key,item)->content.put(String.valueOf(key),item));
       String candidateId=optionalText(content.get("source_candidate_id"),120);
+      String submittedMediaUrl=String.valueOf(content.getOrDefault("url","")).trim();
+      if(candidateId==null&&!submittedMediaUrl.isBlank()
+          &&existingSourceVisualUrls.contains(submittedMediaUrl)
+          &&!authorization.hasPermission(context,"CONTENT_REVIEW")) {
+        throw badRequest("Only a content reviewer can detach source provenance from an existing textbook visual.");
+      }
       if(candidateId!=null) {
         String visualStatus=String.valueOf(content.getOrDefault("visual_review_status","NEEDS_REVIEW")).trim().toUpperCase(Locale.ROOT);
         String rightsStatus=String.valueOf(content.getOrDefault("rights_status","SOURCE_REFERENCE_ONLY")).trim().toUpperCase(Locale.ROOT);
@@ -1456,8 +1471,15 @@ public class AdminContentController {
   }
 
   static String visualPublicationValidationError(String type, Map<String,Object> content) {
-    if(content==null||content.get("source_candidate_id")==null
-        ||String.valueOf(content.get("source_candidate_id")).isBlank()) return null;
+    if(content==null) return null;
+    String candidateId=String.valueOf(content.getOrDefault("source_candidate_id","")).trim();
+    String mediaUrl=String.valueOf(content.getOrDefault("url","")).trim();
+    if(candidateId.isBlank()) {
+      if(isGeneratedV3VisualAssetUrl(mediaUrl)) {
+        return "Preserve the source candidate metadata for generated V3 textbook visual assets.";
+      }
+      return null;
+    }
     if(!Set.of("IMAGE","DIAGRAM","ANIMATION").contains(String.valueOf(type).toUpperCase(Locale.ROOT))) {
       return "A textbook visual candidate must use an image, diagram, or animation block.";
     }
@@ -1497,6 +1519,12 @@ public class AdminContentController {
     String url=String.valueOf(content.getOrDefault("url","")).trim();
     if(!url.matches("(?i)^https://.+")) return "The approved textbook visual must resolve to an HTTPS media URL.";
     return null;
+  }
+
+  private static boolean isGeneratedV3VisualAssetUrl(String rawUrl) {
+    String url=rawUrl==null?"":rawUrl.trim().toLowerCase(Locale.ROOT);
+    return url.contains("/apps/web/public/content/visual-assets/")
+        ||url.contains("/content/visual-assets/");
   }
 
   private boolean updateQuestions(long lessonId, Object value, AuthContext context) {
