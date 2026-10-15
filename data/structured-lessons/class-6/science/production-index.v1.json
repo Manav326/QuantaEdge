@@ -29,14 +29,16 @@
   "non_negotiable_rules": [
     "Every authored lesson belongs to exactly one canonical chapter and one topic within that chapter.",
     "No lesson explanation, visual, interaction, example, or practice item may teach concepts from another chapter. Incidental chapter-scope examples must not become mini-lessons on later topics.",
-    "English and Hindi are authored as a paired record from the same canonical learning objectives. Preserve identical learning-objective IDs, block IDs, asset IDs, question IDs, answer IDs, scoring logic and expected difficulty.",
-    "Every lesson contains a distinct explain section and practice section.",
-    "Practice must contain multiple question types. Each item has localized prompt/options/feedback and a bilingual answer key or rubric, with consistent grading between languages.",
-    "Generated explanations, diagrams and practice questions must be labelled as authored material, not represented as verbatim NCERT content.",
-    "Only source-derived material is grounded by the book. Original teaching diagrams must be clearly marked as generated. V3 visual candidates remain review-only until each is checked for semantic fit, alt text, provenance, rights and approval.",
-    "A lesson marked generated is not thereby source-complete, fact-checked, bilingual-approved or publishable.",
-    "After every newly generated topic lesson, commit the lesson JSON first, then immediately update this progress index with commit/path, status and exact next step.",
-    "Work on these content artifacts only unless UI implementation is separately requested. Preserve existing application data and workflows."
+    "English and Hindi are authored as a paired record from the same canonical learning objectives. Preserve identical objective, block, visual, question, answer IDs, grading rules and intended difficulty.",
+    "The single global app language selector drives every student-visible string across web and Android; the user can switch it at any time. Do not make the learner select language separately inside each section.",
+    "Every learner-visible field needs non-empty en and hi values: lesson metadata, explanation, captions, alt text, diagram labels, activities, practice prompts/options, feedback, hints, answer explanations, rubrics, glossary, recap, and shared UI controls/errors/status labels.",
+    "Language changes must switch the whole visible experience together and preserve question index, selected/typed answers, score, progress and reading position. Mixed-language screens and silent cross-language fallback are prohibited.",
+    "Every artifact has distinct Explain and Practice sections; practice includes multiple question types.",
+    "Generated explanations, diagrams and practice questions are authored learning aids, not verbatim NCERT text or NCERT-provided assessment questions.",
+    "V3 source images stay review-only until checked for semantic fit, source fidelity, alt text, provenance, rights and approval. Full-page source previews containing English text are editor-only and must not render as student visuals in Hindi mode.",
+    "Generating a lesson does not establish source completeness, fact-checking, bilingual approval or publication eligibility.",
+    "After every newly generated topic lesson, commit the lesson JSON first, then immediately update this progress index with the latest commit/path, status and exact next action.",
+    "Work on content artifacts only unless UI implementation is separately requested. Preserve existing application data and workflows."
   ],
   "production_summary": {
     "chapters_total": 12,
@@ -45,10 +47,10 @@
     "topics_bilingual_approved": 0,
     "topics_publishable": 0,
     "lessons_committed": 1,
-    "last_completed_authoring_step": "Drafted topic 1 explanation, bilingual visual metadata, generated curiosity-loop diagram data, activity prompt and 8 bilingual practice items in one structured JSON.",
+    "last_completed_authoring_step": "Drafted topic 1 Explain and 8 bilingual multi-type practice questions; added an app-wide live-locale contract, localized practice control strings, state-preservation requirements, and blocked the English full-page preview from student rendering.",
     "current_chapter_number": 1,
     "current_topic_number": 1,
-    "next_action": "Reconcile the Hindi source pages and English source visuals for topic 1, then generate topic 2 (scientific method) as a separate bilingual lesson and update this index."
+    "next_action": "Align the Hindi source pages and choose/approve a locale-safe student visual for topic 1, then author topic 2 (scientific method) as a separate bilingual lesson and update this index."
   },
   "chapters": [
     {
@@ -80,7 +82,10 @@
             "scenario_based"
           ],
           "committed_at": "2026-10-15",
-          "commit_sha": "1f0f8e3c75da637c401731c4a85c652a2a1847b0"
+          "commit_sha": "36870ea85aa3c032b416613cdd3356bfb61a8596",
+          "runtime_language_switch": "CONTRACT_RECORDED_NOT_IMPLEMENTED",
+          "student_renderable_v3_page_preview": false,
+          "commit_note": "Locale contract and localized practice labels added; English full-page source preview locked to editor/review use."
         },
         {
           "number": 2,
@@ -203,8 +208,33 @@
     "Read this index first and open the exact lesson artifact recorded above.",
     "Do not regenerate or overwrite completed lesson JSON blindly; inspect it and make additive corrections.",
     "Continue on main; do not create an extra branch for this content-authoring stream.",
-    "For the active topic, resolve Hindi page mapping and source visual review gaps and update its status only when evidence exists.",
-    "Then generate topic 2 with a separate explain/practice structure and paired en/hi content. Commit it, then update this index immediately.",
+    "Apply the single global locale contract to every learner-visible string; the language switch must update all visible content while preserving active learning state. Content files specify requirements but do not implement the runtime.",
+    "For the active topic, resolve Hindi page mapping and source visual/rights gaps; do not display the English source-page preview as a student asset.",
+    "Then generate topic 2 with separate Explain and Practice sections and paired en/hi content. Commit it, then update this index immediately.",
     "Do not mark a chapter complete until every topic has source reconciliation, visual mapping, bilingual parity and practice review."
-  ]
+  ],
+  "language_runtime_contract": {
+    "contract_path": "Each lesson artifact contains language_runtime_contract; the shared app-wide string catalog and runtime behavior will require implementation later.",
+    "locales": [
+      "en",
+      "hi"
+    ],
+    "live_switch_required": true,
+    "preserve_state": [
+      "current question",
+      "selected answers",
+      "typed response",
+      "score",
+      "progress",
+      "reading position"
+    ],
+    "missing_locale_policy": "BLOCK_APPROVAL_NO_SILENT_FALLBACK",
+    "validation_required": [
+      "all visible strings present in both locales",
+      "question and answer logic identical across locales",
+      "no mixed language after switching in all student-facing states",
+      "shared web/Android controls and system errors are localized too"
+    ],
+    "runtime_status": "CONTRACT_RECORDED_NOT_IMPLEMENTED"
+  }
 }
