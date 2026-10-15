@@ -31,7 +31,7 @@ public class TextbookExtractionController {
       AuthorizationService authorization, StaffAuditService staffAudit,
       TextbookExtractionService extraction,
       @Value("${app.admin.content-token:}") String adminContentToken,
-      @Value("${app.environment:local}") String appEnvironment) {
+      @Value("${app.environment:production}") String appEnvironment) {
     this.authorization = authorization;
     this.staffAudit = staffAudit;
     this.extraction = extraction;
