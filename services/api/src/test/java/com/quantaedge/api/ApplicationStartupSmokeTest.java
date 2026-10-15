@@ -171,13 +171,11 @@ class ApplicationStartupSmokeTest {
     assertEquals(1, jdbc.queryForObject("select count(*) from flyway_schema_history where version='99' and success=true", Integer.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from curriculum_class
-      where public_id !~ '^[A-Z]{3}[A-Z0-9]{5}
-         or left(public_id,3)<>'SCH'
+      where length(public_id)<>8 or public_id !~ '^[A-Z]{3}[A-Z0-9]{5}' or left(public_id,3)<>'SCH'
       """, Integer.class));
     assertEquals(0, jdbc.queryForObject("""
       select count(*) from curriculum_program
-      where code<>'GENERAL' and (
-        public_id is null or public_id !~ '^[A-Z]{3}[A-Z0-9]{5}
+      where code<>'GENERAL' and (length(public_id)<>8 or public_id !~ '^[A-Z]{3}[A-Z0-9]{5}'
         or public_id_prefix is null or left(public_id,3)<>public_id_prefix)
       """, Integer.class));
     assertEquals(0, jdbc.queryForObject("""
@@ -197,5 +195,4 @@ class ApplicationStartupSmokeTest {
       jdbc.queryForObject("select count(*) from curriculum_program where code<>'GENERAL'", Integer.class),
       jdbc.queryForObject("select count(*) from public_identity_registry where entity_type='PROGRAM'", Integer.class));
   }
-
 }
