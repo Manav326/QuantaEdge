@@ -30,7 +30,11 @@ As of the last verified local checks on 2026-10-15:
 
 Refresh cookies (QE_STAFF_REFRESH, QE_REFRESH, QE_HRMS_REFRESH) are not access cookies and must never be passed as the session token.
 
-The importer uses workspace header X-QE-Workspace: EDUCATION_ADMIN. The API endpoint is protected by AuthorizationService.requirePermission(context, "CONTENT_EDIT"). Do not relax this check to bypass authentication.
+The API endpoint is protected by AuthorizationService.requirePermission(context, "CONTENT_EDIT"). The currently supported pilot script validates the signed-in staff identity through the Admin proxy and does not force X-QE-Workspace on this call, matching the historical importer request contract. Do not relax the permission check to bypass authentication.
+
+### What about QUANTAEDGE_ADMIN_TOKEN / X-Admin-Token?
+
+The repo history confirms the old Admin Content API initially compared X-Admin-Token with the configured APP_ADMIN_CONTENT_TOKEN (fed by QUANTAEDGE_ADMIN_TOKEN in Docker Compose). That shared-key authorization was removed in security commit 7d69a011b3, which changed content authoring to require an authenticated staff/admin identity. In the current main code, AdminContentController.authorize ignores the supplied token and checks the AuthContext permission; the newer TextbookExtractionController likewise requires an authenticated context and CONTENT_EDIT. Therefore, adding X-Admin-Token alone cannot authenticate this textbook import. Do not restore a broad shared-key bypass just to work around the 401. Use the working Education Admin session route; a future machine-token design would need a narrowly scoped endpoint and an explicit audit actor.
 
 ## 3. Source books included in this pilot
 
@@ -93,16 +97,16 @@ Expected summary: exactly four expected Class 6 books, 1,252 pages, and 31 pages
 Only continue after the focused tests pass and the current GitHub Actions run has been checked.
 
 1. In Chrome, sign in to Education Admin at http://localhost:3001 with the staff mobile + OTP flow. Do not sign in through HRMS for this task.
-2. Use Chrome DevTools → Application → Cookies for localhost to inspect the access cookies. Copy only the current access-cookie Value—prefer the active QE_STAFF_SESSION; if the active portal only has the legacy QE_SESSION, use that. Do not use a refresh cookie. The access token is short-lived, so re-authenticate and copy it immediately before importing.
+2. The script will prompt for the current access-cookie Value with hidden input. In Chrome DevTools → Application → Cookies for localhost, copy the active access cookie named QE_SESSION or QE_STAFF_SESSION. Do not use QE_REFRESH, QE_STAFF_REFRESH, or QE_HRMS_SESSION. The token is short-lived, so re-authenticate and copy it immediately before import.
 3. Run the existing script:
    ~~~powershell
    .\scripts\quantaedge-class6-tutor-pilot.ps1 -Mode ImportDraft
    ~~~
-4. At the script's hidden prompt, paste that access-cookie value and press Enter. Do not paste an entire command block into the prompt. The script should validate session/workspace/permission before invoking the importer.
-5. If session validation returns HTTP 401, **stop**. Do not loop through cookie names or repeat all four uploads. Record only the status/message. Recheck the direct-vs-proxy mismatch: the authenticated Admin route http://localhost:3001/api/v1/auth/me previously returned authenticated JSON while direct API http://localhost:8080/api/v1/auth/me returned 401. Diagnose the proxy/header/session path; never weaken API authorization.
-6. If authentication is accepted, read the importer summary. A complete pilot import should report four manifests and four successes. If it reports partial success, note the exact book IDs and response errors; the importer uses idempotent source keys, but still inspect existing counts before rerunning.
+4. Paste only the cookie Value at the prompt and press Enter. Do not paste a command block into the prompt. The script sends the value using the historical QE_SESSION cookie name and validates /api/v1/auth/me through http://localhost:3001, the same Admin proxy route used by the browser. It deliberately omits X-QE-Workspace for this legacy-compatible request path, then confirms that the session is an Education Admin staff identity with ADMIN or CONTENT_EDIT.
+5. If session validation returns HTTP 401, **stop**. Do not loop through cookie names or repeat uploads. Record only the status/message. At the previous checkpoint the authenticated Admin proxy route worked while a direct API request with a forced workspace header returned 401. The current change routes both session verification and multipart import through the Admin proxy. If it still returns 401, collect the proxy response and inspect cookie forwarding/token freshness; never weaken API authorization.
+6. If authentication is accepted, read the importer summary. A complete pilot import should report four manifests and four successes. If it reports partial success, note exact book IDs and response errors; importer keys are idempotent, but inspect counts before rerunning.
 
-The script and importer send X-QE-Workspace: EDUCATION_ADMIN. The current compatibility attempt sends the provided access value under both QE_STAFF_SESSION and QE_SESSION; this is a diagnostic compatibility measure, **not proof** that an arbitrary cookie value is valid.
+The importer now sends Cookie: QE_SESSION=<access-token> and Accept: application/json, without X-QE-Workspace. This matches the initial importer implementation (commit 999f95e1cd). Sending a staff session token under the QE_SESSION request-cookie name is acceptable to AuthService's token lookup, because the cookie name selects which token is read; the server still hashes and validates the token against auth_session and checks the staff identity/permissions. This is not a token bypass.
 
 ## 7. After a successful draft import: verify, do not approve
 
@@ -167,7 +171,7 @@ The four rejected API requests returned HTTP 401 and succeeded=0; the request wa
 ## 10. Troubleshooting shorthand
 
 - **python opens Microsoft Store:** Python 3.12.10 is at D:\Tools\Python312\python.exe; Windows User PATH has been configured. Verify with Get-Command python and python --version; do not reinstall just for the alias.
-- **All books return HTTP 401:** stop after the first authenticated request proves rejected. No content data should have been accepted. Confirm Education Admin (not HRMS), check the current access cookie, then diagnose the proxy/API route discrepancy. Never share the token.
+- **All books return HTTP 401:** stop after the first authentication check fails. No content data should have been accepted. Confirm Education Admin (not HRMS), use the current access cookie with the Admin proxy on port 3001, and compare the result of the proxied /api/v1/auth/me with the import route. Never share the token. The old QUANTAEDGE_ADMIN_TOKEN is not an auth fallback for this endpoint.
 - **HTTP 403 / permission required:** verify /api/v1/auth/me through the Admin origin; do not elevate roles or disable the CONTENT_EDIT guard to bypass it.
 - **Manifest/hash/page validation error:** return to DryRun; do not edit hashes to make an import pass.
 - **LOW_TEXT pages:** keep review-gated; no blanket approval just to enable Tutor retrieval.
