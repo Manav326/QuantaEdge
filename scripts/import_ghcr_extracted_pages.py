@@ -167,6 +167,8 @@ def main(argv: list[str] | None = None) -> int:
                     "manifest": str(path), "pages": str(pages_path),
                     "book_id": manifest.get("book_id"), "title": manifest.get("title"),
                     "language": manifest.get("language"), "pages_count": manifest.get("completed_pages"),
+                    "course_id": args.course_id or None,
+                    "program_code": args.program_code.strip().upper() or None,
                 }, ensure_ascii=False))
                 successes += 1
                 continue
@@ -199,6 +201,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ERROR {path}: {exc}", file=sys.stderr)
     report = {"manifests_found": len(manifests), "succeeded": successes, "failures": failures,
               "mode": "IMPORT_AND_APPROVE" if args.approve else ("IMPORT_DRAFT" if args.apply else "DRY_RUN"),
+              "course_id": args.course_id or None,
+              "program_code": args.program_code.strip().upper() or None,
               "auth_mode": auth_mode if args.apply else "none"}
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return 1 if failures else 0

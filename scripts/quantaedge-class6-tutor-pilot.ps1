@@ -3,10 +3,12 @@ param(
     [ValidateSet("DryRun", "ImportDraft", "ImportAndApprove")]
     [string]$Mode = "DryRun",
     [string]$ApiBaseUrl = "http://localhost:8080",
-    [string]$AdminProxyBaseUrl = "http://localhost:3001"
+    [string]$AdminProxyBaseUrl = "http://localhost:3001",
+    [long]$CourseId = 0
 )
 
 $ErrorActionPreference = "Stop"
+if ($CourseId -lt 0) { throw "CourseId must be a positive numeric course ID when supplied." }
 if ($env:QUANTAEDGE_API_BASE_URL) { $ApiBaseUrl = $env:QUANTAEDGE_API_BASE_URL }
 if ($env:QUANTAEDGE_ADMIN_PROXY_URL) { $AdminProxyBaseUrl = $env:QUANTAEDGE_ADMIN_PROXY_URL }
 
@@ -163,6 +165,11 @@ $records |
 Write-Host "Total pages: $(($records | Measure-Object -Property Pages -Sum).Sum)"
 Write-Host "Pages flagged for low text: $(($records | Measure-Object -Property LowTextPages -Sum).Sum)"
 Write-Host "The source PDFs remain in GHCR; this command imports only extracted page text and metadata."
+if ($CourseId -gt 0) {
+    Write-Host "Independent course scope: numeric course ID $CourseId (source books remain Class 6; enrollment is not class-restricted)."
+} else {
+    Write-Host "Scope: existing Class 6 textbook source records."
+}
 
 if ($Mode -ne "DryRun") {
     $envFile = Join-Path $RepoRoot ".env"
@@ -227,8 +234,9 @@ if ($Mode -eq "ImportAndApprove") {
     Write-Host ""
     Write-Host "Source approval is a separate, audited action. Review each URL, edition, page count, and SHA prefix above."
     Write-Host "LOW_TEXT pages remain excluded from AI Tutor retrieval by the API quality filter."
-    $confirmation = Read-Host "Type APPROVE CLASS 6 SOURCES to import and approve these four source books"
-    if ($confirmation -cne "APPROVE CLASS 6 SOURCES") {
+    $approvalPhrase = if ($CourseId -gt 0) { "APPROVE COURSE SOURCES $CourseId" } else { "APPROVE CLASS 6 SOURCES" }
+    $confirmation = Read-Host "Type $approvalPhrase to import and approve these four source books"
+    if ($confirmation -cne $approvalPhrase) {
         Write-Host "Cancelled. No API changes were made."
         exit 0
     }
@@ -237,6 +245,7 @@ if ($Mode -eq "ImportAndApprove") {
 $arguments = @()
 $arguments += $PythonPrefix
 $arguments += @($Importer, "--extracted-root", $ExtractionRoot, "--api-base-url", $ApiBaseUrl)
+if ($CourseId -gt 0) { $arguments += @("--course-id", [string]$CourseId) }
 if ($Mode -ne "DryRun") { $arguments += "--apply" }
 if ($Mode -eq "ImportAndApprove") { $arguments += "--approve" }
 
