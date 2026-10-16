@@ -39,3 +39,18 @@ The manual workflow .github/workflows/quantaedge-layers-6-8.yml defaults to benc
 ## Correction overlay
 
 The visual correction overlay remains at data/textbook-content-pipeline/class-N/books/BOOK_SLUG/visual-analysis-corrections.v1.json using schema quantaedge.visual-analysis-corrections.v1. Accepted entries require exact PDF/asset hashes, reviewer, reason and supported patch. Edition or asset mismatches fail closed, and raw visual analysis is not mutated.
+
+## Direct local commands
+
+From a clean clone on the machine that already runs Ollama, first ensure the source's Layer 5 coverage ledger is complete and the Ollama model is installed. The endpoint must be loopback (the script will refuse remote endpoints).
+
+Benchmark sample candidates:
+`python scripts/quantaedge_layers_6_8.py benchmark --repo-root . --source-book-id ncert-c6-english-fecu1 --endpoint http://127.0.0.1:11434 --models qwen2.5:1.5b,qwen2.5:3b --sample-segments 3 --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json`
+
+Resume a small review-only generation batch:
+`python scripts/quantaedge_layers_6_8.py run --repo-root . --class-no 6 --source-book-id ncert-c6-english-fecu1 --endpoint http://127.0.0.1:11434 --model qwen2.5:1.5b --max-model-calls 6 --checkpoint-every 2 --allow-experimental-model --commit-checkpoints`
+
+The same command can be repeated to resume. The model must first have a contract-valid sample in the committed benchmark report. Pick matching class and exact source-book ID for other tracks; do not reuse the Class 6 Science book ID for Class 7/8.
+
+The existing general-purpose SFT generator is also Ollama-first:
+`python scripts/ai_training_dataset.py generate --input-dir private-review --output data/ai-training/generated/drafts.jsonl --provider ollama --endpoint http://127.0.0.1:11434 --model qwen2.5:1.5b --target 25000 --batch-size 5 --max-api-calls 100 --generate`

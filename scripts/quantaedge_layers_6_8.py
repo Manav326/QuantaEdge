@@ -333,9 +333,21 @@ def validate_splits(rows:list[dict[str,Any]],parts:dict[str,list[dict[str,Any]]]
 
 def write_rag(path:Path,source:dict[str,Any])->None:
     if path.exists():
-        rows=read_jsonl(path)
-        if rows and (rows[0].get("source_pdf_sha256")!=source["source_pdf_sha256"] or rows[0].get("source_book_id")!=source["book_id"]): raise ValueError("Existing RAG corpus belongs to another book/edition.")
-        if len(rows)==source["page_count"] and all(r.get("source_pdf_page_number")==i+1 for i,r in enumerate(rows)): return
+        old=read_jsonl(path)
+        if any(r.get("source_pdf_sha256")!=source["source_pdf_sha256"] or r.get("source_book_id")!=source["book_id"] for r in old):
+            raise ValueError("Existing RAG corpus mixes or belongs to another book/edition.")
+        if len(old)==source["page_count"]:
+            expected=source["pages"]
+            valid=True
+            for i,(row,page) in enumerate(zip(old,expected),1):
+                expected_id="rag-"+sha(source["book_id"]+"|"+source["source_pdf_sha256"]+"|"+str(page["page_number"])+"|"+page["text_sha256"])[:24]
+                if (row.get("source_pdf_page_number")!=i or row.get("text_sha256")!=page["text_sha256"]
+                    or row.get("text")!=page["text"] or row.get("document_id")!=expected_id
+                    or row.get("eligible_for_retrieval") is not page["has_text"]
+                    or row.get("publication_allowed") is not False):
+                    valid=False; break
+            if valid: return
+            raise ValueError("Existing RAG corpus failed per-page integrity validation; preserved for investigation.")
     rows=[]
     for p in source["pages"]:
         rows.append({"schema_version":"quantaedge.ncert-retrieval-document.v1",
@@ -366,16 +378,20 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
         sft.extend(item.get("sft_rows",[]))
     mapped={p for t in topics if t["mapping_status"]=="DRAFT_MAPPED_REQUIRES_REVIEW" for p in t["source_pages"]}
     unresolved=sorted(set(range(1,source["page_count"]+1))-mapped)
+    unresolved_chapters=sorted(t["segment_id"] for t in topics if t["mapping_status"]!="DRAFT_MAPPED_REQUIRES_REVIEW")
+    unresolved_text=sorted(s["segment_id"] for s in segments if checkpoint.get(s["segment_id"],{}).get("status")=="UNRESOLVED_SOURCE_TEXT")
     pending=[s["segment_id"] for s in segments if checkpoint.get(s["segment_id"],{}).get("status") not in {"COMPLETE","UNRESOLVED_SOURCE_TEXT"}]
+    incomplete_map=bool(unresolved or unresolved_chapters or unresolved_text)
     mp=outdir/"curriculum-map.v1.json"
     mapping={"schema_version":"quantaedge.curriculum-map-candidate.v1",
       "source":{"class_code":str(source["class_no"]),"subject_code":source["subject"],"language":source["language"],
         "source_book_id":source["book_id"],"source_title":source["title"],"source_url":source["source_url"],
         "source_edition":source["edition"],"source_pdf_sha256":source["source_pdf_sha256"],"pdf_page_count":source["page_count"]},
       "prompt_version":PROMPT_VERSION,"generation_model":model,"segment_count":len(segments),"segments_completed":len(good),
-      "pending_segments":pending,"mapped_source_pages":len(mapped),"total_source_pages":source["page_count"],
+      "pending_segments":pending,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,
+      "mapped_source_pages":len(mapped),"total_source_pages":source["page_count"],
       "unresolved_source_pages":unresolved,"topics":topics,
-      "status":"IN_PROGRESS" if pending else ("INCOMPLETE" if unresolved else "DRAFT_REQUIRES_HUMAN_REVIEW"),
+      "status":"IN_PROGRESS" if pending else ("INCOMPLETE" if incomplete_map else "DRAFT_REQUIRES_HUMAN_REVIEW"),
       "human_review_required":True,"publication_allowed":False}
     write_json(mp,mapping)
     ldir=outdir/"lessons"; ldir.mkdir(parents=True,exist_ok=True); wanted=set()
@@ -391,9 +407,10 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     if split_errors: raise ValueError("SFT split validation failed: "+"; ".join(split_errors))
     mapped_segments={t["segment_id"] for t in topics}
     lesson_segments={l.get("generation_metadata",{}).get("segment_id") for l in lessons}
+    missing_sft=any(len(checkpoint.get(seg["segment_id"],{}).get("sft_rows",[]))<2 for seg in segments)
     layers={"6":mapping["status"],
-      "7":"IN_PROGRESS" if pending or mapped_segments!=lesson_segments else "DRAFT_REQUIRES_HUMAN_REVIEW",
-      "8":"IN_PROGRESS" if pending or any(len(checkpoint.get(seg["segment_id"],{}).get("sft_rows",[]))<2 for seg in segments) else "DRAFT_REQUIRES_HUMAN_REVIEW"}
+      "7":"IN_PROGRESS" if pending else ("INCOMPLETE" if unresolved_chapters or unresolved_text or mapped_segments!=lesson_segments else "DRAFT_REQUIRES_HUMAN_REVIEW"),
+      "8":"IN_PROGRESS" if pending else ("INCOMPLETE" if missing_sft else "DRAFT_REQUIRES_HUMAN_REVIEW")}
     overall="IN_PROGRESS" if pending else ("INCOMPLETE" if any(v=="INCOMPLETE" for v in layers.values()) else "DRAFT_REQUIRES_HUMAN_REVIEW")
     report={"schema_version":"quantaedge.layers-6-8-run-manifest.v1","source_book_id":source["book_id"],
       "source_pdf_sha256":source["source_pdf_sha256"],"class_code":str(source["class_no"]),"subject_code":source["subject"],
@@ -402,7 +419,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
       "tutor_sft_candidates":len(sft),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
-      "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"pending_segments":pending,
+      "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"pending_segments":pending,
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
       "human_review_required":True,"publication_allowed":False,
       "next_action":"Resume this exact book/model until checkpoints are complete; then review map, lesson candidates and both datasets. Production model selection remains a separate human decision."}

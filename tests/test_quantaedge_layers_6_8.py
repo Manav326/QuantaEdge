@@ -8,7 +8,7 @@ from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
     lesson_from, ollama_chat, sha, split_sft, validate_lesson, validate_output,
-    validate_splits, segments_for, write_rag, write_json, write_jsonl, run as run_layers,
+    validate_splits, segments_for, write_rag, write_json, write_jsonl, write_outputs, run as run_layers,
 )
 
 class FakeResponse:
@@ -149,5 +149,41 @@ class LayersTests(unittest.TestCase):
             write_jsonl(source_path,[row])
             with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):
                 run_layers(args,opener=open_)
+
+
+    def test_existing_retrieval_corpus_is_checked_page_by_page(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source={"pages":[{"page_number":1,"text":"grounded source","text_sha256":sha("grounded source"),"has_text":True}],
+                "page_count":1,"book_id":"book","source_pdf_sha256":"c"*64,"class_no":6,"subject":"science",
+                "language":"en","title":"Science","source_url":"https://ncert.nic.in/x","edition":"Reprint"}
+            path=Path(temp)/"rag.jsonl"
+            write_rag(path,source)
+            rows=[json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+            rows[0]["text"]="tampered text"
+            write_jsonl(path,rows)
+            with self.assertRaisesRegex(ValueError,"per-page integrity"):
+                write_rag(path,source)
+
+    def test_unresolved_chapter_segment_prevents_false_completion(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); text="supported evidence"
+            source={"pages":[{"page_number":1,"text":text,"text_sha256":sha(text),"has_text":True}],
+                "page_count":1,"book_id":"book","source_pdf_sha256":"d"*64,"class_no":6,"subject":"science",
+                "language":"en","title":"Science","source_url":"https://ncert.nic.in/x","edition":"Reprint"}
+            seg1={"segment_id":"mapped","sequence":1,"source_pages":[1],"segment_sha256":"1"}
+            seg2={"segment_id":"unresolved","sequence":2,"source_pages":[1],"segment_sha256":"2"}
+            good=model_json([1])
+            unknown=model_json([1]); unknown["chapter_number"]=None; unknown["mapping_confidence"]="LOW"; unknown["chapter_title_by_locale"]={"en":"","hi":""}
+            source_for_lesson={**source,"source_pdf_sha256":"d"*64}
+            lesson=lesson_from(source_for_lesson,seg1,good); lesson["workflow"]["generation_model"]="qwen2.5:1.5b"
+            checkpoint={
+                "mapped":{"status":"COMPLETE","segment_sha256":"1","generated":good,"lesson":lesson,"sft_rows":[{"example_id":"1","metadata":{"source_group_id":"book|chapter-1","review_status":"machine_validated_draft","publication_allowed":False}},{"example_id":"2","metadata":{"source_group_id":"book|chapter-1","review_status":"machine_validated_draft","publication_allowed":False}}]},
+                "unresolved":{"status":"COMPLETE","segment_sha256":"2","generated":unknown,"lesson":None,"sft_rows":[{"example_id":"3","metadata":{"source_group_id":"book|pages-000","review_status":"machine_validated_draft","publication_allowed":False}},{"example_id":"4","metadata":{"source_group_id":"book|pages-000","review_status":"machine_validated_draft","publication_allowed":False}}]}}
+            outdir=root/"out"; rag=root/"rag.jsonl"; write_rag(rag,source)
+            report=write_outputs(source,[seg1,seg2],checkpoint,outdir,rag,"qwen2.5:1.5b","e"*64)
+            self.assertEqual("INCOMPLETE",report["layers"]["6"])
+            self.assertEqual("INCOMPLETE",report["layers"]["7"])
+            self.assertEqual("INCOMPLETE",report["overall_status"])
+            self.assertEqual(["unresolved"],report["unresolved_chapter_segments"])
 
 if __name__=="__main__": unittest.main()
