@@ -24,6 +24,9 @@ on:
       - "services/api/src/test/java/com/quantaedge/api/AdminContentControllerTest.java"
       - "scripts/extract_visual_asset_inventory.py"
       - "tests/test_extract_visual_asset_inventory.py"
+      - "scripts/quantaedge_textbook_pipeline.py"
+      - "tests/test_quantaedge_textbook_pipeline.py"
+      - "data/textbook-content-pipeline/**/visual-analysis-corrections.v1.json"
   workflow_dispatch:
     inputs:
       class_no:
@@ -32,11 +35,17 @@ on:
         type: choice
         options: ["6", "7", "8"]
         default: "7"
-      max_candidates:
-        description: "Review candidates per source book (1-200)"
+      analysis_mode:
+        description: "Run Layers 1–3 only or continue through full Layer 4 analysis and Layer 5 coverage"
+        required: true
+        type: choice
+        options: ["prepare_only", "analyze_all"]
+        default: "analyze_all"
+      vision_model:
+        description: "Ollama vision model used in Layer 4"
         required: true
         type: string
-        default: "60"
+        default: "qwen2.5vl:3b"
 
 permissions:
   contents: write
@@ -73,6 +82,8 @@ jobs:
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
+          python -m unittest discover -s tests -p "test_analyze_visual_inventory_with_ollama.py" -v
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
 
   prepare:
     if: github.event_name == 'workflow_dispatch'
@@ -81,7 +92,8 @@ jobs:
     timeout-minutes: 240
     env:
       CLASS_NO: ${{ inputs.class_no }}
-      MAX_CANDIDATES: ${{ inputs.max_candidates }}
+      ANALYSIS_MODE: ${{ inputs.analysis_mode }}
+      VISION_MODEL: ${{ inputs.vision_model }}
     steps:
       - name: Checkout main with write permission for review metadata
         uses: actions/checkout@v4
@@ -95,9 +107,10 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
-          [[ "$MAX_CANDIDATES" =~ ^[0-9]+$ ]] && (( MAX_CANDIDATES >= 1 && MAX_CANDIDATES <= 200 )) || { echo "max_candidates must be 1..200"; exit 2; }
+          [[ "$ANALYSIS_MODE" == "prepare_only" || "$ANALYSIS_MODE" == "analyze_all" ]] || { echo "Invalid analysis_mode"; exit 2; }
+          [[ -n "$VISION_MODEL" ]] || { echo "vision_model must be non-empty"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
-          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
+          python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py scripts/analyze_visual_inventory_with_ollama.py scripts/quantaedge_textbook_pipeline.py
           python -m unittest discover -s tests -p "test_select_textbook_visual_sources.py" -v
           python -m unittest discover -s tests -p "test_validate_textbook_extraction_artifacts.py" -v
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -186,8 +199,13 @@ jobs:
                   raise SystemExit(f"{book_id}: sibling page JSONL is missing.")
               shutil.copy2(manifest_path, book_dir / "source.manifest.json")
               shutil.copy2(page_path, book_dir / page_name)
+              source["extraction_manifest_repo_path"] = manifest_path.relative_to(repo).as_posix()
+              source["text_jsonl_repo_path"] = page_path.relative_to(repo).as_posix()
+              source["text_jsonl_filename"] = page_name
               (book_dir / "source-selection.json").write_text(json.dumps(source, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
               print(json.dumps({"book_id": book_id, "language": language, "subject": source["subject"], "slug": source["book_slug"], "sha256": digest}))
+          # Keep original extraction references for correction-only rebuilds.
+          Path(selection_arg).write_text(json.dumps(selection, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
           subprocess.run(["docker", "rm", "-f", container_id], check=True)
           PY
             echo "::endgroup::"
@@ -216,10 +234,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" "$MAX_CANDIDATES" <<'PY'
+          python - "$VISUAL_SOURCE_ROOT/selected-sources.json" "$VISUAL_SOURCE_ROOT" "$RUNNER_TEMP/visual-candidates-v3" "$GITHUB_WORKSPACE" <<'PY'
           import json, os, shutil, subprocess, sys
           from pathlib import Path
-          selection_path, source_root_arg, output_root_arg, repo_arg, max_candidates = sys.argv[1:]
+          selection_path, source_root_arg, output_root_arg, repo_arg = sys.argv[1:]
           selection = json.loads(Path(selection_path).read_text(encoding="utf-8"))
           source_root = Path(source_root_arg)
           output_root = Path(output_root_arg)
@@ -242,7 +260,6 @@ jobs:
                   "--inventory", str(inventory_dir / "visual-inventory.v1.json"),
                   "--pdf", str(work / "source.pdf"),
                   "--output-dir", str(out),
-                  "--max-candidates", str(max_candidates),
                   "--crop-scale", "2.0",
               ], cwd=repo, check=True)
               pack_path = out / "candidates.v3.json"
@@ -363,3 +380,81 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
           echo "Persisted review-only visual candidates for every required NCERT Maths and Science source book in English and Hindi. All candidate packs remain non-publishable."
+
+
+      - name: Start Ollama container and load vision model for Layer 4
+        if: inputs.analysis_mode == 'analyze_all'
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-ollama-models >/dev/null
+          docker run -d --name quantaedge-ollama -p 11434:11434 -v quantaedge-ollama-models:/root/.ollama ollama/ollama:latest
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:11434/api/tags >/dev/null || { docker logs quantaedge-ollama; exit 1; }
+          docker exec quantaedge-ollama ollama pull "$VISION_MODEL"
+
+      - name: Run exhaustive, resumable Layers 4–5 for the selected class
+        if: inputs.analysis_mode == 'analyze_all'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_textbook_pipeline.py run \
+            --selection "$VISUAL_SOURCE_ROOT/selected-sources.json" \
+            --source-root "$VISUAL_SOURCE_ROOT" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --package "ghcr.io/\${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
+            --run-id "$GITHUB_RUN_ID" \
+            --model "$VISION_MODEL" \
+            --batch-size 25
+
+      - name: Stop Ollama container
+        if: always() && inputs.analysis_mode == 'analyze_all'
+        run: docker rm -f quantaedge-ollama >/dev/null 2>&1 || true
+
+      - name: Summarize integrated eight-layer pipeline
+        if: always() && inputs.analysis_mode == 'analyze_all'
+        shell: bash
+        run: |
+          {
+            echo "## QuantaEdge eight-layer textbook pipeline"
+            echo "- Executed: Layers 1–5. Layers 6–8 remain NOT_STARTED until implemented."
+            echo "- No visual/candidate total cap; batch size is a checkpoint interval only."
+            echo "- All generated data remains review-only; publication_allowed=false."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  rebuild-correction-coverage:
+    if: github.event_name == 'push' && contains(toJson(github.event.commits), 'visual-analysis-corrections.v1.json')
+    name: Rebuild Layer 5 after correction overlay changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild affected ledgers without rerunning Layer 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/quantaedge_textbook_pipeline.py
+          python -m unittest discover -s tests -p "test_quantaedge_textbook_pipeline.py" -v
+          python scripts/quantaedge_textbook_pipeline.py rebuild-corrections --event "$GITHUB_EVENT_PATH" --repo-root "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/textbook-content-pipeline
+          if ! git diff --cached --quiet; then
+            git commit -m "rebuild(content): propagate accepted visual corrections"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
