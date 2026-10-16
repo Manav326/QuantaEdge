@@ -421,7 +421,7 @@ jobs:
         run: |
           {
             echo "## QuantaEdge eight-layer textbook pipeline"
-            echo "- Executed: Layers 1–5. Layers 6–8 remain NOT_STARTED until implemented."
+            echo "- Executed here: Layers 1–5. Layers 6–8 are implemented in the separate budgeted per-book workflow; benchmark the model first, then generate review-only drafts."
             echo "- No visual/candidate total cap; batch size is a checkpoint interval only."
             echo "- All generated data remains review-only; publication_allowed=false."
           } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,181 @@
+name: QuantaEdge Layers 6-8 - local Ollama pipeline
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "scripts/quantaedge_layers_6_8.py"
+      - "scripts/ai_training_dataset.py"
+      - "tests/test_quantaedge_layers_6_8.py"
+      - ".github/workflows/quantaedge-layers-6-8.yml"
+      - "docs/textbook-content-pipeline-eight-layers.md"
+      - "apps/admin/app/structured-lesson-preview/page.tsx"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Benchmark first; generation is a separate explicitly experimental run"
+        type: choice
+        options: ["benchmark", "run"]
+        default: "benchmark"
+        required: true
+      class_no:
+        description: "Class for draft generation (benchmark always uses Class 6 NCERT Science)"
+        type: choice
+        options: ["6", "7", "8"]
+        default: "6"
+        required: true
+      source_book_id:
+        description: "Exact whole-book ID from the committed extraction manifest"
+        type: string
+        default: "ncert-c6-english-fecu1"
+        required: true
+      benchmark_models:
+        description: "Comma-separated local Ollama models to benchmark"
+        type: string
+        default: "qwen2.5:1.5b,qwen2.5:3b"
+        required: true
+      generation_model:
+        description: "Model for experimental draft generation; not a production selection"
+        type: string
+        default: "qwen2.5:1.5b"
+        required: true
+      max_model_calls:
+        description: "Maximum model calls for this resumable run (1-20)"
+        type: number
+        default: 6
+        required: true
+      allow_experimental_model:
+        description: "Explicitly permit unapproved model output as review-only draft candidates"
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qe-layers-6-8-${{ inputs.class_no || '6' }}-${{ inputs.source_book_id || 'validation' }}-${{ inputs.mode || 'push' }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate Layers 6-8 contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile pipeline scripts
+        run: python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py
+      - name: Test pipeline contracts, native Ollama, provenance, resume and split safety
+        run: |
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+
+  execute:
+    if: github.event_name == 'workflow_dispatch'
+    name: Run budgeted local Ollama pipeline
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout main with checkpoint write permission
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Repeat checks on the execution checkout
+        run: |
+          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+      - name: Start loopback-only Ollama service
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-layers-6-8-models >/dev/null
+          docker run -d --name quantaedge-layers-6-8-ollama \
+            -p 127.0.0.1:11434:11434 \
+            -v quantaedge-layers-6-8-models:/root/.ollama \
+            ollama/ollama:latest
+          ready=false
+          for attempt in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-ollama; exit 1; }
+      - name: Pull only candidate models for this invocation
+        shell: bash
+        env:
+          MODE: "${{ inputs.mode }}"
+          BENCHMARK_MODELS: "${{ inputs.benchmark_models }}"
+          GENERATION_MODEL: "${{ inputs.generation_model }}"
+        run: |
+          set -euo pipefail
+          if [[ "$MODE" == "benchmark" ]]; then
+            IFS=',' read -r -a candidates <<< "$BENCHMARK_MODELS"
+          else
+            candidates=("$GENERATION_MODEL")
+          fi
+          for model in "${candidates[@]}"; do
+            model="$(printf '%s' "$model" | xargs)"
+            [[ -n "$model" ]] || { echo "Model list contains an empty item"; exit 2; }
+            docker exec quantaedge-layers-6-8-ollama ollama pull "$model"
+          done
+      - name: Benchmark the same Class 6 NCERT excerpts with every model
+        if: inputs.mode == 'benchmark'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py benchmark \
+            --repo-root "$GITHUB_WORKSPACE" --source-book-id ncert-c6-english-fecu1 \
+            --endpoint http://127.0.0.1:11434 --models "${{ inputs.benchmark_models }}" \
+            --sample-segments 3 \
+            --output data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --commit-checkpoints
+      - name: Run bounded single-book draft generation
+        if: inputs.mode == 'run'
+        shell: bash
+        env:
+          CLASS_NO: "${{ inputs.class_no }}"
+          SOURCE_BOOK_ID: "${{ inputs.source_book_id }}"
+          MODEL: "${{ inputs.generation_model }}"
+          MAX_MODEL_CALLS: "${{ inputs.max_model_calls }}"
+          ALLOW_EXPERIMENTAL_MODEL: "${{ inputs.allow_experimental_model }}"
+        run: |
+          set -euo pipefail
+          [[ "$ALLOW_EXPERIMENTAL_MODEL" == "true" ]] || { echo "Enable allow_experimental_model for review-only drafts."; exit 2; }
+          [[ "$MAX_MODEL_CALLS" =~ ^[0-9]+$ ]] && (( MAX_MODEL_CALLS >= 1 && MAX_MODEL_CALLS <= 20 )) || { echo "max_model_calls must be 1..20"; exit 2; }
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" --class-no "$CLASS_NO" \
+            --source-book-id "$SOURCE_BOOK_ID" --endpoint http://127.0.0.1:11434 \
+            --model "$MODEL" --max-model-calls "$MAX_MODEL_CALLS" \
+            --checkpoint-every 2 --request-timeout 180 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model --commit-checkpoints
+      - name: Run summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## QuantaEdge Layers 6-8"
+            echo "- Provider: native local Ollama /api/chat; no OpenAI API key or hosted endpoint."
+            echo "- One whole-book source per run and a strict model-call budget."
+            echo "- Git savepoints are pushed to main; reruns resume from source, edition, model and prompt fingerprints."
+            echo "- Lessons, retrieval records and SFT examples remain review-only; production selection remains pending human review."
+            echo "- IN_PROGRESS means repeat the same inputs to resume. It is never a false completion."
+          } >> "$GITHUB_STEP_SUMMARY"
+          docker logs --tail 80 quantaedge-layers-6-8-ollama 2>/dev/null || true
+      - name: Stop Ollama service
+        if: always()
+        run: docker rm -f quantaedge-layers-6-8-ollama >/dev/null 2>&1 || true

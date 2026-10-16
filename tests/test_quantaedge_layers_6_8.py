@@ -1,0 +1,153 @@
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+from scripts.ai_training_dataset import request_examples
+from types import SimpleNamespace
+from scripts.quantaedge_layers_6_8 import (
+    lesson_from, ollama_chat, sha, split_sft, validate_lesson, validate_output,
+    validate_splits, segments_for, write_rag, write_json, write_jsonl, run as run_layers,
+)
+
+class FakeResponse:
+    def __init__(self, data): self.data=json.dumps(data).encode()
+    def __enter__(self): return self
+    def __exit__(self,*args): return False
+    def read(self): return self.data
+
+def model_json(pages):
+    bi={"en":"Understand the idea.","hi":"विचार को समझें।"}
+    q={"prompt_by_locale":{"en":"Which statement is correct?","hi":"कौन-सा कथन सही है?"},
+       "options":[{"id":"a","text_by_locale":{"en":"Correct","hi":"सही"}},{"id":"b","text_by_locale":{"en":"Wrong","hi":"गलत"}}],
+       "correct_answer_ids":["a"],"feedback_by_locale":bi}
+    return {"chapter_number":1,"chapter_title_by_locale":{"en":"Curiosity","hi":"जिज्ञासा"},"mapping_confidence":"HIGH",
+      "topic_title_by_locale":{"en":"Observation","hi":"अवलोकन"},"microtopic_title_by_locale":{"en":"Careful observation","hi":"ध्यानपूर्वक अवलोकन"},
+      "concepts_by_locale":{"en":["observation"],"hi":["अवलोकन"]},"learning_objectives":[{"statement_by_locale":bi}],
+      "explanation_by_locale":{"en":{"heading":"Explain","paragraphs":["Explain in original words."]},"hi":{"heading":"समझें","paragraphs":["अपने शब्दों में समझें।"]}},
+      "worked_example_by_locale":{"en":{"heading":"Example","paragraphs":["Observe a leaf and note two features."]},"hi":{"heading":"उदाहरण","paragraphs":["पत्ती देखें और दो विशेषताएँ लिखें।"]}},
+      "recap_by_locale":bi,"questions":[q,dict(q)],
+      "tutor_examples":[{"language":"en","student_message":"Why observe?","assistant_message":"It separates evidence from guesses.","source_pages":pages[:1]},
+                        {"language":"hi","student_message":"ध्यान से क्यों देखें?","assistant_message":"इससे प्रमाण और अनुमान अलग होते हैं।","source_pages":pages[:1]}]}
+
+class LayersTests(unittest.TestCase):
+    def test_segments_preserve_every_character_and_empty_pages(self):
+        pages=[{"page_number":1,"text":"A"*2200},{"page_number":2,"text":""},{"page_number":3,"text":"हिंदी text "*500}]
+        segments=segments_for(pages,2,2500); seen={}
+        for s in segments:
+            for piece in s["pieces"]: seen.setdefault(piece["page"],[]).append(piece["text"])
+        self.assertEqual(pages[0]["text"],"".join(seen[1]))
+        self.assertEqual("", "".join(seen[2]))
+        self.assertEqual(pages[2]["text"],"".join(seen[3]))
+        self.assertEqual({1,2,3},{n for s in segments for n in s["source_pages"]})
+
+    def test_native_ollama_uses_json_api_and_no_key(self):
+        got={}
+        def open_(request,timeout=180):
+            got["url"]=request.full_url; got["headers"]={k.lower():v for k,v in request.header_items()}
+            got["body"]=json.loads(request.data.decode())
+            return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
+        v,elapsed=ollama_chat("http://127.0.0.1:11434","qwen2.5:1.5b","prompt",opener=open_)
+        self.assertTrue(got["url"].endswith("/api/chat")); self.assertNotIn("authorization",got["headers"])
+        self.assertEqual("json",got["body"]["format"]); self.assertEqual("Careful observation",v["microtopic_title_by_locale"]["en"])
+        self.assertGreaterEqual(elapsed,0)
+
+    def test_external_ollama_endpoint_is_blocked(self):
+        with self.assertRaisesRegex(ValueError,"loopback"):
+            ollama_chat("https://example.com","m","p",opener=lambda *a,**k:self.fail("network must not run"))
+
+    def test_structured_lesson_contract_and_source_refs(self):
+        generated=model_json([1,2]); self.assertEqual([],validate_output(generated,{1,2}))
+        source={"book_id":"ncert-c6-english-fecu1","source_pdf_sha256":"a"*64,"source_url":"https://ncert.nic.in/textbook.php?x=1",
+          "title":"Curiosity","edition":"Reprint 2026-27","class_no":6,"subject":"science","language":"en"}
+        seg={"segment_id":"seg1","sequence":1,"source_pages":[1,2]}
+        lesson=lesson_from(source,seg,generated); self.assertEqual([],validate_lesson(lesson))
+        self.assertFalse(lesson["workflow"]["publication_allowed"])
+        self.assertEqual(2,len(lesson["practice"]["questions"]))
+
+    def test_invalid_page_citations_fail_validation(self):
+        v=model_json([99]); self.assertTrue(any("citations" in x for x in validate_output(v,{1,2})))
+
+    def test_unresolved_chapter_must_not_generate_lesson(self):
+        from scripts.quantaedge_layers_6_8 import lesson_from
+        v=model_json([1]); v["chapter_number"]=None; v["mapping_confidence"]="LOW"; v["chapter_title_by_locale"]={"en":"","hi":""}
+        self.assertEqual([],validate_output(v,{1}))
+        source={"book_id":"b","source_pdf_sha256":"a"*64,"source_url":"https://ncert.nic.in/x","title":"Book","edition":"Reprint","class_no":6,"subject":"science","language":"en"}
+        self.assertIsNone(lesson_from(source,{"segment_id":"s","sequence":1,"source_pages":[1]},v))
+
+    def test_sft_split_groups_do_not_leak(self):
+        rows=[]
+        for i in range(100):
+            group="chapter-"+str(i%12)
+            rows.append({"example_id":str(i),"messages":[],"metadata":{"source_group_id":group,"review_status":"machine_validated_draft","publication_allowed":False}})
+        parts=split_sft(rows); self.assertEqual([],validate_splits(rows,parts))
+
+    def test_rag_corpus_covers_empty_and_nonempty_pages(self):
+        from scripts.quantaedge_layers_6_8 import write_jsonl, read_jsonl
+        with tempfile.TemporaryDirectory() as temp:
+            source={"pages":[{"page_number":1,"text":"evidence","text_sha256":sha("evidence"),"has_text":True},
+                             {"page_number":2,"text":"","text_sha256":sha(""),"has_text":False}],
+              "page_count":2,"book_id":"b","source_pdf_sha256":"a"*64,"class_no":6,"subject":"science","language":"en",
+              "title":"Book","source_url":"https://ncert.nic.in/x","edition":"Reprint"}
+            path=Path(temp)/"rag.jsonl"; write_rag(path,source); rows=read_jsonl(path)
+            self.assertEqual(2,len(rows)); self.assertEqual("evidence",rows[0]["text"])
+            self.assertFalse(rows[1]["eligible_for_retrieval"]); self.assertTrue(all(r["publication_allowed"] is False for r in rows))
+
+    def test_existing_training_script_native_ollama_has_no_api_key(self):
+        captured={}
+        def open_(request,timeout=120):
+            captured["url"]=request.full_url; captured["headers"]={k.lower():v for k,v in request.header_items()}
+            captured["body"]=json.loads(request.data.decode())
+            return FakeResponse({"message":{"content":json.dumps({"examples":[{"example_type":"concept_explanation","student_message":"Why?","assistant_message":"Because.","source_pages":[1]}]})}})
+        ctx={"chapter":{"code":"ch1","title":"Test","pages":[{"page_number":1,"text":"Enough source context for a small test concept."}]},
+             "source":{"title":"Book","edition":"Reprint"},"curriculum":{"class_code":"6","subject_code":"science"}}
+        with patch("scripts.ai_training_dataset.urllib.request.urlopen",open_):
+            rows=request_examples(ctx,"en",1,"qwen2.5:1.5b","http://127.0.0.1:11434","",provider="ollama")
+        self.assertEqual(1,len(rows)); self.assertTrue(captured["url"].endswith("/api/chat"))
+        self.assertNotIn("authorization",captured["headers"]); self.assertEqual("json",captured["body"]["format"])
+
+
+    def test_resumes_completed_checkpoint_and_rejects_changed_source_text(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); book="ncert-c6-english-fecu1"; pdfhash="b"*64
+            pagesdir=root/"data"/"textbook-extractions"/"class-6"/"english"/"pages"
+            pagesdir.mkdir(parents=True)
+            text="Curiosity begins with careful observation. " * 8
+            source_path=pagesdir/"pages.jsonl"
+            row={"schema_version":1,"book_id":book,"class":"6","language":"english","subject":"Science",
+                 "asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,"asset_page_index":0,
+                 "source_book_page_number":1,"text":text,"review_status":"TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW"}
+            write_jsonl(source_path,[row])
+            write_json(pagesdir/"book.manifest.json",{"schema_version":1,"book_id":book,"class":"6","language":"english",
+                "subject":"Science","scope":"SUBJECT_BOOK","published":False,"asset_pdf_sha256":pdfhash,
+                "original_book_sha256":pdfhash,"page_count":1,"completed_pages":1,"source_page_start":1,
+                "text_jsonl":"pages.jsonl","source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12",
+                "title":"Curiosity","source_title":"Curiosity","edition":"Reprint 2026-27"})
+            ledger=root/"data"/"textbook-content-pipeline"/"class-6"/"books"/"curiosity"/"coverage-ledger.v1.json"
+            write_json(ledger,{"ledger_status":"COMPLETE","publication_allowed":False,
+                "source":{"source_book_id":book,"source_pdf_sha256":pdfhash}})
+            benchmark=root/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
+            write_json(benchmark,{"production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
+                "models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
+            args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",benchmark_report=None,
+                max_pages_per_segment=4,max_context_chars=7000,endpoint="http://127.0.0.1:11434",
+                max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False)
+            calls={"count":0}
+            def open_(request,timeout=180):
+                calls["count"]+=1
+                self.assertEqual("json",json.loads(request.data.decode())["format"])
+                return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
+            result=run_layers(args,opener=open_)
+            self.assertEqual(1,calls["count"])
+            self.assertEqual(1,result["segments_completed"])
+            self.assertEqual("DRAFT_REQUIRES_HUMAN_REVIEW",result["overall_status"])
+            again=run_layers(args,opener=open_)
+            self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
+            self.assertEqual(1,again["segments_completed"])
+            row["text"]="Changed extraction text while retaining the PDF SHA."
+            write_jsonl(source_path,[row])
+            with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):
+                run_layers(args,opener=open_)
+
+if __name__=="__main__": unittest.main()

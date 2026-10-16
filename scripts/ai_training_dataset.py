@@ -5,7 +5,7 @@ Uses only the Python standard library. Source extraction bundles stay local/priv
 Generated examples are original drafts; this tool never marks them human-approved.
 """
 from __future__ import annotations
-import argparse, difflib, hashlib, json, os, re, subprocess, sys, time, urllib.error, urllib.request
+import argparse, difflib, hashlib, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -67,7 +67,7 @@ def check_source(bundle: Any, path: Path) -> dict[str, Any]:
  usable=[{"code":code,"title":ch.get("title"),"pages":page_by_chapter.get(code,[])} for code,ch in valid_chapters.items() if page_by_chapter.get(code)]
  if not usable: raise ValueError(f"{path}: no mapped chapters have usable extracted text")
  return {"path":str(path),"class_code":cls,"subject_code":sub,"source":s,"curriculum":c,"chapters":usable}
-def request_examples(context: dict[str,Any], language: str, batch: int, model: str, base_url: str, api_key: str) -> list[dict[str,Any]]:
+def request_examples(context: dict[str,Any], language: str, batch: int, model: str, base_url: str, api_key: str, provider: str = "ollama") -> list[dict[str,Any]]:
  ch=context["chapter"]; src=context["source"]; cur=context["curriculum"]
  all_pages=ch["pages"]
  if len(all_pages) > 6:
@@ -84,16 +84,29 @@ Source: {src['title']}, edition {src['edition']}.
 Context:
 {page_text}"""
 
- url=base_url.rstrip("/")+"/v1/chat/completions"
- body={"model":model,"temperature":0.35,"messages":[{"role":"system","content":SYSTEMS[language]},{"role":"user","content":prompt}],"response_format":{"type":"json_object"}}
- # JSON object wrapper avoids providers that reject top-level JSON arrays.
- body["messages"][1]["content"] += "\nReturn a JSON object with one key named examples whose value is the array."
- req=urllib.request.Request(url,data=json.dumps(body).encode(),headers={"Content-Type":"application/json","Authorization":"Bearer "+api_key},method="POST")
+ messages=[{"role":"system","content":SYSTEMS[language]},{"role":"user","content":prompt+"\nReturn a JSON object with one key named examples whose value is the array."}]
+ if provider == "ollama":
+  parsed_url=urllib.parse.urlparse(base_url)
+  if parsed_url.scheme != "http" or parsed_url.hostname not in {"localhost","127.0.0.1","::1"} or parsed_url.username or parsed_url.password:
+   raise ValueError("Ollama generation must use unauthenticated loopback HTTP.")
+  url=base_url.rstrip("/")+"/api/chat"
+  body={"model":model,"stream":False,"format":"json","options":{"temperature":0.35},"messages":messages}
+  headers={"Content-Type":"application/json"}
+ elif provider == "openai-compatible":
+  url=base_url.rstrip("/")+"/v1/chat/completions"
+  body={"model":model,"temperature":0.35,"messages":messages,"response_format":{"type":"json_object"}}
+  headers={"Content-Type":"application/json"}
+  if api_key: headers["Authorization"]="Bearer "+api_key
+ else:
+  raise ValueError("provider must be ollama or openai-compatible")
+ req=urllib.request.Request(url,data=json.dumps(body,ensure_ascii=False).encode("utf-8"),headers=headers,method="POST")
  last=None
  for attempt in range(5):
   try:
    with urllib.request.urlopen(req,timeout=120) as response: payload=json.loads(response.read().decode("utf-8"))
-   content=payload["choices"][0]["message"]["content"]
+   content=((payload.get("message") or {}).get("content") if provider == "ollama"
+            else (payload.get("choices") or [{}])[0].get("message",{}).get("content"))
+   if not isinstance(content,str): raise ValueError("provider response has no message content")
    parsed=json.loads(content)
    result=parsed.get("examples") if isinstance(parsed,dict) else None
    if not isinstance(result,list): raise ValueError("provider response must contain an examples array")
@@ -126,12 +139,30 @@ def commit_and_push_dataset(path: Path) -> None:
  print(f"Committed and pushed dataset to main: {relative.as_posix()}")
 
 def cmd_generate(a: argparse.Namespace) -> int:
- if not a.generate or not a.confirm_external_processing:
-  print("DRY RUN: no provider request made. Re-run with --generate --confirm-external-processing after reviewing provider privacy/rights.")
-  print(f"Input directory: {a.input_dir}; target: {a.target}; batch size: {a.batch_size}")
+ if not a.generate:
+  print("DRY RUN: no model request made. Use --generate to run the selected provider.")
+  print(f"Provider: {a.provider}; input directory: {a.input_dir}; target: {a.target}; batch size: {a.batch_size}")
   return 0
- key=os.getenv("OPENAI_API_KEY","").strip(); base=os.getenv("OPENAI_API_BASE_URL","https://api.openai.com").strip(); model=os.getenv("QUANTAEDGE_TRAINING_DATA_MODEL","").strip()
- if not key or not model: raise ValueError("Set OPENAI_API_KEY and QUANTAEDGE_TRAINING_DATA_MODEL in the local environment.")
+ provider=a.provider
+ model=(a.model or os.getenv("QUANTAEDGE_TRAINING_DATA_MODEL","").strip() or ("qwen2.5:1.5b" if provider == "ollama" else ""))
+ if not model: raise ValueError("Set --model or QUANTAEDGE_TRAINING_DATA_MODEL.")
+ if provider == "ollama":
+  base=(a.endpoint or os.getenv("QUANTAEDGE_OLLAMA_URL","http://127.0.0.1:11434")).strip()
+  parsed=urllib.parse.urlparse(base)
+  if parsed.scheme != "http" or parsed.hostname not in {"localhost","127.0.0.1","::1"} or parsed.username or parsed.password:
+   raise ValueError("The Ollama provider must use unauthenticated loopback HTTP; no hosted endpoint is allowed in local mode.")
+  key=""
+ elif provider == "openai-compatible":
+  base=(a.endpoint or os.getenv("OPENAI_API_BASE_URL","https://api.openai.com")).strip()
+  parsed=urllib.parse.urlparse(base)
+  if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+   raise ValueError("External OpenAI-compatible endpoints must use HTTPS without URL-embedded credentials.")
+  if not a.confirm_external_processing:
+   raise ValueError("Pass --confirm-external-processing only after reviewing provider privacy/rights.")
+  key=os.getenv("OPENAI_API_KEY","").strip()
+  if not key: raise ValueError("OPENAI_API_KEY is required only for an explicitly selected external provider.")
+ else:
+  raise ValueError("Unknown provider selection.")
  paths=sorted(a.input_dir.rglob("*.json"))
  if not paths: raise ValueError(f"No extraction JSON files found in {a.input_dir}. Keep raw bundles private; see docs/ai/training-dataset-plan.md.")
  sources=[]
@@ -157,7 +188,7 @@ def cmd_generate(a: argparse.Namespace) -> int:
   ctx=item["source_bundle"]
   calls+=1
   gen_context={"chapter":item["chapter"],"source":ctx["source"],"curriculum":ctx["curriculum"]}
-  try: generated=request_examples(gen_context,lang,min(a.batch_size,a.target-count),model,base,key)
+  try: generated=request_examples(gen_context,lang,min(a.batch_size,a.target-count),model,base,key,provider=provider)
   except RuntimeError as e:
    print(str(e),file=sys.stderr); continue
   page_nums=set(gen_context.get("context_pages",[]))
@@ -171,7 +202,7 @@ def cmd_generate(a: argparse.Namespace) -> int:
    row={"messages":[{"role":"system","content":SYSTEMS[lang]},{"role":"user","content":student},{"role":"assistant","content":assistant}],
     "metadata":{"class_code":ctx["class_code"],"subject_code":ctx["subject_code"],"language":lang,"chapter_code":item["chapter"]["code"],"example_type":et,
     "source_id":sha(str(ctx["source"]["url"])+"|"+str(ctx["source"]["pdf_sha256"]))[:24],"source_title":ctx["source"]["title"],"source_url":ctx["source"]["url"],"source_edition":ctx["source"]["edition"],
-    "source_pdf_sha256":ctx["source"]["pdf_sha256"],"source_pages":sorted(set(pages)),"generation_model":model,"review_status":"machine_validated_draft","rights_status":"pending_review","duplicate_group_id":None}}
+    "source_pdf_sha256":ctx["source"]["pdf_sha256"],"source_pages":sorted(set(pages)),"generation_model":model,"generation_provider":provider,"review_status":"machine_validated_draft","rights_status":"pending_review","duplicate_group_id":None}}
    row["example_id"]="qe-"+sha(json.dumps(row["messages"],ensure_ascii=False,sort_keys=True)+json.dumps(row["metadata"],sort_keys=True))[:24]
    if row["example_id"] not in seen:
     existing.append(row); seen.add(row["example_id"]); count+=1
@@ -295,7 +326,7 @@ def cmd_validate(a:argparse.Namespace)->int:
  return 0
 def main()->int:
  p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest="command",required=True)
- g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="commit only the generated JSONL file and push it to origin/main after generation; requires a clean, synced local main"); g.set_defaults(func=cmd_generate)
+ g=sub.add_parser("generate"); g.add_argument("--input-dir",type=Path,default=Path("private-review")); g.add_argument("--output",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); g.add_argument("--target",type=int,default=25000); g.add_argument("--batch-size",type=int,default=5); g.add_argument("--max-api-calls",type=int,default=5000); g.add_argument("--provider",choices=("ollama","openai-compatible"),default=os.getenv("QUANTAEDGE_TRAINING_PROVIDER","ollama")); g.add_argument("--endpoint",default=""); g.add_argument("--model",default=""); g.add_argument("--generate",action="store_true"); g.add_argument("--confirm-external-processing",action="store_true"); g.add_argument("--commit-and-push",action="store_true",help="commit only the generated JSONL file and push it to origin/main after generation; requires a clean, synced local main"); g.set_defaults(func=cmd_generate)
  b=sub.add_parser("build"); b.add_argument("--input",type=Path,default=Path("data/ai-training/generated/drafts.jsonl")); b.add_argument("--output-dir",type=Path,default=Path("data/ai-training/datasets")); b.add_argument("--include-drafts",action="store_true"); b.set_defaults(func=cmd_build)
  v=sub.add_parser("validate"); v.add_argument("--dataset-dir",type=Path,default=Path("data/ai-training/datasets")); v.add_argument("--require-approved",action="store_true"); v.set_defaults(func=cmd_validate)
  a=p.parse_args()

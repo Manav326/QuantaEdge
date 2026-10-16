@@ -1,22 +1,41 @@
 # QuantaEdge eight-layer textbook content pipeline
 
-Each class run is isolated by stable book ID and exact whole-book PDF SHA-256 edition. No automatic publishing; every generated output remains review-only.
+## Layer contracts
 
-1. **Source visual inventory** — every PDF page, embedded-image occurrence, and rendered page preview with hashes and source-page linkage.
-2. **Exhaustive V3 candidate preparation** — every eligible item is represented. Candidate packs are review views, not a filter; no total candidate cap.
-3. **Review catalog and attachment manifests** — admin catalog, source lineage, and immutable bundle references.
-4. **Visual AI analysis** — Ollama analyzes all embedded-image and page-preview rows. A per-invocation batch size is only a checkpoint interval. Checkpoints include model/prompt and asset hashes.
-5. **Evidence and correction ledger** — every page, text record, visual row, analysis result and accepted correction is linked. Corrections create a separate effective sidecar and rebuild Layer 5 without rerunning Layer 4.
-6. **Curriculum/concept map** — chapter/section/topic/microtopic/concept map, prerequisites, bilingual alignment, advanced concepts and gap reporting. NOT_STARTED until implemented.
-7. **Premium course generation** — grounded bilingual explanations, worked examples, activities, relevant visuals, recap and questions; completeness validation before draft import. NOT_STARTED until implemented.
-8. **AI tutor datasets** — a source-grounded retrieval corpus and a separate conversational fine-tuning corpus with provenance, deduplication and train/validation/test separation. NOT_STARTED until implemented.
+Every run is bound to a stable book ID and the SHA-256 of the exact complete-book PDF edition. A checkpoint from another edition is never silently reused. All generated assets are experimental review-only candidates; no stage publishes to student delivery.
+
+1. Source visual inventory: every original PDF page, embedded-image occurrence and page preview with hashes and source-page linkage.
+2. Exhaustive visual candidate preparation: eligible assets are represented; batch size is a checkpoint interval rather than a total candidate cap.
+3. Review catalog and attachment manifests: source lineage and immutable bundle references.
+4. Visual AI analysis: local Ollama processes embedded-image and page-preview rows.
+5. Evidence/correction ledger: each page, text record, visual row, analysis and accepted correction is linked. Human corrections are sidecars; raw Layer 4 results remain unchanged.
+6. Curriculum/concept map: the Layers 6–8 script maps every bounded segment to chapter/topic/microtopic/concept candidates, bilingual terms, objectives and source pages. Uncertain chapter IDs remain unresolved, not guessed.
+7. Premium course generation: the same generation result produces a structured bilingual lesson candidate with explanation, worked example, recap, two bilingual MCQs, objective references and page-level source links. Contract checks run before a candidate is written.
+8. AI tutor datasets: a deterministic page-level NCERT retrieval corpus is separate from conversational fine-tuning/SFT examples. SFT rows are deduplicated by stable IDs and grouped into non-overlapping train/validation/test splits. Neither dataset is automatically approved, fine-tuned or served.
+
+## Native Ollama and model benchmark
+
+The script scripts/quantaedge_layers_6_8.py uses Ollama's native /api/chat endpoint and JSON mode. The existing scripts/ai_training_dataset.py generator also defaults to native loopback Ollama. Local generation does not require an OpenAI API key. An API key is required only when an operator explicitly chooses the external OpenAI-compatible provider; that branch requires HTTPS and explicit confirmation of external processing.
+
+The manual workflow .github/workflows/quantaedge-layers-6-8.yml defaults to benchmark-only. It compares qwen2.5:1.5b and qwen2.5:3b on the same three Class 6 NCERT Science (Curiosity) segments with the same prompt. Its committed report records JSON/schema validity, structured-lesson validity, page-citation validity and CPU runner latency. It intentionally leaves production_model null and production_model_selection PENDING_HUMAN_REVIEW; it never automatically selects a production model. A small sample is a screening benchmark, not proof of educational quality.
+
+## Resource budget, persistence and resumability
+
+- Do not run all 18 Class 6–8 subject/language whole books in one hosted runner job. Dispatch one exact source book ID per run.
+- GitHub-hosted runners are CPU-only for this design; assume no GPU and bounded RAM, disk and runtime. The job has a 360-minute hard ceiling, supports at most 20 model calls per generation run and defaults to six. Benchmark runs test at most three excerpts per model and pull only the configured candidate models.
+- Hosted runners are ephemeral: model weights may need to be downloaded again on every workflow invocation. Durable state is the source-bound Git checkpoint committed to main, not the runner's Ollama volume.
+- Context is bounded. Oversized page text is split into lossless fragments, and the segment builder checks that no source characters were dropped.
+- JSON/JSONL writes use temporary files and atomic replacement. Successful segments are checkpointed after a small batch; resume skips successful records. Failed output is retryable. A PDF, extraction JSONL, Layer 5 ledger, model or prompt fingerprint mismatch fails closed rather than silently mixing editions.
+- Retrieval output has one row per original PDF page, including explicit non-retrievable rows for pages with no extractable text. SFT output is separate from retrieval text, and source groups do not cross train/validation/test splits.
+- Budget exhaustion is resumable IN_PROGRESS, not false completion. Even after machine checks pass, outputs stay DRAFT_REQUIRES_HUMAN_REVIEW and publication_allowed remains false.
+
+## Execution order
+
+1. Run Layers 1–5 and verify the source's Layer 5 coverage ledger is COMPLETE for the exact whole-book PDF hash.
+2. Dispatch the Layers 6–8 workflow in benchmark mode and review the committed comparison and sample output quality.
+3. Decide the production model separately after checking Hindi fluency, factual/math correctness, answer keys, source linkage and practical latency. Run mode requires a successful benchmark sample and a separate explicit experimental-draft acknowledgement.
+4. Use one book ID per run and repeat the same inputs until the per-book manifest has no pending segments. Review the map, lessons and both datasets; do not publish or fine-tune drafts.
 
 ## Correction overlay
 
-Path: data/textbook-content-pipeline/class-N/books/BOOK_SLUG/visual-analysis-corrections.v1.json
-
-Schema: quantaedge.visual-analysis-corrections.v1. Top-level source_pdf_sha256 and corrections list. Each correction has asset_id, asset_sha256, status (PROPOSED/ACCEPTED/REJECTED). ACCEPTED also requires reviewer, reason and a supported analysis_patch. Edition or asset hash mismatch is a hard error. Raw Layer 4 output is never modified.
-
-## Current execution scope
-
-The class-wide workflow now defaults to Layers 1–5. Layers 6–8 must be implemented as additional stages that consume these versioned contracts; their status is explicitly NOT_STARTED, not complete. Layer 5 remains INCOMPLETE whenever source text or any eligible visual analysis is missing or failed.
+The visual correction overlay remains at data/textbook-content-pipeline/class-N/books/BOOK_SLUG/visual-analysis-corrections.v1.json using schema quantaedge.visual-analysis-corrections.v1. Accepted entries require exact PDF/asset hashes, reviewer, reason and supported patch. Edition or asset mismatches fail closed, and raw visual analysis is not mutated.
