@@ -31,7 +31,7 @@ The manual workflow .github/workflows/quantaedge-layers-6-8.yml defaults to benc
 
 ## Recovering the existing Class 6 Curiosity Layer 5 checkpoint
 
-The one-time workflow `.github/workflows/quantaedge-layers-1-5-resume.yml` is deliberately triggered by a separate marker-file commit under `private-review/`. It retries the existing failed vision checkpoint using local `qwen2.5vl:3b` with an 8,192-token context, commits every small batch to `main`, and rebuilds the effective analysis plus actual Layer 5 ledger for the exact Curiosity PDF hash. It never writes `COMPLETE` itself: the ledger builder computes completeness from every page and eligible visual, and the workflow fails if any gap remains. A failed/incomplete run leaves its raw checkpoint and ledger committed for inspection/retry.
+The one-time workflow `.github/workflows/quantaedge-layers-1-5-resume.yml` is deliberately triggered by a separate marker-file commit under `.github/triggers/`. It retries the existing failed vision checkpoint using local `qwen2.5vl:3b` with an 8,192-token context, commits every small batch to `main`, and rebuilds the effective analysis plus actual Layer 5 ledger for the exact Curiosity PDF hash. It never writes `COMPLETE` itself: the ledger builder computes completeness from every page and eligible visual, and the workflow fails if any gap remains. A failed/incomplete run leaves its raw checkpoint and ledger committed for inspection/retry.
 
 ## Execution order
 

@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - "private-review/trigger-layers1-5-class6-curiosity.txt"
+      - ".github/triggers/layers1-5-class6-curiosity.trigger"
   workflow_dispatch:
 
 permissions:
