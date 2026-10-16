@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 2291,
     "eligible_visual_asset_rows": 2291,
-    "raw_analysis_result_rows": 50,
-    "successful_visual_analyses": 48,
-    "missing_visual_analyses": 2241,
+    "raw_analysis_result_rows": 75,
+    "successful_visual_analyses": 73,
+    "missing_visual_analyses": 2216,
     "failed_visual_analyses": 2,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 2243,
+    "unresolved_count": 2218,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -9137,9 +9137,44 @@
       "asset_path": "page-0007.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the scientific heritage and encouraging readers to think like a scientist.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "applications, showing how science has contributed to societal development.",
+          "Our scientific heritage offers information about institutions which have contributed to the progress of scientific temper and any personality or their works of 'heritage level repute'.",
+          "You will find a Think like a scientist section in some chapters, where you can explore the experiment further by making modifications or trying different approaches. It will help you to investigate more deeply and allow new questions to emerge in your minds.",
+          "Some chapters also feature a section called Be a scientist, where you can learn about the contributions of Indian and international scientists related to the topic. These sections include brief biographies and show how scientists have made a difference. Additionally, an interesting element that has ",
+          "The Snapshots section provides the summary of a chapter, which offers an overview of the chapter's main points, reinforcing the key ideas discussed. Each chapter includes Keywords in between the text that highlight key concepts and steps in science, helping learners understand ideas and think critic",
+          "Keep the curiosity alive includes a range of exercises, from pictorial questions and puzzles to multiple choice questions, offering a challenging and engaging experience. These questions also help assess the competencies developed by learners in each chapter. We recommend teachers to use questions s"
+        ],
+        "concepts": [
+          "scientific heritage",
+          "scientific temper",
+          "personality",
+          "heritage level repute",
+          "Think like a scientist",
+          "Be a scientist",
+          "Indian and international scientists",
+          "NEP 2020",
+          "Snapshots",
+          "Keywords",
+          "scientific activities",
+          "curiosity",
+          "exercises",
+          "pictorial questions",
+          "puzzles",
+          "multiple choice questions",
+          "competencies",
+          "evaluation"
+        ],
+        "context_relation": "The page discusses the educational content of a textbook, focusing on the scientific heritage, encouraging readers to think like a scientist, and providing exercises to assess competencies.",
+        "limitations": [
+          "The page does not provide specific examples or details about the exercises or the content of the chapters."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9155,9 +9190,18 @@
       "asset_path": "assets/a80610c3ae132d907370e10793a914273693686e3814ce0f1a9d8f25ba6eb291.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a large piece of paper or a book, possibly presenting or showing something.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a student or teacher presenting information, possibly related to the educational activities mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the content of the paper or book being held."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9173,9 +9217,18 @@
       "asset_path": "assets/a80610c3ae132d907370e10793a914273693686e3814ce0f1a9d8f25ba6eb291.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a large piece of paper or a book, possibly presenting or showing something.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a student or teacher presenting information, possibly related to the educational activities mentioned in the text.",
+        "limitations": [
+          "The image does not provide specific details about the content of the paper or book being held."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9191,9 +9244,16 @@
       "asset_path": "assets/d608849bb6a018d5a6452e7fcb1f9d78b83490c2d1836bc92e8cab179756c30e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a large green hexagon.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9209,9 +9269,18 @@
       "asset_path": "assets/d608849bb6a018d5a6452e7fcb1f9d78b83490c2d1836bc92e8cab179756c30e.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A person holding a large green octagonal object.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to educational content, possibly a textbook illustration.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or activities it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9227,9 +9296,16 @@
       "asset_path": "assets/1f9e7dd9f724e6db77db9ee60253d3cad4b0a4629748b37a08a66e6acd6737a2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a yellow board.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to educational content, specifically a cartoon character holding a board.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9245,9 +9321,16 @@
       "asset_path": "assets/1f9e7dd9f724e6db77db9ee60253d3cad4b0a4629748b37a08a66e6acd6737a2.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a yellow board.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to educational content, specifically a cartoon character holding a board.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9263,9 +9346,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9281,9 +9373,31 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "The image is a black and white page from a textbook, possibly a page from a science or society textbook. The page contains text that discusses the importance of interaction with experts, teachers, parents, and the community in educational activities.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "A key feature of the book is Discover, design, and debate, which",
+          "includes activities/projects designed to encourage interaction with",
+          "experts, teachers, parents, and the community. Students are",
+          "encouraged to gather diverse information and"
+        ],
+        "concepts": [
+          "interaction",
+          "experts",
+          "teachers",
+          "parents",
+          "community",
+          "educational activities",
+          "diverse information"
+        ],
+        "context_relation": "The text discusses the importance of interaction with experts, teachers, parents, and the community in educational activities.",
+        "limitations": [
+          "The image is a black and white page, so details such as colors, images, or specific text are not visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9299,9 +9413,51 @@
       "asset_path": "page-0008.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the features of a science book, including interactive activities and projects.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "A key feature of the book is Discover, design, and debate, which",
+          "includes activities/projects designed to encourage interaction with",
+          "experts, teachers, parents, and",
+          "the community. Students are",
+          "encouraged to gather diverse",
+          "information and draw their own",
+          "conclusions. These support the",
+          "development of thoughtful, active,",
+          "and compassionate learners. It makes science more fun, meaningful,",
+          "and connected to life—as it no longer remains about reading and",
+          "memorising, but also about doing. Some projects may require prior",
+          "preparation.",
+          "Friends! Science is full of wonders, and there is always more to",
+          "discover. That is why the Grade 8 textbook also ends with a page called",
+          "It’s never the end, my friend!",
+          "The textbook is one way to learn, but learners should also explore",
+          "and observe their surroundings. Information and Communication",
+          "Technology (ICT) can further enhance learning when used",
+          "appropriately. QR codes in the textbook provide access to interactive",
+          "resources like videos, puzzles, games, quizzes, audio, and additional",
+          "content, allowing learners to explore at their own pace.",
+          "Now, with Curiosity in your hands, keep exploring, keep questioning,",
+          "and never stop being curious.",
+          "TEXTBOOK DEVELOPMENT TEAM",
+          "viii"
+        ],
+        "concepts": [
+          "Discover, design, and debate",
+          "Interactive activities",
+          "Information and Communication Technology (ICT)",
+          "QR codes",
+          "Curiosity"
+        ],
+        "context_relation": "The page discusses the features of a science textbook, including interactive activities and projects.",
+        "limitations": [
+          "The page does not provide specific details about the textbook or its content.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9317,9 +9473,40 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook listing the members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning",
+          "Material Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning",
+          "and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University, (Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the Prime Minister (EAC-PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished Professor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee",
+          "NSTC",
+          "Members of the NSTC",
+          "Chairperson",
+          "Co-Chairperson",
+          "Acclaimed Writer and Educationist",
+          "Economic Advisory Council to the Prime Minister",
+          "Former Director General, CSIR",
+          "Distinguished Professor",
+          "University of British Columbia"
+        ],
+        "context_relation": "The page is part of an educational textbook, listing the members of the NSTC.",
+        "limitations": [
+          "The page does not contain any visual elements.",
+          "The page does not provide any specific information about the NSTC's role or responsibilities."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9335,9 +9522,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "No visible content or text present in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9353,9 +9549,54 @@
       "asset_path": "page-0009.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "List of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "table",
+        "visible_text": [
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University, (Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council to the Prime Minister (EAC-PM)",
+          "5. Shekhar Mande, Former Director General, CSIR; Distinguished Professor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia, Canada",
+          "7. Shankar Mahadevan, Music Maestro, Mumbai",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton Academy, Bengaluru",
+          "9. Michel Danino, Visiting Professor, IIT-Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General, HIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bharatiya Bhasha Samiti, Ministry of Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council to the Prime Minister (EAC-PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office, NSTC",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education in Social Sciences, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages, NCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum Studies and Development, NCERT, (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Chancellor",
+          "Professor",
+          "Economic Advisory Council to the Prime Minister (EAC-PM)",
+          "Distinguished Professor",
+          "Music Maestro",
+          "Director",
+          "Visiting Professor",
+          "IAS (Retd.)",
+          "Head",
+          "Member",
+          "Department of Education",
+          "Department of Science and Mathematics",
+          "Department of Languages",
+          "Department of Curriculum Studies and Development"
+        ],
+        "context_relation": "The list of members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is limited to the members mentioned in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9371,9 +9612,16 @@
       "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page with a light green background and small, scattered black lines.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9389,9 +9637,18 @@
       "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9407,9 +9664,16 @@
       "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a gradient effect transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background or cover design for a book or educational content.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9425,9 +9689,16 @@
       "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light orange to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9443,9 +9714,18 @@
       "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific text or content visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9461,9 +9741,18 @@
       "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9479,9 +9768,18 @@
       "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with a warm, golden color transitioning from light to dark.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9497,9 +9795,26 @@
       "asset_path": "assets/23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color",
+          "beige",
+          "brown"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9515,9 +9830,19 @@
       "asset_path": "assets/f0ceac7c356550391c15d3d95b6d8413b36571dd39e1f2abfe89d00bb8195012.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gradient background transitioning from beige to yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page does not contain any text or images.",
+          "The page is not a diagram, chart, graph, table, map, cartoon, photo, or equation."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9533,9 +9858,21 @@
       "asset_path": "assets/9e94478c8e82a9b36758bb0c2406569431e81a5d3f997f8e0e1b9893422524be.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A yellow background with a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "yellow background",
+          "black horizontal line"
+        ],
+        "context_relation": "background",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9551,9 +9888,18 @@
       "asset_path": "assets/f6316d5187ab07d2a43a700ce37bd5c0de7f5433105f616c19b6a81b75ffa68e.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A horizontal gradient bar with a golden color transitioning to a lighter shade.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual element in a textbook, likely used to illustrate a concept or serve as a decorative element.",
+        "limitations": [
+          "The image does not contain any text or labels that provide specific information about the concept it represents."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -9569,9 +9915,19 @@
       "asset_path": "assets/d979c6cba3c257d639a05c2274f741c514c6bc6a9b93338e3674599c00cede0a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blurred, gradient background with warm colors transitioning from light orange to a darker shade of orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "Unclear background details",
+          "No visible text or objects"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
