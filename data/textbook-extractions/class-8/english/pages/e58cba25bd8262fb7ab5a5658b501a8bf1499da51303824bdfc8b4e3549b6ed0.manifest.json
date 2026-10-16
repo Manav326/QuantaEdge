@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-16T03:38:33.230983+00:00",
+  "bundle_file": "ncert-c8-english-hegp2--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c8-english-hegp2--whole-book.pdf",
+  "asset_pdf_sha256": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0",
+  "original_book_sha256": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0",
+  "book_id": "ncert-c8-english-hegp2",
+  "title": "Ganita Prakash Part-II",
+  "source_title": "Ganita Prakash Part-II",
+  "source_url": "https://ncert.nic.in/textbook.php?hegp2=0-7",
+  "edition": "UNVERIFIED: official NCERT bundle; dated imprint not detected automatically",
+  "subject": "Mathematics",
+  "class": "8",
+  "language": "english",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 192,
+  "completed_pages": 192,
+  "pages_newly_extracted": 192,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 187,
+    "NO_EXTRACTABLE_TEXT_REVIEW": 3,
+    "LOW_TEXT_REVIEW": 2
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "e58cba25bd8262fb7ab5a5658b501a8bf1499da51303824bdfc8b4e3549b6ed0.jsonl",
+  "published": false
+}

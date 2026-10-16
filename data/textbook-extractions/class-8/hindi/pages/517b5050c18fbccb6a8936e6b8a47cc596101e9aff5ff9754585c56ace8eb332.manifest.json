@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-16T03:37:49.824050+00:00",
+  "bundle_file": "ncert-c8-hindi-hhcu1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c8-hindi-hhcu1--whole-book.pdf",
+  "asset_pdf_sha256": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332",
+  "original_book_sha256": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332",
+  "book_id": "ncert-c8-hindi-hhcu1",
+  "title": "Jigyasa",
+  "source_title": "Jigyasa",
+  "source_url": "https://ncert.nic.in/textbook.php?hhcu1=0-13",
+  "edition": "UNVERIFIED: official NCERT bundle; dated imprint not detected automatically",
+  "subject": "Science",
+  "class": "8",
+  "language": "hindi",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 248,
+  "completed_pages": 248,
+  "pages_newly_extracted": 248,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 245,
+    "NO_EXTRACTABLE_TEXT_REVIEW": 1,
+    "NO_DEVANAGARI_REVIEW": 2
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "517b5050c18fbccb6a8936e6b8a47cc596101e9aff5ff9754585c56ace8eb332.jsonl",
+  "published": false
+}

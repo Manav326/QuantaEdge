@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "extractor_version": "quantaedge-pymupdf-text-v1",
-  "created_at_utc": "2026-10-16T02:57:05.118602+00:00",
+  "created_at_utc": "2026-10-16T03:38:20.741679+00:00",
   "bundle_file": "ncert-c7-english-gecu1--whole-book.pdf.json",
   "asset_pdf_filename": "ncert-c7-english-gecu1--whole-book.pdf",
   "asset_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",

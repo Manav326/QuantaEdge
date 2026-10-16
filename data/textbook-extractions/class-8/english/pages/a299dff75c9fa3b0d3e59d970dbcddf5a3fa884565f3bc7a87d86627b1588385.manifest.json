@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-16T03:38:31.365119+00:00",
+  "bundle_file": "ncert-c8-english-hegp1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c8-english-hegp1--whole-book.pdf",
+  "asset_pdf_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+  "original_book_sha256": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385",
+  "book_id": "ncert-c8-english-hegp1",
+  "title": "Ganita Prakash Part-I",
+  "source_title": "Ganita Prakash Part-I",
+  "source_url": "https://ncert.nic.in/textbook.php?hegp1=0-7",
+  "edition": "Reprint 2026-27",
+  "subject": "Mathematics",
+  "class": "8",
+  "language": "english",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 263,
+  "completed_pages": 263,
+  "pages_newly_extracted": 263,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 259,
+    "LOW_TEXT_REVIEW": 4
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "a299dff75c9fa3b0d3e59d970dbcddf5a3fa884565f3bc7a87d86627b1588385.jsonl",
+  "published": false
+}
