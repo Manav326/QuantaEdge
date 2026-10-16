@@ -138,13 +138,19 @@ jobs:
           owner="$(printf '%s' "$GITHUB_REPOSITORY_OWNER" | tr '[:upper:]' '[:lower:]')"
           image_prefix="ghcr.io/$owner/quantaedge-textbooks"
           repair_queue="data/textbook-cache/repair-queue.json"
-          queue_added="false"
           if [ "$EVENT_NAME" = "push" ]; then
-            if jq -e '((.head_commit.added // []) + (.head_commit.modified // [])) | any(. == "data/textbook-cache/repair-queue.json" or . == ".github/workflows/textbook-cache.yml")' "$GITHUB_EVENT_PATH" >/dev/null; then
-              queue_added="true"
+            # Fail closed: a push-triggered run may ONLY process these five books.
+            # Never fall through to the general publisher for an implicit full-catalog scan.
+            if [ ! -f "$repair_queue" ] || ! jq -e '
+              .enabled == true
+              and (.books | type == "array")
+              and (.books | length == 5)
+              and ([.books[] | "\(.class_no):\(.language):\(.book_code)"] | sort)
+                  == (["7:english:gegp2","8:hindi:hhgp1","8:hindi:hhgp2","8:hindi:hhcu1","8:english:hegp2"] | sort)
+            ' "$repair_queue" >/dev/null; then
+              echo "Refusing an implicit all-books publish on push: repair queue must contain exactly the five approved books."
+              exit 1
             fi
-          fi
-          if [ "$EVENT_NAME" = "push" ] && [ "$queue_added" = "true" ] && [ -f "$repair_queue" ] && jq -e '.enabled == true and (.books | type == "array")' "$repair_queue" >/dev/null; then
             echo "repair_only=true" >> "$GITHUB_OUTPUT"
             echo "Running targeted NCERT repair queue. Each verified whole book is published to its existing class/medium :latest image before moving to the next title."
             failures=0
@@ -326,7 +332,7 @@ jobs:
           if [ "$failures" -ne 0 ]; then exit 1; fi
 
       - name: Upload Class 6 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-6-hindi-${{ github.run_number }}
@@ -338,7 +344,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 6 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-6-english-${{ github.run_number }}
@@ -350,7 +356,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 7 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-7-hindi-${{ github.run_number }}
@@ -362,7 +368,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 7 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-7-english-${{ github.run_number }}
@@ -374,7 +380,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 8 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-8-hindi-${{ github.run_number }}
@@ -386,7 +392,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 8 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-8-english-${{ github.run_number }}
@@ -398,7 +404,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 9 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-9-hindi-${{ github.run_number }}
@@ -410,7 +416,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 9 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-9-english-${{ github.run_number }}
@@ -422,7 +428,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 10 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-10-hindi-${{ github.run_number }}
@@ -434,7 +440,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 10 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-10-english-${{ github.run_number }}
@@ -446,7 +452,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 11 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-11-hindi-${{ github.run_number }}
@@ -458,7 +464,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 11 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-11-english-${{ github.run_number }}
@@ -470,7 +476,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 12 Hindi textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-12-hindi-${{ github.run_number }}
@@ -482,7 +488,7 @@ jobs:
           retention-days: 90
 
       - name: Upload Class 12 English textbook ZIP
-        if: always() && steps.publish.outcome == 'success' && (github.event_name == 'push' || inputs.download_artifacts == true)
+        if: always() && steps.publish.outcome == 'success' && steps.publish.outputs.repair_only != 'true' && (github.event_name == 'push' || inputs.download_artifacts == true)
         uses: actions/upload-artifact@v4
         with:
           name: quantaedge-textbooks-class-12-english-${{ github.run_number }}
