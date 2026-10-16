@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "extractor_version": "quantaedge-pymupdf-text-v1",
+  "created_at_utc": "2026-10-16T02:56:29.888267+00:00",
+  "bundle_file": "ncert-c7-hindi-ghgp1--whole-book.pdf.json",
+  "asset_pdf_filename": "ncert-c7-hindi-ghgp1--whole-book.pdf",
+  "asset_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+  "original_book_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
+  "book_id": "ncert-c7-hindi-ghgp1",
+  "title": "Ganita Prakash(Hindi)",
+  "source_title": "Ganita Prakash(Hindi)",
+  "source_url": "https://ncert.nic.in/textbook.php?ghgp1=0-8",
+  "edition": "Reprint 2026-27",
+  "subject": "Mathematics",
+  "class": "7",
+  "language": "hindi",
+  "scope": "SUBJECT_BOOK",
+  "chapter_title": null,
+  "source_page_start": 1,
+  "page_count": 224,
+  "completed_pages": 224,
+  "pages_newly_extracted": 224,
+  "status_counts": {
+    "TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW": 217,
+    "LOW_TEXT_REVIEW": 6,
+    "NO_DEVANAGARI_REVIEW": 1
+  },
+  "content_state": "DRAFT_EXTRACTION_ONLY_REQUIRES_REVIEW",
+  "text_jsonl": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3.jsonl",
+  "published": false
+}
