@@ -6,11 +6,11 @@ on:
       class_no:
         description: "Class whose verified extraction artifact should be committed"
         type: choice
-        options: ["6", "7", "8"]
-        default: "6"
+        options: ["7", "8"]
+        default: "7"
         required: true
       source_run_id:
-        description: "Successful textbook extraction workflow run ID"
+        description: "Successful QuantaEdge GHCR Textbook Extraction Pilot run ID for the selected class"
         type: string
         default: ""
         required: true
@@ -34,19 +34,45 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Download selected class extraction artifact
+      - name: Confirm source run and download the selected class artifact
         env:
           GH_TOKEN: ${{ github.token }}
           CLASS_NO: ${{ inputs.class_no }}
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
         run: |
           set -euo pipefail
+
+          case "$CLASS_NO" in
+            7|8) ;;
+            *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
+          esac
+          [[ "$SOURCE_RUN_ID" =~ ^[0-9]+$ ]] || {
+            echo "::error::source_run_id must be the numeric ID of a successful extraction-pilot run."
+            exit 2
+          }
+
+          source_metadata="$(gh run view "$SOURCE_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json workflowName,status,conclusion,headBranch,url)"
+
+          if ! jq -e '
+            .workflowName == "QuantaEdge GHCR Textbook Extraction Pilot"
+            and .status == "completed"
+            and .conclusion == "success"
+            and .headBranch == "main"
+          ' >/dev/null <<< "$source_metadata"; then
+            echo "::error::Source run must be a successful, completed 'QuantaEdge GHCR Textbook Extraction Pilot' run on main."
+            jq '{workflowName,status,conclusion,headBranch,url}' <<< "$source_metadata"
+            exit 1
+          fi
+
           artifact_name="quantaedge-textbook-extraction-pilot-class-${CLASS_NO}-${SOURCE_RUN_ID}"
-          echo "Downloading ${artifact_name} from run ${SOURCE_RUN_ID}"
-          gh run download "${SOURCE_RUN_ID}" \
-            --repo "${GITHUB_REPOSITORY}" \
-            --name "${artifact_name}" \
-            --dir "${RUNNER_TEMP}/quantaedge-textbook-artifact"
+          echo "Downloading ${artifact_name} from ${SOURCE_RUN_ID}"
+          jq '{workflowName,status,conclusion,headBranch,url}' <<< "$source_metadata"
+          gh run download "$SOURCE_RUN_ID" \
+            --repo "$GITHUB_REPOSITORY" \
+            --name "$artifact_name" \
+            --dir "$RUNNER_TEMP/quantaedge-textbook-artifact"
 
       - name: Validate and copy source-bound extraction files
         env:
@@ -54,30 +80,35 @@ jobs:
           SOURCE_RUN_ID: ${{ inputs.source_run_id }}
         run: |
           set -euo pipefail
-          artifact_root="${RUNNER_TEMP}/quantaedge-textbook-artifact"
-          source_root="${artifact_root}/extracted/class-${CLASS_NO}"
-          test -d "${source_root}/english/pages"
-          test -d "${source_root}/hindi/pages"
+          case "$CLASS_NO" in
+            7|8) ;;
+            *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
+          esac
+
+          artifact_root="$RUNNER_TEMP/quantaedge-textbook-artifact"
+          source_root="$artifact_root/extracted/class-$CLASS_NO"
 
           for medium in english hindi; do
+            test -d "$source_root/$medium/pages"
+            test -s "$artifact_root/cache/class-$CLASS_NO/$medium/index.json"
             python scripts/validate_textbook_extraction_artifacts.py \
-              --registry-index "${artifact_root}/cache/class-${CLASS_NO}/${medium}/index.json" \
-              --extraction-dir "${source_root}/${medium}" \
-              --class-no "${CLASS_NO}" \
-              --language "${medium}"
+              --registry-index "$artifact_root/cache/class-$CLASS_NO/$medium/index.json" \
+              --extraction-dir "$source_root/$medium" \
+              --class-no "$CLASS_NO" \
+              --language "$medium"
           done
 
           mkdir -p data/textbook-extractions
-          rm -rf "data/textbook-extractions/class-${CLASS_NO}"
-          cp -R "${source_root}" "data/textbook-extractions/class-${CLASS_NO}"
+          rm -rf "data/textbook-extractions/class-$CLASS_NO"
+          cp -R "$source_root" "data/textbook-extractions/class-$CLASS_NO"
           mkdir -p data/textbook-extractions/reports
-          cp "${artifact_root}/reports/"*.json data/textbook-extractions/reports/ 2>/dev/null || true
+          cp "$artifact_root/reports/"*.json data/textbook-extractions/reports/ 2>/dev/null || true
           cat > data/textbook-extractions/README.md <<'EOF'
           # Textbook extraction artifacts
 
           Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.
           EOF
-          printf 'Mirrored class %s from workflow run %s\n' "${CLASS_NO}" "${SOURCE_RUN_ID}" > "data/textbook-extractions/class-${CLASS_NO}/MIRROR-SOURCE.txt"
+          printf 'Mirrored class %s from workflow run %s\n' "$CLASS_NO" "$SOURCE_RUN_ID" > "data/textbook-extractions/class-$CLASS_NO/MIRROR-SOURCE.txt"
 
       - name: Commit extracted text to main
         env:
