@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v1"
+PROMPT_VERSION = "qe-l6-l8-ollama-v2-visual"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -149,6 +149,76 @@ def segments_for(pages: list[dict[str,Any]], max_pages: int=4, max_chars: int=70
     if sum(len(x["text"]) for g in result for x in g["pieces"])!=sum(len(p["text"]) for p in pages): raise ValueError("Segment builder dropped source characters.")
     return result
 
+
+def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dict[str,Any]]) -> tuple[dict[str,list[dict[str,Any]]],str]:
+    """Find hash-matched V3 visual candidates for admin preview only; never grants publication."""
+    catalog=repo/"data"/"textbook-visual-candidates-v3"
+    packs=[]
+    if catalog.is_dir():
+        for selection_path in sorted(catalog.glob("*/source-selection.v1.json")):
+            try: selection=read_json(selection_path)
+            except ValueError: continue
+            if (selection.get("book_id")!=source["book_id"] or
+                str(selection.get("sha256") or selection.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]):
+                continue
+            slug=str(selection.get("book_slug") or selection_path.parent.name)
+            pack_path=selection_path.parent/"candidates.v3.json"
+            static_dir=repo/"apps"/"web"/"public"/"content"/"visual-assets"/slug/"candidates"
+            if not pack_path.is_file() or not static_dir.is_dir(): continue
+            try: pack=read_json(pack_path)
+            except ValueError: continue
+            info=pack.get("source") or {}
+            if (pack.get("schema_version")!="quantaedge.visual-candidate-pack.v3" or
+                info.get("book_id")!=source["book_id"] or
+                str(info.get("pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+                pack.get("publication_allowed") is True):
+                continue
+            count=int((pack.get("summary") or {}).get("selected_embedded_images") or 0)
+            packs.append((count,slug,pack_path,static_dir,pack))
+    if not packs:
+        return {},sha("no-matching-visual-pack|"+source["book_id"]+"|"+source["source_pdf_sha256"])
+    _,slug,pack_path,static_dir,pack=sorted(packs,key=lambda item:(-item[0],item[1]))[0]
+    wanted_pages={p for seg in segments for p in seg["source_pages"]}
+    by_page={}
+    for row in pack.get("candidates",[]):
+        if not isinstance(row,dict) or row.get("candidate_kind")!="embedded_image": continue
+        if (row.get("source_book_id")!=source["book_id"] or
+            str(row.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+            row.get("publication_allowed") is not False or row.get("human_review_required") is not True or
+            str(row.get("review_status") or "").upper() not in {"CANDIDATE_NEEDS_HUMAN_REVIEW","NEEDS_REVIEW"}):
+            continue
+        page=row.get("source_pdf_page_number"); cid=str(row.get("candidate_id") or "")
+        source_asset_sha=str(row.get("source_asset_sha256") or "").lower()
+        if (not isinstance(page,int) or isinstance(page,bool) or page not in wanted_pages or
+            not re.fullmatch(r"v3-image-[a-z0-9-]{8,100}",cid) or
+            not re.fullmatch(r"[0-9a-f]{64}",source_asset_sha)):
+            continue
+        valid=[]
+        for path in static_dir.glob(cid+"-*.jpg"):
+            if path.is_file():
+                digest=sha_file(path)
+                if path.stem.rsplit("-",1)[-1]==digest[:12]: valid.append((path,digest))
+        if len(valid)!=1: continue
+        path,display_sha=valid[0]
+        by_page.setdefault(page,[]).append({
+            "candidate_id":cid,"candidate_kind":"embedded_image","source_book_id":source["book_id"],
+            "source_pdf_sha256":source["source_pdf_sha256"],"source_pdf_page_number":page,
+            "source_asset_sha256":source_asset_sha,"display_sha256":display_sha,
+            "url":"https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"+path.relative_to(repo).as_posix(),
+            "heuristic_score":float(row.get("heuristic_score") or 0),
+        })
+    by_segment={}; selected_for_fingerprint=[]
+    for seg in segments:
+        attached=[]
+        for page in seg["source_pages"]:
+            rows=by_page.get(page,[])
+            if rows: attached.append(sorted(rows,key=lambda x:(-x["heuristic_score"],x["candidate_id"]))[0])
+            if len(attached)>=2: break
+        by_segment[seg["segment_id"]]=attached
+        selected_for_fingerprint.extend({k:v for k,v in row.items() if k in {"candidate_id","source_pdf_page_number","source_asset_sha256","display_sha256"}} for row in attached)
+    fingerprint=sha(json.dumps({"slug":slug,"pack_sha256":sha_file(pack_path),"assets":selected_for_fingerprint},sort_keys=True))
+    return by_segment,fingerprint
+
 def prompt_for(source: dict[str,Any], segment: dict[str,Any]) -> str:
     context="\n\n".join(f"Original PDF page {p['page']} (fragment {p['part']}):\n{p['text'] if p['text'].strip() else '[No extractable text]'}" for p in segment["pieces"])
     allowed=json.dumps(segment["source_pages"])
@@ -230,7 +300,7 @@ def validate_output(v: Any, allowed: set[int]) -> list[str]:
         if found!={"en","hi"}: errors.append("tutor examples must cover English and Hindi")
     return errors
 
-def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any]) -> dict[str,Any]|None:
+def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], visuals: list[dict[str,Any]]|None=None) -> dict[str,Any]|None:
     if v.get("chapter_number") is None: return None
     stable=sha(source["book_id"]+"|"+source["source_pdf_sha256"]+"|"+seg["segment_id"])
     aid="qe-lesson-"+stable[:24]; topic_id="topic-"+stable[:20]
@@ -243,12 +313,28 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any]) -> 
                      "source_title":source["title"],"edition":source["edition"],"url":source["source_url"],
                      "source_pdf_sha256":source["source_pdf_sha256"],"pdf_page":p,"source_pdf_page_number":p,"human_review_required":True})
     refids=[r["id"] for r in refs]
-    blocks=[
-      {"id":aid+"-explain","type":"rich_text","order":1,"objective_ids":objective_ids,"source_refs":refids,"text_by_locale":v["explanation_by_locale"]},
-      {"id":aid+"-worked","type":"rich_text","order":2,"objective_ids":objective_ids,"source_refs":refids,"text_by_locale":v["worked_example_by_locale"]},
-      {"id":aid+"-recap","type":"recap","order":3,"objective_ids":objective_ids,"source_refs":refids,
+    ref_by_page={r["pdf_page"]:r["id"] for r in refs}
+    blocks=[{"id":aid+"-explain","type":"rich_text","order":1,"objective_ids":objective_ids,"source_refs":refids,"text_by_locale":v["explanation_by_locale"]}]
+    for i,visual in enumerate(visuals or [],1):
+        page=visual["source_pdf_page_number"]
+        alt={"en":f"Unreviewed textbook visual candidate from PDF page {page}",
+             "hi":f"PDF पृष्ठ {page} से पाठ्यपुस्तक दृश्य उम्मीदवार — समीक्षा लंबित"}
+        caption={"en":"Human review required before use with this lesson.",
+                 "hi":"इस दृश्य को पाठ के साथ उपयोग करने से पहले मानवीय समीक्षा आवश्यक है।"}
+        asset={"asset_id":visual["candidate_id"],"candidate_id":visual["candidate_id"],"url":visual["url"],
+          "source_book_id":source["book_id"],"source_pdf_sha256":source["source_pdf_sha256"],
+          "source_pdf_page_number":page,"source_asset_sha256":visual["source_asset_sha256"],
+          "display_sha256":visual["display_sha256"],"review_status":"CANDIDATE_NEEDS_HUMAN_REVIEW",
+          "rights_status":"SOURCE_REFERENCE_ONLY","publication_allowed":False,"student_renderable":False,
+          "human_review_required":True,"alt_by_locale":alt,"caption_by_locale":caption}
+        blocks.append({"id":aid+"-visual-"+str(i),"type":"image","order":len(blocks)+1,
+          "objective_ids":objective_ids,"source_refs":[ref_by_page[page]],"visual_id":visual["candidate_id"],
+          "alt_by_locale":alt,"caption_by_locale":caption,"asset":asset})
+    blocks.extend([
+      {"id":aid+"-worked","type":"rich_text","order":len(blocks)+1,"objective_ids":objective_ids,"source_refs":refids,"text_by_locale":v["worked_example_by_locale"]},
+      {"id":aid+"-recap","type":"recap","order":len(blocks)+2,"objective_ids":objective_ids,"source_refs":refids,
        "text_by_locale":{"en":{"heading":"Recap","paragraphs":[v["recap_by_locale"]["en"]]},"hi":{"heading":"पुनरावृत्ति","paragraphs":[v["recap_by_locale"]["hi"]]}}},
-    ]
+    ])
     questions=[]
     for i,q in enumerate(v["questions"],1):
         questions.append({"id":aid+f"-q-{i}","type":"multiple_choice","rendering_contract_id":"qtype-multiple-choice.v1",
@@ -277,9 +363,21 @@ def validate_lesson(x: dict[str,Any]) -> list[str]:
     blocks=x.get("explain",{}).get("blocks",[]); bids={b.get("id") for b in blocks if isinstance(b,dict)}
     if not blocks or len(bids)!=len(blocks) or None in bids: e.append("block IDs invalid")
     for b in blocks:
-        if not isinstance(b,dict) or b.get("type") not in {"rich_text","recap"}: e.append("block type invalid"); continue
+        if not isinstance(b,dict) or b.get("type") not in {"rich_text","recap","image"}: e.append("block type invalid"); continue
         for field,expected in (("objective_ids",oids),("source_refs",rids)):
             if any(v not in expected for v in b.get(field,[])): e.append("block reference invalid")
+        if b.get("type")=="image":
+            asset=b.get("asset"); page=asset.get("source_pdf_page_number") if isinstance(asset,dict) else None
+            page_refs=[r for r in refs if isinstance(r,dict) and r.get("pdf_page")==page]
+            if (not isinstance(asset,dict) or not isinstance(asset.get("url"),str) or not asset["url"].startswith("https://")
+                or asset.get("source_pdf_sha256")!=x.get("workflow",{}).get("source_pdf_sha256")
+                or asset.get("publication_allowed") is not False or asset.get("student_renderable") is not False
+                or asset.get("review_status")!="CANDIDATE_NEEDS_HUMAN_REVIEW"
+                or asset.get("rights_status")!="SOURCE_REFERENCE_ONLY" or not localized(asset.get("alt_by_locale"))
+                or not localized(asset.get("caption_by_locale")) or not page_refs or
+                not set(b.get("source_refs",[])).intersection({r.get("id") or r.get("source_ref_id") for r in page_refs})):
+                e.append("review-only visual candidate has invalid provenance or publication gate")
+            continue
         tx=b.get("text_by_locale")
         if not isinstance(tx,dict) or any(not isinstance(tx.get(l),dict) or not tx[l].get("paragraphs") for l in ("en","hi")): e.append("block bilingual text invalid")
     qs=x.get("practice",{}).get("questions",[])
@@ -417,7 +515,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
       "language":source["language"],"model":model,"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE",
       "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"segments_total":len(segments),
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
-      "tutor_sft_candidates":len(sft),"retrieval_documents":source["page_count"],
+      "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
       "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"pending_segments":pending,
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
@@ -451,6 +549,8 @@ def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     report=read_json(path); row=next((r for r in report.get("models",[]) if r.get("model")==model),None)
     if not row or row.get("successful_samples",0)<1 or row.get("lesson_contract_valid_rate",0)<=0:
         raise ValueError(f"Model {model} has no successful, contract-valid Class 6 NCERT benchmark sample.")
+    if report.get("prompt_version")!=PROMPT_VERSION:
+        raise ValueError("Benchmark prompt/lesson-contract version is stale; rerun benchmark before generation.")
     if report.get("production_model_selection")!="PENDING_HUMAN_REVIEW" or report.get("production_model") is not None:
         raise ValueError("Benchmark report must keep production selection pending human review.")
     return report
@@ -459,7 +559,8 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     repo=args.repo_root.resolve(); source=load_source(repo,args.class_no,args.source_book_id)
     ledger=layer5_ledger(repo,source); report=benchmark_report(repo,args.benchmark_report,args.model)
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
-    fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"manifest_sha256":sha_file(source["manifest_path"]),
+    visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
+    fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,"manifest_sha256":sha_file(source["manifest_path"]),
       "pages_sha256":sha_file(source["text_path"]),"layer5_sha256":sha_file(ledger),"model":args.model,"prompt":PROMPT_VERSION},sort_keys=True))
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}"
@@ -495,7 +596,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
                 checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
                   "attempts":int((prior or {}).get("attempts",0))+1,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2)}
             else:
-                lesson=lesson_from(source,seg,value)
+                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[]))
                 if lesson:
                     lesson["workflow"]["generation_model"]=args.model
                     lesson_errors=validate_lesson(lesson)
@@ -527,7 +628,7 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     usable=[segment for segment in segments if any(piece["text"].strip() for piece in segment["pieces"])]
     if not usable: raise ValueError("NCERT benchmark source has no extractable text segments.")
     indices=sorted(set((0,len(usable)//2,len(usable)-1)))[:args.sample_segments]
-    samplesegs=[usable[i] for i in indices]; results=[]
+    samplesegs=[usable[i] for i in indices]; visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,samplesegs); results=[]
     models=[x.strip() for x in args.models.split(",") if x.strip()]
     if not models or len(models)>4 or len(set(models))!=len(models): raise ValueError("Provide 1–4 unique benchmark models.")
     for model in models:
@@ -537,7 +638,7 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
             try:
                 value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg),args.request_timeout,opener)
                 errs=validate_output(value,set(seg["source_pages"]))
-                lesson=lesson_from(source,seg,value) if not errs else None
+                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[])) if not errs else None
                 le=validate_lesson(lesson) if lesson else (["unresolved chapter"] if not errs else [])
                 sft_ok=not errs and len(sft_records(source,seg,value,model))>=2
                 samples.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"seconds":round(elapsed,2),
