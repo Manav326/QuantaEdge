@@ -122,13 +122,16 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):
-    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
+    # Stage the intended checkpoint before rebasing; pull-before-stage fails when new ledger files are uncommitted.
     subprocess.run(["git","add",*paths],cwd=repo,check=True)
     if subprocess.run(["git","diff","--cached","--quiet"],cwd=repo).returncode==0:return
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True);subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message],cwd=repo,check=True)
+    subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
     try:subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
-    except subprocess.CalledProcessError:subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True);subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
+    except subprocess.CalledProcessError:
+        subprocess.run(["git","pull","--rebase","origin","main"],cwd=repo,check=True)
+        subprocess.run(["git","push","origin","HEAD:main"],cwd=repo,check=True)
 
 def run_layers(args):
     repo=args.repo_root.resolve();sroot=args.source_root.resolve();selection=read_json(args.selection);model=re.sub(r"[^A-Za-z0-9._-]","-",args.model);bad=[]
