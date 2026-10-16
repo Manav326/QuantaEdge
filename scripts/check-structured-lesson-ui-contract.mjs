@@ -84,6 +84,8 @@ for (const [key, needle] of [
   assert.ok(source[key].includes(needle), key + ' is missing expected security/state integration marker: ' + needle);
 }
 
+assert.ok(source.webQuestions.includes("question.type !== 'short_answer' && result &&"), 'Learner feedback must render from the server result after author-only feedback is sanitized.');
+assert.ok(!source.webQuestions.includes("question.type !== 'short_answer' && question.feedback_by_locale && result &&"), 'Learner feedback must not depend on the sanitized author-only question feedback field.');
 assert.ok(source.adminPreview.includes("setLocale('hi')"), 'Admin preview must have Hindi language selection.');
 assert.ok(source.adminPreview.includes("setLocale('en')"), 'Admin preview must have English language selection.');
 assert.ok(source.webDetail.includes('learningLanguage'), 'Web learner must use the global learning language.');
