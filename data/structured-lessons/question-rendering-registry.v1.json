@@ -1,7 +1,7 @@
 {
   "schema_version": "quantaedge.question-rendering-registry.v1",
-  "purpose": "Canonical data-to-UI contract for rendering structured lesson practice questions. Used by content authors, UI implementers, QA and future maintainers. This contract describes required UI behavior; it does not mean the components are implemented.",
-  "status": "SPECIFIED_NOT_IMPLEMENTED",
+  "purpose": "Canonical data-to-UI contract for structured lesson practice. Implemented question dispatchers exist in student Web, Admin preview and Android; the repository contract check verifies type/contract parity. This registry does not constitute editorial approval, browser/device acceptance, accessibility sign-off or permission to publish.",
+  "status": "IMPLEMENTED_CONTRACT_VERIFIED_WITH_REVIEW_BLOCKERS",
   "target_surfaces": [
     "student_web",
     "student_android"
@@ -129,7 +129,7 @@
         "hi": "बहुविकल्पीय प्रश्न"
       },
       "component_name": "MultipleChoiceQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Question prompt followed by a single-select vertical option group; show selection before submission and correctness/feedback after submission.",
       "input_control": "Accessible radio group; exactly one option may be selected.",
       "required_fields": [
@@ -165,7 +165,13 @@
         "Every option has both locale labels.",
         "Correct ID exists in options."
       ],
-      "component_contract_id": "qtype-multiple-choice.v1"
+      "component_contract_id": "qtype-multiple-choice.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-multiple-choice.v1"
     },
     {
       "id": "qtype-multiple-select.v1",
@@ -175,7 +181,7 @@
         "hi": "सभी सही विकल्प चुनें"
       },
       "component_name": "MultipleSelectQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Question prompt followed by a vertical checkbox group; multiple answers can be selected.",
       "input_control": "Checkbox group; selected state is an unordered set of option IDs.",
       "required_fields": [
@@ -213,7 +219,13 @@
         "All correct IDs exist in options.",
         "Every option is bilingual."
       ],
-      "component_contract_id": "qtype-multiple-select.v1"
+      "component_contract_id": "qtype-multiple-select.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-multiple-select.v1"
     },
     {
       "id": "qtype-true-false.v1",
@@ -223,7 +235,7 @@
         "hi": "सही या गलत"
       },
       "component_name": "TrueFalseQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Statement/prompt followed by two equally prominent choices.",
       "input_control": "Radio group or two accessible choice buttons; never use colour as the sole indicator.",
       "required_fields": [
@@ -257,7 +269,13 @@
         "correct_answer must be a boolean.",
         "Both locale prompts and feedback are non-empty."
       ],
-      "component_contract_id": "qtype-true-false.v1"
+      "component_contract_id": "qtype-true-false.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-true-false.v1"
     },
     {
       "id": "qtype-matching.v1",
@@ -267,7 +285,7 @@
         "hi": "मिलान करें"
       },
       "component_name": "MatchingQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Two clearly named columns. Each left item pairs with one right item. On narrow screens, render a stacked row per left item with an associated selection control.",
       "input_control": "Accessible select/list choice for each left item; drag and drop may be an enhancement but can never be the only interaction.",
       "required_fields": [
@@ -311,7 +329,13 @@
         "Every left item has exactly one correct pair unless an explicit different rule is declared.",
         "Column labels and all item labels are bilingual."
       ],
-      "component_contract_id": "qtype-matching.v1"
+      "component_contract_id": "qtype-matching.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-matching.v1"
     },
     {
       "id": "qtype-fill-blank.v1",
@@ -321,7 +345,7 @@
         "hi": "रिक्त स्थान भरें"
       },
       "component_name": "FillBlankQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Sentence/prompt with an inline or clearly adjacent text input; allow submit using a visible button and optionally Enter where appropriate.",
       "input_control": "Single-line text input with localized accessible label and placeholder.",
       "required_fields": [
@@ -370,7 +394,13 @@
         "Accepted answers are in the corresponding language/script.",
         "Normalization is documented and applied consistently."
       ],
-      "component_contract_id": "qtype-fill-blank.v1"
+      "component_contract_id": "qtype-fill-blank.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-fill-blank.v1"
     },
     {
       "id": "qtype-image-observation.v1",
@@ -380,7 +410,7 @@
         "hi": "चित्र का अवलोकन करें"
       },
       "component_name": "ImageObservationQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Approved, locale-appropriate image/diagram above the question and response controls; zoom/open control when appropriate; caption and alt text available.",
       "input_control": "Visual panel plus an explicitly declared answer control. For the current item, use a single-select option group matching MultipleChoiceQuestion.",
       "required_fields": [
@@ -417,7 +447,14 @@
         "Any visible text embedded in the image is appropriate for the active locale.",
         "The underlying answer control is named explicitly."
       ],
-      "component_contract_id": "qtype-image-observation.v1"
+      "component_contract_id": "qtype-image-observation.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-image-observation.v1",
+      "content_gate": "BLOCKED_UNTIL_EXACT_VISUAL_APPROVAL"
     },
     {
       "id": "qtype-short-answer.v1",
@@ -427,7 +464,7 @@
         "hi": "संक्षिप्त उत्तर"
       },
       "component_name": "ShortAnswerQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "Prompt followed by an accessible multiline text area, character/length guidance if configured, and submit control. After submission show pending-review or rubric feedback as configured.",
       "input_control": "Multiline text area; preserve text when changing language. Do not compare the response to a single exact sample sentence.",
       "required_fields": [
@@ -465,7 +502,14 @@
         "Key points/sample answer exist in both locales.",
         "No hardcoded single-string exact-match grading."
       ],
-      "component_contract_id": "qtype-short-answer.v1"
+      "component_contract_id": "qtype-short-answer.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-short-answer.v1",
+      "content_gate": "HUMAN_OR_VALIDATED_GRADER_REQUIRED; NO_FABRICATED_AUTOSCORE"
     },
     {
       "id": "qtype-scenario-based.v1",
@@ -475,7 +519,7 @@
         "hi": "परिस्थिति-आधारित प्रश्न"
       },
       "component_name": "ScenarioQuestion",
-      "status": "SPECIFIED_NOT_IMPLEMENTED",
+      "status": "IMPLEMENTED_CONTRACT_VERIFIED",
       "layout": "A distinct scenario/context card followed by a separate question prompt and an explicitly declared response control. The scenario and question must both switch with the global locale.",
       "input_control": "Use the question's declared response subtype. Current contract version supports choice-based scenarios through a radio group.",
       "required_fields": [
@@ -511,7 +555,13 @@
         "The subtype and grading rule are explicit.",
         "Scenario remains within the lesson's chapter scope."
       ],
-      "component_contract_id": "qtype-scenario-based.v1"
+      "component_contract_id": "qtype-scenario-based.v1",
+      "implementation_surfaces": [
+        "student_web",
+        "admin_preview",
+        "student_android"
+      ],
+      "response_contract_id": "qtype-scenario-based.v1"
     }
   ],
   "implementation_acceptance": [
@@ -595,7 +645,7 @@
           "scenario_based": 3
         },
         "bilingual_content_status": "DRAFT_PAIRED_PENDING_SEMANTIC_REVIEW",
-        "runtime_components_status": "SPECIFIED_NOT_IMPLEMENTED"
+        "runtime_components_status": "IMPLEMENTED_CONTRACT_VERIFIED_WITH_REVIEW_BLOCKERS"
       }
     },
     "readiness": {
@@ -613,5 +663,21 @@
       "All three topic lessons are draft authored learning material; no semantic bilingual or human content review has been completed.",
       "The eight UI components and app-wide live language switch are specification-only, not implemented."
     ]
-  }
+  },
+  "implementation_evidence": {
+    "question_contract_source": "apps/web/app/student/structured-lessons/contract.ts",
+    "web_dispatcher": "apps/web/app/student/structured-lessons/StructuredQuestionRenderer.tsx",
+    "admin_dispatcher": "apps/admin/app/structured-lesson-preview/StructuredQuestionRenderer.tsx",
+    "android_dispatcher": "apps/android/app/src/main/java/com/quantaedge/android/ui/StructuredLessonRenderer.kt",
+    "response_and_publication_gate": "services/api/src/main/java/com/quantaedge/api/StructuredLessonArtifactService.java",
+    "automated_contract_check": "scripts/check-structured-lesson-ui-contract.mjs",
+    "status_definition": "IMPLEMENTED_CONTRACT_VERIFIED confirms source dispatch/contract checks only; it does not imply all browser/device interaction or accessibility acceptance scenarios have passed."
+  },
+  "known_blockers": [
+    "All current 39-topic/312-question records remain DRAFT_GENERATED_NOT_REVIEWED; semantic English/Hindi review, factual/science review and item-level source reconciliation are pending.",
+    "Image-observation questions reference candidate/source visuals and remain blocked from student rendering until the exact visual, rights/provenance, localized alt/caption and accessibility review is approved.",
+    "The current Class 6 Science chapter coverage must pass item-level source_inventory/coverage_map reconciliation before the affected chapter can be approved.",
+    "The repository contract check validates dispatch and schema markers, but complete browser/device interaction, locale-switch state-preservation, keyboard/touch accessibility and assistive-technology acceptance must be verified separately.",
+    "Short-answer items remain pending review unless a configured, validated grader is available; do not invent automatic scores."
+  ]
 }
