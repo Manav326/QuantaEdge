@@ -146,6 +146,10 @@ class LayersTests(unittest.TestCase):
             again=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
             self.assertEqual(1,again["segments_completed"])
+            args.max_context_chars=6000
+            with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):
+                run_layers(args,opener=open_)
+            args.max_context_chars=7000
             row["text"]="Changed extraction text while retaining the PDF SHA."
             write_jsonl(source_path,[row])
             with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):

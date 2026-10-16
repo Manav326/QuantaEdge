@@ -580,8 +580,11 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
     source["visual_candidate_fingerprint"]=visual_fingerprint
-    fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,"manifest_sha256":sha_file(source["manifest_path"]),
-      "pages_sha256":sha_file(source["text_path"]),"layer5_sha256":sha_file(ledger),"model":args.model,"prompt":PROMPT_VERSION},sort_keys=True))
+    fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
+      "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
+      "layer5_sha256":sha_file(ledger),"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
+      "model":args.model,"prompt":PROMPT_VERSION,"max_pages_per_segment":args.max_pages_per_segment,
+      "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.15,"num_ctx":6144,"num_predict":2048}},sort_keys=True))
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}"
