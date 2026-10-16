@@ -230,3 +230,9 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Rewrote V108 as a complete clean forward migration. The constraint now validates ID length and allowed characters without a dollar-anchored expression, requires non-null ID, and enforces no private meeting URL for YouTube broadcasts.
 - Corrected the class-card action to use its own `session.provider`, not optional `activeJoined.provider`. This addresses the TypeScript failure at its source rather than masking the type checker.
 - Re-run full API migration tests and web build on the resulting commit; do not proceed on the assumption these fixes pass.
+
+
+### Schema invariant check — YouTube versus private join URLs
+
+- The original V43 schema requires `private_join_url NOT NULL`. V108 now explicitly drops that column-level requirement because YouTube broadcasts do not have a private meeting URL, while its replacement provider-specific CHECK requires a non-null private URL for every non-YouTube provider. This preserves the prior invariant for Meet/custom/other sessions instead of accidentally making their private URL optional.
+- This correction is part of the unvalidated V108 migration before the feature is released; do not rewrite a migration after it has been deployed. Re-run migration/API tests before proceeding.

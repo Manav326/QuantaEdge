@@ -2,7 +2,8 @@
 -- Existing provider values and private-link behavior remain unchanged.
 ALTER TABLE learning_class_session
   DROP CONSTRAINT IF EXISTS learning_class_session_provider_check,
-  ADD COLUMN youtube_video_id varchar(11);
+  ADD COLUMN youtube_video_id varchar(11),
+  ALTER COLUMN private_join_url DROP NOT NULL;
 
 ALTER TABLE learning_class_session
   ADD CONSTRAINT ck_learning_class_session_provider
@@ -14,7 +15,9 @@ ALTER TABLE learning_class_session
         AND length(youtube_video_id) = 11
         AND youtube_video_id !~ '[^A-Za-z0-9_-]'
         AND private_join_url IS NULL)
-      OR (provider <> 'YOUTUBE_LIVE' AND youtube_video_id IS NULL)
+      OR (provider <> 'YOUTUBE_LIVE'
+        AND youtube_video_id IS NULL
+        AND private_join_url IS NOT NULL)
     );
 
 CREATE INDEX idx_learning_class_session_youtube_video
