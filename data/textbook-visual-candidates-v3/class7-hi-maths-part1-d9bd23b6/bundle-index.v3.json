@@ -238,7 +238,7 @@
   "publication_allowed": false,
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
-  "version_tag": "candidates-v3-class7-class7-hi-maths-part1-d9bd23b6-run-38893208624",
-  "bundle_tar_sha256": "2fb124f260a4bfccca4d345c0026956b8c08a143f769a1d5005f29e5e6b427c4",
+  "version_tag": "candidates-v3-class7-class7-hi-maths-part1-d9bd23b6-run-38904464438",
+  "bundle_tar_sha256": "f7e998cf4e1d9e99aaed5e1e87a4c8f57c10e81ce296b99cefa00da4b0512e83",
   "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
 }
