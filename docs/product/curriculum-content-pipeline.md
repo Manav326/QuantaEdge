@@ -87,10 +87,10 @@ The extractor intentionally does not call an AI model. Use this separate script 
 - Script: `scripts/generate_questions_from_extraction.py`
 - Input: only a `DRAFT_EXTRACTION_ONLY` bundle made by the extractor.
 - Output: one `<chapter-code>.ai-generated-draft.json` per selected chapter, marked `AI_GENERATED_DRAFT`.
-- Default question count: 12 candidates per chapter. The default type mix is curriculum-aware: Maths uses 6 MCQ, 2 True/False, 2 text-input and 2 numerical questions per 12; Science uses 7 MCQ, 2 True/False and 3 text-input questions per 12. These are generated candidates, not approved content.
-- Model provider: any configured OpenAI-compatible chat-completions endpoint. Set `OPENAI_API_KEY`, `OPENAI_API_BASE_URL` and `QUANTAEDGE_QUESTION_MODEL` explicitly. The question-generation model is deliberately configured separately from the AI tutor.
+- Default question-count budget: 12 candidates per chapter. By default, the model selects only context-appropriate types from the supported legacy bank catalogue; there is no fixed type distribution. `--question-types` narrows the allowed catalogue but does not create quotas. `--exact-type-quotas` explicitly opts into the older deterministic test mix. `--use-curriculum-targets` remains a separate operation that replenishes documented per-type approved-bank targets; do not use it as the structured lesson-authoring rule. These are generated candidates, not approved content.
+- Model provider: native loopback Ollama is the default and needs no API key or external-processing confirmation. It uses `QUANTAEDGE_QUESTION_MODEL` (default `qwen2.5:1.5b`) and optionally `QUANTAEDGE_QUESTION_OLLAMA_URL` (default `http://127.0.0.1:11434`). The OpenAI-compatible provider is opt-in via `--provider openai-compatible`; it requires HTTPS, `--confirm-external-processing` and a key. The question-generation model remains separately configurable from the AI tutor.
 - Budget controls: `--chapter-code`, `--max-chapters`, `--questions-per-chapter`, `--max-context-chars` and `--max-api-calls`. Long chapters are split into bounded excerpts; when there are more excerpts than requested questions, the excerpts are sampled across the chapter. Inspect the generated question-level page references to see the actual coverage.
-- Quality gates: exact question counts/type quotas, supported grading types, answer-key/option consistency, numeric answer types, page references, prompt uniqueness and difficulty values are validated locally. A validation failure stops the chapter and does not write its candidate bundle. This is a structural check, not proof that the model's answers are factually correct.
+- Quality gates: the run's question-count budget, chosen type membership in the allowed catalogue, supported grading payloads, answer-key/option consistency, numeric answer types, page references, prompt uniqueness and difficulty values are validated locally. Per-type quota validation applies only in explicit `--exact-type-quotas` mode or `--use-curriculum-targets`. A validation failure stops the chapter and does not write its candidate bundle. This is a structural check, not proof that the model's answers are factually correct.
 
 First run an offline plan. It does not make any network calls:
 
@@ -101,7 +101,22 @@ python scripts/generate_questions_from_extraction.py \
   --chapter-code knowing-numbers
 ```
 
-For actual generation, first configure a model that is enabled on your endpoint. Then explicitly confirm that extracted page text may be sent to that model provider:
+For the default local generation path, ensure Ollama is running and the model is already available:
+
+```bash
+export QUANTAEDGE_QUESTION_MODEL='qwen2.5:1.5b'
+python scripts/generate_questions_from_extraction.py \
+  --extraction ./private-review/class-6-maths-extraction.json \
+  --output-dir ./private-review/ai-candidates/class-6-maths \
+  --chapter-code knowing-numbers \
+  --questions-per-chapter 12 \
+  --max-api-calls 12 \
+  --provider ollama --generate
+```
+
+This default selects types contextually and applies no per-type quota. To deliberately reproduce the earlier deterministic mix for a controlled bank test, add `--exact-type-quotas`. For an approved-count replenishment operation, use `--use-curriculum-targets`; that mode intentionally follows the target matrix and is not the rule for structured lesson authoring.
+
+To opt into an external OpenAI-compatible provider, configure the key/base URL and explicitly confirm source-text transfer:
 
 ```bash
 export OPENAI_API_KEY='<provider API key>'
@@ -113,7 +128,7 @@ python scripts/generate_questions_from_extraction.py \
   --chapter-code knowing-numbers \
   --questions-per-chapter 12 \
   --max-api-calls 12 \
-  --generate --confirm-external-processing
+  --provider openai-compatible --generate --confirm-external-processing
 ```
 
 The script sends the selected extracted text—not the PDF file itself—to the configured provider. Review provider privacy/retention terms and content-sharing permissions before confirming. Use a private, ignored directory for extraction bundles and candidates; do not commit textbook text, generated candidate bundles or API credentials.

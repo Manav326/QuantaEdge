@@ -15,7 +15,7 @@ This folder stores AI-authored learning drafts separately from source-text extra
 
 1. **Source-first lesson boundaries.** Derive lesson counts from the actual numbered textbook sections and subsections; do not preselect the count. Use each chapter coverage ledger to track figures, tables, activities, special boxes, summary, keywords, review questions and Learning further tasks.
 2. **No omissions or cross-chapter teaching.** Account for the source scope or explicitly classify notes/front/back matter. A passing mention of another chapter must not become a separate lesson on it.
-3. **Explain + Practice.** Every lesson has a structured explanation and distinct practice using multiple question types.
+3. **Explain + Practice.** Every lesson has structured explanation and purposeful practice. Choose question types from the supported registry according to the concept and objective; no type is a quota and equal type counts are not required.
 4. **English/Hindi parity.** Keep objective/block/visual/activity/question IDs, answer keys, grading and intended difficulty aligned. Localize all learner-visible fields, including diagram labels/alt text, instructions, options, feedback, rubrics and controls.
 5. **One global live language selector.** The app language controls all learner-visible Web and Android content. Switching must preserve question index, selected/typed answers, score, progress and reading position. No mixed-language screen or silent locale fallback; missing fields block approval.
 6. **Document every renderer.** Every question has `type` and `rendering_contract_id` from the registry. The registry specifies UI contracts but does not mean those components are implemented.
@@ -36,7 +36,7 @@ This folder stores AI-authored learning drafts separately from source-text extra
 | 6 — Materials Around Us | 9 | 72 | Committed in batch; coverage ledger included |
 | **Total prepared** | **39** | **312** | **Draft only; not approved or publishable** |
 
-The prepared inventory contains **39 questions of each** registered type: multiple choice, multiple select, true/false, matching, fill in the blank, image observation, short answer and scenario-based. All image-observation questions and draft diagrams for Chapters 2–6 remain blocked pending visual/accessibility approval.
+The committed historical inventory contains **39 questions of each** registered type because the earlier prompt forced one of each per topic. This describes existing draft data—not a target distribution for future generation. New lessons must choose question types contextually and map every source-inventory item to lesson content or an explicit disposition. All image-observation questions and draft diagrams for Chapters 2–6 remain blocked pending visual/accessibility approval.
 
 ## Resume procedure
 
@@ -56,3 +56,8 @@ Read the production index and GitHub issue [#56](https://github.com/Manav326/Qua
 - `class-6/science/chapter-06/`: 9 bilingual lessons derived from headings 6.1, 6.2, 6.3.1–6.3.6 and 6.4; 72 practice questions (9 per registered type), plus a source-coverage ledger.
 - The ledger inventories figures 6.1–6.8, tables 6.1–6.5, activities 6.1–6.8, both `Let us play` tasks, 10 end questions and four `Learning further` tasks. Exact page boundaries, figure/layout mapping, Hindi semantic parity and science review remain pending.
 - Commit status is recorded in [Issue #56](https://github.com/Manav326/QuantaEdge/issues/56). Committed draft data does not mean approved or publishable.
+
+
+## Item-level source coverage contract
+
+New coverage ledgers must provide `source_inventory.items[]` and `coverage_map[]`. Every source item ID appears exactly once in the map; coverage references resolve to real lesson block, activity or question IDs. A source item may be taught, handled by an activity, assessed in practice, intentionally kept as reference-only, excluded with a reason, or explicitly blocked pending source review. An unaccounted item is a validation failure. Existing ledgers without these fields remain historical audit records and are not coverage-validator passes.

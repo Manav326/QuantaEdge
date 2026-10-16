@@ -152,8 +152,8 @@ The two class workflows deliberately accept **only Class 7 or Class 8**. Each se
 ### Reusable class content contract
 
 - Use the actual numbered headings/subsections in both language editions to choose lesson count; never choose a fixed number of topics before reviewing the chapter structure.
-- Maintain a bilingual source-coverage ledger for page ranges, figures, tables, activities, sidebars/safety notes, keywords, summary, chapter questions and “Learning further” tasks. The ledger records what still needs review; it is not proof that coverage is complete.
-- Each lesson JSON must use the current structured lesson schema and have separate Explain and Practice sections; stable locale-neutral IDs; non-empty English and Hindi text for learner-visible fields; and one question for each registered type (8 questions per topic).
+- Maintain a bilingual source-coverage ledger that itemizes every section/subsection, figure/panel, table/chart, activity/experiment, worked example, sidebar/case/safety note, keyword, summary point, chapter-end question and “Learning further” task. Give every item a stable ID and map it to a concrete lesson block/activity/question ID, or state a reasoned explicit disposition. Counts alone do not prove item-level coverage. Run `scripts/validate_structured_lesson_coverage.py`; rendered-source and human review remain separate gates.
+- Each lesson JSON must use the current structured lesson schema and have separate Explain and Practice sections; stable locale-neutral IDs; non-empty English and Hindi text for learner-visible fields; and a context-appropriate set of questions. The eight structured types are a supported catalogue, not quotas: never require one of each type or equal per-type counts.
 - Questions must use the current renderer contract IDs, localized options/feedback/rubrics and validated answer references. AI-authored questions are supplementary, not verbatim NCERT questions.
 - A generated diagram or visual observation is non-renderable until visual, source, semantic bilingual, scientific and accessibility review passes. Keep the publication flag false until human approval.
 - Create all topic JSONs and the coverage ledger as one chapter batch. Do not commit topic-by-topic. Update Issue #56 once per completed chapter with the exact tree/blob pointers, test results and next action. Commit only when explicitly requested.
@@ -161,3 +161,18 @@ The two class workflows deliberately accept **only Class 7 or Class 8**. Each se
 ### Current verification status
 
 The updated workflow code and focused tests are committed together as an implementation change, but the Class 7/8 batch is **not confirmed end-to-end until both workflows are run against the actual GHCR indexes and the source artifacts are reviewed**. If the GHCR source list differs from the required 1 Science + 2 clearly labelled Maths parts per language, first resolve the source selection rather than weakening the validation.
+
+
+### Contextual question-type selection
+
+For structured lessons, the model may select from the eight registered structured question types (and only additional contracts explicitly supported for the target surface). The list is capability metadata, not a required distribution. The validator checks each question against its selected contract but does not require all types to appear. A generated question must be relevant to a learning objective and source evidence; an activity or figure can be covered by teaching content without being forced into a question. The legacy question-bank generator's explicit approved-count target mode is a separate replenishment operation and must not be confused with lesson authoring.
+
+Run the source-item coverage validator on a draft coverage ledger:
+
+```bash
+python scripts/validate_structured_lesson_coverage.py \
+  --ledger data/structured-lessons/class-6/science/chapter-03/source-coverage.v1.json \
+  --repo-root . --allow-pending-review
+```
+
+Use `--allow-pending-review` only when creating a draft checkpoint and report every pending item. Run again without that flag after source reconciliation; only the strict run can pass without source-review blockers. Existing coverage ledgers written before the item-level `source_inventory`/`coverage_map` contract will be reported as incomplete until they are reviewed and normalized. Do not treat a missing map as an empty map or silently mark it complete.

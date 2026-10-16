@@ -20,7 +20,7 @@ class FakeResponse:
 
 def model_json(pages):
     bi={"en":"Understand the idea.","hi":"विचार को समझें।"}
-    q={"prompt_by_locale":{"en":"Which statement is correct?","hi":"कौन-सा कथन सही है?"},
+    q={"type":"multiple_choice","prompt_by_locale":{"en":"Which statement is correct?","hi":"कौन-सा कथन सही है?"},"source_pages":pages[:1],"difficulty":"easy",
        "options":[{"id":"a","text_by_locale":{"en":"Correct","hi":"सही"}},{"id":"b","text_by_locale":{"en":"Wrong","hi":"गलत"}}],
        "correct_answer_ids":["a"],"feedback_by_locale":bi}
     return {"chapter_number":1,"chapter_title_by_locale":{"en":"Curiosity","hi":"जिज्ञासा"},"mapping_confidence":"HIGH",
@@ -28,7 +28,7 @@ def model_json(pages):
       "concepts_by_locale":{"en":["observation"],"hi":["अवलोकन"]},"learning_objectives":[{"statement_by_locale":bi}],
       "explanation_by_locale":{"en":{"heading":"Explain","paragraphs":["Explain in original words."]},"hi":{"heading":"समझें","paragraphs":["अपने शब्दों में समझें।"]}},
       "worked_example_by_locale":{"en":{"heading":"Example","paragraphs":["Observe a leaf and note two features."]},"hi":{"heading":"उदाहरण","paragraphs":["पत्ती देखें और दो विशेषताएँ लिखें।"]}},
-      "recap_by_locale":bi,"questions":[q,dict(q)],
+      "recap_by_locale":bi,"questions":[q,{**q,"prompt_by_locale":{"en":"Which observation supports the idea?","hi":"कौन-सा अवलोकन इस विचार का समर्थन करता है?"},"source_pages":pages[:1]}],
       "tutor_examples":[{"language":"en","student_message":"Why observe?","assistant_message":"It separates evidence from guesses.","source_pages":pages[:1]},
                         {"language":"hi","student_message":"ध्यान से क्यों देखें?","assistant_message":"इससे प्रमाण और अनुमान अलग होते हैं।","source_pages":pages[:1]}]}
 
@@ -66,6 +66,89 @@ class LayersTests(unittest.TestCase):
         lesson=lesson_from(source,seg,generated); self.assertEqual([],validate_lesson(lesson))
         self.assertFalse(lesson["workflow"]["publication_allowed"])
         self.assertEqual(2,len(lesson["practice"]["questions"]))
+
+    def test_question_types_are_contextual_and_question_count_is_not_fixed(self):
+        generated=model_json([1,2])
+        generated["questions"]=[generated["questions"][0]]
+        self.assertEqual([],validate_output(generated,{1,2}))
+        source={"book_id":"ncert-c6-english-fecu1","source_pdf_sha256":"a"*64,"source_url":"https://ncert.nic.in/textbook.php?x=1",
+          "title":"Curiosity","edition":"Reprint 2026-27","class_no":6,"subject":"science","language":"en"}
+        seg={"segment_id":"seg-contextual","sequence":1,"source_pages":[1,2]}
+        lesson=lesson_from(source,seg,generated)
+        self.assertEqual(1,len(lesson["practice"]["questions"]))
+        self.assertEqual([],validate_lesson(lesson))
+
+    def test_true_false_type_is_preserved_without_mcq_quota(self):
+        generated=model_json([1,2])
+        tf={"type":"true_false","prompt_by_locale":{"en":"A leaf is a living part of a plant.","hi":"पत्ती पौधे का जीवित भाग है।"},
+            "feedback_by_locale":{"en":"Leaves are living plant organs.","hi":"पत्तियाँ पौधे के जीवित अंग हैं।"},
+            "source_pages":[1],"difficulty":"easy","correct_answer":True}
+        generated["questions"]=[generated["questions"][0],tf]
+        self.assertEqual([],validate_output(generated,{1,2}))
+        source={"book_id":"ncert-c6-english-fecu1","source_pdf_sha256":"a"*64,"source_url":"https://ncert.nic.in/textbook.php?x=1",
+          "title":"Curiosity","edition":"Reprint 2026-27","class_no":6,"subject":"science","language":"en"}
+        seg={"segment_id":"seg-types","sequence":1,"source_pages":[1,2]}
+        lesson=lesson_from(source,seg,generated)
+        self.assertEqual(["multiple_choice","true_false"],[q["type"] for q in lesson["practice"]["questions"]])
+        self.assertEqual([],validate_lesson(lesson))
+
+    def test_image_observation_requires_allowlisted_visual(self):
+        generated=model_json([1,2])
+        generated["questions"][0]["type"]="image_observation"
+        generated["questions"][0]["visual_candidate_id"]="candidate-not-present"
+        errors=validate_output(generated,{1,2},[])
+        self.assertTrue(any("visual_candidate_id" in error for error in errors))
+
+    def test_all_supported_question_types_use_their_own_contract(self):
+        bi={"en":"Useful feedback.","hi":"उपयोगी प्रतिक्रिया।"}
+        options=[
+            {"id":"a","text_by_locale":{"en":"Correct","hi":"सही"}},
+            {"id":"b","text_by_locale":{"en":"Incorrect","hi":"गलत"}}
+        ]
+        base_q={"prompt_by_locale":{"en":"What does the evidence show?","hi":"प्रमाण क्या दिखाता है?"},
+                "feedback_by_locale":bi,"source_pages":[1],"difficulty":"easy"}
+        left=[{"id":"l1","label_by_locale":{"en":"Leaf","hi":"पत्ती"}}]
+        right=[{"id":"r1","label_by_locale":{"en":"Plant part","hi":"पौधे का भाग"}}]
+        visual={"candidate_id":"v3-image-abcdefgh","source_pdf_page_number":1,
+                "url":"https://raw.githubusercontent.com/Manav326/QuantaEdge/main/example.jpg",
+                "source_asset_sha256":"b"*64,"display_sha256":"c"*64}
+        cases=[
+            ("multiple_choice",{"options":options,"correct_answer_ids":["a"]},[]),
+            ("multiple_select",{"options":options,"correct_answer_ids":["a","b"]},[]),
+            ("true_false",{"correct_answer":True},[]),
+            ("matching",{"left_items":left,"right_items":right,
+                         "correct_pairs":[{"left_id":"l1","right_id":"r1"}]},[]),
+            ("fill_blank",{"accepted_answers":{"en":["leaf"],"hi":["पत्ती"]}},[]),
+            ("image_observation",{"options":options,"correct_answer_ids":["a"],
+                                  "visual_candidate_id":visual["candidate_id"]},[visual]),
+            ("short_answer",{"answer_guide_by_locale":{
+                                "en":{"sample_answer":"A leaf is a plant part.","key_points":["It is part of a plant."]},
+                                "hi":{"sample_answer":"पत्ती पौधे का एक भाग है।","key_points":["यह पौधे का भाग है।"]}},
+                             "grading":{"max_score":2,"rubric_by_locale":{"en":"Award up to two points.","hi":"दो अंक तक दें।"}}},[]),
+            ("scenario_based",{"scenario_by_locale":{"en":"A learner observes a plant.","hi":"एक विद्यार्थी पौधे का अवलोकन करता है।"},
+                               "options":options,"correct_answer_ids":["a"]},[])
+        ]
+        source={"book_id":"ncert-c6-english-fecu1","source_pdf_sha256":"a"*64,
+                "source_url":"https://ncert.nic.in/textbook.php?x=1","title":"Curiosity",
+                "edition":"Reprint 2026-27","class_no":6,"subject":"science","language":"en"}
+        segment={"segment_id":"seg-contracts","sequence":1,"source_pages":[1,2]}
+        for qtype,fields,visuals in cases:
+            with self.subTest(question_type=qtype):
+                generated=model_json([1,2])
+                generated["questions"]=[{"type":qtype,**base_q,**fields}]
+                self.assertEqual([],validate_output(generated,{1,2},visuals))
+                lesson=lesson_from(source,segment,generated,visuals)
+                self.assertIsNotNone(lesson)
+                self.assertEqual(qtype,lesson["practice"]["questions"][0]["type"])
+                self.assertEqual([],validate_lesson(lesson))
+
+    def test_prompt_has_no_fixed_question_type_distribution(self):
+        source={"class_no":6,"subject":"science","language":"en","book_id":"book","title":"Curiosity","edition":"Reprint"}
+        seg={"source_pages":[1],"pieces":[{"page":1,"part":1,"text":"Plants have leaves."}]}
+        prompt=prompt_for(source,seg,[])
+        self.assertIn("There is NO question-type quota",prompt)
+        self.assertIn("Return 1 to 6 distinct, useful questions",prompt)
+        self.assertNotIn("exactly two MCQs",prompt.lower())
 
     def test_invalid_page_citations_fail_validation(self):
         v=model_json([99]); self.assertTrue(any("citations" in x for x in validate_output(v,{1,2})))

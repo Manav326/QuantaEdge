@@ -5,8 +5,8 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v4-compact-benchmark"
-LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-renderer-recap.v1"
+PROMPT_VERSION = "qe-l6-l8-ollama-v5-contextual-questions"
+LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions.v2"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -220,19 +220,86 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
     fingerprint=sha(json.dumps({"slug":slug,"pack_sha256":sha_file(pack_path),"assets":selected_for_fingerprint},sort_keys=True))
     return by_segment,fingerprint
 
-def prompt_for(source: dict[str,Any], segment: dict[str,Any]) -> str:
+QUESTION_TYPES = {
+ "multiple_choice", "multiple_select", "true_false", "matching",
+ "fill_blank", "image_observation", "short_answer", "scenario_based"
+}
+RENDERER_IDS = {
+ "multiple_choice":"qtype-multiple-choice.v1",
+ "multiple_select":"qtype-multiple-select.v1",
+ "true_false":"qtype-true-false.v1",
+ "matching":"qtype-matching.v1",
+ "fill_blank":"qtype-fill-blank.v1",
+ "image_observation":"qtype-image-observation.v1",
+ "short_answer":"qtype-short-answer.v1",
+ "scenario_based":"qtype-scenario-based.v1",
+}
+
+def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict[str,Any]]|None=None) -> str:
     context="\n\n".join(f"Original PDF page {p['page']} (fragment {p['part']}):\n{p['text'] if p['text'].strip() else '[No extractable text]'}" for p in segment["pieces"])
     allowed=json.dumps(segment["source_pages"])
-    return f"""Return ONE compact JSON object for an educational lesson draft based ONLY on the supplied NCERT excerpt. Do not copy textbook wording or exercises. Never guess chapter identity or facts. If chapter number is not certain, use null and mapping_confidence "LOW". Keep every bilingual text field short (normally one sentence; only 1-2 short paragraphs per explanation). Exactly one learning objective, at most two concepts per language, exactly two MCQs with exactly two short options each, and exactly two tutor examples (one en, one hi). Tutor examples must cite only these allowed original PDF pages: {allowed}.
-Return only JSON matching these keys:
-chapter_number (1..80 or null); chapter_title_by_locale {{en,hi}}; mapping_confidence; topic_title_by_locale {{en,hi}}; microtopic_title_by_locale {{en,hi}}; concepts_by_locale {{en:[strings],hi:[strings]}}; learning_objectives [{{statement_by_locale:{{en,hi}}}}];
-explanation_by_locale {{en:{{heading,paragraphs:[strings]}},hi:{{heading,paragraphs:[strings]}}}};
-worked_example_by_locale (same shape, one concise step/example per language); recap_by_locale {{en,hi}};
-questions [2 objects: prompt_by_locale {{en,hi}}, options [2 objects {{id,text_by_locale:{{en,hi}}}}], correct_answer_ids [one option ID], feedback_by_locale {{en,hi}}];
-tutor_examples [2 objects {{language:"en" or "hi",student_message,assistant_message,source_pages:[allowed page numbers]}}].
-Keep JSON compact. Avoid markdown, commentary and repeated text. Class {source['class_no']}; subject {source['subject']}; source language {source['language']}; book ID {source['book_id']}; title {source['title']}; edition {source['edition']}.
-Source excerpt:
-{context}"""
+    visual_rows=visuals or []
+    visual_choices=[
+        {"visual_candidate_id":x["candidate_id"],"source_pdf_page_number":x["source_pdf_page_number"]}
+        for x in visual_rows if isinstance(x,dict) and x.get("candidate_id")
+    ]
+    visual_text=json.dumps(visual_choices,ensure_ascii=False)
+    return f"""Create one compact, review-only bilingual NCERT learning unit grounded only in this excerpt. Use original wording; never copy textbook text or exercise questions. Never guess facts, chapter identity, page numbers or visual contents.
+There is NO question-type quota. The structured types below are a supported catalogue, not a checklist. Generate only questions that the source context and learning objectives justify; do not rotate through types, do not pad the output, and do not omit a core assessable idea just to keep the set short. Return 1 to 6 distinct, useful questions; fewer high-quality questions are better than redundant questions.
+Supported types and purpose:
+- multiple_choice: one best choice for an important concept or misconception;
+- multiple_select: select all independently correct statements when there are genuinely multiple answers;
+- true_false: test a precise, meaningful proposition (not trivial wording);
+- matching: match related terms, structures, functions or categories;
+- fill_blank: recall a clearly defined term/value with a stable expected answer;
+- image_observation: interpret a visual only when its candidate ID is in the supplied allowlist and the visual genuinely supports the question;
+- short_answer: explain, compare, predict or justify; include a bilingual rubric and sample answer;
+- scenario_based: apply the concept to a distinct realistic scenario with a choice response.
+The only eligible image candidates for this excerpt are: {visual_text}. Do not use image_observation if no relevant candidate exists in this allowlist. Never invent visual IDs. A visual candidate is still unapproved; all visual-dependent output remains non-publishable and blocked from student rendering.
+Every generated question must assess a stated learning objective, cite one or more exact allowed source PDF pages {allowed}, remain within the mapped chapter, and add information not already asked redundantly by another question. Source sections, tables, activities and examples may be accounted for through explanation or worked example; do not force every item to become a question.
+Keep all learner-facing content semantically aligned in natural English and Hindi. Use one concise bilingual learning objective, at most two concepts per locale, concise explanations and one worked example when supported. Create exactly two tutor examples: one English and one Hindi; each must cite allowed pages.
+Return JSON only:
+{{
+  "chapter_number": 1,
+  "chapter_title_by_locale": {{"en":"...","hi":"..."}},
+  "mapping_confidence": "HIGH|MEDIUM|LOW",
+  "topic_title_by_locale": {{"en":"...","hi":"..."}},
+  "microtopic_title_by_locale": {{"en":"...","hi":"..."}},
+  "concepts_by_locale": {{"en":["..."],"hi":["..."]}},
+  "learning_objectives": [{{"statement_by_locale":{{"en":"...","hi":"..."}}}}],
+  "explanation_by_locale": {{"en":{{"heading":"...","paragraphs":["..."]}},"hi":{{"heading":"...","paragraphs":["..."]}}}},
+  "worked_example_by_locale": {{"en":{{"heading":"...","paragraphs":["..."]}},"hi":{{"heading":"...","paragraphs":["..."]}}}},
+  "recap_by_locale": {{"en":"...","hi":"..."}},
+  "questions": [
+    {{"type":"multiple_choice|multiple_select|true_false|matching|fill_blank|image_observation|short_answer|scenario_based",
+      "prompt_by_locale":{{"en":"...","hi":"..."}},
+      "feedback_by_locale":{{"en":"...","hi":"..."}},
+      "source_pages":[{segment['source_pages'][0]}],
+      "difficulty":"easy|medium|hard",
+      "options":[{{"id":"stable-option-id","text_by_locale":{{"en":"...","hi":"..."}}}}],
+      "correct_answer_ids":["stable-option-id"],
+      "correct_answer":true,
+      "left_items":[{{"id":"left-id","label_by_locale":{{"en":"...","hi":"..."}}}}],
+      "right_items":[{{"id":"right-id","label_by_locale":{{"en":"...","hi":"..."}}}}],
+      "correct_pairs":[{{"left_id":"left-id","right_id":"right-id"}}],
+      "accepted_answers":{{"en":["..."],"hi":["..."]}},
+      "answer_guide_by_locale":{{"en":{{"sample_answer":"...","key_points":["..."]}},"hi":{{"sample_answer":"...","key_points":["..."]}}}},
+      "grading":{{"max_score":2,"rubric_by_locale":{{"en":"...","hi":"..."}}}},
+      "scenario_by_locale":{{"en":"...","hi":"..."}},
+      "visual_candidate_id":"an ID from the supplied allowlist or null"
+    }}
+  ],
+  "tutor_examples":[
+    {{"language":"en","student_message":"...","assistant_message":"...","source_pages":[{segment['source_pages'][0]}]}},
+    {{"language":"hi","student_message":"...","assistant_message":"...","source_pages":[{segment['source_pages'][0]}]}}
+  ]
+}}
+For each question emit only fields appropriate to its selected type. Option/answer ID arrays are for choice questions; true_false uses boolean correct_answer; matching uses both item lists and correct_pairs; fill_blank uses accepted answers in both locales; short_answer uses bilingual answer guide and rubric with a positive max score; scenario_based keeps separate scenario and prompt; image_observation uses a candidate ID from the allowlist plus choice fields. Do not make up scores for short answers.
+Class {source['class_no']}; subject {source['subject']}; language edition {source['language']}; book ID {source['book_id']}; title {source['title']}; edition {source['edition']}.
+SOURCE EXCERPT START
+{context}
+SOURCE EXCERPT END
+""";
 
 def ollama_chat(endpoint: str, model: str, prompt: str, timeout: int=180, opener: Any=None) -> tuple[dict[str,Any],float]:
     u=urllib.parse.urlparse(endpoint)
@@ -261,7 +328,26 @@ def ollama_chat(endpoint: str, model: str, prompt: str, timeout: int=180, opener
         if attempt==0: time.sleep(1)
     raise RuntimeError(f"Local Ollama call failed: {last}") from last
 
-def validate_output(v: Any, allowed: set[int]) -> list[str]:
+def _bilingual_list(value: Any) -> bool:
+    return isinstance(value,dict) and all(
+        isinstance(value.get(locale),list) and bool(value[locale]) and
+        all(isinstance(item,str) and item.strip() for item in value[locale])
+        for locale in ("en","hi")
+    )
+
+def _bilingual_items(items: Any) -> bool:
+    if not isinstance(items,list) or not items:
+        return False
+    seen=set()
+    for item in items:
+        if not isinstance(item,dict) or not isinstance(item.get("id"),str) or not item["id"].strip():
+            return False
+        if item["id"] in seen or not localized(item.get("label_by_locale")):
+            return False
+        seen.add(item["id"])
+    return True
+
+def validate_output(v: Any, allowed: set[int], visuals: list[dict[str,Any]]|None=None) -> list[str]:
     errors=[]
     if not isinstance(v,dict): return ["not an object"]
     chapter=v.get("chapter_number")
@@ -280,17 +366,65 @@ def validate_output(v: Any, allowed: set[int]) -> list[str]:
         for l in ("en","hi"):
             b=block.get(l)
             if not isinstance(b,dict) or not isinstance(b.get("heading"),str) or not b["heading"].strip() or not isinstance(b.get("paragraphs"),list) or not b["paragraphs"] or any(not isinstance(x,str) or not x.strip() for x in b["paragraphs"]): errors.append(k+"."+l+" invalid")
+    available_visuals={x.get("candidate_id"):x for x in (visuals or []) if isinstance(x,dict) and isinstance(x.get("candidate_id"),str)}
     qs=v.get("questions")
-    if not isinstance(qs,list) or len(qs)!=2: errors.append("exactly two questions required")
+    if not isinstance(qs,list) or not 1<=len(qs)<=6: errors.append("questions must contain between 1 and 6 useful items")
     else:
+        seen_prompts=set()
         for i,q in enumerate(qs):
-            if not isinstance(q,dict) or not localized(q.get("prompt_by_locale")) or not localized(q.get("feedback_by_locale")): errors.append(f"question {i} lacks bilingual prompt/feedback"); continue
-            opts=q.get("options")
-            if not isinstance(opts,list) or len(opts)<2: errors.append(f"question {i} needs options"); continue
-            ids=[o.get("id") for o in opts if isinstance(o,dict) and isinstance(o.get("id"),str) and o.get("id").strip() and localized(o.get("text_by_locale"))]
-            if len(ids)!=len(opts) or len(ids)!=len(set(ids)): errors.append(f"question {i} options invalid")
-            correct=q.get("correct_answer_ids")
-            if not isinstance(correct,list) or len(correct)!=1 or correct[0] not in ids: errors.append(f"question {i} answer key invalid")
+            if not isinstance(q,dict): errors.append(f"question {i} invalid"); continue
+            qtype=str(q.get("type","")).strip()
+            if qtype not in QUESTION_TYPES: errors.append(f"question {i} unsupported type {qtype!r}"); continue
+            if not localized(q.get("prompt_by_locale")) or not localized(q.get("feedback_by_locale")):
+                errors.append(f"question {i} lacks bilingual prompt/feedback")
+            if str(q.get("difficulty", "")).strip().lower() not in {"easy", "medium", "hard"}:
+                errors.append(f"question {i} difficulty must be easy, medium or hard")
+            prompt_key=json.dumps(q.get("prompt_by_locale"),ensure_ascii=False,sort_keys=True)
+            if prompt_key in seen_prompts: errors.append(f"question {i} duplicates another question prompt")
+            seen_prompts.add(prompt_key)
+            cited=q.get("source_pages")
+            if not isinstance(cited,list) or not cited or any(not isinstance(p,int) or isinstance(p,bool) or p not in allowed for p in cited):
+                errors.append(f"question {i} must cite one or more exact allowed PDF pages")
+            if qtype in {"multiple_choice","multiple_select","scenario_based","image_observation"}:
+                opts=q.get("options"); correct=q.get("correct_answer_ids")
+                if not isinstance(opts,list) or len(opts)<2: errors.append(f"question {i} needs at least two options"); continue
+                ids=[o.get("id") for o in opts if isinstance(o,dict) and isinstance(o.get("id"),str) and o.get("id").strip() and localized(o.get("text_by_locale"))]
+                if len(ids)!=len(opts) or len(ids)!=len(set(ids)): errors.append(f"question {i} options invalid")
+                if not isinstance(correct,list) or not correct or any(not isinstance(cid,str) for cid in correct) or len(correct)!=len(set(correct)) or any(cid not in ids for cid in correct):
+                    errors.append(f"question {i} answer option references invalid")
+                if qtype in {"multiple_choice","scenario_based","image_observation"} and (not isinstance(correct,list) or len(correct)!=1):
+                    errors.append(f"question {i} must have exactly one correct option")
+                if qtype=="scenario_based" and not localized(q.get("scenario_by_locale")):
+                    errors.append(f"question {i} scenario is not bilingual and separate from its prompt")
+                if qtype=="image_observation":
+                    visual_id=q.get("visual_candidate_id")
+                    visual=available_visuals.get(visual_id) if isinstance(visual_id,str) else None
+                    if visual is None:
+                        errors.append(f"question {i} image observation requires an allowed relevant visual_candidate_id")
+                    elif not isinstance(cited,list) or visual.get("source_pdf_page_number") not in cited:
+                        errors.append(f"question {i} must cite the PDF page containing its referenced image")
+            elif qtype=="true_false":
+                if not isinstance(q.get("correct_answer"),bool): errors.append(f"question {i} true_false correct_answer must be boolean")
+            elif qtype=="matching":
+                left=q.get("left_items"); right=q.get("right_items"); pairs=q.get("correct_pairs")
+                if not _bilingual_items(left) or not _bilingual_items(right): errors.append(f"question {i} matching items invalid")
+                else:
+                    lset={x["id"] for x in left}; rset={x["id"] for x in right}
+                    if not isinstance(pairs,list) or len(pairs)!=len(left): errors.append(f"question {i} matching needs one pair per left item")
+                    else:
+                        seen_left=set()
+                        for pair in pairs:
+                            if not isinstance(pair,dict) or not isinstance(pair.get("left_id"),str) or not isinstance(pair.get("right_id"),str) or pair.get("left_id") not in lset or pair.get("right_id") not in rset or pair.get("left_id") in seen_left:
+                                errors.append(f"question {i} matching pair references invalid"); break
+                            seen_left.add(pair["left_id"])
+            elif qtype=="fill_blank":
+                if not _bilingual_list(q.get("accepted_answers")): errors.append(f"question {i} accepted answers need non-empty English/Hindi lists")
+            elif qtype=="short_answer":
+                guide=q.get("answer_guide_by_locale"); grading=q.get("grading")
+                if not isinstance(guide,dict) or any(not isinstance(guide.get(l),dict) or not isinstance(guide[l].get("sample_answer"),str) or not guide[l]["sample_answer"].strip() or not isinstance(guide[l].get("key_points"),list) or not guide[l]["key_points"] or any(not isinstance(point,str) or not point.strip() for point in guide[l]["key_points"] ) for l in ("en","hi")):
+                    errors.append(f"question {i} needs bilingual short-answer guide/sample answer")
+                if not isinstance(grading,dict) or not isinstance(grading.get("max_score"),(int,float)) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")):
+                    errors.append(f"question {i} needs positive max_score and bilingual rubric")
     examples=v.get("tutor_examples"); found=set()
     if not isinstance(examples,list): errors.append("tutor_examples missing")
     else:
@@ -355,11 +489,27 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
        "content_by_locale":{"en":{"key_takeaways":[v["recap_by_locale"]["en"]],"vocabulary":[]},"hi":{"key_takeaways":[v["recap_by_locale"]["hi"]],"vocabulary":[]}}},
     ])
     questions=[]
+    visual_by_id={x.get("candidate_id"):x for x in (visuals or []) if isinstance(x,dict) and isinstance(x.get("candidate_id"),str)}
+    candidate_block_by_id={b.get("visual_id"):b for b in blocks if isinstance(b,dict) and b.get("type")=="image"}
     for i,q in enumerate(v["questions"],1):
-        questions.append({"id":aid+f"-q-{i}","type":"multiple_choice","rendering_contract_id":"qtype-multiple-choice.v1",
-                          "prompt_by_locale":q["prompt_by_locale"],"feedback_by_locale":q["feedback_by_locale"],
-                          "options":q["options"],"correct_answer_ids":q["correct_answer_ids"],
-                          "objective_ids":objective_ids,"source_refs":refids,"difficulty":"review-required"})
+        qtype=q["type"]
+        question={"id":aid+f"-q-{i}","type":qtype,"rendering_contract_id":RENDERER_IDS[qtype],
+                  "prompt_by_locale":q["prompt_by_locale"],"feedback_by_locale":q["feedback_by_locale"],
+                  "objective_ids":objective_ids,"source_refs":[ref_by_page[p] for p in q["source_pages"]],
+                  "difficulty":q["difficulty"]}
+        for field in ("options","correct_answer_ids","correct_answer","left_items","right_items","correct_pairs",
+                      "accepted_answers","answer_guide_by_locale","grading","scenario_by_locale"):
+            if field in q: question[field]=q[field]
+        if qtype=="image_observation":
+            visual_id=q["visual_candidate_id"]
+            if visual_id not in visual_by_id or visual_id not in candidate_block_by_id:
+                raise ValueError(f"image_observation references missing lesson visual {visual_id}")
+            question["visual_asset_ref"]=visual_id
+            question["alt_by_locale"]=block["asset"]["alt_by_locale"]
+            question["caption_by_locale"]=block["asset"]["caption_by_locale"]
+            question["renderability"]={"status":"BLOCKED_FROM_STUDENT_RENDERING",
+                "reason":"Candidate visual is unapproved; render only after exact-asset visual, rights, language and accessibility approval."}
+        questions.append(question)
     return {"schema_version":"quantaedge.structured-lesson.v1","artifact_type":"quantaedge.structured-lesson.v1","artifact_id":aid,
       "workflow":{"status":"DRAFT_REQUIRES_HUMAN_REVIEW","content_review_status":"NOT_REVIEWED","source_completeness_status":"SOURCE_LINKED_REQUIRES_REVIEW",
                   "visual_review_status":"NOT_REVIEWED","bilingual_parity_status":"MACHINE_CHECKED_REQUIRES_REVIEW","publication_allowed":False,
@@ -411,13 +561,41 @@ def validate_lesson(x: dict[str,Any]) -> list[str]:
         tx=b.get("text_by_locale")
         if not isinstance(tx,dict) or any(not isinstance(tx.get(l),dict) or not tx[l].get("paragraphs") for l in ("en","hi")): e.append("block bilingual text invalid")
     qs=x.get("practice",{}).get("questions",[])
-    if len(qs)!=2: e.append("question count invalid")
+    if not isinstance(qs,list) or not 1<=len(qs)<=6: e.append("question count must be between 1 and 6")
+    visual_by_id={b.get("visual_id"):b for b in blocks if isinstance(b,dict) and b.get("type")=="image" and isinstance(b.get("visual_id"),str)}
     for q in qs:
-        if not isinstance(q,dict) or q.get("type")!="multiple_choice" or q.get("rendering_contract_id")!="qtype-multiple-choice.v1": e.append("question contract invalid"); continue
+        if not isinstance(q,dict): e.append("question invalid"); continue
+        qtype=q.get("type")
+        if not isinstance(qtype,str) or qtype not in QUESTION_TYPES or q.get("rendering_contract_id")!=RENDERER_IDS.get(qtype):
+            e.append("question renderer contract invalid"); continue
         if not localized(q.get("prompt_by_locale")) or not localized(q.get("feedback_by_locale")): e.append("question locale gap")
-        ids={o.get("id") for o in q.get("options",[]) if isinstance(o,dict)}
-        if len(ids)<2 or len(ids)!=len(q.get("options",[])) or len(q.get("correct_answer_ids",[]))!=1 or q["correct_answer_ids"][0] not in ids: e.append("question option/answer invalid")
         if any(r not in oids for r in q.get("objective_ids",[])) or any(r not in rids for r in q.get("source_refs",[])): e.append("question references invalid")
+        if qtype in {"multiple_choice","multiple_select","scenario_based","image_observation"}:
+            options=q.get("options",[]); ids={o.get("id") for o in options if isinstance(o,dict)}
+            correct=q.get("correct_answer_ids")
+            if len(ids)<2 or len(ids)!=len(options) or not isinstance(correct,list) or not correct or any(cid not in ids for cid in correct): e.append("question option/answer invalid")
+            if qtype in {"multiple_choice","scenario_based","image_observation"} and (not isinstance(correct,list) or len(correct)!=1): e.append("single-select answer invalid")
+            if qtype=="scenario_based" and not localized(q.get("scenario_by_locale")): e.append("scenario locale gap")
+            if qtype=="image_observation":
+                visual_ref=q.get("visual_asset_ref")
+                if not isinstance(visual_ref,str) or visual_ref not in visual_by_id: e.append("image-observation visual reference invalid")
+                if not localized(q.get("alt_by_locale")) or not localized(q.get("caption_by_locale")): e.append("image-observation alt/caption locale gap")
+                renderability=q.get("renderability")
+                if not isinstance(renderability,dict) or renderability.get("status")!="BLOCKED_FROM_STUDENT_RENDERING": e.append("unapproved image-observation question must remain blocked")
+        elif qtype=="true_false":
+            if not isinstance(q.get("correct_answer"),bool): e.append("true_false answer invalid")
+        elif qtype=="matching":
+            left=q.get("left_items",[]); right=q.get("right_items",[]); pairs=q.get("correct_pairs",[])
+            left_ids={row.get("id") for row in left if isinstance(row,dict)}
+            right_ids={row.get("id") for row in right if isinstance(row,dict)}
+            if not _bilingual_items(left) or not _bilingual_items(right) or not isinstance(pairs,list) or len(pairs)!=len(left): e.append("matching contract invalid")
+            elif any(not isinstance(pair,dict) or pair.get("left_id") not in left_ids or pair.get("right_id") not in right_ids for pair in pairs): e.append("matching references invalid")
+        elif qtype=="fill_blank":
+            if not _bilingual_list(q.get("accepted_answers")): e.append("fill_blank accepted answers invalid")
+        elif qtype=="short_answer":
+            guide=q.get("answer_guide_by_locale"); grading=q.get("grading")
+            if not isinstance(guide,dict) or any(not isinstance(guide.get(l),dict) or not isinstance(guide[l].get("sample_answer"),str) or not guide[l]["sample_answer"].strip() or not isinstance(guide[l].get("key_points"),list) or not guide[l]["key_points"] for l in ("en","hi")): e.append("short-answer guide invalid")
+            if not isinstance(grading,dict) or not isinstance(grading.get("max_score"),(int,float)) or isinstance(grading.get("max_score"),bool) or grading["max_score"]<=0 or not localized(grading.get("rubric_by_locale")): e.append("short-answer grading invalid")
     w=x.get("workflow",{})
     if w.get("publication_allowed") is not False or w.get("human_review_required") is not True: e.append("publication gate invalid")
     return e
@@ -630,8 +808,8 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         if calls>=args.max_model_calls: break
         calls+=1
         try:
-            value,elapsed=ollama_chat(args.endpoint,args.model,prompt_for(source,seg),args.request_timeout,opener)
-            errors=validate_output(value,set(seg["source_pages"]))
+            value,elapsed=ollama_chat(args.endpoint,args.model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[])),args.request_timeout,opener)
+            errors=validate_output(value,set(seg["source_pages"]),visuals_by_segment.get(seg["segment_id"],[]))
             if errors:
                 checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
                   "attempts":int((prior or {}).get("attempts",0))+1,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2)}
@@ -722,7 +900,7 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
             value_sha=sha(json.dumps(value,ensure_ascii=False,sort_keys=True))
             if sample.get("sample_output_sha256") and sample["sample_output_sha256"]!=value_sha:
                 raise ValueError(f"Raw output hash mismatch: {model_row['model']} / {segment_id}")
-            schema_errors=validate_output(value,set(segment["source_pages"]))
+            schema_errors=validate_output(value,set(segment["source_pages"]),visuals_by_segment.get(segment_id,[]))
             lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[])) if not schema_errors else None
             lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not schema_errors else [])
             lesson_valid=(not schema_errors and lesson is not None and not lesson_errors)
@@ -773,8 +951,8 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         for seg in samplesegs:
             start=time.monotonic()
             try:
-                value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg),args.request_timeout,opener)
-                errs=validate_output(value,set(seg["source_pages"]))
+                value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[])),args.request_timeout,opener)
+                errs=validate_output(value,set(seg["source_pages"]),visuals_by_segment.get(seg["segment_id"],[]))
                 lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[])) if not errs else None
                 lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not errs else [])
                 lesson_valid=(not errs and lesson is not None and not lesson_errors)
