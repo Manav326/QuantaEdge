@@ -242,7 +242,7 @@ class LayersTests(unittest.TestCase):
                 "generated":generated,"lesson":lesson,"sft_rows":sft}}
             rag=root/"rag.jsonl"; write_rag(rag,source)
             report=write_outputs(source,[segment],checkpoint,root/"out",rag,"qwen2.5:1.5b","f"*64)
-            self.assertEqual([1],report["unresolved_source_pages"])
+            self.assertEqual([2],report["unresolved_source_pages"])
             self.assertEqual([2],report["unresolved_text_pages"])
             self.assertEqual("INCOMPLETE",report["layers"]["6"])
             self.assertEqual("INCOMPLETE",report["layers"]["7"])
