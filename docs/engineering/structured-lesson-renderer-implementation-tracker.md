@@ -223,3 +223,14 @@ A focused review of the staged Web/Admin/Android source found and fixed these UI
 - The guard is released in `finally`, including on endpoint errors, so the learner can retry after a failed request. This prevents accidental duplicate requests from fast repeated clicks without falsely claiming the response was saved.
 - Web learner and Admin preview share the same renderer files by Git blob, so this interaction stays visually and behaviorally aligned.
 - **Acceptance remains in progress:** this is a narrow UI hardening fix, not evidence of end-to-end structured artifact API/persistence. No SL task is marked complete. Verify the repository's CI for this commit.
+
+
+## 8. Main-branch verification and next UI batch — 2026-10-16
+
+This section supersedes stale statements in sections 5–7 that described the renderer files as staged/not on `main` or said CI for the duplicate-submit fix was still pending.
+
+- **Verified prior commit:** [`e7ca9ef`](https://github.com/Manav326/QuantaEdge/commit/e7ca9efed79e288ed31407435f95d29b1092497a) is on `main`; its full [GitHub Actions run](https://github.com/Manav326/QuantaEdge/actions/runs/38867958633) completed successfully. Android APK, Web image, Admin image, API image, API verification, content import safeguards, component detection and People Operations image jobs all passed.
+- **Implemented in this batch:** Admin structured preview now includes a read-only artifact inspector for chapter/topic/schema identity, bilingual objectives, source references, ordered explanation blocks, canonical question contracts, and explicit review/publication workflow statuses. The inspector does not mutate the artifact or mark it approved.
+- **Governance rule:** structural validation and rendering preview remain distinct from source completeness, science review, bilingual review, visual approval and publication permission.
+- **Task status:** SL-21 and SL-23 are still in progress, not complete; the inspector is a foundation, not proof that every Chapter 1–6 draft is loaded from a managed repository source or that all review gates are actionable. SL-01–SL-28 remain unchecked until their full acceptance criteria and tests pass.
+- **Next required integration:** backward-compatible server-side structured artifact loading, response persistence/grading by stable IDs, answer-key sanitization, and wiring the same artifact into Web learner and Android runtime. Do not use legacy numeric question IDs for structured artifact IDs.

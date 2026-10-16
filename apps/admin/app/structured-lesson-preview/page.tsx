@@ -105,6 +105,73 @@ export default function StructuredLessonPreviewPage() {
             <button type="button" className="qe-structured-button-secondary" onClick={() => setShowRaw(value => !value)}>{showRaw ? 'Hide JSON' : 'Show JSON'}</button>
           </div>
         </div>
+        <section className="qe-structured-inspector" aria-labelledby="qe-structured-inspector-title">
+          <div className="qe-structured-inspector__heading">
+            <div>
+              <h2 id="qe-structured-inspector-title">Structured artifact inspector</h2>
+              <p>Read-only inspection of the parsed artifact. This view never edits source data or changes publication status.</p>
+            </div>
+            <span className="qe-structured-inspector__count">{lesson.explain.blocks.length} content blocks · {lesson.practice.questions.length} questions</span>
+          </div>
+          <div className="qe-structured-inspector__grid">
+            <article className="qe-structured-inspector__card">
+              <h3>Lesson metadata</h3>
+              <dl>
+                <div><dt>Chapter</dt><dd>{lesson.chapter.chapter_number} · {lesson.chapter.title_by_locale[locale]}</dd></div>
+                <div><dt>Topic</dt><dd>{lesson.topic.topic_id} · {lesson.topic.title_by_locale[locale]}</dd></div>
+                <div><dt>Schema</dt><dd>{lesson.schema_version}</dd></div>
+                <div><dt>Artifact</dt><dd>{lesson.artifact_id}</dd></div>
+              </dl>
+            </article>
+            <article className="qe-structured-inspector__card">
+              <h3>Learning objectives ({lesson.learning_objectives?.length || 0})</h3>
+              {lesson.learning_objectives?.length
+                ? <ul>{lesson.learning_objectives.map(objective => <li key={objective.id}><code>{objective.id}</code><span>{objective.statement_by_locale?.[locale] || 'Missing selected-language statement'}</span></li>)}</ul>
+                : <p className="qe-structured-inspector__empty">No learning objectives are declared.</p>}
+            </article>
+            <article className="qe-structured-inspector__card">
+              <h3>Source traceability ({lesson.source_refs?.length || 0})</h3>
+              {lesson.source_refs?.length
+                ? <ul>{lesson.source_refs.map((source, index) => <li key={String(source.source_ref_id || source.id || index)}>
+                    <strong>{String(source.title || source.source_title || source.source_type || 'Source reference')}</strong>
+                    <span>{[source.book_id, source.edition, source.page, source.pdf_page, source.url].filter(value => value !== undefined && value !== null && String(value).trim()).map(String).join(' · ') || 'Source metadata needs review'}</span>
+                  </li>)}</ul>
+                : <p className="qe-structured-inspector__empty">No explicit source_refs are declared. Check curriculum textbook metadata and topic page mapping separately.</p>}
+            </article>
+            <article className="qe-structured-inspector__card">
+              <h3>Explain blocks ({lesson.explain.blocks.length})</h3>
+              <ol>{[...lesson.explain.blocks].sort((a, b) => a.order - b.order).map(block => <li key={block.id}>
+                <span><strong>{block.order}. {block.type}</strong><small>{block.id}</small></span>
+                <span className="qe-structured-inspector__tag">{block.type === 'image' || block.type === 'diagram'
+                  ? String((block as any).review_status || (block.asset as any)?.review_status || (block.diagram_data as any)?.review_status || 'review state not explicit').replaceAll('_', ' ')
+                  : 'content block'}</span>
+              </li>)}</ol>
+            </article>
+            <article className="qe-structured-inspector__card">
+              <h3>Practice questions ({lesson.practice.questions.length})</h3>
+              <ol>{lesson.practice.questions.map(question => <li key={question.id}>
+                <span><strong>{question.type}</strong><small>{question.id}</small></span>
+                <span className="qe-structured-inspector__tag">{question.rendering_contract_id === undefined ? 'contract missing' : question.rendering_contract_id}</span>
+              </li>)}</ol>
+            </article>
+            <article className="qe-structured-inspector__card">
+              <h3>Review and publication gates</h3>
+              <ul className="qe-structured-inspector__gates">
+                {[
+                  ['Content review', lesson.workflow?.content_review_status],
+                  ['Source completeness', lesson.workflow?.source_completeness_status],
+                  ['Visual review', lesson.workflow?.visual_review_status],
+                  ['Bilingual parity', lesson.workflow?.bilingual_parity_status],
+                  ['Publication workflow', lesson.workflow?.status],
+                  ['Publication allowed', lesson.workflow?.publication_allowed === true ? 'ALLOWED' : 'BLOCKED'],
+                ].map(([label, status]) => <li key={String(label)}>
+                  <span>{label}</span><strong>{String(status || 'NOT DECLARED').replaceAll('_', ' ')}</strong>
+                </li>)}
+              </ul>
+              <p className="qe-structured-inspector__note">A schema pass is not science review, source verification, bilingual approval or permission to publish.</p>
+            </article>
+          </div>
+        </section>
         {showRaw && <pre className="qe-structured-raw-json">{JSON.stringify(lesson, null, 2)}</pre>}
         <StructuredLessonExperience
           key={lesson.artifact_id}
