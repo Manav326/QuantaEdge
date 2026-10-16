@@ -222,3 +222,11 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 ### CI-driven correction — student broadcast render guard
 
 - The first frontend build reported TypeScript errors because the newly added broadcast iframe read `activeJoined` without guarding the optional result of the session lookup. Changed the condition to require `activeJoined` before reading its provider/title. This is a genuine nullability issue, not a suppression or cast. Re-run the web build and the full workflow; do not mark the feature green until the current `main` SHA passes.
+
+
+### CI-driven root-cause correction — migration and card action
+
+- Run #2878 exposed two independent defects: V108 had a malformed SQL regular-expression literal and stray duplicated SQL appended after the metadata upsert; the web build also found the card action dereferenced `activeJoined` when the card's session variable was the correct scoped value.
+- Rewrote V108 as a complete clean forward migration. The constraint now validates ID length and allowed characters without a dollar-anchored expression, requires non-null ID, and enforces no private meeting URL for YouTube broadcasts.
+- Corrected the class-card action to use its own `session.provider`, not optional `activeJoined.provider`. This addresses the TypeScript failure at its source rather than masking the type checker.
+- Re-run full API migration tests and web build on the resulting commit; do not proceed on the assumption these fixes pass.
