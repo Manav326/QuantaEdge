@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 175,
-    "successful_visual_analyses": 167,
-    "missing_visual_analyses": 7313,
-    "failed_visual_analyses": 8,
+    "raw_analysis_result_rows": 200,
+    "successful_visual_analyses": 191,
+    "missing_visual_analyses": 7288,
+    "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7321,
+    "unresolved_count": 7297,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -17065,9 +17065,67 @@
       "asset_path": "page-0019.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Table of contents for a textbook.",
+        "visual_type": "table",
+        "visible_text": [
+          "Contents",
+          "Foreword",
+          "About this Book",
+          "Chapter 1",
+          "The Ever-Evolving World of Science",
+          "Chapter 2",
+          "Exploring Substances: Acidic, Basic, and Neutral",
+          "Chapter 3",
+          "Electricity: Circuits and their Components",
+          "Chapter 4",
+          "The World of Metals and Non-metals",
+          "Chapter 5",
+          "Changes Around Us: Physical and Chemical",
+          "Chapter 6",
+          "Adolescence: A Stage of Growth and Change",
+          "Chapter 7",
+          "Heat Transfer in Nature",
+          "Chapter 8",
+          "Measurement of Time and Motion",
+          "Chapter 9",
+          "Life Processes in Animals",
+          "Chapter 10",
+          "Life Processes in Plants",
+          "Chapter 11",
+          "Light: Shadows and Reflections",
+          "Chapter 12",
+          "Earth, Moon, and the Sun"
+        ],
+        "concepts": [
+          "Foreword",
+          "About this Book",
+          "Chapter 1",
+          "The Ever-Evolving World of Science",
+          "Chapter 2",
+          "Exploring Substances: Acidic, Basic, and Neutral",
+          "Chapter 3",
+          "Electricity: Circuits and their Components",
+          "Chapter 4",
+          "The World of Metals and Non-metals",
+          "Chapter 5",
+          "Changes Around Us: Physical and Chemical",
+          "Chapter 6",
+          "Adolescence: A Stage of Growth and Change",
+          "Chapter 7",
+          "Heat Transfer in Nature",
+          "Chapter 8",
+          "Measurement of Time and Motion",
+          "Chapter 9",
+          "Life Processes in Animals"
+        ],
+        "context_relation": "Table of contents for a textbook.",
+        "limitations": [
+          "The page only shows the table of contents, not the actual content of the chapters."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17083,9 +17141,37 @@
       "asset_path": "assets/fbacc19bb222b338f01cffe7807cc12871695f813d45d912a59d2929c5cbdee7.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a national toll-free counseling telehelpline number and website.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call 8448440632",
+          "National Toll-free Counselling Tele-Helpline 8am to 8pm All days of the week",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond (An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
+          "www.https://manodarpan.education.gov.in"
+        ],
+        "concepts": [
+          "Counseling",
+          "Mental Health",
+          "Students",
+          "COVID-19",
+          "Ministry of Education",
+          "Atma Nirbhar Bharat Abhiyan"
+        ],
+        "context_relation": "The advertisement is promoting a counseling service for students during the COVID-19 pandemic.",
+        "limitations": [
+          "The advertisement does not provide specific details about the counseling services offered."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17101,9 +17187,18 @@
       "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17119,9 +17214,18 @@
       "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text, images, or other elements."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17137,9 +17241,18 @@
       "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17155,9 +17268,41 @@
       "asset_path": "page-0020.jpg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "An advertisement for a counseling service for students, highlighting various issues such as studies, exams, personal relationships, career concerns, and peer pressure. It provides a toll-free number for support.",
+        "visual_type": "diagram",
+        "visible_text": [
+          "If you are stressed, anxious, worried, sad or confused about ....",
+          "Studies and Exams",
+          "Personal Relationships",
+          "Career Concerns",
+          "Peer Pressure",
+          "Seek Support of Counsellors",
+          "Call",
+          "8448440632",
+          "National Toll-free Counselling Tele-Helpline",
+          "8am to 8pm",
+          "All days of the week",
+          "MANODARPAN",
+          "Psychosocial Support for Mental Health & Well-being of Students during the COVID-19 Outbreak and beyond (An initiative by Ministry of Education, Government of India, as part of Atma Nirbhar Bharat Abhiyan)",
+          "www.https://manodarpan.education.gov.in"
+        ],
+        "concepts": [
+          "counseling",
+          "mental health",
+          "students",
+          "COVID-19",
+          "toll-free number",
+          "helpline",
+          "psychosocial support"
+        ],
+        "context_relation": "The advertisement is promoting a counseling service for students during the COVID-19 pandemic.",
+        "limitations": [
+          "The advertisement does not provide specific details about the counseling services offered."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17173,9 +17318,25 @@
       "asset_path": "assets/3bd8a0abff7fa725fa2d9485d7701d075742a98d3f91c801c1a298774aa44e51.jpeg",
       "media_type": "image/jpeg",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "Children playing with paper airplanes in a park, with a toy rocket in the sky and birds flying nearby.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "play",
+          "paper airplanes",
+          "park",
+          "toy rocket",
+          "birds",
+          "sky"
+        ],
+        "context_relation": "The image depicts a playful and leisurely scene in a park, where children are engaged in a simple outdoor activity.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the grade level."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17191,9 +17352,18 @@
       "asset_path": "assets/c6afc184abe5abd3427bc0118a597ef7663c09cad042ad7edff71962f4e6653c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17209,9 +17379,33 @@
       "asset_path": "assets/21459d22d0043b74a056e9f301db9144049aeb9057174aad850dfe3c8d13b583.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a gray background and text about the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "science",
+          "curiosity",
+          "world of science",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "introduction to the world of science",
+        "limitations": [
+          "no specific images or diagrams are visible",
+          "text is not visually represented"
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17227,9 +17421,31 @@
       "asset_path": "assets/d99ec91611b1e64fae02a52df60e4861273da7c6e3b0ee6325643c65a7bffbbe.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with various scientific symbols and icons.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the world of science",
+        "limitations": [
+          "No specific symbols or icons are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17245,9 +17461,22 @@
       "asset_path": "assets/acc00753d95951e383b7ea3a5d328ba614fa5fc36a2647d7904aa8c0af84d98b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A pixelated image of a letter 'B'.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "B"
+        ],
+        "concepts": [
+          "letter"
+        ],
+        "context_relation": "The image is a part of the text about the world of science.",
+        "limitations": [
+          "The image is pixelated and not clear enough to identify specific details."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17263,9 +17492,18 @@
       "asset_path": "assets/b8fc88b05c32b7acdd9651470dc4942369af2e27030a2fffafa65f8ecb395e90.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17281,9 +17519,31 @@
       "asset_path": "assets/710da813e79bc1df9df8fddf301f1c21038120a11e51ff45cc7f6b9f1dc6d770.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17299,9 +17559,18 @@
       "asset_path": "assets/1229664e04e37f177275f69b012bc55485be8a28c9fabd407a1f3e663cc9a476.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17317,9 +17586,18 @@
       "asset_path": "assets/409f924b0b4039facdee4a3f51b1b642dec40fcaa77fd86e82874b02b051d2f9.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a plain gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or introductory page in a textbook.",
+        "limitations": [
+          "The page is empty and lacks any visual elements or text content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17335,9 +17613,16 @@
       "asset_path": "assets/cdd1b6d3662f36cc4aed3b47b70cdb78fc3f154041efcb877d7fb7a0039ed5ad.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page from a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17353,9 +17638,18 @@
       "asset_path": "assets/a45cd8259b55b5ff18964daba678e9021828354712b2d6bbe40384bccdbe0032.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17371,9 +17665,31 @@
       "asset_path": "assets/47be0d8c6d0976cbc9e6518a440e117622f2dfdf589297f57eeb5a18ef3f4678.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with the title 'The Ever-Evolving World of Science' and a subtitle 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the subject matter",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17389,7 +17705,7 @@
       "asset_path": "assets/47be0d8c6d0976cbc9e6518a440e117622f2dfdf589297f57eeb5a18ef3f4678.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYSIS_ERROR",
       "correction_status": "NONE",
       "effective_analysis": null,
       "chapter_id": null,
@@ -17407,9 +17723,32 @@
       "asset_path": "assets/7c6ebeb48cc652ad83dc3c8ad727a84d76c5169b69543211fdfc186a70265b86.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with Curiosity in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science and encourages them to question and explore further.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17425,9 +17764,31 @@
       "asset_path": "assets/7c6ebeb48cc652ad83dc3c8ad727a84d76c5169b69543211fdfc186a70265b86.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a title and some text.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to a new chapter or section in a textbook",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17443,9 +17804,18 @@
       "asset_path": "assets/39c0a23e97c52680f6e92371d53c8aed1d045fa79267d2f135cff58343b98cf8.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17461,9 +17831,18 @@
       "asset_path": "assets/374d14c1dfd6b424932d44191e659019be65ce435bf4ef74dd0185c91fd1b8b1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17479,9 +17858,16 @@
       "asset_path": "assets/daec834b07438570b4535a4bbfb25cd4ea0101b1275be5ccd7914a8ff179a8bf.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a plain gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "introduction to the world of science",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -17497,9 +17883,18 @@
       "asset_path": "assets/950e729110dea539667d519847e27373af3e9df7ae19c5d518f32d18b2866ccf.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
