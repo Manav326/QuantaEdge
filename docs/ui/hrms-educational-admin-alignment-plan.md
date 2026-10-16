@@ -226,3 +226,8 @@ Implementation is proceeding directly on `main`. Each check distinguishes source
 - [ ] Rendered desktop/tablet/mobile screenshots, live browser interactions, role/session workflows, and payslip-print review remain pending. These must not be inferred from image builds alone.
 
 Run `38372164855` validates commit `ddc83a1` (HRMS auth branding/components). The newer status-consistency follow-up must pass its own workflow. Rendered screenshot/browser QA remains a separate pending gate.
+
+
+## Orange-led HRMS theme alignment — 2026-10-16
+
+**Status: implemented in CSS; build and visual verification still required.** The user explicitly clarified that People Operations/HRMS is the exception to the no-colour-change instruction because its standalone blue theme did not match QuantaEdge branding. HRMS-only theme alignment updates `apps/people/app/globals.css` to use the existing brand orange `#F97316`, deep orange `#C2410C`, soft orange `#FFF0E5`, and the established dark charcoal `#111A2B` for its login story panel. Active tabs, primary actions, focus outlines, and status pills now follow the orange-led brand palette. Semantic success/error colours and light work surfaces are preserved. No other app's palette, logo asset, wordmark, tagline, business logic, routes, permissions, API contracts, or data workflows are changed. No layout/placement changes are included in this pass.
