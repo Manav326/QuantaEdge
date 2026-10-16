@@ -310,7 +310,7 @@ class LayersTests(unittest.TestCase):
             self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
             self.assertIn("A leaf diagram",prompts[0])
             self.assertIn("asset-preview-1",prompts[0])
-            outdir=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")
+            outdir=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v5")
             mapping=json.loads((outdir/"curriculum-map.v1.json").read_text(encoding="utf-8"))
             self.assertEqual(["asset-preview-1"],mapping["topics"][0]["layer5_visual_evidence_asset_ids"])
             ledger_sha=__import__("hashlib").sha256(ledger.read_bytes()).hexdigest()
@@ -387,7 +387,7 @@ class LayersTests(unittest.TestCase):
             self.assertEqual(book,result["source_book_id"])
             self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
             self.assertEqual("DRAFT_REQUIRES_HUMAN_REVIEW",result["overall_status"])
-            mapping_path=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v4")/"curriculum-map.v1.json"
+            mapping_path=ledger.parent/"layers-6-8"/("qwen2.5-1.5b-sha"+pdfhash[:8]+"-v5")/"curriculum-map.v1.json"
             mapping=json.loads(mapping_path.read_text(encoding="utf-8"))
             self.assertEqual(pdfhash,mapping["source"]["source_pdf_sha256"])
             self.assertEqual(book,mapping["source"]["source_book_id"])
