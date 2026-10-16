@@ -29,6 +29,10 @@ AI-powered learning platform for Hindi-medium students, starting with Bihar Boar
 
 Parent registration collects the parent name and verifies the mobile OTP before creating the account. Local demo mode returns OTP `123456`. Each parent can manage a configurable number of active child profiles (default `APP_AUTH_MAX_CHILDREN_PER_PARENT=3`); increase this environment variable to expand the limit. Each child may subscribe to Maths, Science, or both, and the API enforces these subscriptions when listing, opening, starting, or practising lessons. Administrators can suspend/reactivate parent accounts and student profiles and manage subject tracks in the admin console under **Parents & families**. Suspension revokes current sessions; archiving a parent-child link retains learning history.
 
+## Data storage and Git policy
+
+Durable data intended for database import, AI Tutor training, or book/content consumption belongs under the appropriate `data/` subdirectory. Intermediate extraction/generation files, caches, scratch outputs, logs and temporary reports must stay in local/runner temporary storage or explicitly retained workflow artifacts; they must not be committed merely to survive `git pull`. See [Data Storage and Git Commit Policy](docs/product/data-storage-policy.md). Existing data paths must be classified and migrated deliberately; this policy does not assume all current artifacts already comply.
+
 ## Saved curriculum pipeline implementation plan
 
 The execution checklist for the complete-book → chapter → original learning material → bilingual assessment workflow is saved in [docs/product/curriculum-pipeline-implementation-plan.md](docs/product/curriculum-pipeline-implementation-plan.md).
