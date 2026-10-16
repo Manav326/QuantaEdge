@@ -175,7 +175,7 @@ def run_analysis(
     *,
     endpoint: str,
     model: str,
-    max_assets: int,
+    max_assets: int | None,
     include_page_previews: bool,
     timeout: int = 180,
     opener=urllib.request.urlopen,
@@ -216,9 +216,11 @@ def run_analysis(
         if asset.get("kind") == "page_preview" and not include_page_previews:
             continue
         asset_id = asset.get("asset_id")
-        if not asset_id or asset_id in seen:
-            continue
-        seen.add(str(asset_id))
+        if not isinstance(asset_id, str) or not asset_id:
+            raise ValueError("An analyzable visual inventory row lacks asset_id; refusing silent omission.")
+        if asset_id in seen:
+            raise ValueError(f"Duplicate analyzable visual asset_id {asset_id}; refusing silent omission.")
+        seen.add(asset_id)
         existing = previous.get(str(asset_id), {})
         if (
             existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
@@ -232,7 +234,7 @@ def run_analysis(
         # A later workflow run has a different run_id and will retry it.
         if run_id and existing.get("analysis_status") == "ANALYSIS_ERROR" and existing.get("run_id") == run_id:
             continue
-        if len(selected) < max_assets:
+        if max_assets is None or len(selected) < max_assets:
             selected.append(asset)
 
     results_by_id = dict(previous)
@@ -314,7 +316,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--inventory", required=True, type=Path, help="Path to visual-inventory.v1.json.")
     parser.add_argument("--model", required=True, help="An already-installed Ollama vision model tag.")
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434", help="Local Ollama endpoint.")
-    parser.add_argument("--max-assets", type=int, default=5, help="Maximum candidate assets in this run (default: 5).")
+    parser.add_argument("--max-assets", type=int, help="Optional per-invocation batch size; omit it to process every remaining eligible visual. Never limits total assets.")
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--output", type=Path, help="Optional checkpoint path; use a model-specific path to preserve checkpoints across model comparisons.")
@@ -324,8 +326,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args()
     output_path = args.output or (args.inventory.parent / "visual-analysis.v1.json")
     try:
-        if args.max_assets < 1 or args.max_assets > 10000:
-            raise ValueError("--max-assets must be between 1 and 10000.")
+        if args.max_assets is not None and args.max_assets < 1:
+            raise ValueError("--max-assets, when supplied as a per-invocation batch size, must be positive.")
         if args.timeout < 10 or args.timeout > 900:
             raise ValueError("--timeout must be between 10 and 900 seconds.")
         if output_path.exists() and not (args.resume or args.overwrite):

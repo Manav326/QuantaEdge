@@ -26,7 +26,6 @@ except ImportError:  # pragma: no cover - exercised by CLI error path
 
 SCHEMA_VERSION = "quantaedge.visual-candidate-pack.v3"
 MAX_CONTEXT_CHARS = 2400
-DEFAULT_MAX_CANDIDATES = 60
 DEFAULT_CROP_SCALE = 2.0
 TEXTBOOK_SIGNAL_TERMS = (
     "figure", "fig.", "diagram", "observe", "observation", "activity", "experiment",
@@ -313,7 +312,6 @@ def prepare_candidates(
     pdf_path: Path,
     output_dir: Path,
     *,
-    max_candidates: int = DEFAULT_MAX_CANDIDATES,
     crop_scale: float = DEFAULT_CROP_SCALE,
 ) -> dict[str, Any]:
     if fitz is None:
@@ -322,8 +320,6 @@ def prepare_candidates(
         raise FileNotFoundError(f"Inventory not found: {inventory_path}")
     if not pdf_path.is_file():
         raise FileNotFoundError(f"Source PDF not found: {pdf_path}")
-    if max_candidates < 1 or max_candidates > 200:
-        raise ValueError("--max-candidates must be between 1 and 200.")
     if crop_scale < 1.0 or crop_scale > 4.0:
         raise ValueError("--crop-scale must be between 1.0 and 4.0.")
 
@@ -479,21 +475,12 @@ def prepare_candidates(
                 "human_review_required": True,
             })
 
-        # Preserve broad page-level evidence while keeping useful embedded crops in the pack.
-        # Empty quotas are redistributed, so a book with few embedded objects still uses its budget.
-        embedded_quota = min(len(embedded_candidates), max(1, int(round(max_candidates * 0.40))))
-        page_quota = min(len(page_candidates), max_candidates - embedded_quota)
-        selected_embedded = _stratified_select(embedded_candidates, embedded_quota, page_count)
-        selected_page = _stratified_select(page_candidates, page_quota, page_count)
-        selected_ids = {row["candidate_id"] for row in selected_embedded + selected_page}
-        remaining = max_candidates - len(selected_ids)
-        if remaining > 0:
-            available = [row for row in embedded_candidates + page_candidates if row["candidate_id"] not in selected_ids]
-            selected_extra = _stratified_select(available, remaining, page_count)
-        else:
-            selected_extra = []
-        selected = selected_embedded + selected_page + selected_extra
-        # Sort by book order for reviewer navigation; candidate IDs preserve identity across reruns.
+        # Exhaustive production selection: keep every unique embedded-image byte group
+        # and every page preview. Identical image bytes are stored/processed once, while all
+        # source-page and placement occurrences remain attached to that image group.
+        # There is deliberately no candidate-count ceiling.
+        candidate_pool = embedded_candidates + page_candidates
+        selected = list(candidate_pool)
         selected.sort(key=lambda row: (int(row["source_pdf_page_number"]), row["candidate_kind"], row["candidate_id"]))
 
         for folder in ("prepared/crops", "prepared/originals", "prepared/pages", "source-pages"):
@@ -562,12 +549,14 @@ def prepare_candidates(
                 "class": source.get("class"),
             },
             "selection_policy": {
-                "method": "STRATIFIED_HEURISTIC_V3",
+                "method": "EXHAUSTIVE_ELIGIBLE_INVENTORY_V3",
                 "page_preview_target_fraction": 0.60,
                 "embedded_image_target_fraction": 0.40,
                 "semantic_classification_performed": False,
                 "model_used": None,
                 "notes": [
+                    "No candidate-count ceiling is applied; every eligible unique embedded-image group and every page preview is represented.",
+                    "Identical embedded image bytes are deduplicated only for processing/storage; every source-page occurrence is retained.",
                     "Heuristic scores rank candidates; they do not determine educational correctness.",
                     "Unique embedded bytes are deduplicated for storage, while every source-page occurrence is retained.",
                     "Whole-page candidates preserve vector diagrams and surrounding textbook context.",
@@ -579,6 +568,10 @@ def prepare_candidates(
                 "embedded_image_hash_groups": len(embedded_groups),
                 "page_preview_records": len(page_assets),
                 "missing_inventory_asset_files": missing_assets,
+                "candidate_pool_count": len(candidate_pool),
+                "unselected_candidate_count": len(candidate_pool) - len(selected),
+                "selection_complete": len(selected) == len(candidate_pool),
+                "selection_limit": None,
                 "selected_candidate_count": len(selected),
                 "selected_embedded_images": sum(1 for row in selected if row["candidate_kind"] == "embedded_image"),
                 "selected_page_previews": sum(1 for row in selected if row["candidate_kind"] == "page_preview"),
@@ -611,15 +604,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--inventory", required=True, type=Path, help="Path to visual-inventory.v1.json.")
     parser.add_argument("--pdf", required=True, type=Path, help="Exact source PDF matching the inventory hash.")
     parser.add_argument("--output-dir", required=True, type=Path, help="New/empty directory for the review pack.")
-    parser.add_argument("--max-candidates", type=int, default=DEFAULT_MAX_CANDIDATES,
-                        help="Maximum candidate count, evenly stratified where possible (default: 60, range 1..200).")
     parser.add_argument("--crop-scale", type=float, default=DEFAULT_CROP_SCALE,
                         help="PDF render scale for crops/pages, from 1.0 to 4.0 (default: 2.0).")
     args = parser.parse_args()
     try:
         pack = prepare_candidates(
             args.inventory, args.pdf, args.output_dir,
-            max_candidates=args.max_candidates, crop_scale=args.crop_scale,
+            crop_scale=args.crop_scale,
         )
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"Visual candidate preparation stopped safely: {exc}", file=sys.stderr)

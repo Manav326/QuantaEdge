@@ -101,13 +101,16 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
             self.inventory_dir / "visual-inventory.v1.json",
             self.pdf_path,
             self.output_dir,
-            max_candidates=10,
             crop_scale=1.2,
         )
         self.assertEqual("quantaedge.visual-candidate-pack.v3", pack["schema_version"])
         self.assertFalse(pack["summary"]["publication_allowed"])
-        self.assertEqual(10, pack["summary"]["selected_candidate_count"])
-        self.assertGreaterEqual(pack["summary"]["distinct_selected_pages"], 7)
+        self.assertEqual(pack["summary"]["candidate_pool_count"], pack["summary"]["selected_candidate_count"])
+        self.assertEqual(0, pack["summary"]["unselected_candidate_count"])
+        self.assertTrue(pack["summary"]["selection_complete"])
+        self.assertIsNone(pack["summary"]["selection_limit"])
+        self.assertEqual(17, pack["summary"]["selected_candidate_count"])
+        self.assertEqual(16, pack["summary"]["distinct_selected_pages"])
         page_numbers = pack["summary"]["selected_page_numbers"]
         self.assertLessEqual(min(page_numbers), 4)
         self.assertGreaterEqual(max(page_numbers), 13)
@@ -133,7 +136,6 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
             self.inventory_dir / "visual-inventory.v1.json",
             self.pdf_path,
             self.output_dir,
-            max_candidates=12,
             crop_scale=1.2,
         )
         embedded = [row for row in pack["candidates"] if row["candidate_kind"] == "embedded_image"]
@@ -156,7 +158,6 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
                 self.inventory_dir / "visual-inventory.v1.json",
                 changed_pdf,
                 self.output_dir,
-                max_candidates=5,
             )
         self.assertFalse(self.output_dir.exists())
 
@@ -169,7 +170,7 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "Page preview SHA-256 mismatch"):
             prepare_candidates(
-                inventory_path, self.pdf_path, self.output_dir, max_candidates=5,
+                inventory_path, self.pdf_path, self.output_dir,
             )
 
     def test_rejects_nonempty_output_directory(self):
@@ -181,18 +182,26 @@ class PrepareVisualCandidatesV3Tests(unittest.TestCase):
                 self.inventory_dir / "visual-inventory.v1.json",
                 self.pdf_path,
                 self.output_dir,
-                max_candidates=5,
             )
         self.assertEqual("do not overwrite", marker.read_text(encoding="utf-8"))
 
-    def test_rejects_candidate_limit_outside_safe_range(self):
-        with self.assertRaisesRegex(ValueError, "between 1 and 200"):
-            prepare_candidates(
-                self.inventory_dir / "visual-inventory.v1.json",
-                self.pdf_path,
-                self.output_dir,
-                max_candidates=201,
-            )
+    def test_candidate_inventory_is_never_truncated(self):
+        pack = prepare_candidates(
+            self.inventory_dir / "visual-inventory.v1.json",
+            self.pdf_path,
+            self.output_dir,
+            crop_scale=1.2,
+        )
+        eligible_unique_images = {
+            row["asset_sha256"] for row in self.inventory["assets"] if row.get("kind") == "embedded_image"
+        }
+        eligible_pages = {
+            row["source_pdf_page_number"] for row in self.inventory["assets"] if row.get("kind") == "page_preview"
+        }
+        self.assertEqual(len(eligible_unique_images) + len(eligible_pages), pack["summary"]["candidate_pool_count"])
+        self.assertEqual(pack["summary"]["candidate_pool_count"], pack["summary"]["selected_candidate_count"])
+        self.assertEqual(0, pack["summary"]["unselected_candidate_count"])
+        self.assertTrue(pack["summary"]["selection_complete"])
 
 
 if __name__ == "__main__":

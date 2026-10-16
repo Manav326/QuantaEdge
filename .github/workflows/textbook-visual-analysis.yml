@@ -34,11 +34,6 @@ on:
         required: true
         default: qwen2.5vl:3b
         type: string
-      max_assets:
-        description: Maximum candidate assets to process in this run (raise to continue through a larger book)
-        required: true
-        default: "100"
-        type: string
       restart_analysis:
         description: Discard the previous analysis checkpoint and intentionally start over
         required: true
@@ -69,7 +64,6 @@ jobs:
       LANGUAGE: ${{ inputs.language }}
       BOOK_ID: ${{ inputs.book_id }}
       VISION_MODEL: ${{ inputs.model }}
-      MAX_ASSETS: ${{ inputs.max_assets }}
       RESTART_ANALYSIS: ${{ inputs.restart_analysis }}
       PUBLISH_STABLE: ${{ inputs.publish_stable }}
     steps:
@@ -85,7 +79,6 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$BOOK_SLUG" =~ ^[a-z0-9]+([.-][a-z0-9]+)*$ ]] || { echo "Invalid book_slug"; exit 2; }
-          [[ "$MAX_ASSETS" =~ ^[1-9][0-9]*$ ]] && (( MAX_ASSETS <= 10000 )) || { echo "max_assets must be 1..10000"; exit 2; }
           [[ "$BOOK_ID" =~ ^ncert-c${CLASS_NO}-${LANGUAGE}-[a-z0-9]+$ ]] || { echo "book_id must match the selected class and language"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m unittest discover -s tests -p "test_extract_visual_asset_inventory.py" -v
@@ -224,13 +217,10 @@ jobs:
           echo "ANALYSIS_OUTPUT=$analysis_output" >> "$GITHUB_ENV"
 
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
-          total_limit="$MAX_ASSETS"
-          processed_total=0
-          batch_size=10
-          while (( processed_total < total_limit )); do
-            remaining=$((total_limit - processed_total))
+          # Analyze the entire eligible inventory. Batch size controls checkpoints only.
+          batch_size=25
+          while true; do
             batch="$batch_size"
-            if (( remaining < batch )); then batch="$remaining"; fi
             args=(--inventory "$out/visual-inventory.v1.json" --model "$VISION_MODEL" --max-assets "$batch" --include-page-previews --run-id "$GITHUB_RUN_ID" --output "$analysis_output")
             if [[ -f "$analysis_output" ]]; then args+=(--resume); fi
             python scripts/analyze_visual_inventory_with_ollama.py "${args[@]}"
@@ -250,7 +240,6 @@ jobs:
             # Mirror the small durable checkpoint to GHCR after the repository commit.
             oras push "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$analysis_output:application/json"
 
-            processed_total=$((processed_total + batch_processed))
             if (( batch_processed == 0 )); then break; fi
           done
 
