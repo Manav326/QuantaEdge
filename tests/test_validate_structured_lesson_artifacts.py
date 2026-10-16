@@ -24,7 +24,7 @@ def sample_lesson():
         "explain": {"title_by_locale": bi("Explain", "समझें"), "blocks": [
             {"id": "block-1", "type": "rich_text", "objective_ids": ["obj-1"], "source_refs": ["src-1"],
              "text_by_locale": {"en": {"heading": "Curiosity", "paragraphs": ["Curiosity leads to questions."]},
-                                "hi": {"heading": "जिज्ञासा", "paragraphs": ["जिज्ञासा से प्रश्न बनते हैं।"]}},
+                                "hi": {"heading": "जिज्ञासा", "paragraphs": ["जिज्ञासा से प्रश्न बनते हैं।"]}}},
             {"id": "block-interactive", "type": "interactive", "configuration": {
                 "steps": [
                     {"id": "step-enhi", "instruction_by_locale": bi("Observe one thing.", "एक वस्तु देखें।")},
