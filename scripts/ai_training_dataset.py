@@ -90,11 +90,11 @@ Context:
   if parsed_url.scheme != "http" or parsed_url.hostname not in {"localhost","127.0.0.1","::1"} or parsed_url.username or parsed_url.password:
    raise ValueError("Ollama generation must use unauthenticated loopback HTTP.")
   url=base_url.rstrip("/")+"/api/chat"
-  body={"model":model,"stream":False,"format":"json","options":{"temperature":0.35},"messages":messages}
+  body={"model":model,"stream":False,"format":"json","options":{"temperature":0.35,"num_ctx":8192,"num_predict":2048},"messages":messages}
   headers={"Content-Type":"application/json"}
  elif provider == "openai-compatible":
   url=base_url.rstrip("/")+"/v1/chat/completions"
-  body={"model":model,"temperature":0.35,"messages":messages,"response_format":{"type":"json_object"}}
+  body={"model":model,"temperature":0.35,"max_tokens":2048,"messages":messages,"response_format":{"type":"json_object"}}
   headers={"Content-Type":"application/json"}
   if api_key: headers["Authorization"]="Bearer "+api_key
  else:

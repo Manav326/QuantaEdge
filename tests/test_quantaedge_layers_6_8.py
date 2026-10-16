@@ -7,8 +7,8 @@ from unittest.mock import patch
 from scripts.ai_training_dataset import request_examples
 from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
-    PROMPT_VERSION, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft,
-    validate_lesson, validate_output, validate_splits, segments_for, write_rag,
+    PROMPT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft,
+    validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag,
     write_json, write_jsonl, write_outputs, run as run_layers,
 )
 
@@ -51,7 +51,7 @@ class LayersTests(unittest.TestCase):
             return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
         v,elapsed=ollama_chat("http://127.0.0.1:11434","qwen2.5:1.5b","prompt",opener=open_)
         self.assertTrue(got["url"].endswith("/api/chat")); self.assertNotIn("authorization",got["headers"])
-        self.assertEqual("json",got["body"]["format"]); self.assertEqual("Careful observation",v["microtopic_title_by_locale"]["en"])
+        self.assertEqual("json",got["body"]["format"]); self.assertEqual(2048,got["body"]["options"]["num_predict"]); self.assertEqual(6144,got["body"]["options"]["num_ctx"]); self.assertEqual("Careful observation",v["microtopic_title_by_locale"]["en"])
         self.assertGreaterEqual(elapsed,0)
 
     def test_external_ollama_endpoint_is_blocked(self):
@@ -186,6 +186,36 @@ class LayersTests(unittest.TestCase):
             self.assertEqual("INCOMPLETE",report["layers"]["7"])
             self.assertEqual("INCOMPLETE",report["overall_status"])
             self.assertEqual(["unresolved"],report["unresolved_chapter_segments"])
+
+
+
+    def test_benchmark_does_not_count_bad_schema_as_valid_lesson_and_keeps_sample_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); book="ncert-c6-english-fecu1"; pdfhash="9"*64
+            pages=root/"data"/"textbook-extractions"/"class-6"/"english"/"pages"; pages.mkdir(parents=True)
+            row={"book_id":book,"class":"6","language":"english","subject":"Science","asset_pdf_sha256":pdfhash,
+                 "original_book_sha256":pdfhash,"source_book_page_number":1,"asset_page_index":0,
+                 "text":"A source concept with enough text to create a bounded benchmark segment."}
+            write_jsonl(pages/"pages.jsonl",[row])
+            write_json(pages/"book.manifest.json",{"book_id":book,"class":"6","language":"english","subject":"Science",
+                "scope":"SUBJECT_BOOK","published":False,"asset_pdf_sha256":pdfhash,"original_book_sha256":pdfhash,
+                "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
+                "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
+            invalid={"chapter_number":1,"tutor_examples":[
+                {"language":"en","student_message":"Why?","assistant_message":"Because.","source_pages":[1]},
+                {"language":"hi","student_message":"क्यों?","assistant_message":"क्योंकि।","source_pages":[1]}]}
+            args=SimpleNamespace(repo_root=root,source_book_id=book,endpoint="http://127.0.0.1:11434",
+                models="qwen2.5:1.5b",sample_segments=1,request_timeout=30,
+                output=root/"benchmark.json",commit_checkpoints=False)
+            with patch("scripts.quantaedge_layers_6_8.ollama_chat",return_value=(invalid,1.25)):
+                report=run_benchmark(args)
+            sample=report["models"][0]["samples"][0]
+            self.assertFalse(sample["schema_valid"])
+            self.assertFalse(sample["lesson_contract_valid"])
+            self.assertTrue(sample["source_page_citations_valid"])
+            self.assertEqual(invalid,sample["sample_output"])
+            self.assertIsNone(sample["lesson_candidate_preview"])
+            self.assertEqual(64,sample["sample_output_sha256"] and len(sample["sample_output_sha256"]))
 
 
     def test_visual_candidates_are_hash_bound_and_preview_only(self):

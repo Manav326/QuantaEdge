@@ -5,7 +5,7 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v2-visual"
+PROMPT_VERSION = "qe-l6-l8-ollama-v3-bounded-benchmark"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -239,7 +239,7 @@ def ollama_chat(endpoint: str, model: str, prompt: str, timeout: int=180, opener
     if u.scheme!="http" or u.hostname not in {"127.0.0.1","localhost","::1"} or u.username or u.password:
         raise ValueError("Generation must use native unauthenticated loopback Ollama HTTP; external providers are disabled.")
     if not model.strip(): raise ValueError("Model is required.")
-    body={"model":model,"stream":False,"format":"json","options":{"temperature":0.15},
+    body={"model":model,"stream":False,"format":"json","options":{"temperature":0.15,"num_ctx":6144,"num_predict":2048},
           "messages":[{"role":"system","content":SYSTEM},{"role":"user","content":prompt}]}
     req=urllib.request.Request(endpoint.rstrip("/")+"/api/chat",data=json.dumps(body,ensure_ascii=False).encode(),headers={"Content-Type":"application/json"},method="POST")
     send=opener or urllib.request.urlopen; last=None
@@ -249,6 +249,8 @@ def ollama_chat(endpoint: str, model: str, prompt: str, timeout: int=180, opener
             with send(req,timeout=timeout) as response: payload=json.loads(response.read().decode("utf-8"))
             content=(payload.get("message") or {}).get("content")
             if not isinstance(content,str): raise ValueError("Ollama response missing message.content.")
+            if len(content.encode("utf-8")) > 100_000:
+                raise ValueError("Ollama JSON response exceeds the 100 KB output budget.")
             value=json.loads(content)
             if not isinstance(value,dict): raise ValueError("Ollama response must be a JSON object.")
             return value,time.monotonic()-started
@@ -299,6 +301,23 @@ def validate_output(v: Any, allowed: set[int]) -> list[str]:
             if not isinstance(refs,list) or not refs or any(not isinstance(p,int) or isinstance(p,bool) or p not in allowed for p in refs): errors.append(f"tutor example {i} page citations invalid")
         if found!={"en","hi"}: errors.append("tutor examples must cover English and Hindi")
     return errors
+
+def tutor_citations_valid(value: Any, allowed_pages: set[int]) -> bool:
+    examples=value.get("tutor_examples") if isinstance(value,dict) else None
+    if not isinstance(examples,list) or not examples:
+        return False
+    languages=set()
+    for example in examples:
+        if not isinstance(example,dict) or example.get("language") not in {"en","hi"}:
+            return False
+        languages.add(example["language"])
+        pages=example.get("source_pages")
+        if not isinstance(pages,list) or not pages or any(
+            not isinstance(page,int) or isinstance(page,bool) or page not in allowed_pages for page in pages
+        ):
+            return False
+    return languages=={"en","hi"}
+
 
 def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], visuals: list[dict[str,Any]]|None=None) -> dict[str,Any]|None:
     if v.get("chapter_number") is None: return None
@@ -513,7 +532,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     report={"schema_version":"quantaedge.layers-6-8-run-manifest.v1","source_book_id":source["book_id"],
       "source_pdf_sha256":source["source_pdf_sha256"],"class_code":str(source["class_no"]),"subject_code":source["subject"],
       "language":source["language"],"model":model,"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE",
-      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"segments_total":len(segments),
+      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"input_fingerprint":source.get("pipeline_input_fingerprint"),"visual_candidate_fingerprint":source.get("visual_candidate_fingerprint"),"segments_total":len(segments),
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
       "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
@@ -560,8 +579,10 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     ledger=layer5_ledger(repo,source); report=benchmark_report(repo,args.benchmark_report,args.model)
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
+    source["visual_candidate_fingerprint"]=visual_fingerprint
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,"manifest_sha256":sha_file(source["manifest_path"]),
       "pages_sha256":sha_file(source["text_path"]),"layer5_sha256":sha_file(ledger),"model":args.model,"prompt":PROMPT_VERSION},sort_keys=True))
+    source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}"
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger.parent/"layer-8-rag-corpus.v1.jsonl"
@@ -639,15 +660,22 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
                 value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg),args.request_timeout,opener)
                 errs=validate_output(value,set(seg["source_pages"]))
                 lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[])) if not errs else None
-                le=validate_lesson(lesson) if lesson else (["unresolved chapter"] if not errs else [])
+                lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not errs else [])
+                lesson_valid=(not errs and lesson is not None and not lesson_errors)
+                citations_valid=tutor_citations_valid(value,set(seg["source_pages"]))
                 sft_ok=not errs and len(sft_records(source,seg,value,model))>=2
+                sample_output_sha=sha(json.dumps(value,ensure_ascii=False,sort_keys=True))
                 samples.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"seconds":round(elapsed,2),
-                  "schema_valid":not errs,"lesson_contract_valid":not le,"sft_examples_valid":sft_ok,
-                  "source_page_citations_valid":not errs,"errors":(errs+le)[:10]})
+                  "response_chars":len(json.dumps(value,ensure_ascii=False)),
+                  "schema_valid":not errs,"lesson_contract_valid":lesson_valid,"sft_examples_valid":sft_ok,
+                  "source_page_citations_valid":citations_valid,"sample_output_sha256":sample_output_sha,
+                  "sample_output":value,"lesson_candidate_preview":lesson,"lesson_contract_errors":lesson_errors[:10],
+                  "errors":(errs+lesson_errors)[:12]})
             except (OSError,ValueError,RuntimeError,urllib.error.URLError) as exc:
                 samples.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"seconds":round(time.monotonic()-start,2),
                   "schema_valid":False,"lesson_contract_valid":False,"sft_examples_valid":False,
-                  "source_page_citations_valid":False,"errors":[str(exc)[:1200]]})
+                  "source_page_citations_valid":False,"sample_output":None,"lesson_candidate_preview":None,
+                  "lesson_contract_errors":[str(exc)[:1200]],"errors":[str(exc)[:1200]]})
         n=len(samples)
         ok=sum(s["schema_valid"] for s in samples); lessons=sum(s["lesson_contract_valid"] for s in samples)
         sft=sum(s["sft_examples_valid"] for s in samples); citations=sum(s["source_page_citations_valid"] for s in samples)
