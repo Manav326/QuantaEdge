@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 25,
+    "assets_selected": 45,
     "assets_processed_this_run": 25,
-    "assets_analyzed": 20,
-    "assets_failed": 5,
-    "assets_skipped_from_checkpoint": 0,
+    "assets_analyzed": 44,
+    "assets_failed": 6,
+    "assets_skipped_from_checkpoint": 20,
     "publication_allowed": false
   },
   "results": [
@@ -761,6 +761,823 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38896695297",
       "checkpointed_at": "2026-10-16T12:54:08Z"
+    },
+    {
+      "asset_id": "fbec9dd5a194d2cf561dad5d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T12:55:19Z"
+    },
+    {
+      "asset_id": "c6a831694848458053f2aa82",
+      "asset_sha256": "ab0f20f40fe4048794c5900d88619dabbca30024537e8f7e23b859e7b1814569",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "3057f0483a7a0b6f1ecaacc2",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:00:32Z"
+    },
+    {
+      "asset_id": "71e2c81fb29557d709be3d58",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:00:39Z"
+    },
+    {
+      "asset_id": "a123f1e89ed063a86528eedb",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible content to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:00:55Z"
+    },
+    {
+      "asset_id": "536e0e377291f52f0660280e",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:01:11Z"
+    },
+    {
+      "asset_id": "7e3d4a9251c90271df84b246",
+      "asset_sha256": "dce8ed34dfaadeab6ee26d200391f9a8d75148cb5886cc5384c89439e40d7edc",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 7,
+      "asset_path": "page-0007.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the importance of keywords in scientific processes and the role of summaries in reinforcing key ideas.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "ideas and encourage them to think more deeply about the content.",
+          "The keywords related to scientific processes depict the steps or",
+          "procedure involved in the scientific activities. These words guide",
+          "learners on how scientific knowledge is generated, tested and",
+          "applied. ‘Summary’ offers an overview of the chapter’s main points",
+          "reinforcing the key ideas discussed. It serves to outline the content",
+          "presented in the chapter. A non-evaluative interesting element that",
+          "has been incorporated in some of the chapters is the introduction of",
+          "certain verses from various Indian texts to promote rootedness in"
+        ],
+        "concepts": [
+          "scientific processes",
+          "keywords",
+          "scientific knowledge",
+          "summary",
+          "Indian texts"
+        ],
+        "context_relation": "The page discusses the educational content of a textbook, focusing on keywords and summaries in scientific processes.",
+        "limitations": [
+          "The page does not provide specific examples or details about the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:05:15Z"
+    },
+    {
+      "asset_id": "66c6be28e7dc40045fe563f3",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in the textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:05:27Z"
+    },
+    {
+      "asset_id": "bf47af0965fd3c1bcb3670b1",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a motivational message encouraging learners to continue their educational journey.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "codes that have additional resources can be accessed by the learners",
+          "at their own convenience and pace. These additional resources",
+          "include videos, puzzles, games, quizzes, audio, documentaries and",
+          "additional content on some topics.",
+          "At the end of this book, learners will find a page titled ‘It is not the",
+          "end, my friend!’. This includes words of encouragement, motivating",
+          "learners to continue their educational journey and ignite their",
+          "curiosity for further learning. It is meant to be non-evaluative.",
+          "May the journey of every learner be filled with joy and continue",
+          "the curiosity in the higher"
+        ],
+        "concepts": [
+          "motivation",
+          "educational journey",
+          "non-evaluative",
+          "additional resources",
+          "encouragement",
+          "curiosity",
+          "joy"
+        ],
+        "context_relation": "The page provides encouragement and motivation for learners to continue their educational journey.",
+        "limitations": [
+          "The page does not provide specific details about the additional resources available."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:05:50Z"
+    },
+    {
+      "asset_id": "3ebffa78ada58854febaed5b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and has no visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:06:07Z"
+    },
+    {
+      "asset_id": "7b8b92579b15d1dcc24d0d09",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 8,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:06:21Z"
+    },
+    {
+      "asset_id": "41955daad6a65c821a375d50",
+      "asset_sha256": "4b31865d285396b8ffe55ce6fa661613058928ada4532f786be1101b19374cee",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 8,
+      "asset_path": "page-0008.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook with a motivational message for learners.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "codes that have additional resources can be accessed by the learners",
+          "at their own convenience and pace. These additional resources",
+          "include videos, puzzles, games, quizzes, audio, documentaries and",
+          "additional content on some topics.",
+          "At the end of this book, learners will find a page titled ‘It is not the",
+          "end, my friend!’. This includes words of encouragement, motivating",
+          "learners to continue their educational journey and ignite their",
+          "curiosity for further learning. It is meant to be non-evaluative.",
+          "May the journey of every learner be filled with joy and continue",
+          "the curiosity in the higher grades as well!",
+          "We express our gratitude to all the members of the textbook",
+          "development committee for their contributions in shaping this",
+          "textbook. We look forward to the feedback of the readers.",
+          "TEXTBOOK DEVELOPMENT TEAM"
+        ],
+        "concepts": [
+          "motivational message",
+          "encouragement",
+          "curiosity",
+          "non-evaluative",
+          "textbook development committee",
+          "feedback"
+        ],
+        "context_relation": "The page is a motivational message for learners in a textbook.",
+        "limitations": [
+          "The page does not show any visual elements.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:10:27Z"
+    },
+    {
+      "asset_id": "832113502906cc76508720ad",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning",
+          "Material Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University (Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council–Prime Minister (EAC–PM)",
+          "5. Shekhar Mande, Former Director General, CSIR, Distinguished Professor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia, Canada",
+          "7. Shan"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Members of the NSTC",
+          "Chancellor of NIEPA",
+          "Professor at Princeton University",
+          "Acclaimed Writer and Educationist",
+          "Chairperson of EAC–PM",
+          "Former Director General of CSIR",
+          "Distinguished Professor at Savitribai Phule Pune University",
+          "Professor at University of British Columbia, Canada"
+        ],
+        "context_relation": "The page is part of an educational textbook, likely discussing the members of the NSTC and their roles.",
+        "limitations": [
+          "The page does not contain any visual elements or diagrams.",
+          "The text is in English and does not include any images or illustrations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:11:06Z"
+    },
+    {
+      "asset_id": "b265e95e530d3aee11e276a1",
+      "asset_sha256": "337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/337545319fd63cf05058083ba50aeaabe09acd6561e21ee3a36a8aa7f707012b.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook listing the members of the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning",
+          "Material Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational Planning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University (Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council–Prime Minister (EAC–PM)",
+          "5. Shekhar Mande, Former Director General, CSIR, Distinguished Professor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia, Canada",
+          "7. Shan"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Members of the NSTC",
+          "Chancellor of NIEPA",
+          "Professor at Princeton University",
+          "Acclaimed Writer and Educationist",
+          "Chairperson of EAC–PM",
+          "Former Director General of CSIR",
+          "Distinguished Professor at Savitribai Phule Pune University",
+          "Professor at University of British Columbia, Canada"
+        ],
+        "context_relation": "The page is part of an educational textbook, likely discussing the members of the NSTC and their roles in the educational system.",
+        "limitations": [
+          "The page does not contain any visual elements other than text.",
+          "The text is in English and does not include any images or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:11:39Z"
+    },
+    {
+      "asset_id": "621e7f15906dd556ba8cb629",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images present."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:11:56Z"
+    },
+    {
+      "asset_id": "f819e786c5753684dd868453",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 9,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content or text present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:12:12Z"
+    },
+    {
+      "asset_id": "aecc6234857605276de86b42",
+      "asset_sha256": "d29153664335807a27ac65634376c00330b6de3e54afc7e06e5c18b445812920",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 9,
+      "asset_path": "page-0009.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of committee members for National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "National Syllabus and Teaching Learning\nMaterial Committee (NSTC)",
+          "1. M.C. Pant, Chancellor, National Institute of Educational\nPlanning and Administration (NIEPA), (Chairperson)",
+          "2. Manjul Bhargava, Professor, Princeton University\n(Co-Chairperson)",
+          "3. Sudha Murty, Acclaimed Writer and Educationist",
+          "4. Bibek Debroy, Chairperson, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "5. Shekhar Mande, Former Director General, CSIR, Distinguished\nProfessor, Savitribai Phule Pune University, Pune",
+          "6. Sujatha Ramdorai, Professor, University of British Columbia,\nCanada",
+          "7. Shan",
+          "8. U. Vimal Kumar, Director, Prakash Padukone Badminton\nAcademy, Bengaluru",
+          "9. Michel Danino, Visiting Professor, IIT–Gandhinagar",
+          "10. Surina Rajan, IAS (Retd.), Haryana, Former Director General,\nHIPA",
+          "11. Chamu Krishna Shastri, Chairperson, Bhasha Samiti, Ministry\nof Education",
+          "12. Sanjeev Sanyal, Member, Economic Advisory Council–Prime\nMinister (EAC–PM)",
+          "13. M.D. Srinivas, Chairperson, Centre for Policy Studies, Chennai",
+          "14. Gajanan Londhe, Head, Programme Office, NSTC",
+          "15. Rabin Chhetri, Director, SCERT, Sikkim",
+          "16. Pratyusha Kumar Mandal, Professor, Department of Education\nin Social Science, NCERT, New Delhi",
+          "17. Dinesh Kumar, Professor and Head, Planning and Monitoring\nDivision, NCERT, New Delhi",
+          "18. Kirti Kapur, Professor, Department of Education in Languages,\nNCERT, New Delhi",
+          "19. Ranjana Arora, Professor and Head, Department of Curriculum\nStudies and Development, NCERT (Member-Secretary)"
+        ],
+        "concepts": [
+          "National Syllabus and Teaching Learning Material Committee (NSTC)",
+          "Committee members",
+          "Chancellor",
+          "Professor",
+          "Economic Advisory Council",
+          "Distinguished Professor",
+          "Music Maestro",
+          "Badminton Academy",
+          "HIPA",
+          "Ministry of Education",
+          "Economic Advisory Council–Prime Minister",
+          "Centre for Policy Studies",
+          "Programme Office",
+          "SCERT",
+          "Department of Education in Social Science",
+          "Planning and Monitoring Division",
+          "Department of Education in Languages",
+          "Department of Curriculum Studies and Development"
+        ],
+        "context_relation": "The list of committee members for the National Syllabus and Teaching Learning Material Committee (NSTC).",
+        "limitations": [
+          "The list is incomplete, with some names and positions missing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:17:00Z"
+    },
+    {
+      "asset_id": "9221c92f66926af1dc38caf8",
+      "asset_sha256": "b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/b49c065485fb301a31e3c54b9c034ade502b9d2be918644cf8396d3e6c46649f.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page with a light green background and small, scattered black lines.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:18:32Z"
+    },
+    {
+      "asset_id": "1524c5f474314fd0235cd96e",
+      "asset_sha256": "bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/bbb407c8d9f4b049be6a8fbe2a7f2896e51b3961729a230c7a8283a43700e649.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Unclear",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:20:05Z"
+    },
+    {
+      "asset_id": "cde1cdc68d8262fad2aecb47",
+      "asset_sha256": "e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/e0079aa99561d88a922c3c51eb2382e32d3f39eee35528b6241bfe0a8466b20d.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow and orange gradient background with a black line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "line"
+        ],
+        "context_relation": "background",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:21:39Z"
+    },
+    {
+      "asset_id": "d3d95345c1d0b1349bf16a32",
+      "asset_sha256": "2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/2dbbbcb8a21495310878e56c5b3b586f0b0e69936131dfd9605b8948ec797c05.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light brown to dark orange.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for text or image",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:23:06Z"
+    },
+    {
+      "asset_id": "7d6f5537786277f7ed78a53e",
+      "asset_sha256": "38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/38e10fab41fdf5613faee47d4261973de8ef97c1befff5f36c3c91b29d91ac42.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light orange to yellow.",
+        "visual_type": "photo",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Background for educational content",
+        "limitations": [
+          "No specific content or text is visible in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:24:34Z"
+    },
+    {
+      "asset_id": "68909d5d05113f04eabe5dfb",
+      "asset_sha256": "fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/fcd4796c40735b32a3d243e23c51f6d85c07d1052a051c43603942cb0d6b480c.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background transitioning from light beige to a warm yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "background",
+          "gradient",
+          "color",
+          "text"
+        ],
+        "context_relation": "The background serves as a neutral backdrop for the text.",
+        "limitations": [
+          "No specific content or information is provided within the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:26:06Z"
+    },
+    {
+      "asset_id": "a506f06afd74433d84125ee1",
+      "asset_sha256": "0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/0ece5c90241f2ea004d46c9389a873d867ff8b73191c3794ad80ea13a008a028.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page with a gradient background transitioning from light yellow to a darker shade of yellow.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be a full page of a textbook, possibly a page with a gradient background.",
+        "limitations": [
+          "The image does not contain any text or visual elements that can be analyzed for content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:27:33Z"
+    },
+    {
+      "asset_id": "fe12eefaed55fddbe759af81",
+      "asset_sha256": "23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "source_pdf_page_number": 10,
+      "asset_path": "assets/23f807fdb3087675e1d4319c2c0f229c3ffe1207b5596d72f4d1fc334ea95910.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A gradient background with warm colors transitioning from light beige to dark brown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a background or cover page for a textbook.",
+        "limitations": [
+          "The image does not contain any specific content or text that can be analyzed for educational content.",
+          "The image is a gradient background with warm colors, which may not be directly related to the content of the textbook.",
+          "The image does not provide any specific information about the subject matter or educational content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38896695297",
+      "checkpointed_at": "2026-10-16T13:29:08Z"
     }
   ]
 }
