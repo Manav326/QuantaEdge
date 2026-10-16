@@ -321,7 +321,7 @@ class LayersTests(unittest.TestCase):
             stale_benchmark=json.loads(json.dumps(saved_benchmark))
             stale_benchmark["source"]["layer5_coverage_ledger_sha256"]="0"*64
             write_json(benchmark,stale_benchmark)
-            with self.assertRaisesRegex(ValueError,"Benchmark Layer 5 evidence ledger hash"):
+            with self.assertRaisesRegex(ValueError,"older Layer 5 ledger"):
                 run_layers(args,opener=open_)
             write_json(benchmark,saved_benchmark)
             again=run_layers(args,opener=open_)
