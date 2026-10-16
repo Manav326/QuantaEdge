@@ -99,6 +99,19 @@ class LearningClassControllerTest {
   }
 
   @Test
+  void classManagerCannotSaveAnUntrustedYouTubeBroadcastUrl() {
+    when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
+    ResponseStatusException error = assertThrows(ResponseStatusException.class,
+        () -> controller.createLiveClass(Map.of(
+            "title", "Live science lesson", "classCode", "7", "subjectCode", "science",
+            "provider", "YOUTUBE_LIVE", "broadcastUrl", "https://attacker.example/watch?v=abcdefghijk",
+            "startsAt", OffsetDateTime.now().plusHours(1).toString(),
+            "endsAt", OffsetDateTime.now().plusHours(2).toString()), admin));
+    assertEquals(400, error.getStatusCode().value());
+    verifyNoInteractions(jdbc, staffAudit, mediaStorage);
+  }
+
+  @Test
   void staffWithoutClassManageCannotRetrievePrivateMeetingLink() {
     AuthContext author = new AuthContext(100L, null, 42L, "CONTENT_AUTHOR", "Author");
     when(authorization.requirePermission(author, "CLASS_MANAGE"))

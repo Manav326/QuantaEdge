@@ -44,7 +44,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 @RequestMapping("/api/v1")
 public class LearningClassController {
   private static final Set<String> PROVIDERS =
-      Set.of("CUSTOM", "GOOGLE_MEET", "ZOOM", "MICROSOFT_TEAMS", "OTHER");
+      Set.of("CUSTOM", "GOOGLE_MEET", "ZOOM", "MICROSOFT_TEAMS", "OTHER", "YOUTUBE_LIVE");
   private static final Set<String> SESSION_STATUSES =
       Set.of("SCHEDULED", "LIVE", "COMPLETED", "CANCELLED");
   private static final Set<String> RECORDING_STATUSES =
@@ -88,12 +88,12 @@ public class LearningClassController {
     context=authorization.requireAuth(context);
     if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
         cs.provider_operation_status,cs.provider_error_message,cs.teaching_assignment_id,
         s.code as subject_code,s.display_name as subject_name,c.code as class_code,c.display_name as class_name,
         p.name as academic_period_name,
         (cs.status in ('SCHEDULED','LIVE') and cs.starts_at<=now()+interval '15 minutes'
-          and cs.ends_at>now() and cs.private_join_url is not null
+          and cs.ends_at>now() and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
           and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')) as joinable
       from hr_employee e join hr_teaching_assignment a on a.employee_id=e.id
       join learning_class_session cs on cs.teaching_assignment_id=a.id
@@ -121,7 +121,7 @@ public class LearningClassController {
     context=authorization.requireAuth(context);
     if(!context.isEmployee()||context.staffId()==null)throw new SecurityException("Linked employee access is required.");
     List<Map<String,Object>> rows=jdbc.queryForList("""
-      select cs.id,cs.title,cs.provider,cs.private_join_url,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id,cs.title,cs.provider,cs.private_join_url,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
         cs.provider_operation_status,cs.provider_error_message,a.employee_id,a.effective_start,a.effective_end
       from learning_class_session cs
       join hr_teaching_assignment a on a.id=cs.teaching_assignment_id and a.status='APPROVED'
@@ -129,7 +129,7 @@ public class LearningClassController {
       where cs.id=? and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
         and a.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and a.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
-        and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
+        and cs.status in ('SCHEDULED','LIVE') and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
       """,context.staffId(),sessionId);
     if(rows.isEmpty())throw notFound("Assigned live class",sessionId);
@@ -224,10 +224,10 @@ public class LearningClassController {
     if(!Set.of("ALL","SCHEDULED","LIVE","COMPLETED","CANCELLED").contains(statusFilter))throw badRequest("Choose a valid live class status.");
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
-             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,
+             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,cs.youtube_video_id,
              cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,s.code as subject_code,s.display_name as subject_name,
              ch.id as chapter_id,ch.code as chapter_code,ch.display_name as chapter_name,
@@ -261,7 +261,8 @@ public class LearningClassController {
     String subjectCode = requiredText(body.get("subjectCode"), "Subject", 40);
     String provider = safeText(body.getOrDefault("provider", "CUSTOM"), 32).toUpperCase(Locale.ROOT);
     if (!PROVIDERS.contains(provider)) throw badRequest("Choose a supported live class provider.");
-    String joinUrl = "GOOGLE_MEET".equals(provider) ? null : validJoinUrl(body.get("joinUrl"));
+    String youtubeVideoId = "YOUTUBE_LIVE".equals(provider) ? validYouTubeVideoId(body.get("broadcastUrl")) : null;
+    String joinUrl = ("GOOGLE_MEET".equals(provider) || "YOUTUBE_LIVE".equals(provider)) ? null : validJoinUrl(body.get("joinUrl"));
     OffsetDateTime startsAt = parseDate(body.get("startsAt"), "Start time");
     OffsetDateTime endsAt = parseDate(body.get("endsAt"), "End time");
     if (!endsAt.isAfter(startsAt)) throw badRequest("End time must be after the start time.");
@@ -311,10 +312,10 @@ public class LearningClassController {
     String requestId = "GOOGLE_MEET".equals(provider) ? UUID.randomUUID().toString() : null;
     Long id = jdbc.queryForObject("""
       insert into learning_class_session(
-        title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,starts_at,ends_at,
+        title,description,subject_id,chapter_id,teaching_assignment_id,provider,private_join_url,youtube_video_id,starts_at,ends_at,
         status,host_staff_id,created_by_staff_id,provider_operation_status,provider_conference_request_id
-      ) values(?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
-      """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl,
+      ) values(?,?,?,?,?,?,?,?,?,?,'SCHEDULED',?,?,?,?) returning id
+      """, Long.class, title, nullable(description), subjectId, chapterId, teachingAssignmentId, provider, joinUrl, youtubeVideoId,
         startsAt, endsAt, hostStaffId, context.staffId(),
         "GOOGLE_MEET".equals(provider) ? "PENDING" : "NOT_REQUIRED", requestId);
 
@@ -766,7 +767,7 @@ public class LearningClassController {
     String subjectFilter=safeText(subjectCode,40);
     int rowLimit=Math.max(1,Math.min(limit==null?25:limit,100)),rowOffset=Math.max(0,Math.min(offset==null?0:offset,10_000_000));
     List<Map<String,Object>> items=jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
              s.code as subject_code,s.display_name as subject_name,ch.id as chapter_id,ch.code as chapter_code,
              ch.display_name as chapter_name,host.display_name as host_staff_name,
              exists(select 1 from recorded_class rc where rc.class_session_id=cs.id and rc.status='PUBLISHED') as has_recording,
@@ -819,7 +820,7 @@ public class LearningClassController {
       @RequestAttribute(value = "authContext", required = false) AuthContext context) {
     context = authorization.requireStudent(context);
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select cs.id,cs.private_join_url,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at
+      select cs.id,cs.private_join_url,cs.youtube_video_id,cs.provider,cs.title,cs.status,cs.starts_at,cs.ends_at
       from learning_class_session cs
       join curriculum_subject s on s.id=cs.subject_id and s.active=true
       join curriculum_class c on c.id=s.class_id and c.active=true
@@ -828,7 +829,8 @@ public class LearningClassController {
       left join hr_teaching_assignment ta on ta.id=cs.teaching_assignment_id
       left join hr_employee assigned_employee on assigned_employee.id=ta.employee_id
       left join curriculum_chapter ch on ch.id=cs.chapter_id
-      where cs.id=? and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
+      where cs.id=? and cs.status in ('SCHEDULED','LIVE')
+        and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
         and ta.id is not null and ta.status='APPROVED'
         and assigned_employee.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
@@ -862,6 +864,7 @@ public class LearningClassController {
     result.put("title", session.get("title"));
     result.put("provider", session.get("provider"));
     result.put("joinUrl", session.get("private_join_url"));
+    result.put("youtubeVideoId", session.get("youtube_video_id"));
     result.put("joined", true);
     result.put("attendanceRecorded", true);
     return result;
@@ -1087,10 +1090,10 @@ public class LearningClassController {
 
   private Map<String, Object> adminSessionById(long sessionId) {
     List<Map<String, Object>> rows = jdbc.queryForList("""
-      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.starts_at,cs.ends_at,cs.status,
+      select cs.id as session_id,cs.title,cs.description,cs.provider,cs.youtube_video_id,cs.starts_at,cs.ends_at,cs.status,
              cs.host_staff_id,host.display_name as host_staff_name,cs.teaching_assignment_id,
              assigned.display_name as assigned_teacher_name,ap.name as academic_period_name,
-             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,
+             cs.provider_operation_status,cs.provider_error_code,cs.provider_error_message,cs.provider_event_id,cs.youtube_video_id,
              cs.created_at,cs.updated_at,
              c.code as class_code,c.display_name as class_name,
              s.code as subject_code,s.display_name as subject_name,
@@ -1156,6 +1159,39 @@ public class LearningClassController {
       where id=? and subject_id=? and active=true
       """ + publishedClause, Long.class, chapterId, subjectId);
     if (count == null || count == 0) throw badRequest("The selected active chapter does not belong to this subject.");
+  }
+
+  private String validYouTubeVideoId(Object value) {
+    String text = requiredText(value, "YouTube broadcast URL", 2000);
+    try {
+      URI uri = URI.create(text);
+      if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost() == null || uri.getUserInfo() != null) {
+        throw badRequest("Use a valid HTTPS YouTube live broadcast URL.");
+      }
+      String host = uri.getHost().toLowerCase(Locale.ROOT);
+      if (!Set.of("youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be").contains(host)) {
+        throw badRequest("Use a YouTube watch, live, or youtu.be URL.");
+      }
+      String videoId = null;
+      if ("youtu.be".equals(host)) {
+        videoId = uri.getPath() == null ? null : uri.getPath().replaceFirst("^/", "").split("/")[0];
+      } else if ("/watch".equals(uri.getPath())) {
+        String query = uri.getRawQuery();
+        if (query != null) for (String part : query.split("&")) {
+          String[] pair = part.split("=", 2);
+          if (pair.length == 2 && pair[0].equals("v")) { videoId = pair[1]; break; }
+        }
+      } else if (uri.getPath() != null && (uri.getPath().startsWith("/live/") || uri.getPath().startsWith("/embed/"))) {
+        String[] parts = uri.getPath().split("/");
+        if (parts.length > 2) videoId = parts[2];
+      }
+      if (videoId == null || !videoId.matches("[A-Za-z0-9_-]{11}")) {
+        throw badRequest("Enter a YouTube broadcast URL with a valid 11-character video ID.");
+      }
+      return videoId;
+    } catch (IllegalArgumentException ex) {
+      throw badRequest("Enter a valid HTTPS YouTube broadcast URL.");
+    }
   }
 
   private String validJoinUrl(Object value) {

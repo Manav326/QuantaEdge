@@ -200,3 +200,14 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Stable structured identity is `artifact_id` (string), with `topic.topic_id` as a stable string in the JSON. V106/V107 learner-response rows key on `artifact_id` plus exact artifact SHA-256.
 - Resource links to legacy lessons may use `lesson.id`; links to structured lessons must use the stable `artifact_id`, validate through `StructuredLessonArtifactService.requirePublished`, and verify class/subject/chapter scope. Do not invent numeric topic FKs or publish a resource against a draft artifact.
 - This resolves the topic-key ambiguity. Next implementation step remains the forward-only resource model that can attach at chapter scope, legacy lesson scope, or structured artifact scope without changing the existing structured artifact/version contract.
+
+
+### Implementation journal — 2026-10-16 (checkpoint 4: YouTube Live broadcast path)
+
+- Added forward-only migration V108 to introduce `YOUTUBE_LIVE` as a distinct provider with a validated 11-character YouTube video ID and a database invariant that public broadcast sessions never carry a private meeting URL. Existing providers and Google Meet's managed lifecycle remain unchanged.
+- Extended the live-class API to accept only HTTPS YouTube watch/live/embed/short URLs on approved YouTube hosts, extract the video ID, store it separately, and return the ID only in access-controlled class catalogue/join payloads. The 15-minute join gate and 24-hour schedule visibility remain intact; YouTube attendance is recorded through QuantaEdge.
+- Updated the admin class form with a distinct public broadcast URL field and the student web client to render a privacy-enhanced YouTube embed after the server authorizes joining. This is a broadcast embed, not a private YouTube download or a replacement for uploading an authorized recording into private storage.
+- Added a controller regression test rejecting a broadcast URL on an untrusted host before database access.
+- Files changed in this checkpoint: V108 migration, `LearningClassController.java`, `LearningClassControllerTest.java`, admin classes page, student classes client, and this journal. No generated pipeline data or media files were added.
+- **Validation status:** this commit has not yet passed CI. Verify migration/API compilation and both frontend builds; fix failures before claiming the milestone green.
+- Next: validate V108 against the migration test harness, then implement recording upload idempotency and provider-neutral resource assignments before Android offline video downloads. Native messaging remains a separate durable PostgreSQL-backed workstream.

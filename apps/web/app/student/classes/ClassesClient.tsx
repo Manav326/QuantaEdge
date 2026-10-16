@@ -8,7 +8,7 @@ import { useLocale } from '../../components/LanguageProvider';
 import styles from './Classes.module.css';
 
 type LiveClass = {
-  session_id:number;title:string;description?:string;provider:string;starts_at:string;ends_at:string;status:string;
+  session_id:number;title:string;description?:string;provider:string;youtube_video_id?:string|null;starts_at:string;ends_at:string;status:string;
   subject_code:string;subject_name:string;chapter_id?:number|null;chapter_name?:string|null;host_staff_name?:string|null;
   has_recording?:boolean;join_count?:number;attended_seconds?:number;currently_joined?:boolean;
 };
@@ -49,6 +49,7 @@ export default function StudentClassesClient(){
   const [recordings,setRecordings]=useState<Recording[]>([]);
   const [joinedSessionId,setJoinedSessionId]=useState<number|null>(null);
   const [activeJoinUrl,setActiveJoinUrl]=useState<string|null>(null);
+  const [activeVideoId,setActiveVideoId]=useState<string|null>(null);
   const joinedSessionRef=useRef<number|null>(null);
   const [selectedRecording,setSelectedRecording]=useState<Recording|null>(null);
   const [livePage,setLivePage]=useState(0); const [liveTotal,setLiveTotal]=useState(0); const [livePageSize,setLivePageSize]=useState(10);
@@ -79,7 +80,7 @@ export default function StudentClassesClient(){
       setRecordings(Array.isArray(videoRows?.items)?videoRows.items:(Array.isArray(videoRows)?videoRows:[]));
       setRecordingsTotal(Number(videoRows?.total??(Array.isArray(videoRows)?videoRows.length:0)));
       const active=(Array.isArray(live?.items)?live.items:(Array.isArray(live)?live:[])).find((s:LiveClass)=>s.currently_joined);
-      if(active&&!joinedSessionRef.current){joinedSessionRef.current=active.session_id;setJoinedSessionId(active.session_id);}
+      if(active&&!joinedSessionRef.current){joinedSessionRef.current=active.session_id;setJoinedSessionId(active.session_id);setActiveVideoId(active.youtube_video_id||null);}
     }catch(e:any){
       if(e?.auth){router.replace('/login/student');return;}
       setError(e instanceof Error?e.message:t('Your class library could not be loaded.','आपकी कक्षा लाइब्रेरी लोड नहीं हो सकी।'));
@@ -96,16 +97,16 @@ export default function StudentClassesClient(){
     if(busy)return;
     // Open a temporary same-origin window during the click so popup blockers do not
     // discard the provider URL returned by the access-checked API.
-    const popup=window.open('about:blank','_blank');
+    const popup=session.provider==='YOUTUBE_LIVE'?null:window.open('about:blank','_blank');
     if(popup){
       try{popup.opener=null;popup.document.title=t('Opening secure class','सुरक्षित कक्षा खोली जा रही है');popup.document.body.textContent=t('Checking your class access…','कक्षा की अनुमति जाँची जा रही है…');}catch{}
     }
     setBusy(true);setError('');setNotice('');
     try{
       const result=await api('/api/v1/learning/live-classes/'+session.session_id+'/join',{method:'POST'});
-      joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);setActiveJoinUrl(String(result.joinUrl||''));
-      if(popup&&!popup.closed){popup.location.replace(String(result.joinUrl));}
-      setNotice(popup&&!popup.closed
+      joinedSessionRef.current=session.session_id;setJoinedSessionId(session.session_id);setActiveJoinUrl(String(result.joinUrl||''));setActiveVideoId(String(result.youtubeVideoId||'')||null);
+      if(popup&&!popup.closed&&result.joinUrl){popup.location.replace(String(result.joinUrl));}
+      setNotice(result.youtubeVideoId?t('Attendance is saved. The YouTube broadcast is embedded below.','उपस्थिति सहेज ली गई है। YouTube प्रसारण नीचे दिखाया गया है।'):popup&&!popup.closed
         ? t('Attendance is saved for this session. Keep this page open so you can leave cleanly when finished.','इस सत्र की उपस्थिति सहेज ली गई है। समाप्त होने पर सही तरीके से बाहर निकलने के लिए यह पेज खुला रखें।')
         : t('You are checked in. Use the secure meeting link below to enter the class.','आपकी उपस्थिति दर्ज है। कक्षा में प्रवेश करने के लिए नीचे दिया सुरक्षित लिंक खोलें।'));
       await load();
@@ -120,8 +121,8 @@ export default function StudentClassesClient(){
     setBusy(true);setError('');
     try{
       const result=await api('/api/v1/learning/live-classes/'+sessionId+'/join',{method:'POST'});
-      window.open(String(result.joinUrl),'_blank','noopener,noreferrer');
-      joinedSessionRef.current=sessionId;setJoinedSessionId(sessionId);setActiveJoinUrl(String(result.joinUrl||''));
+      if(result.joinUrl)window.open(String(result.joinUrl),'_blank','noopener,noreferrer');
+      joinedSessionRef.current=sessionId;setJoinedSessionId(sessionId);setActiveJoinUrl(String(result.joinUrl||''));setActiveVideoId(String(result.youtubeVideoId||'')||null);
       await load();
     }catch(e:any){setError(e instanceof Error?e.message:t('Meeting access is not available.','मीटिंग का एक्सेस अभी उपलब्ध नहीं है।'));}
     finally{setBusy(false);}
@@ -131,7 +132,7 @@ export default function StudentClassesClient(){
     setBusy(true);setError('');setNotice('');
     try{
       await api('/api/v1/learning/live-classes/'+sessionId+'/leave',{method:'POST'});
-      joinedSessionRef.current=null;setJoinedSessionId(null);setActiveJoinUrl(null);
+      joinedSessionRef.current=null;setJoinedSessionId(null);setActiveJoinUrl(null);setActiveVideoId(null);
       setNotice(t('You left the class. Your attendance duration has been saved.','आप कक्षा से बाहर आ गए हैं। आपकी उपस्थिति की अवधि सहेज ली गई है।'));
       await load();
     }catch(e:any){setError(e instanceof Error?e.message:t('Attendance could not be updated.','उपस्थिति अपडेट नहीं हो सकी।'));}
@@ -212,7 +213,8 @@ export default function StudentClassesClient(){
   return <main className={styles.shell}>
     <section className={styles.wrap}>
       {error&&<div className={styles.error} role="alert">{error}</div>}{notice&&<div className={styles.notice} role="status">{notice}</div>}
-      {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>{t('You are checked in','आपकी उपस्थिति दर्ज है')}</b><small>{activeJoined.title} · {t('Attendance is being recorded while your session is active.','सत्र सक्रिय रहने तक उपस्थिति दर्ज की जा रही है।')}</small></div>{activeJoinUrl&&joinedSessionId===activeJoined.session_id&&<a className={styles.openSecureLink} href={activeJoinUrl} target="_blank" rel="noreferrer">{t('Open secure meeting ↗','सुरक्षित मीटिंग खोलें ↗')}</a>}<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>{t('Refresh meeting link','मीटिंग लिंक रिफ्रेश करें')}</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>{t('Leave & save attendance','बाहर निकलें और उपस्थिति सहेजें')}</button></div>}
+      {activeJoined&&<div className={styles.joinedBanner}><span>●</span><div><b>{t('You are checked in','आपकी उपस्थिति दर्ज है')}</b><small>{activeJoined.title} · {t('Attendance is being recorded while your session is active.','सत्र सक्रिय रहने तक उपस्थिति दर्ज की जा रही है।')}</small></div>{activeJoinUrl&&joinedSessionId===activeJoined.session_id&&<a className={styles.openSecureLink} href={activeJoinUrl} target="_blank" rel="noreferrer">{t('Open secure meeting ↗','सुरक्षित मीटिंग खोलें ↗')}</a>}{activeJoined.provider!=='YOUTUBE_LIVE'&&<button type="button" className={styles.secondaryButton} disabled={busy} onClick={()=>void openMeetingAgain(activeJoined.session_id)}>{t('Refresh meeting link','मीटिंग लिंक रिफ्रेश करें')}</button>}<button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(activeJoined.session_id)}>{t('Leave & save attendance','बाहर निकलें और उपस्थिति सहेजें')}</button></div>}
+      {activeJoined.provider==='YOUTUBE_LIVE'&&activeVideoId&&<section className={styles.videoFrame} aria-label={t('Live broadcast','लाइव प्रसारण')}><iframe title={activeJoined.title} src={'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(activeVideoId)+'?autoplay=1'} style={{width:'100%',aspectRatio:'16 / 9',border:0}} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/></section>}
       <div className={styles.toolbar}><div className={styles.tabs}><button type="button" className={tab==='live'?styles.activeTab:''} onClick={()=>setTab('live')}>{t('Live classes','लाइव कक्षाएँ')} <span>{liveTotal}</span></button><button type="button" className={tab==='recorded'?styles.activeTab:''} onClick={()=>setTab('recorded')}>{t('Recorded classes','रिकॉर्डेड कक्षाएँ')} <span>{recordingsTotal}</span></button></div><label>{t('Subject','विषय')}<select value={subjectFilter} onChange={e=>{setSubjectFilter(e.target.value);setLivePage(0);setRecordingPage(0)}}><option value="ALL">{t('All subjects','सभी विषय')}</option><option value="maths">{t('Mathematics','गणित')}</option><option value="science">{t('Science','विज्ञान')}</option></select></label></div>
 
       {tab==='live'?<>
@@ -222,7 +224,7 @@ export default function StudentClassesClient(){
           const ended=end<now||session.status==='COMPLETED';
           const canJoin=!ended&&['SCHEDULED','LIVE'].includes(session.status)&&start<=now+15*60*1000&&end>now;
           const joined=joinedSessionId===session.session_id||session.currently_joined;
-          return <article key={session.session_id} className={styles.sessionCard}><div className={styles.sessionTop}><span className={styles.liveSymbol}>◷</span><span className={styles['status'+session.status]}>{session.status==='LIVE'?'● LIVE':session.status}</span></div><h3>{session.title}</h3><p>{session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><div className={styles.sessionTime}><span>{t('START','शुरू')}</span><b>{formatDate(session.starts_at)}</b><span>{t('END','समाप्त')}</span><b>{formatDate(session.ends_at)}</b></div>{session.description&&<p className={styles.description}>{session.description}</p>}<div className={styles.sessionMeta}><span>{t('Host','होस्ट')}: {session.host_staff_name||t('Teacher','शिक्षक')}</span><span>{session.provider.replaceAll('_',' ')}</span>{session.has_recording&&<span>{t('Recording available','रिकॉर्डिंग उपलब्ध')}</span>}</div>{joined?<div className={styles.joinedActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openMeetingAgain(session.session_id)}>{t('Open meeting ↗','मीटिंग खोलें ↗')}</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(session.session_id)}>{t('Leave class','कक्षा छोड़ें')}</button></div>:canJoin?<button type="button" className={styles.primaryButton+' '+styles.fullButton} disabled={busy} onClick={()=>void joinClass(session)}>{busy?t('Checking access…','अनुमति जाँची जा रही है…'):session.status==='LIVE'?t('Join live class ↗','लाइव कक्षा में शामिल हों ↗'):t('Join class ↗','कक्षा में शामिल हों ↗')}</button>:<button type="button" className={styles.disabledButton} disabled>{ended?t('Session ended','सत्र समाप्त'):start>now+15*60*1000?t('Join opens ','शामिल होने का समय ')+formatDate(session.starts_at):t('Not available to join','अभी शामिल नहीं हो सकते')}</button>}{session.has_recording&&<button type="button" className={styles.textButton} onClick={()=>{setTab('recorded');}}>{t('View class recordings →','कक्षा की रिकॉर्डिंग देखें →')}</button>}</article>;
+          return <article key={session.session_id} className={styles.sessionCard}><div className={styles.sessionTop}><span className={styles.liveSymbol}>◷</span><span className={styles['status'+session.status]}>{session.status==='LIVE'?'● LIVE':session.status}</span></div><h3>{session.title}</h3><p>{session.subject_name}{session.chapter_name?' · '+session.chapter_name:''}</p><div className={styles.sessionTime}><span>{t('START','शुरू')}</span><b>{formatDate(session.starts_at)}</b><span>{t('END','समाप्त')}</span><b>{formatDate(session.ends_at)}</b></div>{session.description&&<p className={styles.description}>{session.description}</p>}<div className={styles.sessionMeta}><span>{t('Host','होस्ट')}: {session.host_staff_name||t('Teacher','शिक्षक')}</span><span>{session.provider.replaceAll('_',' ')}</span>{session.has_recording&&<span>{t('Recording available','रिकॉर्डिंग उपलब्ध')}</span>}</div>{joined?<div className={styles.joinedActions}><button type="button" className={styles.primaryButton} disabled={busy} onClick={()=>void openMeetingAgain(session.session_id)}>{t('Open meeting ↗','मीटिंग खोलें ↗')}</button><button type="button" className={styles.leaveButton} disabled={busy} onClick={()=>void leaveClass(session.session_id)}>{t('Leave class','कक्षा छोड़ें')}</button></div>:canJoin?<button type="button" className={styles.primaryButton+' '+styles.fullButton} disabled={busy} onClick={()=>void joinClass(session)}>{busy?t('Checking access…','अनुमति जाँची जा रही है…'):session.provider==='YOUTUBE_LIVE'?t('Watch live broadcast','लाइव प्रसारण देखें'):session.status==='LIVE'?t('Join live class ↗','लाइव कक्षा में शामिल हों ↗'):t('Join class ↗','कक्षा में शामिल हों ↗')}</button>:<button type="button" className={styles.disabledButton} disabled>{ended?t('Session ended','सत्र समाप्त'):start>now+15*60*1000?t('Join opens ','शामिल होने का समय ')+formatDate(session.starts_at):t('Not available to join','अभी शामिल नहीं हो सकते')}</button>}{session.has_recording&&<button type="button" className={styles.textButton} onClick={()=>{setTab('recorded');}}>{t('View class recordings →','कक्षा की रिकॉर्डिंग देखें →')}</button>}</article>;
         })}</div>}
         <PremiumPagination page={livePage} total={liveTotal} pageSize={livePageSize} onPageChange={setLivePage}
           onPageSizeChange={size=>{setLivePageSize(size);setLivePage(0);}} itemLabel={t('live classes','लाइव कक्षाएँ')} loading={loading} />
