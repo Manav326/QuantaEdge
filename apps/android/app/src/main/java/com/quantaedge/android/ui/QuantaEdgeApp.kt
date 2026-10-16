@@ -4262,9 +4262,10 @@ private fun AssessmentAttemptScreen(
                     language = language,
                     showPrevious = safeQuestionIndex > 0,
                     showPrimary = safeQuestionIndex < questions.lastIndex,
+                    actionsEnabled = !busy && !deadlineReached,
                     canSave = canEditAnswer && answerPresent && !busy,
                     canClear = canEditAnswer && answerPresent && !busy,
-                    primaryLabel = if (answerPresent) {
+                    primaryLabel = if (canEditAnswer && answerPresent) {
                         if (language == "hi") "सहेजें और आगे" else "Save & Next"
                     } else {
                         if (language == "hi") "अगला" else "Next"
@@ -4329,6 +4330,7 @@ private fun CompactQuestionActions(
     language: String,
     showPrevious: Boolean,
     showPrimary: Boolean,
+    actionsEnabled: Boolean,
     canSave: Boolean,
     canClear: Boolean,
     primaryLabel: String,
@@ -4364,7 +4366,7 @@ private fun CompactQuestionActions(
     fun PreviousButton(modifier: Modifier) {
         OutlinedButton(
             onClick = onPrevious,
-            enabled = !canSave || canSave,
+            enabled = actionsEnabled,
             modifier = modifier.height(40.dp),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 0.dp)
         ) { Text(previousLabel, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
@@ -4390,14 +4392,15 @@ private fun CompactQuestionActions(
                     ClearButton(Modifier.weight(1f))
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                if (showPrevious) ClearButton(Modifier.weight(1f))
-                if (showPrimary) PrimaryButton(Modifier.weight(1f))
-                else if (showPrevious) Spacer(Modifier.weight(1f).height(40.dp))
-            }
-            if (!showPrevious && showPrimary) {
-                // On the first question the primary action gets the full second row.
-                // The first row keeps Save and Clear aligned at the same height.
+            if (showPrevious || showPrimary) {
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                    if (showPrevious) ClearButton(Modifier.weight(1f))
+                    if (showPrimary) {
+                        PrimaryButton(if (showPrevious) Modifier.weight(1f) else Modifier.fillMaxWidth())
+                    } else if (showPrevious) {
+                        Spacer(Modifier.weight(1f).height(40.dp))
+                    }
+                }
             }
         }
     } else {
