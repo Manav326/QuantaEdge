@@ -322,6 +322,16 @@ class LayersTests(unittest.TestCase):
                 sft_row=json.loads(next(stream))
             self.assertEqual(ledger_sha,sft_row["metadata"]["layer5_coverage_ledger_sha256"])
             self.assertEqual(["asset-preview-1"],sft_row["metadata"]["layer5_visual_evidence_asset_ids"])
+            visual_path=outdir/"layer-8-visual-evidence-candidates.v1.jsonl"
+            visual_rows=[json.loads(line) for line in visual_path.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(1,len(visual_rows))
+            self.assertEqual("quantaedge.ncert-visual-evidence-candidate.v1",visual_rows[0]["schema_version"])
+            self.assertIn("A leaf diagram",visual_rows[0]["text"])
+            self.assertEqual(ledger_sha,visual_rows[0]["metadata"]["layer5_coverage_ledger_sha256"])
+            self.assertFalse(visual_rows[0]["eligible_for_retrieval"])
+            self.assertFalse(visual_rows[0]["metadata"]["eligible_for_retrieval"])
+            self.assertFalse(result["layer5_visual_evidence_retrieval_eligible"])
+            self.assertEqual(1,result["layer5_visual_evidence_candidate_documents"])
             saved_benchmark=json.loads(benchmark.read_text(encoding="utf-8"))
             stale_benchmark=json.loads(json.dumps(saved_benchmark))
             stale_benchmark["source"]["layer5_coverage_ledger_sha256"]="0"*64
