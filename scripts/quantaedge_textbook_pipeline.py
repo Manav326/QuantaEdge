@@ -163,7 +163,7 @@ def run_layers(args):
                 if files:shutil.copy2(files[0],raw);cmd.append("--resume")
                 shutil.rmtree(pull,ignore_errors=True)
             subprocess.run(cmd,cwd=repo,check=True)
-            subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","--mode","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
+            subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
             subprocess.run(["oras","push",f"{args.package}:{checkpoint}",f"{raw}:application/json"],cwd=repo,check=True)
             data=read_json(raw);processed=int(data.get("summary",{}).get("assets_processed_this_run",0))
             git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)],f"checkpoint(content): Layer 4-5 {slug}")
