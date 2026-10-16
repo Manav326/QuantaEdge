@@ -1011,7 +1011,7 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
     outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v4"
-    cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger.parent/"layer-8-rag-corpus.v1.jsonl"
+    cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger_path.parent/"layer-8-rag-corpus.v1.jsonl"
     if cpfile.exists():
         doc=read_json(cpfile)
         if doc.get("input_fingerprint")!=fingerprint: raise ValueError("Resume fingerprint mismatch (edition/text/Layer5/model/prompt changed); existing checkpoint preserved.")
