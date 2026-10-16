@@ -7,5 +7,8 @@
   "subject": "maths",
   "maths_part": 2,
   "file": "books/ncert-c7-hindi-ghgp2.pdf",
-  "sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5"
+  "sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-7/hindi/pages/647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-7/hindi/pages/647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5.jsonl",
+  "text_jsonl_filename": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5.jsonl"
 }

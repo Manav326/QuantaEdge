@@ -7,5 +7,8 @@
   "subject": "science",
   "maths_part": null,
   "file": "books/ncert-c7-english-gecu1.pdf",
-  "sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a"
+  "sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-7/english/pages/040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-7/english/pages/040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a.jsonl",
+  "text_jsonl_filename": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a.jsonl"
 }

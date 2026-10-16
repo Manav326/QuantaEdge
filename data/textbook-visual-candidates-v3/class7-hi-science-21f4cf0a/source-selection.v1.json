@@ -7,5 +7,8 @@
   "subject": "science",
   "maths_part": null,
   "file": "books/ncert-c7-hindi-ghcu1.pdf",
-  "sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa"
+  "sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-7/hindi/pages/e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-7/hindi/pages/e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa.jsonl",
+  "text_jsonl_filename": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa.jsonl"
 }

@@ -7,5 +7,8 @@
   "subject": "maths",
   "maths_part": 1,
   "file": "books/ncert-c7-english-gegp1.pdf",
-  "sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314"
+  "sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-7/english/pages/066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-7/english/pages/066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314.jsonl",
+  "text_jsonl_filename": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314.jsonl"
 }

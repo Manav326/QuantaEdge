@@ -87,7 +87,7 @@
       "edition": "Reprint 2026-27",
       "source_pdf_sha256": "066775a2d0cd300d0cf629e59bcd54fae094511461ab3210ce4ce2cfbc789314",
       "page_count": 331,
-      "candidate_count": 200,
+      "candidate_count": 1414,
       "publication_allowed": false,
       "review_required": true
     },
@@ -102,7 +102,7 @@
       "edition": "UNVERIFIED: official NCERT bundle; dated imprint not detected automatically",
       "source_pdf_sha256": "acdfb381c1c5fba015e2f77a2177408da423e78fb9a4a3579063b0f18d8bf8d7",
       "page_count": 216,
-      "candidate_count": 200,
+      "candidate_count": 1159,
       "publication_allowed": false,
       "review_required": true
     },
@@ -117,7 +117,7 @@
       "edition": "Reprint 2026-27",
       "source_pdf_sha256": "4684054beffd52b818bf03b6c260647fc945c69d1ebf8b128ec5b54504aa71c3",
       "page_count": 224,
-      "candidate_count": 200,
+      "candidate_count": 1201,
       "publication_allowed": false,
       "review_required": true
     },
@@ -132,7 +132,7 @@
       "edition": "Reprint 2026-27",
       "source_pdf_sha256": "647c89e1be4181c18b6b8376bc5d4901462faded6fa28ddde2bcb49f047383d5",
       "page_count": 216,
-      "candidate_count": 200,
+      "candidate_count": 1159,
       "publication_allowed": false,
       "review_required": true
     },
@@ -147,7 +147,7 @@
       "edition": "Reprint 2026-27",
       "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
       "page_count": 208,
-      "candidate_count": 200,
+      "candidate_count": 5391,
       "publication_allowed": false,
       "review_required": true
     },
@@ -162,7 +162,7 @@
       "edition": "Reprint 2026-27",
       "source_pdf_sha256": "e07265037e1455a4cb499ef2157627c0c93254ff63597442b45ed8e77782a5aa",
       "page_count": 208,
-      "candidate_count": 200,
+      "candidate_count": 1213,
       "publication_allowed": false,
       "review_required": true
     },
@@ -259,7 +259,7 @@
   ],
   "summary": {
     "catalog_count": 17,
-    "candidate_count": 7486,
+    "candidate_count": 17823,
     "publication_allowed": false,
     "review_required": true
   }
