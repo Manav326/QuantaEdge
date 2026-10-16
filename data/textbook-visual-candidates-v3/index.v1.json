@@ -3,7 +3,7 @@
   "catalogs": [
     {
       "book_slug": "class6-en-maths-bde5606e",
-      "catalog_path": "/content/visual-candidates/class6-en-maths-bde5606e.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class6-en-maths-bde5606e.v3.json",
       "source_book_id": "ncert-c6-english-fegp1",
       "title": "class6-en-maths-bde5606e",
       "class": "6",
@@ -18,7 +18,7 @@
     },
     {
       "book_slug": "class6-hi-maths-0bbba43f",
-      "catalog_path": "/content/visual-candidates/class6-hi-maths-0bbba43f.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class6-hi-maths-0bbba43f.v3.json",
       "source_book_id": "ncert-c6-hindi-fhgp1",
       "title": "class6-hi-maths-0bbba43f",
       "class": "6",
@@ -33,7 +33,7 @@
     },
     {
       "book_slug": "class6-curiosity-en",
-      "catalog_path": "/content/visual-candidates/class6-curiosity-en.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class6-curiosity-en.v3.json",
       "source_book_id": "ncert-c6-english-fecu1",
       "title": "Curiosity",
       "class": "6",
@@ -48,7 +48,7 @@
     },
     {
       "book_slug": "class6-en-science-9c1315ba",
-      "catalog_path": "/content/visual-candidates/class6-en-science-9c1315ba.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class6-en-science-9c1315ba.v3.json",
       "source_book_id": "ncert-c6-english-fecu1",
       "title": "class6-en-science-9c1315ba",
       "class": "6",
@@ -63,7 +63,7 @@
     },
     {
       "book_slug": "class6-hi-science-f538ae2b",
-      "catalog_path": "/content/visual-candidates/class6-hi-science-f538ae2b.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class6-hi-science-f538ae2b.v3.json",
       "source_book_id": "ncert-c6-hindi-fhcu1",
       "title": "class6-hi-science-f538ae2b",
       "class": "6",
@@ -78,7 +78,7 @@
     },
     {
       "book_slug": "class7-en-maths-part1-d75e5b97",
-      "catalog_path": "/content/visual-candidates/class7-en-maths-part1-d75e5b97.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-en-maths-part1-d75e5b97.v3.json",
       "source_book_id": "ncert-c7-english-gegp1",
       "title": "class7-en-maths-part1-d75e5b97",
       "class": "7",
@@ -93,7 +93,7 @@
     },
     {
       "book_slug": "class7-en-maths-part2-b088302e",
-      "catalog_path": "/content/visual-candidates/class7-en-maths-part2-b088302e.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-en-maths-part2-b088302e.v3.json",
       "source_book_id": "ncert-c7-english-gegp2",
       "title": "class7-en-maths-part2-b088302e",
       "class": "7",
@@ -108,7 +108,7 @@
     },
     {
       "book_slug": "class7-hi-maths-part1-d9bd23b6",
-      "catalog_path": "/content/visual-candidates/class7-hi-maths-part1-d9bd23b6.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-hi-maths-part1-d9bd23b6.v3.json",
       "source_book_id": "ncert-c7-hindi-ghgp1",
       "title": "class7-hi-maths-part1-d9bd23b6",
       "class": "7",
@@ -123,7 +123,7 @@
     },
     {
       "book_slug": "class7-hi-maths-part2-5262dc75",
-      "catalog_path": "/content/visual-candidates/class7-hi-maths-part2-5262dc75.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-hi-maths-part2-5262dc75.v3.json",
       "source_book_id": "ncert-c7-hindi-ghgp2",
       "title": "class7-hi-maths-part2-5262dc75",
       "class": "7",
@@ -138,7 +138,7 @@
     },
     {
       "book_slug": "class7-en-science-93a8f46e",
-      "catalog_path": "/content/visual-candidates/class7-en-science-93a8f46e.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-en-science-93a8f46e.v3.json",
       "source_book_id": "ncert-c7-english-gecu1",
       "title": "class7-en-science-93a8f46e",
       "class": "7",
@@ -153,7 +153,7 @@
     },
     {
       "book_slug": "class7-hi-science-21f4cf0a",
-      "catalog_path": "/content/visual-candidates/class7-hi-science-21f4cf0a.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class7-hi-science-21f4cf0a.v3.json",
       "source_book_id": "ncert-c7-hindi-ghcu1",
       "title": "class7-hi-science-21f4cf0a",
       "class": "7",
@@ -168,7 +168,7 @@
     },
     {
       "book_slug": "class8-en-maths-part1-dbc32d16",
-      "catalog_path": "/content/visual-candidates/class8-en-maths-part1-dbc32d16.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-en-maths-part1-dbc32d16.v3.json",
       "source_book_id": "ncert-c8-english-hegp1",
       "title": "class8-en-maths-part1-dbc32d16",
       "class": "8",
@@ -183,7 +183,7 @@
     },
     {
       "book_slug": "class8-en-maths-part2-24c8080e",
-      "catalog_path": "/content/visual-candidates/class8-en-maths-part2-24c8080e.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-en-maths-part2-24c8080e.v3.json",
       "source_book_id": "ncert-c8-english-hegp2",
       "title": "class8-en-maths-part2-24c8080e",
       "class": "8",
@@ -198,7 +198,7 @@
     },
     {
       "book_slug": "class8-hi-maths-part1-94eac999",
-      "catalog_path": "/content/visual-candidates/class8-hi-maths-part1-94eac999.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-hi-maths-part1-94eac999.v3.json",
       "source_book_id": "ncert-c8-hindi-hhgp1",
       "title": "class8-hi-maths-part1-94eac999",
       "class": "8",
@@ -213,7 +213,7 @@
     },
     {
       "book_slug": "class8-hi-maths-part2-aa91fabe",
-      "catalog_path": "/content/visual-candidates/class8-hi-maths-part2-aa91fabe.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-hi-maths-part2-aa91fabe.v3.json",
       "source_book_id": "ncert-c8-hindi-hhgp2",
       "title": "class8-hi-maths-part2-aa91fabe",
       "class": "8",
@@ -228,7 +228,7 @@
     },
     {
       "book_slug": "class8-en-science-9580b02d",
-      "catalog_path": "/content/visual-candidates/class8-en-science-9580b02d.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-en-science-9580b02d.v3.json",
       "source_book_id": "ncert-c8-english-hecu1",
       "title": "class8-en-science-9580b02d",
       "class": "8",
@@ -243,7 +243,7 @@
     },
     {
       "book_slug": "class8-hi-science-0be682f4",
-      "catalog_path": "/content/visual-candidates/class8-hi-science-0be682f4.v3.json",
+      "catalog_path": "data/textbook-visual-candidates-v3/catalogs/class8-hi-science-0be682f4.v3.json",
       "source_book_id": "ncert-c8-hindi-hhcu1",
       "title": "class8-hi-science-0be682f4",
       "class": "8",
