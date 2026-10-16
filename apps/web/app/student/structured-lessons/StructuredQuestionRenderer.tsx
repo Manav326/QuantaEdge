@@ -168,7 +168,7 @@ export default function StructuredQuestionRenderer({
       <strong>{question.correct_answer ? ui.trueLabel : ui.falseLabel}</strong>
     </details>}
 
-    {question.type !== 'short_answer' && question.feedback_by_locale && result &&
+    {question.type !== 'short_answer' && result &&
       <div className={'qe-structured-feedback qe-structured-feedback--' + result.status} role="status">
         <strong>{statusLabel}</strong>
         <p>{result.feedbackByLocale?.[locale] || result.feedback || text(question.feedback_by_locale, locale)}</p>
