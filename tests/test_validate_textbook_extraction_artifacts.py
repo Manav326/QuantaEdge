@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from validate_textbook_extraction_artifacts import validate
+from validate_textbook_extraction_artifacts import detect_maths_part, validate
 
 
 class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
@@ -69,6 +69,26 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
             json.dumps(manifest), encoding="utf-8"
         )
         return manifest
+
+    def test_ncert_ganita_prakash_codes_identify_parts_when_titles_omit_labels(self):
+        cases = [
+            ({"book_id": "ncert-c7-hindi-ghgp1", "code": "ghgp1", "title": "गणित प्रकाश"}, 1),
+            ({"book_id": "ncert-c7-hindi-ghgp2", "code": "ghgp2", "title": "गणित प्रकाश"}, 2),
+            ({"book_id": "ncert-c8-hindi-hhgp1", "code": "hhgp1", "title": "गणित प्रकाश"}, 1),
+            ({"book_id": "ncert-c8-hindi-hhgp2", "code": "hhgp2", "title": "गणित प्रकाश"}, 2),
+            ({"book_id": "ncert-c8-english-hegp2", "code": "hegp2", "title": "Ganita Prakash"}, 2),
+        ]
+        for item, expected_part in cases:
+            with self.subTest(book_id=item["book_id"]):
+                self.assertEqual(expected_part, detect_maths_part(item))
+
+    def test_ncert_code_conflicting_with_explicit_part_label_is_ambiguous(self):
+        item = {
+            "book_id": "ncert-c7-hindi-ghgp1",
+            "code": "ghgp1",
+            "title": "गणित प्रकाश भाग 2",
+        }
+        self.assertIsNone(detect_maths_part(item))
 
     def test_class7_requires_and_accepts_both_maths_parts(self):
         self.write_source()

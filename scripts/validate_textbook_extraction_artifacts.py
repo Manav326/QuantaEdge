@@ -56,11 +56,14 @@ def class_matches(item: dict[str, Any], grade: int) -> bool:
 
 
 def detect_maths_part(item: dict[str, Any]) -> int | None:
-    """Return 1 or 2 only when title/ID clearly identifies one part; never guess."""
-    raw = " ".join(
-        str(item.get(key) or "")
-        for key in ("part", "volume", "title", "title_en", "title_hi", "book_id", "name")
-    ).casefold()
+    """Return Part 1/2 from explicit labels or the official NCERT Ganita Prakash code.
+
+    NCERT's registered codes use the suffix gp1/gp2 (e.g. ghgp1, hegp2).
+    These codes are an authoritative part marker when textbook titles omit the
+    words "Part 1/2". Conflicting labels and codes remain ambiguous and fail closed.
+    """
+    text_fields = ("part", "volume", "title", "title_en", "title_hi", "book_id", "name")
+    raw = " ".join(str(item.get(key) or "") for key in text_fields).casefold()
     raw = re.sub(r"\s+", " ", raw)
     found: set[int] = set()
     for match in re.finditer(r"\b(?:part|volume|vol)\s*[-_.:]?\s*(ii|i|1|2)\b", raw):
@@ -69,6 +72,19 @@ def detect_maths_part(item: dict[str, Any]) -> int | None:
     for match in re.finditer(r"भाग\s*[-_.:]?\s*(प्रथम|द्वितीय|१|२|1|2)", raw):
         token = match.group(1)
         found.add(1 if token in {"प्रथम", "१", "1"} else 2)
+
+    # Prefer the explicit code field when present, and also recognise the code at
+    # the end of the stable NCERT registry ID (ncert-c7-hindi-ghgp1, etc.).
+    for key in ("code", "book_code", "ncert_code", "catalog_code"):
+        code = str(item.get(key) or "").strip().casefold()
+        match = re.fullmatch(r"[a-z]{2}gp([12])", code)
+        if match:
+            found.add(int(match.group(1)))
+    book_id = str(item.get("book_id") or "").strip().casefold()
+    match = re.search(r"(?:^|[-_])[a-z]{2}gp([12])$", book_id)
+    if match:
+        found.add(int(match.group(1)))
+
     return next(iter(found)) if len(found) == 1 else None
 
 
