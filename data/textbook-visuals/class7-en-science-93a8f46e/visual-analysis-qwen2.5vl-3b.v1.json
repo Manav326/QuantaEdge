@@ -8,11 +8,11 @@
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "summary": {
-    "assets_selected": 25,
+    "assets_selected": 46,
     "assets_processed_this_run": 25,
-    "assets_analyzed": 21,
-    "assets_failed": 4,
-    "assets_skipped_from_checkpoint": 0,
+    "assets_analyzed": 45,
+    "assets_failed": 5,
+    "assets_skipped_from_checkpoint": 21,
     "publication_allowed": false
   },
   "results": [
@@ -741,6 +741,726 @@
       "prompt_version": "visual-analysis-prompt-v2",
       "run_id": "38904464438",
       "checkpointed_at": "2026-10-16T13:57:17Z"
+    },
+    {
+      "asset_id": "b376e0ead7901fc2d427f437",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely intended for educational content editing.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The page may be used as a template for educational content editing."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T13:57:47Z"
+    },
+    {
+      "asset_id": "398e5f6b5b6d7ca5c32e81e5",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely intended for educational content to be added.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T13:57:55Z"
+    },
+    {
+      "asset_id": "81ce70ab4f254b4331e7a323",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "exploring the world of science in Grade 6",
+        "limitations": [
+          "no visible content on the page"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T13:58:06Z"
+    },
+    {
+      "asset_id": "b83d8b403417a852b1fe839c",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "No visible content on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T13:58:18Z"
+    },
+    {
+      "asset_id": "ad81dce26759e074a1936b81",
+      "asset_sha256": "8a0111f0f7327bcde94b3a6670b929b2203480eda2d0a578f36cc9998235694f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 5,
+      "asset_path": "page-0005.jpg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false
+    },
+    {
+      "asset_id": "f5efe597ad79b686b56b1c14",
+      "asset_sha256": "47252ea47395d94c2c52fc4a8583c6443b23c780eecbab38df357eef883a25cd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/47252ea47395d94c2c52fc4a8583c6443b23c780eecbab38df357eef883a25cd.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank rectangular frame with a light green background and a black outline.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank frame, likely intended for educational content.",
+        "limitations": [
+          "The image is blank and does not contain any specific content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:03:36Z"
+    },
+    {
+      "asset_id": "af671151264e431894720b56",
+      "asset_sha256": "c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c632ee2769000d74063337a9c1de2b9f45819fcbccff5830fdc0b20b61ad4b27.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass, suggesting a detective or investigative theme.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "investigation",
+          "detective",
+          "magnifying glass"
+        ],
+        "context_relation": "The image likely represents a character from a story or educational content that involves investigation or detective work.",
+        "limitations": [
+          "The image does not provide specific details about the story or content it is part of."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:04:42Z"
+    },
+    {
+      "asset_id": "a305bf1f33f764706dd26213",
+      "asset_sha256": "6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6a0b3c78cf48995be5f653d8b3e0b9bdc4685c8a3c2ecfbcbe3506879715bb67.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a test tube.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "test tube",
+          "lab coat",
+          "research",
+          "experiment"
+        ],
+        "context_relation": "The image is likely used to illustrate a scientific concept or experiment.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or concept."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:05:51Z"
+    },
+    {
+      "asset_id": "7fffaa676bf981633268bb52",
+      "asset_sha256": "622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/622f1ada3b04d9879057a691088566ac29720e33d1f984df7e27ad5cfe3d0347.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a scientist working at a globe-shaped desk.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "desk",
+          "globe",
+          "workplace"
+        ],
+        "context_relation": "The image represents a scientist's workspace, possibly related to a science topic.",
+        "limitations": [
+          "The image does not provide specific details about the scientist's work or the topic being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:07:00Z"
+    },
+    {
+      "asset_id": "e1f5aa0b42b156c5572f4a23",
+      "asset_sha256": "e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/e6e693c229be6a7f5debd1df1ab61b1cda75d8cdca8c9db179710d9739c2c6d0.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist holding a beaker with a blue liquid.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "beaker",
+          "blue liquid"
+        ],
+        "context_relation": "The image represents a scientific theme, possibly related to a lesson on chemistry or biology.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientist's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:08:09Z"
+    },
+    {
+      "asset_id": "fcb7dd88f751167a49061fda",
+      "asset_sha256": "8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/8eb93678c0bcd14df1ede16b02ad0ea11e78e4ed80c8e16a1d236d1a36142e44.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a magnifying glass, possibly examining something closely.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image likely represents a scene where someone is investigating or examining something with a magnifying glass, possibly for educational or illustrative purposes.",
+        "limitations": [
+          "The image does not provide specific details about the context or the subject being examined."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:09:16Z"
+    },
+    {
+      "asset_id": "846e3f522e2be7aa2124483d",
+      "asset_sha256": "b213e223419f1c635dccd486a098daa2d1d4ecb646bb23d9e61114a0b9505ef9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/b213e223419f1c635dccd486a098daa2d1d4ecb646bb23d9e61114a0b9505ef9.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a rectangular outline.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content to be filled with various types of content.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page is designed to be filled with educational content, but currently has no content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:10:25Z"
+    },
+    {
+      "asset_id": "db5e2a4c865f0dbf5898e2c1",
+      "asset_sha256": "41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/41fc2f7c1af34a765ecafa7cbabd09e6016935473dd09d0fffdf287c98245c63.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a diver in the water, with bubbles and a scuba tank.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "diving",
+          "scuba diving",
+          "bubbles",
+          "scuba tank"
+        ],
+        "context_relation": "The image is related to the topic of diving and scuba diving.",
+        "limitations": [
+          "The image does not provide specific details about the diving activity or the diver's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:11:34Z"
+    },
+    {
+      "asset_id": "bbc21f48608130c11d4d8f60",
+      "asset_sha256": "57ce9084367d7efa02da98b88156ef382e0376c3756be55dc1b640d974af4714",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/57ce9084367d7efa02da98b88156ef382e0376c3756be55dc1b640d974af4714.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cloud-like shape with a light blue interior and a black outline.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly a box or a graphic used to present information or facts.",
+        "limitations": [
+          "The image does not provide specific details about the content it represents.",
+          "The image is a simple illustration and does not convey complex information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:12:41Z"
+    },
+    {
+      "asset_id": "62a3e7888d70da1a7c78cb64",
+      "asset_sha256": "3bcd5cc2eda749e2d7bad923c9eefbe32b40e097ce371452ee9c3a225ed7f984",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/3bcd5cc2eda749e2d7bad923c9eefbe32b40e097ce371452ee9c3a225ed7f984.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank white page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content editing.",
+        "limitations": [
+          "The page is blank and requires content to be added.",
+          "The page does not provide specific information or data to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:13:50Z"
+    },
+    {
+      "asset_id": "44a0b2c695d4ed74fc97c934",
+      "asset_sha256": "ffbc467299c0b36be3c71739999570a0f52c59bc37a6a912e77adc732b9ff423",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/ffbc467299c0b36be3c71739999570a0f52c59bc37a6a912e77adc732b9ff423.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a wheelchair holding a camera.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely used as an illustration to accompany a text box or a section in the book.",
+        "limitations": [
+          "The image does not provide specific information about the book's content or the page it is on."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:14:56Z"
+    },
+    {
+      "asset_id": "9a53c2d2fec333671b377fe4",
+      "asset_sha256": "d84652b6b20f1152194ecc97e0072e6e320e564231ef4fc6e2d53fc010eefc48",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/d84652b6b20f1152194ecc97e0072e6e320e564231ef4fc6e2d53fc010eefc48.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty whiteboard or page with a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a blank page or whiteboard where educational content can be added.",
+        "limitations": [
+          "The image is empty and does not contain any text or content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:16:01Z"
+    },
+    {
+      "asset_id": "c46dfdd8d4215644a43a2792",
+      "asset_sha256": "6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6caaf5407bc3053870f3a2f5365dc895612061fb83456559bd1b8924bdf9517c.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist working at a globe-shaped desk, surrounded by laboratory equipment.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "laboratory",
+          "desk",
+          "globe",
+          "equipment"
+        ],
+        "context_relation": "The image represents a scientific theme, possibly related to a lesson on the role of scientists in the world.",
+        "limitations": [
+          "The image does not provide specific details about the content of the lesson."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:17:12Z"
+    },
+    {
+      "asset_id": "3f133a6115bf766dd7dd3b47",
+      "asset_sha256": "6ca756eb88fc974ebaa35a821bc1b2ed8fb8869147aeaf6fc9ade966f420be17",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/6ca756eb88fc974ebaa35a821bc1b2ed8fb8869147aeaf6fc9ade966f420be17.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "An empty whiteboard or page with a simple border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image represents a blank space for educational content.",
+        "limitations": [
+          "The image is empty and does not contain any specific content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:18:19Z"
+    },
+    {
+      "asset_id": "a70461e1cc755e8050094477",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content editing, possibly for a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or visual elements.",
+          "The page may be used as a template for adding educational content.",
+          "The page may be used as a placeholder for inserting text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:18:33Z"
+    },
+    {
+      "asset_id": "05adb6ff814232ce2e5a30c7",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for educational content editing.",
+        "limitations": [
+          "The page is blank and does not contain any specific content or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:18:41Z"
+    },
+    {
+      "asset_id": "e00c458fbc46f499cd3153da",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:18:52Z"
+    },
+    {
+      "asset_id": "44d9ca93478e49dc3b640764",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in a textbook.",
+        "limitations": [
+          "The page is completely black and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:19:02Z"
+    },
+    {
+      "asset_id": "421608240c19ff39723748c4",
+      "asset_sha256": "b2f8240cd505b6bda635b082f08164f6f3e3ae2b53667f2d79c0bd84b6055a11",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook, featuring various educational content boxes and illustrations.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "To sustain the readers’ interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in various boxes.",
+          "The box ‘Fascinating Facts’, highlights fun facts, interesting observations, and curiosity-driven questions.",
+          "The ‘Dive Deeper’ boxes contain advanced concepts that lead to questions for in-depth exploration of a topic.",
+          "The ‘Holistic Lens’ offers horizontal connections to a concept from multiple perspectives.",
+          "‘Science and Society’ links with real-life applications showing how science has contributed to societal development.",
+          "Some chapters also feature sections called ‘Know a Scientist,’ where students can learn about the contributions of Indian and international scientists related to the relevant topics.",
+          "This section includes brief biographies and shows how scientists have made a difference. Each chapter includes highlighted words that emphasise key concepts explained in the chapter. Some highlighted words outline the procedures in scientific activities. An interesting non-evaluative element that ha"
+        ],
+        "concepts": [
+          "Fascinating Facts",
+          "Dive Deeper",
+          "Holistic Lens",
+          "Science and Society",
+          "Know a Scientist",
+          "Biographies",
+          "Highlighted words",
+          "Key concepts",
+          "Procedures in scientific activities",
+          "Indian texts",
+          "NEP 2020"
+        ],
+        "context_relation": "The image is a page from a textbook that provides various educational content boxes and illustrations to engage readers and promote learning.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:22:19Z"
+    },
+    {
+      "asset_id": "25584e8eb6767a8d99cabeb3",
+      "asset_sha256": "f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/f6300f6d7833c0c599b3ba3d867e164ac85e99d8e71d49962f96fd81accf3696.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a blue ring at one end.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of a rope with a ring, possibly used as a symbol or illustration for a chapter summary.",
+        "limitations": [
+          "The image does not provide specific details about the chapter it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T14:23:25Z"
     }
   ]
 }
