@@ -9,7 +9,18 @@ ALTER TABLE learning_class_session
     CHECK (provider IN ('CUSTOM','GOOGLE_MEET','ZOOM','MICROSOFT_TEAMS','OTHER','YOUTUBE_LIVE')),
   ADD CONSTRAINT ck_learning_class_session_youtube_reference
     CHECK (
-      (provider = 'YOUTUBE_LIVE' AND youtube_video_id ~ '^[A-Za-z0-9_-]{11}$' AND private_join_url IS NULL)
+      (provider = 'YOUTUBE_LIVE' AND youtube_video_id IS NOT NULL AND youtube_video_id ~ '^[A-Za-z0-9_-]{11})
+      OR (provider <> 'YOUTUBE_LIVE' AND youtube_video_id IS NULL)
+    );
+
+CREATE INDEX idx_learning_class_session_youtube_video
+  ON learning_class_session(youtube_video_id)
+  WHERE provider = 'YOUTUBE_LIVE';
+
+INSERT INTO app_metadata(key, value)
+VALUES ('schema', 'youtube-live-broadcast-provider-v108')
+ON CONFLICT(key) DO UPDATE SET value=excluded.value;
+ AND private_join_url IS NULL)
       OR (provider <> 'YOUTUBE_LIVE' AND youtube_video_id IS NULL)
     );
 

@@ -93,7 +93,7 @@ public class LearningClassController {
         s.code as subject_code,s.display_name as subject_name,c.code as class_code,c.display_name as class_name,
         p.name as academic_period_name,
         (cs.status in ('SCHEDULED','LIVE') and cs.starts_at<=now()+interval '15 minutes'
-          and cs.ends_at>now() and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
+          and cs.ends_at>now() and cs.private_join_url is not null
           and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')) as joinable
       from hr_employee e join hr_teaching_assignment a on a.employee_id=e.id
       join learning_class_session cs on cs.teaching_assignment_id=a.id
@@ -129,7 +129,7 @@ public class LearningClassController {
       where cs.id=? and e.employment_status in ('ACTIVE','ON_LEAVE','NOTICE_PERIOD')
         and a.effective_start <= (cs.starts_at at time zone 'Asia/Kolkata')::date
         and a.effective_end >= (cs.starts_at at time zone 'Asia/Kolkata')::date
-        and cs.status in ('SCHEDULED','LIVE') and (cs.provider='YOUTUBE_LIVE' or cs.private_join_url is not null)
+        and cs.status in ('SCHEDULED','LIVE') and cs.private_join_url is not null
         and (cs.provider<>'GOOGLE_MEET' or cs.provider_operation_status='CREATED')
       """,context.staffId(),sessionId);
     if(rows.isEmpty())throw notFound("Assigned live class",sessionId);

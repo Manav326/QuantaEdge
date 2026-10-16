@@ -211,3 +211,9 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 - Files changed in this checkpoint: V108 migration, `LearningClassController.java`, `LearningClassControllerTest.java`, admin classes page, student classes client, and this journal. No generated pipeline data or media files were added.
 - **Validation status:** this commit has not yet passed CI. Verify migration/API compilation and both frontend builds; fix failures before claiming the milestone green.
 - Next: validate V108 against the migration test harness, then implement recording upload idempotency and provider-neutral resource assignments before Android offline video downloads. Native messaging remains a separate durable PostgreSQL-backed workstream.
+
+
+### YouTube provider contract correction
+
+- Tightened the V108 database check to require `youtube_video_id IS NOT NULL` explicitly. PostgreSQL CHECK constraints accept NULL expressions, so the explicit predicate is necessary to prevent a YOUTUBE_LIVE row without a video ID.
+- Kept the teacher's private `meeting-link` endpoint private-link-only. YouTube broadcasts use the separate student broadcast/player field and must not be returned as a meeting URL by that endpoint.
