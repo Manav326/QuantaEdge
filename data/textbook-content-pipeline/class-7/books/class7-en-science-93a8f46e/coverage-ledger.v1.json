@@ -28,13 +28,13 @@
     "pages_with_unresolved_text": 0,
     "inventory_asset_rows": 7488,
     "eligible_visual_asset_rows": 7488,
-    "raw_analysis_result_rows": 225,
-    "successful_visual_analyses": 216,
-    "missing_visual_analyses": 7263,
+    "raw_analysis_result_rows": 250,
+    "successful_visual_analyses": 241,
+    "missing_visual_analyses": 7238,
     "failed_visual_analyses": 9,
     "orphan_analysis_results": 0,
     "corrections_applied": 0,
-    "unresolved_count": 7272,
+    "unresolved_count": 7247,
     "mapping_status": "NOT_STARTED",
     "analysis_model": "qwen2.5vl:3b",
     "analysis_prompt_version": "visual-analysis-prompt-v2",
@@ -18675,9 +18675,16 @@
       "asset_path": "assets/a67448f14867e4f169b5ac9536ae7f1d4af0012fa9cb883f4ec9a0ed135f7733.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a solid gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page of a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18693,9 +18700,30 @@
       "asset_path": "assets/b41a638433c4b98c327d2740c590ee24066c5908c71c027637eb7121cf54d9df.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook introducing the concept of 'The Ever-Evolving World of Science' with a focus on curiosity and questioning.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Questioning"
+        ],
+        "context_relation": "Introduction to the concept of science and the importance of curiosity and questioning in learning.",
+        "limitations": [
+          "No specific images or diagrams are visible in the text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18711,9 +18739,32 @@
       "asset_path": "assets/09d9ffb6f70638e2a82e4c1ef033883c281df7c98767866a64298e9792b3cbc3.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The cover of the textbook is the main focus, with the subtitle providing additional context about the educational journey and the invitation to question.",
+        "limitations": [
+          "The image does not show any specific content or illustrations related to the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18729,9 +18780,31 @@
       "asset_path": "assets/d84ce7715e197102fd44154da560404aac4b16f762c41439286e071d59e4bf5c.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a light blue background and a white text area in the center.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the subject of science",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18747,9 +18820,19 @@
       "asset_path": "assets/185f0eb4b582426046ef9b108947ee9d9aefe5221b28443889dc0836121d85d1.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, not a visual representation of any concept or data.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text.",
+          "The image does not provide any information or data that can be analyzed."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18765,9 +18848,18 @@
       "asset_path": "assets/00577e5dce355ed8341e7fe56281fc7375a0e4b74a40458e4bf6254b56704f9a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual or textual content."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18783,9 +18875,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18801,9 +18916,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18819,9 +18957,18 @@
       "asset_path": "assets/fbac51b490e5062089def72537c464229ba9655e0578eb5fb2c8f6cb42c0fb15.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page, likely from a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18837,9 +18984,18 @@
       "asset_path": "assets/5d8db085590b401b9a0dc98b57eebfbd4db7d28f0256a368fe51e625af52cb65.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18855,9 +19011,31 @@
       "asset_path": "assets/c20b862a81b68a099cba8e07168b177f1a2af75577a721b85f52346f6b90694f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook about the world of science, inviting readers to question and explore.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Questioning",
+          "Exploration"
+        ],
+        "context_relation": "Introduction to the world of science",
+        "limitations": [
+          "No specific images or diagrams are visible."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18873,9 +19051,18 @@
       "asset_path": "assets/33ffec965d6a76932f03710775ba41e3c1202cce57c01f7d21355542cf7dde8b.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18891,9 +19078,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18909,9 +19119,18 @@
       "asset_path": "assets/ed179cfba686a957b8c5167ca19e2db99ea5abc4010fdef1b8fd54eb103dd784.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18927,9 +19146,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18945,9 +19187,18 @@
       "asset_path": "assets/6030b1dece611dd9953bb084b364d267fc7f97100edc3bc21a0a199fbd68b3a4.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18963,9 +19214,18 @@
       "asset_path": "assets/7ec6533e878c0c7c101582537963f6d27896d0f5d0f48d485c773345d058af98.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18981,9 +19241,18 @@
       "asset_path": "assets/ce44fd64fd6c17ae1ce8a3bc53e62defcf53badcf0fe4329f21457103d709f96.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -18999,9 +19268,32 @@
       "asset_path": "assets/f4dcc105020576cc9478b533d62d65ed4baf2a6131e767babbabbe288636945a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts — it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "questioning"
+        ],
+        "context_relation": "The image is a cover page of a textbook for Grade 6, promoting the idea of questioning and exploring the world of science.",
+        "limitations": [
+          "The image does not show any specific content or illustrations."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19017,9 +19309,31 @@
       "asset_path": "assets/bd773f1f7394cbc18db1b68ddc223c170c4d88fc52c73af44d39ed5948b2a084.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Grade 6'. The cover features a blue background with a white border and a small image of a globe.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "World of Science"
+        ],
+        "context_relation": "The image is a cover page of a textbook, likely for a Grade 6 science course.",
+        "limitations": [
+          "The image does not show any specific content or illustrations from the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19035,9 +19349,31 @@
       "asset_path": "assets/288429df82c3eed95df8ed3adb7a2d55ef44e114d0c5cea0c120728caedd114f.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook with a light blue background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "Science",
+          "Curiosity",
+          "Grade 6",
+          "Invitation to question"
+        ],
+        "context_relation": "Introduction to the subject of science",
+        "limitations": [
+          "No specific visual elements are described."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19053,9 +19389,18 @@
       "asset_path": "assets/05bea64d96fb2ecc5885019f0b7962eb5e590370acf5a9d5cbee88d03af50a66.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19071,9 +19416,32 @@
       "asset_path": "assets/512480e43ca0e3e8dbd4f212114473a6441f64e22894cdb5d112e7a002c5cdf2.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full-page image of a textbook cover with the title 'The Ever-Evolving World of Science' and a subtitle 'Science of Curiosity'. The cover also includes a tagline that reads 'We hope you enjoyed your adventures with Curiosity in Grade 6, and are now ready to continue our journey into the wonderful world of science. This again, is not just a textbook with facts—it is an invitation to question.'",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question."
+        ],
+        "concepts": [
+          "textbook cover",
+          "science",
+          "curiosity",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "The image is a cover page of a textbook that introduces the reader to the world of science, emphasizing the importance of curiosity and questioning in learning.",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19089,9 +19457,16 @@
       "asset_path": "assets/5f221bb2517d8dadd594709ec6889c59092417021748256ca731e81c7f13fa0a.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A full page with a light gray background and a black horizontal line at the bottom.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a full page from a textbook.",
+        "limitations": []
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
@@ -19107,9 +19482,18 @@
       "asset_path": "assets/4f21f51427ffaca543084868d33249fc6e90c969043c58dd7a853ebaf5118760.png",
       "media_type": "image/png",
       "bbox": null,
-      "analysis_status": "ANALYSIS_MISSING",
+      "analysis_status": "ANALYZED_REQUIRES_HUMAN_REVIEW",
       "correction_status": "NONE",
-      "effective_analysis": null,
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light blue background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
       "chapter_id": null,
       "topic_ids": [],
       "mapping_status": "NOT_STARTED",
