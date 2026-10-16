@@ -243,3 +243,11 @@ This section supersedes stale statements in sections 5–7 that described the re
 - Explanation blocks and practice questions now fail validation when declared `objective_ids` or `source_refs` point to missing records. Diagnostics include the exact field path and a stable error code.
 - Validation remains additive: references are checked when present; existing supported extension fields are not dropped or rewritten.
 - **Status:** SL-04 and SL-23 remain in progress pending CI plus representative artifact validation. No SL task is marked complete.
+
+
+## 10. Actions failure diagnosis and fix — 2026-10-16
+
+- Checked both recent runs: [`f11d59c`](https://github.com/Manav326/QuantaEdge/actions/runs/38869279502) and [`6862481`](https://github.com/Manav326/QuantaEdge/actions/runs/38869399221).
+- Both failed only at the Admin Next.js TypeScript check in `apps/admin/app/structured-lesson-preview/page.tsx`: inspector gate tuple destructuring inferred `label` as `unknown`, which was rendered directly as a React child.
+- Fixed by rendering `String(label)`; status is already explicitly stringified. No API/Android/Web build failures were reported in these runs.
+- **Status:** fix committed to `main`; rerun required before the inspector/validator batch is considered green.

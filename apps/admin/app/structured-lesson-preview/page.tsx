@@ -165,7 +165,7 @@ export default function StructuredLessonPreviewPage() {
                   ['Publication workflow', lesson.workflow?.status],
                   ['Publication allowed', lesson.workflow?.publication_allowed === true ? 'ALLOWED' : 'BLOCKED'],
                 ].map(([label, status]) => <li key={String(label)}>
-                  <span>{label}</span><strong>{String(status || 'NOT DECLARED').replaceAll('_', ' ')}</strong>
+                  <span>{String(label)}</span><strong>{String(status || 'NOT DECLARED').replaceAll('_', ' ')}</strong>
                 </li>)}
               </ul>
               <p className="qe-structured-inspector__note">A schema pass is not science review, source verification, bilingual approval or permission to publish.</p>
