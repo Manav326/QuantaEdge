@@ -5,8 +5,8 @@ import argparse, hashlib, json, re, subprocess, sys, time, urllib.error, urllib.
 from pathlib import Path
 from typing import Any
 
-PROMPT_VERSION = "qe-l6-l8-ollama-v5-contextual-questions"
-LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v3"
+PROMPT_VERSION = "qe-l6-l8-ollama-v6-layer5-evidence-bridge"
+LESSON_CONTRACT_VERSION = "quantaedge.structured-lesson-contextual-questions-runtime-schema.v4"
 HOSTS = {"ncert.nic.in", "ncert.ncert.org.in"}
 LANG = {"english":"en","hindi":"hi","en":"en","hi":"hi"}
 SUBJECT = {"maths":"maths","mathematics":"maths","science":"science"}
@@ -127,6 +127,197 @@ def layer5_ledger(repo: Path, source: dict[str,Any]) -> Path:
         raise ValueError(f"Layer 5 status is {v.get('ledger_status')!r}; only a complete review-only ledger is eligible.")
     return matches[0]
 
+def load_layer5_evidence(repo: Path, source: dict[str,Any]) -> tuple[Path,dict[str,Any],dict[int,list[dict[str,Any]]]]:
+    """Verify L5's input lineage and return review-only visual evidence indexed by PDF page."""
+    repo=repo.resolve()
+    ledger_path=layer5_ledger(repo,source).resolve()
+    ledger=read_json(ledger_path)
+    if ledger.get("schema_version")!="quantaedge.textbook-coverage-ledger.v1" or ledger.get("layer")!=5:
+        raise ValueError("Unsupported Layer 5 coverage-ledger schema/version.")
+    if ledger.get("publication_allowed") is not False or ledger.get("human_review_required") is not True:
+        raise ValueError("Layer 5 must remain review-only and publication-blocked.")
+    src=ledger.get("source") if isinstance(ledger.get("source"),dict) else {}
+    if (src.get("source_book_id")!=source["book_id"] or
+        str(src.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+        src.get("pdf_page_count")!=source["page_count"]):
+        raise ValueError("Layer 5 source book, exact PDF hash or page count does not match the extraction input.")
+    if str(src.get("class")) not in {str(source["class_no"]), "Class "+str(source["class_no"]), "class-"+str(source["class_no"])}:
+        raise ValueError("Layer 5 class does not match the source extraction.")
+    if LANG.get(str(src.get("language") or "").strip().lower())!=source["language"]:
+        raise ValueError("Layer 5 language does not match the source extraction.")
+    if SUBJECT.get(str(src.get("subject") or "").strip().lower())!=source["subject"]:
+        raise ValueError("Layer 5 subject does not match the source extraction.")
+    summary=ledger.get("summary") if isinstance(ledger.get("summary"),dict) else {}
+    if ledger.get("ledger_status")!="COMPLETE" or summary.get("unresolved_count")!=0:
+        raise ValueError("Layer 5 ledger is not evidence-complete; Layers 6–8 must not proceed.")
+    paths=ledger.get("source_paths") if isinstance(ledger.get("source_paths"),dict) else {}
+    def artifact(key: str) -> Path:
+        value=paths.get(key)
+        if not isinstance(value,str) or not value.strip():
+            raise ValueError(f"Layer 5 source_paths.{key} is missing.")
+        relpath=Path(value)
+        if relpath.is_absolute() or ".." in relpath.parts:
+            raise ValueError(f"Layer 5 source_paths.{key} is not a safe repository-relative path.")
+        resolved=(repo/relpath).resolve()
+        if not resolved.is_relative_to(repo) or not resolved.is_file():
+            raise ValueError(f"Layer 5 source_paths.{key} does not resolve to a repository file.")
+        return resolved
+    inventory_path=artifact("inventory")
+    raw_path=artifact("raw_analysis")
+    manifest_path=artifact("manifest")
+    text_path=artifact("text_jsonl")
+    effective_path=artifact("effective_analysis_output")
+    stored_ledger_path=artifact("coverage_ledger_output")
+    if stored_ledger_path!=ledger_path:
+        raise ValueError("Layer 5 ledger self-path does not resolve to the loaded ledger.")
+    if manifest_path!=source["manifest_path"].resolve() or text_path!=source["text_path"].resolve():
+        raise ValueError("Layer 5 manifest/page-JSONL paths do not match the exact extraction inputs.")
+    inventory=read_json(inventory_path)
+    raw=read_json(raw_path)
+    manifest=read_json(manifest_path)
+    effective=read_json(effective_path)
+    inv_src=inventory.get("source") if isinstance(inventory.get("source"),dict) else {}
+    if (inventory.get("schema_version")!="quantaedge.visual-inventory.v1" or
+        inv_src.get("book_id")!=source["book_id"] or
+        str(inv_src.get("pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+        inv_src.get("pdf_page_count")!=source["page_count"]):
+        raise ValueError("Layer 1 inventory source identity differs from the extracted PDF.")
+    manifest_sha=str(manifest.get("original_book_sha256") or manifest.get("asset_pdf_sha256") or "").lower()
+    if manifest.get("book_id")!=source["book_id"] or manifest_sha!=source["source_pdf_sha256"]:
+        raise ValueError("Layer 5 source manifest identity/hash mismatch.")
+    if (raw.get("schema_version")!="quantaedge.visual-analysis.v1" or raw.get("source_book_id")!=source["book_id"] or
+        str(raw.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]):
+        raise ValueError("Layer 4 raw analysis identity/hash mismatch.")
+    raw_sha=sha_file(raw_path)
+    if (effective.get("schema_version")!="quantaedge.visual-analysis-effective.v1" or
+        effective.get("source_book_id")!=source["book_id"] or
+        str(effective.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"] or
+        effective.get("raw_analysis_sha256")!=raw_sha):
+        raise ValueError("Layer 5 effective analysis does not match the current raw Layer 4 checkpoint.")
+    page_rows=ledger.get("pages")
+    if not isinstance(page_rows,list) or len(page_rows)!=source["page_count"]:
+        raise ValueError("Layer 5 ledger does not contain exactly one row per original PDF page.")
+    page_by_number={}
+    for row in page_rows:
+        if not isinstance(row,dict):
+            raise ValueError("Layer 5 page entry must be an object.")
+        number=row.get("source_pdf_page_number")
+        if not isinstance(number,int) or isinstance(number,bool) or number in page_by_number:
+            raise ValueError("Layer 5 page entries contain a missing/duplicate page number.")
+        page_by_number[number]=row
+    if set(page_by_number)!=set(range(1,source["page_count"]+1)):
+        raise ValueError("Layer 5 page ledger is not contiguous across the complete source PDF.")
+    for page in source["pages"]:
+        number=page["page_number"]
+        row=page_by_number[number]
+        if row.get("text_status")!="COMPLETE":
+            raise ValueError(f"Layer 5 page {number} is not text-complete.")
+        evidence=row.get("text_evidence")
+        if not isinstance(evidence,list) or not any(
+            isinstance(item,dict) and item.get("text_sha256")==page["text_sha256"] and
+            item.get("character_count")==len(page["text"]) for item in evidence
+        ):
+            raise ValueError(f"Layer 5 page {number} text hash/character count does not match the source JSONL.")
+    assets=inventory.get("assets")
+    ledger_visuals=ledger.get("visuals")
+    raw_rows=raw.get("results")
+    effective_rows=effective.get("results")
+    if not all(isinstance(value,list) for value in (assets,ledger_visuals,raw_rows,effective_rows)):
+        raise ValueError("Layer 5 visual evidence arrays are missing or malformed.")
+    asset_by_id={}
+    for row in assets:
+        if not isinstance(row,dict) or not isinstance(row.get("asset_id"),str) or not row["asset_id"]:
+            raise ValueError("Layer 1 inventory contains an asset without a stable ID.")
+        if row["asset_id"] in asset_by_id:
+            raise ValueError("Layer 1 inventory contains duplicate asset IDs.")
+        asset_by_id[row["asset_id"]]=row
+    ledger_by_id={row.get("asset_id"):row for row in ledger_visuals if isinstance(row,dict) and isinstance(row.get("asset_id"),str)}
+    raw_by_id={row.get("asset_id"):row for row in raw_rows if isinstance(row,dict) and isinstance(row.get("asset_id"),str)}
+    effective_by_id={row.get("asset_id"):row for row in effective_rows if isinstance(row,dict) and isinstance(row.get("asset_id"),str)}
+    if len(ledger_by_id)!=len(ledger_visuals) or set(ledger_by_id)!=set(asset_by_id):
+        raise ValueError("Layer 5 visual rows do not map one-to-one to the Layer 1 inventory assets.")
+    if len(raw_by_id)!=len(raw_rows) or len(effective_by_id)!=len(effective_rows):
+        raise ValueError("Layer 4/5 analysis records contain missing or duplicate asset IDs.")
+    eligible_ids={aid for aid,row in asset_by_id.items() if row.get("kind") in KINDS}
+    if set(raw_by_id)!=eligible_ids or set(effective_by_id)!=eligible_ids:
+        raise ValueError("Layer 4/5 result IDs do not equal the eligible Layer 1 visual asset IDs.")
+    expected_by_page={}
+    for aid,asset in asset_by_id.items():
+        number=page_no(asset)
+        expected_by_page.setdefault(number,[]).append(aid)
+    evidence_by_page:dict[int,list[dict[str,Any]]]={}
+    for aid,asset in asset_by_id.items():
+        row=ledger_by_id[aid]
+        asset_hash=str(asset.get("asset_sha256") or "").lower()
+        number=page_no(asset)
+        if (row.get("asset_sha256")!=asset_hash or row.get("source_pdf_sha256")!=source["source_pdf_sha256"] or
+            row.get("source_pdf_page_number")!=number or row.get("asset_kind")!=asset.get("kind")):
+            raise ValueError(f"Layer 5 visual {aid} does not match its inventory hash/page/kind.")
+        if asset.get("kind") not in KINDS:
+            continue
+        raw_row=raw_by_id.get(aid)
+        effective_row=effective_by_id.get(aid)
+        if (row.get("analysis_status")!="ANALYZED_REQUIRES_HUMAN_REVIEW" or
+            not isinstance(row.get("effective_analysis"),dict) or raw_row is None or effective_row is None):
+            raise ValueError(f"Layer 5 marks eligible visual {aid} incomplete despite COMPLETE status.")
+        if (raw_row.get("asset_sha256")!=asset_hash or raw_row.get("analysis_status")!="DRAFT_REQUIRES_REVIEW" or
+            not isinstance(raw_row.get("analysis"),dict) or effective_row.get("asset_sha256")!=asset_hash or
+            effective_row.get("effective_analysis")!=row.get("effective_analysis")):
+            raise ValueError(f"Layer 4/5 analysis for visual {aid} does not match the source-bound ledger.")
+        analysis=row["effective_analysis"]
+        evidence_by_page.setdefault(number,[]).append({
+            "asset_id":aid,"asset_kind":asset.get("kind"),"source_pdf_page_number":number,
+            "source_asset_sha256":asset_hash,"analysis_status":row["analysis_status"],
+            "correction_status":row.get("correction_status","NONE"),
+            "visual_type":analysis.get("visual_type"),"visual_summary":analysis.get("visual_summary"),
+            "visible_text":analysis.get("visible_text",[]),"concepts":analysis.get("concepts",[]),
+            "context_relation":analysis.get("context_relation"),"limitations":analysis.get("limitations",[]),
+            "human_review_required":True,"publication_allowed":False})
+    for number,row in page_by_number.items():
+        if sorted(row.get("visual_asset_ids",[]))!=sorted(expected_by_page.get(number,[])):
+            raise ValueError(f"Layer 5 page {number} visual IDs do not match the Layer 1 asset inventory.")
+    for rows in evidence_by_page.values():
+        rows.sort(key=lambda item:item["asset_id"])
+    return ledger_path,ledger,evidence_by_page
+
+
+def layer5_evidence_for_segment(evidence_by_page: dict[int,list[dict[str,Any]]], segment: dict[str,Any]) -> list[dict[str,Any]]:
+    result=[]
+    for number in segment.get("source_pages",[]):
+        result.extend(evidence_by_page.get(number,[]))
+    return sorted(result,key=lambda item:(item["source_pdf_page_number"],item["asset_id"]))
+
+
+def prompt_evidence_summary(rows: list[dict[str,Any]]) -> dict[str,Any]:
+    """Bound model context while preserving complete evidence IDs and marking omitted detail."""
+    pages={}
+    for row in rows:
+        number=row["source_pdf_page_number"]
+        pages.setdefault(number,[]).append(row)
+    result=[]
+    for number,items in sorted(pages.items()):
+        concepts=sorted({str(value).strip()[:100] for row in items for value in row.get("concepts",[])
+                         if isinstance(value,str) and value.strip()})
+        visible=sorted({str(value).strip()[:100] for row in items for value in row.get("visible_text",[])
+                        if isinstance(value,str) and value.strip()})
+        details=[]
+        for row in items[:6]:
+            details.append({"asset_id":row["asset_id"],"kind":row["asset_kind"],"visual_type":row.get("visual_type"),
+                "summary":str(row.get("visual_summary") or "")[:180],
+                "visible_text":[str(v)[:80] for v in row.get("visible_text",[])[:5] if isinstance(v,str)],
+                "concepts":[str(v)[:80] for v in row.get("concepts",[])[:5] if isinstance(v,str)],
+                "limitations":[str(v)[:100] for v in row.get("limitations",[])[:3] if isinstance(v,str)]})
+        result.append({"source_pdf_page_number":number,"visual_asset_count":len(items),
+            "all_visual_asset_ids":[row["asset_id"] for row in items],"visual_types":sorted({str(row.get("visual_type") or "uncertain") for row in items}),
+            "visible_text_summary":visible[:20],"concept_summary":concepts[:24],"detail_rows":details,
+            "asset_detail_rows_omitted":max(0,len(items)-len(details))})
+    return {"schema_version":"quantaedge.layer5-prompt-evidence-summary.v1",
+            "source_pdf_sha256":rows[0].get("source_pdf_sha256") if rows else None,
+            "pages":result,"evidence_asset_count":len(rows),
+            "all_asset_ids":[row["asset_id"] for row in rows],
+            "human_review_required":True,"publication_allowed":False}
+
+
 def segments_for(pages: list[dict[str,Any]], max_pages: int=4, max_chars: int=7000) -> list[dict[str,Any]]:
     if not 1<=max_pages<=8 or not 2000<=max_chars<=12000: raise ValueError("Segment limits exceed safe bounds.")
     fragments=[]
@@ -208,7 +399,7 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
             "url":"https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"+path.relative_to(repo).as_posix(),
             "heuristic_score":float(row.get("heuristic_score") or 0),
         })
-    by_segment={}; selected_for_fingerprint=[]
+    by_segment={}
     for seg in segments:
         attached=[]
         for page in seg["source_pages"]:
@@ -216,8 +407,21 @@ def load_visual_candidates(repo: Path, source: dict[str,Any], segments: list[dic
             if rows: attached.append(sorted(rows,key=lambda x:(-x["heuristic_score"],x["candidate_id"]))[0])
             if len(attached)>=2: break
         by_segment[seg["segment_id"]]=attached
-        selected_for_fingerprint.extend({k:v for k,v in row.items() if k in {"candidate_id","source_pdf_page_number","source_asset_sha256","display_sha256"}} for row in attached)
-    fingerprint=sha(json.dumps({"slug":slug,"pack_sha256":sha_file(pack_path),"assets":selected_for_fingerprint},sort_keys=True))
+    pack_fingerprint_assets=[]
+    for row in pack.get("candidates",[]):
+        if not isinstance(row,dict): continue
+        page=row.get("source_pdf_page_number"); cid=str(row.get("candidate_id") or "")
+        asset_sha=str(row.get("source_asset_sha256") or "").lower()
+        if (row.get("candidate_kind")=="embedded_image" and row.get("source_book_id")==source["book_id"] and
+            str(row.get("source_pdf_sha256") or "").lower()==source["source_pdf_sha256"] and
+            row.get("publication_allowed") is False and row.get("human_review_required") is True and
+            str(row.get("review_status") or "").upper() in {"CANDIDATE_NEEDS_HUMAN_REVIEW","NEEDS_REVIEW"} and
+            isinstance(page,int) and not isinstance(page,bool) and 1<=page<=source["page_count"] and
+            re.fullmatch(r"v3-image-[a-z0-9-]{8,100}",cid) and re.fullmatch(r"[0-9a-f]{64}",asset_sha)):
+            pack_fingerprint_assets.append({"candidate_id":cid,"source_pdf_page_number":page,
+                "source_asset_sha256":asset_sha,"display_path":row.get("display_path")})
+    pack_fingerprint_assets.sort(key=lambda item:item["candidate_id"])
+    fingerprint=sha(json.dumps({"slug":slug,"pack_sha256":sha_file(pack_path),"assets":pack_fingerprint_assets},sort_keys=True))
     return by_segment,fingerprint
 
 QUESTION_TYPES = {
@@ -235,16 +439,20 @@ RENDERER_IDS = {
  "scenario_based":"qtype-scenario-based.v1",
 }
 
-def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict[str,Any]]|None=None) -> str:
+def prompt_for(source: dict[str,Any], segment: dict[str,Any], visuals: list[dict[str,Any]]|None=None,
+               layer5_visual_evidence: list[dict[str,Any]]|None=None) -> str:
     context="\n\n".join(f"Original PDF page {p['page']} (fragment {p['part']}):\n{p['text'] if p['text'].strip() else '[No extractable text]'}" for p in segment["pieces"])
     allowed=json.dumps(segment["source_pages"])
     visual_rows=visuals or []
+    layer5_text=json.dumps(prompt_evidence_summary(layer5_visual_evidence or []),ensure_ascii=False,separators=(",",":"))
     visual_choices=[
         {"visual_candidate_id":x["candidate_id"],"source_pdf_page_number":x["source_pdf_page_number"]}
         for x in visual_rows if isinstance(x,dict) and x.get("candidate_id")
     ]
     visual_text=json.dumps(visual_choices,ensure_ascii=False)
     return f"""Create one compact, review-only bilingual NCERT learning unit grounded only in this excerpt. Use original wording; never copy textbook text or exercise questions. Never guess facts, chapter identity, page numbers or visual contents.
+Layer 5 same-PDF visual-analysis evidence (unapproved machine observations, for curriculum-mapping hints only): {layer5_text}
+Layer 5 summaries/concepts/visible text are hypotheses, not verified facts. Cross-check them against the supplied source text, retain uncertainty and limitations, and do not use Layer 5 asset IDs as visual question IDs. Visual questions may cite only the separately allow-listed V3 candidate IDs above; those candidates remain blocked until human approval.
 There is NO question-type quota. The structured types below are a supported catalogue, not a checklist. Generate only questions that the source context and learning objectives justify; do not rotate through types, do not pad the output, and do not omit a core assessable idea just to keep the set short. Return 1 to 6 distinct, useful questions; fewer high-quality questions are better than redundant questions.
 Supported types and purpose:
 - multiple_choice: one best choice for an important concept or misconception;
@@ -453,7 +661,8 @@ def tutor_citations_valid(value: Any, allowed_pages: set[int]) -> bool:
     return languages=={"en","hi"}
 
 
-def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], visuals: list[dict[str,Any]]|None=None) -> dict[str,Any]|None:
+def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], visuals: list[dict[str,Any]]|None=None,
+                layer5_visual_evidence: list[dict[str,Any]]|None=None) -> dict[str,Any]|None:
     if v.get("chapter_number") is None: return None
     stable=sha(source["book_id"]+"|"+source["source_pdf_sha256"]+"|"+seg["segment_id"])
     aid="qe-lesson-"+stable[:24]; topic_id="topic-"+stable[:20]
@@ -522,7 +731,7 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
       "learning_objectives":objectives,"source_refs":refs,"explain":{"title_by_locale":v["microtopic_title_by_locale"],"blocks":blocks},
       "practice":{"title_by_locale":{"en":"Check your understanding","hi":"अपनी समझ जाँचें"},"questions":questions,"question_count":len(questions)},
       "language_runtime_contract":{"supported_locales":["en","hi"],"default_locale":"en"},
-      "generation_metadata":{"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE","prompt_version":PROMPT_VERSION,"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"publication_allowed":False,"human_review_required":True}}
+      "generation_metadata":{"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE","prompt_version":PROMPT_VERSION,"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"layer5_coverage_ledger_path":source.get("layer5_ledger_path"),"layer5_coverage_ledger_sha256":source.get("layer5_ledger_sha256"),"layer5_visual_evidence_asset_ids":[x["asset_id"] for x in (layer5_visual_evidence or [])],"layer5_visual_evidence_count":len(layer5_visual_evidence or []),"publication_allowed":False,"human_review_required":True}}
 
 def validate_lesson(x: dict[str,Any]) -> list[str]:
     e=[]; curriculum=x.get("curriculum",{})
@@ -870,6 +1079,8 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
         raise ValueError("Benchmark source page set changed; rerun inference.")
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,selected)
     prior_contract=report.get("lesson_contract_version")
+    if report.get("visual_candidate_fingerprint")!=visual_fingerprint:
+        raise ValueError("Visual candidate pack changed since benchmark inference; rerun the benchmark.")
     if prior_contract==LESSON_CONTRACT_VERSION and report.get("visual_candidate_fingerprint")==visual_fingerprint:
         return {"status":"ALREADY_CURRENT","report":str(output),"lesson_contract_version":LESSON_CONTRACT_VERSION,
                 "new_model_calls":0,"models":[{"model":m.get("model"),"successful_samples":m.get("successful_samples"),
