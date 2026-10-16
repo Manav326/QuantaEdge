@@ -167,3 +167,28 @@ This journal is intentionally part of the repository contract. Update it in the 
 1. Check run `38933086666` and current `main` head.
 2. Continue audit: identify all existing content-resource tables/APIs and lesson/micro-topic keys; inspect complete admin upload/publish/archive endpoints; trace Android resource download worker and storage; inspect Compose/deployment/backup media-volume config; search the repository for any alternative messaging transport.
 3. Then implement the multi-resource model only after those FK and API contracts are reconciled. Keep this journal current at every milestone.
+
+
+## Implementation journal — 2026-10-16 (checkpoint 3: source audit and CI confirmation)
+
+### Audit artifacts and repository state
+
+- Added `docs/product/live-lectures-messaging-offline-video-audit.md` in commit `da9df4339a3c5eb51bb8d94c2181eb312d281ac9`.
+- The audit traces current API endpoints, migration/schema contracts, production Compose volume, admin/student web clients, Android playback/download worker, resource models, and messaging search results.
+- At audit start, `main` was `19ec0e7a76a3b1f740bf0cbefa1d4057c5da457e`. This is three content-pipeline commits ahead of `df5e8d5cefc0b88e136a4516cf119cc24504a79d`; the three commits only changed files under `data/`. Pipeline data stays confined to `data/` as required.
+- Confirmed CI run [#2862](https://github.com/Manav326/QuantaEdge/actions/runs/38933136844) on `df5e8d5cefc0b88e136a4516cf119cc24504a79d` completed successfully across all eight jobs: Android APK, affected-component detection, API verification, content safeguards, admin image, People Operations image, web image, and API image. The successful commit is an ancestor of current `main`; do not infer that later data commits constitute a separate feature-code build.
+- This is source-level auditing plus CI evidence; no production deployment, PostgreSQL integration boundary test, load test, or backup restore drill has been run by this checkpoint.
+
+### Confirmed root gaps
+
+1. YouTube Live is not a first-class provider in V43's provider constraint. Existing live-session creation and join assume a private `private_join_url`; the broadcast player/reference must be modeled separately, while preserving the existing Google Meet lifecycle in V79.
+2. `recorded_class` supports private local media, but only one multipart upload request (500 MiB max), no upload idempotency/resume state, no download-permission field and no lesson/microtopic FK. Existing byte-range stream authorization is a sound base.
+3. Production Compose mounts the named `quantaedge_media` volume at `/var/lib/quantaedge/media`; this proves persistence across container recreation, not backup readiness. No automated media backup/restore job or script was found in the repository paths searched. Confirm the real deployment and restore process before release.
+4. The generic `content_asset` model is used by lesson blocks but only contains a URL/status/provenance and does not provide the full access-controlled multi-resource assignment/lifecycle/download contract. `learning_document` is chapter/subject PDF-oriented and returns authorized rendered pages; it is not a generic resource catalogue.
+5. Android `RecordedPlayerScreen` uses authenticated online Media3 playback; `ProtectedResourceDownloadWorker` downloads encrypted rendered page images, not video. Video offline support must be implemented as a distinct media transfer/storage path that reuses account isolation and safe worker patterns without misusing the page endpoint.
+6. Searches for `@EnableWebSocket`, `WebSocketMessageBrokerConfigurer`, `SimpMessagingTemplate`, `RedisMessageListenerContainer`, `SseEmitter`, and likely conversation/message table names found no native chat transport or durable message model in inspected source. Redis is already deployed, but no broker should be added until measured multi-instance requirements justify it.
+7. Recording upload already removes the file if the DB insert/audit transaction throws. It does not protect against a client retry after a lost success response, which can create a duplicate recording. A stable request identity is required; SHA-256 alone cannot be the idempotency key because the same bytes may legitimately be reused.
+
+### Exact next step
+
+Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific lifecycle for `learning_document`, `content_asset`, and `recorded_class`; then design a forward-only migration for provider-neutral multi-resource assignments and YouTube broadcast metadata. Do not modify released migrations or add a video-only duplicate catalogue. Implement upload idempotency and authorized offline download policy before the corresponding retry/download UI. Add issue #58 audit findings and update this journal after each milestone.
