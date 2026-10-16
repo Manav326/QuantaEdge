@@ -140,7 +140,7 @@ jobs:
           repair_queue="data/textbook-cache/repair-queue.json"
           queue_added="false"
           if [ "$EVENT_NAME" = "push" ]; then
-            if jq -e '.head_commit.added[]? | select(. == "data/textbook-cache/repair-queue.json")' "$GITHUB_EVENT_PATH" >/dev/null; then
+            if jq -e '((.head_commit.added // []) + (.head_commit.modified // [])) | any(. == "data/textbook-cache/repair-queue.json" or . == ".github/workflows/textbook-cache.yml")' "$GITHUB_EVENT_PATH" >/dev/null; then
               queue_added="true"
             fi
           fi
