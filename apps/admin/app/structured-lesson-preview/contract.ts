@@ -136,6 +136,27 @@ export function validateStructuredLesson(input: unknown): ValidationResult {
   if (!isRecord(input.explain) || !Array.isArray(input.explain.blocks)) add('explain.blocks', 'REQUIRED', 'explain.blocks must be an array.');
   if (!isRecord(input.practice) || !Array.isArray(input.practice.questions)) add('practice.questions', 'REQUIRED', 'practice.questions must be an array.');
 
+  const objectives: unknown[] = Array.isArray(input.learning_objectives) ? input.learning_objectives : [];
+  const objectiveIds = new Set<string>();
+  objectives.forEach((objective, index) => {
+    const path = 'learning_objectives[' + index + ']';
+    if (!isRecord(objective)) { add(path, 'OBJECT_REQUIRED', 'Learning objective must be an object.'); return; }
+    if (!nonEmpty(objective.id)) add(path + '.id', 'REQUIRED', 'Learning objective needs a stable ID.');
+    else if (objectiveIds.has(objective.id)) add(path + '.id', 'DUPLICATE_ID', 'Learning objective IDs must be unique.');
+    else objectiveIds.add(objective.id);
+    if (!localized(objective.statement_by_locale)) add(path + '.statement_by_locale', 'LOCALE_GAP', 'Learning objective needs English and Hindi statements.');
+  });
+  const sourceRefs: unknown[] = Array.isArray(input.source_refs) ? input.source_refs : [];
+  const sourceRefIds = new Set<string>();
+  sourceRefs.forEach((source, index) => {
+    const path = 'source_refs[' + index + ']';
+    if (!isRecord(source)) { add(path, 'OBJECT_REQUIRED', 'Source reference must be an object.'); return; }
+    const id = nonEmpty(source.source_ref_id) ? source.source_ref_id : source.id;
+    if (!nonEmpty(id)) add(path + '.source_ref_id', 'REQUIRED', 'Source reference needs a stable source_ref_id.');
+    else if (sourceRefIds.has(id)) add(path + '.source_ref_id', 'DUPLICATE_ID', 'Source reference IDs must be unique.');
+    else sourceRefIds.add(id);
+  });
+
   const blocks: unknown[] = isRecord(input.explain) && Array.isArray(input.explain.blocks) ? input.explain.blocks : [];
   const questions: unknown[] = isRecord(input.practice) && Array.isArray(input.practice.questions) ? input.practice.questions : [];
   const seenBlocks = new Set<string>();
@@ -147,6 +168,13 @@ export function validateStructuredLesson(input: unknown): ValidationResult {
     else seenBlocks.add(block.id);
     if (!BLOCK_TYPES.has(String(block.type))) add(path + '.type', 'UNKNOWN_BLOCK_TYPE', 'Unsupported block type: ' + String(block.type));
     if (!Number.isFinite(block.order)) add(path + '.order', 'INVALID_ORDER', 'Block order must be numeric.');
+    if (Array.isArray(block.objective_ids)) block.objective_ids.forEach((id: unknown, refIndex: number) => {
+      if (typeof id !== 'string' || !objectiveIds.has(id)) add(path + '.objective_ids[' + refIndex + ']', 'INVALID_OBJECTIVE_REF', 'Block refers to a learning objective that does not exist.');
+    });
+    if (Array.isArray(block.source_refs)) block.source_refs.forEach((id: unknown, refIndex: number) => {
+      if (typeof id !== 'string' || !sourceRefIds.has(id)) add(path + '.source_refs[' + refIndex + ']', 'INVALID_SOURCE_REF', 'Block refers to a source reference that does not exist.');
+    });
+
     if (block.type === 'rich_text') {
       const text = block.text_by_locale;
       if (!isRecord(text) || !isRecord(text.en) || !isRecord(text.hi)) add(path + '.text_by_locale', 'LOCALE_GAP', 'Rich text needs English and Hindi content.');
@@ -178,6 +206,13 @@ export function validateStructuredLesson(input: unknown): ValidationResult {
     const type = question.type as StructuredQuestionType;
     if (question.rendering_contract_id !== QUESTION_CONTRACTS[type]) add(path + '.rendering_contract_id', 'CONTRACT_MISMATCH', 'The rendering contract does not match question type.');
     if (!localized(question.prompt_by_locale)) add(path + '.prompt_by_locale', 'LOCALE_GAP', 'Question prompt needs English and Hindi.');
+    if (Array.isArray(question.objective_ids)) question.objective_ids.forEach((id: unknown, refIndex: number) => {
+      if (typeof id !== 'string' || !objectiveIds.has(id)) add(path + '.objective_ids[' + refIndex + ']', 'INVALID_OBJECTIVE_REF', 'Question refers to a learning objective that does not exist.');
+    });
+    if (Array.isArray(question.source_refs)) question.source_refs.forEach((id: unknown, refIndex: number) => {
+      if (typeof id !== 'string' || !sourceRefIds.has(id)) add(path + '.source_refs[' + refIndex + ']', 'INVALID_SOURCE_REF', 'Question refers to a source reference that does not exist.');
+    });
+
     if (type !== 'short_answer' && !localized(question.feedback_by_locale)) add(path + '.feedback_by_locale', 'LOCALE_GAP', 'Question feedback needs English and Hindi.');
     const optionTypes: StructuredQuestionType[] = ['multiple_choice', 'multiple_select', 'image_observation', 'scenario_based'];
     if (optionTypes.includes(type)) {

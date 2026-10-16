@@ -234,3 +234,12 @@ This section supersedes stale statements in sections 5–7 that described the re
 - **Governance rule:** structural validation and rendering preview remain distinct from source completeness, science review, bilingual review, visual approval and publication permission.
 - **Task status:** SL-21 and SL-23 are still in progress, not complete; the inspector is a foundation, not proof that every Chapter 1–6 draft is loaded from a managed repository source or that all review gates are actionable. SL-01–SL-28 remain unchecked until their full acceptance criteria and tests pass.
 - **Next required integration:** backward-compatible server-side structured artifact loading, response persistence/grading by stable IDs, answer-key sanitization, and wiring the same artifact into Web learner and Android runtime. Do not use legacy numeric question IDs for structured artifact IDs.
+
+
+## 9. Contract validation expansion — 2026-10-16
+
+- Added shared Web/Admin validation for stable, unique learning-objective IDs and bilingual objective statements.
+- Added validation for unique source-reference IDs.
+- Explanation blocks and practice questions now fail validation when declared `objective_ids` or `source_refs` point to missing records. Diagnostics include the exact field path and a stable error code.
+- Validation remains additive: references are checked when present; existing supported extension fields are not dropped or rewritten.
+- **Status:** SL-04 and SL-23 remain in progress pending CI plus representative artifact validation. No SL task is marked complete.
