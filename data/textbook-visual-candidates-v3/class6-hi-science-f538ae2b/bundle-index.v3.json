@@ -279,6 +279,6 @@
   "review_required": true,
   "ghcr_package": "ghcr.io/manav326/quantaedge-textbook-visuals",
   "version_tag": "candidates-v3-class6-class6-hi-science-f538ae2b-run-38868909722",
-  "bundle_tar_sha256": "c9e6e77003f6a4fdfa60bbe0c1dd651daf54127d8adc3257f42a61aa8ad380f4",
+  "bundle_tar_sha256": "20f5ce2e361f4aef50392e0a3fd6b6a3847ad45af5174252803340b51d740c3b",
   "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
 }
