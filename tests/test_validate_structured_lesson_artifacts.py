@@ -59,6 +59,18 @@ class StructuredLessonArtifactTests(unittest.TestCase):
         artifact["generation_metadata"] = {"model": "local", "extra": {"kept": True}}
         self.assertEqual([], validate_artifact(artifact, "fixture.json"))
 
+    def test_activity_instruction_arrays_are_valid_in_the_existing_schema(self):
+        artifact = sample_lesson()
+        artifact["explain"]["blocks"][1] = {
+            "id": "activity-array",
+            "type": "activity",
+            "instructions_by_locale": {
+                "en": ["Observe one thing.", "Record the result."],
+                "hi": ["एक वस्तु देखें।", "परिणाम दर्ज करें।"]
+            }
+        }
+        self.assertEqual([], validate_artifact(artifact, "activity-array.json"))
+
     def test_missing_current_db_track_key_is_rejected(self):
         artifact = sample_lesson()
         artifact["curriculum"].pop("class")

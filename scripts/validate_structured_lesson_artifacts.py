@@ -71,17 +71,29 @@ def localized_content(value: Any) -> bool:
             return False
     return True
 
+def localized_instructions(value: Any) -> bool:
+    if not isinstance(value, dict):
+        return False
+    for locale in ("en", "hi"):
+        entry = value.get(locale)
+        if nonempty(entry):
+            continue
+        if isinstance(entry, list) and entry and all(nonempty(line) for line in entry):
+            continue
+        return False
+    return True
+
 def instructions_present(block: dict[str, Any]) -> bool:
-    """Accept the current block schema and legacy top-level localized instructions."""
-    if localized(block.get("instructions_by_locale")):
+    """Accept localized text/list instructions and the current nested activity-step schema."""
+    if localized_instructions(block.get("instructions_by_locale")):
         return True
     config = block.get("configuration") if isinstance(block.get("configuration"), dict) else {}
-    if localized(config.get("instruction_by_locale")):
+    if localized_instructions(config.get("instruction_by_locale")):
         return True
     steps = config.get("steps")
     if isinstance(steps, list) and steps:
         return all(
-            isinstance(step, dict) and localized(step.get("instruction_by_locale") or step.get("instructions_by_locale"))
+            isinstance(step, dict) and localized_instructions(step.get("instruction_by_locale") or step.get("instructions_by_locale"))
             for step in steps
         )
     return False
