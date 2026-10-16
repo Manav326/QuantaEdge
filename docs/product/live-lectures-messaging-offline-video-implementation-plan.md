@@ -217,3 +217,8 @@ Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific
 
 - Tightened the V108 database check to require `youtube_video_id IS NOT NULL` explicitly. PostgreSQL CHECK constraints accept NULL expressions, so the explicit predicate is necessary to prevent a YOUTUBE_LIVE row without a video ID.
 - Kept the teacher's private `meeting-link` endpoint private-link-only. YouTube broadcasts use the separate student broadcast/player field and must not be returned as a meeting URL by that endpoint.
+
+
+### CI-driven correction — student broadcast render guard
+
+- The first frontend build reported TypeScript errors because the newly added broadcast iframe read `activeJoined` without guarding the optional result of the session lookup. Changed the condition to require `activeJoined` before reading its provider/title. This is a genuine nullability issue, not a suppression or cast. Re-run the web build and the full workflow; do not mark the feature green until the current `main` SHA passes.
