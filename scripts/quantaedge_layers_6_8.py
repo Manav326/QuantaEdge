@@ -250,6 +250,8 @@ def load_layer5_evidence(repo: Path, source: dict[str,Any]) -> tuple[Path,dict[s
         row=ledger_by_id[aid]
         asset_hash=str(asset.get("asset_sha256") or "").lower()
         number=page_no(asset)
+        if not isinstance(number,int) or isinstance(number,bool) or not 1<=number<=source["page_count"]:
+            raise ValueError(f"Layer 1 visual {aid} has an invalid original PDF page number.")
         if (row.get("asset_sha256")!=asset_hash or row.get("source_pdf_sha256")!=source["source_pdf_sha256"] or
             row.get("source_pdf_page_number")!=number or row.get("asset_kind")!=asset.get("kind")):
             raise ValueError(f"Layer 5 visual {aid} does not match its inventory hash/page/kind.")
@@ -266,7 +268,7 @@ def load_layer5_evidence(repo: Path, source: dict[str,Any]) -> tuple[Path,dict[s
             raise ValueError(f"Layer 4/5 analysis for visual {aid} does not match the source-bound ledger.")
         analysis=row["effective_analysis"]
         evidence_by_page.setdefault(number,[]).append({
-            "asset_id":aid,"asset_kind":asset.get("kind"),"source_pdf_page_number":number,
+            "asset_id":aid,"asset_kind":asset.get("kind"),"source_pdf_sha256":source["source_pdf_sha256"],"source_pdf_page_number":number,
             "source_asset_sha256":asset_hash,"analysis_status":row["analysis_status"],
             "correction_status":row.get("correction_status","NONE"),
             "visual_type":analysis.get("visual_type"),"visual_summary":analysis.get("visual_summary"),
@@ -884,6 +886,9 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     for seg,item in good:
         v=item["generated"]; chapter=v.get("chapter_number")
         topics.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"segment_sha256":seg["segment_sha256"],
+          "layer5_coverage_ledger_path":source.get("layer5_ledger_path"),"layer5_coverage_ledger_sha256":item.get("layer5_ledger_sha256"),
+          "layer5_visual_evidence_asset_ids":item.get("layer5_visual_evidence_asset_ids",[]),
+          "layer5_visual_evidence_count":len(item.get("layer5_visual_evidence_asset_ids",[])),
           "chapter_number":chapter,"chapter_title_by_locale":v.get("chapter_title_by_locale"),
           "topic_title_by_locale":v["topic_title_by_locale"],"microtopic_title_by_locale":v["microtopic_title_by_locale"],
           "concepts_by_locale":v["concepts_by_locale"],"learning_objectives":v["learning_objectives"],
@@ -908,7 +913,9 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     mapping={"schema_version":"quantaedge.curriculum-map-candidate.v1",
       "source":{"class_code":str(source["class_no"]),"subject_code":source["subject"],"language":source["language"],
         "source_book_id":source["book_id"],"source_title":source["title"],"source_url":source["source_url"],
-        "source_edition":source["edition"],"source_pdf_sha256":source["source_pdf_sha256"],"pdf_page_count":source["page_count"]},
+        "source_edition":source["edition"],"source_pdf_sha256":source["source_pdf_sha256"],"pdf_page_count":source["page_count"],
+        "layer5_coverage_ledger_path":source.get("layer5_ledger_path"),"layer5_coverage_ledger_sha256":source.get("layer5_ledger_sha256"),
+        "layer5_visual_evidence_available_count":source.get("layer5_visual_evidence_count",0)},
       "prompt_version":PROMPT_VERSION,"generation_model":model,"segment_count":len(segments),"segments_completed":len(good),
       "pending_segments":pending,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"unresolved_text_pages":unresolved_text_pages,
       "mapped_source_pages":len(mapped),"total_source_pages":source["page_count"],
@@ -937,7 +944,11 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     report={"schema_version":"quantaedge.layers-6-8-run-manifest.v1","source_book_id":source["book_id"],
       "source_pdf_sha256":source["source_pdf_sha256"],"class_code":str(source["class_no"]),"subject_code":source["subject"],
       "language":source["language"],"model":model,"model_role":"EXPERIMENTAL_BENCHMARKED_CANDIDATE",
-      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"input_fingerprint":source.get("pipeline_input_fingerprint"),"visual_candidate_fingerprint":source.get("visual_candidate_fingerprint"),"segments_total":len(segments),
+      "benchmark_report_sha256":bench_sha,"prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"input_fingerprint":source.get("pipeline_input_fingerprint"),"visual_candidate_fingerprint":source.get("visual_candidate_fingerprint"),
+      "layer5_coverage_ledger_path":source.get("layer5_ledger_path"),"layer5_coverage_ledger_sha256":source.get("layer5_ledger_sha256"),
+      "layer5_visual_evidence_available_count":source.get("layer5_visual_evidence_count",0),
+      "layer5_visual_evidence_asset_ids":sorted({aid for _,item in good for aid in item.get("layer5_visual_evidence_asset_ids",[])}),
+      "layer5_visual_evidence_consumed_count":len({aid for _,item in good for aid in item.get("layer5_visual_evidence_asset_ids",[])}),"segments_total":len(segments),
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
       "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
@@ -983,18 +994,23 @@ def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
 
 def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     repo=args.repo_root.resolve(); source=load_source(repo,args.class_no,args.source_book_id)
-    ledger=layer5_ledger(repo,source); report=benchmark_report(repo,args.benchmark_report,args.model)
+    ledger_path,ledger,layer5_by_page=load_layer5_evidence(repo,source)
+    layer5_sha=sha_file(ledger_path)
+    source["layer5_ledger_path"]=ledger_path.relative_to(repo).as_posix()
+    source["layer5_ledger_sha256"]=layer5_sha
+    source["layer5_visual_evidence_count"]=sum(len(rows) for rows in layer5_by_page.values())
+    report=benchmark_report(repo,args.benchmark_report,args.model)
     segments=segments_for(source["pages"],args.max_pages_per_segment,args.max_context_chars)
     visuals_by_segment,visual_fingerprint=load_visual_candidates(repo,source,segments)
     source["visual_candidate_fingerprint"]=visual_fingerprint
     fingerprint=sha(json.dumps({"source_pdf_sha256":source["source_pdf_sha256"],"visual_fingerprint":visual_fingerprint,
       "manifest_sha256":sha_file(source["manifest_path"]),"pages_sha256":sha_file(source["text_path"]),
-      "layer5_sha256":sha_file(ledger),"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
+      "layer5_coverage_ledger_sha256":layer5_sha,"benchmark_report_sha256":sha(json.dumps(report,sort_keys=True)),
       "model":args.model,"prompt":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"max_pages_per_segment":args.max_pages_per_segment,
       "max_context_chars":args.max_context_chars,"generation_parameters":{"temperature":0.1,"num_ctx":8192,"num_predict":3072}},sort_keys=True))
     source["pipeline_input_fingerprint"]=fingerprint
     slug=re.sub(r"[^A-Za-z0-9._-]","-",args.model)
-    outdir=ledger.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}"
+    outdir=ledger_path.parent/"layers-6-8"/f"{slug}-sha{source['source_pdf_sha256'][:8]}-v4"
     cpfile=outdir/"generation-checkpoints.v1.json"; rag=ledger.parent/"layer-8-rag-corpus.v1.jsonl"
     if cpfile.exists():
         doc=read_json(cpfile)
@@ -1020,25 +1036,30 @@ def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
             continue
         if calls>=args.max_model_calls: break
         calls+=1
+        segment_layer5=layer5_evidence_for_segment(layer5_by_page,seg)
+        segment_layer5_ids=[row["asset_id"] for row in segment_layer5]
         try:
-            value,elapsed=ollama_chat(args.endpoint,args.model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[])),args.request_timeout,opener)
+            value,elapsed=ollama_chat(args.endpoint,args.model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[]),segment_layer5),args.request_timeout,opener)
             errors=validate_output(value,set(seg["source_pages"]),visuals_by_segment.get(seg["segment_id"],[]))
             if errors:
                 checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
-                  "attempts":int((prior or {}).get("attempts",0))+1,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2)}
+                  "attempts":int((prior or {}).get("attempts",0))+1,"layer5_ledger_sha256":layer5_sha,
+                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":"; ".join(errors[:12]),"elapsed_seconds":round(elapsed,2)}
             else:
-                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[]))
+                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[]),segment_layer5)
                 if lesson:
                     lesson["workflow"]["generation_model"]=args.model
                     lesson_errors=validate_lesson(lesson)
                     if lesson_errors: raise ValueError("Lesson contract: "+"; ".join(lesson_errors[:12]))
                 records=sft_records(source,seg,value,args.model)
                 checkpoints[seg["segment_id"]]={"status":"COMPLETE","segment_sha256":seg["segment_sha256"],
-                  "generated":value,"lesson":lesson,"sft_rows":records,"elapsed_seconds":round(elapsed,2),
+                  "generated":value,"lesson":lesson,"sft_rows":records,"layer5_ledger_sha256":layer5_sha,
+                  "layer5_visual_evidence_asset_ids":segment_layer5_ids,"elapsed_seconds":round(elapsed,2),
                   "mapping_status":"MAPPED" if value.get("chapter_number") is not None else "UNRESOLVED_CHAPTER"}
         except (OSError,ValueError,RuntimeError,urllib.error.URLError) as exc:
             checkpoints[seg["segment_id"]]={"status":"ERROR","segment_sha256":seg["segment_sha256"],
-              "attempts":int((prior or {}).get("attempts",0))+1,"error":str(exc)[:1200]}
+              "attempts":int((prior or {}).get("attempts",0))+1,"layer5_ledger_sha256":layer5_sha,
+              "layer5_visual_evidence_asset_ids":segment_layer5_ids,"error":str(exc)[:1200]}
         doc["segments"]=checkpoints; write_json(cpfile,doc)
         if calls%args.checkpoint_every==0 or calls==args.max_model_calls:
             current=write_outputs(source,segments,checkpoints,outdir,rag,args.model,sha(json.dumps(report,sort_keys=True)))
@@ -1065,9 +1086,16 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
     if report.get("prompt_version")!=PROMPT_VERSION:
         raise ValueError("Benchmark prompt changed; new model inference is required.")
     source=load_source(repo,6,args.source_book_id)
+    ledger_path,ledger,layer5_by_page=load_layer5_evidence(repo,source)
+    layer5_sha=sha_file(ledger_path)
+    source["layer5_ledger_path"]=ledger_path.relative_to(repo).as_posix()
+    source["layer5_ledger_sha256"]=layer5_sha
+    source["layer5_visual_evidence_count"]=sum(len(rows) for rows in layer5_by_page.values())
     source_report=report.get("source") or {}
     if source_report.get("book_id")!=source["book_id"] or str(source_report.get("source_pdf_sha256") or "").lower()!=source["source_pdf_sha256"]:
         raise ValueError("Benchmark source book/PDF SHA-256 mismatch.")
+    if source_report.get("layer5_coverage_ledger_sha256")!=layer5_sha:
+        raise ValueError("Layer 5 evidence changed since benchmark inference; rerun the benchmark.")
     segments=segments_for(source["pages"],2,5000)
     segments_by_id={segment["segment_id"]:segment for segment in segments}
     ids=source_report.get("sample_segment_ids")
@@ -1116,7 +1144,7 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
             if sample.get("sample_output_sha256") and sample["sample_output_sha256"]!=value_sha:
                 raise ValueError(f"Raw output hash mismatch: {model_row['model']} / {segment_id}")
             schema_errors=validate_output(value,set(segment["source_pages"]),visuals_by_segment.get(segment_id,[]))
-            lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[])) if not schema_errors else None
+            lesson=lesson_from(source,segment,value,visuals_by_segment.get(segment_id,[]),layer5_evidence_for_segment(layer5_by_page,segment)) if not schema_errors else None
             lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not schema_errors else [])
             lesson_valid=(not schema_errors and lesson is not None and not lesson_errors)
             citations_valid=tutor_citations_valid(value,set(segment["source_pages"]))
@@ -1141,6 +1169,9 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
         raise ValueError("Refusing to revalidate a report that already selected a production model.")
     report["lesson_contract_version"]=LESSON_CONTRACT_VERSION
     report["visual_candidate_fingerprint"]=visual_fingerprint
+    report["source"]["layer5_coverage_ledger_path"]=source["layer5_ledger_path"]
+    report["source"]["layer5_coverage_ledger_sha256"]=layer5_sha
+    report["source"]["layer5_visual_evidence_count"]=source["layer5_visual_evidence_count"]
     report["benchmark_revalidation"]={"reason":"lesson-renderer-contract-refresh","previous_contract_version":prior_contract,
         "previous_report_sha256":old_report_sha,"revalidated_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
         "new_model_calls":0,"source_pdf_sha256":source["source_pdf_sha256"]}
@@ -1154,6 +1185,11 @@ def refresh_benchmark(args:argparse.Namespace)->dict[str,Any]:
 def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     repo=args.repo_root.resolve(); source=load_source(repo,6,args.source_book_id)
     if source["subject"]!="science" or source["language"]!="en": raise ValueError("Benchmark must use Class 6 NCERT English Science (Curiosity).")
+    ledger_path,ledger,layer5_by_page=load_layer5_evidence(repo,source)
+    layer5_sha=sha_file(ledger_path)
+    source["layer5_ledger_path"]=ledger_path.relative_to(repo).as_posix()
+    source["layer5_ledger_sha256"]=layer5_sha
+    source["layer5_visual_evidence_count"]=sum(len(rows) for rows in layer5_by_page.values())
     segments=segments_for(source["pages"],2,5000)
     usable=[segment for segment in segments if any(piece["text"].strip() for piece in segment["pieces"])]
     if not usable: raise ValueError("NCERT benchmark source has no extractable text segments.")
@@ -1166,9 +1202,9 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
         for seg in samplesegs:
             start=time.monotonic()
             try:
-                value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[])),args.request_timeout,opener)
+                value,elapsed=ollama_chat(args.endpoint,model,prompt_for(source,seg,visuals_by_segment.get(seg["segment_id"],[]),layer5_evidence_for_segment(layer5_by_page,seg)),args.request_timeout,opener)
                 errs=validate_output(value,set(seg["source_pages"]),visuals_by_segment.get(seg["segment_id"],[]))
-                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[])) if not errs else None
+                lesson=lesson_from(source,seg,value,visuals_by_segment.get(seg["segment_id"],[]),layer5_evidence_for_segment(layer5_by_page,seg)) if not errs else None
                 lesson_errors=validate_lesson(lesson) if lesson is not None else (["unresolved chapter mapping"] if not errs else [])
                 lesson_valid=(not errs and lesson is not None and not lesson_errors)
                 citations_valid=tutor_citations_valid(value,set(seg["source_pages"]))
@@ -1195,7 +1231,9 @@ def benchmark(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
     out={"schema_version":"quantaedge.local-ollama-benchmark.v1","benchmark_completed_utc":time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime()),
       "benchmark_scope":"same Class 6 NCERT Science text segments and prompt for all models",
       "source":{"book_id":source["book_id"],"title":source["title"],"edition":source["edition"],"source_url":source["source_url"],
-        "source_pdf_sha256":source["source_pdf_sha256"],"sample_segment_ids":[s["segment_id"] for s in samplesegs],
+        "source_pdf_sha256":source["source_pdf_sha256"],"layer5_coverage_ledger_path":source["layer5_ledger_path"],
+        "layer5_coverage_ledger_sha256":layer5_sha,"layer5_visual_evidence_count":source["layer5_visual_evidence_count"],
+        "sample_segment_ids":[s["segment_id"] for s in samplesegs],
         "sample_source_pages":sorted({p for s in samplesegs for p in s["source_pages"]})},
       "endpoint_mode":"native local Ollama /api/chat; no hosted API or API key","prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"visual_candidate_fingerprint":visual_fingerprint,"models":results,
       "selection_metric":"Review exact sample outputs plus schema validity, structured-lesson validity, page-citation validity and latency; no automatic winner.",
