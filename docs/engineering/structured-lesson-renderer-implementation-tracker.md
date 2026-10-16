@@ -3,9 +3,9 @@
 **Purpose:** Track the Web student, Web admin, and Android implementation required to render the new structured bilingual lesson content correctly. Use the checkboxes as the source of truth: mark an item `[x]` only after its acceptance checks pass on the relevant platform(s).
 
 **Audit baseline:** `787d3dbadffc5a6d4da6c6ca786776e0aaf978dc`  
-**Scope:** Class 6 Science structured lesson drafts, Chapters 1–6; registry contracts; existing legacy lesson/practice UI.  
+**Scope:** Class 6 Science structured lesson drafts, Chapters 1–6; registry contracts; existing lesson and practice UI.  
 **Status vocabulary:** `NOT STARTED` = checkbox unchecked; `IN PROGRESS` = add a short note beside the item; `DONE` = checkbox checked and acceptance criteria verified.  
-**Important:** A renderer contract in JSON or a generic legacy input is not proof that the new structured type is integrated.
+**Important:** A renderer contract in JSON or an existing generic input is not proof that the new structured type is integrated.
 
 ## 1. Audit findings — current state
 
@@ -15,23 +15,23 @@ The registry in [`data/structured-lessons/question-rendering-registry.v1.json`](
 
 | Canonical type | Contract component | Current related UI found in repository | Required conclusion |
 |---|---|---|---|
-| `multiple_choice` | `MultipleChoiceQuestion` | Web legacy questions have option-button / MCQ rendering. Android has legacy assessment UI. | **Partial / not wired to structured schema.** Integrate via canonical adapter and verify stable option IDs and scoring. |
+| `multiple_choice` | `MultipleChoiceQuestion` | Web already has option-button / MCQ rendering for its current question model. Android already has assessment UI. | **Partial / not wired to structured schema.** Integrate via canonical adapter and verify stable option IDs and scoring. |
 | `multiple_select` | `MultipleSelectQuestion` | No verified structured multi-select contract in the existing practice path. | **Missing as a structured question type.** Add checkbox multi-select and exact-set grading. |
-| `true_false` | `TrueFalseQuestion` | Legacy `TRUE_FALSE` records are recognised in Web question labels; Android legacy assessment may use its own model. | **Partial / not wired to structured schema.** Use a boolean response with locale-independent grading. |
-| `matching` | `MatchingQuestion` | Web legacy `MATCH` input accepts typed pair text. Android localization includes a JSON-map help phrase. | **Partial, not equivalent to contract.** Implement a structured, keyboard/touch-accessible pair selector with partial credit. |
-| `fill_blank` | `FillBlankQuestion` | A generic text input exists for legacy non-choice questions. | **Partial input only.** Add locale-specific accepted answers and the specified safe normalization policy. |
+| `true_false` | `TrueFalseQuestion` | The existing `TRUE_FALSE` question model is recognised in Web question labels; Android already has an assessment model. | **Partial / not wired to structured schema.** Use a boolean response with locale-independent grading. |
+| `matching` | `MatchingQuestion` | Web already accepts typed pair text for its current `MATCH` question model. Android localization includes a JSON-map help phrase. | **Partial, not equivalent to contract.** Implement a structured, keyboard/touch-accessible pair selector with partial credit. |
+| `fill_blank` | `FillBlankQuestion` | A generic text input already exists for non-choice questions. | **Partial input only.** Add locale-specific accepted answers and the specified safe normalization policy. |
 | `image_observation` | `ImageObservationQuestion` | Existing lesson pages can render image/diagram media and zoom/alt-text metadata. | **Partial media support, missing question integration and approval gate.** The image must be approved and student-renderable before the question is shown. |
-| `short_answer` | `ShortAnswerQuestion` | Web supports textarea for legacy `SHORT_ANSWER`; Android has older answer/assessment flows. | **Partial input only.** Add bilingual answer guide/rubric, score range, and pending-review behavior if no validated grader exists. |
-| `scenario_based` | `ScenarioQuestion` | Legacy prompts can contain prose, but no verified dedicated scenario/context renderer for the structured schema. | **Missing as a structured type.** Render localized scenario context plus its declared response control. |
+| `short_answer` | `ShortAnswerQuestion` | Web already supports textarea for `SHORT_ANSWER`; Android already has answer and assessment flows. | **Partial input only.** Add bilingual answer guide/rubric, score range, and pending-review behavior if no validated grader exists. |
+| `scenario_based` | `ScenarioQuestion` | Existing question prompts can contain prose, but a dedicated scenario/context renderer for the structured schema has not been verified. | **Missing as a structured type.** Render localized scenario context plus its declared response control. |
 
-**Existing legacy question types are not the same schema.** Current Web data paths also use legacy identifiers such as `MCQ`, `TRUE_FALSE`, `NUMERICAL`, `ORDER`, `MATCH`, `SHORT_ANSWER`, and `LONG_ANSWER`. The implementation must explicitly map these to canonical types where semantics match, or keep them as named legacy extensions. Do not silently reinterpret them or change scoring. Ordering and numerical input may remain additional supported types, versioned/documented separately from this eight-type registry.
+**Existing question models and the new structured schema are different data contracts.** Current Web data paths also use identifiers such as `MCQ`, `TRUE_FALSE`, `NUMERICAL`, `ORDER`, `MATCH`, `SHORT_ANSWER`, and `LONG_ANSWER`. The implementation must explicitly map these to canonical types where semantics match, or retain them as documented extensions. Do not silently reinterpret them or change scoring. Ordering and numerical input may remain additional supported types, versioned/documented separately from this eight-type registry.
 
 ### Lesson/content blocks and visuals
 
 | Existing capability observed | Gap for the new structured data |
 |---|---|
-| Web `LearnClient.tsx` and Android `LessonContentBlock.kt` render legacy explanation/prerequisite, worked example, guided/independent practice, hint/challenge, image/diagram/animation, video/audio, AI help and recap/summary blocks. | New JSON uses `explain.blocks[].type` values such as `rich_text`, `diagram`, `interactive`, and `recap`, with nested bilingual values. It does not directly match the legacy `block_type` + stringified `content` schema. |
-| Legacy visual blocks can render images, captions, alt text, zoom/lightbox and source attribution. Legacy UI has visual-kind labels such as diagram, chart, table, infographic and sequence. | The new lesson diagrams contain structured `diagram_data.nodes`; many have no image URL. Kind labels alone do not render node/edge relationships, process flows, tables or charts. |
+| Web `LearnClient.tsx` and Android `LessonContentBlock.kt` render existing explanation/prerequisite, worked example, guided/independent practice, hint/challenge, image/diagram/animation, video/audio, AI help and recap/summary blocks. | New JSON uses `explain.blocks[].type` values such as `rich_text`, `diagram`, `interactive`, and `recap`, with nested bilingual values. It does not directly match the existing `block_type` + stringified `content` data contract. |
+| QuantaEdge already renders image/diagram/media blocks with captions, alt text, zoom/lightbox, source attribution and visual-kind labels such as diagram, chart, table, infographic and sequence. | The new lesson diagrams contain structured `diagram_data.nodes`; many have no image URL. Kind labels alone do not render node/edge relationships, process flows, tables or charts. |
 | Admin Content Studio supports existing lesson-block authoring, student-style previews and a source-bound visual-candidate browser. | Admin needs a way to inspect and validate the structured lesson JSON itself, display canonical question-type and locale coverage, surface unsupported blocks, and enforce the visual-approval gate. Existing generic block preview is not a substitute. |
 | A Web language provider and Android app language state already exist. | New data must use one selected learning locale consistently across question, visual labels/alt text, feedback, activity controls and status messages. Switching locale must preserve the learner state defined by the registry. |
 | Mathematical-text display helpers exist (`MathText` on Web and `LearningMathText` on Android). | Keep them reusable in structured rich text and questions; add test coverage for structured text/inline formula content rather than assuming compatibility. |
@@ -43,17 +43,17 @@ Mark each task complete only after the acceptance checks pass. Keep Web and Andr
 ### A. Shared contract, data loading and safety gates — P0
 
 - [ ] **SL-01 — Canonical structured-lesson adapter** *(Shared data contract; Web + Android consumers)*  
-  **Context:** Generated lesson JSON is not the same as the existing API's `blocks[]` / legacy database `question_type` payloads.  
+  **Context:** Generated lesson JSON has a different contract from the existing API's `blocks[]` / database `question_type` payloads.  
   **Implement:** Define typed models and one explicit versioned adapter for `chapter`, `topic`, `learning_objectives`, `source_refs`, `explain.blocks`, `practice.questions`, rubrics, bilingual labels and visuals. Map `rich_text → explanation`, `diagram → structured visual`, `interactive → activity`, `recap → recap`; do not flatten away fields.  
   **Accept when:** Valid Chapters 1–6 JSON can be parsed; missing required fields, unknown types and unsupported schema versions return explicit validation errors; no content is silently dropped.
 
 - [ ] **SL-02 — Canonical question-type registry wired into runtime** *(Web + Android)*  
   **Context:** The registry is a specification only; its eight types all currently say `SPECIFIED_NOT_IMPLEMENTED`.  
-  **Implement:** Type-safe dispatch on canonical `question.type`; validate `rendering_contract_id` against the registry before rendering. Keep legacy aliases/extensions in a separately documented mapping.  
+  **Implement:** Type-safe dispatch on canonical `question.type`; validate `rendering_contract_id` against the registry before rendering. Keep existing question identifiers/extensions in a separately documented mapping.  
   **Accept when:** Each canonical type routes to exactly one renderer; a missing or mismatched contract fails closed with a developer-visible diagnostic and learner-safe unavailable state.
 
 - [ ] **SL-03 — One locale source, state-preserving language switch** *(Web + Android)*  
-  **Context:** Existing language selectors/providers exist, but structured data has deeper localized fields than the legacy APIs.  
+  **Context:** Existing language selectors/providers exist, but structured data has additional localized fields beyond those exposed by the existing APIs.  
   **Implement:** Read one global learning locale (`en` or `hi`) for every structured learner-facing field; update displayed text immediately without resetting responses or changing grading IDs. Never fallback silently to the other locale.  
   **Accept when:** Switching language preserves active question ID/index, selections, boolean, matching pairs, typed response, submission state, score, completion progress and lesson reading position on both platforms. Any missing translation blocks approval/rendering and is logged clearly.
 
@@ -99,10 +99,10 @@ Mark each task complete only after the acceptance checks pass. Keep Web and Andr
   **Implement:** Show the localized scenario/context as a distinct readable block, then render the response control declared by the question contract (currently choice-based for authored records).  
   **Accept when:** Scenario and prompt both switch language; option IDs and grading remain stable; context is not lost on narrow screens or when the question is revisited.
 
-- [ ] **SL-14 — Explicit handling for legacy numerical, ordering and long-answer types** *(Web + Android)*  
+- [ ] **SL-14 — Explicit handling for additional numerical, ordering and long-answer question types** *(Web + Android)*  
   **Context:** Existing data includes `NUMERICAL`, `ORDER`, `SHORT_ANSWER` and `LONG_ANSWER`, which are not all in the current eight-type registry.  
   **Implement:** Document whether each type maps to a canonical type or remains an extension; preserve existing behavior while sharing components where semantics truly match.  
-  **Accept when:** A regression matrix covers old question rows and canonical structured JSON; no legacy type is silently rendered as an unrelated input or graded by a changed rule.
+  **Accept when:** A regression matrix covers existing question records and canonical structured JSON; no supported type is silently rendered as an unrelated input or graded by a changed rule.
 
 ### C. Teaching blocks, visuals and activities — P0/P1
 
@@ -120,12 +120,12 @@ Mark each task complete only after the acceptance checks pass. Keep Web and Andr
   **Accept when:** Each kind has at least one representative fixture on all three surfaces; image-only fallback does not hide structured data; caption, alt text, source/rights metadata and locale are handled consistently.
 
 - [ ] **SL-18 — Interactive activity block** *(Web student + Android)*  
-  **Context:** Generated lessons use `type: interactive` with `activity_kind`, configuration, steps and response storage rules. Legacy `GUIDED_PRACTICE` or `INDEPENDENT_PRACTICE` text blocks do not implement these activity semantics.  
+  **Context:** Generated lessons use `type: interactive` with `activity_kind`, configuration, steps and response storage rules. The existing `GUIDED_PRACTICE` or `INDEPENDENT_PRACTICE` text blocks do not by themselves implement these activity semantics.  
   **Implement:** Add an activity renderer/registry and a safe generic fallback only for explicitly supported activity kinds. Start with the activities in Chapters 1–6; do not show inert controls that appear to work but do not save results.  
   **Accept when:** Inputs, steps, reset/save actions and result state function end-to-end; learner response persists as declared and survives language changes; unavailable activity kinds fail visibly rather than silently disappearing.
 
 - [ ] **SL-19 — Worked example, guided practice, hint and recap parity** *(Web student + Android)*  
-  **Implement:** Make new-schema equivalents render consistently with current legacy blocks; localize headings and body/key point data; keep recap after practice according to lesson order.  
+  **Implement:** Make new-schema equivalents render consistently with existing content blocks; localize headings and body/key point data; keep recap after practice according to lesson order.  
   **Accept when:** Same lesson fixtures display equivalent content and order on Web and Android; no duplicate recap or lost key point occurs.
 
 - [ ] **SL-20 — Visual approval and student-renderability gate** *(Admin + API + Web student + Android)*  
@@ -183,7 +183,7 @@ A task can be marked complete only when the relevant code is committed and the e
 ## 4. Suggested implementation order
 
 1. **SL-01–SL-05:** data adapter, validation, registry dispatch, locale and grading/state foundations.
-2. **SL-06–SL-14:** canonical question components and legacy type mapping.
+2. **SL-06–SL-14:** canonical question components and explicit mapping for existing question models.
 3. **SL-15–SL-20:** rich content, structured visuals, activities and visual safety gate.
 4. **SL-21–SL-24:** Admin inspector, preview and governance.
 5. **SL-25–SL-28:** shared tests, parity, accessibility and performance; then mark tasks done from evidence.
