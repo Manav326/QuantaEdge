@@ -170,3 +170,10 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Security/content gate: current generated artifacts are still drafts with publication_allowed=false and pending source/bilingual/visual reviews. The new learner endpoint must not deliver them; previewing or rendering a draft does not approve it.
 - Validation status: tests are authored but have not yet been run in this session. No UI task is marked complete from source inspection alone. Await the GitHub API test/build workflow results for the adapter slice.
 - Next action after CI: fix any build/test regressions found by Actions, then wire the new published-artifact endpoint into the Web learner route and Android lesson route with state restoration by stable question ID. Keep the existing legacy lesson route intact and maintain Web/Admin/Android renderer parity.
+
+
+## CI feedback — adapter compile correction (2026-10-16)
+
+- Build run 2753 reached API verification and identified one compile-time API mismatch: Jackson 3 JsonNode does not provide fieldNames().
+- Replaced that call with JsonNode.properties(), already used in this service to recursively strip answer keys. This is a targeted API-compatibility fix; the API tests/build must rerun before the adapter slice is accepted.
+- Run: https://github.com/Manav326/QuantaEdge/actions/runs/38874455123

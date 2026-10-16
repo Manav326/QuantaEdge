@@ -175,8 +175,7 @@ public class StructuredLessonArtifactService {
       Set<String> leftIds = itemIds(question, "left_items");
       Set<String> rightIds = itemIds(question, "right_items");
       Set<String> responseIds = new HashSet<>();
-      Iterator<String> keyIterator = response.fieldNames();
-      while (keyIterator.hasNext()) responseIds.add(keyIterator.next());
+      for (Map.Entry<String, JsonNode> field : response.properties()) responseIds.add(field.getKey());
       if (leftIds.isEmpty() || !responseIds.equals(leftIds)) {
         throw new IllegalArgumentException("Complete every matching row before submitting.");
       }
