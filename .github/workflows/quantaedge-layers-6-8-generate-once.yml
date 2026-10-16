@@ -1,0 +1,98 @@
+name: Generate the first Class 6 Curiosity Layers 6-8 batch
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/triggers/generate-class6-curiosity.trigger"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: qe-layers-6-8-generate-class6-curiosity
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Generate a bounded review-only batch after evidence gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout latest main with checkpoint write access
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run contract tests before any model download
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/quantaedge_layers_6_8.py scripts/ai_training_dataset.py
+          python -m unittest discover -s tests -p "test_quantaedge_layers_6_8.py" -v
+          python -m unittest discover -s tests -p "test_ai_training_dataset.py" -v
+      - name: Verify exact whole-book source, complete Layer 5 ledger, and current benchmark
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.quantaedge_layers_6_8 import load_source, layer5_ledger, benchmark_report
+          root = Path.cwd()
+          source = load_source(root, 6, "ncert-c6-english-fecu1")
+          ledger = layer5_ledger(root, source)
+          benchmark = benchmark_report(root, None, "qwen2.5:1.5b")
+          print({
+              "source_book_id": source["book_id"],
+              "source_pdf_sha256": source["source_pdf_sha256"],
+              "layer5_ledger": str(ledger),
+              "layer5_status": "COMPLETE",
+              "benchmark_prompt_version": benchmark.get("prompt_version"),
+              "lesson_contract_version": benchmark.get("lesson_contract_version"),
+              "model": "qwen2.5:1.5b",
+              "successful_samples": next(x["successful_samples"] for x in benchmark["models"] if x["model"] == "qwen2.5:1.5b"),
+              "production_model_selection": benchmark.get("production_model_selection"),
+          })
+          PY
+      - name: Start loopback-only local Ollama
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull ollama/ollama:latest
+          docker volume create quantaedge-layers-6-8-generation-models >/dev/null
+          docker run -d --name quantaedge-layers-6-8-generation-ollama \
+            -p 127.0.0.1:11434:11434 \
+            -v quantaedge-layers-6-8-generation-models:/root/.ollama \
+            ollama/ollama:latest
+          ready=false
+          for attempt in $(seq 1 90); do
+            if curl -fsS http://127.0.0.1:11434/api/tags >/dev/null; then ready=true; break; fi
+            sleep 2
+          done
+          [[ "$ready" == true ]] || { docker logs quantaedge-layers-6-8-generation-ollama; exit 1; }
+      - name: Pull only the benchmark-approved experimental candidate
+        run: docker exec quantaedge-layers-6-8-generation-ollama ollama pull qwen2.5:1.5b
+      - name: Generate six review-only model calls with durable savepoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/quantaedge_layers_6_8.py run \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --class-no 6 \
+            --source-book-id ncert-c6-english-fecu1 \
+            --endpoint http://127.0.0.1:11434 \
+            --model qwen2.5:1.5b \
+            --max-model-calls 6 \
+            --max-pages-per-segment 2 \
+            --max-context-chars 5000 \
+            --checkpoint-every 2 \
+            --request-timeout 300 \
+            --benchmark-report data/textbook-content-pipeline/model-benchmarks/class-6-ncert-curiosity.v1.json \
+            --allow-experimental-model \
+            --commit-checkpoints
+      - name: Stop local Ollama even on failure
+        if: always()
+        run: docker rm -f quantaedge-layers-6-8-generation-ollama >/dev/null 2>&1 || true

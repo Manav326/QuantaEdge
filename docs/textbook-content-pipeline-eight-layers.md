@@ -58,3 +58,7 @@ The same command can be repeated to resume. The model must first have a contract
 
 The existing general-purpose SFT generator is also Ollama-first:
 `python scripts/ai_training_dataset.py generate --input-dir private-review --output data/ai-training/generated/drafts.jsonl --provider ollama --endpoint http://127.0.0.1:11434 --model qwen2.5:1.5b --target 25000 --batch-size 5 --max-api-calls 100 --generate`
+
+## First bounded Class 6 generation run
+
+The guarded workflow `.github/workflows/quantaedge-layers-6-8-generate-once.yml` is ready but deliberately not triggered by its own introduction. Only after the fresh benchmark contains a contract-valid `qwen2.5:1.5b` sample and the real Class 6 Curiosity Layer 5 ledger is `COMPLETE`, add or update `.github/triggers/generate-class6-curiosity.trigger` on `main` to execute the initial six-call experimental run. Preflight checks run before model download; each two-call batch is checkpointed and committed. The workflow cannot publish lessons or select the production model, and reports `IN_PROGRESS` when it has more segments to resume.
