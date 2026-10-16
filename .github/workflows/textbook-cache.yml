@@ -151,7 +151,7 @@ jobs:
             while IFS=$'\\t' read -r grade medium code title; do
               [ -n "$code" ] || continue
               echo "::group::Repair Class $grade $medium — $title ($code)"
-              target_args=(python scripts/textbook_registry.py publish --class-wise --language "$medium" --class-no "$grade" --book-code "$code" --download-workers 1 --push-batch-size 1 --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
+              target_args=(python scripts/textbook_registry.py publish --class-wise --language "$medium" --class-no "$grade" --book-code "$code" --refresh --download-workers 1 --push-batch-size 1 --retry-rounds "$retry_rounds" --image-prefix "$image_prefix")
               output_file="$RUNNER_TEMP/repair-class-$grade-$medium-$code.log"
               set +e
               "${target_args[@]}" 2>&1 | tee "$output_file"
