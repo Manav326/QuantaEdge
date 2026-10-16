@@ -231,6 +231,14 @@
         "integration_note_by_locale": {
           "en": "Actual V3 page preview retained for source verification only; it is not approved for student rendering.",
           "hi": "वास्तविक V3 पृष्ठ-पूर्वावलोकन केवल स्रोत-सत्यापन के लिए रखा गया है; विद्यार्थी स्क्रीन पर दिखाने के लिए स्वीकृत नहीं है।"
+        },
+        "alt_by_locale": {
+          "en": "A textbook page showing a desert, a coast, an underwater ocean view and a galaxy, beside text comparing scientific knowledge to a jigsaw puzzle.",
+          "hi": "पाठ्यपुस्तक के एक पृष्ठ पर मरुस्थल, समुद्र-तट, समुद्र के भीतर का दृश्य और आकाशगंगा दिखाई गई हैं। साथ में वैज्ञानिक ज्ञान की तुलना जिग्सॉ पहेली से की गई है।"
+        },
+        "caption_by_locale": {
+          "en": "Questions can begin anywhere—from places on Earth to the wider universe. The page uses a jigsaw puzzle to show that discoveries add to our understanding.",
+          "hi": "प्रश्न कहीं से भी शुरू हो सकते हैं—पृथ्वी के स्थानों से लेकर विशाल ब्रह्मांड तक। इस पृष्ठ पर पहेली का उदाहरण दिखाता है कि नई खोजें हमारी समझ में नए हिस्से जोड़ती हैं।"
         }
       },
       {
