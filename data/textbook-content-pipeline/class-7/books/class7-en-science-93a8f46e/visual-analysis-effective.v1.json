@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "99c8cdca7e90fea3bec244a5b6e7f19b6edbc22962f2bd16d3c833156d43b76a",
+  "raw_analysis_sha256": "b021e14e86d8913e67d0fa39da378647d32412a6bbd7abfe2285a5f142a855be",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -4187,6 +4187,1226 @@
         "context_relation": "The image is likely a part of a physics or engineering textbook, possibly discussing the properties or uses of twisted ropes.",
         "limitations": [
           "The image does not provide specific details about the rope's material, thickness, or application."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "07dcfa8655f89eec7da74ffd",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:02:38Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a14b6a4e35750e8bfd32b01f",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:02:41Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9da00ba5a4a9f1f9254972ec",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:02:45Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5bca998a5ee198f0bff14d1b",
+      "asset_sha256": "2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/2c849a37ff295f52178f4b8f0e26e770e379786fb470101839579610fb1ed4ad.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:02:48Z",
+      "effective_analysis": {
+        "visual_summary": "A yellow rope with a spiral pattern.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "None",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b8e47fee1ef8f07368198e95",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:03:01Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "19968804a41d11127d37b8dd",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:03:09Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "14511be4fa853011c9182159",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:03:22Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely black and does not contain any visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0f2ed31343644946a6c167fc",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:03:34Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "No visible content or text on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6357cc7785fd257aec74adf7",
+      "asset_sha256": "289b7c60da3f5c838231154ff5aa814353ce2b61067bb1297790e18690d92b0e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 11,
+      "asset_path": "page-0011.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science",
+          "Education (HBCSE), Tata Institute of Fundamental Research (TIFR)",
+          "Mumbai; Professor, Department of Condensed Matter Physics and",
+          "Material Science, TIFR, Mumbai (Team Leader and Leader, Physics",
+          "Sub-group)",
+          "Saroj Ghaskadbi, Former Senior Professor, Savitribai Phule Pune",
+          "University, Pune (Leader, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian",
+          "Institute of Science, Bengaluru (Leader, Chemistry Sub-group)",
+          "R. Shankar, Adviser, International Geoscience Education Organisation",
+          "Coordinator, International Earth Science Olympiad and Former",
+          "Professor, Mangalore University, Mangaluru (Leader, Earth Science",
+          "Sub-group)",
+          "Abhay Kumar, Assistant Professor, Central Institute of Educational",
+          "Technology, NCERT, New Delhi",
+          "Anand Arya, Associate Professor, Regional Institute of Education",
+          "NCERT, Ajmer",
+          "Animesh Kumar Mohapatra, Former Professor, Department of",
+          "Education in Science and Mathematics, RIE, Bhubaneswar",
+          "Arun Pratap Sikarwar, Associate Professor, Department of Education",
+          "in Science and Mathematics, NCERT, New Delhi",
+          "Ashish Kumar Srivastava, Assistant Professor, Department of",
+          "Education in Science and Mathematics, NCERT, New Delhi",
+          "B.K. Tripathi, Former Professor, Department of Education in Science",
+          "and Mathematics, NCERT, New Delhi",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram,",
+          "Haryana",
+          "C.V. Shimray, Associate Professor, Department of Education in Science"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Saroj Ghaskadbi",
+          "Uday Maitra",
+          "R. Shankar",
+          "Abhay Kumar",
+          "Anand Arya",
+          "Animesh Kumar Mohapatra",
+          "Arun Pratap Sikarwar",
+          "Ashish Kumar Srivastava",
+          "B.K. Tripathi",
+          "Charu Maini",
+          "C.V. Shimray",
+          "Dinesh Kumar",
+          "Fanindra Sharma"
+        ],
+        "context_relation": "List of contributors to a textbook development team.",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:07:17Z",
+      "effective_analysis": {
+        "visual_summary": "List of contributors to a textbook development team.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya, Centre Director, Homi Bhabha Centre for Science",
+          "Education (HBCSE), Tata Institute of Fundamental Research (TIFR)",
+          "Mumbai; Professor, Department of Condensed Matter Physics and",
+          "Material Science, TIFR, Mumbai (Team Leader and Leader, Physics",
+          "Sub-group)",
+          "Saroj Ghaskadbi, Former Senior Professor, Savitribai Phule Pune",
+          "University, Pune (Leader, Biology Sub-group)",
+          "Uday Maitra, Honorary Professor and INSA Senior Scientist, Indian",
+          "Institute of Science, Bengaluru (Leader, Chemistry Sub-group)",
+          "R. Shankar, Adviser, International Geoscience Education Organisation",
+          "Coordinator, International Earth Science Olympiad and Former",
+          "Professor, Mangalore University, Mangaluru (Leader, Earth Science",
+          "Sub-group)",
+          "Abhay Kumar, Assistant Professor, Central Institute of Educational",
+          "Technology, NCERT, New Delhi",
+          "Anand Arya, Associate Professor, Regional Institute of Education",
+          "NCERT, Ajmer",
+          "Animesh Kumar Mohapatra, Former Professor, Department of",
+          "Education in Science and Mathematics, RIE, Bhubaneswar",
+          "Arun Pratap Sikarwar, Associate Professor, Department of Education",
+          "in Science and Mathematics, NCERT, New Delhi",
+          "Ashish Kumar Srivastava, Assistant Professor, Department of",
+          "Education in Science and Mathematics, NCERT, New Delhi",
+          "B.K. Tripathi, Former Professor, Department of Education in Science",
+          "and Mathematics, NCERT, New Delhi",
+          "Charu Maini, Principal, DAV Public School, Sector 49, Gurugram,",
+          "Haryana",
+          "C.V. Shimray, Associate Professor, Department of Education in Science"
+        ],
+        "concepts": [
+          "Textbook Development Team",
+          "Contributors",
+          "Arnab Bhattacharya",
+          "Saroj Ghaskadbi",
+          "Uday Maitra",
+          "R. Shankar",
+          "Abhay Kumar",
+          "Anand Arya",
+          "Animesh Kumar Mohapatra",
+          "Arun Pratap Sikarwar",
+          "Ashish Kumar Srivastava",
+          "B.K. Tripathi",
+          "Charu Maini",
+          "C.V. Shimray",
+          "Dinesh Kumar",
+          "Fanindra Sharma"
+        ],
+        "context_relation": "List of contributors to a textbook development team.",
+        "limitations": [
+          "No specific limitations mentioned."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "74da95eba2f975b6b4030e82",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:07:30Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images are present on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c68854503d53c53cca104d8e",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:07:38Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b111716bdb9605a9f2cd2ccd",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:07:49Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "622aaa095a26260d434873f7",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 12,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:08:01Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is blank and contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "10cd9db7a895d38d30bc959c",
+      "asset_sha256": "ec681336ca42427068a6a105f0c3f38e63917f308940b3329780abc58f0f7c72",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 12,
+      "asset_path": "page-0012.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Gauri Roy, PGT (Physics), Demonstration Multipurpose School, Regional Institute of Education, Mysuru",
+          "Indrani Das Sen, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Karthick Balasubramanian, Scientist E, Agharkar Research Institute, Pune",
+          "Lalminthang Kipgen, Assistant Professor, Division of Educational Kits, NCERT, New Delhi",
+          "Linto Alappat, Assistant Professor, Christ College Autonomous, Irinjalakuda, Thrissur, Kerala",
+          "L.K. Tiwary, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Manasi Goswami, Professor, Regional Institute of Education, NCERT, Bhubaneswar",
+          "Manjushree Chaudhuri, Former PGT (Physics), St. Columba's School, New Delhi and La Grande Boissière Campus of International School of Geneva, Switzerland",
+          "Meher Wan, Scientist, CSIR-National Institute of Science Communication and Policy Research, New Delhi",
+          "Munindra Ruwali, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Neeraja Dashaputre, Principal Technical Officer (Education), Indian Institute of Science Education and Research, Pune",
+          "Nicole Ann Fae Sequeira, Assistant Professor, Goa University, Goa",
+          "Poonam Katyal, Former TGT, Zeenat Mahal Sarvodaya Kanya Vidyalaya, Jafrabad, Delhi",
+          "Pramila Tanwar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Praveen Pathak, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Preeti Khanna, Rehabilitation Professional (Visual Impairment), National Association for the Blind, New Delhi",
+          "Puneet Sharma, Assistant Professor, Division of Educational Kits, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "educational institutions",
+          "roles",
+          "professors",
+          "scientists",
+          "teachers",
+          "educational organizations",
+          "science education",
+          "rehabilitation professionals"
+        ],
+        "context_relation": "list of educational professionals",
+        "limitations": [
+          "names and roles are listed without specific details about their positions or departments",
+          "the list does not include any specific educational content or topics"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:11:37Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective roles in educational institutions.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Gagan Gupta, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Gauri Roy, PGT (Physics), Demonstration Multipurpose School, Regional Institute of Education, Mysuru",
+          "Indrani Das Sen, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Jaya P. Swaminathan, Teacher Developer, Royal Society of Chemistry, Bengaluru",
+          "Karthick Balasubramanian, Scientist E, Agharkar Research Institute, Pune",
+          "Lalminthang Kipgen, Assistant Professor, Division of Educational Kits, NCERT, New Delhi",
+          "Linto Alappat, Assistant Professor, Christ College Autonomous, Irinjalakuda, Thrissur, Kerala",
+          "L.K. Tiwary, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Manasi Goswami, Professor, Regional Institute of Education, NCERT, Bhubaneswar",
+          "Manjushree Chaudhuri, Former PGT (Physics), St. Columba's School, New Delhi and La Grande Boissière Campus of International School of Geneva, Switzerland",
+          "Meher Wan, Scientist, CSIR-National Institute of Science Communication and Policy Research, New Delhi",
+          "Munindra Ruwali, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Neeraja Dashaputre, Principal Technical Officer (Education), Indian Institute of Science Education and Research, Pune",
+          "Nicole Ann Fae Sequeira, Assistant Professor, Goa University, Goa",
+          "Poonam Katyal, Former TGT, Zeenat Mahal Sarvodaya Kanya Vidyalaya, Jafrabad, Delhi",
+          "Pramila Tanwar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Praveen Pathak, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Preeti Khanna, Rehabilitation Professional (Visual Impairment), National Association for the Blind, New Delhi",
+          "Puneet Sharma, Assistant Professor, Division of Educational Kits, NCERT, New Delhi"
+        ],
+        "concepts": [
+          "educational institutions",
+          "roles",
+          "professors",
+          "scientists",
+          "teachers",
+          "educational organizations",
+          "science education",
+          "rehabilitation professionals"
+        ],
+        "context_relation": "list of educational professionals",
+        "limitations": [
+          "names and roles are listed without specific details about their positions or departments",
+          "the list does not include any specific educational content or topics"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "724531199f18cf90480f9f6f",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:11:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97e6060ac937a9674b412a63",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:11:58Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "No visible text or images on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ee745cdaf0d6c40695e639ee",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:12:12Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c13aab6e92c82a4c050a4594",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:12:25Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be blank or contains no visible content.",
+        "limitations": [
+          "The page is completely black and lacks any visible text, images, or other elements."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0c4b0b5bccedd94b3e27f27a",
+      "asset_sha256": "1d72b6e8274031168b5b0fdfb74078f9da5c99983036244f52bfc2c311caa6d7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 13,
+      "asset_path": "page-0013.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and positions of educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pushp Lata Verma, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "P.V. Raghavendra, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravijot Sandhu, PGT (Chemistry), Navyug School, Laxmibai Nagar, New Delhi",
+          "Ravindra Kumar Parashar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravi S. Nanjundiah, Professor, Centre for Atmospheric and Oceanic Sciences (CAOS), Indian Institute of Science, Bengaluru",
+          "Reena Mohapatra, Former PGT (Biology), DAV School, Bhubaneswar",
+          "Ritika Anand, Principal, St. Mark's Senior Secondary Public School, Meera Bagh, New Delhi",
+          "Ruchi Verma, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Sarat Phukan, Professor, Department of Geological Sciences, Gauhati University, Guwahati",
+          "Sarita Kumar, Professor, Acharya Narendra Dev College, University of Delhi, Delhi",
+          "Sarita Vig, Professor, Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram",
+          "Smita Chaturvedi, Assistant Professor, Interdisciplinary School of Science, Savitribai Phule Pune University, Pune",
+          "Sudesh Kumar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Surhud More, Professor, Inter-University Centre for Astronomy and Astrophysics (IUCAA), Pune",
+          "Tarun Choubisa, Director, Pedagogy, Seed2Sapling Education Foundation; and Senior Consultant, Programme Office, NSTC, NCERT, New Delhi",
+          "T.A. Viswanath, Former Associate Professor, Goa University, Goa",
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Rachna Garg, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Physics Sub-group)"
+        ],
+        "concepts": [
+          "educational professionals",
+          "positions",
+          "departments",
+          "institutes",
+          "locations"
+        ],
+        "context_relation": "List of educational professionals and their positions",
+        "limitations": [
+          "The list is incomplete, as it only shows names and positions of professionals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:15:59Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and positions of educational professionals.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Pushp Lata Verma, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "P.V. Raghavendra, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravijot Sandhu, PGT (Chemistry), Navyug School, Laxmibai Nagar, New Delhi",
+          "Ravindra Kumar Parashar, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Ravi S. Nanjundiah, Professor, Centre for Atmospheric and Oceanic Sciences (CAOS), Indian Institute of Science, Bengaluru",
+          "Reena Mohapatra, Former PGT (Biology), DAV School, Bhubaneswar",
+          "Ritika Anand, Principal, St. Mark's Senior Secondary Public School, Meera Bagh, New Delhi",
+          "Ruchi Verma, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Sarat Phukan, Professor, Department of Geological Sciences, Gauhati University, Guwahati",
+          "Sarita Kumar, Professor, Acharya Narendra Dev College, University of Delhi, Delhi",
+          "Sarita Vig, Professor, Indian Institute of Space Science and Technology (IIST), Thiruvananthapuram",
+          "Smita Chaturvedi, Assistant Professor, Interdisciplinary School of Science, Savitribai Phule Pune University, Pune",
+          "Sudesh Kumar, Associate Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "Surhud More, Professor, Inter-University Centre for Astronomy and Astrophysics (IUCAA), Pune",
+          "Tarun Choubisa, Director, Pedagogy, Seed2Sapling Education Foundation; and Senior Consultant, Programme Office, NSTC, NCERT, New Delhi",
+          "T.A. Viswanath, Former Associate Professor, Goa University, Goa",
+          "Sunita Farkya, Professor and Head, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Biology Sub-group)",
+          "Rachna Garg, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Coordinator, Physics Sub-group)"
+        ],
+        "concepts": [
+          "educational professionals",
+          "positions",
+          "departments",
+          "institutes",
+          "locations"
+        ],
+        "context_relation": "List of educational professionals and their positions",
+        "limitations": [
+          "The list is incomplete, as it only shows names and positions of professionals."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2cc0c6f669354cfce5006a71",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:16:12Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page with no visible content.",
+        "limitations": [
+          "The page is blank and does not contain any text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "52a30843c6ffa588ca17ffd2",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a document or textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:16:21Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green background and a black border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page appears to be a blank page in a document or textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visible text or images."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a05f97f5a0f04af2c755d64b",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:16:33Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content on the page.",
+          "No visible text or images to analyze."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7ddf9cf3483f7dddbfeb266f",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "The image is completely black and does not contain any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:16:45Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided in the image.",
+        "limitations": [
+          "The image is completely black and does not contain any visible content or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "12a9e4b969142af2a31592b8",
+      "asset_sha256": "be7cf162bca10eea60b07e844b4eb60f215b857341b8af1af0e4d98fc2e1d5c7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 14,
+      "asset_path": "page-0014.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "List of names and their respective roles in the curriculum development.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R.R. Koireng, Associate Professor, Department of Curriculum Studies and Development, NCERT, New Delhi (Coordinator, Earth Science Sub-group)",
+          "Anjni Koul, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Member-Coordinator and Coordinator, Chemistry Sub-group)",
+          "Reviewers",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune (Chairperson, Curricular Area Group: Science)",
+          "Manjul Bhargava, Professor, Princeton University and Co-Chairperson, NSTC",
+          "Anurag Behar, CEO, Azim Premji Foundation, Member, National Curriculum Framework Oversight Committee",
+          "Gajanan Londhe, Director, Samvit Research Foundation, Bengaluru",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Ankush Gupta, Associate Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "B.K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "K.K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "K.V. Sridevi, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Lakshmy Ravishankar, Former Professor, KET's V.G. Vaze College of Arts, Science and Commerce, Mumbai",
+          "Manoj Yadav, Professor, Government College, Ajmer",
+          "Mayuri Rege, Reader, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Monika Koul, Professor, Hansraj College, University of Delhi, Delhi",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, KV. Sarma Research Foundation, Chennai"
+        ],
+        "concepts": [
+          "Curriculum Studies",
+          "Earth Science",
+          "Chemistry",
+          "Science Education",
+          "Bioinformatics",
+          "National Centre for Cell Science",
+          "Princeton University",
+          "Azim Premji Foundation",
+          "Samvit Research Foundation",
+          "Homi Bhabha Centre for Science Education",
+          "TIFR",
+          "KET's V.G. Vaze College of Arts",
+          "Government College",
+          "Hansraj College",
+          "Navyug School",
+          "Sarojini Nagar",
+          "University of Madras",
+          "Chennai",
+          "KV. Sarma Research Foundation"
+        ],
+        "context_relation": "The page lists various educators and their roles in the curriculum development.",
+        "limitations": [
+          "The page does not provide specific details about the roles or responsibilities of the listed individuals."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:20:29Z",
+      "effective_analysis": {
+        "visual_summary": "List of names and their respective roles in the curriculum development.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "R.R. Koireng, Associate Professor, Department of Curriculum Studies and Development, NCERT, New Delhi (Coordinator, Earth Science Sub-group)",
+          "Anjni Koul, Professor, Department of Education in Science and Mathematics, NCERT, New Delhi (Member-Coordinator and Coordinator, Chemistry Sub-group)",
+          "Reviewers",
+          "Shekhar C. Mande, FNA, FASc, FNASc, Former Director General, CSIR, Distinguished Professor, Bioinformatics Centre, Savitribai Phule Pune University, Honorary Distinguished Scientist, National Centre for Cell Science, Pune (Chairperson, Curricular Area Group: Science)",
+          "Manjul Bhargava, Professor, Princeton University and Co-Chairperson, NSTC",
+          "Anurag Behar, CEO, Azim Premji Foundation, Member, National Curriculum Framework Oversight Committee",
+          "Gajanan Londhe, Director, Samvit Research Foundation, Bengaluru",
+          "Adithi Muralidhar, Scientific Officer, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Ankush Gupta, Associate Professor, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "B.K. Sharma, Former Professor, Department of Education in Science and Mathematics, NCERT, New Delhi",
+          "K.K. Arora, Former Professor, Zakir Husain Delhi College, University of Delhi, Delhi",
+          "K.V. Sridevi, Associate Professor, Regional Institute of Education, NCERT, Ajmer",
+          "Lakshmy Ravishankar, Former Professor, KET's V.G. Vaze College of Arts, Science and Commerce, Mumbai",
+          "Manoj Yadav, Professor, Government College, Ajmer",
+          "Mayuri Rege, Reader, Homi Bhabha Centre for Science Education, TIFR, Mumbai",
+          "Monika Koul, Professor, Hansraj College, University of Delhi, Delhi",
+          "Mridula Arora, Principal, Navyug School, Sarojini Nagar, New Delhi",
+          "M.S. Sriram, Former Professor and Head, Department of Theoretical Physics, University of Madras, Chennai and President, KV. Sarma Research Foundation, Chennai"
+        ],
+        "concepts": [
+          "Curriculum Studies",
+          "Earth Science",
+          "Chemistry",
+          "Science Education",
+          "Bioinformatics",
+          "National Centre for Cell Science",
+          "Princeton University",
+          "Azim Premji Foundation",
+          "Samvit Research Foundation",
+          "Homi Bhabha Centre for Science Education",
+          "TIFR",
+          "KET's V.G. Vaze College of Arts",
+          "Government College",
+          "Hansraj College",
+          "Navyug School",
+          "Sarojini Nagar",
+          "University of Madras",
+          "Chennai",
+          "KV. Sarma Research Foundation"
+        ],
+        "context_relation": "The page lists various educators and their roles in the curriculum development.",
+        "limitations": [
+          "The page does not provide specific details about the roles or responsibilities of the listed individuals."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "06375d4522abf9dea01ec904",
+      "asset_sha256": "a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 15,
+      "asset_path": "assets/a5995f1e6f76a135966b00505d5f4f6518373a68db73f5346fac4788849c11cf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for text insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T15:20:42Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light green border.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely intended for text insertion.",
+        "limitations": [
+          "The page is blank and requires content to be added."
         ]
       },
       "correction_status": "NONE"
