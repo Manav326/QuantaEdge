@@ -67,7 +67,7 @@ for (const [key, needle] of [
   ['webExperience', 'blockedByPublicationGate'],
   ['webQuestions', 'isQuestionVisualApproved'],
   ['adminPreview', 'validateStructuredLesson'],
-  ['adminPreview', 'publicationAllowed'],
+  ['adminPreview', 'publicationFlagSet'],
   ['apiService', 'publication_allowed'],
   ['apiService', 'stripPrivateFields'],
   ['apiService', 'correct_answer_ids'],
