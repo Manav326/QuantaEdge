@@ -32,6 +32,72 @@ def model_json(pages):
       "tutor_examples":[{"language":"en","student_message":"Why observe?","assistant_message":"It separates evidence from guesses.","source_pages":pages[:1]},
                         {"language":"hi","student_message":"ध्यान से क्यों देखें?","assistant_message":"इससे प्रमाण और अनुमान अलग होते हैं।","source_pages":pages[:1]}]}
 
+def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body:str)->Path:
+    """Create a complete synthetic L1/L4/L5 source chain for bridge integration tests."""
+    import hashlib
+    import os
+    asset_hash="c"*64
+    analysis={"visual_summary":"A leaf diagram","visual_type":"illustration","visible_text":["leaf"],
+              "concepts":["leaf","plant parts"],"context_relation":"next to the source paragraph",
+              "limitations":["Machine observations require human review."]}
+    invdir=root/"data"/"textbook-visuals"/"curiosity"; invdir.mkdir(parents=True,exist_ok=True)
+    inventory_path=invdir/"visual-inventory.v1.json"
+    inventory={"schema_version":"quantaedge.visual-inventory.v1","inventory_status":"DRAFT_VISUAL_INVENTORY_ONLY",
+      "source":{"book_id":book,"pdf_sha256":pdfhash,"pdf_page_count":1,"class":"6","language":"English","subject":"Science","edition":"Reprint 2026-27"},
+      "summary":{"pages_scanned":1,"asset_count":1},"pages":[{"source_pdf_page_number":1,"page_text_sha256":sha(body)}],
+      "assets":[{"asset_id":"asset-preview-1","kind":"page_preview","source_book_id":book,
+        "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg",
+        "media_type":"image/jpeg","asset_sha256":asset_hash,"bbox":None}]}
+    write_json(inventory_path,inventory)
+    raw_path=invdir/"visual-analysis-qwen2.5vl-3b.v1.json"
+    raw_result={"asset_id":"asset-preview-1","asset_sha256":asset_hash,"source_book_id":book,
+      "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg","asset_kind":"page_preview",
+      "model_provider":"ollama_local","model":"qwen2.5vl:3b","analysis_status":"DRAFT_REQUIRES_REVIEW","analysis":analysis,
+      "human_review_required":True,"publication_allowed":False}
+    raw={"schema_version":"quantaedge.visual-analysis.v1","source_book_id":book,"source_pdf_sha256":pdfhash,
+      "model":"qwen2.5vl:3b","prompt_version":"visual-analysis-prompt-v2","results":[raw_result],
+      "human_review_required":True,"publication_allowed":False}
+    write_json(raw_path,raw)
+    ledgerdir=root/"data"/"textbook-content-pipeline"/"class-6"/"books"/"curiosity"
+    ledgerdir.mkdir(parents=True,exist_ok=True)
+    effective_path=ledgerdir/"visual-analysis-effective.v1.json"
+    effective_result={**raw_result,"effective_analysis":analysis,"correction_status":"NONE"}
+    effective={"schema_version":"quantaedge.visual-analysis-effective.v1","source_book_id":book,
+      "source_pdf_sha256":pdfhash,"raw_analysis_path":os.path.relpath(raw_path,root).replace("\\\\","/"),
+      "raw_analysis_sha256":hashlib.sha256(raw_path.read_bytes()).hexdigest(),"model":"qwen2.5vl:3b",
+      "prompt_version":"visual-analysis-prompt-v2","corrections_path":None,"corrections_applied_count":0,
+      "results":[effective_result],"human_review_required":True,"publication_allowed":False}
+    write_json(effective_path,effective)
+    ledger_path=ledgerdir/"coverage-ledger.v1.json"
+    page={"source_pdf_page_number":1,"inventory_page_records":1,"text_records":1,
+      "text_evidence":[{"text_sha256":sha(body),"character_count":len(body),"text_preview":body[:400],
+        "extraction_method":"synthetic-test","extraction_status":"TEXT_EXTRACTED_REQUIRES_CONTENT_REVIEW"}],
+      "text_status":"COMPLETE","visual_asset_ids":["asset-preview-1"],"chapter_id":None,"topic_ids":[],
+      "mapping_status":"NOT_STARTED","human_review_required":True}
+    visual={"asset_id":"asset-preview-1","asset_kind":"page_preview","asset_sha256":asset_hash,
+      "source_pdf_sha256":pdfhash,"source_pdf_page_number":1,"asset_path":"assets/page-1.jpg","media_type":"image/jpeg",
+      "bbox":None,"analysis_status":"ANALYZED_REQUIRES_HUMAN_REVIEW","correction_status":"NONE",
+      "effective_analysis":analysis,"chapter_id":None,"topic_ids":[],"mapping_status":"NOT_STARTED",
+      "human_review_required":True,"publication_allowed":False}
+    relative=lambda p:p.resolve().relative_to(root.resolve()).as_posix()
+    ledger={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,
+      "ledger_status":"COMPLETE","source":{"class":"6","language":"english","subject":"Science","source_book_id":book,
+        "source_pdf_sha256":pdfhash,"edition":"Reprint 2026-27","pdf_page_count":1},
+      "source_paths":{"inventory":relative(inventory_path),"raw_analysis":relative(raw_path),
+        "manifest":relative(pagesdir/"book.manifest.json"),"text_jsonl":relative(pagesdir/"pages.jsonl"),
+        "corrections":None,"effective_analysis_output":relative(effective_path),"coverage_ledger_output":relative(ledger_path)},
+      "summary":{"source_pdf_page_count":1,"inventory_page_records":1,"page_text_records":1,
+        "pages_with_unresolved_text":0,"inventory_asset_rows":1,"eligible_visual_asset_rows":1,
+        "raw_analysis_result_rows":1,"successful_visual_analyses":1,"missing_visual_analyses":0,
+        "failed_visual_analyses":0,"orphan_analysis_results":0,"corrections_applied":0,"unresolved_count":0,
+        "mapping_status":"NOT_STARTED","analysis_model":"qwen2.5vl:3b","analysis_prompt_version":"visual-analysis-prompt-v2",
+        "publication_allowed":False},
+      "pages":[page],"visuals":[visual],"orphan_analysis_asset_ids":[],
+      "human_review_required":True,"publication_allowed":False}
+    write_json(ledger_path,ledger)
+    return ledger_path
+
+
 class LayersTests(unittest.TestCase):
     def test_segments_preserve_every_character_and_empty_pages(self):
         pages=[{"page_number":1,"text":"A"*2200},{"page_number":2,"text":""},{"page_number":3,"text":"हिंदी text "*500}]
@@ -211,24 +277,40 @@ class LayersTests(unittest.TestCase):
                 "original_book_sha256":pdfhash,"page_count":1,"completed_pages":1,"source_page_start":1,
                 "text_jsonl":"pages.jsonl","source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12",
                 "title":"Curiosity","source_title":"Curiosity","edition":"Reprint 2026-27"})
-            ledger=root/"data"/"textbook-content-pipeline"/"class-6"/"books"/"curiosity"/"coverage-ledger.v1.json"
-            write_json(ledger,{"ledger_status":"COMPLETE","publication_allowed":False,
-                "source":{"source_book_id":book,"source_pdf_sha256":pdfhash}})
+            ledger=install_layer5_fixture(root,pagesdir,book,pdfhash,text)
             benchmark=root/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
-            write_json(benchmark,{"production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
-                "prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,"models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
+            no_visual_fingerprint=sha("no-matching-visual-pack|"+book+"|"+pdfhash)
+            write_json(benchmark,{"schema_version":"quantaedge.local-ollama-benchmark.v1",
+                "source":{"book_id":book,"source_pdf_sha256":pdfhash},
+                "visual_candidate_fingerprint":no_visual_fingerprint,
+                "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
+                "prompt_version":PROMPT_VERSION,"lesson_contract_version":LESSON_CONTRACT_VERSION,
+                "models":[{"model":"qwen2.5:1.5b","successful_samples":1,"lesson_contract_valid_rate":1.0}]})
             args=SimpleNamespace(repo_root=root,class_no=6,source_book_id=book,model="qwen2.5:1.5b",benchmark_report=None,
                 max_pages_per_segment=4,max_context_chars=7000,endpoint="http://127.0.0.1:11434",
                 max_model_calls=3,checkpoint_every=1,request_timeout=30,commit_checkpoints=False)
-            calls={"count":0}
+            calls={"count":0}; prompts=[]
             def open_(request,timeout=180):
                 calls["count"]+=1
-                self.assertEqual("json",json.loads(request.data.decode())["format"])
+                payload=json.loads(request.data.decode())
+                self.assertEqual("json",payload["format"])
+                prompts.append(payload["messages"][1]["content"])
                 return FakeResponse({"message":{"content":json.dumps(model_json([1]))}})
             result=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"])
             self.assertEqual(1,result["segments_completed"])
             self.assertEqual("DRAFT_REQUIRES_HUMAN_REVIEW",result["overall_status"])
+            self.assertEqual(1,result["layer5_visual_evidence_available_count"])
+            self.assertEqual(1,result["layer5_visual_evidence_consumed_count"])
+            self.assertIn("A leaf diagram",prompts[0])
+            self.assertIn("layer5_visual_evidence_asset_ids",prompts[0])
+            outdir=ledger.parent/"layers-6-8"/("qwen2.5:1.5b-sha"+pdfhash[:8]+"-v4")
+            mapping=json.loads((outdir/"curriculum-map.v1.json").read_text(encoding="utf-8"))
+            self.assertEqual(["asset-preview-1"],mapping["topics"][0]["layer5_visual_evidence_asset_ids"])
+            self.assertEqual(sha(ledger.read_text(encoding="utf-8").rstrip("\n")) if False else __import__("hashlib").sha256(ledger.read_bytes()).hexdigest(),mapping["source"]["layer5_coverage_ledger_sha256"])
+            lesson=json.loads(next((outdir/"lessons").glob("qe-lesson-*.json")).read_text(encoding="utf-8"))
+            self.assertEqual(["asset-preview-1"],lesson["generation_metadata"]["layer5_visual_evidence_asset_ids"])
+            self.assertEqual(__import__("hashlib").sha256(ledger.read_bytes()).hexdigest(),lesson["generation_metadata"]["layer5_coverage_ledger_sha256"])
             again=run_layers(args,opener=open_)
             self.assertEqual(1,calls["count"],"completed checkpoints must not call Ollama again")
             self.assertEqual(1,again["segments_completed"])
@@ -238,7 +320,7 @@ class LayersTests(unittest.TestCase):
             args.max_context_chars=7000
             row["text"]="Changed extraction text while retaining the PDF SHA."
             write_jsonl(source_path,[row])
-            with self.assertRaisesRegex(ValueError,"fingerprint mismatch"):
+            with self.assertRaisesRegex(ValueError,"text hash/character count"):
                 run_layers(args,opener=open_)
 
 
@@ -364,15 +446,20 @@ class LayersTests(unittest.TestCase):
                  "page_count":1,"completed_pages":1,"source_page_start":1,"text_jsonl":"pages.jsonl",
                  "source_url":"https://ncert.nic.in/textbook.php?fecu1=0-12","title":"Curiosity","edition":"Reprint 2026-27"})
             source=__import__("scripts.quantaedge_layers_6_8",fromlist=["load_source"]).load_source(root,6,book)
+            ledger=install_layer5_fixture(root,pages,book,pdfhash,body)
             segment=segments_for(source["pages"],2,5000)[0]
+            _,visual_fingerprint=load_visual_candidates(root,source,[segment])
             raw=model_json([1])
             report={"schema_version":"quantaedge.local-ollama-benchmark.v1","prompt_version":PROMPT_VERSION,
-                 "source":{"book_id":book,"source_pdf_sha256":pdfhash,"sample_segment_ids":[segment["segment_id"]],"sample_source_pages":[1]},
+                 "source":{"book_id":book,"source_pdf_sha256":pdfhash,
+                    "layer5_coverage_ledger_sha256":__import__("hashlib").sha256(ledger.read_bytes()).hexdigest(),
+                    "sample_segment_ids":[segment["segment_id"]],"sample_source_pages":[1]},
                  "models":[{"model":"qwen2.5:1.5b","samples_attempted":1,"successful_samples":1,
                     "samples":[{"segment_id":segment["segment_id"],"source_pages":[1],"sample_output":raw,
                       "sample_output_sha256":sha(json.dumps(raw,ensure_ascii=False,sort_keys=True)),
                       "schema_valid":True,"lesson_contract_valid":True,"sft_examples_valid":True,
                       "source_page_citations_valid":True,"seconds":1.0}]}],
+                 "visual_candidate_fingerprint":visual_fingerprint,
                  "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None}
             path=root/"benchmark.json"; write_json(path,report)
             args=SimpleNamespace(repo_root=root,source_book_id=book,output=path,commit_checkpoints=False)
