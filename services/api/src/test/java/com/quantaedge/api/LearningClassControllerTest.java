@@ -62,6 +62,25 @@ class LearningClassControllerTest {
   }
 
   @Test
+  void scheduledClassesUseTheSameTwentyFourHourVisibilityRuleForItemsAndCount() {
+    when(authorization.requireStudent(student)).thenReturn(student);
+    when(jdbc.queryForList(contains("select cs.id as session_id"),
+        eq(7L), eq(""), eq(""), eq(25), eq(0))).thenReturn(List.of());
+    when(jdbc.queryForObject(contains("select count(*) from learning_class_session"),
+        eq(Long.class), eq(7L), eq(""), eq(""))).thenReturn(0L);
+
+    Map<String, Object> result = controller.studentLiveClasses(null, 25, 0, student);
+
+    assertEquals(0L, result.get("total"));
+    verify(jdbc).queryForList(
+        contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
+        eq(7L), eq(""), eq(""), eq(25), eq(0));
+    verify(jdbc).queryForObject(
+        contains("cs.status<>'SCHEDULED' or cs.starts_at<=now()+interval '24 hours'"),
+        eq(Long.class), eq(7L), eq(""), eq(""));
+  }
+
+  @Test
   void classManagerCannotSaveAnInsecureMeetingUrl() {
     when(authorization.requirePermission(admin, "CLASS_MANAGE")).thenReturn(admin);
 
