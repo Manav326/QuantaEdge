@@ -586,6 +586,8 @@ export default function ContentStudio(){
    visual_kind:'TEXTBOOK_FIGURE',
    source_candidate_id:candidate.candidate_id,
    source_book_id:candidate.source_book_id,
+   source_class:visualCatalog?.source?.class||'',
+   source_subject:visualCatalog?.source?.subject||'',
    source_book_title:visualCatalog?.source?.title||candidate.source_book_id,
    source_edition:visualCatalog?.source?.edition||'',
    source_language:visualCatalog?.source?.language||'english',

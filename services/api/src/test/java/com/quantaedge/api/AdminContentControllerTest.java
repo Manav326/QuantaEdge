@@ -185,6 +185,29 @@ class AdminContentControllerTest {
   }
 
   @Test
+  void textbookVisualSourceMustMatchLessonClassAndSubject() {
+    Map<String,Object> candidate = new java.util.LinkedHashMap<>();
+    candidate.put("source_candidate_id", "v3-image-abcd1234");
+    candidate.put("source_class", "6");
+    candidate.put("source_subject", "Science");
+
+    assertNull(AdminContentController.visualSourceMappingValidationError(candidate, "6", "science", "Science"));
+    assertNull(AdminContentController.visualSourceMappingValidationError(candidate, "Class 6", "science", "विज्ञान"));
+
+    assertTrue(AdminContentController.visualSourceMappingValidationError(candidate, "7", "science", "Science")
+        .contains("class must match"));
+    assertTrue(AdminContentController.visualSourceMappingValidationError(candidate, "6", "maths", "Mathematics")
+        .contains("subject must match"));
+    candidate.put("source_class", "");
+    assertTrue(AdminContentController.visualSourceMappingValidationError(candidate, "6", "science", "Science")
+        .contains("class must match"));
+    candidate.put("source_class", "6");
+    candidate.put("source_subject", "");
+    assertTrue(AdminContentController.visualSourceMappingValidationError(candidate, "6", "science", "Science")
+        .contains("subject must match"));
+  }
+
+  @Test
   void legacyMediaBlocksWithoutVisualCandidateMetadataKeepExistingRules() {
     assertNull(AdminContentController.visualPublicationValidationError(
         "IMAGE", Map.of("url", "https://example.com/image.png", "description", "Existing lesson image")));

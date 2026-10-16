@@ -1253,6 +1253,14 @@ public class AdminContentController {
     if (parentReady == null || parentReady == 0) {
       throw badRequest("Publish the parent chapter first and ensure its class and subject are active.");
     }
+    Map<String,Object> lessonIdentity = jdbc.queryForMap("""
+      select c.code as class_code, s.code as subject_code, s.display_name as subject_name
+      from lesson l
+      join curriculum_chapter ch on ch.id=l.chapter_id
+      join curriculum_subject s on s.id=ch.subject_id
+      join curriculum_class c on c.id=s.class_id
+      where l.id=?
+      """, lessonId);
     Long sourceReady = jdbc.queryForObject("""
       select count(*) from lesson
       where id=? and alignment_source_verified=true
@@ -1287,6 +1295,11 @@ public class AdminContentController {
       }
       String visualIssue=visualPublicationValidationError(type,content);
       if(visualIssue!=null) throw badRequest(visualIssue);
+      String sourceMappingIssue=visualSourceMappingValidationError(content,
+          String.valueOf(lessonIdentity.getOrDefault("class_code","")),
+          String.valueOf(lessonIdentity.getOrDefault("subject_code","")),
+          String.valueOf(lessonIdentity.getOrDefault("subject_name","")));
+      if(sourceMappingIssue!=null) throw badRequest(sourceMappingIssue);
       activeBlockTypes.add(type);
       if(!"AI_HELP".equals(type)) hasCoreTeachingBlock=true;
     }
@@ -1519,6 +1532,34 @@ public class AdminContentController {
     String url=String.valueOf(content.getOrDefault("url","")).trim();
     if(!url.matches("(?i)^https://.+")) return "The approved textbook visual must resolve to an HTTPS media URL.";
     return null;
+  }
+
+  static String visualSourceMappingValidationError(Map<String,Object> content,
+      String lessonClassCode, String lessonSubjectCode, String lessonSubjectName) {
+    if(content==null||String.valueOf(content.getOrDefault("source_candidate_id","")).trim().isBlank()) return null;
+    String sourceClass=normalizeVisualClass(Objects.toString(content.get("source_class"),""));
+    String lessonClass=normalizeVisualClass(lessonClassCode);
+    if(sourceClass.isBlank()||lessonClass.isBlank()||!sourceClass.equals(lessonClass)) {
+      return "The textbook visual source class must match the lesson class.";
+    }
+    String sourceSubject=normalizeVisualSubject(Objects.toString(content.get("source_subject"),""));
+    String lessonCodeSubject=normalizeVisualSubject(lessonSubjectCode);
+    String lessonNameSubject=normalizeVisualSubject(lessonSubjectName);
+    if(sourceSubject.isBlank()||(!sourceSubject.equals(lessonCodeSubject)&&!sourceSubject.equals(lessonNameSubject))) {
+      return "The textbook visual source subject must match the lesson subject.";
+    }
+    return null;
+  }
+
+  private static String normalizeVisualClass(String raw) {
+    return raw==null?"":raw.trim().toLowerCase(Locale.ROOT).replaceFirst("^(?:class|grade)[\\s_-]*","");
+  }
+
+  private static String normalizeVisualSubject(String raw) {
+    String value=Normalizer.normalize(raw==null?"":raw.trim(),Normalizer.Form.NFKC).toLowerCase(Locale.ROOT);
+    if(value.contains("science")||value.contains("विज्ञान")||value.contains("vigyan")) return "science";
+    if(value.contains("math")||value.contains("गणित")||value.contains("ganit")) return "mathematics";
+    return value.replaceAll("[^a-z0-9]+","");
   }
 
   private static boolean isGeneratedV3VisualAssetUrl(String rawUrl) {

@@ -190,6 +190,9 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertIn("Provide the visual caption in both English and Hindi", source)
         self.assertIn("isGeneratedV3VisualAssetUrl", source)
         self.assertIn("existingSourceVisualUrls.contains(submittedMediaUrl)", source)
+        self.assertIn("visualSourceMappingValidationError", source)
+        self.assertIn('content.get("source_class")', source)
+        self.assertIn('content.get("source_subject")', source)
 
 
 if __name__ == "__main__":
