@@ -1,6 +1,6 @@
+import hashlib
 import json
 import sys
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -10,83 +10,99 @@ from select_textbook_visual_sources import select_sources
 
 class SelectTextbookVisualSourcesTests(unittest.TestCase):
     def setUp(self):
-        self.hashes = {name: (hex(ord(name[0]))[2:] * 64)[:64] for name in []}
         self.index = {"books": []}
-        for grade in (7, 8):
-            for language, medium in (("english", "english"), ("hindi", "hindi")):
-                lang_suffix = "en" if language == "english" else "hi"
-                entries = [
-                    (f"math-part-1-{grade}-{lang_suffix}", "Mathematics", f"Mathematics Part 1 {language}", 1),
-                    (f"math-part-2-{grade}-{lang_suffix}", "Mathematics", f"Mathematics Part 2 {language}", 2),
-                    (f"science-{grade}-{lang_suffix}", "Science", f"Science {language}", None),
-                ]
-                for book_id, subject, title, part in entries:
+        class_prefix = {6: "f", 7: "g", 8: "h"}
+        for grade in (6, 7, 8):
+            for language, medium_code in (("english", "e"), ("hindi", "h")):
+                prefix = class_prefix[grade] + medium_code
+                math_parts = (1,) if grade == 6 else (1, 2)
+                for part in math_parts:
+                    code = f"{prefix}gp{part}"
+                    book_id = f"ncert-c{grade}-{language}-{code}"
                     self.index["books"].append({
-                        "book_id": book_id,
-                        "file": f"books/{book_id}.pdf",
-                        "title": title,
-                        "part": part,
-                        "class": str(grade),
-                        "medium": medium,
-                        "subject": subject,
-                        "sha256": (("abcdef0123456789" * 4)[:64] if "part-1" in book_id else
-                                   ("1234567890abcdef" * 4)[:64] if "part-2" in book_id else
-                                   ("fedcba9876543210" * 4)[:64]),
+                        "book_id": book_id, "code": code, "file": f"books/{book_id}.pdf",
+                        "title": "गणित प्रकाश" if language == "hindi" else "Ganita Prakash",
+                        "class": str(grade), "medium": language,
+                        "subject": "Mathematics", "sha256": hashlib.sha256(book_id.encode()).hexdigest(),
                         "content_availability": {"status": "complete"},
                     })
-            self.index["books"].append({
-                "book_id": f"social-science-{grade}",
-                "file": f"books/social-science-{grade}.pdf",
-                "title": "Social Science",
-                "class": str(grade), "medium": "english", "subject": "Social Science",
-                "sha256": "a" * 64, "content_availability": {"status": "complete"},
-            })
+                science_code = f"{prefix}cu1"
+                science_id = f"ncert-c{grade}-{language}-{science_code}"
+                self.index["books"].append({
+                    "book_id": science_id, "code": science_code, "file": f"books/{science_id}.pdf",
+                    "title": "विज्ञान" if language == "hindi" else "Science",
+                    "class": str(grade), "medium": language,
+                    "subject": "विज्ञान" if language == "hindi" else "Science",
+                    "sha256": hashlib.sha256(science_id.encode()).hexdigest(),
+                    "content_availability": {"status": "complete"},
+                })
+        legacy_id = "ncert-c8-english-hemh1"
         self.index["books"].append({
-            "book_id": "science-class6-en", "file": "books/science-class6-en.pdf",
-            "title": "Science", "class": "6", "medium": "english", "subject": "Science",
-            "sha256": "b" * 64, "content_availability": {"status": "complete"},
+            "book_id": legacy_id, "code": "hemh1", "file": f"books/{legacy_id}.pdf",
+            "title": "Legacy Mathematics", "class": "8", "medium": "english",
+            "subject": "Mathematics", "sha256": hashlib.sha256(legacy_id.encode()).hexdigest(),
+            "content_availability": {"status": "complete"},
         })
+        for grade in (6, 7, 8):
+            legacy_id = f"ncert-c{grade}-english-social-science"
+            self.index["books"].append({
+                "book_id": legacy_id, "file": f"books/{legacy_id}.pdf",
+                "title": "Social Science", "class": str(grade), "medium": "english",
+                "subject": "Social Science", "sha256": "a" * 64,
+                "content_availability": {"status": "complete"},
+            })
 
-    def test_selects_only_selected_grade_science_and_two_maths_parts_in_both_languages(self):
-        rows = select_sources(self.index, 7)
-        self.assertEqual(6, len(rows))
-        self.assertEqual({"english", "hindi"}, {x["language"] for x in rows})
-        self.assertEqual({7}, {x["class"] for x in rows})
-        self.assertEqual(2, sum(x["subject"] == "maths" for x in rows if x["language"] == "english"))
-        self.assertEqual(2, sum(x["subject"] == "maths" for x in rows if x["language"] == "hindi"))
-        self.assertEqual({"science"}, {x["subject"] for x in rows if x["book_id"].startswith("science")})
-        self.assertEqual({1, 2}, {x["maths_part"] for x in rows if x["subject"] == "maths"})
-        self.assertFalse(any("social-science" in x["book_id"] or "class6" in x["book_id"] for x in rows))
+    def test_language_scoped_selection_matches_single_medium_ghcr_indexes(self):
+        for grade in (6, 7, 8):
+            for language in ("english", "hindi"):
+                with self.subTest(grade=grade, language=language):
+                    rows = select_sources(self.index, grade, language)
+                    self.assertEqual(2 if grade == 6 else 3, len(rows))
+                    self.assertEqual({language}, {row["language"] for row in rows})
+                    self.assertEqual({grade}, {row["class"] for row in rows})
+                    self.assertEqual(1, sum(row["subject"] == "science" for row in rows))
+                    self.assertEqual(1 if grade == 6 else 2,
+                                     sum(row["subject"] == "maths" for row in rows))
+                    if grade == 6:
+                        self.assertEqual({1}, {row["maths_part"] for row in rows if row["subject"] == "maths"})
+                    else:
+                        self.assertEqual({1, 2}, {row["maths_part"] for row in rows if row["subject"] == "maths"})
+                    self.assertFalse(any("social-science" in row["book_id"] or "hemh1" in row["book_id"] for row in rows))
 
-    def test_rejects_missing_maths_part(self):
+    def test_bilingual_combined_index_selection_remains_available_for_callers(self):
+        self.assertEqual(4, len(select_sources(self.index, 6)))
+        self.assertEqual(6, len(select_sources(self.index, 7)))
+        self.assertEqual(6, len(select_sources(self.index, 8)))
+
+    def test_rejects_missing_current_maths_part(self):
         copied = json.loads(json.dumps(self.index))
-        copied["books"] = [b for b in copied["books"] if b["book_id"] != "math-part-2-7-en"]
-        with self.assertRaisesRegex(ValueError, "exactly two complete Maths"):
-            select_sources(copied, 7)
+        copied["books"] = [b for b in copied["books"] if b["book_id"] != "ncert-c7-english-gegp2"]
+        with self.assertRaisesRegex(ValueError, "exactly 2 complete current Maths"):
+            select_sources(copied, 7, "english")
 
-    def test_rejects_ambiguous_math_parts(self):
+    def test_rejects_ambiguous_math_part_labels(self):
         copied = json.loads(json.dumps(self.index))
-        entry = next(b for b in copied["books"] if b["book_id"] == "math-part-2-7-en")
-        entry["title"] = "Mathematics book"
-        entry.pop("part", None)
-        entry["book_id"] = "math-book-7-en"
-        entry["file"] = "books/math-book-7-en.pdf"
-        with self.assertRaisesRegex(ValueError, "clearly identify Part 1 and Part 2"):
-            select_sources(copied, 7)
+        entry = next(b for b in copied["books"] if b["book_id"] == "ncert-c7-english-gegp2")
+        entry["title"] = "Ganita Prakash Part 1"
+        with self.assertRaisesRegex(ValueError, "identify Part 1 and Part 2"):
+            select_sources(copied, 7, "english")
 
     def test_rejects_multiple_complete_science_books(self):
         copied = json.loads(json.dumps(self.index))
+        legacy_id = "alternate-science-class7-english"
         copied["books"].append({
-            "book_id":"science-alt-7-en", "file":"books/science-alt-7-en.pdf",
-            "title":"Another Science", "class":"7", "medium":"english", "subject":"Science",
-            "sha256":"c"*64, "content_availability":{"status":"complete"},
+            "book_id": legacy_id, "file": f"books/{legacy_id}.pdf", "title": "Another Science",
+            "class": "7", "medium": "english", "subject": "Science",
+            "sha256": "c" * 64, "content_availability": {"status": "complete"},
         })
         with self.assertRaisesRegex(ValueError, "exactly one complete Science"):
-            select_sources(copied, 7)
+            select_sources(copied, 7, "english")
 
-    def test_class_must_be_7_or_8_and_social_science_is_excluded(self):
-        with self.assertRaisesRegex(ValueError, "Class 7 or Class 8"):
-            select_sources(self.index, 6)
+    def test_invalid_class_or_language_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Class 6, Class 7 or Class 8"):
+            select_sources(self.index, 5)
+        with self.assertRaisesRegex(ValueError, "Language must be English or Hindi"):
+            select_sources(self.index, 7, "French")
 
 
 if __name__ == "__main__":

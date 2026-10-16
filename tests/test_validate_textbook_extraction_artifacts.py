@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from validate_textbook_extraction_artifacts import detect_maths_part, validate
+from validate_textbook_extraction_artifacts import detect_maths_part, is_ncert_ganita_prakash, validate
 
 
 class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
@@ -89,6 +89,57 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
             "title": "गणित प्रकाश भाग 2",
         }
         self.assertIsNone(detect_maths_part(item))
+
+    def test_current_ncert_code_filter_excludes_legacy_maths_rows(self):
+        import hashlib
+        source_ids = (
+            "ncert-c8-english-hegp1", "ncert-c8-english-hegp2",
+            "ncert-c8-english-hemh1", "ncert-c8-english-hecu1",
+        )
+        digests = {book_id: hashlib.sha256(book_id.encode()).hexdigest() for book_id in source_ids}
+        rows = [
+            {"book_id": source_ids[0], "code": "hegp1", "title": "Ganita Prakash", "class": "8",
+             "medium": "english", "subject": "Mathematics", "sha256": digests[source_ids[0]],
+             "content_availability": {"status": "complete"}},
+            {"book_id": source_ids[1], "code": "hegp2", "title": "Ganita Prakash II", "class": "8",
+             "medium": "english", "subject": "Mathematics", "sha256": digests[source_ids[1]],
+             "content_availability": {"status": "complete"}},
+            {"book_id": source_ids[2], "code": "hemh1", "title": "Legacy Mathematics", "class": "8",
+             "medium": "english", "subject": "Mathematics", "sha256": digests[source_ids[2]],
+             "content_availability": {"status": "complete"}},
+            {"book_id": source_ids[3], "code": "hecu1", "title": "Science", "class": "8",
+             "medium": "english", "subject": "Science", "sha256": digests[source_ids[3]],
+             "content_availability": {"status": "complete"}},
+        ]
+        self.assertTrue(is_ncert_ganita_prakash(rows[0]))
+        self.assertFalse(is_ncert_ganita_prakash(rows[2]))
+        self.index_path.write_text(json.dumps({"books": rows}), encoding="utf-8")
+        self.write_manifest(source_ids[0], "Mathematics", digests[source_ids[0]])
+        self.write_manifest(source_ids[1], "Mathematics", digests[source_ids[1]])
+        self.write_manifest(source_ids[3], "Science", digests[source_ids[3]])
+        result = validate(self.index_path, self.extraction, 8, "english")
+        self.assertEqual({source_ids[0], source_ids[1]}, set(result["maths_source_books"]))
+        self.assertEqual([source_ids[3]], result["science_source_books"])
+        self.assertEqual(3, len(result["verified_books"]))
+
+    def test_class6_requires_one_current_math_book_and_one_science_book(self):
+        import hashlib
+        source_ids = ("ncert-c6-english-fegp1", "ncert-c6-english-fecu1")
+        digests = {book_id: hashlib.sha256(book_id.encode()).hexdigest() for book_id in source_ids}
+        rows = [
+            {"book_id": source_ids[0], "code": "fegp1", "title": "Ganita Prakash", "class": "6",
+             "medium": "english", "subject": "Mathematics", "sha256": digests[source_ids[0]],
+             "content_availability": {"status": "complete"}},
+            {"book_id": source_ids[1], "code": "fecu1", "title": "Curiosity", "class": "6",
+             "medium": "english", "subject": "Science", "sha256": digests[source_ids[1]],
+             "content_availability": {"status": "complete"}},
+        ]
+        self.index_path.write_text(json.dumps({"books": rows}), encoding="utf-8")
+        self.write_manifest(source_ids[0], "Mathematics", digests[source_ids[0]])
+        self.write_manifest(source_ids[1], "Science", digests[source_ids[1]])
+        result = validate(self.index_path, self.extraction, 6, "english")
+        self.assertEqual([source_ids[0]], result["maths_source_books"])
+        self.assertEqual([source_ids[1]], result["science_source_books"])
 
     def test_class7_requires_and_accepts_both_maths_parts(self):
         self.write_source()

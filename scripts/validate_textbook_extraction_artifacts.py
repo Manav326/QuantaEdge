@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Validate complete-book extraction artifacts against the class-wise GHCR index.
 
-For Classes 7 and 8, each language must contain exactly one complete Science book
-and exactly two complete Maths source books explicitly identified as Part 1 and Part 2.
-Partial, duplicate, ambiguous, or unrelated source books are never treated as complete.
+For Class 6, each language must contain one complete Science book and one complete
+Ganita Prakash Maths book. For Classes 7 and 8, each language must contain one complete
+Science book and Ganita Prakash Maths Parts 1 and 2. Partial, duplicate, ambiguous, or
+unrelated legacy catalogue entries are never treated as current sources.
 """
 from __future__ import annotations
 
@@ -88,6 +89,22 @@ def detect_maths_part(item: dict[str, Any]) -> int | None:
     return next(iter(found)) if len(found) == 1 else None
 
 
+
+def is_ncert_ganita_prakash(item: dict[str, Any]) -> bool:
+    """Recognize current NCERT Ganita Prakash part-book codes, not legacy Maths rows.
+
+    Official NCERT codes end in gp1/gp2 (e.g. fegp1, ghgp2, hegp1). When at least
+    one such source exists for a class/medium, those code-bound entries define the
+    current Maths source set; unrelated legacy rows such as hemh1 must not create a
+    false extra textbook.
+    """
+    for key in ("code", "book_code", "ncert_code", "catalog_code"):
+        code = str(item.get(key) or "").strip().casefold()
+        if re.fullmatch(r"[a-z]{2}gp[12]", code):
+            return True
+    book_id = str(item.get("book_id") or "").strip().casefold()
+    return re.search(r"(?:^|[-_])[a-z]{2}gp[12]$", book_id) is not None
+
 def _availability_complete(item: dict[str, Any]) -> bool:
     availability = item.get("content_availability") or {}
     return str(availability.get("status") or "complete").casefold() == "complete"
@@ -119,6 +136,16 @@ def validate(registry_index: Path, extraction_dir: Path, grade: int, language: s
             raise ValueError(f"Missing or duplicate complete-book ID in GHCR index: {book_id!r}")
         selected[book_id] = {**item, "_normalized_subject": subject}
 
+    # Prefer code-bound current Ganita Prakash books whenever the index contains them.
+    # This excludes unrelated legacy catalogue rows (e.g. hemh1) that use the generic
+    # Mathematics subject label but are not Parts 1/2 of the current source set.
+    indexed_maths = [item for item in selected.values() if item["_normalized_subject"] == "maths"]
+    if any(is_ncert_ganita_prakash(item) for item in indexed_maths):
+        selected = {
+            book_id: item for book_id, item in selected.items()
+            if item["_normalized_subject"] != "maths" or is_ncert_ganita_prakash(item)
+        }
+
     if not selected:
         raise ValueError(f"No complete Maths/Science source books found for Class {grade} {language}.")
     math_ids = sorted(book_id for book_id, item in selected.items() if item["_normalized_subject"] == "maths")
@@ -126,7 +153,21 @@ def validate(registry_index: Path, extraction_dir: Path, grade: int, language: s
     if not math_ids or not science_ids:
         raise ValueError(f"Class {grade} {language} must contain Maths and Science source books.")
 
-    if grade in (7, 8):
+    if grade == 6:
+        if len(math_ids) != 1:
+            raise ValueError(
+                f"Class 6 {language} requires exactly one complete Ganita Prakash Maths book; "
+                f"found {len(math_ids)}: {math_ids}"
+            )
+        if len(science_ids) != 1:
+            raise ValueError(
+                f"Class 6 {language} requires exactly one complete Science book; "
+                f"found {len(science_ids)}: {science_ids}"
+            )
+        parts = {book_id: detect_maths_part(selected[book_id]) for book_id in math_ids}
+        if set(parts.values()) != {1}:
+            raise ValueError(f"Class 6 {language} Maths source must be the current gp1 book; found {parts}.")
+    elif grade in (7, 8):
         if len(math_ids) != 2:
             raise ValueError(
                 f"Class {grade} {language} must select exactly two complete Maths part-books; "

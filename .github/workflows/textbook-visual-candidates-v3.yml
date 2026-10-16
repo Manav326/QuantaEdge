@@ -30,7 +30,7 @@ on:
         description: "Prepare candidates for this complete bilingual class source set"
         required: true
         type: choice
-        options: ["7", "8"]
+        options: ["6", "7", "8"]
         default: "7"
       max_candidates:
         description: "Review candidates per source book (1-200)"
@@ -94,7 +94,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 7 or Class 8 is supported."; exit 2; }
+          [[ "$CLASS_NO" == "6" || "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 6, Class 7 or Class 8 is supported."; exit 2; }
           [[ "$MAX_CANDIDATES" =~ ^[0-9]+$ ]] && (( MAX_CANDIDATES >= 1 && MAX_CANDIDATES <= 200 )) || { echo "max_candidates must be 1..200"; exit 2; }
           python -m pip install --disable-pip-version-check "PyMuPDF>=1.24,<2"
           python -m py_compile scripts/extract_visual_asset_inventory.py scripts/prepare_visual_candidates_v3.py scripts/select_textbook_visual_sources.py scripts/validate_textbook_extraction_artifacts.py scripts/build_visual_lesson_attachment_manifest.py scripts/update_visual_catalog_index.py
@@ -131,6 +131,7 @@ jobs:
             python scripts/select_textbook_visual_sources.py \
               --index "$source_root/index-$medium.json" \
               --class-no "$CLASS_NO" \
+              --language "$medium" \
               --output "$source_root/selected-$medium.json"
             python scripts/validate_textbook_extraction_artifacts.py \
               --registry-index "$source_root/index-$medium.json" \
@@ -197,15 +198,17 @@ jobs:
           root = Path(sys.argv[1])
           grade = int(sys.argv[2])
           all_sources = []
+          expected_per_language = 2 if grade == 6 else 3
           for language in ("english", "hindi"):
               value = json.loads((root / f"selected-{language}.json").read_text(encoding="utf-8"))
-              if value.get("class") != grade or len(value.get("sources", [])) != 3:
-                  raise SystemExit(f"Invalid source set for Class {grade} {language}.")
+              if value.get("class") != grade or value.get("language") != language or len(value.get("sources", [])) != expected_per_language:
+                  raise SystemExit(f"Invalid source set for Class {grade} {language}; expected {expected_per_language} books.")
               all_sources.extend(value["sources"])
-          if len(all_sources) != 6 or len({x["book_slug"] for x in all_sources}) != 6:
-              raise SystemExit(f"Expected six unique source books (Science + Maths Parts 1/2 in each language); found {len(all_sources)}.")
+          expected_total = expected_per_language * 2
+          if len(all_sources) != expected_total or len({x["book_slug"] for x in all_sources}) != expected_total:
+              raise SystemExit(f"Expected {expected_total} unique Class {grade} source books across English and Hindi; found {len(all_sources)}.")
           (root / "selected-sources.json").write_text(json.dumps({"class": grade, "sources": all_sources, "publication_allowed": False, "review_required": True}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          print(json.dumps({"class": grade, "selected_source_count": len(all_sources), "subjects": ["science", "maths"], "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
+          print(json.dumps({"class": grade, "selected_source_count": len(all_sources), "maths_books_per_language": 1 if grade == 6 else 2, "science_books_per_language": 1, "languages": ["english", "hindi"], "publication_allowed": False}, indent=2))
           PY
           echo "VISUAL_SOURCE_ROOT=$source_root" >> "$GITHUB_ENV"
 
@@ -359,4 +362,4 @@ jobs:
           fi
           git pull --rebase origin main
           git push origin HEAD:main
-          echo "Persisted candidates for Science plus Maths Parts 1/2 in English and Hindi. All candidate packs remain review-only and non-publishable."
+          echo "Persisted review-only visual candidates for every required NCERT Maths and Science source book in English and Hindi. All candidate packs remain non-publishable."
