@@ -743,18 +743,13 @@
         "answer_guide_by_locale": {
           "en": {
             "key_points": [
-              [
-                "Stroke an iron needle repeatedly with the same pole in one direction.",
-                "लोहे की सुई पर एक ही ध्रुव को एक दिशा में बार-बार चलाएँ।"
-              ]
+              "Stroke an iron needle repeatedly with the same pole in one direction."
             ],
             "sample_answer": "Under supervision, stroke the needle 30–40 times in one direction with the same pole, pass it through cork, float it and observe its settled direction."
           },
           "hi": {
             "key_points": [
-              [
-                "लोहे की सुई पर एक ही ध्रुव को एक दिशा में बार-बार चलाएँ।"
-              ]
+              "लोहे की सुई पर एक ही ध्रुव को एक दिशा में बार-बार चलाएँ।"
             ],
             "sample_answer": "देखरेख में एक ही ध्रुव से सुई पर एक दिशा में 30–40 बार चलाएँ, कॉर्क में लगाकर पानी में तैराएँ और ठहरने की दिशा देखें।"
           }
