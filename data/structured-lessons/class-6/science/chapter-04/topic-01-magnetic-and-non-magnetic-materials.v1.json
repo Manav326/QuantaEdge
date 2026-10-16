@@ -739,18 +739,13 @@
         "answer_guide_by_locale": {
           "en": {
             "key_points": [
-              [
-                "Predict, bring the magnet near the object and observe.",
-                "अनुमान लगाएँ, चुंबक पास लाएँ और अवलोकन करें।"
-              ]
+              "Predict, bring the magnet near the object and observe."
             ],
             "sample_answer": "Predict first, test the object with a magnet and record whether attraction occurs. Classify from the observation."
           },
           "hi": {
             "key_points": [
-              [
-                "अनुमान लगाएँ, चुंबक पास लाएँ और अवलोकन करें।"
-              ]
+              "अनुमान लगाएँ, चुंबक पास लाएँ और अवलोकन करें।"
             ],
             "sample_answer": "पहले अनुमान लगाएँ, चुंबक से वस्तु की जाँच करें और आकर्षण हुआ या नहीं लिखें। अवलोकन से वर्गीकृत करें।"
           }
