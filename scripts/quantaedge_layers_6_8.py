@@ -502,7 +502,8 @@ def lesson_from(source: dict[str,Any], seg: dict[str,Any], v: dict[str,Any], vis
             if field in q: question[field]=q[field]
         if qtype=="image_observation":
             visual_id=q["visual_candidate_id"]
-            if visual_id not in visual_by_id or visual_id not in candidate_block_by_id:
+            block=candidate_block_by_id.get(visual_id)
+            if visual_id not in visual_by_id or block is None:
                 raise ValueError(f"image_observation references missing lesson visual {visual_id}")
             question["visual_asset_ref"]=visual_id
             question["alt_by_locale"]=block["asset"]["alt_by_locale"]

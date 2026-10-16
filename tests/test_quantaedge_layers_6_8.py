@@ -9,7 +9,7 @@ from types import SimpleNamespace
 from scripts.quantaedge_layers_6_8 import (
     PROMPT_VERSION, LESSON_CONTRACT_VERSION, benchmark as run_benchmark, lesson_from, load_visual_candidates, ollama_chat, sha, split_sft, refresh_benchmark,
     validate_lesson, validate_output, validate_splits, segments_for, tutor_citations_valid, write_rag,
-    write_json, write_jsonl, write_outputs, run as run_layers,
+    write_json, write_jsonl, write_outputs, prompt_for, run as run_layers,
 )
 
 class FakeResponse:
