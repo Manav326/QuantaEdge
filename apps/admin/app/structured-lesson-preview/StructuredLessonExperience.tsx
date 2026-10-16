@@ -72,6 +72,7 @@ export default function StructuredLessonExperience({
   const [results, setResults] = useState<Record<string, QuestionResult>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
   const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const allQuestions = lesson.practice.questions;
   const hasAnswerKeys = allQuestions.some(question =>
     Object.prototype.hasOwnProperty.call(question, 'correct_answer_ids') ||
@@ -98,7 +99,8 @@ export default function StructuredLessonExperience({
   const isLocked = current ? submitted[current.id] === true : false;
 
   async function submitCurrent() {
-    if (!current || activeResponse === null) return;
+    if (!current || activeResponse === null || isSubmitting) return;
+    setIsSubmitting(true);
     setSubmitError('');
     try {
       let result: QuestionResult;
@@ -117,11 +119,13 @@ export default function StructuredLessonExperience({
       setSubmitted(previous => ({ ...previous, [current.id]: result.status === 'correct' || result.status === 'pending_review' }));
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : tx(locale, 'Answer could not be submitted.', 'उत्तर जमा नहीं हो सका।'));
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   function updateResponse(value: QuestionResponse) {
-    if (!current || isLocked) return;
+    if (!current || isLocked || isSubmitting) return;
     setResponses(previous => ({ ...previous, [current.id]: value }));
     setResults(previous => { const next = { ...previous }; delete next[current.id]; return next; });
     setSubmitted(previous => ({ ...previous, [current.id]: false }));
@@ -173,6 +177,7 @@ export default function StructuredLessonExperience({
           response={activeResponse}
           result={activeResult}
           submitted={isLocked}
+          submitting={isSubmitting}
           onResponseChange={updateResponse}
           onSubmit={() => void submitCurrent()}
         />

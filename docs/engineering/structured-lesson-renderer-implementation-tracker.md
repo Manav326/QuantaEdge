@@ -215,3 +215,11 @@ A focused review of the staged Web/Admin/Android source found and fixed these UI
 **Still not complete:** no structured artifact API adapter or answer persistence/grading endpoint has been added; Android renderer is not wired to an API payload; Web learner submit adapter is absent. These staged components intentionally fail closed rather than using the legacy database question IDs incorrectly.
 
 **Do not mark tasks SL-01–SL-28 complete yet.** No local build could be run in this session; the next verification is the existing GitHub Actions build matrix after the staged UI changes are committed on `main`.
+
+## 7. UI interaction hardening — 2026-10-16
+
+- Updated the shared Web/Admin structured question experience to guard the submit action while a response is in flight.
+- The question submit control is disabled during submission and shows a localized progress label (English/Hindi); response editing is also paused until the request resolves.
+- The guard is released in `finally`, including on endpoint errors, so the learner can retry after a failed request. This prevents accidental duplicate requests from fast repeated clicks without falsely claiming the response was saved.
+- Web learner and Admin preview share the same renderer files by Git blob, so this interaction stays visually and behaviorally aligned.
+- **Acceptance remains in progress:** this is a narrow UI hardening fix, not evidence of end-to-end structured artifact API/persistence. No SL task is marked complete. Verify the repository's CI for this commit.

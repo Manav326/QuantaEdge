@@ -15,6 +15,7 @@ type Props = {
   response: QuestionResponse | null;
   result?: QuestionResult | null;
   submitted?: boolean;
+  submitting?: boolean;
   disabled?: boolean;
   onResponseChange: (value: QuestionResponse) => void;
   onSubmit: () => void;
@@ -32,6 +33,7 @@ const labels = (locale: LessonLocale) => ({
   incorrect: locale === 'hi' ? 'उत्तर सही नहीं है' : 'Not correct yet',
   partial: locale === 'hi' ? 'आंशिक रूप से सही' : 'Partly correct',
   pending: locale === 'hi' ? 'जाँच लंबित है' : 'Pending review',
+  submitting: locale === 'hi' ? 'उत्तर भेजा जा रहा है…' : 'Submitting answer…',
 });
 
 function typeLabel(type: string, locale: LessonLocale): string {
@@ -58,7 +60,7 @@ function text(value: unknown, locale: LessonLocale): string {
 }
 
 export default function StructuredQuestionRenderer({
-  question, lesson, locale, mode = 'student', response, result, submitted = false, disabled = false,
+  question, lesson, locale, mode = 'student', response, result, submitted = false, submitting = false, disabled = false,
   onResponseChange, onSubmit,
 }: Props) {
   const ui = labels(locale);
@@ -176,6 +178,8 @@ export default function StructuredQuestionRenderer({
       <strong>{statusLabel || ui.pending}</strong><p>{result.feedback || (locale === 'hi' ? 'आपका उत्तर जाँच के लिए सहेजा गया है।' : 'Your response has been saved for review.')}</p>
     </div>}
 
-    {!submitted && <button type="button" className="qe-structured-submit" disabled={!canSubmit || disabled} onClick={onSubmit}>{ui.submit}</button>}
+    {!submitted && <button type="button" className="qe-structured-submit" disabled={!canSubmit || disabled || submitting} onClick={onSubmit}>
+      {submitting ? ui.submitting : ui.submit}
+    </button>}
   </section>;
 }
