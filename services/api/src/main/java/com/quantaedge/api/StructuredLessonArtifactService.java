@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -56,6 +57,7 @@ public class StructuredLessonArtifactService {
   private final ResourcePatternResolver resolver;
   private volatile Map<String, LoadedArtifact> cache;
 
+  @Autowired
   public StructuredLessonArtifactService(ObjectMapper mapper) {
     this(mapper, new PathMatchingResourcePatternResolver());
   }

@@ -177,3 +177,11 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Build run 2753 reached API verification and identified one compile-time API mismatch: Jackson 3 JsonNode does not provide fieldNames().
 - Replaced that call with JsonNode.properties(), already used in this service to recursively strip answer keys. This is a targeted API-compatibility fix; the API tests/build must rerun before the adapter slice is accepted.
 - Run: https://github.com/Manav326/QuantaEdge/actions/runs/38874455123
+
+
+## CI feedback — Spring bean constructor selection (2026-10-16)
+
+- The Jackson 3 compile error was corrected. The next API verification run compiled and the four new StructuredLessonArtifactService tests passed, but Spring application-context tests reported that the service bean had no default constructor.
+- Cause: test-only/package-private constructors mean Spring needs an explicit production constructor selection in this Spring Boot configuration.
+- Fix: annotate the public ObjectMapper-only constructor with @Autowired. The existing fixture constructors remain package-private for tests.
+- Follow-up: rerun API verification and keep the next application/client slice blocked until bean startup and Flyway migrations pass.
