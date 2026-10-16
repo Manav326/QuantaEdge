@@ -222,6 +222,33 @@ class LayersTests(unittest.TestCase):
             self.assertEqual(64,sample["sample_output_sha256"] and len(sample["sample_output_sha256"]))
 
 
+
+    def test_empty_text_page_stays_unresolved_when_sharing_a_mapped_segment(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); body="supported source concept"
+            pages=[{"page_number":1,"text":body,"text_sha256":sha(body),"has_text":True},
+                   {"page_number":2,"text":"","text_sha256":sha(""),"has_text":False}]
+            source={"pages":pages,"page_count":2,"book_id":"book","source_pdf_sha256":"e"*64,
+                "class_no":6,"subject":"science","language":"en","title":"Science",
+                "source_url":"https://ncert.nic.in/x","edition":"Reprint"}
+            segment={"segment_id":"mixed-text-and-image-page","sequence":1,"source_pages":[1,2],"segment_sha256":"ab"}
+            generated=model_json([1,2])
+            lesson=lesson_from(source,segment,generated)
+            lesson["workflow"]["generation_model"]="qwen2.5:1.5b"
+            sft=[{"example_id":str(i),"messages":[],"metadata":{
+                "source_group_id":"book|chapter-1","review_status":"machine_validated_draft","publication_allowed":False}}
+                for i in (1,2)]
+            checkpoint={segment["segment_id"]:{"status":"COMPLETE","segment_sha256":"ab",
+                "generated":generated,"lesson":lesson,"sft_rows":sft}}
+            rag=root/"rag.jsonl"; write_rag(rag,source)
+            report=write_outputs(source,[segment],checkpoint,root/"out",rag,"qwen2.5:1.5b","f"*64)
+            self.assertEqual([1],report["unresolved_source_pages"])
+            self.assertEqual([2],report["unresolved_text_pages"])
+            self.assertEqual("INCOMPLETE",report["layers"]["6"])
+            self.assertEqual("INCOMPLETE",report["layers"]["7"])
+            self.assertEqual("INCOMPLETE",report["overall_status"])
+
+
     def test_visual_candidates_are_hash_bound_and_preview_only(self):
         with tempfile.TemporaryDirectory() as temp:
             repo=Path(temp); book="book"; pdfhash="f"*64; slug="class6-en-science-test"

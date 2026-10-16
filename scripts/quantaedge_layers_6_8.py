@@ -493,19 +493,22 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
             if err: raise ValueError("Saved lesson contract failure: "+"; ".join(err[:8]))
             lessons.append(lesson)
         sft.extend(item.get("sft_rows",[]))
-    mapped={p for t in topics if t["mapping_status"]=="DRAFT_MAPPED_REQUIRES_REVIEW" for p in t["source_pages"]}
+    nonempty_source_pages={p["page_number"] for p in source["pages"] if p["text"].strip()}
+    mapped={p for t in topics if t["mapping_status"]=="DRAFT_MAPPED_REQUIRES_REVIEW"
+            for p in t["source_pages"] if p in nonempty_source_pages}
     unresolved=sorted(set(range(1,source["page_count"]+1))-mapped)
     unresolved_chapters=sorted(t["segment_id"] for t in topics if t["mapping_status"]!="DRAFT_MAPPED_REQUIRES_REVIEW")
     unresolved_text=sorted(s["segment_id"] for s in segments if checkpoint.get(s["segment_id"],{}).get("status")=="UNRESOLVED_SOURCE_TEXT")
+    unresolved_text_pages=sorted(p["page_number"] for p in source["pages"] if not p["text"].strip())
     pending=[s["segment_id"] for s in segments if checkpoint.get(s["segment_id"],{}).get("status") not in {"COMPLETE","UNRESOLVED_SOURCE_TEXT"}]
-    incomplete_map=bool(unresolved or unresolved_chapters or unresolved_text)
+    incomplete_map=bool(unresolved or unresolved_chapters or unresolved_text or unresolved_text_pages)
     mp=outdir/"curriculum-map.v1.json"
     mapping={"schema_version":"quantaedge.curriculum-map-candidate.v1",
       "source":{"class_code":str(source["class_no"]),"subject_code":source["subject"],"language":source["language"],
         "source_book_id":source["book_id"],"source_title":source["title"],"source_url":source["source_url"],
         "source_edition":source["edition"],"source_pdf_sha256":source["source_pdf_sha256"],"pdf_page_count":source["page_count"]},
       "prompt_version":PROMPT_VERSION,"generation_model":model,"segment_count":len(segments),"segments_completed":len(good),
-      "pending_segments":pending,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,
+      "pending_segments":pending,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"unresolved_text_pages":unresolved_text_pages,
       "mapped_source_pages":len(mapped),"total_source_pages":source["page_count"],
       "unresolved_source_pages":unresolved,"topics":topics,
       "status":"IN_PROGRESS" if pending else ("INCOMPLETE" if incomplete_map else "DRAFT_REQUIRES_HUMAN_REVIEW"),
@@ -526,7 +529,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
     lesson_segments={l.get("generation_metadata",{}).get("segment_id") for l in lessons}
     missing_sft=any(len(checkpoint.get(seg["segment_id"],{}).get("sft_rows",[]))<2 for seg in segments)
     layers={"6":mapping["status"],
-      "7":"IN_PROGRESS" if pending else ("INCOMPLETE" if unresolved_chapters or unresolved_text or mapped_segments!=lesson_segments else "DRAFT_REQUIRES_HUMAN_REVIEW"),
+      "7":"IN_PROGRESS" if pending else ("INCOMPLETE" if unresolved_chapters or unresolved_text or unresolved_text_pages or mapped_segments!=lesson_segments else "DRAFT_REQUIRES_HUMAN_REVIEW"),
       "8":"IN_PROGRESS" if pending else ("INCOMPLETE" if missing_sft else "DRAFT_REQUIRES_HUMAN_REVIEW")}
     overall="IN_PROGRESS" if pending else ("INCOMPLETE" if any(v=="INCOMPLETE" for v in layers.values()) else "DRAFT_REQUIRES_HUMAN_REVIEW")
     report={"schema_version":"quantaedge.layers-6-8-run-manifest.v1","source_book_id":source["book_id"],
@@ -536,7 +539,7 @@ def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:d
       "segments_completed":len(good),"layers":layers,"overall_status":overall,"lesson_candidates":len(lessons),
       "tutor_sft_candidates":len(sft),"visual_candidates_attached_for_human_review":sum(1 for lesson in lessons for block in lesson.get("explain",{}).get("blocks",[]) if block.get("type")=="image"),"retrieval_documents":source["page_count"],
       "retrieval_nonempty_documents":sum(p["has_text"] for p in source["pages"]),"source_pages_mapped":len(mapped),
-      "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"pending_segments":pending,
+      "source_page_count":source["page_count"],"unresolved_source_pages":unresolved,"unresolved_text_pages":unresolved_text_pages,"unresolved_chapter_segments":unresolved_chapters,"unresolved_text_segments":unresolved_text,"pending_segments":pending,
       "production_model_selection":"PENDING_HUMAN_REVIEW","production_model":None,
       "human_review_required":True,"publication_allowed":False,
       "next_action":"Resume this exact book/model until checkpoints are complete; then review map, lesson candidates and both datasets. Production model selection remains a separate human decision."}
