@@ -360,10 +360,10 @@ def write_rag(path:Path,source:dict[str,Any])->None:
     write_jsonl(path,rows)
 
 def write_outputs(source:dict[str,Any],segments:list[dict[str,Any]],checkpoint:dict[str,Any],outdir:Path,rag:Path,model:str,bench_sha:str)->dict[str,Any]:
-    good=[checkpoint[s["segment_id"]] for s in segments if checkpoint.get(s["segment_id"],{}).get("status")=="COMPLETE"]
+    good=[(s,checkpoint[s["segment_id"]]) for s in segments if checkpoint.get(s["segment_id"],{}).get("status")=="COMPLETE"]
     topics=[]; lessons=[]; sft=[]
-    for item in good:
-        seg=next(s for s in segments if s["segment_id"]==item["segment_id"]); v=item["generated"]; chapter=v.get("chapter_number")
+    for seg,item in good:
+        v=item["generated"]; chapter=v.get("chapter_number")
         topics.append({"segment_id":seg["segment_id"],"source_pages":seg["source_pages"],"segment_sha256":seg["segment_sha256"],
           "chapter_number":chapter,"chapter_title_by_locale":v.get("chapter_title_by_locale"),
           "topic_title_by_locale":v["topic_title_by_locale"],"microtopic_title_by_locale":v["microtopic_title_by_locale"],
