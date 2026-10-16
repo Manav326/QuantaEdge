@@ -86,7 +86,7 @@ def install_layer5_fixture(root:Path, pagesdir:Path, book:str, pdfhash:str, body
       "human_review_required":True,"publication_allowed":False}
     relative=lambda p:p.resolve().relative_to(root.resolve()).as_posix()
     ledger={"schema_version":"quantaedge.textbook-coverage-ledger.v1","architecture_version":"8-layer-resumable-v1","layer":5,
-      "ledger_status":"COMPLETE","source":{"class":"6","language":"english","subject":"Science","source_book_id":book,
+      "ledger_status":"COMPLETE","source":{"class":str(grade),"language":language.lower(),"subject":subject,"source_book_id":book,
         "source_pdf_sha256":pdfhash,"edition":"Reprint 2026-27","pdf_page_count":1},
       "source_paths":{"inventory":relative(inventory_path),"raw_analysis":relative(raw_path),
         "manifest":relative(pagesdir/"book.manifest.json"),"text_jsonl":relative(pagesdir/"pages.jsonl"),
