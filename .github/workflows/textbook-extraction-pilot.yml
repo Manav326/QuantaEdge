@@ -1,6 +1,18 @@
 name: QuantaEdge GHCR Textbook Extraction Pilot
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/textbook-extraction-pilot.yml"
+      - "scripts/textbook_registry.py"
+      - "scripts/extract_textbook_text.py"
+      - "scripts/validate_textbook_extraction_artifacts.py"
+      - "scripts/select_textbook_visual_sources.py"
+      - "tests/test_extract_textbook_text.py"
+      - "tests/test_validate_textbook_extraction_artifacts.py"
+      - "tests/test_select_textbook_visual_sources.py"
+      - "tests/test_import_ghcr_extracted_pages.py"
   workflow_dispatch:
     inputs:
       class_no:
@@ -15,12 +27,16 @@ permissions:
   packages: read
 
 concurrency:
-  group: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no || '7' }}
+  group: quantaedge-textbook-extraction-pilot-${{ github.event_name == 'workflow_dispatch' && inputs.class_no || 'all-classes' }}
   cancel-in-progress: false
 
 jobs:
   extract:
-    name: Extract selected Class ${{ inputs.class_no }} in English and Hindi
+    strategy:
+      fail-fast: false
+      matrix:
+        class_no: ${{ github.event_name == 'workflow_dispatch' && fromJSON(format('[{0}]', inputs.class_no)) || fromJSON('[7,8]') }}
+    name: Extract selected Class ${{ matrix.class_no }} in English and Hindi
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -57,7 +73,7 @@ jobs:
         shell: bash
         env:
           GHCR_OWNER: ${{ github.repository_owner }}
-          CLASS_NO: ${{ inputs.class_no }}
+          CLASS_NO: ${{ matrix.class_no }}
         run: |
           set -euo pipefail
           [[ "$CLASS_NO" == "7" || "$CLASS_NO" == "8" ]] || { echo "Only Class 7 or Class 8 is supported."; exit 2; }
@@ -106,7 +122,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: quantaedge-textbook-extraction-pilot-class-${{ inputs.class_no }}-${{ github.run_id }}
+          name: quantaedge-textbook-extraction-pilot-class-${{ matrix.class_no }}-${{ github.run_id }}
           path: |
             pilot-output/extracted/
             pilot-output/reports/
