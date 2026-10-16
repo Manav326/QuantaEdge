@@ -100,7 +100,7 @@ class ValidateTextbookExtractionArtifactsTests(unittest.TestCase):
     def test_class7_rejects_unlabelled_maths_parts(self):
         self.write_source()
         books = json.loads(self.index_path.read_text(encoding="utf-8"))
-        row = next(x for x in books["books"] if x["book_id"] == "math-part-2")
+        row = dict(next(x for x in books["books"] if x["book_id"] == "math-part-2"))
         row["title"] = "Mathematics"
         row["book_id"] = "math-book"
         books["books"] = [x for x in books["books"] if x["book_id"] != "math-part-2"] + [row]
