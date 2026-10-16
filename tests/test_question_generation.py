@@ -79,6 +79,36 @@ def sample_model_output():
 
 
 class QuestionGenerationTests(unittest.TestCase):
+    def test_contextual_prompt_treats_types_as_catalogue_not_quotas(self):
+        curriculum = {"class_code": "7", "subject_code": "science"}
+        chapter = {"title": "Separation of Substances"}
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "A mixture can be separated by filtration."}
+        prompt = GEN.make_prompt(curriculum, chapter, chunk, None, "en",
+                                 question_count=2, allowed_types={"MCQ", "INPUT", "MATCH"})
+        self.assertIn("There is NO per-type quota", prompt)
+        self.assertIn("never include a type solely for variety", prompt.lower())
+        self.assertNotIn("Exact per-type quota for this request", prompt)
+
+    def test_contextual_validator_accepts_suitable_subset_without_quota(self):
+        output = sample_model_output()
+        mcq = sample_question()
+        typed = copy.deepcopy(mcq)
+        typed.update(question_type="INPUT", options=[], answer_payload={"kind": "TEXT", "value": "5"},
+                     prompt="यदि x + 3 = 8 हो, तो x का मान क्या है?", explanation="दोनों पक्षों से 3 घटाने पर x = 5 मिलता है।")
+        output["questions"] = [mcq, typed]
+        chunk = {"page_numbers": [2, 3], "page_start": 2, "page_end": 3, "text": "source"}
+        checked = GEN.validate_model_output(output, None, chunk, "hi",
+                                            question_count=2, allowed_types={"MCQ", "INPUT"})
+        self.assertEqual({"MCQ", "INPUT"}, {q["question_type"] for q in checked["questions"]})
+
+    def test_contextual_validator_rejects_type_outside_selected_catalogue(self):
+        output = sample_model_output()
+        output["questions"][0]["question_type"] = "MAP"
+        chunk = {"page_numbers": [2], "page_start": 2, "page_end": 2, "text": "source"}
+        with self.assertRaisesRegex(ValueError, "disallowed type"):
+            GEN.validate_model_output(output, None, chunk, "hi", question_count=1, allowed_types={"MCQ"})
+
+
     def test_valid_extraction_is_grouped_by_chapter(self):
         curriculum, source, chapters = GEN.validate_extraction(sample_extraction())
         self.assertEqual("7", curriculum["class_code"])
