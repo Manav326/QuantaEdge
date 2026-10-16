@@ -195,7 +195,7 @@ class QuestionGenerationSchemaTests(unittest.TestCase):
         self.assertEqual(answer, result)
 
     def test_model_endpoint_defaults_to_native_ollama_and_preserves_legacy_api_path(self):
-        self.assertEqual("http://127.0.0.1:11434/api/chat", model_endpoint("http://127.0.0.1:11434"))
+        self.assertEqual("http://127.0.0.1:11434/api/chat", model_endpoint("http://127.0.0.1:11434", "ollama"))
         self.assertEqual("https://api.example.com/v1/chat/completions",
                          model_endpoint("https://api.example.com", "openai-compatible"))
 

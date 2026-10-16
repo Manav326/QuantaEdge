@@ -314,7 +314,7 @@ def model_request_headers(api_key: str) -> dict[str, str]:
     return headers
 
 
-def model_endpoint(base_url: str, provider: str = "ollama") -> str:
+def model_endpoint(base_url: str, provider: str = "openai-compatible") -> str:
     base = base_url.rstrip("/")
     if provider == "ollama":
         if base.endswith("/api/chat"):
@@ -339,7 +339,7 @@ def _model_retry_delay(attempt: int, retry_after: str | None = None) -> float:
 def call_model(
     prompt: str, api_key: str, base_url: str, model: str, timeout: int,
     max_attempts: int = MAX_MODEL_ATTEMPTS, attempt_counter: list[int] | None = None,
-    provider: str = "ollama", num_ctx: int = 8192, num_predict: int = 4096,
+    provider: str = "openai-compatible", num_ctx: int = 8192, num_predict: int = 4096,
 ) -> dict[str, Any]:
     if not 1 <= max_attempts <= MAX_MODEL_ATTEMPTS:
         raise ValueError(f"max_attempts must be between 1 and {MAX_MODEL_ATTEMPTS}.")
@@ -553,7 +553,7 @@ def scheduled_question_types(total: int, allowed_types: set[str], subject_code: 
 
 def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], chapter: dict[str, Any],
                            chunk_results: list[tuple[dict[str, Any], dict[str, Any]]], model: str,
-                           provider: str = "ollama") -> dict[str, Any]:
+                           provider: str = "openai-compatible") -> dict[str, Any]:
     lessons, question_total = [], 0
     for index, (chunk, result) in enumerate(chunk_results, start=1):
         questions = []
@@ -625,7 +625,7 @@ def build_candidate_bundle(curriculum: dict[str, Any], source: dict[str, Any], c
 def validate_resume_candidate(
     candidate: dict[str, Any], curriculum: dict[str, Any], source: dict[str, Any],
     chapter: dict[str, Any], questions_per_chapter: int, model: str,
-    expected_types: list[str] | None = None, provider: str = "ollama",
+    expected_types: list[str] | None = None, provider: str = "openai-compatible",
 ) -> int:
     """Validate a previously completed chapter bundle before skipping it on --resume."""
     if not isinstance(candidate, dict):
