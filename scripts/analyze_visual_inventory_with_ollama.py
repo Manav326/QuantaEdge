@@ -286,9 +286,26 @@ def run_analysis(
     # the currently executing asset. Successful assets are reused only when their
     # content hash, model tag and prompt version still match; errors are retried.
     result = checkpoint()
-    for asset in selected:
+    print(
+        f"[visual-analysis] READY book={source.get('book_id')} model={model} "
+        f"eligible_visuals={len(seen)} existing_results={len(previous)} "
+        f"already_analyzed={skipped_from_checkpoint} selected_this_batch={len(selected)} "
+        f"batch_limit={max_assets if max_assets is not None else 'all'} "
+        f"run_id={run_id or 'local'}",
+        flush=True,
+    )
+    if not selected:
+        print(f"[visual-analysis] NO_PENDING_ASSETS book={source.get('book_id')} run_id={run_id or 'local'}", flush=True)
+    for asset_index, asset in enumerate(selected, start=1):
         asset_id = str(asset["asset_id"])
         existing = results_by_id.get(asset_id, {})
+        started_at = time.monotonic()
+        print(
+            f"[visual-analysis] START {asset_index}/{len(selected)} asset_id={asset_id} "
+            f"page={asset.get('source_pdf_page_number')} kind={asset.get('kind')} "
+            f"run_id={run_id or 'local'}",
+            flush=True,
+        )
         if (
             existing.get("analysis_status") == "DRAFT_REQUIRES_REVIEW"
             and existing.get("asset_sha256") == asset.get("asset_sha256")
@@ -303,7 +320,13 @@ def run_analysis(
                 item["run_id"] = run_id
             item["checkpointed_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
             results_by_id[asset_id] = item
+            print(
+                f"[visual-analysis] RESULT asset_id={asset_id} status={item.get('analysis_status')} "
+                f"duration_seconds={time.monotonic() - started_at:.1f}",
+                flush=True,
+            )
         except Exception as exc:
+            error_text = " ".join(str(exc).split())[:180]
             results_by_id[asset_id] = {
                 "asset_id": asset.get("asset_id"),
                 "asset_sha256": asset.get("asset_sha256"),
@@ -320,8 +343,25 @@ def run_analysis(
                 "human_review_required": True,
                 "publication_allowed": False,
             }
+            print(
+                f"[visual-analysis] RESULT asset_id={asset_id} status=ANALYSIS_ERROR "
+                f"duration_seconds={time.monotonic() - started_at:.1f} error={error_text}",
+                flush=True,
+            )
         processed_this_run += 1
         result = checkpoint()
+        print(
+            f"[visual-analysis] CHECKPOINT saved processed_this_batch={processed_this_run}/{len(selected)} "
+            f"analyzed_total={result['summary']['assets_analyzed']} "
+            f"failed_total={result['summary']['assets_failed']}",
+            flush=True,
+        )
+    print(
+        f"[visual-analysis] BATCH_COMPLETE book={source.get('book_id')} "
+        f"processed_this_batch={processed_this_run} selected_this_batch={len(selected)} "
+        f"analyzed_total={result['summary']['assets_analyzed']} failed_total={result['summary']['assets_failed']}",
+        flush=True,
+    )
     return result
 
 def main(argv: list[str] | None = None) -> int:
