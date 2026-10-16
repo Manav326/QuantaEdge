@@ -159,8 +159,8 @@ Implement a renderer registry matching question-rendering-registry.v1.json on We
 - Lesson data: data/structured-lessons/class-6/science/chapter-01/ through chapter-06/
 - Chapter coverage audits: chapter-02/source-coverage.v1.json through chapter-06/source-coverage.v1.json
 - V3 workflow: .github/workflows/textbook-visual-candidates-v3.yml
-- V3 catalog index: apps/admin/public/content/visual-candidates/index.v1.json
-- Class 6 V3 candidate catalog: apps/admin/public/content/visual-candidates/class6-curiosity-en.v3.json
+- V3 catalog index: data/textbook-visual-candidates-v3/index.v1.json
+- Class 6 V3 candidate catalog: data/textbook-visual-candidates-v3/catalogs/class6-curiosity-en.v3.json
 - Class 6 V3 candidate pack and chapter map: data/textbook-visual-candidates-v3/class6-curiosity-en/
 - Web lesson renderer: apps/web/app/student/learn/LearnClient.tsx
 - Web legacy practice renderer: apps/web/app/student/practice/PracticeClient.tsx

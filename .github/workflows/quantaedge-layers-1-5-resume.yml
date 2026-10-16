@@ -72,6 +72,7 @@ jobs:
               --output "$RAW" --resume
             processed="$(python -c 'import json,sys; print(int(json.load(open(sys.argv[1], encoding="utf-8"))["summary"].get("assets_processed_this_run", 0)))' "$RAW")"
             git add -- "$RAW"
+            python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
             if ! git diff --cached --quiet -- "$RAW"; then
               git config user.name "github-actions[bot]"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -130,6 +131,7 @@ jobs:
             data/textbook-visuals/class6-curiosity-en/visual-analysis.v1.json \
             data/textbook-content-pipeline/class-6/books/class6-curiosity-en/visual-analysis-effective.v1.json \
             data/textbook-content-pipeline/class-6/books/class6-curiosity-en/coverage-ledger.v1.json
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

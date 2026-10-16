@@ -122,8 +122,17 @@ def build_coverage_ledger(inventory_path,raw_path,manifest_path,text_path,effect
     write_json(ledger_path,out);return out
 
 def git_checkpoint(repo,paths,message):
-    # Stage the intended checkpoint before rebasing; pull-before-stage fails when new ledger files are uncommitted.
-    subprocess.run(["git","add",*paths],cwd=repo,check=True)
+    # Pipeline-generated data is versioned only under data/, never in application/code folders.
+    repo_root=Path(repo).resolve()
+    data_root=(repo_root/"data").resolve()
+    staged_paths=[]
+    for raw_path in paths:
+        candidate=Path(raw_path)
+        if not candidate.is_absolute(): candidate=repo_root/candidate
+        try: relative=candidate.resolve().relative_to(data_root)
+        except ValueError as exc: raise ValueError(f"Pipeline checkpoints may only be committed under data/: {raw_path}") from exc
+        staged_paths.append((Path("data")/relative).as_posix())
+    subprocess.run(["git","add","--",*staged_paths],cwd=repo_root,check=True)
     if subprocess.run(["git","diff","--cached","--quiet"],cwd=repo).returncode==0:return
     subprocess.run(["git","config","user.name","github-actions[bot]"],cwd=repo,check=True);subprocess.run(["git","config","user.email","41898282+github-actions[bot]@users.noreply.github.com"],cwd=repo,check=True)
     subprocess.run(["git","commit","-m",message],cwd=repo,check=True)

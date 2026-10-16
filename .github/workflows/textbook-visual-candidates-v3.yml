@@ -16,8 +16,8 @@ on:
       - "tests/test_textbook_visual_end_to_end_contract.py"
       - "scripts/update_visual_catalog_index.py"
       - "tests/test_update_visual_catalog_index.py"
-      - "apps/admin/public/content/visual-candidates/index.v1.json"
-      - "apps/admin/public/content/visual-candidates/*.v3.json"
+      - "data/textbook-visual-candidates-v3/catalogs/**"
+      - "data/textbook-visual-candidates-v3/index.v1.json"
       - "data/textbook-visual-candidates-v3/**"
       - "apps/admin/app/content/page.tsx"
       - "services/api/src/main/java/com/quantaedge/api/AdminContentController.java"
@@ -288,7 +288,7 @@ jobs:
                   "--candidate-root", str(out),
                   "--repo-root", str(repo),
                   "--book-slug", slug,
-                  "--output", str(repo / "apps" / "admin" / "public" / "content" / "visual-candidates" / f"{slug}.v3.json"),
+                  "--output", str(repo / "data" / "textbook-visual-candidates-v3" / "catalogs" / f"{slug}.v3.json"),
               ]
               if chapter_map.is_file():
                   cmd.extend(["--chapter-map", str(chapter_map)])
@@ -364,11 +364,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python scripts/update_visual_catalog_index.py --catalog-dir apps/admin/public/content/visual-candidates --output apps/admin/public/content/visual-candidates/index.v1.json
+          python scripts/update_visual_catalog_index.py --catalog-dir data/textbook-visual-candidates-v3/catalogs --output data/textbook-visual-candidates-v3/index.v1.json
           python -m unittest discover -s tests -p "test_build_visual_lesson_attachment_manifest.py" -v
           python -m unittest discover -s tests -p "test_textbook_visual_end_to_end_contract.py" -v
           python -m unittest discover -s tests -p "test_update_visual_catalog_index.py" -v
-          git add -A data/textbook-visual-candidates-v3 apps/admin/public/content/visual-candidates
+          python -m unittest discover -s tests -p "test_pipeline_data_locations.py" -v
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
+          git add -A data/textbook-visual-candidates-v3
+          python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

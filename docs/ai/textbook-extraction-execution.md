@@ -144,7 +144,7 @@ The two class workflows deliberately accept **only Class 7 or Class 8**. Each se
 
 - Extraction output: `data/textbook-extractions/class-N/{english,hindi}/pages/*.jsonl` plus sibling `*.manifest.json`.
 - Visual candidate metadata: `data/textbook-visual-candidates-v3/<book_slug>/`.
-- Admin review catalog: `apps/admin/public/content/visual-candidates/<book_slug>.v3.json` and `index.v1.json`.
+- Admin review catalog: `data/textbook-visual-candidates-v3/catalogs/<book_slug>.v3.json`; index: `data/textbook-visual-candidates-v3/index.v1.json`.
 - Visual bundles are versioned in GHCR and must be restored/verified by the recorded bundle SHA-256.
 - All extracts and visual candidates remain draft/review-only. The pipeline never marks content publishable.
 - Web/Android question renderers and the single state-preserving global language selector are separate runtime implementation tasks; source preparation does not implement them.
@@ -191,3 +191,6 @@ Only after checking the displayed file names, stable IDs, exact source book/hash
 python scripts/validate_structured_lesson_artifacts.py --repo-root . --index data/structured-lessons/class-6/science/production-index.v1.json
 
 The strict validator is wired into CI. Existing 39 topics and 312 questions are included in the same index check, but structural success does not clear pending rendered-source, science, bilingual, activity-safety or visual reviews.
+
+
+**Storage invariant:** generated textbook pipeline data committed to Git stays under `data/`. The Admin Content Studio reads review-only candidate catalogs from the data directory; it does not need the same generated JSON copied under an application `public/` folder.

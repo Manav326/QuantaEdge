@@ -1065,6 +1065,8 @@ def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
         try: items.append(p.resolve().relative_to(repo.resolve()).as_posix())
         except ValueError as exc: raise ValueError(f"Checkpoint outside repository: {p}") from exc
     if not items: return
+    outside_data=[item for item in items if item!="data" and not item.startswith("data/")]
+    if outside_data: raise ValueError(f"Generated Layers 6-8 checkpoints may only be committed under data/: {outside_data}")
     subprocess.run(["git","add","--",*items],cwd=repo,check=True)
     rc=subprocess.run(["git","diff","--cached","--quiet","--",*items],cwd=repo).returncode
     if rc==0: return

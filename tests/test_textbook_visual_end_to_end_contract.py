@@ -5,10 +5,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOK_SLUG = "class6-curiosity-en"
-CATALOG_PATH = ROOT / "apps/admin/public/content/visual-candidates" / f"{BOOK_SLUG}.v3.json"
+CATALOG_DIR = ROOT / "data/textbook-visual-candidates-v3" / "catalogs"
+CATALOG_PATH = CATALOG_DIR / f"{BOOK_SLUG}.v3.json"
 PACK_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "candidates.v3.json"
 CHAPTER_MAP_PATH = ROOT / "data/textbook-visual-candidates-v3" / BOOK_SLUG / "chapter-map.v1.json"
-INDEX_PATH = ROOT / "apps/admin/public/content/visual-candidates/index.v1.json"
+INDEX_PATH = ROOT / "data/textbook-visual-candidates-v3/index.v1.json"
 CONTRACT_PATH = ROOT / "docs/ai/visual-render-contract.v1.json"
 RAW_PREFIX = "https://raw.githubusercontent.com/Manav326/QuantaEdge/main/"
 
@@ -29,7 +30,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertEqual(self.pack["source"]["book_id"], self.catalog["source"]["book_id"])
         self.assertTrue(self.catalog["source"]["title"])
         self.assertEqual("quantaedge.visual-catalog-index.v1", self.index["schema_version"])
-        catalog_slugs = {path.name.removesuffix(".v3.json") for path in (ROOT / "apps/admin/public/content/visual-candidates").glob("*.v3.json")}
+        catalog_slugs = {path.name.removesuffix(".v3.json") for path in CATALOG_DIR.glob("*.v3.json")}
         self.assertEqual(catalog_slugs, {row["book_slug"] for row in self.index["catalogs"]})
         indexed = next(row for row in self.index["catalogs"] if row["book_slug"] == BOOK_SLUG)
         self.assertEqual(self.catalog["source"]["book_id"], indexed["source_book_id"])
@@ -70,7 +71,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                     self.assertTrue(path.is_file(), f"{field} does not resolve to a checked-in file: {path}")
 
     def test_every_catalog_index_pack_and_tracked_asset_agree_before_persistence(self):
-        catalog_dir = ROOT / "apps/admin/public/content/visual-candidates"
+        catalog_dir = CATALOG_DIR
         index_by_slug = {item["book_slug"]: item for item in self.index["catalogs"]}
         catalog_paths = sorted(catalog_dir.glob("*.v3.json"))
         self.assertGreater(len(catalog_paths), 0)
@@ -122,6 +123,18 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertEqual(len(index_by_slug), self.index["summary"]["catalog_count"])
         self.assertFalse(self.index["summary"]["publication_allowed"])
         self.assertTrue(self.index["summary"]["review_required"])
+
+    def test_generated_catalogs_are_not_kept_under_application_public_directories(self):
+        for relative in (
+            "apps/admin/public/content/visual-candidates",
+            "apps/web/public/content/visual-assets",
+        ):
+            directory = ROOT / relative
+            if directory.exists():
+                self.assertFalse(any(path.is_file() for path in directory.rglob("*")),
+                                 f"Generated review data remains outside data/: {relative}")
+        self.assertTrue(CATALOG_PATH.is_file())
+        self.assertTrue(INDEX_PATH.is_file())
 
     def test_layer4_5_artifact_contract_uses_relative_paths_and_expanded_package(self):
         workflow = (ROOT / ".github/workflows/textbook-visual-candidates-v3.yml").read_text(encoding="utf-8")

@@ -230,6 +230,7 @@ jobs:
             # currently active batch, not the book or already committed analysis.
             # The user requires generated binaries and metadata in both main and GHCR.
             git add "$out"
+            python scripts/validate_pipeline_data_locations.py --repo-root "$GITHUB_WORKSPACE"
             if ! git diff --cached --quiet; then
               git config user.name "github-actions[bot]"
               git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

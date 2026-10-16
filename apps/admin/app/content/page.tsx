@@ -11,8 +11,9 @@ type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:s
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
 type VisualSourceMatch={class:string;subject:string};
-const LEGACY_REVIEW_ASSET_PREFIX='https://raw.githubusercontent.com/Manav326/QuantaEdge/main/apps/web/public/content/visual-assets/';
-const REVIEW_ASSET_PREFIX='https://raw.githubusercontent.com/Manav326/QuantaEdge/main/data/textbook-visual-candidates-v3/';
+const RAW_REPO_CONTENT_PREFIX='https://raw.githubusercontent.com/Manav326/QuantaEdge/main/';
+const LEGACY_REVIEW_ASSET_PREFIX=RAW_REPO_CONTENT_PREFIX+'apps/web/public/content/visual-assets/';
+const REVIEW_ASSET_PREFIX=RAW_REPO_CONTENT_PREFIX+'data/textbook-visual-candidates-v3/';
 function normalizeReviewAssetUrl(url:string|undefined):string|undefined {
  if(!url)return url;
  return url.startsWith(LEGACY_REVIEW_ASSET_PREFIX)?REVIEW_ASSET_PREFIX+url.slice(LEGACY_REVIEW_ASSET_PREFIX.length):url;
@@ -328,7 +329,7 @@ export default function ContentStudio(){
  useEffect(()=>{if((selected||createType)&&workspaceRef.current)workspaceRef.current.scrollIntoView({behavior:'smooth',block:'start'})},[selected,createType,detail]);
  useEffect(()=>{
   let mounted=true;
-  fetch('/content/visual-candidates/index.v1.json',{cache:'no-store'})
+  fetch(REVIEW_ASSET_PREFIX+'index.v1.json',{cache:'no-store'})
    .then(async response=>{if(!response.ok)throw new Error('The textbook visual catalog index is not available yet.');return response.json()})
    .then(value=>{
     if(!mounted)return;
@@ -368,12 +369,12 @@ export default function ContentStudio(){
    setVisualCatalog(null);setVisualCatalogError('More than one textbook source matches this lesson. Choose the exact book and edition before attaching a visual.');setVisualCatalogLoading(false);
    return ()=>{mounted=false};
   }
-  if(!entry.catalog_path.startsWith('/content/visual-candidates/')){
+  if(!/^data\/textbook-visual-candidates-v3\/catalogs\/[a-z0-9]+(?:[.-][a-z0-9]+)*\.v3\.json$/.test(entry.catalog_path)){
    setVisualCatalog(null);setVisualCatalogError('The matching visual catalog has an invalid path.');setVisualCatalogLoading(false);
    return ()=>{mounted=false};
   }
   setVisualCatalogLoading(true);setVisualCatalogError('');
-  fetch(entry.catalog_path,{cache:'no-store'})
+  fetch(RAW_REPO_CONTENT_PREFIX+entry.catalog_path,{cache:'no-store'})
    .then(async response=>{if(!response.ok)throw new Error('The matching textbook visual catalog could not be loaded.');return response.json()})
    .then(value=>{
     if(!mounted)return;

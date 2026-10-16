@@ -54,7 +54,7 @@ class UpdateVisualCatalogIndexTests(unittest.TestCase):
         self.assertTrue(index["summary"]["review_required"])
         self.assertEqual(["class6-maths-hi", "class7-science-en"],
                          [row["book_slug"] for row in index["catalogs"]])
-        self.assertEqual("/content/visual-candidates/class6-maths-hi.v3.json",
+        self.assertEqual("data/textbook-visual-candidates-v3/catalogs/class6-maths-hi.v3.json",
                          index["catalogs"][0]["catalog_path"])
         self.assertEqual("b" * 64, index["catalogs"][0]["source_pdf_sha256"])
 

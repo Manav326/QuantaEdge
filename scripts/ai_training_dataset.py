@@ -121,6 +121,8 @@ def commit_and_push_dataset(path: Path) -> None:
  resolved=path.resolve()
  try: relative=resolved.relative_to(repo_root.resolve())
  except ValueError as exc: raise ValueError("GitHub output must be inside the QuantaEdge repository.") from exc
+ if not relative.parts or relative.parts[0] != "data":
+  raise ValueError("Generated AI training datasets may only be committed under data/.")
  def git(*args: str) -> str:
   return subprocess.run(["git",*args],cwd=repo_root,check=True,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE).stdout.strip()
  branch=git("branch","--show-current")

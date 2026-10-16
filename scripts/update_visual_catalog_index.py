@@ -57,7 +57,7 @@ def build_catalog_index(catalog_dir: Path) -> dict[str, Any]:
                 raise ValueError(f"Candidate is not review-only in {path.name}")
         entries.append({
             "book_slug": slug,
-            "catalog_path": f"/content/visual-candidates/{path.name}",
+            "catalog_path": f"data/textbook-visual-candidates-v3/catalogs/{path.name}",
             "source_book_id": str(source["book_id"]),
             "title": str(source.get("title") or source["book_id"]),
             "class": str(source["class"]),
