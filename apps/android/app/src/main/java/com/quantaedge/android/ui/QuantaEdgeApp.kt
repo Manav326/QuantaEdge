@@ -1482,7 +1482,7 @@ fun QuantaEdgeApp() {
         }
     }
 
-    fun saveAssessmentAnswer(question: JSONObject, answer: String) {
+    fun saveAssessmentAnswer(question: JSONObject, answer: String, onSaved: () -> Unit = {}) {
         runTask {
             val attemptId = assessmentAttempt.longAny("attempt_id", "attemptId", "id")
             val questionId = question.longAny("attemptQuestionId", "attempt_question_id")
@@ -1492,6 +1492,7 @@ fun QuantaEdgeApp() {
                     offlineAssessmentStore.saveAttempt(assessmentAttempt, copy, "DRAFT")
                 }
                 feedbacks[questionId.toString()] = "उत्तर इस device पर encrypted सुरक्षित है।"
+                onSaved()
                 return@runTask
             }
             ApiClient.putObject(
@@ -1499,6 +1500,7 @@ fun QuantaEdgeApp() {
                 JSONObject().put("answer", answer)
             )
             feedbacks[questionId.toString()] = "उत्तर सर्वर पर सुरक्षित है।"
+            onSaved()
         }
     }
 
@@ -2663,7 +2665,7 @@ fun QuantaEdgeApp() {
                         onIssueCertificate = ::issueCertificateForAttempt,
                         onDownloadCertificate = ::downloadResultCertificate,
                         onAnswerChange = { id, value -> answers[id] = value },
-                        onSave = ::saveAssessmentAnswer,
+                        onSave = { question, answer, afterSaved -> saveAssessmentAnswer(question, answer, afterSaved) },
                         onSubmit = ::submitAssessment,
                         onRefresh = {
                             runTask {
@@ -4021,7 +4023,7 @@ private fun AssessmentAttemptScreen(
     onIssueCertificate: (Long) -> Unit,
     onDownloadCertificate: (Long, String) -> Unit,
     onAnswerChange: (String, String) -> Unit,
-    onSave: (JSONObject, String) -> Unit,
+    onSave: (JSONObject, String, () -> Unit) -> Unit,
     onSubmit: () -> Unit,
     onRefresh: () -> Unit
 ) {
@@ -4165,16 +4167,6 @@ private fun AssessmentAttemptScreen(
                 val answerId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
                 (answers[answerId] ?: item.textAny("answer")).isNotBlank()
             }
-            Row(modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                questions.forEachIndexed { index, item ->
-                    val answerId = item.longAny("attemptQuestionId", "attempt_question_id").toString()
-                    val hasAnswer = (answers[answerId] ?: item.textAny("answer")).isNotBlank()
-                    val label = (if (hasAnswer) "✓ " else "") + (index + 1)
-                    if (index == safeQuestionIndex) Button(onClick = { currentQuestionIndex = index }) { Text(label) }
-                    else OutlinedButton(onClick = { currentQuestionIndex = index }) { Text(label) }
-                }
-            }
             Column(
                 modifier = Modifier.weight(1f).fillMaxWidth().padding(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -4224,7 +4216,8 @@ private fun AssessmentAttemptScreen(
                             }
                             "परिणाम: " + correctness + " • अंक: " + question.textAny("awardedMarks", "maxMarks")
                         } else null,
-                        submitLabel = "उत्तर सहेजें"
+                        submitLabel = "उत्तर सहेजें",
+                        showSubmitButton = false
                     )
                     if (released) {
                         val correctAnswer = question.optJSONObject("correctAnswer")
@@ -4260,43 +4253,52 @@ private fun AssessmentAttemptScreen(
                         }
                     }
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    OutlinedButton(
-                        onClick = {
-                            val question = questions[safeQuestionIndex]
-                            val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
-                            val value = answers[id] ?: question.textAny("answer")
-                            if (inProgress && !deadlineReached && value.isNotBlank() && value != question.textAny("answer")) {
-                                onSave(question, value)
+                val activeQuestion = questions[safeQuestionIndex]
+                val activeAnswerId = activeQuestion.longAny("attemptQuestionId", "attempt_question_id").toString()
+                val activeAnswer = answers[activeAnswerId] ?: activeQuestion.textAny("answer")
+                val answerPresent = activeAnswer.isNotBlank()
+                val canEditAnswer = inProgress && !deadlineReached && !released
+                CompactQuestionActions(
+                    language = language,
+                    showPrevious = safeQuestionIndex > 0,
+                    showPrimary = safeQuestionIndex < questions.lastIndex,
+                    canSave = canEditAnswer && answerPresent && !busy,
+                    canClear = canEditAnswer && answerPresent && !busy,
+                    primaryLabel = if (answerPresent) {
+                        if (language == "hi") "सहेजें और आगे" else "Save & Next"
+                    } else {
+                        if (language == "hi") "अगला" else "Next"
+                    },
+                    primaryEnabled = canEditAnswer && !busy,
+                    onPrevious = {
+                        val previousIndex = safeQuestionIndex - 1
+                        if (canEditAnswer && answerPresent && activeAnswer != activeQuestion.textAny("answer")) {
+                            onSave(activeQuestion, activeAnswer) { currentQuestionIndex = previousIndex }
+                        } else currentQuestionIndex = previousIndex
+                    },
+                    onSave = {
+                        if (canEditAnswer && answerPresent) onSave(activeQuestion, activeAnswer) {}
+                    },
+                    onClear = {
+                        if (canEditAnswer && answerPresent) {
+                            onAnswerChange(activeAnswerId, "")
+                            if (activeQuestion.textAny("answer").isNotBlank()) {
+                                onSave(activeQuestion, "") { activeQuestion.put("answer", "") }
                             }
-                            currentQuestionIndex = (safeQuestionIndex - 1).coerceAtLeast(0)
-                        },
-                        enabled = safeQuestionIndex > 0 && !busy,
-                        modifier = Modifier.weight(1f)
-                    ) { Text(if (language == "hi") "← पिछला" else "← Previous") }
-                    Text(
-                        "${safeQuestionIndex + 1}/${questions.size}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Button(
-                        onClick = {
-                            val question = questions[safeQuestionIndex]
-                            val id = question.longAny("attemptQuestionId", "attempt_question_id").toString()
-                            val value = answers[id] ?: question.textAny("answer")
-                            if (inProgress && !deadlineReached && value.isNotBlank() && value != question.textAny("answer")) {
-                                onSave(question, value)
+                        }
+                    },
+                    onPrimary = {
+                        if (safeQuestionIndex < questions.lastIndex && canEditAnswer) {
+                            if (answerPresent) {
+                                onSave(activeQuestion, activeAnswer) {
+                                    currentQuestionIndex = safeQuestionIndex + 1
+                                }
+                            } else {
+                                currentQuestionIndex = safeQuestionIndex + 1
                             }
-                            currentQuestionIndex = (safeQuestionIndex + 1).coerceAtMost(questions.lastIndex)
-                        },
-                        enabled = safeQuestionIndex < questions.lastIndex && !busy,
-                        modifier = Modifier.weight(1f)
-                    ) { Text(if (language == "hi") "अगला →" else "Next →") }
-                }
+                        }
+                    }
+                )
             }
         }
         if (inProgress) {
