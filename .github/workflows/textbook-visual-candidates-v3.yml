@@ -334,7 +334,7 @@ jobs:
               subprocess.run(["tar", "-C", str(pack_root), "-czf", str(archive), slug], check=True)
               bundle_sha = hashlib.sha256(archive.read_bytes()).hexdigest()
               version_tag = f"candidates-v3-class{selection['class']}-{slug}-run-{run_id}"
-              subprocess.run(["oras", "push", f"{package}:{version_tag}", f"{archive.name}:application/gzip"], cwd=pack_root, check=True)
+              subprocess.run(["oras", "push", "--artifact-type", "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3", f"{package}:{version_tag}", f"{archive.name}:application/gzip"], cwd=pack_root, check=True)
               pack = json.loads((pack_dir / "candidates.v3.json").read_text(encoding="utf-8"))
               summary = pack.get("summary", {})
               bundle_index = {
@@ -352,6 +352,7 @@ jobs:
                   "publication_allowed": False,
                   "review_required": True,
                   "ghcr_package": package,
+                  "artifact_type": "application/vnd.quantaedge.textbook.visual-candidate-bundle.v3",
                   "version_tag": version_tag,
                   "bundle_tar_sha256": bundle_sha,
                   "restore_note": "Authenticate to ghcr.io, pull this exact ORAS artifact version, and verify bundle_tar_sha256 before review. Full crops, source-page previews, contact sheets and original image objects are in the immutable package."
@@ -412,7 +413,7 @@ jobs:
             --package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
             --run-id "$GITHUB_RUN_ID" \
             --model "$VISION_MODEL" \
-            --batch-size 25
+            --batch-size 5
 
       - name: Stop Ollama container
         if: always() && inputs.analysis_mode == 'analyze_all'
