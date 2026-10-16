@@ -64,7 +64,8 @@ concurrency:
   group: quantaedge-textbook-cache-final
   # Never interrupt a writer or its recovery/export steps mid-run; the next publisher
   # resumes from the last atomically pushed class-image index.
-  cancel-in-progress: false
+  # A targeted main push must replace stale publishers; manual full-catalog dispatches do not cancel each other.
+  cancel-in-progress: ${{ github.event_name == 'push' }}
 
 jobs:
   cache-textbooks:
