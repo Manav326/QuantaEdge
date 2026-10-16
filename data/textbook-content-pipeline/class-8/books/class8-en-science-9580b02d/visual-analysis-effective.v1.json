@@ -1,0 +1,1303 @@
+{
+  "schema_version": "quantaedge.visual-analysis-effective.v1",
+  "source_book_id": "ncert-c8-english-hecu1",
+  "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+  "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
+  "raw_analysis_sha256": "4113f6f4ad39b700eeb84526765704caa03bf3cb439888627b3a9528b9ecd80f",
+  "model": "qwen2.5vl:3b",
+  "prompt_version": "visual-analysis-prompt-v2",
+  "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
+  "corrections_applied_count": 0,
+  "results": [
+    {
+      "asset_id": "e55ae9e2b1877e999bc9a875",
+      "asset_sha256": "78e9ec2ce66237e7a28616dda4c3a8076805a5fb301846a1031d986e4df395c2",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/78e9ec2ce66237e7a28616dda4c3a8076805a5fb301846a1031d986e4df395c2.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0877' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook.",
+        "limitations": [
+          "The QR code may not directly relate to the content of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:33:37Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0877' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0877"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook.",
+        "limitations": [
+          "The QR code may not directly relate to the content of the textbook."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "b5f8a1ccb19f9b82e9529733",
+      "asset_sha256": "bafede34b617687104090bdf68fec922f37293730e9de652e86fb27be56222de",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/bafede34b617687104090bdf68fec922f37293730e9de652e86fb27be56222de.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A group of children and an adult are conducting a science experiment outdoors in a lush green field with animals and trees in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science experiment",
+          "outdoor learning",
+          "environmental study",
+          "animal observation",
+          "plant study"
+        ],
+        "context_relation": "The image depicts a science lesson or activity being conducted in a natural setting, likely as part of a science curriculum for grade 8.",
+        "limitations": [
+          "The image does not provide specific details about the experiment being conducted.",
+          "The text 'Curiosity' and 'Textbook of Science for Grade 8' are present but do not contribute to the visual content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:37:07Z",
+      "effective_analysis": {
+        "visual_summary": "A group of children and an adult are conducting a science experiment outdoors in a lush green field with animals and trees in the background.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "science experiment",
+          "outdoor learning",
+          "environmental study",
+          "animal observation",
+          "plant study"
+        ],
+        "context_relation": "The image depicts a science lesson or activity being conducted in a natural setting, likely as part of a science curriculum for grade 8.",
+        "limitations": [
+          "The image does not provide specific details about the experiment being conducted.",
+          "The text 'Curiosity' and 'Textbook of Science for Grade 8' are present but do not contribute to the visual content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6fd6770a4400457303bd35e6",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "996b3820df833b77e70d4317",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 1,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "timed out",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "129b0b8538cf05fd64dc0353",
+      "asset_sha256": "1b8c32e790a49e651468d3acfb59f49f52b62dbf6b83af7061924d80a063f1db",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 1,
+      "asset_path": "page-0001.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The cover of a science textbook for Grade 8, featuring a cartoon illustration of children conducting experiments in a natural setting.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Curiosity",
+          "Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Science",
+          "Grade 8",
+          "Children conducting experiments",
+          "Natural setting"
+        ],
+        "context_relation": "The cover of the textbook",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:50:16Z",
+      "effective_analysis": {
+        "visual_summary": "The cover of a science textbook for Grade 8, featuring a cartoon illustration of children conducting experiments in a natural setting.",
+        "visual_type": "illustration",
+        "visible_text": [
+          "Curiosity",
+          "Textbook of Science for Grade 8",
+          "Reprint 2026-27"
+        ],
+        "concepts": [
+          "Science",
+          "Grade 8",
+          "Children conducting experiments",
+          "Natural setting"
+        ],
+        "context_relation": "The cover of the textbook",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae9f75eed39fc864cfc39d4c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:50:26Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No visible content to analyze.",
+        "limitations": [
+          "No visible content to analyze."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "471113272e25489f4f1bbb74",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 2,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:50:35Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4f3610a77df0fdd36813e502",
+      "asset_sha256": "25cd3a460b1312d14909f6d93c2465113277674e95ada0e6695a7cb69cf705be",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 2,
+      "asset_path": "page-0002.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Page from a textbook with publication details and rights information.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "0877 – Curiosity",
+          "Textbook of Science for Grade 8",
+          "ISBN 978-93-5729-772-1",
+          "First Edition",
+          "June 2025 Ashadha 1947",
+          "Reprinted",
+          "January 2026 Magha 1947",
+          "PD 730T SM",
+          "© National Council of Educational Research and Training, 2025",
+          "OFFICES OF THE PUBLICATION DIVISION, NCERT",
+          "NCERT Campus",
+          "Sri Aurobindo Marg",
+          "New Delhi 110 016",
+          "108, 100 Feet Road",
+          "Hodskaree Halli Extension",
+          "Banashankari III Stage",
+          "Bengaluru 560 085",
+          "Navjivan Trust Building",
+          "P.O.Navjivan",
+          "Ahmedabad 380 014",
+          "CWC Campus",
+          "Opp. Dhankal Bus Stop",
+          "Panihat",
+          "Kolkata 700 114",
+          "CWC Complex",
+          "Maligaon",
+          "Guwahati 781 021",
+          "Phone : 011-26562708",
+          "Phone : 080-26725740",
+          "Phone : 079-27541446"
+        ],
+        "concepts": [
+          "NCERT",
+          "Textbook",
+          "Science",
+          "Grade 8",
+          "Rights Reserved",
+          "Publication Details",
+          "Offices of the Publication Division",
+          "Head, Publication Division",
+          "Chief Editor",
+          "Chief Business Manager",
+          "Chief Production Officer",
+          "Editor",
+          "Assistant Production Officer",
+          "Cover, Layout, and Illustrations",
+          "NCERT watermark",
+          "Printed on 80 GSM paper",
+          "Published by the Secretary, National Council of Educational Research and Training",
+          "Printed at Laxmi Offset Printers"
+        ],
+        "context_relation": "The page contains detailed information about a textbook, including its publication details, rights information, and the publication team.",
+        "limitations": [
+          "No specific limitations are mentioned in the visible text.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:54:26Z",
+      "effective_analysis": {
+        "visual_summary": "Page from a textbook with publication details and rights information.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "0877 – Curiosity",
+          "Textbook of Science for Grade 8",
+          "ISBN 978-93-5729-772-1",
+          "First Edition",
+          "June 2025 Ashadha 1947",
+          "Reprinted",
+          "January 2026 Magha 1947",
+          "PD 730T SM",
+          "© National Council of Educational Research and Training, 2025",
+          "OFFICES OF THE PUBLICATION DIVISION, NCERT",
+          "NCERT Campus",
+          "Sri Aurobindo Marg",
+          "New Delhi 110 016",
+          "108, 100 Feet Road",
+          "Hodskaree Halli Extension",
+          "Banashankari III Stage",
+          "Bengaluru 560 085",
+          "Navjivan Trust Building",
+          "P.O.Navjivan",
+          "Ahmedabad 380 014",
+          "CWC Campus",
+          "Opp. Dhankal Bus Stop",
+          "Panihat",
+          "Kolkata 700 114",
+          "CWC Complex",
+          "Maligaon",
+          "Guwahati 781 021",
+          "Phone : 011-26562708",
+          "Phone : 080-26725740",
+          "Phone : 079-27541446"
+        ],
+        "concepts": [
+          "NCERT",
+          "Textbook",
+          "Science",
+          "Grade 8",
+          "Rights Reserved",
+          "Publication Details",
+          "Offices of the Publication Division",
+          "Head, Publication Division",
+          "Chief Editor",
+          "Chief Business Manager",
+          "Chief Production Officer",
+          "Editor",
+          "Assistant Production Officer",
+          "Cover, Layout, and Illustrations",
+          "NCERT watermark",
+          "Printed on 80 GSM paper",
+          "Published by the Secretary, National Council of Educational Research and Training",
+          "Printed at Laxmi Offset Printers"
+        ],
+        "context_relation": "The page contains detailed information about a textbook, including its publication details, rights information, and the publication team.",
+        "limitations": [
+          "No specific limitations are mentioned in the visible text.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d0aa90e7f8b10b4444cff7ee",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its vision for education in India.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:54:45Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its vision for education in India.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9aa57e3c567670eda61b31bd",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 3,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its goals for education in India.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:55:00Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "Foreword of a textbook discussing the National Education Policy (NEP) 2020 and its goals for education in India.",
+        "limitations": [
+          "No visible text or images on the page.",
+          "No specific content or information provided in the image."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ddb513b8545f5507c015f4d6",
+      "asset_sha256": "ea7b3f48ed43efe3620a715df763e1225c00e31907ca1854e5932543038ad0ab",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 3,
+      "asset_path": "page-0003.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Foreword section of a textbook discussing the National Education Policy (NEP) 2020 and its curriculum framework.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Foreword",
+          "The National Education Policy (NEP) 2020 envisages a system of\neducation in the country that is rooted in an Indian ethos and\nits civilisational accomplishments in all fields of knowledge and\nhuman endeavour. At the same time, it aims to prepare students to\nengage constructively with the opportuniti",
+          "The NCF-SE 2023, at the Middle Stage, aims to equip students\nwith the skills that are needed to grow, as they advance in their\nlives. It strives to enhance their analytical, descriptive, and\nnarrative capabilities, and to prepare them for the challenges and\nopportunities that await them. A diverse c",
+          "Such a transformative learning culture requires certain essential\nconditions. One of them is to have appropriate textbooks in different\ncurricular areas, as these textbooks are intended to play a central role\nin mediating between content and pedagogy—a role that helps strike\na judicious balance betw",
+          "The National Council of Educational Research and Training, on\nits part, is committed to providing students with such high-quality\ntextbooks. Various Curricular Area Groups, which have been\nconstituted for this purpose, comprising notable subject-experts,\npedagogues, and practising teachers as their "
+        ],
+        "concepts": [
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "pañchakośhas",
+          "Foundational and Preparatory Stages",
+          "Middle Stage",
+          "Preparatory and Secondary Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Direct instruction",
+          "Exploration and inquiry",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "High-quality textbooks",
+          "Curricular Area Groups",
+          "Subject-experts",
+          "Pedagogues",
+          "Practising teachers"
+        ],
+        "context_relation": "The foreword discusses the NEP 2020, its curriculum framework, and the development of textbooks that align with these goals.",
+        "limitations": [
+          "The foreword does not provide specific details about the textbook's content or structure.",
+          "The foreword does not include any visual elements or graphics."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:58:58Z",
+      "effective_analysis": {
+        "visual_summary": "Foreword section of a textbook discussing the National Education Policy (NEP) 2020 and its curriculum framework.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Foreword",
+          "The National Education Policy (NEP) 2020 envisages a system of\neducation in the country that is rooted in an Indian ethos and\nits civilisational accomplishments in all fields of knowledge and\nhuman endeavour. At the same time, it aims to prepare students to\nengage constructively with the opportuniti",
+          "The NCF-SE 2023, at the Middle Stage, aims to equip students\nwith the skills that are needed to grow, as they advance in their\nlives. It strives to enhance their analytical, descriptive, and\nnarrative capabilities, and to prepare them for the challenges and\nopportunities that await them. A diverse c",
+          "Such a transformative learning culture requires certain essential\nconditions. One of them is to have appropriate textbooks in different\ncurricular areas, as these textbooks are intended to play a central role\nin mediating between content and pedagogy—a role that helps strike\na judicious balance betw",
+          "The National Council of Educational Research and Training, on\nits part, is committed to providing students with such high-quality\ntextbooks. Various Curricular Area Groups, which have been\nconstituted for this purpose, comprising notable subject-experts,\npedagogues, and practising teachers as their "
+        ],
+        "concepts": [
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "pañchakośhas",
+          "Foundational and Preparatory Stages",
+          "Middle Stage",
+          "Preparatory and Secondary Stages",
+          "Analytical, descriptive, and narrative capabilities",
+          "Transformative learning culture",
+          "Appropriate textbooks",
+          "Curricular areas",
+          "Direct instruction",
+          "Exploration and inquiry",
+          "Classroom arrangement",
+          "Teacher preparation",
+          "Conceptual connections",
+          "High-quality textbooks",
+          "Curricular Area Groups",
+          "Subject-experts",
+          "Pedagogues",
+          "Practising teachers"
+        ],
+        "context_relation": "The foreword discusses the NEP 2020, its curriculum framework, and the development of textbooks that align with these goals.",
+        "limitations": [
+          "The foreword does not provide specific details about the textbook's content or structure.",
+          "The foreword does not include any visual elements or graphics."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "758345af6dc5da782fccebec",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:59:11Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "uncertain",
+        "limitations": [
+          "unclear if the page is a full page or a cropped figure",
+          "no visible text or images to analyze"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "dee677a43bc8cccd9824bb89",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 4,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T13:59:21Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e9b08c9cec818875a26aaf1a",
+      "asset_sha256": "bd546ae66a143e6eef546409183d7b2e60edae27bc6c79cf92671e5d01820551",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 4,
+      "asset_path": "page-0004.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "and understand scientific concepts through real-world contexts.",
+          "Integrating physics, chemistry, biology, and earth science, the",
+          "textbook also highlights environmental awareness, ethical values,",
+          "and insights from India’s rich tradition of knowledge. Featuring",
+          "numerous hands-on activities and relatable examples, the book",
+          "aims to simplify complex topics and foster deeper understanding.",
+          "Collaborative learning is encouraged through group work and peer",
+          "discussions, helping learners develop creativity, logical thinking,",
+          "and decision-making skills. Rather than simply reading about",
+          "science, students are guided to explore, question, and experience it",
+          "actively—making the learning process both enjoyable and impactful.",
+          "However, in addition to this textbook, students at this stage should",
+          "also be encouraged to explore various other learning resources.",
+          "School libraries play a crucial role in making such resources available.",
+          "Besides, the role of parents and teachers will also be invaluable in",
+          "guiding and encouraging students to do so.",
+          "With this, I express my gratitude to all those who have been",
+          "involved in the development of this textbook, and hope that it will",
+          "meet the expectations of all stakeholders. At the same time, I also invite",
+          "suggestions and feedback from all its users for further improvement",
+          "in the coming years.",
+          "Dinesh Prasad Saklani",
+          "Director",
+          "National Council of Educational",
+          "Research and Training",
+          "New Delhi",
+          "June 2025"
+        ],
+        "concepts": [
+          "real-world contexts",
+          "hands-on activities",
+          "collaborative learning",
+          "creativity",
+          "logical thinking",
+          "decision-making skills",
+          "school libraries",
+          "parents and teachers",
+          "suggestions and feedback"
+        ],
+        "context_relation": "The page discusses the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "limitations": [
+          "The page does not provide specific details about the textbook or its content.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:02:41Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "and understand scientific concepts through real-world contexts.",
+          "Integrating physics, chemistry, biology, and earth science, the",
+          "textbook also highlights environmental awareness, ethical values,",
+          "and insights from India’s rich tradition of knowledge. Featuring",
+          "numerous hands-on activities and relatable examples, the book",
+          "aims to simplify complex topics and foster deeper understanding.",
+          "Collaborative learning is encouraged through group work and peer",
+          "discussions, helping learners develop creativity, logical thinking,",
+          "and decision-making skills. Rather than simply reading about",
+          "science, students are guided to explore, question, and experience it",
+          "actively—making the learning process both enjoyable and impactful.",
+          "However, in addition to this textbook, students at this stage should",
+          "also be encouraged to explore various other learning resources.",
+          "School libraries play a crucial role in making such resources available.",
+          "Besides, the role of parents and teachers will also be invaluable in",
+          "guiding and encouraging students to do so.",
+          "With this, I express my gratitude to all those who have been",
+          "involved in the development of this textbook, and hope that it will",
+          "meet the expectations of all stakeholders. At the same time, I also invite",
+          "suggestions and feedback from all its users for further improvement",
+          "in the coming years.",
+          "Dinesh Prasad Saklani",
+          "Director",
+          "National Council of Educational",
+          "Research and Training",
+          "New Delhi",
+          "June 2025"
+        ],
+        "concepts": [
+          "real-world contexts",
+          "hands-on activities",
+          "collaborative learning",
+          "creativity",
+          "logical thinking",
+          "decision-making skills",
+          "school libraries",
+          "parents and teachers",
+          "suggestions and feedback"
+        ],
+        "context_relation": "The page discusses the integration of real-world contexts, hands-on activities, and collaborative learning in science education.",
+        "limitations": [
+          "The page does not provide specific details about the textbook or its content.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e5224e5068361eeca13f4472",
+      "asset_sha256": "6ac0c3d0cf47792bf332f85a63d674f84bf85867a04a5a267ecef7ef7d944f93",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/6ac0c3d0cf47792bf332f85a63d674f84bf85867a04a5a267ecef7ef7d944f93.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and a pencil, with a determined expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the character's actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:03:49Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and a pencil, with a determined expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the character's actions."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d8531cf6217a6afdc3801b09",
+      "asset_sha256": "2900db2b5da7897a8e5e3f6b74f6d9687e08426cb5a6c00fddb77107f13425d3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/2900db2b5da7897a8e5e3f6b74f6d9687e08426cb5a6c00fddb77107f13425d3.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy holding a smartphone and a pen, possibly engaged in an activity.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:04:54Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy holding a smartphone and a pen, possibly engaged in an activity.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "21a37850b299d6f36c468c7b",
+      "asset_sha256": "e3ce24440bceb42889963c0de7cce373ff65b054d962780f9c102a3cbfaffa40",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/e3ce24440bceb42889963c0de7cce373ff65b054d962780f9c102a3cbfaffa40.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and a pen, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:06:00Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and a pen, smiling.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the educational content of the textbook.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a12de38ebf492401fe02869c",
+      "asset_sha256": "8e1b1616d882e5f04f569ad74e19c3f45d4e07cc444c2920a587a37908e85bbc",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/8e1b1616d882e5f04f569ad74e19c3f45d4e07cc444c2920a587a37908e85bbc.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist with a white lab coat and a blue shirt, gesturing with his hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "education",
+          "curiosity",
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023"
+        ],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the curriculum framework."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:07:16Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist with a white lab coat and a blue shirt, gesturing with his hands.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "education",
+          "curiosity",
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023"
+        ],
+        "context_relation": "The image is related to the educational content of the Grade 8 science textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the curriculum framework."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1bee5e0d260a9ed7e6b3ca9a",
+      "asset_sha256": "f8b438f240cd21b29a1d52714b5616d98784c01a2cf2442ca2dc286fcb991e30",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/f8b438f240cd21b29a1d52714b5616d98784c01a2cf2442ca2dc286fcb991e30.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a female scientist wearing a lab coat and a blue sari, holding a clipboard and gesturing with her right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "research",
+          "education",
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023"
+        ],
+        "context_relation": "The image represents a character from the 'Curiosity' series, which is part of the science curriculum for Grade 8.",
+        "limitations": [
+          "The image does not provide specific details about the character's actions or the context of the scene."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:08:33Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a female scientist wearing a lab coat and a blue sari, holding a clipboard and gesturing with her right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "research",
+          "education",
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023"
+        ],
+        "context_relation": "The image represents a character from the 'Curiosity' series, which is part of the science curriculum for Grade 8.",
+        "limitations": [
+          "The image does not provide specific details about the character's actions or the context of the scene."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e08b15a474f8e644f272241c",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:08:47Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page with no visible content.",
+        "limitations": [
+          "The page is a blank page with no visible content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "79ea5e0572e2fbbd321e39cf",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:09:00Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a blank page with no visible content.",
+        "limitations": [
+          "The image is a blank page with no visible content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9c07b85e8698783a7b8f3525",
+      "asset_sha256": "5f6a1159d7d54646a185415a85e6c715bd1be2f752f1a61b6f500ecd13e5f272",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 5,
+      "asset_path": "page-0005.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Introduction to a science textbook for Grade 8.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "About this Book",
+          "After exploring the Curiosity, Grade 7 textbook, we hope you discovered new ideas and found yourself wondering even more about the world around you! Our journey of exploration continues in Curiosity for Grade 8, where you will learn to ask deeper questions, design investigations, and think like real",
+          "The Grade 8 textbook of science has been developed in alignment with the National Education Policy (NEP) 2020 and the National Curriculum Framework for School Education (NCF-SE) 2023. It is expected that all competencies outlined for the final year of Middle Stage (Grade 8) are achieved. This textbo",
+          "The textbook integrates topics from biology, chemistry, physics, and earth science. It also incorporates essential themes, such as environmental care, value education, inclusivity, health, hygiene, and India's traditional knowledge systems. The goal is to help you learn through real experiences rath",
+          "Curiosity, the textbook of science for Grade 8, contains 13 chapters. Each chapter includes engaging activities, thought-provoking questions, and clear illustrations to support your learning. The first chapter is titled Exploring the Investigative World of Science. It gives you a quick look at the v",
+          "Each chapter begins with a picture linked to the chapter that is designed to spark curiosity, capture your attention, and connect prior knowledge to new concepts. There are a few Probe and ponder questions. These are critical thinking questions that are not for evaluation and do not always have simp"
+        ],
+        "concepts": [
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "Grade 8",
+          "Science",
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Earth Science",
+          "Environmental Care",
+          "Value Education",
+          "Inclusivity",
+          "Health",
+          "Hygiene",
+          "India's Traditional Knowledge Systems",
+          "Curiosity",
+          "Investigative World of Science",
+          "Engaging Activities",
+          "Thought-Provoking Questions",
+          "Clear Illustrations",
+          "Real Experiences"
+        ],
+        "context_relation": "Introduction to a science textbook for Grade 8",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook.",
+          "The image does not show the actual textbook or its contents.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:12:54Z",
+      "effective_analysis": {
+        "visual_summary": "Introduction to a science textbook for Grade 8.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "About this Book",
+          "After exploring the Curiosity, Grade 7 textbook, we hope you discovered new ideas and found yourself wondering even more about the world around you! Our journey of exploration continues in Curiosity for Grade 8, where you will learn to ask deeper questions, design investigations, and think like real",
+          "The Grade 8 textbook of science has been developed in alignment with the National Education Policy (NEP) 2020 and the National Curriculum Framework for School Education (NCF-SE) 2023. It is expected that all competencies outlined for the final year of Middle Stage (Grade 8) are achieved. This textbo",
+          "The textbook integrates topics from biology, chemistry, physics, and earth science. It also incorporates essential themes, such as environmental care, value education, inclusivity, health, hygiene, and India's traditional knowledge systems. The goal is to help you learn through real experiences rath",
+          "Curiosity, the textbook of science for Grade 8, contains 13 chapters. Each chapter includes engaging activities, thought-provoking questions, and clear illustrations to support your learning. The first chapter is titled Exploring the Investigative World of Science. It gives you a quick look at the v",
+          "Each chapter begins with a picture linked to the chapter that is designed to spark curiosity, capture your attention, and connect prior knowledge to new concepts. There are a few Probe and ponder questions. These are critical thinking questions that are not for evaluation and do not always have simp"
+        ],
+        "concepts": [
+          "National Education Policy (NEP) 2020",
+          "National Curriculum Framework for School Education (NCF-SE) 2023",
+          "Grade 8",
+          "Science",
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Earth Science",
+          "Environmental Care",
+          "Value Education",
+          "Inclusivity",
+          "Health",
+          "Hygiene",
+          "India's Traditional Knowledge Systems",
+          "Curiosity",
+          "Investigative World of Science",
+          "Engaging Activities",
+          "Thought-Provoking Questions",
+          "Clear Illustrations",
+          "Real Experiences"
+        ],
+        "context_relation": "Introduction to a science textbook for Grade 8",
+        "limitations": [
+          "The image does not provide specific details about the content or structure of the textbook.",
+          "The image does not show the actual textbook or its contents.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "694ed3c3dfe778c00e40e5c7",
+      "asset_sha256": "5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two cartoon scientists giving a thumbs up.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "thumbs up"
+        ],
+        "concepts": [
+          "scientists",
+          "gloves",
+          "goggles",
+          "thumbs up"
+        ],
+        "context_relation": "The image represents a scientific theme, possibly related to a chapter on critical thinking or curiosity in a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or chapter it is related to."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:14:04Z",
+      "effective_analysis": {
+        "visual_summary": "Two cartoon scientists giving a thumbs up.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "thumbs up"
+        ],
+        "concepts": [
+          "scientists",
+          "gloves",
+          "goggles",
+          "thumbs up"
+        ],
+        "context_relation": "The image represents a scientific theme, possibly related to a chapter on critical thinking or curiosity in a textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or chapter it is related to."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "92645a50ae9746ffd54367d9",
+      "asset_sha256": "5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/5cb8be5bfcc4d256b56d873f2d49a34c6748907ded30c69aad56ec8089ba3543.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Two cartoon scientists giving a thumbs up.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "two cartoon scientists giving a thumbs up."
+        ],
+        "concepts": [
+          "scientists",
+          "thumbs up"
+        ],
+        "context_relation": "The image represents a visual representation of scientists giving a thumbs up, which is a common gesture of approval or agreement.",
+        "limitations": [
+          "The image does not provide specific details about the scientists or their actions."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:14:13Z",
+      "effective_analysis": {
+        "visual_summary": "Two cartoon scientists giving a thumbs up.",
+        "visual_type": "cartoon",
+        "visible_text": [
+          "two cartoon scientists giving a thumbs up."
+        ],
+        "concepts": [
+          "scientists",
+          "thumbs up"
+        ],
+        "context_relation": "The image represents a visual representation of scientists giving a thumbs up, which is a common gesture of approval or agreement.",
+        "limitations": [
+          "The image does not provide specific details about the scientists or their actions."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "44eece26b8a0cb3f6b143941",
+      "asset_sha256": "1102f6613c2ca2e59d8f453e9a6f9b4a707cd426960d256861ea6645109f86eb",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/1102f6613c2ca2e59d8f453e9a6f9b4a707cd426960d256861ea6645109f86eb.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character with a blue top and a braid, pointing upwards with one finger.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the educational content editor's role."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:15:25Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character with a blue top and a braid, pointing upwards with one finger.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is not directly related to the text provided.",
+        "limitations": [
+          "The image does not provide any specific information about the text or the educational content editor's role."
+        ]
+      },
+      "correction_status": "NONE"
+    }
+  ],
+  "human_review_required": true,
+  "publication_allowed": false
+}

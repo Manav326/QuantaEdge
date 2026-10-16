@@ -1,0 +1,28 @@
+{
+  "schema_version": "quantaedge.textbook-content-pipeline-index.v1",
+  "architecture_version": "8-layer-resumable-v1",
+  "class": 8,
+  "book_slug": "class8-en-science-9580b02d",
+  "source_book_id": "ncert-c8-english-hecu1",
+  "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+  "layers": {
+    "1": "COMPLETE",
+    "2": "COMPLETE",
+    "3": "COMPLETE",
+    "4": "RUNNING",
+    "5": "RUNNING",
+    "6": "NOT_STARTED",
+    "7": "NOT_STARTED",
+    "8": "NOT_STARTED"
+  },
+  "inventory_bundle": {
+    "package": "ghcr.io/manav326/quantaedge-textbook-visuals",
+    "tag": "inventory-layer1-class8-class8-en-science-9580b02d-sha5b5034ac1448-run-38904509019",
+    "tar_sha256": "d0d603f336e20fdda2c129146d855c9cc10eef672010a718a67a455a65678d1e"
+  },
+  "analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
+  "effective_analysis_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-effective.v1.json",
+  "coverage_ledger_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/coverage-ledger.v1.json",
+  "publication_allowed": false,
+  "human_review_required": true
+}
