@@ -47,9 +47,9 @@ for (const [type, contractId] of Object.entries(questionContracts)) {
   assert.ok(source.webContract.includes("'" + type + "'"), 'Web contract missing question type: ' + type);
   assert.ok(source.webContract.includes(type + ": '" + contractId + "'"), 'Web contract ID mismatch for ' + type);
   assert.ok(source.adminContract.includes(type + ": '" + contractId + "'"), 'Admin contract ID mismatch for ' + type);
-  assert.ok(new RegExp("question\\\\.type\\\\s*===\\\\s*['\\\"]" + type + "['\\\"]").test(source.webQuestions),
+  assert.ok(new RegExp("question\\.type\\s*===\\s*['\"]" + type + "['\"]").test(source.webQuestions),
     'Web renderer missing dispatcher for ' + type);
-  assert.ok(new RegExp("question\\\\.type\\\\s*===\\\\s*['\\\"]" + type + "['\\\"]").test(source.adminQuestions),
+  assert.ok(new RegExp("question\\.type\\s*===\\s*['\"]" + type + "['\"]").test(source.adminQuestions),
     'Admin renderer missing dispatcher for ' + type);
   assert.ok(source.androidRenderer.includes('"' + type + '"'), 'Android renderer missing type branch: ' + type);
 }
