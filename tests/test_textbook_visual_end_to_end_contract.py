@@ -50,6 +50,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
             original = pack_by_id[candidate_id]
             with self.subTest(candidate=candidate_id):
                 self.assertEqual(original["candidate_kind"], item["candidate_kind"])
+                self.assertEqual(self.pack["source"]["book_id"], item["source_book_id"])
                 self.assertEqual(original["source_pdf_sha256"], item["source_pdf_sha256"])
                 self.assertEqual(original["source_pdf_page_number"], item["source_pdf_page_number"])
                 self.assertEqual(original["source_asset_sha256"], item["source_asset_sha256"])
@@ -99,6 +100,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
                 for candidate_id, item in catalog_items.items():
                     original = source_items[candidate_id]
                     with self.subTest(book_slug=slug, candidate=candidate_id):
+                        self.assertEqual(source["book_id"], item["source_book_id"])
                         self.assertEqual(source["pdf_sha256"], item["source_pdf_sha256"])
                         self.assertEqual(original["source_asset_sha256"], item["source_asset_sha256"])
                         self.assertIs(item["publication_allowed"], False)

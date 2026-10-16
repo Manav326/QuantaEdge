@@ -50,6 +50,9 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
     source = pack.get("source")
     if not isinstance(source, dict) or not SHA_RE.fullmatch(str(source.get("pdf_sha256", "")).lower()):
         raise ValueError("Candidate pack must contain a source PDF SHA-256.")
+    source_book_id = str(source.get("book_id") or "").strip()
+    if not source_book_id:
+        raise ValueError("Candidate pack must contain a source book ID.")
     chapter_map = None
     if chapter_map_path is not None:
         chapter_map = json.loads(chapter_map_path.read_text(encoding="utf-8"))
@@ -76,8 +79,12 @@ def build_catalog(pack_path: Path, pack_root: Path, repo_root: Path, book_slug: 
         candidate_id = str(row.get("candidate_id", ""))
         if not re.fullmatch(r"[a-z0-9-]{5,120}", candidate_id):
             raise ValueError(f"Invalid candidate id: {candidate_id!r}")
+        if str(row.get("source_book_id") or "").strip() != source_book_id:
+            raise ValueError(f"Source book ID mismatch for {candidate_id}.")
         if row.get("source_pdf_sha256") != source["pdf_sha256"]:
             raise ValueError(f"Source PDF hash mismatch for {candidate_id}.")
+        if not SHA_RE.fullmatch(str(row.get("source_asset_sha256") or "").lower()):
+            raise ValueError(f"Invalid source asset SHA-256 for {candidate_id}.")
         page = row.get("source_pdf_page_number")
         if not isinstance(page, int) or isinstance(page, bool) or page < 1 or page > int(source.get("page_count", 2000)):
             raise ValueError(f"Invalid source page for {candidate_id}.")

@@ -77,6 +77,20 @@ class BuildVisualLessonAttachmentManifestTests(unittest.TestCase):
         self.assertEqual("TOC_DERIVED_NEEDS_HUMAN_REVIEW", row["chapter_map_review_status"])
         self.assertFalse(row["publication_allowed"])
 
+    def test_rejects_candidate_source_book_id_mismatch(self):
+        value = json.loads(self.pack_path.read_text(encoding="utf-8"))
+        value["candidates"][0]["source_book_id"] = "ncert-c6-hindi-fecu1"
+        self.pack_path.write_text(json.dumps(value), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Source book ID mismatch"):
+            build_catalog(self.pack_path, self.pack_root, self.repo, "class6-curiosity-en")
+
+    def test_rejects_invalid_source_asset_hash(self):
+        value = json.loads(self.pack_path.read_text(encoding="utf-8"))
+        value["candidates"][0]["source_asset_sha256"] = ""
+        self.pack_path.write_text(json.dumps(value), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Invalid source asset SHA-256"):
+            build_catalog(self.pack_path, self.pack_root, self.repo, "class6-curiosity-en")
+
     def test_rejects_source_hash_mismatch(self):
         value = json.loads(self.pack_path.read_text(encoding="utf-8"))
         value["candidates"][0]["source_pdf_sha256"] = "c" * 64
