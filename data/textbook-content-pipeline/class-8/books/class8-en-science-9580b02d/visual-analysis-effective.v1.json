@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c8-english-hecu1",
   "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
   "raw_analysis_path": "data/textbook-visuals/class8-en-science-9580b02d/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "4113f6f4ad39b700eeb84526765704caa03bf3cb439888627b3a9528b9ecd80f",
+  "raw_analysis_sha256": "6542f334cead77efa4c53b37e42cca9e88e01fe86e98cd3831a6d9a343a338b3",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-8/books/class8-en-science-9580b02d/visual-analysis-corrections.v1.json",
@@ -1293,6 +1293,1086 @@
         "context_relation": "The image is not directly related to the text provided.",
         "limitations": [
           "The image does not provide any specific information about the text or the educational content editor's role."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "871aa922af40a61cd22d1fd8",
+      "asset_sha256": "150d90ea435445e3ccb850848abba6b062cd9e3fdad29b0a42f83d9653ee21d7",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/150d90ea435445e3ccb850848abba6b062cd9e3fdad29b0a42f83d9653ee21d7.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is holding a phone to his ear and pointing upwards with his right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer the context or relation to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:16:46Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is holding a phone to his ear and pointing upwards with his right hand.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or relation to the text.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer the context or relation to the text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "7873e0bd5e8a9af924d64855",
+      "asset_sha256": "c0bfa4d3401ccc2febb0ea45e45f369399278a2f597e084b48037f6d5a1eec3b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c0bfa4d3401ccc2febb0ea45e45f369399278a2f597e084b48037f6d5a1eec3b.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a book and a pencil, with a cheerful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to educational content, specifically a textbook page about open-ended questions.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the questions being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:17:58Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a book and a pencil, with a cheerful expression.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to educational content, specifically a textbook page about open-ended questions.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the questions being discussed."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "9f0239c3eaff6e2ffc62b6e0",
+      "asset_sha256": "2fab82d277e72841ef8eaf165be9a4ba365b0dc52a2524408ff3eb6430f6ed24",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/2fab82d277e72841ef8eaf165be9a4ba365b0dc52a2524408ff3eb6430f6ed24.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a boy holding a pen and a notebook.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to educational content, possibly a textbook or a learning resource.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:19:05Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a boy holding a pen and a notebook.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to educational content, possibly a textbook or a learning resource.",
+        "limitations": [
+          "The image does not provide specific details about the educational content it represents."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6113f36ac2eacdb71723820e",
+      "asset_sha256": "12e42805247f349ef5e78ce53e027bb77c3b03cfc66cf8d4ebf9a8ebec013f26",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/12e42805247f349ef5e78ce53e027bb77c3b03cfc66cf8d4ebf9a8ebec013f26.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to educational content, possibly a teaching scenario or a student's study session.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:20:10Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a notebook and pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to educational content, possibly a teaching scenario or a student's study session.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "318790f37c2fc0a1050629fe",
+      "asset_sha256": "e0cfe73eefb91143643de85b53e5bf6435306808d72eb24bad47177ceefa1d3c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/e0cfe73eefb91143643de85b53e5bf6435306808d72eb24bad47177ceefa1d3c.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is climbing a staircase, appearing to be in a hurry or stressed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:21:20Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is climbing a staircase, appearing to be in a hurry or stressed.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ef3d6e66afb97ca12735de4e",
+      "asset_sha256": "01abca31df965bc57122f6f5d7b6af230eda16c86979b477da3d0e13e80e1eb3",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/01abca31df965bc57122f6f5d7b6af230eda16c86979b477da3d0e13e80e1eb3.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is climbing stairs, pointing towards the top.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:22:29Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is climbing stairs, pointing towards the top.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide a direct relation to the text.",
+        "limitations": [
+          "The image does not contain any text or labels that can be used to infer a specific context or question related to the text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "cdc2d1275a5bdc3cf7fb305f",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:22:39Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "957790b1c0946a355e8e1ae0",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:22:49Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2b71f040b18c02e306e02930",
+      "asset_sha256": "e8fbcc2e3740a10eb93aae2a7cb2846d41998124e60b373dcb3a85844c542ab4",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 6,
+      "asset_path": "page-0006.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
+          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
+          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
+          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+        ],
+        "concepts": [
+          "open-ended questions",
+          "critical thinking",
+          "curiosity",
+          "teamwork",
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "limitations": [
+          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:26:12Z",
+      "effective_analysis": {
+        "visual_summary": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "visual_type": "uncertain",
+        "visible_text": [
+          "questions are open-ended and thought-provoking because they do not just ask for a fact or a quick answer. Instead, they ask why or how, encouraging you to think critically and stay curious. You may not always be able to find the answers to these questions even after going through the chapter, but do",
+          "The activities in the book are designed to reflect how science works, offering both hands-on and minds-on experiences. These activities promote teamwork and are inclusive in nature, ensuring participation from all students. Teachers are expected to pay extra attention while supporting children with ",
+          "In some activities Safety first, has been given to keep students safe, especially when using hot, sharp, or breakable materials. These precautions help prevent accidents and make sure everyone can enjoy the activity while learning safely.",
+          "To sustain the students' interest, some challenging ideas, additional information, interesting facts, and other engaging materials are presented in boxes labelled Ever heard of ..., which highlight fascinating facts, interesting observations, and curiosity-driven questions.",
+          "A step further boxes contain advanced concepts that explore the topic in more depth. The information given in these boxes also brings scientific principles and knowledge into real-life"
+        ],
+        "concepts": [
+          "open-ended questions",
+          "critical thinking",
+          "curiosity",
+          "teamwork",
+          "inclusive nature",
+          "safety precautions",
+          "ever heard of",
+          "step further",
+          "scientific principles"
+        ],
+        "context_relation": "The image is a page from a textbook discussing open-ended questions and their benefits in encouraging critical thinking and curiosity.",
+        "limitations": [
+          "The image does not provide specific examples or details about the open-ended questions or the activities described.",
+          "Unrecognized model visual_type 'page'; conservatively normalized to uncertain."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "f7018735097143adbc0e0b1e",
+      "asset_sha256": "d8049899e9e47e777dca48f2ea6763f0db96ae3267db58e57a8429183c24aa5b",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/d8049899e9e47e777dca48f2ea6763f0db96ae3267db58e57a8429183c24aa5b.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character pointing upwards with a smile.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the textbook content.",
+          "The image is a cartoon character and does not represent any specific scientific concept or experiment."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:27:20Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character pointing upwards with a smile.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information related to the textbook content.",
+        "limitations": [
+          "The image does not contain any text or information relevant to the textbook content.",
+          "The image is a cartoon character and does not represent any specific scientific concept or experiment."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "198450c4dcae9bed734e26d8",
+      "asset_sha256": "9e797f35cf452a6458a425963d3c73a4e3bfd0421198153eed2d94c30b7a5b88",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/9e797f35cf452a6458a425963d3c73a4e3bfd0421198153eed2d94c30b7a5b88.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a book and a pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "teacher",
+          "student",
+          "book",
+          "pen"
+        ],
+        "context_relation": "The image likely represents an educational setting, possibly a classroom or library.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the subject being taught."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:28:32Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a book and a pen, possibly a teacher or student.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "teacher",
+          "student",
+          "book",
+          "pen"
+        ],
+        "context_relation": "The image likely represents an educational setting, possibly a classroom or library.",
+        "limitations": [
+          "The image does not provide specific details about the content of the book or the subject being taught."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "4751734e51145f65e41c9681",
+      "asset_sha256": "72aa0d29f61a77d39cf78215315730bd3c91f1255966e765a8bcb65fbf02404a",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/72aa0d29f61a77d39cf78215315730bd3c91f1255966e765a8bcb65fbf02404a.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A green backpack with a face and a carrot on it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about scientific heritage and experiments.",
+        "limitations": [
+          "The image does not provide any information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:29:36Z",
+      "effective_analysis": {
+        "visual_summary": "A green backpack with a face and a carrot on it.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is unrelated to the text about scientific heritage and experiments.",
+        "limitations": [
+          "The image does not provide any information about the text's content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a412e3824a7c8c13e2db0b60",
+      "asset_sha256": "e25ca837dff2d755b61118a5a38c10c9a986f8f824752c666eadfb56da9f5b6d",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/e25ca837dff2d755b61118a5a38c10c9a986f8f824752c666eadfb56da9f5b6d.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person holding a camera, with a backpack next to them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of scientific heritage and the contributions of institutions and personalities to scientific progress.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:30:46Z",
+      "effective_analysis": {
+        "visual_summary": "A person holding a camera, with a backpack next to them.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be related to the theme of scientific heritage and the contributions of institutions and personalities to scientific progress.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "019d15af43b38537f9640a9a",
+      "asset_sha256": "6db773af7252f87de76872ca3b2f795d52a7931cfab56bf620bfd366c7c2e3f5",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/6db773af7252f87de76872ca3b2f795d52a7931cfab56bf620bfd366c7c2e3f5.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character in a lab coat is climbing a ladder to reach a bookshelf filled with books.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "lab coat",
+          "ladder",
+          "bookshelf",
+          "books",
+          "cartoon character"
+        ],
+        "context_relation": "The image depicts a character in a scientific setting, possibly related to a textbook or educational content.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:31:58Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character in a lab coat is climbing a ladder to reach a bookshelf filled with books.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "lab coat",
+          "ladder",
+          "bookshelf",
+          "books",
+          "cartoon character"
+        ],
+        "context_relation": "The image depicts a character in a scientific setting, possibly related to a textbook or educational content.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "97559415b46f6cf6409db1cb",
+      "asset_sha256": "ec5c4775532a11200f87cfad2bed9509170b5dbcad8ef0522144ea6b950deedf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ec5c4775532a11200f87cfad2bed9509170b5dbcad8ef0522144ea6b950deedf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a character interacting with a bookshelf, possibly organizing or selecting a book.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the character's actions beyond the general activity of reaching for a book."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:33:08Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character is standing on a ladder, reaching for a book on a bookshelf.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image depicts a character interacting with a bookshelf, possibly organizing or selecting a book.",
+        "limitations": [
+          "The image does not provide any specific information about the context or the character's actions beyond the general activity of reaching for a book."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d9e60f4ef7e2e71051d88d75",
+      "asset_sha256": "ca4defa5e99a2fa4a2a4a1adf258afbba4f68c35269afe33d6a2d0c8eb9bce73",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ca4defa5e99a2fa4a2a4a1adf258afbba4f68c35269afe33d6a2d0c8eb9bce73.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a student holding a book and a backpack, possibly in a classroom setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "student",
+          "book",
+          "backpack",
+          "classroom"
+        ],
+        "context_relation": "The image likely represents a student preparing for or engaged in a study session.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the student's activities."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:34:14Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a student holding a book and a backpack, possibly in a classroom setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "student",
+          "book",
+          "backpack",
+          "classroom"
+        ],
+        "context_relation": "The image likely represents a student preparing for or engaged in a study session.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the student's activities."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ee0abeef77b6113c070b2dd2",
+      "asset_sha256": "764e4285ee3863e627163fcd37a853270de1bd41f5c40bb74a17e27a308345f1",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/764e4285ee3863e627163fcd37a853270de1bd41f5c40bb74a17e27a308345f1.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a student raising their hand in a classroom setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to an educational context, possibly a classroom or a learning environment.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the specific chapter it is from."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:35:22Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a student raising their hand in a classroom setting.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely related to an educational context, possibly a classroom or a learning environment.",
+        "limitations": [
+          "The image does not provide specific details about the educational content or the specific chapter it is from."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c8866f6f6186d50c81b2412f",
+      "asset_sha256": "b42fb6ae16b81a1a77be70155ef298d99b51c4d67238a3b81a98d551686700fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/b42fb6ae16b81a1a77be70155ef298d99b51c4d67238a3b81a98d551686700fd.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of five people standing in a row, with one person pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the provided text about scientific heritage and contributions.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:36:31Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of five people standing in a row, with one person pointing upwards.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image appears to be unrelated to the provided text about scientific heritage and contributions.",
+        "limitations": [
+          "The image does not provide any specific information about the text's content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "faf3081ed7388661b57601a4",
+      "asset_sha256": "b78f2465ef8cb8c10459b07791088ce6199a00de33a6be715478348e8733729f",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/b78f2465ef8cb8c10459b07791088ce6199a00de33a6be715478348e8733729f.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles, gloves, and a lab coat, holding a test tube and a beaker.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "experiment",
+          "research",
+          "education",
+          "learning",
+          "innovation",
+          "progress",
+          "heritage",
+          "history",
+          "institutions",
+          "personality",
+          "work"
+        ],
+        "context_relation": "The image represents a cartoon representation of a scientist, which is likely used as an educational tool to engage students in the topic of science and its contributions to society.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientific heritage being discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:37:45Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon scientist wearing goggles, gloves, and a lab coat, holding a test tube and a beaker.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "experiment",
+          "research",
+          "education",
+          "learning",
+          "innovation",
+          "progress",
+          "heritage",
+          "history",
+          "institutions",
+          "personality",
+          "work"
+        ],
+        "context_relation": "The image represents a cartoon representation of a scientist, which is likely used as an educational tool to engage students in the topic of science and its contributions to society.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientific heritage being discussed."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "6e525e745352f279239db237",
+      "asset_sha256": "dc4ba5bc885d417b103d5848b863f6575dfba7eab056531d0660d6f9dd237b9c",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/dc4ba5bc885d417b103d5848b863f6575dfba7eab056531d0660d6f9dd237b9c.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "scientific research"
+        ],
+        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:38:56Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "scientific research"
+        ],
+        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or modifications that can be made.",
+          "The image does not show any text or labels that could provide additional context or information."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "fd62eac1e21c327810a9cf5d",
+      "asset_sha256": "a6e3031767aac8afd3662f41ce6948116c3dc72efb91bfde08180fc18e732c21",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/a6e3031767aac8afd3662f41ce6948116c3dc72efb91bfde08180fc18e732c21.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person using a telescope, sitting on a stool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "telescope",
+          "astronomy",
+          "observation",
+          "scientific inquiry"
+        ],
+        "context_relation": "The image represents a scientific activity, possibly related to astronomy or observational science.",
+        "limitations": [
+          "The image does not provide specific details about the telescope or the person's actions.",
+          "The image does not include any text or labels that provide additional context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:40:08Z",
+      "effective_analysis": {
+        "visual_summary": "A person using a telescope, sitting on a stool.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "telescope",
+          "astronomy",
+          "observation",
+          "scientific inquiry"
+        ],
+        "context_relation": "The image represents a scientific activity, possibly related to astronomy or observational science.",
+        "limitations": [
+          "The image does not provide specific details about the telescope or the person's actions.",
+          "The image does not include any text or labels that provide additional context."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e98f218cd5d50fbd10d81fef",
+      "asset_sha256": "ed911787dc3f1cbf5e7c51a84722222509d2f64ae63be0dc54e3b1900d1131bf",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/ed911787dc3f1cbf5e7c51a84722222509d2f64ae63be0dc54e3b1900d1131bf.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A scientist using a microscope in a laboratory setting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "laboratory",
+          "experiment",
+          "progress",
+          "heritage",
+          "scientific development"
+        ],
+        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientist's work."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:41:18Z",
+      "effective_analysis": {
+        "visual_summary": "A scientist using a microscope in a laboratory setting.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "scientist",
+          "microscope",
+          "laboratory",
+          "experiment",
+          "progress",
+          "heritage",
+          "scientific development"
+        ],
+        "context_relation": "The image represents a scientific activity, likely related to the theme of scientific heritage and contributions to societal development.",
+        "limitations": [
+          "The image does not provide specific details about the experiment or the scientist's work."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "195ac7bda94d3f9589aea494",
+      "asset_sha256": "f604695fb2ba053d1f9dce778dcffc7337cb2b7c18da60cf27e8f8c37d1db591",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/f604695fb2ba053d1f9dce778dcffc7337cb2b7c18da60cf27e8f8c37d1db591.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer a specific context or relationship."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:42:24Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a smartphone.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image does not provide any specific context or information.",
+        "limitations": [
+          "The image does not contain any text or information that can be used to infer a specific context or relationship."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0baf3f6cc75b03d50f1f3259",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content or text present on the page."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:42:35Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "No specific context or relation provided.",
+        "limitations": [
+          "No visible content or text present on the page."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "016a9d44621a6ad6d2e1884d",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c8-english-hecu1",
+      "source_pdf_sha256": "5b5034ac1448c9d6c16e9d16f736362b4a89071c730831b63b0e13f1af9b4cba",
+      "source_pdf_page_number": 7,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904509019",
+      "checkpointed_at": "2026-10-16T14:42:44Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "unclear",
+        "limitations": [
+          "unclear"
         ]
       },
       "correction_status": "NONE"
