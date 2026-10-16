@@ -161,11 +161,15 @@ def run_layers(args):
         bundle=sroot/f"{slug}-inventory-run-{args.run_id}.tar.gz"
         with tarfile.open(bundle,"w:gz") as tar:tar.add(invdir,arcname="inventory");tar.add(work/"source.manifest.json",arcname="source.manifest.json");tar.add(work/name,arcname=name)
         digest=hashlib.sha256(bundle.read_bytes()).hexdigest();tag=f"inventory-layer1-class{selection['class']}-{slug}-sha{s['sha256'][:12]}-run-{args.run_id}"
-        subprocess.run(["oras","push",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
+        subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-inventory-bundle.v1",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
         index=vis/"visual-pipeline-index.v1.json"
         write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":{"1":"COMPLETE","2":"COMPLETE","3":"COMPLETE","4":"RUNNING","5":"RUNNING","6":"NOT_STARTED","7":"NOT_STARTED","8":"NOT_STARTED"},"inventory_bundle":{"package":args.package,"tag":tag,"tar_sha256":digest},"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
+        batch_number=0
+        print(f"[pipeline] BOOK_START class={selection['class']} book={slug} eligible_inventory_assets={len(inventory.get('assets',[]))} batch_size={args.batch_size} checkpoint_tag={checkpoint}",flush=True)
         while True:
+            batch_number+=1
+            print(f"[pipeline] BATCH_START class={selection['class']} book={slug} batch={batch_number} batch_limit={args.batch_size} run_id={args.run_id}",flush=True)
             cmd=[sys.executable,"scripts/analyze_visual_inventory_with_ollama.py","--inventory",str(inv),"--model",args.model,"--max-assets",str(args.batch_size),"--include-page-previews","--run-id",args.run_id,"--output",str(raw)]
             if raw.is_file():cmd.append("--resume")
             else:
@@ -176,9 +180,10 @@ def run_layers(args):
                 shutil.rmtree(pull,ignore_errors=True)
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
-            subprocess.run(["oras","push",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],cwd=raw.parent,check=True)
-            data=read_json(raw);processed=int(data.get("summary",{}).get("assets_processed_this_run",0))
+            subprocess.run(["oras","push","--artifact-type","application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],cwd=raw.parent,check=True)
+            data=read_json(raw);summary=data.get("summary",{});processed=int(summary.get("assets_processed_this_run",0))
             git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)],f"checkpoint(content): Layer 4-5 {slug}")
+            print(f"[pipeline] BATCH_CHECKPOINTED class={selection['class']} book={slug} batch={batch_number} processed_this_batch={processed} analyzed_total={summary.get('assets_analyzed',0)} failed_total={summary.get('assets_failed',0)} results_saved={len(data.get('results',[]))} next_batch={'yes' if processed>0 else 'no'}",flush=True)
             if processed==0:break
         result=read_json(ledger);idx=read_json(index);idx["layers"]["4"]="CHECKPOINTED";idx["layers"]["5"]=result["ledger_status"];write_json(index,idx);git_checkpoint(repo,[rel(index,repo)],f"status(content): Layer 5 {slug}")
         print(json.dumps({"book":slug,"ledger_status":result["ledger_status"],"unresolved_count":result["summary"]["unresolved_count"]}))
@@ -210,7 +215,7 @@ def rebuild_corrections(args):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest="mode",required=True)
-    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=25)
+    q=sub.add_parser("run");q.add_argument("--selection",type=Path,required=True);q.add_argument("--source-root",type=Path,required=True);q.add_argument("--repo-root",type=Path,default=Path.cwd());q.add_argument("--package",required=True);q.add_argument("--run-id",required=True);q.add_argument("--model",required=True);q.add_argument("--batch-size",type=int,default=5,help="Assets per durable Layer 4–5 checkpoint; smaller batches make progress visible and reduce uncheckpointed work.")
     q=sub.add_parser("ledger")
     for k in ("inventory","raw-analysis","manifest","text-jsonl","effective-output","ledger-output"):q.add_argument("--"+k,type=Path,required=True)
     q.add_argument("--corrections",type=Path);q.add_argument("--repo-root",type=Path,default=Path.cwd())
