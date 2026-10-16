@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis
+from scripts.analyze_visual_inventory_with_ollama import analyze_one, run_analysis, _json_object_from_response
 
 
 class FakeResponse:
@@ -48,6 +48,8 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
     def _opener(self, request, timeout=180):
         payload = json.loads(request.data.decode("utf-8"))
         self.assertEqual("qwen2.5vl:3b", payload["model"])
+        self.assertEqual(8192, payload["options"]["num_ctx"])
+        self.assertEqual(1024, payload["options"]["num_predict"])
         self.assertEqual("Water cycle", payload["messages"][0]["content"].split("Nearby extracted page text")[1].splitlines()[1])
         self.assertEqual(base64.b64encode(self.asset_path.read_bytes()).decode("ascii"), payload["messages"][0]["images"][0])
         return FakeResponse({"message": {"content": json.dumps({
@@ -69,6 +71,24 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
         self.assertFalse(result["summary"]["publication_allowed"])
         self.assertEqual("diagram", result["results"][0]["analysis"]["visual_type"])
         self.assertEqual(original, self.inventory_path.read_bytes())
+
+
+    def test_unknown_visual_type_is_conservatively_normalized_for_review(self):
+        result = _json_object_from_response({
+            "visual_summary": "A science illustration.",
+            "visual_type": "scientific_diagram_thing",
+            "visible_text": [],
+            "concepts": ["science"],
+            "context_relation": "Supports the nearby topic.",
+            "limitations": [],
+        })
+        self.assertEqual("uncertain", result["visual_type"])
+        self.assertTrue(any("normalized to uncertain" in item for item in result["limitations"]))
+
+    def test_rejects_invalid_vision_context_budget(self):
+        with self.assertRaisesRegex(ValueError, "num_ctx"):
+            run_analysis(self.inventory_path, endpoint="http://127.0.0.1:11434", model="qwen2.5vl:3b",
+                         max_assets=1, include_page_previews=True, num_ctx=2048, opener=self._opener)
 
     def test_rejects_non_loopback_endpoint_before_request(self):
         with self.assertRaisesRegex(ValueError, "loopback HTTP"):

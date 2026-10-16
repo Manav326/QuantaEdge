@@ -38,11 +38,18 @@ def _json_object_from_response(value: Any) -> dict[str, Any]:
         raise ValueError("Vision model response is missing required fields.")
     if not isinstance(value["visual_summary"], str) or not value["visual_summary"].strip():
         raise ValueError("visual_summary must be non-empty text.")
-    if value["visual_type"] not in {
-        "diagram", "chart", "graph", "table", "map", "cartoon", "photo",
-        "illustration", "equation", "page_with_multiple_visuals", "other", "uncertain",
-    }:
-        raise ValueError("visual_type is not in the supported classification set.")
+    allowed_types = {"diagram", "chart", "graph", "table", "map", "cartoon", "photo",
+                     "illustration", "equation", "page_with_multiple_visuals", "other", "uncertain"}
+    if value["visual_type"] not in allowed_types:
+        raw_type = value["visual_type"]
+        if not isinstance(raw_type, str) or not raw_type.strip():
+            raise ValueError("visual_type must be a non-empty string.")
+        value = dict(value)
+        value["visual_type"] = "uncertain"
+        limitations = value.get("limitations")
+        if not isinstance(limitations, list):
+            raise ValueError("limitations must be a list when visual_type is normalized.")
+        value["limitations"] = limitations + [f"Unrecognized model visual_type {raw_type[:80]!r}; conservatively normalized to uncertain."]
     for key in ("visible_text", "concepts", "limitations"):
         if not isinstance(value[key], list) or not all(isinstance(item, str) for item in value[key]):
             raise ValueError(f"{key} must be a list of strings.")
@@ -64,7 +71,9 @@ def analyze_one(
     *,
     endpoint: str,
     model: str,
-    timeout: int = 180,
+    timeout: int = 300,
+    num_ctx: int = 8192,
+    num_predict: int = 1024,
     opener=urllib.request.urlopen,
 ) -> dict[str, Any]:
     relative = asset.get("asset_path")
@@ -112,7 +121,7 @@ def analyze_one(
             "content": prompt,
             "images": [base64.b64encode(asset_path.read_bytes()).decode("ascii")],
         }],
-        "options": {"temperature": 0},
+        "options": {"temperature": 0, "num_ctx": num_ctx, "num_predict": num_predict},
     }
     base = endpoint.rstrip("/")
     parsed = urllib.parse.urlparse(base)
@@ -177,12 +186,16 @@ def run_analysis(
     model: str,
     max_assets: int | None,
     include_page_previews: bool,
-    timeout: int = 180,
+    timeout: int = 300,
+    num_ctx: int = 8192,
+    num_predict: int = 1024,
     opener=urllib.request.urlopen,
     output_path: Path | None = None,
     resume: bool = False,
     run_id: str | None = None,
 ) -> dict[str, Any]:
+    if not 4096 <= num_ctx <= 32768 or not 256 <= num_predict <= 4096:
+        raise ValueError("num_ctx must be 4096..32768 and num_predict must be 256..4096.")
     if not inventory_path.is_file():
         raise FileNotFoundError(f"Inventory not found: {inventory_path}")
     inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
@@ -284,7 +297,7 @@ def run_analysis(
         ):
             continue
         try:
-            item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, opener=opener)
+            item = analyze_one(inventory_dir, asset, endpoint=endpoint, model=model, timeout=timeout, num_ctx=num_ctx, num_predict=num_predict, opener=opener)
             item["prompt_version"] = PROMPT_VERSION
             if run_id:
                 item["run_id"] = run_id
@@ -318,7 +331,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--endpoint", default="http://127.0.0.1:11434", help="Local Ollama endpoint.")
     parser.add_argument("--max-assets", type=int, help="Optional per-invocation batch size; omit it to process every remaining eligible visual. Never limits total assets.")
     parser.add_argument("--include-page-previews", action="store_true", help="Include full-page previews; these may cost more context.")
-    parser.add_argument("--timeout", type=int, default=180)
+    parser.add_argument("--timeout", type=int, default=300)
+    parser.add_argument("--num-ctx", type=int, default=8192, help="Ollama context size; 8192 avoids prior 4096-token input failures.")
+    parser.add_argument("--num-predict", type=int, default=1024, help="Bounded output-token budget for visual JSON.")
     parser.add_argument("--output", type=Path, help="Optional checkpoint path; use a model-specific path to preserve checkpoints across model comparisons.")
     parser.add_argument("--resume", action="store_true", help="Resume from the existing output checkpoint and retry failed assets.")
     parser.add_argument("--run-id", help="Optional runner-run identifier; failed assets are not retried repeatedly within that run.")
@@ -339,7 +354,8 @@ def main(argv: list[str] | None = None) -> int:
         result = run_analysis(
             args.inventory, endpoint=args.endpoint, model=args.model,
             max_assets=args.max_assets, include_page_previews=args.include_page_previews,
-            timeout=args.timeout, output_path=output_path, resume=args.resume, run_id=args.run_id,
+            timeout=args.timeout, num_ctx=args.num_ctx, num_predict=args.num_predict,
+            output_path=output_path, resume=args.resume, run_id=args.run_id,
         )
     except (OSError, ValueError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"Visual analysis stopped safely: {exc}", file=sys.stderr)
