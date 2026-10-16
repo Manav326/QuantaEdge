@@ -10,9 +10,13 @@ type Selection={type:'chapter'|'lesson';id:number};
 type VisualCandidate={candidate_id:string;candidate_kind:string;source_book_id:string;source_pdf_sha256:string;source_pdf_page_number:number;suggested_chapter_number?:number|null;suggested_chapter_title?:string|null;chapter_map_review_status?:string|null;source_asset_sha256?:string|null;bbox_pdf_points?:number[]|null;page_text_context:string;image_url:string;source_page_url?:string;publication_allowed:boolean;human_review_required:boolean};
 type VisualCatalog={schema_version:string;book_slug:string;source:{book_id:string;title:string;class:string;subject:string;language:string;edition:string;pdf_sha256:string;page_count:number};summary:{candidate_count:number;publication_allowed:boolean;review_required:boolean};visual_kinds:{id:string;label:string;description?:string}[];candidates:VisualCandidate[]};
 type VisualCatalogIndex={schema_version:string;catalogs:Array<{book_slug:string;catalog_path:string;source_book_id:string;title:string;class:string;subject:string;language:string;edition:string;source_pdf_sha256:string;page_count:number;candidate_count:number;publication_allowed:boolean;review_required:boolean}>};
-type VisualSourceMatch={subject:string};
+type VisualSourceMatch={class:string;subject:string};
 function visualSourceMatchesLesson(row:Row|undefined,source:VisualSourceMatch|undefined):boolean {
  if(!row||!source)return false;
+ const normalizedClass=(value:string|undefined|null)=>String(value??'').trim().toLocaleLowerCase().replace(/^(?:class|grade)[\s_-]*/,'');
+ const sourceClass=normalizedClass(source.class);
+ const lessonClass=normalizedClass(row.class_code);
+ if(!sourceClass||sourceClass!==lessonClass)return false;
  const subjectKey=(value:string|undefined|null)=>{
   const raw=String(value??'').trim().toLocaleLowerCase().normalize('NFKC');
   if(raw.includes('विज्ञान')||raw.includes('science')||raw.includes('vigyan'))return 'science';
@@ -564,9 +568,9 @@ export default function ContentStudio(){
   if(!canEdit||saving||!selected||selected.type!=='lesson')return;
   const targetRow=rows.find(row=>row.lesson_id===selected.id);
   if(!visualCatalogMatchesLesson(targetRow,visualCatalog)){
-   const sourceLabel=visualCatalog?visualCatalog.source.subject:'the selected textbook';
-   const lessonLabel=targetRow?targetRow.subject_name:'the selected lesson';
-   setError('This visual source is for '+sourceLabel+'; it does not match '+lessonLabel+'. Select a lesson with the matching subject.');return;
+   const sourceLabel=visualCatalog?('Class '+visualCatalog.source.class+' '+visualCatalog.source.subject):'the selected textbook';
+   const lessonLabel=targetRow?('Class '+targetRow.class_code+' '+targetRow.subject_name):'the selected lesson';
+   setError('This visual source is for '+sourceLabel+'; it does not match '+lessonLabel+'. Select a lesson with the matching class and subject.');return;
   }
   const existing=blocks.findIndex(block=>block.content?.source_candidate_id===candidate.candidate_id&&block.content?.source_book_id===candidate.source_book_id&&block.content?.source_pdf_sha256===candidate.source_pdf_sha256);
   if(existing>=0){setActiveBlock(existing);setNotice('This candidate is already attached to this micro-topic.');return;}
@@ -788,7 +792,7 @@ export default function ContentStudio(){
       <div className="qe-editor-section qe-visual-library">
        <div className="qe-editor-section-title"><div><h3>Textbook visuals</h3><p>Browse V3 candidates from the whole source book and attach the relevant figure to this micro-topic. Selection never publishes it.</p></div><span className="qe-block-count">{visualCatalog?.summary?.candidate_count??0} candidates</span></div>
        <div className="qe-visual-source-note"><span>Source-bound sample</span><p>{visualCatalog?visualCatalog.source.title+' · Grade '+visualCatalog.source.class+' · '+visualCatalog.source.subject+' · '+visualCatalog.source.language+' · '+visualCatalog.source.edition:visualCatalogLoading?'Loading the matching source manifest…':'No matching source catalog selected yet.'}</p><small>PDF SHA-256: {visualCatalog?.source?.pdf_sha256||'—'} · All candidates remain review-only.</small></div>
-       {selected?.type==='lesson'&&!visualCatalogMatchesTarget?<div className="qe-visual-empty">Attach is disabled: this catalog belongs to Grade {visualCatalog?.source.class} {visualCatalog?.source.subject}; the selected lesson is {visualTargetRow?.class_name} {visualTargetRow?.subject_name}. Choose a lesson with the matching subject.</div>:null}
+       {selected?.type==='lesson'&&!visualCatalogMatchesTarget?<div className="qe-visual-empty">Attach is disabled: this catalog belongs to Grade {visualCatalog?.source.class} {visualCatalog?.source.subject}; the selected lesson is {visualTargetRow?.class_name} {visualTargetRow?.subject_name}. Choose a lesson with the matching class and subject.</div>:null}
        {visualCatalogOptions.length>1?<label className="qe-form-field">Source textbook / edition<select value={visualCatalogOptions.some(item=>item.book_slug===visualCatalogSlug)?visualCatalogSlug:''} onChange={event=>{setVisualCatalogSlug(event.target.value);setVisualCatalog(null);setVisualCatalogError('Loading the selected source textbook…')}}><option value="">Choose the exact source book…</option>{visualCatalogOptions.map(item=><option key={item.book_slug} value={item.book_slug}>{item.title} · Grade {item.class} · {item.subject} · {item.language} · {item.edition}</option>)}</select></label>:null}
        <label className="qe-form-field qe-visual-search">Search candidate pages and context<input value={visualSearch} onChange={e=>setVisualSearch(e.target.value)} placeholder="Search topic, page text, or candidate ID"/></label>
        {visualCatalogLoading?<div className="qe-visual-empty">Loading source-bound visual candidates…</div>:visualCatalogError?<div className="qe-visual-empty">{visualCatalogError}</div>:null}

@@ -406,7 +406,7 @@ jobs:
             --selection "$VISUAL_SOURCE_ROOT/selected-sources.json" \
             --source-root "$VISUAL_SOURCE_ROOT" \
             --repo-root "$GITHUB_WORKSPACE" \
-            --package "ghcr.io/\${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
+            --package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals" \
             --run-id "$GITHUB_RUN_ID" \
             --model "$VISION_MODEL" \
             --batch-size 25

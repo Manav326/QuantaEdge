@@ -115,6 +115,16 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertFalse(self.index["summary"]["publication_allowed"])
         self.assertTrue(self.index["summary"]["review_required"])
 
+    def test_layer4_5_artifact_contract_uses_relative_paths_and_expanded_package(self):
+        workflow = (ROOT / ".github/workflows/textbook-visual-candidates-v3.yml").read_text(encoding="utf-8")
+        pipeline = (ROOT / "scripts/quantaedge_textbook_pipeline.py").read_text(encoding="utf-8")
+        self.assertIn('--package "ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"', workflow)
+        self.assertNotIn("ghcr.io/" + chr(92) + "${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals", workflow)
+        self.assertIn('f"{bundle.name}:application/gzip"', pipeline)
+        self.assertIn('],cwd=sroot,check=True)', pipeline)
+        self.assertIn('f"{raw.name}:application/json"', pipeline)
+        self.assertIn('],cwd=raw.parent,check=True)', pipeline)
+
     def test_chapter_suggestions_are_ordered_contiguous_and_review_only(self):
         chapters = self.chapter_map["chapters"]
         self.assertGreater(len(chapters), 0)
@@ -128,6 +138,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
     def test_admin_prevents_attaching_a_source_to_an_unrelated_subject(self):
         source = (ROOT / "apps/admin/app/content/page.tsx").read_text(encoding="utf-8")
         self.assertIn("function visualSourceMatchesLesson", source)
+        self.assertIn("sourceClass!==lessonClass", source)
         self.assertIn("विज्ञान", source)
         self.assertIn("गणित", source)
         self.assertIn("normalize('NFKC')", source)
@@ -136,7 +147,7 @@ class TextbookVisualEndToEndContractTests(unittest.TestCase):
         self.assertNotIn("class6-curiosity-en.v3.json", source)
         self.assertIn("visualCatalogMatchesLesson(targetRow,visualCatalog)", source)
         self.assertIn("!visualCatalogMatchesTarget", source)
-        self.assertIn("Choose a lesson with the matching subject.", source)
+        self.assertIn("Choose a lesson with the matching class and subject.", source)
         self.assertIn("visualCandidateRelevanceScore", source)
         self.assertIn("visualCandidateBlockRelevanceScore", source)
         self.assertIn("source_pdf_sha256===candidate.source_pdf_sha256", source)
