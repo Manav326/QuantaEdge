@@ -17,7 +17,6 @@ PIPELINE_DIRECTORY_MARKERS = (
     "textbook-visuals/",
     "textbook-visual-candidates-v3/",
     "textbook-content-pipeline/",
-    "structured-lessons/",
     "ai-training/generated/",
 )
 PIPELINE_FILENAMES = {
@@ -50,6 +49,10 @@ def is_generated_pipeline_artifact(path: str) -> bool:
     if any(suffix in "/" + lower for suffix in FORBIDDEN_PUBLIC_SUFFIXES):
         return True
     if any(marker in lower for marker in PIPELINE_DIRECTORY_MARKERS):
+        return True
+    # The web app has a legitimate route/component directory named structured-lessons;
+    # only data files in such a directory are generated artifacts, not its TSX/CSS code.
+    if "structured-lessons/" in lower and lower.endswith((".json", ".jsonl")):
         return True
     name = lower.rsplit("/", 1)[-1]
     if name in PIPELINE_FILENAMES:
