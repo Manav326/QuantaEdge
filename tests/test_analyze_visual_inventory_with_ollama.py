@@ -1,8 +1,10 @@
 import base64
 import hashlib
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
@@ -63,9 +65,16 @@ class AnalyzeVisualInventoryWithOllamaTests(unittest.TestCase):
 
     def test_writes_separate_review_only_analysis_and_does_not_change_inventory(self):
         original = self.inventory_path.read_bytes()
-        result = run_analysis(self.inventory_path, endpoint="http://127.0.0.1:11434",
-                              model="qwen2.5vl:3b", max_assets=1,
-                              include_page_previews=True, opener=self._opener)
+        progress = io.StringIO()
+        with redirect_stdout(progress):
+            result = run_analysis(self.inventory_path, endpoint="http://127.0.0.1:11434",
+                                  model="qwen2.5vl:3b", max_assets=1,
+                                  include_page_previews=True, opener=self._opener)
+        progress_text = progress.getvalue()
+        self.assertIn("[visual-analysis] START 1/1 asset_id=asset-1", progress_text)
+        self.assertIn("[visual-analysis] RESULT asset_id=asset-1 status=DRAFT_REQUIRES_REVIEW", progress_text)
+        self.assertIn("[visual-analysis] CHECKPOINT saved", progress_text)
+        self.assertIn("[visual-analysis] BATCH_COMPLETE", progress_text)
         self.assertEqual("DRAFT_VISION_ANALYSIS_ONLY", result["analysis_status"])
         self.assertEqual(1, result["summary"]["assets_analyzed"])
         self.assertFalse(result["summary"]["publication_allowed"])
