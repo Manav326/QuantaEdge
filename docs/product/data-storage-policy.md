@@ -99,3 +99,11 @@ A pipeline complies only when:
 - no draft is imported or published automatically without its required review and approval.
 
 This policy is the default for new work and the target for existing workflows. Update affected workflows and their documentation to match it; documentation alone does not prove that a pipeline already complies.
+
+
+
+## 9. Structured lesson source versus API runtime
+
+The canonical JSON under `data/structured-lessons/` is authoring/source data, not an indication that the corresponding records exist in PostgreSQL. Draft topics and questions remain available for review and resumability, but they must not be bundled into the API runtime or made available to learners before publication gates pass.
+
+`services/api/Dockerfile` runs `scripts/package_published_structured_lessons.py` to stage only topic artifacts whose workflow status is `PUBLISHED`, `publication_allowed` is true, and content, source-completeness, bilingual, scientific and visual review statuses are explicitly approved. The staging directory is replaced on every build to prevent stale resources from surviving a later approval change. If there are no approved artifacts, zero structured topic JSON files are packaged. This process does not insert, delete or alter database rows; database import and student publication remain separate operations.

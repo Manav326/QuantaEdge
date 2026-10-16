@@ -5,9 +5,14 @@ COPY services/api/pom.xml ./pom.xml
 # Keep Maven artifacts in BuildKit's persistent cache across rebuilds.
 RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests dependency:go-offline
 COPY services/api/src ./src
-# Structured lesson JSON is server-side source data; package it for the API adapter.
-COPY data/structured-lessons/ ./src/main/resources/structured-lessons/
-RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests package
+# Keep canonical drafts in data/, but include only explicitly approved/published lesson JSON in the API JAR.
+COPY scripts/package_published_structured_lessons.py ./scripts/package_published_structured_lessons.py
+COPY data/structured-lessons/ ./data/structured-lessons/
+RUN --mount=type=cache,target=/root/.m2 \
+    python ./scripts/package_published_structured_lessons.py \
+      --source ./data/structured-lessons \
+      --destination ./src/main/resources/structured-lessons \
+    && mvn -B -ntp -q -DskipTests package
 
 FROM eclipse-temurin:21-jre
 # Hindi and English OCR language packs are used only when an admin explicitly requests OCR review.
