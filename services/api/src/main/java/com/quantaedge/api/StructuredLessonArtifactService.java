@@ -44,7 +44,7 @@ public class StructuredLessonArtifactService {
       "multiple_choice", "multiple_select", "true_false", "matching",
       "fill_blank", "image_observation", "short_answer", "scenario_based");
   private static final Set<String> BLOCK_TYPES =
-      Set.of("rich_text", "image", "diagram", "interactive", "recap");
+      Set.of("rich_text", "image", "diagram", "interactive", "activity", "recap");
   private static final Set<String> OPTION_TYPES =
       Set.of("multiple_choice", "image_observation", "scenario_based");
   private static final Set<String> PRIVATE_FIELDS = Set.of(
@@ -379,7 +379,8 @@ public class StructuredLessonArtifactService {
         }
         if (type.equals("image") && !block.path("asset").isObject()) errors.add("explain.blocks.asset");
         if (type.equals("diagram") && !block.path("diagram_data").isObject()) errors.add("explain.blocks.diagram_data");
-        if (type.equals("interactive") && !hasLocalizedActivityInstructions(block.path("instructions_by_locale"))) {
+        if ((type.equals("interactive") || type.equals("activity"))
+            && !hasLocalizedActivityInstructions(block.path("instructions_by_locale"))) {
           errors.add("explain.blocks.instructions_by_locale");
         }
         if ((type.equals("image") || type.equals("diagram")) && !hasLocale(block.path("alt_by_locale"))) {

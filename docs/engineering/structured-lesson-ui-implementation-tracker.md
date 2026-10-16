@@ -224,3 +224,10 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Still not accepted: the eight-type Web/Admin/Android interaction matrix; live locale-switch preservation; real device TalkBack/keyboard/focus and portrait/landscape checks; runtime question/activity save-and-reload with an authenticated student; image zoom/visual rendering for approved assets; and cross-surface comparison using an approved fixture. CI has not simulated those user interactions.
 - Content boundary: current source-generated lessons still carry pending human source, scientific, bilingual and/or visual reviews and publication_allowed: false. Do not publish them to make UI tests appear populated. A structurally valid test fixture can validate UI behavior, but does not grant publication approval.
 - Next action: read the CI result for the commit containing this guard. If the guard fails, correct only validated mismatches. If it passes, perform the remaining authenticated browser/device acceptance tests and attach their evidence before changing any remaining [~] to [x].
+
+## API question/block contract regression additions — 2026-10-16
+
+- The source contract review found that the API block registry omitted the authored activity block type even though all client renderers and the activity persistence path support it. Added activity to the backend allow-list and apply bilingual-instruction validation to both activity and interactive blocks.
+- Added server regression coverage for all eight registered question types: multiple choice, multi-select, true/false, matching, fill blank, image observation, short answer (pending review), and scenario based. Added an API regression for an approved activity block being returned to the activity-response adapter.
+- The CI contract guard now checks the server block registry includes activity as well. The new code/test changes require the next GitHub Actions run to pass before their acceptance can be marked green.
+- Still outstanding after CI: authenticated end-to-end interactions and accessibility/device checks recorded above. These cannot be claimed from source tests alone.

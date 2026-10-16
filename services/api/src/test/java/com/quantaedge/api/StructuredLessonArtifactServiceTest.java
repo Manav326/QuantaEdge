@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.web.server.ResponseStatusException;
 import tools.jackson.databind.JsonNode;
@@ -68,6 +71,70 @@ class StructuredLessonArtifactServiceTest {
         () -> service.validateResponse(question, "not-an-option"));
     assertThrows(IllegalArgumentException.class,
         () -> service.validateResponse(question, ""));
+  }
+
+
+  @Test
+  void allEightRegisteredQuestionTypesHaveExplicitServerResponsePolicies() throws Exception {
+    StructuredLessonArtifactService service =
+        new StructuredLessonArtifactService(mapper, fixture(true, true));
+
+    assertEvaluation(service, """
+        {"type":"multiple_choice","options":[{"id":"a"},{"id":"b"}],
+         "correct_answer_ids":["a"],"feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, "a", "correct", 1, 1, true);
+    assertEvaluation(service, """
+        {"type":"multiple_select","options":[{"id":"a"},{"id":"b"}],
+         "correct_answer_ids":["a","b"],"feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, List.of("a", "b"), "correct", 1, 1, true);
+    assertEvaluation(service, """
+        {"type":"true_false","correct_answer":true,"feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, true, "correct", 1, 1, true);
+    assertEvaluation(service, """
+        {"type":"matching","left_items":[{"id":"l1"},{"id":"l2"}],
+         "right_items":[{"id":"r1"},{"id":"r2"}],
+         "correct_pairs":[{"left_id":"l1","right_id":"r1"},{"left_id":"l2","right_id":"r2"}],
+         "feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, Map.of("l1", "r1", "l2", "r2"), "correct", 2, 2, true);
+    assertEvaluation(service, """
+        {"type":"fill_blank","accepted_answers":{"en":["water"],"hi":["जल"]},
+         "feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, "  Water  ", "correct", 1, 1, true);
+    assertEvaluation(service, """
+        {"type":"image_observation","options":[{"id":"a"},{"id":"b"}],
+         "correct_answer_ids":["b"],"feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, "b", "correct", 1, 1, true);
+    assertEvaluation(service, """
+        {"type":"short_answer","feedback_by_locale":{"en":"Saved for review","hi":"जाँच के लिए सहेजा गया"}}
+        """, "A reasoned observation.", "pending_review", null, null, false);
+    assertEvaluation(service, """
+        {"type":"scenario_based","options":[{"id":"a"},{"id":"b"}],
+         "correct_answer_ids":["b"],"feedback_by_locale":{"en":"Correct","hi":"सही"}}
+        """, "b", "correct", 1, 1, true);
+  }
+
+  @Test
+  void activityBlocksAreAcceptedAndRemainAvailableToTheActivityResponseAdapter() throws Exception {
+    String json = fixture(true, true).replace(
+        "\"blocks\":[]",
+        "\"blocks\":[{\"id\":\"activity-test-1\",\"type\":\"activity\",\"order\":1,"
+            + "\"instructions_by_locale\":{\"en\":\"Record observations\",\"hi\":\"अवलोकन दर्ज करें\"}}]");
+    StructuredLessonArtifactService service = new StructuredLessonArtifactService(mapper, json);
+    var artifact = service.requirePublished("qe-test-topic-v1");
+    assertEquals("activity",
+        service.activityBlockForStudent(artifact, "activity-test-1").path("type").asText());
+  }
+
+  private void assertEvaluation(StructuredLessonArtifactService service, String questionJson,
+      Object response, String expectedStatus, Integer expectedScore, Integer expectedMaxScore,
+      boolean expectedAutoGraded) throws Exception {
+    JsonNode question = mapper.readTree(questionJson);
+    JsonNode normalized = service.validateResponse(question, response);
+    var evaluation = service.evaluateResponse(question, normalized, "en");
+    assertEquals(expectedStatus, evaluation.status());
+    assertEquals(expectedScore, evaluation.score());
+    assertEquals(expectedMaxScore, evaluation.maxScore());
+    assertEquals(expectedAutoGraded, evaluation.autoGraded());
   }
 
   private String fixture(boolean published, boolean validAnswer) throws Exception {

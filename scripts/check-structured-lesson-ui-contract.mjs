@@ -72,6 +72,7 @@ for (const [key, needle] of [
   ['apiService', 'stripPrivateFields'],
   ['apiService', 'correct_answer_ids'],
   ['apiService', 'isApprovedVisual'],
+  ['apiService', 'Set.of("rich_text", "image", "diagram", "interactive", "activity", "recap")'],
   ['apiController', '/responses'],
   ['apiController', 'requireStudent'],
   ['apiController', 'ensureStudentTrackAccess'],
