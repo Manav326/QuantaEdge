@@ -1,6 +1,9 @@
 name: Mirror verified textbook extraction artifact to main
 
 on:
+  workflow_run:
+    workflows: ["QuantaEdge GHCR Textbook Extraction Pilot"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       class_no:
@@ -10,7 +13,7 @@ on:
         default: "7"
         required: true
       source_run_id:
-        description: "Successful QuantaEdge GHCR Textbook Extraction Pilot run ID for the selected class"
+        description: "Successful extraction-pilot run ID that contains an artifact for the selected class"
         type: string
         default: ""
         required: true
@@ -25,6 +28,7 @@ concurrency:
 
 jobs:
   commit-extraction:
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
@@ -34,20 +38,31 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Confirm source run and download the selected class artifact
+      - name: Confirm source run, resolve matching class artifacts, and download
         env:
           GH_TOKEN: ${{ github.token }}
-          CLASS_NO: ${{ inputs.class_no }}
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          EVENT_NAME: ${{ github.event_name }}
+          CLASS_NO_INPUT: ${{ inputs.class_no }}
+          SOURCE_RUN_ID_INPUT: ${{ inputs.source_run_id }}
+          WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+        shell: bash
         run: |
           set -euo pipefail
 
-          case "$CLASS_NO" in
-            7|8) ;;
-            *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
-          esac
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            SOURCE_RUN_ID="$SOURCE_RUN_ID_INPUT"
+            case "$CLASS_NO_INPUT" in
+              7|8) ;;
+              *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
+            esac
+            requested_classes=("$CLASS_NO_INPUT")
+          else
+            SOURCE_RUN_ID="$WORKFLOW_RUN_ID"
+            requested_classes=()
+          fi
+
           [[ "$SOURCE_RUN_ID" =~ ^[0-9]+$ ]] || {
-            echo "::error::source_run_id must be the numeric ID of a successful extraction-pilot run."
+            echo "::error::The source run ID must be numeric."
             exit 2
           }
 
@@ -61,59 +76,107 @@ jobs:
             and .conclusion == "success"
             and .headBranch == "main"
           ' >/dev/null <<< "$source_metadata"; then
-            echo "::error::Source run must be a successful, completed 'QuantaEdge GHCR Textbook Extraction Pilot' run on main."
+            echo "::error::Source run must be a successful, completed extraction-pilot run on main."
             jq '{workflowName,status,conclusion,headBranch,url}' <<< "$source_metadata"
             exit 1
           fi
 
-          artifact_name="quantaedge-textbook-extraction-pilot-class-${CLASS_NO}-${SOURCE_RUN_ID}"
-          echo "Downloading ${artifact_name} from ${SOURCE_RUN_ID}"
-          jq '{workflowName,status,conclusion,headBranch,url}' <<< "$source_metadata"
-          gh run download "$SOURCE_RUN_ID" \
-            --repo "$GITHUB_REPOSITORY" \
-            --name "$artifact_name" \
-            --dir "$RUNNER_TEMP/quantaedge-textbook-artifact"
+          available_artifacts="$(gh api --paginate \
+            "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.expired == false) | .name')"
 
-      - name: Validate and copy source-bound extraction files
-        env:
-          CLASS_NO: ${{ inputs.class_no }}
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
-        run: |
-          set -euo pipefail
-          case "$CLASS_NO" in
-            7|8) ;;
-            *) echo "::error::Only Class 7 or Class 8 is supported."; exit 2 ;;
-          esac
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            mapfile -t requested_classes < <(
+              printf '%s\n' "$available_artifacts" |
+                sed -nE "s/^quantaedge-textbook-extraction-pilot-class-([78])-${SOURCE_RUN_ID}$/\1/p" |
+                sort -nu
+            )
+          fi
 
-          artifact_root="$RUNNER_TEMP/quantaedge-textbook-artifact"
-          source_root="$artifact_root/extracted/class-$CLASS_NO"
+          if [[ "${#requested_classes[@]}" -eq 0 ]]; then
+            echo "::error::No unexpired Class 7/8 extraction artifact was found in source run $SOURCE_RUN_ID."
+            printf 'Available artifacts:\n%s\n' "$available_artifacts"
+            exit 1
+          fi
 
-          for medium in english hindi; do
-            test -d "$source_root/$medium/pages"
-            test -s "$artifact_root/cache/class-$CLASS_NO/$medium/index.json"
-            python scripts/validate_textbook_extraction_artifacts.py \
-              --registry-index "$artifact_root/cache/class-$CLASS_NO/$medium/index.json" \
-              --extraction-dir "$source_root/$medium" \
-              --class-no "$CLASS_NO" \
-              --language "$medium"
+          for class_no in "${requested_classes[@]}"; do
+            expected="quantaedge-textbook-extraction-pilot-class-${class_no}-${SOURCE_RUN_ID}"
+            if ! grep -Fxq "$expected" <<< "$available_artifacts"; then
+              echo "::error::Run $SOURCE_RUN_ID has no artifact for Class $class_no."
+              echo "Choose the run ID that produced $expected."
+              printf 'Available artifacts:\n%s\n' "$available_artifacts"
+              exit 1
+            fi
           done
 
-          mkdir -p data/textbook-extractions
-          rm -rf "data/textbook-extractions/class-$CLASS_NO"
-          cp -R "$source_root" "data/textbook-extractions/class-$CLASS_NO"
-          mkdir -p data/textbook-extractions/reports
-          cp "$artifact_root/reports/"*.json data/textbook-extractions/reports/ 2>/dev/null || true
+          echo "Source run:"
+          jq '{workflowName,status,conclusion,headBranch,url}' <<< "$source_metadata"
+          echo "Classes to mirror: ${requested_classes[*]}"
+
+          for class_no in "${requested_classes[@]}"; do
+            artifact_name="quantaedge-textbook-extraction-pilot-class-${class_no}-${SOURCE_RUN_ID}"
+            destination="$RUNNER_TEMP/quantaedge-textbook-artifact/class-${class_no}"
+            mkdir -p "$destination"
+            echo "Downloading $artifact_name"
+            gh run download "$SOURCE_RUN_ID" \
+              --repo "$GITHUB_REPOSITORY" \
+              --name "$artifact_name" \
+              --dir "$destination"
+          done
+
+          echo "SOURCE_RUN_ID=$SOURCE_RUN_ID" >> "$GITHUB_ENV"
+          echo "MIRROR_CLASSES=${requested_classes[*]}" >> "$GITHUB_ENV"
+
+      - name: Validate both languages and copy verified class artifacts
+        env:
+          SOURCE_RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.source_run_id || github.event.workflow_run.id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          read -r -a classes <<< "$MIRROR_CLASSES"
+
+          for class_no in "${classes[@]}"; do
+            artifact_root="$RUNNER_TEMP/quantaedge-textbook-artifact/class-${class_no}"
+            source_root="$artifact_root/extracted/class-${class_no}"
+
+            for medium in english hindi; do
+              test -d "$source_root/$medium/pages" || {
+                echo "::error::Class $class_no $medium extraction pages are missing from the selected artifact."
+                exit 1
+              }
+              test -s "$artifact_root/cache/class-${class_no}/$medium/index.json" || {
+                echo "::error::Class $class_no $medium GHCR index is missing from the selected artifact."
+                exit 1
+              }
+              python scripts/validate_textbook_extraction_artifacts.py \
+                --registry-index "$artifact_root/cache/class-${class_no}/$medium/index.json" \
+                --extraction-dir "$source_root/$medium" \
+                --class-no "$class_no" \
+                --language "$medium"
+            done
+
+            mkdir -p data/textbook-extractions
+            rm -rf "data/textbook-extractions/class-${class_no}"
+            cp -R "$source_root" "data/textbook-extractions/class-${class_no}"
+            mkdir -p data/textbook-extractions/reports
+            if compgen -G "$artifact_root/reports/*.json" > /dev/null; then
+              cp "$artifact_root/reports/"*.json data/textbook-extractions/reports/
+            fi
+            printf 'Mirrored class %s from workflow run %s\n' "$class_no" "$SOURCE_RUN_ID" > \
+              "data/textbook-extractions/class-${class_no}/MIRROR-SOURCE.txt"
+            echo "Verified and staged Class $class_no English + Hindi extraction data."
+          done
+
           cat > data/textbook-extractions/README.md <<'EOF'
           # Textbook extraction artifacts
 
           Verified class-wise whole-book extracted page text, manifests and reports are committed here so a normal git pull updates the local checkout. Original source PDFs remain in GHCR. These are draft extraction artifacts only, not approved or published lessons/questions. Source-bound chapter mapping and human review are required before generation/import/publication.
           EOF
-          printf 'Mirrored class %s from workflow run %s\n' "$CLASS_NO" "$SOURCE_RUN_ID" > "data/textbook-extractions/class-$CLASS_NO/MIRROR-SOURCE.txt"
 
       - name: Commit extracted text to main
         env:
-          CLASS_NO: ${{ inputs.class_no }}
-          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          SOURCE_RUN_ID: ${{ github.event_name == 'workflow_dispatch' && inputs.source_run_id || github.event.workflow_run.id }}
+        shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -123,5 +186,8 @@ jobs:
             echo "Extraction artifacts already match main; no commit required."
             exit 0
           fi
-          git commit -m "Add verified Class ${CLASS_NO} textbook extraction artifacts"
+          classes_for_message="$(printf '%s' "$MIRROR_CLASSES" | tr ' ' '-')"
+          git commit -m "Mirror verified textbook extraction artifacts for classes ${classes_for_message}"
+          git pull --rebase origin main
           git push origin HEAD:main
+          echo "Committed extraction artifacts for classes $MIRROR_CLASSES from run $SOURCE_RUN_ID."

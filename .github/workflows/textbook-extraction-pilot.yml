@@ -118,6 +118,8 @@ jobs:
             cp "$extracted_dir/extraction-report.json" "pilot-output/reports/class-$CLASS_NO-$medium-extraction-report.json"
           done
 
+      # Artifact names include the class number and source run ID; the mirror workflow
+      # automatically validates and commits successful class artifacts back to main.
       - name: Publish extracted page data and reports (not source PDFs)
         if: always()
         uses: actions/upload-artifact@v4
