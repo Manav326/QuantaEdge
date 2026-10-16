@@ -192,3 +192,11 @@ This journal is intentionally part of the repository contract. Update it in the 
 ### Exact next step
 
 Reconcile canonical subject/chapter/lesson/topic identifiers and source-specific lifecycle for `learning_document`, `content_asset`, and `recorded_class`; then design a forward-only migration for provider-neutral multi-resource assignments and YouTube broadcast metadata. Do not modify released migrations or add a video-only duplicate catalogue. Implement upload idempotency and authorized offline download policy before the corresponding retry/download UI. Add issue #58 audit findings and update this journal after each milestone.
+
+
+### Structured lesson identifier reconciliation (follow-up audit)
+
+- The current structured lesson runtime loads approved JSON artifacts from packaged `data/structured-lessons`; topic/microtopic definitions are not rows in the legacy `lesson` table.
+- Stable structured identity is `artifact_id` (string), with `topic.topic_id` as a stable string in the JSON. V106/V107 learner-response rows key on `artifact_id` plus exact artifact SHA-256.
+- Resource links to legacy lessons may use `lesson.id`; links to structured lessons must use the stable `artifact_id`, validate through `StructuredLessonArtifactService.requirePublished`, and verify class/subject/chapter scope. Do not invent numeric topic FKs or publish a resource against a draft artifact.
+- This resolves the topic-key ambiguity. Next implementation step remains the forward-only resource model that can attach at chapter scope, legacy lesson scope, or structured artifact scope without changing the existing structured artifact/version contract.
