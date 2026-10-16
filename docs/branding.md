@@ -10,10 +10,10 @@
 - **Wordmark:** “Quanta” in deep navy and “Edge” in orange, using the approved shared rendering component.
 - **Brand navy:** `#152038` (canonical identity and wordmark colour).
 - **Interface surfaces:** continue using the current repository-approved navy, orange, neutral and semantic tokens; audit actual CSS before changing any placement or component styling.
-- **Brand orange:** `#F97316`; deep orange `#C2410C`; soft orange `#FFF0E5` remain part of the orange-led visual identity. Do not replace orange with blue as the default UI action colour.
+- **Brand orange:** `#F97316`; deep orange `#C2410C`; soft orange `#FFF0E5` remain part of the orange-led visual identity. Preserve the existing interface use of these colours.
 - **Light canvas:** `#F5F7FC`; white cards and reading surfaces.
 - **Neutral border:** `#E5EAF3`; primary light-surface text `#172033`; secondary text `#667085`, subject to contrast validation.
-- **Legacy brand orange:** `#F97316`; deep orange `#C2410C`; soft orange `#FFF0E5`. Retain these for the canonical mark/wordmark and existing brand-specific contexts, but do not use orange as the default UI action colour in the refreshed interface.
+- **Orange-led palette:** `#F97316`; deep orange `#C2410C`; soft orange `#FFF0E5`. Preserve the current approved uses throughout the interface; do not shift to a different dominant accent.
 
 No brand colour refresh is approved. Preserve the current orange-led palette and use the existing Q mark and shared QuantaEdgeBrand component. Maintain one consistent mark, name, tagline, logo colours and wordmark across languages and apps. Proposed layout/placement changes require user approval before implementation.
 
