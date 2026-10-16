@@ -3449,7 +3449,7 @@ private fun StructuredLessonCatalogueScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.weight(1f)) {
-                Text("Structured lessons", style = MaterialTheme.typography.headlineSmall)
+                Text(if (language == "hi") "संरचित पाठ" else "Structured lessons", style = MaterialTheme.typography.headlineSmall)
                 Text(if (language == "hi") "समीक्षा और प्रकाशन स्वीकृत पाठ" else "Reviewed and published lessons",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
             }
