@@ -152,7 +152,7 @@ def run_layers(args):
         bundle=sroot/f"{slug}-inventory-run-{args.run_id}.tar.gz"
         with tarfile.open(bundle,"w:gz") as tar:tar.add(invdir,arcname="inventory");tar.add(work/"source.manifest.json",arcname="source.manifest.json");tar.add(work/name,arcname=name)
         digest=hashlib.sha256(bundle.read_bytes()).hexdigest();tag=f"inventory-layer1-class{selection['class']}-{slug}-sha{s['sha256'][:12]}-run-{args.run_id}"
-        subprocess.run(["oras","push",f"{args.package}:{tag}",f"{bundle}:application/gzip"],cwd=repo,check=True)
+        subprocess.run(["oras","push",f"{args.package}:{tag}",f"{bundle.name}:application/gzip"],cwd=sroot,check=True)
         index=vis/"visual-pipeline-index.v1.json"
         write_json(index,{"schema_version":"quantaedge.textbook-content-pipeline-index.v1","architecture_version":"8-layer-resumable-v1","class":selection["class"],"book_slug":slug,"source_book_id":s["book_id"],"source_pdf_sha256":s["sha256"],"layers":{"1":"COMPLETE","2":"COMPLETE","3":"COMPLETE","4":"RUNNING","5":"RUNNING","6":"NOT_STARTED","7":"NOT_STARTED","8":"NOT_STARTED"},"inventory_bundle":{"package":args.package,"tag":tag,"tar_sha256":digest},"analysis_path":rel(raw,repo),"effective_analysis_path":rel(eff,repo),"coverage_ledger_path":rel(ledger,repo),"publication_allowed":False,"human_review_required":True})
         checkpoint=f"layer4-class{selection['class']}-{slug}-{model}-checkpoint"
@@ -167,7 +167,7 @@ def run_layers(args):
                 shutil.rmtree(pull,ignore_errors=True)
             subprocess.run(cmd,cwd=repo,check=True)
             subprocess.run([sys.executable,"scripts/quantaedge_textbook_pipeline.py","ledger","--inventory",str(invrepo),"--raw-analysis",str(raw),"--manifest",s["extraction_manifest_repo_path"],"--text-jsonl",s["text_jsonl_repo_path"],"--effective-output",str(eff),"--ledger-output",str(ledger),"--corrections",str(cor),"--repo-root",str(repo)],cwd=repo,check=True)
-            subprocess.run(["oras","push",f"{args.package}:{checkpoint}",f"{raw}:application/json"],cwd=repo,check=True)
+            subprocess.run(["oras","push",f"{args.package}:{checkpoint}",f"{raw.name}:application/json"],cwd=raw.parent,check=True)
             data=read_json(raw);processed=int(data.get("summary",{}).get("assets_processed_this_run",0))
             git_checkpoint(repo,[rel(p,repo) for p in (invrepo,vis/"source.manifest.json",raw,eff,ledger,index)],f"checkpoint(content): Layer 4-5 {slug}")
             if processed==0:break
