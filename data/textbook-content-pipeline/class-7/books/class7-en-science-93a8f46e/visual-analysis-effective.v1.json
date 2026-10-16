@@ -3,7 +3,7 @@
   "source_book_id": "ncert-c7-english-gecu1",
   "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
   "raw_analysis_path": "data/textbook-visuals/class7-en-science-93a8f46e/visual-analysis-qwen2.5vl-3b.v1.json",
-  "raw_analysis_sha256": "059ea0834d42d78007037332c45dd9194d03ce5fc3d4e7b134ca78d59187a7cd",
+  "raw_analysis_sha256": "c66368e04847ee4719d39d63dc71a419f8a7a96c2bace85e1f08fe0d40e506c0",
   "model": "qwen2.5vl:3b",
   "prompt_version": "visual-analysis-prompt-v2",
   "corrections_path": "data/textbook-content-pipeline/class-7/books/class7-en-science-93a8f46e/visual-analysis-corrections.v1.json",
@@ -12257,6 +12257,1152 @@
         "context_relation": "The page is likely a blank page in a textbook.",
         "limitations": [
           "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e08b89458823c88177ad767a",
+      "asset_sha256": "2482ccc4485c38e752ae9274022f341203b96a848d34571b68daaceffe61fed7",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/2482ccc4485c38e752ae9274022f341203b96a848d34571b68daaceffe61fed7.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:42:35Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3b45026ad5bd0bd3699d2f92",
+      "asset_sha256": "cf8ee6f9a4d45624429a06dc5b7240ab0434cb51dda18438520c402d9053c838",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/cf8ee6f9a4d45624429a06dc5b7240ab0434cb51dda18438520c402d9053c838.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:43:41Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0016d1d03a339dc45d89f613",
+      "asset_sha256": "44954ea598c22438fcdcbf3a00a29fc06072c28ed740fea237298baa1c9591b4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/44954ea598c22438fcdcbf3a00a29fc06072c28ed740fea237298baa1c9591b4.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:44:50Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1b5e853c8e6ebcfd78d7f47a",
+      "asset_sha256": "2991388815e5ce92fd17335bcd2105b2a39341899350b18a555af57fc65df5b8",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/2991388815e5ce92fd17335bcd2105b2a39341899350b18a555af57fc65df5b8.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:45:58Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a light gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "5f0595e95b5474d80c8db774",
+      "asset_sha256": "eef53ce20d1d181287a3cb6b3a4a6c7fd00a0a4bdf1819210eb0de8ebb7e6538",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/eef53ce20d1d181287a3cb6b3a4a6c7fd00a0a4bdf1819210eb0de8ebb7e6538.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A full page of a textbook with a gray background and text about the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "science",
+          "curiosity",
+          "world of science",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "introduction to the world of science",
+        "limitations": [
+          "no specific visual elements",
+          "text only"
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:47:15Z",
+      "effective_analysis": {
+        "visual_summary": "A full page of a textbook with a gray background and text about the world of science.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "Science",
+          "of",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question,"
+        ],
+        "concepts": [
+          "science",
+          "curiosity",
+          "world of science",
+          "grade 6",
+          "invitation to question"
+        ],
+        "context_relation": "introduction to the world of science",
+        "limitations": [
+          "no specific visual elements",
+          "text only"
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "0fd9902fd5918f56e5156f8d",
+      "asset_sha256": "6ca7987a98a3f50a74e07c8040842e3c3f8b642cfcc0312e8b61f621ce64e2be",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/6ca7987a98a3f50a74e07c8040842e3c3f8b642cfcc0312e8b61f621ce64e2be.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:48:20Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely part of a textbook or educational material.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "ae073f37268842821ad9fc1e",
+      "asset_sha256": "7bbf33891a3776e6535982889de6d7f8c19c09829c53be558082fccb0b66566e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/7bbf33891a3776e6535982889de6d7f8c19c09829c53be558082fccb0b66566e.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:49:28Z",
+      "effective_analysis": {
+        "visual_summary": "A blank page with a gray background.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank page in a textbook.",
+        "limitations": [
+          "The page is blank and does not contain any visual elements or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "876a8392e733d52354f74a51",
+      "asset_sha256": "3107dbe585c1ac59b504ede828249d9d553a278faebe0ede4e0cb3b00bb3294e",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/3107dbe585c1ac59b504ede828249d9d553a278faebe0ede4e0cb3b00bb3294e.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A QR code with the text '0777CH01' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH01"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly linking to additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image, so the specific information it contains cannot be determined."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:50:39Z",
+      "effective_analysis": {
+        "visual_summary": "A QR code with the text '0777CH01' at the bottom.",
+        "visual_type": "other",
+        "visible_text": [
+          "0777CH01"
+        ],
+        "concepts": [],
+        "context_relation": "The QR code is likely related to the content of the textbook, possibly linking to additional resources or information.",
+        "limitations": [
+          "The QR code's content is not visible in the image, so the specific information it contains cannot be determined."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "48f5c0ffc88c168dfc22205b",
+      "asset_sha256": "dd64180eceb2ac559e08822ff36c1bd8826cc8090a8694185a59e8f3c0458384",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/dd64180eceb2ac559e08822ff36c1bd8826cc8090a8694185a59e8f3c0458384.jpeg",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "analysis_status": "ANALYSIS_ERROR",
+      "error": "Vision model did not return valid JSON.",
+      "human_review_required": true,
+      "publication_allowed": false,
+      "effective_analysis": null,
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "a6eb6926d058d671e0417583",
+      "asset_sha256": "ebfe2dc6344cb887fed6ecc83547147bf8297f3a1ce36a34b6c4805a3b78be2d",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/ebfe2dc6344cb887fed6ecc83547147bf8297f3a1ce36a34b6c4805a3b78be2d.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustrations of various objects and symbols, including a moon, leaves, a flower, an apple, a watermelon, a ruler, a bottle, and a box with buildings inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is part of an educational content, likely related to a science textbook for Grade 6.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:54:05Z",
+      "effective_analysis": {
+        "visual_summary": "Illustrations of various objects and symbols, including a moon, leaves, a flower, an apple, a watermelon, a ruler, a bottle, and a box with buildings inside.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is part of an educational content, likely related to a science textbook for Grade 6.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "e43caaae3b418f42c191b6df",
+      "asset_sha256": "e10c871073bf6011c8b95f81d6168149e8222ba6084341c74eab78710fcdaaa9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/e10c871073bf6011c8b95f81d6168149e8222ba6084341c74eab78710fcdaaa9.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a faucet and a hose connected to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "water faucet",
+          "hose"
+        ],
+        "context_relation": "The image is related to the topic of water and its usage in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the faucet or hose, only their general appearance."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:55:14Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a faucet and a hose connected to it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "water faucet",
+          "hose"
+        ],
+        "context_relation": "The image is related to the topic of water and its usage in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the faucet or hose, only their general appearance."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "812f7b723791f47fd0a8c454",
+      "asset_sha256": "ac384be18c01ee07cdd2fdf740bd5dcdaa8a0fd3e6e1c7f2fb4e2cf508b467ef",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/ac384be18c01ee07cdd2fdf740bd5dcdaa8a0fd3e6e1c7f2fb4e2cf508b467ef.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass and a beaker, with a question mark above.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "questioning",
+          "exploration"
+        ],
+        "context_relation": "The image is related to the theme of science and questioning in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the grade level."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:56:24Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon character holding a magnifying glass and a beaker, with a question mark above.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "science",
+          "questioning",
+          "exploration"
+        ],
+        "context_relation": "The image is related to the theme of science and questioning in the context of the textbook.",
+        "limitations": [
+          "The image does not provide specific details about the textbook content or the grade level."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "d3ae81b390284727f5c6f9c3",
+      "asset_sha256": "a98eecad393a80a90defc357f347398f2908e0bc62749429160a3761837ec28f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/a98eecad393a80a90defc357f347398f2908e0bc62749429160a3761837ec28f.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a curved shape, possibly a letter or a symbol.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a science textbook.",
+        "limitations": [
+          "The image is a black and white illustration and does not provide specific details about the content or context."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:57:33Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a curved shape, possibly a letter or a symbol.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is likely a part of an educational content, possibly related to a science textbook.",
+        "limitations": [
+          "The image is a black and white illustration and does not provide specific details about the content or context."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "3f218610954fd60a767eb164",
+      "asset_sha256": "83a0c1d4b838c8341837f4e82b8ffb00c96e5d9e6a4cfa5c04e5f9c8e50e5ef4",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/83a0c1d4b838c8341837f4e82b8ffb00c96e5d9e6a4cfa5c04e5f9c8e50e5ef4.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a pineapple being sliced open, revealing its juicy interior.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of 'The Ever-Evolving World of Science', suggesting a focus on scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific scientific content or formulas. It is a general illustration related to the theme of the textbook."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:58:40Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a pineapple being sliced open, revealing its juicy interior.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is related to the theme of 'The Ever-Evolving World of Science', suggesting a focus on scientific exploration and curiosity.",
+        "limitations": [
+          "The image does not provide specific scientific content or formulas. It is a general illustration related to the theme of the textbook."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e078c01a7e8e4c121a8b732",
+      "asset_sha256": "87928c613f161b1002131dd2cb3f71fa40aa6907fc56b12aff7e7376b166937a",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/87928c613f161b1002131dd2cb3f71fa40aa6907fc56b12aff7e7376b166937a.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black and white illustration of a brain with a brain cell on top, surrounded by various other brain-related symbols.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brain",
+          "brain cell",
+          "brain-related symbols"
+        ],
+        "context_relation": "The image is related to the theme of the textbook, which is about the world of science.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:59:48Z",
+      "effective_analysis": {
+        "visual_summary": "A black and white illustration of a brain with a brain cell on top, surrounded by various other brain-related symbols.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "brain",
+          "brain cell",
+          "brain-related symbols"
+        ],
+        "context_relation": "The image is related to the theme of the textbook, which is about the world of science.",
+        "limitations": [
+          "The image does not provide specific details about the textbook or its content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "23b5d2da1833e2197d4ec74a",
+      "asset_sha256": "c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/c91021b8ddfe48ee4e24eb06978a959d2bed6897cc38b49770981f387adb49fd.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text, images, or diagrams."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T17:59:59Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible content.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is a blank page in a textbook.",
+        "limitations": [
+          "The page is completely blank and does not contain any text, images, or diagrams."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "c886ddd4d32a41c9f8bffc43",
+      "asset_sha256": "cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "assets/cae8dab0abc4192720d0bab2092eb2d0e92dec95b45a2a7804a2ba3c82ab2286.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:00:10Z",
+      "effective_analysis": {
+        "visual_summary": "A black page with no visible text or images.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The page is likely a blank or unused page in the textbook.",
+        "limitations": [
+          "The page is completely blank and lacks any visible content or text."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "1cf4aab369877fa2b10ca856",
+      "asset_sha256": "3b66a763cce9a22bd5cbfdb91fe5b8f858d94ad92b203bd0e1b8a3819ce980b1",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 21,
+      "asset_path": "page-0021.jpg",
+      "asset_kind": "page_preview",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook introducing the world of science, featuring illustrations of a paper airplane and a child playing with it, along with text about curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question, to perform experiments,",
+          "and to explore, as we try to understand the beautiful world we",
+          "live in. The world of science covers everything—small and large,",
+          "near and far. We may be looking at tiny cells inside a leaf, or",
+          "the movement of the sun and the stars. We may be testing out",
+          "the materials around us at home, or discussing how water flows",
+          "underground. As you go through the chapters in this book, you",
+          "will start new adventures that challenge your thinking, expand",
+          "your knowledge, and help you become an explorer, making small",
+          "discoveries for yourself.",
+          "Before we dive into our exciting journey, take a moment to",
+          "observe something special about this book. Look at the page",
+          "numbers—they follow the playful flight of a butterfly and the",
+          "soaring of a paper plane! Just as a butterfly flutters freely and a",
+          "paper plane flies into the sky, learning takes flight when curiosity",
+          "leads the way. Did you know that something as simple as a paper",
+          "plane inspired real scientific explorations of flight? From early",
+          "inventors studying bird wings to modern engineers designing",
+          "aircraft, the dream of flying started with simple observations and",
+          "experiments. So, as you turn each page, let your imagination take",
+          "flight—exploring new ideas, discovering wonders, and reaching",
+          "for the skies!"
+        ],
+        "concepts": [
+          "curiosity",
+          "exploration",
+          "science",
+          "experiments",
+          "learning",
+          "invention",
+          "observation",
+          "exploration"
+        ],
+        "context_relation": "introduction",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content or structure."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:03:39Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook introducing the world of science, featuring illustrations of a paper airplane and a child playing with it, along with text about curiosity and exploration.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "The Ever-Evolving  1      World of Science",
+          "We hope you enjoyed your adventures with  Curiosity  in",
+          "Grade 6, and are now ready to continue our journey into the",
+          "wonderful world of science. This again, is not just a textbook with",
+          "facts — it is an invitation to question, to perform experiments,",
+          "and to explore, as we try to understand the beautiful world we",
+          "live in. The world of science covers everything—small and large,",
+          "near and far. We may be looking at tiny cells inside a leaf, or",
+          "the movement of the sun and the stars. We may be testing out",
+          "the materials around us at home, or discussing how water flows",
+          "underground. As you go through the chapters in this book, you",
+          "will start new adventures that challenge your thinking, expand",
+          "your knowledge, and help you become an explorer, making small",
+          "discoveries for yourself.",
+          "Before we dive into our exciting journey, take a moment to",
+          "observe something special about this book. Look at the page",
+          "numbers—they follow the playful flight of a butterfly and the",
+          "soaring of a paper plane! Just as a butterfly flutters freely and a",
+          "paper plane flies into the sky, learning takes flight when curiosity",
+          "leads the way. Did you know that something as simple as a paper",
+          "plane inspired real scientific explorations of flight? From early",
+          "inventors studying bird wings to modern engineers designing",
+          "aircraft, the dream of flying started with simple observations and",
+          "experiments. So, as you turn each page, let your imagination take",
+          "flight—exploring new ideas, discovering wonders, and reaching",
+          "for the skies!"
+        ],
+        "concepts": [
+          "curiosity",
+          "exploration",
+          "science",
+          "experiments",
+          "learning",
+          "invention",
+          "observation",
+          "exploration"
+        ],
+        "context_relation": "introduction",
+        "limitations": [
+          "The image does not provide specific details about the textbook's content or structure."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "2e65529277ab46f2465ddc44",
+      "asset_sha256": "3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/3c592f7a47fcbc1e16ead05f54686eb66c070a8f19d8792bc5f0a92fb8ae41b6.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue, stylized, abstract figure with a curved line and a circular shape with two small lines extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image is related to the educational content about the process of science, emphasizing curiosity, asking questions, and exploring the unknown.",
+        "limitations": [
+          "The image does not provide specific details about the science process or the questions being asked."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:04:51Z",
+      "effective_analysis": {
+        "visual_summary": "A blue, stylized, abstract figure with a curved line and a circular shape with two small lines extending from it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image is related to the educational content about the process of science, emphasizing curiosity, asking questions, and exploring the unknown.",
+        "limitations": [
+          "The image does not provide specific details about the science process or the questions being asked."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "87caff3e826665d5edda680b",
+      "asset_sha256": "04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/04359c6b8f97f6c90232ee85623c8aba2c6ecd1f7f545100561329f1b74d8742.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the text discussing the nature of science as a process involving curiosity and asking questions.",
+        "limitations": []
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:05:57Z",
+      "effective_analysis": {
+        "visual_summary": "A blue butterfly illustration.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [],
+        "context_relation": "The image is a visual representation of the text discussing the nature of science as a process involving curiosity and asking questions.",
+        "limitations": []
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "040a0c6fbe362701806ca705",
+      "asset_sha256": "030ff33e1dc09c4300d1138413ef4eaa6688052cf72109b3926dd404e765957b",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/030ff33e1dc09c4300d1138413ef4eaa6688052cf72109b3926dd404e765957b.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a newspaper with a cartoon character on it, with a thought bubble above their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image illustrates the concept of curiosity and exploration in the context of science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the newspaper or the cartoon character."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:07:10Z",
+      "effective_analysis": {
+        "visual_summary": "A cartoon illustration of a person holding a newspaper with a cartoon character on it, with a thought bubble above their head.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "curiosity",
+          "thinking",
+          "exploration",
+          "science",
+          "questions",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image illustrates the concept of curiosity and exploration in the context of science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the newspaper or the cartoon character."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "178c5e72b9c7c73bdd6436a8",
+      "asset_sha256": "548df967ef00af7e77f59137e27cdcaa8a799a1fc8eb7536737a271a1131ccf9",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/548df967ef00af7e77f59137e27cdcaa8a799a1fc8eb7536737a271a1131ccf9.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A person in a light blue shirt is holding their chin, appearing thoughtful or contemplative.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "curiosity",
+          "questions",
+          "exploration",
+          "science"
+        ],
+        "context_relation": "The image complements the text by illustrating the idea of thinking deeply and asking questions about nature.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:08:20Z",
+      "effective_analysis": {
+        "visual_summary": "A person in a light blue shirt is holding their chin, appearing thoughtful or contemplative.",
+        "visual_type": "cartoon",
+        "visible_text": [],
+        "concepts": [
+          "thinking",
+          "curiosity",
+          "questions",
+          "exploration",
+          "science"
+        ],
+        "context_relation": "The image complements the text by illustrating the idea of thinking deeply and asking questions about nature.",
+        "limitations": [
+          "The image does not provide specific details about the text's content."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "feb792d53774f4bdfd5bb0e4",
+      "asset_sha256": "e069eea7e6e78d0d18225ec87987cf8b7804baf299d3fbd36ca5d2455ee69996",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/e069eea7e6e78d0d18225ec87987cf8b7804baf299d3fbd36ca5d2455ee69996.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A basket filled with various fruits and vegetables, with arrows pointing towards it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "basket",
+          "fruits",
+          "vegetables",
+          "arrows",
+          "exploration",
+          "science",
+          "curiosity",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image represents the theme of exploration and curiosity in science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the fruits and vegetables."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:09:32Z",
+      "effective_analysis": {
+        "visual_summary": "A basket filled with various fruits and vegetables, with arrows pointing towards it.",
+        "visual_type": "illustration",
+        "visible_text": [],
+        "concepts": [
+          "basket",
+          "fruits",
+          "vegetables",
+          "arrows",
+          "exploration",
+          "science",
+          "curiosity",
+          "questions",
+          "unknown",
+          "patterns",
+          "nature"
+        ],
+        "context_relation": "The image represents the theme of exploration and curiosity in science, as described in the text.",
+        "limitations": [
+          "The image does not provide specific details about the fruits and vegetables."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "58aa96e1e2410617e7e09d94",
+      "asset_sha256": "679cf1fe55c35aa2e75a772ce40e62e9483933ee53008031a5288b4df7a7aa1f",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/679cf1fe55c35aa2e75a772ce40e62e9483933ee53008031a5288b4df7a7aa1f.jpeg",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "Illustration of a sequence of fruits and vegetables, possibly representing a food chain or a sequence of transformations.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "food chain",
+          "transformations",
+          "sequence",
+          "sequence of events"
+        ],
+        "context_relation": "The image likely represents a sequence of events or transformations in nature, possibly related to the educational content about science and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the sequence or transformations."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:10:45Z",
+      "effective_analysis": {
+        "visual_summary": "Illustration of a sequence of fruits and vegetables, possibly representing a food chain or a sequence of transformations.",
+        "visual_type": "diagram",
+        "visible_text": [],
+        "concepts": [
+          "food chain",
+          "transformations",
+          "sequence",
+          "sequence of events"
+        ],
+        "context_relation": "The image likely represents a sequence of events or transformations in nature, possibly related to the educational content about science and curiosity.",
+        "limitations": [
+          "The image does not provide specific details about the sequence or transformations."
+        ]
+      },
+      "correction_status": "NONE"
+    },
+    {
+      "asset_id": "700231bb49c037d5d8077981",
+      "asset_sha256": "05fcc9be0ba84f0c824610f0f7748a0cf35d7012fcc8a53596cdb5e35257eac2",
+      "source_book_id": "ncert-c7-english-gecu1",
+      "source_pdf_sha256": "040de505bafd8bf53cbec0b75115cb6175c6f6336016f64259cb201ccd1cdf7a",
+      "source_pdf_page_number": 22,
+      "asset_path": "assets/05fcc9be0ba84f0c824610f0f7748a0cf35d7012fcc8a53596cdb5e35257eac2.png",
+      "asset_kind": "embedded_image",
+      "model_provider": "ollama_local",
+      "model": "qwen2.5vl:3b",
+      "analysis_status": "DRAFT_REQUIRES_REVIEW",
+      "analysis": {
+        "visual_summary": "A page from a textbook discussing the nature of science as a process involving curiosity, questioning, and openness to the unknown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown.",
+          "In Grade 7, we will try to ask deeper questions: How do things work? Why do events happen the way they do? And what can we learn from the patterns that we see in nature?"
+        ],
+        "concepts": [
+          "Science as a process",
+          "Curiosity",
+          "Questioning",
+          "Openness to the unknown",
+          "Exploration",
+          "Patterns in nature"
+        ],
+        "context_relation": "The page discusses the nature of science as a process involving curiosity, questioning, and openness to the unknown, which is a continuation of the concepts introduced in Grade 6.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations to support the concepts discussed."
+        ]
+      },
+      "human_review_required": true,
+      "publication_allowed": false,
+      "prompt_version": "visual-analysis-prompt-v2",
+      "run_id": "38904464438",
+      "checkpointed_at": "2026-10-16T18:12:03Z",
+      "effective_analysis": {
+        "visual_summary": "A page from a textbook discussing the nature of science as a process involving curiosity, questioning, and openness to the unknown.",
+        "visual_type": "page_with_multiple_visuals",
+        "visible_text": [
+          "Exploration, of course, isn’t just about discovering new facts or learning about different things in nature. Science, as we said in Grade 6, is a process, so it is about a way of thinking that welcomes curiosity, asks questions, and is open to the unknown.",
+          "In Grade 7, we will try to ask deeper questions: How do things work? Why do events happen the way they do? And what can we learn from the patterns that we see in nature?"
+        ],
+        "concepts": [
+          "Science as a process",
+          "Curiosity",
+          "Questioning",
+          "Openness to the unknown",
+          "Exploration",
+          "Patterns in nature"
+        ],
+        "context_relation": "The page discusses the nature of science as a process involving curiosity, questioning, and openness to the unknown, which is a continuation of the concepts introduced in Grade 6.",
+        "limitations": [
+          "The page does not provide specific examples or illustrations to support the concepts discussed."
         ]
       },
       "correction_status": "NONE"
