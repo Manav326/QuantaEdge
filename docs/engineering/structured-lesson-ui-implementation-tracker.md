@@ -157,3 +157,16 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - **Important boundary:** current API responses do not yet include a published structured artifact, and no API endpoint exists for grading the stable string question IDs. The learner component accepts a host submit callback and reports a clear error rather than fabricating saved scores when no callback is wired. Server artifact delivery and grading remain UI-003/backend integration work.
 - **No build/test result claimed.** The remote Git object service provided no local repo/build environment during this chat; CI/manual validation is still required. Task IDs UI-001/UI-101/UI-102/UI-201 are in progress, not marked complete.
 - **Next action:** implement the native Android structured lesson/explain/question Compose components, including the same visual and answer-key gates. Then add or adapt tests and update the complete tree checkpoint.
+
+
+## Resume checkpoint — server-side structured artifact adapter (2026-10-16; CI acceptance pending)
+
+- Rechecked main while resuming. The prior Web/Admin/Android renderer slice is already committed at 7f28d280f88923cfe78fbaeab9a299fde5e307bd; this slice is additive and does not replace those components or change authored lesson JSON files.
+- Added StructuredLessonArtifactService.java: server-side artifact discovery from packaged classpath JSON, duplicate artifact-ID fail-closed behavior, schema checks, explicit publication/review gates, approved-visual checks, and a sanitized learner payload that removes grading keys and author-only feedback.
+- Added StructuredLessonController.java under /api/v1/learning/structured-lessons: student-authenticated, locale-aware artifact delivery and a stable-string-question-ID response endpoint. Student track access is checked before delivery or submission. Legacy numeric question endpoints remain unchanged.
+- Added Flyway migration V106__structured_lesson_responses.sql for per-student, artifact-versioned, stable-ID response persistence, attempt counts and objective/pending-review result states.
+- Added StructuredLessonArtifactServiceTest.java for draft/pending-gate denial, answer-key sanitization, server-side grading and response validation.
+- Corrected API Docker build context in services/api/Dockerfile, docker-compose.yml and .github/workflows/ci.yml so repository-root data/structured-lessons is packaged as server-side API resources.
+- Security/content gate: current generated artifacts are still drafts with publication_allowed=false and pending source/bilingual/visual reviews. The new learner endpoint must not deliver them; previewing or rendering a draft does not approve it.
+- Validation status: tests are authored but have not yet been run in this session. No UI task is marked complete from source inspection alone. Await the GitHub API test/build workflow results for the adapter slice.
+- Next action after CI: fix any build/test regressions found by Actions, then wire the new published-artifact endpoint into the Web learner route and Android lesson route with state restoration by stable question ID. Keep the existing legacy lesson route intact and maintain Web/Admin/Android renderer parity.

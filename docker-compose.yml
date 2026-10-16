@@ -27,7 +27,8 @@ services:
       retries: 10
   api:
     build:
-      context: ./services/api
+      context: .
+      dockerfile: services/api/Dockerfile
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-quantaedge}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-quantaedge}

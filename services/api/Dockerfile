@@ -1,10 +1,12 @@
 # syntax=docker/dockerfile:1.7
 FROM maven:3.9.12-eclipse-temurin-21 AS build
 WORKDIR /app
-COPY pom.xml ./
+COPY services/api/pom.xml ./pom.xml
 # Keep Maven artifacts in BuildKit's persistent cache across rebuilds.
 RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests dependency:go-offline
-COPY src ./src
+COPY services/api/src ./src
+# Structured lesson JSON is server-side source data; package it for the API adapter.
+COPY data/structured-lessons/ ./src/main/resources/structured-lessons/
 RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -q -DskipTests package
 
 FROM eclipse-temurin:21-jre
