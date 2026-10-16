@@ -993,7 +993,10 @@ def checkpoint_git(repo:Path,paths:list[Path],message:str)->None:
 def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
     path=path or repo/"data"/"textbook-content-pipeline"/"model-benchmarks"/"class-6-ncert-curiosity.v1.json"
     if not path.is_file(): raise ValueError(f"Benchmark report missing: {path}")
-    report=read_json(path); row=next((r for r in report.get("models",[]) if r.get("model")==model),None)
+    report=read_json(path)
+    if report.get("schema_version")!="quantaedge.local-ollama-benchmark.v1":
+        raise ValueError("Unsupported local Ollama benchmark report schema.")
+    row=next((r for r in report.get("models",[]) if r.get("model")==model),None)
     if not row or row.get("successful_samples",0)<1 or row.get("lesson_contract_valid_rate",0)<=0:
         raise ValueError(f"Model {model} has no successful, contract-valid Class 6 NCERT benchmark sample.")
     if report.get("prompt_version")!=PROMPT_VERSION:
@@ -1002,6 +1005,23 @@ def benchmark_report(repo:Path,path:Path|None,model:str)->dict[str,Any]:
         raise ValueError("Benchmark lesson-renderer contract is stale; run refresh-benchmark on its saved raw samples before generation.")
     if report.get("production_model_selection")!="PENDING_HUMAN_REVIEW" or report.get("production_model") is not None:
         raise ValueError("Benchmark report must keep production selection pending human review.")
+    # Benchmark identity is intentionally anchored to Class 6 English Science;
+    # the target book's own Layer 5 ledger is validated separately by run().
+    bench_source=load_source(repo,6,"ncert-c6-english-fecu1")
+    if bench_source["subject"]!="science" or bench_source["language"]!="en":
+        raise ValueError("The benchmark anchor must be Class 6 English NCERT Science (Curiosity).")
+    source_record=report.get("source") if isinstance(report.get("source"),dict) else {}
+    if (source_record.get("book_id")!=bench_source["book_id"] or
+        str(source_record.get("source_pdf_sha256") or "").lower()!=bench_source["source_pdf_sha256"]):
+        raise ValueError("Benchmark report does not match the current Class 6 Curiosity PDF edition.")
+    bench_ledger_path,_,_=load_layer5_evidence(repo,bench_source)
+    bench_ledger_sha=sha_file(bench_ledger_path)
+    if source_record.get("layer5_coverage_ledger_sha256")!=bench_ledger_sha:
+        raise ValueError("Benchmark was built against an older Layer 5 ledger; rerun benchmark inference.")
+    bench_segments=segments_for(bench_source["pages"],2,5000)
+    _,bench_visual_fingerprint=load_visual_candidates(repo,bench_source,bench_segments)
+    if report.get("visual_candidate_fingerprint")!=bench_visual_fingerprint:
+        raise ValueError("Benchmark visual candidates changed since inference; rerun benchmark against current inputs.")
     return report
 
 def run(args:argparse.Namespace,opener:Any=None)->dict[str,Any]:
