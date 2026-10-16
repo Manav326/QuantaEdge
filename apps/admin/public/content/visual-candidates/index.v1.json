@@ -2,6 +2,36 @@
   "schema_version": "quantaedge.visual-catalog-index.v1",
   "catalogs": [
     {
+      "book_slug": "class6-en-maths-bde5606e",
+      "catalog_path": "/content/visual-candidates/class6-en-maths-bde5606e.v3.json",
+      "source_book_id": "ncert-c6-english-fegp1",
+      "title": "class6-en-maths-bde5606e",
+      "class": "6",
+      "subject": "Mathematics",
+      "language": "english",
+      "edition": "Reprint 2026-27",
+      "source_pdf_sha256": "07e70f879355ef91fadba2c375928c807649b5018fbec16ea6a0cf1aa6b63d33",
+      "page_count": 412,
+      "candidate_count": 1491,
+      "publication_allowed": false,
+      "review_required": true
+    },
+    {
+      "book_slug": "class6-hi-maths-0bbba43f",
+      "catalog_path": "/content/visual-candidates/class6-hi-maths-0bbba43f.v3.json",
+      "source_book_id": "ncert-c6-hindi-fhgp1",
+      "title": "class6-hi-maths-0bbba43f",
+      "class": "6",
+      "subject": "Mathematics",
+      "language": "hindi",
+      "edition": "Reprint 2026-27",
+      "source_pdf_sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+      "page_count": 304,
+      "candidate_count": 640,
+      "publication_allowed": false,
+      "review_required": true
+    },
+    {
       "book_slug": "class6-curiosity-en",
       "catalog_path": "/content/visual-candidates/class6-curiosity-en.v3.json",
       "source_book_id": "ncert-c6-english-fecu1",
@@ -13,6 +43,36 @@
       "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
       "page_count": 272,
       "candidate_count": 60,
+      "publication_allowed": false,
+      "review_required": true
+    },
+    {
+      "book_slug": "class6-en-science-9c1315ba",
+      "catalog_path": "/content/visual-candidates/class6-en-science-9c1315ba.v3.json",
+      "source_book_id": "ncert-c6-english-fecu1",
+      "title": "class6-en-science-9c1315ba",
+      "class": "6",
+      "subject": "Science",
+      "language": "english",
+      "edition": "Reprint 2026-27",
+      "source_pdf_sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+      "page_count": 272,
+      "candidate_count": 1472,
+      "publication_allowed": false,
+      "review_required": true
+    },
+    {
+      "book_slug": "class6-hi-science-f538ae2b",
+      "catalog_path": "/content/visual-candidates/class6-hi-science-f538ae2b.v3.json",
+      "source_book_id": "ncert-c6-hindi-fhcu1",
+      "title": "class6-hi-science-f538ae2b",
+      "class": "6",
+      "subject": "Science",
+      "language": "hindi",
+      "edition": "Reprint 2026-27",
+      "source_pdf_sha256": "af6c738eed25d9565403eb42350b98f793630500c871e8c719c25261b995afec",
+      "page_count": 264,
+      "candidate_count": 1423,
       "publication_allowed": false,
       "review_required": true
     },
@@ -198,8 +258,8 @@
     }
   ],
   "summary": {
-    "catalog_count": 13,
-    "candidate_count": 2460,
+    "catalog_count": 17,
+    "candidate_count": 7486,
     "publication_allowed": false,
     "review_required": true
   }

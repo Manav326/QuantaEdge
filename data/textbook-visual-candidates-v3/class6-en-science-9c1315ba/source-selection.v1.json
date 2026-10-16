@@ -1,0 +1,14 @@
+{
+  "class": 6,
+  "language": "english",
+  "book_id": "ncert-c6-english-fecu1",
+  "book_slug": "class6-en-science-9c1315ba",
+  "title": "Curiosity",
+  "subject": "science",
+  "maths_part": null,
+  "file": "books/ncert-c6-english-fecu1.pdf",
+  "sha256": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-6/english/pages/7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-6/english/pages/7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.jsonl",
+  "text_jsonl_filename": "7e6c3a6ba4f80aa15120f446fb66614c3cec7c17462414d410d7be66c3ca8b73.jsonl"
+}

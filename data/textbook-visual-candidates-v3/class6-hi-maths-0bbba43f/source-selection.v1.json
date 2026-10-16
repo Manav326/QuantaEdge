@@ -1,0 +1,14 @@
+{
+  "class": 6,
+  "language": "hindi",
+  "book_id": "ncert-c6-hindi-fhgp1",
+  "book_slug": "class6-hi-maths-0bbba43f",
+  "title": "Ganita Prakash (Hindi)",
+  "subject": "maths",
+  "maths_part": 1,
+  "file": "books/ncert-c6-hindi-fhgp1.pdf",
+  "sha256": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f",
+  "extraction_manifest_repo_path": "data/textbook-extractions/class-6/hindi/pages/f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f.manifest.json",
+  "text_jsonl_repo_path": "data/textbook-extractions/class-6/hindi/pages/f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f.jsonl",
+  "text_jsonl_filename": "f815150b18a0124fbe0742cd3896ef802b1ad1760586b3614d68b75a8dc5d38f.jsonl"
+}
