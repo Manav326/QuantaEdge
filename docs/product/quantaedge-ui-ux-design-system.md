@@ -1,6 +1,6 @@
 # QuantaEdge Web UI/UX Design System and Rollout Plan
 
-**Status:** Design direction approved; implementation is staged and must be verified per phase.  
+**Status:** UX polish direction approved; proposed placement/layout changes require user approval before implementation.  
 **Scope:** All QuantaEdge web interfaces: learner/public web, Admin/Content Studio, and People Operations (HRMS).  
 **Branch policy:** Work on `main` only unless the user explicitly changes this instruction.  
 **Primary rule:** Improve presentation and interaction quality without changing business logic, authorization, API contracts, persistence semantics, curriculum behaviour, or existing workflows.
@@ -13,7 +13,7 @@ Use a **premium hybrid** visual language:
 - Consistent typography, spacing, borders, radii, focus styles, component states, and motion across all three applications.
 - A single QuantaEdge identity. Do not independently restyle or translate the logo, wordmark, tagline, or canonical brand colours per application or language.
 
-This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content. The refreshed interface palette is midnight navy + royal blue + electric blue with light working surfaces. Preserve the existing approved orange Q mark and orange wordmark exactly; blue is the interface accent, not a replacement or recolouring of the canonical logo asset.
+This is a restrained, polished education product—not a neon/glassmorphism theme. Effects should improve hierarchy and perceived quality, not compete with content. **Keep the existing orange-led QuantaEdge palette unchanged.** Do not introduce a blue-led palette or alter canonical logo/wordmark/tagline colours. Layout, spacing, typography, navigation, card/form structure and interaction polish may be proposed, but obtain the user's approval on placement changes before implementation.
 
 ## 2. Canonical brand tokens
 
@@ -22,12 +22,9 @@ The existing approved brand system in `docs/branding.md` remains authoritative. 
 | Token | Value | Use |
 |---|---|---|
 | Canonical brand navy | `#152038` | Existing wordmark and identity elements |
-| Interface midnight navy | `#101828` | Dark hero and selected navigation surfaces |
-| Primary interface blue | `#315EFB` | Primary buttons, links, active and selected controls |
-| Electric blue | `#6C8CFF` | Restrained highlights and decorative gradients; avoid small text on light surfaces |
-| Legacy/canonical orange | `#F97316` | Existing approved Q mark, wordmark and brand-specific contexts |
-| Deep orange | `#C2410C` | Existing brand contexts where required; not the default UI action colour |
-| Soft orange | `#FFF0E5` | Existing brand-specific soft surfaces where appropriate |
+| Orange | `#F97316` | Existing orange-led brand accent; preserve current usage and hierarchy |
+| Deep orange | `#C2410C` | Existing approved brand context; preserve current usage |
+| Soft orange | `#FFF0E5` | Existing approved brand context; preserve current usage |
 | White | `#FFFFFF` | Cards and reading surfaces |
 | Light canvas | `#F5F7FC` | Main light work area |
 | Neutral border | `#E5EAF3` | Dividers, outlines, card boundaries |
@@ -35,12 +32,12 @@ The existing approved brand system in `docs/branding.md` remains authoritative. 
 | Muted text | `#667085` | Secondary metadata, after contrast verification |
 | Success / warning / error | Existing semantic tokens first | Status and validation meaning, never decorative branding |
 
-The navy/blue interface palette is approved as the refreshed UI direction. The canonical Q mark and wordmark remain unchanged; do not recolour or replace the approved assets. Reconcile the proposed neutral tokens with existing CSS and test contrast before implementation. Additional semantic colours may be used only for meaning, with accessible contrast.
+No new colour palette is approved. Existing CSS/design tokens and the orange-led identity are the source of truth; do not add blue palette tokens or shift primary actions from orange to blue. Reconcile any proposed neutral/semantic token adjustments against the actual code and contrast-test them. Keep logo, wordmark and tagline assets unchanged. Layout/placement proposals are for review only until the user approves them.
 
 ## 3. Visual and interaction foundations
 
 ### Surfaces and depth
-- Public landing pages may use a midnight-navy hero, a restrained royal/electric-blue glow, high-contrast headline, and one dominant royal-blue primary call to action. Keep the canonical orange Q mark and wordmark unchanged.
+- Public landing pages may retain their existing brand colours. Any proposed hero, navigation, CTA, card or section placement changes must be shown for user approval first; do not introduce a blue glow or blue primary action as part of this redesign.
 - The hero is followed by light sections; working screens should not become dark solely for visual novelty.
 - Prefer surface contrast, thin borders, and low-elevation shadows over heavy drop shadows.
 - Glass effects, blur, gradients, and decorative illustrations are optional and rare; avoid them behind dense text and data tables.
