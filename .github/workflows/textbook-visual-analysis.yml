@@ -239,7 +239,7 @@ jobs:
             git pull --rebase origin main
             git push origin HEAD:main
             # Mirror the small durable checkpoint to GHCR after the repository commit.
-            oras push "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$analysis_output:application/json"
+            oras push --artifact-type application/vnd.quantaedge.textbook.visual-analysis-checkpoint.v1 "$package:class${CLASS_NO}-$BOOK_SLUG-checkpoint" "$analysis_output:application/json"
 
             if (( batch_processed == 0 )); then break; fi
           done
@@ -270,9 +270,9 @@ jobs:
           echo "$GH_TOKEN" | oras login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
           package="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/quantaedge-textbook-visuals"
           version_tag="class${CLASS_NO}-$BOOK_SLUG-run-$GITHUB_RUN_ID"
-          (cd "$RUNNER_TEMP" && oras push "$package:$version_tag" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
+          (cd "$RUNNER_TEMP" && oras push --artifact-type application/vnd.quantaedge.textbook.visual-analysis-bundle.v1 "$package:$version_tag" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
           if [[ "$PUBLISH_STABLE" == "true" ]]; then
-            (cd "$RUNNER_TEMP" && oras push "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
+            (cd "$RUNNER_TEMP" && oras push --artifact-type application/vnd.quantaedge.textbook.visual-analysis-bundle.v1 "$package:class${CLASS_NO}-$BOOK_SLUG-latest" "$BOOK_SLUG-visual-bundle.tar.gz:application/gzip")
           else
             echo "Skipping stable GHCR tag update for this diagnostic/model-comparison run."
           fi
