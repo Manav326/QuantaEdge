@@ -6,7 +6,7 @@ import { findQuestionVisual, isQuestionVisualApproved } from './contract';
 import { StructuredDiagramView } from './StructuredLessonContent';
 
 export type QuestionResponse = string | boolean | string[] | Record<string, string>;
-export type QuestionResult = { status: 'correct' | 'incorrect' | 'partially_correct' | 'pending_review'; score?: number; maxScore?: number; feedback?: string; correctAnswer?: unknown };
+export type QuestionResult = { status: 'correct' | 'incorrect' | 'partially_correct' | 'pending_review'; score?: number; maxScore?: number; feedback?: string; feedbackByLocale?: Partial<Record<LessonLocale, string>>; autoGraded?: boolean; correctAnswer?: unknown };
 type Props = {
   question: StructuredQuestion;
   lesson?: StructuredLesson;
@@ -171,11 +171,11 @@ export default function StructuredQuestionRenderer({
     {question.type !== 'short_answer' && question.feedback_by_locale && result &&
       <div className={'qe-structured-feedback qe-structured-feedback--' + result.status} role="status">
         <strong>{statusLabel}</strong>
-        <p>{result.feedback || text(question.feedback_by_locale, locale)}</p>
+        <p>{result.feedbackByLocale?.[locale] || result.feedback || text(question.feedback_by_locale, locale)}</p>
         {typeof result.score === 'number' && typeof result.maxScore === 'number' && <small>{result.score} / {result.maxScore}</small>}
       </div>}
     {question.type === 'short_answer' && result && <div className="qe-structured-feedback qe-structured-feedback--pending_review" role="status">
-      <strong>{statusLabel || ui.pending}</strong><p>{result.feedback || (locale === 'hi' ? 'आपका उत्तर जाँच के लिए सहेजा गया है।' : 'Your response has been saved for review.')}</p>
+      <strong>{statusLabel || ui.pending}</strong><p>{result.feedbackByLocale?.[locale] || result.feedback || (locale === 'hi' ? 'आपका उत्तर जाँच के लिए सहेजा गया है।' : 'Your response has been saved for review.')}</p>
     </div>}
 
     {!submitted && <button type="button" className="qe-structured-submit" disabled={!canSubmit || disabled || submitting} onClick={onSubmit}>

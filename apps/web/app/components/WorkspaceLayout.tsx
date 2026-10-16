@@ -33,7 +33,8 @@ const studentNavGroups: StudentNavGroup[] = [
     id: 'learn', hinglish: 'पढ़ाई', english: 'Learn', mobileHinglish: 'पढ़ाई', mobileEnglish: 'Learn', icon: '▤',
     children: [
       { href: '/student/learn', hinglish: 'Lessons और topics', english: 'Lessons & topics', icon: '▤' },
-      { href: '/student/classes', hinglish: 'Live और recorded classes', english: 'Live & recorded classes', icon: '◷' },
+      { href: '/student/structured-lessons', hinglish: 'Structured lessons', english: 'Structured lessons', icon: '✧' },
+      { href: '/student/classes', hinglish: 'Live और recorded classes', english: 'Live & recorded classes', icon: '◷' }
     ],
   },
   {

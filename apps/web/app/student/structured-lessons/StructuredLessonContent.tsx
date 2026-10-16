@@ -5,7 +5,7 @@ import type { LessonLocale, StructuredExplainBlock, StructuredLesson } from './c
 import { isStudentRenderableAsset, readLocale } from './contract';
 
 type Mode = 'student' | 'admin-preview';
-type Props = { lesson: StructuredLesson; locale: LessonLocale; mode?: Mode; onActivitySave?: (blockId: string, value: string) => void };
+type Props = { lesson: StructuredLesson; locale: LessonLocale; mode?: Mode; onActivitySave?: (blockId: string, value: string) => void | Promise<void>; initialActivityResponses?: Record<string, Record<string, string>> };
 
 function localized(value: unknown, locale: LessonLocale, fallback = ''): string {
   return readLocale(value, locale) || fallback;
@@ -50,9 +50,11 @@ export function StructuredDiagramView({ block, locale }: { block: StructuredExpl
   </figure>;
 }
 
-function ActivityBlock({ block, locale, mode, onSave }: { block: StructuredExplainBlock; locale: LessonLocale; mode: Mode; onSave?: Props['onActivitySave'] }) {
-  const [responses, setResponses] = useState<Record<string, string>>({});
+function ActivityBlock({ block, locale, mode, onSave, initialResponses }: { block: StructuredExplainBlock; locale: LessonLocale; mode: Mode; onSave?: Props['onActivitySave']; initialResponses?: Record<string, string> }) {
+  const [responses, setResponses] = useState<Record<string, string>>(() => initialResponses || {});
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const config = (block.configuration || {}) as Record<string, any>;
   const rawInstructions = (block as any).instructions_by_locale?.[locale];
   const instructions = Array.isArray(rawInstructions) ? rawInstructions : [];
@@ -69,7 +71,7 @@ function ActivityBlock({ block, locale, mode, onSave }: { block: StructuredExpla
   const safety = localized((block as any).safety_note_by_locale, locale) ||
     localized((block as any).safety_and_scope, locale) ||
     localized((block as any).safety, locale);
-  const update = (id: string, value: string) => { setResponses(previous => ({ ...previous, [id]: value })); setSaved(false); };
+  const update = (id: string, value: string) => { setResponses(previous => ({ ...previous, [id]: value })); setSaved(false); setSaveError(''); };
   return <section className="qe-structured-activity" aria-labelledby={'activity-' + block.id}>
     <h3 id={'activity-' + block.id}>{title}</h3>
     {instructionText && <p>{instructionText}</p>}
@@ -90,12 +92,14 @@ function ActivityBlock({ block, locale, mode, onSave }: { block: StructuredExpla
       <textarea value={responses.response || ''} onChange={event => update('response', event.target.value)} rows={3} />
     </label>}
     <div className="qe-structured-actions">
-      <button type="button" disabled={!onSave} onClick={() => {
-        if (!onSave) return;
-        onSave(block.id, JSON.stringify(responses));
-        setSaved(true);
+      <button type="button" disabled={!onSave || saving} onClick={async () => {
+        if (!onSave || saving) return;
+        setSaving(true); setSaveError('');
+        try { await onSave(block.id, JSON.stringify(responses)); setSaved(true); }
+        catch (error) { setSaveError(error instanceof Error ? error.message : (locale === 'hi' ? 'उत्तर सहेजा नहीं जा सका।' : 'Response could not be saved.')); }
+        finally { setSaving(false); }
       }}>
-        {String(controls.save || (locale === 'hi' ? 'उत्तर सहेजें' : 'Save response'))}
+        {saving ? (locale === 'hi' ? 'सहेज रहे हैं…' : 'Saving…') : String(controls.save || (locale === 'hi' ? 'उत्तर सहेजें' : 'Save response'))}
       </button>
       <button type="button" className="qe-structured-button-secondary" onClick={() => { setResponses({}); setSaved(false); }}>
         {String(controls.reset || (locale === 'hi' ? 'मिटाएँ' : 'Clear'))}
@@ -106,7 +110,7 @@ function ActivityBlock({ block, locale, mode, onSave }: { block: StructuredExpla
   </section>;
 }
 
-export default function StructuredLessonContent({ lesson, locale, mode = 'student', onActivitySave }: Props) {
+export default function StructuredLessonContent({ lesson, locale, mode = 'student', onActivitySave, initialActivityResponses }: Props) {
   const [showBlocked, setShowBlocked] = useState(false);
   const blocks = lesson.explain.blocks.slice().sort((a, b) => a.order - b.order);
   return <section className="qe-structured-lesson" aria-label={localized(lesson.topic.title_by_locale, locale, 'Lesson')}>
@@ -155,7 +159,7 @@ export default function StructuredLessonContent({ lesson, locale, mode = 'studen
             {mode === 'admin-preview' && <small>{locale === 'hi' ? 'दृश्य स्थिति:' : 'Visual status:'} {String(data.review_status || block.review_status || 'UNREVIEWED')}</small>}
           </article>;
         }
-        if (block.type === 'interactive' || block.type === 'activity') return <ActivityBlock key={block.id} block={block} locale={locale} mode={mode} onSave={onActivitySave} />;
+        if (block.type === 'interactive' || block.type === 'activity') return <ActivityBlock key={block.id} block={block} locale={locale} mode={mode} onSave={onActivitySave} initialResponses={initialActivityResponses?.[block.id]} />;
         if (block.type === 'recap') {
           const selected = typeof content === 'object' && content !== null ? (content as Record<string, unknown>)[locale] : content;
           const recapObject = selected && typeof selected === 'object' ? selected as Record<string, unknown> : null;

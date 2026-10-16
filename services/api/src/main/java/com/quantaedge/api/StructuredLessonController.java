@@ -1,6 +1,8 @@
 package com.quantaedge.api;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,6 +34,33 @@ public class StructuredLessonController {
     this.authorization = authorization;
     this.artifacts = artifacts;
     this.mapper = mapper;
+  }
+
+  /** Lists only published lessons that match the student's active class/subject enrollment. */
+  @GetMapping
+  public List<Map<String, Object>> catalogue(
+      @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    String locale = normalizeLanguage(language);
+    List<Map<String, Object>> result = new ArrayList<>();
+    for (StructuredLessonArtifactService.PublishedArtifact artifact : artifacts.listPublishedArtifacts()) {
+      if (!studentHasTrackAccess(context.studentId(), artifact)) continue;
+      JsonNode source = artifact.source();
+      Map<String, Object> item = new LinkedHashMap<>();
+      item.put("artifactId", artifact.artifactId());
+      item.put("classNumber", artifacts.classNumber(artifact));
+      item.put("subjectCode", artifacts.subjectCode(artifact));
+      item.put("chapterNumber", source.path("chapter").path("chapter_number").asInt(0));
+      item.put("chapterTitle", localizedText(source.path("chapter").path("title_by_locale"), locale));
+      item.put("topicId", source.path("topic").path("topic_id").asText(""));
+      item.put("topicNumber", source.path("topic").path("topic_number").asInt(0));
+      item.put("title", localizedText(source.path("topic").path("title_by_locale"), locale));
+      item.put("estimatedMinutes", source.path("estimated_minutes").asInt(
+          source.path("topic").path("estimated_minutes").asInt(0)));
+      result.add(item);
+    }
+    return List.copyOf(result);
   }
 
   /** Authenticated learner delivery. Drafts and unreviewed artifacts deliberately return 404. */
@@ -99,10 +128,104 @@ public class StructuredLessonController {
     if (evaluation.score() != null) result.put("score", evaluation.score());
     if (evaluation.maxScore() != null) result.put("maxScore", evaluation.maxScore());
     result.put("feedback", evaluation.feedback());
+    StructuredLessonArtifactService.Evaluation english = artifacts.evaluateResponse(question, response, "en");
+    StructuredLessonArtifactService.Evaluation hindi = artifacts.evaluateResponse(question, response, "hi");
+    result.put("feedbackByLocale", Map.of("en", english.feedback(), "hi", hindi.feedback()));
     return result;
   }
 
+  /** Restore response and activity state by stable IDs, not translated labels or array order. */
+  @GetMapping("/{artifactId}/responses")
+  public Map<String, Object> savedResponses(@PathVariable String artifactId,
+      @RequestParam(required = false, defaultValue = "hi") String language,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    String locale = normalizeLanguage(language);
+    StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
+    ensureStudentTrackAccess(context.studentId(), artifact);
+    Map<String, Object> questions = new LinkedHashMap<>();
+    for (Map<String, Object> row : jdbc.queryForList("""
+      select question_id, response::text as response, result_status, score, max_score
+      from student_structured_question_response
+      where student_id=? and artifact_id=? and artifact_sha256=?
+      order by last_submitted_at, question_id
+      """, context.studentId(), artifact.artifactId(), artifact.sha256())) {
+      String id = String.valueOf(row.get("question_id"));
+      try {
+        JsonNode question = artifacts.questionForStudent(artifact, id);
+        JsonNode response = mapper.readTree(String.valueOf(row.get("response")));
+        var english = artifacts.evaluateResponse(question, response, "en");
+        var hindi = artifacts.evaluateResponse(question, response, "hi");
+        String state = String.valueOf(row.get("result_status")).toLowerCase(Locale.ROOT);
+        Map<String, Object> value = new LinkedHashMap<>();
+        value.put("response", response);
+        value.put("status", state);
+        value.put("autoGraded", !"pending_review".equals(state));
+        value.put("feedback", "en".equals(locale) ? english.feedback() : hindi.feedback());
+        value.put("feedbackByLocale", Map.of("en", english.feedback(), "hi", hindi.feedback()));
+        if (row.get("score") instanceof Number score) value.put("score", score.intValue());
+        if (row.get("max_score") instanceof Number max) value.put("maxScore", max.intValue());
+        questions.put(id, value);
+      } catch (Exception ignored) {
+        // Removed or now-unapproved visual questions must not be restored to a learner.
+      }
+    }
+    Map<String, Object> activities = new LinkedHashMap<>();
+    for (Map<String, Object> row : jdbc.queryForList("""
+      select block_id, response::text as response
+      from student_structured_activity_response
+      where student_id=? and artifact_id=? and artifact_sha256=?
+      order by last_saved_at, block_id
+      """, context.studentId(), artifact.artifactId(), artifact.sha256())) {
+      String id = String.valueOf(row.get("block_id"));
+      try {
+        artifacts.activityBlockForStudent(artifact, id);
+        activities.put(id, mapper.readTree(String.valueOf(row.get("response"))));
+      } catch (Exception ignored) {
+        // Exclude activity state for content which is no longer learner-visible.
+      }
+    }
+    return Map.of("questions", questions, "activities", activities);
+  }
+
+  /** Persists activity response state without inventing an objective score. */
+  @PostMapping("/{artifactId}/activities/{blockId}/responses")
+  @Transactional
+  public Map<String, Object> saveActivityResponse(@PathVariable String artifactId,
+      @PathVariable String blockId, @RequestBody Map<String, Object> body,
+      @RequestAttribute(value = "authContext", required = false) AuthContext context) {
+    context = authorization.requireStudent(context);
+    if (body == null || !body.containsKey("response")) {
+      throw new IllegalArgumentException("An activity response is required.");
+    }
+    StructuredLessonArtifactService.PublishedArtifact artifact = artifacts.requirePublished(artifactId);
+    ensureStudentTrackAccess(context.studentId(), artifact);
+    JsonNode response = artifacts.validateActivityResponse(artifact, blockId, body.get("response"));
+    String serialized;
+    try {
+      serialized = mapper.writeValueAsString(response);
+    } catch (JacksonException error) {
+      throw new IllegalArgumentException("The activity response could not be saved.", error);
+    }
+    jdbc.update("""
+      insert into student_structured_activity_response
+        (student_id, artifact_id, artifact_sha256, block_id, response, attempt_count, first_saved_at, last_saved_at)
+      values (?, ?, ?, ?, ?::jsonb, 1, now(), now())
+      on conflict (student_id, artifact_id, artifact_sha256, block_id)
+      do update set response=excluded.response,
+        attempt_count=student_structured_activity_response.attempt_count+1, last_saved_at=now()
+      """, context.studentId(), artifact.artifactId(), artifact.sha256(), blockId, serialized);
+    return Map.of("blockId", blockId, "saved", true);
+  }
+
   private void ensureStudentTrackAccess(long studentId,
+      StructuredLessonArtifactService.PublishedArtifact artifact) {
+    if (!studentHasTrackAccess(studentId, artifact)) {
+      throw new SecurityException("Student access to this structured lesson is not permitted.");
+    }
+  }
+
+  private boolean studentHasTrackAccess(long studentId,
       StructuredLessonArtifactService.PublishedArtifact artifact) {
     Long allowed = jdbc.queryForObject("""
       select count(*)
@@ -115,9 +238,12 @@ public class StructuredLessonController {
         and regexp_replace(c.code, '[^0-9]', '', 'g')=?
       """, Long.class, studentId, artifacts.subjectCode(artifact),
         String.valueOf(artifacts.classNumber(artifact)));
-    if (allowed == null || allowed < 1) {
-      throw new SecurityException("Student access to this structured lesson is not permitted.");
-    }
+    return allowed != null && allowed > 0;
+  }
+
+  private String localizedText(JsonNode locales, String locale) {
+    JsonNode value = locales.path(locale);
+    return value.isTextual() ? value.asText("") : "";
   }
 
   private String normalizeLanguage(String language) {

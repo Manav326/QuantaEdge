@@ -51,6 +51,14 @@ class StructuredLessonArtifactServiceTest {
   }
 
   @Test
+  void publishedCatalogExcludesDraftsAndIncludesApprovedArtifacts() throws Exception {
+    var published = new StructuredLessonArtifactService(mapper, fixture(true, true));
+    var draft = new StructuredLessonArtifactService(mapper, fixture(false, true));
+    assertEquals(1, published.listPublishedArtifacts().size());
+    assertEquals(0, draft.listPublishedArtifacts().size());
+  }
+
+  @Test
   void invalidOptionIdIsRejectedBeforeGrading() throws Exception {
     StructuredLessonArtifactService service =
         new StructuredLessonArtifactService(mapper, fixture(true, true));

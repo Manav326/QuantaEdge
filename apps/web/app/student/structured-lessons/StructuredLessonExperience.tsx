@@ -13,6 +13,10 @@ type Props = {
   mode?: 'student' | 'admin-preview';
   onActivitySave?: (blockId: string, value: string) => void;
   onQuestionSubmit?: (question: StructuredQuestion, response: QuestionResponse) => Promise<QuestionResult> | QuestionResult;
+  initialResponses?: Record<string, QuestionResponse>;
+  initialResults?: Record<string, QuestionResult>;
+  initialSubmitted?: Record<string, boolean>;
+  initialActivityResponses?: Record<string, Record<string, string>>;
 };
 
 const tx = (locale: LessonLocale, en: string, hi: string) => locale === 'hi' ? hi : en;
@@ -66,11 +70,12 @@ function gradeAdminPreview(question: StructuredQuestion, response: QuestionRespo
 
 export default function StructuredLessonExperience({
   lesson, locale, mode = 'student', onActivitySave, onQuestionSubmit,
+  initialResponses, initialResults, initialSubmitted, initialActivityResponses,
 }: Props) {
   const [index, setIndex] = useState(0);
-  const [responses, setResponses] = useState<Record<string, QuestionResponse>>({});
-  const [results, setResults] = useState<Record<string, QuestionResult>>({});
-  const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
+  const [responses, setResponses] = useState<Record<string, QuestionResponse>>(() => initialResponses || {});
+  const [results, setResults] = useState<Record<string, QuestionResult>>(() => initialResults || {});
+  const [submitted, setSubmitted] = useState<Record<string, boolean>>(() => initialSubmitted || {});
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const allQuestions = lesson.practice.questions;
@@ -151,7 +156,7 @@ export default function StructuredLessonExperience({
   }
 
   return <div className="qe-structured-experience">
-    <StructuredLessonContent lesson={lesson} locale={locale} mode={mode} onActivitySave={onActivitySave} />
+    <StructuredLessonContent lesson={lesson} locale={locale} mode={mode} onActivitySave={onActivitySave} initialActivityResponses={initialActivityResponses} />
     <section className="qe-structured-practice" aria-labelledby="qe-structured-practice-title">
       <header className="qe-structured-practice__header">
         <p className="qe-structured-eyebrow">{tx(locale, 'EXPLAIN → PRACTICE', 'समझें → अभ्यास करें')}</p>

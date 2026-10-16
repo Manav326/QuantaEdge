@@ -95,6 +95,18 @@ public class StructuredLessonArtifactService {
     return new PublishedArtifact(artifactId, artifact.sha256(), artifact.source().deepCopy());
   }
 
+  /** Published-only catalogue; draft source records are never enumerated to learners. */
+  public List<PublishedArtifact> listPublishedArtifacts() {
+    List<PublishedArtifact> result = new ArrayList<>();
+    for (Map.Entry<String, LoadedArtifact> entry : artifacts().entrySet()) {
+      LoadedArtifact loaded = entry.getValue();
+      if (isPublicationApproved(loaded.source()) && validateStructure(loaded.source()).isEmpty()) {
+        result.add(new PublishedArtifact(entry.getKey(), loaded.sha256(), loaded.source().deepCopy()));
+      }
+    }
+    return List.copyOf(result);
+  }
+
   /** Sanitize a copy; the cached/server-side record retains its grading key. */
   public ObjectNode toStudentPayload(PublishedArtifact artifact) {
     ObjectNode safe = artifact.source().deepCopy();
@@ -143,6 +155,37 @@ public class StructuredLessonArtifactService {
       if (questionId.equals(question.path("id").asText(""))) return question.deepCopy();
     }
     throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Structured question is not available.");
+  }
+
+  /** Only activity blocks included in the learner-safe payload may accept responses. */
+  public JsonNode activityBlockForStudent(PublishedArtifact artifact, String blockId) {
+    if (blockId == null || !blockId.matches("[A-Za-z0-9][A-Za-z0-9._:-]{0,179}")) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Structured activity is not available.");
+    }
+    for (JsonNode block : arrayAt(objectAt(toStudentPayload(artifact), "explain"), "blocks")) {
+      if (blockId.equals(block.path("id").asText(""))
+          && Set.of("interactive", "activity").contains(block.path("type").asText(""))) {
+        return block.deepCopy();
+      }
+    }
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Structured activity is not available.");
+  }
+
+  /** Validate the persisted activity contract and bound request size. */
+  public JsonNode validateActivityResponse(PublishedArtifact artifact, String blockId, Object submitted) {
+    activityBlockForStudent(artifact, blockId);
+    if (!(submitted instanceof String raw) || raw.isBlank() || raw.length() > 16000) {
+      throw new IllegalArgumentException("Enter an activity response before saving.");
+    }
+    try {
+      JsonNode response = mapper.readTree(raw);
+      if (response == null || !response.isObject()) {
+        throw new IllegalArgumentException("The activity response is invalid.");
+      }
+      return response.deepCopy();
+    } catch (JacksonException error) {
+      throw new IllegalArgumentException("The activity response is not valid JSON.", error);
+    }
   }
 
   /** Check the response type and every submitted choice before grading or persistence. */

@@ -185,3 +185,12 @@ Test lesson fixtures: at minimum Class 6 Science Ch1 (rich text plus source/diag
 - Cause: test-only/package-private constructors mean Spring needs an explicit production constructor selection in this Spring Boot configuration.
 - Fix: annotate the public ObjectMapper-only constructor with @Autowired. The existing fixture constructors remain package-private for tests.
 - Follow-up: rerun API verification and keep the next application/client slice blocked until bean startup and Flyway migrations pass.
+
+
+## Learner API + Web client wiring (2026-10-16; CI acceptance pending)
+
+- Added published-only structured lesson catalogue discovery; only students with an active class/subject enrollment receive matching published entries.
+- Added separate activity-response persistence plus saved-response retrieval for stable-ID lesson state; legacy numeric lesson/question APIs remain unchanged.
+- Web experience now hydrates restored question/activity responses, uses bilingual server feedback, and shows activity save success only after the server confirms the save.
+- Added a Web structured-lessons catalogue/detail route and a navigation link in the existing Learn group.
+- Validation pending: API verification and Web image build must pass before marking this slice complete.
